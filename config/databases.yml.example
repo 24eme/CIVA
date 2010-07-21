@@ -5,5 +5,5 @@ all:
   couchdb:
     class: sfCouchdbDatabase
     param:
-      dsn: http://CHA.NG.ME.216:5984/
-      dbname: dr
+      dsn: http://127.0.0.1:5984/
+      dbname: civa
