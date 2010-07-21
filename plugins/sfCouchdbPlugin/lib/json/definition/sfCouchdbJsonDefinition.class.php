@@ -28,13 +28,13 @@ class sfCouchdbJsonDefinition {
     }
 
     public function getRequiredFields() {
+
         $this->_required_fields = array();
         foreach($this->_fields as $key => $field) {
             if (!$field->isMultiple()) {
                 $this->_required_fields[$key] = $field;
             }
         }
-
         return $this->_required_fields;
     }
 
@@ -64,6 +64,23 @@ class sfCouchdbJsonDefinition {
         }
         
         throw new sfCouchdbException("This field doesn't exist");
+    }
+
+    public function findByClassName($class_name) {
+        foreach($this->_fields as $field) {
+            if ($field instanceof sfCouchdbJsonDefinitionFieldCollection) {
+                if ($field->getCollectionClass() == $class_name) {
+                    return $field->getDefinition();
+                } else {
+                    $result = $field->getDefinition()->findByClassName($class_name);
+                    if (!is_null($result)) {
+                        return $result;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public function getJsonField($key, $item, $numeric_key) {

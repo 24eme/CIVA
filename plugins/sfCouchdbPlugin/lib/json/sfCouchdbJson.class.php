@@ -6,10 +6,14 @@ class sfCouchdbJson {
     protected $_definition = null;
     private $_is_array = false;
 
-    public function __construct() {
+    public function __construct($definition = null) {
         $this->_fields = array();
         $this->_is_array = false;
-        $this->setupDefinition();
+        if (is_null($definition)) {
+            $this->setupDefinition();
+        } else {
+            $this->_definition = $definition;
+        }
         $this->initializeDefinition();
     }
 

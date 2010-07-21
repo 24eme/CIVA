@@ -3,7 +3,7 @@
 class sfCouchdbClient extends couchClient {
     public function saveDocument($document) {
         $method = 'POST';
-	$url  = '/'.urlencode('dr');
+	$url  = '/'.urlencode($this->dbname);
         if (!$document->isNew()) {
             $method = 'PUT';
             $url.='/'.urlencode($document->get('_id'));

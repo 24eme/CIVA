@@ -11,7 +11,7 @@ class importTask extends sfBaseTask {
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'couchdb'),
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
                 // add your own options here
         ));
 
@@ -57,7 +57,7 @@ EOF;
             $appellation = $csv[3];
             $cepage = $csv[4];
 
-
+            $doc = new DR();
             if (!isset($list_documents[$_id])) {
                 $doc = new DR();
                 $doc->set('_id', $_id);
@@ -80,7 +80,6 @@ EOF;
                 if (is_null($this->getLies())) {
                     $this->setLies(0);
                 }
-                exit;
                 $this->setLies($this->getLies() + $this->recode_number($csv[12]));
 
             } elseif ($cepage == 'VT') { /* Vin de table */

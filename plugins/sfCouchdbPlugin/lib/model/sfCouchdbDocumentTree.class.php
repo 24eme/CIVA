@@ -5,9 +5,9 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    protected $_tree_class_name = null;
 
 
-   public function  __construct() {
+   public function  __construct($definition = null) {
         $this->configureTree();
-        parent::__construct();
+        parent::__construct($definition);
    }
 
    public function configureTree() {
@@ -15,14 +15,11 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    }
 
    public function setupDefinition() {
-       $root_data = call_user_func_array(array($this->getRootClassName(), 'getRootDefinition'), array());
-       $definition_data = sfCouchdbJsonDefinitionParser::searchDefinitionByClass($root_data, $this->getTreeClassName());
-       if ($definition_data) {
-          $this->_definition = sfCouchdbJsonDefinitionParser::parse($definition_data);
-       } else {
-           parent::setupDefinition();
+       $this->_definition = sfCouchdbManager::getDefinitionTree($this->getRootClassName(), $this->getTreeClassName());
+       if (is_null($this->_definition)) {
+           throw new sfCouchdbException('Class definition not find');
        }
-   }
+    }
 
    public function getRootClassName() {
        if (!class_exists($this->_root_class_name)) {

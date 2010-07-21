@@ -1,0 +1,107 @@
+DR:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      acheteurs:
+        type: collection
+        class: DRAcheteurs
+        definition:
+          fields:
+            '*':
+              type: array_collection
+              definition:
+                fields:
+                  '*': { type: string }
+      campagne: {  }
+      cvi: {  }
+      VT:
+        type: collection
+        definition:
+          fields:
+            surface: { type: float }
+            volume:  { type: float }
+      lies: {type: float}
+      recolte:
+        type: collection
+        class: DRRecolte
+        definition:
+          fields:
+            # ------ Appellation ------
+            '*':
+              type: collection
+              definition:
+                fields:
+                  lieu:
+                    type: collection
+                    class: DRRecolteAppellation
+                    definition:
+                      fields:
+                        # ------ Cépage ------
+                        '*':
+                          type: collection
+                          class: DRRecolteAppellationCepage
+                          definition:
+                            fields:
+                              detail:
+                                type: array_collection
+                                definition:
+                                  fields:
+                                    '*':
+                                      type: collection
+                                      class: DRRecolteAppellationCepageDetail
+                                      definition:
+                                        fields:
+                                          appellation: {  }
+                                          cepage: {  }
+                                          denomination: {  }
+                                          vtsgn: {  }
+                                          code_lieu: {  }
+                                          surface: { type: float }
+                                          volume: { type: float }
+                                          acheteurs:
+                                            type: array_collection
+                                            definition:
+                                              fields:
+                                                '*':
+                                                  type: collection
+                                                  definition:
+                                                    fields:
+                                                      cvi: {  }
+                                                      quantite_vendue: { type: float }
+                                          cooperatives:
+                                            type: array_collection
+                                            definition:
+                                              fields:
+                                                '*':
+                                                  type: collection
+                                                  definition:
+                                                    fields:
+                                                      cvi: {  }
+                                                      quantite_vendue: { type: float }
+                                          cave_particuliere: { type: float }
+                                          volume_revendique: { type: float }
+                                          volume_dplc: { type: float }
+                        rebeche:
+                          type: array_collection
+                          class: DRRecolteAppellationRebeche
+                          definition:
+                            fields:
+                              '*':
+                                type: collection
+                                class: DRRecolteAppellationRebecheDetail
+                                definition:
+                                  fields:
+                                    appellation: {  }
+                                    volume: {type: float }
+                                    cooperatives:
+                                      type: array_collection
+                                      definition:
+                                        fields:
+                                          '*':
+                                            type: collection
+                                            definition:
+                                              fields:
+                                                cvi: {  }
+                                                quantite_vendue: { type: float }
+                                    cave_particuliere: { type: float }
