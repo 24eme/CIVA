@@ -4,9 +4,9 @@ class importTask extends sfBaseTask {
 
     protected function configure() {
         // // add your own arguments here
-        // $this->addArguments(array(
-        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-        // ));
+         $this->addArguments(array(
+           new sfCommandArgument('fast', sfCommandArgument::OPTIONAL, 'Script plus rapide sans validation de schema'),
+         ));
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
@@ -36,6 +36,11 @@ EOF;
             sfCouchdbManager::getClient()->deleteDatabase();
         }
         sfCouchdbManager::getClient()->createDatabase();
+        
+        $fast = false;
+        if (isset($arguments['fast']) &&  $arguments['fast'] == 1){
+            $fast = true;
+        }
 
         $achat = array();
         $achatcvi = array();
@@ -59,13 +64,17 @@ EOF;
 
             $doc = new DR();
             if (!isset($list_documents[$_id])) {
-                $doc = new DR();
+                if (!$fast) {
+                    $doc = new DR();
+                } else {
+                    $doc = new sfCouchdbDocument($definition);
+                }
                 $doc->set('_id', $_id);
-                $doc->setCvi($cvi);
-                $doc->setCampagne($campagne);
+                $doc->set('cvi', $cvi);
+                $doc->set('campagne', $campagne);
                 foreach($achatcvi[$campagne][$cvi] as $key => $item) {
                     foreach($item as $data) {
-                        $doc->setAcheteurs()->add('appellation_'.$key)->add(null,$data);
+                        $doc->add('acheteurs')->add('appellation_'.$key)->add(null,$data);
                     }
                 }
                 
@@ -77,67 +86,81 @@ EOF;
 
             if (in_array($cepage, array('LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) { /* Prise en compte des lies */
                 
-                if (is_null($this->getLies())) {
-                    $this->setLies(0);
+                if (is_null($this->add('lies'))) {
+                    $this->set('lies', 0);
                 }
-                $this->setLies($this->getLies() + $this->recode_number($csv[12]));
+                $this->set('lies', $this->get('lies') + $this->recode_number($csv[12]));
 
             } elseif ($cepage == 'VT') { /* Vin de table */
                 
-                $doc->getVT()->setSurface($csv[11]);
-                $doc->getVT()->setVolume($csv[12]);
+                $doc->add('VT')->set('surface', $csv[11]);
+                $doc->add('VT')->set('volume', $csv[12]);
 
             } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'VT'))) {
                 
             } elseif ($cepage == 'RB') {
+                if (!$fast) {
+                    $rebeche = new DRRecolteAppellationRebecheDetail();
+                } else {
+                    $rebeche = new sfCouchdbJson();
+                }
                 
-                $rebeche = new DRRecolteAppellationRebecheDetail();
-                $rebeche->setAppellation($appellation);
-                $rebeche->setVolume($this->recode_number($csv[12]));
-                $rebeche->setCaveParticuliere($this->recode_number($csv[21]));
+                $rebeche->set('appellation', $appellation);
+                $rebeche->set('volume', $this->recode_number($csv[12]));
+                $rebeche->set('cave_particuliere', $this->recode_number($csv[21]));
                 /* les coopératives */
                 for ($i = 5; $i < 8; $i++) {
                     $val = $this->recode_number($csv[13 + $i]);
                     if ($val > 0) {
-                        $cooperatives = $rebeche->get('cooperatives')->add();
-                        $cooperatives->setCvi($achat[$campagne][$cvi][$appellation][$i]);
-                        $cooperatives->setQuantiteVendue($val);
+                        $cooperatives = $rebeche->add('cooperatives')->add();
+                        $cooperatives->set('cvi', $achat[$campagne][$cvi][$appellation][$i]);
+                        $cooperatives->set('quantite_vendue', $val);
                     }
                 }
-                $doc->addRebeche($rebeche);
+                if (!$fast) {
+                    $doc->addRebeche($rebeche);
+                } else {
+                    $doc->add('recolte')->add('appellation_'.$appellation)->add('lieu')->add('rebeche')->add(null, $rebeche);
+                }
 
             } else {
 
                 $detail = new DRRecolteAppellationCepageDetail();
-                $detail->setAppellation($appellation);
-                $detail->setCepage($cepage);
-                $detail->setDenomination($csv[6]);
-                $detail->setVtsgn($csv[9]);
-                $detail->setCodeLieu($csv[10]);
-                $detail->setSurface($this->recode_number($csv[11]));
-                $detail->setVolume($this->recode_number($csv[12]));
-                $detail->setCaveParticuliere($this->recode_number($csv[21]));
-                $detail->setVolumeRevendique($this->recode_number($csv[27]));
-                $detail->setVolumeDplc($this->recode_number($csv[28]));
-                /* Les acheteurs */
+                $detail->set('appellation', $appellation);
+                $detail->set('cepage', $cepage);
+                $detail->set('denomination', $csv[6]);
+                $detail->set('vtsgn', $csv[9]);
+                $detail->set('code_lieu', $csv[10]);
+                $detail->set('surface', $this->recode_number($csv[11]));
+                $detail->set('volume', $this->recode_number($csv[12]));
+                $rebeche->set('cave_particuliere', $this->recode_number($csv[21]));
+                $detail->set('volume_revendique', $this->recode_number($csv[27]));
+                $detail->set('volume_dplc', $this->recode_number($csv[28]));
+                
+                /* les acheteurs */
                 for ($i = 1; $i < 5; $i++) {
                     $val = $this->recode_number($csv[12 + $i]);
                     if ($val > 0) {
-                        $acheteur = $detail->getAcheteurs()->add();
-                        $acheteur->setCvi($achat[$campagne][$cvi][$appellation][$i]);
-                        $acheteur->setQuantiteVendue($val);
+                        $acheteur = $detail->add('acheteurs')->add();
+                        $acheteur->set('cvi', $achat[$campagne][$cvi][$appellation][$i]);
+                        $acheteur->set('quantite_vendue', $val);
                     }
                 }
                 /* les coopératives */
                 for ($i = 5; $i < 8; $i++) {
                     $val = $this->recode_number($csv[13 + $i]);
                     if ($val > 0) {
-                        $cooperatives = $detail->get('cooperatives')->add();
-                        $cooperatives->setCvi($achat[$campagne][$cvi][$appellation][$i]);
-                        $cooperatives->setQuantiteVendue($val);
+                        $cooperatives = $detail->add('cooperatives')->add();
+                        $cooperatives->set('cvi', $achat[$campagne][$cvi][$appellation][$i]);
+                        $cooperatives->set('quantite_vendue', $val);
                     }
                 }
-                $doc->addRecolte($detail);
+                if (!$fast) {
+                    $doc->addRecolte($detail);
+                } else {
+                    $doc->add('recolte')->add('appellation_'.$appellation)->add('lieu')->add('cepage_'.$cepage)->add('detail')->add(null, $detail);
+                }
+                
 
             }
             $this->log($nb++ . '/' . $max);
