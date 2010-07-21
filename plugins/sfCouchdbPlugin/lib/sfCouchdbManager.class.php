@@ -24,6 +24,7 @@ class sfCouchdbManager {
 
     public static function initializeClient($dsn, $dbname) {
         self::getInstance()->_client = new sfCouchdbClient($dsn, $dbname);
+	return self::getInstance()->_client;
     }
 
     public static function getClient() {

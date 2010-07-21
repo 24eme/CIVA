@@ -4,11 +4,15 @@ class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
 
     public function isNew() {
-        return is_null($this->get('_rev'));
+      if (!$this->hasField('_rev'))
+	return true;
+      return is_null($this->get('_rev'));
     }
 
     public function save() {
-        return sfCouchdbManager::getClient()->saveDocument($this);
+        $ret = sfCouchdbManager::getClient()->saveDocument($this);
+	$this->_rev = $ret->rev;
+	return $ret;
     }
 
     public function getData() {
@@ -17,5 +21,9 @@ class sfCouchdbDocument extends sfCouchdbJson {
             unset($data->_rev);
         }
         return $data;
+    }
+
+    public function delete() {
+      return sfCouchdbManager::getClient()->deleteDocument($this);
     }
 }

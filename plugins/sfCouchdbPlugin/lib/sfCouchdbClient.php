@@ -10,4 +10,9 @@ class sfCouchdbClient extends couchClient {
 	}
         return $this->_queryAndTest ($method, $url, array(200,201),array(),$document->getData());
     }
+
+    public function deleteDocument($document) {
+      return $this->deleteDoc($document->getData());
+    }
+
 }
