@@ -16,12 +16,6 @@ DR:
                   '*': { type: string }
       campagne: {  }
       cvi: {  }
-      VT:
-        type: collection
-        definition:
-          fields:
-            surface: { type: float }
-            volume:  { type: float }
       lies: {type: float}
       recolte:
         type: collection
