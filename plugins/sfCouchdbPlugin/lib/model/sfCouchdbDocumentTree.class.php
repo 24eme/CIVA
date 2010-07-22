@@ -4,10 +4,9 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    protected $_root_class_name = null;
    protected $_tree_class_name = null;
 
-
-   public function  __construct($definition = null) {
+   public function  __construct($definition_model = null, $definition_hash = null) {
         $this->configureTree();
-        parent::__construct($definition);
+        parent::__construct($definition_model, $definition_hash);
    }
 
    public function configureTree() {
@@ -15,9 +14,10 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    }
 
    public function setupDefinition() {
-       $this->_definition = sfCouchdbManager::getDefinitionTree($this->getRootClassName(), $this->getTreeClassName());
-       if (is_null($this->_definition)) {
-           throw new sfCouchdbException('Class definition not find');
+       $this->_definition_model = call_user_func_array(array($this->getRootClassName(), 'getDocumentDefinitionModel'), array());
+       $this->_definition_hash = sfCouchdbManager::getDefinitionHashTree($this->getRootClassName(), $this->getTreeClassName());
+       if (is_null($this->_definition_hash)) {
+           throw new sfCouchdbException('definition hash not find');
        }
     }
 

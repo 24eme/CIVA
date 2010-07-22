@@ -3,26 +3,28 @@
 class sfCouchdbJson {
 
     private $_fields = null;
-    protected $_definition = null;
     private $_is_array = false;
+    protected $_definition_hash = null;
+    protected $_definition_model = null;
 
-    public function __construct($definition = null) {
+    public function __construct($definition_model = null, $definition_hash = null) {
         $this->_fields = array();
         $this->_is_array = false;
-        if (is_null($definition)) {
+        if (is_null($definition_model) || is_null($definition_hash)) {
             $this->setupDefinition();
         } else {
-            $this->_definition = $definition;
+            $this->_definition_model = $definition_model;
+            $this->_definition_hash = $definition_hash;
         }
         $this->initializeDefinition();
     }
 
     protected function setupDefinition() {
-        $this->_definition = new sfCouchdbJsonDefinition(true);
+        throw new sfCouchdbException('Definition not found');
     }
 
     private function initializeDefinition() {
-        foreach($this->_definition->getRequiredFields() as $field_definition) {
+        foreach($this->getDefinition()->getRequiredFields() as $field_definition) {
             $this->add($field_definition->getKey(), null);
         }
     }
@@ -31,9 +33,8 @@ class sfCouchdbJson {
        $this->_is_array = $value;
     }
 
-    public function changeDefinition($definition) {
-        $this->_definition = $definition;
-        $this->initializeDefinition();
+    public function getDefinition() {
+        return sfCouchdbManager::getDefinitionByHash($this->_definition_model, $this->_definition_hash);
     }
 
     public function isArray() {
@@ -43,7 +44,7 @@ class sfCouchdbJson {
     public function load($data) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
-                $this->set($key, $item);
+                $this->add($key, $item);
             }
         }
     }
@@ -56,9 +57,8 @@ class sfCouchdbJson {
         return $this->getField($key)->getValue();
     }
 
-    public function set($key, $value = null) {
-        $this->remove($key);
-        return $this->add($key, $value);
+    public function set($key, $value) {
+        return $this->getField($key)->setValue($value);
     }
 
     protected function remove($key) {
@@ -79,7 +79,7 @@ class sfCouchdbJson {
             return $this->get($key);
         }
         
-        $field = $this->_definition->getJsonField($key, $item, $this->_is_array);
+        $field = $this->getDefinition()->getJsonField($key, $item, $this->_is_array);
 
         if ($field->isNumericKey()) {
             $this->_fields[] = $field;

@@ -1,8 +1,8 @@
 <?php
 
 class sfCouchdbJsonDefinitionFieldMultipleCollection extends sfCouchdbJsonDefinitionFieldCollection {
-    public function __construct($collection_class = 'sfCouchdbJson') {
-        parent::__construct('*', $collection_class);
+    public function __construct($model, $hash, $collection_class = 'sfCouchdbJson') {
+        parent::__construct('*', $model, $hash, $collection_class);
         $this->is_multiple = true;
     }
 }

@@ -6,7 +6,8 @@ class sfCouchdbManager {
     protected $_client;
 
     protected $_definition = array();
-    protected $_definition_tree = array();
+    protected $_definition_tree_hash = array();
+    protected $_definition_hash = array();
 
     protected $_schema = null;
     
@@ -44,18 +45,30 @@ class sfCouchdbManager {
     public static function getDefinition($model) {
         if (!isset(self::getInstance()->_definition[$model])) {
             $schema = self::getInstance()->getSchema();
-            self::getInstance()->_definition[$model] = sfCouchdbJsonDefinitionParser::parse($schema['DR']);
+            self::getInstance()->_definition[$model] = sfCouchdbJsonDefinitionParser::parse($model, $schema[$model]);
             return self::getInstance()->_definition[$model];
         } else {
             return self::getInstance()->_definition[$model];
         }
     }
-    public static function getDefinitionTree($model, $model_tree) {
-        if (!isset(self::getInstance()->_definition_tree[$model_tree])) {
-            self::getInstance()->_definition_tree[$model_tree] = self::getDefinition($model)->findByClassName($model_tree);
-            return self::getInstance()->_definition_tree[$model_tree];
+
+    public static function getDefinitionByHash($model, $hash) {
+        if (!isset(self::getInstance()->_definition_hash[$model][$hash])) {
+            self::getInstance()->_definition_hash[$model][$hash] = self::getDefinition($model)->getDefinitionByHash($hash);
+            return self::getInstance()->_definition_hash[$model][$hash];
         } else {
-            return self::getInstance()->_definition_tree[$model_tree];
+            return self::getInstance()->_definition_hash[$model][$hash];
+        }
+
+        return ;
+    }
+
+    public static function getDefinitionHashTree($model, $class_tree) {
+        if (!isset(self::getInstance()->_definition_tree_hash[$class_tree])) {
+            self::getInstance()->_definition_tree_hash[$class_tree] = self::getDefinition($model)->findHashByClassName($class_tree);
+            return self::getInstance()->_definition_tree_hash[$class_tree];
+        } else {
+            return self::getInstance()->_definition_tree_hash[$class_tree];
         }
     }
 }

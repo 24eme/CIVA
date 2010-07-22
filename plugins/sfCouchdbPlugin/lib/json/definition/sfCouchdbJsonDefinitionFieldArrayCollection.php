@@ -1,8 +1,8 @@
 <?php
 
 class sfCouchdbJsonDefinitionFieldArrayCollection extends sfCouchdbJsonDefinitionFieldCollection {
-    public function __construct($name, $collection_class = 'sfCouchdbJson') {
-        parent::__construct($name, $collection_class);
+    public function __construct($name, $model, $hash, $collection_class = 'sfCouchdbJson') {
+        parent::__construct($name, $model, $hash, $collection_class);
     }
 
     public function getJsonObject($data) {

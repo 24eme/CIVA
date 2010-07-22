@@ -9,7 +9,7 @@ if (!sfCouchdbManager::getClient()->databaseExists()) {
         sfCouchdbManager::getClient()->createDatabase();
  }
 
-$doc = new sfCouchdbDocument();
+$doc = new DR();
 $doc->_id = 'TESTCOUCHDB';
 try{
 $t->ok($doc->save(), 'save an empty document');

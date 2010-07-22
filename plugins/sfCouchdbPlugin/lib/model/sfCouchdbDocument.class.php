@@ -3,6 +3,10 @@
 class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
 
+    public function  __construct() {
+        parent::__construct(null, null);
+    }
+
     public function isNew() {
       if (!$this->hasField('_rev'))
 	return true;
@@ -22,6 +26,10 @@ class sfCouchdbDocument extends sfCouchdbJson {
         }
         return $data;
     }
+
+    public static function getDocumentDefinitionModel() {
+        throw new sfCouchdbException('Definition model not implemented');
+    }    
 
     public function delete() {
       return sfCouchdbManager::getClient()->deleteDocument($this);

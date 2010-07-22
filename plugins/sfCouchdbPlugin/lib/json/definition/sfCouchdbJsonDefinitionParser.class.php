@@ -2,34 +2,10 @@
 
 class sfCouchdbJsonDefinitionParser {
 
-    public static function parse($data) {
-        return (self::parseDefinition(new sfCouchdbJsonDefinition(), self::getValueRequired($data, 'definition', 'global')));
+    public static function parse($model, $data) {
+        return (self::parseDefinition(new sfCouchdbJsonDefinition($model, ''), self::getValueRequired($data, 'definition', 'global')));
     }
-
-    public static function searchDefinitionByClass($data, $class) {
-        $data_definition = self::getValueRequired($data, 'definition');
-        if (self::getValue($data_definition, 'free') === true) {
-            return false;
-        } else {
-            $data_fields = self::getValue($data_definition, 'fields');
-            foreach($data_fields as $key => $data_field) {
-                $type = self::getValue($data_field, 'type', 'string');
-                if ($type == sfCouchdbJsonDefinitionField::TYPE_COLLECTION || $type == sfCouchdbJsonDefinitionField::TYPE_ARRAY_COLLECTION) {
-                    if (self::getValue($data_field, 'class') == $class) {
-                        return $data_field;
-                    } else {
-                        $search = self::searchDefinitionByClass($data_field, $class);
-                        if($search) {
-                            return $search;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
+    
     protected static function parseDefinition($definition, $data_definition) {
         if (self::getValue($data_definition, 'free') === true) {
             $definition->setIsFree(true);
@@ -62,13 +38,13 @@ class sfCouchdbJsonDefinitionParser {
         } elseif ($type == sfCouchdbJsonDefinitionField::TYPE_COLLECTION) {
             if (!$multiple) {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldCollection($key, self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldCollection($key, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );
             } else {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldMultipleCollection(self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldMultipleCollection($definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );
@@ -77,13 +53,13 @@ class sfCouchdbJsonDefinitionParser {
         } elseif ($type == sfCouchdbJsonDefinitionField::TYPE_ARRAY_COLLECTION) {
             if (!$multiple) {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldArrayCollection($key, self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldArrayCollection($key, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );
             } else {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldMultipleArrayCollection(self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldMultipleArrayCollection($definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );

@@ -27,6 +27,8 @@ abstract class sfCouchdbJsonField {
         if ($this->isValid($value)) {
             $this->value = $value;
         }
+
+        return $this->value;
     }
 
     public function isValid($value) {

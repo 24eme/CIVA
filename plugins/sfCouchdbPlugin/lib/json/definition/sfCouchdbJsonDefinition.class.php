@@ -3,19 +3,22 @@
 class sfCouchdbJsonDefinition {
 
     private $_fields = null;
-    private $_free = false;
+    private $_hash = null;
+    private $_model = null;
 
-    public function __construct($free = false) {
+
+    public function __construct($model, $hash) {
         $this->_fields = array();
-        $this->_free = $free;
+        $this->_model = $model;
+        $this->_hash = $hash;
     }
 
-    public function setIsFree($value) {
-        $this->_free = $value;
+    public function getModel() {
+        return $this->_model;
     }
 
-    public function isFree() {
-        return $this->_free;
+    public function getHash() {
+        return $this->_hash;
     }
 
     public function add(sfCouchdbJsonDefinitionField $field) {
@@ -66,13 +69,28 @@ class sfCouchdbJsonDefinition {
         throw new sfCouchdbException("This field doesn't exist");
     }
 
-    public function findByClassName($class_name) {
+    public function getDefinitionByHash($hash) {
+        $tab_hash = explode('/', $hash);
+        if (count($tab_hash) > 1 && $tab_hash[1] != '') {
+            $current_field = $tab_hash[1];
+            unset($tab_hash[0], $tab_hash[1]);
+            $new_hash = '';
+            foreach($tab_hash as $item) {
+                $new_hash .= '/'.$item;
+            }
+            return $this->get($current_field)->getDefinitionByHash($new_hash);
+        } else {
+            return $this;
+        }
+    }
+
+    public function findHashByClassName($class_name) {
         foreach($this->_fields as $field) {
             if ($field instanceof sfCouchdbJsonDefinitionFieldCollection) {
                 if ($field->getCollectionClass() == $class_name) {
-                    return $field->getDefinition();
+                    return $field->getDefinition()->getHash();
                 } else {
-                    $result = $field->getDefinition()->findByClassName($class_name);
+                    $result = $field->getDefinition()->findHashByClassName($class_name);
                     if (!is_null($result)) {
                         return $result;
                     }
@@ -84,7 +102,7 @@ class sfCouchdbJsonDefinition {
     }
 
     public function getJsonField($key, $item, $numeric_key) {
-        if (!$this->isFree() && !$this->hasField($key)) {
+        if (!$this->hasField($key)) {
              throw new sfCouchdbException(sprintf("Definition error : %s", $key));
         }
 
@@ -93,17 +111,9 @@ class sfCouchdbJsonDefinition {
         } else {
             $data = $item;
         }
-        if ($this->isFree()) {
-            if ($data instanceof stdClass) {
-                $field = new sfCouchdbJsonDefinitionFieldCollection($key);
-            } elseif(is_array($data)) {
-                $field = new sfCouchdbJsonDefinitionFieldArrayCollection($key);
-            } else {
-                $field = new sfCouchdbJsonDefinitionField($key, sfCouchdbJsonDefinitionField::TYPE_ANYONE);
-            }
-        } else {
-            $field = $this->get($key);
-        }
+        
+        $field = $this->get($key);
+        
         if ($field->isMultiple())
             return $field->getJsonField($data, $numeric_key, $key);
         else

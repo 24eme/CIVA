@@ -7,6 +7,7 @@ class sfCouchdbJsonDefinitionField {
     protected $collection = false;
     protected $collection_class = '';
     protected $is_multiple = false;
+    protected $field_definition = null;
 
     const TYPE_ANYONE = 'anyone';
     const TYPE_STRING = 'string';
@@ -66,5 +67,17 @@ class sfCouchdbJsonDefinitionField {
 
     public function isMultiple() {
         return $this->is_multiple;
+    }
+
+    public function getDefinition() {
+        return $this->field_definition;
+    }
+
+    public function getDefinitionByHash($hash) {
+        if (!is_null($this->field_definition)) {
+            return $this->field_definition->getDefinitionByHash($hash);
+        } else {
+            throw new sfCouchdbException(sprintf('Hash definition does not exist : %s', $hash));
+        }
     }
 }
