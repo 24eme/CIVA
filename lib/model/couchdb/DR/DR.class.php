@@ -14,6 +14,7 @@ class DR extends BaseDR {
              ->addAppellation($detail->getAppellation())
              ->getLieu()
              ->addRebeche()
+             ->getDetail()
              ->add(null, $detail);
     }
 }

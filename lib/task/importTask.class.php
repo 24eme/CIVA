@@ -82,16 +82,11 @@ EOF;
                 }
                 $this->setLies($this->getLies() + $this->recode_number($csv[12]));
 
-            } elseif ($cepage == 'VT') { /* Vin de table */
-
-                $doc->getVT()->setSurface($csv[11]);
-                $doc->getVT()->setVolume($csv[12]);
-
             } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'VT'))) {
 
             } elseif ($cepage == 'RB') {
 
-                $rebeche = new DRRecolteAppellationRebecheDetail();
+                $rebeche = new DRRecolteAppellationCepageDetail();
                 $rebeche->setAppellation($appellation);
                 $rebeche->setVolume($this->recode_number($csv[12]));
                 $rebeche->setCaveParticuliere($this->recode_number($csv[21]));
@@ -147,6 +142,7 @@ EOF;
         }
 
         foreach ($list_documents as $doc) {
+            //print_r($doc->getData());
             $doc->save();
         }
 

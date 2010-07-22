@@ -20,6 +20,7 @@ class homeActions extends sfActions {
 
         $doc = new DR();
         $doc->load(sfCouchdbManager::getClient()->getDoc('DR-6701800180-2009'));
+        print_r($doc->getData());
 
         $doc2 = new DR();
         $doc2->load(sfCouchdbManager::getClient()->getDoc('DR-6701800180-2009'));
