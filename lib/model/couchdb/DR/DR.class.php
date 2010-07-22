@@ -6,7 +6,7 @@ class DR extends BaseDR {
              ->getLieu()
              ->addCepage($detail->getCepage())
              ->getDetail()
-             ->add(0, $detail);
+             ->add(null, $detail);
     }
 
     public function addRebeche($detail) {
@@ -14,6 +14,6 @@ class DR extends BaseDR {
              ->addAppellation($detail->getAppellation())
              ->getLieu()
              ->addRebeche()
-             ->add(0, $detail);
+             ->add(null, $detail);
     }
 }

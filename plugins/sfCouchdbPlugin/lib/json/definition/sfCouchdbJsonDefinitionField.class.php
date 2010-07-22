@@ -8,6 +8,7 @@ class sfCouchdbJsonDefinitionField {
     protected $collection_class = '';
     protected $is_multiple = false;
     protected $field_definition = null;
+    protected $is_required = true;
 
     const TYPE_ANYONE = 'anyone';
     const TYPE_STRING = 'string';
@@ -16,7 +17,7 @@ class sfCouchdbJsonDefinitionField {
     const TYPE_COLLECTION = 'collection';
     const TYPE_ARRAY_COLLECTION = 'array_collection';
 
-    public function __construct($name, $type = self::TYPE_STRING) {
+    public function __construct($name, $type = self::TYPE_STRING, $required = true) {
         $this->key = sfInflector::underscore(sfInflector::camelize($name));
         $this->name = $name;
         if ($type == self::TYPE_STRING) {
@@ -34,7 +35,7 @@ class sfCouchdbJsonDefinitionField {
         } else {
             throw new sfCouchdbException("Type doesn't exit");
         }
-
+        $this->is_required = $required;
         return null;
     }
 
@@ -67,6 +68,10 @@ class sfCouchdbJsonDefinitionField {
 
     public function isMultiple() {
         return $this->is_multiple;
+    }
+
+    public function isRequired() {
+        return $this->is_required;
     }
 
     public function getDefinition() {

@@ -34,7 +34,7 @@ class sfCouchdbJsonDefinition {
 
         $this->_required_fields = array();
         foreach($this->_fields as $key => $field) {
-            if (!$field->isMultiple()) {
+            if (!$field->isMultiple() && $field->isRequired()) {
                 $this->_required_fields[$key] = $field;
             }
         }
@@ -66,19 +66,13 @@ class sfCouchdbJsonDefinition {
            return $this->_fields['*'];
         }
         
-        throw new sfCouchdbException("This field doesn't exist");
+        throw new sfCouchdbException(sprintf("This field doesn't exist : %s", $key));
     }
 
     public function getDefinitionByHash($hash) {
-        $tab_hash = explode('/', $hash);
-        if (count($tab_hash) > 1 && $tab_hash[1] != '') {
-            $current_field = $tab_hash[1];
-            unset($tab_hash[0], $tab_hash[1]);
-            $new_hash = '';
-            foreach($tab_hash as $item) {
-                $new_hash .= '/'.$item;
-            }
-            return $this->get($current_field)->getDefinitionByHash($new_hash);
+        $obj_hash = new sfCouchdbHash($hash);
+        if (!$obj_hash->isEmpty()) {
+            return $this->get($obj_hash->getFirst())->getDefinitionByHash($obj_hash->getAllWithoutFirst());
         } else {
             return $this;
         }

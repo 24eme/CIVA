@@ -44,6 +44,7 @@ class sfCouchdbJson {
     public function load($data) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
+                $this->remove($key);
                 $this->add($key, $item);
             }
         }
@@ -53,8 +54,13 @@ class sfCouchdbJson {
         return $this->get($key);
     }
 
-    public function get($key) {
-        return $this->getField($key)->getValue();
+    public function get($key_or_hash) {
+        $obj_hash = new sfCouchdbHash($key_or_hash);
+        if ($obj_hash->isAlone()) {
+           return $this->getField($obj_hash->getFirst())->getValue();
+        } else {
+           return $this->get($obj_hash->getFirst())->get($obj_hash->getAllWithoutFirst());
+        }
     }
 
     public function set($key, $value) {
@@ -75,28 +81,66 @@ class sfCouchdbJson {
     }
 
     public function add($key = null, $item = null) {
+        if ($this->_is_array) {
+            return $this->addNumeric($item);
+        } else {
+            return $this->addNormal($key, $item);
+        }
+    }
+
+    protected function addNormal($key = null, $item = null) {
         if ($this->hasField($key)) {
             return $this->get($key);
         }
-        
-        $field = $this->getDefinition()->getJsonField($key, $item, $this->_is_array);
 
-        if ($field->isNumericKey()) {
-            $this->_fields[] = $field;
-        } else {
-            $this->_fields[$field->getKey()] = $field;
-        }
+        $field = $this->getDefinition()->getJsonField($key, $item, false);
+        $this->_fields[$field->getKey()] = $field;
+
+        return $field->getValue();
+    }
+
+    protected function addNumeric($item = null) {
+        $field = $this->getDefinition()->getJsonField(null, $item, true);
+        $this->_fields[] = $field;
 
         return $field->getValue();
     }
 
     public function hasField($key) {
+        if ($this->_is_array) {
+            return $this->hasFieldNumeric($key);
+        } else {
+            return $this->hasFieldNormal($key);
+        }
+    }
+
+    public function hasFieldNormal($key) {
         return isset($this->_fields[sfInflector::underscore(sfInflector::camelize($key))]);
     }
 
+    public function hasFieldNumeric($key) {
+        return isset($this->_fields[$key]);
+    }
+
     public function getField($key) {
-        if ($this->hasField($key)) {
+        if ($this->_is_array) {
+            return $this->getFieldNumeric($key);
+        } else {
+            return $this->getFieldNormal($key);
+        }
+    }
+
+    protected function getFieldNormal($key) {
+         if ($this->hasField($key)) {
             return $this->_fields[sfInflector::underscore(sfInflector::camelize($key))];
+        } else {
+            throw new sfCouchdbException(sprintf('field inexistant : %s', $key));
+        }
+    }
+
+    protected function getFieldNumeric($key) {
+         if ($this->hasField($key)) {
+            return $this->_fields[$key];
         } else {
             throw new sfCouchdbException(sprintf('field inexistant : %s', $key));
         }

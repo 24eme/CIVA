@@ -104,8 +104,8 @@ EOF;
                         $cooperatives->setQuantiteVendue($val);
                     }
                 }
+                
                 $doc->addRebeche($rebeche);
-
             } else {
 
                 $detail = new DRRecolteAppellationCepageDetail();

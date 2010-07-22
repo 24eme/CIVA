@@ -24,20 +24,21 @@ class sfCouchdbJsonDefinitionParser {
 
     protected static function parseField($definition, $key, $data_field) {
         $type = self::getValue($data_field, 'type', 'string');
+        $required = self::getValue($data_field, 'required', true);
         $multiple = ($key == '*');
         if (in_array($type, array(sfCouchdbJsonDefinitionField::TYPE_STRING,
                                   sfCouchdbJsonDefinitionField::TYPE_ANYONE,
                                   sfCouchdbJsonDefinitionField::TYPE_INTEGER,
                                   sfCouchdbJsonDefinitionField::TYPE_FLOAT))) {
             if (!$multiple) {
-                $definition->add(new sfCouchdbJsonDefinitionField($key, $type));
+                $definition->add(new sfCouchdbJsonDefinitionField($key, $type, $required));
             } else {
                 $definition->add(new sfCouchdbJsonDefinitionFieldMultiple($type));
             }
         } elseif ($type == sfCouchdbJsonDefinitionField::TYPE_COLLECTION) {
             if (!$multiple) {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldCollection($key, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldCollection($key, $required, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );
@@ -52,7 +53,7 @@ class sfCouchdbJsonDefinitionParser {
         } elseif ($type == sfCouchdbJsonDefinitionField::TYPE_ARRAY_COLLECTION) {
             if (!$multiple) {
                 self::parseDefinition(
-                    $definition->add(new sfCouchdbJsonDefinitionFieldArrayCollection($key, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
+                    $definition->add(new sfCouchdbJsonDefinitionFieldArrayCollection($key, $required, $definition->getModel(), $definition->getHash(), self::getValue($data_field, 'class', 'sfCouchdbJson')))
                         ->getDefinition(),
                     self::getValueRequired($data_field, 'definition', $key)
                 );

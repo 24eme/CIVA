@@ -16,7 +16,7 @@ DR:
                   '*': { type: string }
       campagne: {  }
       cvi: {  }
-      lies: {type: float}
+      lies: {type: float, required: false}
       recolte:
         type: collection
         class: DRRecolte

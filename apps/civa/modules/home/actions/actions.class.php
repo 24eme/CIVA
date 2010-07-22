@@ -24,7 +24,8 @@ class homeActions extends sfActions {
         $doc2 = new DR();
         $doc2->load(sfCouchdbManager::getClient()->getDoc('DR-6701800180-2009'));
         echo $this->sizeofvar($doc);
-        var_dump($doc);
+
+        echo $doc->get('recolte/appellation_1/lieu/cepage_SY/detail/0/surface');
     }
 
     // convertion d'un nombre d'octet en kB, MB, GB
