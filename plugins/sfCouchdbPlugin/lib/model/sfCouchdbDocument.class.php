@@ -4,7 +4,14 @@ class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
 
     public function  __construct() {
-        parent::__construct(null, null);
+      parent::__construct(null, null);
+      try{
+	if (isset($this->_definition_model)) {
+	  $this->type = $this->_definition_model;
+	}
+      }catch(Exception $e) {
+	throw new sfCouchdbException('Model should include Type field in the document root');
+      }
     }
 
     public function isNew() {

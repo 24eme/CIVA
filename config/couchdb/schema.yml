@@ -1,8 +1,9 @@
 DR:
   definition:
     fields:
-      _id: {  }
-      _rev: {  }
+      _id: {}
+      _rev: {}
+      type: {}
       acheteurs:
         type: collection
         class: DRAcheteurs

@@ -19,6 +19,11 @@ $t->ok($doc->save(), 'save an empty document');
 $t->is($doc->_id, 'TESTCOUCHDB', 'id is the good one');
 $t->ok($doc->_rev, 'should have now a rev number');
 $t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve the new doc');
+try {
+$t->is($doc->type, 'DR', 'should have a type');
+}catch(Exception $e) {
+$t->fail('should have a type');
+ }
 $t->ok($doc->delete(), 'delete the document');
 try
 {

@@ -19,7 +19,6 @@ class sfCouchdbJsonDefinitionParser {
         foreach($data_fields as $key => $data_field) {
             self::parseField($definition, $key, $data_field);
         }
-
         return $definition;
     }
 
