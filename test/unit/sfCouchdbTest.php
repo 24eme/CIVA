@@ -24,6 +24,16 @@ $t->is($doc->type, 'DR', 'should have a type');
 }catch(Exception $e) {
 $t->fail('should have a type');
  }
+
+$rev = $doc->_rev;
+$doc->cvi = "TEST";
+$doc->campagne = "2009";
+$doc->save();
+
+$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->cvi, 'TEST', 'cvi number saved');
+$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->campagne, '2009', 'campagne saved');
+$t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revision changed');
+
 $t->ok($doc->delete(), 'delete the document');
 try
 {
