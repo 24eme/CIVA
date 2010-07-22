@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(7);
+$t = new lime_test(10);
 
 $databaseManager = new sfDatabaseManager($this->configuration);
 
