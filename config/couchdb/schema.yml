@@ -77,26 +77,3 @@ DR:
                                           cave_particuliere: { type: float }
                                           volume_revendique: { type: float }
                                           volume_dplc: { type: float }
-                        rebeche:
-                          type: array_collection
-                          class: DRRecolteAppellationRebeche
-                          definition:
-                            fields:
-                              '*':
-                                type: collection
-                                class: DRRecolteAppellationRebecheDetail
-                                definition:
-                                  fields:
-                                    appellation: {  }
-                                    volume: {type: float }
-                                    cooperatives:
-                                      type: array_collection
-                                      definition:
-                                        fields:
-                                          '*':
-                                            type: collection
-                                            definition:
-                                              fields:
-                                                cvi: {  }
-                                                quantite_vendue: { type: float }
-                                    cave_particuliere: { type: float }
