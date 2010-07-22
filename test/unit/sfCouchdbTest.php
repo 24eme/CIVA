@@ -34,6 +34,21 @@ $t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->cvi, 'TEST', 'cvi n
 $t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->campagne, '2009', 'campagne saved');
 $t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revision changed');
 
+$detail = new DRRecolteAppellationCepageDetail();
+$detail->setAppellation("appellation_1");
+$detail->setCepage("cepage_PB");
+$detail->setCodeLieu("lieu");
+$detail->setSurface(100);
+$detail->setVolume(10);
+$detail->setCaveParticuliere(5);
+$acheteur = $detail->getAcheteurs()->add();
+$acheteur->setCvi("CVI_FICTIF");
+$acheteur->setQuantiteVendue(5);
+$t->ok($doc->addRecolte($detail), 'add detail');
+
+$obj = $doc->getRecolte()->get('appellation_1')->get('lieu')->get('cepage_PB');
+$t->ok($obj, 'can retrieve detail object');
+
 $t->ok($doc->delete(), 'delete the document');
 try
 {
