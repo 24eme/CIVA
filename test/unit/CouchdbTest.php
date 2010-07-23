@@ -1,9 +1,10 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(7);
+$t = new lime_test(5);
 
-$databaseManager = new sfDatabaseManager($this->configuration);
+$configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
+$databaseManager = new sfDatabaseManager($configuration);
 $connection = $databaseManager->getDatabase()->getConnection();
 
 $t->ok($connection, 'can retrieve default couchdb database');
