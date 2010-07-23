@@ -184,4 +184,10 @@ class sfCouchdbJson {
         
     }
 
+    public function fromArray($values) {
+        foreach($values as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
+
 }

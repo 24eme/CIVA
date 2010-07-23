@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(10);
+$t = new lime_test(11);
 
 $databaseManager = new sfDatabaseManager($this->configuration);
 
@@ -35,8 +35,8 @@ $t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->campagne, '2009', '
 $t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revision changed');
 
 $detail = new DRRecolteAppellationCepageDetail();
-$detail->setAppellation("appellation_1");
-$detail->setCepage("cepage_PB");
+$detail->setAppellation("1");
+$detail->setCepage("PB");
 $detail->setCodeLieu("lieu");
 $detail->setSurface(100);
 $detail->setVolume(10);
@@ -48,6 +48,9 @@ $t->ok($doc->addRecolte($detail), 'add detail');
 
 $obj = $doc->getRecolte()->get('appellation_1')->get('lieu')->get('cepage_PB');
 $t->ok($obj, 'can retrieve detail object');
+
+$obj_hash = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/surface');
+$t->ok($obj_hash == 100, 'can retrieve surface by hash');
 
 $t->ok($doc->delete(), 'delete the document');
 try
