@@ -26,12 +26,15 @@ class homeActions extends sfActions {
         $doc2->load(sfCouchdbManager::getClient()->getDoc('DR-6701800180-2009'));
 
         $this->form = new DRRecolteAppellationCepageDetailForm($doc2, $doc2->getRecolteDetail('test', 'test', 1));
+        $this->form->addAcheteur();
+        $this->form->addAcheteur();
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
 
             if ($this->form->isValid()) {
                 $this->form->save();
+                $this->redirect('home/index');
             }
         }
     }

@@ -196,7 +196,9 @@ class sfCouchdbJson {
 
     public function fromArray($values) {
         foreach($values as $key => $value) {
-            $this->set($key, $value);
+            if (!is_array($value)) {
+                $this->set($key, $value);
+            }
         }
     }
 
