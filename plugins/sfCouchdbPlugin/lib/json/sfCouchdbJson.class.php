@@ -72,13 +72,17 @@ class sfCouchdbJson {
         }
     }
 
-    protected function remove($key) {
+    public function remove($key_or_hash) {
+      $obj_hash = new sfCouchdbHash($key_or_hash);
+      if ($obj_hash->isAlone()) {
+	$key = $key_or_hash;
         if ($this->hasField($key)) {
             unset($this->_fields[$key]);
             return true;
-        } else {
-            return false;
-        }
+        } 
+	return false;
+      }
+      return $this->get($obj_hash->getFirst())->remove($obj_hash->getAllWithoutFirst());
     }
 
     public function __set($key, $value) {
