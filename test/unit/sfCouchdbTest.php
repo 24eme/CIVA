@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(13);
+$t = new lime_test(15);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -52,6 +52,12 @@ $t->ok($obj, 'can retrieve detail object');
 
 $obj_hash = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/surface');
 $t->ok($obj_hash == 100, 'can retrieve surface by hash');
+
+$doc->set('recolte/appellation_1/lieu/cepage_PB/detail/0/surface', 150);
+$rev = $doc->_rev;
+$t->is($obj_hash = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/surface'), 150, 'can change value in the tree');
+$doc->save();
+$t->isnt($rev, $doc->_rev, 'revision number has changed after saving');
 
 $t->ok($doc->delete(), 'delete the document');
 try

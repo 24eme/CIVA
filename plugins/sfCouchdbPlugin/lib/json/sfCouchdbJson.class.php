@@ -63,8 +63,13 @@ class sfCouchdbJson {
         }
     }
 
-    public function set($key, $value) {
-        return $this->getField($key)->setValue($value);
+    public function set($key_or_hash, $value) {
+        $obj_hash = new sfCouchdbHash($key_or_hash);
+        if ($obj_hash->isAlone()) {
+	  return $this->getField($obj_hash->getFirst())->setValue($value);
+        } else {
+	  return $this->get($obj_hash->getFirst())->set($obj_hash->getAllWithoutFirst(), $value);
+        }
     }
 
     protected function remove($key) {
