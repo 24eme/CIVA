@@ -72,6 +72,7 @@ class sfCouchdbJson {
         }
     }
 
+
     public function remove($key_or_hash) {
       $obj_hash = new sfCouchdbHash($key_or_hash);
       if ($obj_hash->isAlone()) {
@@ -199,4 +200,23 @@ class sfCouchdbJson {
         }
     }
 
+    public function getSimpleFields() {
+        $simple_fields = array();
+        foreach($this->_fields as $key => $field) {
+            if (!($field instanceof sfCouchdbJsonFieldArrayCollection || $field instanceof sfCouchdbJsonFieldCollection)) {
+                $simple_fields[$key] = $field;
+            }
+        }
+        return $simple_fields;
+    }
+
+    public function toArray($deep = false) {
+        $array_fields = array();
+        $simple_fields = $this->getSimpleFields();
+        foreach($simple_fields as $key => $field) {
+            $array_fields[$key] = $field->getValue();
+        }
+
+        return $array_fields;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class BaseDR extends sfCouchdbDocument {
+abstract class BaseDR extends sfCouchdbDocument {
     public function setupDefinition() {
         $this->_definition_model = self::getDocumentDefinitionModel();
         $this->_definition_hash = '/';

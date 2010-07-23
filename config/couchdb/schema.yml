@@ -60,6 +60,7 @@ DR:
                                               fields:
                                                 '*':
                                                   type: collection
+                                                  class: DRRecolteAppellationCepageDetailAcheteur
                                                   definition:
                                                     fields:
                                                       cvi: {  }
