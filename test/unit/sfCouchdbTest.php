@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(27);
+$t = new lime_test(28);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -55,6 +55,8 @@ $acheteur = $detail->getAcheteurs()->add();
 $acheteur->setCvi("CVI_FICTIF");
 $acheteur->setQuantiteVendue(5);
 $t->ok($doc->addRecolte($detail), 'add detail');
+
+print_r($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/0'));
 
 $obj = $doc->getRecolte()->get('appellation_1')->get('lieu')->get('cepage_PB');
 $t->ok($obj, 'can retrieve detail object');
@@ -110,9 +112,22 @@ $t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getHash(), '/recolte/
 /*** NEW TEST ****/
 $t->is($doc->get('/recolte/appellation_2')->getHash(), '/recolte/appellation_2', 'can access field hash from an sfcouchdbJson object issued of a collection');
 
+/*** NEW TEST ****/
 $doc->addRecolte($detail);
 $t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/1')->getHash(), '/recolte/appellation_1/lieu/cepage_PB/detail/1', 'can access field hash from a array collection');
 
+/*** NEW TEST ****/
+$nb = 0;
+foreach($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail') as $k => $i) {
+  $nb++;
+}
+$t->is($nb, 2, 'iterator on detail');
+
+
+/*** NEW TEST ****/
+//$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/total_volume')->getValue(), 20, 'total volume for a cepage is automaticaly set');
+/*** NEW TEST ****/
+//$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/total_surface')->getValue(), 250, 'total volume for a cepage is automaticaly set');
 
 /*** NEW TEST ****/
 
