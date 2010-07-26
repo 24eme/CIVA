@@ -1,6 +1,6 @@
 <?php
 
-class sfCouchdbJson {
+class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     private $_fields = null;
     private $_is_array = false;
@@ -98,7 +98,7 @@ class sfCouchdbJson {
         }
     }
 
-    protected function addNormal($key = null, $item = null) {
+    private function addNormal($key = null, $item = null) {
         if ($this->hasField($key)) {
             return $this->get($key);
         }
@@ -109,7 +109,7 @@ class sfCouchdbJson {
         return $field->getValue();
     }
 
-    protected function addNumeric($item = null) {
+    private function addNumeric($item = null) {
         $field = $this->getDefinition()->getJsonField(null, $item, true);
         $this->_fields[] = $field;
 
@@ -124,11 +124,11 @@ class sfCouchdbJson {
         }
     }
 
-    public function hasFieldNormal($key) {
+    private function hasFieldNormal($key) {
         return isset($this->_fields[sfInflector::underscore(sfInflector::camelize($key))]);
     }
 
-    public function hasFieldNumeric($key) {
+    private function hasFieldNumeric($key) {
         return isset($this->_fields[$key]);
     }
 
@@ -140,7 +140,11 @@ class sfCouchdbJson {
         }
     }
 
-    protected function getFieldNormal($key) {
+    public function getFields() {
+        return $this->_fields;
+    }
+
+    private function getFieldNormal($key) {
          if ($this->hasField($key)) {
             return $this->_fields[sfInflector::underscore(sfInflector::camelize($key))];
         } else {
@@ -148,7 +152,7 @@ class sfCouchdbJson {
         }
     }
 
-    protected function getFieldNumeric($key) {
+    private function getFieldNumeric($key) {
          if ($this->hasField($key)) {
             return $this->_fields[$key];
         } else {
@@ -220,5 +224,29 @@ class sfCouchdbJson {
         }
 
         return $array_fields;
+    }
+
+    public function getIterator() {
+        return new sfCouchdbJsonArrayIterator($this);
+    }
+
+    public function offsetGet($index) {
+        return $this->get($index);
+    }
+
+    public function offsetSet($index, $newval) {
+        return $this->set($index, $newval);
+    }
+
+    public function offsetExists($index) {
+        return $this->hasField($index);
+    }
+
+    public function offsetUnset($offset) {
+      return $this->remove($offset);
+    }
+
+    public function count() {
+        return count($this->_fields);
     }
 }

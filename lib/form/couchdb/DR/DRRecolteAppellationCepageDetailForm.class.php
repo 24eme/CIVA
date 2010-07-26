@@ -2,10 +2,11 @@
 
 class DRRecolteAppellationCepageDetailForm extends BaseDRRecolteAppellationCepageDetailForm {
     public function configure() {
-        $this->embedForm(0, new DRRecolteAppellationCepageDetailAcheteurForm($this->doc, $this->getObject()->get('acheteurs/0')));
-        $this->embedForm(1, new DRRecolteAppellationCepageDetailAcheteurForm($this->doc, $this->getObject()->get('acheteurs/1')));
-        $this->embedForm(2, new DRRecolteAppellationCepageDetailAcheteurForm($this->doc, $this->getObject()->get('acheteurs/2')));
-        $this->embedForm(3, new DRRecolteAppellationCepageDetailAcheteurForm($this->doc, $this->getObject()->get('acheteurs/3')));
+        foreach($this->getObject()->getAcheteurs() as $key => $acheteur) {
+            echo $key;
+            print_r($acheteur);
+            $this->embedForm($key, new DRRecolteAppellationCepageDetailAcheteurForm($this->doc, $acheteur));
+        }
     }
 
     public function addAcheteur() {
