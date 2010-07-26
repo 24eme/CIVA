@@ -16,12 +16,8 @@ abstract class BaseDRRecolteAppellationCepageDetailAcheteurForm extends sfCouchd
         //$this->validatorSchema->setPostValidator();
 
         $this->widgetSchema->setNameFormat('dr_recolte_appellation_cepage_detail_acheteur[%s]');
-
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-        //$this->setupInheritance();
-
-        parent::setup();
     }
 
     public function getModelName() {

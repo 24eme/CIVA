@@ -2,9 +2,38 @@
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
 # default rules
-homepage:
+login:
   url:   /
-  param: { module: home, action: index }
+  param: { module: recoltant, action: login }
+
+mon_espace_civa:
+  url:   /mon_espace_civa
+  param: { module: declaration, action: monEspaceCiva }
+
+exploitation_administratif:
+  url:   /exploitation_administratif
+  param: { module: recoltant, action: exploitationAdministratif }
+
+exploitation_acheteurs:
+  url:   /exploitation_acheteurs
+  param: { module: acheteur, action: exploitationAcheteurs }
+
+exploitation_autres:
+  url:   /exploitation_autres
+  param: { module: declaration, action: exploitationAutres }
+
+recolte:
+  url:   /recolte
+  param: { module: declaration, action: recolte }
+
+validation:
+  url:   /validation
+  param: { module: declaration, action: validation }
+
+confirmation:
+  url:   /confirmation
+  param: { module: declaration, action: confirmation }
+
 
 # generic rules
 # please, remove them by adding more specific rules

@@ -6,9 +6,19 @@
     <?php include_title() ?>
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php include_stylesheets() ?>
-    <?php include_javascripts() ?>
   </head>
-  <body>
-    <?php echo $sf_content ?>
+  <body id="declaration_recolte">
+    <!-- #global -->
+	<div id="global">
+            <?php include_partial('global/header') ?>
+            <div id="contenu">
+                <?php echo $sf_content ?>
+            </div>
+            <?php include_partial('global/footer') ?>
+        </div>
+    <!-- fin #global -->
+
+    <?php include_javascripts() ?>
+    <?php include_partial('global/ieCssJavascript') ?>
   </body>
 </html>

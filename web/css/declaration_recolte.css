@@ -1,0 +1,782 @@
+@charset "utf-8";
+/**
+ * Fichier : declaration_recolte.css
+ * Description : styles spécifiques à la déclaration de récolte
+ * Auteur : Hamza Iqbal - hiqbal[at]actualys.com
+ * Version : 1.0.0
+ ******************************************/
+
+/**
+ * Structure
+ ******************************************/
+#declaration_recolte #contenu
+{
+	padding: 30px 0;
+	position: relative;
+}
+
+#declaration_recolte #principal
+{
+}
+
+#declaration_recolte #application_dr
+{
+	background: #f1f1f1;
+	clear: both;
+	margin: 0 0 22px;
+	padding: 30px 20px;
+	position: relative;
+}
+
+
+/**
+ * Eléménts génériques
+ ******************************************/
+/* Sections */
+.titre_principal
+{
+	background: #acb701;
+	color: #f1f1f1;
+	display: inline-block; !display: inline; zoom: 1;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 26px;
+	padding: 0 10px;
+	margin: 0 0 0 20px;
+}
+
+.titre_section
+{
+	background: #dcdfa9;
+	color: #848c03;
+	display: inline-block; !display: inline; zoom: 1;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 25px;
+	padding: 0 10px;
+}
+
+.contenu_section
+{
+	background: #edecec;
+	border: 1px solid #c7c9c8;
+	padding: 15px;
+}
+
+.bloc_gris,
+.bloc_vert { padding: 10px; }
+.bloc_gris { background: #e0dfdf; }
+.bloc_vert { background: #e0e1bd; }
+
+/* Etapes de la déclaration */
+#declaration_recolte ul#etape_declaration
+{
+	background: #f1f1f1;
+	border-bottom: 1px solid #cacaca;
+	border-top: 1px solid #dcdcdc;
+	color: #a8a8a8;
+	font-size: 18px;
+	margin: 0 0 -15px;
+	padding: 4px 20px;
+	position: relative;
+	top: -30px;
+}
+
+#declaration_recolte ul#etape_declaration li
+{
+	float: left;
+	margin: 0 1px 0 0;
+	width: 133px;
+}
+
+#declaration_recolte ul#etape_declaration li.actif { color: #000; }
+
+#declaration_recolte ul#etape_declaration li em
+{
+	background: url(../images/fonds/bg_etapes_declaration.png) 0 0 repeat-x;
+	color: #c8ce79;
+	display: block;
+	font-size: 12px;
+	font-style: italic;
+	font-weight: bold;
+	margin: 2px 0 0;
+	padding: 6px 0 0;
+}
+
+#declaration_recolte ul#etape_declaration li.actif em
+{
+	background-position: 0 -26px;	
+	color: #ffb100;
+}
+
+#declaration_recolte ul#etape_declaration li.passe em { background-position: 0 -52px; }
+
+/* Actions sur la déclaration */
+#declaration_recolte ul#actions_declaration
+{
+	position: absolute;
+	right: 15px;
+	top: 18px;
+	z-index: 10;
+}
+
+#declaration_recolte ul#actions_declaration li
+{
+	display: inline;
+	float: left;
+	margin: 0 0 0 10px;
+}
+
+/* Onglets */
+#declaration_recolte ul#onglets_majeurs
+{
+	float: left;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 0 20px;
+	width: 958px;
+}
+
+#declaration_recolte ul#onglets_majeurs.onglets_courts
+{
+	font-size: 13px;
+	line-height: 1;
+}
+
+#declaration_recolte ul#onglets_majeurs li
+{
+	float: left;
+	margin: 0 3px 0 0;
+}
+
+#declaration_recolte ul#onglets_majeurs li a
+{
+	background: #bcbdbc;
+	color: #fff;
+	float: left;
+	padding: 4px 15px;
+	text-decoration: none;
+}
+
+#declaration_recolte ul#onglets_majeurs.onglets_courts li a { padding: 2px 15px 2px 5px; }
+
+#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a
+{
+	background: #acb701;
+	color: #000;
+	cursor: default;
+}
+
+#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a:hover { text-decoration: none; }
+
+#declaration_recolte ul#onglets_majeurs li a span { color: #fff; }
+
+#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a span { cursor: default; }
+
+/* Boutons précédent / suivant  */
+#declaration_recolte ul.btn_prev_suiv { clear: both; }
+#declaration_recolte ul.btn_prev_suiv li { display: inline; }
+#declaration_recolte ul.btn_prev_suiv li.prec { float: left; }
+#declaration_recolte ul.btn_prev_suiv li.suiv { float: right; }
+#declaration_recolte ul.btn_prev_suiv li.previsualiser { float: left; margin: 0 0 0 308px; }
+#declaration_recolte ul.btn_prev_suiv li img { display: block; }
+#declaration_recolte ul#btn_etape { padding: 0 20px; }
+#declaration_recolte ul#btn_appelation { padding: 30px 60px 0; }
+#declaration_recolte ul#btn_cepage { padding: 10px 0; }
+
+/* Tableau de données */
+#declaration_recolte table.table_donnees { }
+
+#declaration_recolte table.table_donnees thead th 
+{
+	color: #000;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 1;
+	padding: 3px;
+	text-align: left;
+	vertical-align: bottom;
+}
+
+#declaration_recolte table.table_donnees thead th:first-child,
+#declaration_recolte table.table_donnees thead th.cvi
+{
+	color: #848c03;
+	font-size: 16px !important;
+	font-weight: normal;
+}
+
+#declaration_recolte table.table_donnees thead th:first-child
+{
+	background: #dcdfa9;
+	vertical-align: middle;
+	padding: 0;
+	width: 130px;
+}
+
+#declaration_recolte table.table_donnees thead th span
+{
+	color: #acb701;
+	display: block;
+	font-weight: normal;
+}
+
+#declaration_recolte table.table_donnees tbody td
+{
+	background: #edecec;
+	border-bottom: 1px dashed #c6c8c7;
+	color: #7a7a7a;
+	font-size: 12px;
+	line-height: 17px;
+	padding: 3px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+#declaration_recolte table.table_donnees tbody td.alt { background: #ddd; }
+#declaration_recolte table.table_donnees tbody tr:first-child td { border-top: 1px solid #c6c8c7; }
+#declaration_recolte table.table_donnees tbody td:first-child { border-left: 1px solid #c6c8c7; }
+#declaration_recolte table.table_donnees tbody td:last-child { border-right: 1px solid #c6c8c7; }
+#declaration_recolte table.table_donnees tbody tr:last-child td { border-bottom: 1px solid #c6c8c7; }
+
+/* Autocompletion */
+.ui-autocomplete
+{
+	background: #fff;
+	border: 1px solid #c2c1ba;
+	font-size: 12px;
+	position: absolute;
+	_width:1px;
+}
+
+.ui-autocomplete .ui-menu-item a
+{
+	background: #fff;
+	color: #7a7a7a;
+	cursor: pointer;
+	display: block;
+	padding: 2px;
+	text-decoration: none;
+}
+
+.ui-autocomplete .ui-menu-item a.ui-state-hover,
+.ui-autocomplete .ui-menu-item a.ui-state-active
+{
+	background: #dcdfa9;
+	color: #000;
+}
+
+
+/**
+ * Nouvelle déclaration
+ ******************************************/
+#declaration_recolte #nouvelle_declaration
+{
+	float: left;
+	margin: 0 20px 0 0;
+	width: 488px;
+}
+
+#declaration_recolte #nouvelle_declaration p.intro
+{
+	color: #9a9999;
+	font-size: 14px;
+	margin: 0 0 10px;
+}
+
+#declaration_recolte #nouvelle_declaration p.intro
+{
+	color: #999;
+	font-size: 14px;
+	margin: 0 0 10px;
+}
+
+#declaration_recolte #nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
+
+#declaration_recolte #nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
+
+#declaration_recolte #nouvelle_declaration .ligne_form label { font-size: 14px; }
+
+#declaration_recolte #nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
+
+#declaration_recolte #nouvelle_declaration .ligne_btn select
+{
+	border: 1px solid #dadad6;
+	color: #7a7a7a;
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+#declaration_recolte #nouvelle_declaration .ligne_btn input.btn
+{
+	float: right;
+	vertical-align: middle;
+}
+
+/**
+ * Précédentes déclarations
+ ******************************************/
+#declaration_recolte #precedentes_declarations
+{
+	float: left;
+	width: 264px;
+}
+
+#declaration_recolte #precedentes_declarations ul { font-size: 15px; }
+
+#declaration_recolte #precedentes_declarations ul li { margin: 0 0 3px; }
+
+#declaration_recolte #precedentes_declarations ul li a
+{
+	background: url(../images/puces/puces_accordeon.png) -27px 0 no-repeat;
+	display: inline-block;
+	padding: 0 0 0 15px;
+	outline: 0;
+}
+
+#declaration_recolte #precedentes_declarations ul li a.ui-state-active { background-position: -12px -16px; }
+
+#declaration_recolte #precedentes_declarations ul ul
+{
+	font-size: 14px;
+	padding: 3px 0 0 15px;
+}
+
+#declaration_recolte #precedentes_declarations ul ul li a { background-position: -8px -32px; }
+#declaration_recolte #precedentes_declarations ul ul li a.ui-state-active { background-position: 0 -48px; }
+
+#declaration_recolte #precedentes_declarations ul ul.declarations { font-size: 13px; }
+
+#declaration_recolte #precedentes_declarations ul ul.declarations li a
+{
+	background: url(../images/pictos/pi_declaration_recolte.png) 0 center no-repeat;
+	color: #7a7a7a;
+	padding: 0 0 0 20px;
+}
+
+/**
+ * Informations exploitation
+ ******************************************/
+#declaration_recolte #infos_exploitation
+{
+	float: left;
+	margin: 0 20px 0 0;
+	width: 488px;
+}
+
+/* Colonne gauche */
+#declaration_recolte #infos_exploitation .col_1
+{
+	float: left;
+	width: 215px;
+}
+
+#declaration_recolte #infos_exploitation .col_1 p.num
+{
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0 0 15px;
+}
+
+#declaration_recolte #infos_exploitation .col_1 p.num span
+{
+	color: #7a7a7a;
+	font-weight: normal;
+}
+
+#declaration_recolte #infos_exploitation .col_1 #regime_fiscal p
+{
+	color: #7a7a7a;
+	float: left;
+	font-size: 14px;
+	width: 55%;
+}
+
+#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul
+{
+	float: left;
+	width: 45%;
+}
+
+#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul li { margin: 0 0 7px; }
+#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul li input[type=radio] { margin: 0 3px 0 0; }
+
+/* Colonne droite */
+#declaration_recolte #infos_exploitation .col_2
+{
+	float: right;
+	width: 202px;
+}
+
+#declaration_recolte #infos_exploitation .col_2 h3
+{
+	font-size: 24px;
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+
+#declaration_recolte #infos_exploitation .col_2 address
+{
+	display: block;
+	font-size: 16px;
+	font-style: normal;
+	margin: 0 0 15px;
+}
+
+#declaration_recolte #infos_exploitation .col_2 p
+{
+	display: inline-block; !display: inline;
+	font-size: 15px;
+	width: 49%;
+	zoom: 1;
+}
+
+#declaration_recolte #infos_exploitation .col_2 p span
+{
+	color: #7a7a7a;
+	display: block;
+	font-size: 14px;
+}
+
+/**
+ * Gestionnaire de l'exploitation
+ ******************************************/
+#declaration_recolte #gestionnaire_exploitation
+{
+	float: left;
+	width: 264px;
+}
+
+#declaration_recolte #gestionnaire_exploitation h3
+{
+	font-size: 21px;
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+
+#declaration_recolte #gestionnaire_exploitation address
+{
+	display: block;
+	font-size: 16px;
+	font-style: normal;
+	margin: 0 0 15px;
+}
+
+#declaration_recolte #gestionnaire_exploitation p
+{
+	font-size: 15px;
+	margin: 0 0 10px;
+}
+
+#declaration_recolte #gestionnaire_exploitation p span
+{
+	color: #7a7a7a;
+	display: block;
+	font-size: 14px;
+}
+
+#declaration_recolte #gestionnaire_exploitation .btn { text-align: right; }
+
+/**
+ * Acheteurs de l'exploitation
+ ******************************************/
+#declaration_recolte #exploitation_acheteurs #acheteurs_raisin,
+#declaration_recolte #exploitation_acheteurs #caves_cooperatives
+{
+	margin: 0 0 15px;
+	position: relative;
+	width: 950px;
+	zoom: 1;
+}
+
+#declaration_recolte #exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
+
+#declaration_recolte #exploitation_acheteurs table th { font-size: 11px; }
+
+#declaration_recolte #exploitation_acheteurs table tbody a.supprimer
+{
+	position: absolute;
+	right: -20px;
+}
+
+#declaration_recolte #exploitation_acheteurs table tbody td { text-align: center; }
+
+#declaration_recolte #exploitation_acheteurs table tbody td.nom,
+#declaration_recolte #exploitation_acheteurs table tbody td.cvi,
+#declaration_recolte #exploitation_acheteurs table tbody td.rs
+{
+	cursor: pointer;
+	text-align: left;
+}
+
+#declaration_recolte #exploitation_acheteurs table tbody td.cvi { width: 63px; }
+#declaration_recolte #exploitation_acheteurs table tbody td.rs { width: 110px; }
+
+#declaration_recolte #exploitation_acheteurs table tbody td.nom span { height: 17px; display: block; }
+
+#declaration_recolte #exploitation_acheteurs table tbody td input[type=text],
+#declaration_recolte #exploitation_acheteurs table tbody .editable input
+{
+	background: #f6f6f6;
+	border: 1px solid #c2c1ba;
+	color: #7a7a7a;
+	font-size: 12px;
+}
+
+#declaration_recolte #exploitation_acheteurs table tbody td.alt input { background: #efeeee; }
+#declaration_recolte #exploitation_acheteurs table tbody td.nom input { width: 121px; }
+#declaration_recolte #exploitation_acheteurs table tbody td.cvi input { width: 58px; }
+#declaration_recolte #exploitation_acheteurs table tbody td.rs input { width: 108px; }
+
+#declaration_recolte #exploitation_acheteurs table tbody td label { display: block; }
+
+#declaration_recolte #exploitation_acheteurs .btn
+{
+	overflow: hidden;
+	width: 100%;
+}
+
+#declaration_recolte #exploitation_acheteurs .btn a,
+#declaration_recolte #exploitation_acheteurs .btn input
+{
+	float: right;
+	margin: 0 0 0 5px;
+}
+
+
+/**
+ * Ajout achteur / cave
+ ******************************************/
+#declaration_recolte #exploitation_acheteurs .form_ajout
+{
+	margin: -36px 0 15px;
+	width: 950px;
+}
+
+#declaration_recolte #exploitation_acheteurs .form_ajout table thead { visibility: hidden; }
+
+
+/**
+ * Acheteurs de moults
+ ******************************************/
+#declaration_recolte #acheteurs_moults { width: 316px; }
+
+/**
+ * Autres exploitations
+ ******************************************/
+#declaration_recolte #vol_total_lies,
+#declaration_recolte #jeunes_vignes
+{
+	clear: both;
+	width: 488px;
+}
+
+#declaration_recolte #vol_total_lies { margin: 0 0 45px; }
+
+#declaration_recolte #vol_total_lies input,
+#declaration_recolte #jeunes_vignes input
+{
+	background: #f0f0de;
+	border: 1px solid #c2c1ba;
+	float: left;
+	margin: 0 12px 0 0;
+	vertical-align: middle;
+	width: 120px;
+}
+
+#declaration_recolte #vol_total_lies label,
+#declaration_recolte #jeunes_vignes label
+{
+	float: left;
+	font-size: 14px;
+}
+
+/**
+ * Validation Acheteurs et caves
+ ******************************************/
+#declaration_recolte #acheteurs_caves #acheteurs_raisin { margin: 0 0 50px; }
+#declaration_recolte #acheteurs_caves #acheteurs_raisin,
+#declaration_recolte #acheteurs_caves #caves_cooperatives { width: 710px; }
+
+#declaration_recolte #acheteurs_caves table tbody td { padding: 5px 3px; }
+
+/**
+ * Validation Acheteurs et caves
+ ******************************************/
+#declaration_recolte #appelations table { float: left; width: 830px; }
+#declaration_recolte #appelations table thead th { font-size: 11px; }
+#declaration_recolte #appelations table thead th:first-child { width: auto; }
+
+/**
+ * Validation Total général
+ ******************************************/
+#declaration_recolte #total_general { float: right; width: 120px; }
+#declaration_recolte #total_general h2 { line-height: 28px; }
+
+#declaration_recolte #total_general ul
+{
+	font-size: 14px;
+	font-weight: bold;
+	padding: 2px 15px;
+	text-align: center;
+	line-height: 1;
+}
+
+#declaration_recolte #total_general ul li
+{
+	background: #fff;
+	border: 1px solid #dadad6;
+	margin: 0 0 2px;
+}
+
+/**
+ * Confirmation fin de la déclaration
+ ******************************************/
+#declaration_recolte #confirmation_fin_declaration { width: 536px; }
+
+#declaration_recolte #confirmation_fin_declaration p.important
+{
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
+/**
+ * Gestion de récolte
+ ******************************************/
+/* Liste des sépages */
+#gestion_recolte ul#liste_sepages
+{
+	float: left;
+	font-size: 14px;
+	position: relative;
+	width: 106px;
+	z-index: 10;
+}
+
+#gestion_recolte ul#liste_sepages li
+{
+	background: #c6c6c6;
+	border: 1px solid #c6c6c6;
+	margin: 0 0 2px;
+	width: 105px;
+}
+
+#gestion_recolte ul#liste_sepages li.ui-tabs-selected
+{
+	background: #edecec;
+	border-right-color: #edecec;
+	font-weight: bold;
+}
+
+#gestion_recolte ul#liste_sepages li a
+{
+	color: #fff;
+	display: block;
+	padding: 3px 5px;
+	text-decoration: none;
+}
+
+#gestion_recolte ul#liste_sepages li.ui-tabs-selected a
+{
+	color: #848c03;
+	cursor: default;
+}
+
+#gestion_recolte ul#liste_sepages li.ui-tabs-selected a span
+{
+	color: #000; 
+	cursor: default;
+}
+
+/* Récolte de sépage */
+#gestion_recolte #donnees_recolte_sepage
+{
+	background: #edecec;
+	border: 1px solid #c6c6c6;
+	float: left;
+	padding: 5px;
+	width: 714px;
+}
+
+/* Colonne intitulés */
+#gestion_recolte #colonne_intitules
+{
+	color: #7a7a7a;
+	float: left;
+	font-size: 14px;
+	line-height: 17px;
+	margin: 18px 0 0;
+	width: 185px;
+}
+
+#gestion_recolte #colonne_intitules h3
+{
+	border-bottom: 1px dashed #b5b4b4;
+	font-weight: normal;
+	padding: 3px 0;
+}
+
+#gestion_recolte #colonne_intitules p,
+#gestion_recolte #colonne_intitules ul
+{
+	background: #e0dfdf;
+	margin: 0 0 3px;
+}
+
+#gestion_recolte #colonne_intitules p
+{
+	padding: 3px;
+}
+
+#gestion_recolte #colonne_intitules ul
+{
+	padding: 0 3px;
+}
+
+#gestion_recolte #colonne_intitules ul li
+{
+	border-top: 1px dashed #b5b4b4;
+	padding: 3px 0;
+}
+
+#gestion_recolte #colonne_intitules ul li:first-child
+{
+	border: 0;
+}
+
+#gestion_recolte #colonne_intitules .vente_raisins,
+#gestion_recolte #colonne_intitules .caves
+{
+	background: #e0dfdf;
+	margin: 0 0 3px;
+	padding: 3px 3px 0;
+}
+
+#gestion_recolte #colonne_intitules .caves { margin: 0 0 25px; }
+
+#gestion_recolte #colonne_intitules .vente_raisins ul,
+#gestion_recolte #colonne_intitules .caves ul
+{
+	margin: 0 0 0 10px;
+	font-size: 12px;
+	padding: 0;
+}
+
+#gestion_recolte #colonne_intitules .vente_raisins ul li,
+#gestion_recolte #colonne_intitules .caves ul li
+{
+	background: url(../images/puces/liste_tiret.png) 0 10px no-repeat;
+	padding-left: 8px;
+}
+
+
+/* Récolte totale appelation */
+#gestion_recolte #recolte_totale_aoc
+{
+	background: #ffa913;
+	float: right;
+	margin: 24px 0 0;
+	padding: 4px;
+	width: 100px;
+}
