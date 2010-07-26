@@ -5,12 +5,16 @@ abstract class sfCouchdbJsonField {
     protected $key;
     protected $name = null;
     protected $numeric_key = false;
+    protected $_couchdb_document = null;
+    protected $_field_hash = null;
 
-    public function __construct($name, $value, $numeric_key = false) {
+    public function __construct($name, $value, $numeric_key = false, $couchdb_document = null, $hash = null) {
         $this->numeric_key = $numeric_key;
+	$this->_couchdb_document = $couchdb_document;
+	$this->_field_hash = $hash;
         if (!$numeric_key) {
-            $this->key = sfInflector::underscore(sfInflector::camelize($name));
-            $this->name = $name;
+	  $this->key = sfInflector::underscore(sfInflector::camelize($name));
+	  $this->name = $name;
         }
         $this->setValue($value);
     }
@@ -27,7 +31,9 @@ abstract class sfCouchdbJsonField {
         if ($this->isValid($value)) {
             $this->value = $value;
         }
-
+	if ($value instanceof sfCouchdbJson) {
+	  $value->setCouchdbDocumentAndHash($this->_couchdb_document, $this->_field_hash);
+	}
         return $this->value;
     }
 

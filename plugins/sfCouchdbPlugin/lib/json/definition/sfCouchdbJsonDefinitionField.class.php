@@ -39,11 +39,11 @@ class sfCouchdbJsonDefinitionField {
         return null;
     }
 
-    public function getJsonField($data, $numeric_key, $name = null) {
+    public function getJsonField($data, $numeric_key, $couchdb_document, $hash, $name = null) {
             if (is_null($name)) {
                 $name = $this->name;
             }
-            return new $this->class($name, $this->getJsonObject($data), $numeric_key);
+            return new $this->class($name, $this->getJsonObject($data), $numeric_key, $couchdb_document, $hash);
     }
 
     public function getJsonObject($data) {

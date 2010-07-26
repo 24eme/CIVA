@@ -3,8 +3,12 @@
 class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
 
+    public function __toString() {
+      return $this->get('_id').'/'.$this->get('_rev');
+    }
+
     public function  __construct() {
-      parent::__construct(null, null);
+      parent::__construct(null, null, $this);
       try{
 	if (isset($this->_definition_model)) {
 	  $this->type = $this->_definition_model;

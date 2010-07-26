@@ -1,6 +1,7 @@
 <?php
 
 class sfCouchdbJsonFieldCollection extends sfCouchdbJsonField {
+
     public function getData() {
         return $this->value->getData();
     }
