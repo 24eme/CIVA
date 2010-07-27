@@ -15,7 +15,7 @@ class importTask extends sfBaseTask {
                 // add your own options here
         ));
 
-        $this->namespace = 'couchdb';
+        $this->namespace = 'civa';
         $this->name = 'import';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
