@@ -95,22 +95,16 @@ class sfCouchdbJsonDefinition {
         return null;
     }
 
-    public function getJsonField($key, $item, $numeric_key, $couchdb_document, $hash) {
+    public function getJsonField($key, $numeric_key, $couchdb_document, $hash) {
         if (!$this->hasField($key)) {
              throw new sfCouchdbException(sprintf("Definition error : %s", $key));
         }
 
-        if ($item instanceof sfCouchdbJson) {
-            $data = $item->getData();
-        } else {
-            $data = $item;
-        }
-        
         $field = $this->get($key);
         
         if ($field->isMultiple())
-	  return $field->getJsonField($data, $numeric_key, $couchdb_document, $hash, $key);
+	  return $field->getJsonField($numeric_key, $couchdb_document, $hash, $key);
         else
-	  return $field->getJsonField($data, $numeric_key, $couchdb_document, $hash);
+	  return $field->getJsonField($numeric_key, $couchdb_document, $hash);
     }
 }

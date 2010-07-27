@@ -137,13 +137,13 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             return $this->get($key);
         }
 
-        $field = $this->getDefinition()->getJsonField($key, null, false, $this->_couchdb_document, $this->_object_hash.'/'.$key);
+        $field = $this->getDefinition()->getJsonField($key, false, $this->_couchdb_document, $this->_object_hash.'/'.$key);
         $this->_fields[$field->getKey()] = $field;
         return $field->getValue();
     }
 
     private function addNumeric() {
-      $field = $this->getDefinition()->getJsonField(null, null, true, $this->_couchdb_document, $this->_object_hash.'/'.count($this->_fields));
+      $field = $this->getDefinition()->getJsonField(null, true, $this->_couchdb_document, $this->_object_hash.'/'.count($this->_fields));
       $this->_fields[] = $field;
 
       return $field->getValue();

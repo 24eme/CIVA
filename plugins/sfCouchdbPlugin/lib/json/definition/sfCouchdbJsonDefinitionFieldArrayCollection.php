@@ -5,8 +5,8 @@ class sfCouchdbJsonDefinitionFieldArrayCollection extends sfCouchdbJsonDefinitio
         parent::__construct($name, $required, $model, $hash, $collection_class);
     }
 
-    public function getJsonObject($data) {
-        $json_collection = parent::getJsonObject($data);
+    public function getJsonObject() {
+        $json_collection = parent::getJsonObject();
         $json_collection->setIsArray(true);
         return $json_collection;
     }

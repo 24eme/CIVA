@@ -9,9 +9,9 @@ class sfCouchdbJsonDefinitionFieldCollection extends sfCouchdbJsonDefinitionFiel
         return $this->field_definition;
     }
 
-    public function getJsonObject($data) {
+    public function getJsonObject() {
         $json_collection = new $this->collection_class($this->field_definition->getModel(), $this->field_definition->getHash());
-        $json_collection->load($data);
+        //$json_collection->load($data);
         return $json_collection;
     }
 }
