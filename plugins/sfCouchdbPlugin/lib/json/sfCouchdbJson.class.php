@@ -53,8 +53,10 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function load($data) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
-                $this->remove($key);
-                $this->add($key, $item);
+                if (!$this->hasField($key)) {
+                    $this->add($key);
+                }
+                $this->set($key, $item);
             }
         }
     }
@@ -72,10 +74,25 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
+     private function setFromDataOrObject($key, $data_or_object) {
+        $field = $this->getField($key);
+        if ($data instanceof sfCouchdbJson) {
+            $field->getValue()->setFromDataOrObject($data_or_object)->getData();
+        } elseif ($item instanceof stdClass) {
+            $field->getValue()->setFromDataOrObject($data_or_object);
+         } elseif (is_array($item)) {
+            $field->getValue()->setFromDataOrObject($data_or_object);
+         } else {
+            $field->setValue($data_or_object);
+         }
+
+         return $field;
+    }
+
     public function set($key_or_hash, $value) {
         $obj_hash = new sfCouchdbHash($key_or_hash);
         if ($obj_hash->isAlone()) {
-	  return $this->getField($obj_hash->getFirst())->setValue($value);
+          return $this->setFromDataOrObject($obj_hash->getFirst(), $value);
         } else {
 	  return $this->get($obj_hash->getFirst())->set($obj_hash->getAllWithoutFirst(), $value);
         }
@@ -101,29 +118,35 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     public function add($key = null, $item = null) {
         if ($this->_is_array) {
-            $ret = $this->addNumeric($item);
+            $ret = $this->addNumeric();
         } else {
-            $ret = $this->addNormal($key, $item);
+            $ret = $this->addNormal($key);
         }
-
+        if (!is_null($item)) {
+            if ($this->_is_array) {
+               $this->set(count($this->_fields) - 1, $item);
+            } else {
+               $this->set($key, $item);
+            }
+        }
 	return $ret;
     }
-
-    private function addNormal($key = null, $item = null) {
+    
+    private function addNormal($key = null) {
         if ($this->hasField($key)) {
             return $this->get($key);
         }
 
-        $field = $this->getDefinition()->getJsonField($key, $item, false, $this->_couchdb_document, $this->_object_hash.'/'.$key);
+        $field = $this->getDefinition()->getJsonField($key, null, false, $this->_couchdb_document, $this->_object_hash.'/'.$key);
         $this->_fields[$field->getKey()] = $field;
         return $field->getValue();
     }
 
-    private function addNumeric($item = null) {
-      $field = $this->getDefinition()->getJsonField(null, $item, true, $this->_couchdb_document, $this->_object_hash.'/'.count($this->_fields));
-        $this->_fields[] = $field;
+    private function addNumeric() {
+      $field = $this->getDefinition()->getJsonField(null, null, true, $this->_couchdb_document, $this->_object_hash.'/'.count($this->_fields));
+      $this->_fields[] = $field;
 
-        return $field->getValue();
+      return $field->getValue();
     }
 
     public function hasField($key) {
