@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(38);
+$t = new lime_test(39);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -23,7 +23,12 @@ $t->is($doc->_id, 'TESTCOUCHDB', 'id is the good one');
 $t->ok($doc->_rev, 'should have now a rev number');
 /*** NEW TEST ****/
 /*** TEST 1 ****/
-$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve the new doc');
+$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve and verify the new doc');
+$dr = sfCouchdbManager::getClient()->retrieveDocById('TESTCOUCHDB');
+$t->is(get_class($dr), 'DR', 'retrieve the doc as a DR object');
+
+
+
 /*** NEW TEST ****/
 /*** TEST 1 ****/
 try {
