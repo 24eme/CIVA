@@ -42,9 +42,9 @@ EOF;
 	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]))
 	    continue;
 
-	  $json->_id = 'ACH-'.$achat[2];
+	  $json->_id = 'ACHAT-'.$achat[2];
 	  $json->cvi = $achat[2];
-	  $json->civa = $achat[1];
+	  $json->civaba = $achat[1];
 	  $json->type = "Acheteur";
 	  $json->qualité = ($achat[4] == 'N') ? 'Negociant' : 'Cooperative';
 	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat[5]));
