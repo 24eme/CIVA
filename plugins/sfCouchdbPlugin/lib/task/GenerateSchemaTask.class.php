@@ -5,7 +5,7 @@ class GenerateSchemaTask extends sfBaseTask {
     protected function configure() {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('id_doc', sfCommandArgument::REQUIRED, 'Id du document'),
+            new sfCommandArgument('id_doc', sfCommandArgument::REQUIRED, 'id du document'),
         ));
 
         $this->addOptions(array(
@@ -17,7 +17,7 @@ class GenerateSchemaTask extends sfBaseTask {
 
         $this->namespace = 'couchdb';
         $this->name = 'generate-schema';
-        $this->briefDescription = '';
+        $this->briefDescription = 'Generates a schema from a document';
         $this->detailedDescription = <<<EOF
 The [generate-schema|INFO] task does things.
 Call it with:

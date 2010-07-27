@@ -10,22 +10,18 @@
  */
 class declarationActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
-  public function executeIndex(sfWebRequest $request)
-  {
-    $this->forward('default', 'module');
-  }
-
+ 
   /**
    *
    * @param sfWebRequest $request
    */
   public function executeMonEspaceCiva(sfWebRequest $request) {
+        $campagne = '2010';
+        $documents = new sfCouchdbDocumentCollection(sfCouchdbManager::getClient()->startkey('DR-6700800820-0000')->endkey('DR-6700800820-9999')->getAllDocs());
 
+        foreach($documents as $doc) {
+            print_r($doc->campagne);
+        }
   }
 
   /**

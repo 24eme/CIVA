@@ -76,12 +76,12 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
      private function setFromDataOrObject($key, $data_or_object) {
         $field = $this->getField($key);
-        if ($data instanceof sfCouchdbJson) {
-            $field->getValue()->setFromDataOrObject($data_or_object)->getData();
-        } elseif ($item instanceof stdClass) {
-            $field->getValue()->setFromDataOrObject($data_or_object);
-         } elseif (is_array($item)) {
-            $field->getValue()->setFromDataOrObject($data_or_object);
+        if ($data_or_object instanceof sfCouchdbJson) {
+            $field->getValue()->load($data_or_object->getData());
+        } elseif ($data_or_object instanceof stdClass) {
+            $field->getValue()->load($data_or_object);
+         } elseif (is_array($data_or_object)) {
+            $field->getValue()->load($data_or_object);
          } else {
             $field->setValue($data_or_object);
          }

@@ -13,6 +13,8 @@ class sfCouchdbClient extends couchClient {
 
     public function deleteDocument($document) {
       return $this->deleteDoc($document->getData());
+
+      $this->getList($id, $name, $view_name);
     }
     public function retrieveDocById($id) {
       $data = $this->getDoc($id);
