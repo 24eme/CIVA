@@ -38,6 +38,8 @@ DR:
                           class: DRRecolteAppellationCepage
                           definition:
                             fields:
+                              total_volume: {type: float }
+                              total_surface: {type:float }
                               detail:
                                 type: array_collection
                                 definition:
@@ -52,8 +54,8 @@ DR:
                                           denomination: {  }
                                           vtsgn: {  }
                                           code_lieu: {  }
-                                          surface: { type: float }
                                           volume: { type: float }
+                                          surface: { type: float }
                                           acheteurs:
                                             type: array_collection
                                             definition:

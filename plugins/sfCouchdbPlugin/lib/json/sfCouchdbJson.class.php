@@ -233,7 +233,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return $array_fields;
     }
 
-    public function setCouchdbDocumentAndHash($document, $hash) {
+    public function setCouchdbDocumentAndHash($document, $hash, $internal = 0) {
       if ($this->_couchdb_document)
 	return;
       $this->_couchdb_document = $document;
@@ -241,9 +241,14 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
       foreach($this->_fields as $key => $item) {
 	$value = $item->getValue();
 	if ($value instanceOf sfCouchdbJson) {
-	  $value->setCouchdbDocumentAndHash($document, $hash.'/'.$key);
+	  $value->setCouchdbDocumentAndHash($document, $hash.'/'.$key, 1);
 	}
       }
+      /*
+      if (!$internal) {
+	$this->update();
+      }
+      */
     }
 
     public function getCouchdbDocument() {
@@ -262,6 +267,16 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 	throw new sfCouchdbException('document not yet associated');
       }
       return $this->_object_hash;
+    }
+
+
+    protected function update() {
+      foreach ($this->_fields as $key => $item) {
+	$value = $item->getValue();
+	if ($value instanceOf sfCouchdbJson) {
+	  $value->update();
+	}
+      }
     }
 
     public function getIterator() {
