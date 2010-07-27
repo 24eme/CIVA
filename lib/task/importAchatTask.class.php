@@ -13,7 +13,8 @@ class importAchatTask extends sfBaseTask {
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
                 // add your own options here
-            new sfCommandOption('output', null, sfCommandOption::PARAMETER_REQUIRED, 'output type [json|none]', 'json'),
+            new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'stdout'),
+            new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
         ));
 
         $this->namespace = 'import';
@@ -33,7 +34,14 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-	
+		
+	if($options['removedb'] && $options['import'] == 'couchdb') {
+	  if (sfCouchdbManager::getClient()->databaseExists()) {
+	    sfCouchdbManager::getClient()->deleteDatabase();
+	  }
+	  sfCouchdbManager::getClient()->createDatabase();
+	}
+
 	$docs = array();
 
         foreach (file(sfConfig::get('sf_data_dir') . '/' . 'Achat09') as $a) {
@@ -52,16 +60,15 @@ EOF;
 	  $json->achnum = $achat[0];
 	  $docs[] = $json;
 	}
-	if ($options['output'] == 'json') {
-	  echo '{"docs":';
-	  echo json_encode($docs);
-	  echo '}';
-	  return ;
+	if ($options['output'] == 'couchdb') {
+	  foreach ($docs as $data) {
+	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+	    $doc->save();
+	  }
 	}
-	foreach ($docs as $data) {
-	  $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
-	  $doc->save();
-	}
+	echo '{"docs":';
+	echo json_encode($docs);
+	echo '}';
     }
 
     private function recode_number($val) {
