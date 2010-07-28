@@ -128,6 +128,30 @@ EOF;
             }
         }
 
+	//Ajout des totaux
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dcltot09") as $l) {
+            $csv = explode(',', preg_replace('/"/', '', $l));
+            $cvi = $csv[1];
+            $campagne = $csv[0];
+            $_id = 'DR' . '-' . $cvi . '-' . $campagne;
+	    $appellation = $csv[3];
+	    $cepage = $csv[4];
+	    $appellation_new = $this->convertappellation($appellation, $cepage);
+	    $lieu = $csv[10];
+            if (!isset($list_documents[$_id])) {
+	      continue;
+            }
+	    $doc = $list_documents[$_id];
+	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
+	    ->total_surface = $this->recode_number($csv[11]);
+	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
+	    ->total_volume = $this->recode_number($csv[12]);
+	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
+	    ->volume_revendique = $this->recode_number($csv[27]);
+	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
+	    ->dplc = $this->recode_number($csv[28]);
+	}
+
 	//reconstruction des acheteurs
 	foreach($list_documents as $doc) {
 	  $acheteurs = array();
