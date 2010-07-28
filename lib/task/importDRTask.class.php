@@ -104,7 +104,7 @@ EOF;
 		    $acheteur = new stdClass();
 		    $acheteur->cvi = $achat[$campagne][$cvi][$appellation][$i];
 		    $acheteur->quantite_vendue = $val;
-		    $detail->acheteurs[] = $acheteur;
+		    $detail->negoces[] = $acheteur;
 		  }
                 }
                 /* les coopératives */
@@ -136,8 +136,8 @@ EOF;
 	    foreach($app as $nom => $lieu) {
 	      foreach($lieu as $nom => $cep) {
 		foreach ($cep->detail as $detail) {
-		  if (isset($detail->acheteurs))
-		  foreach ($detail->acheteurs as $a) {
+		  if (isset($detail->negoces))
+		  foreach ($detail->negoces as $a) {
 		    $acheteurs[$a->cvi] = $a->cvi;
 		  }
 		  if (isset($detail->cooperatives))
@@ -147,7 +147,7 @@ EOF;
 		}
 	      }
 	    }
-	    $doc->acheteurs->{$nomappellation}->acheteurs = array_keys($acheteurs);
+	    $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
 	    $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
 	  }
 	}

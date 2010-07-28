@@ -14,7 +14,7 @@ DR:
               type: collection
               definition:
                 fields:
-                  'acheteurs':
+                  'negoces':
                     type: array_collection
                     definition: 
                       fields: 
@@ -65,7 +65,7 @@ DR:
                                           code_lieu: {  }
                                           volume: { type: float }
                                           surface: { type: float }
-                                          acheteurs:
+                                          negoces:
                                             type: array_collection
                                             definition:
                                               fields:
