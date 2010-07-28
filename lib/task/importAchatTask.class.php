@@ -54,7 +54,7 @@ EOF;
 	  $json->cvi = $achat[2];
 	  $json->civaba = $achat[1];
 	  $json->type = "Acheteur";
-	  $json->qualité = ($achat[4] == 'N') ? 'Negociant' : 'Cooperative';
+	  $json->qualite = ($achat[4] == 'N') ? 'Negociant' : 'Cooperative';
 	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat[5]));
 	  $json->commune = rtrim($achat[6]);
 	  $json->achnum = $achat[0];
