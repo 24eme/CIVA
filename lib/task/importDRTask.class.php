@@ -83,7 +83,13 @@ EOF;
 		$doc->lies += $this->recode_number($csv[12]);
 
             } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) {
-
+	      if ($cepage == 'AN') {
+		$doc->recolte->appellation_PINOTNOIR->total_surface = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_PINOTNOIR->total_volume = $this->recode_number($csv[12]);
+	      } else if ($cepage == 'CR') {
+		$doc->recolte->appellation_CREMENT->total_surface = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_CREMENT->total_volume = $this->recode_number($csv[12]);
+	      }
             } else {
 
 	        $detail = new stdClass();
@@ -158,6 +164,7 @@ EOF;
 	  $coop = array();
 	  foreach ($doc->recolte as $nomappellation => $app) {
 	    foreach($app as $nom => $lieu) {
+	      if (is_array($lieu))
 	      foreach($lieu as $nom => $cep) {
 		foreach ($cep->detail as $detail) {
 		  if (isset($detail->negoces))
@@ -196,7 +203,7 @@ EOF;
 	return 'CREMENT';
       if ($appellation_db2 == 3)
 	return 'GRDCRU';
-      if ($cepage == 'PN')
+      if ($cepage == 'PN' || $cepage == 'AN')
 	return 'PINOTNOIR';
       if ($cepage == 'KL') 
 	return 'KLEVENER';

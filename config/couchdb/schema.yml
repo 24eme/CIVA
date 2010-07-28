@@ -36,6 +36,8 @@ DR:
               type: collection
               definition:
                 fields:
+                  total_volume: {type: float}
+                  total_surface: {type: float}
                   '*':
                     type: collection
                     class: DRRecolteAppellation
