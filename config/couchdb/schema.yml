@@ -36,7 +36,7 @@ DR:
               type: collection
               definition:
                 fields:
-                  lieu:
+                  '*':
                     type: collection
                     class: DRRecolteAppellation
                     definition:
@@ -49,6 +49,8 @@ DR:
                             fields:
                               total_volume: {type: float }
                               total_surface: {type:float }
+                              volume_revendique: {type:float }
+                              dplc: {type:float }
                               detail:
                                 type: array_collection
                                 definition:
