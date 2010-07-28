@@ -3,7 +3,8 @@
 class sfCouchdbManager {
     protected static $_instance;
 
-    protected $_client;
+    protected $_client = null;
+    protected $_clients_model = array();
 
     protected $_definition = array();
     protected $_definition_tree_hash = array();
@@ -28,47 +29,57 @@ class sfCouchdbManager {
 	return self::getInstance()->_client;
     }
 
-    public static function getClient() {
-        return self::getInstance()->_client;
+    public static function getClient($model = null) {
+        if (is_null($model)) {
+            return self::getInstance()->_client;
+        } else {
+            return self::getInstance()->getClientByModel($model);
+        }
+    }
+
+    protected function getClientByModel($model) {
+        if (!isset(self::getInstance()->_clients_model[$model])) {
+            $class_name = $model.'Client';
+            if (class_exists($class_name)) {
+                self::getInstance()->_clients_model[$model] = new $class_name(self::getClient()->dsn(), self::getClient()->getDatabaseName());
+            } else {
+                throw new sfCouchdbException(sprintf("This model client doesn't exist : %s", $class_name));
+            }
+        }
+
+        return self::getInstance()->_clients_model[$model];
     }
     
     public static function getSchema() {
         if (is_null(self::getInstance()->_schema)) {
             self::getInstance()->_schema = sfYaml::load(sfConfig::get('sf_config_dir').'/couchdb/schema.yml');
-            return self::getInstance()->_schema;
-            echo '1';
-        } else {
-            return self::getInstance()->_schema;
         }
+
+        return self::getInstance()->_schema;
     }
 
     public static function getDefinition($model) {
         if (!isset(self::getInstance()->_definition[$model])) {
             $schema = self::getInstance()->getSchema();
             self::getInstance()->_definition[$model] = sfCouchdbJsonDefinitionParser::parse($model, $schema[$model]);
-            return self::getInstance()->_definition[$model];
-        } else {
-            return self::getInstance()->_definition[$model];
         }
+
+        return self::getInstance()->_definition[$model];
     }
 
     public static function getDefinitionByHash($model, $hash) {
         if (!isset(self::getInstance()->_definition_hash[$model][$hash])) {
             self::getInstance()->_definition_hash[$model][$hash] = self::getDefinition($model)->getDefinitionByHash($hash);
-            return self::getInstance()->_definition_hash[$model][$hash];
-        } else {
-            return self::getInstance()->_definition_hash[$model][$hash];
-        }
+        } 
 
-        return ;
+        return self::getInstance()->_definition_hash[$model][$hash];
     }
 
     public static function getDefinitionHashTree($model, $class_tree) {
         if (!isset(self::getInstance()->_definition_tree_hash[$class_tree])) {
             self::getInstance()->_definition_tree_hash[$class_tree] = self::getDefinition($model)->findHashByClassName($class_tree);
-            return self::getInstance()->_definition_tree_hash[$class_tree];
-        } else {
-            return self::getInstance()->_definition_tree_hash[$class_tree];
         }
+        
+        return self::getInstance()->_definition_tree_hash[$class_tree];
     }
 }

@@ -22,8 +22,10 @@ class recoltantActions extends sfActions
      if ($request->isMethod(sfWebRequest::POST)) {
          $this->form->bind($request->getParameter($this->form->getName()));
          if ($this->form->isValid()) {
-             $this->getUser()->setRecoltantCvi($this->form->getValue('cvi'));
-             $this->redirect('@mon_espace_civa');
+             if ($recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->form->getValue('cvi'))) {
+                 $this->getUser()->signIn($recoltant);
+                 $this->redirect('@mon_espace_civa');
+             }
          }
      }
 

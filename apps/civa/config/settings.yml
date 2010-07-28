@@ -33,3 +33,7 @@ all:
 
     # Enable the database manager
     use_database:           true
+
+  .actions:
+    login_module:           recoltant
+    login_action:           login

@@ -13,7 +13,7 @@
             <h3 class="titre_section">Ma déclaration</h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
-                <?php if ($has_brouillons): ?>
+                <?php if ($declaration): ?>
                         <div class="ligne_form">
                             <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="reprendre_brouillon" checked="checked" />
                             <label for="type_declaration_brouillon">A partir du brouillon</label>
@@ -38,7 +38,7 @@
                             <div class="ligne_form ligne_btn">
                                 <select id="liste_precedentes_declarations" name="dr[liste_precedentes_declarations]">
                         <?php foreach ($campagnes as $id => $campagne): ?>
-                                <option value="<?php echo $id ?>">DR <?php echo $campagne ?></option>
+                                <option value="<?php echo $campagne ?>">DR <?php echo $campagne ?></option>
                         <?php endforeach; ?>
                             </select>
 
@@ -58,7 +58,7 @@
                                 <ul class="bloc_vert ui-accordion">
                                     <li>
                                         <a href="#">2010 Brouillon</a>
-                        <?php if ($has_brouillons): ?>
+                        <?php if ($declaration): ?>
                                     <ul class="declarations">
                                         <li><a href="#">Brouillon courrant</a></li>
                                     </ul>

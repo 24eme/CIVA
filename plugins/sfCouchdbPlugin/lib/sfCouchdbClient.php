@@ -17,8 +17,12 @@ class sfCouchdbClient extends couchClient {
       $this->getList($id, $name, $view_name);
     }
     public function retrieveDocById($id) {
-      $data = $this->getDoc($id);
-      return $this->createDocumentFromData($data);
+        try {
+             $data = $this->getDoc($id);
+             return $this->createDocumentFromData($data);
+        } catch (Exception $exc) {
+             return null;
+        }
     }
     public function createDocumentFromData($data) {
       if (!isset($data->type)) {
