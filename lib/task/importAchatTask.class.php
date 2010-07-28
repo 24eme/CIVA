@@ -60,11 +60,12 @@ EOF;
 	  $json->achnum = $achat[0];
 	  $docs[] = $json;
 	}
-	if ($options['output'] == 'couchdb') {
+	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
+	  return;
 	}
 	echo '{"docs":';
 	echo json_encode($docs);

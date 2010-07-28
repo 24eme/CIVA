@@ -74,7 +74,7 @@ class importTiersTask extends sfBaseTask {
 	  
 	  $docs[] = $json;
 	}
-	if ($options['output'] == 'couchdb') {
+	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
