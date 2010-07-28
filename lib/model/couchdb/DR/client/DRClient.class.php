@@ -2,7 +2,7 @@
 
 class DRClient extends sfCouchdbClient {
     public function retrieveByCampagneAndCvi($cvi, $campagne) {
-        return parent::retrieveDocById('DR-'.$cvi.'-'.$campagne);
+        return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne);
     }
 
     public function getArchivesCampagnes($cvi, $campagne) {

@@ -32,7 +32,7 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
     public function get($id) {
         if($this->contains($id)) {
             if (is_null($this->_docs[$id])) {
-                $this->_docs[$id] = sfCouchdbManager::getClient()->retrieveDocById($id);
+                $this->_docs[$id] = sfCouchdbManager::getClient()->retrieveDocumentById($id);
             }
             return $this->_docs[$id];
         } else {

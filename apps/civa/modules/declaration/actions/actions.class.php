@@ -69,7 +69,10 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
-        
+      $recoltant = $this->getUser()->getRecoltant();
+      $annee = $this->getRequestParameter('annee', null);
+      $key = 'DR-'.$recoltant->cvi.'-'.$annee;
+      $this->declaration = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     }
 
     /**
@@ -77,7 +80,7 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeConfirmation(sfWebRequest $request) {
-        
+      
     }
 
 }

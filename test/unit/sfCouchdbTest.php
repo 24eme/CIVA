@@ -24,7 +24,7 @@ $t->ok($doc->_rev, 'should have now a rev number');
 /*** NEW TEST ****/
 /*** TEST 1 ****/
 $t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve and verify the new doc');
-$dr = sfCouchdbManager::getClient()->retrieveDocById('TESTCOUCHDB');
+$dr = sfCouchdbManager::getClient()->retrieveDocumentById('TESTCOUCHDB');
 $t->is(get_class($dr), 'DR', 'retrieve the doc as a DR object');
 $t->is($dr->_rev, $doc->_rev, 'verify the DR object has the correct rev number');
 

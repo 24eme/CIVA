@@ -30,6 +30,10 @@ validation:
   url:   /validation
   param: { module: declaration, action: validation }
 
+visualisation:
+  url: /visualisation/:annee
+  param: {module: declaration, action: validation }
+
 confirmation:
   url:   /confirmation
   param: { module: declaration, action: confirmation }
