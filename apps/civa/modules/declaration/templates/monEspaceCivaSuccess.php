@@ -10,25 +10,25 @@
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <h3 class="titre_section">Nouvelle déclaration</h3>
+            <h3 class="titre_section">Ma déclaration</h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
                 <?php if ($has_brouillons): ?>
                         <div class="ligne_form">
-                            <input type="radio" id="type_declaration_1" name="dr[type_declaration]" value="reprendre_brouillon" checked="checked" />
-                            <label for="type_declaration_1">A partir du brouillon</label>
+                            <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="reprendre_brouillon" checked="checked" />
+                            <label for="type_declaration_brouillon">A partir du brouillon</label>
                         </div>
                         <div class="ligne_form">
-                            <input type="radio" id="type_declaration_1" name="dr[type_declaration]" value="supprimer_brouillon" />
-                            <label for="type_declaration_1">Supprimer le brouillon</label>
+                            <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer_brouillon" />
+                            <label for="type_declaration_suppr">Supprimer le brouillon</label>
                         </div>
                         <div class="ligne_form ligne_btn">
                             <input type="image" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
                         </div>
                 <?php else: ?>
                         <div class="ligne_form">
-                            <input type="radio" id="type_declaration_1" name="dr[type_declaration]" value="nouvelle" checked="checked" />
-                            <label for="type_declaration_1">A partir d'une déclaration vierge</label>
+                            <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="nouvelle" checked="checked" />
+                            <label for="type_declaration_vierge">A partir d'une déclaration vierge</label>
                         </div>
                 <?php if (count($campagnes) > 0): ?>
                             <div class="ligne_form">
@@ -52,7 +52,7 @@
 
                         <!-- #precedentes_declarations -->
                         <div id="precedentes_declarations">
-                            <h3 class="titre_section">Mes précédentes déclarations</h3>
+                            <h3 class="titre_section">Visualiser mes déclarations</h3>
                             <div class="contenu_section">
 
                                 <ul class="bloc_vert ui-accordion">
@@ -60,7 +60,7 @@
                                         <a href="#">2010 Brouillon</a>
                         <?php if ($has_brouillons): ?>
                                     <ul class="declarations">
-                                        <li><a href="#">Brouillon 1</a></li>
+                                        <li><a href="#">Brouillon courrant</a></li>
                                     </ul>
                         <?php endif; ?>
                                 </li>
