@@ -80,3 +80,54 @@ DR:
                                           cave_particuliere: { type: float }
                                           volume_revendique: { type: float }
                                           volume_dplc: { type: float }
+
+Acheteur:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      cvi: {  }
+      civaba: {  }
+      type: {  }
+      qualite: {  }
+      nom: {  }
+      commune: {  }
+      achnum: {  }
+
+Recoltant:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      cvi: {  }
+      num: {  }
+      no_stock: {  }
+      maison_mere: {  }
+      civaba: {  }
+      no_accises: {  }
+      siret: {  }
+      intitule: {  }
+      nom: {  }
+      siege:
+        type: collection
+        definition:
+          fields:
+            adresse: {  }
+            insee_commune: {  }
+            code_postal: {  }
+            commune: {  }
+      telephone: {  }
+      fax: {  }
+      email: {  }
+      web: {  }
+      exploitant:
+        type: collection
+        definition:
+          fields:
+            sexe: {  }
+            nom: {  }
+            adresse: {  }
+            code_postal: {  }
+            commune: {  }
+            date_naissance: {  }
