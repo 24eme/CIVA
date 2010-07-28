@@ -16,6 +16,7 @@ class importDRTask extends sfBaseTask {
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'stdout'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
             new sfCommandOption('limit', null, sfCommandOption::PARAMETER_REQUIRED, 'limit the number of imported record', -1),
+            new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'insert data only for a given cvi', 0),
 	));
 
         $this->namespace = 'import';
@@ -58,6 +59,8 @@ EOF;
         foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dcllig09") as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
+	    if ($options['cvi'] && $cvi != $options['cvi'])
+	      continue;
             $campagne = $csv[0];
             $_id = 'DR' . '-' . $cvi . '-' . $campagne;
             $appellation = $csv[3];
@@ -123,6 +126,7 @@ EOF;
 		      $detail->cooperatives[] = $cooperative;
                     }
                 }
+		$doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->appellation = $this->convertappellation($appellation, $cepage);
                 $doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->{'lieu'.$csv[10]}->{"cepage_$cepage"}->detail[] = $detail;
 
             }
@@ -138,6 +142,8 @@ EOF;
         foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dcltot09") as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
+	    if ($options['civ'] && $cvi != $options['civ'])
+	      continue;
             $campagne = $csv[0];
             $_id = 'DR' . '-' . $cvi . '-' . $campagne;
 	    $appellation = $csv[3];
@@ -160,26 +166,26 @@ EOF;
 
 	//reconstruction des acheteurs
 	foreach($list_documents as $doc) {
-	  $acheteurs = array();
-	  $coop = array();
 	  foreach ($doc->recolte as $nomappellation => $app) {
+	    $acheteurs = array();
+	    $coop = array();
 	    foreach($app as $nom => $lieu) {
-	      if (is_array($lieu))
-	      foreach($lieu as $nom => $cep) {
-		foreach ($cep->detail as $detail) {
-		  if (isset($detail->negoces))
-		  foreach ($detail->negoces as $a) {
-		    $acheteurs[$a->cvi] = $a->cvi;
-		  }
-		  if (isset($detail->cooperatives))
-		  foreach ($detail->cooperatives as $c) {
-		    $coop[$c->cvi] = $c->cvi;
+	      if ($lieu instanceOf stdClass)
+		foreach($lieu as $nom => $cep) {
+		  foreach ($cep->detail as $detail) {
+		    if (isset($detail->negoces))
+		      foreach ($detail->negoces as $a) {
+			$acheteurs[$a->cvi] = $a->cvi;
+		      }
+		    if (isset($detail->cooperatives))
+		      foreach ($detail->cooperatives as $c) {
+			$coop[$c->cvi] = $c->cvi;
+		      }
 		  }
 		}
-	      }
+	      $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
+	      $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
 	    }
-	    $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
-	    $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
 	  }
 	}
 
