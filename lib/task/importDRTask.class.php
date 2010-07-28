@@ -88,6 +88,7 @@ EOF;
 
 	        $detail = new stdClass();
                 $detail->denomination = $csv[6];
+		$detail->appellation = $this->convertappellation($appellation, $cepage);
                 $detail->vtsgn = $csv[9];
                 $detail->code_lieu = $csv[10];
                 $detail->cepage = $cepage;

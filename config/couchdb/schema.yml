@@ -4,17 +4,26 @@ DR:
       _id: {}
       _rev: {}
       type: {}
+      campagne: {  }
       acheteurs:
         type: collection
-        class: DRAcheteurs
         definition:
           fields:
+          # -------- rappel des appellations -------
             '*':
-              type: array_collection
+              type: collection
               definition:
                 fields:
-                  '*': { type: string }
-      campagne: {  }
+                  'acheteurs':
+                    type: array_collection
+                    definition: 
+                      fields: 
+                        '*': {  }
+                  'cooperatives':
+                    type: array_collection
+                    definition: 
+                      fields: 
+                        '*': {  }
       cvi: {  }
       lies: {type: float, required: false}
       recolte:
