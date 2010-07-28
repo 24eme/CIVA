@@ -69,7 +69,6 @@ EOF;
                 $doc->_id = $_id;
                 $doc->cvi = $cvi;
                 $doc->campagne = $campagne;
-
                 $list_documents[$_id] = $doc;
             } else {
                 $doc = $list_documents[$_id];
@@ -83,7 +82,7 @@ EOF;
                 }
 		$doc->lies += $this->recode_number($csv[12]);
 
-            } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'VT'))) {
+            } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) {
 
             } else {
 
@@ -117,7 +116,7 @@ EOF;
 		      $detail->cooperatives[] = $cooperative;
                     }
                 }
-                $doc->recolte->{"appellation_$appellation"}->lieu->{"cepage_$cepage"}->detail[] = $detail;
+                $doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->{'lieu'.$csv[10]}->{"cepage_$cepage"}->detail[] = $detail;
 
             }
 	    $nb++;
@@ -127,6 +126,30 @@ EOF;
                 break;
             }
         }
+
+	//reconstruction des acheteurs
+	foreach($list_documents as $doc) {
+	  $acheteurs = array();
+	  $coop = array();
+	  foreach ($doc->recolte as $nomappellation => $app) {
+	    foreach($app as $nom => $lieu) {
+	      foreach($lieu as $nom => $cep) {
+		foreach ($cep->detail as $detail) {
+		  if (isset($detail->acheteurs))
+		  foreach ($detail->acheteurs as $a) {
+		    $acheteurs[$a->cvi] = $a->cvi;
+		  }
+		  if (isset($detail->cooperatives))
+		  foreach ($detail->cooperatives as $c) {
+		    $coop[$c->cvi] = $c->cvi;
+		  }
+		}
+	      }
+	    }
+	    $doc->acheteurs->{$nomappellation}->acheteurs = array_keys($acheteurs);
+	    $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
+	  }
+	}
 
 	if ($options['import'] == 'couchdb') {
 	  foreach ($list_documents as $json) {
@@ -142,6 +165,19 @@ EOF;
 
     private function recode_number($val) {
         return preg_replace('/^\./', '0.', $val) + 0;
+    }
+    private function convertappellation($appellation_db2, $cepage) {
+      if ($appellation_db2 == 2)
+	return 'CREMENT';
+      if ($appellation_db2 == 3)
+	return 'GRDCRU';
+      if ($cepage == 'PN')
+	return 'PINOTNOIR';
+      if ($cepage == 'KL') 
+	return 'KLEVENER';
+      if ($cepage == 'VT')
+	return 'VINTABLE';
+      return 'ALSACEBLANC';
     }
 
 }
