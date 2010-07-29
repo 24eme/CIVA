@@ -149,3 +149,35 @@ Recoltant:
             commune: {  }
             date_naissance: {  }
             telephone: {  }
+
+Configuration:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {}
+      recolte:
+        type: collection
+        definition:
+          fields:
+            '*':
+            # ------- APPELLATION ---------
+              type: collection
+              definition:
+                fields:
+                  libelle: {  }
+                  rendement : { type: float }
+                  '*':
+                  # ------------ LIEU --------------
+                    type: collection
+                    definition:
+                      fields:
+                        rendement: {type: float}
+                        libelle: {}
+                        '*':
+                        # ------------ CEPAGE -------------
+                          type: collection
+                          definition:
+                            fields:
+                              libelle: {  }
+                              rendement: { type: float }

@@ -32,4 +32,5 @@ class sfCouchdbClient extends couchClient {
       $doc->load($data);
       return $doc;
     }
+    
 }
