@@ -136,6 +136,7 @@ Recoltant:
       email: {  }
       web: {  }
       exploitant:
+        class: RecoltantExploitant
         type: collection
         definition:
           fields:
