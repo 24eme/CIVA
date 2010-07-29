@@ -21,7 +21,6 @@ class sfCouchdbClient extends couchClient {
              $data = $this->getDoc($id);
              return $this->createDocumentFromData($data);
         } catch (Exception $exc) {
-	  echo $exc;
              return null;
         }
     }

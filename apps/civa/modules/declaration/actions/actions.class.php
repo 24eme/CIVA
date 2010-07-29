@@ -83,7 +83,6 @@ class declarationActions extends EtapesActions {
       $recoltant = $this->getUser()->getRecoltant();
       $annee = $this->getRequestParameter('annee', null);
       $key = 'DR-'.$recoltant->cvi.'-'.$annee;
-      echo "$key<br/>";
       $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
       $this->forward404Unless($dr);
       $this->appellations = array();

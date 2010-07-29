@@ -19,7 +19,7 @@
                                 <table cellpadding="0" cellspacing="0" class="table_donnees">
                                         <thead>
                                                 <tr>
-                                                        <th><img src="../images/textes/acheteurs_raisin.png" alt="Acheteurs de raisin" /></th>
+                                                        <th><img src="/images/textes/acheteurs_raisin.png" alt="Acheteurs de raisin" /></th>
                                                         <th class="cvi">n°CVI</th>
                                                         <th>Raison sociale</th>
                                                         <th>Surface</th>
@@ -73,7 +73,7 @@
                                 <table cellpadding="0" cellspacing="0" class="table_donnees">
                                         <thead>
                                                 <tr>
-                                                        <th><img src="../images/textes/caves_cooperatives.png" alt="Caves coopératives" /></th>
+                                                        <th><img src="/images/textes/caves_cooperatives.png" alt="Caves coopératives" /></th>
                                                         <th class="cvi">n°CVI</th>
                                                         <th>Raison sociale</th>
                                                         <th>Surface</th>
@@ -134,7 +134,7 @@
                                 <table cellpadding="0" cellspacing="0" class="table_donnees">
                                         <thead>
                                                 <tr>
-                                                        <th><img src="../images/textes/appelations.png" alt="Appelations" /></th>
+                                                        <th><img src="/images/textes/appelations.png" alt="Appelations" /></th>
   <?php foreach ($appellations as $a) : ?>
 <th><?php echo $a; ?></th>
 <?php endforeach; ?>
