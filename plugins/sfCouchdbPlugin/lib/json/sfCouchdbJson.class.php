@@ -273,6 +273,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         } elseif(isset($model_mutator[$fieldName]) && !is_null($model_mutator[$fieldName])) {
             return true;
         } else {
+            $mutator = 'set' . sfInflector::humanize($fieldName);
             if($mutator != 'set' && method_exists($this, $mutator)) {
                 sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash][$fieldName] = $mutator;
                 return true;

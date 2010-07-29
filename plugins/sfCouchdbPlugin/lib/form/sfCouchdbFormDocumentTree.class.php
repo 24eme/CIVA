@@ -1,6 +1,6 @@
 <?php
 
-abstract class sfCouchdbFormDocumentTree extends sfCouchdbForm {
+abstract class sfCouchdbFormJson extends sfCouchdbForm {
     protected $doc = null;
     
     public function __construct(sfCouchdbDocument $doc, $object, $options = array(), $CSRFSecret = null) {

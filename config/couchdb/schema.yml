@@ -25,7 +25,8 @@ DR:
                       fields: 
                         '*': {  }
       cvi: {  }
-      lies: {type: float, required: false}
+      lies: {type: float}
+      jeunes_vignes: {type: float}
       recolte:
         type: collection
         class: DRRecolte

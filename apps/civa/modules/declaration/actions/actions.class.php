@@ -57,8 +57,15 @@ class declarationActions extends EtapesActions {
     public function executeExploitationAutres(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_autres');
 
+        $this->form = new ExploitationAutresForm($this->getUser()->getDeclaration());
+        
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->redirectByBoutonsEtapes();
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                $this->redirectByBoutonsEtapes();
+            }
+            
         }
     }
 
