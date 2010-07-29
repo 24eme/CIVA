@@ -24,7 +24,7 @@ class importTiersTask extends sfBaseTask {
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 	
-	if($options['removedb'] && $options['import'] == 'couchdb') {
+	if($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
 	  if (sfCouchdbManager::getClient()->databaseExists()) {
 	    sfCouchdbManager::getClient()->deleteDatabase();
 	  }
