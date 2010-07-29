@@ -57,7 +57,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
                 if (!$this->hasField($key)) {
                     $this->add($key);
                 }
-                $this->set($key, $item);
+                $this->_set($key, $item);
             }
         }
     }
