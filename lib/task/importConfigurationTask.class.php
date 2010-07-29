@@ -213,6 +213,7 @@ EOF;
 	$json->recolte->appellation_KLEVENER->rendement = 75;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL = "Klevener";
 	$json->_id = 'CONFIGURATION';
+	$json->type = 'Configuration';
 
 	$docs[] = $json;
 
