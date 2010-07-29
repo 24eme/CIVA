@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(42);
+$t = new lime_test(43);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -130,6 +130,7 @@ $t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getCouchdbDocument(),
  }
 /*** NEW TEST ****/
 $t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getHash(), '/recolte/appellation_1/lieu/cepage_PB', 'can access field hash from an sfcouchdbJson object');
+$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getParentHash(), '/recolte/appellation_1/lieu', 'can access field hash from an sfcouchdbJson object');
 /*** NEW TEST ****/
 $t->is($doc->get('/recolte/appellation_2')->getHash(), '/recolte/appellation_2', 'can access field hash from an sfcouchdbJson object issued of a collection');
 

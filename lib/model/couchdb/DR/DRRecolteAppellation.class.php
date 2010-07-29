@@ -8,7 +8,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     return $this->get("lieu$lieu")->get('cepage_'.$cepage);
   }
 
-    private function getSumCepageField($field) {
+    private function getSumCepageFields($field) {
       $sum = 0;
       foreach ($this->getData() as $key => $lieu) {
 	if (preg_match("/^lieu/", $key)) {
@@ -24,18 +24,18 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     public function getTotalVolume() {
       if ($r = parent::get('total_volume'))
 	return $r;
-      return $this->getSumCepageField('total_volume');
+      return $this->getSumCepageFields('total_volume');
       
     }
     public function getTotalSuperficie() {
       if ($r = parent::get('total_superficie'))
 	return $r;
-      return $this->getSumCepageField('total_superficie');
+      return $this->getSumCepageFields('total_superficie');
     }
     public function getTotalDPLC() {
-      return $this->getSumCepageField('dplc');
+      return $this->getSumCepageFields('dplc');
     }
     public function getTotalVolumeRevendique() {
-      return $this->getSumCepageField('volume_revendique');
+      return $this->getSumCepageFields('volume_revendique');
     }
 }

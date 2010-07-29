@@ -94,8 +94,8 @@ class declarationActions extends EtapesActions {
 	$this->appellations[] = $appellation->getAppellation();
 	$this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
 	$this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolume();
-	$this->dplc[$appellation->getAppellation()] = 0;
+	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
+	$this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
       }
 
       $this->total_superficie = array_sum(array_values($this->superficie));

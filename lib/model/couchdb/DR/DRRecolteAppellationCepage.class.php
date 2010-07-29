@@ -17,4 +17,28 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       $this->set('total_volume', $v);
       $this->set('total_superficie', $s);
     }
+    private function getSumDetailFields($field) {
+      $sum = 0;
+      foreach ($this->getData()->detail as $detail) {
+	$sum += $cepage->{$field};
+      }
+      return $sum;
+    }
+    public function getTotalVolume() {
+      if ($r = parent::get('total_volume'))
+	return $r;
+      return $this->getSumDetailFields('total_volume');
+      
+    }
+    public function getTotalSuperficie() {
+      if ($r = parent::get('total_superficie'))
+	return $r;
+      return $this->getSumDetailFields('total_superficie');
+    }
+    public function getRendement() {
+      if ($r = parent::get('rendement'))
+	return $r;
+      return $this->getCouchdbDocument()->get($this->getParentHash())->getRendement();
+    }
+
 }
