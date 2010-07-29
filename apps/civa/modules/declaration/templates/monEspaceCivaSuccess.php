@@ -14,26 +14,26 @@
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
                 <?php if ($declaration): ?>
-                        <div class="ligne_form">
-                            <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="reprendre_brouillon" checked="checked" />
-                            <label for="type_declaration_brouillon">A partir du brouillon</label>
-                        </div>
-                        <div class="ligne_form">
-                            <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer_brouillon" />
-                            <label for="type_declaration_suppr">Supprimer le brouillon</label>
-                        </div>
-                        <div class="ligne_form ligne_btn">
-                            <input type="image" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
-                        </div>
+                    <div class="ligne_form">
+                        <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="brouillon" checked="checked" />
+                        <label for="type_declaration_brouillon">A partir du brouillon</label>
+                    </div>
+                    <div class="ligne_form">
+                        <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
+                        <label for="type_declaration_suppr">Supprimer le brouillon</label>
+                    </div>
+                    <div class="ligne_form ligne_btn">
+                        <input type="image" class="btn" name="boutons[valider]" src="../images/boutons/btn_valider.png" alt="Valider" />
+                    </div>
                 <?php else: ?>
                         <div class="ligne_form">
-                            <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="nouvelle" checked="checked" />
+                            <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" checked="checked" />
                             <label for="type_declaration_vierge">A partir d'une déclaration vierge</label>
                         </div>
                 <?php if (count($campagnes) > 0): ?>
                             <div class="ligne_form">
-                                <input type="radio" id="type_declaration_2" name="dr[type_declaration]" value="reprendre_ancienne" />
-                                <label for="type_declaration_2">A partir d'une précédente déclaration</label>
+                                <input type="radio" id="type_declaration_precedente" name="dr[type_declaration]" value="precedente" />
+                                <label for="type_declaration_precedente">A partir d'une précédente déclaration</label>
                             </div>
                             <div class="ligne_form ligne_btn">
                                 <select id="liste_precedentes_declarations" name="dr[liste_precedentes_declarations]">
@@ -42,8 +42,8 @@
                         <?php endforeach; ?>
                             </select>
 
-                            <input type="image" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
-                            </div>
+                            <input type="image" name="boutons[valider]" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+                        </div>
                 <?php endif; ?>
                 <?php endif; ?>
                             </div>

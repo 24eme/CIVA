@@ -43,7 +43,11 @@ class myUser extends sfBasicSecurityUser {
     }
 
     public function getDeclaration() {
-        return $this->getRecoltant()->getDeclaration($this->getCampagne());
+        if (!isset($this->_declaration)) {
+            $this->_declaration = $this->getRecoltant()->getDeclaration($this->getCampagne());
+        }
+
+        return $this->_declaration;
     }
 
     public function getCampagne() {

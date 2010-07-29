@@ -8,7 +8,7 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class recoltantActions extends sfActions
+class recoltantActions extends EtapesActions
 {
  /**
   * Executes index action
@@ -22,14 +22,10 @@ class recoltantActions extends sfActions
      if ($request->isMethod(sfWebRequest::POST)) {
          $this->form->bind($request->getParameter($this->form->getName()));
          if ($this->form->isValid()) {
-             if ($recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->form->getValue('cvi'))) {
-                 $this->getUser()->signIn($recoltant);
-                 $this->redirect('@mon_espace_civa');
-             }
+             $this->getUser()->signIn($this->form->getValue('recoltant'));
+             $this->redirect('@mon_espace_civa');
          }
      }
-
-     
   }
   /**
    *
@@ -37,6 +33,11 @@ class recoltantActions extends sfActions
    */
   public function executeExploitationAdministratif(sfWebRequest $request)
   {
-      
+      $this->setCurrentEtape('exploitation_administratif');
+      $this->forwardUnless($this->recoltant = $this->getUser()->getRecoltant(), 'declaration', 'monEspaceciva');
+
+      if ($request->isMethod(sfWebRequest::POST)) {
+          $this->redirectByBoutonsEtapes();
+      }
   }
 }

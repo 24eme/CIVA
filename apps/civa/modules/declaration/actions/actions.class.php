@@ -8,13 +8,14 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class declarationActions extends sfActions {
+class declarationActions extends EtapesActions {
 
     /**
      *
      * @param sfWebRequest $request
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
+        $this->setCurrentEtape('mon_espace_civa');
         $this->campagnes = $this->getUser()->getRecoltant()->getDeclarationArchivesCampagne($this->getUser()->getCampagne());
         $this->declaration = $this->getUser()->getDeclaration();
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -26,24 +27,25 @@ class declarationActions extends sfActions {
         $recoltant = $this->getUser()->getRecoltant();
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
-            if ($dr_data['type_declaration'] == 'reprendre_brouillon') {
-                $this->redirect('@exploitation_administratif');
-            } elseif ($dr_data['type_declaration'] == 'supprimer_brouillon') {
+            if ($dr_data['type_declaration'] == 'brouillon') {
+                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->getDeclaration()->delete();
                 $this->redirect('@mon_espace_civa');
-            } elseif ($dr_data['type_declaration'] == 'nouvelle') {
+            } elseif ($dr_data['type_declaration'] == 'vierge') {
                 $doc = new DR();
                 $doc->set('_id', 'DR-' . $recoltant->cvi . '-' . $this->getUser()->getCampagne());
                 $doc->cvi = $recoltant->cvi;
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->save();
-                $this->redirect('@exploitation_administratif');
-            } elseif ($dr_data['type_declaration'] == 'reprendre_ancienne') {
+                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $this->forward404Unless($old_doc = $recoltant->getDeclaration($dr_data['liste_precedentes_declarations']));
                 $doc = clone $old_doc;
+                $doc->_id = 'DR-'.$recoltant->cvi.'-'.$this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->save();
-                $this->redirect('@exploitation_administratif');
+                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
     }
@@ -53,7 +55,11 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request 
      */
     public function executeExploitationAutres(sfWebRequest $request) {
-        
+        $this->setCurrentEtape('exploitation_autres');
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
+        }
     }
 
     /**
@@ -61,7 +67,11 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-        
+        $this->setCurrentEtape('recolte');
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
+        }
     }
 
     /**
@@ -69,10 +79,15 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
+      $this->setCurrentEtape('validation');
       $recoltant = $this->getUser()->getRecoltant();
       $annee = $this->getRequestParameter('annee', null);
       $key = 'DR-'.$recoltant->cvi.'-'.$annee;
       $this->declaration = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+
+      if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
+      }
     }
 
     /**
@@ -80,7 +95,11 @@ class declarationActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeConfirmation(sfWebRequest $request) {
-      
+        $this->setCurrentEtape('confirmation');
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
+        }
     }
 
 }

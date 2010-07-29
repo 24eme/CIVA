@@ -31,7 +31,7 @@ var choixPrecDecla = function()
 	
 	type_decla.change(function()
 	{
-		if(type_decla.filter(':checked').val() == 'type_declaration_1') liste_prec_decla.hide();
+		if(type_decla.filter(':checked').val() == 'vierge') liste_prec_decla.hide();
 		else liste_prec_decla.show();
 	});
 };

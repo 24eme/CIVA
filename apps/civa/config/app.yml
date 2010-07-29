@@ -2,4 +2,21 @@
 # http://www.symfony-project.org/reference/1_4/en/11-App
 
 # default values
-#all:
+all:
+  etapes:
+    items:
+      mon_espace_civa:
+        url: "@mon_espace_civa"
+      exploitation_administratif:
+        url: "@exploitation_administratif"
+      exploitation_acheteurs:
+        url: "@exploitation_acheteurs"
+      exploitation_autres:
+        url: "@exploitation_autres"
+      recolte:
+        url: "@recolte"
+      validation:
+        url: "@validation"
+      confirmation:
+        url: "@confirmation"
+    orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_autres, recolte, validation, confirmation]

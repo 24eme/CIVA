@@ -8,7 +8,7 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class acheteurActions extends sfActions
+class acheteurActions extends EtapesActions
 {
  /**
   * Executes index action
@@ -17,6 +17,9 @@ class acheteurActions extends sfActions
   */
   public function executeExploitationAcheteurs(sfWebRequest $request)
   {
-    
+        $this->setCurrentEtape('exploitation_acheteurs');
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
+        }
   }
 }
