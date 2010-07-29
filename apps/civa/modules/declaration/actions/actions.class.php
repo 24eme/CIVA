@@ -83,7 +83,26 @@ class declarationActions extends EtapesActions {
       $recoltant = $this->getUser()->getRecoltant();
       $annee = $this->getRequestParameter('annee', null);
       $key = 'DR-'.$recoltant->cvi.'-'.$annee;
-      $this->declaration = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+      echo "$key<br/>";
+      $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+      $this->forward404Unless($dr);
+      $this->appellations = array();
+      $this->superficie = array();
+      $this->volume = array();
+      $this->revendique = array();
+      $this->dplc = array();
+      foreach ($dr->recolte as $appellation) {
+	$this->appellations[] = $appellation->getAppellation();
+	$this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
+	$this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolume();
+	$this->dplc[$appellation->getAppellation()] = 0;
+      }
+
+      $this->total_superficie = array_sum(array_values($this->superficie));
+      $this->total_volume = array_sum(array_values($this->volume));
+      $this->total_dplc = array_sum(array_values($this->dplc));
+      $this->total_revendique = array_sum(array_values($this->revendique));
 
       if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();

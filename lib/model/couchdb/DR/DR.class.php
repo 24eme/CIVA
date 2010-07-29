@@ -1,29 +1,20 @@
 <?php
 class DR extends BaseDR {
-    public function addRecolte($detail) {
-        return $this->getRecolte()
-             ->addAppellation($detail->getAppellation())
-             ->getLieu()
-             ->addCepage($detail->getCepage())
-             ->getDetail()
-             ->add(null, $detail);
+  public function addRecolte($detail) {
+    $lieu = $detail->code_lieu;
+    return $this->getRecolte()
+      ->addAppellation($detail->getAppellation())
+      ->addCepage($detail->getCepage(), $lieu)
+      ->getDetail()
+      ->add(null, $detail);
     }
 
-    public function getRecolteDetail($appellation, $cepage, $numero) {
+    public function getRecolteDetail($appellation, $cepage, $numero, $lieu = '') {
         return $this->getRecolte()
              ->getAppellation($appellation)
-             ->getLieu()
-             ->getCepage($cepage)
+	  ->getCepage($cepage, $lieu)
              ->getDetail()
              ->get($numero);
     }
 
-    public function addRebeche($detail) {
-        return $this->getRecolte()
-             ->addAppellation($detail->getAppellation())
-             ->getLieu()
-             ->addRebeche()
-             ->getDetail()
-             ->add(null, $detail);
-    }
 }

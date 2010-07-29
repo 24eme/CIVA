@@ -87,11 +87,11 @@ EOF;
 
             } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) {
 	      if ($cepage == 'AN') {
-		$doc->recolte->appellation_PINOTNOIR->total_surface = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_PINOTNOIR->total_superficie = $this->recode_number($csv[11]);
 		$doc->recolte->appellation_PINOTNOIR->total_volume = $this->recode_number($csv[12]);
 	      } else if ($cepage == 'CR') {
-		$doc->recolte->appellation_CREMENT->total_surface = $this->recode_number($csv[11]);
-		$doc->recolte->appellation_CREMENT->total_volume = $this->recode_number($csv[12]);
+		$doc->recolte->appellation_CREMANT->total_superficie = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_CREMANT->total_volume = $this->recode_number($csv[12]);
 	      }
             } else {
 
@@ -101,7 +101,7 @@ EOF;
                 $detail->vtsgn = $csv[9];
                 $detail->code_lieu = $csv[10];
                 $detail->cepage = $cepage;
-                $detail->surface = $this->recode_number($csv[11]);
+                $detail->superficie = $this->recode_number($csv[11]);
                 $detail->volume = $this->recode_number($csv[12]);
                 $detail->cave_particuliere = $this->recode_number($csv[21]);
                 $detail->volume_revendique = $this->recode_number($csv[27]);
@@ -155,7 +155,7 @@ EOF;
             }
 	    $doc = $list_documents[$_id];
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
-	    ->total_surface = $this->recode_number($csv[11]);
+	    ->total_superficie = $this->recode_number($csv[11]);
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
 	    ->total_volume = $this->recode_number($csv[12]);
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
@@ -206,7 +206,7 @@ EOF;
     }
     private function convertappellation($appellation_db2, $cepage) {
       if ($appellation_db2 == 2)
-	return 'CREMENT';
+	return 'CREMANT';
       if ($appellation_db2 == 3)
 	return 'GRDCRU';
       if ($cepage == 'PN' || $cepage == 'AN')

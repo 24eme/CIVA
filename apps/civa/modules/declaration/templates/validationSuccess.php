@@ -135,65 +135,35 @@
                                         <thead>
                                                 <tr>
                                                         <th><img src="../images/textes/appelations.png" alt="Appelations" /></th>
-                                                        <th>AOC <span>Alsace blanc</span></th>
-                                                        <th><span>Klevener de<br />Heiligenstein</span></th>
-                                                        <th>AOC <span>Alsace Pinot noir</span></th>
-                                                        <th>AOC <span>Alsace Pinot noir rouge</span></th>
-                                                        <th>AOC <span>Alsace Grand cru</span></th>
-                                                        <th>AOC <span>Alsace Crément d'Alsace</span></th>
-                                                        <th>Vin de table</th>
+  <?php foreach ($appellations as $a) : ?>
+<th><?php echo $a; ?></th>
+<?php endforeach; ?>
                                                 </tr>
                                         </thead>
                                         <tbody>
                                                 <tr>
                                                         <td>Superficie (Ha)</td>
-                                                        <td>362</td>
-                                                        <td>362</td>
-                                                        <td>58</td>
-                                                        <td>5</td>
-                                                        <td>19</td>
-                                                        <td>0</td>
-                                                        <td>0</td>
+  <?php foreach ($appellations as $a) : ?>
+<td><?php echo $superficie[$a]; ?></td>
+<?php endforeach; ?>
                                                 </tr>
                                                 <tr>
                                                         <td>Volume Total (Hl)</td>
-                                                        <td>362</td>
-                                                        <td>362</td>
-                                                        <td>58</td>
-                                                        <td>5</td>
-                                                        <td>19</td>
-                                                        <td>0</td>
-                                                        <td>0</td>
+  <?php foreach ($appellations as $a) : ?>
+<td><?php echo $volume[$a]; ?></td>
+<?php endforeach; ?>
                                                 </tr>
                                                 <tr>
                                                         <td>Volume Revendiqué (Hl)</td>
-                                                        <td>362</td>
-                                                        <td>362</td>
-                                                        <td>58</td>
-                                                        <td>5</td>
-                                                        <td>19</td>
-                                                        <td>0</td>
-                                                        <td>0</td>
+  <?php foreach ($appellations as $a) : ?>
+<td><?php echo $revendique[$a]; ?></td>
+<?php endforeach; ?>
                                                 </tr>
                                                 <tr>
                                                         <td>DPLC (Hl)</td>
-                                                        <td>362</td>
-                                                        <td>362</td>
-                                                        <td>58</td>
-                                                        <td>5</td>
-                                                        <td>19</td>
-                                                        <td>0</td>
-                                                        <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>Lies (Hl)</td>
-                                                        <td>362</td>
-                                                        <td>362</td>
-                                                        <td>58</td>
-                                                        <td>5</td>
-                                                        <td>19</td>
-                                                        <td>0</td>
-                                                        <td>0</td>
+  <?php foreach ($appellations as $a) : ?>
+<td><?php echo $dplc[$a]; ?></td>
+<?php endforeach; ?>
                                                 </tr>
                                         </tbody>
                                 </table>
@@ -203,11 +173,10 @@
                         <div id="total_general">
                                 <h2 class="titre_section">Total général</h2>
                                 <ul class="contenu_section">
-                                        <li>362Ha</li>
-                                        <li>362Hl</li>
-                                        <li>362Hl</li>
-                                        <li>362Hl</li>
-                                        <li>362Hl</li>
+    <li><?php echo $total_superficie;?>&nbsp;Ha</li>
+    <li><?php echo $total_volume;?>&nbsp;Hl</li>
+    <li><?php echo $total_revendique;?>&nbsp;Hl</li>
+    <li><?php echo $total_dplc; ?>&nbsp;Hl</li>
                                 </ul>
                         </div>
                 </div>

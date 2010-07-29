@@ -72,7 +72,7 @@
                                             <li>
                                                 <a href="#"><?php echo $campagne ?></a>
                                                 <ul class="declarations">
-                                                    <li><a href="#<?php echo $id ?>">DR <?php echo $campagne ?></a></li>
+					   <li><?php echo link_to($campagne, '@visualisation?annee='.$campagne); ?></li>
                                                 </ul>
                                             </li>
                             <?php endforeach; ?>

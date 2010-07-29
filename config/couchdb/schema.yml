@@ -34,14 +34,15 @@ DR:
             # ------ Appellation ------
             '*':
               type: collection
+              class: DRRecolteAppellation
               definition:
                 fields:
                   appellation: {}
                   total_volume: {type: float}
-                  total_surface: {type: float}
+                  total_superficie: {type: float}
+                  # ------- LIEU ----------
                   '*':
                     type: collection
-                    class: DRRecolteAppellation
                     definition:
                       fields:
                         # ------ Cépage ------
@@ -51,7 +52,7 @@ DR:
                           definition:
                             fields:
                               total_volume: {type: float }
-                              total_surface: {type:float }
+                              total_superficie: {type:float }
                               volume_revendique: {type:float }
                               dplc: {type:float }
                               detail:
@@ -69,7 +70,7 @@ DR:
                                           vtsgn: {  }
                                           code_lieu: {  }
                                           volume: { type: float }
-                                          surface: { type: float }
+                                          superficie: { type: float }
                                           negoces:
                                             type: array_collection
                                             definition:
