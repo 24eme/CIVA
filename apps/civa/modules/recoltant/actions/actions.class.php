@@ -27,6 +27,12 @@ class recoltantActions extends EtapesActions
          }
      }
   }
+
+  public function executeLogout(sfWebRequest $request)
+  {
+    $this->getUser()->signOut();
+    $this->redirect('@login');
+  }
   /**
    *
    * @param sfWebRequest $request 

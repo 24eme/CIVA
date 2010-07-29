@@ -6,6 +6,10 @@ login:
   url:   /
   param: { module: recoltant, action: login }
 
+logout:
+  url:   /logout
+  param: { module: recoltant, action: logout }
+
 mon_espace_civa:
   url:   /mon_espace_civa
   param: { module: declaration, action: monEspaceCiva }

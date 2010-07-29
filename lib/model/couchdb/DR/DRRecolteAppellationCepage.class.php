@@ -11,10 +11,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       $v = 0;
       foreach ($this->get('detail') as $key => $item) {
 	$v += $item->getVolume();
-	$s += $item->getSurface();
+	$s += $item->getSuperficie();
       }
 
       $this->set('total_volume', $v);
-      $this->set('total_surface', $s);
+      $this->set('total_superficie', $s);
     }
 }

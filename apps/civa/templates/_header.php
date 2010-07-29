@@ -7,16 +7,17 @@
 
     <div id="titre_rubrique">
         <h1>Déclaration de récolte de vins d'Alsace 2010</h1>
-
-        <p class="utilisateur"><?php echo link_to($sf_user->getRecoltant()->getExploitant()->getNom(), '@mon_espace_civa'); ?></a></p>
-        <p class="domaine"><?php echo $sf_user->getRecoltant()->getNom();?></p>
+<?php if ($recoltant = $sf_user->getRecoltant()) : ?>
+        <p class="utilisateur"><?php echo link_to($recoltant->getExploitant()->getNom(), '@mon_espace_civa'); ?></a></p>
+        <p class="domaine"><?php echo $recoltant->getNom();?></p>
+<?php endif; ?>
     </div>
 
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
             <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mon compte</a></li>
-            <li><a href="#">Deconnexion</a></li>
+            <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
         </ul>
     </div>
 </div>
