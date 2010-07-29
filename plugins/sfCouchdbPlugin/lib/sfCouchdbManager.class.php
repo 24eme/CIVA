@@ -10,6 +10,9 @@ class sfCouchdbManager {
     protected $_definition_tree_hash = array();
     protected $_definition_hash = array();
 
+    public $_custom_accessors = array();
+    public $_custom_mutators = array();
+
     protected $_schema = null;
     
     private function __construct()

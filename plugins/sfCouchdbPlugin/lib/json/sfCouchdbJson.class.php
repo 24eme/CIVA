@@ -6,8 +6,6 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     private $_is_array = false;
     protected $_definition_hash = null;
     protected $_definition_model = null;
-    protected $_customAccessors = array();
-    protected $_customMutators = array();
     private $_couchdb_document = null;
     private $_object_hash = null;
 
@@ -225,20 +223,35 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
+   protected function getModelAccessor() {
+        if (!isset(sfCouchdbManager::getInstance()->_custom_accessors[$this->_definition_model][$this->_definition_hash])) {
+            sfCouchdbManager::getInstance()->_custom_accessors[$this->_definition_model][$this->_definition_hash] = array();
+        } 
+        return sfCouchdbManager::getInstance()->_custom_accessors[$this->_definition_model][$this->_definition_hash];
+   }
+
+   protected function getModelMutator() {
+        if (!isset(sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash])) {
+            sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash] = array();
+        }
+        return sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash];
+   }
+
    protected function hasAccessor($key) {
         $fieldName = sfInflector::underscore(sfInflector::camelize($key));
+        $model_accessor = $this->getModelAccessor();
         
-        if(isset($this->_customAccessors[$fieldName]) && is_null($this->_customAccessors[$fieldName])) {
+        if(isset($model_accessor[$fieldName]) && is_null($model_accessor[$fieldName])) {
             return false;
-        } elseif (isset($this->_customAccessors[$fieldName]) && !is_null($this->_customAccessors[$fieldName])) {
+        } elseif (isset($model_accessor[$fieldName]) && !is_null($model_accessor[$fieldName])) {
             return true;
         } else {
             $accessor = 'get' . sfInflector::humanize($fieldName);
             if($accessor != 'get' && method_exists($this, $accessor)) {
-                $this->_customAccessors[$fieldName] = $accessor;
+                sfCouchdbManager::getInstance()->_custom_accessors[$this->_definition_model][$this->_definition_hash][$fieldName] = $accessor;
                 return true;
             } else {
-                 $this->_customAccessors[$fieldName] = null;
+                 sfCouchdbManager::getInstance()->_custom_accessors[$this->_definition_model][$this->_definition_hash][$fieldName] = null;
                  return false;
             }
         }
@@ -246,24 +259,25 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     public function getAccessor($key) {
         $fieldName = sfInflector::underscore(sfInflector::camelize($key));
+        $model_accessor = $this->getModelAccessor();
         if ($this->hasAccessor($fieldName)) {
-            return $this->_customAccessors[$fieldName];
+            return $model_accessor[$fieldName];
         }
     }
 
     protected function hasMutator($key) {
         $fieldName = sfInflector::underscore(sfInflector::camelize($key));
-        if (isset($this->_customMutators[$fieldName]) && is_null($this->_customMutators[$fieldName])) {
+        $model_mutator = $this->getModelMutator();
+        if (isset($model_mutator[$fieldName]) && is_null($model_mutator[$fieldName])) {
             return false;
-        } elseif(isset($this->_customMutators[$fieldName]) && !is_null($this->_customMutators[$fieldName])) {
+        } elseif(isset($model_mutator[$fieldName]) && !is_null($model_mutator[$fieldName])) {
             return true;
         } else {
-            $mutator = 'set' . sfInflector::humanize($fieldName);
             if($mutator != 'set' && method_exists($this, $mutator)) {
-                $this->_customMutators[$fieldName] = $mutator;
+                sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash][$fieldName] = $mutator;
                 return true;
             } else {
-                 $this->_customMutators[$fieldName] = null;
+                 sfCouchdbManager::getInstance()->_custom_mutators[$this->_definition_model][$this->_definition_hash][$fieldName] = null;
                  return false;
             }
         }
@@ -271,8 +285,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     protected function getMutator($key) {
         $fieldName = sfInflector::underscore(sfInflector::camelize($key));
+        $model_mutator = $this->getModelMutator();
         if ($this->hasMutator($fieldName)) {
-            return $this->_customMutators[$fieldName];
+            return $model_mutator[$fieldName];
         }
     }
 
