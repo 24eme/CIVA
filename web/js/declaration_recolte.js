@@ -63,7 +63,7 @@ var formGestionnaireExploitation = function()
 	var datepicker = modification_infos.find('input.datepicker');
 	var annee = new Date().getFullYear();
 	
-	modification_infos.hide();
+	//	modification_infos.hide();
 	
 	btn_modifier.click(function()
 	{

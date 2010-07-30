@@ -42,8 +42,20 @@ class recoltantActions extends EtapesActions
       $this->setCurrentEtape('exploitation_administratif');
       $this->forwardUnless($this->recoltant = $this->getUser()->getRecoltant(), 'declaration', 'monEspaceciva');
 
+      $this->form = new RecoltantExploitantForm($this->getUser()->getRecoltant()->getExploitant());
+      $this->form_err = 0;
+        
       if ($request->isMethod(sfWebRequest::POST)) {
-          $this->redirectByBoutonsEtapes();
+	$this->form->bind($request->getParameter($this->form->getName()));
+	if ($this->form->isValid()) {
+	  $this->form->save();
+	  $this->redirectByBoutonsEtapes();
+	}
+	$this->form_err = 1;            
+      }
+
+      if ($request->isMethod(sfWebRequest::POST)) {
+	$this->redirectByBoutonsEtapes();
       }
   }
 }

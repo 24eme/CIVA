@@ -12,7 +12,7 @@
             <div class="contenu_section">
                 <p class="intro">Pour vous connecter, merci d'indiquer votre numéro CVI :</p>
                                     
-                    <div class="ligne_form ligne_btn">
+                    <div class="ligne_form">
     <?php echo $form->renderHiddenFields(); ?>
     <?php echo $form->renderGlobalErrors(); ?>
 
