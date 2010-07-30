@@ -1,8 +1,5 @@
-<div id="contenu">
-                
 <!-- #principal -->
-<form action="<?php echo url_for('@login') ?>" method="post">
-<form method="post" action="/civa_dev.php/mon_espace_civa" id="principal">
+<form action="<?php echo url_for('@login') ?>" method="post" id="principal">
 
     <h2 class="titre_principal">Mon espace CIVA</h2>
 
@@ -37,4 +34,4 @@
                         <!-- fin #application_dr -->
 
     </form>
-<!-- fin #principal -->            </div>
+<!-- fin #principal -->
