@@ -129,10 +129,10 @@
                         <div id="total_general">
                                 <h2 class="titre_section">Total général</h2>
                                 <ul class="contenu_section">
-    <li><?php echo $total_superficie;?>&nbsp;Ha</li>
-    <li><?php echo $total_volume;?>&nbsp;Hl</li>
-    <li><?php echo $total_revendique;?>&nbsp;Hl</li>
-    <li><?php echo $total_dplc; ?>&nbsp;Hl</li>
+    <li><input type="text" value="<?php echo $total_superficie;?> Ha" readonly="readonly"></li>
+    <li><input type="text" value="<?php echo $total_volume;?> Hl" readonly="readonly"></li>
+    <li><input type="text" value="<?php echo $total_revendique;?> Hl" readonly="readonly"></li>
+    <li><input type="text" value="<?php echo $total_dplc;?> Hl" readonly="readonly"></li>
                                 </ul>
                         </div>
                 </div>

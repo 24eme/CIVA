@@ -17,15 +17,17 @@ class recoltantActions extends EtapesActions
   */
   public function executeLogin(sfWebRequest $request)
   {
-     $this->form = new LoginForm();
-     print_r(sfConfig::get('acheteurs'));
-     if ($request->isMethod(sfWebRequest::POST)) {
-         $this->form->bind($request->getParameter($this->form->getName()));
-         if ($this->form->isValid()) {
-             $this->getUser()->signIn($this->form->getValue('recoltant'));
-             $this->redirect('@mon_espace_civa');
-         }
-     }
+    if ($this->getUser()->getRecoltant())
+      return $this->redirect('@mon_espace_civa');
+
+    $this->form = new LoginForm();
+    if ($request->isMethod(sfWebRequest::POST)) {
+      $this->form->bind($request->getParameter($this->form->getName()));
+      if ($this->form->isValid()) {
+	$this->getUser()->signIn($this->form->getValue('recoltant'));
+	$this->redirect('@mon_espace_civa');
+      }
+    }
   }
 
   public function executeLogout(sfWebRequest $request)

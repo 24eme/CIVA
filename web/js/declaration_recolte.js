@@ -14,6 +14,7 @@ $(document).ready( function()
 	hauteurEgale($('#onglets_majeurs li a'));
 	if($("#principal").hasClass('ui-tabs')) $("#principal").tabs();
 	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
+	$('#nouvelle_declaration').ready( function() { choixPrecDecla(); });
 	$('#gestionnaire_exploitation').ready( function() { formGestionnaireExploitation(); });
 	$('.table_donnees').ready( function() { initTablesDonnes(); });
 	$('#exploitation_acheteurs').ready( function() { initTablesAcheteurs(); });
@@ -22,7 +23,7 @@ $(document).ready( function()
 /**
  * Choix d'un précédente déclaration
  ******************************************/
-/*var choixPrecDecla = function()
+var choixPrecDecla = function()
 {
 	var nouvelle_decla = $('#nouvelle_declaration');
 	var liste_prec_decla = nouvelle_decla.find('select');
@@ -32,10 +33,10 @@ $(document).ready( function()
 	
 	type_decla.change(function()
 	{
-		if(type_decla.filter(':checked').val() == 'type_declaration_1') liste_prec_decla.hide();
+		if(type_decla.filter(':checked').val() == 'vierge') liste_prec_decla.hide();
 		else liste_prec_decla.show();
 	});
-};*/
+};
 
 /**
  * Accordéon précédentes déclarations

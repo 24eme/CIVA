@@ -283,7 +283,7 @@
 #declaration_recolte #nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
 #declaration_recolte #nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
 #declaration_recolte #nouvelle_declaration .ligne_form label { font-size: 14px; }
-/*
+
 #declaration_recolte #nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
 
 #declaration_recolte #nouvelle_declaration .ligne_btn select
@@ -298,7 +298,7 @@
 {
 	float: right;
 	vertical-align: middle;
-}*/
+}
 
 /**
  * Précédentes déclarations
