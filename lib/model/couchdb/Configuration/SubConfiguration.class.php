@@ -2,10 +2,12 @@
 
 class SubConfiguration extends BaseSubConfiguration {
   public function getRendement() {
-    if ($r = parent::get('Rendement') && $r > 0)
+    $r = $this->_get('Rendement');
+    if ($r && $r > 0) {
       return $r;
+    }
     $h = $this->getParentHash();
-    if ($h == 'Recolte')
+    if ($h == '/recolte')
       return 0;
     return $this->getCouchdbDocument()->get($h)->getRendement();
   }

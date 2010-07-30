@@ -163,6 +163,7 @@ Configuration:
             '*':
             # ------- APPELLATION ---------
               type: collection
+              class: SubConfiguration
               definition:
                 fields:
                   libelle: {  }
@@ -170,6 +171,7 @@ Configuration:
                   '*':
                   # ------------ LIEU --------------
                     type: collection
+                    class: SubConfiguration
                     definition:
                       fields:
                         rendement: {type: float}
@@ -177,6 +179,7 @@ Configuration:
                         '*':
                         # ------------ CEPAGE -------------
                           type: collection
+                          class: SubConfiguration
                           definition:
                             fields:
                               libelle: {  }
