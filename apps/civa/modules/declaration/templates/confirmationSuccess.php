@@ -22,7 +22,7 @@
         </div>
         <!-- fin #application_dr -->
 
-        <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser'))) ?>
+        <?php include_partial('global/boutons', array('display' => array('','previsualiser'))) ?>
 
 </form>
 <!-- fin #principal -->

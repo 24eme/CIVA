@@ -32,7 +32,7 @@ recolte:
 
 validation:
   url:   /validation
-  param: { module: declaration, action: validation }
+  param: { module: declaration, action: validation, annee: 2010 }
 
 visualisation:
   url: /visualisation/:annee
