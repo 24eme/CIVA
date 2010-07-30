@@ -10,7 +10,6 @@
  ******************************************/
 $(document).ready( function()
 {
-	
 	hauteurEgale($('#onglets_majeurs li a'));
 	if($("#principal").hasClass('ui-tabs')) $("#principal").tabs();
 	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
@@ -210,6 +209,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 	var commune = table_ajout.find('td.commune');
 	var btn = form_ajout.find('.btn a');
 	var acheteur_mouts = 0;
+        var qualite_name = '';
 	
 	nom.autocomplete(
 	{
@@ -251,6 +251,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 	btn.click(function()
 	{
 		if(table_achet.parent().attr('id') == 'acheteurs_mouts') acheteur_mouts = 1;
+                qualite_name = form_ajout.attr('rel');
 		
 		if($(this).hasClass('valider'))
 		{
@@ -274,8 +275,8 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 					}
 				});
 				
-				$.post("../ajax.php",
-				{ action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts },
+				$.post(url_ajax,
+				{ action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts, qualite_name: qualite_name  },
 				function(data)
 				{
 					var tr = $(data);

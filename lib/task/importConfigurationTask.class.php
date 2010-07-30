@@ -49,6 +49,7 @@ EOF;
 	//	$docs[] = $json;
 
 	$json = new stdClass();
+        $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
 	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";
 	$lieu = new stdClass();
 
@@ -72,6 +73,8 @@ EOF;
 	$lieu->cepage_ED->libelle = "Edelzwicker";
 
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
+
+        $json->recolte->appellation_GRDCRU->appellation = "GRDCRU";
 	$json->recolte->appellation_GRDCRU->libelle = "AOC Alsace Grand Cru";
 	$lieu = new stdClass();
 	$lieu->cepage_RI->libelle = "Riesling";
@@ -213,13 +216,17 @@ EOF;
 	$json->recolte->appellation_GRDCRU->lieu51->cepage_MU->libelle = "Muscat d'Alsace";
 	$json->recolte->appellation_GRDCRU->lieu51->cepage_ED->libelle = "Assemblage";
 
+        $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
 	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->libelle = "Pinot noir";
 	$json->recolte->appellation_PINOTNOIR->rendement = 75;
+
+        $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
 	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
 	$json->recolte->appellation_PINOTNOIRROUGE->rendement = 60;
 	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PN->libelle = "Pinot noir";
 
+        $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
 	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RS->libelle = "Crémant Rosé";
@@ -227,9 +234,12 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
 	$json->recolte->appellation_CREMANT->rendement = 80;
+        $json->recolte->appellation_CREMANT->mout = 1;
 
+        $json->recolte->appellation_VINTABLE->appellation = "VINTABLE";
 	$json->recolte->appellation_VINTABLE->libelle = "Vin de table";
 
+        $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
 	$json->recolte->appellation_KLEVENER->libelle = "Klevener de Heiligenstein";
 	$json->recolte->appellation_KLEVENER->rendement = 75;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";

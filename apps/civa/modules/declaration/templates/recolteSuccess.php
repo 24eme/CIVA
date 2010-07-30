@@ -1,5 +1,5 @@
 <!-- #principal -->
-			<form id="principal" action="<?php echo url_for('@validation'); ?>" method="get" style="opacity: 0.5">
+			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post" style="opacity: 0.5">
 			
 				<ul id="onglets_majeurs" class="clearfix onglets_courts">
 					<li class="ui-tabs-selected"><a href="#">AOC<br /> <span>Alsace Blanc</span></a></li>
@@ -98,10 +98,7 @@
 				<!-- fin #application_dr -->
 				
 				
-				<ul id="btn_etape" class="btn_prev_suiv clearfix">
-					<li class="prec"><input type="image" src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" name="retourner_etape" /></li>
-					<li class="suiv"><input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Passer à l'étape suivante" name="passer_etape" /></li>
-				</ul>
+				<?php include_partial('global/boutons', array('display' => array('precedent','suivant'))) ?>
 
 				
 			</form>

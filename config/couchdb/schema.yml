@@ -7,6 +7,7 @@ DR:
       campagne: {  }
       acheteurs:
         type: collection
+        class: DRAcheteurs
         definition:
           fields:
           # -------- rappel des appellations -------
@@ -23,6 +24,12 @@ DR:
                     type: array_collection
                     definition: 
                       fields: 
+                        '*': {  }
+                  'cave_particuliere': {type: integer}
+                  'mouts':
+                    type: array_collection
+                    definition:
+                      fields:
                         '*': {  }
       cvi: {  }
       lies: {type: float}
@@ -166,8 +173,10 @@ Configuration:
               class: SubConfiguration
               definition:
                 fields:
+                  appellation: { }
                   libelle: {  }
                   rendement : { type: float }
+                  mout: {type: integer}
                   '*':
                   # ------------ LIEU --------------
                     type: collection
