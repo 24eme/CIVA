@@ -140,8 +140,8 @@
 
         </div>
         <!-- fin #application_dr -->
-
+<?php if ($annee == '2010') : ?>
        <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser','suivant'))) ?>
-
+<?php endif; ?>
 </form>
 <!-- fin #principal -->
