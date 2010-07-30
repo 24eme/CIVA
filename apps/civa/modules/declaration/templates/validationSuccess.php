@@ -14,14 +14,16 @@
 
                 <!-- #acheteurs_caves -->
                 <div id="acheteurs_caves">
-
+<?php
+  if (count($volume_negoces)) :
+?>
                         <div id="acheteurs_raisin">
                                 <table cellpadding="0" cellspacing="0" class="table_donnees">
                                         <thead>
                                                 <tr>
                                                         <th><img src="/images/textes/acheteurs_raisin.png" alt="Acheteurs de raisin" /></th>
                                                         <th class="cvi">n°CVI</th>
-                                                        <th>Raison sociale</th>
+                                                        <th>Commune</th>
                                                         <th>Surface</th>
                                                         <th>Volume total</th>
                                                         <th>Volume revendiqué</th>
@@ -29,45 +31,24 @@
                                                 </tr>
                                         </thead>
                                         <tbody>
+<?php foreach ($volume_negoces as $cvi => $v) : ?>
                                                 <tr>
-                                                        <td class="nom">Nom de l'acheteur 1</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
+						<td class="nom"><?php echo $acheteurs[$cvi]->nom; ?></td>
+						<td class="cvi"><?php echo $cvi; ?></td>
+						<td class="rs"><?php echo $acheteurs[$cvi]->commune; ?></td>
+                                                        <td>????</td>
+						<td><?php echo $v; ?></td>
+                                                        <td>????</td>
+                                                        <td>????</td>
                                                 </tr>
-                                                <tr>
-                                                        <td class="nom">Nom de l'acheteur 2</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
-                                                <tr>
-                                                        <td class="nom">Nom de l'acheteur 3</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
-                                                <tr>
-                                                        <td class="nom">Nom de l'acheteur 4</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
+<?php endforeach; ?>
                                         </tbody>
                                 </table>
                         </div>
+<?php 
+  endif; 
+  if (count($volume_cooperatives)) :
+?>
 
                         <div id="caves_cooperatives">
                                 <table cellpadding="0" cellspacing="0" class="table_donnees">
@@ -83,46 +64,21 @@
                                                 </tr>
                                         </thead>
                                         <tbody>
+<?php foreach ($volume_cooperatives as $cvi => $v) : ?>
                                                 <tr>
-                                                        <td class="nom">Cave 1</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
+						<td class="nom"><?php echo $acheteurs[$cvi]->nom; ?></td>
+						<td class="cvi"><?php echo $cvi; ?></td>
+						<td class="rs"><?php echo $acheteurs[$cvi]->commune; ?></td>
+                                                        <td>????</td>
+						<td><?php echo $v; ?></td>
+                                                        <td>????</td>
+                                                        <td>????</td>
                                                 </tr>
-                                                <tr>
-                                                        <td class="nom">Cave 2</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
-                                                <tr>
-                                                        <td class="nom">Cave 3</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
-                                                <tr>
-                                                        <td class="nom">Cave 4</td>
-                                                        <td class="cvi">1454567895</td>
-                                                        <td class="rs">SARL Vini</td>
-                                                        <td>25</td>
-                                                        <td>89</td>
-                                                        <td>512</td>
-                                                        <td>98</td>
-                                                </tr>
+<?php endforeach; ?>
                                         </tbody>
                                 </table>
                         </div>
-
+<?php endif; ?>
                 </div>
                 <!-- fin #acheteurs_caves -->
 
@@ -136,7 +92,7 @@
                                                 <tr>
                                                         <th><img src="/images/textes/appelations.png" alt="Appelations" /></th>
   <?php foreach ($appellations as $a) : ?>
-<th><?php echo $a; ?></th>
+  <th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
 <?php endforeach; ?>
                                                 </tr>
                                         </thead>

@@ -97,12 +97,35 @@ class declarationActions extends EtapesActions {
       $this->volume = array();
       $this->revendique = array();
       $this->dplc = array();
+      $this->libelle = array();
+      $this->volume_negoces = array();
+      $this->volume_cooperatives = array();
+      $cvi = array();
+      $conf = ConfigurationClient::getConfiguration();
       foreach ($dr->recolte as $appellation) {
 	$this->appellations[] = $appellation->getAppellation();
+	$this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
 	$this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
 	$this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
 	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
 	$this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getNegoces() as $n) {
+	  $cvi[$n] = 1;
+	  if (!isset($this->volume_negoces[$n]))
+	    $this->volume_negoces[$n] = 0;
+	  $this->volume_negoces[$n] += $appellation->getVolumeAcheteur($n, 'negoces');
+	}
+	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getCooperatives() as $n) {
+	  $cvi[$n] = 1;
+	  if (!isset($this->volume_cooperatives[$n]))
+	    $this->volume_cooperatives[$n] = 0;
+	  $this->volume_cooperatives[$n] += $appellation->getVolumeAcheteur($n, 'cooperatives');
+	}
+      }
+
+      $this->acheteurs = array();
+      foreach (array_keys($cvi) as $c) {
+	$this->acheteurs[$c] = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$c);
       }
 
       $this->total_superficie = array_sum(array_values($this->superficie));
