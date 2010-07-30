@@ -1,3 +1,6 @@
+<?php include_partial('global/etapes', array('etape' => 2)) ?>
+<?php include_partial('global/actions') ?>
+
 <!-- #principal -->
 			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post" style="opacity: 0.5">
 			

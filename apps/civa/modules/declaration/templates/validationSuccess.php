@@ -70,7 +70,7 @@
 						<td class="cvi"><?php echo $cvi; ?></td>
 						<td class="rs"><?php echo $acheteurs[$cvi]->commune; ?></td>
                                                         <td>????</td>
-						<td><?php echo $v; ?></td>
+						<td><?php echo $v->volume; ?></td>
                                                         <td>????</td>
                                                         <td>????</td>
                                                 </tr>
