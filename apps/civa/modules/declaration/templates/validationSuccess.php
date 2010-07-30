@@ -2,7 +2,7 @@
 <?php include_partial('global/actions') ?>
 
 <!-- #principal -->
-<form id="principal" action="" method="post" class="ui-tabs">
+  <form id="principal" action="" method="post" class="ui-tabs" <?php if ($annee == 2010) echo 'style="opacity: 0.5" '; ?>>
 
         <ul id="onglets_majeurs" class="clearfix">
                 <li><a href="#acheteurs_caves">Acheteurs et Caves</a></li>

@@ -147,6 +147,8 @@ class declarationActions extends EtapesActions {
       $this->total_dplc = array_sum(array_values($this->dplc));
       $this->total_revendique = array_sum(array_values($this->revendique));
 
+      $this->annee = $annee;
+
       if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
       }
