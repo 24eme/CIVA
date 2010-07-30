@@ -6,11 +6,6 @@ class sfCouchdbJsonFieldString extends sfCouchdbJsonField {
             return true;
         }
 
-        if (!is_string($value)) {
-            print_r($value);
-            throw new sfCouchdbException(sprintf('Not valid : %s', $this->key));
-        }
-
         return true;
     }
     public function getData() {

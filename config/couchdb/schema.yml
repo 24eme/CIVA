@@ -131,7 +131,7 @@ Recoltant:
           fields:
             adresse: {  }
             insee_commune: {  }
-            code_postal: {  }
+            code_postal: { }
             commune: {  }
       telephone: {  }
       fax: {  }

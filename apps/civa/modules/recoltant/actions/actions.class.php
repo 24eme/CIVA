@@ -50,8 +50,8 @@ class recoltantActions extends EtapesActions
 	if ($this->form->isValid()) {
 	  $this->form->save();
 	  $this->redirectByBoutonsEtapes();
-	}
-	$this->form_err = 1;            
+	}else
+	  $this->form_err = 1;            
       }
 
       if ($request->isMethod(sfWebRequest::POST)) {
