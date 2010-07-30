@@ -22,13 +22,15 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getTotalVolume() {
-      if ($r = parent::get('total_volume'))
+      $r = $this->_get('total_volume');
+      if ($r)
 	return $r;
       return $this->getSumCepageFields('total_volume');
       
     }
     public function getTotalSuperficie() {
-      if ($r = parent::get('total_superficie'))
+      $r =  $this->_get('total_superficie');
+      if ($r)
 	return $r;
       return $this->getSumCepageFields('total_superficie');
     }
@@ -54,6 +56,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 	  }
 	}
       }
-      return $sum;
+      return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
     }
 }

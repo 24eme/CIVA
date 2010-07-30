@@ -111,15 +111,29 @@ class declarationActions extends EtapesActions {
 	$this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
 	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getNegoces() as $n) {
 	  $cvi[$n] = 1;
-	  if (!isset($this->volume_negoces[$n]))
-	    $this->volume_negoces[$n] = 0;
-	  $this->volume_negoces[$n] += $appellation->getVolumeAcheteur($n, 'negoces');
+	  if (!isset($this->volume_negoces[$n])) {
+	    $this->volume_negoces[$n] = new stdClass();
+	    $this->volume_negoces[$n]->volume = 0;
+	    $this->volume_negoces[$n]->ratio_superficie = 0;
+	  }
+	  $vol = $appellation->getVolumeAcheteur($n, 'negoces');
+	  if ($vol) {
+	    $this->volume_negoces[$n]->volume += $vol['volume'];
+	    $this->volume_negoces[$n]->ratio_superficie += $vol['ratio_superficie'];
+	  }
 	}
 	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getCooperatives() as $n) {
 	  $cvi[$n] = 1;
-	  if (!isset($this->volume_cooperatives[$n]))
-	    $this->volume_cooperatives[$n] = 0;
-	  $this->volume_cooperatives[$n] += $appellation->getVolumeAcheteur($n, 'cooperatives');
+	  if (!isset($this->volume_cooperatives[$n])) {
+	    $this->volume_cooperatives[$n] = new stdClass();
+	    $this->volume_cooperatives[$n]->volume = 0;
+	    $this->volume_cooperatives[$n]->ratio_superficie = 0;
+	  }
+	  $vol = $appellation->getVolumeAcheteur($n, 'cooperatives');
+	  if ($vol) {
+	    $this->volume_cooperatives[$n]->volume += $vol['volume'];
+	    $this->volume_cooperatives[$n]->ratio_superficie += $vol['ratio_superficie'];
+	  }
 	}
       }
 

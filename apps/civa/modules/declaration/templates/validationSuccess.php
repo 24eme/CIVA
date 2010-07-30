@@ -24,7 +24,7 @@
                                                         <th><img src="/images/textes/acheteurs_raisin.png" alt="Acheteurs de raisin" /></th>
                                                         <th class="cvi">n°CVI</th>
                                                         <th>Commune</th>
-                                                        <th>Surface</th>
+                                                        <th>Superficie</th>
                                                         <th>Volume total</th>
                                                         <th>Volume revendiqué</th>
                                                         <th>DPLC</th>
@@ -36,8 +36,8 @@
 						<td class="nom"><?php echo $acheteurs[$cvi]->nom; ?></td>
 						<td class="cvi"><?php echo $cvi; ?></td>
 						<td class="rs"><?php echo $acheteurs[$cvi]->commune; ?></td>
-                                                        <td>????</td>
-						<td><?php echo $v; ?></td>
+						<td><?php echo $v->ratio_superficie; ?></td>
+						<td><?php echo $v->volume; ?></td>
                                                         <td>????</td>
                                                         <td>????</td>
                                                 </tr>
