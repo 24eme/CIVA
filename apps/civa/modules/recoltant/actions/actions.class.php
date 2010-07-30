@@ -18,7 +18,7 @@ class recoltantActions extends EtapesActions
   public function executeLogin(sfWebRequest $request)
   {
      $this->form = new LoginForm();
-
+     print_r(sfConfig::get('acheteurs'));
      if ($request->isMethod(sfWebRequest::POST)) {
          $this->form->bind($request->getParameter($this->form->getName()));
          if ($this->form->isValid()) {

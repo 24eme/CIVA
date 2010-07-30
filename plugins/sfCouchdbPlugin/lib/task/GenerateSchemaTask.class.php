@@ -36,8 +36,7 @@ EOF;
         $schema = array($arguments['id_doc'] => $this->generateDefinition(array(), $data));
         $yml = sfYaml::dump($schema, 200);
 
-        $file = new sfFinder();
-        $file_system = new sfFileSystem();
+        
         if (!file_exists(sfConfig::get('sf_data_dir').'/'.'generate-schema')) {
             mkdir(sfConfig::get('sf_data_dir').'/generate-schema');
         }
