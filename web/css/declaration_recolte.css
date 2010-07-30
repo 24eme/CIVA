@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /**
  * Fichier : declaration_recolte.css
  * Description : styles spécifiques à la déclaration de récolte
@@ -189,9 +190,9 @@
 
 #declaration_recolte table.table_donnees thead th 
 {
-	color: #000;
+	color: #acb701;
 	font-size: 14px;
-	font-weight: bold;
+	font-weight: normal;
 	line-height: 1;
 	padding: 3px;
 	text-align: left;
@@ -216,9 +217,9 @@
 
 #declaration_recolte table.table_donnees thead th span
 {
-	color: #acb701;
+	color: #000;
 	display: block;
-	font-weight: normal;
+	font-weight: bold;
 }
 
 #declaration_recolte table.table_donnees tbody td
@@ -234,38 +235,26 @@
 }
 
 #declaration_recolte table.table_donnees tbody td.alt { background: #ddd; }
-#declaration_recolte table.table_donnees tbody tr:first-child td { border-top: 1px solid #c6c8c7; }
+#declaration_recolte table.table_donnees tbody tr:first-child td,
+#declaration_recolte table.table_donnees tbody tr.premier td { border-top: 1px solid #c6c8c7; }
 #declaration_recolte table.table_donnees tbody td:first-child { border-left: 1px solid #c6c8c7; }
 #declaration_recolte table.table_donnees tbody td:last-child { border-right: 1px solid #c6c8c7; }
 #declaration_recolte table.table_donnees tbody tr:last-child td { border-bottom: 1px solid #c6c8c7; }
 
-/* Autocompletion */
-.ui-autocomplete
-{
-	background: #fff;
-	border: 1px solid #c2c1ba;
-	font-size: 12px;
-	position: absolute;
-	_width:1px;
-}
 
-.ui-autocomplete .ui-menu-item a
+/* Erreurs */
+#declaration_recolte ul.error_list
 {
-	background: #fff;
-	color: #7a7a7a;
-	cursor: pointer;
-	display: block;
-	padding: 2px;
-	text-decoration: none;
-}
-
-.ui-autocomplete .ui-menu-item a.ui-state-hover,
-.ui-autocomplete .ui-menu-item a.ui-state-active
-{
-	background: #dcdfa9;
+	background: #ffdddd;
+	border: 1px solid #f30;
+	clear: both;
 	color: #000;
+	font-size: 12px;
+	margin: 0 0 10px;
+	padding: 5px;
 }
 
+#declaration_recolte ul.error_list li { margin: 3px 0; }
 
 /**
  * Nouvelle déclaration
@@ -292,11 +281,9 @@
 }
 
 #declaration_recolte #nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
-
 #declaration_recolte #nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
-
 #declaration_recolte #nouvelle_declaration .ligne_form label { font-size: 14px; }
-
+/*
 #declaration_recolte #nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
 
 #declaration_recolte #nouvelle_declaration .ligne_btn select
@@ -311,7 +298,7 @@
 {
 	float: right;
 	vertical-align: middle;
-}
+}*/
 
 /**
  * Précédentes déclarations
@@ -447,14 +434,15 @@
 	width: 264px;
 }
 
-#declaration_recolte #gestionnaire_exploitation h3
+/* Présentation infos */
+#declaration_recolte #gestionnaire_exploitation #presentation_infos h3
 {
 	font-size: 21px;
 	font-weight: bold;
 	margin: 0 0 5px;
 }
 
-#declaration_recolte #gestionnaire_exploitation address
+#declaration_recolte #gestionnaire_exploitation #presentation_infos address
 {
 	display: block;
 	font-size: 16px;
@@ -462,26 +450,77 @@
 	margin: 0 0 15px;
 }
 
-#declaration_recolte #gestionnaire_exploitation p
+#declaration_recolte #gestionnaire_exploitation #presentation_infos p
 {
 	font-size: 15px;
 	margin: 0 0 10px;
 }
 
-#declaration_recolte #gestionnaire_exploitation p span
+#declaration_recolte #gestionnaire_exploitation #presentation_infos p span
 {
 	color: #7a7a7a;
 	display: block;
 	font-size: 14px;
 }
 
+/* Modification infos */
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form { margin: 0 0 5px; }
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form label
+{
+	color: #7a7a7a;
+	float: left;
+	font-size: 13px;
+	line-height: 1;
+	margin: 0 10px 0 0;
+//	width: 90px;
+}
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur label { color: #f30; }
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form label span
+{
+	display: block;
+	font-size: 11px;
+	font-style: italic;
+	margin: 3px 0 0;
+}
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form input[type=text],
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form textarea
+{
+	background: #fff;
+	border: 1px solid #cecdc9;
+	color: #7a7a7a;
+	font-size: 12px;
+}
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur input[type=text],
+#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur textarea
+{
+	border-color: #f30;
+	color: #f30;
+}
+
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form input[type=text],
+#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form textarea
+{
+	clear: both;
+	margin: 3px 0 0;
+	width: 210px;
+}
+
+
 #declaration_recolte #gestionnaire_exploitation .btn { text-align: right; }
+#declaration_recolte #gestionnaire_exploitation .btn a,
+#declaration_recolte #gestionnaire_exploitation .btn input { margin: 0 0 0 5px; }
 
 /**
  * Acheteurs de l'exploitation
  ******************************************/
 #declaration_recolte #exploitation_acheteurs #acheteurs_raisin,
-#declaration_recolte #exploitation_acheteurs #caves_cooperatives
+#declaration_recolte #exploitation_acheteurs #caves_cooperatives,
+#declaration_recolte #exploitation_acheteurs #acheteurs_mouts
 {
 	margin: 0 0 15px;
 	position: relative;
@@ -489,9 +528,13 @@
 	zoom: 1;
 }
 
+#declaration_recolte #exploitation_acheteurs select.source_autocompletion { display: none; }
+
 #declaration_recolte #exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
 
 #declaration_recolte #exploitation_acheteurs table th { font-size: 11px; }
+#declaration_recolte #exploitation_acheteurs table th.cvi { width: 63px; }
+#declaration_recolte #exploitation_acheteurs table th.commune { width: 110px; }
 
 #declaration_recolte #exploitation_acheteurs table tbody a.supprimer
 {
@@ -500,22 +543,13 @@
 }
 
 #declaration_recolte #exploitation_acheteurs table tbody td { text-align: center; }
-
 #declaration_recolte #exploitation_acheteurs table tbody td.nom,
 #declaration_recolte #exploitation_acheteurs table tbody td.cvi,
-#declaration_recolte #exploitation_acheteurs table tbody td.rs
-{
-	cursor: pointer;
-	text-align: left;
-}
-
+#declaration_recolte #exploitation_acheteurs table tbody td.commune { text-align: left; }
 #declaration_recolte #exploitation_acheteurs table tbody td.cvi { width: 63px; }
-#declaration_recolte #exploitation_acheteurs table tbody td.rs { width: 110px; }
+#declaration_recolte #exploitation_acheteurs table tbody td.commune { width: 110px; }
 
-#declaration_recolte #exploitation_acheteurs table tbody td.nom span { height: 17px; display: block; }
-
-#declaration_recolte #exploitation_acheteurs table tbody td input[type=text],
-#declaration_recolte #exploitation_acheteurs table tbody .editable input
+#declaration_recolte #exploitation_acheteurs table tbody td input[type=text]
 {
 	background: #f6f6f6;
 	border: 1px solid #c2c1ba;
@@ -526,7 +560,9 @@
 #declaration_recolte #exploitation_acheteurs table tbody td.alt input { background: #efeeee; }
 #declaration_recolte #exploitation_acheteurs table tbody td.nom input { width: 121px; }
 #declaration_recolte #exploitation_acheteurs table tbody td.cvi input { width: 58px; }
-#declaration_recolte #exploitation_acheteurs table tbody td.rs input { width: 108px; }
+#declaration_recolte #exploitation_acheteurs table tbody td.commune input { width: 108px; }
+
+#declaration_recolte #exploitation_acheteurs table tbody td span { display: block; height: 17px; }
 
 #declaration_recolte #exploitation_acheteurs table tbody td label { display: block; }
 
@@ -545,7 +581,7 @@
 
 
 /**
- * Ajout achteur / cave
+ * Ajout d'acheteurs
  ******************************************/
 #declaration_recolte #exploitation_acheteurs .form_ajout
 {
@@ -556,10 +592,29 @@
 #declaration_recolte #exploitation_acheteurs .form_ajout table thead { visibility: hidden; }
 
 
+#declaration_recolte .ui-autocomplete .ui-menu-item a { overflow: hidden; }
+#declaration_recolte .ui-autocomplete .ui-menu-item a span { float: left; }
+#declaration_recolte .ui-autocomplete .ui-menu-item a span.nom { padding: 0 3px 0 0; width: 121px; }
+#declaration_recolte .ui-autocomplete .ui-menu-item a span.cvi { padding: 0 3px; width: 63px; }
+#declaration_recolte .ui-autocomplete .ui-menu-item a span.commune { padding: 0 0 0 3px; width: 110px; }
+
 /**
  * Acheteurs de moults
  ******************************************/
-#declaration_recolte #acheteurs_moults { width: 316px; }
+#declaration_recolte #acheteurs_mouts {  }
+#declaration_recolte #acheteurs_mouts table th { visibility: hidden; }
+#declaration_recolte #acheteurs_mouts table th:first-child,
+#declaration_recolte #acheteurs_mouts table th.cvi,
+#declaration_recolte #acheteurs_mouts table th.commune,
+#declaration_recolte #acheteurs_mouts table th.cremant_alsace { visibility: visible; }
+
+
+/**
+ * Cave particulière
+ ******************************************/
+#declaration_recolte #cave_particuliere { width: 950px; }
+#declaration_recolte #cave_particuliere table th { visibility: hidden; }
+#declaration_recolte #cave_particuliere table th:first-child { visibility: visible; }
 
 /**
  * Autres exploitations
@@ -601,7 +656,7 @@
 #declaration_recolte #acheteurs_caves table tbody td { padding: 5px 3px; }
 
 /**
- * Validation Acheteurs et caves
+ * Validation Appelation
  ******************************************/
 #declaration_recolte #appelations table { float: left; width: 830px; }
 #declaration_recolte #appelations table thead th { font-size: 11px; }
@@ -615,18 +670,21 @@
 
 #declaration_recolte #total_general ul
 {
-	font-size: 14px;
-	font-weight: bold;
-	padding: 2px 15px;
-	text-align: center;
+	padding: 1px 15px 2px;
 	line-height: 1;
 }
 
-#declaration_recolte #total_general ul li
+#declaration_recolte #total_general ul li { padding: 3px 0; }
+
+#declaration_recolte #total_general ul li input
 {
 	background: #fff;
 	border: 1px solid #dadad6;
-	margin: 0 0 2px;
+	font-size: 12px;
+	font-weight: bold;
+	height: 15px;
+	text-align: center;
+	width: 86px;
 }
 
 /**

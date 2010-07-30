@@ -31,7 +31,7 @@ ol { list-style-position: inside; }
 
 ul { list-style: none; }
 
-textarea, input, select { font: 12px Arial, Helvetica, sans-serif; }
+textarea, input, select { font: 12px Calibri, Arial, Helvetica, sans-serif; }
 
 sup { vertical-align: top; }
 
@@ -118,6 +118,9 @@ html[xmlns] .clearfix { display: block; }
  ******************************************/
 .ui-tabs .ui-tabs-panel { clear: both; display: block; }
 .ui-tabs .ui-tabs-hide { display: none; }
+
+
+
 
 
 /**
