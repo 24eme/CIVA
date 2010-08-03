@@ -8,78 +8,72 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class acheteurActions extends EtapesActions
-{
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
-  public function executeExploitationAcheteurs(sfWebRequest $request)
-  {
-       $this->setCurrentEtape('exploitation_acheteurs');
+class acheteurActions extends EtapesActions {
 
-       $configuration = ConfigurationClient::getConfiguration();
-       $this->config_appellations = $configuration->getArrayAppellations();
-       $this->nb_config_appellations = count($this->config_appellations);
+    /**
+     * Executes index action
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeExploitationAcheteurs(sfWebRequest $request) {
+        $this->setCurrentEtape('exploitation_acheteurs');
 
-        $this->acheteurs_negociant = include(sfConfig::get('sf_data_dir').'/acheteurs-negociant.php');
-        $this->acheteurs_cave = include(sfConfig::get('sf_data_dir').'/acheteurs-cave.php');
-        $acheteurs_negociant_without_key = array();
-        $acheteurs_cave_without_key = array();
-        foreach($this->acheteurs_negociant as $item) {
-            $acheteurs_negociant_without_key[] = $item['nom'].'|@'.$item['cvi'].'|@'.$item['commune'];
+        $this->appellations = ExploitationAcheteursForm::getListeAppellations();
+
+        $this->acheteurs_negociant = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
+        $this->acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
+
+        $this->acheteurs_negociant_json = array();
+        $this->acheteurs_cave_json = array();
+        foreach ($this->acheteurs_negociant as $item) {
+            $this->acheteurs_negociant_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
-        foreach($this->acheteurs_cave as $item) {
-            $acheteurs_cave_without_key[] = $item['nom'].'|@'.$item['cvi'].'|@'.$item['commune'];
+        foreach ($this->acheteurs_cave as $item) {
+            $this->acheteurs_cave_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
-        $this->acheteurs_negociant_json = $acheteurs_negociant_without_key;
-        $this->acheteurs_cave_json = $acheteurs_cave_without_key;
 
-        //print_r($this->getUser()->getDeclaration()->getAcheteurs());
         $this->form = new ExploitationAcheteursForm($this->getUser()->getDeclaration()->getAcheteurs());
-       
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
                 $this->redirectByBoutonsEtapes();
             }
-            
         }
-  }
+    }
 
-  public function executeExploitationAcheteursTableRowItemAjax(sfWebRequest $request) {
-      if ($request->isXmlHttpRequest()) {
-          $configuration = ConfigurationClient::getConfiguration();
-          $config_appellations = $configuration->getArrayAppellations();
-          $qualite_name = $request->getParameter('qualite_name');
-          $donnees = $request->getParameter('donnees');
-          $nom = $donnees[0];
-          $cvi = $donnees[1];
-          $commune = $donnees[2];
-          $mout = ($request->getParameter('acheteur_mouts', null) == '1');
-          $config_appellations_form = $config_appellations;
-          if ($mout) {
-            $config_appellations_form = $configuration->getArrayAppellationsMout();
-          }
-          $values = array();
-          $i=3;
-          foreach($config_appellations_form as $appellation_key => $config_appellation) {
-              $values[$appellation_key] = (isset($donnees[$i]) && $donnees[$i]=='1');
-              $i++;
-          }
+    public function executeExploitationAcheteursTableRowItemAjax(sfWebRequest $request) {
+        if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
+            $name = $request->getParameter('qualite_name');
+            $donnees = $request->getParameter('donnees');
+            $nom = $donnees[0];
+            $cvi = $donnees[1];
+            $commune = $donnees[2];
+            $mout = ($request->getParameter('acheteur_mouts', null) == '1');
 
-          $form = ExploitationAcheteursForm::getNewQualiteAjax($qualite_name, $cvi, $values, $config_appellations_form);
+            $appellations_form = ExploitationAcheteursForm::getListeAppellations();
+            if ($mout) {
+                $appellations_form = ExploitationAcheteursForm::getListeAppellationsMout();
+            }
+            $values = array();
+            $i = 3;
+            foreach ($appellations_form as $key => $item) {
+                $values[$key] = (isset($donnees[$i]) && $donnees[$i] == '1');
+                $i++;
+            }
 
-          return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
-                                                                          'cvi' => $cvi,
-                                                                          'commune' => $commune,
-                                                                          'appellations' => $config_appellations,
-                                                                          'form_item' => $form[$qualite_name.'_new'][$cvi],
-                                                                          'mout' => $mout));
-      } else {
-          $this->forward404();
-      }
-  }
+            $form = ExploitationAcheteursForm::getNewItemAjax($name, $cvi, $values, $appellations_form);
+
+            return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
+                'cvi' => $cvi,
+                'commune' => $commune,
+                'appellations' => ExploitationAcheteursForm::getListeAppellations(),
+                'form_item' => $form[$name.ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
+                'mout' => $mout));
+        } else {
+            $this->forward404();
+        }
+    }
+
 }
