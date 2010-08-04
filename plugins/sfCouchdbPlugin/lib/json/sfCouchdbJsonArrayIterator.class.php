@@ -12,6 +12,14 @@ class sfCouchdbJsonArrayIterator extends ArrayIterator {
         return $this->_json->get($this->key());
     }
 
+    public function key() {
+        if ($this->_json->isArray()) {
+            return parent::key();
+        } else {
+            return $this->_json->getField(parent::key())->getName();
+        }
+    }
+ 
     public function offsetGet($index) {
         return $this->_json->offsetGet($index);
     }

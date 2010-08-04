@@ -32,7 +32,7 @@ exploitation_autres:
 
 recolte:
   url:   /recolte
-  param: { module: declaration, action: recolte }
+  param: { module: recolte, action: recolte }
 
 validation:
   url:   /validation

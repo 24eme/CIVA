@@ -1,7 +1,10 @@
 <?php
 
 class sfCouchdbJsonFieldCollection extends sfCouchdbJsonField {
-
+    public function  __construct($name, $value, $numeric_key = false, $couchdb_document = null, $hash = null) {
+        parent::__construct($name, $value, $numeric_key, $couchdb_document, $hash);
+        $this->_is_collection = true;
+    }
     public function getData() {
         return $this->value->getData();
     }

@@ -7,9 +7,11 @@ abstract class sfCouchdbJsonField {
     protected $numeric_key = false;
     protected $_couchdb_document = null;
     protected $_field_hash = null;
+    protected $_is_collection = false;
 
     public function __construct($name, $value, $numeric_key = false, $couchdb_document = null, $hash = null) {
         $this->numeric_key = $numeric_key;
+        $this->_is_collection = false;
 	$this->_couchdb_document = $couchdb_document;
 	$this->_field_hash = $hash;
         if (!$numeric_key) {
@@ -47,6 +49,10 @@ abstract class sfCouchdbJsonField {
 
     public function isNumericKey() {
         return $this->numeric_key;
+    }
+
+    public function isCollection() {
+        return $this->_is_collection;
     }
     
     public function __toString() {

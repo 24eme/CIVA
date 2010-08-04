@@ -3,36 +3,20 @@
 
 <!-- #principal -->
 			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post" style="opacity: 0.5">
-			
-				<ul id="onglets_majeurs" class="clearfix onglets_courts">
-					<li class="ui-tabs-selected"><a href="#">AOC<br /> <span>Alsace Blanc</span></a></li>
-					<li><a href="#"><span>Klevener de<br /> Helligenstein</span></a></li>
+                                <?php include_partial('ongletsAppellations', array('appellations' => $declaration->recolte,
+                                                                                   'appellation_current_key' => $appellation_current_key,
+                                                                                   'appellations_config' => $configuration->recolte
+                                                                                   )); ?>
 
-					<li><a href="#">AOC<br /> <span>Pinot Noir</span></a></li>
-					<li><a href="#">AOC<br /> <span>Pinot Noir Rouge</span></a></li>
-					<li><a href="#">AOC <span>Alsace<br /> Grand Cru</span></a></li>
-					<li><a href="#">AOC<br /> <span>Crémant d'alsace</span></a></li>
-
-					<li><a href="#"><span>Vins de table</span></a></li>
-				</ul>
-			
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
 				
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix">
-						<ul id="liste_sepages">
-							<li class="ui-tabs-selected"><a href="#">Sylvaner <span>(2)</span></a></li>
-
-							<li><a href="#">Riesling <span></span></a></li>
-							<li><a href="#">Chasselas <span></span></a></li>
-							<li><a href="#">Pinot Blanc <span>(1)</span></a></li>
-							<li><a href="#">Muscat <span></span></a></li>
-							<li><a href="#">Pinot Gris <span></span></a></li>
-							<li><a href="#">Gewurztraminer <span></span></a></li>
-
-							<li><a href="#">Edel <span></span></a></li>
-						</ul>
+						<?php include_partial('ongletsCepages', array('cepages' => $declaration->recolte->get($appellation_current_key)->lieu,
+                                                                                              'cepage_current_key' => $cepage_current_key,
+                                                                                              'cepages_config' => $configuration->recolte->get($appellation_current_key)->lieu
+                                                                                            )); ?>
 					
 						<div id="donnees_recolte_sepage" class="clearfix">
 						

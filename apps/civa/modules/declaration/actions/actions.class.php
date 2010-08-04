@@ -73,20 +73,6 @@ class declarationActions extends EtapesActions {
      *
      * @param sfWebRequest $request
      */
-    public function executeRecolte(sfWebRequest $request) {
-        $this->setCurrentEtape('recolte');
-
-
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->redirectByBoutonsEtapes();
-        }
-    }
-
-    /**
-     *
-     * @param sfWebRequest $request
-     */
     public function executeValidation(sfWebRequest $request) {
       $this->setCurrentEtape('validation');
       $recoltant = $this->getUser()->getRecoltant();

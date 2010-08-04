@@ -326,7 +326,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function getSimpleFields() {
         $simple_fields = array();
         foreach ($this->_fields as $key => $field) {
-            if (!($field instanceof sfCouchdbJsonFieldArrayCollection || $field instanceof sfCouchdbJsonFieldCollection)) {
+            if (!$field->isCollection()) {
                 $simple_fields[$key] = $field;
             }
         }
@@ -335,11 +335,20 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     public function toArray($deep = false) {
         $array_fields = array();
-        $simple_fields = $this->getSimpleFields();
-        foreach ($simple_fields as $key => $field) {
-            $array_fields[$key] = $field->getValue();
+        if ($deep === false || $deep < 1) {
+            $simple_fields = $this->getSimpleFields();
+            foreach ($simple_fields as $key => $field) {
+                $array_fields[$key] = $field->getValue();
+            }
+        } elseif($deep) {
+            foreach ($this->_fields as $key => $field) {
+                if (!$field->isCollection()) {
+                    $array_fields[$key] = $field->getValue();
+                } else {
+                    $array_fields[$key] = $field->getValue()->toArray($deep - 1);
+                }
+            }
         }
-
         return $array_fields;
     }
 
@@ -381,6 +390,19 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             throw new sfCouchdbException('document not yet associated');
         }
         return $this->_object_hash;
+    }
+
+    public function getFirstCollection() {
+        return $this->get($this->getFirstCollectionKey);
+    }
+
+    public function getFirstCollectionKey() {
+        foreach($this->_fields as $field) {
+            if ($field->isCollection()) {
+                return $field->getName();
+            }
+        }
+        throw new sfCouchdbException('There is no collection key');
     }
 
     protected function update() {
