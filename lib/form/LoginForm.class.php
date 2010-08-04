@@ -3,7 +3,7 @@
         public function setup() {
             
             $this->setWidgets(array(
-                'cvi' => new sfWidgetFormInputText(),
+				    'cvi' => new sfWidgetFormInputText(array('label' => 'CVI'))
             ));
 
             $this->setValidators(array(
