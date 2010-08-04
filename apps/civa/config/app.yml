@@ -11,6 +11,8 @@ all:
         url: "@exploitation_administratif"
       exploitation_acheteurs:
         url: "@exploitation_acheteurs"
+      exploitation_lieu:
+        url: "@exploitation_lieu"
       exploitation_autres:
         url: "@exploitation_autres"
       recolte:
@@ -19,4 +21,4 @@ all:
         url: "@validation"
       confirmation:
         url: "@confirmation"
-    orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_autres, recolte, validation, confirmation]
+    orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_lieu, exploitation_autres, recolte, validation, confirmation]

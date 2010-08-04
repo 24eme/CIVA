@@ -76,6 +76,8 @@ class declarationActions extends EtapesActions {
     public function executeRecolte(sfWebRequest $request) {
         $this->setCurrentEtape('recolte');
 
+
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }

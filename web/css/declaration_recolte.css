@@ -613,8 +613,10 @@
  * Cave particulière
  ******************************************/
 #declaration_recolte #cave_particuliere { width: 950px; }
-#declaration_recolte #cave_particuliere table th { visibility: hidden; }
-#declaration_recolte #cave_particuliere table th:first-child { visibility: visible; }
+/*#declaration_recolte #cave_particuliere table th { visibility: hidden; }
+#declaration_recolte #cave_particuliere table th:first-child { visibility: visible; } */
+#declaration_recolte #cave_particuliere table th.cvi,
+#declaration_recolte #cave_particuliere table th.commune { visibility: hidden; }
 
 /**
  * Autres exploitations

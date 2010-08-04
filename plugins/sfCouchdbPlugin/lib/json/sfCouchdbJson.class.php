@@ -163,7 +163,11 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return $field->getValue();
     }
 
-    public function hasField($key) {
+    public function exist($key) {
+        return $this->hasField($key);
+    }
+
+    protected function hasField($key) {
         if ($this->_is_array) {
             return $this->hasFieldNumeric($key);
         } else {

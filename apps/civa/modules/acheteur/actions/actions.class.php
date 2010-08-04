@@ -17,27 +17,38 @@ class acheteurActions extends EtapesActions {
      */
     public function executeExploitationAcheteurs(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_acheteurs');
+        $declaration = $this->getUser()->getDeclaration();
 
         $this->appellations = ExploitationAcheteursForm::getListeAppellations();
 
         $this->acheteurs_negociant = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
         $this->acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
+        $this->acheteurs_mout = array();
 
         $this->acheteurs_negociant_json = array();
         $this->acheteurs_cave_json = array();
-        foreach ($this->acheteurs_negociant as $item) {
+        $this->acheteurs_mout_json = array();
+        foreach ($this->acheteurs_negociant as $cvi => $item) {
+            $this->acheteurs_mout[$cvi] = $item;
             $this->acheteurs_negociant_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
+            $this->acheteurs_mout_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
-        foreach ($this->acheteurs_cave as $item) {
+        foreach ($this->acheteurs_cave as $cvi => $item) {
+            $this->acheteurs_mout[$cvi] = $item;
             $this->acheteurs_cave_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
+            $this->acheteurs_mout_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
 
-        $this->form = new ExploitationAcheteursForm($this->getUser()->getDeclaration()->getAcheteurs());
+        $this->form = new ExploitationAcheteursForm($declaration->getAcheteurs());
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
+
+                $declaration->getRecolte()->updateFromAcheteurs();
+                $declaration->save();
+                
                 $this->redirectByBoutonsEtapes();
             }
         }
@@ -73,6 +84,18 @@ class acheteurActions extends EtapesActions {
                 'mout' => $mout));
         } else {
             $this->forward404();
+        }
+    }
+
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeExploitationLieu(sfWebRequest $request) {
+        $this->setCurrentEtape('exploitation_lieu');
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->redirectByBoutonsEtapes();
         }
     }
 
