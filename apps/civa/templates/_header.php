@@ -6,10 +6,9 @@
     <h1 id="logo"><a href="<?php echo url_for('@mon_espace_civa'); ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
     <div id="titre_rubrique">
-        <h1>Déclaration de récolte de vins d'Alsace 2010</h1>
+        <h1>Déclaration de récolte de vins d'Alsace</h1>
 <?php if ($recoltant = $sf_user->getRecoltant()) : ?>
-        <p class="utilisateur"><?php echo link_to($recoltant->getExploitant()->getNom(), '@mon_espace_civa'); ?></a></p>
-        <p class="domaine"><?php echo $recoltant->getNom();?></p>
+        <p class="utilisateur"><?php echo link_to($recoltant->getIntitule().' '.$recoltant->getNom(), '@mon_espace_civa'); ?></a></p>
 <?php endif; ?>
     </div>
 
