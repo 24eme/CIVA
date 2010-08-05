@@ -2,10 +2,38 @@
 class sfCouchdbJsonArrayIterator extends ArrayIterator {
     private $_json;
 
-    public function __construct(sfCouchdbJson $json)
+    public function __construct(sfCouchdbJson $json, $filter = null)
     {
         $this->_json = $json;
-        parent::__construct($json->getFields());
+        if (!is_null($filter)) {
+            $fields = array();
+            foreach($json->getFields() as $key => $field) {
+                if (preg_match('/'.$filter.'/', $key)) {
+                    $fields[$key] = null;
+                }
+            }
+        } else {
+            $fields = array_fill_keys(array_keys($json->getFields()), null);
+        }
+        parent::__construct($fields);
+    }
+
+    public function getFirst() {
+        if($this->valid()){
+            $this->seek(0);
+            return $this->current();
+        } else {
+            throw new sfCouchdbException('This iterator has no entrie');
+        }
+    }
+
+    public function getFirstKey() {
+        if($this->valid()){
+            $this->seek(0);
+            return $this->key();
+        } else {
+            throw new sfCouchdbException('This iterator has no entrie');
+        }
     }
 
     public function current() {

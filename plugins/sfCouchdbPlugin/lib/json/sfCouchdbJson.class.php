@@ -8,6 +8,8 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     protected $_definition_model = null;
     private $_couchdb_document = null;
     private $_object_hash = null;
+    private $_filter = null;
+    private $_filter_persisent = false;
 
     public function __construct($definition_model = null, $definition_hash = null, $couchdoc = null, $my_hash = null) {
         $this->_fields = array();
@@ -392,17 +394,12 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return $this->_object_hash;
     }
 
-    public function getFirstCollection() {
-        return $this->get($this->getFirstCollectionKey);
+    public function getFirst() {
+        return $this->getIterator()->getFirst();
     }
 
-    public function getFirstCollectionKey() {
-        foreach($this->_fields as $field) {
-            if ($field->isCollection()) {
-                return $field->getName();
-            }
-        }
-        throw new sfCouchdbException('There is no collection key');
+    public function getFirstKey() {
+        return $this->getIterator()->getFirstKey();
     }
 
     protected function update() {
@@ -414,8 +411,23 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
+    public function filter($expression, $persisent = false) {
+        $this->_filter = $expression;
+        $this->_filter_persisent = $persisent;
+        return $this;
+    }
+
+    public function clearFilter() {
+        $this->_filter = null;
+        $this->_filter_persisent = false;
+    }
+
     public function getIterator() {
-        return new sfCouchdbJsonArrayIterator($this);
+        $iterator =  new sfCouchdbJsonArrayIterator($this, $this->_filter);
+        if (!$this->_filter_persisent) {
+            $this->clearFilter();
+        }
+        return $iterator;
     }
 
     public function offsetGet($index) {
@@ -435,7 +447,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     public function count() {
-        return count($this->_fields);
+        return $this->getIterator()->count();
     }
 
 }
