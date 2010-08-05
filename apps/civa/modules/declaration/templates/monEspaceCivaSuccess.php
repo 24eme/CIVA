@@ -16,11 +16,11 @@
                 <?php if ($declaration): ?>
                     <div class="ligne_form">
                         <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="brouillon" checked="checked" />
-                        <label for="type_declaration_brouillon">A partir du brouillon</label>
+                        <label for="type_declaration_brouillon">Continuer ma déclaration</label>
                     </div>
                     <div class="ligne_form">
                         <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
-                        <label for="type_declaration_suppr">Supprimer le brouillon</label>
+                        <label for="type_declaration_suppr">Supprimer ma déclaration en cours de rédaction</label>
                     </div>
                     <div class="ligne_form ligne_btn">
                         <input type="image" class="btn" name="boutons[valider]" src="../images/boutons/btn_valider.png" alt="Valider" />
@@ -57,10 +57,10 @@
 
                                 <ul class="bloc_vert ui-accordion">
                                     <li>
-                                        <a href="#">2010 Brouillon</a>
+                                        <a href="#">Déclaration en cours</a>
                         <?php if ($declaration): ?>
                                     <ul class="declarations">
-                                        <li><a href="#">Brouillon courrant</a></li>
+                                        <li><a href="#">Rédaction courrante</a></li>
                                     </ul>
                         <?php endif; ?>
                                 </li>
