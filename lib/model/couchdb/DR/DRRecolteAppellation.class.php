@@ -41,7 +41,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       return $this->getSumCepageFields('dplc');
     }
     public function getTotalVolumeRevendique() {
-      $r = $this->_get('volume_reventique');
+      $r = $this->_get('volume_revendique');
       if ($r) 
 	return $r;
       return $this->getSumCepageFields('volume_revendique');
