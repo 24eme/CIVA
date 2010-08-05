@@ -189,6 +189,46 @@ EOF;
 	  }
 	}
 
+	foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dclent09") as $l) {
+	  $csv = explode(',', preg_replace('/"/', '', $l));
+	  $cvi = $csv[1];
+	  if ($options['civ'] && $cvi != $options['civ'])
+	    continue;
+	  $campagne = $csv[0];
+	  $_id = 'DR' . '-' . $cvi . '-' . $campagne;
+	  if (!isset($list_documents[$_id])) {
+	    continue;
+	  }
+	  $doc = $list_documents[$_id];
+	  $doc->jeunes_vignes =  $this->recode_number($csv[6]);
+	  $doc->lies =  $this->recode_number($csv[84]);
+
+	  if ($this->recode_number($csv[91])) {
+	    $doc->recolte->appellation_ALSACEBLANC->volume_revendique =  $this->recode_number($csv[91]);
+	    $doc->recolte->appellation_ALSACEBLANC->dplc =  $this->recode_number($csv[92]);
+	  }
+	  if ($this->recode_number($csv[95])) {	  
+	    $doc->recolte->appellation_PINOTNOIR->volume_revendique =  $this->recode_number($csv[95]);
+	    $doc->recolte->appellation_PINOTNOIR->dplc =  $this->recode_number($csv[96]);
+	  }
+	  if ($this->recode_number($csv[90])) {
+	    $doc->recolte->appellation_PINOTROUGE->volume_revendique =  $this->recode_number($csv[99]);
+	    $doc->recolte->appellation_PINOTROUGE->dplc =  $this->recode_number($csv[100]);
+	  }
+	  if ($this->recode_number($csv[103])) {
+	    $doc->recolte->appellation_KLEVENER->volume_revendique =  $this->recode_number($csv[103]);
+	    $doc->recolte->appellation_KLEVENER->dplc =  $this->recode_number($csv[104]);
+	  }
+	  if ($this->recode_number($csv[107])) {
+	    $doc->recolte->appellation_CREMANT->volume_revendique =  $this->recode_number($csv[107]);
+	    $doc->recolte->appellation_CREMANT->dplc =  $this->recode_number($csv[108]);
+	  }
+	  if ($this->recode_number($csv[111])) {
+	    $doc->recolte->appellation_GRDCRU->volume_revendique =  $this->recode_number($csv[111]);
+	    $doc->recolte->appellation_GRDCRU->dplc =  $this->recode_number($csv[112]);
+	  }
+	}
+
 	if ($options['import'] == 'couchdb') {
 	  foreach ($list_documents as $json) {
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($json);
@@ -211,6 +251,8 @@ EOF;
 	return 'GRDCRU';
       if ($cepage == 'PN' || $cepage == 'AN')
 	return 'PINOTNOIR';
+      if ($cepage == 'PR')
+	return 'PINOTROUGE';
       if ($cepage == 'KL') 
 	return 'KLEVENER';
       if ($cepage == 'VT')
