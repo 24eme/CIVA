@@ -35,9 +35,15 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       return $this->getSumCepageFields('total_superficie');
     }
     public function getTotalDPLC() {
+      $r = $this->_get('dplc');
+      if ($r) 
+	return $r;
       return $this->getSumCepageFields('dplc');
     }
     public function getTotalVolumeRevendique() {
+      $r = $this->_get('volume_reventique');
+      if ($r) 
+	return $r;
       return $this->getSumCepageFields('volume_revendique');
     }
     public function getVolumeAcheteur($cvi, $type) {
