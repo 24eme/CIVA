@@ -4,7 +4,7 @@ class ValidatorRecoltantLogin extends sfValidatorBase
 {
   public function configure($options = array(), $messages = array())
   {
-    $this->setMessage('invalid', 'Le numéro de cvi est incorrect.');
+    $this->setMessage('invalid', 'Le numéro de CVI est incorrect.');
   }
 
   protected function doClean($values)
