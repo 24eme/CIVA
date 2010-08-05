@@ -21,7 +21,7 @@
     <?php echo $form['cvi']->render() ?>
                     </div>
 <div class="ligne_form ligne_btn">
-                        <input type="image" alt="Valider" src="../images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
+                        <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
                     </div>
                                             </div>
                         </div>
