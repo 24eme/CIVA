@@ -229,6 +229,25 @@ EOF;
 	  }
 	}
 
+	foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dclgc09") as $l) {
+	  $csv = explode(',', preg_replace('/"/', '', $l));
+	  $cvi = $csv[1];
+	  if ($options['civ'] && $cvi != $options['civ'])
+	    continue;
+	  $campagne = $csv[0];
+	  $_id = 'DR' . '-' . $cvi . '-' . $campagne;
+	  if (!isset($list_documents[$_id])) {
+	    continue;
+	  }
+	  $doc = $list_documents[$_id];
+
+	  if ($this->recode_number($csv[36])) {
+	    $doc->recolte->appellation_GRDCRU->{'lieu'.$csv[3]}->volume_revendique =  $this->recode_number($csv[36]);
+	    $doc->recolte->appellation_GRDCRU->{'lieu'.$csv[3]}->dplc =  $this->recode_number($csv[37]);
+	  }
+	  
+	}
+
 	if ($options['import'] == 'couchdb') {
 	  foreach ($list_documents as $json) {
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($json);
