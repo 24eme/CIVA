@@ -48,11 +48,17 @@ DR:
                   appellation: {}
                   total_volume: {type: float}
                   total_superficie: {type: float}
+                  volume_revendique: {type:float }
+                  dplc: {type:float }
                   # ------- LIEU ----------
                   '*':
                     type: collection
                     definition:
                       fields:
+                        total_volume: {type:float}
+                        total_superficie: {type:float}
+                        volume_revendique: {type: float}
+                        dplc: {type: float}
                         # ------ Cépage ------
                         '*':
                           type: collection
