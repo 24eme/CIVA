@@ -135,6 +135,9 @@ class declarationActions extends EtapesActions {
       $this->total_dplc = array_sum(array_values($this->dplc));
       $this->total_revendique = array_sum(array_values($this->revendique));
 
+      $this->lies = $dr->lies;
+      $this->jeunes_vignes = $dr->jeunes_vignes;
+
       $this->annee = $annee;
 
       if ($request->isMethod(sfWebRequest::POST)) {
