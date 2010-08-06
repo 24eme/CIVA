@@ -2,21 +2,19 @@
 <?php include_partial('global/actions') ?>
 
 <!-- #principal -->
-			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post" style="opacity: 0.5">
-                                <?php include_partial('ongletsAppellations', array('appellations' => $declaration->recolte,
-                                                                                   'appellation_current_key' => $appellation_current_key,
-                                                                                   'appellations_config' => $configuration->recolte
-                                                                                   )); ?>
+			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post">
+                                <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
+                                                                                   'configuration' => $configuration,
+                                                                                   'onglets' => $onglets)); ?>
 
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
 				
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix">
-						<?php include_partial('ongletsCepages', array('cepages' => $declaration->recolte->get($appellation_current_key)->lieu,
-                                                                                              'cepage_current_key' => $cepage_current_key,
-                                                                                              'cepages_config' => $configuration->recolte->get($appellation_current_key)->lieu
-                                                                                            )); ?>
+						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
+                                                                                              'configuration' => $configuration,
+                                                                                              'onglets' => $onglets)); ?>
 					
 						<div id="donnees_recolte_sepage" class="clearfix">
 						

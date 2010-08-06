@@ -31,8 +31,8 @@ exploitation_autres:
   param: { module: declaration, action: exploitationAutres }
 
 recolte:
-  url:   /recolte
-  param: { module: recolte, action: recolte }
+  url:   /recolte/:appellation_lieu/:cepage
+  param: { module: recolte, action: recolte, appellation_lieu: null, cepage: null}
 
 validation:
   url:   /validation

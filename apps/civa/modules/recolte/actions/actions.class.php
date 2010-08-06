@@ -9,14 +9,10 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class recolteActions extends EtapesActions {
-    const SESSION_RECOLTE_APPELLATION = 'recolte_appellation';
-    const SESSION_RECOLTE_CEPAGE = 'recolte_cepage';
 
     public function preExecute() {
+        $this->configuration = ConfigurationClient::getConfiguration();
         $this->declaration = $this->getUser()->getDeclaration();
-        $this->configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
-        $this->setAppellation();
-        $this->setCepage();
     }
 
     /**
@@ -26,35 +22,25 @@ class recolteActions extends EtapesActions {
     public function executeRecolte(sfWebRequest $request) {
         $this->setCurrentEtape('recolte');
 
+        preg_match('/(?P<appellation>\w+)-(?P<lieu>\w*)/',$this->getRequestParameter('appellation_lieu', null), $appellation_lieu);
+        $appellation = null;
+        if (isset($appellation_lieu['appellation'])) {
+            $appellation = $appellation_lieu['appellation'];
+        }
+        $lieu = null;
+        if (isset($appellation_lieu['lieu'])) {
+            $lieu = $appellation_lieu['lieu'];
+        }
+        $cepage = $this->getRequestParameter('cepage', null);
+
+        $this->onglets = new RecolteOnglets($this->configuration, $this->declaration);
+        if (!$appellation && !$lieu && !$cepage) {
+           $this->redirect($this->onglets->getUrl());
+        }
+        $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
     }
-
-    protected function setAppellation($appellation = null) {
-        if (is_null($appellation)) {
-            $appellation = $this->getAppellation();
-        }
-        $this->getUser()->setFlash(self::SESSION_RECOLTE_APPELLATION, $appellation);
-        $this->appellation_current_key = $appellation;
-    }
-    
-    protected function setCepage($cepage = null) {
-        if (is_null($cepage)) {
-            $cepage = $this->getCepage();
-        }
-        $this->getUser()->setFlash(self::SESSION_RECOLTE_CEPAGE, $cepage);
-        $this->cepage_current_key = $cepage;
-    }
-
-    protected function getAppellation() {
-        return $this->getUser()->getFlash(self::SESSION_RECOLTE_APPELLATION, $this->declaration->get('recolte')->getFirstCollectionKey());
-    }
-
-    protected function getCepage() {
-        return $this->getUser()->getFlash(self::SESSION_RECOLTE_CEPAGE, $this->configuration->recolte->get($this->getAppellation())->lieu->getFirstCollectionKey());
-    }
-
-
-
 }
