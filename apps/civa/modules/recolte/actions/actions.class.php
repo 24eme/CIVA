@@ -43,6 +43,7 @@ class recolteActions extends EtapesActions {
                                      ->add($this->onglets->getCurrentKeyCepage())
                                      ->add('detail');
 
+        
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
