@@ -39,6 +39,10 @@ class recolteActions extends EtapesActions {
         }
         $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
 
+        $this->details = $this->declaration->get($this->onglets->getItemsCepage()->getHash())
+                                     ->add($this->onglets->getCurrentKeyCepage())
+                                     ->add('detail');
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }

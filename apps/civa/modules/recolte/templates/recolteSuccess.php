@@ -58,6 +58,8 @@
 									<li>DPLC</li>
 								</ul>
 							</div>
+
+                                                        <?php echo include_partial('detailList', array('details' => $details)) ?>
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
 

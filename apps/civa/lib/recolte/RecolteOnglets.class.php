@@ -81,6 +81,10 @@ class RecolteOnglets {
         return $this->_current_key_cepage;
     }
 
+    public function getCurrentCepage() {
+        return $this->getItemsCepage()->get($this->_current_key_cepage);
+    }
+
     public function getCurrentValueAppellation() {
         return $this->convertKeyToValue($this->getCurrentKeyAppellation(), $this->_prefix_key_appellation);
     }
