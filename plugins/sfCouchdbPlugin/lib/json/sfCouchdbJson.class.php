@@ -340,7 +340,8 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         if ($deep === false || $deep < 1) {
             $simple_fields_keys = array_keys($this->getSimpleFields());
             foreach ($simple_fields_keys as $key) {
-                $array_fields[$key] = $this->get($key);
+                $v = $this->get($key);
+                $array_fields[$key] = $v;
             }
         } elseif($deep) {
             foreach ($this->_fields as $key => $field) {

@@ -10,14 +10,68 @@
  ******************************************/
 $(document).ready( function()
 {
+	
 	hauteurEgale($('#onglets_majeurs li a'));
-	if($("#principal").hasClass('ui-tabs')) $("#principal").tabs();
+	initMsgAide();
+	if($("#onglets_majeurs").hasClass('ui-tabs-nav')) $("#principal").tabs();
 	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
 	$('#nouvelle_declaration').ready( function() { choixPrecDecla(); });
-	$('#gestionnaire_exploitation').ready( function() { formGestionnaireExploitation(); });
+	$('#exploitation_administratif').ready( function() { formExploitationAdministratif(); });
 	$('.table_donnees').ready( function() { initTablesDonnes(); });
 	$('#exploitation_acheteurs').ready( function() { initTablesAcheteurs(); });
+	
+	var annee = new Date().getFullYear();
+	
+	$('.datepicker').datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'dd/mm/yy',
+		dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+		dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+		firstDay: 1,
+		monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+		monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+		yearRange: '1900:'+annee
+	});
 });
+
+/**
+ * Messages d'aide
+ ******************************************/
+var initMsgAide = function()
+{
+	var liens = $('a.msg_aide');
+	var popup = $('#popup_msg_aide');
+	
+	liens.live('click', function()
+	{
+		var id_msg_aide = $(this).attr('id');
+		
+		$.getJSON(
+			url_ajax_msg_aide,
+			{ action: "popup_msg_aide", id_msg_aide: id_msg_aide },
+			function(json)
+			{
+				var titre = json.titre;
+				var message = json.message;
+				popup.find('p').text(message);
+				
+				popup.dialog(
+				{
+					draggable: false,
+					minHeight: 200,
+					modal: true,
+					resizable: false,
+					title: titre,
+					width: 375
+				});
+			}
+		);
+		
+		return false;
+	});
+};
 
 /**
  * Choix d'un précédente déclaration
@@ -50,46 +104,39 @@ var accordeonPrecDecla = function()
 };
 
 /**
- * Formulaire de modification du
- * gestionnaire de l'exploitation
+ * Formulaire de modification des infos
+ * de l'exploitation
  ******************************************/
-var formGestionnaireExploitation = function()
+var formExploitationAdministratif = function()
 {
-	var bloc = $('#gestionnaire_exploitation');
-	var presentation_infos = bloc.find('#presentation_infos');
-	var modification_infos = bloc.find('#modification_infos');
-	var btn_modifier = presentation_infos.find('a.modifier');
-	var btn_annuler = modification_infos.find('a.annuler');
-	var datepicker = modification_infos.find('input.datepicker');
-	var annee = new Date().getFullYear();
+	var blocs = $('#infos_exploitation, #gestionnaire_exploitation');
 	
-	//	modification_infos.hide();
-	
-	btn_modifier.click(function()
+	blocs.each(function()
 	{
-		presentation_infos.hide();
-		modification_infos.show();
-		return false;
-	});
-	
-	btn_annuler.click(function()
-	{	
-		presentation_infos.show();
-		modification_infos.hide();
-		return false;
-	});
-	
-	$('.datepicker').datepicker(
-	{
-		changeMonth: true,
-		changeYear: true,
-		dateFormat: 'dd/mm/yy',
-		dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-		dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
-		firstDay: 1,
-		monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-		monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-		yearRange: '1900:'+annee
+		var bloc = $(this);
+		var presentation_infos = bloc.find('.presentation');
+		var modification_infos = bloc.find('.modification');
+		var btn = bloc.find('.btn');
+		var btn_modifier = btn.find('a.modifier');
+		var btn_annuler = btn.find('a.annuler');
+
+		//		modification_infos.hide();
+		
+		btn_modifier.click(function()
+		{
+			presentation_infos.hide();
+			modification_infos.show();
+			bloc.addClass('edition');
+			return false;
+		});
+		
+		btn_annuler.click(function()
+		{	
+			presentation_infos.show();
+			modification_infos.hide();
+			bloc.removeClass('edition');
+			return false;
+		});
 	});
 };
 
@@ -139,7 +186,7 @@ var initTablesAcheteurs = function()
 		var form_ajout = bloc.next(".form_ajout");
 		var btn_ajout = bloc.children('.btn');
 		
-		if(bloc.attr('id') != 'cave_particuliere')
+		if(bloc.attr('id') != 'vol_sur_place')
 		{
 			toggleTrVide(table_achet);
 			supprimerLigneTable(table_achet);
@@ -209,7 +256,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 	var commune = table_ajout.find('td.commune');
 	var btn = form_ajout.find('.btn a');
 	var acheteur_mouts = 0;
-        var qualite_name = '';
+	var qualite_name = '';
 	
 	nom.autocomplete(
 	{
@@ -251,7 +298,8 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 	btn.click(function()
 	{
 		if(table_achet.parent().attr('id') == 'acheteurs_mouts') acheteur_mouts = 1;
-                qualite_name = form_ajout.attr('rel');
+
+		qualite_name = form_ajout.attr('rel');
 		
 		if($(this).hasClass('valider'))
 		{
@@ -276,7 +324,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 				});
 				
 				$.post(url_ajax,
-				{ action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts, qualite_name: qualite_name  },
+				{ action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts, qualite_name: qualite_name },
 				function(data)
 				{
 					var tr = $(data);
@@ -305,8 +353,9 @@ var masquerTableAjout = function(table_achet, form_ajout, nb)
 	var champs_cb = table.find('input:checkbox');
 	
 	spans.text('');
-	champs_txt.attr("value",'');
-	champs_cb.attr("checked",'');
+	champs_txt.attr('value','');
+	champs_cb.attr('checked','');
+	champs_cb.filter('.cremant_alsace').attr('checked','checked');
 	
 	form_ajout.hide();
 	if(nb == 1) etatChampsTableAcht('');

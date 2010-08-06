@@ -44,19 +44,24 @@ class recoltantActions extends EtapesActions
       $this->setCurrentEtape('exploitation_administratif');
       $this->forwardUnless($this->recoltant = $this->getUser()->getRecoltant(), 'declaration', 'monEspaceciva');
 
-      $this->form = new RecoltantExploitantForm($this->getUser()->getRecoltant()->getExploitant());
-      $this->form_err = 0;
+      $this->form_gest = new RecoltantExploitantForm($this->getUser()->getRecoltant()->getExploitant());
+      $this->form_gest_err = 0;
+      $this->form_expl = new RecoltantExploitationForm($this->getUser()->getRecoltant());
+      $this->form_expl_err = 0;
         
       if ($request->isMethod(sfWebRequest::POST)) {
-	$this->form->bind($request->getParameter($this->form->getName()));
-	if ($this->form->isValid()) {
-	  $this->form->save();
-	  $this->redirectByBoutonsEtapes();
+	$this->form_gest->bind($request->getParameter($this->form_gest->getName()));
+	if ($this->form_gest->isValid()) {
+	  $this->form_gest->save();
 	}else
-	  $this->form_err = 1;            
-      }
+	  $this->form_gest_err = 1;            
 
-      if ($request->isMethod(sfWebRequest::POST)) {
+	$this->form_expl->bind($request->getParameter($this->form_expl->getName()));
+	if ($this->form_expl->isValid()) {
+	  $this->form_expl->save();
+	}else
+	  $this->form_expl_err = 1;            
+
 	$this->redirectByBoutonsEtapes();
       }
   }

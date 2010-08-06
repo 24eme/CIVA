@@ -10,17 +10,17 @@
 /**
  * Structure
  ******************************************/
-#declaration_recolte #contenu
+#contenu
 {
 	padding: 30px 0;
 	position: relative;
 }
 
-#declaration_recolte #principal
+#principal
 {
 }
 
-#declaration_recolte #application_dr
+#application_dr
 {
 	background: #f1f1f1;
 	clear: both;
@@ -70,7 +70,7 @@
 .bloc_vert { background: #e0e1bd; }
 
 /* Etapes de la déclaration */
-#declaration_recolte ul#etape_declaration
+ul#etape_declaration
 {
 	background: #f1f1f1;
 	border-bottom: 1px solid #cacaca;
@@ -83,16 +83,16 @@
 	top: -30px;
 }
 
-#declaration_recolte ul#etape_declaration li
+ul#etape_declaration li
 {
 	float: left;
 	margin: 0 1px 0 0;
 	width: 133px;
 }
 
-#declaration_recolte ul#etape_declaration li.actif { color: #000; }
+ul#etape_declaration li.actif { color: #000; }
 
-#declaration_recolte ul#etape_declaration li em
+ul#etape_declaration li em
 {
 	background: url(../images/fonds/bg_etapes_declaration.png) 0 0 repeat-x;
 	color: #c8ce79;
@@ -104,16 +104,16 @@
 	padding: 6px 0 0;
 }
 
-#declaration_recolte ul#etape_declaration li.actif em
+ul#etape_declaration li.actif em
 {
 	background-position: 0 -26px;	
 	color: #ffb100;
 }
 
-#declaration_recolte ul#etape_declaration li.passe em { background-position: 0 -52px; }
+ul#etape_declaration li.passe em { background-position: 0 -52px; }
 
 /* Actions sur la déclaration */
-#declaration_recolte ul#actions_declaration
+ul#actions_declaration
 {
 	position: absolute;
 	right: 15px;
@@ -121,7 +121,7 @@
 	z-index: 10;
 }
 
-#declaration_recolte ul#actions_declaration li
+ul#actions_declaration li
 {
 	display: inline;
 	float: left;
@@ -129,7 +129,7 @@
 }
 
 /* Onglets */
-#declaration_recolte ul#onglets_majeurs
+ul#onglets_majeurs
 {
 	float: left;
 	font-size: 15px;
@@ -138,19 +138,19 @@
 	width: 958px;
 }
 
-#declaration_recolte ul#onglets_majeurs.onglets_courts
+ul#onglets_majeurs.onglets_courts
 {
 	font-size: 13px;
 	line-height: 1;
 }
 
-#declaration_recolte ul#onglets_majeurs li
+ul#onglets_majeurs li
 {
 	float: left;
 	margin: 0 3px 0 0;
 }
 
-#declaration_recolte ul#onglets_majeurs li a
+ul#onglets_majeurs li a
 {
 	background: #bcbdbc;
 	color: #fff;
@@ -159,36 +159,34 @@
 	text-decoration: none;
 }
 
-#declaration_recolte ul#onglets_majeurs.onglets_courts li a { padding: 2px 15px 2px 5px; }
+ul#onglets_majeurs.onglets_courts li a { padding: 2px 15px 2px 5px; }
 
-#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a
+ul#onglets_majeurs li.ui-tabs-selected a
 {
 	background: #acb701;
 	color: #000;
 	cursor: default;
 }
 
-#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a:hover { text-decoration: none; }
-
-#declaration_recolte ul#onglets_majeurs li a span { color: #fff; }
-
-#declaration_recolte ul#onglets_majeurs li.ui-tabs-selected a span { cursor: default; }
+ul#onglets_majeurs li.ui-tabs-selected a:hover { text-decoration: none; }
+ul#onglets_majeurs li a span { color: #fff; }
+ul#onglets_majeurs li.ui-tabs-selected a span { cursor: default; }
 
 /* Boutons précédent / suivant  */
-#declaration_recolte ul.btn_prev_suiv { clear: both; }
-#declaration_recolte ul.btn_prev_suiv li { display: inline; }
-#declaration_recolte ul.btn_prev_suiv li.prec { float: left; }
-#declaration_recolte ul.btn_prev_suiv li.suiv { float: right; }
-#declaration_recolte ul.btn_prev_suiv li.previsualiser { float: left; margin: 0 0 0 308px; }
-#declaration_recolte ul.btn_prev_suiv li img { display: block; }
-#declaration_recolte ul#btn_etape { padding: 0 20px; }
-#declaration_recolte ul#btn_appelation { padding: 30px 60px 0; }
-#declaration_recolte ul#btn_cepage { padding: 10px 0; }
+ul.btn_prev_suiv { clear: both; }
+ul.btn_prev_suiv li { display: inline; }
+ul.btn_prev_suiv li.prec { float: left; }
+ul.btn_prev_suiv li.suiv { float: right; }
+ul.btn_prev_suiv li.previsualiser { float: left; margin: 0 0 0 308px; }
+ul.btn_prev_suiv li img { display: block; }
+ul#btn_etape { padding: 0 20px; }
+ul#btn_appelation { padding: 30px 60px 0; }
+ul#btn_cepage { padding: 10px 0; }
 
 /* Tableau de données */
-#declaration_recolte table.table_donnees { }
+table.table_donnees { }
 
-#declaration_recolte table.table_donnees thead th 
+table.table_donnees thead th 
 {
 	color: #acb701;
 	font-size: 14px;
@@ -199,15 +197,15 @@
 	vertical-align: bottom;
 }
 
-#declaration_recolte table.table_donnees thead th:first-child,
-#declaration_recolte table.table_donnees thead th.cvi
+table.table_donnees thead th:first-child,
+table.table_donnees thead th.cvi
 {
 	color: #848c03;
 	font-size: 16px !important;
 	font-weight: normal;
 }
 
-#declaration_recolte table.table_donnees thead th:first-child
+table.table_donnees thead th:first-child
 {
 	background: #dcdfa9;
 	vertical-align: middle;
@@ -215,14 +213,14 @@
 	width: 130px;
 }
 
-#declaration_recolte table.table_donnees thead th span
+table.table_donnees thead th span
 {
 	color: #000;
 	display: block;
 	font-weight: bold;
 }
 
-#declaration_recolte table.table_donnees tbody td
+table.table_donnees tbody td
 {
 	background: #edecec;
 	border-bottom: 1px dashed #c6c8c7;
@@ -234,16 +232,16 @@
 	vertical-align: middle;
 }
 
-#declaration_recolte table.table_donnees tbody td.alt { background: #ddd; }
-#declaration_recolte table.table_donnees tbody tr:first-child td,
-#declaration_recolte table.table_donnees tbody tr.premier td { border-top: 1px solid #c6c8c7; }
-#declaration_recolte table.table_donnees tbody td:first-child { border-left: 1px solid #c6c8c7; }
-#declaration_recolte table.table_donnees tbody td:last-child { border-right: 1px solid #c6c8c7; }
-#declaration_recolte table.table_donnees tbody tr:last-child td { border-bottom: 1px solid #c6c8c7; }
+table.table_donnees tbody td.alt { background: #ddd; }
+table.table_donnees tbody tr:first-child td,
+table.table_donnees tbody tr.premier td { border-top: 1px solid #c6c8c7; }
+table.table_donnees tbody td:first-child { border-left: 1px solid #c6c8c7; }
+table.table_donnees tbody td:last-child { border-right: 1px solid #c6c8c7; }
+table.table_donnees tbody tr:last-child td { border-bottom: 1px solid #c6c8c7; }
 
 
 /* Erreurs */
-#declaration_recolte ul.error_list
+ul.error_list
 {
 	background: #ffdddd;
 	border: 1px solid #f30;
@@ -254,47 +252,72 @@
 	padding: 5px;
 }
 
-#declaration_recolte ul.error_list li { margin: 3px 0; }
+ul.error_list li { margin: 3px 0; }
+
+
+/* Popup d'aide */
+a.msg_aide
+{
+	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 20px;
+	outline: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	width: 14px;
+}
+
+#popup_msg_aide { display: none; }
+
+#popup_msg_aide p
+{
+	background: url(../images/pictos/pi_aide.png) 0 3px no-repeat;
+	color: #929292;
+	font-size: 15px;
+	padding: 0 0 0 25px;
+}
+
 
 /**
  * Nouvelle déclaration
  ******************************************/
-#declaration_recolte #nouvelle_declaration
+#nouvelle_declaration
 {
 	float: left;
 	margin: 0 20px 0 0;
 	width: 488px;
 }
 
-#declaration_recolte #nouvelle_declaration p.intro
+#nouvelle_declaration p.intro
 {
 	color: #9a9999;
 	font-size: 14px;
 	margin: 0 0 10px;
 }
 
-#declaration_recolte #nouvelle_declaration p.intro
+#nouvelle_declaration p.intro
 {
 	color: #999;
 	font-size: 14px;
 	margin: 0 0 10px;
 }
 
-#declaration_recolte #nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
-#declaration_recolte #nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
-#declaration_recolte #nouvelle_declaration .ligne_form label { font-size: 14px; }
+#nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
+#nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
+#nouvelle_declaration .ligne_form label { font-size: 14px; }
 
-#declaration_recolte #nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
+#nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
 
-#declaration_recolte #nouvelle_declaration .ligne_btn select
+#nouvelle_declaration .ligne_btn select
 {
 	border: 1px solid #dadad6;
 	color: #7a7a7a;
+	float: left;
 	font-size: 14px;
 	vertical-align: middle;
 }
 
-#declaration_recolte #nouvelle_declaration .ligne_btn input.btn
+#nouvelle_declaration .ligne_btn input.btn
 {
 	float: right;
 	vertical-align: middle;
@@ -303,17 +326,17 @@
 /**
  * Précédentes déclarations
  ******************************************/
-#declaration_recolte #precedentes_declarations
+#precedentes_declarations
 {
 	float: left;
 	width: 264px;
 }
 
-#declaration_recolte #precedentes_declarations ul { font-size: 15px; }
+#precedentes_declarations ul { font-size: 15px; }
 
-#declaration_recolte #precedentes_declarations ul li { margin: 0 0 3px; }
+#precedentes_declarations ul li { margin: 0 0 3px; }
 
-#declaration_recolte #precedentes_declarations ul li a
+#precedentes_declarations ul li a
 {
 	background: url(../images/puces/puces_accordeon.png) -27px 0 no-repeat;
 	display: inline-block;
@@ -321,20 +344,20 @@
 	outline: 0;
 }
 
-#declaration_recolte #precedentes_declarations ul li a.ui-state-active { background-position: -12px -16px; }
+#precedentes_declarations ul li a.ui-state-active { background-position: -12px -16px; }
 
-#declaration_recolte #precedentes_declarations ul ul
+#precedentes_declarations ul ul
 {
 	font-size: 14px;
 	padding: 3px 0 0 15px;
 }
 
-#declaration_recolte #precedentes_declarations ul ul li a { background-position: -8px -32px; }
-#declaration_recolte #precedentes_declarations ul ul li a.ui-state-active { background-position: 0 -48px; }
+#precedentes_declarations ul ul li a { background-position: -8px -32px; }
+#precedentes_declarations ul ul li a.ui-state-active { background-position: 0 -48px; }
 
-#declaration_recolte #precedentes_declarations ul ul.declarations { font-size: 13px; }
+#precedentes_declarations ul ul.declarations { font-size: 13px; }
 
-#declaration_recolte #precedentes_declarations ul ul.declarations li a
+#precedentes_declarations ul ul.declarations li a
 {
 	background: url(../images/pictos/pi_declaration_recolte.png) 0 center no-repeat;
 	color: #7a7a7a;
@@ -342,143 +365,30 @@
 }
 
 /**
- * Informations exploitation
+ * Exploitation administratif
  ******************************************/
-#declaration_recolte #infos_exploitation
+#exploitation_administratif p.message
 {
-	float: left;
-	margin: 0 20px 0 0;
-	width: 488px;
+	background: #fffcef;
+	border: 1px solid #f90;
+	margin: 0 0 8px;
+	padding: 5px;
 }
+ 
+#exploitation_administratif .modification .ligne_form { margin: 0 0 8px; }
 
-/* Colonne gauche */
-#declaration_recolte #infos_exploitation .col_1
-{
-	float: left;
-	width: 215px;
-}
-
-#declaration_recolte #infos_exploitation .col_1 p.num
-{
-	font-size: 18px;
-	font-weight: bold;
-	margin: 0 0 15px;
-}
-
-#declaration_recolte #infos_exploitation .col_1 p.num span
-{
-	color: #7a7a7a;
-	font-weight: normal;
-}
-
-#declaration_recolte #infos_exploitation .col_1 #regime_fiscal p
-{
-	color: #7a7a7a;
-	float: left;
-	font-size: 14px;
-	width: 55%;
-}
-
-#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul
-{
-	float: left;
-	width: 45%;
-}
-
-#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul li { margin: 0 0 7px; }
-#declaration_recolte #infos_exploitation .col_1 #regime_fiscal ul li input[type=radio] { margin: 0 3px 0 0; }
-
-/* Colonne droite */
-#declaration_recolte #infos_exploitation .col_2
-{
-	float: right;
-	width: 202px;
-}
-
-#declaration_recolte #infos_exploitation .col_2 h3
-{
-	font-size: 24px;
-	font-weight: bold;
-	margin: 0 0 5px;
-}
-
-#declaration_recolte #infos_exploitation .col_2 address
-{
-	display: block;
-	font-size: 16px;
-	font-style: normal;
-	margin: 0 0 15px;
-}
-
-#declaration_recolte #infos_exploitation .col_2 p
-{
-	display: inline-block; !display: inline;
-	font-size: 15px;
-	width: 49%;
-	zoom: 1;
-}
-
-#declaration_recolte #infos_exploitation .col_2 p span
+#exploitation_administratif .modification .ligne_form label
 {
 	color: #7a7a7a;
 	display: block;
-	font-size: 14px;
-}
-
-/**
- * Gestionnaire de l'exploitation
- ******************************************/
-#declaration_recolte #gestionnaire_exploitation
-{
-	float: left;
-	width: 264px;
-}
-
-/* Présentation infos */
-#declaration_recolte #gestionnaire_exploitation #presentation_infos h3
-{
-	font-size: 21px;
-	font-weight: bold;
-	margin: 0 0 5px;
-}
-
-#declaration_recolte #gestionnaire_exploitation #presentation_infos address
-{
-	display: block;
-	font-size: 16px;
-	font-style: normal;
-	margin: 0 0 15px;
-}
-
-#declaration_recolte #gestionnaire_exploitation #presentation_infos p
-{
-	font-size: 15px;
-	margin: 0 0 10px;
-}
-
-#declaration_recolte #gestionnaire_exploitation #presentation_infos p span
-{
-	color: #7a7a7a;
-	display: block;
-	font-size: 14px;
-}
-
-/* Modification infos */
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form { margin: 0 0 5px; }
-
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form label
-{
-	color: #7a7a7a;
-	float: left;
 	font-size: 13px;
 	line-height: 1;
-	margin: 0 10px 0 0;
-//	width: 90px;
+	margin: 0 0 3px;
 }
 
-#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur label { color: #f30; }
+#exploitation_administratif .modification .erreur label { color: #f30; }
 
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form label span
+#exploitation_administratif .modification .ligne_form label span
 {
 	display: block;
 	font-size: 11px;
@@ -486,8 +396,8 @@
 	margin: 3px 0 0;
 }
 
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form input[type=text],
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form textarea
+#exploitation_administratif .modification .ligne_form input[type=text],
+#exploitation_administratif .modification .ligne_form textarea
 {
 	background: #fff;
 	border: 1px solid #cecdc9;
@@ -495,32 +405,171 @@
 	font-size: 12px;
 }
 
-#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur input[type=text],
-#declaration_recolte #gestionnaire_exploitation #modification_infos .erreur textarea
+#exploitation_administratif .modification .erreur input[type=text],
+#exploitation_administratif .modification .erreur textarea
 {
 	border-color: #f30;
 	color: #f30;
 }
 
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form input[type=text],
-#declaration_recolte #gestionnaire_exploitation #modification_infos .ligne_form textarea
+#exploitation_administratif .modification .ligne_form input[type=text] { height: 15px; }
+ 
+#exploitation_administratif .btn
 {
 	clear: both;
-	margin: 3px 0 0;
-	width: 210px;
+	padding: 10px 0 0;
+	text-align: right;
+}
+
+#exploitation_administratif .btn a,
+#exploitation_administratif .btn input
+{
+	display: inline-block;
+	margin: 0 0 0 5px;
+	vertical-align: baseline;
+}
+
+#exploitation_administratif .btn a.annuler,
+#exploitation_administratif .btn input,
+#exploitation_administratif .edition .btn a.modifier { display: none; }
+#exploitation_administratif .edition .btn a.annuler,
+#exploitation_administratif .edition .btn input { display: inline-block; }
+
+/**
+ * Informations exploitation
+ ******************************************/
+#infos_exploitation
+{
+	float: left;
+	margin: 0 20px 0 0;
+	width: 488px;
+}
+
+/* Colonne gauche */
+#infos_exploitation .col_1
+{
+	float: left;
+	width: 215px;
+}
+
+#infos_exploitation .col_1 p.num
+{
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0 0 15px;
+}
+
+#infos_exploitation .col_1 p.num span
+{
+	color: #7a7a7a;
+	font-weight: normal;
+}
+
+#infos_exploitation .col_1 p.rf
+{
+	background: #e0e1bd;
+	color: #7a7a7a;
+	font-size: 14px;
+	padding: 10px;
+}
+
+/* Colonne droite */
+#infos_exploitation .col_2
+{
+	float: right;
+	width: 202px;
+}
+
+#infos_exploitation .col_2 h3
+{
+	font-size: 24px;
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+
+#infos_exploitation .col_2 address
+{
+	display: block;
+	font-size: 16px;
+	font-style: normal;
+	margin: 0 0 15px;
+}
+
+#infos_exploitation .col_2 p
+{
+	display: inline-block; !display: inline;
+	font-size: 15px;
+	width: 49%;
+	zoom: 1;
+}
+
+#infos_exploitation .col_2 p span
+{
+	color: #7a7a7a;
+	display: block;
+	font-size: 14px;
 }
 
 
-#declaration_recolte #gestionnaire_exploitation .btn { text-align: right; }
-#declaration_recolte #gestionnaire_exploitation .btn a,
-#declaration_recolte #gestionnaire_exploitation .btn input { margin: 0 0 0 5px; }
+/* Modification infos */
+#infos_exploitation .bloc_vert p { color: #7a7a7a; float: left; font-size: 14px; width: 55%; }
+#infos_exploitation .bloc_vert ul { float: left; width: 45%; }
+#infos_exploitation .bloc_vert ul li { margin: 0 0 7px; }
+#infos_exploitation .bloc_vert ul li input[type=radio] { margin: 0 3px 0 0; }
+#infos_exploitation .col_1 .ligne_form input[type=text],
+#infos_exploitation .col_1 .ligne_form textarea { width: 213px; }
+#infos_exploitation .col_2 .ligne_form input[type=text],
+#infos_exploitation .col_2 .ligne_form textarea { width: 200px; }
+
+/**
+ * Gestionnaire de l'exploitation
+ ******************************************/
+#gestionnaire_exploitation
+{
+	float: left;
+	width: 264px;
+}
+
+/* Présentation infos */
+#gestionnaire_exploitation .presentation h3
+{
+	font-size: 21px;
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+
+#gestionnaire_exploitation .presentation address
+{
+	display: block;
+	font-size: 16px;
+	font-style: normal;
+	margin: 0 0 15px;
+}
+
+#gestionnaire_exploitation .presentation p
+{
+	font-size: 15px;
+	margin: 0 0 10px;
+}
+
+#gestionnaire_exploitation .presentation p span
+{
+	color: #7a7a7a;
+	display: block;
+	font-size: 14px;
+}
+
+/* Modification infos */
+#gestionnaire_exploitation .ligne_form input[type=text],
+#gestionnaire_exploitation .ligne_form textarea { width: 210px; }
 
 /**
  * Acheteurs de l'exploitation
  ******************************************/
-#declaration_recolte #exploitation_acheteurs #acheteurs_raisin,
-#declaration_recolte #exploitation_acheteurs #caves_cooperatives,
-#declaration_recolte #exploitation_acheteurs #acheteurs_mouts
+#exploitation_acheteurs #acheteurs_raisin,
+#exploitation_acheteurs #caves_cooperatives,
+#exploitation_acheteurs #vol_sur_place,
+#exploitation_acheteurs #acheteurs_mouts
 {
 	margin: 0 0 15px;
 	position: relative;
@@ -528,28 +577,28 @@
 	zoom: 1;
 }
 
-#declaration_recolte #exploitation_acheteurs select.source_autocompletion { display: none; }
+#exploitation_acheteurs select.source_autocompletion { display: none; }
 
-#declaration_recolte #exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
+#exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
 
-#declaration_recolte #exploitation_acheteurs table th { font-size: 11px; }
-#declaration_recolte #exploitation_acheteurs table th.cvi { width: 63px; }
-#declaration_recolte #exploitation_acheteurs table th.commune { width: 110px; }
+#exploitation_acheteurs table th { font-size: 11px; }
+#exploitation_acheteurs table th.cvi { width: 63px; }
+#exploitation_acheteurs table th.commune { width: 110px; }
 
-#declaration_recolte #exploitation_acheteurs table tbody a.supprimer
+#exploitation_acheteurs table tbody a.supprimer
 {
 	position: absolute;
 	right: -20px;
 }
 
-#declaration_recolte #exploitation_acheteurs table tbody td { text-align: center; }
-#declaration_recolte #exploitation_acheteurs table tbody td.nom,
-#declaration_recolte #exploitation_acheteurs table tbody td.cvi,
-#declaration_recolte #exploitation_acheteurs table tbody td.commune { text-align: left; }
-#declaration_recolte #exploitation_acheteurs table tbody td.cvi { width: 63px; }
-#declaration_recolte #exploitation_acheteurs table tbody td.commune { width: 110px; }
+#exploitation_acheteurs table tbody td { text-align: center; }
+#exploitation_acheteurs table tbody td.nom,
+#exploitation_acheteurs table tbody td.cvi,
+#exploitation_acheteurs table tbody td.commune { text-align: left; }
+#exploitation_acheteurs table tbody td.cvi { width: 63px; }
+#exploitation_acheteurs table tbody td.commune { width: 110px; }
 
-#declaration_recolte #exploitation_acheteurs table tbody td input[type=text]
+#exploitation_acheteurs table tbody td input[type=text]
 {
 	background: #f6f6f6;
 	border: 1px solid #c2c1ba;
@@ -557,23 +606,23 @@
 	font-size: 12px;
 }
 
-#declaration_recolte #exploitation_acheteurs table tbody td.alt input { background: #efeeee; }
-#declaration_recolte #exploitation_acheteurs table tbody td.nom input { width: 121px; }
-#declaration_recolte #exploitation_acheteurs table tbody td.cvi input { width: 58px; }
-#declaration_recolte #exploitation_acheteurs table tbody td.commune input { width: 108px; }
+#exploitation_acheteurs table tbody td.alt input { background: #efeeee; }
+#exploitation_acheteurs table tbody td.nom input { width: 121px; }
+#exploitation_acheteurs table tbody td.cvi input { width: 58px; }
+#exploitation_acheteurs table tbody td.commune input { width: 108px; }
 
-#declaration_recolte #exploitation_acheteurs table tbody td span { display: block; height: 17px; }
+#exploitation_acheteurs table tbody td span { display: block; height: 17px; }
 
-#declaration_recolte #exploitation_acheteurs table tbody td label { display: block; }
+#exploitation_acheteurs table tbody td label { display: block; }
 
-#declaration_recolte #exploitation_acheteurs .btn
+#exploitation_acheteurs .btn
 {
 	overflow: hidden;
 	width: 100%;
 }
 
-#declaration_recolte #exploitation_acheteurs .btn a,
-#declaration_recolte #exploitation_acheteurs .btn input
+#exploitation_acheteurs .btn a,
+#exploitation_acheteurs .btn input
 {
 	float: right;
 	margin: 0 0 0 5px;
@@ -583,55 +632,110 @@
 /**
  * Ajout d'acheteurs
  ******************************************/
-#declaration_recolte #exploitation_acheteurs .form_ajout
+#exploitation_acheteurs .form_ajout
 {
 	margin: -36px 0 15px;
 	width: 950px;
 }
 
-#declaration_recolte #exploitation_acheteurs .form_ajout table thead { visibility: hidden; }
+#exploitation_acheteurs .form_ajout table thead { visibility: hidden; }
 
 
-#declaration_recolte .ui-autocomplete .ui-menu-item a { overflow: hidden; }
-#declaration_recolte .ui-autocomplete .ui-menu-item a span { float: left; }
-#declaration_recolte .ui-autocomplete .ui-menu-item a span.nom { padding: 0 3px 0 0; width: 121px; }
-#declaration_recolte .ui-autocomplete .ui-menu-item a span.cvi { padding: 0 3px; width: 63px; }
-#declaration_recolte .ui-autocomplete .ui-menu-item a span.commune { padding: 0 0 0 3px; width: 110px; }
+.ui-autocomplete .ui-menu-item a { overflow: hidden; }
+.ui-autocomplete .ui-menu-item a span { float: left; }
+.ui-autocomplete .ui-menu-item a span.nom { padding: 0 3px 0 0; width: 121px; }
+.ui-autocomplete .ui-menu-item a span.cvi { padding: 0 3px; width: 63px; }
+.ui-autocomplete .ui-menu-item a span.commune { padding: 0 0 0 3px; width: 110px; }
 
 /**
  * Acheteurs de moults
  ******************************************/
-#declaration_recolte #acheteurs_mouts {  }
-#declaration_recolte #acheteurs_mouts table th { visibility: hidden; }
-#declaration_recolte #acheteurs_mouts table th:first-child,
-#declaration_recolte #acheteurs_mouts table th.cvi,
-#declaration_recolte #acheteurs_mouts table th.commune,
-#declaration_recolte #acheteurs_mouts table th.cremant_alsace { visibility: visible; }
+#acheteurs_mouts { margin: 0; }
+#acheteurs_mouts table th { visibility: hidden; }
+#acheteurs_mouts table th:first-child,
+#acheteurs_mouts table th.cvi,
+#acheteurs_mouts table th.commune,
+#acheteurs_mouts table th.cremant_alsace { visibility: visible; }
 
 
 /**
  * Cave particulière
  ******************************************/
-#declaration_recolte #cave_particuliere { width: 950px; }
-/*#declaration_recolte #cave_particuliere table th { visibility: hidden; }
-#declaration_recolte #cave_particuliere table th:first-child { visibility: visible; } */
-#declaration_recolte #cave_particuliere table th.cvi,
-#declaration_recolte #cave_particuliere table th.commune { visibility: hidden; }
+#vol_sur_place {  }
+#vol_sur_place table th { visibility: visible; }
+#vol_sur_place table th.cvi,
+#vol_sur_place table th.commune { visibility: hidden; }
+
+
+/**
+ * Gestion grands crus
+ ******************************************/
+#gestion_grands_crus
+{
+	float: left;
+	width: 400px;
+}
+
+#gestion_grands_crus ul#liste_grands_crus
+{
+	font-size: 13px;
+	margin: 0 0 15px;
+}
+
+#gestion_grands_crus ul#liste_grands_crus li
+{
+	border-bottom: 1px dashed #c6c8c7;
+	padding: 3px 25px 3px 0;
+	position: relative;
+}
+
+#gestion_grands_crus ul#liste_grands_crus li a.supprimer
+{
+	position: absolute;
+	right: 0;
+	top: 3px;
+}
+
+#gestion_grands_crus .ligne_form { margin: 0; }
+
+#gestion_grands_crus .ligne_form label
+{
+	color: #7a7a7a;
+	font-size: 13px;
+	float: left;
+	line-height: 20px;
+	margin: 0 10px 0 0;
+}
+
+#gestion_grands_crus .ligne_form select
+{
+	border: 1px solid #dadad6;
+	color: #7a7a7a;
+	float: left;
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+#gestion_grands_crus .ligne_form input.btn
+{
+	float: right;
+	vertical-align: middle;
+}
 
 /**
  * Autres exploitations
  ******************************************/
-#declaration_recolte #vol_total_lies,
-#declaration_recolte #jeunes_vignes
+#vol_total_lies,
+#jeunes_vignes
 {
 	clear: both;
 	width: 488px;
 }
 
-#declaration_recolte #vol_total_lies { margin: 0 0 45px; }
+#vol_total_lies { margin: 0 0 45px; }
 
-#declaration_recolte #vol_total_lies input,
-#declaration_recolte #jeunes_vignes input
+#vol_total_lies input,
+#jeunes_vignes input
 {
 	background: #f0f0de;
 	border: 1px solid #c2c1ba;
@@ -641,8 +745,8 @@
 	width: 120px;
 }
 
-#declaration_recolte #vol_total_lies label,
-#declaration_recolte #jeunes_vignes label
+#vol_total_lies label,
+#jeunes_vignes label
 {
 	float: left;
 	font-size: 14px;
@@ -651,34 +755,34 @@
 /**
  * Validation Acheteurs et caves
  ******************************************/
-#declaration_recolte #acheteurs_caves #acheteurs_raisin { margin: 0 0 50px; }
-#declaration_recolte #acheteurs_caves #acheteurs_raisin,
-#declaration_recolte #acheteurs_caves #caves_cooperatives { width: 710px; }
+#acheteurs_caves #acheteurs_raisin { margin: 0 0 50px; }
+#acheteurs_caves #acheteurs_raisin,
+#acheteurs_caves #caves_cooperatives { width: 710px; }
 
-#declaration_recolte #acheteurs_caves table tbody td { padding: 5px 3px; }
+#acheteurs_caves table tbody td { padding: 5px 3px; }
 
 /**
  * Validation Appelation
  ******************************************/
-#declaration_recolte #appelations table { float: left; width: 830px; }
-#declaration_recolte #appelations table thead th { font-size: 11px; }
-#declaration_recolte #appelations table thead th:first-child { width: auto; }
+#appelations table { float: left; width: 830px; }
+#appelations table thead th { font-size: 11px; }
+#appelations table thead th:first-child { width: auto; }
 
 /**
  * Validation Total général
  ******************************************/
-#declaration_recolte #total_general { float: right; width: 120px; }
-#declaration_recolte #total_general h2 { line-height: 28px; }
+#total_general { float: right; width: 120px; }
+#total_general h2 { line-height: 28px; }
 
-#declaration_recolte #total_general ul
+#total_general ul
 {
 	padding: 1px 15px 2px;
 	line-height: 1;
 }
 
-#declaration_recolte #total_general ul li { padding: 3px 0; }
+#total_general ul li { padding: 3px 0; }
 
-#declaration_recolte #total_general ul li input
+#total_general ul li input
 {
 	background: #fff;
 	border: 1px solid #dadad6;
@@ -692,9 +796,9 @@
 /**
  * Confirmation fin de la déclaration
  ******************************************/
-#declaration_recolte #confirmation_fin_declaration { width: 536px; }
+#confirmation_fin_declaration { width: 536px; }
 
-#declaration_recolte #confirmation_fin_declaration p.important
+#confirmation_fin_declaration p.important
 {
 	color: #acb701;
 	font-size: 16px;
