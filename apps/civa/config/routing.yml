@@ -34,6 +34,18 @@ recolte:
   url:   /recolte/:appellation_lieu/:cepage
   param: { module: recolte, action: recolte, appellation_lieu: null, cepage: null}
 
+recolte_update:
+  url:   /recolte/:appellation_lieu/:cepage/update/:detail_key
+  param: { module: recolte, action: update}
+
+recolte_delete:
+  url:   /recolte/:appellation_lieu/:cepage/delete/:detail_key
+  param: { module: recolte, action: delete}
+
+recolte_add:
+  url:   /recolte/:appellation_lieu/:cepage/add
+  param: { module: recolte, action: add}
+
 validation:
   url:   /validation
   param: { module: declaration, action: validation, annee: 2010 }

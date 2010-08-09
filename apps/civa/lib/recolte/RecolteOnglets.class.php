@@ -168,7 +168,7 @@ class RecolteOnglets {
         return false;
     }
 
-    public function getUrl($appellation = null, $lieu = null, $cepage = null) {
+    public function getUrl($sf_route, $appellation = null, $lieu = null, $cepage = null) {
         if (is_null($appellation)) {
             if (!is_null($this->getCurrentKeyAppellation())) {
                 $appellation = $this->getCurrentValueAppellation();
@@ -192,14 +192,14 @@ class RecolteOnglets {
 
         if (is_null($cepage)) {
             if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
-                $cepage = $this->getCurrentValueAppellation();
+                $cepage = $this->getCurrentValueCepage();
             } else {
                 $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
             }
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
 
-        return array('sf_route' => 'recolte', 'appellation_lieu' => $appellation.'-'.$lieu, 'cepage' => $cepage);
+        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.'-'.$lieu, 'cepage' => $cepage);
     }
 
     protected function verifyCurrent($value, $prefix, $method) {

@@ -36,4 +36,6 @@
         <li><?php echo $detail->volume_revendique ?>&nbsp;</li>
         <li>&nbsp;</li>
     </ul>
+    <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>">Modifier</a>
+    <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" onclick="return confirm('Supprimer ?')">Supprimer</a>
 </div>

@@ -2,7 +2,7 @@
 <?php include_partial('global/actions') ?>
 
 <!-- #principal -->
-			<form id="principal" action="<?php echo url_for('@recolte'); ?>" method="post">
+			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                                    'configuration' => $configuration,
                                                                                    'onglets' => $onglets)); ?>
@@ -15,7 +15,7 @@
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'configuration' => $configuration,
                                                                                               'onglets' => $onglets)); ?>
-					
+                                                <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>
 						<div id="donnees_recolte_sepage" class="clearfix">
 						
 							<div id="colonne_intitules">
@@ -59,7 +59,11 @@
 								</ul>
 							</div>
 
-                                                        <?php echo include_partial('detailList', array('details' => $details)) ?>
+                                                        <?php echo include_partial('detailList', array('details' => $details, 
+                                                                                                       'onglets' => $onglets,
+                                                                                                       'detail_key' => $detail_key,
+                                                                                                       'detail_action_mode' => $detail_action_mode,
+                                                                                                       'form' => $form_detail)) ?>
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
 
@@ -88,5 +92,5 @@
 				<?php include_partial('global/boutons', array('display' => array('precedent','suivant'))) ?>
 
 				
-			</form>
+			<!--</form>-->
 			<!-- fin #principal -->
