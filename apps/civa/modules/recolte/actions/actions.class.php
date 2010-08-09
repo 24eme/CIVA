@@ -14,6 +14,8 @@ class recolteActions extends EtapesActions {
         $this->setCurrentEtape('recolte');
         $this->configuration = ConfigurationClient::getConfiguration();
         $this->declaration = $this->getUser()->getDeclaration();
+        $this->list_acheteurs_negoce = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
+        $this->list_acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
     }
 
     /**
@@ -38,7 +40,7 @@ class recolteActions extends EtapesActions {
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
         
-        $this->form_detail = new RecolteForm($this->details->get($this->detail_key));
+        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), array('acheteurs_negoce' => $this->acheteurs_negoce, 'acheteurs_cooperative' => $this->acheteurs_cave));
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -55,7 +57,7 @@ class recolteActions extends EtapesActions {
         $detail = $this->details->add();
         $this->detail_key = $this->details->count() - 1;
 
-        $this->form_detail = new RecolteForm($detail);
+        $this->form_detail = new RecolteForm($detail, array('acheteurs_negoce' => $this->acheteurs_negoce, 'acheteurs_cooperative' => $this->acheteurs_cave));
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -111,5 +113,8 @@ class recolteActions extends EtapesActions {
         $this->detail_key = null;
         $this->detail_action_mode = null;
         $this->form_detail = null;
+
+        $this->acheteurs_negoce = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('negoces');
+        $this->acheteurs_cave = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('cooperatives');
     }
 }

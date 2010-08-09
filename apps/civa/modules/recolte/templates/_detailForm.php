@@ -22,36 +22,39 @@
             <div class="vente_raisins">
                 <h3>Ventes de Raisins</h3>
                 <ul>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
+                <?php foreach ($form[RecolteForm::FORM_NAME_NEGOCES] as $form_acheteur): ?>
+                    <li>
+                        <?php echo $form_acheteur['quantite_vendue']->renderError() ?>
+                        <?php echo $form_acheteur['quantite_vendue']->render() ?>
+                    </li>
+                <?php endforeach; ?>
                 </ul>
             </div>
 
             <div class="caves">
                 <h3>Caves Coopératives</h3>
                 <ul>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
-                    <li>&nbsp;</li>
+                    <?php foreach ($form[RecolteForm::FORM_NAME_COOPERATIVES] as $form_acheteur): ?>
+                    <li>
+                        <?php echo $form_acheteur['quantite_vendue']->renderError() ?>
+                        <?php echo $form_acheteur['quantite_vendue']->render() ?>
+                    </li>
+                <?php endforeach; ?>
                 </ul>
             </div>
 
             <p class="vol_place">
             <?php echo $form['cave_particuliere']->renderError() ?>
             <?php echo $form['cave_particuliere']->render() ?>
-            </p>
+                </p>
 
-            <p class="vol_total_recolte">&nbsp;</p>
+                <p class="vol_total_recolte">&nbsp;</p>
 
-            <ul class="vol_revendique_dplc">
-            <li>&nbsp;</li>
-            <li>&nbsp;</li>
-        </ul>
-        <input type="submit" value="Valider" />
-        <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>">Annuler</a>
+                <ul class="vol_revendique_dplc">
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                </ul>
+                <input type="submit" value="Valider" />
+                <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>">Annuler</a>
     </form>
 </div>

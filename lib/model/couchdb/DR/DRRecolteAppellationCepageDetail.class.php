@@ -1,11 +1,12 @@
 <?php
 
 class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDetail {
-    public function save($doc) {
-        if ($this->_is_new) {
-            return $doc->addRecolte($this);
+    public function getAcheteursValuesWithCvi($field) {
+        $acheteurs = $this->get($field);
+        $values = array();
+        foreach($acheteurs as $acheteur) {
+            $values[$acheteur->cvi] = $acheteur->quantite_vendue;
         }
-        return $this;
+        return $values;
     }
-
 }

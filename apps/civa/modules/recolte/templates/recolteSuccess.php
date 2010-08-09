@@ -26,27 +26,29 @@
 								</ul>
 								
 								<p class="superficie">Superficie</p>
-								
+
+
 								<div class="vente_raisins">
 									<h3>Ventes de Raisins</h3>
+                                                                        <?php if ($acheteurs_negoce->count() > 0): ?>
 									<ul>
-										<li>Acheteur 1</li>
-										<li>Acheteur 2</li>
-
-										<li>Acheteur 3</li>
-										<li>Acheteur 4</li>
+                                                                            <?php foreach($acheteurs_negoce as $cvi): ?>
+                                                                            <li><?php echo $list_acheteurs_negoce[$cvi]['nom'] ?></li>
+                                                                            <?php endforeach; ?>
 									</ul>
+                                                                        <?php endif; ?>
 								</div>
+
 								
 								<div class="caves">
 									<h3>Caves Coopératives</h3>
+									<?php if ($acheteurs_cave->count() > 0): ?>
 									<ul>
-
-										<li>Cave 1</li>
-										<li>Cave 2</li>
-										<li>Cave 3</li>
-										<li>Cave 4</li>
+                                                                            <?php foreach($acheteurs_cave as $cvi): ?>
+                                                                            <li><?php echo $list_acheteurs_cave[$cvi]['nom'] ?></li>
+                                                                            <?php endforeach; ?>
 									</ul>
+                                                                        <?php endif; ?>
 								</div>
 								
 								<p class="vol_place">Volume sur place</p>

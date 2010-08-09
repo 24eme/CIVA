@@ -143,6 +143,14 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return false;
     }
 
+    public function clear() {
+        if ($this->_is_array) {
+            foreach($this->_fields as $key => $field) {
+                $this->remove($key);
+            }
+        }
+    }
+
     public function __set($key, $value) {
         return $this->set($key, $value);
     }
