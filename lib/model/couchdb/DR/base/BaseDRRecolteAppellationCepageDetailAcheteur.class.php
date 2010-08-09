@@ -5,7 +5,4 @@ abstract class BaseDRRecolteAppellationCepageDetailAcheteur extends sfCouchdbDoc
        $this->_root_class_name = 'DR';
        $this->_tree_class_name = 'DRRecolteAppellationCepageDetailAcheteur';
     }
-    public function save($doc) {
-
-    }
 }

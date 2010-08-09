@@ -5,7 +5,4 @@ abstract class BaseDRRecolte extends sfCouchdbDocumentTree {
        $this->_root_class_name = 'DR';
        $this->_tree_class_name = 'DRRecolte';
     }
-    public function save($doc) {
-        
-    }
 }

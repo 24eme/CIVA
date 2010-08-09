@@ -5,7 +5,4 @@ abstract class BaseDRAcheteurs extends sfCouchdbDocumentTree {
        $this->_root_class_name = 'DR';
        $this->_tree_class_name = 'DRAcheteurs';
     }
-    public function save($doc) {
-        
-    }
 }

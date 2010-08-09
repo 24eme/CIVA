@@ -53,6 +53,7 @@ DR:
                   # ------- LIEU ----------
                   '*':
                     type: collection
+                    class: DRRecolteAppellationLieu
                     definition:
                       fields:
                         total_volume: {type:float}

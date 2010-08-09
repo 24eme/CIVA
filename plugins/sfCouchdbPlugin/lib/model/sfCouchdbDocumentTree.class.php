@@ -43,8 +43,6 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    public function isNew() {
        return $this->_is_new;
    }
-
-   abstract public function save($doc);
 }
 
 ?>
