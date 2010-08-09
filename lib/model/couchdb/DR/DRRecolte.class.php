@@ -20,7 +20,14 @@ class DRRecolte extends BaseDRRecolte {
         $declaration = $this;
         $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
         foreach($acheteurs as $key => $appellation) {
-            $declaration->addAppellation($configuration->get('recolte')->get($key)->appellation)->add('lieu');
+	  $cappellation = $configuration->get('recolte')->get($key);
+	  $app = $declaration->addAppellation($cappellation->appellation);
+	  try{
+	    $cappellation->get('lieu');
+	    $app->add('lieu');
+	  }catch(Exception $e) {
+	    //Cas avec lieu-dits
+	  }
         }
         foreach($declaration as $key => $appellation) {
             if (!$acheteurs->exist($key)) {
