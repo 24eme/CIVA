@@ -46,6 +46,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 	return $r;
       return $this->getSumCepageFields('volume_revendique');
     }
+    
+    public function save() {
+      return $this->getCouchdbDocument()->save();
+    }
+
     public function getVolumeAcheteur($cvi, $type) {
       $sum = 0;
       foreach ($this->getData() as $key => $lieu) {

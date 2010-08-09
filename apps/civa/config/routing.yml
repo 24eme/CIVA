@@ -26,6 +26,10 @@ exploitation_lieu:
   url:   /exploitation_lieu
   param: { module: acheteur, action: exploitationLieu }
 
+exploitation_lieu_delete:
+  url:  /exploitation_lieu/delete/:lieu
+  param: {module: acheteur, action: exploitationLieuDelete }
+
 exploitation_autres:
   url:   /exploitation_autres
   param: { module: declaration, action: exploitationAutres }

@@ -93,10 +93,35 @@ class acheteurActions extends EtapesActions {
      */
     public function executeExploitationLieu(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_lieu');
+	
+	try{
+	$grdcru = $this->getUser()->getDeclaration()->get('/recolte/appellation_GRDCRU');
+	}catch(Exception $e) {
+	  return $this->redirect('@exploitation_autres');
+	}
+	$this->lieux = array();
+	foreach ($grdcru->filter('lieu[0-9]') as $key => $lieu) {
+	  $this->lieux[$key] = $lieu->getLibelle();
+	}
+
+	$this->form = new LieuDitForm();
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->redirectByBoutonsEtapes();
+	  $this->form->bind($request->getParameter($this->form->getName()));
+	  if ($this->form->isValid()) {
+	    $grdcru->add($this->form->getValue('lieu'));
+	    $grdcru->save();
+	    return $this->redirect('@exploitation_lieu');
+	  }
+	  $this->redirectByBoutonsEtapes();
         }
+    }
+
+    public function executeExploitationLieuDelete(sfWebRequest $request) {
+      $declaration = $this->getUser()->getDeclaration();
+      $declaration->get('/recolte/appellation_GRDCRU')->remove($request->getParameter('lieu'));
+      $declaration->save();
+      return $this->redirect('@exploitation_lieu');
     }
 
 }
