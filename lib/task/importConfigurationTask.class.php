@@ -74,147 +74,25 @@ EOF;
 
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
 
-        $json->recolte->appellation_GRDCRU->appellation = "GRDCRU";
-	$json->recolte->appellation_GRDCRU->libelle = "AOC Alsace Grand Cru";
-	$lieu = new stdClass();
-	$lieu->cepage_RI->libelle = "Riesling";
-	$lieu->cepage_GW->libelle = "Gewurztraminer";
-	$lieu->cepage_PG->libelle = "Pinot Gris";
-	$lieu->cepage_MU->libelle = "Muscat d'Alsace";
-	$lieu->cepage_ED->libelle = "Assemblage";
+	$grdcru = new stdClass();
+        $grdcru->appellation = "GRDCRU";
+	$grdcru->libelle = "AOC Alsace Grand Cru";
 
-	$lieu55 = new stdClass();
-	$lieu55->cepage_RI->libelle = "Riesling";
-	$lieu55->cepage_GW->libelle = "Gewurztraminer";
-	$lieu55->cepage_PG->libelle = "Pinot Gris";
-	$lieu55->cepage_MU->libelle = "Muscat d'Alsace";
-	$lieu55->cepage_ED->libelle = "Assemblage";
-	$lieu55->rendement = 55;
-
-
-	$json->recolte->appellation_GRDCRU->rendement = 61;
-	$json->recolte->appellation_GRDCRU->lieu01 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu01->libelle = "Altenberg de Bergbieten";
-	$json->recolte->appellation_GRDCRU->lieu02 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu02->libelle = "Altenberg de Bergheim";
-	$json->recolte->appellation_GRDCRU->lieu03 = clone $lieu55;
-	$json->recolte->appellation_GRDCRU->lieu03->libelle = "Brand";
-	$json->recolte->appellation_GRDCRU->lieu04 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu04->libelle = "Eichberg";
-	$json->recolte->appellation_GRDCRU->lieu05 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu05->libelle = "Geisberg";
-	$json->recolte->appellation_GRDCRU->lieu06 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu06->libelle = "Gloeckelberg";
-	$json->recolte->appellation_GRDCRU->lieu07 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu07->libelle = "Goldert";
-	$json->recolte->appellation_GRDCRU->lieu08 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu08->libelle = "Hatschbourg";
-	$json->recolte->appellation_GRDCRU->lieu09 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu09->libelle = "Hengst";
-	$json->recolte->appellation_GRDCRU->lieu10 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu10->libelle = "Kanzlerberg";
-	$json->recolte->appellation_GRDCRU->lieu11 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu11->libelle = "Kastelberg";
-	$json->recolte->appellation_GRDCRU->lieu12 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu12->libelle = "Kessler";
-	$json->recolte->appellation_GRDCRU->lieu13 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu13->libelle = "Kirchberg de Barr";
-	$json->recolte->appellation_GRDCRU->lieu14 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu14->libelle = "Kirchberg de Ribeauvillé";
-	$json->recolte->appellation_GRDCRU->lieu15 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu15->libelle = "Kitterlé";
-	$json->recolte->appellation_GRDCRU->lieu16 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu16->libelle = "Moenchberg";
-	$json->recolte->appellation_GRDCRU->lieu17 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu17->libelle = "Ollwiller";
-	$json->recolte->appellation_GRDCRU->lieu18 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu18->libelle = "Rangen";
-	$json->recolte->appellation_GRDCRU->lieu19 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu19->libelle = "Rosacker";
-	$json->recolte->appellation_GRDCRU->lieu20 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu20->libelle = "Saering";
-	$json->recolte->appellation_GRDCRU->lieu21 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu21->libelle = "Schlossberg";
-	$json->recolte->appellation_GRDCRU->lieu22 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu22->libelle = "Sommerberg";
-	$json->recolte->appellation_GRDCRU->lieu23 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu23->libelle = "Sonnenglanz";
-	$json->recolte->appellation_GRDCRU->lieu24 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu24->libelle = "Spiegel";
-
-	$json->recolte->appellation_GRDCRU->lieu26 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu26->libelle = "Altenberg de Wolxheim";
-	$json->recolte->appellation_GRDCRU->lieu27 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu27->libelle = "Engelberg";
-	$json->recolte->appellation_GRDCRU->lieu28 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu28->libelle = "Frankstein";
-	$json->recolte->appellation_GRDCRU->lieu29 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu29->libelle = "Froehn";
-	$json->recolte->appellation_GRDCRU->lieu30 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu30->libelle = "Mambourg";
-	$json->recolte->appellation_GRDCRU->lieu31 = clone $lieu55;
-
-	$json->recolte->appellation_GRDCRU->lieu31->libelle = "Mandelberg";
-	$json->recolte->appellation_GRDCRU->lieu32 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu32->libelle = "Marckrain";
-	$json->recolte->appellation_GRDCRU->lieu33 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu33->libelle = "Muenchberg";
-	$json->recolte->appellation_GRDCRU->lieu34 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu34->libelle = "Osterberg";
-	$json->recolte->appellation_GRDCRU->lieu35 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu35->libelle = "Pfersigberg";
-	$json->recolte->appellation_GRDCRU->lieu36 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu36->libelle = "Pfingstberg";
-	$json->recolte->appellation_GRDCRU->lieu37 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu37->libelle = "Praelatenberg";
-	$json->recolte->appellation_GRDCRU->lieu38 = clone $lieu55;
-	$json->recolte->appellation_GRDCRU->lieu38->libelle = "Schoenenbourg";
-	$json->recolte->appellation_GRDCRU->lieu39 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu39->libelle = "Sporen";
-	$json->recolte->appellation_GRDCRU->lieu40 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu40->libelle = "Steinert";
-	$json->recolte->appellation_GRDCRU->lieu41 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu41->libelle = "Steingrubler";
-	$json->recolte->appellation_GRDCRU->lieu42 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu42->libelle = "Steinklotz";
-	$json->recolte->appellation_GRDCRU->lieu43 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu43->libelle = "Vorbourg";
-	$json->recolte->appellation_GRDCRU->lieu44 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu44->libelle = "Wineck-Schlossberg";
-	$json->recolte->appellation_GRDCRU->lieu45 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu45->libelle = "Winzenberg";
-	$json->recolte->appellation_GRDCRU->lieu46 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu46->libelle = "Zinnkoepflé";
-	$json->recolte->appellation_GRDCRU->lieu47 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu47->libelle = "Zotzenberg";
-	$json->recolte->appellation_GRDCRU->lieu48 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu48->libelle = "Furstentum";
-	$json->recolte->appellation_GRDCRU->lieu49 = clone $lieu55;
-	$json->recolte->appellation_GRDCRU->lieu49->libelle = "Bruderthal";
-	$json->recolte->appellation_GRDCRU->lieu50 = &$lieu;
-	$json->recolte->appellation_GRDCRU->lieu50->libelle = "Florimont";
-
-	$json->recolte->appellation_GRDCRU->lieu25->libelle = "Wiebelsberg";
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_MU->rendement = 55;
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_RI->libelle = "Riesling";
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_GW->libelle = "Gewurztraminer";
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_PG->libelle = "Pinot Gris";
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_MU->libelle = "Muscat d'Alsace";
-	$json->recolte->appellation_GRDCRU->lieu25->cepage_ED->libelle = "Assemblage";
-
-	$json->recolte->appellation_GRDCRU->lieu51->libelle = "Kaefferkopf";
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_ED->rendement = 55;
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_RI->libelle = "Riesling";
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_GW->libelle = "Gewurztraminer";
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_PG->libelle = "Pinot Gris";
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_MU->libelle = "Muscat d'Alsace";
-	$json->recolte->appellation_GRDCRU->lieu51->cepage_ED->libelle = "Assemblage";
+	foreach(file(sfConfig::get('sf_data_dir') . '/' . 'Grdcrv09') as $l) {
+	  $g = explode(',', preg_replace('/"/', '', $l));
+	  if (!$g[2]) {
+	    $grdcru->{'lieu'.$g[1]}->libelle = $g[3];
+	    $grdcru->{'lieu'.$g[1]}->rendement = $this->recode_number($g[4]);
+	  }else{
+	    if (preg_match('/^L/', $g[2]))
+		continue;
+	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);	
+	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
+	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]);
+  	  }
+	  
+	}
+	$json->recolte->appellation_GRDCRU = $grdcru;
 
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
@@ -261,7 +139,7 @@ EOF;
 	    $doc->save();
 	  }
 	  return;
-	}
+}
 	echo '{"docs":';
 	echo json_encode($docs);
 	echo '}';
@@ -269,6 +147,25 @@ EOF;
 
     private function recode_number($val) {
         return preg_replace('/^\./', '0.', $val) + 0;
+    }
+    private function convertCepage2Libelle($c) {
+      switch ($c) {
+      case 'RI':
+	return 'Riesling';
+      case 'GW':
+	return 'Gewurztraminer';
+      case 'PG':
+	return 'Pinot Gris';
+      case 'MU':
+	return "Muscat d'Alsace";
+      case 'ED':
+	return 'Assemblage';
+      case 'SY':
+	return 'Sylvaner';
+      default:
+	echo "definition for $c missing\n";
+	return ;
+      }
     }
 
 }
