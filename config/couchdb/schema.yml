@@ -133,9 +133,10 @@ Recoltant:
       num: {  }
       no_stock: {  }
       maison_mere: {  }
+      regime_fiscal: { }
       civaba: {  }
       no_accises: {  }
-      siret: {  }
+      siret: { type: string }
       intitule: {  }
       nom: {  }
       siege:
@@ -169,6 +170,11 @@ Configuration:
       _id: {  }
       _rev: {  }
       type: {}
+      intitule:
+        type: array_collection
+        definition:
+          fields:
+            '*': {  }
       recolte:
         type: collection
         definition:

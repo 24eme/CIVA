@@ -8,7 +8,7 @@ class importTiersTask extends sfBaseTask {
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
                 // add your own options here
-	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'stdout'),
+	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
 				));
 
@@ -47,8 +47,9 @@ class importTiersTask extends sfBaseTask {
 	  $json->maison_mere = $tiers[2];
 	  $json->civaba = $tiers[3];
 	  $json->no_accises = $tiers[5];
-	  $json->siret = $tiers[6];
+	  $json->siret = $tiers[6].'';
 	  $json->intitule = $tiers[7];
+	  $json->regime_fiscal = '';
 	  $json->nom = $tiers[8];
 	  $json->siege->adresse = $tiers[9];
 	  $json->siege->insee_commune = $tiers[10];

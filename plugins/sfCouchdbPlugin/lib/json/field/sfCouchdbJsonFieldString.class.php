@@ -11,4 +11,5 @@ class sfCouchdbJsonFieldString extends sfCouchdbJsonField {
     public function getData() {
         return $this->value;
     }
+
 }
