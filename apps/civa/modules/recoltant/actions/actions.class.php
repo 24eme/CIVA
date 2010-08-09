@@ -50,18 +50,20 @@ class recoltantActions extends EtapesActions
       $this->form_expl_err = 0;
         
       if ($request->isMethod(sfWebRequest::POST)) {
-	$this->form_gest->bind($request->getParameter($this->form_gest->getName()));
-	if ($this->form_gest->isValid()) {
-	  $this->form_gest->save();
-	}else
-	  $this->form_gest_err = 1;            
-
-	$this->form_expl->bind($request->getParameter($this->form_expl->getName()));
-	if ($this->form_expl->isValid()) {
-	  $this->form_expl->save();
-	}else
-	  $this->form_expl_err = 1;            
-
+	if ($request->getParameter('gestionnaire')) {
+	  $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
+	  if ($this->form_gest->isValid()) {
+	    $this->form_gest->save();
+	  }else
+	    $this->form_gest_err = 1;            
+	}
+	if ($request->getParameter('exploitation')) {
+	  $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
+	  if ($this->form_expl->isValid()) {
+	    $this->form_expl->save();
+	  }else
+	    $this->form_expl_err = 1;            
+	}
 	$this->redirectByBoutonsEtapes();
       }
   }
