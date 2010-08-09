@@ -80,12 +80,15 @@ EOF;
 
 	foreach(file(sfConfig::get('sf_data_dir') . '/' . 'Grdcrv09') as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
+	  if ($g[1] == "99")  {
+	    continue;
+	  }
 	  if (!$g[2]) {
 	    $grdcru->{'lieu'.$g[1]}->libelle = $g[3];
 	    $grdcru->{'lieu'.$g[1]}->rendement = $this->recode_number($g[4]);
 	  }else{
 	    if (preg_match('/^L/', $g[2]))
-		continue;
+	      continue;
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);	
 	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]);
