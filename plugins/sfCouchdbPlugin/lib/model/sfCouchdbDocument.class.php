@@ -26,9 +26,9 @@ class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function save() {
-        $ret = sfCouchdbManager::getClient()->saveDocument($this);
-	$this->_rev = $ret->rev;
-	return $ret;
+      $ret = sfCouchdbManager::getClient()->saveDocument($this);
+      $this->_rev = $ret->rev;
+      return $ret;
     }
 
     public function getData() {

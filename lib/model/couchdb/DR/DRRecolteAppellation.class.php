@@ -53,19 +53,8 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getVolumeAcheteur($cvi, $type) {
       $sum = 0;
-      foreach ($this->getData() as $key => $lieu) {
-	if (preg_match("/^lieu/", $key)) {
-	  foreach ($lieu as $key => $cepage) {
-	    if (preg_match('/^cepage/', $key))
-	      foreach ($cepage->detail as $d) {
-		if (isset($d->{$type}))
-		    foreach ($d->{$type} as $a) {
-		      if ($a->cvi == $cvi)
-			$sum += $a->quantite_vendue;
-		    }
-	      }
-	  }
-	}
+      foreach ($this->filter('^lieu') as $key => $lieu) {
+	$sum += $lieu->getVolumeAcheteur($cvi, $type);
       }
       return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
     }

@@ -60,6 +60,18 @@ DR:
                         total_superficie: {type:float}
                         volume_revendique: {type: float}
                         dplc: {type: float}
+                        acheteurs: 
+                           type: collection
+                           definition:
+                             fields:
+                               '*':
+                                 type: collection
+                                 class: DRRecolteAppellationLieuAcheteur
+                                 definition:
+                                   fields:
+                                     type_acheteur: {}
+                                     superficie: {type:float}
+                                     dontdplc: {type:float}
                         # ------ Cépage ------
                         '*':
                           type: collection

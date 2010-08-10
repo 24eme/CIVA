@@ -40,7 +40,10 @@ class declarationActions extends EtapesActions {
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
-                $this->forward404Unless($old_doc = $recoltant->getDeclaration($dr_data['liste_precedentes_declarations']));
+                $old_doc = $recoltant->getDeclaration($dr_data['liste_precedentes_declarations']);
+		if (!$old_doc) {
+		  throw new Exception("Bug: ".$dr_data['liste_precedentes_declarations']." not found :()");
+		}
                 $doc = clone $old_doc;
                 $doc->_id = 'DR-'.$recoltant->cvi.'-'.$this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
@@ -97,37 +100,6 @@ class declarationActions extends EtapesActions {
 	$this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
 	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
 	$this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
-	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getNegoces() as $n) {
-	  $cvi[$n] = 1;
-	  if (!isset($this->volume_negoces[$n])) {
-	    $this->volume_negoces[$n] = new stdClass();
-	    $this->volume_negoces[$n]->volume = 0;
-	    $this->volume_negoces[$n]->ratio_superficie = 0;
-	  }
-	  $vol = $appellation->getVolumeAcheteur($n, 'negoces');
-	  if ($vol) {
-	    $this->volume_negoces[$n]->volume += $vol['volume'];
-	    $this->volume_negoces[$n]->ratio_superficie += $vol['ratio_superficie'];
-	  }
-	}
-	foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getCooperatives() as $n) {
-	  $cvi[$n] = 1;
-	  if (!isset($this->volume_cooperatives[$n])) {
-	    $this->volume_cooperatives[$n] = new stdClass();
-	    $this->volume_cooperatives[$n]->volume = 0;
-	    $this->volume_cooperatives[$n]->ratio_superficie = 0;
-	  }
-	  $vol = $appellation->getVolumeAcheteur($n, 'cooperatives');
-	  if ($vol) {
-	    $this->volume_cooperatives[$n]->volume += $vol['volume'];
-	    $this->volume_cooperatives[$n]->ratio_superficie += $vol['ratio_superficie'];
-	  }
-	}
-      }
-
-      $this->acheteurs = array();
-      foreach (array_keys($cvi) as $c) {
-	$this->acheteurs[$c] = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$c);
       }
 
       $this->total_superficie = array_sum(array_values($this->superficie));

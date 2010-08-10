@@ -51,7 +51,7 @@ recolte_add:
   param: { module: recolte, action: add}
 
 recolte_recapitulatif:
-  url:   /recapitulatif/:appellation
+  url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif}
 
 validation:

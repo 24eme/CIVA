@@ -403,12 +403,17 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return $this->_couchdb_document;
     }
 
+
     public function setHash($hash) {
         $this->_object_hash = $hash;
     }
 
     public function getParentHash() {
         return preg_replace('/\/[^\/]+$/', '', $this->getHash());
+    }
+
+    public function getParent() {
+      return $this->getCouchdbDocument()->get($this->getParentHash());
     }
 
     public function getKey() {
