@@ -77,6 +77,7 @@ EOF;
 	$grdcru = new stdClass();
         $grdcru->appellation = "GRDCRU";
 	$grdcru->libelle = "AOC Alsace Grand Cru";
+	$grdcru->rendement = 61;
 
 	foreach(file(sfConfig::get('sf_data_dir') . '/' . 'Grdcrv09') as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
@@ -85,7 +86,9 @@ EOF;
 	  }
 	  if (!$g[2]) {
 	    $grdcru->{'lieu'.$g[1]}->libelle = $g[3];
-	    $grdcru->{'lieu'.$g[1]}->rendement = $this->recode_number($g[4]);
+	    $r = $this->recode_number($g[4]);
+	    if ($r != $grdcru->rendement)
+	      $grdcru->{'lieu'.$g[1]}->rendement = $r;
 	  }else{
 	    if (preg_match('/^L/', $g[2]))
 	      continue;
