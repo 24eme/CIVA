@@ -411,6 +411,10 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return preg_replace('/\/[^\/]+$/', '', $this->getHash());
     }
 
+    public function getKey() {
+      return preg_replace('/^.*\//', '\1', $this->getHash());
+    }
+
     public function getHash() {
         if (!$this->_object_hash) {
             throw new sfCouchdbException('document not yet associated');
