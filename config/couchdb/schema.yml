@@ -107,6 +107,17 @@ DR:
                                                     fields:
                                                       cvi: {  }
                                                       quantite_vendue: { type: float }
+                                          mouts:
+                                            type: array_collection
+                                            required: false
+                                            definition:
+                                              fields:
+                                                '*':
+                                                  type: collection
+                                                  definition:
+                                                    fields:
+                                                      cvi: {  }
+                                                      quantite_vendue: { type: float }
                                           cave_particuliere: { type: float }
                                           volume_revendique: { type: float }
                                           volume_dplc: { type: float }
@@ -206,3 +217,4 @@ Configuration:
                             fields:
                               libelle: {  }
                               rendement: { type: float }
+                              superficie_optionnelle: { type: integer, required: false }

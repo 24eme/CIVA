@@ -16,6 +16,7 @@ class recolteActions extends EtapesActions {
         $this->declaration = $this->getUser()->getDeclaration();
         $this->list_acheteurs_negoce = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
         $this->list_acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
+        $this->list_acheteurs_mout = include(sfConfig::get('sf_data_dir') . '/acheteurs-mout.php');
     }
 
     /**
@@ -40,7 +41,10 @@ class recolteActions extends EtapesActions {
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
         
-        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), array('acheteurs_negoce' => $this->acheteurs_negoce, 'acheteurs_cooperative' => $this->acheteurs_cave));
+        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), array('superficie_required' => $this->superficie_required,
+                                                                                           'acheteurs_negoce' => $this->acheteurs_negoce,
+                                                                                           'acheteurs_cooperative' => $this->acheteurs_cave,
+                                                                                           'acheteurs_mout' => $this->acheteurs_mout));
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -57,7 +61,10 @@ class recolteActions extends EtapesActions {
         $detail = $this->details->add();
         $this->detail_key = $this->details->count() - 1;
 
-        $this->form_detail = new RecolteForm($detail, array('acheteurs_negoce' => $this->acheteurs_negoce, 'acheteurs_cooperative' => $this->acheteurs_cave));
+        $this->form_detail = new RecolteForm($detail, array('superficie_required' => $this->superficie_required,
+                                                            'acheteurs_negoce' => $this->acheteurs_negoce,
+                                                            'acheteurs_cooperative' => $this->acheteurs_cave,
+                                                            'acheteurs_mout' => $this->acheteurs_mout));
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -73,7 +80,7 @@ class recolteActions extends EtapesActions {
         $detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($detail_key));
 
-        $this->details->remove($detail_remove_key);
+        $this->details->remove($detail_key);
         $this->declaration->save();
         
         $this->redirect($this->onglets->getUrl('recolte'));
@@ -111,12 +118,23 @@ class recolteActions extends EtapesActions {
         $this->details = $this->declaration->get($this->onglets->getItemsCepage()->getHash())
                                      ->add($this->onglets->getCurrentKeyCepage())
                                      ->add('detail');
+
+       $configuration_appellation = $this->configuration->get('recolte')->get($this->onglets->getCurrentKeyAppellation());
+       $configuration_lieu = $configuration_appellation->get($this->onglets->getCurrentKeyLieu());
+       $configuration_cepage = $configuration_lieu->get($this->onglets->getCurrentKeyCepage());
+        
         $this->detail_key = null;
         $this->detail_action_mode = null;
         $this->form_detail = null;
 
-        $this->acheteurs_negoce = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('negoces');
-        $this->acheteurs_cave = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('cooperatives');
+        $this->has_acheteurs_mout = ($configuration_appellation->mout == 1);
+        $this->superficie_required = !($configuration_cepage->exist('superficie_optionnelle'));
+        $this->acheteurs_negoce = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('negoces');
+        $this->acheteurs_cave = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('cooperatives');
+        $this->acheteurs_mout = null;
+        if ($this->has_acheteurs_mout) {
+            $this->acheteurs_mout = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('mouts');
+        }
     }
 
 

@@ -23,21 +23,21 @@ class acheteurActions extends EtapesActions {
 
         $this->acheteurs_negociant = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
         $this->acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
-        $this->acheteurs_mout = array();
+        $this->acheteurs_mout = include(sfConfig::get('sf_data_dir') . '/acheteurs-mout.php');;
 
         $this->acheteurs_negociant_json = array();
         $this->acheteurs_cave_json = array();
         $this->acheteurs_mout_json = array();
         foreach ($this->acheteurs_negociant as $cvi => $item) {
-            $this->acheteurs_mout[$cvi] = $item;
             $this->acheteurs_negociant_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
-            $this->acheteurs_mout_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
         foreach ($this->acheteurs_cave as $cvi => $item) {
-            $this->acheteurs_mout[$cvi] = $item;
             $this->acheteurs_cave_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
+        }
+        foreach ($this->acheteurs_mout as $cvi => $item) {
             $this->acheteurs_mout_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
         }
+
 
         $this->form = new ExploitationAcheteursForm($declaration->getAcheteurs());
 
@@ -45,10 +45,6 @@ class acheteurActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
-
-                $declaration->getRecolte()->updateFromAcheteurs();
-                $declaration->save();
-                
                 $this->redirectByBoutonsEtapes();
             }
         }

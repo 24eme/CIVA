@@ -4,6 +4,7 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
 
     const FORM_NAME_NEGOCES = 'negoces';
     const FORM_NAME_COOPERATIVES = 'cooperatives';
+    const FORM_NAME_MOUTS = 'mouts';
     const FORM_SUFFIX_NEW = '_new';
     const FORM_NAME = 'recolte[%s]';
 
@@ -12,21 +13,29 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
 
         $this->setWidgets(array(
             'denomination' => new sfWidgetFormInputText(),
-            'vtsgn' => new sfWidgetFormInputText(),
+            'vtsgn' => new sfWidgetFormSelect(array('choices' => $this->getChoicesVvtsgn())),
             'superficie' => new sfWidgetFormInputText(),
             'cave_particuliere' => new sfWidgetFormInputText(),
         ));
 
         $this->setValidators(array(
-            'denomination' => new sfValidatorString(),
-            'vtsgn' => new sfValidatorString(),
-            'superficie' => new sfValidatorNumber(),
-            'cave_particuliere' => new sfValidatorNumber(),
+            'denomination' => new sfValidatorString(array('required' => false)),
+            'vtsgn' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getChoicesVvtsgn()))),
+            'superficie' => new sfValidatorNumber(array('required' => false)),
+            'cave_particuliere' => new sfValidatorNumber(array('required' => false)),
         ));
+
+        if ($this->getOption('superficie_required', true)) {
+            $this->getValidator('superficie')->setOption('required', true);
+            $this->getValidator('superficie')->setOption('min', 0.01);
+        }
 
         $this->configureAcheteurs(self::FORM_NAME_NEGOCES, $this->getObject()->getAcheteursValuesWithCvi('negoces'), $this->getAcheteursNegoces());
         $this->configureAcheteurs(self::FORM_NAME_COOPERATIVES, $this->getObject()->getAcheteursValuesWithCvi('cooperatives'), $this->getAcheteursCooperatives());
-        //$this->validatorSchema->setPostValidator();
+        if ($this->hasAcheteursMouts()) {
+            $this->getObject()->add('mouts');
+            $this->configureAcheteurs(self::FORM_NAME_MOUTS, $this->getObject()->getAcheteursValuesWithCvi('mouts'), $this->getAcheteursMouts());
+        }
 
         $this->widgetSchema->setNameFormat(self::FORM_NAME);
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
@@ -38,6 +47,11 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
         $this->configureAcheteursFromBind(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $taintedValues);
         $this->bindCheckDelete(self::FORM_NAME_COOPERATIVES, $taintedValues);
         $this->configureAcheteursFromBind(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $taintedValues);
+
+        if ($this->hasAcheteursMouts()) {
+            $this->bindCheckDelete(self::FORM_NAME_MOUTS, $taintedValues);
+            $this->configureAcheteursFromBind(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $taintedValues);
+        }
 
         parent::bind($taintedValues, $taintedFiles);
     }
@@ -77,11 +91,21 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
 
         $this->getObject()->negoces->clear();
         $this->getObject()->cooperatives->clear();
+        if ($this->hasAcheteursMouts()) {
+            $this->getObject()->mouts->clear();
+        }
         
         $this->updateAcheteurs(self::FORM_NAME_NEGOCES, $values, $this->getObject()->getNegoces());
         $this->updateAcheteurs(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->negoces);
         $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES, $values, $this->getObject()->cooperatives);
         $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->cooperatives);
+
+        if ($this->hasAcheteursMouts()) {
+            $this->updateAcheteurs(self::FORM_NAME_MOUTS, $values, $this->getObject()->mouts);
+            $this->updateAcheteurs(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $values, $this->getObject()->mouts);
+        }
+
+        $this->getObject()->getCouchdbDocument()->update();
     }
 
     protected function updateAcheteurs($value_name, $values, $object) {
@@ -110,6 +134,18 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             throw new sfException('Option "acheteurs_cooperative" is required');
         }
         return $acheteurs;
+    }
+
+    protected function getAcheteursMouts() {
+        return $this->getOption('acheteurs_mout', null);
+    }
+
+    protected function hasAcheteursMouts() {
+        return !is_null($this->getAcheteursMouts());
+    }
+
+    protected function getChoicesVvtsgn() {
+        return array('' => '', 'VT' => 'VT', 'SGN' => 'SGN');
     }
 
 }

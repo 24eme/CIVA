@@ -36,6 +36,7 @@ EOF;
     $docs = sfCouchdbManager::getClient('Acheteur')->getAll();
     $acheteurs_negociant = array();
     $acheteurs_cave = array();
+    $acheteurs_mout = array();
 
     foreach($docs as $id => $anyone) {
         $doc = $docs->get($id);
@@ -48,6 +49,9 @@ EOF;
             $acheteurs_cave[$doc->getCvi()]['commune'] = $doc->getCommune();
             $acheteurs_cave[$doc->getCvi()]['nom'] = $doc->getNom();
         }
+        $acheteurs_mout[$doc->getCvi()]['cvi'] = $doc->getCvi();
+        $acheteurs_mout[$doc->getCvi()]['commune'] = $doc->getCommune();
+        $acheteurs_mout[$doc->getCvi()]['nom'] = $doc->getNom();
     }
 
     $retval = "<?php\n".
@@ -56,6 +60,7 @@ EOF;
     
     $acheteurs_negociant_data = sprintf($retval, __CLASS__, date('Y/m/d H:i:s'), var_export($acheteurs_negociant, true));
     $acheteurs_cave_data = sprintf($retval, __CLASS__, date('Y/m/d H:i:s'), var_export($acheteurs_cave, true));
+    $acheteurs_mout_data = sprintf($retval, __CLASS__, date('Y/m/d H:i:s'), var_export($acheteurs_mout, true));
 
     $filename = sfConfig::get('sf_data_dir').'/acheteurs-negociant.php';
     if (file_exists($filename)) {
@@ -70,6 +75,14 @@ EOF;
         unlink($filename);
     }
     file_put_contents($filename, $acheteurs_cave_data);
+
+    $this->logSection('data created', $filename);
+
+    $filename = sfConfig::get('sf_data_dir').'/acheteurs-mout.php';
+    if (file_exists($filename)) {
+        unlink($filename);
+    }
+    file_put_contents($filename, $acheteurs_mout_data);
 
     $this->logSection('data created', $filename);
 

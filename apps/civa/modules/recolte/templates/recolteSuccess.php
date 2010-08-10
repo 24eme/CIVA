@@ -15,57 +15,27 @@
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'configuration' => $configuration,
                                                                                               'onglets' => $onglets)); ?>
+                                            
                                                 <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>
 						<div id="donnees_recolte_sepage" class="clearfix">
 						
-							<div id="colonne_intitules">
-								<ul class="denomination_mention">
-									<li>Dénomination complémentaire</li>
-									<li>Mention VT/SGN</li>
-
-								</ul>
-								
-								<p class="superficie">Superficie</p>
-
-
-								<div class="vente_raisins">
-									<h3>Ventes de Raisins</h3>
-                                                                        <?php if ($acheteurs_negoce->count() > 0): ?>
-									<ul>
-                                                                            <?php foreach($acheteurs_negoce as $cvi): ?>
-                                                                            <li><?php echo $list_acheteurs_negoce[$cvi]['nom'] ?></li>
-                                                                            <?php endforeach; ?>
-									</ul>
-                                                                        <?php endif; ?>
-								</div>
-
-								
-								<div class="caves">
-									<h3>Caves Coopératives</h3>
-									<?php if ($acheteurs_cave->count() > 0): ?>
-									<ul>
-                                                                            <?php foreach($acheteurs_cave as $cvi): ?>
-                                                                            <li><?php echo $list_acheteurs_cave[$cvi]['nom'] ?></li>
-                                                                            <?php endforeach; ?>
-									</ul>
-                                                                        <?php endif; ?>
-								</div>
-								
-								<p class="vol_place">Volume sur place</p>
-
-								<p class="vol_total_recolte">Volume Total Récolté</p>
-								
-								<ul class="vol_revendique_dplc">
-									<li>Volume revendiqué</li>
-									<li>DPLC</li>
-								</ul>
-							</div>
+							<?php echo include_partial('detailHeader', array('acheteurs_negoce' => $acheteurs_negoce,
+                                                                                                         'acheteurs_cave' => $acheteurs_cave,
+                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                         'acheteurs_mout' => $acheteurs_mout,
+                                                                                                         'list_acheteurs_negoce' => $list_acheteurs_negoce,
+                                                                                                         'list_acheteurs_cave' => $list_acheteurs_cave,
+                                                                                                         'list_acheteurs_mout' => $list_acheteurs_mout)) ?>
 
                                                         <?php echo include_partial('detailList', array('details' => $details, 
                                                                                                        'onglets' => $onglets,
                                                                                                        'detail_key' => $detail_key,
                                                                                                        'detail_action_mode' => $detail_action_mode,
-                                                                                                       'form' => $form_detail)) ?>
+                                                                                                       'form' => $form_detail,
+                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
+                                                                                                       'acheteurs_cave' => $acheteurs_cave,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                       'acheteurs_mout' => $acheteurs_mout)) ?>
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
 

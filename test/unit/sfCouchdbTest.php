@@ -55,8 +55,8 @@ $t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revi
 /*** NEW TEST ****/
 
 $detail = new DRRecolteAppellationCepageDetail();
-$detail->setAppellation("1");
-$detail->setCepage("PB");
+$detail->setAppellation("ALSACEBLANC");
+$detail->setCepage("PG");
 $detail->setSuperficie(100);
 $detail->setVolume(10);
 $detail->setCaveParticuliere(5);
@@ -65,17 +65,17 @@ $acheteur->setCvi("CVI_FICTIF");
 $acheteur->setQuantiteVendue(5);
 $t->ok($doc->addRecolte($detail), 'add detail');
 
-$obj = $doc->getRecolte()->get('appellation_1')->get('lieu')->get('cepage_PB');
+$obj = $doc->getRecolte()->get('appellation_ALSACEBLANC')->get('lieu')->get('cepage_PG');
 $t->ok($obj, 'can retrieve detail object');
 
 /*** NEW TEST ****/
-$t->is($val = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 100, 'can retrieve superficie by hash');
+$t->is($val = $doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 100, 'can retrieve superficie by hash');
 
 /*** NEW TEST ****/
 
-$doc->set('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie', 150);
+$doc->set('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie', 150);
 $rev = $doc->_rev;
-$t->is($obj_hash = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 150, 'can change value in the tree');
+$t->is($obj_hash = $doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'can change value in the tree');
 
 /*** NEW TEST ****/
 $doc->save();
@@ -94,7 +94,7 @@ foreach($doc->getRecolte() as $key => $item) {
 }
 $t->ok($iterator_ok && $iterator_nb == 2, 'Iterate : can foreach');
 /*** NEW TEST ****/
-$t->ok($obj_array_access = $doc['recolte']['appellation_1']['lieu']['cepage_PB']['detail'][0], 'ArrayAccess : can get value in the tree');
+$t->ok($obj_array_access = $doc['recolte']['appellation_ALSACEBLANC']['lieu']['cepage_PG']['detail'][0], 'ArrayAccess : can get value in the tree');
 /*** NEW TEST ****/
 $obj_array_access['denomination'] = 'test';
 $t->is($obj_array_access->get('denomination'), 'test', 'ArrayAccess : can set value in the tree');
@@ -102,66 +102,66 @@ $t->is($obj_array_access->get('denomination'), 'test', 'ArrayAccess : can set va
 $t->is($doc->getRecolte()->count(), 2, 'ArrayAccess : can count');
 
 /*** NEW TEST ****/
-$t->ok($doc->remove('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 'remove a field');
+$t->ok($doc->remove('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 'remove a field');
 /*** NEW TEST ****/
  try{
-   $t->ok(!$doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 'field removed');
+   $t->ok(!$doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 'field removed');
 }catch(Exception $e) {
   $t->pass('field removed');
  }
 
 try{
-  $doc->set('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie', 150);
+  $doc->set('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie', 150);
   $t->fail('cannot set a removed field ');
 }catch(Exception $e) {
   $t->pass('cannot set a removed field ');
  }
 
 
-$detail = $doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0');
+$detail = $doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0');
 $detail->add('superficie', 150);
-$t->is($doc->get('recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 150, 'superficie added');
+$t->is($doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'superficie added');
 
 /*** NEW TEST ****/
 try {
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getCouchdbDocument(), $doc, 'can access couchdb doc from an sfcouchdbJson object');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG')->getCouchdbDocument(), $doc, 'can access couchdb doc from an sfcouchdbJson object');
 }catch(Exception $e) {
   $t->fail('can access couchdb doc from an sfcouchdbJson object : '.$e);
  }
 /*** NEW TEST ****/
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getHash(), '/recolte/appellation_1/lieu/cepage_PB', 'can access field hash from an sfcouchdbJson object');
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB')->getParentHash(), '/recolte/appellation_1/lieu', 'can access field hash from an sfcouchdbJson object');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG')->getHash(), '/recolte/appellation_ALSACEBLANC/lieu/cepage_PG', 'can access field hash from an sfcouchdbJson object');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG')->getParentHash(), '/recolte/appellation_ALSACEBLANC/lieu', 'can access field hash from an sfcouchdbJson object');
 /*** NEW TEST ****/
 $t->is($doc->get('/recolte/appellation_2')->getHash(), '/recolte/appellation_2', 'can access field hash from an sfcouchdbJson object issued of a collection');
 
 /*** NEW TEST ****/
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 150, 'can access to original superficie value');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'can access to original superficie value');
 
 $detail2 = new DRRecolteAppellationCepageDetail();
-$detail2->setAppellation("1");
-$detail2->setCepage("PB");
+$detail2->setAppellation("ALSACEBLANC");
+$detail2->setCepage("PG");
 $detail2->setSuperficie(100);
 $detail2->setVolume(20);
-$detail2->setCaveParticuliere(5);
+$detail2->setCaveParticuliere(10);
 $acheteur = $detail2->getNegoces()->add();
 $acheteur->setCvi("CVI_FICTIF");
-$acheteur->setQuantiteVendue(5);
+$acheteur->setQuantiteVendue(10);
 
 $doc->addRecolte($detail2);
 
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/1')->getHash(), '/recolte/appellation_1/lieu/cepage_PB/detail/1', 'can access field hash from a array collection');
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/1/superficie'), 100, 'can access superficie value');
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/0/superficie'), 150, 'can access to superficie other value');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1')->getHash(), '/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1', 'can access field hash from a array collection');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1/superficie'), 100, 'can access superficie value');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'can access to superficie other value');
 
 /*** NEW TEST ****/
 $nb = 0;
-$cepage = $doc->get('/recolte/appellation_1/lieu/cepage_PB');
+$cepage = $doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG');
 foreach($cepage->get('detail') as $k => $i) {
   $nb++;
 }
 $t->is($nb, 2, 'iterator on detail');
 
-foreach($doc->get('/recolte/appellation_1/lieu/cepage_PB/detail') as $i => $class) {
+foreach($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail') as $i => $class) {
   break;
 }
 $t->is(get_class($class), 'DRRecolteAppellationCepageDetail', 'Test the class name of a detail');
@@ -172,24 +172,24 @@ $t->ok($data->superficie, 'Test detail iterator data (superficie)');
 /*** NEW TEST ****/
 try{
   $doc->update();
-  $t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/total_volume'), 30, 'total volume for a cepage is automaticaly set');
+  $t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/total_volume'), 30, 'total volume for a cepage is automaticaly set');
   /*** NEW TEST ****/
-$t->is($doc->get('/recolte/appellation_1/lieu/cepage_PB/total_superficie'), 250, 'total volume for a cepage is automaticaly set');
+$t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/total_superficie'), 250, 'total volume for a cepage is automaticaly set');
 }catch(Exception $e) {
   $t->fail($e);
  }
 
-$t->is($doc->get('recolte/appellation_1')->getTotalVolume(), 30, 'total volume accessible from appellation');
-$t->is($doc->get('recolte/appellation_1')->getTotalSuperficie(), 250, 'total volume accessible from appellation');
-//$t->ok($doc->get('recolte/appellation_1')->getTotalDPLC(), 'total DPLC');
-//$t->ok($doc->get('recolte/appellation_1')->getTotalVolumeRevendique(), 'Total Volume revendiqué');
+$t->is($doc->get('recolte/appellation_ALSACEBLANC')->getTotalVolume(), 30, 'total volume accessible from appellation');
+$t->is($doc->get('recolte/appellation_ALSACEBLANC')->getTotalSuperficie(), 250, 'total volume accessible from appellation');
+//$t->ok($doc->get('recolte/appellation_ALSACEBLANC')->getTotalDPLC(), 'total DPLC');
+//$t->ok($doc->get('recolte/appellation_ALSACEBLANC')->getTotalVolumeRevendique(), 'Total Volume revendiqué');
 
 /*** NEW TEST ****/
 
-$t->ok($doc->remove('/recolte/appellation_1/lieu/cepage_PB/detail/0'), 'remove a multifield');
+$t->ok($doc->remove('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0'), 'remove a multifield');
 /*** NEW TEST ****/
  try{
-   $t->ok(!$doc->get('/recolte/appellation_1/lieu/cepage_PB/detail/0'), 'multifield removed');
+   $t->ok(!$doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0'), 'multifield removed');
 }catch(Exception $e) {
   $t->pass('multifield removed');
  }

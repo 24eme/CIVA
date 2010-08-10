@@ -6,7 +6,6 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     }
     protected function update() {
       parent::update();
-
       $s = 0;
       $v = 0;
       foreach ($this->get('detail') as $key => $item) {
@@ -35,10 +34,8 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 	return $r;
       return $this->getSumDetailFields('total_superficie');
     }
-    public function getRendement() {
-      if ($r = parent::get('rendement'))
-	return $r;
-      return $this->getCouchdbDocument()->get($this->getParentHash())->getRendement();
-    }
 
+    public function getRendement() {
+        return ConfigurationClient::getConfiguration()->get($this->getHash())->getRendement();
+    }
 }

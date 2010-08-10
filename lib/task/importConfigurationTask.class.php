@@ -71,6 +71,7 @@ EOF;
 	$lieu->cepage_CH->rendement = 100;
 
 	$lieu->cepage_ED->libelle = "Edelzwicker";
+        $lieu->cepage_ED->superficie_optionnelle = 1;
 
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
 
