@@ -206,26 +206,32 @@ EOF;
 	  if ($this->recode_number($csv[91])) {
 	    $doc->recolte->appellation_ALSACEBLANC->volume_revendique =  $this->recode_number($csv[91]);
 	    $doc->recolte->appellation_ALSACEBLANC->dplc =  $this->recode_number($csv[92]);
+	    $doc->acheteurs->appellation_ALSACEBLANC->cave_particuliere = ($this->recode_number($csv[10]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[95])) {	  
 	    $doc->recolte->appellation_PINOTNOIR->volume_revendique =  $this->recode_number($csv[95]);
 	    $doc->recolte->appellation_PINOTNOIR->dplc =  $this->recode_number($csv[96]);
+	    $doc->acheteurs->appellation_PINOTNOIR->cave_particuliere = ($this->recode_number($csv[21]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[90])) {
 	    $doc->recolte->appellation_PINOTROUGE->volume_revendique =  $this->recode_number($csv[99]);
 	    $doc->recolte->appellation_PINOTROUGE->dplc =  $this->recode_number($csv[100]);
+	    $doc->acheteurs->appellation_PINOTROUGE->cave_particuliere = ($this->recode_number($csv[32]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[103])) {
 	    $doc->recolte->appellation_KLEVENER->volume_revendique =  $this->recode_number($csv[103]);
 	    $doc->recolte->appellation_KLEVENER->dplc =  $this->recode_number($csv[104]);
+	    $doc->acheteurs->appellation_KLEVENER->cave_particuliere = ($this->recode_number($csv[43]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[107])) {
 	    $doc->recolte->appellation_CREMANT->volume_revendique =  $this->recode_number($csv[107]);
 	    $doc->recolte->appellation_CREMANT->dplc =  $this->recode_number($csv[108]);
+	    $doc->acheteurs->appellation_CREMANT->cave_particuliere = ($this->recode_number($csv[54]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[111])) {
 	    $doc->recolte->appellation_GRDCRU->volume_revendique =  $this->recode_number($csv[111]);
 	    $doc->recolte->appellation_GRDCRU->dplc =  $this->recode_number($csv[112]);
+	    $doc->acheteurs->appellation_GRDCRU->cave_particuliere = ($this->recode_number($csv[65]) > 0) ? 1 : 0;
 	  }
 	}
 
