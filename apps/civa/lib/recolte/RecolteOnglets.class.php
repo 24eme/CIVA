@@ -199,7 +199,13 @@ class RecolteOnglets {
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
 
-        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.'-'.$lieu, 'cepage' => $cepage);
+
+	$lieu_str = '';
+	if ($lieu) {
+	  $lieu_str = '-'.$lieu;
+	}
+
+        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage);
     }
 
     protected function verifyCurrent($value, $prefix, $method) {

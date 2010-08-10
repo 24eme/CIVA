@@ -24,7 +24,7 @@ class recolteActions extends EtapesActions {
      */
     public function executeRecolte(sfWebRequest $request) {
         
-        $this->initOnglets();
+        $this->initOnglets($request);
         $this->getDetails();
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -33,7 +33,7 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeUpdate(sfWebRequest $request) {
-        $this->initOnglets();
+        $this->initOnglets($request);
         $this->getDetails();
         $this->detail_action_mode = 'update';
 
@@ -50,7 +50,7 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeAdd(sfWebRequest $request) {
-        $this->initOnglets();
+        $this->initOnglets($request);
         $this->getDetails();
         $this->detail_action_mode = 'add';
 
@@ -67,7 +67,7 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeDelete(sfWebRequest $request) {
-        $this->initOnglets();
+        $this->initOnglets($request);
         $this->getDetails();
         
         $detail_key = $request->getParameter('detail_key');
@@ -87,8 +87,8 @@ class recolteActions extends EtapesActions {
         }
     }
 
-    protected function initOnglets() {
-        preg_match('/(?P<appellation>\w+)-(?P<lieu>\w*)/',$this->getRequestParameter('appellation_lieu', null), $appellation_lieu);
+    protected function initOnglets(sfWebRequest $request) {
+        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
         $appellation = null;
         if (isset($appellation_lieu['appellation'])) {
             $appellation = $appellation_lieu['appellation'];
@@ -97,13 +97,14 @@ class recolteActions extends EtapesActions {
         if (isset($appellation_lieu['lieu'])) {
             $lieu = $appellation_lieu['lieu'];
         }
-        $cepage = $this->getRequestParameter('cepage', null);
+        $cepage = $request->getParameter('cepage', null);
 
         $this->onglets = new RecolteOnglets($this->configuration, $this->declaration);
         if (!$appellation && !$lieu && !$cepage) {
            $this->redirect($this->onglets->getUrl('recolte'));
         }
         $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
+	return $this->onglets;
     }
     
     protected function getDetails() {
@@ -116,5 +117,12 @@ class recolteActions extends EtapesActions {
 
         $this->acheteurs_negoce = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('negoces');
         $this->acheteurs_cave = $this->declaration->get('Acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('cooperatives');
+    }
+
+
+    public function executeRecapitulatif(sfWebRequest $request)
+    {
+      $this->initOnglets($request);
+      
     }
 }

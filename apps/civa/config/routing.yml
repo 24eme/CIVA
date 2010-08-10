@@ -50,6 +50,10 @@ recolte_add:
   url:   /recolte/:appellation_lieu/:cepage/add
   param: { module: recolte, action: add}
 
+recolte_recapitulatif:
+  url:   /recapitulatif/:appellation
+  param: {module: recolte, action: recapitulatif}
+
 validation:
   url:   /validation
   param: { module: declaration, action: validation, annee: 2010 }
