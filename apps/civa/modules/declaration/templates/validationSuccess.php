@@ -66,12 +66,14 @@
     <li><input type="text" value="<?php echo $total_dplc;?> Hl" readonly="readonly"></li>
                                 </ul>
                         </div>
+                </div>
+                <div id="extra recap" style="clear: both;">
     <p>Jeunes Vignes : <?php echo $jeunes_vignes; ?>Ha</p>
     <p>Lies : <?php echo $lies; ?>Hl</p>
     <?php if (isset($superficie['VINTABLE'])) : ?>
 	      <p>Vin de table : <?php echo $superficie['VINTABLE']; ?> Ha / <?php echo $volume['VINTABLE']; ?> Hl</p>
     <?php endif; ?>
-                </div>
+</div>
                 <!-- fin #acheteurs_caves -->
 
         </div>
