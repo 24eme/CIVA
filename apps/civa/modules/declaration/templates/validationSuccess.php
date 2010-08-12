@@ -5,8 +5,7 @@
   <form id="principal" action="" method="post" class="ui-tabs">
 
         <ul id="onglets_majeurs" class="clearfix">
-                <li><a href="#acheteurs_caves">Acheteurs et Caves</a></li>
-                <li><a href="#recolte_totale">Récolte totale</a></li>
+                <li class="ui-tabs-selected"><a href="#recolte_totale">Récolte totale</a></li>
         </ul>
 
         <!-- #application_dr -->
