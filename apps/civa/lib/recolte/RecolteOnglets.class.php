@@ -296,8 +296,13 @@ class RecolteOnglets {
         
     }
 
-    public function getUrlRecap() {
-        return $this->getUrl('recolte_recapitulatif', null, null, false);
+    public function getUrlRecap($with_redirect = false) {
+        $url = $this->getUrl('recolte_recapitulatif', null, null, false);
+        if (!$with_redirect) {
+            return $url;
+        } else {
+            return array_merge($url, array('redirect' => true));
+        }
     }
 
     protected function verifyCurrent($value, $prefix, $method) {
