@@ -147,7 +147,7 @@ class recolteActions extends EtapesActions {
 
       $this->form = new RecapitulatifForm($this->appellationlieu);
 
-      if (!count($this->form->getEmbeddedForm()) && $request->getParameter('redirect')) {
+      if (!count($this->form->getEmbeddedForms()) && $request->getParameter('redirect')) {
 	return $this->redirect('@validation'); //Mettre le getNextUrl de l'onglet
       }
 
