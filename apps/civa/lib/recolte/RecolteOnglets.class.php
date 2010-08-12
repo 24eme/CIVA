@@ -142,6 +142,43 @@ class RecolteOnglets {
         return $this->last('getItemsAppellation');
     }
 
+    public function getPreviousLieu() {
+        return $this->previous('getItemsLieu', 'getCurrentKeyLieu');
+    }
+
+    public function previousLieu() {
+        $key = $this->getPreviousLieu();
+        if ($key) {
+            $this->setCurrentLieu($key);
+        }
+        return $key;
+    }
+
+    public function getNextLieu() {
+        return $this->next('getItemsLieu', 'getCurrentKeyLieu');
+    }
+
+    public function nextLieu() {
+        $key = $this->getNextLieu();
+        echo $key;
+        if ($key) {
+            $this->setCurrentLieu($key);
+        }
+        return $key;
+    }
+
+    public function hasPreviousLieu() {
+        return ($this->getPreviousLieu() !== false);
+    }
+
+    public function hasNextLieu() {
+        return ($this->getNextLieu() !== false);
+    }
+
+    public function getLastLieu() {
+        return $this->last('getItemsLieu');
+    }
+
     public function getLastCepage() {
         return $this->last('getItemsCepage');
     }
@@ -158,14 +195,6 @@ class RecolteOnglets {
         $key = $this->getPreviousCepage();
         if ($key) {
             $this->setCurrentCepage($key);
-        }
-        return $key;
-    }
-
-    public function nextLieu() {
-        $key = $this->next('getItemsLieu', 'getCurrentKeyLieu');
-        if ($key) {
-            $this->setCurrentlieu($key);
         }
         return $key;
     }
@@ -279,8 +308,10 @@ class RecolteOnglets {
     }
 
     public function getPreviousUrl() {
-        if (!$this->hasPreviousAppellation()) {
+        if (!$this->hasPreviousLieu() && !$this->hasPreviousAppellation()) {
             return '@exploitation_autres';
+        } elseif ($this->hasPreviousLieu()) {
+            return $this->getUrl('recolte', null, $this->getPreviousLieu());
         } else {
             return $this->getUrl('recolte', $this->getPreviousAppellation());
         }
@@ -288,8 +319,10 @@ class RecolteOnglets {
     }
 
     public function getNextUrl() {
-        if (!$this->hasNextAppellation()) {
+        if (!$this->hasNextLieu() && !$this->hasNextAppellation()) {
             return '@validation';
+        } elseif($this->hasNextLieu()) {
+            return $this->getUrl('recolte', null, $this->getNextLieu());
         } else {
             return $this->getUrl('recolte', $this->getNextAppellation());
         }
