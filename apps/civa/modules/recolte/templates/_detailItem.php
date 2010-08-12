@@ -1,5 +1,5 @@
 <div class="col_recolte col_validee">
-    <h2>Sylvaner</h2>
+    <h2><?php echo $onglets->getCurrentCepage()->libelle ?></h2>
 
     <div class="col_cont">
         <p class="denomination">

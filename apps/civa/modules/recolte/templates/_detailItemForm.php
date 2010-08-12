@@ -2,7 +2,7 @@
     <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post">
         <?php echo $form->renderHiddenFields(); ?>
         <?php echo $form->renderGlobalErrors(); ?>
-    <h2>Sylvaner</h2>
+    <h2><?php echo $onglets->getCurrentCepage()->libelle ?></h2>
 
     <div class="col_cont">
 

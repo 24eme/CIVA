@@ -1,5 +1,5 @@
 <div id="col_sepage_total" class="col_recolte col_total">
-    <h2>Total AOC Alsace blanc</h2>
+    <h2>Total <br /> <?php echo $onglets->getCurrentCepage()->libelle ?></h2>
 
     <div class="col_cont">
         <p class="superficie">

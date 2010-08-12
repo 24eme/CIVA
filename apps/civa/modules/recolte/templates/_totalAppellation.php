@@ -1,5 +1,5 @@
 <div id="col_recolte_totale" class="col_recolte col_total">
-    <h2>Total AOC Alsace blanc</h2>
+    <h2>Total <?php echo $configuration->get($onglets->getItemsLieu()->getHash())->libelle ?></h2>
 
     <div class="col_cont">
         <p class="superficie">
