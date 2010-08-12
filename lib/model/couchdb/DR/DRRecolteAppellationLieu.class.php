@@ -93,5 +93,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
             $acheteur->type_acheteur = $a->getParent()->getKey();
         }
     }
-
+    public function save() {
+      return $this->getCouchdbDocument()->save();
+    }
 }

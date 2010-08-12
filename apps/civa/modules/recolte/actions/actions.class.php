@@ -147,15 +147,16 @@ class recolteActions extends EtapesActions {
 
       $this->form = new RecapitulatifForm($this->appellationlieu);
 
-      if (!count($this->form->getEmbeddedForms()) && $request->getParameter('redirect')) {
-	return $this->redirect('@validation'); //Mettre le getNextUrl de l'onglet
+      $forms = $this->form->getEmbeddedForms();
+      if (!count($forms) && $request->getParameter('redirect')) {
+	return $this->redirect($this->onglets->getNextUrl()); 
       }
 
       if ($request->isMethod(sfWebRequest::POST)) {
 	$this->form->bind($request->getParameter($this->form->getName()));
 	if ($this->form->isValid()) {
 	  $this->form->save();
-	  return $this->redirect('@validation');
+	  return $this->redirect($this->onglets->getNextUrl());
 	}
       }
       
