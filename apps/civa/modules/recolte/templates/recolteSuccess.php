@@ -36,6 +36,20 @@
                                                                                                        'acheteurs_cave' => $acheteurs_cave,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout,
                                                                                                        'acheteurs_mout' => $acheteurs_mout)) ?>
+
+                                                       <?php echo include_partial('totalCepage', array('cepage' => $cepage,
+                                                                                                       'onglets' => $onglets,
+                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
+                                                                                                       'acheteurs_cave' => $acheteurs_cave,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
+
+                                                     <?php echo include_partial('totalCepage', array('cepage' => $appellation,
+                                                                                                       'onglets' => $onglets,
+                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
+                                                                                                       'acheteurs_cave' => $acheteurs_cave,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
 

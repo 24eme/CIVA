@@ -115,13 +115,14 @@ class recolteActions extends EtapesActions {
     }
     
     protected function getDetails() {
-        $this->details = $this->declaration->get($this->onglets->getItemsCepage()->getHash())
-                                     ->add($this->onglets->getCurrentKeyCepage())
-                                     ->add('detail');
+        $this->appellation = $this->onglets->getItemsLieu();
+        $this->cepage = $this->declaration->get($this->onglets->getItemsCepage()->getHash())
+                                     ->add($this->onglets->getCurrentKeyCepage());
+        $this->details = $this->cepage->add('detail');
 
-       $configuration_appellation = $this->configuration->get('recolte')->get($this->onglets->getCurrentKeyAppellation());
-       $configuration_lieu = $configuration_appellation->get($this->onglets->getCurrentKeyLieu());
-       $configuration_cepage = $configuration_lieu->get($this->onglets->getCurrentKeyCepage());
+        $configuration_appellation = $this->configuration->get('recolte')->get($this->onglets->getCurrentKeyAppellation());
+        $configuration_lieu = $configuration_appellation->get($this->onglets->getCurrentKeyLieu());
+        $configuration_cepage = $configuration_lieu->get($this->onglets->getCurrentKeyCepage());
         
         $this->detail_key = null;
         $this->detail_action_mode = null;
