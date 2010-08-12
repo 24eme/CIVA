@@ -491,7 +491,7 @@ a.msg_aide
 
 #exploitation_administratif .btn a.annuler,
 #exploitation_administratif .btn input,
-#exploitation_administratif .edition .btn a.modifier { display: none; }
+//#exploitation_administratif .edition .btn a.modifier { display: none; }
 #exploitation_administratif .edition .btn a.annuler,
 #exploitation_administratif .edition .btn input { display: inline-block; }
 
