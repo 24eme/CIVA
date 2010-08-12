@@ -169,7 +169,7 @@ ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a { background: #ffb52c; 
 ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }
 ul#onglets_majeurs.onglets_recolte li.ajouter a { background: #a5a6a5 url(../images/pictos/pi_ajout.png) 10px center no-repeat; padding-left: 30px; }
 
-ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets
+ul#onglets_majeurs li ul.sous_onglets
 {
 	left: 0;
 	position: absolute;
@@ -178,15 +178,15 @@ ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets
 	z-index: 100;
 }
 
-ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li
+ul#onglets_majeurs li ul.sous_onglets li
 {
 	margin: 0 2px 0 0;
 	padding: 2px 0 0;
 }
 
-ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li.ui-tabs-selected { background: url(../images/fonds/bg_sous_onglet_actif.png) -3px 0 no-repeat; }
+ul#onglets_majeurs li ul.sous_onglets li.ui-tabs-selected { background: url(../images/fonds/bg_sous_onglet_actif.png) -3px 0 no-repeat; }
 
-ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li a
+ul#onglets_majeurs li ul.sous_onglets li a
 {
 	background-color: #d8d8d8;
 	cursor: pointer;
@@ -194,7 +194,7 @@ ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li a
 	padding-bottom: 4px;
 }
 	
-ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li.ui-tabs-selected a
+ul#onglets_majeurs li ul.sous_onglets li.ui-tabs-selected a
 {
 	background: #ffd589 url(../images/fonds/bg_sous_onglet_actif.png) 6px -2px no-repeat;
 	cursor: default;

@@ -221,8 +221,9 @@ class RecolteOnglets {
             if (!is_null($this->getCurrentKeyAppellation())) {
                 $appellation = $this->getCurrentValueAppellation();
             } else {
-                $this->setCurrentAppellation();
-                return $this->getUrl($sf_route);
+                $appellation = $this->getItemsAppellation()->getFirstKey();
+                $lieu = $this->getItemsLieu($appellation)->getFirstKey();
+                $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
             }
         }
         $appellation = $this->convertKeyToValue($appellation, $this->_prefix_key_appellation);
@@ -231,8 +232,8 @@ class RecolteOnglets {
             if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
                 $lieu = $this->getCurrentValueLieu();
             } else {
-                $this->setCurrentLieu();
-                return $this->getUrl($sf_route);
+                $lieu = $this->getItemsLieu($appellation)->getFirstKey();
+                $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
             }
         }
         $lieu = $this->convertKeyToValue($lieu, $this->_prefix_key_lieu);
@@ -241,8 +242,7 @@ class RecolteOnglets {
             if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
                $cepage = $this->getCurrentValueCepage();
             } else {
-               $this->setCurrentCepage();
-               return $this->getUrl($sf_route);
+               $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
             }
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);

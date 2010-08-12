@@ -77,4 +77,9 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       }
       return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
     }
+
+    public function hasManyLieu() {
+        $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
+        return !$configuration->get($this->getHash())->exist('lieu');
+    }
 }

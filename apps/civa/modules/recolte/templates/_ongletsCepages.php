@@ -1,6 +1,6 @@
 <ul id="liste_sepages">
     <?php foreach($onglets->getItemsCepage() as $key => $cepage): ?>
-        <li <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>class="ui-tabs-selected"<?php endif; ?>>
+        <li <?php if ($onglets->getCurrentKeyCepage() == $key): ?>class="ui-tabs-selected"<?php endif; ?>>
             <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, $key)->getRawValue()) ?>">
             <?php echo $cepage->libelle ?>
             <?php if ($declaration->get($onglets->getItemsCepage()->getHash())->exist($key) && $declaration->get($cepage->getHash())->detail->count() > 0): ?>

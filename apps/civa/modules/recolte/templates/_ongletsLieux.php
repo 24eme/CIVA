@@ -1,4 +1,4 @@
-<?php if (count($onglets->getItemsLieu($appellation_key)) > 0): ?>
+<?php if ($onglets->getItemsLieu($appellation_key)->hasManyLieu()): ?>
 <ul class="sous_onglets">
     <?php foreach($onglets->getItemsLieu($appellation_key) as $key => $lieu): ?>
         <?php if ($key != 'lieu'): ?>

@@ -22,11 +22,8 @@ class DRRecolte extends BaseDRRecolte {
         foreach($acheteurs as $key => $appellation) {
 	  $cappellation = $configuration->get('recolte')->get($key);
 	  $app = $declaration->addAppellation($cappellation->appellation);
-	  try{
-	    $cappellation->get('lieu');
+	  if (!$app->hasManyLieu()) {
 	    $app->add('lieu');
-	  }catch(Exception $e) {
-	    //Cas avec lieu-dits
 	  }
         }
         foreach($declaration as $key => $appellation) {
