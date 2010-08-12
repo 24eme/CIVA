@@ -3,33 +3,38 @@
 
     <div class="col_cont">
         <p class="superficie">
-            <input type="text" readonly="readonly" value="0.9" />
+            <input type="text" readonly="readonly" value="<?php echo $lieu->getTotalSuperficie() ?>" />
         </p>
 
         <div class="vente_raisins">
-            <ul>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-            </ul>
+                <?php
+                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_negoce,
+                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('negoces')))
+                ?>
         </div>
 
         <div class="caves">
-            <ul>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-                <li><input type="text" readonly="readonly" value="25" /></li>
-            </ul>
+            <?php
+                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_cave,
+                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('cooperatives')))
+                ?>
         </div>
 
-        <p class="vol_place"><input type="text" readonly="readonly" /></p>
-        <p class="vol_total_recolte"><input type="text" readonly="readonly" value="300" /></p>
+        <?php if ($has_acheteurs_mout): ?>
+        <div class="mouts">
+            <?php
+                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_mouts,
+                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('mouts')))
+                ?>
+        </div>
+        <?php endif; ?>
+
+        <p class="vol_place"><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalCaveParticuliere() ?>" /></p>
+        <p class="vol_total_recolte"><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolume() ?>" /></p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement">Rdt : <strong>142 hl/ha</strong></li>
-            <li><input type="text" readonly="readonly" value="25" /></li>
-            <li><input type="text" readonly="readonly" class="alerte" value="42" /></li>
+            <li class="rendement">Rdt : <strong><?php echo $lieu->getRendementRecoltant() ?> hl/ha</strong></li>
+            <li><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolumeRevendique() ?>" /></li>
+            <li><input type="text" readonly="readonly" class="alerte" value="<?php echo $lieu->getTotalDPLC() ?>"/></li>
         </ul>
     </div>
 </div>

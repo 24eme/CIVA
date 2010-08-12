@@ -56,7 +56,7 @@
 						
 						</div>
 
-                                                <?php echo include_partial('totalAppellation', array('appellation' => $appellation,
+                                                <?php echo include_partial('totalAppellation', array('lieu' => $lieu,
                                                                                                        'onglets' => $onglets,
                                                                                                        'acheteurs_negoce' => $acheteurs_negoce,
                                                                                                        'acheteurs_cave' => $acheteurs_cave,

@@ -30,21 +30,28 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 	return $r;
       return $this->getSumCepageFields('total_superficie');
     }
-    public function getDplc() {
+
+    public function getTotalVolumeRevendique() {
+      $sum = 0;
+      foreach ($this->filter('^cepage') as $key => $cepage) {
+	$sum += $cepage->getTotalVolumeRevendique();
+      }
+      return $sum;
+    }
+
+    public function getTotalDPLC() {
       $r = $this->_get('dplc');
-      if ($r) 
+      if ($r)
 	return $r;
       return $this->getSumCepageFields('dplc');
     }
-    public function getVolumeRevendique() {
-      $r = $this->_get('volume_revendique');
-      if ($r) 
-	return $r;
-      return $this->getSumCepageFields('volume_revendique');
-    }
 
     public function getTotalCaveParticuliere() {
-        return 0;
+      $sum = 0;
+      foreach ($this->filter('^cepage') as $key => $cepage) {
+	$sum += $cepage->getTotalCaveParticuliere();
+      }
+      return $sum;
     }
     
     private function getSumCepageFields($field) {
@@ -95,5 +102,13 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
     public function save() {
       return $this->getCouchdbDocument()->save();
+    }
+
+    public function getRendementRecoltant() {
+        if ($this->getTotalSuperficie() > 0) {
+            return round($this->getTotalVolume() / $this->getTotalSuperficie(),0);
+        } else {
+            return 0;
+        }
     }
 }
