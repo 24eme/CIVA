@@ -92,11 +92,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 						</div>					</div>	
 					<!-- fin #gestion_recolte -->
 					
-					<ul id="btn_appelation" class="btn_prev_suiv clearfix">
-
-						<li class="prec"><input type="image" src="/images/boutons/btn_appelation_prec.png" alt="Retour à l'appelation précédente" name="retourner_appelation" /></li>
-						<li class="suiv"><input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et Passer à l'appelation suivante" name="passer_appelation" /></li>
-					</ul>
+  <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
 					
 				</div>
 				<!-- fin #application_dr -->
