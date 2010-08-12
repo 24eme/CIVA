@@ -11,42 +11,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     return $this->get("lieu$lieu")->get('cepage_'.$cepage);
   }
 
-    private function getSumCepageFields($field) {
-      $sum = 0;
-      foreach ($this->filter('^lieu') as $key => $lieu) {
-	  foreach ($lieu->filter('^cepage') as $key => $cepage) {
-	      $sum += $cepage->get($field);
-	  }
-      }
-      return $sum;
-    }
-
-    public function getTotalVolume() {
-      $r = $this->_get('total_volume');
-      if ($r)
-	return $r;
-      return $this->getSumCepageFields('total_volume');
-      
-    }
-    public function getTotalSuperficie() {
-      $r =  $this->_get('total_superficie');
-      if ($r)
-	return $r;
-      return $this->getSumCepageFields('total_superficie');
-    }
-    public function getTotalDPLC() {
-      $r = $this->_get('dplc');
-      if ($r) 
-	return $r;
-      return $this->getSumCepageFields('dplc');
-    }
-    public function getTotalVolumeRevendique() {
-      $r = $this->_get('volume_revendique');
-      if ($r) 
-	return $r;
-      return $this->getSumCepageFields('volume_revendique');
-    }
-
 
     public function getTotalAcheteursByCvi($field) {
         if (!isset($this->_total_acheteurs_by_cvi[$field])) {
@@ -64,10 +28,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->_total_acheteurs_by_cvi[$field];
     }
 
-    public function getTotalCaveParticuliere() {
-        return 0;
-    }
-    
     public function save() {
       return $this->getCouchdbDocument()->save();
     }

@@ -17,6 +17,45 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return $sum;
     }
 
+    public function getTotalVolume() {
+      $r = $this->_get('total_volume');
+      if ($r)
+	return $r;
+      return $this->getSumCepageFields('total_volume');
+      
+    }
+    public function getTotalSuperficie() {
+      $r =  $this->_get('total_superficie');
+      if ($r)
+	return $r;
+      return $this->getSumCepageFields('total_superficie');
+    }
+    public function getTotalDPLC() {
+      $r = $this->_get('dplc');
+      if ($r) 
+	return $r;
+      return $this->getSumCepageFields('dplc');
+    }
+    public function getTotalVolumeRevendique() {
+      $r = $this->_get('volume_revendique');
+      if ($r) 
+	return $r;
+      return $this->getSumCepageFields('volume_revendique');
+    }
+
+    public function getTotalCaveParticuliere() {
+        return 0;
+    }
+    
+    private function getSumCepageFields($field) {
+      $sum = 0;
+      foreach ($this->filter('^cepage') as $key => $cepage) {
+	$sum += $cepage->get($field);
+      }
+      return $sum;
+    }
+
+
     private function getAcheteursFromCepage($type = 'negoces|cooperatives') {
         $acheteurs = array();
         foreach ($this->filter('^cepage') as $key => $cepage) {
