@@ -14,7 +14,8 @@
 					<div id="gestion_recolte" class="clearfix">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'configuration' => $configuration,
-                                                                                              'onglets' => $onglets)); ?>
+                                                                                              'onglets' => $onglets,
+                                                                                              'recapitulatif' => false)); ?>
                                             
                                                 <!--<a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>-->
 						<div id="donnees_recolte_sepage" class="clearfix">
@@ -45,9 +46,12 @@
                                                                                                        'acheteurs_mouts' => $acheteurs_mout)) ?>                                              
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
-
-								<li class="prec"><input type="image" src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" name="retourner_cepage" /></li>
-								<li class="suiv"><input type="image" src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" name="passer_cepage" /></li>
+                                                                <?php if ($onglets->hasPreviousCepage()): ?>
+                                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
+                                                                <?php endif; ?>
+                                                                <?php if ($onglets->hasNextCepage()): ?>
+                                                                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
+                                                                <?php endif; ?>
 							</ul>
 						
 						</div>
@@ -63,9 +67,10 @@
 					<!-- fin #gestion_recolte -->
 					
 					<ul id="btn_appelation" class="btn_prev_suiv clearfix">
-
-						<li class="prec"><input type="image" src="/images/boutons/btn_appelation_prec.png" alt="Retour à l'appelation précédente" name="retourner_appelation" /></li>
-						<li class="suiv"><input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et Passer à l'appelation suivante" name="passer_appelation" /></li>
+                                                <?php if ($onglets->hasPreviousAppellation()): ?>
+                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrl()->getRawValue()) ?>"><img src="/images/boutons/btn_appelation_prec.png" alt="Retour à l'appelation précédente" /></a></li>
+                                                <?php endif; ?>
+						<li class="suiv"><a href="<?php echo url_for($onglets->getUrlRecap()->getRawValue()) ?>"><img src="/images/boutons/btn_appelation_suiv.png" alt="Valider et Passer à l'appelation suivante" /></a></li>
 					</ul>
 					
 				</div>

@@ -434,6 +434,14 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function getFirstKey() {
         return $this->getIterator()->getFirstKey();
     }
+    
+    public function getLast() {
+        return $this->getIterator()->getLast();
+    }
+
+    public function getLastKey() {
+        return $this->getIterator()->getLastKey();
+    }
 
     protected function update() {
         foreach ($this->_fields as $key => $item) {

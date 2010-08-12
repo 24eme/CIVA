@@ -36,6 +36,24 @@ class sfCouchdbJsonArrayIterator extends ArrayIterator {
         }
     }
 
+    public function getLast() {
+        if($this->valid()){
+            $this->seek($this->count() -1);
+            return $this->current();
+        } else {
+            throw new sfCouchdbException('This iterator has no entrie');
+        }
+    }
+
+    public function getLastKey() {
+        if($this->valid()){
+            $this->seek($this->count() -1);
+            return $this->key();
+        } else {
+            throw new sfCouchdbException('This iterator has no entrie');
+        }
+    }
+
     public function current() {
         return $this->_json->get($this->key());
     }

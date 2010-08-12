@@ -105,35 +105,59 @@ class RecolteOnglets {
         return $this->convertKeyToValue($this->getCurrentKeyCepage(), $this->_prefix_key_cepage);
     }
 
+    public function getPreviousAppellation() {
+        return $this->previous('getItemsAppellation', 'getCurrentKeyAppellation');
+    }
+
     public function previousAppellation() {
-        $key = $this->previous('getItemsAppellation', 'getCurrentKeyAppellation');
+        $key = $this->getPreviousAppellation();
         if ($key) {
             $this->setCurrentAppellation($key);
         }
         return $key;
     }
 
-    public function previousLieu() {
-        $key = $this->previous('getItemsLieu', 'getCurrentKeyLieu');
-        if ($key) {
-            $this->setCurrentlieu($key);
-        }
-        return $key;
-    }
-
-    public function previousCepage() {
-        $key = $this->previous('getItemsCepage', 'getCurrentKeyCepage');
-        if ($key) {
-            $this->setCurrentCepage($key);
-        }
-        return $key;
+    public function getNextAppellation() {
+        return $this->next('getItemsAppellation', 'getCurrentKeyAppellation');
     }
 
     public function nextAppellation() {
-        $key = $this->next('getItemsAppellation', 'getCurrentKeyAppellation');
+        $key = $this->getNextAppellation();
         echo $key;
         if ($key) {
             $this->setCurrentAppellation($key);
+        }
+        return $key;
+    }
+
+    public function hasPreviousAppellation() {
+        return ($this->getPreviousAppellation() !== false);
+    }
+
+    public function hasNextAppellation() {
+        return ($this->getNextAppellation() !== false);
+    }
+
+    public function getLastAppellation() {
+        return $this->last('getItemsAppellation');
+    }
+
+    public function getLastCepage() {
+        return $this->last('getItemsCepage');
+    }
+
+    public function getPreviousCepage() {
+        return $this->previous('getItemsCepage', 'getCurrentKeyCepage');
+    }
+
+    public function hasPreviousCepage() {
+        return ($this->getPreviousCepage() !== false);
+    }
+
+    public function previousCepage() {
+        $key = $this->getPreviousCepage();
+        if ($key) {
+            $this->setCurrentCepage($key);
         }
         return $key;
     }
@@ -146,8 +170,16 @@ class RecolteOnglets {
         return $key;
     }
 
+    public function getNextCepage() {
+        return $this->next('getItemsCepage', 'getCurrentKeyCepage');
+    }
+
+    public function hasNextCepage() {
+        return ($this->getNextCepage() !== false);
+    }
+
     public function nextCepage() {
-        $key = $this->next('getItemsCepage', 'getCurrentKeyCepage');
+        $key = $this->getNextCepage();
         if ($key) {
             $this->setCurrentCepage($key);
         }
@@ -176,14 +208,21 @@ class RecolteOnglets {
         return false;
     }
 
+    protected function first($method_items) {
+        return $this->$method_items()->getFirstKey();
+    }
+
+    protected function last($method_items) {
+        return $this->$method_items()->getLastKey();
+    }
+
     public function getUrl($sf_route, $appellation = null, $lieu = null, $cepage = null) {
         if (is_null($appellation)) {
             if (!is_null($this->getCurrentKeyAppellation())) {
                 $appellation = $this->getCurrentValueAppellation();
             } else {
-                $appellation = $this->getItemsAppellation()->getFirstKey();
-                $lieu = $this->getItemsLieu($appellation)->getFirstKey();
-                $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
+                $this->setCurrentAppellation();
+                return $this->getUrl($sf_route);
             }
         }
         $appellation = $this->convertKeyToValue($appellation, $this->_prefix_key_appellation);
@@ -192,17 +231,18 @@ class RecolteOnglets {
             if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
                 $lieu = $this->getCurrentValueLieu();
             } else {
-                $lieu = $this->getItemsLieu($appellation)->getFirstKey();
-                $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
+                $this->setCurrentLieu();
+                return $this->getUrl($sf_route);
             }
         }
         $lieu = $this->convertKeyToValue($lieu, $this->_prefix_key_lieu);
 
         if (is_null($cepage)) {
             if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
-                $cepage = $this->getCurrentValueCepage();
+               $cepage = $this->getCurrentValueCepage();
             } else {
-                $cepage = $this->getItemsCepage($appellation, $lieu)->getFirstKey();
+               $this->setCurrentCepage();
+               return $this->getUrl($sf_route);
             }
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
@@ -212,13 +252,57 @@ class RecolteOnglets {
 	if ($lieu) {
 	  $lieu_str = '-'.$lieu;
 	}
+        if (!$cepage) {
+            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str);
+        } else {
+            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage);
+        }
+    }
 
-        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage);
+
+    public function getPreviousUrlCepage() {
+        if (!$this->hasPreviousCepage()) {
+            return false;
+        } else {
+            return $this->getUrl('recolte', null, null, $this->getPreviousCepage());
+        }
+
+    }
+
+    public function getNextUrlCepage() {
+        if (!$this->hasNextCepage()) {
+            return false;
+        } else {
+            return $this->getUrl('recolte', null, null, $this->getNextCepage());
+        }
+
+    }
+
+    public function getPreviousUrl() {
+        if (!$this->hasPreviousAppellation()) {
+            return '@exploitation_autres';
+        } else {
+            return $this->getUrl('recolte', $this->getPreviousAppellation());
+        }
+
+    }
+
+    public function getNextUrl() {
+        if (!$this->hasNextAppellation()) {
+            return '@validation';
+        } else {
+            return $this->getUrl('recolte', $this->getNextAppellation());
+        }
+        
+    }
+
+    public function getUrlRecap() {
+        return $this->getUrl('recolte_recapitulatif', null, null, false);
     }
 
     protected function verifyCurrent($value, $prefix, $method) {
         if (!$value) {
-            $value = $this->$method()->getFirstKey();
+            $value = $this->first($method);
         }
         $value = $this->convertValueToKey($value, $prefix);
         if ($this->$method()->exist($value)) {
