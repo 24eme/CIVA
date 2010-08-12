@@ -1,13 +1,8 @@
-<h3><?php echo $title ?></h3>
 <?php if ($acheteurs->count() > 0): ?>
     <ul>
     <?php foreach ($acheteurs as $cvi): ?>
         <li>
-            <?php if (isset($acheteurs_value[$cvi])): ?>
-                <?php echo $acheteurs_value[$cvi] ?>
-            <?php else: ?>
-                &nbsp;
-            <?php endif; ?>
+            <input type="text" class="num" disabled="disabled" value="<?php if (isset($acheteurs_value[$cvi])): echo $acheteurs_value[$cvi]; endif; ?>" />
         </li>
     <?php endforeach; ?>
     </ul>

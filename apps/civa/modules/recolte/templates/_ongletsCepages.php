@@ -9,4 +9,6 @@
             </a>
         </li>
     <?php endforeach; ?>
+        <!--<li class="alerte"><a href="#">Rebêche <span></span></a></li>-->
+        <li class="recapitulatif"><a href="#">Recapitulatif des ventes<span></span></a></li>
 </ul>

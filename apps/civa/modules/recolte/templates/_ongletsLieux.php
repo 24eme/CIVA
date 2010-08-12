@@ -1,5 +1,5 @@
-<?php if (count($onglets->getItemsLieu()) > 0): ?>
-<ul id="" class="clearfix onglets_courts">
+<?php if (count($onglets->getItemsLieu($appellation_key)) > 0): ?>
+<ul class="sous_onglets">
     <?php foreach($onglets->getItemsLieu($appellation_key) as $key => $lieu): ?>
         <?php if ($key != 'lieu'): ?>
         <li <?php if ($onglets->getCurrentKeyAppellation() == $appellation_key && $onglets->getCurrentKeyLieu() == $key): ?>class="ui-tabs-selected"<?php endif; ?>>
@@ -7,5 +7,6 @@
         </li>
         <?php endif; ?>
     <?php endforeach; ?>
+        <li class="ajouter"><a href="#">Ajouter un lieu dit</a></li>
 </ul>
 <?php endif; ?>

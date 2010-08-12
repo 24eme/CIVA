@@ -896,7 +896,8 @@ a.msg_aide
 #gestion_recolte #colonne_intitules ul li:first-child { border: 0; }
 
 #gestion_recolte #colonne_intitules .vente_raisins,
-#gestion_recolte #colonne_intitules .caves
+#gestion_recolte #colonne_intitules .caves,
+#gestion_recolte #colonne_intitules .mouts
 {
 	background: #e0dfdf;
 	margin: 0 0 3px;
@@ -904,7 +905,8 @@ a.msg_aide
 }
 
 #gestion_recolte #colonne_intitules .vente_raisins ul,
-#gestion_recolte #colonne_intitules .caves ul
+#gestion_recolte #colonne_intitules .caves ul,
+#gestion_recolte #colonne_intitules .mouts ul
 {
 	margin: 0 0 0 10px;
 	font-size: 12px;
@@ -912,7 +914,8 @@ a.msg_aide
 }
 
 #gestion_recolte #colonne_intitules .vente_raisins ul li,
-#gestion_recolte #colonne_intitules .caves ul li
+#gestion_recolte #colonne_intitules .caves ul li,
+#gestion_recolte #colonne_intitules .mouts ul li
 {
 	background: url(../images/puces/liste_tiret.png) 0 10px no-repeat;
 	padding-left: 8px;
@@ -971,7 +974,8 @@ a.msg_aide
 }
 
 #gestion_recolte .col_recolte .vente_raisins,
-#gestion_recolte .col_recolte .caves
+#gestion_recolte .col_recolte .caves,
+#gestion_recolte .col_recolte .mouts
 {
 	margin: 0 0 3px;
 	padding: 20px 0 0;

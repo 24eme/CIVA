@@ -16,7 +16,7 @@
                                                                                               'configuration' => $configuration,
                                                                                               'onglets' => $onglets)); ?>
                                             
-                                                <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>
+                                                <!--<a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>-->
 						<div id="donnees_recolte_sepage" class="clearfix">
 						
 							<?php echo include_partial('detailHeader', array('acheteurs_negoce' => $acheteurs_negoce,
@@ -42,14 +42,7 @@
                                                                                                        'acheteurs_negoce' => $acheteurs_negoce,
                                                                                                        'acheteurs_cave' => $acheteurs_cave,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
-
-                                                     <?php echo include_partial('totalCepage', array('cepage' => $appellation,
-                                                                                                       'onglets' => $onglets,
-                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
-                                                                                                       'acheteurs_cave' => $acheteurs_cave,
-                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
+                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>                                              
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
 
@@ -58,10 +51,14 @@
 							</ul>
 						
 						</div>
+
+                                                <?php echo include_partial('totalAppellation', array('appellation' => $appellation,
+                                                                                                       'onglets' => $onglets,
+                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
+                                                                                                       'acheteurs_cave' => $acheteurs_cave,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
 					
-						<div id="recolte_totale_aoc">
-						
-						</div>
 					</div>
 					<!-- fin #gestion_recolte -->
 					

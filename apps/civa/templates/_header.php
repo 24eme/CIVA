@@ -8,7 +8,7 @@
     <div id="titre_rubrique">
         <h1>Déclaration de récolte de vins d'Alsace</h1>
 <?php if ($recoltant = $sf_user->getRecoltant()) : ?>
-        <p class="utilisateur"><?php echo link_to($recoltant->getIntitule().' '.$recoltant->getNom(), '@mon_espace_civa'); ?></a></p>
+        <p class="utilisateur"><?php echo link_to($recoltant->getIntitule().' '.$recoltant->getNom(), '@mon_espace_civa'); ?></p>
 <?php endif; ?>
     </div>
 
