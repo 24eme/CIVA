@@ -30,13 +30,13 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 	return $r;
       return $this->getSumCepageFields('total_superficie');
     }
-    public function getTotalDPLC() {
+    public function getDplc() {
       $r = $this->_get('dplc');
       if ($r) 
 	return $r;
       return $this->getSumCepageFields('dplc');
     }
-    public function getTotalVolumeRevendique() {
+    public function getVolumeRevendique() {
       $r = $this->_get('volume_revendique');
       if ($r) 
 	return $r;
@@ -88,10 +88,9 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 
     public function update() {
         parent::update();
-        $type = array('negoces' => 'negociant', 'cooperatives' => 'cooperative');
         foreach ($this->getAcheteursFromCepage() as $a) {
             $acheteur = $this->add('acheteurs')->add($a->cvi);
-            $acheteur->type_acheteur = $type[$a->getParent()->getKey()];
+            $acheteur->type_acheteur = $a->getParent()->getKey();
         }
     }
 

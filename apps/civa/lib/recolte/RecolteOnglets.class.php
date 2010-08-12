@@ -28,6 +28,14 @@ class RecolteOnglets {
         return $this->_declaration->get('recolte')->filter('^appellation');
     }
 
+    public function getLieu($appellation = null, $lieu = null) {
+      if (!$appellation)
+	$appellation = $this->_current_key_appellation;
+      if (!$lieu) 
+	$lieu = $this->_current_key_lieu;
+      return $this->_declaration->get('recolte')->get($appellation)->get($lieu);
+    }
+
     public function getItemsLieu($appellation = null) {
         if (is_null($appellation)) {
             $appellation = $this->getCurrentKeyAppellation();

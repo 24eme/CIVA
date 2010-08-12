@@ -5,7 +5,7 @@ class DRRecolteAppellationLieuAcheteur extends BaseDRRecolteAppellationLieuAchet
   private $acheteur = null;
 
   public function getVolume() {
-    $this->getParent()->getParent()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
+    return $this->getParent()->getParent()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
   }
   public function getNom() {
     return $this->getAcheteurFromCVI()->getNom();

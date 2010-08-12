@@ -28,7 +28,45 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->_total_acheteurs_by_cvi[$field];
     }
 
-    public function save() {
+    public function getTotalVolume() {
+      $r = $this->_get('total_volume');
+      if ($r)
+	return $r;
+      return $this->getSumLieu('total_volume');
+      
+    }
+    public function getTotalSuperficie() {
+      $r =  $this->_get('total_superficie');
+      if ($r)
+	return $r;
+      return $this->getSumLieu('total_superficie');
+    }
+    public function getTotalDPLC() {
+      $r = $this->_get('dplc');
+      if ($r) 
+	return $r;
+      return $this->getSumLieu('dplc');
+    }
+    public function getTotalVolumeRevendique() {
+      $r = $this->_get('volume_revendique');
+      if ($r) 
+	return $r;
+      return $this->getSumLieu('volume_revendique');
+    }
+
+    public function getTotalCaveParticuliere() {
+        return 0;
+    }
+    
+    private function getSumLieu($type) {
+      $sum = 0;
+      foreach ($this->filter('^lieu') as $key => $lieu) {
+	$sum += $lieu->get($type);
+      }
+      return $sum;
+    }
+    
+     public function save() {
       return $this->getCouchdbDocument()->save();
     }
 

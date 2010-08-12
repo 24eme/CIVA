@@ -142,45 +142,24 @@ class recolteActions extends EtapesActions {
     public function executeRecapitulatif(sfWebRequest $request)
     {
       $this->initOnglets($request);
-      
       $dr = $this->getUser()->getDeclaration();
-      $appellation = $this->onglets->getItemsLieu();
+      $this->appellationlieu = $this->onglets->getLieu();
 
-      $this->volume_negoces = array();
-      $this->volume_cooperatives = array();
-      $this->volume_mouts = array();
+      $this->form = new RecapitulatifForm($this->appellationlieu);
 
-      foreach($dr->acheteurs->get($appellation->getKey())->getNegoces() as $n) {
-	$cvi[$n] = 1;
-	if (!isset($this->volume_negoces[$n])) {
-	  $this->volume_negoces[$n] = new stdClass();
-	  $this->volume_negoces[$n]->volume = 0;
-	  $this->volume_negoces[$n]->ratio_superficie = 0;
-	}
-	$vol = $appellation->getVolumeAcheteur($n, 'negoces');
-	if ($vol) {
-	  $this->volume_negoces[$n]->volume += $vol['volume'];
-	  $this->volume_negoces[$n]->ratio_superficie += $vol['ratio_superficie'];
-	}
-      }
-      foreach($dr->acheteurs->get('appellation_'.$appellation->getAppellation())->getCooperatives() as $n) {
-	  $cvi[$n] = 1;
-	  if (!isset($this->volume_cooperatives[$n])) {
-	    $this->volume_cooperatives[$n] = new stdClass();
-	    $this->volume_cooperatives[$n]->volume = 0;
-	    $this->volume_cooperatives[$n]->ratio_superficie = 0;
-	  }
-	  $vol = $appellation->getVolumeAcheteur($n, 'cooperatives');
-	  if ($vol) {
-	    $this->volume_cooperatives[$n]->volume += $vol['volume'];
-	    $this->volume_cooperatives[$n]->ratio_superficie += $vol['ratio_superficie'];
-	  }
+      if (!count($this->form->getEmbeddedForm()) && $request->getParameter('redirect')) {
+	return $this->redirect('@validation'); //Mettre le getNextUrl de l'onglet
       }
 
-      $this->acheteurs = array();
-      foreach (array_keys($cvi) as $c) {
-	$this->acheteurs[$c] = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$c);
+      if ($request->isMethod(sfWebRequest::POST)) {
+	$this->form->bind($request->getParameter($this->form->getName()));
+	if ($this->form->isValid()) {
+	  $this->form->save();
+	  return $this->redirect('@validation');
+	}
       }
       
+
+      return;
     }
 }
