@@ -10,15 +10,14 @@
  ******************************************/
 $(document).ready( function()
 {
-	
-	hauteurEgale($('#onglets_majeurs li a'));
 	initMsgAide();
-	if($("#onglets_majeurs").hasClass('ui-tabs-nav')) $("#principal").tabs();
+	$('#onglets_majeurs').ready( function() { initOngletsMajeurs(); });
 	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
 	$('#nouvelle_declaration').ready( function() { choixPrecDecla(); });
 	$('#exploitation_administratif').ready( function() { formExploitationAdministratif(); });
 	$('.table_donnees').ready( function() { initTablesDonnes(); });
 	$('#exploitation_acheteurs').ready( function() { initTablesAcheteurs(); });
+	$('#gestion_recolte').ready( function() { initGestionRecolte(); });
 	
 	var annee = new Date().getFullYear();
 	
@@ -35,6 +34,19 @@ $(document).ready( function()
 		yearRange: '1900:'+annee
 	});
 });
+
+
+/**
+ * Onglets majeurs
+ ******************************************/
+var initOngletsMajeurs = function()
+{
+	var onglets = $('#onglets_majeurs');
+	
+	hauteurEgale(onglets.find('>li>a'));
+	hauteurEgale(onglets.find('ul.sous_onglets li a'));
+	if(onglets.hasClass('ui-tabs-nav')) $("#principal").tabs();
+};
 
 /**
  * Messages d'aide
@@ -120,7 +132,7 @@ var formExploitationAdministratif = function()
 		var btn_modifier = btn.find('a.modifier');
 		var btn_annuler = btn.find('a.annuler');
 
-		//		modification_infos.hide();
+		modification_infos.hide();
 		
 		btn_modifier.click(function()
 		{
@@ -394,4 +406,154 @@ var etatChampsTableAcht = function(type)
 		btns_supprimer.show();
 		btns.show();
 	}
+};
+
+
+
+
+
+/**
+ * Initialise les fonctions de la gestion
+ * de récolte
+ ******************************************/
+var initGestionRecolte = function(type)
+{
+	var col_intitules = $('#colonne_intitules');
+	var col_scroller = $('#col_scroller');
+	var col_scroller_cont = col_scroller.find('#col_scroller_cont');
+	var col_recolte = col_scroller.find('.col_recolte');
+	var col_cepage_total = $('#col_cepage_total');
+	var col_recolte_totale = $('#col_recolte_totale');
+	
+	var btn_ajout_col = col_scroller.find('a#ajout_col');
+	
+	etatBtnAjoutCol();
+	hauteurEgaleColRecolte();
+	largeurColScrollerCont();
+	
+	btn_ajout_col.click(function()
+	{
+		if(!$(this).hasClass('inactif')) ajouterColRecolte($(this), col_scroller_cont);
+		return false;
+	});
+	
+	col_recolte.each(function()
+	{
+		var col = $(this);
+		initColRecolte(col);
+	});
+};
+
+/**
+ * Egalise les hauteurs des colonnes
+ ******************************************/
+var hauteurEgaleColRecolte = function()
+{
+	hauteurEgale('#colonne_intitules, #col_scroller .col_recolte .col_cont');
+};
+
+/**
+ * Etat du bouton d'ajout de colonne
+ ******************************************/
+var etatBtnAjoutCol = function()
+{
+	var col_recolte = $('#col_scroller .col_recolte');
+	var btn = $('a#ajout_col');
+	
+	if(col_recolte.filter('.col_active').size() > 0) btn.addClass('inactif');
+	else btn.removeClass('inactif');
+};
+
+/**
+ * Initialise les fonctions des colonnes
+ ******************************************/
+var initColRecolte = function(col)
+{
+	var contenu = col.find('.col_cont');
+	var champs = contenu.find('input:text, select');
+	
+	var btn = col.find('.col_btn');
+	var btn_modifier = btn.find('a.modifier');
+	var btn_supprimer = btn.find('a.supprimer');
+	var btn_annuler = btn.find('a.annuler');
+	var btn_valider = btn.find('a.valider');
+	
+	
+	btn_modifier.click(function()
+	{
+		col.addClass('col_active').removeClass('col_validee');
+		champs.attr('disabled', '');
+		etatBtnAjoutCol();
+		return false;
+	});
+	
+	btn_supprimer.click(function()
+	{
+		col.remove();
+		largeurColScrollerCont();
+		return false;
+	});
+	
+	btn_annuler.click(function()
+	{
+		return false;
+	});
+	
+	btn_valider.click(function()
+	{
+		col.addClass('col_validee').removeClass('col_active');
+		champs.attr('disabled', 'disabled');
+		etatBtnAjoutCol();
+		return false;
+	});
+	
+	champs.filter('.num').keypress(function(e)
+	{
+		var val = $(this).val();
+		
+		if(e.which != 8 && e.which != 0 && e.which != 46 && (e.which < 48 || e.which > 57))
+			return false;
+		else
+			if(e.which == 46 && val.indexOf('.') != -1)
+				return false;
+	});
+};
+
+/**
+ * Ajoute une colonne pour la déclaration
+ ******************************************/
+var ajouterColRecolte = function(btn, cont)
+{	
+	$.post(url_ajax,
+	{ action: "ajout_col_recolte" },
+	function(data)
+	{
+		var col = $(data);
+		col.insertBefore(btn);
+		hauteurEgaleColRecolte();
+		initColRecolte(col);
+		etatBtnAjoutCol();
+		largeurColScrollerCont();
+	});
+};
+
+/**
+ * Largeur colonne scroll conteneur
+ ******************************************/
+var largeurColScrollerCont = function()
+{
+	var cont = $('#col_scroller_cont');
+	var cols = cont.find('.col_recolte');
+	var btn = cont.find('a#ajout_col');
+	
+	var largeur = btn.width();
+	
+	cols.each(function()
+	{
+		largeur += $(this).width() + parseInt($(this).css('marginRight'));
+	});
+
+	cont.width(largeur);
+	cont.scrollTo( { left:largeur}, 800 );
+	//cont.parent().scrollTo('+='+largeur_cont+'px');
 };
