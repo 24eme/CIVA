@@ -26,7 +26,6 @@
 	clear: both;
 	margin: 0 0 22px;
 	padding: 30px 20px;
-	position: relative;
 }
 
 
@@ -138,16 +137,11 @@ ul#onglets_majeurs
 	width: 958px;
 }
 
-ul#onglets_majeurs.onglets_courts
-{
-	font-size: 13px;
-	line-height: 1;
-}
-
 ul#onglets_majeurs li
 {
 	float: left;
 	margin: 0 3px 0 0;
+	position: relative;
 }
 
 ul#onglets_majeurs li a
@@ -159,8 +153,6 @@ ul#onglets_majeurs li a
 	text-decoration: none;
 }
 
-ul#onglets_majeurs.onglets_courts li a { padding: 2px 15px 2px 5px; }
-
 ul#onglets_majeurs li.ui-tabs-selected a
 {
 	background: #acb701;
@@ -169,8 +161,44 @@ ul#onglets_majeurs li.ui-tabs-selected a
 }
 
 ul#onglets_majeurs li.ui-tabs-selected a:hover { text-decoration: none; }
-ul#onglets_majeurs li a span { color: #fff; }
 ul#onglets_majeurs li.ui-tabs-selected a span { cursor: default; }
+
+ul#onglets_majeurs.onglets_recolte { font-size: 13px; line-height: 1; }
+ul#onglets_majeurs.onglets_recolte li a { padding: 2px 15px 2px 5px; }
+ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a { background: #ffb52c; color: #fff; }
+ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }
+ul#onglets_majeurs.onglets_recolte li.ajouter a { background: #a5a6a5 url(../images/pictos/pi_ajout.png) 10px center no-repeat; padding-left: 30px; }
+
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets
+{
+	left: 0;
+	position: absolute;
+	top: 30px;
+	width: 500px;
+	z-index: 100;
+}
+
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li
+{
+	margin: 0 2px 0 0;
+	padding: 2px 0 0;
+}
+
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li.ui-tabs-selected { background: url(../images/fonds/bg_sous_onglet_actif.png) -3px 0 no-repeat; }
+
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li a
+{
+	background-color: #d8d8d8;
+	cursor: pointer;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+	
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li.ui-tabs-selected a
+{
+	background: #ffd589 url(../images/fonds/bg_sous_onglet_actif.png) 6px -2px no-repeat;
+	cursor: default;
+}
 
 /* Boutons précédent / suivant  */
 ul.btn_prev_suiv { clear: both; }
@@ -205,6 +233,11 @@ table.table_donnees thead th.cvi
 	font-weight: normal;
 }
 
+table.table_donnees tbody td.cvi,
+table.table_donnees thead th.cvi { width: 63px; }
+table.table_donnees thead th.commune,
+table.table_donnees tbody td.commune { width: 110px; }
+
 table.table_donnees thead th:first-child
 {
 	background: #dcdfa9;
@@ -238,6 +271,33 @@ table.table_donnees tbody tr.premier td { border-top: 1px solid #c6c8c7; }
 table.table_donnees tbody td:first-child { border-left: 1px solid #c6c8c7; }
 table.table_donnees tbody td:last-child { border-right: 1px solid #c6c8c7; }
 table.table_donnees tbody tr:last-child td { border-bottom: 1px solid #c6c8c7; }
+
+table.table_donnees tbody td input[type=text]
+{
+	background: #f6f6f6;
+	border: 1px solid #c2c1ba;
+	color: #7a7a7a;
+	font-size: 12px;
+}
+
+table.table_donnees tbody td.alt input { background: #efeeee; }
+table.table_donnees tbody td.nom input { width: 121px; }
+table.table_donnees tbody td.cvi input { width: 58px; }
+table.table_donnees tbody td.commune input { width: 108px; }
+
+table.table_donnees tbody td a.supprimer
+{
+	position: absolute;
+	right: -20px;
+}
+
+table.table_donnees tbody td label { display: block; }
+
+table.table_donnees tbody td span
+{
+	display: block;
+	min-height: 17px; !height: 17px;
+}
 
 
 /* Erreurs */
@@ -431,7 +491,7 @@ a.msg_aide
 
 #exploitation_administratif .btn a.annuler,
 #exploitation_administratif .btn input,
-//#exploitation_administratif .edition .btn a.modifier { display: none; }
+#exploitation_administratif .edition .btn a.modifier { display: none; }
 #exploitation_administratif .edition .btn a.annuler,
 #exploitation_administratif .edition .btn input { display: inline-block; }
 
@@ -582,38 +642,11 @@ a.msg_aide
 #exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
 
 #exploitation_acheteurs table th { font-size: 11px; }
-#exploitation_acheteurs table th.cvi { width: 63px; }
-#exploitation_acheteurs table th.commune { width: 110px; }
-
-#exploitation_acheteurs table tbody a.supprimer
-{
-	position: absolute;
-	right: -20px;
-}
 
 #exploitation_acheteurs table tbody td { text-align: center; }
 #exploitation_acheteurs table tbody td.nom,
 #exploitation_acheteurs table tbody td.cvi,
 #exploitation_acheteurs table tbody td.commune { text-align: left; }
-#exploitation_acheteurs table tbody td.cvi { width: 63px; }
-#exploitation_acheteurs table tbody td.commune { width: 110px; }
-
-#exploitation_acheteurs table tbody td input[type=text]
-{
-	background: #f6f6f6;
-	border: 1px solid #c2c1ba;
-	color: #7a7a7a;
-	font-size: 12px;
-}
-
-#exploitation_acheteurs table tbody td.alt input { background: #efeeee; }
-#exploitation_acheteurs table tbody td.nom input { width: 121px; }
-#exploitation_acheteurs table tbody td.cvi input { width: 58px; }
-#exploitation_acheteurs table tbody td.commune input { width: 108px; }
-
-#exploitation_acheteurs table tbody td span { display: block; height: 17px; }
-
-#exploitation_acheteurs table tbody td label { display: block; }
 
 #exploitation_acheteurs .btn
 {
@@ -752,58 +785,6 @@ a.msg_aide
 	font-size: 14px;
 }
 
-/**
- * Validation Acheteurs et caves
- ******************************************/
-#acheteurs_caves #acheteurs_raisin { margin: 0 0 50px; }
-#acheteurs_caves #acheteurs_raisin,
-#acheteurs_caves #caves_cooperatives { width: 710px; }
-
-#acheteurs_caves table tbody td { padding: 5px 3px; }
-
-/**
- * Validation Appelation
- ******************************************/
-#appelations table { float: left; width: 830px; }
-#appelations table thead th { font-size: 11px; }
-#appelations table thead th:first-child { width: auto; }
-
-/**
- * Validation Total général
- ******************************************/
-#total_general { float: right; width: 120px; }
-#total_general h2 { line-height: 28px; }
-
-#total_general ul
-{
-	padding: 1px 15px 2px;
-	line-height: 1;
-}
-
-#total_general ul li { padding: 3px 0; }
-
-#total_general ul li input
-{
-	background: #fff;
-	border: 1px solid #dadad6;
-	font-size: 12px;
-	font-weight: bold;
-	height: 15px;
-	text-align: center;
-	width: 86px;
-}
-
-/**
- * Confirmation fin de la déclaration
- ******************************************/
-#confirmation_fin_declaration { width: 536px; }
-
-#confirmation_fin_declaration p.important
-{
-	color: #acb701;
-	font-size: 16px;
-	margin: 0 0 5px;
-}
 
 /**
  * Gestion de récolte
@@ -833,6 +814,12 @@ a.msg_aide
 	font-weight: bold;
 }
 
+#gestion_recolte ul#liste_sepages li.recapitulatif
+{
+	font-weight: bold;
+	margin-top: 18px;
+}
+
 #gestion_recolte ul#liste_sepages li a
 {
 	color: #fff;
@@ -841,11 +828,19 @@ a.msg_aide
 	text-decoration: none;
 }
 
+#gestion_recolte ul#liste_sepages li.alerte a
+{
+	background: url(../images/pictos/pi_alerte.png) 90px center no-repeat;
+	padding: 3px 10px 3px 5px;
+}
+
 #gestion_recolte ul#liste_sepages li.ui-tabs-selected a
 {
 	color: #848c03;
 	cursor: default;
 }
+
+#gestion_recolte ul#liste_sepages li.ui-tabs-selected.recapitulatif a { color: #ffb52c; }
 
 #gestion_recolte ul#liste_sepages li.ui-tabs-selected a span
 {
@@ -863,6 +858,7 @@ a.msg_aide
 	width: 714px;
 }
 
+
 /* Colonne intitulés */
 #gestion_recolte #colonne_intitules
 {
@@ -870,7 +866,7 @@ a.msg_aide
 	float: left;
 	font-size: 14px;
 	line-height: 17px;
-	margin: 18px 0 0;
+	margin: 18px 10px 0 0;
 	width: 185px;
 }
 
@@ -888,15 +884,8 @@ a.msg_aide
 	margin: 0 0 3px;
 }
 
-#gestion_recolte #colonne_intitules p
-{
-	padding: 3px;
-}
-
-#gestion_recolte #colonne_intitules ul
-{
-	padding: 0 3px;
-}
+#gestion_recolte #colonne_intitules p { padding: 3px; }
+#gestion_recolte #colonne_intitules ul { padding: 0 3px; }
 
 #gestion_recolte #colonne_intitules ul li
 {
@@ -904,10 +893,7 @@ a.msg_aide
 	padding: 3px 0;
 }
 
-#gestion_recolte #colonne_intitules ul li:first-child
-{
-	border: 0;
-}
+#gestion_recolte #colonne_intitules ul li:first-child { border: 0; }
 
 #gestion_recolte #colonne_intitules .vente_raisins,
 #gestion_recolte #colonne_intitules .caves
@@ -916,8 +902,6 @@ a.msg_aide
 	margin: 0 0 3px;
 	padding: 3px 3px 0;
 }
-
-#gestion_recolte #colonne_intitules .caves { margin: 0 0 25px; }
 
 #gestion_recolte #colonne_intitules .vente_raisins ul,
 #gestion_recolte #colonne_intitules .caves ul
@@ -934,13 +918,334 @@ a.msg_aide
 	padding-left: 8px;
 }
 
+#gestion_recolte #colonne_intitules .vol_place,
+#gestion_recolte #colonne_intitules .vol_revendique_dplc { margin-top: 25px; }
+
+/* Colonnes de déclaration */
+#gestion_recolte #col_scroller
+{
+	float: left;
+	overflow: auto;
+	padding: 0 0 15px;
+	width: 331px;
+}
+
+#gestion_recolte #col_scroller #col_scroller_cont
+{
+}
+
+#gestion_recolte .col_recolte
+{
+	float: left;
+	display: inline;
+	margin: 0 10px 0 0;
+	position: relative;
+	width: 108px;
+}
+
+#gestion_recolte #col_scroller .col_recolte h2
+{
+	background: #acb701;
+	color: #fff;
+	display: inline-block; !display: inline; zoom: 1;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 18px;
+	padding: 0 5px;
+}
+
+#gestion_recolte .col_recolte .col_cont
+{
+	background: #e0e1bd;
+	padding: 0 4px;
+}
+
+#gestion_recolte .col_recolte p,
+#gestion_recolte .col_recolte ul { margin: 0 0 3px; }
+
+#gestion_recolte .col_recolte p,
+#gestion_recolte .col_recolte ul li
+{
+	height: 17px;
+	padding: 3px 0;
+}
+
+#gestion_recolte .col_recolte .vente_raisins,
+#gestion_recolte .col_recolte .caves
+{
+	margin: 0 0 3px;
+	padding: 20px 0 0;
+	position: relative;
+}
+
+#gestion_recolte .col_recolte .vol_place { margin-top: 25px; }
+#gestion_recolte .col_recolte .vol_revendique_dplc { margin-top: 22px; }
+
+#gestion_recolte .col_recolte input,
+#gestion_recolte .col_recolte select
+{
+	background: #fff;
+	border: 1px solid #c2c1ba;
+	font-size: 13px;
+	height: 17px;
+	text-align: right;
+	width: 98px;
+}
+
+#gestion_recolte .col_recolte input
+{
+	padding: 0 5px; 
+	width: 88px;
+}
+
+#gestion_recolte #col_scroller .col_validee input,
+#gestion_recolte #col_scroller .col_validee select { background-color: #f0f0de; }
+
+#gestion_recolte .col_recolte input.alerte
+{
+	background-image: url(../images/pictos/pi_alerte.png);
+	background-position: 2px center;
+	background-repeat: no-repeat;
+}
+
+#gestion_recolte .col_recolte .vol_total_recolte input,
+#gestion_recolte .col_validee .vol_total_recolte input
+{
+	background: #acb701;
+	border-color: #cecebb;
+	font-weight: bold;
+}
+
+#gestion_recolte #col_scroller .col_recolte a.ajout_acheteur,
+#gestion_recolte #col_scroller .col_recolte a.ajout_cave
+{
+	background: url(../images/puces/puce_lien.png) 0 center no-repeat;
+	bottom: -10px;
+	font-size: 10px;
+	padding: 0 0 0 8px;
+	position: absolute;
+	right: 0;
+	text-decoration: underline;
+}
+
+#gestion_recolte #col_scroller .col_recolte a.ajout_acheteur:hover,
+#gestion_recolte #col_scroller .col_recolte a.ajout_cave:hover { text-decoration: none; }
+
+#gestion_recolte #col_scroller .col_validee a.ajout_acheteur,
+#gestion_recolte #col_scroller .col_validee a.ajout_cave { display: none; }
+
+#gestion_recolte #col_scroller .col_recolte .col_btn
+{
+	background: #e0e1bd;
+	padding: 4px;
+}
+
+#gestion_recolte #col_scroller .col_active .col_btn a.supprimer,
+#gestion_recolte #col_scroller .col_active .col_btn a.modifier,
+#gestion_recolte #col_scroller .col_validee .col_btn a.annuler,
+#gestion_recolte #col_scroller .col_validee .col_btn a.valider { display: none; }
+
+#gestion_recolte #col_scroller a#ajout_col
+{
+	float: left;
+	margin: 18px 0 0;
+	outline: 0;
+}
+
+#gestion_recolte #col_scroller a#ajout_col.inactif
+{
+	cursor: default;
+	opacity: 0.3;
+	filter: Alpha(Opacity=0.3); 
+}
+
+#gestion_recolte #col_scroller a#ajout_col.inactif img { cursor: default; }
 
 /* Récolte totale appelation */
-#gestion_recolte #recolte_totale_aoc
+#gestion_recolte .col_total
 {
-	background: #ffa913;
 	float: right;
-	margin: 24px 0 0;
-	padding: 4px;
-	width: 100px;
+	margin: 18px 0 0;
+	position: relative;
+	padding: 54px 0 0;
+	width: 108px;
+}
+
+#gestion_recolte #col_recolte_totale { margin-top: 24px; }
+
+#gestion_recolte #col_sepage_total,
+#gestion_recolte #col_sepage_total .col_cont,
+#gestion_recolte #col_sepage_total .vol_total_recolte input { background: #acb701; }
+
+#gestion_recolte #col_recolte_totale,
+#gestion_recolte #col_recolte_totale .col_cont,
+#gestion_recolte #col_recolte_totale .vol_total_recolte input { background: #ffa913; }
+
+#gestion_recolte .col_total h2
+{
+	font-size: 16px;
+	font-weight: normal;
+	left: 0;
+	line-height: 1;
+	padding: 4px 4px 0;
+	position: absolute;
+	top: 0;
+}
+
+#gestion_recolte .col_total .vol_revendique_dplc
+{
+	margin-top: 0;
+	padding: 19px 0 0;
+	position: relative;
+}
+
+#gestion_recolte .col_total .vol_revendique_dplc .rendement
+{
+	color: #bc0d0d;
+	font-size: 13px;
+	position: absolute;
+	top: 0;
+	padding: 0;
+}
+
+#gestion_recolte .col_total .vol_revendique_dplc .rendement strong { font-size: 16px; }
+
+/**
+ * Récapitualtif des ventes
+ ******************************************/
+#gestion_recolte #donnees_recolte_sepage.recapitualtif
+{
+	padding: 25px 35px;
+	width: 654px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif p.intro
+{
+	font-size: 13px;
+	margin: 0 0 20px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif .titre_section
+{
+	background: #ffb52c;
+	color: #000;
+}
+
+/* Total appelation */
+#gestion_recolte #total_appelation
+{
+	margin: 0 0 15px;
+	width: 285px;
+}
+
+#gestion_recolte #total_appelation table tbody td { color: #000; }
+
+#gestion_recolte #total_appelation table tbody td.valeur
+{
+	color: #9fac01;
+	font-weight: bold;
+	text-align: center;
+	width: 80px;
+}
+
+/* Récapitulatif des ventes */
+#gestion_recolte #recap_ventes table { margin: 0 0 15px; }
+#gestion_recolte #recap_ventes table thead th { }
+#gestion_recolte #recap_ventes table tbody td.superficie { color: #000; font-weight: bold; }
+#gestion_recolte #recap_ventes table tbody td.superficie input,
+#gestion_recolte #recap_ventes table tbody td.dplc input { width: 63px; }
+#gestion_recolte #recap_ventes .btn { text-align: right; }
+
+
+/**
+ * Validation Acheteurs et caves
+ ******************************************/
+#acheteurs_caves #acheteurs_raisin { margin: 0 0 50px; }
+#acheteurs_caves #acheteurs_raisin,
+#acheteurs_caves #caves_cooperatives { width: 710px; }
+
+#acheteurs_caves table tbody td { padding: 5px 3px; }
+
+/**
+ * Validation Appelation
+ ******************************************/
+#recolte_totale #appelations table
+{
+	float: left;
+	margin: 0 7px 0 0;
+	width: 734px;
+}
+
+#recolte_totale #appelations table thead th { font-size: 11px; }
+#recolte_totale #appelations table thead th:first-child { width: auto; }
+
+/**
+ * Validation Total général
+ ******************************************/
+#recolte_totale #total_general { float: left; width: 120px; }
+#recolte_totale #total_general h2 { line-height: 28px; }
+
+#recolte_totale #total_general ul
+{
+	padding: 1px 15px 2px;
+	line-height: 1;
+}
+
+#recolte_totale #total_general ul li { padding: 3px 0; }
+
+#recolte_totale #total_general ul li input
+{
+	background: #fff;
+	border: 1px solid #dadad6;
+	font-size: 12px;
+	font-weight: bold;
+	height: 15px;
+	text-align: center;
+	width: 86px;
+}
+
+/**
+ * Vin de table
+ ******************************************/
+#recolte_totale #vin_table
+{
+	float: right;
+	width: 90px;
+}
+
+#recolte_totale #vin_table h2
+{
+	color: #000;
+	font-size: 13px;
+	line-height: 28px;
+	text-align: center;
+}
+
+#recolte_totale #vin_table ul
+{
+	background: #ddd;
+	border: 1px solid #C6C8C7;
+	color: #7a7a7a;
+	padding: 0 4px;
+}
+
+#recolte_totale #vin_table ul li
+{
+	border-top: 1px dashed #C6C8C7;
+	line-height: 17px;
+	padding: 3px 8px;
+}
+
+#recolte_totale #vin_table ul li:first-child { border: 0; }
+
+/**
+ * Confirmation fin de la déclaration
+ ******************************************/
+#confirmation_fin_declaration { width: 536px; }
+
+#confirmation_fin_declaration p.important
+{
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
 }

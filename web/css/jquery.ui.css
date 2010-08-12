@@ -40,6 +40,15 @@
 
 /* Widgets
 ----------------------------------*/
+
+/* Tabs */
+.ui-tabs .ui-tabs-panel { clear: both; display: block; }
+.ui-tabs .ui-tabs-hide { display: none; }
+
+/* Accordeon */
+.ui-accordion .ui-icon { display: none; }
+
+
 /* Autocompletion */
 .ui-autocomplete { background: #fff; border: 1px solid #c2c1ba; font-size: 12px; position: absolute; _width:1px; }
 .ui-autocomplete .ui-menu-item a { background: #fff; clear: both; color: #7a7a7a; cursor: pointer; display: block; padding: 2px; text-decoration: none; }
@@ -72,3 +81,13 @@
 .ui-datepicker td.ui-state-disabled {  }
 .ui-datepicker td.ui-datepicker-current-day a { background: #fff; border-color: #aaa; color: #212121; }
 .ui-datepicker td.ui-datepicker-today a { background: #fbf9fe; border-color: #fcefa1; color: #363636; }
+
+
+/* Dialog */
+.ui-widget-overlay { background: #000; opacity: .3; filter:Alpha(Opacity=30); }
+.ui-dialog { background: #fff; border: 1px solid #dbdbdb; box-shadow: 0 0 10px #888; -moz-box-shadow: 0 0 10px #888; -webkit-box-shadow: 0 0 10px #888; padding: 15px; }
+.ui-dialog .ui-dialog-titlebar { width: 100%; overflow: hidden; }
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title { background: #dcdfa9; color: #848c03; float: left; font-size: 16px; font-weight: normal; line-height: 25px; margin: 0 15px 0 0; padding: 0 10px; }
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close { float: right; }
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon { background: url(../images/boutons/btn_fermer_popup.png) 0 0 no-repeat; height: 14px; width: 13px; }
+.ui-dialog .ui-dialog-content { background: #f6f6f6; border: 1px solid #d8d8d8; padding: 15px; }

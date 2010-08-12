@@ -113,15 +113,6 @@ html[xmlns] .clearfix { display: block; }
 	overflow: hidden;
 }
 
-/**
- * JQuery UI
- ******************************************/
-.ui-tabs .ui-tabs-panel { clear: both; display: block; }
-.ui-tabs .ui-tabs-hide { display: none; }
-
-
-
-
 
 /**
  * Structure générique
