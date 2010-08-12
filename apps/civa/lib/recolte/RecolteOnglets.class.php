@@ -309,7 +309,7 @@ class RecolteOnglets {
 
     public function getPreviousUrl() {
         if (!$this->hasPreviousLieu() && !$this->hasPreviousAppellation()) {
-            return '@exploitation_autres';
+            return array('sf_route' => 'exploitation_autres');
         } elseif ($this->hasPreviousLieu()) {
             return $this->getUrl('recolte', null, $this->getPreviousLieu());
         } else {
@@ -320,7 +320,7 @@ class RecolteOnglets {
 
     public function getNextUrl() {
         if (!$this->hasNextLieu() && !$this->hasNextAppellation()) {
-            return array('sf_route' => '@validation');
+            return array('sf_route' => 'validation');
         } elseif($this->hasNextLieu()) {
             return $this->getUrl('recolte', null, $this->getNextLieu());
         } else {
