@@ -98,7 +98,7 @@ EOF;
 	        $detail = new stdClass();
                 $detail->denomination = $csv[6];
 		$detail->appellation = $this->convertappellation($appellation, $cepage);
-                $detail->vtsgn = $csv[9];
+                $detail->vtsgn = $this->toVtSgn($csv[9]);
                 $detail->code_lieu = $csv[10];
                 $detail->cepage = $cepage;
                 $detail->superficie = $this->recode_number($csv[11]);
@@ -264,6 +264,17 @@ EOF;
 	echo '{"docs":';
 	echo json_encode(array_values($list_documents));
 	echo '}';
+    }
+
+    private function toVtSgn($num) {
+      switch($num) {
+      case '1':
+	return 'VT';
+      case '2':
+	return 'SGN';
+      default:
+	return '';
+      }
     }
 
     private function recode_number($val) {
