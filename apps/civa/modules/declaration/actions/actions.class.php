@@ -47,6 +47,7 @@ class declarationActions extends EtapesActions {
                 $doc = clone $old_doc;
                 $doc->_id = 'DR-'.$recoltant->cvi.'-'.$this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
+		$doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
