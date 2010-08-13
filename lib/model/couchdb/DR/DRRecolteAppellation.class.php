@@ -2,15 +2,19 @@
 
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
-  protected $_total_acheteurs_by_cvi = array();
+    protected $_total_acheteurs_by_cvi = array();
 
-  public function addCepage($cepage, $lieu = '') {
-    return $this->add("lieu$lieu")->add('cepage_'.$cepage);
-  }
-  public function getCepage($cepage, $lieu = '') {
-    return $this->get("lieu$lieu")->get('cepage_'.$cepage);
-  }
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
 
+    public function addCepage($cepage, $lieu = '') {
+        return $this->add("lieu$lieu")->add('cepage_' . $cepage);
+    }
+
+    public function getCepage($cepage, $lieu = '') {
+        return $this->get("lieu$lieu")->get('cepage_' . $cepage);
+    }
 
     public function getTotalAcheteursByCvi($field) {
         if (!isset($this->_total_acheteurs_by_cvi[$field])) {
@@ -29,57 +33,64 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getTotalVolume() {
-      $r = $this->_get('total_volume');
-      if ($r)
-	return $r;
-      return $this->getSumLieu('total_volume');
-      
+        $r = $this->_get('total_volume');
+        if ($r)
+            return $r;
+        return $this->getSumLieu('total_volume');
     }
+
     public function getTotalSuperficie() {
-      $r =  $this->_get('total_superficie');
-      if ($r)
-	return $r;
-      return $this->getSumLieu('total_superficie');
+        $r = $this->_get('total_superficie');
+        if ($r)
+            return $r;
+        return $this->getSumLieu('total_superficie');
     }
+
     public function getTotalDPLC() {
-      $r = $this->_get('dplc');
-      if ($r) 
-	return $r;
-      return $this->getSumLieu('dplc');
+        $r = $this->_get('dplc');
+        if ($r)
+            return $r;
+        return $this->getSumLieu('dplc');
     }
+
     public function getTotalVolumeRevendique() {
-      $r = $this->_get('volume_revendique');
-      if ($r) 
-	return $r;
-      return $this->getSumLieu('volume_revendique');
+        $r = $this->_get('volume_revendique');
+        if ($r)
+            return $r;
+        return $this->getSumLieu('volume_revendique');
     }
 
     public function getTotalCaveParticuliere() {
-        return 0;
-    }
-    
-    private function getSumLieu($type) {
       $sum = 0;
       foreach ($this->filter('^lieu') as $key => $lieu) {
-	$sum += $lieu->get($type);
+	$sum += $lieu->getTotalCaveParticuliere();
       }
       return $sum;
     }
-    
-     public function save() {
-      return $this->getCouchdbDocument()->save();
+
+    private function getSumLieu($type) {
+        $sum = 0;
+        foreach ($this->filter('^lieu') as $key => $lieu) {
+            $sum += $lieu->get($type);
+        }
+        return $sum;
+    }
+
+    public function save() {
+        return $this->getCouchdbDocument()->save();
     }
 
     public function getVolumeAcheteur($cvi, $type) {
-      $sum = 0;
-      foreach ($this->filter('^lieu') as $key => $lieu) {
-	$sum += $lieu->getVolumeAcheteur($cvi, $type);
-      }
-      return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
+        $sum = 0;
+        foreach ($this->filter('^lieu') as $key => $lieu) {
+            $sum += $lieu->getVolumeAcheteur($cvi, $type);
+        }
+        return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
     }
 
     public function hasManyLieu() {
         $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
-        return !$configuration->get($this->getHash())->exist('lieu');
+        return!$configuration->get($this->getHash())->exist('lieu');
     }
+
 }

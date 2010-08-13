@@ -7,27 +7,27 @@
 
     <div class="vente_raisins">
         <?php
-        include_partial('detailHeaderAcheteurs', array('title' => "Ventes de Raisins",
-            'acheteurs' => $acheteurs_negoce,
-            'list_acheteurs' => $list_acheteurs_negoce
+        include_partial('headerAcheteurs', array('title' => "Ventes de Raisins",
+            'acheteurs' => $acheteurs->negoces,
+            'list_acheteurs' => ListAcheteursConfig::getNegoces()
         ))
         ?>
     </div>
 
     <div class="caves">
         <?php
-        include_partial('detailHeaderAcheteurs', array('title' => "Caves Coopératives",
-            'acheteurs' => $acheteurs_cave,
-            'list_acheteurs' => $list_acheteurs_cave
+        include_partial('headerAcheteurs', array('title' => "Caves Coopératives",
+            'acheteurs' => $acheteurs->cooperatives,
+            'list_acheteurs' => ListAcheteursConfig::getCooperatives()
         )) ?>
     </div>
 
     <?php if ($has_acheteurs_mout): ?>
             <div class="caves">
         <?php
-            include_partial('detailHeaderAcheteurs', array('title' => "Acheteurs de Mouts",
-                'acheteurs' => $acheteurs_mout,
-                'list_acheteurs' => $list_acheteurs_mout
+            include_partial('headerAcheteurs', array('title' => "Acheteurs de Mouts",
+                'acheteurs' => $acheteurs->mouts,
+                'list_acheteurs' => ListAcheteursConfig::getMouts()
             ))
         ?>
         </div>

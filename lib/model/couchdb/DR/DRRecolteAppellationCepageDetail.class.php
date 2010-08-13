@@ -1,6 +1,11 @@
 <?php
 
 class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDetail {
+
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
+
     public function getAcheteursValuesWithCvi($field) {
         $values = array();
         if ($this->exist($field)) {

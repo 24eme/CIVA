@@ -2,7 +2,7 @@
     <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post">
         <?php echo $form->renderHiddenFields(); ?>
         <?php echo $form->renderGlobalErrors(); ?>
-    <h2><?php echo $onglets->getCurrentCepage()->libelle ?></h2>
+    <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
     <div class="col_cont">
 
@@ -22,18 +22,18 @@
         </p>
 
         <div class="vente_raisins">
-            <?php include_partial('detailItemFormAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+            <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
             <a href="#" class="ajout_acheteur">Ajouter un acheteur</a>
         </div>
 
         <div class="caves">
-            <?php include_partial('detailItemFormAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
+            <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
             <a href="#" class="ajout_cave">Ajouter une cave</a>
         </div>
 
         <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS])): ?>
         <div class="mouts">
-            <?php include_partial('detailItemFormAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
+            <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
             <a href="#" class="ajout_cave">Ajouter mout</a>
         </div>
         <?php endif; ?>

@@ -4,7 +4,6 @@
 <!-- #principal -->
 			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-                                                                                   'configuration' => $configuration,
                                                                                    'onglets' => $onglets)); ?>
 
 				<!-- #application_dr -->
@@ -13,37 +12,27 @@
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
-                                                                                              'configuration' => $configuration,
                                                                                               'onglets' => $onglets,
                                                                                               'recapitulatif' => false)); ?>
                                             
                                                 <!--<a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>-->
 						<div id="donnees_recolte_sepage" class="clearfix">
 						
-							<?php echo include_partial('detailHeader', array('acheteurs_negoce' => $acheteurs_negoce,
-                                                                                                         'acheteurs_cave' => $acheteurs_cave,
-                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                         'acheteurs_mout' => $acheteurs_mout,
-                                                                                                         'list_acheteurs_negoce' => $list_acheteurs_negoce,
-                                                                                                         'list_acheteurs_cave' => $list_acheteurs_cave,
-                                                                                                         'list_acheteurs_mout' => $list_acheteurs_mout)) ?>
+							<?php echo include_partial('detailHeader', array('acheteurs' => $acheteurs,
+                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
 
                                                         <?php echo include_partial('detailList', array('details' => $details, 
                                                                                                        'onglets' => $onglets,
                                                                                                        'detail_key' => $detail_key,
                                                                                                        'detail_action_mode' => $detail_action_mode,
                                                                                                        'form' => $form_detail,
-                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
-                                                                                                       'acheteurs_cave' => $acheteurs_cave,
-                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                       'acheteurs_mout' => $acheteurs_mout)) ?>
+                                                                                                       'acheteurs' => $acheteurs,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
 
-                                                       <?php echo include_partial('totalCepage', array('cepage' => $cepage,
+                                                       <?php echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
                                                                                                        'onglets' => $onglets,
-                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
-                                                                                                       'acheteurs_cave' => $acheteurs_cave,
-                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>                                              
+                                                                                                       'acheteurs' => $acheteurs,
+                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout)) ?>                                              
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
                                                                 <?php if ($onglets->hasPreviousCepage()): ?>
@@ -56,13 +45,10 @@
 						
 						</div>
 
-                                                <?php echo include_partial('totalAppellation', array('lieu' => $lieu,
-                                                                                                       'configuration' => $configuration,
-                                                                                                       'onglets' => $onglets,
-                                                                                                       'acheteurs_negoce' => $acheteurs_negoce,
-                                                                                                       'acheteurs_cave' => $acheteurs_cave,
-                                                                                                       'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                                                                       'acheteurs_mouts' => $acheteurs_mout)) ?>
+                                                <?php echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),
+                                                                                                    'onglets' => $onglets,
+                                                                                                    'acheteurs' => $acheteurs,
+                                                                                                    'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
 					
 					</div>
 					<!-- fin #gestion_recolte -->

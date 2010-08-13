@@ -93,7 +93,11 @@ class acheteurActions extends EtapesActions {
 	try{
 	$grdcru = $this->getUser()->getDeclaration()->get('/recolte/appellation_GRDCRU');
 	}catch(Exception $e) {
-	  return $this->redirect('@exploitation_autres');
+          if ($this->hasRequestParameter('from_exploitation_autres')) {
+             return $this->redirectToPreviousEtapes();
+          } else {
+             return $this->redirectToNextEtapes();
+          }
 	}
 	$this->lieux = array();
 	foreach ($grdcru->filter('lieu[0-9]') as $key => $lieu) {

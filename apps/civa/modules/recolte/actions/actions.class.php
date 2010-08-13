@@ -12,11 +12,7 @@ class recolteActions extends EtapesActions {
 
     public function preExecute() {
         $this->setCurrentEtape('recolte');
-        $this->configuration = ConfigurationClient::getConfiguration();
         $this->declaration = $this->getUser()->getDeclaration();
-        $this->list_acheteurs_negoce = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
-        $this->list_acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
-        $this->list_acheteurs_mout = include(sfConfig::get('sf_data_dir') . '/acheteurs-mout.php');
     }
 
     /**
@@ -26,7 +22,8 @@ class recolteActions extends EtapesActions {
     public function executeRecolte(sfWebRequest $request) {
         
         $this->initOnglets($request);
-        $this->getDetails();
+        $this->initDetails();
+        $this->initAcheteurs();
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
@@ -35,16 +32,15 @@ class recolteActions extends EtapesActions {
 
     public function executeUpdate(sfWebRequest $request) {
         $this->initOnglets($request);
-        $this->getDetails();
+        $this->initDetails();
+        $this->initAcheteurs();
+        
         $this->detail_action_mode = 'update';
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
         
-        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), array('superficie_required' => $this->superficie_required,
-                                                                                           'acheteurs_negoce' => $this->acheteurs_negoce,
-                                                                                           'acheteurs_cooperative' => $this->acheteurs_cave,
-                                                                                           'acheteurs_mout' => $this->acheteurs_mout));
+        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), $this->getFormDetailsOptions());
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -55,16 +51,15 @@ class recolteActions extends EtapesActions {
 
     public function executeAdd(sfWebRequest $request) {
         $this->initOnglets($request);
-        $this->getDetails();
+        $this->initDetails();
+        $this->initAcheteurs();
+        
         $this->detail_action_mode = 'add';
 
         $detail = $this->details->add();
         $this->detail_key = $this->details->count() - 1;
 
-        $this->form_detail = new RecolteForm($detail, array('superficie_required' => $this->superficie_required,
-                                                            'acheteurs_negoce' => $this->acheteurs_negoce,
-                                                            'acheteurs_cooperative' => $this->acheteurs_cave,
-                                                            'acheteurs_mout' => $this->acheteurs_mout));
+        $this->form_detail = new RecolteForm($detail, $this->getFormDetailsOptions());
 
         if ($request->isMethod(sfWebRequest::POST)) {
            $this->processFormDetail($this->form_detail, $request);
@@ -75,7 +70,7 @@ class recolteActions extends EtapesActions {
 
     public function executeDelete(sfWebRequest $request) {
         $this->initOnglets($request);
-        $this->getDetails();
+        $this->initDetails();
         
         $detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($detail_key));
@@ -85,59 +80,6 @@ class recolteActions extends EtapesActions {
         
         $this->redirect($this->onglets->getUrl('recolte'));
     }
-
-    protected function processFormDetail($form, $request) {
-        $form->bind($request->getParameter($form->getName()));
-        if ($form->isValid()) {
-            $form->save();
-            $this->redirect($this->onglets->getUrl('recolte'));
-        }
-    }
-
-    protected function initOnglets(sfWebRequest $request) {
-        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
-        $appellation = null;
-        if (isset($appellation_lieu['appellation'])) {
-            $appellation = $appellation_lieu['appellation'];
-        }
-        $lieu = null;
-        if (isset($appellation_lieu['lieu'])) {
-            $lieu = $appellation_lieu['lieu'];
-        }
-        $cepage = $request->getParameter('cepage', null);
-
-        $this->onglets = new RecolteOnglets($this->configuration, $this->declaration);
-        if (!$appellation && !$lieu && !$cepage) {
-           $this->redirect($this->onglets->getUrl('recolte'));
-        }
-        $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
-	return $this->onglets;
-    }
-    
-    protected function getDetails() {
-        $this->appellation = $this->onglets->getItemsLieu();
-        $this->lieu = $this->declaration->get($this->onglets->getItemsCepage()->getHash());
-        $this->cepage = $this->lieu->add($this->onglets->getCurrentKeyCepage());
-        $this->details = $this->cepage->add('detail');
-
-        $configuration_appellation = $this->configuration->get('recolte')->get($this->onglets->getCurrentKeyAppellation());
-        $configuration_lieu = $configuration_appellation->get($this->onglets->getCurrentKeyLieu());
-        $configuration_cepage = $configuration_lieu->get($this->onglets->getCurrentKeyCepage());
-        
-        $this->detail_key = null;
-        $this->detail_action_mode = null;
-        $this->form_detail = null;
-
-        $this->has_acheteurs_mout = ($configuration_appellation->mout == 1);
-        $this->superficie_required = !($configuration_cepage->exist('superficie_optionnelle'));
-        $this->acheteurs_negoce = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('negoces');
-        $this->acheteurs_cave = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('cooperatives');
-        $this->acheteurs_mout = null;
-        if ($this->has_acheteurs_mout) {
-            $this->acheteurs_mout = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation())->get('mouts');
-        }
-    }
-
 
     public function executeRecapitulatif(sfWebRequest $request)
     {
@@ -163,4 +105,52 @@ class recolteActions extends EtapesActions {
 
       return;
     }
+
+    protected function processFormDetail($form, $request) {
+        $form->bind($request->getParameter($form->getName()));
+        if ($form->isValid()) {
+            $form->save();
+            $this->redirect($this->onglets->getUrl('recolte'));
+        }
+    }
+
+    protected function initOnglets(sfWebRequest $request) {
+        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
+        $appellation = null;
+        if (isset($appellation_lieu['appellation'])) {
+            $appellation = $appellation_lieu['appellation'];
+        }
+        $lieu = null;
+        if (isset($appellation_lieu['lieu'])) {
+            $lieu = $appellation_lieu['lieu'];
+        }
+        $cepage = $request->getParameter('cepage', null);
+
+        $this->onglets = new RecolteOnglets($this->declaration);
+        if (!$appellation && !$lieu && !$cepage) {
+           $this->redirect($this->onglets->getUrl('recolte'));
+        }
+        $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
+	return $this->onglets;
+    }
+
+    protected function initDetails() {
+        $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCepage())->add('detail');
+
+        $this->detail_key = null;
+        $this->detail_action_mode = null;
+        $this->form_detail = null;
+    }
+
+    protected function initAcheteurs() {
+        $this->has_acheteurs_mout = ($this->onglets->getCurrentAppellation()->getConfig()->mout == 1);
+        $this->acheteurs = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation());
+    }
+
+     protected function getFormDetailsOptions() {
+         return array('superficie_required' => (!($this->onglets->getCurrentCepage()->getConfig()->exist('superficie_optionnelle'))),
+                      'acheteurs_negoce' => $this->acheteurs->negoces,
+                      'acheteurs_cooperative' => $this->acheteurs->cooperatives,
+                      'acheteurs_mout' => $this->acheteurs->mouts);
+     }
 }

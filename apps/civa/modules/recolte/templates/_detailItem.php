@@ -1,5 +1,5 @@
 <div class="col_recolte col_validee">
-    <h2><?php echo $onglets->getCurrentCepage()->libelle ?></h2>
+    <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
     <div class="col_cont">
         <p class="denomination">
@@ -20,20 +20,20 @@
 
         <div class="vente_raisins">
             <?php
-                include_partial('detailItemAcheteurs', array('acheteurs' => $acheteurs_negoce,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
                                                              'acheteurs_value' => $detail->getAcheteursValuesWithCvi('negoces')))
                 ?>
         </div>
 
         <div class="caves">
             <?php
-                include_partial('detailItemAcheteurs', array('acheteurs' => $acheteurs_cave,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
                                                              'acheteurs_value' => $detail->getAcheteursValuesWithCvi('cooperatives'))) ?>
         </div>
         <?php if ($has_acheteurs_mout): ?>
         <div class="mouts">
             <?php
-                include_partial('detailItemAcheteurs', array('acheteurs' => $acheteurs_mouts,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
                                                              'acheteurs_value' => $detail->getAcheteursValuesWithCvi('mouts'))) ?>
             <!--<a href="#" class="ajout_mout">Ajouter un acheteur de mouts</a>-->
         </div>

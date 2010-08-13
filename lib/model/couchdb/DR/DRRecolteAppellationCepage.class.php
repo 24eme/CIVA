@@ -4,6 +4,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 
     protected $_total_acheteurs_by_cvi = array();
 
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
+
     public function addDetail($detail) {
       return $this->add(null, $detail);
     }

@@ -67,7 +67,13 @@ class declarationActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
-                $this->redirectByBoutonsEtapes();
+                if ($this->askRedirectToPreviousEtapes()) {
+                    $this->logMessage($this->_etapes_config->previousUrl());
+                    $this->redirect($this->_etapes_config->previousUrl().'?from_exploitation_autres=1');
+                } else {
+                    $this->redirectByBoutonsEtapes();
+                }
+                
             }
             
         }

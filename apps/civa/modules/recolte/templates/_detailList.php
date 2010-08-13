@@ -8,10 +8,8 @@
                     include_partial('detailItem', array('detail' => $detail,
                         'key' => $key,
                         'onglets' => $onglets,
-                        'acheteurs_negoce' => $acheteurs_negoce,
-                        'acheteurs_cave' => $acheteurs_cave,
-                        'has_acheteurs_mout' => $has_acheteurs_mout,
-                        'acheteurs_mouts' => $acheteurs_mout)) ?>
+                        'acheteurs' => $acheteurs,
+                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
         <?php endif; ?>
 <?php endforeach; ?>
         <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>" id="ajout_col"><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>

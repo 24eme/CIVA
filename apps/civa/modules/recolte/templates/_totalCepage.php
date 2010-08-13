@@ -1,5 +1,5 @@
 <div id="col_sepage_total" class="col_recolte col_total">
-    <h2>Total <br /> <?php echo $onglets->getCurrentCepage()->libelle ?></h2>
+    <h2>Total <br /> <?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
     <div class="col_cont">
         <p class="superficie">
@@ -8,14 +8,14 @@
 
         <div class="vente_raisins">
                 <?php
-                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_negoce,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
                                                               'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces')))
                 ?>
         </div>
 
         <div class="caves">
             <?php
-                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_cave,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
                                                               'acheteurs_value' => $cepage->getTotalAcheteursByCvi('cooperatives')))
                 ?>
         </div>
@@ -23,7 +23,7 @@
         <?php if ($has_acheteurs_mout): ?>
         <div class="mouts">
             <?php
-                include_partial('totalCepageAcheteurs', array('acheteurs' => $acheteurs_mouts,
+                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
                                                               'acheteurs_value' => $cepage->getTotalAcheteursByCvi('mouts')))
                 ?>
         </div>

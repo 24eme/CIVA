@@ -1,7 +1,6 @@
 <?php
 
 class RecolteOnglets {
-    protected $_configuration = null;
     protected $_declaration = null;
     protected $_current_key_appellation = null;
     protected $_current_key_lieu = null;
@@ -10,8 +9,7 @@ class RecolteOnglets {
     protected $_prefix_key_lieu = null;
     protected $_prefix_key_cepage = null;
 
-    public function __construct(sfCouchdbJson $configuration, sfCouchdbJson $declaration) {
-        $this->_configuration = $configuration;
+    public function __construct(sfCouchdbJson $declaration) {
         $this->_declaration = $declaration;
         $this->_prefix_key_appellation = 'appellation_';
         $this->_prefix_key_lieu = 'lieu';
@@ -54,7 +52,7 @@ class RecolteOnglets {
         }
         $lieu = $this->convertValueToKey($lieu, $this->_prefix_key_lieu);
 
-        return $this->_configuration->get('recolte')->get($appellation)->get($lieu)->filter('^cepage');
+        return $this->_declaration->get('recolte')->get($appellation)->get($lieu)->getConfig()->filter('^cepage');
     }
 
     public function setCurrentAppellation($value = null) {
@@ -81,8 +79,16 @@ class RecolteOnglets {
         return $this->_current_key_appellation;
     }
 
+    public function getCurrentAppellation() {
+        return $this->_declaration->recolte->get($this->_current_key_appellation);
+    }
+
     public function getCurrentKeyLieu() {
         return $this->_current_key_lieu;
+    }
+
+    public function getCurrentLieu() {
+        return $this->getCurrentAppellation()->get($this->_current_key_lieu);
     }
 
     public function getCurrentKeyCepage() {
@@ -90,7 +96,7 @@ class RecolteOnglets {
     }
 
     public function getCurrentCepage() {
-        return $this->getItemsCepage()->get($this->_current_key_cepage);
+        return $this->getCurrentLieu()->get($this->_current_key_cepage);
     }
 
     public function getCurrentValueAppellation() {

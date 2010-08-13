@@ -4,7 +4,6 @@
 <!-- #principal -->
 			<form id="principal" action="" method="post">
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-                                                                                   'configuration' => $configuration,
                                                                                    'onglets' => $onglets)); ?>
 
 				<!-- #application_dr -->
@@ -13,7 +12,6 @@
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
-                                                                                              'configuration' => $configuration,
                                                                                               'onglets' => $onglets, 'recapitulatif' => true)); ?>
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
 						

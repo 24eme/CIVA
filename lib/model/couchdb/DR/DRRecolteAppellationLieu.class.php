@@ -4,6 +4,10 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 
     protected $_total_acheteurs_by_cvi = array();
 
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
+
     public function getLibelle() {
         return ConfigurationClient::getConfiguration()->get($this->getHash())->getLibelle();
     }
@@ -32,11 +36,10 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function getTotalVolumeRevendique() {
-      $sum = 0;
-      foreach ($this->filter('^cepage') as $key => $cepage) {
-	$sum += $cepage->getTotalVolumeRevendique();
-      }
-      return $sum;
+      $r =  $this->_get('total_superficie');
+      if ($r)
+	return $r;
+      return $this->getSumCepageFields('volume_revendique');
     }
 
     public function getTotalDPLC() {
