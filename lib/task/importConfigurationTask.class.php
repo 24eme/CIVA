@@ -109,16 +109,19 @@ EOF;
         $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
 	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
 	$json->recolte->appellation_PINOTNOIRROUGE->rendement = 60;
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PN->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->libelle = "Pinot noir";
 
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir";
-	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
+	$json->recolte->appellation_CREMANT->lieu->cepage_AR->libelle = "Chardonnay";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RS->libelle = "Crémant Rosé";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
+	$json->recolte->appellation_CREMANT->lieu->cepage_RB->libelle = "Rebêches";
+	$json->recolte->appellation_CREMANT->lieu->cepage_RB->min_quantite = 0.2;
+	$json->recolte->appellation_CREMANT->lieu->cepage_RB->exclude_total = 1;
 	$json->recolte->appellation_CREMANT->rendement = 80;
         $json->recolte->appellation_CREMANT->mout = 1;
 

@@ -78,20 +78,26 @@ EOF;
             }
 
 
-            if (in_array($cepage, array('LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) { /* Prise en compte des lies */
+            if (in_array($cepage, array('LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'LK', 'LR'))) { /* Prise en compte des lies */
 
                 if (is_null($doc->lies)) {
                     $doc->lies = 0;
                 }
 		$doc->lies += $this->recode_number($csv[12]);
 
-            } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS'))) {
+            } elseif (in_array($cepage, array('AL', 'CR', 'GD', 'AN', 'LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'AR', 'AK'))) {
 	      if ($cepage == 'AN') {
 		$doc->recolte->appellation_PINOTNOIR->total_superficie = $this->recode_number($csv[11]);
 		$doc->recolte->appellation_PINOTNOIR->total_volume = $this->recode_number($csv[12]);
 	      } else if ($cepage == 'CR') {
 		$doc->recolte->appellation_CREMANT->total_superficie = $this->recode_number($csv[11]);
 		$doc->recolte->appellation_CREMANT->total_volume = $this->recode_number($csv[12]);
+	      }else if ($cepage == 'AR') {
+		$doc->recolte->appellation_PINOTROUGE->total_superficie = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_PINOTROUGE->total_volume = $this->recode_number($csv[12]);
+	      }else if ($cepage == 'AK') {
+		$doc->recolte->appellation_KLEVENER->total_superficie = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_KLEVENER->total_volume = $this->recode_number($csv[12]);
 	      }
             } else {
 
@@ -214,9 +220,9 @@ EOF;
 	    $doc->acheteurs->appellation_PINOTNOIR->cave_particuliere = ($this->recode_number($csv[21]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[90])) {
-	    $doc->recolte->appellation_PINOTROUGE->volume_revendique =  $this->recode_number($csv[99]);
-	    $doc->recolte->appellation_PINOTROUGE->dplc =  $this->recode_number($csv[100]);
-	    $doc->acheteurs->appellation_PINOTROUGE->cave_particuliere = ($this->recode_number($csv[32]) > 0) ? 1 : 0;
+	    $doc->recolte->appellation_PINOTNOIRROUGE->volume_revendique =  $this->recode_number($csv[99]);
+	    $doc->recolte->appellation_PINOTNOIRROUGE->dplc =  $this->recode_number($csv[100]);
+	    $doc->acheteurs->appellation_PINOTNOIRROUGE->cave_particuliere = ($this->recode_number($csv[32]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[103])) {
 	    $doc->recolte->appellation_KLEVENER->volume_revendique =  $this->recode_number($csv[103]);
@@ -235,6 +241,7 @@ EOF;
 	  }
 	}
 
+	/*
 	foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dclgc09") as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
@@ -252,7 +259,7 @@ EOF;
 	    $doc->recolte->appellation_GRDCRU->{'lieu'.$csv[3]}->dplc =  $this->recode_number($csv[37]);
 	  }
 	  
-	}
+	  }*/
 
 	if ($options['import'] == 'couchdb') {
 	  foreach ($list_documents as $json) {
@@ -288,7 +295,7 @@ EOF;
       if ($cepage == 'PN' || $cepage == 'AN')
 	return 'PINOTNOIR';
       if ($cepage == 'PR')
-	return 'PINOTROUGE';
+	return 'PINOTNOIRROUGE';
       if ($cepage == 'KL') 
 	return 'KLEVENER';
       if ($cepage == 'VT')
