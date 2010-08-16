@@ -114,4 +114,9 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
             return 0;
         }
     }
+    public function removeVolumes() {
+      foreach($this->filter('^cepage_') as $cepage) {
+	$cepage->removeVolumes();
+      }
+    }
 }

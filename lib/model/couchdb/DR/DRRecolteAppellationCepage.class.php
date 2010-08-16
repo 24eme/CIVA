@@ -93,4 +93,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
             return 0;
         }
     }
+
+    public function removeVolumes() {
+      foreach($this->getDetail() as $detail) {
+	$detail->removeVolumes();
+      }
+    }
 }

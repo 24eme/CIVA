@@ -93,4 +93,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return!$configuration->get($this->getHash())->exist('lieu');
     }
 
+
+    public function removeVolumes() {
+      foreach ($this->filter('^lieu') as $lieu) {
+	$lieu->removeVolumes();
+      }
+    }
+
 }

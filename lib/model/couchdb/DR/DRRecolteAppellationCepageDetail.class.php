@@ -56,7 +56,14 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         return $cepage->getRendement();
     }
     public function save() {
-      echo "SAVE! !!!!!!!!<br/>";
       return $this->getCouchdbDocument()->save();
+    }
+
+    public function removeVolumes() {
+      $this->volume = null;
+      $this->cave_particuliere = null;
+      $this->remove('cooperative');
+      $this->remove('mouts');
+      $this->remove('negoces');
     }
 }
