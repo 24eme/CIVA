@@ -6,7 +6,7 @@
 if (isset($is_recap) && $is_recap) {
 echo url_for($onglets->getNextUrl()->getRawValue());
 }else{
-echo url_for($onglets->getUrlRecap()->getRawValue());
+echo url_for($onglets->getUrlRecap(true)->getRawValue());
 }
  ?>"><img src="/images/boutons/btn_appelation_suiv.png" alt="Valider et Passer à l'appelation suivante" /></a></li>
 					</ul>
