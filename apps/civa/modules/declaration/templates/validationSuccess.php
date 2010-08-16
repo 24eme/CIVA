@@ -28,7 +28,7 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>Superficie (Ha)</td>
+                                                        <td>Superficie (ares)</td>
   <?php foreach ($appellations as $a) : ?>
 <td><?php echo $superficie[$a]; ?></td>
 <?php endforeach; ?>
@@ -59,7 +59,7 @@
                         <div id="total_general">
                                 <h2 class="titre_section">Total général</h2>
                                 <ul class="contenu_section">
-    <li><input type="text" value="<?php echo $total_superficie;?> Ha" readonly="readonly"></li>
+    <li><input type="text" value="<?php echo $total_superficie;?> a." readonly="readonly"></li>
     <li><input type="text" value="<?php echo $total_volume;?> Hl" readonly="readonly"></li>
     <li><input type="text" value="<?php echo $total_revendique;?> Hl" readonly="readonly"></li>
     <li><input type="text" value="<?php echo $total_dplc;?> Hl" readonly="readonly"></li>
@@ -67,10 +67,10 @@
                         </div>
                 </div>
                 <div id="extra recap" style="clear: both;">
-    <p>Jeunes Vignes : <?php echo $jeunes_vignes; ?>Ha</p>
+    <p>Jeunes Vignes : <?php echo $jeunes_vignes; ?>a.</p>
     <p>Lies : <?php echo $lies; ?>Hl</p>
     <?php if (isset($superficie['VINTABLE'])) : ?>
-	      <p>Vin de table : <?php echo $superficie['VINTABLE']; ?> Ha / <?php echo $volume['VINTABLE']; ?> Hl</p>
+	      <p>Vin de table : <?php echo $superficie['VINTABLE']; ?> a. / <?php echo $volume['VINTABLE']; ?> Hl</p>
     <?php endif; ?>
 </div>
                 <!-- fin #acheteurs_caves -->
