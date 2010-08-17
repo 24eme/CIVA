@@ -66,4 +66,14 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       $this->remove('mouts');
       $this->remove('negoces');
     }
+
+    public function getMotifNonRecolte() {
+      if ($this->volume)
+	return '';
+      try {
+	if ($m = $this->_get('motif_non_recolte'))
+	  return $m;
+      }catch(Exception $e) {}
+      return 'Non Saisi';
+    }
 }

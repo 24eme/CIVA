@@ -98,6 +98,7 @@ DR:
                                           code_lieu: {  }
                                           volume: { type: float }
                                           superficie: { type: float }
+                                          motif_non_recolte: { required: false}
                                           negoces:
                                             type: array_collection
                                             definition:
