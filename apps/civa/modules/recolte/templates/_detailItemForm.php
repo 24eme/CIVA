@@ -43,7 +43,6 @@
             <?php echo $form['cave_particuliere']->render(array('class' => 'num')) ?>
         </p>
         <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></p>
-
         <ul class="vol_revendique_dplc">
             <li><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
             <li><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>

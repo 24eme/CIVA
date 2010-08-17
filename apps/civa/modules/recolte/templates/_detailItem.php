@@ -42,6 +42,8 @@
         <p class="vol_place"><input type="text" class="num" disabled="disabled" value="<?php echo $detail->cave_particuliere ?>" /></p>
         <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
 
+   <p><?php echo $detail->motif_non_recolte; ?></p>
+
         <ul class="vol_revendique_dplc">
             <li><input type="text" class="num" value="<?php echo $detail->volume_revendique ?>" /></li>
             <li><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
