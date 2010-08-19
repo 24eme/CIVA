@@ -2,8 +2,7 @@
 
 class ValidatorFirstConnection extends sfValidatorBase {
     public function configure($options = array(), $messages = array()) {
-        $this->setMessage('invalid', 'Veuillez remplir tous les champs.');
-        $this->addMessage('mdp_invalid', 'CVI ou mot de passe invalide.');
+       $this->addMessage('mdp_invalid', 'CVI ou mot de passe invalide.');
     }
 
     protected function doClean($values) {
@@ -20,6 +19,5 @@ class ValidatorFirstConnection extends sfValidatorBase {
             throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'mdp_invalid')));
         }
 
-        throw new sfValidatorErrorSchema($this, array($this->getOption('cvi') => new sfValidatorError($this, 'invalid')));
     }
 }

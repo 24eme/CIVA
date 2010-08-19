@@ -19,7 +19,8 @@
                     <?php echo $form['cvi']->renderError() ?>
                     <?php echo $form['cvi']->renderLabel() ?>
                     <?php echo $form['cvi']->render() ?>
-
+                </div>
+                <div class="ligne_form">
                     <?php echo $form['mdp']->renderError() ?>
                     <?php echo $form['mdp']->renderLabel() ?>
                     <?php echo $form['mdp']->render() ?>

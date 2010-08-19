@@ -10,11 +10,15 @@
             $this->widgetSchema->setNameFormat('firstConnection[%s]');
 
             $this->setValidators(array(
-                'cvi' => new sfValidatorString(array('required' => false)),
-                'mdp' => new sfValidatorString(array('required' => false)),
+                'cvi' => new sfValidatorString(array('required' => true)),
+                'mdp' => new sfValidatorString(array('required' => true)),
             ));
-            
-             $this->validatorSchema->setPostValidator(new ValidatorFirstConnection());
+
+            $this->validatorSchema['cvi']->setMessage('required', 'Champ obligatoire');
+            $this->validatorSchema['mdp']->setMessage('required', 'Champ obligatoire');
+
+
+            $this->validatorSchema->setPostValidator(new ValidatorFirstConnection());
         }
     }
 

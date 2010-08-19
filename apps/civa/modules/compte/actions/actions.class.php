@@ -16,20 +16,19 @@ class compteActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeIndex(sfWebRequest $request) {
-
-       
+        
         $this->form = new FirstConnectionForm();
-        $this->erreur = '';
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter('firstConnection'));
+            $this->form->bind($request->getParameter($this->form->getName()));
 
             if ($this->form->isValid()) {
+                $this->getUser()->signIn($this->form->getValue('recoltant'));
                 $this->redirect('compte/create');
             }
         }
 
     }
-   
+
     public function executeCreate(sfWebRequest $request) {
         $this->form = new CreateCompteForm();
     }
