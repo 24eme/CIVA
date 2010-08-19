@@ -93,8 +93,8 @@ EOF;
 		$doc->recolte->appellation_CREMANT->total_superficie = $this->recode_number($csv[11]);
 		$doc->recolte->appellation_CREMANT->total_volume = $this->recode_number($csv[12]);
 	      }else if ($cepage == 'AR') {
-		$doc->recolte->appellation_PINOTROUGE->total_superficie = $this->recode_number($csv[11]);
-		$doc->recolte->appellation_PINOTROUGE->total_volume = $this->recode_number($csv[12]);
+		$doc->recolte->appellation_PINOTNOIRROUGE->total_superficie = $this->recode_number($csv[11]);
+		$doc->recolte->appellation_PINOTNOIRROUGE->total_volume = $this->recode_number($csv[12]);
 	      }else if ($cepage == 'AK') {
 		$doc->recolte->appellation_KLEVENER->total_superficie = $this->recode_number($csv[11]);
 		$doc->recolte->appellation_KLEVENER->total_volume = $this->recode_number($csv[12]);
