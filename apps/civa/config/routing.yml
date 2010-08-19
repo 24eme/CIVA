@@ -66,6 +66,9 @@ confirmation:
   url:   /confirmation
   param: { module: declaration, action: confirmation }
 
+compte:
+  url: /compte
+  param: { module: compte, action: index }
 
 # generic rules
 # please, remove them by adding more specific rules
