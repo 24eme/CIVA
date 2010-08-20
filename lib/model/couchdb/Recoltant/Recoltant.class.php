@@ -26,4 +26,5 @@ class Recoltant extends BaseRecoltant {
     public function setCommune($c) {
       return $this->get('siege')->set('commune', $c);
     }
+    
 }
