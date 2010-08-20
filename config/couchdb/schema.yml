@@ -156,6 +156,7 @@ Recoltant:
       type: {  }
       cvi: {  }
       mdp: { }
+      change_mdp: { }
       num: {  }
       no_stock: {  }
       maison_mere: {  }

@@ -16,21 +16,41 @@ class compteActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeIndex(sfWebRequest $request) {
-        
-        $this->form = new FirstConnectionForm();
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
+        $recoltant = $this->getUser()->getRecoltant();
+        if(isset($recoltant) && $recoltant->change_mdp == 1){
+            $this->redirect('@mon_espace_civa');
+        }else{
+            $this->form = new FirstConnectionForm();
+            if ($request->isMethod(sfWebRequest::POST)) {
+                $this->form->bind($request->getParameter($this->form->getName()));
 
-            if ($this->form->isValid()) {
-                $this->getUser()->signIn($this->form->getValue('recoltant'));
-                $this->redirect('compte/create');
+                if ($this->form->isValid()) {
+                    if(!$recoltant) $this->getUser()->signIn($this->form->getValue('recoltant'));
+                    $this->redirect('compte/create');
+                }
             }
         }
 
     }
 
     public function executeCreate(sfWebRequest $request) {
-        $this->form = new CreateCompteForm();
+        $recoltant = $this->getUser()->getRecoltant();
+        if(isset($recoltant) && $recoltant->change_mdp == 1){
+            $this->redirect('@mon_espace_civa');
+        }elseif($recoltant){
+            
+            $this->form = new CreateCompteForm();
+
+            if ($request->isMethod(sfWebRequest::POST)) {
+                $this->form->bind($request->getParameter($this->form->getName()));
+
+                if ($this->form->isValid()) {
+                    $this->redirect('@mon_espace_civa');
+                }
+            }
+        }else{
+           $this->redirect('compte');
+        }
     }
 
 

@@ -16,11 +16,15 @@ class CreateCompteForm extends BaseForm {
 
         $this->widgetSchema->setNameFormat('create_compte[%s]');
 
+
         $this->setValidators(array(
-                'cvi' => new sfValidatorString(array('required' => false)),
-                'mdp1' => new sfValidatorString(array('required' => false)),
-                'mdp2' => new sfValidatorString(array('required' => false)),
+                'email' => new sfValidatorEmail(array('required' => true),array('required' => 'Champ obligatoire', 'invalid' => 'Adresse email invalide.')),
+                'mdp1'  => new sfValidatorString(array('required' => true), array('required' => 'Champ obligatoire.')),
+                'mdp2'  => new sfValidatorString(array('required' => true), array('required' => 'Champ obligatoire'))
+
         ));
+
+        $this->validatorSchema->setPostValidator(new ValidatorCreateCompte());
     }
 }
 
