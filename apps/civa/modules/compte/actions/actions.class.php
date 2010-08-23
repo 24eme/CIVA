@@ -57,17 +57,16 @@ class compteActions extends sfActions {
     private function addToLdap($recoltant) {
         $ldap = new ldap();
         $ldapAdd = $ldap->ldapAdd($recoltant);
-        print_r($ldapAdd);
-        exit();
     }
 
     public function executeResetMDP(sfWebRequest $request) {
         $recoltant = $this->getUser()->getRecoltant();
-        $recoltant->mdp = md5('0000');
+        $recoltant->mdp = '{TEXT}0000';
         $recoltant->change_mdp = 0;
         $recoltant->save();
         exit();
     }
+
 
 
 }

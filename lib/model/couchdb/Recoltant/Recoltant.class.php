@@ -1,30 +1,50 @@
 <?php
 class Recoltant extends BaseRecoltant {
     public function getDeclaration($campagne) {
-      return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }
 
     public function getDeclarationArchivesCampagne($campagne) {
-      return sfCouchdbManager::getClient('DR')->getArchivesCampagnes($this->cvi, $campagne);
+        return sfCouchdbManager::getClient('DR')->getArchivesCampagnes($this->cvi, $campagne);
     }
 
     public function getAdresse() {
-      return $this->get('siege')->get('adresse');
+        return $this->get('siege')->get('adresse');
     }
     public function getCodePostal() {
-      return $this->get('siege')->get('code_postal');
+        return $this->get('siege')->get('code_postal');
     }
     public function getCommune() {
-      return $this->get('siege')->get('commune');
+        return $this->get('siege')->get('commune');
     }
     public function setAdresse($a) {
-      return $this->get('siege')->set('adresse', $a);
+        return $this->get('siege')->set('adresse', $a);
     }
     public function setCodePostal($c) {
-      return $this->get('siege')->set('code_postal', $c);
+        return $this->get('siege')->set('code_postal', $c);
     }
     public function setCommune($c) {
-      return $this->get('siege')->set('commune', $c);
+        return $this->get('siege')->set('commune', $c);
     }
-    
+
+    public function make_ssha_password($password) {
+        mt_srand((double)microtime()*1000000);
+        $salt = pack("CCCC", mt_rand(), mt_rand(), mt_rand(), mt_rand());
+        $hash = "{SSHA}" . base64_encode(pack("H*", sha1($password . $salt)) . $salt);
+        return $hash;
+    }
+
+    public function ssha_password_verify($hash, $password) {
+        // Verify SSHA hash
+        $ohash = base64_decode(substr($hash, 6));
+        $osalt = substr($ohash, 20);
+        $ohash = substr($ohash, 0, 20);
+        $nhash = pack("H*", sha1($password . $osalt));
+        
+        if ($ohash == $nhash) {
+            return True;
+        } else {
+            return False;
+        }
+    }
 }

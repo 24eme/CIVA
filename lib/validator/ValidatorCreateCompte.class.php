@@ -8,10 +8,9 @@ class ValidatorCreateCompte extends sfValidatorBase {
     protected function doClean($values) {
         if($values['mdp1'] == $values['mdp2']) {
             $recoltant = sfContext::getInstance()->getUser()->getRecoltant();
-            $recoltant->mdp = md5($values['mdp1']);
+            $recoltant->mdp = $recoltant->make_ssha_password($values['mdp1']);
             $recoltant->email = $values['email'];
-            $recoltant->change_mdp = '1';
-            //$recoltant->save();
+            $recoltant->save();
 
             return array_merge($values, array('recoltant' => $recoltant));
 

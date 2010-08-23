@@ -3,9 +3,10 @@ class ldap {
 
     protected $ldapserveur = "CHA.NGE._.ME";
     protected $ldapdn      = "cn=admin,dc=vinsdalsace,dc=pro";
+    protected $ldapdc      = "dc=vinsdalsace,dc=pro";
     protected $ldappass    = "my_passw";
 
-    private function ldapConnect() {
+    public function ldapConnect() {
 
         //Connexion au serveur LDAP
         $ldapconn = ldap_connect($this->ldapserveur);
@@ -27,42 +28,79 @@ class ldap {
 
     public function ldapAdd($recoltant) {
 
-        $ldapConnect = $this->ldapConnect();
+        if($recoltant){
+            $ldapConnect = $this->ldapConnect();
+            if($ldapConnect) {
+                // prepare les données
+                $identifier            = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
+                $info['uid']           = $recoltant->cvi;
+                $info['sn']            = $recoltant->nom;
+                $info['cn']            = $recoltant->nom;
+                $info['givenName']     = 'prenom';
+                $info['objectClass'][0]   = 'top';
+                $info['objectClass'][1]   = 'person';
+                $info['objectClass'][2]   = 'posixAccount';
+                $info['objectClass'][3]   = 'inetOrgPerson';
+                $info['userPassword']  = $recoltant->mdp;
+                $info['loginShell']    = '/bin/bash';
+                $info['uidNumber']     = '1000';
+                $info['gidNumber']     = '1000';
+                $info['homeDirectory'] = '/home/'.$recoltant->cvi;
+                $info['gecos']         = 'Mon recoltant,,,';
+                $info['mail']          = $recoltant->email;
+                $info['postalAddress'] = 'adresse';
+                $info['postalCode']    = '75000';
+                $info['l']             = 'ville';
 
-        if($ldapConnect) {
+                // Ajoute les données au dossier
+                $r=ldap_add($ldapConnect, $identifier, $info);
+                ldap_unbind($ldapConnect);
+                return $r;
+            }
+        }
+        return false;
+    }
+    
+    public function ldapModify($recoltant, $values) {
 
-            // prepare les données
-            $identifier            = 'uid='.$recoltant->cvi.',ou=People,dc=vinsdalsace,dc=pro';
-            $info['uid']           = $recoltant->cvi;
-            $info['sn']            = $recoltant->nom;
-            $info['cn']            = $recoltant->nom;
-            $info['givenName']     = 'prenom';
-            $info['objectClass'][0]   = 'top';
-            $info['objectClass'][1]   = 'person';
-            $info['objectClass'][2]   = 'posixAccount';
-            $info['objectClass'][3]   = 'inetOrgPerson';
-            $info['userPassword']  = '{SSHA}'.$recoltant->mdp;
-            $info['loginShell']    = '/bin/bash';
-            $info['uidNumber']     = '1000';
-            $info['gidNumber']     = '1000';
-            $info['homeDirectory'] = '/home/'.$recoltant->cvi;
-            $info['gecos']         = 'Mon recoltant,,,';
-            $info['mail']          = $recoltant->email;
-            $info['postalAddress'] = 'adresse';
-            $info['postalCode']    = '75000';
-            $info['l']             = 'ville';
+        if($recoltant && $values){
+            $ldapConnect = $this->ldapConnect();
+            if($ldapConnect) {
 
-            // Ajoute les données au dossier
-            $r=ldap_add($ldapConnect, $identifier, $info);
+                // prepare les données
+                $identifier            = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
+                $info['sn']            = $values['nom'];
+                $info['cn']            = $values['nom'];
+                $info['userPassword']  = $values['mdp'];
+                $info['gecos']         = 'Mon recoltant,,,';
+                $info['mail']          = $values['email'];
+                $info['postalAddress'] = 'adresse';
+                $info['postalCode']    = '75000';
+                $info['l']             = 'ville';
+
+                // Ajoute les données au dossier
+                $r=ldap_modify($ldapConnect, $identifier, $info);
+                ldap_unbind($ldapConnect);
+                return $r;
+            }
 
         }
-        ldap_unbind($ldapConnect);
-
-        if($r)
-            return $r;
-        else
-            return false;
+        return false;
     }
+
+    public function ldapDelete($recoltant) {
+        $ldapConnect = $this->ldapConnect();
+        
+        if($ldapConnect && $recoltant) {
+            $identifier  = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
+            $delete      = ldap_delete($ldapConnect, $identifier);
+            ldap_unbind($ldapConnect);
+            return $delete;
+        }else{
+            return false;
+        }
+    }
+
 }
 
 ?>

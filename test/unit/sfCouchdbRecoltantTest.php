@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(6);
+$t = new lime_test(7);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -22,4 +22,12 @@ $t->is($exploitant->getDateNaissance(), '01/01/1970', 'date de naissance via get
 $exploitant->date_naissance = '1970-01-01';
 $t->is($exploitant->date_naissance, '01/01/1970', 'date de naissance via format DB2');
 $t->is($exploitant->getDateNaissance(), '01/01/1970', 'date de naissance via format DB2 et get');
+
+//test la création du MDP
+$pass = 'test';
+$sshaPass = $rec->make_ssha_password($pass);
+$verifPass = $rec->ssha_password_verify($sshaPass, 'test');
+$t->ok($verifPass, 'creation et comparaison du mdp SSHA');
+
+
 
