@@ -36,11 +36,11 @@ class ldap {
             $info['uid']           = $recoltant->cvi;
             $info['sn']            = $recoltant->nom;
             $info['cn']            = $recoltant->nom;
-/*            $info['givenName']     = 'prenom';
-            $info['objectClass']   = 'top';
-            $info['objectClass']   = 'person';
-            $info['objectClass']   = 'posixAccount';
-            $info['objectClass']   = 'inetOrgPerson';
+            $info['givenName']     = 'prenom';
+            $info['objectClass'][0]   = 'top';
+            $info['objectClass'][1]   = 'person';
+            $info['objectClass'][2]   = 'posixAccount';
+            $info['objectClass'][3]   = 'inetOrgPerson';
             $info['userPassword']  = '{SSHA}'.$recoltant->mdp;
             $info['loginShell']    = '/bin/bash';
             $info['uidNumber']     = '1000';
@@ -51,8 +51,6 @@ class ldap {
             $info['postalAddress'] = 'adresse';
             $info['postalCode']    = '75000';
             $info['l']             = 'ville';
-*/
-            print_r($info);
 
             // Ajoute les données au dossier
             $r=ldap_add($ldapConnect, $identifier, $info);
