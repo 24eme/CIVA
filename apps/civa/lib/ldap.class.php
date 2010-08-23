@@ -32,16 +32,16 @@ class ldap {
         if($ldapConnect) {
 
             // prepare les données
-            $info['dn']            = 'uid='.$recoltant->cvi.',ou=People,dc=vinsdalsace,dc=pro';
+            $identifier            = 'uid='.$recoltant->cvi.',ou=People,dc=vinsdalsace,dc=pro';
             $info['uid']           = $recoltant->cvi;
             $info['sn']            = $recoltant->nom;
             $info['cn']            = $recoltant->nom;
-            $info['givenName']     = 'prenom';
+/*            $info['givenName']     = 'prenom';
             $info['objectClass']   = 'top';
             $info['objectClass']   = 'person';
             $info['objectClass']   = 'posixAccount';
             $info['objectClass']   = 'inetOrgPerson';
-            $info['userPassword']  = $recoltant->mdp;
+            $info['userPassword']  = '{SSHA}'.$recoltant->mdp;
             $info['loginShell']    = '/bin/bash';
             $info['uidNumber']     = '1000';
             $info['gidNumber']     = '1000';
@@ -49,11 +49,13 @@ class ldap {
             $info['gecos']         = 'Mon recoltant,,,';
             $info['mail']          = $recoltant->email;
             $info['postalAddress'] = 'adresse';
-            $info['postalCode']    = 'CP';
+            $info['postalCode']    = '75000';
             $info['l']             = 'ville';
-            
+*/
+            print_r($info);
+
             // Ajoute les données au dossier
-            $r=ldap_add($ldapConnect, "cn=admin,dc=vinsdalsace,dc=pro", $info);
+            $r=ldap_add($ldapConnect, $identifier, $info);
 
         }
         ldap_unbind($ldapConnect);
