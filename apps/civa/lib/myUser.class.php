@@ -22,6 +22,11 @@ class myUser extends sfBasicSecurityUser {
         $this->setAuthenticated(true);
     }
 
+    public function signInWithCas($casUser) {
+        $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($casUser);
+        $this->signIn($recoltant);
+    }
+
     public function signOut() {
         $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_RECOLTANT);
         $this->_recoltant = null;

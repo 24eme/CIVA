@@ -2,9 +2,17 @@
 # http://www.symfony-project.org/reference/1_4/en/12-Filters
 
 rendering: ~
-security:  ~
-
+cas_required:
+  class: sfCASRequiredFilter
+  param:
+    server_domain: CHA.NGE._.ME
+    server_port: 8181
+    server_path: cas
+security: ~
+  
 # insert your own filters here
 
 cache:     ~
 execution: ~
+
+

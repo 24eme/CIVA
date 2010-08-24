@@ -1,5 +1,14 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/08-Security
 
+# for all modules
 default:
-  is_secure: false
+  # require authentication, which our CAS filter will provide
+  is_secure: on
+  
+
+# need this to prevent infinite internal forwarding (don't have to be secured to see the "you need to be secured" page)
+login:
+  is_secure: off
+secure:
+  is_secure: off
