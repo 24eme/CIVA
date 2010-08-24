@@ -40,19 +40,23 @@ recolte:
 
 recolte_update:
   url:   /recolte/:appellation_lieu/:cepage/update/:detail_key
-  param: { module: recolte, action: update}
+  param: { module: recolte, action: update }
 
 recolte_delete:
   url:   /recolte/:appellation_lieu/:cepage/delete/:detail_key
-  param: { module: recolte, action: delete}
+  param: { module: recolte, action: delete }
 
 recolte_add:
   url:   /recolte/:appellation_lieu/:cepage/add
-  param: { module: recolte, action: add}
+  param: { module: recolte, action: add }
+
+recolte_motif_non_recolte:
+  url:   /recolte/:appellation_lieu/:cepage/motif_non_recolte/:detail_key
+  param: { module: recolte, action: motifNonRecolte }
 
 recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
-  param: {module: recolte, action: recapitulatif}
+  param: {module: recolte, action: recapitulatif }
 
 validation:
   url:   /validation

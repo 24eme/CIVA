@@ -20,7 +20,6 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-        
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
@@ -81,6 +80,24 @@ class recolteActions extends EtapesActions {
         $this->redirect($this->onglets->getUrl('recolte'));
     }
 
+    public function executeMotifNonRecolte(sfWebRequest $request) {
+        $this->initOnglets($request);
+        $this->initDetails();
+        
+        $this->detail_key = $request->getParameter('detail_key');
+        $this->forward404Unless($this->details->exist($this->detail_key));
+
+        $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key));
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form ->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                return $this->redirect($this->onglets->getUrl('recolte'));
+            }
+        }
+    }
+
     public function executeRecapitulatif(sfWebRequest $request)
     {
       $this->initOnglets($request);
@@ -109,7 +126,12 @@ class recolteActions extends EtapesActions {
     protected function processFormDetail($form, $request) {
         $form->bind($request->getParameter($form->getName()));
         if ($form->isValid()) {
-            $form->save();
+            $detail = $form->save();
+            if ($detail->exist('motif_non_recolte')) {
+                $this->getUser()->setFlash('show_motif_non_recolte', true);
+                $this->redirect(array_merge($this->onglets->getUrl('recolte_motif_non_recolte'), array('detail_key' => $detail->getKey())));
+            }
+
             $this->redirect($this->onglets->getUrl('recolte'));
         }
     }

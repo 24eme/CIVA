@@ -34,6 +34,12 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
             $this->volume_revendique = $this->volume;
             $this->volume_dplc = 0;
         }
+
+        if ($this->volume && $this->volume > 0) {
+           $this->remove('motif_non_recolte');
+        } else {
+           $this->add('motif_non_recolte');
+        }
     }
 
     private function getVolumeMax() {
@@ -68,13 +74,15 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       $this->remove('negoces');
     }
 
-    public function getMotifNonRecolte() {
+    public function getMotifNonRecolteLibelle() {
       if ($this->volume)
 	return '';
-      try {
-	if ($m = $this->_get('motif_non_recolte'))
-	  return $m;
-      }catch(Exception $e) {}
-      return 'Non Saisi';
+
+      if ($this->exist('motif_non_recolte') && ConfigurationClient::getConfiguration()->motif_non_recolte->exist($this->motif_non_recolte)) {
+          return ConfigurationClient::getConfiguration()->motif_non_recolte->get($this->motif_non_recolte);
+      } else {
+         return 'Non saisi';
+      }
+      
     }
 }

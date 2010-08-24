@@ -202,6 +202,11 @@ Configuration:
         definition:
           fields:
             '*': {  }
+      motif_non_recolte:
+        type: collection
+        definition:
+          fields:
+            '*': {  }
       recolte:
         type: collection
         definition:
