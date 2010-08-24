@@ -25,7 +25,7 @@
 											<tbody>
 												<tr>
 													<td>Superficie :</td>
-    <td class="valeur alt"><? echo $appellationlieu->getTotalSuperficie(); ?> ares</td>
+    <td class="valeur alt"><?php echo $appellationlieu->getTotalSuperficie(); ?> ares</td>
 												</tr>
 												<tr>
 													<td>Volume total récolté :</td>

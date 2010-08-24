@@ -55,6 +55,7 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         $cepage = $this->getCouchdbDocument()->get($cepage_detail->getParentHash());
         return $cepage->getRendement();
     }
+    
     public function save() {
       return $this->getCouchdbDocument()->save();
     }

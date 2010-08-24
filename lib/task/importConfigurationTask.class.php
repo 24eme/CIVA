@@ -51,6 +51,7 @@ EOF;
 	$json = new stdClass();
         $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
 	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";
+        $json->recolte->appellation_ALSACEBLANC->rendement_appellation = 80;
 	$lieu = new stdClass();
 
 	$lieu->cepage_PG->libelle = "Pinot Gris";

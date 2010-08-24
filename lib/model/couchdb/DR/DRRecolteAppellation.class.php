@@ -61,11 +61,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getTotalCaveParticuliere() {
-      $sum = 0;
-      foreach ($this->filter('^lieu') as $key => $lieu) {
-	$sum += $lieu->getTotalCaveParticuliere();
-      }
-      return $sum;
+        $sum = 0;
+        foreach ($this->filter('^lieu') as $key => $lieu) {
+            $sum += $lieu->getTotalCaveParticuliere();
+        }
+        return $sum;
     }
 
     private function getSumLieu($type) {
@@ -93,11 +93,42 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return!$configuration->get($this->getHash())->exist('lieu');
     }
 
+    public function hasRendementAppellation() {
+        return !is_null($this->getConfig()->getRendementAppellation());
+    }
+
+    public function getDPLCAppellation() {
+        $volume_dplc = null;
+        if ($this->hasRendementAppellation()) {
+            $volume = $this->getTotalVolume();
+            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            if ($volume > $volume_max) {
+                $volume_dplc = $volume - $volume_max;
+            } else {
+                $volume_dplc = 0;
+            }
+        } 
+        return $volume_dplc;
+    }
+
+    public function getVolumeRevendiqueAppellation() {
+        $volume_revendique = null;
+        if ($this->hasRendementAppellation()) {
+            $volume = $this->getTotalVolume();
+            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            if ($volume > $volume_max) {
+                $volume_revendique = $volume_max;
+            } else {
+                $volume_revendique = $volume;
+            }
+        }
+        return $volume_revendique;
+    }
 
     public function removeVolumes() {
-      foreach ($this->filter('^lieu') as $lieu) {
-	$lieu->removeVolumes();
-      }
+        foreach ($this->filter('^lieu') as $lieu) {
+            $lieu->removeVolumes();
+        }
     }
 
 }

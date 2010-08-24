@@ -215,6 +215,7 @@ Configuration:
                   appellation: { }
                   libelle: {  }
                   rendement : { type: float }
+                  rendement_appellation: { type: float }
                   mout: {type: integer}
                   '*':
                   # ------------ LIEU --------------

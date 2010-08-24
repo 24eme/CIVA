@@ -119,4 +119,16 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 	$cepage->removeVolumes();
       }
     }
+
+    public function hasRendementAppellation() {
+        return $this->getParent()->hasRendementAppellation();
+    }
+
+    public function getDPLCAppellation() {
+        return $this->getParent()->getDPLCAppellation();
+    }
+
+    public function getVolumeRevendiqueAppellation() {
+        return $this->getParent()->getVolumeRevendiqueAppellation();
+    }
 }
