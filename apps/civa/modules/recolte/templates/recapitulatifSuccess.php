@@ -33,11 +33,11 @@
 												</tr>
 												<tr>
 													<td>Volume revendiqué :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendique(); ?> hl</td>
+													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendiqueFinal(); ?> hl</td>
 												</tr>
 												<tr>
 													<td>dont DPLC :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getDplc(); ?> hl</td>
+													<td class="valeur alt"><?php echo $appellationlieu->getDplcFinal(); ?> hl</td>
 												</tr>
 											</tbody>
 										</table>

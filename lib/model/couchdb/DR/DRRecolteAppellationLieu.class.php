@@ -121,14 +121,58 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function hasRendementAppellation() {
-        return $this->getParent()->hasRendementAppellation();
+        return $this->getConfig()->hasRendementAppellation();
     }
 
     public function getDPLCAppellation() {
-        return $this->getParent()->getDPLCAppellation();
+        $volume_dplc = null;
+        if ($this->hasRendementAppellation()) {
+            $volume = $this->getTotalVolume();
+            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            if ($volume > $volume_max) {
+                $volume_dplc = $volume - $volume_max;
+            } else {
+                $volume_dplc = 0;
+            }
+        }
+        return $volume_dplc;
     }
 
     public function getVolumeRevendiqueAppellation() {
-        return $this->getParent()->getVolumeRevendiqueAppellation();
+        $volume_revendique = null;
+        if ($this->hasRendementAppellation()) {
+            $volume = $this->getTotalVolume();
+            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            if ($volume > $volume_max) {
+                $volume_revendique = $volume_max;
+            } else {
+                $volume_revendique = $volume;
+            }
+        }
+        return $volume_revendique;
+    }
+
+    public function getDPLCFinal() {
+      $dplc_total = $this->getTotalDPLC();
+      $dplc_final = $dplc_total;
+      if ($this->hasRendementAppellation()) {
+          $dplc_appellation = $this->getDPLCAppellation();
+          if ($dplc_total < $dplc_appellation) {
+            $dplc_final = $dplc_appellation;
+          }
+      }
+      return $dplc_final;
+    }
+
+    public function getVolumeRevendiqueFinal() {
+      $volume_revendique_total = $this->getTotalVolumeRevendique();
+      $volume_revendique_final = $volume_revendique_total;
+      if ($this->hasRendementAppellation()) {
+          $volume_revendique_appellation = $this->getVolumeRevendiqueAppellation();
+          if ($volume_revendique_total > $volume_revendique_appellation) {
+            $volume_revendique_final = $volume_revendique_appellation;
+          }
+      }
+      return $volume_revendique_final;
     }
 }

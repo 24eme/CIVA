@@ -224,6 +224,7 @@ Configuration:
                     definition:
                       fields:
                         rendement: {type: float}
+                        rendement_appellation: { type: float }
                         libelle: {}
                         '*':
                         # ------------ CEPAGE -------------
