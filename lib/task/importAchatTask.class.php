@@ -15,6 +15,8 @@ class importAchatTask extends sfBaseTask {
                 // add your own options here
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
+            new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
+
         ));
 
         $this->namespace = 'import';
@@ -44,7 +46,7 @@ EOF;
 
 	$docs = array();
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . 'Achat09') as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Achat'.$options['year']) as $a) {
 	  $json = new stdClass();
 	  $achat = explode(',', preg_replace('/"/', '', $a));
 	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]))

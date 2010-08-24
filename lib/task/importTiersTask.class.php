@@ -10,6 +10,8 @@ class importTiersTask extends sfBaseTask {
                 // add your own options here
 	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
+	    new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
+
 				));
 
         $this->namespace = 'import';
@@ -33,7 +35,7 @@ class importTiersTask extends sfBaseTask {
 
 	$docs = array();
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . 'Tiers09') as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Tiers'.$options['year']) as $a) {
 	  $json = new stdClass();
 	  $tiers = explode(',', preg_replace('/"/', '', $a));
 	  if (!isset($tiers[4]) || !$tiers[4] || !strlen($tiers[4]))

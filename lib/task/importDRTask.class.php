@@ -17,6 +17,7 @@ class importDRTask extends sfBaseTask {
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
             new sfCommandOption('limit', null, sfCommandOption::PARAMETER_REQUIRED, 'limit the number of imported record', -1),
             new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'insert data only for a given cvi', 0),
+            new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'Import data for the given year (09 by default)', '09'),
 	));
 
         $this->namespace = 'import';
@@ -47,16 +48,16 @@ EOF;
         $achat = array();
         $achatcvi = array();
         /* Reconstitution des vendeurs pour chaque récoltant */
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . 'Dclven09') as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Dclven'.$options['year']) as $a) {
             $csv = explode(',', preg_replace('/"/', '', $a));
             $achat[$csv[0]][$csv[1]][$csv[4]][$csv[3]] = $csv[6];
             $achatcvi[$csv[0]][$csv[1]][$csv[4]][] = $csv[6];
         }
 
         $list_documents = array();
-        $max = count(file(sfConfig::get('sf_data_dir') . '/' . "Dcllig09"));
+        $max = count(file(sfConfig::get('sf_data_dir') . '/' . $options['year']."/Dcllig".$options['year']));
         $nb = 0;
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dcllig09") as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year']."/Dcllig".$options['year']) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
 	    if ($options['cvi'] && $cvi != $options['cvi'])
@@ -145,7 +146,7 @@ EOF;
         }
 
 	//Ajout des totaux
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dcltot09") as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'] ."/Dcltot".$options['year']) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
 	    if ($options['civ'] && $cvi != $options['civ'])
@@ -195,7 +196,7 @@ EOF;
 	  }
 	}
 
-	foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dclent09") as $l) {
+	foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year']. "/Dclent".$options['year']) as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
 	  if ($options['civ'] && $cvi != $options['civ'])

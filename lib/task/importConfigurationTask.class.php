@@ -15,6 +15,7 @@ class importConfigurationTask extends sfBaseTask {
                 // add your own options here
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
+            new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year version of the file to be imported', '09'),
         ));
 
         $this->namespace = 'import';
@@ -81,7 +82,7 @@ EOF;
 	$grdcru->libelle = "AOC Alsace Grand Cru";
 	$grdcru->rendement = 61;
 
-	foreach(file(sfConfig::get('sf_data_dir') . '/' . 'Grdcrv09') as $l) {
+	foreach(file(sfConfig::get('sf_data_dir') . '/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
 	  if ($g[1] == "99")  {
 	    continue;
