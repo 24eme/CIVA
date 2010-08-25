@@ -16,7 +16,9 @@ class compteActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeIndex(sfWebRequest $request) {
+
         $recoltant = $this->getUser()->getRecoltant();
+        
         if(isset($recoltant) && $recoltant->change_mdp == 1) {
             $this->redirect('@mon_espace_civa');
         }else {

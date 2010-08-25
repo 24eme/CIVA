@@ -17,28 +17,40 @@ class recoltantActions extends EtapesActions
   */
   public function executeLogin(sfWebRequest $request)
   {
-    if ($this->getUser()->getRecoltant())
-      return $this->redirect('@mon_espace_civa');
-    else{
-        $url = $request->getUri();
-        $this->redirect('http://CHA.NGE._.ME:8080/cas?service='.$url);
+    if ($this->getUser()->isAuthenticated()){
+       $this->redirect('@mon_espace_civa');
+    }elseif($request->getParameter('ticket')){
+
+        error_reporting(E_ALL);
+        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
+        //phpCAS::setDebug();
+
+        phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
+
+        phpCAS::setNoCasServerValidation();
+
+        $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
+        phpCAS::forceAuthentication();
+        $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
+
+        $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
+        
+    }else{
+        $url = 'https://'.sfConfig::get('app_cas_domain').':'.sfConfig::get('app_cas_port').'/'.sfConfig::get('app_cas_path').'/login?service='.$request->getUri();
+        $this->redirect($url);
     }
 
-    /*$this->form = new LoginForm();
-    if ($request->isMethod(sfWebRequest::POST)) {
-      $this->form->bind($request->getParameter($this->form->getName()));
-      if ($this->form->isValid()) {
-	$this->getUser()->signIn($this->form->getValue('recoltant'));
-	$this->redirect('@mon_espace_civa');
-      }
-    }*/
+
+
   }
 
   public function executeLogout(sfWebRequest $request)
   {
-    $this->getUser()->signOut();
-    $url = 'http://'.$request->getHost();
-    $this->redirect('http://CHA.NGE._.ME:8080/cas/logout?service='.$url);
+        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
+        $this->getUser()->signOut();
+        $url = 'http://'.$request->getHost();
+        phpCAS::logout();
+        $this->redirect($url);
   }
   /**
    *

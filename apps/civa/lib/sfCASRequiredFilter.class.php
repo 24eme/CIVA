@@ -1,9 +1,10 @@
-<?php
+<?php/*
 class sfCASRequiredFilter extends sfBasicSecurityFilter
 {
   public function execute ($filterChain)
   {
-    if ($this->isFirstCall()) {
+    if ($this->isFirstCall() && !$this->getContext()->getUser()->isAuthenticated()) {
+
         error_reporting(E_ALL);
         require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
         //phpCAS::setDebug();
@@ -23,5 +24,5 @@ class sfCASRequiredFilter extends sfBasicSecurityFilter
     $filterChain->execute();
 
   }
-}
+}*/
 ?>

@@ -1,7 +1,7 @@
 <!-- #principal -->
 <form action="<?php echo url_for('@compte') ?>" method="post" id="principal" name ="firstConnection">
 
-    <h2 class="titre_principal">Premiere connection</h2>
+    <h2 class="titre_principal">Premiere connexion</h2>
 
     <!-- #application_dr -->
     <div class="clearfix" id="application_dr">
