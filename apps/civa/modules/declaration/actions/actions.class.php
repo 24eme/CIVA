@@ -76,7 +76,6 @@ class declarationActions extends EtapesActions {
                 }
                 
             }
-            
         }
     }
 

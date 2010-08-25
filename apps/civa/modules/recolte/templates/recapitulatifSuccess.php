@@ -1,6 +1,8 @@
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions') ?>
 
+<?php echo include_partial('global/errorMessages', array('form' => $form)); ?>
+
 <!-- #principal -->
 			<form id="principal" action="" method="post">
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
@@ -48,11 +50,11 @@
 								<h2 class="titre_section">Récapitulatif des ventes</h2>
 								<div class="contenu_section">
         <?php echo $form->renderHiddenFields(); ?>
-        <?php echo $form->renderGlobalErrors(); 
+        <?php /*echo $form->renderGlobalErrors();
 foreach($appellationlieu->acheteurs as $cvi => $info) {
   echo $form['cvi_'.$cvi]['superficie']->renderError();
   echo $form['cvi_'.$cvi]['dontdplc']->renderError();
-}
+} */
 ?>
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">

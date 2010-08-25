@@ -1,23 +1,19 @@
 <div class="col_recolte col_active">
     <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post">
         <?php echo $form->renderHiddenFields(); ?>
-        <?php echo $form->renderGlobalErrors(); ?>
     <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
     <div class="col_cont">
 
         <p class="denomination">
-           <?php echo $form['denomination']->renderError() ?>
            <?php echo $form['denomination']->render() ?>
         </p>
 
         <p class="mention">
-            <?php echo $form['vtsgn']->renderError() ?>
             <?php echo $form['vtsgn']->render() ?>
         </p>
 
         <p class="superficie">
-            <?php echo $form['superficie']->renderError() ?>
             <?php echo $form['superficie']->render(array('class' => 'num')) ?>
         </p>
 
@@ -39,7 +35,6 @@
         <?php endif; ?>
 
         <p class="vol_place">
-            <?php echo $form['cave_particuliere']->renderError() ?>
             <?php echo $form['cave_particuliere']->render(array('class' => 'num')) ?>
         </p>
         <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></p>
