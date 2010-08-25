@@ -8,6 +8,10 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getLibelle() {
+      return $this->getConfig()->getLibelle();
+    }
+
     public function addCepage($cepage, $lieu = '') {
         return $this->add("lieu$lieu")->add('cepage_' . $cepage);
     }
@@ -89,8 +93,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function hasManyLieu() {
-        $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
-        return!$configuration->get($this->getHash())->exist('lieu');
+      return !$this->getConfig()->exist('lieu');
     }
 
     public function removeVolumes() {

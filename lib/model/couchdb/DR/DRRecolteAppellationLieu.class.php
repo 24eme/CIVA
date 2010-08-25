@@ -8,6 +8,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getLibelleWithAppellation() {
+      if ($this->getLibelle())
+	return $this->getParent()->getLibelle().' - '.$this->getLibelle();
+      return $this->getParent()->getLibelle();
+    }
+
     public function getLibelle() {
         return ConfigurationClient::getConfiguration()->get($this->getHash())->getLibelle();
     }
