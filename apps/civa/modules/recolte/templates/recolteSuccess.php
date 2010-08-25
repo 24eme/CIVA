@@ -1,7 +1,7 @@
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions') ?>
 
-<?php echo include_partial('global/errorMessages', array('form' => $form_detail)); ?>
+<?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 
 <!-- #principal -->
 			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->

@@ -1,7 +1,7 @@
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions') ?>
 
-<?php echo include_partial('global/errorMessages', array('form' => $form)); ?>
+<?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
 <!-- #principal -->
 			<form id="principal" action="" method="post">
@@ -74,9 +74,9 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
     <td class="nom"><?php echo $info->getNom();?></td>
 													<td class="cvi alt"><?php echo $cvi; ?></td>
 													<td class="commune"><?php echo $info->getCommune(); ?></td>
-													<td class="superficie alt"><?php echo $form['cvi_'.$cvi]['superficie']->render(); ?> ha</td>
+													<td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(); ?> ha</td>
 													<td><?php echo $info->getVolume(); ?> hl</td>
-													<td class="dplc alt"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(); ?> hl</td>
+													<td class="dplc alt <?php echo ($form['cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(); ?> hl</td>
 												</tr>
 <?php endforeach; ?>
 											</tbody>

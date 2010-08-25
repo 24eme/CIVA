@@ -5,15 +5,15 @@
 
     <div class="col_cont">
 
-        <p class="denomination">
+        <p class="denomination <?php echo ($form['denomination']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
            <?php echo $form['denomination']->render() ?>
         </p>
 
-        <p class="mention">
+        <p class="mention <?php echo ($form['vtsgn']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <?php echo $form['vtsgn']->render() ?>
         </p>
 
-        <p class="superficie">
+        <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <?php echo $form['superficie']->render(array('class' => 'num')) ?>
         </p>
 
@@ -34,7 +34,7 @@
         </div>
         <?php endif; ?>
 
-        <p class="vol_place">
+        <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <?php echo $form['cave_particuliere']->render(array('class' => 'num')) ?>
         </p>
         <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></p>
