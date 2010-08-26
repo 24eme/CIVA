@@ -54,6 +54,14 @@ recolte_motif_non_recolte:
   url:   /recolte/:appellation_lieu/:cepage/motif_non_recolte/:detail_key
   param: { module: recolte, action: motifNonRecolte }
 
+recolte_add_appellation:
+  url:   /recolte/:appellation_lieu/:cepage/add_appellation
+  param: { module: recolte, action: ajoutAppellationAjax }
+
+recolte_add_lieu:
+  url:   /recolte/:appellation_lieu/:cepage/add_lieu
+  param: { module: recolte, action: ajoutLieuAjax }
+
 recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif }

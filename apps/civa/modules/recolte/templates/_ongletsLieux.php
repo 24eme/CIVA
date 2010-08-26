@@ -7,6 +7,6 @@
         </li>
         <?php endif; ?>
     <?php endforeach; ?>
-        <li class="ajouter"><a href="#">Ajouter un lieu dit</a></li>
+        <li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
 </ul>
 <?php endif; ?>

@@ -71,3 +71,42 @@
 				
 			<!--</form>-->
 			<!-- fin #principal -->
+
+        <script type="text/javascript">
+		var_liste_acheteurs = ['Acheteur n°01|@1234556|@Commune 1', 'Acheteur n°02|@8963486|@Commune 2', 'Acheteur n°03|@0997322|@Commune 3', 'Acheteur n°04|@4625732|@Commune 4'];
+		var_liste_caves = ['Cave n°01|@1234556|@Commune 1', 'Cave n°02|@8963486|@Commune 2', 'Cave n°03|@0997322|@Commune 3', 'Cave n°04|@4625732|@Commune 4'];
+	</script>
+
+        <div id="popup_ajout_acheteur" class="popup_ajout" title="Ajouter un acheteur">
+		<form action="#" method="post">
+			<label for="champ_acheteur_nom">Entrez le nom de l'acheteur, son CVI ou sa commune :</label>
+			<input id="champ_acheteur_nom" class="nom" type="text" name="" />
+			<input class="cvi" type="hidden" name="" />
+			<input class="commune" type="hidden" name="" />
+			<input type="image" name="" src="../images/boutons/btn_valider.png" alt="Valider" />
+		</form>
+	</div>
+
+	<div id="popup_ajout_cave" class="popup_ajout" title="Ajouter une cave">
+		<form action="#" method="post">
+			<label for="champ_cave_nom">Entrez le nom de la cave, son CVI ou sa commune :</label>
+			<input id="champ_cave_nom" class="nom" type="text" name="" />
+			<input class="cvi" type="hidden" name="" />
+			<input class="commune" type="hidden" name="" />
+			<input type="image" name="" src="../images/boutons/btn_valider.png" alt="Valider" />
+		</form>
+	</div>
+                        
+<!-- InstanceBeginEditable name="popups" -->
+	<div id="popup_ajout_appelation" class="popup_ajout" title="Ajouter une appelation">
+	<?php include_partial('recolte/ajoutAppellation', array('onglets' => $onglets,
+                                                                        'form' => $form_ajout_appellation)) ?>
+        </div>
+
+        <?php if($onglets->getCurrentAppellation()->hasManyLieu()): ?>
+                <div id="popup_ajout_lieu" class="popup_ajout" title="Ajouter un lieu dit">
+		<?php include_partial('recolte/ajoutLieu', array('onglets' => $onglets,
+                                                                 'form' => $form_ajout_lieu,
+                                                                 'url'  => $url_ajout_lieu))?>
+                </div>
+        <?php endif; ?>

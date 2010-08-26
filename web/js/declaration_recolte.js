@@ -132,7 +132,7 @@ var formExploitationAdministratif = function()
 		var btn_modifier = btn.find('a.modifier');
 		var btn_annuler = btn.find('a.annuler');
 
-		//		modification_infos.hide();
+		// modification_infos.hide();
 		
 		btn_modifier.click(function()
 		{
@@ -442,6 +442,8 @@ var initGestionRecolte = function(type)
 		var col = $(this);
 		initColRecolte(col);
 	});
+	
+	initDRPopups();
 };
 
 /**
@@ -556,4 +558,108 @@ var largeurColScrollerCont = function()
 	cont.width(largeur);
 	cont.scrollTo( { left:largeur}, 800 );
 	//cont.parent().scrollTo('+='+largeur_cont+'px');
+};
+
+
+
+/**
+ * Initalise les popups de DR
+ ******************************************/
+var initDRPopups = function()
+{
+	var onglets = $('#onglets_majeurs');
+	var btn_ajout_appelation = onglets.find('li.ajouter_appelation a');
+	var btn_ajout_lieu = onglets.find('li.ajouter_lieu a');
+	var col_recolte_cont = $('#col_scroller_cont');
+	var btn_ajout_acheteur = col_recolte_cont.find('a.ajout_acheteur');
+	var btn_ajout_cave = col_recolte_cont.find('a.ajout_cave');
+	
+	var popup_ajout_appelation = $('#popup_ajout_appelation');
+	var popup_ajout_lieu = $('#popup_ajout_lieu');
+	var popup_ajout_acheteur = $('#popup_ajout_acheteur');
+	var popup_ajout_cave = $('#popup_ajout_cave');
+	
+	initPopupAjout(popup_ajout_appelation);
+	initPopupAjout(popup_ajout_lieu);
+	initPopupAjout(popup_ajout_acheteur);
+	initPopupAjout(popup_ajout_cave);
+	
+	initPopupAutocompletion(popup_ajout_acheteur, var_liste_acheteurs);
+	initPopupAutocompletion(popup_ajout_cave, var_liste_caves);
+	
+	btn_ajout_appelation.click(function()
+	{
+		popup_ajout_appelation.dialog('open');
+		return false;
+	});
+	
+	btn_ajout_lieu.click(function()
+	{
+		popup_ajout_lieu.dialog('open');
+		return false;
+	});
+	
+	btn_ajout_acheteur.live('click', function()
+	{
+		popup_ajout_acheteur.dialog('open');
+		return false;
+	});
+	
+	btn_ajout_cave.live('click', function()
+	{
+		popup_ajout_cave.dialog('open');
+		return false;
+	});
+	
+};
+
+var initPopupAjout = function(popup)
+{
+	popup.dialog
+	({
+		autoOpen: false,
+		draggable: false,
+		resizable: false,
+		width: 375,
+		modal: true
+	});
+};
+
+var initPopupAutocompletion = function(popup, source_autocompletion)
+{
+	var nom = popup.find('input.nom');
+	var cvi = popup.find('input.cvi');
+	var commune = popup.find('input.commune');
+	
+	nom.autocomplete(
+	{
+		minLength: 0,
+		source: source_autocompletion,
+		focus: function(event, ui)
+		{
+			nom.val(ui.item[0]);
+			cvi.val(ui.item[1]);
+			commune.val(ui.item[2]);
+			
+			return false;
+		},
+		select: function(event, ui)
+		{	
+			nom.val(ui.item[0]);
+			cvi.val(ui.item[1]);
+			commune.find('input').val(ui.item[2]);
+				
+			return false;
+		}
+	}); 
+	
+	nom.data('autocomplete')._renderItem = function(ul, item)
+	{
+		var tab = item['value'].split('|@');
+		
+		return $('<li></li>')
+		.data("item.autocomplete", tab)
+		.append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
+		.appendTo(ul);
+	};
 };

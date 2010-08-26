@@ -9,5 +9,5 @@
 					 'onglets' => $onglets)); ?>
         </li>
     <?php endforeach; ?>
-        <li class="ajouter"><a href="#">Ajouter<br /> une appelation</a></li>
+        <li class="ajouter ajouter_appelation"><a href="#">Ajouter<br /> une appelation</a></li>
 </ul>

@@ -1,6 +1,11 @@
 <?php
 
 class DRRecolte extends BaseDRRecolte {
+    
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
+
     public function addAppellation($appellation) {
         $appellation_key = 'appellation_'.$appellation;
         if (!$this->exist($appellation_key)) {
