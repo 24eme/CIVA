@@ -8,6 +8,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getLibelle() {
+      return $this->getConfig()->getLibelle();
+    }
+
     public function addDetail($detail) {
       return $this->add(null, $detail);
     }
@@ -83,7 +87,7 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     }
 
     public function getRendement() {
-        return ConfigurationClient::getConfiguration()->get($this->getHash())->getRendement();
+      return $this->getConfig()->getRendement();
     }
 
     public function getRendementRecoltant() {

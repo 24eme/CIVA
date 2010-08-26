@@ -76,7 +76,7 @@ compte:
 
 print:
   url: /print
-  param: {module: printable, action: DR, annee: 2010}
+  param: {module: printable, action: DR, annee: 2009}
 
 default_index:
   url:   /:module
