@@ -12,7 +12,7 @@
             <div class="contenu_section">
                 <p class="intro">Merci d'indiquer votre e-mail et un mot de passe: </p>
 
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form->renderHiddenFields(); ?>
                     <?php echo $form->renderGlobalErrors(); ?>
 
@@ -20,7 +20,7 @@
                     <?php echo $form['email']->renderLabel() ?>
                     <?php echo $form['email']->render() ?>
                 </div>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['mdp1']->renderError() ?>
                     <?php echo $form['mdp1']->renderLabel() ?>
                     <?php echo $form['mdp1']->render() ?>

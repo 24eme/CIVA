@@ -12,7 +12,7 @@
             <div class="contenu_section">
                 <p class="intro">Pour vous connecter, merci d'indiquer votre numéro CVI et votre code:</p>
 
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form->renderHiddenFields(); ?>
                     <?php echo $form->renderGlobalErrors(); ?>
 
@@ -20,7 +20,7 @@
                     <?php echo $form['cvi']->renderLabel() ?>
                     <?php echo $form['cvi']->render() ?>
                 </div>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['mdp']->renderError() ?>
                     <?php echo $form['mdp']->renderLabel() ?>
                     <?php echo $form['mdp']->render() ?>

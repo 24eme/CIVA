@@ -64,8 +64,10 @@ class compteActions extends sfActions {
     public function executeResetMDP(sfWebRequest $request) {
         $recoltant = $this->getUser()->getRecoltant();
         $recoltant->mdp = '{TEXT}0000';
-        $recoltant->change_mdp = 0;
         $recoltant->save();
+        $ldap = new ldap();
+        $ldapDelete = $ldap->ldapDelete($recoltant);
+        echo "recoltant remis a 0 - effacer du LDAP";
         exit();
     }
 

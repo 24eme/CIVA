@@ -9,9 +9,9 @@ class CreateCompteForm extends BaseForm {
         ));
 
         $this->widgetSchema->setLabels(array(
-                'email' => 'Adresse e-mail',
-                'mdp1'  => 'Mot de passe',
-                'mdp2'  => 'Vérification du mot de passe'
+                'email' => 'Adresse e-mail: ',
+                'mdp1'  => 'Mot de passe: ',
+                'mdp2'  => 'Vérification du mot de passe: '
         ));
 
         $this->widgetSchema->setNameFormat('create_compte[%s]');
