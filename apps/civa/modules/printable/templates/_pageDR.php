@@ -32,7 +32,7 @@ if (!function_exists('printColonne')) {
 	echo '<td style="width: 120px;">';
 	if ($c['type'] == 'total')    echo '<b>';
 	if ($unite)
-	  echo preg_match('/\./', ',', $v);
+	  echo preg_replace('/\./', ',', $v);
 	else
 	  echo $v;
 	if ($c['type'] == 'total')    echo '</b>';
