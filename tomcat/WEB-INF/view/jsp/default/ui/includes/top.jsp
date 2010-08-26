@@ -32,7 +32,7 @@
             <!--div id="header" class="flc-screenNavigator-navbar fl-navbar fl-table">
                 <h1 id="app-name" class="fl-table-cell">sdfsdf</h1>
             </div-->
-
+            <ul class="clearfix" id="liens_evitement"></ul>
             <div id="header" class="clearfix pngfix">
                 <h1 id="logo"><a href="" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="images/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 

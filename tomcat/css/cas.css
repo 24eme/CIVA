@@ -47,37 +47,20 @@ a:hover, a:focus { text-decoration: underline; }
 
 .flc-screenNavigator-view-container{ margin: 0 auto;	width: 1000px;}
 
-/*
-#cas form {display:block; margin:18px 0 0; padding:0; width:100%; background:#fff;}
-    #cas fieldset {border:0; margin:0; padding:0; float:left; clear:none; width:auto;}
-        #cas fieldset legend {display:none;}
+ul {list-style:none; font-size:1.1em; padding:0 0 18px 0px;}
 
-        #cas #login {float:left; margin:0 -296px 0 0; padding:15px; width:258px; min-height:15em; background:#eee; position:relative; border:0;}
-        #cas #login:before {line-height:0.1; font-size:1px; background:transparent url("../images/key-point_tr.gif") no-repeat top right; margin:-15px -15px 0 -15px; height:15px; display:block; content:url("../images/key-point_tl.gif");}
-        #cas #login:after {display:block; clear:both; padding-top:15px; line-height:0.1; font-size:1px; content:url("../images/key-point_bl.gif"); margin:-15px; height:8px; background:transparent url("../images/key-point_br.gif") scroll no-repeat bottom right;}
-            #cas #login h2 {border-bottom:1px solid #ddd; padding:3px 0; font:normal 400 17px Georgia, "Times New Roman", Times, serif; color:#333;}
-            #cas #login label {font-size:11px;}
-            #cas #login label span.accesskey {text-decoration:underline;}
-            #cas #login input {letter-spacing:1px;}
-            #cas #login .check input {position:relative; left:-4px; height:auto;}
-            #cas #login .check label {float:none; xwidth:auto; line-height:1.8;}
-            #cas #login .btn-row {position:relative; top:15px; padding-top:10px; border-top:1px solid #ddd;}
-            * html #cas #login .btn-row {top:5px;} /* IE6 */
-/* #cas #login .btn-submit {float:none; clear:none; display:inline; letter-spacing:0;}
-* html #cas #login .btn-submit {background:#ffd;}
-#cas #login .btn-reset {float:none; clear:none; margin-left:5px; border:0; border-left:1px solid #ddd; background:transparent; color:#777; text-transform:lowercase; letter-spacing:0;}
-
-
-#cas #footer p {margin:0 0 1em 0; padding:0;}*/
-
-/* RESET --------------------------------- */
-/* reset some properties for elements since defaults are not crossbrowser - http://meyerweb.com/eric/thoughts/2007/05/01/reset-reloaded/ */
-ul {list-style:none; font-size:1.1em; padding:0 0 18px 10px;}
-
-/* browser default font-size is 16px which is too big so we make it 16px x 62.5% = 10px */
 body {
     background: #000 url(../images/fonds/bg_global.jpg) center 0 no-repeat;
     font-size: 12px;
+}
+
+
+ul#liens_evitement {
+    font-size:10px;
+    line-height:12px;
+    margin:7px 0 0;
+    text-transform:uppercase;
+    padding: 0;
 }
 
 /*
@@ -92,6 +75,7 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
     background: url(../images/fonds/bg_header.png) 0 0 repeat;
     border: 1px solid #252303;
     color: #f1f1f1;
+    height:71px;
     margin: 7px 0;
     padding: 10px;
 }
@@ -107,7 +91,7 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
     border-width:0 0 0 1px;
     float: left;
     margin: 0 12px;
-    padding: 0 12px;
+    padding: 10px 12px;
     width: 658px;
 }
 
@@ -179,8 +163,7 @@ p.intro {
 
 #footer * { display: inline; }
 
-#footer p,
-#footer ul li { margin: 0 12px 0 0; }
+#footer p, #footer ul li { margin: 0 12px 0 0; }
 
 #footer ul li a{
     background: url(../images/bullet_noir.png) 0 center no-repeat;
@@ -191,7 +174,7 @@ p.intro {
 
 /* MESSAGES --------------------------------- */
 .info, .success {clear:both; margin:18px 0; padding:20px 20px 20px 100px; font-size:10px; line-height:1.5;}
-.info {border:1px dotted 008; background:#eff url(../images/info.gif) no-repeat 20px 18px; color:#008;}
+.info {border:1px dotted #008; background:#eff url(../images/info.gif) no-repeat 20px 18px; color:#008;}
 
 .errors{
     background: #ffdddd !important;
