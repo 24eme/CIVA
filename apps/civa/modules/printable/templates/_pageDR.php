@@ -31,7 +31,10 @@ if (!function_exists('printColonne')) {
       if (isset($c[$key]) && $v = $c[$key]) {
 	echo '<td style="width: 120px;">';
 	if ($c['type'] == 'total')    echo '<b>';
-	echo $v;
+	if ($unite)
+	  echo preg_match('/\./', ',', $v);
+	else
+	  echo $v;
 	if ($c['type'] == 'total')    echo '</b>';
 	if ($unite)
 	  echo "&nbsp;<small>$unite</small>";
