@@ -63,9 +63,8 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
   <?php foreach($acheteurs as $cvi => $a) : ?>
   <tr><td style="width: 100px;"><?php echo $cvi; ?></td><td style="width: 300px;"><?php echo $cvi; ?></td><td style="width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
   <?php endforeach; ?>
-<?php endif; ?>
 </table>
 </div>
-</div>
+<?php endif;?>
 
 
