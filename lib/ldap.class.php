@@ -71,7 +71,7 @@ class ldap {
                 $identifier            = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
                 $info['sn']            = $values['nom'];
                 $info['cn']            = $values['nom'];
-                $info['userPassword']  = $values['mdp'];
+                $info['userPassword']  = $values['mot_de_passe'];
                 $info['gecos']         = 'Mon recoltant,,,';
                 $info['mail']          = $values['email'];
                 $info['postalAddress'] = 'adresse';
