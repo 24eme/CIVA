@@ -15,7 +15,7 @@ $recoltant->_id = 'REC-TESTRECOLTANT';
 $recoltant->cvi = '6823700100';
 $recoltant->nom = 'TEST Recoltant';
 $recoltant->email = 'test@example.com';
-$recoltant->mdp = $recoltant->make_ssha_password('password');
+$recoltant->mot_de_passe = $recoltant->make_ssha_password('password');
 
 //ajout au LDAP
 /*$add = $ldap->ldapAdd($recoltant);

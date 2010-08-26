@@ -41,7 +41,7 @@ class ldap {
                 $info['objectClass'][1]   = 'person';
                 $info['objectClass'][2]   = 'posixAccount';
                 $info['objectClass'][3]   = 'inetOrgPerson';
-                $info['userPassword']  = $recoltant->mdp;
+                $info['userPassword']  = $recoltant->mot_de_passe;
                 $info['loginShell']    = '/bin/bash';
                 $info['uidNumber']     = '1000';
                 $info['gidNumber']     = '1000';

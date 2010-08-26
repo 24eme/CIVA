@@ -19,7 +19,7 @@ class compteActions extends sfActions {
 
         $recoltant = $this->getUser()->getRecoltant();
         
-        if(isset($recoltant) && $recoltant->change_mdp == 1) {
+        if(isset($recoltant) && substr($recoltant->mot_de_passe,0,6) == '{SSHA}') {
             $this->redirect('@mon_espace_civa');
         }else {
             $this->form = new FirstConnectionForm();
@@ -37,7 +37,7 @@ class compteActions extends sfActions {
 
     public function executeCreate(sfWebRequest $request) {
         $recoltant = $this->getUser()->getRecoltant();
-        if(isset($recoltant) && $recoltant->change_mdp == 1) {
+        if(isset($recoltant) && substr($recoltant->mot_de_passe,0,6) == '{SSHA}') {
             $this->redirect('@mon_espace_civa');
         }elseif($recoltant) {
 
@@ -62,8 +62,8 @@ class compteActions extends sfActions {
     }
 
     public function executeResetMDP(sfWebRequest $request) {
-        $recoltant = $this->getUser()->getRecoltant();
-        $recoltant->mdp = '{TEXT}0000';
+        $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi('6823700100');
+        $recoltant->mot_de_passe = '{TEXT}0000';
         $recoltant->save();
         $ldap = new ldap();
         $ldapDelete = $ldap->ldapDelete($recoltant);

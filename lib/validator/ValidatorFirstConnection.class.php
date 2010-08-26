@@ -13,7 +13,7 @@ class ValidatorFirstConnection extends sfValidatorBase {
         
         if($mdp && $cvi) {
             $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
-            if ($recoltant && $recoltant->mdp == '{TEXT}'.$mdp) {
+            if ($recoltant && $recoltant->mot_de_passe == '{TEXT}'.$mdp) {
                 return array_merge($values, array('recoltant' => $recoltant));
             }
             
