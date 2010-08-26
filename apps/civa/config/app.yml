@@ -27,6 +27,9 @@ all:
     domain: CHA.NGE._.ME
     port: 8181
     path: cas
+    url : "https://CHA.NGE._.ME:8181/cas"
+
+
 
 
 

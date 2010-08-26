@@ -34,7 +34,7 @@ class recoltantActions extends EtapesActions
         $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
 
     }else{
-        $url = 'https://'.sfConfig::get('app_cas_domain').':'.sfConfig::get('app_cas_port').'/'.sfConfig::get('app_cas_path').'/login?service='.$request->getUri();
+        $url = sfConfig::get('app_cas_url').'/login?service='.$request->getUri();
         $this->redirect($url);
     }
   }
