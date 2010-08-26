@@ -111,9 +111,9 @@ class printableActions extends sfActions
 
     $pages = array();
 
+    //On peut pas mettre plus de 6 colonnes par page, si plus de 6 colonnes cepage
+    //alors on coupe au total précédent
     $nb_colonnes_by_page = 6;
-
-    $cpt = 0;
     $lasti = 0;
     for ($i = 0 ; $i < count($colonnes); ) {
       $page = array_slice($colonnes, $i, $nb_colonnes_by_page);
@@ -128,6 +128,7 @@ class printableActions extends sfActions
       $lasti = ++$i;
     }
 
+    //L'identification des acheteurs ne peut apparaitre qu'une fois par cépage
     $identification_enabled = 1;
     foreach($pages as $p) {
       $this->document->addPage($this->getPartial('pageDR', array('recoltant'=>$recoltant, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled)));
