@@ -115,20 +115,23 @@ class printableActions extends sfActions
 
     $cpt = 0;
     $lasti = 0;
-    for ($i = 0 ; $i + 1 < count($colonnes); $cpt++) {
-      $page = array_slice($colonnes, $i, $nb_colonnes_by_page + 1);
+    for ($i = 0 ; $i < count($colonnes); ) {
+      $page = array_slice($colonnes, $i, $nb_colonnes_by_page);
       $i += count($page) - 1;
-      if (count($page) == $nb_colonnes_by_page + 1) {
+      if (count($page) == $nb_colonnes_by_page) {
 	while($page[$i - $lasti]['type'] != 'total') {
 	  unset($page[$i - $lasti]);
 	  $i--;
 	}
       }
       array_push($pages, $page);
-      $lasti = $i;
+      $lasti = ++$i;
     }
+
+    $identification_enabled = 1;
     foreach($pages as $p) {
-      $this->document->addPage($this->getPartial('pageDR', array('recoltant'=>$recoltant, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs)));
+      $this->document->addPage($this->getPartial('pageDR', array('recoltant'=>$recoltant, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled)));
+      $identification_enabled = 0;
     }
   }
 }

@@ -55,7 +55,7 @@ echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
 echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 ?>
 </table>
-<?php if (count($acheteurs)) : ?>
+<?php if ($enable_identification && count($acheteurs)) : ?>
 <div style="margin-top: 20px;">
 <div><span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span></div>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
