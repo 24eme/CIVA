@@ -23,11 +23,6 @@ all:
         url: "@confirmation"
     orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_lieu, exploitation_autres, recolte, validation, confirmation]
   css_class_field_error: "erreur"
-  cas:
-    domain: CHA.NGE._.ME
-    port: 8181
-    path: cas
-    url : "https://CHA.NGE._.ME:8181/cas"
 
 
 

@@ -1,0 +1,20 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/11-App
+
+# default values
+all:
+  cas:
+    domain: CHA.NGE._.ME
+    port: 8181
+    path: cas
+    url : "https://CHA.NGE._.ME:8181/cas"
+  ldap:
+    serveur: "CHA.NGE._.ME"
+    dn: "cn=admin,dc=vinsalsace,dc=pro"
+    dc: "dc=vinsalsace,dc=pro"
+    pass: "my_passw"
+
+
+
+
+

@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
+
 $t = new lime_test(4);
+
+$configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 
 $ldap = new ldap();
 

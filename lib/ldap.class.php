@@ -1,10 +1,17 @@
 <?php
 class ldap {
 
-    protected $ldapserveur = "CHA.NGE._.ME";
-    protected $ldapdn      = "cn=admin,dc=vinsdalsace,dc=pro";
-    protected $ldapdc      = "dc=vinsdalsace,dc=pro";
-    protected $ldappass    = "my_passw";
+    protected $ldapserveur;
+    protected $ldapdn;
+    protected $ldapdc;
+    protected $ldappass;
+
+    public function __construct(){
+             $this->ldapserveur = sfConfig::get('app_ldap_serveur');
+             $this->ldapdn = sfConfig::get('app_ldap_dn');
+             $this->ldapdc = sfConfig::get('app_ldap_dc');
+             $this->ldappass = sfConfig::get('app_ldap_pass');
+    }
 
     public function ldapConnect() {
 
