@@ -294,6 +294,12 @@ class RecolteOnglets {
         }
     }
 
+     public function getUrlParams($appellation = null, $lieu = null, $cepage = null) {
+         $url = $this->getUrl(null, $appellation, $lieu, $cepage);
+         unset($url['sf_route']);
+         return $url;
+     }
+
 
     public function getPreviousUrlCepage() {
         if (!$this->hasPreviousCepage()) {

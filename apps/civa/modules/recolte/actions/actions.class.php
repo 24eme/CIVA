@@ -108,12 +108,14 @@ class recolteActions extends EtapesActions {
                 if ($this->form_ajout_appellation->needLieu()) {
                     return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
-                    return $this->renderPartial('global/ajaxJsRedirect', array('url' => $this->onglets->getUrl('recolte', $this->form_ajout_appellation->getValue('appellation'))));
+                    return $this->renderText(json_encode(array('action' => 'redirect',
+                                                               'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
                 }
             }
         }
 
-        return $this->renderPartial('recolte/ajoutAppellation', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation));
+        return $this->renderText(json_encode(array('action' => 'render',
+                                                   'data' => $this->getPartial('recolte/ajoutAppellation', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation)))));
     }
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
@@ -129,11 +131,15 @@ class recolteActions extends EtapesActions {
             $this->form_ajout_lieu->bind($request->getParameter($this->form_ajout_lieu->getName()));
             if ($this->form_ajout_lieu->isValid()) {
                 $this->form_ajout_lieu->save();
-                return $this->renderPartial('global/ajaxJsRedirect', array('url' => $this->onglets->getUrl('recolte', $this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))));
+                return $this->renderText(json_encode(array('action' => 'redirect',
+                                                           'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
             }
         }
 
-        return $this->renderPartial('recolte/ajoutLieu', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu));
+        return $this->renderText(json_encode(array('action' => 'render',
+                                                   'data' => $this->getPartial('recolte/ajoutLieu', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
+
+
     }
 
     public function executeRecapitulatif(sfWebRequest $request)
@@ -194,6 +200,8 @@ class recolteActions extends EtapesActions {
 
         /*** AjOUT APPELLATION ***/
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
+        $this->form_ajout_lieu = null;
+        $this->url_ajout_lieu = null;
         if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
             $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');

@@ -96,17 +96,9 @@
 			<input type="image" name="" src="../images/boutons/btn_valider.png" alt="Valider" />
 		</form>
 	</div>
-                        
-<!-- InstanceBeginEditable name="popups" -->
-	<div id="popup_ajout_appelation" class="popup_ajout" title="Ajouter une appelation">
-	<?php include_partial('recolte/ajoutAppellation', array('onglets' => $onglets,
-                                                                        'form' => $form_ajout_appellation)) ?>
-        </div>
 
-        <?php if($onglets->getCurrentAppellation()->hasManyLieu()): ?>
-                <div id="popup_ajout_lieu" class="popup_ajout" title="Ajouter un lieu dit">
-		<?php include_partial('recolte/ajoutLieu', array('onglets' => $onglets,
-                                                                 'form' => $form_ajout_lieu,
-                                                                 'url'  => $url_ajout_lieu))?>
-                </div>
-        <?php endif; ?>
+        <?php include_partial('recolte/ajoutPopupOnglets', array('onglets' => $onglets,
+                                                                 'form_appellation' => $form_ajout_appellation,
+                                                                 'form_lieu' => $form_ajout_lieu,
+                                                                 'url_lieu' => $url_ajout_lieu)) ?>
+	

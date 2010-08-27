@@ -2,8 +2,13 @@
 
 <?php echo jq_form_remote_tag(array('url' => url_for($onglets->getUrl('recolte_add_appellation')->getRawValue()),
                                     'method' => 'post',
-                                    'dataType' => 'html',
-                                    'success' => "$('#form_ajout_appellation').replaceWith(data);")
+                                    'dataType' => 'json',
+                                    'update' => array('failure' => "$('#form_ajout_appellation').replaceWith('Une erreur est survenue !');"),
+                                    'success' => "if (data.action == 'render') {
+                                                    $('#form_ajout_appellation').replaceWith(data.data);
+                                                  } else if (data.action == 'redirect') {
+                                                    document.location.href = data.data;
+                                                  }")
                               , array('id' => 'form_ajout_appellation')); ?>
     <?php echo $form->renderHiddenFields(); ?>
     <?php echo $form->renderGlobalErrors(); ?>

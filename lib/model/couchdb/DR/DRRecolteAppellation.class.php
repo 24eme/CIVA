@@ -102,4 +102,10 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         }
     }
 
+    public function hasMaxLieu() {
+        $nb_lieu = $this->filter('^lieu')->count();
+        $nb_lieu_max = 4;
+        return (!($nb_lieu < $nb_lieu_max));
+    }
+
 }

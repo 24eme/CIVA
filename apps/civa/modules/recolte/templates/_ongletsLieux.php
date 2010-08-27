@@ -7,6 +7,8 @@
         </li>
         <?php endif; ?>
     <?php endforeach; ?>
+        <?php if (!$declaration->recolte->get($appellation_key)->hasMaxLieu()): ?>
         <li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
+        <?php endif; ?>
 </ul>
 <?php endif; ?>

@@ -9,5 +9,7 @@
 					 'onglets' => $onglets)); ?>
         </li>
     <?php endforeach; ?>
+        <?php if (!$declaration->recolte->hasAllAppellation()): ?>
         <li class="ajouter ajouter_appelation"><a href="#">Ajouter<br /> une appelation</a></li>
+        <?php endif; ?>
 </ul>
