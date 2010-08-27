@@ -76,14 +76,16 @@ class ldap {
 
                 // prepare les données
                 $identifier            = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
-                $info['sn']            = $values['nom'];
-                $info['cn']            = $values['nom'];
-                if(isset($values['mot_de_passe'])) $info['userPassword']  = $values['mot_de_passe'];
+                if(isset($values['nom']))           $info['sn']            = $values['nom'];
+                if(isset($values['nom']))           $info['cn']            = $values['nom'];
+                if(isset($values['mot_de_passe']))  $info['userPassword']  = $values['mot_de_passe'];
+
                 $info['gecos']         = 'Mon recoltant,,,';
-                if(isset($values['mail'])) $info['mail'] = $values['email'];
-                $info['postalAddress'] = $values['adresse'];
-                $info['postalCode']    = $values['code_postal'];
-                $info['l']             = $values['ville'];
+                
+                if(isset($values['mail']))          $info['mail'] = $values['email'];
+                if(isset($values['postalAddress'])) $info['postalAddress'] = $values['adresse'];
+                if(isset($values['postalCode']))    $info['postalCode']    = $values['code_postal'];
+                if(isset($values['ville']))         $info['l']             = $values['ville'];
 
                 // Ajoute les données au dossier
                 $r=ldap_modify($ldapConnect, $identifier, $info);
@@ -105,6 +107,14 @@ class ldap {
             return $delete;
         }else{
             return false;
+        }
+    }
+
+    public function ldapVerifieExistence($recoltant){
+        $ldapConnect = $this->ldapConnect();
+        if($ldapConnect && $recoltant) {
+            $filter = 'uid='.$recoltant->cvi;
+            return ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
         }
     }
 

@@ -20,6 +20,11 @@ $recoltant->nom = 'TEST Recoltant';
 $recoltant->email = 'test@example.com';
 $recoltant->mot_de_passe = $recoltant->make_ssha_password('password');
 
+$verify = $ldap->ldapVerifieExistence($recoltant);
+if($verify){
+    $delete = $ldap->ldapDelete($recoltant);
+}
+
 //ajout au LDAP
 $add = $ldap->ldapAdd($recoltant);
 $t->ok($add, 'ajout d\'un recoltant');
