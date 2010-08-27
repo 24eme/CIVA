@@ -1,5 +1,5 @@
 <!-- #principal -->
-<form action="<?php echo url_for('@login') ?>" method="post" id="principal">
+<form action="<?php echo url_for('@login') ?>?redirect=1" method="post" id="principal">
 
     <h2 class="titre_principal">Mon espace CIVA</h2>
 
