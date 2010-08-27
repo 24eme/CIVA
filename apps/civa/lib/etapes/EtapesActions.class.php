@@ -1,23 +1,31 @@
 <?php
 
-class EtapesActions extends sfActions
-{
+class EtapesActions extends sfActions {
+
     protected $_etapes_config = null;
-    
-    public function  __construct($context, $moduleName, $actionName) {
+
+    public function __construct($context, $moduleName, $actionName) {
         parent::__construct($context, $moduleName, $actionName);
         $this->_etapes_config = new EtapesConfig();
     }
 
     protected function redirectByBoutonsEtapes($boutons_suppl = null) {
         if ($this->askRedirectToNextEtapes()) {
-             $this->redirectToNextEtapes();
-        } elseif($this->askRedirectToPreviousEtapes()) {
+            $this->redirectToNextEtapes();
+        } elseif ($this->askRedirectToPreviousEtapes()) {
             $this->redirectToPreviousEtapes();
         } elseif ($this->askRedirectToPrevisualiser()) {
             $this->redirectToPrevisualiser();
-        } elseif(!is_null($boutons_suppl) && is_array($boutons_suppl)) {
-            
+        } elseif (!is_null($boutons_suppl) && is_array($boutons_suppl)) {
+            if (in_array($bouton_suppl, $this->getBoutons())) {
+                if ($action == 'next') {
+                    $this->redirectToNextEtapes();
+                } elseif ($action == 'previous') {
+                    $this->redirectToPreviousEtapes();
+                } elseif('previsualiser') {
+                    $this->redirectToPrevisualiser();
+                }
+            }
         }
     }
 
@@ -50,10 +58,11 @@ class EtapesActions extends sfActions
     }
 
     protected function redirectToPrevisualiser() {
-        $this->redirect('@print?annee='.$this->getUser()->getCampagne());
+        $this->redirect('@print?annee=' . $this->getUser()->getCampagne());
     }
 
     protected function setCurrentEtape($current_etape) {
         $this->_etapes_config->setCurrentEtape($current_etape);
-   }
+    }
+
 }

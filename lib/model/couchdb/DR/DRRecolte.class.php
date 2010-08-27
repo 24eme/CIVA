@@ -43,15 +43,4 @@ class DRRecolte extends BaseDRRecolte {
         $nb_appellation_config = $this->getConfig()->filter('^appellation')->count();
         return (!($nb_appellation < $nb_appellation_config));
     }
-
-    public function sort() {
-        $appellations = array();
-        foreach($this->filter('^appellation') as $key => $item) {
-            $appellations[$key] = $item->getData();
-            $this->remove($key);
-        }
-        foreach($this->getConfig()->filter('^appellation') as $key => $item) {
-           $this->add($key, $appellations[$key]);
-        }
-    }
 }
