@@ -123,6 +123,7 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->libelle = "Rebêches";
+	$json->recolte->appellation_CREMANT->lieu->cepage_RB->rendement = -1;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->min_quantite = 0.2;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->exclude_total = 1;
 	$json->recolte->appellation_CREMANT->rendement = 80;
