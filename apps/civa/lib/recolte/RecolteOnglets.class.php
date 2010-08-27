@@ -29,7 +29,7 @@ class RecolteOnglets {
     public function getLieu($appellation = null, $lieu = null) {
       if (!$appellation)
 	$appellation = $this->_current_key_appellation;
-      if (!$lieu) 
+      if (!$lieu)
 	$lieu = $this->_current_key_lieu;
       return $this->_declaration->get('recolte')->get($appellation)->get($lieu);
     }

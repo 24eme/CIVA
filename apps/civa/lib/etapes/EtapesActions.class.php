@@ -22,7 +22,7 @@ class EtapesActions extends sfActions {
                     $this->redirectToNextEtapes();
                 } elseif ($action == 'previous') {
                     $this->redirectToPreviousEtapes();
-                } elseif('previsualiser') {
+                } elseif($action == 'previsualiser') {
                     $this->redirectToPrevisualiser();
                 }
             }
