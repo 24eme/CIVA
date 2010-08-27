@@ -1,10 +1,11 @@
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions') ?>
 
-<?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 
 <!-- #principal -->
 <p class="intro_declaration_recolte">Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.</p>
+
+<?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 					
 			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
