@@ -4,14 +4,15 @@
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 
 <!-- #principal -->
+<p class="intro_declaration_recolte">Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.</p>
+					
 			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                                    'onglets' => $onglets)); ?>
 
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
-				
-					<!-- #gestion_recolte -->
+                                    <!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'onglets' => $onglets,

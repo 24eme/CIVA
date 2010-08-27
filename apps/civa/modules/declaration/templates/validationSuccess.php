@@ -10,7 +10,7 @@
 
         <!-- #application_dr -->
         <div id="application_dr" class="clearfix">
-
+            <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
 
                 <!-- #acheteurs_caves -->
                 <div id="recolte_totale">
