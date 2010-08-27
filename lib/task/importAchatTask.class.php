@@ -46,7 +46,7 @@ EOF;
 
 	$docs = array();
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Achat'.$options['year']) as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Achat'.$options['year']) as $a) {
 	  $json = new stdClass();
 	  $achat = explode(',', preg_replace('/"/', '', $a));
 	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]))

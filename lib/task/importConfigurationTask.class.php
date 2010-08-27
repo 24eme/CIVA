@@ -83,7 +83,7 @@ EOF;
 	$grdcru->libelle = "AOC Alsace Grand Cru";
 	$grdcru->rendement = 61;
 
-	foreach(file(sfConfig::get('sf_data_dir') . '/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
+	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
 	  if ($g[1] == "99")  {
 	    continue;

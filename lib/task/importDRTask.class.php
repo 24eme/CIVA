@@ -48,16 +48,16 @@ EOF;
         $achat = array();
         $achatcvi = array();
         /* Reconstitution des vendeurs pour chaque récoltant */
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Dclven'.$options['year']) as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Dclven'.$options['year']) as $a) {
             $csv = explode(',', preg_replace('/"/', '', $a));
             $achat[$csv[0]][$csv[1]][$csv[4]][$csv[3]] = $csv[6];
             $achatcvi[$csv[0]][$csv[1]][$csv[4]][] = $csv[6];
         }
 
         $list_documents = array();
-        $max = count(file(sfConfig::get('sf_data_dir') . '/' . $options['year']."/Dcllig".$options['year']));
+        $max = count(file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']."/Dcllig".$options['year']));
         $nb = 0;
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year']."/Dcllig".$options['year']) as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']."/Dcllig".$options['year']) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
 	    if ($options['cvi'] && $cvi != $options['cvi'])
@@ -146,7 +146,7 @@ EOF;
         }
 
 	//Ajout des totaux
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'] ."/Dcltot".$options['year']) as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'] ."/Dcltot".$options['year']) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
 	    if ($options['civ'] && $cvi != $options['civ'])
@@ -196,7 +196,7 @@ EOF;
 	  }
 	}
 
-	foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year']. "/Dclent".$options['year']) as $l) {
+	foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']. "/Dclent".$options['year']) as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
 	  if ($options['civ'] && $cvi != $options['civ'])
@@ -243,7 +243,7 @@ EOF;
 	}
 
 	/*
-	foreach (file(sfConfig::get('sf_data_dir') . '/' . "Dclgc09") as $l) {
+	foreach (file(sfConfig::get('sf_data_dir') . '/import/' . "Dclgc09") as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
 	  if ($options['civ'] && $cvi != $options['civ'])

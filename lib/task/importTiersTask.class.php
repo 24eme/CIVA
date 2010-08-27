@@ -35,7 +35,7 @@ class importTiersTask extends sfBaseTask {
 
 	$docs = array();
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/' . $options['year'].'/Tiers'.$options['year']) as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Tiers'.$options['year']) as $a) {
 	  $json = new stdClass();
 	  $tiers = explode(',', preg_replace('/"/', '', $a));
 	  if (!isset($tiers[4]) || !$tiers[4] || !strlen($tiers[4]))
