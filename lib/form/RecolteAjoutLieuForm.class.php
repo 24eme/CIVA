@@ -39,7 +39,7 @@
             return $this->_lieu_choices;
         }
 
-        public function doUpdateObject($values = null) {
+        public function doUpdateObject($values) {
             $this->getObject()->add($values['lieu']);
         }
     }

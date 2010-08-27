@@ -986,7 +986,8 @@ a.msg_aide
 }
 
 #gestion_recolte .col_recolte .vente_raisins,
-#gestion_recolte .col_recolte .caves
+#gestion_recolte .col_recolte .caves,
+#gestion_recolte .col_recolte .mouts
 {
 	margin: 0 0 3px;
 	padding: 28px 0 0;
