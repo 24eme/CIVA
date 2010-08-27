@@ -88,6 +88,7 @@
 .bloc_vert { padding: 10px; }
 .bloc_gris { background: #e0dfdf; }
 .bloc_vert { background: #e0e1bd; }
+input.readonly { background-color:#F0F0DE !important; }
 
 /* Etapes de la déclaration */
 ul#etape_declaration
