@@ -352,6 +352,10 @@ ul#messages_log li
     padding: 0 0 0 15px;
 }
 
+.erreur select{
+    border: 1px solid #FF3300 !important;
+}
+
 /* Popup d'aide */
 a.msg_aide
 {
