@@ -13,7 +13,7 @@ pre {display: inline;}
 </table>
 </td></tr></table>
 
-<span style="background-color: black; color: white; font-weight: bold;">Gestionnaire de l&apos;exploitation</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
 <table style="border: 1px solid black;"><tr><td>
 <table border="0" style="margin: 0px; padding: 0px;">
   <tr><td>Nom et prénom : <i><?php echo $recoltant->exploitant->nom; ?></i></td><td>Né le <i><?php echo $recoltant->exploitant->date_naissance; ?></i></td></tr>
