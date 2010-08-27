@@ -16,7 +16,8 @@
         <h2>Accès directs</h2>
         <ul>
 <?php if ($recoltant = $sf_user->getRecoltant()) : ?>
-            <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mon compte</a></li>
+            <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
+            <li><a href="">Mon compte</a></li>
             <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
 <?php else : ?>
             <li><a href="<?php echo url_for('@login'); ?>">Connexion</a></li>

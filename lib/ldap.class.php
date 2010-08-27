@@ -78,12 +78,12 @@ class ldap {
                 $identifier            = 'uid='.$recoltant->cvi.',ou=People,'.$this->ldapdc;
                 $info['sn']            = $values['nom'];
                 $info['cn']            = $values['nom'];
-                $info['userPassword']  = $values['mot_de_passe'];
+                if(isset($values['mot_de_passe'])) $info['userPassword']  = $values['mot_de_passe'];
                 $info['gecos']         = 'Mon recoltant,,,';
-                $info['mail']          = $values['email'];
-                $info['postalAddress'] = 'adresse';
-                $info['postalCode']    = '75000';
-                $info['l']             = 'ville';
+                if(isset($values['mail'])) $info['mail'] = $values['email'];
+                $info['postalAddress'] = $values['adresse'];
+                $info['postalCode']    = $values['code_postal'];
+                $info['l']             = $values['ville'];
 
                 // Ajoute les données au dossier
                 $r=ldap_modify($ldapConnect, $identifier, $info);
