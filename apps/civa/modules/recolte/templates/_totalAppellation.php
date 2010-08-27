@@ -1,5 +1,13 @@
 <div id="col_recolte_totale" class="col_recolte col_total">
-    <h2>Total <?php echo $onglets->getItemsLieu()->getConfig()->libelle ?></h2>
+    <h2>Total 
+    <?php if($onglets->getCurrentAppellation()->hasManyLieu()): ?>
+        <?php echo $lieu->getConfig()->libelle ?>
+    <?php else: ?>
+        <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
+    <?php endif; ?>
+    </h2>
+
+
 
     <div class="col_cont">
         <p class="superficie">

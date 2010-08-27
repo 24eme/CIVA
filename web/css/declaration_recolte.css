@@ -920,13 +920,16 @@ a.msg_aide
     margin: 0 0 3px;
 }
 
-#gestion_recolte #colonne_intitules p { padding: 3px; }
+#gestion_recolte #colonne_intitules p { padding: 3px; height: 17px; white-space: nowrap; overflow: hidden }
 #gestion_recolte #colonne_intitules ul { padding: 0 3px; }
 
 #gestion_recolte #colonne_intitules ul li
 {
     border-top: 1px dashed #b5b4b4;
     padding: 3px 0;
+        height: 17px; 
+        white-space: nowrap;
+        overflow: hidden;
 }
 
 #gestion_recolte #colonne_intitules ul li:first-child { border: 0; }

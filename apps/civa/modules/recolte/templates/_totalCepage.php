@@ -33,8 +33,10 @@
         <p class="vol_total_recolte"><input type="text" readonly="readonly" value="<?php echo $cepage->getTotalVolume() ?>" /></p>
         <ul class="vol_revendique_dplc">
             <li class="rendement">Rdt : <strong><?php echo $cepage->getRendementRecoltant() ?> hl/ha</strong></li>
-            <li><input type="text" readonly="readonly" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" /></li>
-            <li><input type="text" readonly="readonly" class="alerte" value="<?php echo $cepage->getTotalDPLC() ?>" /></li>
+            <?php if ($cepage->hasRendement()): ?>
+                <li><input type="text" readonly="readonly" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" /></li>
+                <li><input type="text" readonly="readonly" class="alerte" value="<?php echo $cepage->getTotalDPLC() ?>" /></li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>

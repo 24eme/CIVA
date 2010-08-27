@@ -99,6 +99,8 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
+        $this->forward404Unless($request->isXmlHttpRequest());
+
         $this->initOnglets($request);
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -119,6 +121,8 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
+        $this->forward404Unless($request->isXmlHttpRequest());
+        
         $this->initOnglets($request);
         
          if ($request->hasParameter('force_appellation')) {
@@ -225,6 +229,7 @@ class recolteActions extends EtapesActions {
          return array('superficie_required' => (!($this->onglets->getCurrentCepage()->getConfig()->exist('superficie_optionnelle'))),
                       'acheteurs_negoce' => $this->acheteurs->negoces,
                       'acheteurs_cooperative' => $this->acheteurs->cooperatives,
-                      'acheteurs_mout' => $this->acheteurs->mouts);
+                      'acheteurs_mout' => $this->acheteurs->mouts,
+                      'has_acheteurs_mout' => $this->has_acheteurs_mout);
      }
 }

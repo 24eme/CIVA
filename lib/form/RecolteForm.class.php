@@ -141,7 +141,7 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
     }
 
     protected function hasAcheteursMouts() {
-        return !is_null($this->getAcheteursMouts());
+        return $this->getOption('has_acheteurs_mout', false);
     }
 
     protected function getChoicesVvtsgn() {

@@ -24,15 +24,17 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         $v += $this->getSumAcheteur('mouts');
 
         $this->volume = $v;
+        $this->volume_revendique = 0;
+        $this->volume_dplc = 0;
 
-        $volume_max = $this->getVolumeMax();
-
-        if ($this->volume > $volume_max) {
-            $this->volume_revendique = $volume_max;
-            $this->volume_dplc = $this->volume - $volume_max;
-        } else {
-            $this->volume_revendique = $this->volume;
-            $this->volume_dplc = 0;
+        if ($this->hasRendementCepage()) {
+            $volume_max = $this->getVolumeMax();
+            if ($this->volume > $volume_max) {
+                $this->volume_revendique = $volume_max;
+                $this->volume_dplc = $this->volume - $volume_max;
+            } else {
+                $this->volume_revendique = $this->volume;
+            }
         }
 
         if ($this->volume && $this->volume > 0) {
@@ -55,11 +57,13 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       }
       return $sum;
     }
+
+    public function hasRendementCepage() {
+        return $this->getParent()->getParent()->hasRendement();
+    }
     
     public function getRendementCepage() {
-        $cepage_detail = $this->getCouchdbDocument()->get($this->getParentHash());
-        $cepage = $this->getCouchdbDocument()->get($cepage_detail->getParentHash());
-        return $cepage->getRendement();
+        return $this->getParent()->getParent()->getRendement();
     }
     
     public function save() {

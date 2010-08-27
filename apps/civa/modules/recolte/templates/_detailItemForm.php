@@ -37,11 +37,13 @@
         <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <?php echo $form['cave_particuliere']->render(array('class' => 'num')) ?>
         </p>
-        <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></p>
+        <p class="vol_total_recolte"><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
+        <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
             <li><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
             <li><input type="text" class="num" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
         </ul>
+        <?php endif; ?>
     </div>
 
     <div class="col_btn">

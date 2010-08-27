@@ -90,6 +90,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       return $this->getConfig()->getRendement();
     }
 
+    public function hasRendement() {
+        return ($this->getRendement() !== -1);
+    }
+
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
 	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);

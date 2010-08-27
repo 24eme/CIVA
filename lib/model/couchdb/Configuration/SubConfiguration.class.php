@@ -3,7 +3,7 @@
 class SubConfiguration extends BaseSubConfiguration {
   public function getRendement() {
     $r = $this->_get('Rendement');
-    if ($r && $r > 0) {
+    if ($r && ($r > 0 || $r == -1)) {
       return $r;
     }
     $h = $this->getParentHash();
