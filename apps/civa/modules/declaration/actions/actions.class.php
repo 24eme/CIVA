@@ -51,6 +51,10 @@ class declarationActions extends EtapesActions {
 		$doc->removeVolumes();
 		$doc->update();
                 $doc->save();
+		if ($doc->get('recolte/appellation_KLEVENER/lieu/cepage_KL/detail/0/volume') != 0) {
+		  echo "PUTAIN : ".$doc->get('recolte/appellation_KLEVENER/lieu/cepage_KL/detail/0/volume');
+		  exit;
+		}
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }

@@ -71,9 +71,9 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
     }
 
     public function removeVolumes() {
-      $this->volume = null;
+      $this->setVolume(null);
       $this->cave_particuliere = null;
-      $this->remove('cooperative');
+      $this->remove('cooperatives');
       $this->remove('mouts');
       $this->remove('negoces');
     }

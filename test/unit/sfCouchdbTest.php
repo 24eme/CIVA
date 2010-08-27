@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(43);
+$t = new lime_test(46);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -118,6 +118,8 @@ try{
  }
 
 
+$doc->set('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume', 69);
+
 $detail = $doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0');
 $detail->add('superficie', 150);
 $t->is($doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'superficie added');
@@ -184,6 +186,14 @@ $t->is($doc->get('recolte/appellation_ALSACEBLANC')->getTotalSuperficie(), 250, 
 //$t->ok($doc->get('recolte/appellation_ALSACEBLANC')->getTotalDPLC(), 'total DPLC');
 //$t->ok($doc->get('recolte/appellation_ALSACEBLANC')->getTotalVolumeRevendique(), 'Total Volume revendiqué');
 
+
+$t->isnt($doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume not set to 0 before removeVolumes');
+$doc->removeVolumes();
+$doc->save();
+$t->is($doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume set to 0 after removeVolumes');
+
+$t->is(sfCouchdbManager::getClient()->retrieveDocumentById('TESTCOUCHDB')->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume set to 0 even after retrieve');
+
 /*** NEW TEST ****/
 
 $t->ok($doc->remove('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0'), 'remove a multifield');
@@ -205,3 +215,5 @@ try
 {
   $t->pass('cannot retrieve delete doc');
 }
+
+
