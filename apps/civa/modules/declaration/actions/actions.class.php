@@ -16,7 +16,7 @@ class declarationActions extends EtapesActions {
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->setCurrentEtape('mon_espace_civa');
-        $this->campagnes = $this->getUser()->getRecoltant()->getDeclarationArchivesCampagne($this->getUser()->getCampagne());
+        $this->campagnes = $this->getUser()->getRecoltant()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
 	krsort($this->campagnes);
         $this->declaration = $this->getUser()->getDeclaration();
         if ($request->isMethod(sfWebRequest::POST)) {
