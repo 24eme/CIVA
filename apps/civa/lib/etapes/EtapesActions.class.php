@@ -17,7 +17,7 @@ class EtapesActions extends sfActions {
         } elseif ($this->askRedirectToPrevisualiser()) {
             $this->redirectToPrevisualiser();
         } elseif (!is_null($boutons_suppl) && is_array($boutons_suppl)) {
-            if (in_array($bouton_suppl, $this->getBoutons())) {
+            if (in_array($boutons_suppl, $this->getBoutons())) {
                 if ($action == 'next') {
                     $this->redirectToNextEtapes();
                 } elseif ($action == 'previous') {
