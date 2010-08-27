@@ -9,7 +9,7 @@ class PageableHTML extends PageableOutput {
   protected function init() {
     $this->html = '<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
 <head>
-  <title>Les blogueuses mode sont-elles vendues aux marques ? | Rue89</title>
+  <title>'.$this->title.$this->link.$this->subtitle.'</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   </head></body><h1>'.$this->title.$this->link.$this->subtitle.'</h1>';
   }

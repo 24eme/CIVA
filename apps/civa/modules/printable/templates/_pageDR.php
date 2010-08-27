@@ -48,6 +48,7 @@ if (!function_exists('printColonne')) {
 
 echo printColonne('Cépage', $colonnes_cepage, 'cepage');
 echo printColonne('Dénom. complém.', $colonnes_cepage, 'denomination');
+echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 foreach ($acheteurs as $cvi => $val) {

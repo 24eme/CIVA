@@ -75,7 +75,8 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
                     if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
                         $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
                     }
-                    $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+		    if ($quantite_vendue)
+		      $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
                 }
             }
         }

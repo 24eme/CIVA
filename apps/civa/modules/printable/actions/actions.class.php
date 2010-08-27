@@ -60,7 +60,7 @@ class printableActions extends sfActions
 	$c['type'] = 'detail';
 	$c['cepage'] = $cepage->getLibelle();
 	$c['denomination'] = $detail->denomination;
-	$c['vtsn'] = $detail->vtsgn;
+	$c['vtsgn'] = $detail->vtsgn;
 	$c['superficie'] = $detail->superficie;
 	$c['volume'] = $detail->volume;
 	$c['cave_particuliere'] = $detail->cave_particuliere;
@@ -85,12 +85,20 @@ class printableActions extends sfActions
 	$c['type'] = 'total';
 	$c['cepage'] = $cepage->getLibelle();
 	$c['denomination'] = 'Total';
-	$c['vtsn'] = '';
+	$c['vtsgn'] = '';
 	$c['superficie'] = $cepage->total_superficie;
 	$c['volume'] = $cepage->total_volume;
-	$c['cave_particuliere'] = '';
+	$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
 	$c['revendique'] = $cepage->volume_revendique;
 	$c['dplc'] = $cepage->dplc;
+	$negoces = $cepage->getTotalAcheteursByCvi('negoces');
+	foreach($negoces as $cvi => $total) {
+	  $c[$cvi] = $total;
+	}
+	$coop =  $cepage->getTotalAcheteursByCvi('cooperatives');
+	foreach($detail->cooperatives as $vente) {
+	  $c[$vente->cvi] = $coop[$vente->cvi];
+	}
 	array_push($colonnes, $c);
 	$cpt ++;
       }else{
@@ -101,16 +109,24 @@ class printableActions extends sfActions
     $c['type'] = 'total';
     $c['cepage'] = 'Appellation';
     $c['denomination'] = 'Total';
-    $c['vtsn'] = '';
+    $c['vtsgn'] = '';
     $c['superficie'] = $lieu->total_superficie;
     $c['volume'] = $lieu->total_volume;
-    $c['cave_particuliere'] = '';
-    $c['revendique'] = $lieu->volume_revendique;
-    $c['dplc'] = $lieu->dplc;
+    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
+    $c['revendique'] = $lieu->total_volume_revendique;
+    $c['dplc'] = $lieu->total_dplc;
+    $negoces = $lieu->getTotalAcheteursByCvi('negoces');
+    foreach($negoces as $cvi => $vente) {
+      $c[$cvi] = $vente;
+    }
+    $coop =  $lieu->getTotalAcheteursByCvi('cooperatives');
+    foreach($detail->cooperatives as $vente) {
+      $c[$vente->cvi] = $coop[$vente->cvi];
+    }
     array_push($colonnes, $c);
-
+    
     $pages = array();
-
+    
     //On peut pas mettre plus de 6 colonnes par page, si plus de 6 colonnes cepage
     //alors on coupe au total précédent
     $nb_colonnes_by_page = 6;
