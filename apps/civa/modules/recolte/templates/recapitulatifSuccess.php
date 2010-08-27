@@ -33,6 +33,7 @@
 													<td>Volume total récolté :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getTotalVolume() ;?> hl</td>
 												</tr>
+                                                                                                <?php if($appellationlieu->hasRendement()): ?>
 												<tr>
 													<td>Volume revendiqué :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendiqueFinal(); ?> hl</td>
@@ -41,11 +42,13 @@
 													<td>dont DPLC :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getDplcFinal(); ?> hl</td>
 												</tr>
+                                                                                                <?php endif; ?>
 											</tbody>
 										</table>
 									</div>
 								</div>
 							</div>
+                                                        <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
 							<div id="recap_ventes">
 								<h2 class="titre_section">Récapitulatif des ventes</h2>
 								<div class="contenu_section">
@@ -88,6 +91,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 									</div>
 								</div>
 							</div>
+                                                        <?php endif; ?>
 						
 						</div>					</div>	
 					<!-- fin #gestion_recolte -->

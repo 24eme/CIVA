@@ -22,7 +22,8 @@
 						<div id="donnees_recolte_sepage" class="clearfix">
 						
 							<?php echo include_partial('detailHeader', array('acheteurs' => $acheteurs,
-                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
+                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                                                                         'onglets' => $onglets)) ?>
 
                                                         <?php echo include_partial('detailList', array('details' => $details, 
                                                                                                        'onglets' => $onglets,

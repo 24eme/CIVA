@@ -132,6 +132,7 @@ EOF;
         $json->recolte->appellation_VINTABLE->appellation = "VINTABLE";
 	$json->recolte->appellation_VINTABLE->libelle = "Vin de table";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_VT->libelle = "Vin de table";
+        $json->recolte->appellation_VINTABLE->rendement = -1;
 
         $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
 	$json->recolte->appellation_KLEVENER->libelle = "Klevener de Heiligenstein";

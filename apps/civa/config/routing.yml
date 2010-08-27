@@ -83,8 +83,8 @@ compte:
   param: { module: compte, action: index }
 
 print:
-  url: /print
-  param: {module: printable, action: DR, annee: 2009}
+  url: /print/:annee
+  param: {module: printable, action: DR}
 
 default_index:
   url:   /:module

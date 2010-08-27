@@ -41,13 +41,14 @@
         <p class="vol_total_recolte"><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolume() ?>" /></p>
         <ul class="vol_revendique_dplc">
             <li class="rendement">Rdt : <strong><?php echo $lieu->getRendementRecoltant() ?> hl/ha</strong></li>
-            <?php if ($lieu->hasRendementAppellation()): ?>
-                <li><input type="text" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
-                <li><input type="text" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
+            <?php if ($lieu->hasRendement()): ?>
+                <?php if ($lieu->hasRendementAppellation()): ?>
+                    <li><input type="text" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
+                    <li><input type="text" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
+                <?php endif; ?>
+                <li><input type="text" readonly="readonly" value="Σ <?php echo $lieu->getTotalVolumeRevendique() ?>" /></li>
+                <li><input type="text" readonly="readonly" class="alerte" value="Σ <?php echo $lieu->getTotalDPLC() ?>"/></li>
             <?php endif; ?>
-            <li><input type="text" readonly="readonly" value="Σ <?php echo $lieu->getTotalVolumeRevendique() ?>" /></li>
-            <li><input type="text" readonly="readonly" class="alerte" value="Σ <?php echo $lieu->getTotalDPLC() ?>"/></li>
-
 
         </ul>
     </div>

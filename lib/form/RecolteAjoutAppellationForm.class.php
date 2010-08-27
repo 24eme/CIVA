@@ -43,6 +43,7 @@
 
             if ($config_appellation->exist('lieu')) {
                 $this->getObject()->add($appellation_key)->add('lieu');
+                $this->getObject()->sort();
                 $this->_need_lieu = false;
             } else {
                 $this->_need_lieu = true;

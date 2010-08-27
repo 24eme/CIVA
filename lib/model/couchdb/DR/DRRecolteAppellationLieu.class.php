@@ -131,7 +131,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function getDPLCAppellation() {
-        $volume_dplc = null;
+        $volume_dplc = 0;
         if ($this->hasRendementAppellation()) {
             $volume = $this->getTotalVolume();
             $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
@@ -145,8 +145,8 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function getVolumeRevendiqueAppellation() {
-        $volume_revendique = null;
-        if ($this->hasRendementAppellation()) {
+        $volume_revendique = 0;
+        if ($this->hasRendement() && $this->hasRendementAppellation()) {
             $volume = $this->getTotalVolume();
             $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
             if ($volume > $volume_max) {
@@ -161,7 +161,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     public function getDPLCFinal() {
       $dplc_total = $this->getTotalDPLC();
       $dplc_final = $dplc_total;
-      if ($this->hasRendementAppellation()) {
+      if ($this->hasRendement() && $this->hasRendementAppellation()) {
           $dplc_appellation = $this->getDPLCAppellation();
           if ($dplc_total < $dplc_appellation) {
             $dplc_final = $dplc_appellation;
@@ -180,5 +180,13 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
           }
       }
       return $volume_revendique_final;
+    }
+
+    public function getRendement() {
+      return $this->getConfig()->getRendement();
+    }
+
+    public function hasRendement() {
+        return ($this->getRendement() !== -1);
     }
 }

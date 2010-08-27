@@ -35,8 +35,10 @@
 
     <p class="vol_place">Volume sur place</p>
     <p class="vol_total_recolte">Volume Total Récolté</p>
+    <?php if ($onglets->getCurrentLieu()->hasRendement()): ?>
     <ul class="vol_revendique_dplc">
         <li>Volume revendiqué</li>
         <li>DPLC</li>
     </ul>
+    <?php endif; ?>
 </div>

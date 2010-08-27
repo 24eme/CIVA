@@ -2,6 +2,10 @@
 
 class SubConfiguration extends BaseSubConfiguration {
   public function getRendement() {
+    if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
+       return -1;
+    }
+
     $r = $this->_get('Rendement');
     if ($r && ($r > 0 || $r == -1)) {
       return $r;

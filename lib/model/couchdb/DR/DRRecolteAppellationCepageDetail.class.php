@@ -78,6 +78,10 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       $this->remove('negoces');
     }
 
+    public function hasMotifNonRecolteLibelle() {
+        return $this->exist('motif_non_recolte');
+    }
+
     public function getMotifNonRecolteLibelle() {
       if ($this->volume)
 	return '';
