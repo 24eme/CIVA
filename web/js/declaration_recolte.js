@@ -122,9 +122,10 @@ var accordeonPrecDecla = function()
 var formExploitationAdministratif = function()
 {
 	var blocs = $('#infos_exploitation, #gestionnaire_exploitation');
-	
+
 	blocs.each(function()
 	{
+        
 		var bloc = $(this);
 		var presentation_infos = bloc.find('.presentation');
 		var modification_infos = bloc.find('.modification');
@@ -138,14 +139,16 @@ var formExploitationAdministratif = function()
 		{
 			presentation_infos.hide();
 			modification_infos.show();
+                        $("a.modifier").hide();
 			bloc.addClass('edition');
 			return false;
 		});
 		
 		btn_annuler.click(function()
-		{	
+		{
 			presentation_infos.show();
 			modification_infos.hide();
+                        $("a.modifier").show();
 			bloc.removeClass('edition');
 			return false;
 		});
