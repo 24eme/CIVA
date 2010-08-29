@@ -4,12 +4,12 @@
 # default values
 all:
   cas:
-    domain: CHA.NGE._.ME
-    port: 8181
+    domain: declaration.dev.vinsalsace.pro
+    port: 443
     path: cas
-    url : "https://CHA.NGE._.ME:8181/cas"
+    url : "https://declaration.dev.vinsalsace.pro:443/cas"
   ldap:
-    serveur: "CHA.NGE._.ME"
+    serveur: "127.0.0.1"
     dn: "cn=admin,dc=vinsalsace,dc=pro"
     dc: "dc=vinsalsace,dc=pro"
     pass: "my_passw"
