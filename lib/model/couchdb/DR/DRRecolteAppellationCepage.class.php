@@ -104,6 +104,9 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     }
 
     public function removeVolumes() {
+      $this->total_volume = null;
+      $this->volume_revendique = null;
+      $this->dplc = null;
       foreach($this->getDetail() as $detail) {
 	$detail->removeVolumes();
       }

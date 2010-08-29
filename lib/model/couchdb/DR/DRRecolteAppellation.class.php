@@ -97,6 +97,9 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function removeVolumes() {
+      $this->volume_revendique = null;
+      $this->total_volume = null;
+      $this->dplc = null;
         foreach ($this->filter('^lieu') as $lieu) {
             $lieu->removeVolumes();
         }

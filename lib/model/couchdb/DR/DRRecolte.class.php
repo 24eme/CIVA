@@ -43,4 +43,10 @@ class DRRecolte extends BaseDRRecolte {
         $nb_appellation_config = $this->getConfig()->filter('^appellation')->count();
         return (!($nb_appellation < $nb_appellation_config));
     }
+
+    public function removeVolumes() {
+      foreach ($this->filter('^appellation_') as $appellation) {
+	$appellation->removeVolumes();
+      }
+    }
 }

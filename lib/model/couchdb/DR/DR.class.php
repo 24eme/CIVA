@@ -17,9 +17,8 @@ class DR extends BaseDR {
              ->get($numero);
     }
     public function removeVolumes() {
-      foreach ($this->getRecolte()->filter('^appellation_') as $appellation) {
-	$appellation->removeVolumes();
-      }
+      $this->lies = null;
+      return $this->recolte->removeVolumes();
     }
 
 }
