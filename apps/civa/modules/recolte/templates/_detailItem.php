@@ -40,10 +40,13 @@
         <?php endif; ?>
 
         <p class="vol_place"><input type="text" class="num" disabled="disabled" value="<?php echo $detail->cave_particuliere ?>" /></p>
-        <p class="vol_total_recolte"><input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
-        <?php if ($detail->hasMotifNonRecolteLibelle()): ?>
-            <p><?php echo $detail->getMotifNonRecolteLibelle(); ?></p>
-        <?php endif; ?>
+        <p class="vol_total_recolte">
+            <input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" />
+            <?php if ($detail->hasMotifNonRecolteLibelle()): ?>
+                <a href="#" class="ajout ajout_motif"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
+            <?php endif; ?>
+        </p>
+        
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
             <li><input type="text" class="num" value="<?php echo $detail->volume_revendique ?>" /></li>

@@ -23,7 +23,7 @@
     </div>
 
     <?php if ($has_acheteurs_mout): ?>
-            <div class="caves">
+        <div class="mouts">
         <?php
             include_partial('headerAcheteurs', array('title' => "Acheteurs de Mouts",
                 'acheteurs' => $acheteurs->mouts,

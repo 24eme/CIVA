@@ -81,38 +81,28 @@
             var_liste_mouts = <?php echo ListAcheteursConfig::getMoutsJson() ?>;
 	</script>
 
-        <div id="popup_ajout_acheteur" class="popup_ajout" title="Ajouter un acheteur">
-		<form action="<?php echo url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()) ?>" method="post">
-                        
-                        <input type="hidden" name="type_cssclass" value="vente_raisins" />
-                        <input type="hidden" name="type_name_field" value="negoces" />
-
-			<label for="champ_acheteur_nom">Entrez le nom de l'acheteur, son CVI ou sa commune :</label>
-			<input id="champ_acheteur_nom" class="nom" type="text" name="" />
-			<input class="cvi" type="hidden" name="" />
-			<input class="commune" type="hidden" name="" />
-			<input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
-		</form>
-	</div>
-
-	<div id="popup_ajout_cave" class="popup_ajout" title="Ajouter une cave">
-		<form action="<?php echo url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()) ?>" method="post">
-
-                        <input type="hidden" name="type_cssclass" value="caves" />
-                        <input type="hidden" name="type_name_field" value="cooperatives" />
-
-			<label for="champ_cave_nom">Entrez le nom de la cave, son CVI ou sa commune :</label>
-			<input id="champ_cave_nom" class="nom" type="text" name="" />
-			<input class="cvi" type="hidden" name="" />
-			<input class="commune" type="hidden" name="" />
-			<input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
-		</form>
-	</div>
-
-        <?php include_partial('ajoutPopupOnglets', array('onglets' => $onglets,
+        <?php include_partial('popupAjoutOnglets', array('onglets' => $onglets,
                                                                  'form_appellation' => $form_ajout_appellation,
                                                                  'form_lieu' => $form_ajout_lieu,
                                                                  'url_lieu' => $url_ajout_lieu)) ?>
 
+        <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_acheteur',
+                                                          'title' => 'Ajouter un acheteur',
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'name' => 'negoces',
+                                                          'cssclass' => 'vente_raisins')) ?>
+        <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_cave',
+                                                          'title' => 'Ajouter une cave',
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'name' => 'caves',
+                                                          'cssclass' => 'cooperatives')) ?>
+        <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_mout',
+                                                          'title' => 'Ajouter un acheteur de mout',
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'name' => 'mouts',
+                                                          'cssclass' => 'mouts')) ?>
+
+       <?php include_partial('popupMotifNonRecolte', array()) ?>
+     
        <?php include_partial('emptyAcheteurs') ?>
 	

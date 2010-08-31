@@ -10,6 +10,8 @@
 
 
     <div class="col_cont">
+        <p class="denomination">&nbsp;</p>
+        <p class="mention">&nbsp;</p>
         <p class="superficie">
             <input type="text" readonly="readonly" value="<?php echo $lieu->getTotalSuperficie() ?>" />
         </p>
