@@ -84,23 +84,18 @@ class recoltantActions extends EtapesActions {
             if ($request->getParameter('exploitation')) {
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
                 if ($this->form_expl->isValid()) {
-                    /*try {
 
-                        $ldap = new ldap();
+                    $recoltant = $this->form_expl->save();
+                    $ldap = new ldap();
 
-                        $values['nom'] = $this->form_expl->getValue('nom');
-                        $values['adresse'] = $this->form_expl->getValue('siege_adresse');
-                        $values['code_postal'] = $this->form_expl->getValue('siege_code_postal');
-                        $values['ville'] = $this->form_expl->getValue('siege_commune');
+                    if($recoltant && $ldap) {
 
+                        $values['nom'] = $recoltant->nom;
+                        $values['adresse'] = $recoltant->siege->adresse;
+                        $values['code_postal'] = $recoltant->siege->code_postal;
+                        $values['ville'] = $recoltant->siege->commune;
                         $ldap->ldapModify($this->getUser()->getRecoltant(), $values);
-
-                        $this->form_expl->save();
-                        
-                    } catch (Exception $e) {*/
-                        $this->form_expl->save();
-                    //}
-
+                    }
 
                 }else
                     $this->form_expl_err = 1;

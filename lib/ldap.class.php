@@ -34,6 +34,7 @@ class ldap {
     }
 
     public function ldapAdd($recoltant) {
+        print_r($recoltant); exit();
 
         if($recoltant){
             $ldapConnect = $this->ldapConnect();
@@ -55,9 +56,9 @@ class ldap {
                 $info['homeDirectory'] = '/home/'.$recoltant->cvi;
                 $info['gecos']         = 'Mon recoltant,,,';
                 $info['mail']          = $recoltant->email;
-                $info['postalAddress'] = 'adresse';
-                $info['postalCode']    = '75000';
-                $info['l']             = 'ville';
+                $info['postalAddress'] = $recoltant->siege->adresse;
+                $info['postalCode']    = $recoltant->siege->code_postal;
+                $info['l']             = $recoltant->siege->commune;
 
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
@@ -83,8 +84,8 @@ class ldap {
                 $info['gecos']         = 'Mon recoltant,,,';
                 
                 if(isset($values['mail']))          $info['mail'] = $values['email'];
-                if(isset($values['postalAddress'])) $info['postalAddress'] = $values['adresse'];
-                if(isset($values['postalCode']))    $info['postalCode']    = $values['code_postal'];
+                if(isset($values['adresse']))       $info['postalAddress'] = $values['adresse'];
+                if(isset($values['code_postal']))   $info['postalCode']    = $values['code_postal'];
                 if(isset($values['ville']))         $info['l']             = $values['ville'];
 
                 // Ajoute les données au dossier
