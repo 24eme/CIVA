@@ -8,6 +8,15 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getCodeDouane($vtsgn = '') {
+      if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
+	if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
+	  $vtsgn = 'AOC';
+	}
+      }
+      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+    }
+
     public function getLibelleWithAppellation() {
       if ($this->getLibelle())
 	return $this->getParent()->getLibelle().' - '.$this->getLibelle();

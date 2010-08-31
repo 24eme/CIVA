@@ -84,7 +84,11 @@ compte:
 
 print:
   url: /print/:annee
-  param: {module: printable, action: DR}
+  param: {module: export, action: pdf}
+
+xml:
+  url: /xml/:annee
+  param: {module: export, action: xml}
 
 default_index:
   url:   /:module

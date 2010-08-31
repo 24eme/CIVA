@@ -32,6 +32,11 @@ foreach($conf->get('recolte/appellation_ALSACEBLANC/lieu') as $key => $item) {
     }
 }
 $t->ok($iterator_ok && $iterator_nb == 8,  "foreach on cepages with a filter");
-$t->ok($conf->get('recolte/appellation_ALSACEBLANC/lieu')->count() == 8,  "count cepages with a filter");
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->count(), 8,  "count cepages with a filter");
 $conf->get('recolte/appellation_ALSACEBLANC/lieu')->clearFilter();
-$t->ok($conf->get('recolte/appellation_ALSACEBLANC/lieu')->count() == 10,  "clear filter");
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->count(), 12,  "clear filter");
+
+$t->ok($conf->get('recolte/appellation_ALSACEBLANC/douane/type_aoc'), "Configuration Douane");
+
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu/Cepage_GW/douane')->getCouleur(), 
+       $conf->get('recolte/appellation_ALSACEBLANC/douane/couleur'), "Teste l'héritage des infos douanes");

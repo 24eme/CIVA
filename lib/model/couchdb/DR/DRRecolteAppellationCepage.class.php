@@ -12,6 +12,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       return $this->getConfig()->getLibelle();
     }
 
+    public function getCodeDouane($vtsgn = '') {
+      return $this->getParent()->getCodeDouane($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
+    }
+
     public function addDetail($detail) {
       return $this->add(null, $detail);
     }

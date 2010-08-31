@@ -210,6 +210,19 @@ Configuration:
         type: collection
         definition:
           fields:
+            douane :
+              type: collection
+              class: Douane
+              definition:
+                fields:
+                  type_aoc: {required: false}
+                  couleur: {required: false}
+                  appellation_lieu: {required: false}
+                  qualite: {required: false}
+                  qualite_vt: {required: false}
+                  qualite_sgn: {required: false}
+                  qualite_aoc: {required: false}
+                  code_cepage: {required: false}
             '*':
             # ------- APPELLATION ---------
               type: collection
@@ -221,6 +234,17 @@ Configuration:
                   rendement : { type: float }
                   rendement_appellation: { type: float }
                   mout: {type: integer}
+                  douane :
+                    type: collection
+                    class: Douane
+                    definition:
+                      fields:
+                        type_aoc: {required: false}
+                        couleur: {required: false}
+                        appellation_lieu: {required: false}
+                        qualite: {required: false}
+                        qualite_aoc: {required: false}
+                        code_cepage: {required: false}
                   '*':
                   # ------------ LIEU --------------
                     type: collection
@@ -230,12 +254,32 @@ Configuration:
                         rendement: {type: float}
                         rendement_appellation: { type: float }
                         libelle: {}
+                        douane :
+                          type: collection
+                          class: Douane
+                          definition:
+                            fields:
+                              type_aoc: {required: false}
+                              couleur: {required: false}
+                              appellation_lieu: {required: false}
+                              qualite: {required: false}
+                              code_cepage: {required: false}
                         '*':
                         # ------------ CEPAGE -------------
                           type: collection
                           class: SubConfiguration
                           definition:
                             fields:
+                              douane :
+                                type: collection
+                                class: Douane
+                                definition:
+                                  fields:
+                                    type_aoc: {required: false}
+                                    couleur: {required: false}
+                                    appellation_lieu: {required: false}
+                                    qualite: {required: false}
+                                    code_cepage: {required: false}
                               libelle: {  }
                               rendement: { type: float }
                               min_quantite: {type: float, required: false}

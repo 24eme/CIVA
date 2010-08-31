@@ -224,7 +224,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         if ($this->hasField($key)) {
             return $this->_fields[sfInflector::underscore(sfInflector::camelize($key))];
         } else {
-            throw new sfCouchdbException(sprintf('field inexistant : %s', $key));
+	  throw new sfCouchdbException(sprintf('field inexistant : %s (%s)', $key, $this->getHash()));
         }
     }
 

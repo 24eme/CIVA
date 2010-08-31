@@ -6,6 +6,10 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getCodeDouane() {
+      return $this->getParent()->getParent()->getCodeDouane($this->vtsgn);
+    }
+
     public function getAcheteursValuesWithCvi($field) {
         $values = array();
         if ($this->exist($field)) {

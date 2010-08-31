@@ -9,14 +9,32 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
-class printableActions extends sfActions
+class exportActions extends sfActions
 {
+
+  public function executeXml(sfWebRequest $request) 
+  {
+    $recoltant = $this->getUser()->getRecoltant();
+    $annee = $this->getRequestParameter('annee', null);
+    $key = 'DR-'.$recoltant->cvi.'-'.$annee;
+    $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+    foreach ($dr->recolte->filter('^appellation_') as $appellation) {
+      foreach ($appellation->filter('^lieu') as $lieu)  {
+	foreach ($lieu->filter('^cepage_') as $cepage) {
+	  foreach ($cepage->detail as $detail) {
+	    $xml[$detail->getCodeDouane()] += $detail->volume;
+	  }
+	}
+      }
+    }
+      
+  }
  /**
   * Executes index action
   *
   * @param sfRequest $request A request object
   */
-  public function executeDR(sfWebRequest $request)
+  public function executePdf(sfWebRequest $request)
   {
     $recoltant = $this->getUser()->getRecoltant();
     $annee = $this->getRequestParameter('annee', null);
@@ -134,12 +152,14 @@ class printableActions extends sfActions
     for ($i = 0 ; $i < count($colonnes); ) {
       $page = array_slice($colonnes, $i, $nb_colonnes_by_page);
       $i += count($page) - 1;
+      /*
       if (count($page) == $nb_colonnes_by_page) {
 	while($page[$i - $lasti]['type'] != 'total') {
 	  unset($page[$i - $lasti]);
 	  $i--;
 	}
       }
+      */
       array_push($pages, $page);
       $lasti = ++$i;
     }
