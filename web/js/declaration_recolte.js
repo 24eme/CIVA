@@ -11,13 +11,13 @@
 $(document).ready( function()
 {
 	initMsgAide();
-	$('#onglets_majeurs').ready( function() { initOngletsMajeurs(); });
-	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
-	$('#nouvelle_declaration').ready( function() { choixPrecDecla(); });
-	$('#exploitation_administratif').ready( function() { formExploitationAdministratif(); });
-	$('.table_donnees').ready( function() { initTablesDonnes(); });
-	$('#exploitation_acheteurs').ready( function() { initTablesAcheteurs(); });
-	$('#gestion_recolte').ready( function() { initGestionRecolte(); });
+	$('#onglets_majeurs').ready( function() {initOngletsMajeurs();});
+	$('#precedentes_declarations').ready( function() {accordeonPrecDecla();});
+	$('#nouvelle_declaration').ready( function() {choixPrecDecla();});
+	$('#exploitation_administratif').ready( function() {formExploitationAdministratif();});
+	$('.table_donnees').ready( function() {initTablesDonnes();});
+	$('#exploitation_acheteurs').ready( function() {initTablesAcheteurs();});
+	$('#gestion_recolte').ready( function() {initGestionRecolte();});
 	
 	var annee = new Date().getFullYear();
 	
@@ -62,7 +62,7 @@ var initMsgAide = function()
 		
 		$.getJSON(
 			url_ajax_msg_aide,
-			{ action: "popup_msg_aide", id_msg_aide: id_msg_aide },
+			{action: "popup_msg_aide", id_msg_aide: id_msg_aide},
 			function(json)
 			{
 				var titre = json.titre;
@@ -339,7 +339,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 				});
 				
 				$.post(url_ajax,
-				{ action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts, qualite_name: qualite_name },
+				{action: "ajout_ligne_table", donnees: donnees, acheteur_mouts: acheteur_mouts, qualite_name: qualite_name},
 				function(data)
 				{
 					var tr = $(data);
@@ -530,7 +530,7 @@ var initColRecolte = function(col)
 var ajouterColRecolte = function(btn, cont)
 {	
 	$.post(url_ajax,
-	{ action: "ajout_col_recolte" },
+	{action: "ajout_col_recolte"},
 	function(data)
 	{
 		var col = $(data);
@@ -559,7 +559,7 @@ var largeurColScrollerCont = function()
 	});
 
 	cont.width(largeur);
-	cont.scrollTo( { left:largeur}, 800 );
+	cont.scrollTo( {left:largeur}, 800 );
 	//cont.parent().scrollTo('+='+largeur_cont+'px');
 };
 
@@ -630,9 +630,21 @@ var initPopupAjout = function(popup)
 
 var initPopupAutocompletion = function(popup, source_autocompletion)
 {
-	var nom = popup.find('input.nom');
+	
+
+        var nom = popup.find('input.nom');
 	var cvi = popup.find('input.cvi');
 	var commune = popup.find('input.commune');
+        var type_cssclass = popup.find('input[name=type_cssclass]').val();
+        var type_name_field = popup.find('input[name=type_name_field]').val();
+        var btn = popup.find('input[type=image]');
+        var form = popup.find('form');
+
+        $(popup).bind( "dialogclose", function(event, ui) {
+            nom.val('');
+            cvi.val('');
+            commune.val('');
+        });
 	
 	nom.autocomplete(
 	{
@@ -665,4 +677,38 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
 		.append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
 		.appendTo(ul);
 	};
+
+        btn.click(function()
+	{
+			if(cvi.val()=='')
+			{
+				alert("Veuillez renseigner le nom de l'acheteur");
+				return false;
+			}
+			else
+			{
+                           $.post(form.attr('action'),
+				{cvi: cvi.val(), form_name: type_name_field},
+				function(data)
+				{
+                                   var html_header_item = $('#acheteurs_header_empty').clone();
+                                   html_header_item.find('li').html(nom.val());
+                                   $('#colonne_intitules').
+                                       find('.'+type_cssclass+' ul').
+                                       append(html_header_item.html());
+                                   $('.col_recolte.col_validee, .col_recolte.col_sepage_total, .col_recolte.col_total').
+                                       find('.'+type_cssclass+' ul').
+                                       append($('#acheteurs_item_empty').html());
+                                   $('.col_recolte.col_active').
+                                       find('.'+type_cssclass+' ul').
+                                       append(data);
+                                   popup.dialog('close');
+                                });
+
+                           return false;
+			}
+		
+	});
+
+
 };

@@ -76,12 +76,17 @@
 			<!-- fin #principal -->
 
         <script type="text/javascript">
-		var_liste_acheteurs = ['Acheteur n°01|@1234556|@Commune 1', 'Acheteur n°02|@8963486|@Commune 2', 'Acheteur n°03|@0997322|@Commune 3', 'Acheteur n°04|@4625732|@Commune 4'];
-		var_liste_caves = ['Cave n°01|@1234556|@Commune 1', 'Cave n°02|@8963486|@Commune 2', 'Cave n°03|@0997322|@Commune 3', 'Cave n°04|@4625732|@Commune 4'];
+            var_liste_acheteurs = <?php echo ListAcheteursConfig::getNegocesJson() ?>;
+            var_liste_caves = <?php echo ListAcheteursConfig::getCooperativesJson() ?>;
+            var_liste_mouts = <?php echo ListAcheteursConfig::getMoutsJson() ?>;
 	</script>
 
         <div id="popup_ajout_acheteur" class="popup_ajout" title="Ajouter un acheteur">
-		<form action="#" method="post">
+		<form action="<?php echo url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()) ?>" method="post">
+                        
+                        <input type="hidden" name="type_cssclass" value="vente_raisins" />
+                        <input type="hidden" name="type_name_field" value="negoces" />
+
 			<label for="champ_acheteur_nom">Entrez le nom de l'acheteur, son CVI ou sa commune :</label>
 			<input id="champ_acheteur_nom" class="nom" type="text" name="" />
 			<input class="cvi" type="hidden" name="" />
@@ -91,7 +96,11 @@
 	</div>
 
 	<div id="popup_ajout_cave" class="popup_ajout" title="Ajouter une cave">
-		<form action="#" method="post">
+		<form action="<?php echo url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()) ?>" method="post">
+
+                        <input type="hidden" name="type_cssclass" value="caves" />
+                        <input type="hidden" name="type_name_field" value="cooperatives" />
+
 			<label for="champ_cave_nom">Entrez le nom de la cave, son CVI ou sa commune :</label>
 			<input id="champ_cave_nom" class="nom" type="text" name="" />
 			<input class="cvi" type="hidden" name="" />
@@ -100,8 +109,10 @@
 		</form>
 	</div>
 
-        <?php include_partial('recolte/ajoutPopupOnglets', array('onglets' => $onglets,
+        <?php include_partial('ajoutPopupOnglets', array('onglets' => $onglets,
                                                                  'form_appellation' => $form_ajout_appellation,
                                                                  'form_lieu' => $form_ajout_lieu,
                                                                  'url_lieu' => $url_ajout_lieu)) ?>
+
+       <?php include_partial('emptyAcheteurs') ?>
 	

@@ -56,6 +56,15 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
         parent::bind($taintedValues, $taintedFiles);
     }
 
+    public static function getNewAcheteurItemAjax($name, $cvi) {
+        $form_container = new BaseForm();
+        $form_container->getWidgetSchema()->setNameFormat(self::FORM_NAME);
+        $form = new BaseForm();
+        $form->embedForm($cvi, new RecolteAcheteurForm(array('quantite_vendue' => null)));
+        $form_container->embedForm($name . self::FORM_SUFFIX_NEW, $form);
+        return $form_container[$name.self::FORM_SUFFIX_NEW][$cvi];
+    }
+
     protected function configureAcheteurs($name, $values, $acheteurs) {
         $form = new BaseForm();
         foreach ($acheteurs as $cvi) {

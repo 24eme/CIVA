@@ -146,6 +146,17 @@ class recolteActions extends EtapesActions {
 
     }
 
+    public function executeAjoutAcheteurAjax(sfWebRequest $request) {
+        if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
+            $cvi = $request->getParameter('cvi');
+            $form_name = $request->getParameter('form_name');
+            $form = RecolteForm::getNewAcheteurItemAjax($form_name, $cvi);
+            return $this->renderPartial('formAcheteursItem', array('form' => $form));
+        } else {
+            $this->forward404();
+        }
+    }
+
     public function executeRecapitulatif(sfWebRequest $request)
     {
       $this->initOnglets($request);

@@ -2,7 +2,7 @@
 <?php if ($acheteurs->count() > 0): ?>
             <ul>
     <?php foreach ($acheteurs as $cvi): ?>
-                <li><?php echo $list_acheteurs[$cvi]['nom'] ?></li>
+                <?php include_partial('headerAcheteursItem', array('name' => $list_acheteurs[$cvi]['nom'])) ?>
     <?php endforeach; ?>
             </ul>
 <?php endif; ?>

@@ -62,6 +62,10 @@ recolte_add_lieu:
   url:   /recolte/:appellation_lieu/:cepage/add_lieu
   param: { module: recolte, action: ajoutLieuAjax }
 
+recolte_add_acheteur:
+  url:   /recolte/:appellation_lieu/:cepage/add_acheteur
+  param: { module: recolte, action: ajoutAcheteurAjax }
+
 recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif }
