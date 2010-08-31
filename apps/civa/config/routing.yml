@@ -86,6 +86,10 @@ compte:
   url: /compte
   param: { module: compte, action: index }
 
+mon_compte:
+  url: /mon_compte
+  param: { module: compte, action: modification }
+
 print:
   url: /print/:annee
   param: {module: export, action: pdf}

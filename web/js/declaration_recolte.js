@@ -11,15 +11,17 @@
 $(document).ready( function()
 {
 	initMsgAide();
-	$('#onglets_majeurs').ready( function() {initOngletsMajeurs();});
-	$('#precedentes_declarations').ready( function() {accordeonPrecDecla();});
-	$('#nouvelle_declaration').ready( function() {choixPrecDecla();});
-	$('#exploitation_administratif').ready( function() {formExploitationAdministratif();});
-	$('.table_donnees').ready( function() {initTablesDonnes();});
-	$('#exploitation_acheteurs').ready( function() {initTablesAcheteurs();});
-	$('#gestion_recolte').ready( function() {initGestionRecolte();});
-	
-	var annee = new Date().getFullYear();
+
+	$('#onglets_majeurs').ready( function() { initOngletsMajeurs(); });
+	$('#precedentes_declarations').ready( function() { accordeonPrecDecla(); });
+	$('#nouvelle_declaration').ready( function() { choixPrecDecla(); });
+	$('#exploitation_administratif').ready( function() { formExploitationAdministratif(); });
+        $('#modification_compte').ready( function() { formModificationCompte(); });
+	$('.table_donnees').ready( function() { initTablesDonnes(); });
+	$('#exploitation_acheteurs').ready( function() { initTablesAcheteurs(); });
+	$('#gestion_recolte').ready( function() { initGestionRecolte(); });
+
+	var  annee = new Date().getFullYear();
 	
 	$('.datepicker').datepicker(
 	{
@@ -154,6 +156,43 @@ var formExploitationAdministratif = function()
 		});
 	});
 };
+
+
+/**
+ * Formulaire de modification des identifiants
+ ******************************************/
+var formModificationCompte = function()
+{
+	var bloc = $('#modification_compte');
+
+        var presentation_infos = bloc.find('.presentation');
+        var modification_infos = bloc.find('.modification');
+        var btn = bloc.find('.btn');
+        var btn_modifier = btn.find('a.modifier');
+        var btn_annuler = btn.find('a.annuler');
+
+        // modification_infos.hide();
+
+        btn_modifier.click(function()
+        {
+                presentation_infos.hide();
+                modification_infos.show();
+                $("a.modifier").hide();
+                bloc.addClass('edition');
+                return false;
+        });
+
+        btn_annuler.click(function()
+        {
+                presentation_infos.show();
+                modification_infos.hide();
+                $("a.modifier").show();
+                bloc.removeClass('edition');
+                return false;
+        });
+
+};
+
 
 /**
  * Initialise les fonctions des tables 

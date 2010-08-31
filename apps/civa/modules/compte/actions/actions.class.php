@@ -18,7 +18,7 @@ class compteActions extends sfActions {
     public function executeIndex(sfWebRequest $request) {
 
         $recoltant = $this->getUser()->getRecoltant();
-        
+
         if(isset($recoltant) && substr($recoltant->mot_de_passe,0,6) == '{SSHA}') {
             $this->redirect('@mon_espace_civa');
         }else {
@@ -55,6 +55,31 @@ class compteActions extends sfActions {
             $this->redirect('compte');
         }
     }
+
+    public function executeModification(sfWebRequest $request) {
+    
+        $this->form = new CreateCompteForm();
+        $this->form_modif_err = 0;
+
+        $recoltant = $this->getUser()->getRecoltant();
+        $this->email = $recoltant->email;
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+
+            if ($this->form->isValid()) {
+                $values['nom'] = $recoltant->nom;
+                $values['mot_de_passe'] = $recoltant->mot_de_passe;
+                $ldap = new ldap();
+                $ldap->ldapModify($recoltant, $values);
+                $this->redirect('@mon_compte');
+            }else {
+                $this->form_modif_err = 1;
+            }
+        }
+
+    }
+
 
     private function addToLdap($recoltant) {
         $ldap = new ldap();

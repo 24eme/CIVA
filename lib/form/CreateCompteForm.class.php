@@ -5,8 +5,12 @@ class CreateCompteForm extends BaseForm {
         $this->setWidgets(array(
                 'email' => new sfWidgetFormInputText(),
                 'mdp1'  => new sfWidgetFormInputPassword(),
-                'mdp2'  => new sfWidgetFormInputPassword()
+                'mdp2'  => new sfWidgetFormInputPassword()/*,
+                'form'  => new sfWidgetFormInputHidden()*/
         ));
+
+        //$this->setDefault('form', 'create');
+
 
         $this->widgetSchema->setLabels(array(
                 'email' => 'Adresse e-mail: ',

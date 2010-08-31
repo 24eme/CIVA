@@ -6,6 +6,8 @@ all:
   # require authentication, which our CAS filter will provide
   is_secure: false
 
+modification:
+  is_secure: true
 
 
 

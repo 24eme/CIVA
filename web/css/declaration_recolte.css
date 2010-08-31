@@ -934,9 +934,9 @@ a.msg_aide
 {
     border-top: 1px dashed #b5b4b4;
     padding: 3px 0;
-        height: 17px; 
-        white-space: nowrap;
-        overflow: hidden;
+    height: 17px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #gestion_recolte #colonne_intitules ul li:first-child { border: 0; }
@@ -1338,6 +1338,40 @@ a.msg_aide
 .popup_ajout select[disabled=disabled] { background: #f0f0de; }
 
 #nouvelle_declaration .ligne_form_label label{
+    float:left;
+    width:110px;
+}
+
+/**
+ * Mon compte
+ ******************************************/
+#modification_compte{
+    width:488px;
+}
+
+#modification_compte .presentation p{
+    font-size:18px;
+    margin:0 0 10px;
+}
+
+#modification_compte p.intro {
+    color:#999999;
+    font-size:14px;
+    margin:0 0 10px;
+}
+
+#modification_compte .presentation p span{
+    color:#7A7A7A;
+}
+
+#modification_compte .btn{
+    float: right;
+}
+
+#modification_compte .ligne_form { margin: 0 0 5px 25px; }
+#modification_compte .ligne_form label { font-size: 14px; }
+
+#modification_compte .ligne_form_label label {
     float:left;
     width:110px;
 }
