@@ -137,7 +137,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         $volume_dplc = 0;
         if ($this->hasRendementAppellation()) {
             $volume = $this->getTotalVolume();
-            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            $volume_max = $this->getVolumeMaxAppellation();
             if ($volume > $volume_max) {
                 $volume_dplc = $volume - $volume_max;
             } else {
@@ -151,7 +151,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         $volume_revendique = 0;
         if ($this->hasRendement() && $this->hasRendementAppellation()) {
             $volume = $this->getTotalVolume();
-            $volume_max = $this->getTotalSuperficie() * $this->getConfig()->getRendementAppellation();
+            $volume_max = $this->getVolumeMaxAppellation();
             if ($volume > $volume_max) {
                 $volume_revendique = $volume_max;
             } else {
@@ -159,6 +159,10 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
             }
         }
         return $volume_revendique;
+    }
+
+    private function getVolumeMaxAppellation() {
+        return ($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation();
     }
 
     public function getDPLCFinal() {

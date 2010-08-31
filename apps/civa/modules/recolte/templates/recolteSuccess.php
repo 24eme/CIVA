@@ -86,7 +86,7 @@
 			<input id="champ_acheteur_nom" class="nom" type="text" name="" />
 			<input class="cvi" type="hidden" name="" />
 			<input class="commune" type="hidden" name="" />
-			<input type="image" name="" src="../images/boutons/btn_valider.png" alt="Valider" />
+			<input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
 		</form>
 	</div>
 
@@ -96,7 +96,7 @@
 			<input id="champ_cave_nom" class="nom" type="text" name="" />
 			<input class="cvi" type="hidden" name="" />
 			<input class="commune" type="hidden" name="" />
-			<input type="image" name="" src="../images/boutons/btn_valider.png" alt="Valider" />
+			<input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
 		</form>
 	</div>
 
