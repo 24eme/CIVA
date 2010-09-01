@@ -21,9 +21,9 @@
             <div class="modification clearfix"<?php if (!$form_modif_err) echo ' style="display:none;"'; ?>>
                 <p class="intro">Modification de vos identifiants de connexion :</p>
                 <form method="POST" action="">
-
                     <div class="ligne_form ligne_form_label">
                         <?php echo $form->renderHiddenFields(); ?>
+
                         <?php echo $form->renderGlobalErrors(); ?>
 
                         <?php echo $form['email']->renderError() ?>

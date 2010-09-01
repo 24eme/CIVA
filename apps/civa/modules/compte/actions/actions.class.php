@@ -58,7 +58,7 @@ class compteActions extends sfActions {
 
     public function executeModification(sfWebRequest $request) {
     
-        $this->form = new CreateCompteForm();
+        $this->form = new CreateCompteForm(null, array('verif_mdp'=>false));
         $this->form_modif_err = 0;
 
         $recoltant = $this->getUser()->getRecoltant();

@@ -6,9 +6,9 @@ class ValidatorCreateCompte extends sfValidatorBase {
     }
 
     protected function doClean($values) {
-        if($values['mdp1'] == $values['mdp2'] && $values['mdp1'] != '') {
+        if($values['mdp1'] == $values['mdp2']) {
             $recoltant = sfContext::getInstance()->getUser()->getRecoltant();
-            $recoltant->mot_de_passe = $recoltant->make_ssha_password($values['mdp1']);
+            if($values['mdp1']!= '' ) $recoltant->mot_de_passe = $recoltant->make_ssha_password($values['mdp1']);
             $recoltant->email = $values['email'];
             $recoltant->save();
 

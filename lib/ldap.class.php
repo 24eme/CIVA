@@ -34,7 +34,6 @@ class ldap {
     }
 
     public function ldapAdd($recoltant) {
-        print_r($recoltant); exit();
 
         if($recoltant){
             $ldapConnect = $this->ldapConnect();

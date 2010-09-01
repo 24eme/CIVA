@@ -5,12 +5,8 @@ class CreateCompteForm extends BaseForm {
         $this->setWidgets(array(
                 'email' => new sfWidgetFormInputText(),
                 'mdp1'  => new sfWidgetFormInputPassword(),
-                'mdp2'  => new sfWidgetFormInputPassword()/*,
-                'form'  => new sfWidgetFormInputHidden()*/
+                'mdp2'  => new sfWidgetFormInputPassword()
         ));
-
-        //$this->setDefault('form', 'create');
-
 
         $this->widgetSchema->setLabels(array(
                 'email' => 'Adresse e-mail: ',
@@ -20,12 +16,11 @@ class CreateCompteForm extends BaseForm {
 
         $this->widgetSchema->setNameFormat('create_compte[%s]');
 
-
+        $verif_mdp = $this->getOption('verif_mdp', true);
         $this->setValidators(array(
                 'email' => new sfValidatorEmail(array('required' => true),array('required' => 'Champ obligatoire', 'invalid' => 'Adresse email invalide.')),
-                'mdp1'  => new sfValidatorString(array('required' => true), array('required' => 'Champ obligatoire.')),
-                'mdp2'  => new sfValidatorString(array('required' => true), array('required' => 'Champ obligatoire'))
-
+                'mdp1'  => new sfValidatorString(array('required' => $verif_mdp), array('required' => 'Champ obligatoire.')),
+                'mdp2'  => new sfValidatorString(array('required' => $verif_mdp), array('required' => 'Champ obligatoire'))
         ));
 
         $this->validatorSchema->setPostValidator(new ValidatorCreateCompte());
