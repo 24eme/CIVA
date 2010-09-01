@@ -34,4 +34,14 @@ class SubConfiguration extends BaseSubConfiguration {
       $r = $this->getRendementAppellation();
       return ($r && $r > 0);
   }
+
+  public function hasMout() {
+      if ($this->exist('mout')) {
+          return ($this->mout == 1);
+      } elseif ($this->getParent() instanceof SubConfiguration) {
+          return $this->getParent()->hasMout();
+      } else {
+          return false;
+      }
+  }
 }

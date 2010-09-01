@@ -74,11 +74,15 @@
 				
 			<!--</form>-->
 			<!-- fin #principal -->
-
         <script type="text/javascript">
             var_liste_acheteurs = <?php echo ListAcheteursConfig::getNegocesJson() ?>;
             var_liste_caves = <?php echo ListAcheteursConfig::getCooperativesJson() ?>;
             var_liste_mouts = <?php echo ListAcheteursConfig::getMoutsJson() ?>;
+            var_config_popup_ajout_motif = { ajax: true , auto_open: false};
+            <?php if ($sf_user->hasFlash('open_popup_ajout_motif')): ?>
+                var_config_popup_ajout_motif.auto_open = true;
+                var_config_popup_ajout_motif.auto_open_url = '<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $sf_user->getFlash('open_popup_ajout_motif')))) ?>';
+            <?php endif; ?>
 	</script>
 
         <?php include_partial('popupAjoutOnglets', array('onglets' => $onglets,
@@ -102,7 +106,7 @@
                                                           'name' => 'mouts',
                                                           'cssclass' => 'mouts')) ?>
 
-       <?php include_partial('popupMotifNonRecolte', array()) ?>
+       <?php include_partial('popupMotifNonRecolte') ?>
      
        <?php include_partial('emptyAcheteurs') ?>
 	

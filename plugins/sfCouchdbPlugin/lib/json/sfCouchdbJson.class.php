@@ -35,7 +35,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     private function initializeDefinition() {
         foreach ($this->getDefinition()->getRequiredFields() as $field_definition) {
-            $this->add($field_definition->getKey(), null);
+            $this->_add($field_definition->getKey(), null);
         }
     }
 
@@ -55,7 +55,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
                 if (!$this->hasField($key)) {
-                    $this->add($key);
+                    $this->_add($key);
                 }
                 $this->_set($key, $item);
             }
@@ -156,6 +156,10 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     public function add($key = null, $item = null) {
+        return $this->_add($key, $item);
+    }
+
+    protected function _add($key = null, $item = null) {
         if ($this->_is_array) {
             $ret = $this->addNumeric();
         } else {

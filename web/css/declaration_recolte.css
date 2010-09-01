@@ -1072,7 +1072,8 @@ a.msg_aide
 #gestion_recolte #col_scroller .col_recolte a.ajout
 {
     background: url(../images/puces/puce_lien.png) 0 4px no-repeat;
-    bottom: -10px;
+    bottom: -28px;
+    height: 30px;
     font-size: 10px;
     padding: 0 0 0 8px;
     position: absolute;
@@ -1366,10 +1367,14 @@ a.msg_aide
 }
 
 .popup_ajout select[disabled=disabled] { background: #f0f0de; }
+
+.popup_ajout .ui-autocomplete-loading { background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat ; height: 93px; width: 100%;}
+
 #nouvelle_declaration .ligne_form_label label{
     float:left;
     width:110px;
 }
+
 
 /**
  * Mon compte

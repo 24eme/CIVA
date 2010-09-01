@@ -81,6 +81,7 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeMotifNonRecolte(sfWebRequest $request) {
+        $this->forward404Unless($request->isXmlHttpRequest());
         $this->initOnglets($request);
         $this->initDetails();
         
@@ -93,9 +94,14 @@ class recolteActions extends EtapesActions {
             $this->form ->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
-                return $this->redirect($this->onglets->getUrl('recolte'));
+                return $this->renderText(json_encode(array('action' => 'redirect',
+                                                               'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams()))));
             }
+            return $this->renderText(json_encode(array('action' => 'render',
+                                                   'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
         }
+
+        return $this->renderText($this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)));
     }
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
@@ -117,7 +123,7 @@ class recolteActions extends EtapesActions {
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                                                   'data' => $this->getPartial('recolte/ajoutAppellation', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation)))));
+                                                   'data' => $this->getPartial('ajoutAppellationForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation)))));
     }
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
@@ -141,7 +147,7 @@ class recolteActions extends EtapesActions {
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                                                   'data' => $this->getPartial('recolte/ajoutLieu', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
+                                                   'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
 
 
     }
@@ -187,10 +193,8 @@ class recolteActions extends EtapesActions {
         if ($form->isValid()) {
             $detail = $form->save();
             if ($detail->exist('motif_non_recolte')) {
-                $this->getUser()->setFlash('show_motif_non_recolte', true);
-                $this->redirect(array_merge($this->onglets->getUrl('recolte_motif_non_recolte'), array('detail_key' => $detail->getKey())));
+                $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
-
             $this->redirect($this->onglets->getUrl('recolte'));
         }
     }

@@ -43,7 +43,7 @@
         <p class="vol_total_recolte">
             <input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" />
             <?php if ($detail->hasMotifNonRecolteLibelle()): ?>
-                <a href="#" class="ajout ajout_motif"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
+                <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
             <?php endif; ?>
         </p>
         
