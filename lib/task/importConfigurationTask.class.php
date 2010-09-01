@@ -208,10 +208,9 @@ EOF;
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
 	    if ($doc) {
-	      $doc->load($data);
-	    }else{
-	      $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+	      $doc->delete();
 	    }
+            $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
 	  return;
