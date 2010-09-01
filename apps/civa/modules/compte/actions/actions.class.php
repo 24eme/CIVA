@@ -68,11 +68,11 @@ class compteActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
 
             if ($this->form->isValid()) {
-                $values['nom'] = $recoltant->nom;
+                $values['email'] = $recoltant->email;
                 $values['mot_de_passe'] = $recoltant->mot_de_passe;
                 $ldap = new ldap();
                 $ldap->ldapModify($recoltant, $values);
-                $this->getUser()->setFlash('maj', 'Vos identifiant on bien été mis à jour.');
+                $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
                 $this->redirect('@mon_compte');
             }else {
                 $this->form_modif_err = 1;
