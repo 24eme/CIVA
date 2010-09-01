@@ -55,9 +55,9 @@ class ldap {
                 $info['homeDirectory'] = '/home/'.$recoltant->cvi;
                 $info['gecos']         = 'Mon recoltant,,,';
                 $info['mail']          = $recoltant->email;
-                $info['postalAddress'] = $recoltant->siege->adresse;
-                $info['postalCode']    = $recoltant->siege->code_postal;
-                $info['l']             = $recoltant->siege->commune;
+                $info['postalAddress'] = $recoltant->getAdresse();
+                $info['postalCode']    = $recoltant->getCodePostal();
+                $info['l']             = $recoltant->getCommune();
 
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
@@ -114,7 +114,14 @@ class ldap {
         $ldapConnect = $this->ldapConnect();
         if($ldapConnect && $recoltant) {
             $filter = 'uid='.$recoltant->cvi;
-            return ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            if($search){
+                $count = ldap_count_entries($ldapConnect, $search);
+                if($count>0)
+                    return true;
+            }
+            return false;
+            
         }
     }
 
