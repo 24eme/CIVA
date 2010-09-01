@@ -26,6 +26,4 @@
 </colonne>
 <?php endforeach; ?>
 <qteLies><?php echo $dr->lies; ?></qteLies>
-<volTot><?php echo $dr->getTotalVolume(); ?></volTot>
-<ratio><?php echo $dr->getRatioLies(); ?></ratio>
 </decRec>
