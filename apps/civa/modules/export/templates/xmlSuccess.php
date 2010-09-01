@@ -1,14 +1,31 @@
+<?php function printXml($xml) {
+  foreach ($xml as $k => $v) {
+    if (!is_numeric($k))
+    echo "<$k>";
+    if (get_class($v))
+      printXml($v);
+    else
+      print_r($v);
+    if (!is_numeric($k))
+    echo "</$k>";
+
+  }
+  }
+?>
 <decRec numCvi="<?php echo $dr->cvi; ?>" campagne="<?php echo $dr->campagne; ?>" typeDec="DR">
-<?
-   foreach ($dr->recolte->filter('^appellation_') as $appellation)
-   foreach ($appellation->filter('^lieu') as $lieu) :
-   foreach ($lieu->filter('^cepage_') as $cepage)
-   foreach ($cepage->detail as $detail) 
-   ?><colonne>
-<L1><?php $detail->getCodeDouane(); ?></L1>
-<L3>B</L3>
-<mentionVal><?php echo $detail->denomination; ?></mentionVal>
-<L4><?php echo $detail->volume; ?></L4>
+<rensComp>
+<typeViti>C</typeViti>
+<modeFV>P</modeFV>
+<persCtc><?php echo $dr->declarant->nom; ?></persCtc>
+<mel><?php echo $dr->declarant->email; ?></mel>
+<numTel><?php echo $dr->declarant->telephone; ?></numTel>
+</rensComp>
+<?php foreach($xml as $colonne) : ?>
+<colonne>
+    <?php printXml($colonne); ?>
 </colonne>
 <?php endforeach; ?>
+<qteLies><?php echo $dr->lies; ?></qteLies>
+<volTot><?php echo $dr->getTotalVolume(); ?></volTot>
+<ratio><?php echo $dr->getRatioLies(); ?></ratio>
 </decRec>

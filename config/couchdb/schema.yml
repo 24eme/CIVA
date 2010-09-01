@@ -5,6 +5,14 @@ DR:
       _rev: {}
       type: {}
       campagne: {  }
+      declarant:
+        type: collection
+        class: DRDeclarant
+        definition:
+          fields:
+            nom: {}
+            mail: {}
+            telephone: {}
       acheteurs:
         type: collection
         class: DRAcheteurs

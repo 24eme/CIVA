@@ -12,22 +12,101 @@
 class exportActions extends sfActions
 {
 
+  private static $type2douane = array('negoces' => 'L6', 'mouts' => 'L7', 'cooperatives' => 'L8');
+  private function setAcheteurType($acheteurs, $type, $detail) {
+    if ($detail->exist($type)) {
+      foreach ($detail->{$type} as $n) {
+	if (!isset($acheteurs[$detail->getCodeDouane()][$n->cvi][self::$type2douane[$type]])) {
+	  $acheteurs[$detail->getCodeDouane()][$n->cvi][self::$type2douane[$type]]['cvi'] = $n->cvi;
+	  $acheteurs[$detail->getCodeDouane()][$n->cvi][self::$type2douane[$type]]['volume'] = 0;
+	}
+	$acheteurs[$detail->getCodeDouane()][$n->cvi][self::$type2douane[$type]]['volume'] += $n->quantite_vendue;
+      }
+    }
+    return $acheteurs;
+  }
+
   public function executeXml(sfWebRequest $request) 
   {
     $recoltant = $this->getUser()->getRecoltant();
     $annee = $this->getRequestParameter('annee', null);
     $key = 'DR-'.$recoltant->cvi.'-'.$annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+    $xml = array();
     foreach ($dr->recolte->filter('^appellation_') as $appellation) {
       foreach ($appellation->filter('^lieu') as $lieu)  {
 	foreach ($lieu->filter('^cepage_') as $cepage) {
+	  //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
+	  $acheteurs = array();
+	  //Liste des codes utilisés pour ce cepage (pour les balises avec un calcul cepage)
+	  $cepage_code = array();
 	  foreach ($cepage->detail as $detail) {
-	    $xml[$detail->getCodeDouane()] += $detail->volume;
+	    $code = $detail->getCodeDouane();
+	    //Initialiation
+	    if (!isset($xml[$code])) {
+	      $col = array();
+	      $col['L1'] = $code;
+	      $col['L3'] = 'B';
+	      $col['mentionVal'] = '';
+	      $col['L4'] = 0;
+	      if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte)
+		$col['motifSurfZero'] = $detail->motif_non_recolte;
+	      $col['exploitant'] = array();
+	      $col['exploitant']['L5'] = 0; //Volume total avec lies
+	      $col['exploitant']['L9'] = 0; //Volume revendique sur place
+	      $col['exploitant']['L10'] = 0; //Volume revendique non negoces
+	      $col['exploitant']['L11'] = 0; //HS
+	      $col['exploitant']['L12'] = 0; //HS
+	      $col['exploitant']['L13'] = 0; //HS
+	      $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
+	      $col['exploitant']['L15'] = 0; //Volume revendique
+	      $col['exploitant']['L16'] = 0; //DPLC
+	      $col['exploitant']['L17'] = 0; //HS
+	      $col['exploitant']['L18'] = 0; //HS
+	      $col['exploitant']['L19'] = 0; //HS
+	      $xml[$code] = $col;
+	      $acheteurs[$code] = array();
+	      $cepage_code[$code] = 1;
+	    }
+	    //Renseigne les colonnes
+	    $xml[$code]['L4'] += $detail->superficie;
+	    $xml[$code]['exploitant']['L5'] += $detail->volume;
+	    $xml[$code]['exploitant']['L9'] += $detail->cave_particuliere;
+	    if ($detail->exist('cooperatives'))
+	      foreach ($detail->cooperatives as $coop)  {
+		$xml[$code]['exploitant']['L10'] += $coop->quantite_vendue;
+	      }
+	    $xml[$code]['exploitant']['L10'] += $detail->cave_particuliere;
+
+	    $acheteurs = $this->setAcheteurType($acheteurs, 'negoces', $detail);
+	    $acheteurs = $this->setAcheteurType($acheteurs, 'mouts', $detail);
+	    $acheteurs = $this->setAcheteurType($acheteurs, 'cooperatives', $detail);
+
+	    if (($detail->cepage == 'RB' && $detail->appellation == 'CREMANT') || $detail->appellation == 'VINTABLE') {
+	      $xml[$code]['exploitant']['L14'] += $detail->volume;
+	    }
+
+	    $xml[$code]['exploitant']['L15'] += $detail->volume_revendique;
+	    $xml[$code]['exploitant']['L16'] += $detail->volume_dplc;
+	  }
+	  //Pour chque code traité au niveau du cepage
+	  foreach (array_keys($cepage_code) as $code) {
+	    //Ajout des lies (au prorata)
+	    $xml[$code]['exploitant']['L5'] += $xml[$code]['exploitant']['L5'] * $dr->getRatioLies();
+	    $xml[$code]['exploitant']['L10'] += $xml[$code]['exploitant']['L10'] * $dr->getRatioLies();
+	    //Ajout des acheteurs
+	    if (isset($acheteurs[$code]))
+	      foreach ($acheteurs[$code] as $cvi => $v) {
+		$xml[$code]['exploitant'][] = $v;
+	    }
 	  }
 	}
       }
     }
-      
+    $this->xml = $xml;
+    $this->dr = $dr;
+    $this->setLayout(false);
+    $this->response->setContentType('text/xml');
   }
  /**
   * Executes index action

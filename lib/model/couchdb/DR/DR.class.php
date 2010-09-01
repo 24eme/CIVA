@@ -21,4 +21,18 @@ class DR extends BaseDR {
       return $this->recolte->removeVolumes();
     }
 
+
+    public function getTotalVolume() {
+      $v = 0;
+      foreach($this->recolte->filter('^appellation_') as $appellation) {
+	$v += $appellation->getTotalVolume();
+      }
+      return $v;
+    }
+    public function getRatioLies() {
+      if (!($v = $this->getTotalVolume())) {
+	return 0;
+      }
+      return $this->lies / $v;
+    }
 }

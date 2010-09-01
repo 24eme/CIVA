@@ -100,6 +100,11 @@ class recoltantActions extends EtapesActions {
                 }else
                     $this->form_expl_err = 1;
             }
+	    $dr = $this->getUser()->getDeclaration();
+	    $dr->declarant->nom = $this->recoltant->exploitant->nom;
+	    $dr->declarant->telephone = $this->recoltant->exploitant->telephone;
+	    $dr->declarant->email = $this->recoltant->email;
+	    $dr->save();
             $this->redirectByBoutonsEtapes();
         }
     }
