@@ -1,0 +1,8 @@
+#!/bin/bash
+
+php symfony import:Configuration --removedb=yes
+php symfony import:Achat
+php symfony import:Tiers
+for year in 09 08 07 06 05 ; do 
+php symfony import:DR --year=$year | curl -d @/dev/stdin -X POST http://localhost:5984/civa/_bulk_docs ; 
+done
