@@ -8,9 +8,9 @@
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <h3 class="titre_section">Connexion</h3>
+            <h3 class="titre_section">Créer votre compte</h3>
             <div class="contenu_section">
-                <p class="intro">Pour vous connecter, merci d'indiquer votre numéro CVI et votre code:</p>
+                <p class="intro">Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code:</p>
 
                 <div class="ligne_form ligne_form_label">
                     <?php echo $form->renderHiddenFields(); ?>

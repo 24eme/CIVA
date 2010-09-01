@@ -24,10 +24,14 @@
 
 <form:form method="post" id="fm1" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
 
-    <h2 class="titre_principal">Connexion</h2>
+    <h2 class="titre_principal">Accueil</h2>
         
             <div class="box fl-panel" id="application_dr">
-
+              <div id="intro_accueil_civa">
+                <h2>Bienvenue sur le site du CIVA</h2>
+              </div>
+              <div id="boxes">
+                <h2 class="titre_section">Connexion</h2>
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
                         <p class="intro"><spring:message code="screen.welcome.instructions" /> </p>
@@ -35,7 +39,7 @@
                         <form:errors path="*" cssClass="errors" id="status" element="div" />
 
                         <div class="ligne_form row fl-controls-left">
-                            <label for="username" class="fl-label"><spring:message code="screen.welcome.label.netid" /></label>
+                            <label for="username" class="fl-label">Identifiant : </label>
                                                     <c:if test="${not empty sessionScope.openIdLocalId}">
                                                     <strong>${sessionScope.openIdLocalId}</strong>
                                                     <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
@@ -49,7 +53,7 @@
 
 
                         <div class="ligne_form row fl-controls-left">
-                            <label for="password" class="fl-label"><spring:message code="screen.welcome.label.password" /></label>
+                            <label for="password" class="fl-label">Mot de passe :</label>
                                                     <%--
                                                     NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
                                                     "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
@@ -60,9 +64,13 @@
                                                     <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
                         </div>
 
-                        <div class="ligne_form row check">
+                        <!--div class="ligne_form row check">
                             <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
                             <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
+                        </div-->
+
+                        <div class="ligne_form link">
+                            <a href="http://cdevichet.civa.intra.actualys.fr/compte/motdepasseOublie">Mot de passe oublié</a>
                         </div>
 
                         <div class="ligne_form row btn-row ligne_btn">
@@ -72,6 +80,16 @@
                        </div>
                     </div>
                 </div>
+                <br />
+                <h2 class="titre_section">Premiere connexion</h2>
+                <div id="nouvelle_declaration">
+                    <div class="contenu_section">
+                        <p class="intro">S'il s'agit de votre premiere connexion, munissez votre numéro CVI et du mot de passe recu par courrier.</p>
+                        <p id="creer_compte" ><a href="http://cdevichet.civa.intra.actualys.fr/compte">Créer votre compte</a></p>
+                    </div>
+                </div>
+              </div>
             </div>
+
     </form:form>
 <jsp:directive.include file="includes/bottom.jsp" />

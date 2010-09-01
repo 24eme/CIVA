@@ -81,6 +81,10 @@ class compteActions extends sfActions {
 
     }
 
+    public function executeMotdepasseOublie(sfWebRequest $request) {
+    
+    }
+
 
     private function addToLdap($recoltant) {
         $ldap = new ldap();

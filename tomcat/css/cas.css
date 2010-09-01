@@ -102,6 +102,15 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
 }
 
 /* CONTENT --------------------------------- */
+#intro_accueil_civa{
+    float: left;
+    width: 575px;
+}
+#boxes{
+    float: left;
+    width: 380px;
+}
+
 #content {
     background: #fff;
     border: 1px solid #000;
@@ -121,18 +130,30 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
     margin:0 0 0 20px;
     padding:0 10px;
 }
+
+#content h2.titre_section {
+    background:none repeat scroll 0 0 #DCDFA9;
+    color:#848C03;
+    display:inline-block;
+    font-size:16px;
+    font-weight:normal;
+    line-height:25px;
+    padding:0 10px;
+}
+
 #application_dr {
     background:none repeat scroll 0 0 #F1F1F1;
     clear:both;
     margin:0 0 22px;
     padding:30px 20px;
+    height: 315px;
 }
 
 .contenu_section {
     background:none repeat scroll 0 0 #EDECEC;
     border:1px solid #C7C9C8;
     padding:15px;
-    width:488px;
+    width:350px;
 }
 
 p.intro {
@@ -152,6 +173,23 @@ p.intro {
     vertical-align:middle;
 }
 
+#creer_compte{
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    margin: 15px 0 0;
+}
+
+.link a{
+    color:#999999;
+    text-decoration: underline;
+}
+.link a:hover{
+    color: #000;
+}
+.link{
+    margin-top: 8px
+}
 
 /* FOOTER --------------------------------- */
 #footer{
