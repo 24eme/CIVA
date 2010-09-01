@@ -72,6 +72,7 @@ class compteActions extends sfActions {
                 $values['mot_de_passe'] = $recoltant->mot_de_passe;
                 $ldap = new ldap();
                 $ldap->ldapModify($recoltant, $values);
+                $this->getUser()->setFlash('maj', 'Vos identifiant on bien été mis à jour.');
                 $this->redirect('@mon_compte');
             }else {
                 $this->form_modif_err = 1;
