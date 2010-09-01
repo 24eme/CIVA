@@ -52,7 +52,6 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             $this->bindCheckDelete(self::FORM_NAME_MOUTS, $taintedValues);
             $this->configureAcheteursFromBind(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $taintedValues);
         }
-
         parent::bind($taintedValues, $taintedFiles);
     }
 
@@ -88,8 +87,8 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
     protected function configureAcheteursFromBind($name, $taintedValues) {
         if (isset($taintedValues[$name])) {
             $form = new BaseForm();
-            foreach ($taintedValues as $cvi => $value) {
-                $form->embedForm($cvi, new RecolteAcheteurForm(array('quantite_vendue' => $value)));
+            foreach ($taintedValues[$name] as $cvi => $value) {
+                $form->embedForm($cvi, new RecolteAcheteurForm(array('quantite_vendue' => $value['quantite_vendue'])));
             }
             $this->embedForm($name, $form);
         }
@@ -104,26 +103,31 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             $this->getObject()->mouts->clear();
         }
         
-        $this->updateAcheteurs(self::FORM_NAME_NEGOCES, $values, $this->getObject()->getNegoces());
-        $this->updateAcheteurs(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->negoces);
+        $this->updateAcheteurs(self::FORM_NAME_NEGOCES, $values, $this->getObject()->negoces);
+        $this->updateAcheteurs(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->negoces, $this->getAcheteursNegoces());
         $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES, $values, $this->getObject()->cooperatives);
-        $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->cooperatives);
+        $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->cooperatives, $this->getAcheteursCooperatives());
 
         if ($this->hasAcheteursMouts()) {
             $this->updateAcheteurs(self::FORM_NAME_MOUTS, $values, $this->getObject()->mouts);
-            $this->updateAcheteurs(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $values, $this->getObject()->mouts);
+            $this->updateAcheteurs(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $values, $this->getObject()->mouts, $this->getAcheteursMouts());
         }
+
+        //exit;
 
         $this->getObject()->getCouchdbDocument()->update();
     }
 
-    protected function updateAcheteurs($value_name, $values, $object) {
+    protected function updateAcheteurs($value_name, $values, $object, $with_add_acheteurs = false) {
         if (isset($values[$value_name])) {
-            foreach ($values[$value_name ]as $cvi => $value) {
+            foreach ($values[$value_name]as $cvi => $value) {
                 if ($value['quantite_vendue'] > 0) {
                     $acheteur = $object->add();
                     $acheteur->cvi = $cvi;
                     $acheteur->quantite_vendue = $value['quantite_vendue'];
+                    if ($with_add_acheteurs !== false) {
+                        $this->getObject()->getCouchdbDocument()->get($with_add_acheteurs->getHash())->add(null, $cvi);
+                    }
                 }
             }
         }

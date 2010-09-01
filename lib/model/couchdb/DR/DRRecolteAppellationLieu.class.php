@@ -113,6 +113,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 
     public function update() {
         parent::update();
+        echo count($this->getAcheteursFromCepage());
         foreach ($this->getAcheteursFromCepage() as $a) {
             $acheteur = $this->add('acheteurs')->add($a->cvi);
             $acheteur->type_acheteur = $a->getParent()->getKey();
@@ -124,7 +125,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
-	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() /100),0);
+	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
         } else {
             return 0;
         }
