@@ -3,11 +3,11 @@
 class Douane extends BaseDouane {
   private function getParentValue($key) {
     if ($this->getParent()->getKey() == 'recolte' || !$this->getParent()->getParent()->exist('douane'))
-      throw new sfCouchdbException("$key not found");
+      throw new sfCouchdbException("$key not found (".$this->getHash().")");
     return $this->getParent()->getParent()->getDouane()->getValue($key);
   }
   private function getValue($key) {
-    if ($this->exist($key) && ($v = $this->_get($key)) != null)
+    if ($this->exist($key) && (($v = $this->_get($key)) || !is_null($v)))
       return $v;
     return $this->getParentValue($key);
   }

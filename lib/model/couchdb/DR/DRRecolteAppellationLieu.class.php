@@ -17,6 +17,10 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
       return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
     }
 
+    public function getAppellation() {
+      return $this->getParent()->getAppellation();
+    }
+
     public function getLibelleWithAppellation() {
       if ($this->getLibelle())
 	return $this->getParent()->getLibelle().' - '.$this->getLibelle();

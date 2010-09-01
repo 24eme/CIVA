@@ -56,8 +56,10 @@ class exportActions extends sfActions
 	$total['exploitant']['L17'] = 0; //HS
 	$total['exploitant']['L18'] = 0; //HS
 	$total['exploitant']['L19'] = 0; //HS
+	$colass = null;
 	foreach ($lieu->filter('^cepage_') as $cepage) {
 	  foreach ($cepage->detail as $detail) {
+	    //	    echo "dhash: ".$detail->getHash()."<br/>\n";
 	    $col = array();
 	    //	    $col['hash'] = $detail->getHash();
 	    $col['L1'] = $detail->getCodeDouane();
@@ -115,14 +117,20 @@ class exportActions extends sfActions
 	    $total['exploitant']['L15'] = $detail->volume_revendique;
 	    $col['exploitant']['L16'] = $detail->volume_dplc;
 	    $total['exploitant']['L16'] = $detail->volume_dplc;
-	    $xml[] = $col;
+	    if ($detail->cepage == 'RB' && $detail->appellation == 'CREMANT')
+	      $colass = $col;
+	    else
+	      $xml[] = $col;
 	  }
 	}
 	//Ajout des acheteurs
 	foreach ($acheteurs as $cvi => $v) {
 	  $total['exploitant'][] = $v;
 	}
-	$xml[] = $total;
+	if ($colass)
+	  $total['colonneAss'] = $colass;
+	else if ($lieu->getAppellation() != 'KLEVENER')
+	  $xml[] = $total;
       }
     }
     $this->xml = $xml;

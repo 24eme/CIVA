@@ -167,6 +167,7 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->type_aoc = 4;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->appellation_lieu = '999';
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->qualite = 'B';
+	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->code_cepage = '';
 
 	$json->recolte->appellation_CREMANT->rendement = 80;
         $json->recolte->appellation_CREMANT->mout = 1;
@@ -190,6 +191,7 @@ EOF;
 	$json->recolte->appellation_KLEVENER->rendement = 75;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
 	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
+	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
 	$json->_id = 'CONFIGURATION';
 	$json->type = 'Configuration';
 
