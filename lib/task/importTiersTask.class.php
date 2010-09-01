@@ -53,6 +53,7 @@ class importTiersTask extends sfBaseTask {
 	  $json->intitule = $tiers[7];
 	  $json->regime_fiscal = '';
 	  $json->nom = $tiers[8];
+	  $json->mot_de_passe = '{TEXT}0000';
 	  $json->siege->adresse = $tiers[9];
 	  $json->siege->insee_commune = $tiers[10];
 	  $json->siege->code_postal = $tiers[11];
