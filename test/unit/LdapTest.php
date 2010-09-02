@@ -13,38 +13,39 @@ $t->ok($connection, 'connexion au LDAP');
 ldap_unbind($connection); // on ferme la connexion ouverte avant d'en réouvrir une pour le prochain test
 
 //Création d'un récoltant fictif pour faire les tests de mofifications et de supression
-$recoltant = new Recoltant();
-$recoltant->_id = 'REC-TESTRECOLTANT';
-$recoltant->cvi = '680000000000';
-$recoltant->nom = 'TEST Recoltant';
-$recoltant->email = 'test@example.com';
-$recoltant->mot_de_passe = $recoltant->make_ssha_password('password');
+$tiers = new Tiers();
+$tiers->_id = 'REC-TESTRECOLTANT';
+$tiers->cvi = '680000000000';
+$tiers->nom = 'TEST Recoltant';
+$tiers->email = 'test@example.com';
+$tiers->mot_de_passe = $tiers->make_ssha_password('password');
 
-$recoltant->setAdresse('1 rue de test');
-$recoltant->setCodePostal('75000');
-$recoltant->setCommune('Test');
+$tiers->setAdresse('1 rue de test');
+$tiers->setCodePostal('75000');
+$tiers->setCommune('Test');
 
-$verify = $ldap->ldapVerifieExistence($recoltant);
+$verify = $ldap->ldapVerifieExistence($tiers);
+
 print_r($verify);
 if($verify){
-    $delete = $ldap->ldapDelete($recoltant);
+    $delete = $ldap->ldapDelete($tiers);
 }
 
 //ajout au LDAP
-$add = $ldap->ldapAdd($recoltant);
+$add = $ldap->ldapAdd($tiers);
 $t->ok($add, 'ajout d\'un recoltant');
 
 //modification
-$newData = new Recoltant();
+$newData = new Tiers();
 $newData->nom = 'TEST Modify';
 $newData->email = 'modify@example.com';
-$newData->mot_de_passe = $recoltant->make_ssha_password('modify');
+$newData->mot_de_passe = $tiers->make_ssha_password('modify');
 
-$modify = $ldap->ldapModify($recoltant, $newData);
+$modify = $ldap->ldapModify($tiers, $newData);
 $t->ok($modify, 'modification d\'un recoltant');
 
 //suppression du lDAP
-$delete = $ldap->ldapDelete($recoltant);
+$delete = $ldap->ldapDelete($tiers);
 $t->ok($delete, 'supression d\'un recoltant');
 
 ?>

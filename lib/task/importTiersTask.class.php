@@ -10,6 +10,7 @@ class importTiersTask extends sfBaseTask {
                 // add your own options here
 	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers'),
 	    new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
 
 				));
@@ -34,52 +35,66 @@ class importTiersTask extends sfBaseTask {
 	}
 
 	$docs = array();
+	$csv = array();
+        foreach (file($options['file']) as $a) {
+	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
+	  for($i = 0 ; $i < count($tiers) ; $i++) {
+	    if (!isset($csv[$tiers[3]][$i]) || !$csv[$tiers[3]][$i])
+	      $csv[$tiers[3]][$i] = $tiers[$i];
+	    else if ($tiers[$i] && (!isset($csv[$tiers[3]][57]) || !$csv[$tiers[3]][57]))
+	      $csv[$tiers[3]][$i] = $tiers[$i];
+	  }
+	}
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Tiers'.$options['year']) as $a) {
-	  $json = new stdClass();
-	  $tiers = explode(',', preg_replace('/"/', '', $a));
-	  if (!isset($tiers[4]) || !$tiers[4] || !strlen($tiers[4]))
+	foreach ($csv as $code_civa => $tiers) {
+	  if (!$tiers[57])
 	    continue;
 
-	  $json->type = "Recoltant";
-	  $json->_id = "REC-".$tiers[4];
-	  $json->cvi = $tiers[4];
+	  $json = new stdClass();
+	  $json->type = "Tiers";
+	  $json->_id = "TIERS-".$tiers[57];
+	  $json->cvi = $tiers[57];
 	  $json->num = $tiers[0];
-	  $json->no_stock = $tiers[1];
-	  $json->maison_mere = $tiers[2];
-	  $json->civaba = $tiers[3];
-	  $json->no_accises = $tiers[5];
-	  $json->siret = $tiers[6].'';
-	  $json->intitule = $tiers[7];
+	  $json->no_stock = $tiers[3];
+	  $json->maison_mere = $tiers[10];
+	  $json->civaba = $tiers[1];
+	  $json->no_accises = $tiers[70];
+	  $json->siret = $tiers[58].'';
+	  $json->intitule = $tiers[9];
 	  $json->regime_fiscal = '';
-	  $json->nom = $tiers[8];
+	  $json->nom = $tiers[6];
 	  $json->mot_de_passe = '{TEXT}0000';
-	  $json->siege->adresse = $tiers[9];
-	  $json->siege->insee_commune = $tiers[10];
-	  $json->siege->code_postal = $tiers[11];
-	  $json->siege->commune = $tiers[12];
-	  $json->telephone = sprintf('%010d', $tiers[14]);
-	  if ($tiers[15]) 
-	    $json->fax = sprintf('%010d', $tiers[15]);
-	  if($tiers[16])
-	    $json->email = $tiers[16];
-	  if($tiers[17])
-	    $json->web = $tiers[17];
-	  $json->exploitant->sexe = $tiers[18];
-	  $json->exploitant->nom = $tiers[19];
-	  if ($tiers[21]) {
-	    $json->exploitant->adresse = $tiers[20].", ".$tiers[21];
-	    $json->exploitant->code_postal = $tiers[23];
-	    $json->exploitant->commune = $tiers[24];
+	  $json->siege->adresse = $tiers[46];
+	  $json->siege->insee_commune = $tiers[59];
+	  $json->siege->code_postal = $tiers[60];
+	  $json->siege->commune = $tiers[61];
+	  if ($tiers[37]) 
+	    $json->telephone = sprintf('%010d', $tiers[37]);
+	  if ($tiers[39]) 
+	    $json->fax = sprintf('%010d', $tiers[39]);
+	  if($tiers[40])
+	    $json->email = $tiers[40];
+	  if($tiers[82])
+	    $json->web = $tiers[82];
+	  $json->exploitant->sexe = $tiers[41];
+	  $json->exploitant->nom = $tiers[42];
+	  if ($tiers[13]) {
+	    $json->exploitant->adresse = $tiers[12].", ".$tiers[13];
+	    $json->exploitant->code_postal = $tiers[15];
+	    $json->exploitant->commune = $tiers[14];
 	  }
 	  if ($tiers[25])
-	    $json->exploitant->telephone = sprintf('%010d', $tiers[25]);
-	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers[28], $tiers[27], $tiers[26]);
+	    $json->exploitant->telephone = sprintf('%010d', $tiers[38]);
+	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers[8], $tiers[68], $tiers[69]);
 	  
 	  $docs[] = $json;
 	}
+
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
+	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
+	    if ($doc)
+	      $doc->delete();
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }

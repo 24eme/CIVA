@@ -1,5 +1,5 @@
 <?php
-class Recoltant extends BaseRecoltant {
+class Tiers extends BaseTiers {
     public function getDeclaration($campagne) {
         return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }

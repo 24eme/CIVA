@@ -4,11 +4,11 @@
 # default rules
 login:
   url:   /
-  param: { module: recoltant, action: login }
+  param: { module: tiers, action: login }
 
 logout:
   url:   /logout
-  param: { module: recoltant, action: logout }
+  param: { module: tiers, action: logout }
 
 mon_espace_civa:
   url:   /mon_espace_civa
@@ -16,7 +16,7 @@ mon_espace_civa:
 
 exploitation_administratif:
   url:   /exploitation_administratif
-  param: { module: recoltant, action: exploitationAdministratif }
+  param: { module: tiers, action: exploitationAdministratif }
 
 exploitation_acheteurs:
   url:   /exploitation_acheteurs

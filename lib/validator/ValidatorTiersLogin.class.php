@@ -1,6 +1,6 @@
 <?php
 
-class ValidatorRecoltantLogin extends sfValidatorBase
+class ValidatorTiersLogin extends sfValidatorBase
 {
   public function configure($options = array(), $messages = array())
   {
@@ -11,9 +11,9 @@ class ValidatorRecoltantLogin extends sfValidatorBase
   {
     $cvi = isset($values['cvi']) ? $values['cvi'] : '';
 
-    if ($cvi && $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($values['cvi']))
+    if ($cvi && $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($values['cvi']))
     {
-       return array_merge($values, array('recoltant' => $recoltant));
+       return array_merge($values, array('tiers' => $tiers));
     }
 
     throw new sfValidatorErrorSchema($this, array($this->getOption('cvi') => new sfValidatorError($this, 'invalid')));

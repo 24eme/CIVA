@@ -28,9 +28,9 @@ class exportActions extends sfActions
 
   public function executeXml(sfWebRequest $request) 
   {
-    $recoltant = $this->getUser()->getRecoltant();
+    $tiers = $this->getUser()->getTiers();
     $annee = $this->getRequestParameter('annee', null);
-    $key = 'DR-'.$recoltant->cvi.'-'.$annee;
+    $key = 'DR-'.$tiers->cvi.'-'.$annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     $xml = array();
     foreach ($dr->recolte->filter('^appellation_') as $appellation) {
@@ -145,9 +145,9 @@ class exportActions extends sfActions
   */
   public function executePdf(sfWebRequest $request)
   {
-    $recoltant = $this->getUser()->getRecoltant();
+    $tiers = $this->getUser()->getTiers();
     $annee = $this->getRequestParameter('annee', null);
-    $key = 'DR-'.$recoltant->cvi.'-'.$annee;
+    $key = 'DR-'.$tiers->cvi.'-'.$annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     try {
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->filter('^cepage')->getFirst()->acheteurs;
@@ -161,14 +161,14 @@ class exportActions extends sfActions
     //    $this->getResponse()->setContent('application/x-pdf');
 
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
-      $this->document = new PageableHTML('Déclaration de récolte '.$annee, $recoltant->nom, $annee.'_DR_'.$recoltant->cvi.'.pdf');
+      $this->document = new PageableHTML('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
     }else {
-      $this->document = new PageablePDF('Déclaration de récolte '.$annee, $recoltant->nom, $annee.'_DR_'.$recoltant->cvi.'.pdf');
+      $this->document = new PageablePDF('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
     }
 
     foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
       foreach ($appellation->filter('^lieu') as $lieu) {
-	$this->createAppellationLieu($lieu, $recoltant);
+	$this->createAppellationLieu($lieu, $tiers);
       }
     }
 
@@ -176,7 +176,7 @@ class exportActions extends sfActions
     
   }
 
-  private function createAppellationLieu($lieu, $recoltant) {
+  private function createAppellationLieu($lieu, $tiers) {
     $colonnes = array();
     $acheteurs = $lieu->acheteurs;
     $cpt = 0;
@@ -276,7 +276,7 @@ class exportActions extends sfActions
     //L'identification des acheteurs ne peut apparaitre qu'une fois par cépage
     $identification_enabled = 1;
     foreach($pages as $p) {
-      $this->document->addPage($this->getPartial('pageDR', array('recoltant'=>$recoltant, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled)));
+      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled)));
       $identification_enabled = 0;
     }
   }

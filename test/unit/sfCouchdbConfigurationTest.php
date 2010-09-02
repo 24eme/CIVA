@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(11);
+$t = new lime_test(13);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);

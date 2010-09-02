@@ -1,10 +1,10 @@
 <?php
 
 class myUser extends sfBasicSecurityUser {
-    const SESSION_CVI = 'recoltant_cvi';
-    const NAMESPACE_RECOLTANT = 'myUserRecoltant';
+    const SESSION_CVI = 'tiers_cvi';
+    const NAMESPACE_TIERS = 'myUserTiers';
 
-    protected $_recoltant = null;
+    protected $_tiers = null;
     protected $_declaration = null;
 
     public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array()) {
@@ -12,44 +12,44 @@ class myUser extends sfBasicSecurityUser {
 
         if (!$this->isAuthenticated()) {
             // remove user if timeout
-            $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_RECOLTANT);
+            $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_TIERS);
             $this->user = null;
         }
     }
 
-    public function signIn($recoltant) {
-        $this->setAttribute(self::SESSION_CVI, $recoltant->getCvi(), self::NAMESPACE_RECOLTANT);
+    public function signIn($tiers) {
+        $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
     }
 
     public function signInWithCas($casUser) {
-        $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($casUser);
-        $this->signIn($recoltant);
+        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($casUser);
+        $this->signIn($tiers);
     }
 
     public function signOut() {
-        $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_RECOLTANT);
-        $this->_recoltant = null;
+        $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_TIERS);
+        $this->_tiers = null;
         $this->setAuthenticated(false);
     }
 
-    public function getRecoltant() {
-        if (!$this->_recoltant && $cvi = $this->getAttribute(self::SESSION_CVI, null, self::NAMESPACE_RECOLTANT)) {
-            $this->_recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi); 
+    public function getTiers() {
+        if (!$this->_tiers && $cvi = $this->getAttribute(self::SESSION_CVI, null, self::NAMESPACE_TIERS)) {
+            $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi); 
 
-            if (!$this->_recoltant) {
+            if (!$this->_tiers) {
                 // the user does not exist anymore in the database
                 $this->signOut();
                 throw new sfException('The user does not exist anymore in the database.');
             }
         }
 
-        return $this->_recoltant;
+        return $this->_tiers;
     }
 
     public function getDeclaration() {
         if (!isset($this->_declaration)) {
-            $this->_declaration = $this->getRecoltant()->getDeclaration($this->getCampagne());
+            $this->_declaration = $this->getTiers()->getDeclaration($this->getCampagne());
         }
 
         return $this->_declaration;
@@ -59,8 +59,8 @@ class myUser extends sfBasicSecurityUser {
         return '2010';
     }
 
-    public function getRecoltantCvi() {
-        return $this->getRecoltant()->getCvi();
+    public function getTiersCvi() {
+        return $this->getTiers()->getCvi();
     }
 
 }

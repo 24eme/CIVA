@@ -35,5 +35,5 @@ all:
     use_database:           true
 
   .actions:
-    login_module:           recoltant
+    login_module:           tiers
     login_action:           login

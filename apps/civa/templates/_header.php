@@ -7,15 +7,15 @@
 
     <div id="titre_rubrique">
         <h1>Déclaration de récolte de vins d'Alsace</h1>
-<?php if ($recoltant = $sf_user->getRecoltant()) : ?>
-        <p class="utilisateur"><?php echo link_to($recoltant->getIntitule().' '.$recoltant->getNom(), '@mon_espace_civa'); ?></p>
+<?php if ($tiers = $sf_user->getTiers()) : ?>
+        <p class="utilisateur"><?php echo link_to($tiers->getIntitule().' '.$tiers->getNom(), '@mon_espace_civa'); ?></p>
 <?php endif; ?>
     </div>
 
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-<?php if ($recoltant = $sf_user->getRecoltant()) : ?>
+<?php if ($tiers) : ?>
             <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
             <li><a href="<?php echo url_for('@mon_compte'); ?>">Mon compte</a></li>
             <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>

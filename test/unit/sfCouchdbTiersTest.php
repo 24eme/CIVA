@@ -10,8 +10,8 @@ if (!sfCouchdbManager::getClient()->databaseExists()) {
         sfCouchdbManager::getClient()->createDatabase();
  }
 
-$rec = new Recoltant();
-$rec->_id = 'REC-TESTRECOLTANT';
+$rec = new Tiers();
+$rec->_id = 'TIERS-TESTRECOLTANT';
 $rec->siege->adresse = "2 rue du test";
 $exploitant = $rec->get('exploitant');
 $t->is($exploitant->getAdresse(), $rec->siege->adresse, "Si pas d'adresse de l'exploitant alors adresse du siege");

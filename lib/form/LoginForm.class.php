@@ -10,9 +10,9 @@
                 'cvi' => new sfValidatorString(array('required' => false)),
             ));
             
-            $this->validatorSchema->setPostValidator(new ValidatorRecoltantLogin());
+            $this->validatorSchema->setPostValidator(new ValidatorTiersLogin());
             
-            $this->widgetSchema->setNameFormat('recoltant[%s]');
+            $this->widgetSchema->setNameFormat('tiers[%s]');
         }
     }
 

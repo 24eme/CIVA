@@ -28,6 +28,9 @@ class sfCouchdbClient extends couchClient {
       if (!isset($data->type)) {
 	throw new sfCouchdbException('data should have a type');
       }
+      if (!class_exists($data->type)) {
+	throw new sfCouchdbException('class '.$data->type.' not found');
+      }
       $doc = new $data->type();
       $doc->load($data);
       return $doc;

@@ -1,6 +1,6 @@
 <?php
 
-class setRecoltantPasswordTask extends sfBaseTask {
+class setTiersPasswordTask extends sfBaseTask {
     protected function configure() {
         // // add your own arguments here
         // $this->addArguments(array(
@@ -15,13 +15,13 @@ class setRecoltantPasswordTask extends sfBaseTask {
         ));
 
         $this->namespace        = 'civa-config';
-        $this->name             = 'setRecoltantPassword';
+        $this->name             = 'setTiersPassword';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
-The [setRecoltantPassword|INFO] task does things.
+The [setTiersPassword|INFO] task does things.
 Call it with:
 
-  [php symfony setRecoltantPassword|INFO]
+  [php symfony setTiersPassword|INFO]
 EOF;
     }
 
@@ -31,7 +31,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $docs = sfCouchdbManager::getClient('Recoltant')->getAll();
+        $docs = sfCouchdbManager::getClient('Tiers')->getAll();
 
         foreach($docs as $id => $anyone) {
             $rec = sfCouchdbManager::getClient()->retrieveDocumentById($id);
