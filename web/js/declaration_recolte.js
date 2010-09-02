@@ -722,7 +722,7 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion)
 
 var loadContentPopupAjax = function(popup, url, config)
 {
-    $(popup).html('<div class="ui-autocomplete-loading"></div>');
+    $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
     $(popup).load(url);
 }
 
