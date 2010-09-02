@@ -7,12 +7,12 @@ class ValidatorCreateCompte extends sfValidatorBase {
 
     protected function doClean($values) {
         if($values['mdp1'] == $values['mdp2']) {
-            $recoltant = sfContext::getInstance()->getUser()->getRecoltant();
-            if($values['mdp1']!= '' ) $recoltant->mot_de_passe = $recoltant->make_ssha_password($values['mdp1']);
-            $recoltant->email = $values['email'];
-            $recoltant->save();
+            $tiers = sfContext::getInstance()->getUser()->getTiers();
+            if($values['mdp1']!= '' ) $tiers->mot_de_passe = $tiers->make_ssha_password($values['mdp1']);
+            $tiers->email = $values['email'];
+            $tiers->save();
 
-            return array_merge($values, array('recoltant' => $recoltant));
+            return array_merge($values, array('tiers' => $tiers));
 
         }
         throw new sfValidatorErrorSchema($this, array($this->getOption('mdp1') => new sfValidatorError($this, 'mdp_invalid')));

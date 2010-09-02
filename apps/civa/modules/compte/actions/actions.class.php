@@ -111,11 +111,6 @@ Le CIVA';
             $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($request->getParameter('cvi'));
             $mdp =$request->getParameter('mdp');
 
-<<<<<<< .mine
-    private function addToLdap($tiers) {
-        $ldap = new ldap();
-        $ldapAdd = $ldap->ldapAdd($tiers);
-=======
             if($tiers && $tiers->mot_de_passe==$mdp) {
                 $this->getUser()->signIn($tiers);
                 $this->redirect('compte/create');
@@ -152,7 +147,6 @@ Le CIVA';
             }
         }
 
->>>>>>> .r264
     }
 
     public function executeResetMDP(sfWebRequest $request) {
