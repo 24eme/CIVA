@@ -11,7 +11,7 @@ DR:
         definition:
           fields:
             nom: {}
-            mail: {}
+            email: {}
             telephone: {}
       acheteurs:
         type: collection
