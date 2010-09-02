@@ -20,7 +20,12 @@ $recoltant->nom = 'TEST Recoltant';
 $recoltant->email = 'test@example.com';
 $recoltant->mot_de_passe = $recoltant->make_ssha_password('password');
 
+$recoltant->setAdresse('1 rue de test');
+$recoltant->setCodePostal('75000');
+$recoltant->setCommune('Test');
+
 $verify = $ldap->ldapVerifieExistence($recoltant);
+print_r($verify);
 if($verify){
     $delete = $ldap->ldapDelete($recoltant);
 }

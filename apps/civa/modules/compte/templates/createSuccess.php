@@ -18,7 +18,7 @@
 
                     <?php echo $form['email']->renderError() ?>
                     <?php echo $form['email']->renderLabel() ?>
-                    <?php echo $form['email']->render() ?>
+                    <?php echo $form['email']->render(array('value'=>$email)) ?>
                 </div>
                 <div class="ligne_form ligne_form_label">
                     <?php echo $form['mdp1']->renderError() ?>

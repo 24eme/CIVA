@@ -11,7 +11,7 @@
             <div class="presentation clearfix"<?php if ($form_modif_err) echo ' style="display:none;"'; ?>>
                 <p class="intro">Vos identifiants de connexion :</p>
                 <?php if($sf_user->hasFlash('maj')){ ?>
-                    <p class="message"><?php echo $sf_user->getFlash('maj'); ?></p>
+                    <p class="flash_message"><?php echo $sf_user->getFlash('maj'); ?></p>
                 <?php } ?>
                 <p><span>Email :</span> <?php echo $email; ?></p>
                 <p><span>Mot de passe :</span> ****** </p>

@@ -473,13 +473,6 @@ a.msg_aide
 /**
  * Exploitation administratif
  ******************************************/
-#exploitation_administratif p.message
-{
-    background: #fffcef;
-    border: 1px solid #f90;
-    margin: 0 0 8px;
-    padding: 5px;
-}
 
 #exploitation_administratif .modification .ligne_form { margin: 0 0 8px; }
 

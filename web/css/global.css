@@ -113,6 +113,15 @@ html[xmlns] .clearfix { display: block; }
 	overflow: hidden;
 }
 
+p.flash_message
+{
+    background: #fffcef;
+    border: 1px solid #f90;
+    margin: 0 0 8px;
+    padding: 5px;
+    font-size: 13px !important;
+}
+
 
 /**
  * Structure générique
