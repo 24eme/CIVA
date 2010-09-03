@@ -170,6 +170,8 @@ Tiers:
       regime_fiscal: { }
       civaba: {  }
       no_accises: {  }
+      cvi_acheteur: {  }
+      insee_commune_declaration: {}
       siret: { type: string }
       intitule: {  }
       nom: {  }

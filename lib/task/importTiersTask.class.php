@@ -41,8 +41,12 @@ class importTiersTask extends sfBaseTask {
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
 	    if (!isset($csv[$tiers[3]][$i]) || !$csv[$tiers[3]][$i])
 	      $csv[$tiers[3]][$i] = $tiers[$i];
-	    else if ($tiers[$i] && (!isset($csv[$tiers[3]][57]) || !$csv[$tiers[3]][57]))
+	    else if ($tiers[$i] && !$tiers[1]) {
+	      echo "Reset csv[".$tiers[3]."][$i] = ".$tiers[$i]."\n";
 	      $csv[$tiers[3]][$i] = $tiers[$i];
+	    }
+	    if ($tiers[1] && $i == 57)
+	      $csv[$tiers[3]][99] = $tiers[57];
 	  }
 	}
 
@@ -63,11 +67,14 @@ class importTiersTask extends sfBaseTask {
 	  $json->intitule = $tiers[9];
 	  $json->regime_fiscal = '';
 	  $json->nom = $tiers[6];
+	  $json->insee_commune_declaration = $tiers[62];
 	  $json->mot_de_passe = '{TEXT}0000';
 	  $json->siege->adresse = $tiers[46];
 	  $json->siege->insee_commune = $tiers[59];
 	  $json->siege->code_postal = $tiers[60];
 	  $json->siege->commune = $tiers[61];
+	  if (isset($tiers[99]))
+	    $json->cvi_acheteur = $tiers[99];
 	  if ($tiers[37]) 
 	    $json->telephone = sprintf('%010d', $tiers[37]);
 	  if ($tiers[39]) 
@@ -92,9 +99,11 @@ class importTiersTask extends sfBaseTask {
 
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
+	    print_r($data);
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
-	    if ($doc)
+	    if ($doc) {
 	      $doc->delete();
+	    }
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
