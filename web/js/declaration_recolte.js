@@ -40,10 +40,11 @@ $(document).ready( function()
         if(e.which == 46 && val.indexOf('.') != -1)
             return false;
     });
-	
-    $('#exploitation_acheteurs').ready( function() {
-        initTablesAcheteurs();
-    });
+    if ($('#exploitation_acheteurs').length > 0) {
+        $('#exploitation_acheteurs').ready( function() {
+            initTablesAcheteurs();
+        });
+    }
     $('#gestion_recolte').ready( function() {
         initGestionRecolte();
     });
@@ -284,7 +285,14 @@ var initTablesAcheteurs = function()
             });
         }
     });
+
+    initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
+                    function() {
+                        return (tables_acheteurs.find('input[type=checkbox]:checked').length < 1);
+                    }
+    );
 };
+
 
 /**
  * Affiche/masque la première ligne
@@ -440,7 +448,26 @@ var masquerTableAjout = function(table_achet, form_ajout, nb)
     var champs_txt = table.find('input:text,input[type=hidden]');
     var champs_cb = table.find('input:checkbox');
 	
-    spans.text('');
+    spans.text('');/**
+ * Initialise une popup
+ ******************************************/
+var initPopup = function(btn, popup)
+{
+    popup.dialog
+    ({
+        autoOpen: false,
+        draggable: false,
+        resizable: false,
+        width: 375,
+        modal: true
+    });
+
+    btn.live('click', function()
+    {
+        popup.dialog('open');
+        return false;
+    });
+};
     champs_txt.attr('value','');
     champs_cb.attr('checked','');
     champs_cb.filter('.cremant_alsace').attr('checked','checked');
@@ -808,5 +835,28 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
             return false;
         }
 		
+    });
+};
+
+/**
+ * Initialise une popup
+ ******************************************/
+var initPopup = function(btn, popup, fn_open_if)
+{
+    popup.dialog
+    ({
+        autoOpen: false,
+        draggable: false,
+        resizable: false,
+        width: 375,
+        modal: true
+    });
+
+    btn.live('click', function()
+    {
+        if (!fn_open_if || fn_open_if()) {
+            popup.dialog('open');
+            return false;
+        }
     });
 };
