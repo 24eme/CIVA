@@ -118,6 +118,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     public function update() {
         parent::update();
         $this->remove('acheteurs');
+	$this->add('acheteurs');
         foreach ($this->getAcheteursFromCepage() as $a) {
             $acheteur = $this->add('acheteurs')->add($a->cvi);
             $acheteur->type_acheteur = $a->getParent()->getKey();

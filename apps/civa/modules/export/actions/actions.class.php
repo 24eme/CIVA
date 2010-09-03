@@ -151,6 +151,7 @@ class exportActions extends sfActions
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     try {
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->filter('^cepage')->getFirst()->acheteurs;
+      $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
     }catch(Exception $e) {
       $dr->update();
       $dr->save();
