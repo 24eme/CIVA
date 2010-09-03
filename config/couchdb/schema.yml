@@ -298,3 +298,11 @@ Configuration:
                               min_quantite: {type: float, required: false}
                               exclude_total: {type: float, required: false}
                               superficie_optionnelle: { type: integer, required: false }
+
+Messages:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {}
+      '*': {}
