@@ -122,6 +122,15 @@ p.flash_message
     font-size: 13px !important;
 }
 
+#popup_msg_erreur{
+    background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 50% 10px;
+}
+
+#popup_msg_erreur p{
+    text-align: center;
+    margin-top: 70px;
+}
+
 
 /**
  * Structure générique
