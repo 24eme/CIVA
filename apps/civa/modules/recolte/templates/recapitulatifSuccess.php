@@ -108,7 +108,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 			</form>
 			<!-- fin #principal -->
 
-                        <?php include_partial('recolte/ajoutPopupOnglets', array('onglets' => $onglets,
+                        <?php include_partial('recolte/popupAjoutOnglets', array('onglets' => $onglets,
                                                          'form_appellation' => $form_ajout_appellation,
                                                          'form_lieu' => $form_ajout_lieu,
                                                          'url_lieu' => $url_ajout_lieu)) ?>
