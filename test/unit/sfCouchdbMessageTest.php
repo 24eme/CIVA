@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(5);
+$t = new lime_test(6);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -19,6 +19,12 @@ $t->ok($msg->save(), 'can create test message');
 
 $msg = sfCouchdbManager::getClient()->retrieveDocumentById('MESSAGES');
 $t->is($msg->my_test_message, 'test', 'message saved');
+
+
+$t->is(sfCouchdbManager::getClient('Messages')->getMessage('my_test_message'), 'test', 'retrieve direct message via client');
+
+
+
 
 $t->ok($msg->remove('my_test_message'), 'message removed');
 

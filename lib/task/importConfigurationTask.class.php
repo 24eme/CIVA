@@ -204,11 +204,6 @@ EOF;
 
 	$docs[] = $json;
 
-	$json = new stdClass();
-	$json->_id = 'MESSAGES';
-	$json->type = 'Messages';
-	$docs[] = $json;
-
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
