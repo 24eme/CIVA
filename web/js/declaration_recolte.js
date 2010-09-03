@@ -34,7 +34,7 @@ $(document).ready( function()
         initTablesDonnes();
     });
 	
-    $('input.num').keypress(function(e)
+    $('input.num').live('keypress',function(e)
     {
         var val = $(this).val();
 		
@@ -454,26 +454,8 @@ var masquerTableAjout = function(table_achet, form_ajout, nb)
     var champs_txt = table.find('input:text,input[type=hidden]');
     var champs_cb = table.find('input:checkbox');
 	
-    spans.text('');/**
- * Initialise une popup
- ******************************************/
-var initPopup = function(btn, popup)
-{
-    popup.dialog
-    ({
-        autoOpen: false,
-        draggable: false,
-        resizable: false,
-        width: 375,
-        modal: true
-    });
-
-    btn.live('click', function()
-    {
-        popup.dialog('open');
-        return false;
-    });
-};
+    spans.text('');
+    
     champs_txt.attr('value','');
     champs_cb.attr('checked','');
     champs_cb.filter('.cremant_alsace').attr('checked','checked');
