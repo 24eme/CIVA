@@ -33,6 +33,7 @@ all:
 
     # Enable the database manager
     use_database:           true
+    etag: on
 
   .actions:
     login_module:           tiers

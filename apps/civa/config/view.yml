@@ -4,6 +4,9 @@
 default:
   http_metas:
     content-type: text/html
+    pragma: no-cache
+    cache-control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+    expires: 0
 
   metas:
     #title:        symfony project
@@ -11,6 +14,7 @@ default:
     #keywords:     symfony, project
     #language:     en
     #robots:       index, follow
+    pragma:	   no-cache
 
   stylesheets:    [global.css, declaration_recolte.css, jquery.ui.css]
 
