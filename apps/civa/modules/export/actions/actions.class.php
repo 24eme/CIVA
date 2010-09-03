@@ -153,9 +153,9 @@ class exportActions extends sfActions
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->filter('^cepage')->getFirst()->acheteurs;
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
     }catch(Exception $e) {
+      $dr->update();
+      $dr->save();
     }
-    $dr->update();
-    $dr->save();
     $this->forward404Unless($dr);
 
     $this->setLayout(false);
@@ -167,6 +167,7 @@ class exportActions extends sfActions
       $this->document = new PageablePDF('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
     }
 
+    $this->nb_pages = 0;
     foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
       foreach ($appellation->filter('^lieu') as $lieu) {
 	$this->createAppellationLieu($lieu, $tiers);
@@ -274,10 +275,13 @@ class exportActions extends sfActions
       $lasti = ++$i;
     }
 
+    $extra = array('lies' => $lieu->getCouchdbDocument()->lies, 'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
+
     //L'identification des acheteurs ne peut apparaitre qu'une fois par cépage
     $identification_enabled = 1;
     foreach($pages as $p) {
-      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled)));
+      $this->nb_pages++;
+      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra)));
       $identification_enabled = 0;
     }
   }

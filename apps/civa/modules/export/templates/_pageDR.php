@@ -26,7 +26,7 @@ pre {display: inline;}
 
 if (!function_exists('printColonne')) {
   function printColonne($libelle, $colonnes, $key, $unite = '') {
-    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px;">'.$libelle.'</th>';
+    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px;">&nbsp;'.$libelle.'</th>';
     foreach($colonnes as $c) {
       if (isset($c[$key]) && $v = $c[$key]) {
 	echo '<td style="width: 120px;">';
@@ -61,14 +61,26 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 </table>
 <?php if ($enable_identification && count($acheteurs)) : ?>
 <div style="margin-top: 20px;">
-<div><span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span></div>
+<table>
+<tr>
+<td style="width: 750px">
+<span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
   <tr style="font-weight: bold;"><th style="width: 100px;">N° CVI</th><th style="width: 300px;">Raison social (commune)</th><th style="width: 100px;">Superficie</th><th style="width: 120px;">Vente raisins</th><th style="width: 100px;">dont DPLC</th></tr>
   <?php foreach($acheteurs as $cvi => $a) : ?>
   <tr><td style="width: 100px;"><?php echo $cvi; ?></td><td style="width: 300px;"><?php echo $a->nom.' ('.$a->commune.')'; ?></td><td style="width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
   <?php endforeach; ?>
 </table>
-</div>
+</td>
+<td valign="top" style="width: 200px;">
+<span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
+<table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
+<tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td><?php echo $extra['lies']; ?>&nbsp;<small>hl</small></td></tr>
+<tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td><?php echo $extra['jeunes_vignes']; ?>&nbsp;<small>ares</small></td></tr>
+</table>
+</td>
+</tr>
+</table>
 <?php endif;?>
 
 
