@@ -1,13 +1,18 @@
 #!/bin/bash
 
-. $(echo $0 | sed 's/[^\/]+$//')config.inc
+. $(echo $0 | sed 's/[^\/]*$//')config.inc
 
 php symfony import:Configuration --removedb=yes
+echo "Configuration DONE"
 php symfony import:Messages
+echo "Messages DONE"
 php symfony import:Achat
+echo "Achateurs DONE";
 php symfony import:Tiers
+echo "Tiers DONE";
 for year in 09 08 07 06 05 ; do 
 php symfony import:DR --year=$year > /tmp/dr.json
 curl -d @/tmp/dr.json -X POST http://$COUCHDBDOMAIN:5984/civa/_bulk_docs ; 
+echo "DR $year DONE";
 done
 rm /tmp/dr.json
