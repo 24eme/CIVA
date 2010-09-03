@@ -1,8 +1,9 @@
 #!/bin/bash
 
-. $0.conf
+. $(echo $0 | sed 's/[^\/]+$//')config.inc
 
 php symfony import:Configuration --removedb=yes
+php symfony import:Messages
 php symfony import:Achat
 php symfony import:Tiers
 for year in 09 08 07 06 05 ; do 

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. $(echo $0 | sed 's/[^\/]*$//')config.inc
+
+php symfony import:Configuration 
+echo "Configuration updated";
+php symfony import:Message
+echo "Messages updated";
