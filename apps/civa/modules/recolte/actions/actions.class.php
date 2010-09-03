@@ -75,6 +75,9 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($this->details->exist($detail_key));
 
         $this->details->remove($detail_key);
+        if ($this->details->count() == 0) {
+            $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
+        }
         $this->declaration->save();
         
         $this->redirect($this->onglets->getUrl('recolte'));
