@@ -76,11 +76,14 @@ class ldap {
 
                 // prepare les données
                 $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-                if(isset($values['nom']))           $info['sn']            = $values['nom'];
-                if(isset($values['nom']))           $info['cn']            = $values['nom'];
+                if(isset($values['nom'])) {
+		  $info['sn']            = $values['nom'];
+		  $info['cn']            = $values['nom'];
+		  $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$values['nom'].',';
+		}
+
                 if(isset($values['mot_de_passe']))  $info['userPassword']  = $values['mot_de_passe'];
 
-                $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$values['nom'].',';
                 
                 if(isset($values['mail']))          $info['mail'] = $values['email'];
                 if(isset($values['adresse']))       $info['postalAddress'] = $values['adresse'];
