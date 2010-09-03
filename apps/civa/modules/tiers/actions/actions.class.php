@@ -15,6 +15,7 @@ class tiersActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeLogin(sfWebRequest $request) {
+
         if ($this->getUser()->isAuthenticated()) {
 
             $this->redirect('@mon_espace_civa');
@@ -37,11 +38,10 @@ class tiersActions extends EtapesActions {
             phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
 
             phpCAS::setNoCasServerValidation();
-
+            
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
             phpCAS::forceAuthentication();
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
-
             $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
 
         }else {

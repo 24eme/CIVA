@@ -18,6 +18,8 @@ class myUser extends sfBasicSecurityUser {
     }
 
     public function signIn($tiers) {
+        if (!$tiers)
+            throw new sfCouchdbException('Tiers needed');
         $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
     }

@@ -241,6 +241,14 @@ ul#btn_cepage { padding: 10px 0; }
 /* Tableau de données */
 table.table_donnees { }
 
+table.autres_infos{
+    margin-top: 15px;
+    width: 323px;
+}
+
+td.premiere_colonne{
+    width: 213px;
+}
 table.table_donnees thead th 
 {
     color: #acb701;
@@ -1064,7 +1072,7 @@ a.msg_aide
 
 #gestion_recolte #col_scroller .col_recolte a.ajout
 {
-    background: url(../images/puces/puce_lien.png) 0 4px no-repeat;
+    background: url(../images/puces/puce_plus.png) 0 4px no-repeat;
     bottom: -28px;
     height: 30px;
     font-size: 10px;

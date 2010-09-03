@@ -8,8 +8,8 @@ class FirstConnectionForm extends BaseForm {
         ));
 
         $this->widgetSchema->setLabels(array(
-                'cvi'  => 'Numéro CVI: ',
-                'mdp'  => 'Mot de passe: '
+                'cvi'  => 'Numéro CVI : ',
+                'mdp'  => 'Code de création : '
         ));
 
         $this->widgetSchema->setNameFormat('firstConnection[%s]');

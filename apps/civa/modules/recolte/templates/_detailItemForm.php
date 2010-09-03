@@ -19,12 +19,12 @@
 
         <div class="vente_raisins">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
-            <a href="#" class="ajout ajout_acheteur">Ajouter un acheteur</a>
+            <a href="#" class="ajout ajout_acheteur">Acheteur</a>
         </div>
 
         <div class="caves">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
-            <a href="#" class="ajout ajout_cave">Ajouter une cave</a>
+            <a href="#" class="ajout ajout_cave">Cave</a>
         </div>
 
         <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS])): ?>

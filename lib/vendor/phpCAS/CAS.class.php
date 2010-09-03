@@ -243,7 +243,7 @@ define("PHPCAS_LANG_CATALAN", 'catalan');
 /**
  * phpCAS default language (when phpCAS::setLang() is not used)
  */
-define("PHPCAS_LANG_DEFAULT", PHPCAS_LANG_ENGLISH);
+define("PHPCAS_LANG_DEFAULT", PHPCAS_LANG_FRENCH);
 
 /** @} */
 // ------------------------------------------------------------------------

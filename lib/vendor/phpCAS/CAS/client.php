@@ -1124,7 +1124,7 @@ class CASClient
 		
 		$this->printHTMLHeader($this->getString(CAS_STR_AUTHENTICATION_WANTED));
 		
-		printf('<p>'.$this->getString(CAS_STR_SHOULD_HAVE_BEEN_REDIRECTED).'</p>',$cas_url);
+		printf('<p class="CAS">'.$this->getString(CAS_STR_SHOULD_HAVE_BEEN_REDIRECTED).'</p>',$cas_url);
 		$this->printHTMLFooter();
 		
 		phpCAS::traceExit();
@@ -1155,7 +1155,7 @@ class CASClient
 		session_destroy();
 		
 		$this->printHTMLHeader($this->getString(CAS_STR_LOGOUT));
-		printf('<p>'.$this->getString(CAS_STR_SHOULD_HAVE_BEEN_REDIRECTED).'</p>',$cas_url);
+		printf('<p class="cas">'.$this->getString(CAS_STR_SHOULD_HAVE_BEEN_REDIRECTED).'</p>',$cas_url);
 		$this->printHTMLFooter();
 		
 		phpCAS::traceExit();
