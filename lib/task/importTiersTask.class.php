@@ -42,7 +42,6 @@ class importTiersTask extends sfBaseTask {
 	    if (!isset($csv[$tiers[3]][$i]) || !$csv[$tiers[3]][$i])
 	      $csv[$tiers[3]][$i] = $tiers[$i];
 	    else if ($tiers[$i] && !$tiers[1]) {
-	      echo "Reset csv[".$tiers[3]."][$i] = ".$tiers[$i]."\n";
 	      $csv[$tiers[3]][$i] = $tiers[$i];
 	    }
 	    if ($tiers[1] && $i == 57)
@@ -66,7 +65,7 @@ class importTiersTask extends sfBaseTask {
 	  $json->siret = $tiers[58].'';
 	  $json->intitule = $tiers[9];
 	  $json->regime_fiscal = '';
-	  $json->nom = $tiers[6];
+	  $json->nom = preg_replace('/ +/', ' ', $tiers[6]);
 	  $json->insee_commune_declaration = $tiers[62];
 	  $json->mot_de_passe = '{TEXT}0000';
 	  $json->siege->adresse = $tiers[46];
@@ -99,7 +98,6 @@ class importTiersTask extends sfBaseTask {
 
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
-	    print_r($data);
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
 	    if ($doc) {
 	      $doc->delete();
