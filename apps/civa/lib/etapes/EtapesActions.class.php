@@ -28,6 +28,8 @@ class EtapesActions extends sfActions {
                     }
                 }
             }
+        } else {
+            $this->redirect($this->getRoute()->generate());
         }
     }
 

@@ -1,23 +1,24 @@
 <?php
-    class LieuDitForm extends BaseForm {
+    class LieuDitForm extends sfCouchdbFormDocumentJson {
         public function setup() {
-	  $lieux = array('' => '');
-	  foreach (ConfigurationClient::getConfiguration()->get('/recolte/appellation_GRDCRU')->filter('lieu[0-9]') as $k => $l) {
-	    $lieux[$k] = $l->getLibelle();
-	  }
-          asort($lieux);
+          $lieu_choices = $this->getObject()->getLieuChoices();
+
 	  $this->setWidgets(array(
 				    'lieu' => new sfWidgetFormChoice(array(
-									   'choices'  => $lieux,
+									   'choices'  => $lieu_choices,
 									   )
 								     )
 				    )
 			    );
             $this->setValidators(array(
-                'lieu' => new sfValidatorString(array('required' => $this->getOption('lieu_required', true))),
+                'lieu' => new sfValidatorChoice(array('required' => $this->getOption('lieu_required', true), 'choices' => array_keys($lieu_choices))),
             ));
             
             $this->widgetSchema->setNameFormat('lieudit[%s]');
+        }
+
+        public function doUpdateObject($values) {
+            $this->getObject()->add($values['lieu']);
         }
     }
 

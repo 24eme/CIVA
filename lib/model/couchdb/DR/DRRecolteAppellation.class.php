@@ -9,7 +9,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getLibelle() {
-      return $this->getConfig()->getLibelle();
+        return $this->getConfig()->getLibelle();
     }
 
     public function addCepage($cepage, $lieu = '') {
@@ -93,13 +93,24 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function hasManyLieu() {
-      return !$this->getConfig()->exist('lieu');
+        return!$this->getConfig()->exist('lieu');
+    }
+
+    public function getLieuChoices() {
+        $lieu_choices = array('' => '');
+        foreach ($this->getConfig()->filter('^lieu[0-9]') as $key => $item) {
+            if (!$this->exist($key)) {
+                $lieu_choices[$key] = $item->getLibelle();
+            }
+        }
+        asort($lieu_choices);
+        return $lieu_choices;
     }
 
     public function removeVolumes() {
-      $this->volume_revendique = null;
-      $this->total_volume = null;
-      $this->dplc = null;
+        $this->volume_revendique = null;
+        $this->total_volume = null;
+        $this->dplc = null;
         foreach ($this->filter('^lieu') as $lieu) {
             $lieu->removeVolumes();
         }
