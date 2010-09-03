@@ -104,16 +104,15 @@ class acheteurActions extends EtapesActions {
 	  $this->lieux[$key] = $lieu->getLibelle();
 	}
 
-	$this->form = new LieuDitForm();
+	$this->form = new LieuDitForm(null, array('lieu_required' => !(count($this->lieux) > 0)));
 
         if ($request->isMethod(sfWebRequest::POST)) {
 	  $this->form->bind($request->getParameter($this->form->getName()));
 	  if ($this->form->isValid()) {
 	    $grdcru->add($this->form->getValue('lieu'));
 	    $grdcru->save();
-	    return $this->redirect('@exploitation_lieu');
+	    return  $this->redirectByBoutonsEtapes();
 	  }
-	  $this->redirectByBoutonsEtapes();
         }
     }
 

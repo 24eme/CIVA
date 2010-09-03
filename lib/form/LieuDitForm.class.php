@@ -14,7 +14,7 @@
 				    )
 			    );
             $this->setValidators(array(
-                'lieu' => new sfValidatorString(array('required' => true)),
+                'lieu' => new sfValidatorString(array('required' => $this->getOption('lieu_required', true))),
             ));
             
             $this->widgetSchema->setNameFormat('lieudit[%s]');
