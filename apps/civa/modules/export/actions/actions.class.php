@@ -153,9 +153,9 @@ class exportActions extends sfActions
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->filter('^cepage')->getFirst()->acheteurs;
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
     }catch(Exception $e) {
-      $dr->update();
-      $dr->save();
     }
+    $dr->update();
+    $dr->save();
     $this->forward404Unless($dr);
 
     $this->setLayout(false);

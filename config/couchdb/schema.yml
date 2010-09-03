@@ -78,6 +78,8 @@ DR:
                                  definition:
                                    fields:
                                      type_acheteur: {}
+                                     nom: {}
+                                     commune: {}
                                      superficie: {type:float}
                                      dontdplc: {type:float}
                         # ------ Cépage ------
