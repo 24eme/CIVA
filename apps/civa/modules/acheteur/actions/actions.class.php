@@ -70,6 +70,7 @@ class acheteurActions extends EtapesActions {
                 $i++;
             }
 
+
             $form = ExploitationAcheteursForm::getNewItemAjax($name, $cvi, $values, $appellations_form);
 
             return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,

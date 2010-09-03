@@ -1007,6 +1007,9 @@ a.msg_aide
     font-weight: normal;
     line-height: 18px;
     padding: 0 5px;
+    width: 98px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #gestion_recolte .col_recolte .col_cont

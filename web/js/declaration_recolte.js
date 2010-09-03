@@ -400,7 +400,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 		
         if($(this).hasClass('valider'))
         {
-            if(nom.val()=='')
+            if(cvi.find('input').val() == '')
             {
                 alert("Veuillez renseigner le nom de l'acheteur");
                 return false;
