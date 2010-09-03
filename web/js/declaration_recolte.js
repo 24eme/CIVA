@@ -20,12 +20,16 @@ $(document).ready( function()
     $('#nouvelle_declaration').ready( function() {
         choixPrecDecla();
     });
-    $('#exploitation_administratif').ready( function() {
-        formExploitationAdministratif();
-    });
-    $('#modification_compte').ready( function() {
-        formModificationCompte();
-    });
+    if ($('#exploitation_administratif').length > 0) {
+        $('#exploitation_administratif').ready( function() {
+            formExploitationAdministratif();
+        });
+    }
+    if ($('#modification_compte').length > 0) {
+        $('#modification_compte').ready( function() {
+            formModificationCompte();
+        });
+    }
     $('.table_donnees').ready( function() {
         initTablesDonnes();
     });
@@ -45,9 +49,11 @@ $(document).ready( function()
             initTablesAcheteurs();
         });
     }
-    $('#gestion_recolte').ready( function() {
-        initGestionRecolte();
-    });
+    if ($('#gestion_recolte').length > 0) {
+        $('#gestion_recolte').ready( function() {
+            initGestionRecolte();
+        });
+    }
 	
     var annee = new Date().getFullYear();
 	
