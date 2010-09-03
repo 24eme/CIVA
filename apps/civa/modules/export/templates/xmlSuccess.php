@@ -4,9 +4,11 @@
     echo "<$k>";
     if (get_class($v))
       printXml($v);
-    else if (is_numeric($v) && $k != 'L4' && $v)
-      printf('%04.04f', $v/100);
-    else
+    else if (is_numeric($v) && preg_match('/^(L|volume)/', $k) && $v) {
+      if ($k == 'L4' && $v)
+	$v = $v / 100;
+      printf('%04.04f', $v);
+    } else
       echo $v;
     if (!is_numeric($k))
     echo "</$k>";
