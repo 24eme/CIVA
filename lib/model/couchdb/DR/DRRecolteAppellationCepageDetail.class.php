@@ -48,7 +48,7 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         }
     }
 
-    private function getVolumeMax() {
+    public function getVolumeMax() {
         return ($this->superficie/100) * $this->getRendementCepage();
     }
 

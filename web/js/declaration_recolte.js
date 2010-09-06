@@ -542,6 +542,10 @@ var initGestionRecolte = function(type)
     initDRPopups();
     //Calcule auto du volume
     $('input.volume').change(volumeOnChange);
+    $('#recolte_superficie').change(function() {
+	    $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
+	    volumeOnChange();
+	});
 };
 
 var volumeOnChange = function() {
@@ -551,7 +555,13 @@ var volumeOnChange = function() {
 	    var volume = $(this).val();
 	    if (volume)
 		$('#detail_vol_total_recolte').val(parseFloat(total) + parseFloat(volume));
-	})
+	});
+    if (parseFloat($('#detail_vol_total_recolte').val()) > parseFloat($('#detail_max_volume').val()))
+	$('#detail_volume_revendique').val($('#detail_max_volume').val());
+    else 
+	$('#detail_volume_revendique').val($('#detail_vol_total_recolte').val());
+    $('#detail_volume_dplc').val(parseFloat($('#detail_vol_total_recolte').val()) - parseFloat($('#detail_volume_revendique').val()));
+    
 };
 
 /**
