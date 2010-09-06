@@ -61,6 +61,14 @@ class SubConfiguration extends BaseSubConfiguration {
     return true;
   }
 
+  public function hasTotalCepage() {
+    if ($this->exist('no_total_cepage'))
+      return (! $this->get('no_total_cepage'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    return true;
+  }
+
   public function hasVtsgn() {
     if ($this->exist('no_vtsgn'))
       return (! $this->get('no_vtsgn'));
