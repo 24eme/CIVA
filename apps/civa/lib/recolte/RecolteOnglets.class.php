@@ -253,7 +253,7 @@ class RecolteOnglets {
       return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
-    protected function getFirstKeyCepage($appellation, $lieu) {
+    protected function getFirstKeyCepage($appellation = null, $lieu = null) {
         foreach($this->getItemsCepage($appellation, $lieu) as $key => $item) {
             if ($this->getLieu($appellation, $lieu)->exist($key)) {
                 return $key;

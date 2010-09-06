@@ -369,6 +369,19 @@ ul#messages_log li
     border: 1px solid #FF3300 !important;
 }
 
+a.btn_inactif
+{
+    cursor: default;
+    outline: 0;
+}
+
+a.btn_inactif img {
+    cursor: default;
+    opacity: 0.3;
+    filter: Alpha(Opacity=0.3);
+}
+
+
 /* Popup d'aide */
 a.msg_aide
 {
@@ -1123,6 +1136,7 @@ a.msg_aide
 }
 
 #gestion_recolte #col_scroller a#ajout_col.inactif img { cursor: default; }
+
 
 /* Récolte totale appelation */
 #gestion_recolte .col_total

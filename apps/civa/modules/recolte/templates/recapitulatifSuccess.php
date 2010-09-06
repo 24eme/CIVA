@@ -5,6 +5,7 @@
 
 <!-- #principal -->
 			<form id="principal" action="" method="post">
+                                <?php echo $form->renderHiddenFields(); ?>
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                                    'onglets' => $onglets)); ?>
 
@@ -15,6 +16,7 @@
 					<div id="gestion_recolte" class="clearfix">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'onglets' => $onglets, 'recapitulatif' => true)); ?>
+
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
 						
 							<p class="intro"></p>
@@ -48,11 +50,11 @@
 									</div>
 								</div>
 							</div>
-                                                        <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
+                                                       
+                                                        
 							<div id="recap_ventes">
 								<h2 class="titre_section">Récapitulatif des ventes</h2>
 								<div class="contenu_section">
-        <?php echo $form->renderHiddenFields(); ?>
         <?php /*echo $form->renderGlobalErrors();
 foreach($appellationlieu->acheteurs as $cvi => $info) {
   echo $form['cvi_'.$cvi]['superficie']->renderError();
@@ -60,6 +62,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 } */
 ?>
 									<div class="bloc_gris">
+                                                                            <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<thead>
 												<tr>
@@ -87,22 +90,23 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 										<div class="btn">
 											<input type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 										</div>
-									
+                                                                                <?php else: ?>
+                                                                                <p> Aucune vente </p>
+                                                                                <?php endif; ?>
 									</div>
 								</div>
 							</div>
-                                                        <?php endif; ?>
+                                                        
 						
 						</div>					</div>	
 					<!-- fin #gestion_recolte -->
 					
-  <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
+                                                <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true, 'inactif' => false)) ?>
 					
 				</div>
 				<!-- fin #application_dr -->
 				
-				
-				<?php include_partial('global/boutons', array('display' => array('precedent','suivant'))) ?>
+				<?php include_partial('boutons', array('inactif' => true)) ?>
 
 				
 			</form>

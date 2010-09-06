@@ -35,6 +35,7 @@ class recolteActions extends EtapesActions {
         $this->initAcheteurs();
         
         $this->detail_action_mode = 'update';
+        $this->is_detail_edit = true;
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
@@ -54,6 +55,7 @@ class recolteActions extends EtapesActions {
         $this->initAcheteurs();
         
         $this->detail_action_mode = 'add';
+        $this->is_detail_edit = true;
 
         $detail = $this->details->add();
         $this->detail_key = $this->details->count() - 1;
@@ -190,8 +192,6 @@ class recolteActions extends EtapesActions {
 	}
       }
       
-
-      return;
     }
 
     protected function processFormDetail($form, $request) {
@@ -239,6 +239,7 @@ class recolteActions extends EtapesActions {
         $this->detail_key = null;
         $this->detail_action_mode = null;
         $this->form_detail = null;
+        $this->is_detail_edit = false;
     }
 
     protected function initAcheteurs() {

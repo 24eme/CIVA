@@ -30,6 +30,7 @@
                                                                                                        'onglets' => $onglets,
                                                                                                        'detail_key' => $detail_key,
                                                                                                        'detail_action_mode' => $detail_action_mode,
+                                                                                                       'is_detail_edit' => $is_detail_edit,
                                                                                                        'form' => $form_detail,
                                                                                                        'acheteurs' => $acheteurs,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
@@ -44,10 +45,10 @@
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
                                                                 <?php if ($onglets->hasPreviousCepage()): ?>
-                                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
+                                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="<?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                                                                 <?php endif; ?>
                                                                 <?php if ($onglets->hasNextCepage()): ?>
-                                                                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
+                                                                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="<?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
                                                                 <?php endif; ?>
 							</ul>
 						
@@ -61,19 +62,12 @@
 					</div>
 					<!-- fin #gestion_recolte -->
 
-  <?php include_partial('boutonAppellation', array('onglets' => $onglets)) ?>
+  <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'inactif' => $is_detail_edit)) ?>
 
 				</div>
 				<!-- fin #application_dr -->
-				
-				<ul id="btn_etape" class="btn_prev_suiv clearfix">
-				<!-- InstanceBeginEditable name="btn_etape" -->
-					<li class="prec"><a href="<?php echo url_for('@exploitation_autres') ?>"><img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" /></a></li>
-					<li class="suiv"><a href="<?php echo url_for('@validation') ?>"><img src="/images/boutons/btn_passer_etape_suiv.png" alt="Passer à l'étape suivante" /></a></li>
-				<!-- InstanceEndEditable -->
-				</ul>
-				
 
+                                <?php include_partial('boutons', array('inactif' => $is_detail_edit)) ?>
 				
 			<!--</form>-->
 			<!-- fin #principal -->

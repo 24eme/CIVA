@@ -62,7 +62,9 @@
     </div>
 
     <div class="col_btn">
-        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" class="modifier_tmp"><img src="/images/boutons/btn_modifier_col_cepage.png" alt="Modifier" /></a>
-        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')"><img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" /></a>
+        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" class="modifier_tmp <?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_modifier_col_cepage.png" alt="Modifier" /></a>
+        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp <?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>" <?php if(!$is_detail_edit): ?> onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')" <?php endif; ?>>
+            <img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" />
+        </a>
     </div>
 </div>

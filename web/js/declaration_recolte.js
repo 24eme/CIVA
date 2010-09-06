@@ -70,6 +70,10 @@ $(document).ready( function()
         yearRange: '1900:'+annee
     });
 
+    $(document).find('a.btn_inactif').click(function() {
+       return false;
+    });
+
 });
 
 
@@ -509,7 +513,7 @@ var etatChampsTableAcht = function(type)
  ******************************************/
 var initGestionRecolte = function(type)
 {
-    var col_intitules = $('#colonne_intitules');
+    /*var col_intitules = $('#colonne_intitules');
     var col_scroller = $('#col_scroller');
     var col_scroller_cont = col_scroller.find('#col_scroller_cont');
     var col_recolte = col_scroller.find('.col_recolte');
@@ -517,22 +521,23 @@ var initGestionRecolte = function(type)
     var col_recolte_totale = $('#col_recolte_totale');
 	
     var btn_ajout_col = col_scroller.find('a#ajout_col');
-	
-    etatBtnAjoutCol();
+    */
+
+    //etatBtnAjoutCol();
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
 	
-    btn_ajout_col.click(function()
+    /*btn_ajout_col.click(function()
     {
         if(!$(this).hasClass('inactif')) ajouterColRecolte($(this), col_scroller_cont);
         return false;
-    });
+    });*/
 	
-    col_recolte.each(function()
+    /*col_recolte.each(function()
     {
         var col = $(this);
         initColRecolte(col);
-    });
+    });*/
 	
     initDRPopups();
 };
@@ -576,19 +581,19 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 /**
  * Etat du bouton d'ajout de colonne
  ******************************************/
-var etatBtnAjoutCol = function()
+/*var etatBtnAjoutCol = function()
 {
     var col_recolte = $('#col_scroller .col_recolte');
     var btn = $('a#ajout_col');
 	
     if(col_recolte.filter('.col_active').size() > 0) btn.addClass('inactif');
     else btn.removeClass('inactif');
-};
+};*/
 
 /**
  * Initialise les fonctions des colonnes
  ******************************************/
-var initColRecolte = function(col)
+/*var initColRecolte = function(col)
 {
     var contenu = col.find('.col_cont');
     var champs = contenu.find('input:text, select');
@@ -627,12 +632,12 @@ var initColRecolte = function(col)
         etatBtnAjoutCol();
         return false;
     });
-};
+};*/
 
 /**
  * Ajoute une colonne pour la déclaration
  ******************************************/
-var ajouterColRecolte = function(btn, cont)
+/*var ajouterColRecolte = function(btn, cont)
 {	
     $.post(url_ajax,
     {
@@ -647,7 +652,7 @@ var ajouterColRecolte = function(btn, cont)
         etatBtnAjoutCol();
         largeurColScrollerCont();
     });
-};
+};*/
 
 /**
  * Largeur colonne scroll conteneur
