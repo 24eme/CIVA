@@ -119,7 +119,7 @@ class recolteActions extends EtapesActions {
                 if ($this->form_ajout_appellation->needLieu()) {
                     return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
-                    return $this->renderText(json_encode(array('action' => 'redirect',
+		  return $this->renderText(json_encode(array('action' => 'redirect',
                                                                'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
                 }
             }
@@ -244,7 +244,7 @@ class recolteActions extends EtapesActions {
     }
 
      protected function getFormDetailsOptions() {
-         return array('superficie_required' => (!($this->onglets->getCurrentCepage()->getConfig()->exist('superficie_optionnelle'))),
+       return array('superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
                       'acheteurs_negoce' => $this->acheteurs->negoces,
                       'acheteurs_cooperative' => $this->acheteurs->cooperatives,
                       'acheteurs_mout' => $this->acheteurs->mouts,

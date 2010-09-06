@@ -77,6 +77,14 @@ class SubConfiguration extends BaseSubConfiguration {
     return true;
   }
 
+  public function isSuperficieRequired() {
+    if ($this->exist('superficie_optionnelle'))
+      return (! $this->get('superficie_optionnelle'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    return true;
+  }
+
   public function hasOnlyOneDetail() {
     if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
       return true;
