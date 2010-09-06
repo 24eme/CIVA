@@ -822,13 +822,17 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
             function(data)
             {
                 var html_header_item = $('#acheteurs_header_empty').clone();
-                html_header_item.find('li').html(nom.val());
+                var css_class_acheteur = 'acheteur_' + type_name_field + '_' + cvi.val();
+                html_header_item.find('li').
+                html(nom.val()).
+                addClass(css_class_acheteur);
                 $('#colonne_intitules').
                 find('.'+type_cssclass+' ul').
                 append(html_header_item.html());
                 $('.col_recolte.col_validee, .col_recolte.col_sepage_total, .col_recolte.col_total').
                 find('.'+type_cssclass+' ul').
-                append($('#acheteurs_item_empty').html());
+                append($('#acheteurs_item_empty').html()).
+                find('input').addClass(css_class_acheteur);
                 $('.col_recolte.col_active').
                 find('.'+type_cssclass+' ul').
                 append(data);

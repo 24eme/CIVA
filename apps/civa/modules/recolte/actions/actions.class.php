@@ -165,7 +165,7 @@ class recolteActions extends EtapesActions {
             $cvi = $request->getParameter('cvi');
             $form_name = $request->getParameter('form_name');
             $form = RecolteForm::getNewAcheteurItemAjax($form_name, $cvi);
-            return $this->renderPartial('formAcheteursItem', array('form' => $form));
+            return $this->renderPartial('formAcheteursItem', array('form' => $form, 'type' => $form_name));
         } else {
             $this->forward404();
         }

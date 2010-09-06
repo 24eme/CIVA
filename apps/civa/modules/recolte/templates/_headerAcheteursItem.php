@@ -1,1 +1,1 @@
- <li><?php echo $name ?></li>
+ <li class="<?php echo $css_class ?>"><?php echo $name ?></li>
