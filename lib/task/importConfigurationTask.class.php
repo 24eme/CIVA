@@ -145,7 +145,7 @@ EOF;
 
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
-	$json->recolte->appellation_CREMANT->douane->qualite = 'M0';
+	$json->recolte->appellation_CREMANT->douane->qualite = 'M';
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Crémant Rosé";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";

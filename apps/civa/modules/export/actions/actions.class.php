@@ -66,7 +66,7 @@ class exportActions extends sfActions
 	    $col['L3'] = 'B';
 	    $col['mentionVal'] = $detail->denomination;
 	    $col['L4'] = $detail->superficie;
-	    $total['L4'] = $detail->superficie;
+	    $total['L4'] += $detail->superficie;
 	    if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte)
 	      $col['motifSurfZero'] = $detail->motif_non_recolte;
 	    $col['exploitant'] = array();
@@ -127,9 +127,10 @@ class exportActions extends sfActions
 	foreach ($acheteurs as $cvi => $v) {
 	  $total['exploitant'][] = $v;
 	}
-	if ($colass)
+	if ($colass) {
 	  $total['colonneAss'] = $colass;
-	else if ($lieu->getAppellation() != 'KLEVENER')
+	}
+	if ($lieu->getAppellation() != 'KLEVENER')
 	  $xml[] = $total;
       }
     }
