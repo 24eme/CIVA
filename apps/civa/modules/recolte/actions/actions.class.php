@@ -117,7 +117,10 @@ class recolteActions extends EtapesActions {
             if ($this->form_ajout_appellation->isValid()) {
                 $this->form_ajout_appellation->save();
                 if ($this->form_ajout_appellation->needLieu()) {
-                    return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
+                    $request->setParameter('force_appellation', $this->form_ajout_appellation->getValue('appellation'));
+                    $request->setMethod(sfWebRequest::GET);
+                    $this->forward('recolte', 'ajoutLieuAjax');
+                    //return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
 		  return $this->renderText(json_encode(array('action' => 'redirect',
                                                                'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
