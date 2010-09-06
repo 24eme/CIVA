@@ -705,8 +705,7 @@ var initDRPopups = function()
     initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves);
     initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs);
     initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
-
-       
+    
 };
 
 var initPopupAjout = function(btn, popup, config, source_autocompletion)
@@ -829,8 +828,8 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
 /**
  * Initialise une popup
  ******************************************/
-var initPopup = function(btn, popup, fn_open_if)
-{
+var openPopup = function(popup, fn_open_if) {
+    
     popup.dialog
     ({
         autoOpen: false,
@@ -840,11 +839,17 @@ var initPopup = function(btn, popup, fn_open_if)
         modal: true
     });
 
+
+    if (!fn_open_if || fn_open_if()) {
+	popup.dialog('open');
+	return false;
+    }
+};
+
+var initPopup = function(btn, popup, fn_open_if)
+{
     btn.live('click', function()
     {
-        if (!fn_open_if || fn_open_if()) {
-            popup.dialog('open');
-            return false;
-        }
+	openPopup(popup, fn_open_if);
     });
 };

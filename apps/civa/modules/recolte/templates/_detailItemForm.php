@@ -54,7 +54,22 @@
 
     <div class="col_btn">
         <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
-        <a href="#" class="valider_tmp"><img src="/images/boutons/btn_valider_col_cepage.png" alt="Valider" onclick="document.getElementById('form_detail').submit(); return false;" /></a>
+<script><!--
+function valider_can_submit() 
+{
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
+  if (!document.getElementById('recolte_superficie').value) {
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_err_no_superficie', 'quote' => "'")); ?></p>');
+    openPopup($('#popup_msg_erreur'), 0);
+    return false;
+  }
+<?php endif; ?>
+  document.getElementById('form_detail').submit();
+}
+--></script>
+        <a href="#" class="valider_tmp"><img src="/images/boutons/btn_valider_col_cepage.png" alt="Valider" onclick="valider_can_submit(); return false;" /></a>
     </div>
     </form>
+</div>
+<div id="popup_msg_erreur" title="Erreur !">
 </div>
