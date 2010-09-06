@@ -19,8 +19,26 @@
 
 --%>
 
+<%
+
+File file = new File(request.getRealPath("base_url.conf"));
+String host = "";
+
+        InputStreamReader streamReader = new InputStreamReader(new FileInputStream(file));
+        BufferedReader br = new BufferedReader(streamReader);
+
+        String line = new String();
+        while (br.ready()) {
+           line = br.readLine();
+            host = line;
+        }
+
+%>
+
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:directive.include file="includes/top.jsp" />
+
 
 <form:form method="post" id="fm1" cssClass="fm-v clearfix" commandName="${commandName}" htmlEscape="true">
 
@@ -70,7 +88,7 @@
                         </div-->
 
                         <div class="ligne_form link">
-                            <a href="http://cdevichet.civa.intra.actualys.fr/compte/motdepasseOublie">Mot de passe oublié</a>
+                            <a href="<% out.println(host); %>compte/motdepasseOublie">Mot de passe oublié</a>
                         </div>
 
                         <div class="ligne_form row btn-row ligne_btn">
@@ -85,7 +103,7 @@
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
                         <p class="intro">S'il s'agit de votre premiere connexion, munissez votre numéro CVI et du mot de passe recu par courrier.</p>
-                        <p id="creer_compte" ><a href="http://cdevichet.civa.intra.actualys.fr/compte">Créer votre compte</a></p>
+                        <p id="creer_compte" ><a href="<% out.println(host); %>compte">Créer votre compte</a></p>
                     </div>
                 </div>
               </div>
