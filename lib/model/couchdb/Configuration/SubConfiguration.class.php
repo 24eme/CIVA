@@ -92,4 +92,10 @@ class SubConfiguration extends BaseSubConfiguration {
       return true;
     return false;
   }
+  public function hasMinQuantite() 
+  {
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return true;
+    return false;
+  }
 }

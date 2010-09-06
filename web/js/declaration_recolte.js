@@ -540,6 +540,18 @@ var initGestionRecolte = function(type)
     });*/
 	
     initDRPopups();
+    //Calcule auto du volume
+    $('input.volume').change(volumeOnChange);
+};
+
+var volumeOnChange = function() {
+    $('#detail_vol_total_recolte').val(0);
+    $('input.volume').each(function() {
+	    var total = $('#detail_vol_total_recolte').val();
+	    var volume = $(this).val();
+	    if (volume)
+		$('#detail_vol_total_recolte').val(parseFloat(total) + parseFloat(volume));
+	})
 };
 
 /**
@@ -822,6 +834,8 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
                 append(data);
                 popup.dialog('close');
                 hauteurEgaleColRecolte();
+		$('input.volume').change(volumeOnChange);
+
             });
 
             return false;

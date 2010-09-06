@@ -40,7 +40,7 @@
         <?php endif; ?>
 
         <p class="vol_place"><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalCaveParticuliere() ?>" /></p>
-        <p class="vol_total_recolte"><input type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolume() ?>" /></p>
+        <p class="vol_total_recolte"><input id="appellation_total_volume" type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolume() ?>" /></p>
         <ul class="vol_revendique_dplc">
             <li class="rendement">Rdt : <strong><?php echo $lieu->getRendementRecoltant() ?> hl/ha</strong></li>
             <?php if ($lieu->hasRendement()): ?>

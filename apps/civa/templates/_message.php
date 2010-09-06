@@ -1,3 +1,3 @@
 <?php
-echo htmlentities(sfCouchdbManager::getClient('Messages')->getMessage($id), ENT_QUOTES);
+echo preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage($id));
 

@@ -51,7 +51,8 @@ EOF;
 	$json->type = 'Messages';
 
 	$json->msg_compte_index_intro = "Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code de création de compte&nbsp;:";
-	$json->err_dr_popup_err_no_superficie = "Vous n'avez pas saisi de superficie.";
+	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie.";
+	$json->err_dr_popup_min_quantite = "Vous n'avez pas respecté le volume minimal";
 
 	$docs[] = $json;
 

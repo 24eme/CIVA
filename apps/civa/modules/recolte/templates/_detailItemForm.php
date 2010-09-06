@@ -41,9 +41,9 @@
         <?php endif; ?>
 
         <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-            <?php echo $form['cave_particuliere']->render(array('class' => 'num')) ?>
+            <?php echo $form['cave_particuliere']->render(array('class' => 'num volume')) ?>
         </p>
-        <p class="vol_total_recolte"><input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
+        <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
             <li><input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
@@ -59,7 +59,16 @@ function valider_can_submit()
 {
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
   if (!document.getElementById('recolte_superficie').value) {
-    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_err_no_superficie', 'quote' => "'")); ?></p>');
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_no_superficie')); ?></p>');
+    openPopup($('#popup_msg_erreur'), 0);
+    return false;
+  }
+<?php endif; ?>
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+    var ratio = parseFloat($('#detail_vol_total_recolte').val()) / parseFloat($('#appellation_total_volume').val());
+    var min = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
+    if (ratio < min) {
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p>');
     openPopup($('#popup_msg_erreur'), 0);
     return false;
   }
