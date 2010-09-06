@@ -71,7 +71,8 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     public function getTotalCaveParticuliere() {
       $sum = 0;
       foreach ($this->filter('^cepage') as $key => $cepage) {
-	$sum += $cepage->getTotalCaveParticuliere();
+	if ($key != 'cepage_RB')
+	  $sum += $cepage->getTotalCaveParticuliere();
       }
       return $sum;
     }
