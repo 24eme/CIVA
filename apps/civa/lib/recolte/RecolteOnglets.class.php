@@ -26,6 +26,10 @@ class RecolteOnglets {
         return $this->_declaration->get('recolte')->filter('^appellation');
     }
 
+    public function getItemsAppellationConfig() {
+        return $this->_declaration->get('recolte')->getConfig()->filter('^appellation');
+    }
+
     public function getLieu($appellation = null, $lieu = null) {
        if (is_null($appellation)) {
             $appellation = $this->getCurrentKeyAppellation();
@@ -46,7 +50,7 @@ class RecolteOnglets {
         $appellation = $this->convertValueToKey($appellation, $this->_prefix_key_appellation);
         return $this->_declaration->get('recolte')->get($appellation)->filter('^lieu');
     }
-
+    
     public function getItemsCepage($appellation = null, $lieu = null) {
         return $this->getLieu($appellation, $lieu)->getConfig()->filter('^cepage');
     }
@@ -108,7 +112,7 @@ class RecolteOnglets {
     }
 
     public function getPreviousAppellation() {
-        return $this->previous('getItemsAppellation', 'getCurrentKeyAppellation');
+        return $this->previous('getItemsAppellationConfig', 'getItemsAppellation', 'getCurrentKeyAppellation');
     }
 
     public function previousAppellation() {
@@ -120,7 +124,7 @@ class RecolteOnglets {
     }
 
     public function getNextAppellation() {
-        return $this->next('getItemsAppellation', 'getCurrentKeyAppellation');
+        return $this->next('getItemsAppellationConfig', 'getItemsAppellation', 'getCurrentKeyAppellation');
     }
 
     public function nextAppellation() {
@@ -145,7 +149,7 @@ class RecolteOnglets {
     }
 
     public function getPreviousLieu() {
-        return $this->previous('getItemsLieu', 'getCurrentKeyLieu');
+        return $this->previous('getItemsLieu', 'getItemsLieu', 'getCurrentKeyLieu');
     }
 
     public function previousLieu() {
@@ -157,7 +161,7 @@ class RecolteOnglets {
     }
 
     public function getNextLieu() {
-        return $this->next('getItemsLieu', 'getCurrentKeyLieu');
+        return $this->next('getItemsLieu', 'getItemsLieu', 'getCurrentKeyLieu');
     }
 
     public function nextLieu() {
@@ -186,7 +190,7 @@ class RecolteOnglets {
     }
 
     public function getPreviousCepage() {
-        return $this->previous('getItemsCepage', 'getCurrentKeyCepage');
+        return $this->previous('getItemsCepage', 'getItemsCepage', 'getCurrentKeyCepage');
     }
 
     public function hasPreviousCepage() {
@@ -202,7 +206,7 @@ class RecolteOnglets {
     }
 
     public function getNextCepage() {
-        return $this->next('getItemsCepage', 'getCurrentKeyCepage');
+        return $this->next('getItemsCepage', 'getItemsCepage', 'getCurrentKeyCepage');
     }
 
     public function hasNextCepage() {
@@ -217,24 +221,28 @@ class RecolteOnglets {
         return $key;
     }
 
-    protected function previous($method_items, $method_get_key) {
+    protected function previous($method_items_config, $method_items, $method_get_key) {
         $prev_key = false;
-        foreach($this->$method_items() as $key => $item) {
-            if ($key == $this->$method_get_key()) {
-                return $prev_key;
+        foreach($this->$method_items_config() as $key => $item) {
+            if ($method_items_config == $method_items || $this->$method_items()->exist($key)) {
+                if ($key == $this->$method_get_key()) {
+                    return $prev_key;
+                }
+                $prev_key = $key;
             }
-            $prev_key = $key;
         }
         return false;
     }
 
-    protected function next($method_items, $method_get_key) {
+    protected function next($method_items_config, $method_items, $method_get_key) {
         $next = false;
-        foreach($this->$method_items() as $key => $item) {
-            if ($next) {
-                return $key;
+        foreach($this->$method_items_config() as $key => $item) {
+            if ($method_items_config == $method_items || $this->$method_items()->exist($key)) {
+                if ($next) {
+                    return $key;
+                }
+                $next = ($key == $this->$method_get_key());
             }
-            $next = ($key == $this->$method_get_key());
         }
         return false;
     }
