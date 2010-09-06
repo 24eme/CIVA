@@ -45,6 +45,30 @@ class SubConfiguration extends BaseSubConfiguration {
       }
   }
 
+  public function hasDenomination() {
+    if ($this->exist('no_denomination'))
+      return (! $this->get('no_denomination'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    return true;
+  }
+
+  public function hasSuperficie() {
+    if ($this->exist('no_superficie'))
+      return (! $this->get('no_superficie'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    return true;
+  }
+
+  public function hasVtsgn() {
+    if ($this->exist('no_vtsgn'))
+      return (! $this->get('no_vtsgn'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    return true;
+  }
+
   public function hasOnlyOneDetail() {
     if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
       return true;

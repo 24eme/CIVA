@@ -1,7 +1,15 @@
 <div id="colonne_intitules">
-    <p class="denomination">Dénom. complémentaire</p>
+    <p class="denomination">
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
+   Dénom. complémentaire
+<?php endif; ?>&nbsp;
+   </p>
 
-    <p class="mention">Mention VT/SGN</p>
+    <p class="mention">
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
+   Mention VT/SGN
+<?php endif; ?>&nbsp;
+   </p>
 
     <p class="superficie">Superficie</p>
 

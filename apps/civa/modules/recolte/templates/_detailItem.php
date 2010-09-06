@@ -3,19 +3,25 @@
 
     <div class="col_cont">
         <p class="denomination">
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
             <input type="text" disabled="disabled" value="<?php echo $detail->denomination ?>" />
+<?php endif;?>
         </p>
 
         <p class="mention">
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
             <select disabled="disabled">
                 <option <?php if(!$detail->vtsgn): ?>selected="selected"<?php endif; ?>><option>
                 <option <?php if($detail->vtsgn == 'VT'): ?>selected="selected"<?php endif; ?>>VT</option>
                 <option <?php if($detail->vtsgn == 'SGN'): ?>selected="selected"<?php endif; ?>>SGN</option>
             </select>
+<?php endif; ?>
         </p>
 
         <p class="superficie">
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
             <input type="text" class="num" disabled="disabled" value="<?php echo $detail->superficie ?>" />
+<?php endif; ?>
         </p>
 
         <div class="vente_raisins">
