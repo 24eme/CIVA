@@ -17,7 +17,7 @@ class declarationActions extends EtapesActions {
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->setCurrentEtape('mon_espace_civa');
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
-	krsort($this->campagnes);
+        krsort($this->campagnes);
         $this->declaration = $this->getUser()->getDeclaration();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->processChooseDeclaration($request);
@@ -42,14 +42,14 @@ class declarationActions extends EtapesActions {
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
-		if (!$old_doc) {
-		  throw new Exception("Bug: ".$dr_data['liste_precedentes_declarations']." not found :()");
-		}
+                if (!$old_doc) {
+                    throw new Exception("Bug: ".$dr_data['liste_precedentes_declarations']." not found :()");
+                }
                 $doc = clone $old_doc;
                 $doc->_id = 'DR-'.$tiers->cvi.'-'.$this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
-		$doc->removeVolumes();
-		$doc->update();
+                $doc->removeVolumes();
+                $doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
@@ -58,13 +58,13 @@ class declarationActions extends EtapesActions {
 
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeExploitationAutres(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_autres');
 
         $this->form = new ExploitationAutresForm($this->getUser()->getDeclaration());
-        
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
@@ -75,7 +75,7 @@ class declarationActions extends EtapesActions {
                 } else {
                     $this->redirectByBoutonsEtapes();
                 }
-                
+
             }
         }
     }
@@ -85,44 +85,83 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
-      $this->setCurrentEtape('validation');
-      $tiers = $this->getUser()->getTiers();
-      $annee = $this->getRequestParameter('annee', null);
-      $key = 'DR-'.$tiers->cvi.'-'.$annee;
-      $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-      $this->forward404Unless($dr);
-      $this->appellations = array();
-      $this->superficie = array();
-      $this->volume = array();
-      $this->revendique = array();
-      $this->dplc = array();
-      $this->libelle = array();
-      $this->volume_negoces = array();
-      $this->volume_cooperatives = array();
-      $cvi = array();
-      $conf = ConfigurationClient::getConfiguration();
-      foreach ($dr->recolte as $appellation) {
-	$this->appellations[] = $appellation->getAppellation();
-	$this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
-	$this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
-	$this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-	$this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
-	$this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
-      }
+        $this->setCurrentEtape('validation');
+        $tiers = $this->getUser()->getTiers();
+        $annee = $this->getRequestParameter('annee', null);
+        $key = 'DR-'.$tiers->cvi.'-'.$annee;
+        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $this->forward404Unless($dr);
+        $this->appellations = array();
+        $this->superficie = array();
+        $this->volume = array();
+        $this->revendique = array();
+        $this->dplc = array();
+        $this->libelle = array();
+        $this->volume_negoces = array();
+        $this->volume_cooperatives = array();
+        $cvi = array();
+        $conf = ConfigurationClient::getConfiguration();
+        foreach ($dr->recolte as $appellation) {
+            $this->appellations[] = $appellation->getAppellation();
+            $this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
+            $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
+            $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+            $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
+            $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+        }
 
-      $this->total_superficie = array_sum(array_values($this->superficie));
-      $this->total_volume = array_sum(array_values($this->volume));
-      $this->total_dplc = array_sum(array_values($this->dplc));
-      $this->total_revendique = array_sum(array_values($this->revendique));
+        $this->total_superficie = array_sum(array_values($this->superficie));
+        $this->total_volume = array_sum(array_values($this->volume));
+        $this->total_dplc = array_sum(array_values($this->dplc));
+        $this->total_revendique = array_sum(array_values($this->revendique));
 
-      $this->lies = $dr->lies;
-      $this->jeunes_vignes = $dr->jeunes_vignes;
+        $this->lies = $dr->lies;
+        $this->jeunes_vignes = $dr->jeunes_vignes;
 
-      $this->annee = $annee;
+        $this->annee = $annee;
 
-      if ($request->isMethod(sfWebRequest::POST)) {
+        $this->validLog = array();
+
+        foreach ($dr->recolte->filter('appellation_') as $appellation) {
+            $onglet = new RecolteOnglets($dr);
+            foreach ($appellation->filter('lieu') as $lieu) {
+                //check le lieu
+                if ($lieu->isNonSaisie()){
+                    //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
+                    $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' => lieu non saisi';
+                }else {
+                    //check les cepages
+                    foreach ($lieu->filter('cepage') as $cepage) {
+                        if($cepage->isNonSaisie()){
+                            //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                            $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => cépage non saisi';
+                        }else {
+                            foreach($cepage->filter('detail') as $details) {
+                                foreach ($details as $detail) {
+                                    if($detail->isNonSaisie()) {
+                                        $detail_nom = '';
+                                        if($detail->denomination!= '' || $detail->vtsgn!= '') {
+                                            $detail_nom .= ' - ';
+                                        }
+                                        if($detail->denomination!= '') $detail_nom .= $detail->denomination.' ';
+                                        if($detail->vtsgn!= '')        $detail_nom .= $detail->vtsgn.' ';
+                                        //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                                        $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => détails non saisis';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                //check les details
+            }
+        }
+
+        if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
-      }
+        }
     }
 
     /**

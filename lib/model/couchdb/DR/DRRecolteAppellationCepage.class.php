@@ -115,4 +115,12 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 	$detail->removeVolumes();
       }
     }
+
+    public function isNonSaisie() {
+       foreach($this->detail as $detail) {
+            if(!$detail->isNonSaisie())
+               return false;
+       }
+       return true;
+    }
 }

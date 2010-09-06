@@ -12,6 +12,17 @@
     <div id="application_dr" class="clearfix">
         <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
 
+        <div class="message">
+            <?php foreach($validLog as $logs) { ?>
+            <ul class="messages_log">
+                <?php foreach($logs as $log) { ?>
+                <li><?php echo $log; ?></li>
+                <?php } ?>
+            </ul>
+            <br />
+            <?php } ?>
+
+        </div>
         <!-- #acheteurs_caves -->
         <div id="recolte_totale">
 

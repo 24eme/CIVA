@@ -215,4 +215,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     public function hasRendement() {
         return ($this->getRendement() !== -1);
     }
+
+    public function isNonSaisie() {
+        foreach($this->filter('cepage_') as $key => $cepage) {
+            if (!$cepage->isNonSaisie())
+                    return false;
+        }
+        return true;
+    }
 }

@@ -247,7 +247,7 @@ table.autres_infos{
 }
 
 td.premiere_colonne{
-    width: 213px;
+    width: 202px;
 }
 table.table_donnees thead th 
 {
@@ -350,7 +350,7 @@ ul.error_list
 ul.error_list li { margin: 3px 0; }
 
 /* Messages logs */
-ul#messages_log
+.message
 {
     background: #fffcef;
     border: 1px solid #f90;
@@ -358,10 +358,11 @@ ul#messages_log
     padding: 10px 15px;
 }
 
-ul#messages_log li
+
+.message ul.messages_log li
 {
     background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
-    margin: 8px 0;
+    margin: 0;
     padding: 0 0 0 15px;
 }
 
