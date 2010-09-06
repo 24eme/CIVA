@@ -70,7 +70,7 @@ class exportActions extends sfActions
 	    if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte)
 	      $col['motifSurfZero'] = $detail->motif_non_recolte;
 	    $col['exploitant'] = array();
-	    $col['exploitant']['L5'] = $detail->volume + $detail->volume * $dr->getRatioLies(); //Volume total avec lies
+	    $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
 	    $total['exploitant']['L5'] += $col['exploitant']['L5'];
 	    $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
 	    $total['exploitant']['L9'] += $detail->cave_particuliere; //Volume revendique sur place
@@ -91,7 +91,6 @@ class exportActions extends sfActions
 		$col['exploitant']['L10'] += $coop->quantite_vendue;
 	      }
 	    $col['exploitant']['L10'] += $detail->cave_particuliere;
-	    $col['exploitant']['L10'] += $col['exploitant']['L10'] * $dr->getRatioLies();
 	    $total['exploitant']['L10'] += $col['exploitant']['L10'];
 
 	    if ($detail->exist('negoces'))
@@ -123,6 +122,10 @@ class exportActions extends sfActions
 	      $xml[] = $col;
 	  }
 	}
+
+	$total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
+	$total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
+
 	//Ajout des acheteurs
 	foreach ($acheteurs as $cvi => $v) {
 	  $total['exploitant'][] = $v;
