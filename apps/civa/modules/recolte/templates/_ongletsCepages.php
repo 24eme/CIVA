@@ -2,9 +2,7 @@
     <?php foreach($onglets->getItemsCepage() as $key => $cepage): ?>
         <li <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>class="ui-tabs-selected"<?php endif; ?>>
             <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, $key)->getRawValue()) ?>">
-            <?php echo $cepage->libelle ?>
-            <?php if ($onglets->getCurrentLieu()->exist($key) && $onglets->getCurrentLieu()->get($key)->detail->count() > 0): ?>
-                <span>(<?php echo $onglets->getCurrentLieu()->get($key)->detail->count() ?>)</span>
+            <?php echo $cepage->libelle ?><?php if ($onglets->getCurrentLieu()->exist($key) && $onglets->getCurrentLieu()->get($key)->detail->count() > 0): ?>&nbsp;<span>(<?php echo $onglets->getCurrentLieu()->get($key)->detail->count() ?>)</span>
             <?php endif; ?>
             </a>
         </li>
