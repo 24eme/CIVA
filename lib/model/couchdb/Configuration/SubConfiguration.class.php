@@ -44,4 +44,12 @@ class SubConfiguration extends BaseSubConfiguration {
           return false;
       }
   }
+
+  public function hasOnlyOneDetail() {
+    if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
+      return true;
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return true;
+    return false;
+  }
 }

@@ -12,6 +12,8 @@
                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
         <?php endif; ?>
 <?php endforeach; ?>
+<?php if (! $onglets->getCurrentCepage()->getConfig()->hasOnlyOneDetail() || !count($details) ) :?>
         <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>" id="ajout_col"><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
+<?php endif; ?>
     </div>
 </div>
