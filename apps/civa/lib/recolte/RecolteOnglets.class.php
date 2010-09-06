@@ -247,8 +247,10 @@ class RecolteOnglets {
         return $this->getItemsAppellation()->getFirstKey();
     }
 
-    protected function getFirstKeyLieu($appellation) {
-        return $this->getItemsLieu($appellation)->getFirstKey();
+    protected function getFirstKeyLieu($appellation = null) {
+      if (!$appellation)
+	$appellation = $this->getFirstKeyAppellation();
+      return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
     protected function getFirstKeyCepage($appellation, $lieu) {
