@@ -104,6 +104,13 @@ EOF;
 
 	        $detail = new stdClass();
                 $detail->denomination = $csv[6];
+		if ($campagne == 2007 && $cepage == 'PN' && $csv[5] == 'RG') {
+		  if (!$detail->denomination)
+		    $detail->denomination = 'Rouge';
+		  else if (!preg_match('/rouge/i', $detail->denomination)) {
+		    $detail->denomination = 'Rouge - '.$csv[6];
+		  }
+		}
 		$detail->appellation = $this->convertappellation($appellation, $cepage);
                 $detail->vtsgn = $this->toVtSgn($csv[9]);
                 $detail->code_lieu = $csv[10];
