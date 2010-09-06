@@ -79,7 +79,8 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     private function getSumCepageFields($field) {
       $sum = 0;
       foreach ($this->filter('^cepage') as $key => $cepage) {
-	$sum += $cepage->get($field);
+	if ($key != 'cepage_RB')
+	  $sum += $cepage->get($field);
       }
       return $sum;
     }
@@ -102,14 +103,16 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     public function getTotalAcheteursByCvi($field) {
         if (!isset($this->_total_acheteurs_by_cvi[$field])) {
             $this->_total_acheteurs_by_cvi[$field] = array();
-            foreach ($this->filter('^cepage') as $object) {
+            foreach ($this->filter('^cepage') as $key => $object) {
+	      if ($key != 'cepage_RB') {
                 $acheteurs = $object->getTotalAcheteursByCvi($field);
                 foreach ($acheteurs as $cvi => $quantite_vendue) {
-                    if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
-                        $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
-                    }
-                    $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+		  if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
+		    $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
+		  }
+		  $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
                 }
+	      }
             }
         }
         return $this->_total_acheteurs_by_cvi[$field];
