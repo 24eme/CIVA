@@ -6,7 +6,11 @@
     <h1 id="logo"><a href="<?php echo url_for('@mon_espace_civa'); ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
     <div id="titre_rubrique">
-        <h1>Déclaration de récolte de vins d'Alsace</h1>
+        <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
+
+        <h1>
+            <?php echo html_entity_decode( substr($title,strrpos($title,'-')+1,strlen($title))); ?>
+        </h1>
 <?php if ($tiers = $sf_user->getTiers()) : ?>
         <p class="utilisateur"><?php echo link_to($tiers->getIntitule().' '.$tiers->getNom(), '@mon_espace_civa'); ?></p>
 <?php endif; ?>

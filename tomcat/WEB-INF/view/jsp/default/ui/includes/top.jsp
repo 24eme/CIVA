@@ -13,7 +13,7 @@
 <spring:theme code="mobile.custom.css.file" var="mobileCss" text="" />
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
-	    <title>Civa - Connexion</title>
+	    <title>Portail pro vins d'alsace</title>
         <c:choose>
            <c:when test="${not empty requestScope['isMobile'] and not empty mobileCss}">
                 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
@@ -33,15 +33,12 @@
 	<body id="cas" onload="init();" class="fl-theme-iphone">
     <div class="flc-screenNavigator-view-container">
         <div class="fl-screenNavigator-view">
-            <!--div id="header" class="flc-screenNavigator-navbar fl-navbar fl-table">
-                <h1 id="app-name" class="fl-table-cell">sdfsdf</h1>
-            </div-->
             <ul class="clearfix" id="liens_evitement"></ul>
             <div id="header" class="clearfix pngfix">
                 <h1 id="logo"><a href="" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="images/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
                 <div id="titre_rubrique">
-                    <h1>Déclaration de récolte de vins d'Alsace</h1>
+                    <h1>Portail pro vins d'alsace</h1>
                 </div>
             </div>
 

@@ -1,0 +1,18 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/13-View
+
+monEspaceCivaSuccess:
+  metas:
+    title:        Mon espace civa - Portail pro vins d'alsace
+
+exploitationAutresSuccess:
+  metas:
+    title:        Autres - Déclaration de récolte de vins d'alsace
+    
+validationSuccess:
+  metas:
+    title:        Validation - Déclaration de récolte de vins d'alsace
+
+confirmationSuccess:
+  metas:
+    title:        Confirmation - Déclaration de récolte de vins d'alsace

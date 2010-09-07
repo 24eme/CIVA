@@ -14,7 +14,7 @@ class declarationActions extends EtapesActions {
      *
      * @param sfWebRequest $request
      */
-    public function executeMonEspaceCiva(sfWebRequest $request) {
+    public function executeMonEspaceCiva(sfWebRequest $request) {      
         $this->setCurrentEtape('mon_espace_civa');
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
@@ -25,6 +25,7 @@ class declarationActions extends EtapesActions {
     }
 
     protected function processChooseDeclaration(sfWebRequest $request) {
+
         $tiers = $this->getUser()->getTiers();
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {

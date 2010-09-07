@@ -9,7 +9,7 @@ default:
     expires: 0
 
   metas:
-    #title:        symfony project
+    title:        " Portail pro vins d'alsace"
     #description:  symfony project
     #keywords:     symfony, project
     #language:     en
