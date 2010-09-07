@@ -13,15 +13,15 @@ all:
         url: "@exploitation_acheteurs"
       exploitation_lieu:
         url: "@exploitation_lieu"
-      exploitation_autres:
-        url: "@exploitation_autres"
       recolte:
         url: "@recolte"
+      exploitation_autres:
+        url: "@exploitation_autres"
       validation:
         url: "@validation"
       confirmation:
         url: "@confirmation"
-    orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_lieu, exploitation_autres, recolte, validation, confirmation]
+    orders: [mon_espace_civa, exploitation_administratif, exploitation_acheteurs, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
   css_class_field_error: "erreur"
 
 
