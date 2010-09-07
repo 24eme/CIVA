@@ -57,6 +57,12 @@ $(document).ready( function()
             initGestionRecolte();
         });
     }
+
+    if ($('#validation_dr').length > 0) {
+        $('#validation_dr').ready( function() {
+            initValidationDr();
+        });
+    }
 	
     var annee = new Date().getFullYear();
 	
@@ -74,7 +80,7 @@ $(document).ready( function()
     });
 
     $(document).find('a.btn_inactif').click(function() {
-       return false;
+        return false;
     });
 
 });
@@ -300,10 +306,10 @@ var initTablesAcheteurs = function()
     });
 
     initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
-                    function() {
-                        return (tables_acheteurs.find('input[type=checkbox]:checked').length < 1);
-                    }
-    );
+        function() {
+            return (tables_acheteurs.find('input[type=checkbox]:checked').length < 1);
+        }
+        );
 };
 
 
@@ -507,13 +513,38 @@ var etatChampsTableAcht = function(type)
 };
 
 
-
+/**
+ * Initialise les fonctions de la validation
+ * de récolte
+ ******************************************/
+var initValidationDr = function(type)
+{
+    initValidDRPopup();
+}
 
 
 /**
- * Initialise les fonctions de la gestion
- * de récolte
+ * Initalise la popup previsualisation de DR
  ******************************************/
+var initValidDRPopup = function()
+{
+    $('#previsualiser').click(function() {
+        openPopup($("#popup_loader"));
+         $.ajax({
+        url: ajax_url_to_print,
+        success: function(data) {
+            document.location=data;
+        }
+    });
+        return false;
+    });
+}
+
+
+/**
+     * Initialise les fonctions de la gestion
+     * de récolte
+     ******************************************/
 var initGestionRecolte = function(type)
 {
     /*var col_intitules = $('#colonne_intitules');
@@ -524,7 +555,7 @@ var initGestionRecolte = function(type)
     var col_recolte_totale = $('#col_recolte_totale');
 	
     var btn_ajout_col = col_scroller.find('a#ajout_col');
-    */
+         */
 
     //etatBtnAjoutCol();
     hauteurEgaleColRecolte();
@@ -550,22 +581,22 @@ var initGestionRecolte = function(type)
 var updateElementRows = function (inputObj, totalObj) {
     totalObj.val(0);
     inputObj.each(function() {
-	    var total = parseFloat(totalObj.val());
-	    var element = parseFloat($(this).val());
-	    if (element)
-		totalObj.val(total + element);
-	});
+        var total = parseFloat(totalObj.val());
+        var element = parseFloat($(this).val());
+        if (element)
+            totalObj.val(total + element);
+    });
 };
 var updateAppellationTotal = function (cepageCssId, appellationCssId) {
     var app_orig = parseFloat($(appellationCssId+'_orig').val());
     if (!app_orig)
-	app_orig = 0;
+        app_orig = 0;
     var cep_orig = parseFloat($(cepageCssId+'_orig').val());
     if (!cep_orig)
-	cep_orig = 0;
+        cep_orig = 0;
     var cep_now  = parseFloat($(cepageCssId).val());
     if (!cep_now)
-	cep_now = 0;
+        cep_now = 0;
     $(appellationCssId).val(app_orig - cep_orig + cep_now);
 }
 var superficieOnChange = function() {
@@ -577,17 +608,17 @@ var superficieOnChange = function() {
 };
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if (parseFloat($(totalRecolteCssId).val()) > parseFloat($(elementCssId+'_max_volume').val()))
-	$(elementCssId+'_volume_revendique').val($(elementCssId+'_max_volume').val());
-    else 
-	$(elementCssId+'_volume_revendique').val($(totalRecolteCssId).val());
+        $(elementCssId+'_volume_revendique').val($(elementCssId+'_max_volume').val());
+    else
+        $(elementCssId+'_volume_revendique').val($(totalRecolteCssId).val());
     $(elementCssId+'_volume_dplc').val(parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val()));
 };
 
-var addClassAlerteIfNeeded = function (inputObj) 
+var addClassAlerteIfNeeded = function (inputObj)
 {
     inputObj.removeClass('alerte');
     if (inputObj.val() != '0')
-	inputObj.addClass('alerte');
+        inputObj.addClass('alerte');
 };
 
 var volumeOnChange = function() {
@@ -595,10 +626,10 @@ var volumeOnChange = function() {
     updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
     $('ul.acheteurs li').each(function () {
-	    var class = $(this).attr('class');
-	    updateElementRows($('#col_scroller input.'+class), $('#col_cepage_total input.'+class));
-	    updateAppellationTotal('#col_cepage_total input.'+class, '#col_recolte_totale input.'+class);
-	});
+        var class = $(this).attr('class');
+        updateElementRows($('#col_scroller input.'+class), $('#col_cepage_total input.'+class));
+        updateAppellationTotal('#col_cepage_total input.'+class, '#col_recolte_totale input.'+class);
+    });
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
     updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
@@ -629,10 +660,10 @@ var volumeOnChange = function() {
 };
 
 /**
- * Egalise les hauteurs des colonnes
- ******************************************/
+     * Egalise les hauteurs des colonnes
+     ******************************************/
 var hauteurEgaleColRecolte = function()
-{	
+{
     var col_intitules = '#colonne_intitules';
 	
     hauteurEgaleLignesRecolte(col_intitules+' p', 'p');
@@ -665,8 +696,8 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 };
 
 /**
- * Etat du bouton d'ajout de colonne
- ******************************************/
+     * Etat du bouton d'ajout de colonne
+     ******************************************/
 /*var etatBtnAjoutCol = function()
 {
     var col_recolte = $('#col_scroller .col_recolte');
@@ -677,8 +708,8 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 };*/
 
 /**
- * Initialise les fonctions des colonnes
- ******************************************/
+     * Initialise les fonctions des colonnes
+     ******************************************/
 /*var initColRecolte = function(col)
 {
     var contenu = col.find('.col_cont');
@@ -721,8 +752,8 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 };*/
 
 /**
- * Ajoute une colonne pour la déclaration
- ******************************************/
+     * Ajoute une colonne pour la déclaration
+     ******************************************/
 /*var ajouterColRecolte = function(btn, cont)
 {	
     $.post(url_ajax,
@@ -741,8 +772,8 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 };*/
 
 /**
- * Largeur colonne scroll conteneur
- ******************************************/
+     * Largeur colonne scroll conteneur
+     ******************************************/
 var largeurColScrollerCont = function()
 {
     var cont = $('#col_scroller_cont');
@@ -766,8 +797,8 @@ var largeurColScrollerCont = function()
 
 
 /**
- * Initalise les popups de DR
- ******************************************/
+     * Initalise les popups de DR
+     ******************************************/
 var initDRPopups = function()
 {
     var onglets = $('#onglets_majeurs');
@@ -812,7 +843,7 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion)
 	
     btn.live('click', function()
     {
-	if(config.ajax == true) {
+        if(config.ajax == true) {
             loadContentPopupAjax(popup, btn.attr('href'), config);
         }
         popup.dialog('open');
@@ -912,7 +943,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
                 append(data);
                 popup.dialog('close');
                 hauteurEgaleColRecolte();
-		$('input.volume').change(volumeOnChange);
+                $('input.volume').change(volumeOnChange);
 
             });
 
@@ -923,8 +954,8 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
 };
 
 /**
- * Initialise une popup
- ******************************************/
+     * Initialise une popup
+     ******************************************/
 var openPopup = function(popup, fn_open_if) {
     
     popup.dialog
@@ -938,8 +969,8 @@ var openPopup = function(popup, fn_open_if) {
 
 
     if (!fn_open_if || fn_open_if()) {
-	popup.dialog('open');
-	return false;
+        popup.dialog('open');
+        return false;
     }
 
     return true;
@@ -949,6 +980,6 @@ var initPopup = function(btn, popup, fn_open_if)
 {
     btn.live('click', function()
     {
-	return openPopup(popup, fn_open_if);
+        return openPopup(popup, fn_open_if);
     });
 };

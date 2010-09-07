@@ -9,7 +9,7 @@
         <li class="suiv"><input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" name="boutons[next]" /></li>
     <?php endif; ?>
     <?php if(in_array('previsualiser', $display->getRawValue())): ?>
-        <li class="previsualiser"><input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" /></li>
+        <li class="previsualiser"><input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser" /></li>
     <?php endif; ?>
 
 </ul>

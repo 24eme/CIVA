@@ -10,6 +10,7 @@
 
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
+        <div id="validation_dr">
         <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
 
         <?php if($error){ ?>
@@ -104,7 +105,7 @@
             </table>
         </div>
         <!-- fin #acheteurs_caves -->
-
+        </div>
     </div>
     <!-- fin #application_dr -->
     <?php if ($annee == '2010') : ?>
@@ -116,3 +117,9 @@
     <?php endif; ?>
 </form>
 <!-- fin #principal -->
+<script>
+    ajax_url_to_print = "<?php echo url_for('@print?annee='.$annee); ?>?ajax=1";
+</script>
+<div id="popup_loader" title="Génération du PDF">
+    <div class="ui-autocomplete-loading popup-loading"></div>
+</div>
