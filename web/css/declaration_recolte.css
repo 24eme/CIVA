@@ -459,7 +459,7 @@ a.msg_aide
     float: left;
     width: 264px;
 }
-
+#precedentes_declarations ul.ui-display-none{display: none;}
 #precedentes_declarations ul { font-size: 15px; }
 
 #precedentes_declarations ul li { margin: 0 0 3px; }

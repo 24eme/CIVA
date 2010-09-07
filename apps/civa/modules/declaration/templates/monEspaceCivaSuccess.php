@@ -69,7 +69,7 @@
                     <li>
                         <a href="#">Années précédentes</a>
                         <?php if (count($campagnes) > 0): ?>
-                        <ul class="ui-accordion">
+                        <ul class="ui-accordion ui-display-none">
                                 <?php foreach ($campagnes as $id => $campagne): ?>
                             <li>
                                 <a href="#"><?php echo $campagne ?></a>
