@@ -2,7 +2,7 @@
 
 class ValidatorFirstConnection extends sfValidatorBase {
     public function configure($options = array(), $messages = array()) {
-       $this->addMessage('mdp_invalid', 'CVI ou mot de passe invalide.');
+       $this->addMessage('mdp_invalid', 'CVI ou code de création invalide.');
     }
 
     protected function doClean($values) {

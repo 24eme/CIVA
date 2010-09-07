@@ -52,7 +52,7 @@ class compteActions extends sfActions {
                     if($verify) {
                         $newData['mot_de_passe'] = $tiers->mot_de_passe;
                         $ldap->ldapModify($tiers, $newData);
-                        $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifier.');
+                        $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifié.');
                         $mess = 'Bonjour '.$tiers->nom.',
 
 votre mot de passe sur le site du CIVA vient d\'etre modifié.
