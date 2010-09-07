@@ -12,17 +12,19 @@
     <div id="application_dr" class="clearfix">
         <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
 
-        <div class="message">
-            <?php foreach($validLog as $logs) { ?>
-            <ul class="messages_log">
-                <?php foreach($logs as $log) { ?>
-                <li><?php echo $log; ?></li>
+        <?php if($error){ ?>
+            <div class="message">
+                <?php foreach($validLog as $logs) { ?>
+                <ul class="messages_log">
+                    <?php foreach($logs as $log) { ?>
+                        <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
+                   <?php } ?>
+                </ul>
+                <br />
                 <?php } ?>
-            </ul>
-            <br />
-            <?php } ?>
+            </div>
+        <?php } ?>
 
-        </div>
         <!-- #acheteurs_caves -->
         <div id="recolte_totale">
 
@@ -85,9 +87,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php if($jeunes_vignes>0){ ?>
                     <tr>
                         <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echo $jeunes_vignes; ?>&nbsp;<small>ares</small></td>
                     </tr>
+                    <?php }?>
                     <tr>
                         <td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
                     </tr>
@@ -104,7 +108,11 @@
     </div>
     <!-- fin #application_dr -->
     <?php if ($annee == '2010') : ?>
-        <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser','suivant'))) ?>
+        <?php if($error){ ?>
+            <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser'))) ?>
+        <?php }else{?>
+            <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser','valider'))) ?>
+        <?php } ?>
     <?php endif; ?>
 </form>
 <!-- fin #principal -->

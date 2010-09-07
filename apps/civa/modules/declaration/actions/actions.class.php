@@ -121,20 +121,49 @@ class declarationActions extends EtapesActions {
         $this->annee = $annee;
 
         $this->validLog = array();
-
+        $i = 0 ;
+        $this->error = false;
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
             $onglet = new RecolteOnglets($dr);
             foreach ($appellation->filter('lieu') as $lieu) {
                 //check le lieu
-                if ($lieu->isNonSaisie()){
-                    //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
-                    $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' => lieu non saisi';
+                if ($lieu->isNonSaisie()) {
+                    $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
+                    $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie'));
+                    $i++;
+                    $this->error = true;
                 }else {
+                    //verifie les rebeches pour les crémants
+                    if($appellation->appellation=='CREMANT' && $appellation->getTotalVolume()>0) {
+                        $rebeches=false;
+                        foreach ($lieu->filter('cepage_') as $key => $cepage) {
+                            if($key == 'cepage_RB') $rebeches = true;
+                        }
+                        if(!$rebeches) {
+                            $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
+                            $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches'));
+                            $i++;
+                            $this->error = true;
+                        }
+
+                    }
                     //check les cepages
-                    foreach ($lieu->filter('cepage') as $cepage) {
-                        if($cepage->isNonSaisie()){
-                            //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
-                            $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => cépage non saisi';
+                    foreach ($lieu->filter('cepage_') as $key => $cepage) {
+                        if($key == 'cepage_RB') {
+                            $totalVolRatio = $appellation->getTotalVolume() * $cepage->getConfig()->min_quantite;
+                            $totalVolRevendique = $cepage->getTotalVolumeRevendique();
+                            if( $totalVolRatio > $totalVolRevendique ) {
+                                $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                                $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
+                                $i++;
+                                $this->error = true;
+                            }
+                        }
+                        if($cepage->isNonSaisie()) {
+                            $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                            $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie'));
+                            $i++;
+                            $this->error = true;
                         }else {
                             foreach($cepage->filter('detail') as $details) {
                                 foreach ($details as $detail) {
@@ -145,8 +174,10 @@ class declarationActions extends EtapesActions {
                                         }
                                         if($detail->denomination!= '') $detail_nom .= $detail->denomination.' ';
                                         if($detail->vtsgn!= '')        $detail_nom .= $detail->vtsgn.' ';
-                                        //$this->validLog[$lieu->getKey()]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
-                                        $this->validLog[$lieu->getKey()][] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => détails non saisis';
+                                        $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                                        $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie'));
+                                        $i++;
+                                        $this->error = true;
                                     }
                                 }
                             }

@@ -54,6 +54,12 @@ EOF;
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie.";
 	$json->err_dr_popup_min_quantite = "Vous n'avez pas respecté le volume minimal";
 
+        $json->err_log_lieu_non_saisie = "lieu non saisi";
+        $json->err_log_cepage_non_saisie = "cépage non saisi";
+        $json->err_log_detail_non_saisie = "details non saisis";
+        $json->err_log_cremant_pas_rebeches = "pas de rebêches pour ce crémant";
+        $json->err_log_cremant_min_quantite = "Vous n'avez pas respecté le volume minimal";
+
 	$docs[] = $json;
 
 	if ($options['import'] == 'couchdb') {

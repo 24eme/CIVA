@@ -1100,6 +1100,10 @@ a.msg_aide
     z-index: 100;
 }
 
+#gestion_recolte #col_scroller .col_recolte a.ajout_lien{
+    background: url(../images/puces/puce_lien.png) 0 4px no-repeat !important;
+}
+
 #gestion_recolte #col_scroller .col_recolte a.ajout:hover { text-decoration: none; }
 #gestion_recolte #col_scroller .col_validee a.ajout { display: none; }
 

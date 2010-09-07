@@ -48,9 +48,9 @@
         <p class="vol_place"><input type="text" class="num" disabled="disabled" value="<?php echo $detail->cave_particuliere ?>" /></p>
         <p class="vol_total_recolte">
             <input type="text" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" />
-            <?php if ($detail->hasMotifNonRecolteLibelle()): ?>
-                <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
-            <?php endif; ?>
+            <?php if ($detail->hasMotifNonRecolteLibelle()){ ?>
+                <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif <?php if($detail->getMotifNonRecolteLibelle() != 'Non saisie') echo 'ajout_lien'; ?>"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
+            <?php } ?>
         </p>
         
         <?php if ($detail->hasRendementCepage()): ?>
