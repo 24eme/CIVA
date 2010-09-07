@@ -316,7 +316,7 @@ table.table_donnees tbody td input[type=text]
 }
 
 table.table_donnees tbody td.alt input { background: #efeeee; }
-table.table_donnees tbody td.nom input { width: 121px; }
+table.table_donnees tbody td.nom input { width: 313px; }
 table.table_donnees tbody td.cvi input { width: 58px; }
 table.table_donnees tbody td.commune input { width: 108px; }
 
@@ -710,6 +710,7 @@ a.msg_aide
 #exploitation_acheteurs table tbody td.nom,
 #exploitation_acheteurs table tbody td.cvi,
 #exploitation_acheteurs table tbody td.commune { text-align: left; }
+#exploitation_acheteurs table tbody td.add { display: none; }
 
 #exploitation_acheteurs .btn
 {
