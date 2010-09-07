@@ -542,26 +542,75 @@ var initGestionRecolte = function(type)
     initDRPopups();
     //Calcule auto du volume
     $('input.volume').change(volumeOnChange);
-    $('#recolte_superficie').change(function() {
-	    $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
-	    volumeOnChange();
+    $('#recolte_superficie').change(superficieOnChange);
+};
+var updateElementRows = function (inputObj, totalObj) {
+    totalObj.val(0);
+    inputObj.each(function() {
+	    var total = parseFloat(totalObj.val());
+	    var element = parseFloat($(this).val());
+	    if (element)
+		totalObj.val(total + element);
 	});
 };
-
+var updateAppellationTotal = function (cepageCssId, appellationCssId) {
+    var app_orig = parseFloat($(appellationCssId+'_orig').val());
+    if (!app_orig)
+	app_orig = 0;
+    var cep_orig = parseFloat($(cepageCssId+'_orig').val());
+    if (!cep_orig)
+	cep_orig = 0;
+    var cep_now  = parseFloat($(cepageCssId).val());
+    if (!cep_now)
+	cep_now = 0;
+    $(appellationCssId).val(app_orig - cep_orig + cep_now);
+}
+var superficieOnChange = function() {
+    updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
+    updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
+    $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
+    volumeOnChange();
+};
 var volumeOnChange = function() {
-    $('#detail_vol_total_recolte').val(0);
-    $('input.volume').each(function() {
-	    var total = $('#detail_vol_total_recolte').val();
-	    var volume = $(this).val();
-	    if (volume)
-		$('#detail_vol_total_recolte').val(parseFloat(total) + parseFloat(volume));
-	});
+    updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     if (parseFloat($('#detail_vol_total_recolte').val()) > parseFloat($('#detail_max_volume').val()))
 	$('#detail_volume_revendique').val($('#detail_max_volume').val());
     else 
 	$('#detail_volume_revendique').val($('#detail_vol_total_recolte').val());
-    $('#detail_volume_dplc').val(parseFloat($('#detail_vol_total_recolte').val()) - parseFloat($('#detail_volume_revendique').val()));
     
+    $('ul.acheteurs li').each(function () {
+	    var class = $(this).attr('class');
+	    updateElementRows($('#col_scroller input.'+class), $('#col_cepage_total input.'+class));
+	    updateAppellationTotal('#col_cepage_total input.'+class, '#col_recolte_totale input.'+class);
+	});
+    $('#detail_volume_dplc').val(parseFloat($('#detail_vol_total_recolte').val()) - parseFloat($('#detail_volume_revendique').val()));
+
+    updateElementRows($('input.cave'), $('#cepage_total_cave'));
+    updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
+
+    updateElementRows($('input.total'), $('#cepage_total_volume'));
+    updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
+
+    updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
+    updateAppellationTotal('#cepage_total_revendique', '#appellation_total_revendique');
+
+    updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
+    updateAppellationTotal('#cepage_total_dplc', '#appellation_total_dplc');
+
+    $('#cepage_total_dplc').removeClass('alerte');
+    if ($('#cepage_total_dplc').val() != '0')
+	$('#cepage_total_dplc').addClass('alerte');
+    $('#appellation_total_dplc').removeClass('alerte');
+    if ($('#appellation_total_dplc').val() != '0')
+	$('#appellation_total_dplc').addClass('alerte');
+	
+    $('#appellation_total_dplc').val('Σ '+$('#appellation_total_dplc').val());
+    $('#appellation_total_revendique').val('Σ '+$('#appellation_total_revendique').val());
+
+
+    $('#cepage_rendement').html(parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)));
+    $('#appellation_rendement').html(parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()/100)));
+
 };
 
 /**
@@ -839,7 +888,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
                 $('#colonne_intitules').
                 find('.'+type_cssclass+' ul').
                 append(html_header_item.html());
-                $('.col_recolte.col_validee, .col_recolte.col_sepage_total, .col_recolte.col_total').
+                $('.col_recolte.col_validee, .col_recolte.col_cepage_total, .col_recolte.col_total').
                 find('.'+type_cssclass+' ul').
                 append($('#acheteurs_item_empty').html()).
                 find('input').addClass(css_class_acheteur);

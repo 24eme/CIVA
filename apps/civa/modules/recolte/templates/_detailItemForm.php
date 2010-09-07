@@ -19,7 +19,7 @@
 
         <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-            <?php echo $form['superficie']->render(array('class' => 'num')) ?>
+            <?php echo $form['superficie']->render(array('class' => 'superficie num')) ?>
 <?php endif; ?>
         </p>
 
@@ -41,9 +41,9 @@
         <?php endif; ?>
 
         <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-            <?php echo $form['cave_particuliere']->render(array('class' => 'num volume')) ?>
+            <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
         </p>
-        <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
+        <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
 	   <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
