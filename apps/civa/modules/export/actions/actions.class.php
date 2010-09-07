@@ -29,8 +29,8 @@ class exportActions extends sfActions
   public function executeXml(sfWebRequest $request) 
   {
     $tiers = $this->getUser()->getTiers();
-    $annee = $this->getRequestParameter('annee', null);
-    $key = 'DR-'.$tiers->cvi.'-'.$annee;
+    $this->annee = $this->getRequestParameter('annee', null);
+    $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     $xml = array();
     foreach ($dr->recolte->filter('^appellation_') as $appellation) {
@@ -184,9 +184,9 @@ class exportActions extends sfActions
     $this->forward404Unless($dr);
 
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
-      $this->document = new PageableHTML('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
+      $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'.pdf');
     }else {
-      $this->document = new PageablePDF('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
+      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'.pdf');
     }
 
     $this->nb_pages = 0;
@@ -203,7 +203,7 @@ class exportActions extends sfActions
     if ($request->getParameter('ajax')) {
       return $this->ajaxPdf();
     }
-    return $this->redirect('@print?direct=1&annee='.$annee);
+    return $this->redirect('@print?direct=1&annee='.$this->annee);
     
   }
 
