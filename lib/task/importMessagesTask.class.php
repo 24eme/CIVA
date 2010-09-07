@@ -53,6 +53,7 @@ EOF;
 	$json->msg_compte_index_intro = "Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code de création de compte&nbsp;:";
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie.";
 	$json->err_dr_popup_min_quantite = "Vous n'avez pas respecté le volume minimal";
+        $json->err_dr_popup_unique_mention_denomination = "La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
 
         $json->err_log_lieu_non_saisie = "lieu non saisi";
         $json->err_log_cepage_non_saisie = "cépage non saisi";

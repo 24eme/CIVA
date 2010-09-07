@@ -75,10 +75,19 @@ function valider_can_submit()
   }
 <?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
-    var denomination_is_bad = ($('.col_recolte').find('.col_cont p.denomination input[value="'+$('.col_recolte.col_active .col_cont p.denomination input').val()+'"]').length > 1);
-    var mention_is_bad = ($('.col_recolte').find('.col_cont p.mention select[value="'+$('.col_recolte.col_active .col_cont p.mention select').val()+'"]').length > 1);
+    var denomination_is_bad = false;
+    var mention_is_bad = false;
+
+    <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
+        var denomination_is_bad = ($('.col_recolte').find('.col_cont p.denomination input[value="'+$('.col_recolte.col_active .col_cont p.denomination input').val()+'"]').length > 1);
+    <?php endif; ?>
+
+    <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
+        var mention_is_bad = ($('.col_recolte').find('.col_cont p.mention select[value="'+$('.col_recolte.col_active .col_cont p.mention select').val()+'"]').length > 1);
+    <?php endif; ?>
+        
     if (denomination_is_bad && mention_is_bad) {
-        $('#popup_msg_erreur').html('<p>mention & denomnation not ok (message temporaire)</p>');
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_mention_denomination')); ?></p>');
         openPopup($('#popup_msg_erreur'), 0);
         return false;
     }
