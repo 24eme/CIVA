@@ -55,10 +55,12 @@
 		    <input type="hidden" id="appellation_max_volume" value="<?php echo $lieu->getVolumeMaxAppellation(); ?>"/>
 		       <input type="hidden" id="appellation_rendement" value="<?php echo $lieu->getRendementAppellation(); ?>"/>
 
-                    <li><input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
-                    <li><input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
-                    <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
-                    <li><input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($lieu->getDPLCAppellation()) echo 'alerte'; ?>" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
+                    <li>
+		       <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" />
+		       <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" />
+		       </li>
+                    <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/>
+                    <input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($lieu->getDPLCAppellation()) echo 'alerte'; ?>" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
                 <?php endif; ?>
                 <li>
 		<input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echo $lieu->getTotalVolumeRevendique() ?>" />
