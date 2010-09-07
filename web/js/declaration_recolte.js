@@ -526,18 +526,23 @@ var initValidationDr = function(type)
 /**
  * Initalise la popup previsualisation de DR
  ******************************************/
+var closeValidDRPopup = function () {
+    $('#popup_loader').dialog('close');
+
+};
 var initValidDRPopup = function()
 {
     $('#previsualiser').click(function() {
         openPopup($("#popup_loader"));
-         $.ajax({
-        url: ajax_url_to_print,
-        success: function(data) {
-            document.location=data;
-        }
-    });
+	$.ajax({
+		url: ajax_url_to_print,
+		    success: function(data) {
+		    document.location=data;
+		    setTimeout("closeValidDRPopup()", 1000);
+		}
+	    });
         return false;
-    });
+	});
 }
 
 

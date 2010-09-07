@@ -142,6 +142,13 @@ class exportActions extends sfActions
     $this->setLayout(false);
     $this->response->setContentType('text/xml');
   }
+
+  private function ajaxPdf() {
+    $this->url = array('sf_route'=>'print', 'direct'=>'1', 'annee'=>$this->annee);
+    $this->setTemplate('ajaxRedirect');
+    sfConfig::set('sf_web_debug', false);
+    return ;
+  }
  /**
   * Executes index action
   *
@@ -150,8 +157,8 @@ class exportActions extends sfActions
   public function executePdf(sfWebRequest $request)
   {
     $tiers = $this->getUser()->getTiers();
-    $annee = $this->getRequestParameter('annee', null);
-    $key = 'DR-'.$tiers->cvi.'-'.$annee;
+    $this->annee = $this->getRequestParameter('annee', null);
+    $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
     $pdf_dir = sfConfig::get('sf_cache_dir').'/pdf/';
     $pdf_file = $pdf_dir.$key.'_'.$dr->_rev.'.pdf';
@@ -161,13 +168,10 @@ class exportActions extends sfActions
     if (file_exists($pdf_file) && !$request->getParameter('force')) {
       $this->setLayout(false);
       if ($request->getParameter('ajax')) {
-	$this->url = array('sf_route'=>'print', 'direct'=>'1', 'annee'=>$annee);
-	$this->setTemplate('ajaxRedirect');
-	sfConfig::set('sf_web_debug', false);
-	return ;
+	return $this->ajaxPdf();
       }
       $this->pdfname = $pdf_file;
-      $this->getResponse()->setHttpHeader('content-type', 'application/x-pdf');
+      $this->getResponse()->setHttpHeader('content-type', 'application/pdf');
       $this->getResponse()->setHttpHeader('content-disposition', 'inline; filename="'.basename($pdf_file).'";');
       return ;
     }
@@ -196,6 +200,9 @@ class exportActions extends sfActions
     
     $this->document->output($pdf_file, 'F');
 
+    if ($request->getParameter('ajax')) {
+      return $this->ajaxPdf();
+    }
     return $this->redirect('@print?direct=1&annee='.$annee);
     
   }

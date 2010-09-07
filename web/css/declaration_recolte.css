@@ -1393,7 +1393,14 @@ a.msg_aide
 .popup_ajout select[disabled=disabled] { background: #f0f0de; }
 
 .popup_ajout .popup-loading.ui-autocomplete-loading { background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat ; height: 93px; width: 100%;} 
-.ui-autocomplete-loading { background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat ; height: 93px; width: 100%; display: none;}
+.popup-loading {
+    background: transparent url("../css/jquery.ui/images/ui-anim_basic_16x16.gif") center 20px no-repeat;
+    padding-top: 45px;
+    width: 100%;
+    text-align: center;
+}
+.ui-autocomplete-loading { 
+    background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat ; min-height: 93px; width: 100%; display: none;}
 
 #nouvelle_declaration .ligne_form_label label{
     float:left;
