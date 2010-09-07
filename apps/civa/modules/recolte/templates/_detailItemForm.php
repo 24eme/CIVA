@@ -67,9 +67,8 @@ function valider_can_submit()
   }
 <?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
-    var ratio = parseFloat($('#detail_vol_total_recolte').val()) / parseFloat($('#appellation_total_volume').val());
-    var min = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
-    if (ratio < min) {
+    var min = parseFloat($('#appellation_total_volume').val()) * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
+    if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p>');
     openPopup($('#popup_msg_erreur'), 0);
     return false;
