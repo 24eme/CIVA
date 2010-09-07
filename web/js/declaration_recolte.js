@@ -569,21 +569,33 @@ var superficieOnChange = function() {
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
     $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
+    $('#appellation_max_volume').val(parseFloat($('#appellation_total_superficie').val())/100 * parseFloat($('#appellation_rendement').val()));
     volumeOnChange();
 };
+var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
+    if (parseFloat($(totalRecolteCssId).val()) > parseFloat($(elementCssId+'_max_volume').val()))
+	$(elementCssId+'_volume_revendique').val($(elementCssId+'_max_volume').val());
+    else 
+	$(elementCssId+'_volume_revendique').val($(totalRecolteCssId).val());
+    $(elementCssId+'_volume_dplc').val(parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val()));
+};
+
+var addClassAlerteIfNeeded = function (inputObj) 
+{
+    inputObj.removeClass('alerte');
+    if (inputObj.val() != '0')
+	inputObj.addClass('alerte');
+};
+
 var volumeOnChange = function() {
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
-    if (parseFloat($('#detail_vol_total_recolte').val()) > parseFloat($('#detail_max_volume').val()))
-	$('#detail_volume_revendique').val($('#detail_max_volume').val());
-    else 
-	$('#detail_volume_revendique').val($('#detail_vol_total_recolte').val());
-    
+    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
+
     $('ul.acheteurs li').each(function () {
 	    var class = $(this).attr('class');
 	    updateElementRows($('#col_scroller input.'+class), $('#col_cepage_total input.'+class));
 	    updateAppellationTotal('#col_cepage_total input.'+class, '#col_recolte_totale input.'+class);
 	});
-    $('#detail_volume_dplc').val(parseFloat($('#detail_vol_total_recolte').val()) - parseFloat($('#detail_volume_revendique').val()));
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
     updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
@@ -592,24 +604,22 @@ var volumeOnChange = function() {
     updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
 
     updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
-    updateAppellationTotal('#cepage_total_revendique', '#appellation_total_revendique');
+    updateAppellationTotal('#cepage_total_revendique', '#appellation_total_revendique_sum');
 
     updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
-    updateAppellationTotal('#cepage_total_dplc', '#appellation_total_dplc');
+    updateAppellationTotal('#cepage_total_dplc', '#appellation_total_dplc_sum');
 
-    $('#cepage_total_dplc').removeClass('alerte');
-    if ($('#cepage_total_dplc').val() != '0')
-	$('#cepage_total_dplc').addClass('alerte');
-    $('#appellation_total_dplc').removeClass('alerte');
-    if ($('#appellation_total_dplc').val() != '0')
-	$('#appellation_total_dplc').addClass('alerte');
+    updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
+
+    addClassAlerteIfNeeded($('#cepage_total_dplc'));
+    addClassAlerteIfNeeded($('#appellation_total_dplc_sum'));
+    addClassAlerteIfNeeded($('#appellation_volume_dplc'));
 	
-    $('#appellation_total_dplc').val('Σ '+$('#appellation_total_dplc').val());
-    $('#appellation_total_revendique').val('Σ '+$('#appellation_total_revendique').val());
+    $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
+    $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
 
-
-    $('#cepage_rendement').html(parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)));
-    $('#appellation_rendement').html(parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()/100)));
+    $('#cepage_current_rendement').html(parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)));
+    $('#appellation_current_rendement').html(parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()/100)));
 
 };
 

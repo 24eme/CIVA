@@ -49,21 +49,24 @@
    <input id="appellation_total_volume" type="text" readonly="readonly" value="<?php echo $lieu->getTotalVolume() ?>" />
    </p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement">Rdt : <strong><span id="appellation_rendement"><?php echo $lieu->getRendementRecoltant() ?></span> hl/ha</strong></li>
+            <li class="rendement">Rdt : <strong><span id="appellation_current_rendement"><?php echo $lieu->getRendementRecoltant() ?></span> hl/ha</strong></li>
             <?php if ($lieu->hasRendement()): ?>
                 <?php if ($lieu->hasRendementAppellation()): ?>
-                    <li><input type="hidden" id="appellation_total_revendique_orig" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
-                    <li><input type="text" id="appellation_total_revendique" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
-                    <li><input type="hidden" id="appellation_dplc_app_orig" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
-                    <li><input type="text" id="appellation_dplc_app" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
+		    <input type="hidden" id="appellation_max_volume" value="<?php echo $lieu->getVolumeMaxAppellation(); ?>"/>
+		       <input type="hidden" id="appellation_rendement" value="<?php echo $lieu->getRendementAppellation(); ?>"/>
+
+                    <li><input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
+                    <li><input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echo $lieu->getVolumeRevendiqueAppellation() ?>" /></li>
+                    <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
+                    <li><input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($lieu->getDPLCAppellation()) echo 'alerte'; ?>" value="<?php echo $lieu->getDPLCAppellation() ?>"/></li>
                 <?php endif; ?>
                 <li>
-		<input type="hidden" id="appellation_total_revendique_orig" readonly="readonly" value="<?php echo $lieu->getTotalVolumeRevendique() ?>" />
-		<input type="text" id="appellation_total_revendique" readonly="readonly" value="Σ <?php echo $lieu->getTotalVolumeRevendique() ?>" />
+		<input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echo $lieu->getTotalVolumeRevendique() ?>" />
+		<input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echo $lieu->getTotalVolumeRevendique() ?>" />
    </li>
                 <li>
-   <input type="hidden" id="appellation_total_dplc_orig" value="<?php echo $lieu->getTotalDPLC() ?>"/>
-   <input type="text" id="appellation_total_dplc" readonly="readonly" class="<?php if ($lieu->getTotalDPLC()) echo 'alerte'; ?>" value="Σ <?php echo $lieu->getTotalDPLC() ?>"/>
+   <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echo $lieu->getTotalDPLC() ?>"/>
+   <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($lieu->getTotalDPLC()) echo 'alerte'; ?>" value="Σ <?php echo $lieu->getTotalDPLC() ?>"/>
    </li>
             <?php endif; ?>
 

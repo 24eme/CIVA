@@ -41,7 +41,7 @@
    <input type="text" id='cepage_total_volume' readonly="readonly" value="<?php echo $cepage->getTotalVolume() ?>" />
    </p>
    <ul class="vol_revendique_dplc">
-   <li class="rendement">Rdt : <strong><span id="cepage_rendement"><?php echo $cepage->getRendementRecoltant() ?></span> hl/ha</strong></li>
+   <li class="rendement">Rdt : <strong><span id="cepage_current_rendement"><?php echo $cepage->getRendementRecoltant() ?></span> hl/ha</strong></li>
    <?php if ($cepage->hasRendement()): ?>
 	   <li>
 	      <input type="text" id="cepage_total_revendique" readonly="readonly" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" />

@@ -180,8 +180,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return $volume_revendique;
     }
 
-    private function getVolumeMaxAppellation() {
-        return ($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation();
+    public function getVolumeMaxAppellation() {
+      return ($this->getTotalSuperficie()/100) * $this->getRendementAppellation();
+    }
+
+    public function getRendementAppellation() {
+      return $this->getConfig()->getRendementAppellation();
     }
 
     public function getDPLCFinal() {
