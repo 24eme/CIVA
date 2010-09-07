@@ -10,7 +10,7 @@
         <div id="nouvelle_declaration">
             <h3 class="titre_section">Créer votre compte</h3>
             <div class="contenu_section">
-   <p class="intro"><?php include_partical('global/message', array('id' => 'msg_compte_index_intro')); ?></p>
+   <p class="intro"><?php include_partial('global/message', array('id' => 'msg_compte_index_intro')); ?></p>
 
                 <div class="ligne_form ligne_form_label">
                     <?php echo $form->renderHiddenFields(); ?>
