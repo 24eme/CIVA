@@ -74,6 +74,15 @@ function valider_can_submit()
     return false;
   }
 <?php endif; ?>
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
+    var denomination_is_bad = ($('.col_recolte').find('.col_cont p.denomination input[value="'+$('.col_recolte.col_active .col_cont p.denomination input').val()+'"]').length > 1);
+    var mention_is_bad = ($('.col_recolte').find('.col_cont p.mention select[value="'+$('.col_recolte.col_active .col_cont p.mention select').val()+'"]').length > 1);
+    if (denomination_is_bad && mention_is_bad) {
+        $('#popup_msg_erreur').html('<p>mention & denomnation not ok (message temporaire)</p>');
+        openPopup($('#popup_msg_erreur'), 0);
+        return false;
+    }
+<?php endif; ?>
   document.getElementById('form_detail').submit();
 }
 --></script>
