@@ -620,9 +620,11 @@ var volumeOnChange = function() {
 	
     $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
     $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
-
-    $('#cepage_current_rendement').html(parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)));
-    $('#appellation_current_rendement').html(parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()/100)));
+    
+    var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
+    $('#appellation_current_rendement').html(val.replace(/\..*/, ''));
+    val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
+    $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 
 };
 
