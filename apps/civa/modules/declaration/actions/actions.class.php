@@ -152,7 +152,7 @@ class declarationActions extends EtapesActions {
                     foreach ($lieu->filter('cepage_') as $key => $cepage) {
                         if($key == 'cepage_RB') {
                             $totalVolRatio = $appellation->getTotalVolume() * $cepage->getConfig()->min_quantite;
-                            $totalVolRevendique = $cepage->getTotalVolumeRevendique();
+                            $totalVolRevendique = $cepage->getTotalVolume();
                             if( $totalVolRatio > $totalVolRevendique ) {
                                 $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                 $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
