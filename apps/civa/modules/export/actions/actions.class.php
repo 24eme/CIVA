@@ -158,12 +158,18 @@ class exportActions extends sfActions
     if (!file_exists($pdf_dir)) {
       mkdir($pdf_dir);
     }
-    if (file_exists($pdf_file)) {
+    if (file_exists($pdf_file) && !$request->getParameter('force')) {
       $this->setLayout(false);
+      if ($request->getParameter('ajax')) {
+	$this->url = array('sf_route'=>'print', 'direct'=>'1', 'annee'=>$annee);
+	$this->setTemplate('ajaxRedirect');
+	sfConfig::set('sf_web_debug', false);
+	return ;
+      }
       $this->pdfname = $pdf_file;
       $this->getResponse()->setHttpHeader('content-type', 'application/x-pdf');
       $this->getResponse()->setHttpHeader('content-disposition', 'inline; filename="'.basename($pdf_file).'";');
-      return sfView::SUCCESS;
+      return ;
     }
     try {
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
@@ -185,7 +191,7 @@ class exportActions extends sfActions
 	$this->createAppellationLieu($lieu, $tiers);
       }
     }
-    if ($request->getParameter('direct'))
+    if ($request->getParameter('direct') && !$request->getParameter('ajax'))
       return $this->document->output($pdf_file);
     
     $this->document->output($pdf_file, 'F');
