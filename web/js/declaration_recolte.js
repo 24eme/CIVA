@@ -37,6 +37,9 @@ $(document).ready( function()
     $('input.num').live('keypress',function(e)
     {
         var val = $(this).val();
+
+        val = val.replace(',', '.');
+        $(this).val(val);
 		
         if(e.which != 8 && e.which != 0 && e.which != 46 && (e.which < 48 || e.which > 57))
             return false;
@@ -936,12 +939,14 @@ var openPopup = function(popup, fn_open_if) {
 	popup.dialog('open');
 	return false;
     }
+
+    return true;
 };
 
 var initPopup = function(btn, popup, fn_open_if)
 {
     btn.live('click', function()
     {
-	openPopup(popup, fn_open_if);
+	return openPopup(popup, fn_open_if);
     });
 };

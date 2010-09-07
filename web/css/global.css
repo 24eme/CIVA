@@ -124,6 +124,7 @@ p.flash_message
 
 #popup_msg_erreur{
     background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 50% 10px;
+    display:none;
 }
 
 #popup_msg_erreur p{
