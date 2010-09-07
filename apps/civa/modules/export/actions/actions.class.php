@@ -153,17 +153,25 @@ class exportActions extends sfActions
     $annee = $this->getRequestParameter('annee', null);
     $key = 'DR-'.$tiers->cvi.'-'.$annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+    $pdf_dir = sfConfig::get('sf_cache_dir').'/pdf/';
+    $pdf_file = $pdf_dir.$key.'_'.$dr->_rev.'.pdf';
+    if (!file_exists($pdf_dir)) {
+      mkdir($pdf_dir);
+    }
+    if (file_exists($pdf_file)) {
+      $this->setLayout(false);
+      $this->pdfname = $pdf_file;
+      $this->getResponse()->setHttpHeader('content-type', 'application/x-pdf');
+      $this->getResponse()->setHttpHeader('content-disposition', 'inline; filename="'.basename($pdf_file).'";');
+      return sfView::SUCCESS;
+    }
     try {
-      $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->filter('^cepage')->getFirst()->acheteurs;
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
     }catch(Exception $e) {
       $dr->update();
       $dr->save();
     }
     $this->forward404Unless($dr);
-
-    $this->setLayout(false);
-    //    $this->getResponse()->setContent('application/x-pdf');
 
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
       $this->document = new PageableHTML('Déclaration de récolte '.$annee, $tiers->nom, $annee.'_DR_'.$tiers->cvi.'.pdf');
@@ -177,8 +185,12 @@ class exportActions extends sfActions
 	$this->createAppellationLieu($lieu, $tiers);
       }
     }
+    if ($request->getParameter('direct'))
+      return $this->document->output($pdf_file);
+    
+    $this->document->output($pdf_file, 'F');
 
-    return $this->document->output();
+    return $this->redirect('@print?direct=1&annee='.$annee);
     
   }
 

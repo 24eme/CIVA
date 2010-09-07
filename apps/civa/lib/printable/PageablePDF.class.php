@@ -52,9 +52,11 @@ class PageablePDF extends PageableOutput {
     $this->pdf->writeHTML($html);
   }
 
-  public function output() {
+  public function output($name = null, $dest = 'I') {
+    if (!$name)
+      $name = $this->filename;
     $this->pdf->lastPage();
-    $this->pdf->Output($this->filename, 'I');
+    $this->pdf->Output($name, $dest);
   }
 }
 
