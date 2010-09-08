@@ -1,3 +1,4 @@
+<span class="ombre"></span>
 <div id="col_scroller">
     <div id="col_scroller_cont" class="clearfix">
         <?php foreach ($details as $key => $detail): ?>
@@ -18,3 +19,4 @@
 <?php endif; ?>
     </div>
 </div>
+<span class="ombre ombre_droite"></span>
