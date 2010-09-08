@@ -41,7 +41,7 @@
 													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendiqueFinal(); ?> hl</td>
 												</tr>
 												<tr>
-													<td>dont DPLC :</td>
+													<td>DPLC :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getDplcFinal(); ?> hl</td>
 												</tr>
                                                                                                 <?php endif; ?>
