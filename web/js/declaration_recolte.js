@@ -64,6 +64,13 @@ $(document).ready( function()
             initTablesAcheteurs();
         });
     }
+
+    if ($('#gestion_grands_crus').length > 0) {
+        $('#gestion_grands_crus').ready( function() {
+            initGestionGrandsCrus();
+        });
+    }
+
     if ($('#gestion_recolte').length > 0) {
         $('#gestion_recolte').ready( function() {
             initGestionRecolte();
@@ -556,6 +563,19 @@ var initValidDRPopup = function()
         return false;
 	});
 }
+
+/**
+ * Initialise les fonctions des tables
+ * d'acheteurs
+ ******************************************/
+var initGestionGrandsCrus = function()
+{
+        initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
+        function() {
+            return ($('ul#liste_grands_crus').find('li').length < 1);
+        }
+        );
+};
 
 
 /**
