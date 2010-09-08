@@ -35,4 +35,20 @@ class DR extends BaseDR {
       }
       return $this->lies / $v;
     }
+
+    public function getLies(){
+        $v = $this->_get('lies');
+        if(!$v)
+            return 0;
+        else
+            return $v;
+    }
+
+    public function getJeunesVignes(){
+        $v = $this->_get('jeunes_vignes');
+        if(!$v)
+            return 0;
+        else
+            return $v;
+    }
 }
