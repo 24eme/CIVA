@@ -49,6 +49,14 @@ String host = "";
                 <h2>Bienvenue sur le site du CIVA</h2>
               </div>
               <div id="boxes">
+                <h2 class="titre_section">Premiere connexion</h2>
+                <div id="nouvelle_declaration">
+                    <div class="contenu_section">
+                        <p class="intro">S'il s'agit de votre premiere connexion, munissez vous votre numéro CVI et du mot de passe recu par courrier.</p>
+                        <p id="creer_compte" ><a href="<% out.println(host); %>compte">Créer votre compte</a></p>
+                    </div>
+                </div>
+                <br />
                 <h2 class="titre_section">Connexion</h2>
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
@@ -96,14 +104,6 @@ String host = "";
                             <input type="hidden" name="_eventId" value="submit" />
                             <input class="btn" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" src="images/btn_valider.png" tabindex="4" type="image" />
                        </div>
-                    </div>
-                </div>
-                <br />
-                <h2 class="titre_section">Premiere connexion</h2>
-                <div id="nouvelle_declaration">
-                    <div class="contenu_section">
-                        <p class="intro">S'il s'agit de votre premiere connexion, munissez vous votre numéro CVI et du mot de passe recu par courrier.</p>
-                        <p id="creer_compte" ><a href="<% out.println(host); %>compte">Créer votre compte</a></p>
                     </div>
                 </div>
               </div>
