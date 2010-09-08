@@ -571,10 +571,17 @@ a.msg_aide
 }
 
 /* Colonne gauche */
-#infos_exploitation .col_1
+#infos_exploitation .modification .col_1
 {
 	float: left;
 	width: 215px;
+}
+
+#infos_exploitation .presentation .col_1
+{       background:none repeat scroll 0 0 #E0E1BD;
+	float: left;
+        padding:10px 10px 0;
+	width: 205px;
 }
 
 #infos_exploitation .col_1 p.num
@@ -656,7 +663,7 @@ a.msg_aide
 #infos_exploitation .bloc_vert ul li input[type=radio] { margin: 0 3px 0 0; }
 
 #infos_exploitation .col_1 .ligne_form input[type=text],
-#infos_exploitation .col_1 .ligne_form textarea { width: 213px; }
+#infos_exploitation .col_1 .ligne_form textarea { width: 195px; }
 
 #infos_exploitation .col_2 .ligne_form input[type=text],
 #infos_exploitation .col_2 .ligne_form textarea { width: 200px; }

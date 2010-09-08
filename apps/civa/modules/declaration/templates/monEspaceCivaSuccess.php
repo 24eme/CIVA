@@ -12,7 +12,7 @@
         <?php } ?>
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <h3 class="titre_section">Ma déclaration</h3>
+            <h3 class="titre_section">Ma déclaration de récolte</h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
                 <?php if ($declaration): ?>
@@ -54,18 +54,18 @@
 
         <!-- #precedentes_declarations -->
         <div id="precedentes_declarations">
-            <h3 class="titre_section">Visualiser mes déclarations</h3>
+            <h3 class="titre_section">Visualiser mes DRécolte</h3>
             <div class="contenu_section">
 
                 <ul class="bloc_vert">
                     <li>
-                        <a href="#">Déclaration en cours</a>
+                        <a href="#">Déclaration de l'année</a>
                         <ul class="declarations">
                             <li>
                         <?php if ($declaration): ?>
-                        <a href="#">Rédaction courante</a>
+                        <a href="#">Rédaction en cours</a>
                         <?php else: ?>
-                         <a href="#">Pas de déclaration courante</a>
+                         <a href="#">Pas de déclaration en cours</a>
                         <?php endif; ?>
                         </li>
                         </ul>
