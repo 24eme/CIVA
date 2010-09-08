@@ -98,6 +98,10 @@ xml:
   url: /xml/:annee
   param: {module: export, action: xml}
 
+message:
+  url: /message
+  param: {module: global, action: messageAjax}
+
 default_index:
   url:   /:module
   param: { action: index }

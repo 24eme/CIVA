@@ -127,32 +127,30 @@ var initMsgAide = function()
 	
     liens.live('click', function()
     {
-        var id_msg_aide = $(this).attr('id');
+        var id_msg_aide = $(this).attr('rel');
+        var title_msg_aide = $(this).attr('title');
+        $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
+
 		
         $.getJSON(
             url_ajax_msg_aide,
             {
-                action: "popup_msg_aide",
-                id_msg_aide: id_msg_aide
+                id: id_msg_aide,
+                title: title_msg_aide
             },
             function(json)
             {
                 var titre = json.titre;
                 var message = json.message;
+                popup.html('<p></p>');
                 popup.find('p').text(message);
-				
-                popup.dialog(
-                {
-                    draggable: false,
-                    minHeight: 200,
-                    modal: true,
-                    resizable: false,
-                    title: titre,
-                    width: 375
-                });
+                $(popup).dialog( "option" , "title" , titre);
             }
-            );
-		
+        );
+            
+        openPopup(popup);
+        $(popup).dialog( "option" , "title" , title_msg_aide);
+        
         return false;
     });
 };
@@ -553,15 +551,15 @@ var initValidDRPopup = function()
 {
     $('#previsualiser').click(function() {
         openPopup($("#popup_loader"));
-	$.ajax({
-		url: ajax_url_to_print,
-		    success: function(data) {
-		    document.location=data;
-		    setTimeout("closeValidDRPopup()", 1000);
-		}
-	    });
+        $.ajax({
+            url: ajax_url_to_print,
+            success: function(data) {
+                document.location=data;
+                setTimeout("closeValidDRPopup()", 1000);
+            }
+        });
         return false;
-	});
+    });
 }
 
 /**
@@ -570,7 +568,7 @@ var initValidDRPopup = function()
  ******************************************/
 var initGestionGrandsCrus = function()
 {
-        initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
+    initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
         function() {
             return ($('ul#liste_grands_crus').find('li').length < 1);
         }

@@ -17,7 +17,7 @@
             <?php include_partial('global/footer') ?>
         </div>
     <!-- fin #global -->
-
+    <?php include_partial('global/init') ?>
     <?php include_javascripts() ?>
     <?php include_partial('global/ieCssJavascript') ?>
   </body>
