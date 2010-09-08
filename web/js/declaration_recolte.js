@@ -653,6 +653,7 @@ var initGestionRecolte = function(type)
     //etatBtnAjoutCol();
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
+	$('span.ombre').height($('#col_scroller').height()-15);
 	
     /*btn_ajout_col.click(function()
     {
@@ -771,7 +772,7 @@ var hauteurEgaleColRecolte = function()
 	
     hauteurEgaleLignesRecolte(col_intitules+' p', 'p');
     hauteurEgaleLignesRecolte(col_intitules+' li', 'li');
-    $(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont').height('auto');
+    //$(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont').height('auto');
     hauteurEgale(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont');
 };
 

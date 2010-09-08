@@ -1025,13 +1025,30 @@ a.msg_aide
 #gestion_recolte #colonne_intitules .vol_place,
 #gestion_recolte #colonne_intitules .vol_revendique_dplc { margin-top: 25px; }
 
+#gestion_recolte span.ombre
+{
+	background: url(../images/fonds/bg_ombre_scroll.png) 0 0 repeat-y;
+	float: left;
+	left: 10px;
+	margin-left: -10px;
+	position: relative;
+	width: 10px;
+	z-index: 200;
+}
+
+#gestion_recolte span.ombre_droite
+{
+	background-image: url(../images/fonds/bg_ombre_scroll_droite.png);
+	left: 0;
+}
+
 /* Colonnes de déclaration */
 #gestion_recolte #col_scroller
 {
 	float: left;
 	overflow: auto;
-	padding: 0 0 15px;
-	width: 400px;
+	padding: 0 10px 15px;
+	width: 380px;
 }
 
 #gestion_recolte .col_recolte
