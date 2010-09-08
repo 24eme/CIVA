@@ -306,6 +306,12 @@ class RecolteOnglets {
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
 
+        if ($sf_route == 'recolte') {
+            $cepage_key = $this->convertValueToKey($cepage, $this->_prefix_key_cepage);
+            if (!$this->getLieu($appellation, $lieu)->exist($cepage_key) || !$this->getLieu($appellation, $lieu)->get($cepage_key)->detail->count() > 0) {
+                $sf_route = 'recolte_add';
+            }
+        }
 
 	$lieu_str = '';
 	if ($lieu) {

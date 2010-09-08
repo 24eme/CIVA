@@ -24,6 +24,10 @@ class recolteActions extends EtapesActions {
         $this->initDetails();
         $this->initAcheteurs();
            
+        if (!$this->details->count() > 0) {
+            $this->redirect($this->onglets->getUrl('recolte_add'));
+        }
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
@@ -125,7 +129,7 @@ class recolteActions extends EtapesActions {
                     //return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
 		  return $this->renderText(json_encode(array('action' => 'redirect',
-                                                               'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
+                                                               'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
                 }
             }
         }
@@ -150,7 +154,7 @@ class recolteActions extends EtapesActions {
             if ($this->form_ajout_lieu->isValid()) {
                 $this->form_ajout_lieu->save();
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                                                           'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
+                                                           'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
             }
         }
 
