@@ -76,7 +76,7 @@ validation:
 
 visualisation:
   url: /visualisation/:annee
-  param: {module: declaration, action: validation }
+  param: {module: declaration, action: visualisation }
 
 confirmation:
   url:   /confirmation
