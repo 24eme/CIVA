@@ -180,11 +180,11 @@ var choixPrecDecla = function()
  ******************************************/
 var accordeonPrecDecla = function()
 {
-    $('#precedentes_declarations ul.ui-accordion').accordion(
+   /* $('#precedentes_declarations ul.ui-accordion').accordion(
     {
         autoHeight: false,
         active: 0
-    });
+    });*/
 };
 
 /**
