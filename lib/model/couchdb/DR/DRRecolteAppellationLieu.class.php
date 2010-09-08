@@ -95,7 +95,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
       return $sum;
     }
 
-    public function getTotalVolumeForRebeche() {
+    public function getTotalVolumeForMinQuantite() {
       return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
     }
 

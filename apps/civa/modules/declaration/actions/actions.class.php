@@ -104,13 +104,13 @@ class declarationActions extends EtapesActions {
                     $this->error = true;
                 }else {
                     //verifie les rebeches pour les crÃ©mants
-                    if($appellation->appellation=='CREMANT' && $appellation->getTotalVolume()>0) {
+                    if($appellation->appellation=='CREMANT' && $lieu->getTotalVolumeForMinQuantite()>0) {
                         $rebeches=false;
                         foreach ($lieu->filter('cepage_') as $key => $cepage) {
                             if($key == 'cepage_RB') $rebeches = true;
                         }
                         if(!$rebeches) {
-                            $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
+			  $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), 'cepage_RB'));
                             $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches');
                             $i++;
                             $this->error = true;
@@ -119,9 +119,9 @@ class declarationActions extends EtapesActions {
                     }
                     //check les cepages
                     foreach ($lieu->filter('cepage_') as $key => $cepage) {
-                        if($key == 'cepage_RB') {
-                            $totalVolRatio = $appellation->getTotalVolume() * $cepage->getConfig()->min_quantite;
-                            $totalVolRevendique = $cepage->getTotalVolume();
+		      if($cepage->getConfig()->hasMinQuantite()) {
+			$totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite;
+			$totalVolRevendique = $cepage->getTotalVolume();
                             if( $totalVolRatio > $totalVolRevendique ) {
                                 $this->validLog[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                 $this->validLog[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite');
