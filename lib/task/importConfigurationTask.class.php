@@ -71,7 +71,7 @@ EOF;
 	$lieu->cepage_PG->rendement = 80;
 	$lieu->cepage_PG->douane->code_cepage = $cepage_douane[1]['PG'];
 
-	$lieu->cepage_GW->libelle = "Gewurztraminer";
+	$lieu->cepage_GW->libelle = "Gewurzt.";
 	$lieu->cepage_GW->rendement = 80;
 	$lieu->cepage_GW->douane->code_cepage = $cepage_douane[1]['GW'];
 
@@ -228,7 +228,7 @@ EOF;
       case 'RI':
 	return 'Riesling';
       case 'GW':
-	return 'Gewurztraminer';
+	return 'Gewurzt.';
       case 'PG':
 	return 'Pinot Gris';
       case 'MU':

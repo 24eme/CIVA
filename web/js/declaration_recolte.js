@@ -645,7 +645,7 @@ var volumeOnChange = function() {
     $(this).val(val.replace(',', '.'));
 
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
-    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
+    //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
     $('ul.acheteurs li').each(function () {
         var class = $(this).attr('class');
@@ -654,16 +654,21 @@ var volumeOnChange = function() {
     });
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
-    updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
 
     updateElementRows($('input.total'), $('#cepage_total_volume'));
-    updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
 
     updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
-    updateAppellationTotal('#cepage_total_revendique', '#appellation_total_revendique_sum');
 
-    updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
-    updateAppellationTotal('#cepage_total_dplc', '#appellation_total_dplc_sum');
+    //    updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
+
+    updateRevendiqueDPLC('#cepage_total_volume', '#cepage');
+
+
+    updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
+    updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
+    updateAppellationTotal('#cepage_volume_revendique', '#appellation_total_revendique_sum');
+
+    updateAppellationTotal('#cepage_volume_dplc', '#appellation_total_dplc_sum');
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 

@@ -55,8 +55,8 @@
         
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
-            <li><input type="text" class="num revendique readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
-            <li><input type="text" class="num dplc readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
+            <li><input type="hidden" class="num revendique readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
+            <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
         </ul>
         <?php endif; ?>
     </div>

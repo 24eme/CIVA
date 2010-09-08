@@ -30,7 +30,25 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 
       $this->set('total_volume', $v);
       $this->set('total_superficie', $s);
+
+      if ($this->hasRendement()) {
+	$volume_max = $this->getVolumeMax();
+	if ($this->total_volume > $volume_max) {
+	  $this->volume_revendique = $volume_max;
+	  $this->dplc = $this->total_volume - $volume_max;
+	} else {
+	  $this->volume_revendique = $this->total_volume;
+	}
+      }
+
     }
+
+    public function getVolumeMax() {
+      return ($this->total_superficie/100) * $this->getRendement();
+    }
+
+
+
     private function getSumDetailFields($field) {
       $sum = 0;
       foreach ($this->getData()->detail as $detail) {

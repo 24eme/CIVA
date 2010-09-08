@@ -48,8 +48,8 @@
         <ul class="vol_revendique_dplc">
 	   <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
 	   <input type="hidden" id="detail_rendement" value="<?php echo $detail->getRendementCepage(); ?>"/>
-            <li><input id="detail_volume_revendique" type="text" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
-            <li><input id="detail_volume_dplc" type="text" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
+            <li><input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
+            <li><input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
         </ul>
         <?php endif; ?>
     </div>

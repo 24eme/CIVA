@@ -37,6 +37,7 @@
    <input type="text" id='cepage_total_cave' readonly="readonly" value="<?php echo $cepage->getTotalCaveParticuliere() ?>" />
    </p>
         <p class="vol_total_recolte">
+   <input type="hidden" id='cepage_max_volume' value="<?php echo $cepage->getVolumeMax() ?>" />
    <input type="hidden" id='cepage_total_volume_orig' value="<?php echo $cepage->getTotalVolume() ?>" />
    <input type="text" id='cepage_total_volume' readonly="readonly" value="<?php echo $cepage->getTotalVolume() ?>" />
    </p>
@@ -44,12 +45,12 @@
    <li class="rendement">Rdt : <strong><span id="cepage_current_rendement"><?php echo $cepage->getRendementRecoltant() ?></span> hl/ha</strong></li>
    <?php if ($cepage->hasRendement()): ?>
 	   <li>
-	      <input type="text" id="cepage_total_revendique" readonly="readonly" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" />
-	      <input type="hidden" id="cepage_total_revendique_orig" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" />
+	      <input type="text" id="cepage_volume_revendique" readonly="readonly" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" />
+	      <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echo $cepage->getTotalVolumeRevendique() ?>" />
 	      </li>
 	      <li>
-	      <input type="text" id="cepage_total_dplc" readonly="readonly" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echo $cepage->getTotalDPLC() ?>" />
-	      <input type="hidden" id="cepage_total_dplc_orig" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echo $cepage->getTotalDPLC() ?>" />
+	      <input type="text" id="cepage_volume_dplc" readonly="readonly" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echo $cepage->getTotalDPLC() ?>" />
+	      <input type="hidden" id="cepage_volume_dplc_orig" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echo $cepage->getTotalDPLC() ?>" />
 	      </li>
 	      <?php endif; ?>
         </ul>
