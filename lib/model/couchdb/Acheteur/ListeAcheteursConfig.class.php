@@ -9,6 +9,46 @@ class ListAcheteursConfig {
     protected static $_mouts = null;
     protected static $_mouts_json = null;
 
+    protected static function getJson($items) {
+        $newitems = array();
+        foreach ($items as $cvi => $item) {
+            $newitems[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
+        }
+
+        return json_encode($newitems);
+    }
+
+    protected static function getOut($items, $cvis) {
+        $newitems = array();
+        foreach($items as $cvi => $item) {
+            if (!in_array($cvi, $cvis)) {
+                $newitems[$cvi] = $item;
+            }
+        }
+        return $newitems;
+    }
+
+    protected static function getIn($items, $cvis) {
+        $newitems = array();
+        foreach($items as $cvi => $item) {
+            if (in_array($cvi, $cvis)) {
+                $newitems[$cvi] = $item;
+            }
+        }
+        return $newitems;
+    }
+
+    protected static function getInOut($items, $in = null, $out = null) {
+        if ($in !== null) {
+            return self::getIn($items, $in);
+        } elseif($out !== null) {
+            return self::getOut($items, $out);
+        } else {
+            return $items;
+        }
+    }
+
+
     public static function getNegoces() {
         if (is_null(self::$_negoces)) {
             self::$_negoces = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
@@ -18,15 +58,8 @@ class ListAcheteursConfig {
         
     }
 
-    public static function getNegocesJson() {
-        if (is_null(self::$_negoces_json)) {
-            self::$_negoces_json = array();
-            foreach (self::getNegoces() as $cvi => $item) {
-                self::$_negoces_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
-            }
-        }
-
-        return json_encode(self::$_negoces_json);
+    public static function getNegocesJson($in = null, $out = null) {
+        return self::getJson(self::getInOut(self::getNegoces(), $in, $out));
     }
 
     public static function getCooperatives() {
@@ -37,15 +70,8 @@ class ListAcheteursConfig {
         return self::$_cooperatives;
     }
 
-    public static function getCooperativesJson() {
-        if (is_null(self::$_cooperatives_json)) {
-            self::$_cooperatives_json = array();
-            foreach (self::getCooperatives() as $cvi => $item) {
-                self::$_cooperatives_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
-            }
-        }
-
-        return json_encode(self::$_cooperatives_json);
+    public static function getCooperativesJson($in = null, $out = null) {
+         return self::getJson(self::getInOut(self::getCooperatives(), $in, $out));
     }
 
     public static function getMouts() {
@@ -56,14 +82,7 @@ class ListAcheteursConfig {
         return self::$_mouts;
     }
 
-    public static function getMoutsJson() {
-        if (is_null(self::$_mouts_json)) {
-            self::$_mouts_json = array();
-            foreach (self::getMouts() as $cvi => $item) {
-                self::$_mouts_json[] = $item['nom'] . '|@' . $item['cvi'] . '|@' . $item['commune'];
-            }
-        }
-
-        return json_encode(self::$_mouts_json);
+    public static function getMoutsJson($in = null, $out = null) {
+        return self::getJson(self::getInOut(self::getMouts(), $in, $out));
     }
 }

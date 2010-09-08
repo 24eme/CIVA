@@ -1,6 +1,17 @@
 <?php
 
 class DRAcheteurs extends BaseDRAcheteurs {
+
+    public function getArrayNegoces() {
+        $negoces = array();
+        foreach($this as $appellation => $acheteurs) {
+            foreach($acheteurs->negoces as $acheteur_cvi) {
+                $negoces[] = $acheteur_cvi;
+            }
+        }
+        return $negoces;
+    }
+
     public function getArrayNegocesWithAppellation() {
         $negoces = array();
         foreach($this as $appellation => $acheteurs) {
@@ -11,6 +22,16 @@ class DRAcheteurs extends BaseDRAcheteurs {
         return $negoces;
     }
 
+    public function getArrayCooperatives() {
+        $cooperatives = array();
+        foreach($this as $appellation => $acheteurs) {
+            foreach($acheteurs->cooperatives as $acheteur_cvi) {
+                $cooperatives[] = $acheteur_cvi;
+            }
+        }
+        return $cooperatives;
+    }
+
     public function getArrayCooperativesWithAppellation() {
         $cooperatives = array();
         foreach($this as $appellation => $acheteurs) {
@@ -19,6 +40,16 @@ class DRAcheteurs extends BaseDRAcheteurs {
             }
         }
         return $cooperatives;
+    }
+
+    public function getArrayMouts() {
+        $mouts = array();
+        foreach($this as $appellation => $acheteurs) {
+            foreach($acheteurs->mouts as $acheteur_cvi) {
+                $mouts[] = $acheteur_cvi;
+            }
+        }
+        return $mouts;
     }
 
     public function getArrayMoutsWithAppellation() {

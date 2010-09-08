@@ -495,6 +495,10 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     });
 };
 
+/**
+ * Supprime un CVI de la liste autocomplete
+ *
+ ******************************************/
 var deleteAcheteurFromAutocompletion = function(cvi, form_ajout)
 {
     var table_ajout = form_ajout.find('table');
@@ -514,6 +518,10 @@ var deleteAcheteurFromAutocompletion = function(cvi, form_ajout)
     nom.autocomplete('option', 'source', source_autocompletion);
 }
 
+/**
+ * Ajoute un CVI dans la liste autocomplete
+ *
+ ******************************************/
 var reinsertAcheteurFromAutocompletion = function(cvi, form_ajout)
 {
     var table_ajout = form_ajout.find('table');
