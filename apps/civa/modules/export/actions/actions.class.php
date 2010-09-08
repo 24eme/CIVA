@@ -265,8 +265,8 @@ class exportActions extends sfActions
     }
     $c = array();
     $c['type'] = 'total';
-    $c['cepage'] = 'Appellation';
-    $c['denomination'] = 'Total';
+    $c['cepage'] = 'Total';
+    $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu';
     $c['vtsgn'] = '';
     $c['superficie'] = $lieu->total_superficie;
     $c['volume'] = $lieu->total_volume;
@@ -310,7 +310,7 @@ class exportActions extends sfActions
     $identification_enabled = 1;
     foreach($pages as $p) {
       $this->nb_pages++;
-      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra)));
+      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages)));
       $identification_enabled = 0;
     }
   }

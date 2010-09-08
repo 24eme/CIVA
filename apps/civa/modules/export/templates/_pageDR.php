@@ -8,15 +8,15 @@ pre {display: inline;}
 <table border="0">
   <tr><td>N° CVI : <i><?php echo $tiers->cvi; ?></i></td><td>Nom : <i><?php echo $tiers->intitule.' '.$tiers->nom; ?></i></td></tr>
   <tr><td>SIRET : <i><?php echo $tiers->siret; ?></i></td><td>Adresse : <i><?php echo $tiers->siege->adresse; ?></i></td></tr>
-  <tr><td>Régime Fiscal : <i><?php echo $tiers->regime_fiscal; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
-  <tr><td>Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Fax : <i><?php echo $tiers->fax; ?></i></td></tr>
+  <tr><td>Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
+  <tr><td>Fax : <i><?php echo $tiers->fax; ?></i></td><td>&nbsp;</td></tr>
 </table>
 </td></tr></table>
 
 <span style="background-color: grey; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
 <table style="border: 1px solid grey;"><tr><td>
 <table border="0" style="margin: 0px; padding: 0px;">
-  <tr><td>Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né le <i><?php echo $tiers->exploitant->date_naissance; ?></i></td></tr>
+  <tr><td>Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo $tiers->exploitant->date_naissance; ?></i></td></tr>
   <tr><td>Adresse complete : <i><?php echo $tiers->exploitant->adresse.', '.$tiers->exploitant->code_postal.' '.$tiers->exploitant->commune; ?></i></td><td>Tel. <i><?php echo $tiers->exploitant->telephone; ?></i></td></tr>
 </table>
 </td></tr></table>
@@ -47,7 +47,7 @@ if (!function_exists('printColonne')) {
 }
 
 echo printColonne('Cépage', $colonnes_cepage, 'cepage');
-echo printColonne('Dénom. complém.', $colonnes_cepage, 'denomination');
+echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');
 echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
@@ -59,28 +59,30 @@ echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
 echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 ?>
 </table>
-<?php if ($enable_identification && count($acheteurs)) : ?>
 <div style="margin-top: 20px;">
 <table>
 <tr>
 <td style="width: 750px">
+<?php if ($enable_identification && count($acheteurs)) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="width: 100px;">N° CVI</th><th style="width: 300px;">Raison social (commune)</th><th style="width: 100px;">Superficie</th><th style="width: 120px;">Vente raisins</th><th style="width: 100px;">dont DPLC</th></tr>
+  <tr style="font-weight: bold;"><th style="width: 100px;">N° CVI</th><th style="width: 300px;">Raison social</th><th style="width: 100px;">Superficie</th><th style="width: 120px;">Volume</th><th style="width: 100px;">dont DPLC</th></tr>
   <?php foreach($acheteurs as $cvi => $a) : ?>
   <tr><td style="width: 100px;"><?php echo $cvi; ?></td><td style="width: 300px;"><?php echo $a->nom.' ('.$a->commune.')'; ?></td><td style="width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
   <?php endforeach; ?>
 </table>
+<?php endif;?>
 </td>
 <td valign="top" style="width: 200px;">
+<?php if ($nb_pages == 1) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
 <tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td><?php echo $extra['lies']; ?>&nbsp;<small>hl</small></td></tr>
 <tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td><?php echo $extra['jeunes_vignes']; ?>&nbsp;<small>ares</small></td></tr>
 </table>
+<?php endif; ?>
 </td>
 </tr>
 </table>
-<?php endif;?>
 
 
