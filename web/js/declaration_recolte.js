@@ -316,7 +316,7 @@ var initTablesAcheteurs = function()
         if(bloc.attr('id') != 'vol_sur_place')
         {
             toggleTrVide(table_achet);
-            supprimerLigneTable(table_achet);
+            supprimerLigneTable(table_achet, form_ajout);
 			
             initTableAjout(table_achet, form_ajout, btn_ajout);
             masquerTableAjout(table_achet, form_ajout, 0);
@@ -354,7 +354,7 @@ var toggleTrVide = function(table_achet)
 /**
  * Supprime une ligne de la table courante
  ******************************************/
-var supprimerLigneTable = function(table_achet)
+var supprimerLigneTable = function(table_achet, form_ajout)
 {
     var btn = table_achet.find('tbody tr a.supprimer');
 	
@@ -363,8 +363,11 @@ var supprimerLigneTable = function(table_achet)
         var choix = confirm('Confirmez-vous la suppression de cette ligne ?');
         if(choix)
         {
+            reinsertAcheteurFromAutocompletion($(this).parents('tr').find('td.cvi').html(), form_ajout);
+            
             $(this).parents('tr').remove();
             toggleTrVide(table_achet);
+
         }
         return false;
     });
@@ -384,6 +387,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 {
     var table_ajout = form_ajout.find('table');
     var source_autocompletion = eval(table_ajout.attr('rel'));
+    var source_autocompletion_using = eval(table_ajout.attr('rel')+'_using');
     var champs = table_ajout.find('input');
     var nom = table_ajout.find('td.nom input');
     var cvi = table_ajout.find('td.cvi');
@@ -422,7 +426,15 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     nom.data('autocomplete')._renderItem = function(ul, item)
     {
         var tab = item['value'].split('|@');
-		
+        var find_acheteur = false;
+        /*table_achet.find('td.cvi').each(function() {
+            if ($(this).text() == tab[1]) {
+                find_acheteur = true;
+            }
+        });
+	if (find_acheteur) {
+            return false;
+        }*/
         return $('<li></li>')
         .data("item.autocomplete", tab)
         .append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
@@ -470,6 +482,8 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
                     tr.appendTo(table_achet);
                     toggleTrVide(table_achet);
                     styleTables(table_achet);
+
+                    deleteAcheteurFromAutocompletion(tr.find('td.cvi').html(), form_ajout);
                 });
             }
         }
@@ -480,6 +494,43 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
         return false;
     });
 };
+
+var deleteAcheteurFromAutocompletion = function(cvi, form_ajout)
+{
+    var table_ajout = form_ajout.find('table');
+    var source_autocompletion = eval(table_ajout.attr('rel'));
+    var source_autocompletion_using = eval(table_ajout.attr('rel')+'_using');
+    var nom = table_ajout.find('td.nom input');
+
+    for(var acheteur_id in source_autocompletion) {
+        var tab = source_autocompletion[acheteur_id].split('|@');
+        if (tab[1] == cvi) {
+            source_autocompletion_using.unshift(source_autocompletion[acheteur_id]);
+            source_autocompletion.splice(acheteur_id, 1);
+            break;
+        }
+    }
+
+    nom.autocomplete('option', 'source', source_autocompletion);
+}
+
+var reinsertAcheteurFromAutocompletion = function(cvi, form_ajout)
+{
+    var table_ajout = form_ajout.find('table');
+    var source_autocompletion = eval(table_ajout.attr('rel'));
+    var source_autocompletion_using = eval(table_ajout.attr('rel')+'_using');
+    var nom = table_ajout.find('td.nom input');
+
+    for(var acheteur_id in source_autocompletion_using) {
+        var tab = source_autocompletion_using[acheteur_id].split('|@');
+        if (tab[1] == cvi) {
+            source_autocompletion.unshift(source_autocompletion_using[acheteur_id]);
+            source_autocompletion_using.splice(acheteur_id, 1);
+            break;
+        }
+    }
+    nom.autocomplete('option', 'source', source_autocompletion);
+}
 
 /**
  * Masque les tables d'ajout
