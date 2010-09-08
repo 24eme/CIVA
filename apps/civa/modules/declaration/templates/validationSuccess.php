@@ -18,7 +18,7 @@
                 <?php foreach($validLog as $logs) { ?>
                 <ul class="messages_log">
                     <?php foreach($logs as $log) { ?>
-                        <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
+                    <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
                    <?php } ?>
                 </ul>
                 <br />
