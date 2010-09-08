@@ -67,7 +67,12 @@ function valider_can_submit()
   }
 <?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
-    var min = parseFloat($('#appellation_total_volume').val()) * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
+    var total_non_negociant = parseFloat($('#appellation_total_volume').val());
+    $("#col_recolte_totale .vente_raisins .acheteur").each(function() 
+    {
+      total_non_negociant -= $(this).val();
+    });
+    var min = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
     if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup_msg_erreur"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
     openPopup($('#popup_msg_erreur'), 0);

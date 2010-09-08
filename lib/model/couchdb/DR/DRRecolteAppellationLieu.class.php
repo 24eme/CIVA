@@ -87,18 +87,32 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
 
-    private function getAcheteursFromCepage($type = 'negoces|cooperatives') {
-        $acheteurs = array();
-        foreach ($this->filter('^cepage') as $key => $cepage) {
-            foreach ($cepage->detail as $key => $d) {
-                foreach ($d->filter($type) as $key => $t) {
-                    foreach ($t as $key => $a) {
-                        array_push($acheteurs, $a);
-                    }
-                }
-            }
-        }
-        return $acheteurs;
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives') {
+      $sum = 0;
+      foreach($this->getAcheteursFromCepage($type) as $acheteur) {
+	$sum += $acheteur->quantite_vendue;
+      }
+      return $sum;
+    }
+
+    public function getTotalVolumeForRebeche() {
+      return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
+    }
+
+    private function getAcheteursFromCepage($type = 'negoces|cooperatives', $exclude_cepage = '') {
+      $acheteurs = array();
+      foreach ($this->filter('^cepage') as $key => $cepage) {
+	if ($key == $exclude_cepage)
+	  continue;
+	foreach ($cepage->detail as $key => $d) {
+	  foreach ($d->filter($type) as $key => $t) {
+	    foreach ($t as $key => $a) {
+	      array_push($acheteurs, $a);
+	    }
+	  }
+	}
+      }
+      return $acheteurs;
     }
 
     public function getTotalAcheteursByCvi($field) {
