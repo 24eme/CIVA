@@ -23,7 +23,7 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-
+           
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
