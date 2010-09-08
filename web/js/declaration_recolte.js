@@ -40,14 +40,16 @@ $(document).ready( function()
 
         var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
 
-        if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && (e.which < 48 || e.which > 57))
+	var is_number = (e.which >= 48 && e.which <= 57);
+
+        if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && !is_number)
             return false;
-        else {
-            if(e.which == 46 && has_point_or_virgule)
-                return false;
-            if(e.which == 44 && has_point_or_virgule)
-                return false;
-        }
+	if(e.which == 46 && has_point_or_virgule)
+	    return false;
+	if(e.which == 44 && has_point_or_virgule)
+	    return false;
+	if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.originalTarget.selectionStart > val.length - 3)
+	    return false;
         return e;
     });
     $('input.num').live('change',function(e)
