@@ -88,11 +88,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if($jeunes_vignes>0){ ?>
                     <tr>
                         <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echo $jeunes_vignes; ?>&nbsp;<small>ares</small></td>
                     </tr>
-                    <?php }?>
                     <tr>
                         <td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
                     </tr>
