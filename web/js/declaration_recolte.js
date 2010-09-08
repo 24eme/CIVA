@@ -38,15 +38,27 @@ $(document).ready( function()
     {
         var val = $(this).val();
 
-        val = val.replace(',', '.');
-        $(this).val(val);
-		
-        if(e.which != 8 && e.which != 0 && e.which != 46 && (e.which < 48 || e.which > 57))
+        var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
+
+        if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && (e.which < 48 || e.which > 57))
             return false;
-        else
-        if(e.which == 46 && val.indexOf('.') != -1)
-            return false;
+        else {
+            if(e.which == 46 && has_point_or_virgule)
+                return false;
+            if(e.which == 44 && has_point_or_virgule)
+                return false;
+        }
+        return e;
     });
+    $('input.num').live('change',function(e)
+    {
+        var val = $(this).val();
+        $(this).val(val.replace(',', '.'));
+    });
+    /* $('input.num').live('keyup',function(e)
+    {
+        alert($(this).val());
+    });*/
     if ($('#exploitation_acheteurs').length > 0) {
         $('#exploitation_acheteurs').ready( function() {
             initTablesAcheteurs();
@@ -605,6 +617,8 @@ var updateAppellationTotal = function (cepageCssId, appellationCssId) {
     $(appellationCssId).val(app_orig - cep_orig + cep_now);
 }
 var superficieOnChange = function() {
+    var val = $(this).val();
+    $(this).val(val.replace(',', '.'));
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
     $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
@@ -627,6 +641,9 @@ var addClassAlerteIfNeeded = function (inputObj)
 };
 
 var volumeOnChange = function() {
+    var val = $(this).val();
+    $(this).val(val.replace(',', '.'));
+
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
