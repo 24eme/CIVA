@@ -3,7 +3,7 @@
 
 # default values
 all:
-  base_url : http://declaration.vinsalsace.pro
+  base_url : http://declaration.vinsalsace.pro/
   tomcat_dir : /home/declaration/vinsalsace/cas
   cas:
     domain: declaration.dev.vinsalsace.pro
