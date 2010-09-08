@@ -135,10 +135,12 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     }
 
     public function isNonSaisie() {
-       foreach($this->detail as $detail) {
-            if(!$detail->isNonSaisie())
-               return false;
-       }
-       return true;
+      if (!$this->exist('detail') || !count($this->detail))
+	return false;
+      foreach($this->detail as $detail) {
+	if(!$detail->isNonSaisie())
+	  return false;
+      }
+      return true;
     }
 }

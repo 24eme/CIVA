@@ -221,10 +221,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function isNonSaisie() {
-        foreach($this->filter('cepage_') as $key => $cepage) {
-            if (!$cepage->isNonSaisie())
-                    return false;
-        }
-        return true;
+      $cpt = 0;
+      foreach($this->filter('cepage_') as $key => $cepage) {
+	$cpt ++;
+	if (!$cepage->isNonSaisie())
+	  return false;
+      }
+      return ($cpt);
     }
 }
