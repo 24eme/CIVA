@@ -49,6 +49,12 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
+            <br />
+            <h3 class="titre_section">Gamma</h3>
+            <div class="contenu_section">
+                <p class="intro">Lien vers votre espace Gamma</p>
+
+            </div>
         </div>
         <!-- fin #nouvelle_declaration -->
 

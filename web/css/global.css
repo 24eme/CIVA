@@ -11,16 +11,16 @@
  ******************************************/
 *
 {
-	font-size: 100%;
-	margin: 0;
-	padding: 0;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 html, body
 {
-	font-family: Calibri, Arial, Verdana, Helvetica, sans-serif;
-	height: 100%;
-	line-height: 1.2;
+    font-family: Calibri, Arial, Verdana, Helvetica, sans-serif;
+    height: 100%;
+    line-height: 1.2;
 }
 
 a img, fieldset { border: 0; }
@@ -45,9 +45,9 @@ del { text-decoration: line-through; }
 
 table
 {
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
 }
 
 /**
@@ -55,18 +55,18 @@ table
  ******************************************/
 body
 {
-	background: #000 url(../images/fonds/bg_global.jpg) center 0 no-repeat;
-	font-size: 12px;
+    background: #000 url(../images/fonds/bg_global.jpg) center 0 no-repeat;
+    font-size: 12px;
 }
- 
+
 a { color: #000; text-decoration: none; }
 a:hover, a:focus { text-decoration: underline; }
 
 input[type=radio]
 {
-	height: 14px;
-	vertical-align: top;
-	width: 14px;
+    height: 14px;
+    vertical-align: top;
+    width: 14px;
 }
 
 /**
@@ -100,17 +100,17 @@ html[xmlns] .clearfix { display: block; }
 
 .clearfix:after
 {
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0;
-	visibility: hidden;
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
 }
 
 .ligne_form
 {
-	clear: both;
-	overflow: hidden;
+    clear: both;
+    overflow: hidden;
 }
 
 p.flash_message
@@ -131,6 +131,10 @@ p.flash_message
     text-align: center;
     margin-top: 70px;
 }
+#popup_msg_erreur .close_btn{
+    margin-top:10px;
+    text-align:right;
+}
 
 
 /**
@@ -138,26 +142,26 @@ p.flash_message
  ******************************************/
 #global
 {
-	margin: 0 auto;
-	width: 1000px;
+    margin: 0 auto;
+    width: 1000px;
 }
 
 #header
 {
-	background: url(../images/fonds/bg_header.png) 0 0 repeat;
-	border: 1px solid #252303;
-	color: #f1f1f1;
-	margin: 7px 0;
-	padding: 10px;
+    background: url(../images/fonds/bg_header.png) 0 0 repeat;
+    border: 1px solid #252303;
+    color: #f1f1f1;
+    margin: 7px 0;
+    padding: 10px;
 }
 
 #contenu
 {
-	background: #fff;
-	border: 1px solid #000;
-	border-bottom-color: #dedede;
-	clear: both;
-	padding: 0 0 20px;
+    background: #fff;
+    border: 1px solid #000;
+    border-bottom-color: #dedede;
+    clear: both;
+    padding: 0 0 20px;
 }
 
 #principal
@@ -170,10 +174,10 @@ p.flash_message
 
 #footer
 {
-	color: #4d4f4f;
-	font-size: 11px;
-	padding: 20px 0;
-	text-align: center;
+    color: #4d4f4f;
+    font-size: 11px;
+    padding: 20px 0;
+    text-align: center;
 }
 
 
@@ -182,37 +186,37 @@ p.flash_message
  ******************************************/
 ul#liens_evitement
 {
-	font-size: 10px;
-	line-height: 12px;
-	margin: 7px 0 0;
-	text-transform: uppercase;
+    font-size: 10px;
+    line-height: 12px;
+    margin: 7px 0 0;
+    text-transform: uppercase;
 }
 
 ul#liens_evitement li
 {
-	display: inline;
-	float: right;
-	margin: 0 0 0 28px;
+    display: inline;
+    float: right;
+    margin: 0 0 0 28px;
 }
 
 ul#liens_evitement li a
 {
-	background: url(../images/pictos/pi_liens_evitement.png) no-repeat;
-	color: #c4d00a;
+    background: url(../images/pictos/pi_liens_evitement.png) no-repeat;
+    color: #c4d00a;
 }
 
 ul#liens_evitement li.accueil a
 {
-	background-position: 0 2px;
-	color: #c4d00a;
-	padding: 0 0 0 18px;
+    background-position: 0 2px;
+    color: #c4d00a;
+    padding: 0 0 0 18px;
 }
 
 ul#liens_evitement li.deconnexion a
 {
-	background-position: right -14px;
-	color: #c4d00a;
-	padding: 0 25px 0 0;
+    background-position: right -14px;
+    color: #c4d00a;
+    padding: 0 25px 0 0;
 }
 
 /**
@@ -221,41 +225,41 @@ ul#liens_evitement li.deconnexion a
 /* Logo */
 #header h1#logo
 {
-	float: left;
-	text-align: center;
-	width: 135px;
+    float: left;
+    text-align: center;
+    width: 135px;
 }
 
 /* Titre rubrique */
 #header #titre_rubrique
 {
-	border: solid #fff;
-	border-width: 0 1px;
-	float: left;
-	margin: 0 12px;
-	padding: 0 12px;
-	width: 658px;
+    border: solid #fff;
+    border-width: 0 1px;
+    float: left;
+    margin: 0 12px;
+    padding: 0 12px;
+    width: 658px;
 }
 
 #header #titre_rubrique h1
 {
-	font-size: 34px;
-	font-weight: normal;
-	margin: 0 0 5px;
+    font-size: 34px;
+    font-weight: normal;
+    margin: 0 0 5px;
 }
 
 #header #titre_rubrique p.utilisateur
 {
-	background: url(../images/pictos/pi_utilisateur.png) 0 center no-repeat;
-	font-size: 20px;
-	padding: 0 0 0 15px;
+    background: url(../images/pictos/pi_utilisateur.png) 0 center no-repeat;
+    font-size: 20px;
+    padding: 0 0 0 15px;
 }
 
 #header #titre_rubrique p.utilisateur a
 {
-	background: url(../images/puces/fleche_bas_1.png) right center no-repeat;
-	color: #f1f1f1;
-	padding: 0 12px 0 0;
+    background: url(../images/puces/fleche_bas_1.png) right center no-repeat;
+    color: #f1f1f1;
+    padding: 0 12px 0 0;
 }
 
 #header #titre_rubrique p.utilisateur { font-size: 16px; }
@@ -263,15 +267,15 @@ ul#liens_evitement li.deconnexion a
 /* Accès directs */
 #header #acces_directs
 {
-	float: left;
-	width: 135px;
+    float: left;
+    width: 135px;
 }
 
 #header #acces_directs h2
 {
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0 0 15px;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 15px;
 }
 
 #header #acces_directs ul li a { color: #c4d00a; }
@@ -287,7 +291,7 @@ ul#liens_evitement li.deconnexion a
 
 #footer ul li a
 {
-	background: url(../images/puces/bullet_noir.png) 0 center no-repeat;
-	color: #4d4f4f;
-	padding: 0 0 0 15px;
+    background: url(../images/puces/bullet_noir.png) 0 center no-repeat;
+    color: #4d4f4f;
+    padding: 0 0 0 15px;
 }
