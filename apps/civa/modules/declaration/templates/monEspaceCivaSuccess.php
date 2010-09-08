@@ -57,7 +57,7 @@
             <h3 class="titre_section">Visualiser mes déclarations</h3>
             <div class="contenu_section">
 
-                <ul class="bloc_vert ui-accordion">
+                <ul class="bloc_vert">
                     <li>
                         <a href="#">Déclaration en cours</a>
                         <?php if ($declaration): ?>
@@ -69,15 +69,15 @@
                     <li>
                         <a href="#">Années précédentes</a>
                         <?php if (count($campagnes) > 0): ?>
-                        <ul class="ui-accordion ui-display-none">
-                                <?php foreach ($campagnes as $id => $campagne): ?>
-                            <li>
+                        <ul class="declarations">
+                            <?php foreach ($campagnes as $id => $campagne): ?>
+                            <!--<li>
                                 <a href="#"><?php echo $campagne ?></a>
-                                <ul class="declarations">
+                                <ul>-->
                                     <li><?php echo link_to($campagne, '@visualisation?annee='.$campagne); ?></li>
-                                </ul>
-                            </li>
-                                <?php endforeach; ?>
+                               <!-- </ul>
+                            </li>-->
+                            <?php endforeach; ?>
                         </ul>
                         <?php endif; ?>
                     </li>
