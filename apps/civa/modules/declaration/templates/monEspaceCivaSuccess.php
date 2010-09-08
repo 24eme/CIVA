@@ -60,11 +60,15 @@
                 <ul class="bloc_vert">
                     <li>
                         <a href="#">Déclaration en cours</a>
-                        <?php if ($declaration): ?>
                         <ul class="declarations">
-                            <li><a href="#">Rédaction courante</a></li>
-                        </ul>
+                            <li>
+                        <?php if ($declaration): ?>
+                        <a href="#">Rédaction courante</a>
+                        <?php else: ?>
+                         <a href="#">Pas de déclaration courante</a>
                         <?php endif; ?>
+                        </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#">Années précédentes</a>
@@ -89,6 +93,5 @@
     </div>
     <!-- fin #application_dr -->
 
-    <?php include_partial('global/boutons', array('display' => array('suivant'))) ?>
 </form>
 <!-- fin #principal -->
