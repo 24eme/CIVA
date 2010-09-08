@@ -1031,7 +1031,7 @@ a.msg_aide
 	float: left;
 	overflow: auto;
 	padding: 0 0 15px;
-	width: 331px;
+	width: 400px;
 }
 
 #gestion_recolte .col_recolte
@@ -1206,13 +1206,13 @@ a.msg_aide
 #gestion_recolte .col_total .vol_revendique_dplc .rendement
 {
 	color: #bc0d0d;
-	font-size: 13px;
+	font-size: 12px;
 	position: absolute;
 	top: 0;
 	padding: 0;
 }
 
-#gestion_recolte .col_total .vol_revendique_dplc .rendement strong { font-size: 16px; }
+#gestion_recolte .col_total .vol_revendique_dplc .rendement strong { font-size: 14px; }
 
 /**
  * Récapitualtif des ventes

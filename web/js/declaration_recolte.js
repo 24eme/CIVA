@@ -821,22 +821,24 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
      ******************************************/
 var largeurColScrollerCont = function()
 {
-    var cont = $('#col_scroller_cont');
-    var cols = cont.find('.col_recolte');
-    var btn = cont.find('a#ajout_col');
+   var cont = $('#col_scroller_cont');
+	var cols = cont.find('.col_recolte');
+	var col_active = cont.find('.col_active');
+	var btn = cont.find('a#ajout_col');
 	
-    var largeur = btn.width();
+	var largeur = btn.width();
 	
-    cols.each(function()
-    {
-        largeur += $(this).width() + parseInt($(this).css('marginRight'));
-    });
-
-    cont.width(largeur);
-    cont.scrollTo( {
-        left:largeur
-    }, 800 );
-//cont.parent().scrollTo('+='+largeur_cont+'px');
+	cols.each(function()
+	{
+		largeur += $(this).width() + parseInt($(this).css('marginRight'));
+	});
+	
+	cont.width(largeur);
+	
+	if(col_active.size() > 0)
+		cont.parent().scrollTo(col_active, 0 );
+	else
+		cont.parent().scrollTo( { top: 0, left: largeur }, 0 );
 };
 
 
