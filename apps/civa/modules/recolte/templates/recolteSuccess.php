@@ -14,7 +14,7 @@
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
                                     <!-- #gestion_recolte -->
-					<div id="gestion_recolte" class="clearfix">
+					<div id="gestion_recolte" class="clearfix gestion_recolte_donnees">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'onglets' => $onglets,
                                                                                               'recapitulatif' => false)); ?>
@@ -30,7 +30,6 @@
                                                                                                        'onglets' => $onglets,
                                                                                                        'detail_key' => $detail_key,
                                                                                                        'detail_action_mode' => $detail_action_mode,
-                                                                                                       'is_detail_edit' => $is_detail_edit,
                                                                                                        'form' => $form_detail,
                                                                                                        'acheteurs' => $acheteurs,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
@@ -45,10 +44,10 @@
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
                                                                 <?php if ($onglets->hasPreviousCepage()): ?>
-                                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="<?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
+                                                                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                                                                 <?php endif; ?>
                                                                 <?php if ($onglets->hasNextCepage()): ?>
-                                                                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="<?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
+                                                                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
                                                                 <?php endif; ?>
 							</ul>
 						
@@ -62,12 +61,12 @@
 					</div>
 					<!-- fin #gestion_recolte -->
 
-  <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'inactif' => $is_detail_edit)) ?>
+  <?php include_partial('boutonAppellation', array('onglets' => $onglets)) ?>
 
 				</div>
 				<!-- fin #application_dr -->
 
-                                <?php include_partial('boutons', array('inactif' => $is_detail_edit)) ?>
+                                <?php include_partial('boutons') ?>
 				
 			<!--</form>-->
 			<!-- fin #principal -->

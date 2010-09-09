@@ -73,9 +73,17 @@ $(document).ready( function()
         });
     }
 
-    if ($('#gestion_recolte').length > 0) {
+    if ($('#gestion_recolte.gestion_recolte_donnees').length > 0) {
         $('#gestion_recolte').ready( function() {
             initGestionRecolte();
+            initGestionRecolteDonnees();
+        });
+    }
+
+    if ($('#gestion_recolte.gestion_recolte_recapitulatif').length > 0) {
+        $('#gestion_recolte').ready( function() {
+            initGestionRecolte();
+            initGestionRecolteRecapitulatif();
         });
     }
 
@@ -100,7 +108,7 @@ $(document).ready( function()
         yearRange: '1900:'+annee
     });
 
-    $(document).find('a.btn_inactif').click(function() {
+    $(document).find('a.btn_inactif').live('click', function() {
         return false;
     });
 
@@ -632,12 +640,20 @@ var initGestionGrandsCrus = function()
         );
 };
 
-
 /**
      * Initialise les fonctions de la gestion
      * de récolte
      ******************************************/
-var initGestionRecolte = function(type)
+var initGestionRecolte = function()
+{
+    initDRPopups();
+}
+
+/**
+     * Initialise les fonctions de la gestion
+     * de récolte des données
+     ******************************************/
+var initGestionRecolteDonnees = function()
 {
     /*var col_intitules = $('#colonne_intitules');
     var col_scroller = $('#col_scroller');
@@ -649,10 +665,12 @@ var initGestionRecolte = function(type)
     var btn_ajout_col = col_scroller.find('a#ajout_col');
          */
 
-    //etatBtnAjoutCol();
+    etatBtnAjoutCol();
+    etatBtnRecolteCanBeInactif();
+
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
-	$('span.ombre').height($('#col_scroller').height()-15);
+    $('span.ombre').height($('#col_scroller').height()-15);
 	
     /*btn_ajout_col.click(function()
     {
@@ -666,11 +684,46 @@ var initGestionRecolte = function(type)
         initColRecolte(col);
     });*/
 	
-    initDRPopups();
     //Calcule auto du volume
-    $('input.volume').change(volumeOnChange);
-    $('#recolte_superficie').change(superficieOnChange);
+    $('input.volume').change(volumeOnChange(this));
+    $('#recolte_superficie').change(superficieOnChange(this));
+
+    $('.col_recolte.col_active input').live('change', function() {
+        var val = $(this).val();
+        $(this).val(val.replace(',', '.'));
+
+        etatBtnRecolteCanBeInactif();
+
+        if ($(this).hasClass('volume')) {
+            volumeOnChange(this);
+        }
+        if ($(this).attr('id') == 'recolte_superficie') {
+            superficieOnChange(this)
+        }
+
+    });
+
+    $('.col_recolte.col_active select').live('change', function () {
+        etatBtnRecolteCanBeInactif();
+    });
+
 };
+
+/**
+     * Initialise la page recapitulatif de la recolte
+     ******************************************/
+var initGestionRecolteRecapitulatif = function() {
+    $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
+}
+
+var etatBtnRecolteCanBeInactif = function () {
+   if($('.col_recolte.col_active input:enabled[value!=""][readonly!="readonly"]').length > 0 || $('.col_recolte.col_active select[value!=""][readonly!="readonly"]').length > 0) {
+      $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
+   } else {
+      $('a.btn_recolte_can_be_inactif').removeClass('btn_inactif');
+   }
+}
+
 var updateElementRows = function (inputObj, totalObj) {
     totalObj.val(0);
     inputObj.each(function() {
@@ -692,14 +745,16 @@ var updateAppellationTotal = function (cepageCssId, appellationCssId) {
         cep_now = 0;
     $(appellationCssId).val(app_orig - cep_orig + cep_now);
 }
-var superficieOnChange = function() {
-    var val = $(this).val();
-    $(this).val(val.replace(',', '.'));
+var superficieOnChange = function(input) {
+    if (!input) {
+        input = this;
+    }
+    
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
     $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
     $('#appellation_max_volume').val(parseFloat($('#appellation_total_superficie').val())/100 * parseFloat($('#appellation_rendement').val()));
-    volumeOnChange();
+    volumeOnChange(input);
 };
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if (parseFloat($(totalRecolteCssId).val()) > parseFloat($(elementCssId+'_max_volume').val()))
@@ -716,17 +771,18 @@ var addClassAlerteIfNeeded = function (inputObj)
         inputObj.addClass('alerte');
 };
 
-var volumeOnChange = function() {
-    var val = $(this).val();
-    $(this).val(val.replace(',', '.'));
-
+var volumeOnChange = function(input) {
+    if (!input) {
+        input = this;
+    }
+    
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
     $('ul.acheteurs li').each(function () {
-        var class = $(this).attr('class');
-        updateElementRows($('#col_scroller input.'+class), $('#col_cepage_total input.'+class));
-        updateAppellationTotal('#col_cepage_total input.'+class, '#col_recolte_totale input.'+class);
+        var css_class = $(input).attr('class');
+        updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
+        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_recolte_totale input.'+css_class);
     });
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
@@ -801,14 +857,14 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 /**
      * Etat du bouton d'ajout de colonne
      ******************************************/
-/*var etatBtnAjoutCol = function()
+var etatBtnAjoutCol = function()
 {
     var col_recolte = $('#col_scroller .col_recolte');
     var btn = $('a#ajout_col');
 	
-    if(col_recolte.filter('.col_active').size() > 0) btn.addClass('inactif');
-    else btn.removeClass('inactif');
-};*/
+    if(col_recolte.filter('.col_active').size() > 0) btn.addClass('btn_inactif');
+    else btn.removeClass('btn_inactif');
+};
 
 /**
      * Initialise les fonctions des colonnes
@@ -928,10 +984,13 @@ var initDRPopups = function()
     };
     initPopupAjout(btn_ajout_appelation, popup_ajout_appelation, config_default);
     initPopupAjout(btn_ajout_lieu, popup_ajout_lieu, config_default);
-    initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs, var_liste_acheteurs_using);
-    initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves, var_liste_caves_using);
-    initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs, var_liste_acheteurs_using);
-    initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
+    
+    if (popup_ajout_acheteur.length > 0 && popup_ajout_cave.length > 0 && popup_ajout_mout.length > 0 && popup_ajout_motif.length > 0) {
+        initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs, var_liste_acheteurs_using);
+        initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves, var_liste_caves_using);
+        initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs, var_liste_acheteurs_using);
+        initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
+    }
     
 };
 
@@ -1049,7 +1108,6 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
                 append(data);
                 popup.dialog('close');
                 hauteurEgaleColRecolte();
-                $('input.volume').change(volumeOnChange);
                 deleteRecolteAcheteurFromAutocompletion(cvi_val, nom, source_autocompletion, source_autocompletion_using);
             });
 

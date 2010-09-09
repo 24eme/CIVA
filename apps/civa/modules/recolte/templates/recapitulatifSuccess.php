@@ -13,7 +13,7 @@
 				<div id="application_dr" class="clearfix">
 				
 					<!-- #gestion_recolte -->
-					<div id="gestion_recolte" class="clearfix">
+					<div id="gestion_recolte" class="clearfix gestion_recolte_recapitulatif">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
                                                                                               'onglets' => $onglets, 'recapitulatif' => true)); ?>
 
@@ -101,12 +101,12 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 						</div>					</div>	
 					<!-- fin #gestion_recolte -->
 					
-                                                <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true, 'inactif' => false)) ?>
+                                                <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
 					
 				</div>
 				<!-- fin #application_dr -->
 				
-				<?php include_partial('boutons', array('inactif' => true)) ?>
+				<?php include_partial('boutons') ?>
 
 				
 			</form>

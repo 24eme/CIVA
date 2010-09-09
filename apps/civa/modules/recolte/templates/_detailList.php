@@ -10,12 +10,11 @@
                         'key' => $key,
                         'onglets' => $onglets,
                         'acheteurs' => $acheteurs,
-                        'is_detail_edit' => $is_detail_edit,
                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
         <?php endif; ?>
 <?php endforeach; ?>
 <?php if (! $onglets->getCurrentCepage()->getConfig()->hasOnlyOneDetail() || !count($details) ) :?>
-        <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>" id="ajout_col" class="<?php if($is_detail_edit): ?>btn_inactif<?php endif; ?>"><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
+        <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>" id="ajout_col" class=""><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
 <?php endif; ?>
     </div>
 </div>
