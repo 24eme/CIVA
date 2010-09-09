@@ -37,38 +37,49 @@ exploitation_autres:
 recolte:
   url:   /recolte/:appellation_lieu/:cepage
   param: { module: recolte, action: recolte, appellation_lieu: null, cepage: null}
+  class: sfRouteAnchor
 
 recolte_update:
   url:   /recolte/:appellation_lieu/:cepage/update/:detail_key
   param: { module: recolte, action: update }
+  options: {anchor: "#onglets_majeurs" }
+  class: sfRouteAnchor
 
 recolte_delete:
   url:   /recolte/:appellation_lieu/:cepage/delete/:detail_key
   param: { module: recolte, action: delete }
+  options: {anchor: "#onglets_majeurs" }
+  class: sfRouteAnchor
 
 recolte_add:
   url:   /recolte/:appellation_lieu/:cepage/add
-  param: { module: recolte, action: add }
+  param: { module: recolte, action: add}
+  class: sfRouteAnchor
 
 recolte_motif_non_recolte:
   url:   /recolte/:appellation_lieu/:cepage/motif_non_recolte/:detail_key
   param: { module: recolte, action: motifNonRecolte }
+  class: sfRouteAnchor
 
 recolte_add_appellation:
   url:   /recolte/:appellation_lieu/:cepage/add_appellation
   param: { module: recolte, action: ajoutAppellationAjax }
+  class: sfRouteAnchor
 
 recolte_add_lieu:
   url:   /recolte/:appellation_lieu/:cepage/add_lieu
   param: { module: recolte, action: ajoutLieuAjax }
+  class: sfRouteAnchor
 
 recolte_add_acheteur:
   url:   /recolte/:appellation_lieu/:cepage/add_acheteur
   param: { module: recolte, action: ajoutAcheteurAjax }
+  class: sfRouteAnchor
 
 recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif }
+  class: sfRouteAnchor
 
 validation:
   url:   /validation

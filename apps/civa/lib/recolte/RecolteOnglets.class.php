@@ -275,7 +275,7 @@ class RecolteOnglets {
         return $this->$method_items()->getLastKey();
     }
 
-    public function getUrl($sf_route, $appellation = null, $lieu = null, $cepage = null) {
+    public function getUrl($sf_route, $appellation = null, $lieu = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
         if (is_null($appellation)) {
             if (!is_null($this->getCurrentKeyAppellation())) {
                 $appellation = $this->getCurrentValueAppellation();
@@ -317,10 +317,11 @@ class RecolteOnglets {
 	if ($lieu) {
 	  $lieu_str = '-'.$lieu;
 	}
+
         if (!$cepage) {
-            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str);
+            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'sf_anchor' => $sf_anchor);
         } else {
-            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage);
+            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage, 'sf_anchor' => $sf_anchor);
         }
     }
 

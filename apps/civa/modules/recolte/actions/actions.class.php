@@ -223,7 +223,7 @@ class recolteActions extends EtapesActions {
 
         $this->onglets = new RecolteOnglets($this->declaration);
         if (!$appellation && !$lieu && !$cepage) {
-           $this->redirect($this->onglets->getUrl('recolte'));
+           $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
         }
         $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
 
