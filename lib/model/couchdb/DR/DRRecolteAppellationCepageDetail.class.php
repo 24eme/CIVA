@@ -20,7 +20,6 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         }
         return $values;
     }
-
     protected function update() {
         parent::update();
         $v = $this->cave_particuliere;

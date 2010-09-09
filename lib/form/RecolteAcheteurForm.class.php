@@ -4,7 +4,7 @@ class RecolteAcheteurForm extends BaseForm {
 
     public function configure() {
         $this->setWidgets(array(
-            'quantite_vendue' => new sfWidgetFormInputFloat(),
+            'quantite_vendue' => new sfWidgetFormInputText(),
         ));
 
         $this->setValidators(array(

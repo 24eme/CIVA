@@ -14,8 +14,8 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
         $this->setWidgets(array(
             'denomination' => new sfWidgetFormInputText(),
             'vtsgn' => new sfWidgetFormSelect(array('choices' => $this->getChoicesVvtsgn())),
-            'superficie' => new sfWidgetFormInputFloat(),
-            'cave_particuliere' => new sfWidgetFormInputFloat(),
+            'superficie' => new sfWidgetFormInputText(),
+            'cave_particuliere' => new sfWidgetFormInputText(),
         ));
 
         $this->setValidators(array(

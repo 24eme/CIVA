@@ -165,8 +165,8 @@ class exportActions extends sfActions
     if (!file_exists($pdf_dir)) {
       mkdir($pdf_dir);
     }
-    $this->setLayout(false);
     if (file_exists($pdf_file) && !$request->getParameter('force')) {
+      $this->setLayout(false);
       if ($request->getParameter('ajax')) {
 	return $this->ajaxPdf();
       }
@@ -278,7 +278,7 @@ class exportActions extends sfActions
       $c[$cvi] = $vente;
     }
     $coop =  $lieu->getTotalAcheteursByCvi('cooperatives');
-    foreach($coop as $vente) {
+    foreach($detail->cooperatives as $vente) {
       $c[$vente->cvi] = $coop[$vente->cvi];
     }
     array_push($colonnes, $c);

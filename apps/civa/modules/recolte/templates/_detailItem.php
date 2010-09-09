@@ -1,4 +1,3 @@
-<?php use_helper('civa') ?>
 <div class="col_recolte col_validee">
     <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
@@ -21,7 +20,7 @@
 
         <p class="superficie">
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-            <input type="text" class="num superficie" disabled="disabled" value="<?php echoFloat($detail->superficie); ?>" />
+            <input type="text" class="num superficie" disabled="disabled" value="<?php echo $detail->superficie ?>" />
 <?php endif; ?>
         </p>
 
@@ -48,9 +47,9 @@
         </div>
         <?php endif; ?>
 
-        <p class="vol_place"><input type="text" class="num cave" disabled="disabled" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
+        <p class="vol_place"><input type="text" class="num cave" disabled="disabled" value="<?php echo $detail->cave_particuliere ?>" /></p>
         <p class="vol_total_recolte">
-            <input type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
+            <input type="text" class="num total readonly" readonly="readonly" value="<?php echo $detail->volume ?>" />
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->hasMotifNonRecolteLibelle()) : ?>
                 <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif <?php if($detail->getMotifNonRecolteLibelle() != 'Non saisie') echo 'ajout_lien'; ?>"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
             <?php endif; ?>
@@ -58,8 +57,8 @@
         
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
-            <li><input type="hidden" class="num revendique readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
-            <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" /></li>
+            <li><input type="hidden" class="num revendique readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
+            <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
         </ul>
         <?php endif; ?>
     </div>

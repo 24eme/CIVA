@@ -29,14 +29,12 @@ if (!function_exists('printColonne')) {
     echo '<tr><th style="text-align: left; font-weight: bold; width: 250px;">&nbsp;'.$libelle.'</th>';
     foreach($colonnes as $c) {
       if (isset($c[$key]) && $v = $c[$key]) {
-	echo '<td style="padding-left: 5px;width: 120px;">';
+	echo '<td style="width: 120px;">';
 	if ($c['type'] == 'total')    echo '<b>';
-        if (is_numeric($v)) 
-          $v = sprintf('%01.02f', $v);
-	if ($unite) {
-	  $v = preg_replace('/\./', ',', $v);
-	} 
-	echo $v;
+	if ($unite)
+	  echo preg_replace('/\./', ',', $v);
+	else
+	  echo $v;
 	if ($c['type'] == 'total')    echo '</b>';
 	if ($unite)
 	  echo "&nbsp;<small>$unite</small>";
