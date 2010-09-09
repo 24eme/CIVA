@@ -16,6 +16,7 @@
                                     <!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix gestion_recolte_donnees">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
+                                                                                              'nb_details_current' => $nb_details_current,
                                                                                               'onglets' => $onglets,
                                                                                               'recapitulatif' => false)); ?>
                                             

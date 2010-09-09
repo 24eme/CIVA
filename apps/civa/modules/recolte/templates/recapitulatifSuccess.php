@@ -15,7 +15,8 @@
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix gestion_recolte_recapitulatif">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
-                                                                                              'onglets' => $onglets, 'recapitulatif' => true)); ?>
+                                                                                              'onglets' => $onglets,
+                                                                                              'recapitulatif' => true)); ?>
 
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
 						

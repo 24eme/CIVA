@@ -239,6 +239,7 @@ class recolteActions extends EtapesActions {
 
     protected function initDetails() {
         $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCepage())->add('detail');
+        $this->nb_details_current = $this->details->count();
 
         $this->detail_key = null;
         $this->detail_action_mode = null;
