@@ -99,7 +99,33 @@ EOF;
 
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
 
-	$grdcru = new stdClass();
+
+        $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
+	$json->recolte->appellation_KLEVENER->libelle = "AOC Klevener de Heiligenstein";
+	$json->recolte->appellation_KLEVENER->rendement = 75;
+	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
+	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
+	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
+	$json->_id = 'CONFIGURATION';
+	$json->type = 'Configuration';
+
+        $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
+	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
+	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIR->rendement = 75;
+	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
+	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
+	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
+
+        $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
+	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
+	$json->recolte->appellation_PINOTNOIRROUGE->rendement = 60;
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
+
+        $grdcru = new stdClass();
         $grdcru->appellation = "GRDCRU";
 	$grdcru->libelle = "AOC Alsace Grand Cru";
 	$grdcru->rendement = 61;
@@ -117,31 +143,15 @@ EOF;
 	  }else{
 	    if (preg_match('/^L/', $g[2]))
 	      continue;
-	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);	
+	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
 	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]);
   	  }
-	  
+
 	}
 	$json->recolte->appellation_GRDCRU = $grdcru;
-
-        $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
-	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->rendement = 75;
-	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
-	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
-	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
-
-        $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
-	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
-	$json->recolte->appellation_PINOTNOIRROUGE->rendement = 60;
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
 
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
@@ -186,17 +196,6 @@ EOF;
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->libelle = "Rouge";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->douane->couleur = "R";
         $json->recolte->appellation_VINTABLE->rendement = -1;
-
-        $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
-	$json->recolte->appellation_KLEVENER->libelle = "Klevener de Heiligenstein";
-	$json->recolte->appellation_KLEVENER->rendement = 75;
-	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
-	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
-	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
-	$json->_id = 'CONFIGURATION';
-	$json->type = 'Configuration';
-
-
 
 
 	$json->intitule = array("CAVES", "DOMAINE", "EAR", "EARL", "EURL", "GAEC", "GFA, DU", "HERITIERS", "INDIVISION", "M.", "MADAME", "MADEME", "MAISON", "MELLE", "M., ET, MME", "MLLE", "MM.", "MME", "MMES", "MME, VEUVE", "MRS", "S.A.", "SA", "SARL", "S.A.S.", "SAS", "SASU", "S.C.A.", "SCA", "SCEA", "S.C.I.", "SCI", "S.D.F.", "SDF", "SICA", "STE", "STEF", "VEUVE", "VINS");
