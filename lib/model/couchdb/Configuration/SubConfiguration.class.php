@@ -98,4 +98,12 @@ class SubConfiguration extends BaseSubConfiguration {
       return true;
     return false;
   }
+
+  public function hasNoNegociant()
+  {
+    if ($this->exist('no_negociant') && $this->get('no_negociant'))
+      return true;
+    return false;
+  }
+
 }

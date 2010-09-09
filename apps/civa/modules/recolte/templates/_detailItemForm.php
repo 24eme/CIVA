@@ -24,8 +24,12 @@
         </p>
 
         <div class="vente_raisins">
-            <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+            <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
+                include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+
             <a href="#" class="ajout ajout_acheteur">Acheteur</a>
+            <?php } ?>
+            &nbsp;
         </div>
 
         <div class="caves">

@@ -11,9 +11,11 @@
 
         <div class="vente_raisins">
                 <?php
+                 if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces')))
-                ?>
+                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces')));
+                 } ?>
+            &nbsp;
         </div>
 
         <div class="caves">

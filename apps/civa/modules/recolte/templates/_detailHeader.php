@@ -12,14 +12,16 @@
    </p>
 
     <p class="superficie">Superficie</p>
-
     <div class="vente_raisins">
-        <?php
+        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
+
         include_partial('headerAcheteurs', array('title' => "Ventes de Raisins",
             'acheteurs' => $acheteurs->negoces,
             'list_acheteurs' => ListAcheteursConfig::getNegoces()
-        ))
-        ?>
+        ));
+
+        }
+        ?>&nbsp;
     </div>
 
     <div class="caves">
