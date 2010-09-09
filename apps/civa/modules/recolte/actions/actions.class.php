@@ -244,7 +244,6 @@ class recolteActions extends EtapesActions {
         $this->detail_key = null;
         $this->detail_action_mode = null;
         $this->form_detail = null;
-        $this->is_detail_edit = false;
     }
 
     protected function initAcheteurs() {

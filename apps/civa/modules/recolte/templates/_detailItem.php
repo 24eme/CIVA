@@ -63,7 +63,7 @@
 
     <div class="col_btn">
         <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" class="modifier_tmp btn_recolte_can_be_inactif"><img src="/images/boutons/btn_modifier_col_cepage.png" alt="Modifier" /></a>
-        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" <?php if(!$is_detail_edit): ?> onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')" <?php endif; ?>>
+        <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')">
             <img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" />
         </a>
     </div>
