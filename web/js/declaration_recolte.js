@@ -112,8 +112,9 @@ $(document).ready( function()
         return false;
     });
 
-    $(document).find('a.close_popup_msg_erreur').click(function() {
+    $(document).find('a.close_popup_msg_erreur').live('click', function() {
         $('#popup_msg_erreur').dialog('close');
+        return false;
     });
 
 

@@ -8,15 +8,13 @@
             <input type="hidden" id="cepage_total_superficie_orig" value="<?php echo $cepage->getTotalSuperficie() ?>" />
             <input type="text" id="cepage_total_superficie" readonly="readonly" value="<?php echo $cepage->getTotalSuperficie() ?>" />
         </p>
-
+        <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
                 <?php
-                 if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
-                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces')));
-                 } ?>
-            &nbsp;
+                    include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
+                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces'))); ?>
         </div>
+        <?php endif; ?>
 
         <div class="caves">
             <?php

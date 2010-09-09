@@ -325,8 +325,8 @@ class RecolteOnglets {
         }
     }
 
-     public function getUrlParams($appellation = null, $lieu = null, $cepage = null) {
-         $url = $this->getUrl(null, $appellation, $lieu, $cepage);
+     public function getUrlParams($appellation = null, $lieu = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
+         $url = $this->getUrl(null, $appellation, $lieu, $cepage, $sf_anchor);
          unset($url['sf_route']);
          return $url;
      }

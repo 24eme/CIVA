@@ -106,4 +106,11 @@ class SubConfiguration extends BaseSubConfiguration {
     return false;
   }
 
+  public function hasNoMotifNonRecolte()
+  {
+    if ($this->exist('no_motif_non_recolte') && $this->get('no_motif_non_recolte'))
+      return true;
+    return false;
+  }
+
 }

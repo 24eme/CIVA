@@ -23,14 +23,12 @@
 <?php endif; ?>
         </p>
 
+        <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
-            <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
-                include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
-
+            <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
             <a href="#" class="ajout ajout_acheteur">Acheteur</a>
-            <?php } ?>
-            &nbsp;
         </div>
+        <?php endif; ?>
 
         <div class="caves">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>

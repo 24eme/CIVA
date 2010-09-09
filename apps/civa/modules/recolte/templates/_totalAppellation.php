@@ -17,13 +17,12 @@
             <input id="appellation_total_superficie" type="text" readonly="readonly" value="<?php echo $lieu->getTotalSuperficie() ?>" />
         </p>
 
+        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
-                <?php
-                 if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()){
-                include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('negoces')));
-                 }?>&nbsp;
+                <?php include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
+                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('negoces')));?>
         </div>
+        <?php endif; ?>
 
         <div class="caves">
             <?php

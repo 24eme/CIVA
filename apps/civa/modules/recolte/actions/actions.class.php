@@ -104,7 +104,7 @@ class recolteActions extends EtapesActions {
             if ($this->form->isValid()) {
                 $this->form->save();
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                                                               'data' => $this->generateUrl('recolte', $this->onglets->getUrlParams()))));
+                                                               'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
             }
             return $this->renderText(json_encode(array('action' => 'render',
                                                    'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
@@ -202,7 +202,7 @@ class recolteActions extends EtapesActions {
         $form->bind($request->getParameter($form->getName()));
         if ($form->isValid()) {
             $detail = $form->save();
-            if ($detail->exist('motif_non_recolte')) {
+            if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
             $this->redirect($this->onglets->getUrl('recolte'));
