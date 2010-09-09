@@ -63,6 +63,9 @@ EOF;
         $json->err_log_cremant_pas_rebeches = "pas de rebêches pour ce crémant";
         $json->err_log_cremant_min_quantite = "Vous n'avez pas respecté le volume minimal";
 
+        $json->err_log_superficie_zero = "Vous n'avez pas renseigné de detail pour cette appellation";
+        $json->err_log_dplc = "Votre DPLC cépage est important, sachez qu'il est possible de replier le volume.";
+
 	$docs[] = $json;
 
 	if ($options['import'] == 'couchdb') {

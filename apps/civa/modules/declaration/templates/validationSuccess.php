@@ -13,9 +13,10 @@
         <div id="validation_dr">
         <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
 
-        <?php if($error){ ?>
-            <div class="message">
-                <?php foreach($validLog as $logs) { ?>
+        <?php if($error && !empty($validLogErreur)){ ?>
+            <fieldset class="message message_erreur">
+                <legend class="message_title">Points bloquants</legend>
+                <?php foreach($validLogErreur as $logs) { ?>
                 <ul class="messages_log">
                     <?php foreach($logs as $log) { ?>
                     <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
@@ -23,7 +24,20 @@
                 </ul>
                 <br />
                 <?php } ?>
-            </div>
+            </fieldset>
+        <?php } ?>
+        <?php if(!empty($validLogVigilance)){ ?>
+            <fieldset class="message">
+                <legend class="message_title">Points d'attention</legend>
+                <?php foreach($validLogVigilance as $logs) { ?>
+                <ul class="messages_log">
+                    <?php foreach($logs as $log) { ?>
+                    <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
+                   <?php } ?>
+                </ul>
+                <br />
+                <?php } ?>
+            </fieldset>
         <?php } ?>
 
         <!-- #acheteurs_caves -->
