@@ -43,7 +43,6 @@ class ldap {
                 $info['uid']           = $tiers->cvi;
                 $info['sn']            = $tiers->nom;
                 $info['cn']            = $tiers->nom;
-                $info['givenName']     = '';
                 $info['objectClass'][0]   = 'top';
                 $info['objectClass'][1]   = 'person';
                 $info['objectClass'][2]   = 'posixAccount';
