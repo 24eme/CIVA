@@ -7,7 +7,7 @@ echo "Configuration DONE"
 php symfony import:Messages
 echo "Messages DONE"
 php symfony import:Achat
-echo "Achateurs DONE";
+echo "Acheteurs DONE";
 php symfony import:Tiers
 echo "Tiers DONE";
 for year in 09 08 07 ; do 
