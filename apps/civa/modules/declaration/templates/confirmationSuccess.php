@@ -26,3 +26,5 @@
 
 </form>
 <!-- fin #principal -->
+
+<?php include_partial('generationDuPdf', array('annee' => $annee)) ?>

@@ -28,7 +28,7 @@
         <?php } ?>
         <?php if(!empty($validLogVigilance)){ ?>
             <fieldset class="message">
-                <legend class="message_title">Points d'attention</legend>
+                <legend class="message_title">Points de vigilance</legend>
                 <?php foreach($validLogVigilance as $logs) { ?>
                 <ul class="messages_log">
                     <?php foreach($logs as $log) { ?>
@@ -55,11 +55,5 @@
     <?php endif; ?>
 </form>
 <!-- fin #principal -->
-<script>
-    ajax_url_to_print = "<?php echo url_for('@print?annee='.$annee); ?>?ajax=1";
-</script>
-<div style="display: none" id="popup_loader" title="Génération du PDF">
-    <div class="popup-loading">
-    <p>La génération de votre PDF est en cours.<br/>Merci de patienter.<br/><small>La procédure peut prendre 30 secondes</small></p>
-    </div>
-</div>
+
+<?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
