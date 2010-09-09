@@ -1,4 +1,4 @@
-<div id="recolte_totale">
+<div id="recolte_totale" class="clearfix">
 
     <div id="appelations">
 
@@ -50,26 +50,27 @@
             <li><input type="text" value="<?php echo $total_dplc;?> Hl" readonly="readonly"></li>
         </ul>
     </div>
-</div>
-<div id="extra recap" style="clear: both;">
-    <table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
-        <thead>
-            <tr>
-                <th><img src="/images/textes/autres_infos.png" alt="Appelations" /></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echo $jeunes_vignes; ?>&nbsp;<small>ares</small></td>
-            </tr>
-            <tr>
-                <td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
-            </tr>
-            <?php if (isset($superficie['VINTABLE'])) : ?>
-            <tr>
-                <td class="premiere_colonne">Vin de table : </td><td><?php echo $superficie['VINTABLE']; ?>&nbsp;<small>ares</small> / <?php echo $volume['VINTABLE']; ?> Hl</td>
-            </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+	
+	<div id="recap_autres">
+		<table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
+			<thead>
+				<tr>
+					<th><img src="/images/textes/autres_infos.png" alt="Appelations" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="premiere_colonne">Jeunes Vignes : </td><td><?php echo $jeunes_vignes; ?>&nbsp;<small>ares</small></td>
+				</tr>
+				<tr>
+					<td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
+				</tr>
+				<?php if (isset($superficie['VINTABLE'])) : ?>
+				<tr>
+					<td class="premiere_colonne">Vin de table : </td><td><?php echo $superficie['VINTABLE']; ?>&nbsp;<small>ares</small> / <?php echo $volume['VINTABLE']; ?> Hl</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
 </div>
