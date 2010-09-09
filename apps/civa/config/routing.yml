@@ -42,13 +42,11 @@ recolte:
 recolte_update:
   url:   /recolte/:appellation_lieu/:cepage/update/:detail_key
   param: { module: recolte, action: update }
-  options: {anchor: "#onglets_majeurs" }
   class: sfRouteAnchor
 
 recolte_delete:
   url:   /recolte/:appellation_lieu/:cepage/delete/:detail_key
   param: { module: recolte, action: delete }
-  options: {anchor: "#onglets_majeurs" }
   class: sfRouteAnchor
 
 recolte_add:
