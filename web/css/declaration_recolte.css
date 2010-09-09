@@ -1060,6 +1060,11 @@ a.msg_aide
 }
 
 /* Colonnes de déclaration */
+#col_scroller_cont 
+{
+    padding-right: 10px;
+}
+
 #gestion_recolte #col_scroller
 {
 	float: left;
