@@ -174,8 +174,8 @@ p.flash_message
 
 #footer
 {
-    color: #4d4f4f;
-    font-size: 11px;
+    color: #ccc;
+    font-size: 12px;
     padding: 20px 0;
     text-align: center;
 }
@@ -292,6 +292,6 @@ ul#liens_evitement li.deconnexion a
 #footer ul li a
 {
     background: url(../images/puces/bullet_noir.png) 0 center no-repeat;
-    color: #4d4f4f;
+    color: #ccc;
     padding: 0 0 0 15px;
 }

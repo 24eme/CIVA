@@ -12,6 +12,7 @@ $(document).ready( function()
 {
 	rolloverImg();
 	videInputFocus();
+	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
 });
 
 /**

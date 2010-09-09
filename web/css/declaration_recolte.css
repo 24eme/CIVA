@@ -33,7 +33,7 @@
 .intro_declaration
 {
 	clear: both;
-	color: #999;
+	color: #666;
 	font-size: 14px;
 	margin: -15px 0 10px;
 }
@@ -41,14 +41,14 @@
 .intro_declaration_recolte
 {
 	clear: both;
-	color: #999;
+	color: #666;
 	font-size: 14px;
 	margin: 0px 20px 10px;
 }
 
 .txt_gris
 {
-	color: #999;
+	color: #666;
 	font-size: 14px;
 	margin: 0px 0 10px;
 }
@@ -170,7 +170,7 @@ ul#onglets_majeurs li
 
 ul#onglets_majeurs li a
 {
-	background: #bcbdbc;
+	background: #999;
 	color: #fff;
 	float: left;
 	padding: 4px 15px;
@@ -198,14 +198,14 @@ ul#onglets_majeurs.onglets_recolte li a { padding: 2px 15px 2px 5px; }
 ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a
 {
 	background: #ffb52c;
-	color: #fff;
+	color: #000;
 }
 
-ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }
+/*ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }*/
 
 ul#onglets_majeurs.onglets_recolte li.ajouter a
 {
-	background: #a5a6a5 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
+	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
 	padding-left: 30px;
 }
 
@@ -229,6 +229,7 @@ ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li.premier { background: 
 ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li a
 {
 	background-color: #d8d8d8;
+	color: #666;
 	cursor: pointer;
 	padding-top: 4px;
 	padding-bottom: 4px;
@@ -308,7 +309,7 @@ table.table_donnees tbody td
 {
 	background: #edecec;
 	border-bottom: 1px dashed #c6c8c7;
-	color: #7a7a7a;
+	color: #666;
 	font-size: 12px;
 	line-height: 17px;
 	padding: 3px;
@@ -422,14 +423,7 @@ a.msg_aide
 
 #nouvelle_declaration p.intro
 {
-	color: #9a9999;
-	font-size: 14px;
-	margin: 0 0 10px;
-}
-
-#nouvelle_declaration p.intro
-{
-	color: #999;
+	color: #666;
 	font-size: 14px;
 	margin: 0 0 10px;
 }
@@ -490,7 +484,7 @@ a.msg_aide
 #precedentes_declarations ul ul.declarations li a
 {
 	background: url(../images/pictos/pi_declaration_recolte.png) 0 center no-repeat;
-	color: #7a7a7a;
+	color: #666;
 	padding: 0 0 0 20px;
 }
 
@@ -502,7 +496,7 @@ a.msg_aide
 
 #exploitation_administratif .modification .ligne_form label
 {
-	color: #7a7a7a;
+	color: #666;
 	display: block;
 	font-size: 13px;
 	line-height: 1;
@@ -899,7 +893,7 @@ a.msg_aide
 
 #gestion_recolte ul#liste_sepages li
 {
-	background: #c6c6c6;
+	background: #999;
 	border: 1px solid #c6c6c6;
 	margin: 0 0 2px;
 	width: 105px;
@@ -938,7 +932,7 @@ a.msg_aide
 	cursor: default;
 }
 
-#gestion_recolte ul#liste_sepages li.ui-tabs-selected.recapitulatif a { color: #ffb52c; }
+#gestion_recolte ul#liste_sepages li.ui-tabs-selected.recapitulatif a { color: #e78800; }
 
 #gestion_recolte ul#liste_sepages li.ui-tabs-selected a span
 {
@@ -959,7 +953,7 @@ a.msg_aide
 /* Colonne intitulés */
 #gestion_recolte #colonne_intitules
 {
-	color: #7a7a7a;
+	color: #666;
 	float: left;
 	font-size: 14px;
 	line-height: 17px;
@@ -1474,7 +1468,7 @@ a.msg_aide
 
 #modification_compte p.intro
 {
-	color:#999999;
+	color: #666;
 	font-size:14px;
 	margin:0 0 10px;
 }
