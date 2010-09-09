@@ -72,9 +72,12 @@
 			<!--</form>-->
 			<!-- fin #principal -->
         <script type="text/javascript">
-            var_liste_acheteurs = <?php echo ListAcheteursConfig::getNegocesJson() ?>;
-            var_liste_caves = <?php echo ListAcheteursConfig::getCooperativesJson() ?>;
-            var_liste_mouts = <?php echo ListAcheteursConfig::getMoutsJson() ?>;
+            var_liste_acheteurs = <?php echo ListAcheteursConfig::getNegocesJson(null, $acheteurs->negoces->toArray()->getRawValue()) ?>;
+            var_liste_acheteurs_using = <?php echo ListAcheteursConfig::getNegocesJson($acheteurs->negoces->toArray()->getRawValue(), null) ?>;
+            var_liste_caves = <?php echo ListAcheteursConfig::getCooperativesJson(null, $acheteurs->cooperatives->toArray()->getRawValue()) ?>;
+            var_liste_caves_using = <?php echo ListAcheteursConfig::getCooperativesJson($acheteurs->cooperatives->toArray()->getRawValue(), null) ?>;
+            var_liste_acheteurs_mouts = <?php echo ListAcheteursConfig::getMoutsJson(null,  $acheteurs->mouts->toArray()->getRawValue()) ?>;
+            var_liste_acheteurs_mouts_using = <?php echo ListAcheteursConfig::getMoutsJson($acheteurs->mouts->toArray()->getRawValue(), null) ?>;
             var_config_popup_ajout_motif = { ajax: true , auto_open: false};
             <?php if ($sf_user->hasFlash('open_popup_ajout_motif')): ?>
                 var_config_popup_ajout_motif.auto_open = true;

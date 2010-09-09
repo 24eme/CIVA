@@ -50,7 +50,7 @@
 
 
 /* Autocompletion */
-.ui-autocomplete { background: #fff; border: 1px solid #c2c1ba; font-size: 12px; position: absolute; _width:1px; }
+.ui-autocomplete { background: #fff; border: 1px solid #c2c1ba; font-size: 11px; position: absolute; _width:1px; }
 .ui-autocomplete .ui-menu-item a { background: #fff; clear: both; color: #7a7a7a; cursor: pointer; display: block; padding: 2px; text-decoration: none; }
 .ui-autocomplete .ui-menu-item a.ui-state-hover,
 .ui-autocomplete .ui-menu-item a.ui-state-active { background: #dcdfa9; color: #000; }

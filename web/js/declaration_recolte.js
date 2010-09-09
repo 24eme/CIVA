@@ -426,15 +426,6 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     nom.data('autocomplete')._renderItem = function(ul, item)
     {
         var tab = item['value'].split('|@');
-        var find_acheteur = false;
-        /*table_achet.find('td.cvi').each(function() {
-            if ($(this).text() == tab[1]) {
-                find_acheteur = true;
-            }
-        });
-	if (find_acheteur) {
-            return false;
-        }*/
         return $('<li></li>')
         .data("item.autocomplete", tab)
         .append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
@@ -937,14 +928,14 @@ var initDRPopups = function()
     };
     initPopupAjout(btn_ajout_appelation, popup_ajout_appelation, config_default);
     initPopupAjout(btn_ajout_lieu, popup_ajout_lieu, config_default);
-    initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs);
-    initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves);
-    initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs);
+    initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs, var_liste_acheteurs_using);
+    initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves, var_liste_caves_using);
+    initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs, var_liste_acheteurs_using);
     initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
     
 };
 
-var initPopupAjout = function(btn, popup, config, source_autocompletion)
+var initPopupAjout = function(btn, popup, config, source_autocompletion, source_autocompletion_using)
 {
     popup.dialog
     ({
@@ -967,7 +958,7 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion)
         loadContentPopupAjax(popup, config.auto_open_url, config);
         popup.dialog('open');
     }
-    if(source_autocompletion) initPopupAutocompletion(popup, source_autocompletion);
+    if(source_autocompletion) initPopupAutocompletion(popup, source_autocompletion, source_autocompletion_using);
 };
 
 var loadContentPopupAjax = function(popup, url, config)
@@ -976,7 +967,7 @@ var loadContentPopupAjax = function(popup, url, config)
     $(popup).load(url);
 }
 
-var initPopupAutocompletion = function(popup, source_autocompletion)
+var initPopupAutocompletion = function(popup, source_autocompletion, source_autocompletion_using)
 {
     var nom = popup.find('input.nom');
     var cvi = popup.find('input.cvi');
@@ -1040,8 +1031,9 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
             },
             function(data)
             {
+                var cvi_val = cvi.val();
                 var html_header_item = $('#acheteurs_header_empty').clone();
-                var css_class_acheteur = 'acheteur_' + type_name_field + '_' + cvi.val();
+                var css_class_acheteur = 'acheteur_' + type_name_field + '_' + cvi_val;
                 html_header_item.find('li').
                 html(nom.val()).
                 addClass(css_class_acheteur);
@@ -1058,7 +1050,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
                 popup.dialog('close');
                 hauteurEgaleColRecolte();
                 $('input.volume').change(volumeOnChange);
-
+                deleteRecolteAcheteurFromAutocompletion(cvi_val, nom, source_autocompletion, source_autocompletion_using);
             });
 
             return false;
@@ -1066,6 +1058,24 @@ var initPopupAutocompletion = function(popup, source_autocompletion)
 		
     });
 };
+
+/**
+ * Supprime un CVI de la liste autocomplete de la recolte
+ *
+ ******************************************/
+var deleteRecolteAcheteurFromAutocompletion = function(cvi, champ_autocompletion, source_autocompletion, source_autocompletion_using)
+{
+    for(var acheteur_id in source_autocompletion) {
+        var tab = source_autocompletion[acheteur_id].split('|@');
+        if (tab[1] == cvi) {
+            source_autocompletion_using.unshift(source_autocompletion[acheteur_id]);
+            source_autocompletion.splice(acheteur_id, 1);
+            break;
+        }
+    }
+
+    champ_autocompletion.autocomplete('option', 'source', source_autocompletion);
+}
 
 /**
      * Initialise une popup
