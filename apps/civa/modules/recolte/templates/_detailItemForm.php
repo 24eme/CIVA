@@ -83,18 +83,24 @@ function valider_can_submit()
     });
     var min = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
 
+    var rebeche_ratio_respected = true;
   $("#col_recolte_totale .caves input").each(function()
     {
-        if($(this).attr('type')!='hidden' && $(this)>0){
+      if($(this).attr('type')!='hidden' && $(this).val()>0){
             var css_classes =$(this).attr('class'). split(" ");
             var class_cvi = css_classes[1];
-            if($(".col_active .caves input[class*='"+class_cvi+"']").val()==0){
-                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p><div class="close_btn"><a href="" class="close_popup_msg_erreur"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
-                openPopup($('#popup_msg_erreur'), 0);
-                return false;
+            if(parseFloat($(".col_active .caves input[class*='"+class_cvi+"']").val())==0){
+	      rebeche_ratio_respected = false;
             }
         }
     });
+  if (parseFloat($('#recolte_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0)
+    rebeche_ratio_respected = false;
+  if (!rebeche_ratio_respected) {
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p><div class="close_btn"><a href="" class="close_popup_msg_erreur"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+    openPopup($('#popup_msg_erreur'), 0);
+    return false;
+  }
 
     if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup_msg_erreur"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');

@@ -732,8 +732,6 @@ var etatBtnRecolteCanBeInactif = function (actif) {
 }
 
 var updateElementRows = function (inputObj, totalObj) {
-    if (! autoTotal)
-	return ;
     totalObj.val(0);
     inputObj.each(function() {
         var total = parseFloat(totalObj.val());
@@ -791,11 +789,14 @@ var volumeOnChange = function(input) {
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
+    if (!autoTotal)
+	return ;
     $('ul.acheteurs li').each(function () {
         var css_class = $(this).attr('class');
         updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
         updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_recolte_totale input.'+css_class);
     });
+
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
 
