@@ -667,7 +667,7 @@ var initGestionRecolteDonnees = function()
          */
 
     etatBtnAjoutCol();
-    etatBtnRecolteCanBeInactif();
+    //etatBtnRecolteCanBeInactif();
 
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
@@ -689,11 +689,13 @@ var initGestionRecolteDonnees = function()
     //$('input.volume').change(volumeOnChange(this));
     //$('#recolte_superficie').change(superficieOnChange(this));
 
+    etatBtnRecolteCanBeInactif(true);
+
     $('.col_recolte.col_active input').live('change', function() {
         var val = $(this).val();
         $(this).val(val.replace(',', '.'));
 
-        etatBtnRecolteCanBeInactif();
+        etatBtnRecolteCanBeInactif(false);
 
         if ($(this).hasClass('volume')) {
             volumeOnChange(this);
@@ -707,7 +709,7 @@ var initGestionRecolteDonnees = function()
     });
 
     $('.col_recolte.col_active select').live('change', function () {
-        etatBtnRecolteCanBeInactif();
+        etatBtnRecolteCanBeInactif(false);
     });
 
 };
@@ -719,11 +721,13 @@ var initGestionRecolteRecapitulatif = function() {
     $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
 }
 
-var etatBtnRecolteCanBeInactif = function () {
-   if($('.col_recolte.col_active input:enabled[value!=""][readonly!="readonly"]').length > 0 || $('.col_recolte.col_active select[value!=""][readonly!="readonly"]').length > 0) {
-      $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
-   } else {
+var etatBtnRecolteCanBeInactif = function (actif) {
+   if (actif) {
       $('a.btn_recolte_can_be_inactif').removeClass('btn_inactif');
+      $('.col_recolte.col_active .col_btn a.annuler_tmp').addClass('btn_inactif');
+   } else {
+      $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
+      $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
    }
 }
 
