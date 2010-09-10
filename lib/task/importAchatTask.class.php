@@ -16,6 +16,7 @@ class importAchatTask extends sfBaseTask {
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
             new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'data file', sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Achat'.$options['year']),
 
         ));
 
@@ -46,10 +47,10 @@ EOF;
 
 	$docs = array();
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Achat'.$options['year']) as $a) {
+        foreach (file($options['file']) as $a) {
 	  $json = new stdClass();
 	  $achat = explode(',', preg_replace('/"/', '', $a));
-	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]))
+	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]) || !$achat[4])
 	    continue;
 
 	  $json->_id = 'ACHAT-'.$achat[2];
@@ -58,7 +59,7 @@ EOF;
 	  $json->type = "Acheteur";
           if($achat[4] == 'N')
             $json->qualite = 'Negociant';
-          if($achat[4] == 'C')
+          else if($achat[4] == 'C')
             $json->qualite = 'Cooperative';
 	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat[5]));
 	  $json->commune = rtrim($achat[6]);
