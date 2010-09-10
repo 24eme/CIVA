@@ -102,7 +102,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     private function getAcheteursFromCepage($type = 'negoces|cooperatives', $exclude_cepage = '') {
       $acheteurs = array();
       foreach ($this->filter('^cepage') as $key => $cepage) {
-	if ($key == $exclude_cepage)
+	if (!$cepage->hasTotalCepage())
 	  continue;
 	foreach ($cepage->detail as $key => $d) {
 	  foreach ($d->filter($type) as $key => $t) {
