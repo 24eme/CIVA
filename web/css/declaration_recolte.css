@@ -119,9 +119,11 @@ ul#etape_declaration li a
 	display: block;
 }
 
-ul#etape_declaration li.actif a { color: #000; }
+ul#etape_declaration li.actif a { color: #000; text-decoration: none; }
 
 ul#etape_declaration li a:hover { text-decoration: none; }
+ul#etape_declaration li a:focus { text-decoration: none; }
+
 
 ul#etape_declaration li em
 {
