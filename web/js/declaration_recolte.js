@@ -736,8 +736,10 @@ var updateElementRows = function (inputObj, totalObj) {
     inputObj.each(function() {
         var total = parseFloat(totalObj.val());
         var element = parseFloat($(this).val());
-        if (element)
-            totalObj.val(total + element);
+	total += element;
+        if (element && parseFloat(totalObj.val()) != total) {
+	    totalObj.val(total);
+	}
     });
 };
 var updateAppellationTotal = function (cepageCssId, appellationCssId) {

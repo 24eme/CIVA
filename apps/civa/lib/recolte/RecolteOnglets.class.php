@@ -258,17 +258,21 @@ class RecolteOnglets {
     protected function getFirstKeyLieu($appellation = null) {
       if (!$appellation)
 	$appellation = $this->getFirstKeyAppellation();
+      if (!$appellation)
+	return null;
       return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
     protected function getFirstKeyCepage($appellation = null, $lieu = null) {
-        foreach($this->getItemsCepage($appellation, $lieu) as $key => $item) {
-            if ($this->getLieu($appellation, $lieu)->exist($key)) {
-                return $key;
-            }
-        }
+      if (!$appellation || !$lieu)
+	return null;
+      foreach($this->getItemsCepage($appellation, $lieu) as $key => $item) {
+	if ($this->getLieu($appellation, $lieu)->exist($key)) {
+	  return $key;
+	}
+      }
         
-        return $this->getItemsCepage($appellation, $lieu)->getFirstKey();
+      return $this->getItemsCepage($appellation, $lieu)->getFirstKey();
     }
 
     protected function last($method_items) {
@@ -286,6 +290,10 @@ class RecolteOnglets {
             }
         }
         $appellation = $this->convertKeyToValue($appellation, $this->_prefix_key_appellation);
+
+	if (!$appellation) {
+	  return array('sf_route' => 'mon_espace_civa');
+	}
 
         if (is_null($lieu)) {
             if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
