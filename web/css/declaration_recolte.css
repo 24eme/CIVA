@@ -747,7 +747,7 @@ a.msg_aide
 
 #exploitation_acheteurs .table_donnees { margin: 0 0 7px; }
 
-#exploitation_acheteurs table th { font-size: 11px; }
+#exploitation_acheteurs table th { font-size: 11px; text-align: center;}
 #exploitation_acheteurs table tbody td { text-align: center; }
 #exploitation_acheteurs table tbody td.nom,
 #exploitation_acheteurs table tbody td.cvi,
