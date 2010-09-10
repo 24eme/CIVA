@@ -67,38 +67,40 @@ EOF;
 	
 	$lieu = new stdClass();
 
+        $lieu->cepage_CH->libelle = "Chasselas";
+	$lieu->cepage_CH->rendement = 100;
+	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
+
+	$lieu->cepage_SY->libelle = "Sylvaner";
+	$lieu->cepage_SY->rendement = 100;
+	$lieu->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
+
+        $lieu->cepage_PB->libelle = "Pinot Blanc";
+	$lieu->cepage_PB->rendement = 100;
+	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
+
+        $lieu->cepage_ED->libelle = "Edelzwicker";
+	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
+        $lieu->cepage_ED->superficie_optionnelle = 1;
+        $lieu->cepage_ED->rendement = -1;
+
+	$lieu->cepage_RI->libelle = "Riesling";
+	$lieu->cepage_RI->rendement = 90;
+	$lieu->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
+
 	$lieu->cepage_PG->libelle = "Pinot Gris";
 	$lieu->cepage_PG->rendement = 80;
 	$lieu->cepage_PG->douane->code_cepage = $cepage_douane[1]['PG'];
+
+	$lieu->cepage_MU->libelle = "Muscat d'Alsace";
+	$lieu->cepage_MU->rendement = 90;
+	$lieu->cepage_MU->douane->code_cepage = $cepage_douane[1]['MU'];
 
 	$lieu->cepage_GW->libelle = "Gewurzt.";
 	$lieu->cepage_GW->rendement = 80;
 	$lieu->cepage_GW->douane->code_cepage = $cepage_douane[1]['GW'];
 
-	$lieu->cepage_MU->libelle = "Muscat d'Alsace";
-	$lieu->cepage_MU->rendement = 90;
-	$lieu->cepage_MU->douane->code_cepage = $cepage_douane[1]['MU'];
-	$lieu->cepage_RI->libelle = "Riesling";
-	$lieu->cepage_RI->rendement = 90;
-	$lieu->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
-
-	$lieu->cepage_SY->libelle = "Sylvaner";
-	$lieu->cepage_PB->libelle = "Pinot Blanc";
-	$lieu->cepage_CH->libelle = "Chasselas";
-	$lieu->cepage_SY->rendement = 100;
-	$lieu->cepage_PB->rendement = 100;
-	$lieu->cepage_CH->rendement = 100;
-	$lieu->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
-	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
-	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
-
-	$lieu->cepage_ED->libelle = "Edelzwicker";
-	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
-        $lieu->cepage_ED->superficie_optionnelle = 1;
-        $lieu->cepage_ED->rendement = -1;
-
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
-
 
         $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
 	$json->recolte->appellation_KLEVENER->libelle = "AOC Klevener de Heiligenstein";
@@ -157,17 +159,19 @@ EOF;
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
 	$json->recolte->appellation_CREMANT->douane->qualite = 'M';
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir";
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
+
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
+	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir";
+	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
 	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Blanc de Noir";
 	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
+
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->douane->code_cepage = $cepage_douane[2]['RI'];
+	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
 	$json->recolte->appellation_CREMANT->lieu->cepage_BN->douane->code_cepage = $cepage_douane[2]['BN'];
 	$json->recolte->appellation_CREMANT->lieu->cepage_CD->douane->code_cepage = $cepage_douane[2]['CD'];
 
