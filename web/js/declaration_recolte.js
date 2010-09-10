@@ -1102,20 +1102,27 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
             {
                 var cvi_val = cvi.val();
                 var html_header_item = $('#acheteurs_header_empty').clone();
+                var html_acheteur_item = $('#acheteurs_item_empty').clone();
                 var css_class_acheteur = 'acheteur_' + type_name_field + '_' + cvi_val;
+
                 html_header_item.find('li').
                 html(nom.val()).
                 addClass(css_class_acheteur);
+
+                html_acheteur_item.find('input').addClass(css_class_acheteur);
+
                 $('#colonne_intitules').
                 find('.'+type_cssclass+' ul').
                 append(html_header_item.html());
+
                 $('.col_recolte.col_validee, .col_recolte.col_cepage_total, .col_recolte.col_total').
                 find('.'+type_cssclass+' ul').
-                append($('#acheteurs_item_empty').html()).
-                find('input').addClass(css_class_acheteur);
+                append(html_acheteur_item.html());
+
                 $('.col_recolte.col_active').
                 find('.'+type_cssclass+' ul').
                 append(data);
+
                 popup.dialog('close');
                 hauteurEgaleColRecolte();
                 deleteRecolteAcheteurFromAutocompletion(cvi_val, nom, source_autocompletion, source_autocompletion_using);
