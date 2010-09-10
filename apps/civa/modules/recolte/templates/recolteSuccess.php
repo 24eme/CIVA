@@ -34,14 +34,11 @@
                                                                                                        'form' => $form_detail,
                                                                                                        'acheteurs' => $acheteurs,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
-    <?php 
-    if ($onglets->getCurrentCepage()->getConfig()->hasTotalCepage()) {
-      echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
-						'onglets' => $onglets,
-						'acheteurs' => $acheteurs,
-						'has_acheteurs_mout' => $has_acheteurs_mout)) ;
-    }
-?>                                              
+                                                    
+                                                        <?php echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
+                                                                                                    'onglets' => $onglets,
+                                                                                                    'acheteurs' => $acheteurs,
+                                                                                                    'has_acheteurs_mout' => $has_acheteurs_mout)) ; ?>
 						
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
                                                                 <?php if ($onglets->hasPreviousCepage()): ?>

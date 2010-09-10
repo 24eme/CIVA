@@ -1,5 +1,5 @@
 <?php use_helper('civa') ?>
-<div id="col_cepage_total" class="col_recolte col_total">
+<div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$onglets->getCurrentCepage()->getConfig()->hasTotalCepage()): ?>display:none;<?php endif; ?>">
     <h2>Total <br /> <?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
     <div class="col_cont">
