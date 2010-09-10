@@ -782,7 +782,7 @@ var volumeOnChange = function(input) {
     //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
     $('ul.acheteurs li').each(function () {
-        var css_class = $(input).attr('class');
+        var css_class = $(this).attr('class');
         updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
         updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_recolte_totale input.'+css_class);
     });
