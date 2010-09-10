@@ -16,12 +16,12 @@ class FirstConnectionForm extends BaseForm {
 
         $this->setValidators(array(
                 'cvi' => new sfValidatorString(array('required' => true)),
-                'mdp' => new sfValidatorString(array('required' => true)),
+                'mdp' => new sfValidatorString(array('required' => true, 'min_length' => 4)),
         ));
 
         $this->validatorSchema['cvi']->setMessage('required', 'Champ obligatoire');
         $this->validatorSchema['mdp']->setMessage('required', 'Champ obligatoire');
-
+        
 
         $this->validatorSchema->setPostValidator(new ValidatorFirstConnection());
     }
