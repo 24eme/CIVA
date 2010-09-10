@@ -221,11 +221,13 @@ class recolteActions extends EtapesActions {
         }
         $cepage = $request->getParameter('cepage', null);
 
-        $this->onglets = new RecolteOnglets($this->declaration);
-        if (!$appellation && !$lieu && !$cepage) {
+	if (!$this->declaration) {
+           $this->redirect('@mon_espace_civa');
+	}
+	$this->onglets = new RecolteOnglets($this->declaration);
+        if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
            $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
         }
-        $this->forward404Unless($this->onglets->init($appellation, $lieu, $cepage));
 
         /*** AjOUT APPELLATION ***/
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
