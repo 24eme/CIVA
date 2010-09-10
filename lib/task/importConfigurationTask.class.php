@@ -103,6 +103,7 @@ EOF;
         $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
 	$json->recolte->appellation_KLEVENER->libelle = "AOC Klevener de Heiligenstein";
 	$json->recolte->appellation_KLEVENER->rendement = 75;
+        $json->recolte->appellation_KLEVENER->no_total_cepage = 1;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
 	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
 	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';

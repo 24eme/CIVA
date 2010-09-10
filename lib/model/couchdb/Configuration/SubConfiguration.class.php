@@ -46,26 +46,35 @@ class SubConfiguration extends BaseSubConfiguration {
   }
 
   public function hasDenomination() {
-    if ($this->exist('no_denomination'))
-      return (! $this->get('no_denomination'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+    if ($this->exist('no_denomination')) {
+      return !($this->no_denomination == 1);
+    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
       return false;
+    } elseif ($this->getParent() instanceof SubConfiguration) {
+      return $this->getParent()->hasTotalCepage();
+    }
     return true;
   }
 
   public function hasSuperficie() {
-    if ($this->exist('no_superficie'))
-      return (! $this->get('no_superficie'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+    if ($this->exist('no_superficie')) {
+      return !($this->no_superficie == 1);
+    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
       return false;
+    } elseif ($this->getParent() instanceof SubConfiguration) {
+      return $this->getParent()->hasTotalCepage();
+    }
     return true;
   }
 
   public function hasTotalCepage() {
-    if ($this->exist('no_total_cepage'))
-      return (! $this->get('no_total_cepage'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+    if ($this->exist('no_total_cepage')) {
+      return !($this->no_total_cepage == 1);
+    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
       return false;
+    } elseif ($this->getParent() instanceof SubConfiguration) {
+      return $this->getParent()->hasTotalCepage();
+    }
     return true;
   }
 
