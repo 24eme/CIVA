@@ -40,7 +40,7 @@
         <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
-            <a href="#" class="ajout ajout_mout">Ajouter mout</a>
+            <a href="#" class="ajout ajout_mout">Acheteur de mout</a>
         </div>
         <?php endif; ?>
 
