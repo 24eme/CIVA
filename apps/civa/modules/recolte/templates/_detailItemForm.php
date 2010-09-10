@@ -65,7 +65,7 @@
 autoTotal = false;
 <?php else : ?>
 autoTotal = true;
-<? endif; ?>
+<?php endif; ?>
 function valider_can_submit() 
 {
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
@@ -109,7 +109,7 @@ function valider_can_submit()
     
     return false;
     }
-<? endif; ?>
+<?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
     var couples_denomination_mention_existant = <?php echo json_encode($onglets->getCurrentCepage()->getArrayVtSgnDenomination(array($form->getObject()->getKey()))->getRawValue()) ?>;
     var denomination_val = $('.col_recolte.col_active .col_cont p.denomination input').val();
