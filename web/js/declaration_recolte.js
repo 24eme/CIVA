@@ -769,7 +769,7 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
 var addClassAlerteIfNeeded = function (inputObj)
 {
     inputObj.removeClass('alerte');
-    if (inputObj.val() != '0')
+    if (parseFloat(inputObj.val()) > 0)
         inputObj.addClass('alerte');
 };
 
@@ -806,9 +806,9 @@ var volumeOnChange = function(input) {
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 
-    addClassAlerteIfNeeded($('#cepage_total_dplc'));
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'));
     addClassAlerteIfNeeded($('#appellation_volume_dplc'));
+    addClassAlerteIfNeeded($('#cepage_volume_dplc'));
 	
     $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
     $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
