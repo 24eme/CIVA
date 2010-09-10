@@ -225,18 +225,22 @@ class recolteActions extends EtapesActions {
            $this->redirect('@mon_espace_civa');
 	}
 	$this->onglets = new RecolteOnglets($this->declaration);
-        if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
-           $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
-        }
+	try {
+	  if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
+	    $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
+	  }
 
-        /*** AjOUT APPELLATION ***/
-        $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
-        $this->form_ajout_lieu = null;
-        $this->url_ajout_lieu = null;
-        if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
+	  /*** AjOUT APPELLATION ***/
+	  $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
+	  $this->form_ajout_lieu = null;
+	  $this->url_ajout_lieu = null;
+	  if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
             $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
-        }
+	  }
+	}catch(Exception $e) {
+	  $this->redirect('@mon_espace_civa');
+	}
     }
 
     protected function initDetails() {
