@@ -25,14 +25,16 @@
         </div>
         <?php endif; ?>
 
+        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
                                                               'acheteurs_value' => $lieu->getTotalAcheteursByCvi('cooperatives')))
                 ?>
         </div>
+        <?php endif; ?>
 
-        <?php if ($has_acheteurs_mout): ?>
+        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,

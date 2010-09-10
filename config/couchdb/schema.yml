@@ -298,8 +298,11 @@ Configuration:
                               min_quantite: {type: float, required: false}
                               exclude_total: {type: float, required: false}
                               superficie_optionnelle: { type: integer, required: false }
-                              no_negociant : { type: float }
-                              no_motif_non_recolte : { type: float }
+                              no_negociant : { type: integer, required: false }
+                              no_cooperative : { type: integer, required: false }
+                              no_mout : { type: integer, required: false }
+                              no_motif_non_recolte : { type: integer, required: false }
+
 
 Messages:
   definition:

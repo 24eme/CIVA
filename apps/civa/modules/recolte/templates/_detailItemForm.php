@@ -30,12 +30,14 @@
         </div>
         <?php endif; ?>
 
+        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
         <div class="caves">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
             <a href="#" class="ajout ajout_cave">Cave</a>
         </div>
+        <?php endif; ?>
 
-        <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS])): ?>
+        <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
             <a href="#" class="ajout ajout_mout">Ajouter mout</a>

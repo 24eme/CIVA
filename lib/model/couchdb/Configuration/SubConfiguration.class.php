@@ -106,6 +106,20 @@ class SubConfiguration extends BaseSubConfiguration {
     return false;
   }
 
+  public function hasNoCooperative()
+  {
+    if ($this->exist('no_cooperative') && $this->get('no_cooperative'))
+      return true;
+    return false;
+  }
+
+  public function hasNoMout()
+  {
+    if ($this->exist('no_mout') && $this->get('no_mout'))
+      return true;
+    return false;
+  }
+
   public function hasNoMotifNonRecolte()
   {
     if ($this->exist('no_motif_non_recolte') && $this->get('no_motif_non_recolte'))

@@ -22,6 +22,7 @@
     </div>
     <?php endif; ?>
 
+    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
     <div class="caves">
         <?php
         include_partial('headerAcheteurs', array('title' => "Caves Coopératives",
@@ -29,8 +30,9 @@
             'list_acheteurs' => ListAcheteursConfig::getCooperatives()
         )) ?>
     </div>
+    <?php endif; ?>
 
-    <?php if ($has_acheteurs_mout): ?>
+    <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
         <?php
             include_partial('headerAcheteurs', array('title' => "Acheteurs de Mouts",
