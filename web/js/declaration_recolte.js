@@ -732,6 +732,8 @@ var etatBtnRecolteCanBeInactif = function (actif) {
 }
 
 var updateElementRows = function (inputObj, totalObj) {
+    if (! autoTotal)
+	return ;
     totalObj.val(0);
     inputObj.each(function() {
         var total = parseFloat(totalObj.val());

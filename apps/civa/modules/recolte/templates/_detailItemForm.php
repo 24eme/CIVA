@@ -61,6 +61,11 @@
     <div class="col_btn">
         <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
 <script><!--
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+autoTotal = false;
+<?php else : ?>
+autoTotal = true;
+<? endif; ?>
 function valider_can_submit() 
 {
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
@@ -97,10 +102,8 @@ function valider_can_submit()
     
     
     return false;
-
-
-  }
-<?php endif; ?>
+    }
+<? endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
     var couples_denomination_mention_existant = <?php echo json_encode($onglets->getCurrentCepage()->getArrayVtSgnDenomination(array($form->getObject()->getKey()))->getRawValue()) ?>;
     var denomination_val = $('.col_recolte.col_active .col_cont p.denomination input').val();
