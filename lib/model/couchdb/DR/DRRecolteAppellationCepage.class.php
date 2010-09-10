@@ -143,4 +143,18 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       }
       return true;
     }
+
+    public function getArrayVtSgnDenomination($out = array()) {
+        $resultat = array();
+        if ($this->exist('detail')) {
+            foreach($this->detail as $key => $item) {
+                if (!in_array($key, $out)) {
+                    $resultat[$key] = array('denomination' => null, 'vtsgn' => null);
+                    $resultat[$key]['denomination'] = (string)$item->denomination;
+                    $resultat[$key]['vtsgn'] = (string)$item->vtsgn;
+                }
+            }
+        }
+        return $resultat;
+    }
 }

@@ -6,6 +6,7 @@ class sfWidgetFormInputFloat extends sfWidgetFormInputText
   {
     sfApplicationConfiguration::getActive()->loadHelpers('civa');
     $value = sprintFloat($value);
+    $attributes['autocomplete'] = 'off';
     return parent::render($name, $value, $attributes, $errors);
   }
 }

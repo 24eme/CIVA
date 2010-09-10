@@ -48,7 +48,7 @@ $(document).ready( function()
 	    return false;
 	if(e.which == 44 && has_point_or_virgule)
 	    return false;
-	if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.originalTarget.selectionStart > val.length - 3)
+	if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.currentTarget && e.currentTarget.selectionStart > val.length - 3)
 	    return false;
         return e;
     });
@@ -686,8 +686,8 @@ var initGestionRecolteDonnees = function()
     });*/
 	
     //Calcule auto du volume
-    $('input.volume').change(volumeOnChange(this));
-    $('#recolte_superficie').change(superficieOnChange(this));
+    //$('input.volume').change(volumeOnChange(this));
+    //$('#recolte_superficie').change(superficieOnChange(this));
 
     $('.col_recolte.col_active input').live('change', function() {
         var val = $(this).val();
@@ -701,7 +701,9 @@ var initGestionRecolteDonnees = function()
         if ($(this).attr('id') == 'recolte_superficie') {
             superficieOnChange(this)
         }
-
+        if ($(this).attr('id') == 'recolte_denomination') {
+            $(this).val(jQuery.trim($(this).val()));
+        }
     });
 
     $('.col_recolte.col_active select').live('change', function () {

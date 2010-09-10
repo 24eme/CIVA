@@ -84,18 +84,30 @@ function valider_can_submit()
   }
 <?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
-    var denomination_is_bad = false;
-    var mention_is_bad = false;
+    var couples_denomination_mention_existant = <?php echo json_encode($onglets->getCurrentCepage()->getArrayVtSgnDenomination(array($form->getObject()->getKey()))->getRawValue()) ?>;
+    var denomination_val = $('.col_recolte.col_active .col_cont p.denomination input').val();
+    var mention_val = $('.col_recolte.col_active .col_cont p.mention select').val();
+    
+    var couples_denomination_mention_is_bad = false;
+    for(var couples_item_key in couples_denomination_mention_existant) {
+        var denomination_is_bad = false;
+        var mention_is_bad = false;
+        couples_item = couples_denomination_mention_existant[couples_item_key];
+        <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
+            denomination_is_bad = (couples_item.denomination == denomination_val);
+        <?php endif; ?>
 
-    <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
-        var denomination_is_bad = ($('.col_recolte').find('.col_cont p.denomination input[value="'+$('.col_recolte.col_active .col_cont p.denomination input').val()+'"]').length > 1);
-    <?php endif; ?>
+        <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
+            mention_is_bad = (couples_item.vtsgn == mention_val);
+        <?php endif; ?>
 
-    <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
-        var mention_is_bad = ($('.col_recolte').find('.col_cont p.mention select[value="'+$('.col_recolte.col_active .col_cont p.mention select').val()+'"]').length > 1);
-    <?php endif; ?>
+        if (denomination_is_bad && mention_is_bad) {
+            couples_denomination_mention_is_bad = true;
+            break;
+        }
+    }
         
-    if (denomination_is_bad && mention_is_bad) {
+    if (couples_denomination_mention_is_bad) {
         $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_mention_denomination')); ?></p><div class="close_btn"><a href="" class="close_popup_msg_erreur"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
         openPopup($('#popup_msg_erreur'), 0);
         return false;
