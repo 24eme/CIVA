@@ -30,6 +30,7 @@ $(document).ready( function()
             formModificationCompte();
         });
     }
+    
     $('.table_donnees').ready( function() {
         initTablesDonnes();
     });
@@ -227,6 +228,7 @@ var formExploitationAdministratif = function()
             modification_infos.show();
             btns_modifier.hide();
             bloc.addClass('edition');
+            bloc.find('form input[type!="hidden"], form select').first().focus();
             return false;
         });
 		
@@ -312,6 +314,8 @@ var styleTables = function(table)
  ******************************************/
 var initTablesAcheteurs = function()
 {
+    $('form input[type!="hidden"], form select').first().focus();
+
     var tables_acheteurs = $('#exploitation_acheteurs table.tables_acheteurs');
 	
     tables_acheteurs.each(function()
@@ -337,6 +341,14 @@ var initTablesAcheteurs = function()
             });
         }
     });
+
+    $('body').live('keypress', (function (e) {
+       if ($('#exploitation_acheteurs .form_ajout').find('a.valider:visible').length > 0 && e.which == 13) {
+           $('#exploitation_acheteurs .form_ajout').find('a.valider:visible').click();
+           return false;
+       }
+       return true;
+    }));
 
     initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
         function() {
@@ -490,7 +502,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 		
         masquerTableAjout(table_achet, form_ajout, 1);
         btn_ajout.show();
-		
+
         return false;
     });
 };
@@ -555,9 +567,9 @@ var masquerTableAjout = function(table_achet, form_ajout, nb)
     champs_txt.attr('value','');
     champs_cb.attr('checked','');
     champs_cb.filter('.cremant_alsace').attr('checked','checked');
-	
     form_ajout.hide();
     if(nb == 1) etatChampsTableAcht('');
+    
 };
 
 /**
@@ -567,7 +579,8 @@ var afficherTableAjout = function(table_achet, form_ajout, btn_ajout)
 {
     form_ajout.show();
     btn_ajout.hide();
-    etatChampsTableAcht('disabled')
+    etatChampsTableAcht('disabled');
+    form_ajout.find('input[type="text"]').focus();
 };
 
 /**
@@ -634,6 +647,8 @@ var initValidDRPopup = function()
  ******************************************/
 var initGestionGrandsCrus = function()
 {
+    //$('form input[type!="hidden"], form select').first().focus();
+    
     initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
         function() {
             return ($('ul#liste_grands_crus').find('li').length < 1);
@@ -712,6 +727,7 @@ var initGestionRecolteDonnees = function()
         etatBtnRecolteCanBeInactif(false);
     });
 
+    $('.col_recolte.col_active form input[type!="hidden"], col_recolte.col_active form select').first().focus();
 };
 
 /**

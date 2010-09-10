@@ -1,5 +1,5 @@
 <div class="col_recolte col_active">
-    <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post">
+    <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post" onsubmit="return valider_can_submit();">
         <?php echo $form->renderHiddenFields(); ?>
     <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
@@ -26,28 +26,28 @@
         <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
-            <a href="#" class="ajout ajout_acheteur">Acheteur</a>
+            <a href="#" class="ajout ajout_acheteur" tabindex="-1">Acheteur</a>
         </div>
         <?php endif; ?>
 
         <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
         <div class="caves">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
-            <a href="#" class="ajout ajout_cave">Cave</a>
+            <a href="#" class="ajout ajout_cave" tabindex="-1">Cave</a>
         </div>
         <?php endif; ?>
 
         <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
-            <a href="#" class="ajout ajout_mout">Acheteur de mout</a>
+            <a href="#" class="ajout ajout_mout" tabindex="-1">Acheteur de mout</a>
         </div>
         <?php endif; ?>
 
         <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
         </p>
-        <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
+        <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
         <?php if ($detail->hasRendementCepage()): ?>
         <ul class="vol_revendique_dplc">
 	   <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="col_btn">
-        <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
+        <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
 <script><!--
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
 autoTotal = false;
@@ -140,10 +140,11 @@ function valider_can_submit()
         return false;
     }
 <?php endif; ?>
-  document.getElementById('form_detail').submit();
+  return true;
 }
 --></script>
-        <a href="#" class="valider_tmp"><img src="/images/boutons/btn_valider_col_cepage.png" alt="Valider" onclick="valider_can_submit(); return false;" /></a>
+        <input type="image" src="/images/boutons/btn_valider_col_cepage.png" class="valider_tmp"/>
+        <!--<a href="javascript:void(0)" class="valider_tmp"><img src="" alt="Valider" onclick="valider_can_submit(); return false;" /></a>-->
     </div>
     </form>
 </div>

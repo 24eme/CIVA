@@ -1187,6 +1187,14 @@ a.msg_aide
 #gestion_recolte #col_scroller .col_validee .col_btn a.annuler,
 #gestion_recolte #col_scroller .col_validee .col_btn a.valider { display: none; }
 
+#gestion_recolte #col_scroller .col_active .col_btn input {
+    width: auto;
+    background: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
 #gestion_recolte #col_scroller a#ajout_col
 {
 	float: left;
