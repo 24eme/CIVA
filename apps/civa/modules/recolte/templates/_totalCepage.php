@@ -40,6 +40,7 @@
    <input type="text" id='cepage_total_cave' readonly="readonly" value="<?php echoFloat($cepage->getTotalCaveParticuliere()); ?>" />
    </p>
         <p class="vol_total_recolte">
+   <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getRendement()); ?>" />
    <input type="hidden" id='cepage_max_volume' value="<?php echoFloat($cepage->getVolumeMax()); ?>" />
    <input type="hidden" id='cepage_total_volume_orig' value="<?php echoFloat($cepage->getTotalVolume()); ?>" />
    <input type="text" id='cepage_total_volume' readonly="readonly" value="<?php echoFloat($cepage->getTotalVolume()); ?>" />
