@@ -50,8 +50,6 @@ class SubConfiguration extends BaseSubConfiguration {
       return !($this->no_denomination == 1);
     } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
       return false;
-    } elseif ($this->getParent() instanceof SubConfiguration) {
-      return $this->getParent()->hasTotalCepage();
     }
     return true;
   }
@@ -61,8 +59,6 @@ class SubConfiguration extends BaseSubConfiguration {
       return !($this->no_superficie == 1);
     } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
       return false;
-    } elseif ($this->getParent() instanceof SubConfiguration) {
-      return $this->getParent()->hasTotalCepage();
     }
     return true;
   }

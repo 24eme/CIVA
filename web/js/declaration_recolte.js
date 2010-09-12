@@ -787,7 +787,9 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_revendique').val($(elementCssId+'_max_volume').val());
     else
         $(elementCssId+'_volume_revendique').val($(totalRecolteCssId).val());
-    $(elementCssId+'_volume_dplc').val(parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val()));
+    res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
+    res += '';
+    $(elementCssId+'_volume_dplc').val(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1'));
 };
 
 var addClassAlerteIfNeeded = function (inputObj)

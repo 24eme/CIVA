@@ -166,6 +166,14 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return $this->getConfig()->hasRendementAppellation();
     }
 
+    public function hasRendementCepage() {
+      foreach($this->filter('cepage_') as $cepage) {
+	if ($cepage->hasRendement())
+	  return true;
+      }
+      return false;
+    }
+
     public function getDPLCAppellation() {
         $volume_dplc = 0;
         if ($this->hasRendementAppellation()) {
@@ -231,7 +239,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
     public function hasRendement() {
-        return ($this->getRendement() !== -1);
+      return ($this->hasRendementCepage() || $this->hasRendementAppellation());
     }
 
     public function isNonSaisie() {

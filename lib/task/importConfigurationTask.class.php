@@ -70,19 +70,23 @@ EOF;
         $lieu->cepage_CH->libelle = "Chasselas";
 	$lieu->cepage_CH->rendement = 100;
 	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
+        $lieu->cepage_CH->no_vtsgn = 1;
 
 	$lieu->cepage_SY->libelle = "Sylvaner";
 	$lieu->cepage_SY->rendement = 100;
 	$lieu->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
+        $lieu->cepage_SY->no_vtsgn = 1;
 
         $lieu->cepage_PB->libelle = "Pinot Blanc";
 	$lieu->cepage_PB->rendement = 100;
 	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
+        $lieu->cepage_PB->no_vtsgn = 1;
 
         $lieu->cepage_ED->libelle = "Edelzwicker";
 	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
         $lieu->cepage_ED->superficie_optionnelle = 1;
         $lieu->cepage_ED->rendement = -1;
+        $lieu->cepage_ED->no_vtsgn = 1;
 
 	$lieu->cepage_RI->libelle = "Riesling";
 	$lieu->cepage_RI->rendement = 90;
@@ -104,9 +108,10 @@ EOF;
 
         $json->recolte->appellation_KLEVENER->appellation = "KLEVENER";
 	$json->recolte->appellation_KLEVENER->libelle = "AOC Klevener de Heiligenstein";
-	$json->recolte->appellation_KLEVENER->rendement = 75;
+	$json->recolte->appellation_KLEVENER->rendement_appellation = 75;
         $json->recolte->appellation_KLEVENER->no_total_cepage = 1;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
+	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->no_vtsgn = 1;
 	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
 	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
 	$json->_id = 'CONFIGURATION';
@@ -115,15 +120,17 @@ EOF;
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
 	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->rendement = 75;
+	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->no_vtsgn = 1;
+	$json->recolte->appellation_PINOTNOIR->rendement_appellation = 75;
 	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
 	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
 
         $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
 	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
-	$json->recolte->appellation_PINOTNOIRROUGE->rendement = 60;
+	$json->recolte->appellation_PINOTNOIRROUGE->rendement_appellation = 60;
 	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->no_vtsgn = 1;
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
@@ -151,6 +158,9 @@ EOF;
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
 	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]);
+	    if ($g[2] == 'ED' || $g[2] == 'SY')
+	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->no_vtsgn = 1;
+	      
   	  }
 
 	}
@@ -167,6 +177,13 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
 	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Blanc de Noir";
 	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
+
+	$json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;
+	$json->recolte->appellation_CREMANT->lieu->cepage_PG->no_vtsgn = 1;
+	$json->recolte->appellation_CREMANT->lieu->cepage_RI->no_vtsgn = 1;
+	$json->recolte->appellation_CREMANT->lieu->cepage_PN->no_vtsgn = 1;
+	$json->recolte->appellation_CREMANT->lieu->cepage_BN->no_vtsgn = 1;
+	$json->recolte->appellation_CREMANT->lieu->cepage_CD->no_vtsgn = 1;
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
@@ -187,7 +204,7 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->qualite = 'B';
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->code_cepage = '';
 
-	$json->recolte->appellation_CREMANT->rendement = 80;
+	$json->recolte->appellation_CREMANT->rendement_appellation = 80;
         $json->recolte->appellation_CREMANT->mout = 1;
 	$json->recolte->appellation_CREMANT->douane->appellation_lieu = '001';
 

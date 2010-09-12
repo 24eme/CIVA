@@ -97,7 +97,7 @@ class sfCouchdbJsonDefinition {
 
     public function getJsonField($key, $numeric_key, $couchdb_document, $hash) {
         if (!$this->hasField($key)) {
-             throw new sfCouchdbException(sprintf("Definition error : %s", $key));
+	  throw new sfCouchdbException(sprintf("Definition error : %s (%s)", $key, $hash));
         }
 
         $field = $this->get($key);

@@ -63,7 +63,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 } */
 ?>
 									<div class="bloc_gris">
-                                                                            <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
+    <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<thead>
 												<tr>

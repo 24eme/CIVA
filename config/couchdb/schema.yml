@@ -284,6 +284,7 @@ Configuration:
                           class: SubConfiguration
                           definition:
                             fields:
+                              no_vtsgn: {required: false}
                               douane :
                                 type: collection
                                 class: Douane

@@ -114,11 +114,21 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     }
 
     public function hasTotalCepage() {
+      $cpt = 0;
+      if (!$this->getRendement())
+	return false;
+      foreach($this->getParent()->filter('cepage_') as $c) {
+	$cpt++;
+	if ($cpt>2)
+	  break;
+      }
+      if ($cpt == 1)
+	return false;
       return $this->getConfig()->hasTotalCepage();
     }
 
     public function hasRendement() {
-        return ($this->getRendement() !== -1);
+        return ($this->getRendement()>0);
     }
 
     public function getRendementRecoltant() {
