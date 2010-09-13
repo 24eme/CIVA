@@ -42,6 +42,8 @@ DR:
       cvi: {  }
       lies: {type: float}
       jeunes_vignes: {type: float}
+      declaration_commune: {}
+      declaration_insee: {}
       recolte:
         type: collection
         class: DRRecolte

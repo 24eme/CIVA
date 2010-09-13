@@ -54,6 +54,16 @@ EOF;
             $achatcvi[$csv[0]][$csv[1]][$csv[4]][] = $csv[6];
         }
 
+
+	/* Récupération des communes de déclaration */
+	/*
+	$commune = array();
+	foreach (file(sfConfig::get('sf_data_dir').'/import/Commune') as $c) {
+	  $csv = explode(',', preg_replace('/"/', '', $c));
+	  $commune[$csv[0]]['commune'] = $csv[1];
+	  $commune[$csv[0]]['sous_region'] = $csv[2];
+	}
+	*/
         $list_documents = array();
         $max = count(file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']."/Dcllig".$options['year']));
         $nb = 0;
@@ -216,6 +226,9 @@ EOF;
 	  $doc = $list_documents[$_id];
 	  $doc->jeunes_vignes =  $this->recode_number($csv[6]);
 	  $doc->lies =  $this->recode_number($csv[84]);
+
+	  $doc->declaration_insee = $csv[137];
+	  $doc->declaration_commune = $csv[138];
 
 	  if ($this->recode_number($csv[91])) {
 	    $doc->recolte->appellation_ALSACEBLANC->volume_revendique =  $this->recode_number($csv[91]);
