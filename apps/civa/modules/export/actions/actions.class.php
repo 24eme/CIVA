@@ -221,6 +221,10 @@ class exportActions extends sfActions
 	foreach($detail->cooperatives as $vente) {
 	  $c[$vente->cvi] = $vente->quantite_vendue;
 	}
+	if ($detail->exist('mouts'))
+	  foreach($detail->mouts as $vente) {
+	    $c[$vente->cvi] = $vente->quantite_vendue;
+	  }
 	if ($cepage->excludeTotal()) {
 	  array_push($afterTotal, $c);
 	}else{
@@ -252,6 +256,10 @@ class exportActions extends sfActions
 	foreach($detail->cooperatives as $vente) {
 	  $c[$vente->cvi] = $coop[$vente->cvi];
 	}
+	$mouts =  $cepage->getTotalAcheteursByCvi('mouts');
+	foreach($detail->cooperatives as $vente) {
+	  $c[$vente->cvi] = $mouts[$vente->cvi];
+	}
 	array_push($colonnes, $c);
 	$cpt ++;
       }else{
@@ -274,6 +282,10 @@ class exportActions extends sfActions
     }
     $coop =  $lieu->getTotalAcheteursByCvi('cooperatives');
     foreach($coop as $cvi => $vente) {
+      $c[$cvi] = $vente;
+    }
+    $mouts =  $lieu->getTotalAcheteursByCvi('mouts');
+    foreach($mouts as $cvi => $vente) {
       $c[$cvi] = $vente;
     }
     array_push($colonnes, $c);

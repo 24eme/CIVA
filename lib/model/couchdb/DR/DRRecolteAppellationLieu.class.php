@@ -87,7 +87,7 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
     }
 
 
-    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives') {
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
       $sum = 0;
       foreach($this->getAcheteursFromCepage($type) as $acheteur) {
 	$sum += $acheteur->quantite_vendue;
@@ -99,11 +99,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
       return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
     }
 
-    private function getAcheteursFromCepage($type = 'negoces|cooperatives', $exclude_cepage = '') {
+    private function getAcheteursFromCepage($type = 'mouts|negoces|cooperatives', $exclude_cepage = '') {
       $acheteurs = array();
       foreach ($this->filter('^cepage') as $key => $cepage) {
-	if (!$cepage->hasTotalCepage())
+	if (!$cepage->getTotalVolume()) {
 	  continue;
+	}
 	foreach ($cepage->detail as $key => $d) {
 	  foreach ($d->filter($type) as $key => $t) {
 	    foreach ($t as $key => $a) {

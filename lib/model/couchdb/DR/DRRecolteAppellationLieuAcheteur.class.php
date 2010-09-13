@@ -27,6 +27,8 @@ class DRRecolteAppellationLieuAcheteur extends BaseDRRecolteAppellationLieuAchet
   private function getAcheteurFromCVI() {
     if (!$this->acheteur)
       $this->acheteur = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$this->getKey());
+    if (!$this->acheteur)
+      throw new Exception("Unknown CVI ".$this->getKey());
     return $this->acheteur;
   }
 

@@ -122,7 +122,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return (!($nb_lieu < $nb_lieu_config));
     }
 
-    public function hasCepageAppellation() {
+    public function getAppellation() {
+      $v = $this->_get('appellation');
+      if (!$v)
+	$this->_set('appellation', $this->getConfig()->getAppellation());
+      return $this->_get('appellation');
     }
 
 }
