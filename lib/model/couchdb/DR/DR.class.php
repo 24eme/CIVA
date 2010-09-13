@@ -49,6 +49,15 @@ class DR extends BaseDR {
       $u = $this->add('updated', 1);
     }
 
+    public function isValidee() {
+      return $this->isValidated();
+    }
+    public function isValidated() {
+      if ($this->exist('validee'))
+	  return ($this->validee);
+      return false;
+    }
+
     public function getJeunesVignes(){
         $v = $this->_get('jeunes_vignes');
         if(!$v)

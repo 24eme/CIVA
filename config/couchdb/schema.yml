@@ -6,6 +6,7 @@ DR:
       type: {}
       campagne: {  }
       updated: { required: false }
+      validee: { required: false }
       declarant:
         type: collection
         class: DRDeclarant
