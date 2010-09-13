@@ -6,7 +6,7 @@
             <thead>
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appelations" /></th>
-   <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) :?>
+   <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) :?>
                     <th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
                     <?php endif; ?>
                 </tr>
@@ -14,25 +14,25 @@
             <tbody>
                 <tr>
                     <td>Superficie (ares)</td>
-                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echo $superficie[$a]; ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
                     <td>Volume Total (Hl)</td>
-                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echo $volume[$a]; ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
                     <td>Volume Revendiqué (Hl)</td>
-                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echo $revendique[$a]; ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
                     <td>DPLC (Hl)</td>
-                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echo $dplc[$a]; ?></td>
                     <?php endif; ?>
                 </tr>
