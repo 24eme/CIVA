@@ -131,5 +131,8 @@ class SubConfiguration extends BaseSubConfiguration {
       return true;
     return false;
   }
-
+  public function excludeTotal() 
+  {
+    return ($this->exist('exclude_total') && $this->get('exclude_total'));
+  }
 }

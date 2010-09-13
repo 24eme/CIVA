@@ -199,6 +199,7 @@ class exportActions extends sfActions
 
   private function createAppellationLieu($lieu, $tiers) {
     $colonnes = array();
+    $afterTotal = array();
     $acheteurs = $lieu->acheteurs;
     $cpt = 0;
     foreach ($lieu->filter('^cepage_') as $cepage) {
@@ -220,7 +221,11 @@ class exportActions extends sfActions
 	foreach($detail->cooperatives as $vente) {
 	  $c[$vente->cvi] = $vente->quantite_vendue;
 	}
-	$last = array_push($colonnes, $c) - 1;
+	if ($cepage->excludeTotal()) {
+	  array_push($afterTotal, $c);
+	}else{
+	  $last = array_push($colonnes, $c) - 1;
+	}
 	$i++;
 	$cpt ++;
 	/*
@@ -268,10 +273,13 @@ class exportActions extends sfActions
       $c[$cvi] = $vente;
     }
     $coop =  $lieu->getTotalAcheteursByCvi('cooperatives');
-    foreach($coop as $vente) {
-      $c[$vente->cvi] = $coop[$vente->cvi];
+    foreach($coop as $cvi => $vente) {
+      $c[$cvi] = $vente;
     }
     array_push($colonnes, $c);
+
+    //add afterTOtal columns
+    $colonnes = array_merge($colonnes, $afterTotal);
     
     $pages = array();
     

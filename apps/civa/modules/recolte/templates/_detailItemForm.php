@@ -61,7 +61,7 @@
     <div class="col_btn">
         <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
 <script><!--
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+<?php if ($onglets->getCurrentCepage()->excludeTotal()) : ?>
 autoTotal = false;
 <?php else : ?>
 autoTotal = true;

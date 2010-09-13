@@ -127,6 +127,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       return $this->getConfig()->hasTotalCepage();
     }
 
+    public function excludeTotal() {
+      return $this->getConfig()->excludeTotal();
+    }
+
     public function hasRendement() {
         return ($this->getRendement()>0);
     }
