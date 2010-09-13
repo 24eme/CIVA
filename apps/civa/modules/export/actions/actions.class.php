@@ -160,21 +160,8 @@ class exportActions extends sfActions
     $this->annee = $this->getRequestParameter('annee', null);
     $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-    $pdf_dir = sfConfig::get('sf_cache_dir').'/pdf/';
-    $pdf_file = $pdf_dir.$key.'_'.$dr->_rev.'.pdf';
-    if (!file_exists($pdf_dir)) {
-      mkdir($pdf_dir);
-    }
     $this->setLayout(false);
-    if (file_exists($pdf_file) && !$request->getParameter('force')) {
-      if ($request->getParameter('ajax')) {
-	return $this->ajaxPdf();
-      }
-      $this->pdfname = $pdf_file;
-      $this->getResponse()->setHttpHeader('content-type', 'application/pdf');
-      $this->getResponse()->setHttpHeader('content-disposition', 'inline; filename="'.basename($pdf_file).'";');
-      return ;
-    }
+
     try {
       $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
     }catch(Exception $e) {
@@ -184,26 +171,29 @@ class exportActions extends sfActions
     $this->forward404Unless($dr);
 
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
-      $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'.pdf');
+      $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }else {
-      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'.pdf');
+      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->intitule.' '.$tiers->nom."\n".$dr->declaration_commune, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }
 
+    if($request->getParameter('force'))
+      $this->document->removeCache();
+
     $this->nb_pages = 0;
-    foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
-      foreach ($appellation->filter('^lieu') as $lieu) {
-	$this->createAppellationLieu($lieu, $tiers);
+    if (!$this->document->isCached())
+      foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
+	foreach ($appellation->filter('^lieu') as $lieu) {
+	  $this->createAppellationLieu($lieu, $tiers);
+	}
       }
-    }
-    if ($request->getParameter('direct') && !$request->getParameter('ajax'))
-      return $this->document->output($pdf_file);
-    
-    $this->document->output($pdf_file, 'F');
+
+    $this->document->generatePDF();
 
     if ($request->getParameter('ajax')) {
       return $this->ajaxPdf();
     }
-    return $this->redirect('@print?direct=1&annee='.$this->annee);
+    $this->document->addHeaders($this->getResponse());
+    return ;
     
   }
 

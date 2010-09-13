@@ -13,7 +13,7 @@ class PageablePDF extends PageableOutput {
     // set document information
     $this->pdf->SetCreator('CIVA');
     $this->pdf->SetAuthor('CIVA');
-    $this->pdf->SetTitle($this->title.$this->link.$this->subtitle);
+    $this->pdf->SetTitle($this->title.$this->link.preg_replace('/\n/', ', ', $this->subtitle));
     $this->pdf->SetSubject('PDF CIVA');
     $this->pdf->SetKeywords('Declaration, DR, récolte, vins d\'alsace');
 
@@ -42,9 +42,31 @@ class PageablePDF extends PageableOutput {
     $this->pdf->setLanguageArray('fra');
 
     // ---------------------------------------------------------
+    umask(0002);
+    $this->pdf_dir = sfConfig::get('sf_cache_dir').'/pdf/';
+    if (!file_exists($this->pdf_dir)) {
+      mkdir($this->pdf_dir);
+    }
 
+    $this->pdf_file = $this->pdf_dir.$this->filename;
+    
     // set font
     $this->pdf->SetFont('dejavusans', '', 10);
+  }
+
+  public function isCached() {
+    return file_exists($this->pdf_file);
+  }
+
+  public function removeCache() {
+    if (file_exists($this->pdf_file))
+      return unlink($this->pdf_file);
+    return true;
+  }
+
+  public function addHeaders($response) {
+    $response->setHttpHeader('content-type', 'application/pdf');
+    $response->setHttpHeader('content-disposition', 'inline; filename="'.basename($this->filename).'";');
   }
 
   public function addPage($html) {
@@ -52,11 +74,19 @@ class PageablePDF extends PageableOutput {
     $this->pdf->writeHTML($html);
   }
 
-  public function output($name = null, $dest = 'I') {
-    if (!$name)
-      $name = $this->filename;
+  public function generatePDF($no_cache = false) {
+    if (!$no_cache && $this->isCached()) {
+      return true;
+    }
     $this->pdf->lastPage();
-    $this->pdf->Output($name, $dest);
+    return $this->pdf->Output($this->pdf_file, 'F');
+  }
+
+  public function output() {
+    if (!$this->isCached()) {
+      $this->generatePDF();
+    }
+    echo file_get_contents($this->pdf_file);
   }
 }
 

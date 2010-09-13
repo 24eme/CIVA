@@ -21,5 +21,19 @@ class PageableOutput {
 
   public function output() {
   }
+
+  public function isCached() {
+  }
+
+  public function removeCache() {
+    return true;
+  }
+
+  public function addHeaders($response) {
+  }
+
+  public function generatePDF($no_cache = false) {
+  }
+
 }
 

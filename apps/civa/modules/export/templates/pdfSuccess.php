@@ -1,2 +1,2 @@
 <?php
-echo file_get_contents($pdfname);
+echo $document->output();
