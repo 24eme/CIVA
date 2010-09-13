@@ -252,6 +252,7 @@ Configuration:
                   rendement_appellation: { type: float }
                   mout: {type: integer}
                   no_total_cepage: {type: integer, required: false}
+                  exclude_total: {}
                   douane :
                     type: collection
                     class: Douane

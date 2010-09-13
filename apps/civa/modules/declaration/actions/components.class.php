@@ -32,12 +32,14 @@ class declarationComponents extends sfComponents {
         $cvi = array();
         $conf = ConfigurationClient::getConfiguration();
         foreach ($dr->recolte as $appellation) {
-            $this->appellations[] = $appellation->getAppellation();
-            $this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
-            $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
-            $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-            $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
-            $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+	  if ($appellation->getConfig()->excludeTotal()) 
+	    continue;
+	  $this->appellations[] = $appellation->getAppellation();
+	  $this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
+	  $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
+	  $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+	  $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
+	  $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
         }
 
         $this->total_superficie = array_sum(array_values($this->superficie));
@@ -47,7 +49,12 @@ class declarationComponents extends sfComponents {
 
         $this->lies = $dr->lies;
         $this->jeunes_vignes = $dr->jeunes_vignes;
-	$this->ignore = array('VINTABLE' => true);
+	
+	$this->vintable = array();
+	if ($dr->recolte->exist('appellation_VINTABLE')) {
+	  $this->vintable['superficie'] = $dr->recolte->appellation_VINTABLE->getTotalSuperficie();
+	  $this->vintable['volume'] = $dr->recolte->appellation_VINTABLE->getTotalVolume();
+	}
 
         $this->annee = $annee;
 

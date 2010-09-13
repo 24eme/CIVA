@@ -64,9 +64,9 @@
 				<tr>
 					<td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
 				</tr>
-				<?php if (isset($superficie['VINTABLE'])) : ?>
+					<?php if (isset($vintable['superficie'])) : ?>
 				<tr>
-					<td class="premiere_colonne">Vin de table : </td><td><?php echo $superficie['VINTABLE']; ?>&nbsp;<small>ares</small> / <?php echo $volume['VINTABLE']; ?> Hl</td>
+					<td class="premiere_colonne">Vin de table : </td><td><?php echo $vintable['superficie']; ?>&nbsp;<small>ares</small> / <?php echo $vintable['volume']; ?> Hl</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>

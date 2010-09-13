@@ -209,6 +209,7 @@ EOF;
 	$json->recolte->appellation_CREMANT->douane->appellation_lieu = '001';
 
         $json->recolte->appellation_VINTABLE->appellation = "VINTABLE";
+        $json->recolte->appellation_VINTABLE->exclude_total = 1;
 	$json->recolte->appellation_VINTABLE->libelle = "Vin de table";
 	$json->recolte->appellation_VINTABLE->douane->type_aoc = 4;
 	$json->recolte->appellation_VINTABLE->douane->appellation_lieu = 999;
