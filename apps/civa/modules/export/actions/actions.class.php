@@ -275,8 +275,8 @@ class exportActions extends sfActions
     $c['superficie'] = $lieu->total_superficie;
     $c['volume'] = $lieu->total_volume;
     $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
-    $c['revendique'] = $lieu->total_volume_revendique;
-    $c['dplc'] = $lieu->total_dplc;
+    $c['revendique'] = $lieu->volume_revendique;
+    $c['dplc'] = $lieu->dplc;
     $negoces = $lieu->getTotalAcheteursByCvi('negoces');
     foreach($negoces as $cvi => $vente) {
       $c[$cvi] = $vente;
