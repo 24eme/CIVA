@@ -2,7 +2,7 @@
 
 function sprintFloat($float) 
 {
-  return sprintf("%01.02f", $float);
+  return sprintf("%01.02f", round($float, 2));
 
 }
 
