@@ -26,7 +26,7 @@
                 <?php } ?>
             </fieldset>
         <?php } ?>
-        <?php if(!empty($validLogVigilance)){ ?>
+        <?php if($logVigilance){ ?>
             <fieldset class="message">
                 <legend class="message_title">Points de vigilance <a href="" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide">Teste message d'aide</a></legend>
                 <?php foreach($validLogVigilance as $logs) { ?>

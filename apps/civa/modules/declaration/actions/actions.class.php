@@ -94,6 +94,7 @@ class declarationActions extends EtapesActions {
         $this->validLogVigilance = array();
         $i = 0 ;
         $this->error = false;
+        $this->logVigilance = false;
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
             $onglet = new RecolteOnglets($dr);
             foreach ($appellation->filter('lieu') as $lieu) {
@@ -102,6 +103,7 @@ class declarationActions extends EtapesActions {
                     $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
                     $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero');
                     $i++;
+                    $this->logVigilance = true;
                 }
                 //check le lieu
                 if ($lieu->isNonSaisie()) {
@@ -146,6 +148,7 @@ class declarationActions extends EtapesActions {
                                 $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                 $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc');
                                 $i++;
+                                $this->logVigilance = true;
                             }
                             foreach($cepage->filter('detail') as $details) {
                                 foreach ($details as $detail) {
