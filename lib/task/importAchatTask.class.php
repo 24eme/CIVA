@@ -16,7 +16,7 @@ class importAchatTask extends sfBaseTask {
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
             new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
-            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'data file', sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Achat'.$options['year']),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'data file', null),
 
         ));
 
@@ -38,6 +38,10 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 		
+	if (!$options['file']) {
+	  $options['file'] = sfConfig::get('sf_data_dir') . '/import/' . $options['year'].'/Achat'.$options['year'];
+	}
+
 	if($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
 	  if (sfCouchdbManager::getClient()->databaseExists()) {
 	    sfCouchdbManager::getClient()->deleteDatabase();
