@@ -5,6 +5,7 @@ DR:
       _rev: {}
       type: {}
       campagne: {  }
+      updated: { required: false }
       declarant:
         type: collection
         class: DRDeclarant

@@ -7,7 +7,7 @@ class DR extends BaseDR {
       ->addCepage($detail->getCepage(), $lieu)
       ->getDetail()
       ->add(null, $detail);
-    }
+  }
 
     public function getRecolteDetail($appellation, $cepage, $numero, $lieu = '') {
         return $this->getRecolte()
@@ -42,6 +42,11 @@ class DR extends BaseDR {
             return 0;
         else
             return $v;
+    }
+
+    public function update() {
+      parent::update();
+      $u = $this->add('updated', 1);
     }
 
     public function getJeunesVignes(){

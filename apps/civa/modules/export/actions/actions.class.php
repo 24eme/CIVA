@@ -163,7 +163,8 @@ class exportActions extends sfActions
     $this->setLayout(false);
 
     try {
-      $dr->recolte->filter('^appellation')->getFirst()->filter('^lieu')->getFirst()->acheteurs;
+      if (!$dr->updated)
+	throw new Exception();
     }catch(Exception $e) {
       $dr->update();
       $dr->save();
@@ -253,12 +254,12 @@ class exportActions extends sfActions
 	  $c[$cvi] = $total;
 	}
 	$coop =  $cepage->getTotalAcheteursByCvi('cooperatives');
-	foreach($detail->cooperatives as $vente) {
-	  $c[$vente->cvi] = $coop[$vente->cvi];
+	foreach($coop as $cvi => $total) {
+	  $c[$cvi] = $total;
 	}
 	$mouts =  $cepage->getTotalAcheteursByCvi('mouts');
-	foreach($detail->cooperatives as $vente) {
-	  $c[$vente->cvi] = $mouts[$vente->cvi];
+	foreach($mouts as $cvi => $total) {
+	  $c[$cvi] = $total;
 	}
 	array_push($colonnes, $c);
 	$cpt ++;
