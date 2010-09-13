@@ -2,7 +2,7 @@
 <?php include_partial('global/actions') ?>
 
 <!-- #principal -->
-<form id="principal" action="" method="post" style="opacity: 0.5">
+<form id="principal" action="" method="post">
 
         <ul id="onglets_majeurs" class="clearfix">
                 <li class="ui-tabs-selected"><a href="#">Déclaration envoyée</a></li>

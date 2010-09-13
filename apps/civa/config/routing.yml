@@ -89,7 +89,7 @@ visualisation:
 
 confirmation:
   url:   /confirmation
-  param: { module: declaration, action: confirmation }
+  param: { module: declaration, action: confirmation, annee: 2010 }
 
 compte:
   url: /compte

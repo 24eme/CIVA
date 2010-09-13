@@ -88,6 +88,14 @@ class declarationActions extends EtapesActions {
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
 
+        if ($request->isMethod(sfWebRequest::POST)) {
+	  
+	  if ($this->askRedirectToNextEtapes()) {
+	    $dr->add('validee', date('Y-m-d'));
+	    $dr->save();
+	  }
+	  $this->redirectByBoutonsEtapes();
+        }
         $this->annee = $annee;
 
         $this->validLogErreur = array();
@@ -175,9 +183,6 @@ class declarationActions extends EtapesActions {
             }
         }
 
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->redirectByBoutonsEtapes();
-        }
     }
 
     /**
@@ -201,7 +206,7 @@ class declarationActions extends EtapesActions {
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
-
+	$this->annee = $request->getParameter('annee');
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
