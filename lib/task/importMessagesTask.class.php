@@ -56,7 +56,43 @@ EOF;
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie.";
 	$json->err_dr_popup_min_quantite = "Vous n'avez pas respecté le volume minimal";
         $json->err_dr_popup_dest_rebeches = "Vous n'avez pas respecté la répartition des rebeches.";
+
+
+
         $json->err_dr_popup_unique_mention_denomination = "La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
+        
+        $json->help_popup_exploitation_administratif_exploitation = "Exploitation : Message d'aide à définir.";
+        $json->help_popup_exploitation_administratif_gestionnaire = "Gestionnnaire : Message d'aide à définir.";
+        $json->help_popup_exploitation_administratif_siret = "Siret : Message d'aide à définir.";
+        
+        $json->help_popup_mon_espace_civa_ma_dr = "Ma déclaration de récolte : Message d'aide à définir.";
+        $json->help_popup_mon_espace_civa_visualiser = "Visualiser mes DR : Message d'aide à définir.";
+        $json->help_popup_mon_espace_civa_gamma = "Gamma : Message d'aide à définir.";
+
+        $json->help_popup_exploitation_acheteur_vol_sur_place = "Vol sur place : Message d'aide à définir.";
+        $json->help_popup_exploitation_acheteur_acheteurs_raisin = "Acheteurs : Message d'aide à définir.";
+        $json->help_popup_exploitation_acheteur_caves_cooperatives = "Caves : Message d'aide à définir.";
+        $json->help_popup_exploitation_acheteur_acheteurs_mouts = "Mouts : Message d'aide à définir.";
+
+        $json->help_popup_DR_denomination = "Denomination : Message d'aide à définir.";
+        $json->help_popup_DR_mention = "Mention : Message d'aide à définir.";
+        $json->help_popup_DR_superficie = "Superficie : Message d'aide à définir.";
+        $json->help_popup_DR_vente_raisins = "Vente raisins : Message d'aide à définir.";
+        $json->help_popup_DR_caves = "Cave : Message d'aide à définir.";
+        $json->help_popup_DR_vol_place = "Vol sur place : Message d'aide à définir.";
+        $json->help_popup_DR_vol_total_recolte = "Total récolte : Message d'aide à définir.";
+        $json->help_popup_DR_vol_revendique = "Vol revendiqué : Message d'aide à définir.";
+        $json->help_popup_DR_dplc = "DPLC : Message d'aide à définir.";
+        $json->help_popup_DR_total_cepage = "Total cépage : Message d'aide à définir.";
+        $json->help_popup_DR_total_appellation = "Total appellation : Message d'aide à définir.";
+        $json->help_popup_DR_recap_vente = "Recap Vente : Message d'aide à définir.";
+
+        $json->help_popup_autres_lies = "Lies : Message d'aide à définir.";
+        $json->help_popup_autres_jv = "Jeunes vignes : Message d'aide à définir.";
+
+        $json->help_popup_validation_log_erreur = "Erreurs : Message d'aide à définir.";
+        $json->help_popup_validation_log_vigilance = "Vigilance : Message d'aide à définir.";
+
 
         $json->err_log_lieu_non_saisie = "lieu non saisi";
         $json->err_log_cepage_non_saisie = "cépage non saisi";

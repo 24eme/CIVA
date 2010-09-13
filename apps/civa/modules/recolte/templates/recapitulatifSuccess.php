@@ -54,7 +54,7 @@
                                                        
                                                         
 							<div id="recap_ventes">
-								<h2 class="titre_section">Récapitulatif des ventes</h2>
+								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide">Test message d'aide</a></h2>
 								<div class="contenu_section">
         <?php /*echo $form->renderGlobalErrors();
 foreach($appellationlieu->acheteurs as $cvi => $info) {

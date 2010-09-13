@@ -52,7 +52,7 @@
    <input id="appellation_total_volume" type="text" readonly="readonly" value="<?php echoFloat( $lieu->getTotalVolume()); ?>" />
    </p>
         <ul class="vol_revendique_dplc">
-    <li class="rendement">Rdt : <strong><span id="appellation_current_rendement"><?php echoFloat( $lieu->getRendementRecoltant()); ?></span>&nbsp;hl/ha</strong></li>
+    <li class="rendement">Rdt : <strong><span id="appellation_current_rendement"><?php echoFloat( $lieu->getRendementRecoltant()); ?></span>&nbsp;hl/ha</strong><span><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide">Test message d'aide</a></span></li>
             <?php if ($lieu->hasRendement()): ?>
                 <?php if ($lieu->hasRendementAppellation()): ?>
 		    <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxAppellation()); ?>"/>
