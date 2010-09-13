@@ -26,7 +26,7 @@ pre {display: inline;}
 
 if (!function_exists('printColonne')) {
   function printColonne($libelle, $colonnes, $key, $unite = '') {
-    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px;">&nbsp;'.$libelle.'</th>';
+    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px;">'.$libelle.'</th>';
     foreach($colonnes as $c) {
       if (isset($c[$key]) && $v = $c[$key]) {
 	echo '<td style="padding-left: 5px;width: 120px;">';
