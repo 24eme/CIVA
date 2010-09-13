@@ -6,35 +6,35 @@
             <thead>
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appelations" /></th>
-                    <?php foreach ($appellations as $a) : ?>
+   <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) :?>
                     <th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Superficie (ares)</td>
-                    <?php foreach ($appellations as $a) : ?>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
                     <td><?php echo $superficie[$a]; ?></td>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <td>Volume Total (Hl)</td>
-                    <?php foreach ($appellations as $a) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
                     <td><?php echo $volume[$a]; ?></td>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <td>Volume Revendiqué (Hl)</td>
-                    <?php foreach ($appellations as $a) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
                     <td><?php echo $revendique[$a]; ?></td>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <td>DPLC (Hl)</td>
-                    <?php foreach ($appellations as $a) : ?>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) && !$ignore[$a]) : ?>
                     <td><?php echo $dplc[$a]; ?></td>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tr>
             </tbody>
         </table>
@@ -50,7 +50,6 @@
             <li><input type="text" value="<?php echo $total_dplc;?> Hl" readonly="readonly"></li>
         </ul>
     </div>
-	
 	<div id="recap_autres">
 		<table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
 			<thead>

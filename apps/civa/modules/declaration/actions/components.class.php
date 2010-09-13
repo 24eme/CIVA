@@ -47,6 +47,7 @@ class declarationComponents extends sfComponents {
 
         $this->lies = $dr->lies;
         $this->jeunes_vignes = $dr->jeunes_vignes;
+	$this->ignore = array('VINTABLE' => true);
 
         $this->annee = $annee;
 
