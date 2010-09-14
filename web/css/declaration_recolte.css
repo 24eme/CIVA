@@ -425,6 +425,11 @@ a.msg_aide
     text-indent: -9999px;
     vertical-align: middle;
     width: 14px;
+    opacity:0.5;
+}
+
+a.msg_aide:hover{
+    opacity:1;
 }
 
 #popup_msg_aide { display: none; }
