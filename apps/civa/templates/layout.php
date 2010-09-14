@@ -3,7 +3,10 @@
   <head>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
-    <?php include_title() ?>
+      <title>
+        <?php $title = $sf_context->getInstance()->getResponse()->getTitle();
+        printf($title , date("Y")); ?>
+      </title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php include_stylesheets() ?>
   </head>

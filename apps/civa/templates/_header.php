@@ -9,7 +9,9 @@
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
 
         <h1>
-            <?php echo html_entity_decode( substr($title,strrpos($title,'-')+1,strlen($title))); ?>
+            <?php 
+                printf(html_entity_decode( substr($title,strrpos($title,'-')+1,strlen($title))) , date("Y"));
+            ?>
         </h1>
 <?php if ($tiers = $sf_user->getTiers()) : ?>
         <p class="utilisateur"><?php echo link_to($tiers->getIntitule().' '.$tiers->getNom(), '@mon_espace_civa'); ?></p>

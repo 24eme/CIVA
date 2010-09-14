@@ -3,4 +3,4 @@
 
 default:
   metas:
-    title:        " Déclaration de récolte de vins d'alsace"
+    title:        " Déclaration de récolte de %d"

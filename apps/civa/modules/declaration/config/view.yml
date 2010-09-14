@@ -7,12 +7,12 @@ monEspaceCivaSuccess:
 
 exploitationAutresSuccess:
   metas:
-    title:        Autres - Déclaration de récolte de vins d'alsace
+    title:        Autres - Déclaration de récolte de %d
     
 validationSuccess:
   metas:
-    title:        Validation - Déclaration de récolte de vins d'alsace
+    title:        Validation - Déclaration de récolte de %d
 
 confirmationSuccess:
   metas:
-    title:        Confirmation - Déclaration de récolte de vins d'alsace
+    title:        Confirmation - Déclaration de récolte de %d

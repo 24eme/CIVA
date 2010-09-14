@@ -3,4 +3,4 @@
 
 default:
   metas:
-    title:        Destination de la récolte - Déclaration de récolte de vins d'alsace
+    title:        Destination de la récolte - Déclaration de récolte de %d
