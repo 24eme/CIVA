@@ -51,16 +51,27 @@ EOF;
 	$json->type = 'Messages';
 
 	$json->msg_compte_index_intro = "Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code de création de compte&nbsp;:";
+
+        /** ERRORS **/
         $json->err_exploitation_acheteurs_popup_no_required = "Veuillez cocher au moins une case pour continuer !";
         $json->err_exploitation_lieudits_popup_no_required = "Veuillez séléctionner au moins un lieu-dit !";
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie.";
 	$json->err_dr_popup_min_quantite = "Vous n'avez pas respecté le volume minimal";
         $json->err_dr_popup_dest_rebeches = "Vous n'avez pas respecté la répartition des rebeches.";
 
-
-
         $json->err_dr_popup_unique_mention_denomination = "La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
-        
+
+        $json->err_log_lieu_non_saisie = "lieu non saisi";
+        $json->err_log_cepage_non_saisie = "cépage non saisi";
+        $json->err_log_detail_non_saisie = "details non saisis";
+        $json->err_log_cremant_pas_rebeches = "pas de rebêches pour ce crémant";
+        $json->err_log_cremant_min_quantite = "Vous n'avez pas respecté le volume minimal";
+
+        $json->err_log_superficie_zero = "Vous n'avez pas renseigné de detail pour cette appellation";
+        $json->err_log_dplc = "Votre DPLC cépage est important, sachez qu'il est possible de replier le volume.";
+
+
+        /** HELP¨**/
         $json->help_popup_exploitation_administratif_exploitation = "Exploitation : Message d'aide à définir.";
         $json->help_popup_exploitation_administratif_gestionnaire = "Gestionnnaire : Message d'aide à définir.";
         $json->help_popup_exploitation_administratif_siret = "Siret : Message d'aide à définir.";
@@ -93,15 +104,15 @@ EOF;
         $json->help_popup_validation_log_erreur = "Erreurs : Message d'aide à définir.";
         $json->help_popup_validation_log_vigilance = "Vigilance : Message d'aide à définir.";
 
+        /** INTRO **/
+        $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
+        $json->intro_exploitation_acheteurs = "Veuillez saisir les destinations de la récoltes.";
+        $json->intro_exploitation_lieu = "Indiquez les lieux-dits pour lesquels vous récoltez de l'AOC.";
+        $json->intro_declaration_recolte = "Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.";
+        $json->intro_exploitation_autres = "";
+        $json->intro_validation = "Veuillez vérifier les informations saisies avant de valider votre déclaration.";
+        
 
-        $json->err_log_lieu_non_saisie = "lieu non saisi";
-        $json->err_log_cepage_non_saisie = "cépage non saisi";
-        $json->err_log_detail_non_saisie = "details non saisis";
-        $json->err_log_cremant_pas_rebeches = "pas de rebêches pour ce crémant";
-        $json->err_log_cremant_min_quantite = "Vous n'avez pas respecté le volume minimal";
-
-        $json->err_log_superficie_zero = "Vous n'avez pas renseigné de detail pour cette appellation";
-        $json->err_log_dplc = "Votre DPLC cépage est important, sachez qu'il est possible de replier le volume.";
 
 	$docs[] = $json;
 

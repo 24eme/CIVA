@@ -11,7 +11,7 @@
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
         <div id="validation_dr">
-        <p class="intro_declaration">Veuillez vérifier les informations saisies avant de valider votre déclaration.</p>
+        <p class="intro_declaration"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_validation'); ?></p>
 
         <?php if($error && !empty($validLogErreur)){ ?>
             <fieldset class="message message_erreur">

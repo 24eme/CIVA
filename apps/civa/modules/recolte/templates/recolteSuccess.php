@@ -3,7 +3,7 @@
 
 
 <!-- #principal -->
-<p class="intro_declaration_recolte">Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.</p>
+<p class="intro_declaration_recolte"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
 
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 					
