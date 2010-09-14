@@ -224,6 +224,11 @@ class recolteActions extends EtapesActions {
 	if (!$this->declaration) {
            $this->redirect('@mon_espace_civa');
 	}
+
+	if ($this->declaration->exist('validee') && $this->declaration->validee) {
+	  $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
+	}
+
 	$this->onglets = new RecolteOnglets($this->declaration);
 	try {
 	  if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {

@@ -5,12 +5,16 @@
 <!-- #principal -->
 <p class="intro_declaration_recolte"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
 
+
+<?php if ($sf_user->hasFlash('msg_info')): ?>
+<p><?php echo $sf_user->getFlash('msg_info') ; ?></p>
+<?php endif; ?>
+
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 					
 			<!--<form id="principal" action="<?php // echo url_for('@recolte'); ?>" method="post">-->
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                                    'onglets' => $onglets)); ?>
-
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
                                     <!-- #gestion_recolte -->
