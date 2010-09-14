@@ -12,7 +12,7 @@
 <?php endif; ?>&nbsp;
    </p>
 
-    <p class="superficie">Superficie <a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide">Test message d'aide</a> </p>
+   <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide">Test message d'aide</a> </p>
     <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
     <div class="vente_raisins">
         <?php
@@ -46,8 +46,8 @@
         </div>
     <?php endif; ?>
 
-    <p class="vol_place">Volume sur place <a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide">Test message d'aide</a></p>
-    <p class="vol_total_recolte">Volume Total Récolté <a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide">Test message d'aide</a></p>
+    <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide">Test message d'aide</a></p>
+    <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide">Test message d'aide</a></p>
     <?php if ($onglets->getCurrentLieu()->hasRendement()): ?>
     <ul class="vol_revendique_dplc">
         <li>Volume revendiqué <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide">Test message d'aide</a></li>

@@ -436,10 +436,11 @@ a.msg_aide:hover{
 
 #popup_msg_aide p
 {
-    background: url(../images/pictos/pi_aide.png) 0 3px no-repeat;
-    color: #929292;
-    font-size: 15px;
-    padding: 0 0 0 25px;
+    background:url("../images/pictos/pi_aide.png") no-repeat scroll 0 0 transparent;
+    color:#929292;
+    font-size:15px;
+    height:30px;
+    padding:0 0 0 25px;
 }
 
 /**
@@ -992,6 +993,10 @@ a.msg_aide:hover{
     line-height: 17px;
     margin: 18px 10px 0 0;
     width: 185px;
+}
+
+#gestion_recolte #colonne_intitules .unites{
+    font-size: 11px;
 }
 
 #gestion_recolte #colonne_intitules h3
