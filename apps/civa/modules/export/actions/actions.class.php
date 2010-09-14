@@ -174,7 +174,7 @@ class exportActions extends sfActions
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
       $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }else {
-      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->intitule.' '.$tiers->nom."\n".$dr->declaration_commune, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
+      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }
 
     if($request->getParameter('force'))
