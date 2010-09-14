@@ -840,16 +840,18 @@ a.msg_aide:hover{
 
 #gestion_grands_crus ul#liste_grands_crus li
 {
-    border-bottom: 1px dashed #c6c8c7;
-    padding: 3px 25px 3px 0;
-    position: relative;
+    background:none repeat scroll 0 0 #E0DFDF;
+    border-bottom:1px dashed #C6C8C7;
+    margin-bottom:3px;
+    padding:5px;
+    position:relative;
 }
 
 #gestion_grands_crus ul#liste_grands_crus li a.supprimer
 {
-    position: absolute;
-    right: 0;
-    top: 3px;
+    position:absolute;
+    right:6px;
+    top:6px;
 }
 
 #gestion_grands_crus .ligne_form { margin: 0; }
@@ -924,7 +926,7 @@ a.msg_aide:hover{
 
 #gestion_recolte ul#liste_sepages li
 {
-    background: #999;
+    background: #E0DFDF;
     border: 1px solid #c6c6c6;
     margin: 0 0 2px;
     width: 105px;
@@ -945,7 +947,7 @@ a.msg_aide:hover{
 
 #gestion_recolte ul#liste_sepages li a
 {
-    color: #fff;
+    color: #666666;
     display: block;
     padding: 3px 5px;
     text-decoration: none;
@@ -984,7 +986,7 @@ a.msg_aide:hover{
 /* Colonne intitulés */
 #gestion_recolte #colonne_intitules
 {
-    color: #666;
+    color: #fff;
     float: left;
     font-size: 14px;
     line-height: 17px;
@@ -1004,7 +1006,7 @@ a.msg_aide:hover{
 #gestion_recolte #colonne_intitules p,
 #gestion_recolte #colonne_intitules ul
 {
-    background: #e0dfdf;
+    background: #999;
     margin: 0 0 3px;
     overflow: hidden;
 }
@@ -1025,7 +1027,7 @@ a.msg_aide:hover{
 #gestion_recolte #colonne_intitules .caves,
 #gestion_recolte #colonne_intitules .mouts
 {
-    background: #e0dfdf;
+    background: #999;
     margin: 0 0 3px;
     padding: 3px 3px 0;
 }

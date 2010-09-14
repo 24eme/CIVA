@@ -108,6 +108,7 @@ EOF;
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "Veuillez saisir les destinations de la récoltes.";
         $json->intro_exploitation_lieu = "Indiquez les lieux-dits pour lesquels vous récoltez de l'AOC.";
+        $json->intro_exploitation_lieu_txt_gris = "Lieux-dits : ";
         $json->intro_declaration_recolte = "Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.";
         $json->intro_exploitation_autres = "";
         $json->intro_validation = "Veuillez vérifier les informations saisies avant de valider votre déclaration.";
