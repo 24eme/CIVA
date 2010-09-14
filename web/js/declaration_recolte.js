@@ -841,7 +841,13 @@ var volumeOnChange = function(input) {
 	
     $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
     $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
-    
+
+   if($('#cepage_volume_dplc').val() == 0){
+        ($('.rendement').removeClass("alerte"));
+    }else{
+        ($('.rendement').addClass("alerte"));
+    }
+
     var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
     $('#appellation_current_rendement').html(val.replace(/\..*/, ''));
     val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
@@ -983,7 +989,7 @@ var largeurColScrollerCont = function()
 	if(col_active.size() > 0)
 		cont.parent().scrollTo(col_active, 0 );
 	else
-		cont.parent().scrollTo( { top: 0, left: largeur }, 0 );
+		cont.parent().scrollTo( {top: 0, left: largeur}, 0 );
 };
 
 

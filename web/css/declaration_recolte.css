@@ -1262,12 +1262,17 @@ a.msg_aide:hover{
 
 #gestion_recolte .col_total .vol_revendique_dplc .rendement
 {
-    color: #bc0d0d;
     font-size: 10px;
     position: absolute;
     top: 0;
     padding: 0;
 }
+
+#gestion_recolte .col_total .vol_revendique_dplc .alerte{
+    color: #bc0d0d;
+}
+
+
 
 #gestion_recolte .col_total .vol_revendique_dplc .rendement strong { font-size: 14px; }
 
