@@ -12,7 +12,7 @@
         <?php } ?>
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <h3 class="titre_section">Ma déclaration de récolte <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide">Test message d'aide</a></h3>
+            <h3 class="titre_section">Saisir ma declaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide">Test message d'aide</a></h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
                 <?php if ($declaration): ?>
