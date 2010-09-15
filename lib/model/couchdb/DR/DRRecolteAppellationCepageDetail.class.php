@@ -89,7 +89,7 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         return $this->exist('motif_non_recolte');
     }
     public function isNonSaisie() {
-        return ($this->getMotifNonRecolteLibelle() == 'Non saisie');
+        return ($this->getMotifNonRecolteLibelle() == 'Déclaration en cours');
     }
     public function getMotifNonRecolteLibelle() {
       if ($this->volume)
@@ -98,7 +98,7 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       if ($this->exist('motif_non_recolte') && ConfigurationClient::getConfiguration()->motif_non_recolte->exist($this->motif_non_recolte)) {
           return ConfigurationClient::getConfiguration()->motif_non_recolte->get($this->motif_non_recolte);
       } else {
-         return 'Non saisie';
+         return 'Déclaration en cours';
       }
       
     }
