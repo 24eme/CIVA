@@ -50,8 +50,8 @@
     <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide">Test message d'aide</a></p>
     <?php if ($onglets->getCurrentLieu()->hasRendement()): ?>
     <ul class="vol_revendique_dplc">
-        <li>Volume revendiqué <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide">Test message d'aide</a></li>
-        <li>DPLC <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide">Test message d'aide</a></li>
+        <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide">Test message d'aide</a></li>
+        <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide">Test message d'aide</a></li>
     </ul>
     <?php endif; ?>
 </div>
