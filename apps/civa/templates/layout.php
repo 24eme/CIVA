@@ -5,7 +5,7 @@
     <?php include_metas() ?>
       <title>
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle();
-        printf($title , date("Y")); ?>
+        printf(html_entity_decode($title) , date("Y")); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php include_stylesheets() ?>
