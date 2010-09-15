@@ -843,6 +843,8 @@ a.msg_aide:hover{
 {
     background:none repeat scroll 0 0 #E0DFDF;
     border-bottom:1px dashed #C6C8C7;
+    font-size:14px;
+    font-weight:bold;
     margin-bottom:3px;
     padding:5px;
     position:relative;
