@@ -29,20 +29,20 @@
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<tbody>
 												<tr>
-													<td>Superficie :</td>
+													<td>Superficie <span class="unites">(ares)</span> :</td>
     <td class="valeur alt"><?php echo $appellationlieu->getTotalSuperficie(); ?> ares</td>
 												</tr>
 												<tr>
-													<td>Volume total récolté :</td>
+													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getTotalVolume() ;?> hl</td>
 												</tr>
                                                                                                 <?php if($appellationlieu->hasRendement()): ?>
 												<tr>
-													<td>Volume revendiqué :</td>
+													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendiqueFinal(); ?> hl</td>
 												</tr>
 												<tr>
-													<td>DPLC :</td>
+													<td>DPLC <span class="unites">(hl)</span> :</td>
 													<td class="valeur alt"><?php echo $appellationlieu->getDplcFinal(); ?> hl</td>
 												</tr>
                                                                                                 <?php endif; ?>

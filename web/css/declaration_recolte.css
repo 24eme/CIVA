@@ -351,7 +351,6 @@ table.table_donnees tbody td a.supprimer { position: absolute; right: -20px; }
 table.table_donnees tbody td label { display: block; }
 table.table_donnees tbody td span
 {
-    display: block;
     min-height: 17px; !height: 17px;
 }
 
@@ -1311,7 +1310,7 @@ a.msg_aide:hover{
     width: 285px;
 }
 
-#gestion_recolte #total_appelation table tbody td { color: #000; }
+#gestion_recolte #total_appelation table tbody td { color: #000; width:200px;}
 
 #gestion_recolte #total_appelation table tbody td.valeur
 {
