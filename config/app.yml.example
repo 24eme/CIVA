@@ -4,7 +4,7 @@
 # default values
 all:
   base_url : http://declaration.vinsalsace.pro/
-  tomcat_dir : /home/declaration/vinsalsace/cas
+  tomcat_dir : /var/www/tomcat6/webapps/cas
   cas:
     domain: declaration.dev.vinsalsace.pro
     port: 443
