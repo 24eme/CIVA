@@ -171,6 +171,14 @@ class declarationActions extends EtapesActions {
                                         $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie');
                                         $i++;
                                         $this->error = true;
+                                    }elseif($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle()=="Assemblage Edelswicker"){
+                                        if(!$lieu->exist('cepage_ED') || !$lieu->cepage_ED->getVolume()){
+                                            $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
+                                            $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie');
+                                            $i++;
+                                            $this->error = true;
+                                        }
+                                        
                                     }
                                 }
                             }

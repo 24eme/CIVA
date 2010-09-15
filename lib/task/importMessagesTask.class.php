@@ -64,6 +64,7 @@ EOF;
         $json->err_log_lieu_non_saisie = "lieu non saisi";
         $json->err_log_cepage_non_saisie = "cépage non saisi";
         $json->err_log_detail_non_saisie = "details non saisis";
+        $json->err_log_ED_non_saisie = "Détails Edelzwicker non saisis, alors qu'il s'agit d'un motif de non récolte.";
         $json->err_log_cremant_pas_rebeches = "pas de rebêches pour ce crémant";
         $json->err_log_cremant_min_quantite = "Vous n'avez pas respecté le volume minimal";
 
