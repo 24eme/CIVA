@@ -129,7 +129,7 @@ p.flash_message
 
 #popup_msg_erreur p{
     text-align: center;
-    margin-top: 70px;
+    margin-top: 90px;
 }
 #popup_msg_erreur .close_btn{
     margin-top:10px;
