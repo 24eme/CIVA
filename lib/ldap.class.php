@@ -52,7 +52,7 @@ class ldap {
                 $info['uidNumber']     = '1000';
                 $info['gidNumber']     = '1000';
                 $info['homeDirectory'] = '/home/'.$tiers->cvi;
-                $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$tiers->nom.',';
+                $info['gecos']         = $tiers->nom;
                 $info['mail']          = $tiers->email;
                 $info['postalAddress'] = $tiers->getAdresse();
                 $info['postalCode']    = $tiers->getCodePostal();
