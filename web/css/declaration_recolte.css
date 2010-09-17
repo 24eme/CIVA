@@ -1265,6 +1265,7 @@ a.msg_aide:hover{
     margin-top: 3px;
     padding: 22px 0 0;
     position: relative;
+    white-space:nowrap;
 }
 
 #gestion_recolte .col_total .vol_revendique_dplc .rendement
@@ -1509,7 +1510,7 @@ a.msg_aide:hover{
 #nouvelle_declaration .ligne_form_label label
 {
     float:left;
-    width:110px;
+    width:125px;
 }
 
 /**
@@ -1604,4 +1605,14 @@ a.msg_aide{
 #popup_rendements_max .close_btn {
 margin-top:10px;
 text-align:right;
+}
+
+.picto_rdt_aide_tot_app{
+    position:absolute;
+right:-16px;
+}
+
+.picto_rdt_aide_tot_cepage{
+    position:absolute;
+right:-8px;
 }
