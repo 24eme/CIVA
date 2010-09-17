@@ -41,16 +41,16 @@ $(document).ready( function()
 
         var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
 
-	var is_number = (e.which >= 48 && e.which <= 57);
+        var is_number = (e.which >= 48 && e.which <= 57);
 
         if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && !is_number)
             return false;
-	if(e.which == 46 && has_point_or_virgule)
-	    return false;
-	if(e.which == 44 && has_point_or_virgule)
-	    return false;
-	if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.currentTarget && e.currentTarget.selectionStart > val.length - 3)
-	    return false;
+        if(e.which == 46 && has_point_or_virgule)
+            return false;
+        if(e.which == 44 && has_point_or_virgule)
+            return false;
+        if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.currentTarget && e.currentTarget.selectionStart > val.length - 3)
+            return false;
         return e;
     });
     $('input.num').live('change',function(e)
@@ -118,6 +118,26 @@ $(document).ready( function()
         return false;
     });
 
+    $(document).find('a.open_popup_rendements_max').live('click', function() {
+        popup = $("#popup_rendements_max");
+
+        popup.dialog
+        ({
+            autoOpen: false,
+            draggable: false,
+            resizable: false,
+            width: 500,
+            modal: true
+        });
+        popup.dialog('open');
+
+        return false;
+    });
+
+    $(document).find('a.popup_rendements_max').live('click', function() {
+        $('#popup_rendements_max').dialog('close');
+        return false;
+    });
 
 });
 
@@ -163,7 +183,7 @@ var initMsgAide = function()
                 popup.find('p').text(message);
                 $(popup).dialog( "option" , "title" , titre);
             }
-        );
+            );
             
         openPopup(popup);
         $(popup).dialog( "option" , "title" , title_msg_aide);
@@ -195,7 +215,7 @@ var choixPrecDecla = function()
  ******************************************/
 var accordeonPrecDecla = function()
 {
-   /* $('#precedentes_declarations ul.ui-accordion').accordion(
+/* $('#precedentes_declarations ul.ui-accordion').accordion(
     {
         autoHeight: false,
         active: 0
@@ -343,11 +363,11 @@ var initTablesAcheteurs = function()
     });
 
     $('body').live('keypress', (function (e) {
-       if ($('#exploitation_acheteurs .form_ajout').find('a.valider:visible').length > 0 && e.which == 13) {
-           $('#exploitation_acheteurs .form_ajout').find('a.valider:visible').click();
-           return false;
-       }
-       return true;
+        if ($('#exploitation_acheteurs .form_ajout').find('a.valider:visible').length > 0 && e.which == 13) {
+            $('#exploitation_acheteurs .form_ajout').find('a.valider:visible').click();
+            return false;
+        }
+        return true;
     }));
 
     initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
@@ -738,13 +758,13 @@ var initGestionRecolteRecapitulatif = function() {
 }
 
 var etatBtnRecolteCanBeInactif = function (actif) {
-   if (actif) {
-      $('a.btn_recolte_can_be_inactif').removeClass('btn_inactif');
-      $('.col_recolte.col_active .col_btn a.annuler_tmp').addClass('btn_inactif');
-   } else {
-      $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
-      $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
-   }
+    if (actif) {
+        $('a.btn_recolte_can_be_inactif').removeClass('btn_inactif');
+        $('.col_recolte.col_active .col_btn a.annuler_tmp').addClass('btn_inactif');
+    } else {
+        $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
+        $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
+    }
 }
 
 var updateElementRows = function (inputObj, totalObj) {
@@ -752,10 +772,10 @@ var updateElementRows = function (inputObj, totalObj) {
     inputObj.each(function() {
         var total = parseFloat(totalObj.val());
         var element = parseFloat($(this).val());
-	total += element;
+        total += element;
         if (element && parseFloat(totalObj.val()) != total) {
-	    totalObj.val(total);
-	}
+            totalObj.val(total);
+        }
     });
 };
 var updateAppellationTotal = function (cepageCssId, appellationCssId) {
@@ -808,7 +828,7 @@ var volumeOnChange = function(input) {
     //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
     if (!autoTotal)
-	return ;
+        return ;
     $('ul.acheteurs li').each(function () {
         var css_class = $(this).attr('class');
         updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
@@ -842,7 +862,7 @@ var volumeOnChange = function(input) {
     $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
     $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
 
-   if($('#cepage_volume_dplc').val() == 0){
+    if($('#cepage_volume_dplc').val() == 0){
         ($('.rendement').removeClass("alerte"));
     }else{
         ($('.rendement').addClass("alerte"));
@@ -972,24 +992,27 @@ var etatBtnAjoutCol = function()
      ******************************************/
 var largeurColScrollerCont = function()
 {
-   var cont = $('#col_scroller_cont');
-	var cols = cont.find('.col_recolte');
-	var col_active = cont.find('.col_active');
-	var btn = cont.find('a#ajout_col');
+    var cont = $('#col_scroller_cont');
+    var cols = cont.find('.col_recolte');
+    var col_active = cont.find('.col_active');
+    var btn = cont.find('a#ajout_col');
 	
-	var largeur = btn.width();
+    var largeur = btn.width();
 	
-	cols.each(function()
-	{
-		largeur += $(this).width() + parseInt($(this).css('marginRight'));
-	});
+    cols.each(function()
+    {
+        largeur += $(this).width() + parseInt($(this).css('marginRight'));
+    });
 	
-	cont.width(largeur);
+    cont.width(largeur);
 	
-	if(col_active.size() > 0)
-		cont.parent().scrollTo(col_active, 0 );
-	else
-		cont.parent().scrollTo( {top: 0, left: largeur}, 0 );
+    if(col_active.size() > 0)
+        cont.parent().scrollTo(col_active, 0 );
+    else
+        cont.parent().scrollTo( {
+            top: 0,
+            left: largeur
+        }, 0 );
 };
 
 

@@ -23,7 +23,8 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-           
+        $this->initRendement();
+
         if (!$this->details->count() > 0) {
             $this->redirect($this->onglets->getUrl('recolte_add'));
         }
@@ -31,23 +32,25 @@ class recolteActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
+
     }
 
     public function executeUpdate(sfWebRequest $request) {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-        
+        $this->initRendement();
+
         $this->detail_action_mode = 'update';
         $this->is_detail_edit = true;
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
-        
+
         $this->form_detail = new RecolteForm($this->details->get($this->detail_key), $this->getFormDetailsOptions());
 
         if ($request->isMethod(sfWebRequest::POST)) {
-           $this->processFormDetail($this->form_detail, $request);
+            $this->processFormDetail($this->form_detail, $request);
         }
 
         $this->setTemplate('recolte');
@@ -57,7 +60,8 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-        
+        $this->initRendement();
+
         $this->detail_action_mode = 'add';
         $this->is_detail_edit = true;
 
@@ -67,7 +71,7 @@ class recolteActions extends EtapesActions {
         $this->form_detail = new RecolteForm($detail, $this->getFormDetailsOptions());
 
         if ($request->isMethod(sfWebRequest::POST)) {
-           $this->processFormDetail($this->form_detail, $request);
+            $this->processFormDetail($this->form_detail, $request);
         }
 
         $this->setTemplate('recolte');
@@ -76,7 +80,7 @@ class recolteActions extends EtapesActions {
     public function executeDelete(sfWebRequest $request) {
         $this->initOnglets($request);
         $this->initDetails();
-        
+
         $detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($detail_key));
 
@@ -85,7 +89,7 @@ class recolteActions extends EtapesActions {
             $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
         }
         $this->declaration->save();
-        
+
         $this->redirect($this->onglets->getUrl('recolte'));
     }
 
@@ -93,7 +97,8 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($request->isXmlHttpRequest());
         $this->initOnglets($request);
         $this->initDetails();
-        
+        $this->initRendement();
+
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
 
@@ -104,10 +109,10 @@ class recolteActions extends EtapesActions {
             if ($this->form->isValid()) {
                 $this->form->save();
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                                                               'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
+                        'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
             }
             return $this->renderText(json_encode(array('action' => 'render',
-                                                   'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
+                    'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
         }
 
         return $this->renderText($this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)));
@@ -128,38 +133,38 @@ class recolteActions extends EtapesActions {
                     $this->forward('recolte', 'ajoutLieuAjax');
                     //return $this->redirect(array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
-		  return $this->renderText(json_encode(array('action' => 'redirect',
-                                                               'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
+                    return $this->renderText(json_encode(array('action' => 'redirect',
+                            'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
                 }
             }
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                                                   'data' => $this->getPartial('ajoutAppellationForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation)))));
+                'data' => $this->getPartial('ajoutAppellationForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_appellation)))));
     }
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-        
+
         $this->initOnglets($request);
-        
-         if ($request->hasParameter('force_appellation')) {
-           $this->forward404Unless($this->declaration->recolte->getConfig()->exist($request->getParameter('force_appellation')));
-           $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $request->getParameter('force_appellation')));
-           $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->add($request->getParameter('force_appellation')));
-        } 
+
+        if ($request->hasParameter('force_appellation')) {
+            $this->forward404Unless($this->declaration->recolte->getConfig()->exist($request->getParameter('force_appellation')));
+            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $request->getParameter('force_appellation')));
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->add($request->getParameter('force_appellation')));
+        }
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form_ajout_lieu->bind($request->getParameter($this->form_ajout_lieu->getName()));
             if ($this->form_ajout_lieu->isValid()) {
                 $this->form_ajout_lieu->save();
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                                                           'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
+                        'data' => $this->generateUrl('recolte_add', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
             }
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                                                   'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
+                'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
 
 
     }
@@ -175,27 +180,26 @@ class recolteActions extends EtapesActions {
         }
     }
 
-    public function executeRecapitulatif(sfWebRequest $request)
-    {
-      $this->initOnglets($request);
-      $dr = $this->getUser()->getDeclaration();
-      $this->appellationlieu = $this->onglets->getLieu();
+    public function executeRecapitulatif(sfWebRequest $request) {
+        $this->initOnglets($request);
+        $dr = $this->getUser()->getDeclaration();
+        $this->appellationlieu = $this->onglets->getLieu();
 
-      $this->form = new RecapitulatifForm($this->appellationlieu);
+        $this->form = new RecapitulatifForm($this->appellationlieu);
 
-      $forms = $this->form->getEmbeddedForms();
-      if (!count($forms) && $request->getParameter('redirect')) {
-	return $this->redirect($this->onglets->getNextUrl()); 
-      }
+        $forms = $this->form->getEmbeddedForms();
+        if (!count($forms) && $request->getParameter('redirect')) {
+            return $this->redirect($this->onglets->getNextUrl());
+        }
 
-      if ($request->isMethod(sfWebRequest::POST)) {
-	$this->form->bind($request->getParameter($this->form->getName()));
-	if ($this->form->isValid()) {
-	  $this->form->save();
-	  return $this->redirect($this->onglets->getNextUrl());
-	}
-      }
-      
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                return $this->redirect($this->onglets->getNextUrl());
+            }
+        }
+
     }
 
     protected function processFormDetail($form, $request) {
@@ -206,6 +210,29 @@ class recolteActions extends EtapesActions {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
             $this->redirect($this->onglets->getUrl('recolte'));
+        }
+    }
+
+    protected function initRendement() {
+        $dr = $this->declaration;
+        $this->rendement = array();
+        foreach ($dr->recolte->filter('appellation_') as $appellation) {
+            foreach ($appellation->filter('lieu') as $lieu) {
+                foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
+                    
+                    if($cepage->getRendement()) {
+                        $rd = $cepage->getRendement();
+                    }else {
+                        $rd = $lieu->getRendementAppellation();
+                    }
+                    if($appellation->hasManyLieu()) {
+                        $this->rendement[$appellation->getLibelle()][$rd][$lieu->getLibelle()] = 1;
+                    }else {
+                        $this->rendement[$appellation->getLibelle()][$rd][$cepage->getLibelle()] = 1;
+                    }
+
+                }
+            }
         }
     }
 
@@ -221,31 +248,31 @@ class recolteActions extends EtapesActions {
         }
         $cepage = $request->getParameter('cepage', null);
 
-	if (!$this->declaration) {
-           $this->redirect('@mon_espace_civa');
-	}
+        if (!$this->declaration) {
+            $this->redirect('@mon_espace_civa');
+        }
 
-	if ($this->declaration->exist('validee') && $this->declaration->validee) {
-	  $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
-	}
+        if ($this->declaration->exist('validee') && $this->declaration->validee) {
+            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
+        }
 
-	$this->onglets = new RecolteOnglets($this->declaration);
-	try {
-	  if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
-	    $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
-	  }
+        $this->onglets = new RecolteOnglets($this->declaration);
+        try {
+            if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
+                $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
+            }
 
-	  /*** AjOUT APPELLATION ***/
-	  $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
-	  $this->form_ajout_lieu = null;
-	  $this->url_ajout_lieu = null;
-	  if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
-	  }
-	}catch(Exception $e) {
-	  $this->redirect('@mon_espace_civa');
-	}
+            /*** AjOUT APPELLATION ***/
+            $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
+            $this->form_ajout_lieu = null;
+            $this->url_ajout_lieu = null;
+            if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
+                $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
+                $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
+            }
+        }catch(Exception $e) {
+            $this->redirect('@mon_espace_civa');
+        }
     }
 
     protected function initDetails() {
@@ -262,11 +289,11 @@ class recolteActions extends EtapesActions {
         $this->acheteurs = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation());
     }
 
-     protected function getFormDetailsOptions() {
-       return array('superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
-                      'acheteurs_negoce' => $this->acheteurs->negoces,
-                      'acheteurs_cooperative' => $this->acheteurs->cooperatives,
-                      'acheteurs_mout' => $this->acheteurs->mouts,
-                      'has_acheteurs_mout' => $this->has_acheteurs_mout);
-     }
+    protected function getFormDetailsOptions() {
+        return array('superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
+                'acheteurs_negoce' => $this->acheteurs->negoces,
+                'acheteurs_cooperative' => $this->acheteurs->cooperatives,
+                'acheteurs_mout' => $this->acheteurs->mouts,
+                'has_acheteurs_mout' => $this->has_acheteurs_mout);
+    }
 }

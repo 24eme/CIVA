@@ -263,6 +263,7 @@ ul.btn_prev_suiv li img { display: block; }
 ul#btn_etape { padding: 0 20px; }
 ul#btn_appelation { padding: 30px 60px 0; }
 ul#btn_cepage { padding: 10px 0; }
+ul#btn_appelation li.previsualiser { margin: 0 0 0 368px; }
 
 /* Tableau de données */
 table.table_donnees { }
@@ -1559,4 +1560,48 @@ a.msg_aide:hover{
 
 a.msg_aide{
     margin: -2px 0 0 5px;
+}
+
+/** popup rendements max **/
+
+
+#popup_rendements_max .appellation{
+    background:none repeat scroll 0 0 #999;
+    border-bottom:1px dashed #C6C8C7;
+    font-size:13px;
+    padding:5px;
+}
+
+#popup_rendements_max .appellation, #popup_rendements_max .rendement{
+    font-weight: bold;
+}
+
+#popup_rendements_max table{
+    margin-bottom: 5px;
+}
+
+#popup_rendements_max td{
+    font-size: 13px;
+    padding: 3px;
+}
+
+#popup_rendements_max .cepage{
+    width:350px;
+    padding-left: 15px;
+    background: #E0DFDF;
+
+}
+#popup_rendements_max .rendement{
+    width:100px;
+    background: #E0DFDF;
+}
+
+#popup_rendements_max .vide{
+    padding: 0;
+    background: none;
+}
+
+#popup_rendements_max .close_btn {
+margin-top:10px;
+text-align:right;
 }

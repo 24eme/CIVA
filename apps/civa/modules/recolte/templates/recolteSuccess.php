@@ -110,4 +110,6 @@
        <?php include_partial('popupMotifNonRecolte') ?>
      
        <?php include_partial('emptyAcheteurs') ?>
+
+       <?php include_partial('popupRendementsMax' , array('rendement'=>$rendement)) ?>
 	
