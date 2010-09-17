@@ -102,7 +102,10 @@ class recolteActions extends EtapesActions {
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
 
-        $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key));
+        if($this->onglets->getCurrentKeyAppellation() == "appellation_ALSACEBLANC") $nonEdel = true;
+        else $nonEdel = false;
+        
+        $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key), array('nonEdel'=> $nonEdel));
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form ->bind($request->getParameter($this->form->getName()));
@@ -219,7 +222,9 @@ class recolteActions extends EtapesActions {
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
             foreach ($appellation->filter('lieu') as $lieu) {
                 foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
-                    
+                    if($cepage->hasMinQuantite()) {
+			$this->min_quantite = $cepage->min_quantite * 100 ;
+                    }
                     if($cepage->getRendement()) {
                         $rd = $cepage->getRendement();
                     }else {
