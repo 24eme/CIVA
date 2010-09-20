@@ -139,6 +139,10 @@ $(document).ready( function()
         return false;
     });
 
+    if($('.col_active')){
+        $('.superficie').focus();
+    }
+
 });
 
 
