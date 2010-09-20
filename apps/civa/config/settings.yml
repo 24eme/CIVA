@@ -34,6 +34,10 @@ all:
     # Enable the database manager
     use_database:           true
     etag: on
+    error_404_module: global
+    error_404_action:
+    error_500_module: home
+    error_500_action: error500
 
   .actions:
     login_module:           tiers
