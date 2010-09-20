@@ -22,4 +22,7 @@ class globalActions extends sfActions
                                                  'message' => sfCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
 
   }
+  public function executeError404(){
+
+  }
 }

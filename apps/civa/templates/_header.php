@@ -27,7 +27,6 @@
             <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
 <?php else : ?>
             <li><a href="<?php echo url_for('@login'); ?>">Connexion</a></li>
-
 <?php endif; ?>
         </ul>
     </div>
