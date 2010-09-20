@@ -143,6 +143,11 @@ $(document).ready( function()
         $('.superficie').focus();
     }
 
+    $(document).find('a.btn_voir_dr_prec').live('click', function() {
+         openPopup($('#popup_dr_precedentes'));
+         return false;
+    });
+
 });
 
 

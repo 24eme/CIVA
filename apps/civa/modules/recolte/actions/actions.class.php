@@ -24,6 +24,7 @@ class recolteActions extends EtapesActions {
         $this->initDetails();
         $this->initAcheteurs();
         $this->initRendement();
+        $this->initPrecDR();
 
         if (!$this->details->count() > 0) {
             $this->redirect($this->onglets->getUrl('recolte_add'));
@@ -40,6 +41,7 @@ class recolteActions extends EtapesActions {
         $this->initDetails();
         $this->initAcheteurs();
         $this->initRendement();
+        $this->initPrecDR();
 
         $this->detail_action_mode = 'update';
         $this->is_detail_edit = true;
@@ -61,6 +63,7 @@ class recolteActions extends EtapesActions {
         $this->initDetails();
         $this->initAcheteurs();
         $this->initRendement();
+        $this->initPrecDR();
 
         $this->detail_action_mode = 'add';
         $this->is_detail_edit = true;
@@ -292,6 +295,11 @@ class recolteActions extends EtapesActions {
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->onglets->getCurrentAppellation()->getConfig()->mout == 1);
         $this->acheteurs = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation());
+    }
+
+    protected function initPrecDR(){
+        $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
+        krsort($this->campagnes);
     }
 
     protected function getFormDetailsOptions() {

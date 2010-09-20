@@ -39,7 +39,7 @@
             <!-- fin #header -->
             <div id="contenu">
                 <div id="error_page">
-                    <img src="../images/pictos/hopla_big.png" alt="Hop'La" />
+                    <img src="/images/pictos/hopla_big.png" alt="Hop'La" />
                     <h1>Une erreur est survenue.</h1>
                     <br />
                     <p>

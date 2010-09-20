@@ -161,6 +161,11 @@ ul#actions_declaration li
     margin: 0 0 0 10px;
 }
 
+ul#actions_declaration li.btn
+{
+    margin: -8px 0 0 10px;
+}
+
 /* Onglets */
 ul#onglets_majeurs
 {
@@ -1563,8 +1568,9 @@ a.msg_aide{
     margin: -2px 0 0 5px;
 }
 
-/** popup rendements max **/
 
+
+/** popup rendements max **/
 
 #popup_rendements_max .appellation{
     background:none repeat scroll 0 0 #999;
@@ -1615,4 +1621,25 @@ right:-16px;
 .picto_rdt_aide_tot_cepage{
     position:absolute;
 right:-8px;
+}
+
+
+/** popup voir les DR prec **/
+
+#popup_dr_precedentes ul
+{
+    font-size: 14px;
+    padding: 3px 0 0 15px;
+}
+
+#popup_dr_precedentes ul li { margin: 0 0 3px; }
+#popup_dr_precedentes ul li a { background-position: -8px -32px; }
+#popup_dr_precedentes ul li a.ui-state-active { background-position: 0 -48px; }
+#popup_dr_precedentes ul.declarations { font-size: 13px; }
+
+#popup_dr_precedentes ul.declarations li a
+{
+    background: url(../images/pictos/pi_declaration_recolte.png) 0 center no-repeat;
+    color: #666;
+    padding: 0 0 0 20px;
 }
