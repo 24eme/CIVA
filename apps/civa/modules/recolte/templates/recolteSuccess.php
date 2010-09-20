@@ -114,4 +114,7 @@
        <?php include_partial('popupRendementsMax' , array('rendement'=>$rendement, 'min_quantite'=>$min_quantite)) ?>
 
        <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
-	
+
+<?php if(isset($flash_message) && $sf_user->hasFlash($flash_message)){ ?>
+    <?php include_partial('popupRappelLog' , array('flash_message'=>$sf_user->getFlash($flash_message))) ?>
+<?php } ?>

@@ -1608,19 +1608,15 @@ a.msg_aide{
     background: none;
 }
 
-#popup_rendements_max .close_btn {
-margin-top:10px;
-text-align:right;
+.close_btn {
+    bottom:21px;
+    position:absolute;
+    right:22px;
 }
 
-.picto_rdt_aide_tot_app{
+.picto_rdt_aide_col_total{
     position:absolute;
-right:-16px;
-}
-
-.picto_rdt_aide_tot_cepage{
-    position:absolute;
-right:-8px;
+    left: 83px;
 }
 
 

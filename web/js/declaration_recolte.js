@@ -113,11 +113,11 @@ $(document).ready( function()
         return false;
     });
 
-    $(document).find('a.close_popup_msg_erreur').live('click', function() {
-        $('#popup_msg_erreur').dialog('close');
+    $(document).find('a.close_popup').live('click', function() {
+        $('.popup_ajout').dialog('close');
         return false;
     });
-
+    
     $(document).find('a.open_popup_rendements_max').live('click', function() {
         popup = $("#popup_rendements_max");
 
@@ -134,19 +134,19 @@ $(document).ready( function()
         return false;
     });
 
-    $(document).find('a.popup_rendements_max').live('click', function() {
-        $('#popup_rendements_max').dialog('close');
+
+
+    if($('.col_active')) $('.superficie').focus();
+
+    $(document).find('a.btn_voir_dr_prec').live('click', function() {
+        openPopup($('#popup_dr_precedentes'));
         return false;
     });
 
-    if($('.col_active')){
-        $('.superficie').focus();
-    }
-
-    $(document).find('a.btn_voir_dr_prec').live('click', function() {
-         openPopup($('#popup_dr_precedentes'));
-         return false;
-    });
+    if($('#popup_rappel_log')){
+        openPopup($('#popup_rappel_log'));
+        return false;
+    };
 
 });
 
