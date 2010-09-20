@@ -84,7 +84,7 @@ Le CIVA';
         $this->form = new CreateCompteForm(null, array('verif_mdp'=>false));
         $this->form_modif_err = 0;
 
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiersfsds();
         $this->email = $tiers->email;
 
         if ($request->isMethod(sfWebRequest::POST)) {

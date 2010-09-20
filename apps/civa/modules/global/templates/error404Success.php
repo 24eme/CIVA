@@ -1,4 +1,4 @@
-<div id="error_404">
+<div id="error_page">
     <img src="../images/pictos/hopla_big.png" alt="Hop'La" />
     <h1>La page demandée est introuvable.</h1>
     <br />
@@ -8,7 +8,4 @@
         <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Retour à Mon espace Civa</a></li>
         <li><a onclick="history.back();">Retour à la page précédente</a></li>
     </ul>
-
-
-
 </div>
