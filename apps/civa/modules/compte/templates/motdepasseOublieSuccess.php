@@ -11,7 +11,7 @@
 
             <?php if($sf_user->hasFlash('email_send')) { ?>
                 <p class="intro"><?php echo $sf_user->getFlash('email_send'); ?></p>
-                <p><a href="@compte">Retour</a></p>
+                <p><a href="<?php echo url_for('@compte'); ?>">Retour</a></p>
             <?php }else { ?>
             <form action="<?php echo url_for('compte/motdepasseOublie') ?>" method="post" id="principal">
                 <p class="intro">Merci d'indiquer votre numéro CVI :</p>

@@ -94,7 +94,25 @@ class declarationActions extends EtapesActions {
 	    $dr->add('validee', date('Y-m-d'));
 	    $dr->save();
 	  }
-	  $this->redirectByBoutonsEtapes();
+
+           $mess = 'Bonjour '.$tiers->nom.',
+
+Vous venez de valider votre déclaration de récolte pour l\'année '.date("Y").'. Pour la visualiser rendez-vous sur votre espace civa : '.sfConfig::get('app_base_url').'mon_espace_civa
+    
+Cordialement,
+
+Le CIVA';
+
+            //send email
+            $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+                    $tiers->email,
+                    'CIVA - Validation de votre déclaration de récolte',
+                    $mess
+            );
+            $this->getMailer()->send($message);
+
+
+            $this->redirectByBoutonsEtapes();
         }
         $this->annee = $annee;
 

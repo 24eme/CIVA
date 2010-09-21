@@ -62,7 +62,7 @@ Cordialement,
 Le CIVA';
 
                         //send email
-                        $message = $this->getMailer()->compose('forget@civa.fr',
+                        $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
                                 $tiers->email,
                                 'CIVA - Changement de votre mot de passe',
                                 $mess
@@ -106,9 +106,9 @@ Le CIVA';
 
     public function executeMotdepasseOublie(sfWebRequest $request) {
         $this->form = new LoginForm();
+        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($request->getParameter('cvi'));
 
         if($request->getParameter('cvi')) {
-            $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($request->getParameter('cvi'));
             $mdp =$request->getParameter('mdp');
 
             if($tiers && $tiers->mot_de_passe==$mdp) {
@@ -119,7 +119,6 @@ Le CIVA';
             if ($request->isMethod(sfWebRequest::POST)) {
                 $this->form->bind($request->getParameter($this->form->getName()));
                 if ($this->form->isValid()) {
-                    echo $tiers->email;
                     $tiers = $this->form->getValue('tiers');
                     $tiers->mot_de_passe = sprintf("%04d", rand(0, 9999));
                     $tiers->save();
@@ -128,14 +127,14 @@ Le CIVA';
 
 vous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant :
 
-http://cdevichet.civa.intra.actualys.fr/compte/motdepasseOublie?cvi='.$tiers->cvi.'&mdp='.$tiers->mot_de_passe.'
+'.sfConfig::get('app_base_url').'compte/motdepasseOublie?cvi='.$tiers->cvi.'&mdp='.$tiers->mot_de_passe.'
 
 Cordialement,
 
 Le CIVA';
 
                     //send email
-                    $message = $this->getMailer()->compose('forget@civa.fr',
+                    $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
                             $tiers->email,
                             'CIVA - Mot de passe oublié',
                             $mess
