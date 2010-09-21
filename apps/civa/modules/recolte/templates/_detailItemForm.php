@@ -139,7 +139,29 @@ function valider_can_submit()
         openPopup($('#popup_msg_erreur'), 0);
         return false;
     }
+<?php elseif($onglets->getCurrentCepage()->getConfig()->hasDenomination() && !$onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
+        var array_denomination_existant = <?php echo json_encode($onglets->getCurrentCepage()->getArrayDenomination(array($form->getObject()->getKey()))->getRawValue()) ?>;
+        var denomination_val = $('.col_recolte.col_active .col_cont p.denomination input').val();
+        
+        for(var couples_item_key in array_denomination_existant) {
+            var denomination_is_bad = false;
+            couples_item = array_denomination_existant[couples_item_key];
+            <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
+                if(couples_item.denomination == denomination_val){
+                    denomination_is_bad = true;
+                    break;
+                }
+            <?php endif; ?>
+
+        }
+
+        if (denomination_is_bad) {
+            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_denomination')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+            openPopup($('#popup_msg_erreur'), 0);
+            return false;
+        }
 <?php endif; ?>
+
   return true;
 }
 --></script>

@@ -1,5 +1,5 @@
 <?php include_partial('global/etapes', array('etape' => 3)) ?>
-<?php include_partial('global/actions') ?>
+<?php include_partial('global/actions', array('etape' => 3)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post" class="ui-tabs">

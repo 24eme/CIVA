@@ -60,6 +60,7 @@ EOF;
         $json->err_dr_popup_dest_rebeches = "Vous n'avez pas respecté la répartition des rebeches.";
 
         $json->err_dr_popup_unique_mention_denomination = "La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
+        $json->err_dr_popup_unique_denomination = "La dénomination complémentaire de chaque colonne doit être unique";
 
         $json->err_log_lieu_non_saisie = "lieu non saisi";
         $json->err_log_cepage_non_saisie = "cépage non saisi";

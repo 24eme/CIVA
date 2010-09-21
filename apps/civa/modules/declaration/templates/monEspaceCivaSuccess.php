@@ -1,4 +1,4 @@
-<?php include_partial('global/actions') ?>
+<?php include_partial('global/actions', array('etape' => 0)) ?>
 
 <!-- #principal -->
 <form id="principal" action="<?php echo url_for('@mon_espace_civa') ?>" method="post">

@@ -175,4 +175,16 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
         }
         return $resultat;
     }
+
+    public function getArrayDenomination($out = array()) {
+        $resultat = array();
+        if ($this->exist('detail')) {
+            foreach($this->detail as $key => $item) {
+                if (!in_array($key, $out)) {
+                    $resultat[$key]['denomination'] = (string)$item->denomination;
+                }
+            }
+        }
+        return $resultat;
+    }
 }
