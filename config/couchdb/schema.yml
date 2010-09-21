@@ -46,6 +46,7 @@ DR:
       jeunes_vignes: {type: float}
       declaration_commune: {}
       declaration_insee: {}
+      etape: {type: string, required: false}
       recolte:
         type: collection
         class: DRRecolte

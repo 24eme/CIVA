@@ -10,8 +10,10 @@
         <?php if($sf_user->hasFlash('mdp_modif')) { ?>
             <p class="flash_message"><?php echo $sf_user->getFlash('mdp_modif'); ?></p>
         <?php } ?>
+
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
+            <?php if($sf_user->hasCredential('declaration_brouillon')): ?>
             <h3 class="titre_section">Saisir ma declaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide">Test message d'aide</a></h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
@@ -49,6 +51,12 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
+            <?php elseif($sf_user->hasCredential('declaration_valide')): ?>
+                <h3 class="titre_section">Consulter ma déclaration validée <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide">Test message d'aide</a></h3>
+                <div class="contenu_section">
+                    <p class="intro">Lorem ipsum <?php echo link_to('Visualiser', '@visualisation?annee='.$sf_user->getCampagne()); ?></p>
+                </div>
+            <?php endif; ?>
             <br />
             <h3 class="titre_section">Gamma <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide">Test message d'aide</a></h3>
             <div class="contenu_section">

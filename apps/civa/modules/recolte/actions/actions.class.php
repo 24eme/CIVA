@@ -230,6 +230,7 @@ class recolteActions extends EtapesActions {
     protected function initRendement() {
         $dr = $this->declaration;
         $this->rendement = array();
+        $this->min_quantite = null;
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
             foreach ($appellation->filter('lieu') as $lieu) {
                 foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
@@ -264,30 +265,23 @@ class recolteActions extends EtapesActions {
         }
         $cepage = $request->getParameter('cepage', null);
 
-        if (!$this->declaration) {
-            $this->redirect('@mon_espace_civa');
-        }
-
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
         }
 
         $this->onglets = new RecolteOnglets($this->declaration);
-        try {
-            if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
-                $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
-            }
 
-            /*** AjOUT APPELLATION ***/
-            $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
-            $this->form_ajout_lieu = null;
-            $this->url_ajout_lieu = null;
-            if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
-                $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-                $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
-            }
-        }catch(Exception $e) {
-            $this->redirect('@mon_espace_civa');
+        if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
+            $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
+        }
+
+        /*** AjOUT APPELLATION ***/
+        $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
+        $this->form_ajout_lieu = null;
+        $this->url_ajout_lieu = null;
+        if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
+            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
         }
     }
 

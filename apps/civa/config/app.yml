@@ -7,16 +7,19 @@ all:
     items:
       mon_espace_civa:
         url: "@mon_espace_civa"
+        next_is_new_etape: exploitation
       exploitation_administratif:
         url: "@exploitation_administratif"
       exploitation_acheteurs:
         url: "@exploitation_acheteurs"
       exploitation_lieu:
         url: "@exploitation_lieu"
+        next_is_new_etape: recolte
       recolte:
         url: "@recolte"
       exploitation_autres:
         url: "@exploitation_autres"
+        next_is_new_etape: validation
       validation:
         url: "@validation"
       confirmation:

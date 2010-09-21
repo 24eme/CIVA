@@ -30,6 +30,15 @@
             }
         }
 
+
+        public function needToChangeEtape() {
+            if (isset($this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'])) {
+                return $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'];
+            } else {
+                return false;
+            }
+        }
+
         protected function next() {
             if(isset($this->_orders[$this->getCurrentEtapeRequired() + 1])) {
                 return $this->_items[$this->_orders[$this->getCurrentEtapeRequired() + 1]];

@@ -3,6 +3,17 @@
 class myUser extends sfBasicSecurityUser {
     const SESSION_CVI = 'tiers_cvi';
     const NAMESPACE_TIERS = 'myUserTiers';
+    
+    const ETAPE_EXPLOITATION = 'exploitation';
+    const ETAPE_RECOLTE = 'recolte';
+    const ETAPE_VALIDATION = 'validation';
+    const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
+    const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
+    const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
+
+    protected $_etapes = array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE, self::ETAPE_VALIDATION);
+    protected $_etapes_credential = array(self::ETAPE_EXPLOITATION => self::CREDENTIAL_ETAPE_EXPLOITATION, self::ETAPE_RECOLTE => self::CREDENTIAL_ETAPE_RECOLTE, self::ETAPE_VALIDATION => self::CREDENTIAL_ETAPE_VALIDATION);
+    protected $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION), self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE));
 
     protected $_tiers = null;
     protected $_declaration = null;
@@ -51,10 +62,70 @@ class myUser extends sfBasicSecurityUser {
 
     public function getDeclaration() {
         if (!isset($this->_declaration)) {
-            $this->_declaration = $this->getTiers()->getDeclaration($this->getCampagne());
+            try {
+                $this->_declaration = $this->getTiers()->getDeclaration($this->getCampagne());
+            } catch (Exception $exc) {
+                $this->_declaration = null;
+                $this->clearEtapeCredentials();
+            }
         }
 
         return $this->_declaration;
+    }
+
+    protected function addCredentialEtape($etape) {
+        $this->addCredential($this->_etapes_credential[$etape]);
+        foreach($this->_etapes_inclusion[$etape] as $item) {
+            $this->addCredential($this->_etapes_credential[$item]);
+        }
+    }
+
+    public function clearEtapeCredentials() {
+        foreach($this->_etapes as $item) {
+            $this->removeCredential($this->_etapes_credential[$item]);
+        }
+        $this->removeCredential('declaration_valide');
+        $this->removeCredential('declaration_brouillon');
+    }
+    public function addEtape($etape) {
+        if ($declaration = $this->getDeclaration()) {
+           if (in_array($etape, $this->_etapes)) {
+            $declaration->add('etape');
+            if ($etape != $declaration->etape && !in_array($etape, $this->_etapes_inclusion[$declaration->etape])) {
+                if ($this->verifyEtapeIsOk($etape)) {
+                    $declaration->etape = $etape;
+                    $declaration->save();
+                    $this->addCredentialEtape($etape);
+                }
+            }
+          }
+        }
+    }
+
+    protected function verifyEtapeIsOk($etape) {
+        if ($etape == self::ETAPE_EXPLOITATION) {
+            return true;
+        } elseif ($etape == self::ETAPE_RECOLTE) {
+            return true;
+        } elseif ($etape == self::ETAPE_VALIDATION) {
+            return true;
+        }
+        return true;
+    }
+    
+    public function loadEtape() {
+        $this->clearEtapeCredentials();
+        $this->addCredential('declaration_brouillon');
+        if ($declaration = $this->getDeclaration()) {
+            if ($declaration->isValidated()) {
+                $this->removeCredential('declaration_brouillon');
+                $this->addCredential('declaration_valide');
+            } else {
+                if ($declaration->exist('etape') && in_array($declaration->etape, $this->_etapes)) {
+                    $this->addCredentialEtape($declaration->etape);
+                }
+            }
+        }
     }
 
     public function getCampagne() {

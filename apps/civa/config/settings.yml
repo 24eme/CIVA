@@ -40,3 +40,5 @@ all:
   .actions:
     login_module:           tiers
     login_action:           login
+    secure_module:          declaration
+    secure_action:          monEspaceCiva

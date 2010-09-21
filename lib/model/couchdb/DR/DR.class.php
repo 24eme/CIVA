@@ -59,6 +59,7 @@ class DR extends BaseDR {
     }
 
     public function validate($tiers){
+        $this->remove('etape');
         $this->add('validee', date('Y-m-d'));
         $this->declarant->nom =  $tiers->get('nom');
         $this->declarant->email =  $tiers->get('email');

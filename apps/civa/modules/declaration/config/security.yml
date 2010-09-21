@@ -1,0 +1,5 @@
+exploitationAutres:
+  credentials: [declaration_brouillon, etape_recolte]
+
+validation:
+  credentials: [declaration_brouillon, etape_validation]
