@@ -91,7 +91,7 @@ class declarationActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
 	  
 	  if ($this->askRedirectToNextEtapes()) {
-	    $dr->add('validee', date('Y-m-d'));
+	    $dr->validate($tiers);
 	    $dr->save();
 	  }
 

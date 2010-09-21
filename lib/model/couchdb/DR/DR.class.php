@@ -58,6 +58,13 @@ class DR extends BaseDR {
       return false;
     }
 
+    public function validate($tiers){
+        $this->add('validee', date('Y-m-d'));
+        $this->declarant->nom =  $tiers->get('nom');
+        $this->declarant->email =  $tiers->get('email');
+        $this->declarant->telephone =  $tiers->get('telephone');
+    }
+
     public function getJeunesVignes(){
         $v = $this->_get('jeunes_vignes');
         if(!$v)
