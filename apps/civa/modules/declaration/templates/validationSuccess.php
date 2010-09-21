@@ -57,3 +57,5 @@
 <!-- fin #principal -->
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
+
+<?php include_partial('popupConfirmeValidation') ?>

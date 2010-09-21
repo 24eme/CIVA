@@ -1639,3 +1639,10 @@ a.msg_aide{
     color: #666;
     padding: 0 0 0 20px;
 }
+
+/** popup confirme validation **/
+
+#popup_confirme_validation #btns{
+    margin-top:15px;
+    text-align:center;
+}

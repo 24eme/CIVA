@@ -9,7 +9,7 @@
     <li class="prec"><a href="/mon_espace_civa"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" name="boutons[previous]" /></a></li>
     <?php endif; ?>
     <?php if(in_array('valider', $display->getRawValue())): ?>
-    <li class="suiv"><input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" name="boutons[next]" /></li>
+    <li class="suiv" ><input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" /></li>
     <?php endif; ?>
     <?php if(in_array('previsualiser', $display->getRawValue())): ?>
     <li class="previsualiser"><input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser" /></li>

@@ -645,6 +645,7 @@ var etatChampsTableAcht = function(type)
 var initValidationDr = function(type)
 {
     initValidDRPopup();
+    initConfirmeValidation();
 }
 
 
@@ -666,6 +667,21 @@ var initValidDRPopup = function()
                 setTimeout("closeValidDRPopup()", 1000);
             }
         });
+        return false;
+    });
+}
+
+/* Confirmation de la validation */
+
+var initConfirmeValidation = function()
+{
+    $('#valideDR').click(function() {
+        openPopup($("#popup_confirme_validation"));
+        return false;
+    });
+    $('#valideDR_OK').click(function() {
+        $("#popup_confirme_validation").dialog('close');
+        $("#principal").submit();
         return false;
     });
 }
