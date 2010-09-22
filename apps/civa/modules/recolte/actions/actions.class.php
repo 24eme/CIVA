@@ -196,6 +196,9 @@ class recolteActions extends EtapesActions {
 
     public function executeRecapitulatif(sfWebRequest $request) {
         $this->initOnglets($request);
+        $this->initRendement();
+        $this->initPrecDR();
+        
         $dr = $this->getUser()->getDeclaration();
         $this->appellationlieu = $this->onglets->getLieu();
 
@@ -269,7 +272,7 @@ class recolteActions extends EtapesActions {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
         }
 
-        $this->onglets = new RecolteOnglets($this->declaration);
+        $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
 
         if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
             $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));

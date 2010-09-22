@@ -8,12 +8,16 @@ class RecolteOnglets {
     protected $_prefix_key_appellation = null;
     protected $_prefix_key_lieu = null;
     protected $_prefix_key_cepage = null;
+    protected $_sf_route_previous_etape = null;
+    protected $_sf_route_next_etape = null;
 
-    public function __construct(sfCouchdbJson $declaration) {
+    public function __construct(sfCouchdbJson $declaration, $sf_route_previous_etape = null, $sf_route_next_etape = null) {
         $this->_declaration = $declaration;
         $this->_prefix_key_appellation = 'appellation_';
         $this->_prefix_key_lieu = 'lieu';
         $this->_prefix_key_cepage = 'cepage_';
+        $this->_sf_route_previous_etape = str_replace('@', '', $sf_route_previous_etape);
+        $this->_sf_route_next_etape = str_replace('@', '', $sf_route_next_etape);
     }
 
     public function init($appellation, $lieu, $cepage) {
@@ -353,7 +357,7 @@ class RecolteOnglets {
 
     public function getPreviousUrl() {
         if (!$this->hasPreviousLieu() && !$this->hasPreviousAppellation()) {
-            return array('sf_route' => 'exploitation_autres');
+            return array('sf_route' => $this->_sf_route_previous_etape);
         } elseif ($this->hasPreviousLieu()) {
             return $this->getUrl('recolte', null, $this->getPreviousLieu());
         } else {
@@ -364,7 +368,7 @@ class RecolteOnglets {
 
     public function getNextUrl() {
         if (!$this->hasNextLieu() && !$this->hasNextAppellation()) {
-            return array('sf_route' => 'validation');
+            return array('sf_route' => $this->_sf_route_next_etape);
         } elseif($this->hasNextLieu()) {
             return $this->getUrl('recolte', null, $this->getNextLieu());
         } else {
