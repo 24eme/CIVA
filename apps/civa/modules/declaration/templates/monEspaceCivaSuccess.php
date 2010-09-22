@@ -13,7 +13,7 @@
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <?php if($sf_user->hasCredential('declaration_brouillon')): ?>
+            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>
             <h3 class="titre_section">Saisir ma declaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide">Test message d'aide</a></h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
@@ -51,7 +51,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <?php elseif($sf_user->hasCredential('declaration_valide')): ?>
+            <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
                 <h3 class="titre_section">Consulter ma déclaration validée <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide">Test message d'aide</a></h3>
                 <div class="contenu_section">
                     <p class="intro">Lorem ipsum <?php echo link_to('Visualiser', '@visualisation?annee='.$sf_user->getCampagne()); ?></p>

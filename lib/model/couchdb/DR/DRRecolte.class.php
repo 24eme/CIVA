@@ -38,6 +38,10 @@ class DRRecolte extends BaseDRRecolte {
         }
     }
 
+    public function hasOneOrMoreAppellation() {
+        return $this->filter('^appellation_')->count();
+    }
+
     public function hasAllAppellation() {
         $nb_appellation = $this->filter('^appellation')->count();
         $nb_appellation_config = $this->getConfig()->filter('^appellation')->count();

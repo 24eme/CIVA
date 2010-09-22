@@ -16,11 +16,11 @@ class declarationActions extends EtapesActions {
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {      
         $this->setCurrentEtape('mon_espace_civa');
-        $this->getUser()->loadEtape();
+        $this->getUser()->initDeclarationCredentials();
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
         $this->declaration = $this->getUser()->getDeclaration();
-        if ($this->getUser()->hasCredential('declaration_brouillon') && $request->isMethod(sfWebRequest::POST)) {
+        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST)) {
                 $this->processChooseDeclaration($request);
         }
     }
@@ -92,7 +92,7 @@ class declarationActions extends EtapesActions {
 	  if ($this->askRedirectToNextEtapes()) {
 	    $dr->validate($tiers);
 	    $dr->save();
-            $this->getUser()->loadEtape();
+            $this->getUser()->initDeclarationCredentials();
 	  }
 
            $mess = 'Bonjour '.$tiers->nom.',

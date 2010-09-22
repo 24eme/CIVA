@@ -10,6 +10,8 @@ class myUser extends sfBasicSecurityUser {
     const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
     const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
+    const CREDENTIAL_DECLARATION_BROUILLON = 'declaration_brouillon';
+    const CREDENTIAL_DECLARATION_VALIDE = 'declaration_valide';
 
     protected $_etapes = array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE, self::ETAPE_VALIDATION);
     protected $_etapes_credential = array(self::ETAPE_EXPLOITATION => self::CREDENTIAL_ETAPE_EXPLOITATION, self::ETAPE_RECOLTE => self::CREDENTIAL_ETAPE_RECOLTE, self::ETAPE_VALIDATION => self::CREDENTIAL_ETAPE_VALIDATION);
@@ -80,13 +82,6 @@ class myUser extends sfBasicSecurityUser {
         }
     }
 
-    public function clearEtapeCredentials() {
-        foreach($this->_etapes as $item) {
-            $this->removeCredential($this->_etapes_credential[$item]);
-        }
-        $this->removeCredential('declaration_valide');
-        $this->removeCredential('declaration_brouillon');
-    }
     public function addEtape($etape) {
         if ($declaration = $this->getDeclaration()) {
            if (in_array($etape, $this->_etapes)) {
@@ -106,20 +101,28 @@ class myUser extends sfBasicSecurityUser {
         if ($etape == self::ETAPE_EXPLOITATION) {
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
-            return true;
+            return ($this->getDeclaration()->recolte->hasOneOrMoreAppellation());
         } elseif ($etape == self::ETAPE_VALIDATION) {
             return true;
         }
         return true;
     }
+
+    public function clearDeclarationCredentials() {
+        foreach($this->_etapes as $item) {
+            $this->removeCredential($this->_etapes_credential[$item]);
+        }
+        $this->removeCredential(self::CREDENTIAL_DECLARATION_VALIDE);
+        $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+    }
     
-    public function loadEtape() {
-        $this->clearEtapeCredentials();
-        $this->addCredential('declaration_brouillon');
+    public function initDeclarationCredentials() {
+        $this->clearDeclarationCredentials();
+        $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
         if ($declaration = $this->getDeclaration()) {
             if ($declaration->isValidated()) {
-                $this->removeCredential('declaration_brouillon');
-                $this->addCredential('declaration_valide');
+                $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+                $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
             } else {
                 if ($declaration->exist('etape') && in_array($declaration->etape, $this->_etapes)) {
                     $this->addCredentialEtape($declaration->etape);
