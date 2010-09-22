@@ -234,23 +234,26 @@ class recolteActions extends EtapesActions {
         $dr = $this->declaration;
         $this->rendement = array();
         $this->min_quantite = null;
-        foreach ($dr->recolte->filter('appellation_') as $appellation) {
-            foreach ($appellation->filter('lieu') as $lieu) {
-                foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
-                    if($cepage->hasMinQuantite()) {
-			$this->min_quantite = $cepage->min_quantite * 100 ;
-                    }
-                    if($cepage->getRendement()) {
-                        $rd = $cepage->getRendement();
-                    }else {
-                        $rd = $lieu->getRendementAppellation();
-                    }
-                    if($appellation->hasManyLieu()) {
-                        $this->rendement[$appellation->getLibelle()][$rd][$lieu->getLibelle()] = 1;
-                    }else {
-                        $this->rendement[$appellation->getLibelle()][$rd][$cepage->getLibelle()] = 1;
-                    }
+        foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
+            if ($dr->recolte->exist($key_appellation)) {
+                $appellation = $dr->recolte->get($key_appellation);
+                foreach ($appellation->filter('lieu') as $lieu) {
+                    foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
+                        if($cepage->hasMinQuantite()) {
+                            $this->min_quantite = $cepage->min_quantite * 100 ;
+                        }
+                        if($cepage->getRendement()) {
+                            $rd = $cepage->getRendement();
+                        }else {
+                            $rd = $lieu->getRendementAppellation();
+                        }
+                        if($appellation->hasManyLieu()) {
+                            $this->rendement[$appellation->getLibelle()][$rd][$lieu->getLibelle()] = 1;
+                        }else {
+                            $this->rendement[$appellation->getLibelle()][$rd][$cepage->getLibelle()] = 1;
+                        }
 
+                    }
                 }
             }
         }
