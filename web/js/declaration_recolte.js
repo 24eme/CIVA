@@ -146,7 +146,9 @@ $(document).ready( function()
     if($('#popup_rappel_log')){
         openPopup($('#popup_rappel_log'));
         return false;
-    };
+    }
+
+
 
 });
 
@@ -217,6 +219,14 @@ var choixPrecDecla = function()
         if(type_decla.filter(':checked').val() == 'vierge') liste_prec_decla.hide();
         else liste_prec_decla.show();
     });
+
+
+    $('#mon_espace_civa_valider').live('click', function() {
+        if($('#type_declaration_suppr:checked').length > 0)
+            return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
+    });
+
+    
 };
 
 /**

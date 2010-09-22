@@ -27,7 +27,7 @@
                     <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
                 </div>
                 <div class="ligne_form ligne_btn">
-                    <input type="image" class="btn" name="boutons[valider]" src="../images/boutons/btn_valider.png" alt="Valider" />
+                    <input type="image" class="btn" name="boutons[valider]" id="mon_espace_civa_valider" src="../images/boutons/btn_valider.png" alt="Valider" />
                 </div>
                 <?php else: ?>
                 <div class="ligne_form">
@@ -46,7 +46,7 @@
                                 <?php endforeach; ?>
                     </select>
 
-                    <input type="image" name="boutons[valider]" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+                    <input type="image" name="boutons[valider]"  class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
                 </div>
                     <?php endif; ?>
                 <?php endif; ?>
