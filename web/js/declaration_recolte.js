@@ -1129,6 +1129,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
     var type_cssclass = popup.find('input[name=type_cssclass]').val();
     var type_name_field = popup.find('input[name=type_name_field]').val();
     var btn = popup.find('input[type=image]');
+    var btn_loading = popup.find('.valider-loading');
     var form = popup.find('form');
 
     $(popup).bind( "dialogclose", function(event, ui) {
@@ -1178,6 +1179,9 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
         }
         else
         {
+            btn.hide();
+            btn_loading.show();
+            btn_loading.css('display', 'inline-block');
             $.post(form.attr('action'),
             {
                 cvi: cvi.val(),
@@ -1209,6 +1213,8 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
                 append(data);
 
                 popup.dialog('close');
+                btn.show();
+                btn_loading.hide();
                 hauteurEgaleColRecolte();
                 deleteRecolteAcheteurFromAutocompletion(cvi_val, nom, source_autocompletion, source_autocompletion_using);
             });

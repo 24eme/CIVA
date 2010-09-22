@@ -108,7 +108,6 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($request->isXmlHttpRequest());
         $this->initOnglets($request);
         $this->initDetails();
-        $this->initRendement();
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));

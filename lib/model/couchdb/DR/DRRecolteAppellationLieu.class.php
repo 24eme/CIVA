@@ -99,18 +99,21 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
       return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
     }
 
-    private function getAcheteursFromCepage($type = 'mouts|negoces|cooperatives', $exclude_cepage = '') {
+    private function getAcheteursFromCepage($type = 'negoces|cooperatives|mouts', $exclude_cepage = '') {
       $acheteurs = array();
       foreach ($this->filter('^cepage') as $key => $cepage) {
 	if ($cepage->excludeTotal()) {
 	  continue;
 	}
 	foreach ($cepage->detail as $key => $d) {
-	  foreach ($d->filter($type) as $key => $t) {
-	    foreach ($t as $key => $a) {
-	      array_push($acheteurs, $a);
-	    }
-	  }
+          $liste_type = explode('|', $type);
+          foreach($liste_type as $item_type) {
+              foreach ($d->filter($item_type) as $key => $t) {
+                foreach ($t as $key => $a) {
+                  array_push($acheteurs, $a);
+                }
+              }
+          }
 	}
       }
       return $acheteurs;

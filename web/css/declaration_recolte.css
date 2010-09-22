@@ -1494,6 +1494,16 @@ a.msg_aide:hover{
 
 .popup_ajout select[disabled=disabled] { background: #f0f0de; }
 
+.popup_ajout span.valider-loading
+{
+    background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat;
+    width: 16px;
+    height: 16px;
+    margin: 0 0 0 15px;
+    vertical-align: top;
+    display: none;
+}
+
 .popup_ajout .popup-loading.ui-autocomplete-loading
 {
     background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat;
