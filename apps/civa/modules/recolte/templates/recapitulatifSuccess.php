@@ -109,6 +109,10 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 				
 				<?php include_partial('boutons') ?>
 
+                                <?php include_partial('popupRendementsMax' , array('rendement'=>$rendement, 'min_quantite'=>$min_quantite)) ?>
+
+                                <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
+
 				
 			</form>
 			<!-- fin #principal -->
