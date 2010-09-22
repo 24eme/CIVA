@@ -117,13 +117,16 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       $cpt = 0;
       if (!$this->getRendement())
 	return false;
-      foreach($this->getParent()->filter('cepage_') as $c) {
+      
+      /*foreach($this->getParent()->filter('cepage_') as $c) {
 	$cpt++;
 	if ($cpt>2)
 	  break;
-      }
-      if ($cpt == 1)
+      
+      if ($cpt < 2)
 	return false;
+       */
+
       return $this->getConfig()->hasTotalCepage();
     }
 

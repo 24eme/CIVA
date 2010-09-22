@@ -39,7 +39,7 @@ class DRRecolte extends BaseDRRecolte {
     }
 
     public function hasOneOrMoreAppellation() {
-        return $this->filter('^appellation_')->count();
+        return $this->filter('^appellation_')->count() > 0;
     }
 
     public function hasAllAppellation() {
