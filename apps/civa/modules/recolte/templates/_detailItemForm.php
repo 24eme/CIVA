@@ -69,7 +69,7 @@ autoTotal = true;
 function valider_can_submit() 
 {
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-  if (!document.getElementById('recolte_superficie').value) {
+  if (!document.getElementById('recolte_superficie').value || !(document.getElementById('recolte_superficie').value > 0)) {
     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_no_superficie')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
     openPopup($('#popup_msg_erreur'), 0);
     return false;
