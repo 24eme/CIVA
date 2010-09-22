@@ -31,15 +31,18 @@ class declarationComponents extends sfComponents {
         $this->volume_cooperatives = array();
         $cvi = array();
         $conf = ConfigurationClient::getConfiguration();
-        foreach ($dr->recolte as $appellation) {
-	  if ($appellation->getConfig()->excludeTotal()) 
-	    continue;
-	  $this->appellations[] = $appellation->getAppellation();
-	  $this->libelle[$appellation->getAppellation()] = $conf->get($appellation->getHash())->getLibelle();
-	  $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
-	  $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-	  $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
-	  $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+        foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($dr->recolte->exist($appellation_key)) {
+              $appellation = $dr->recolte->get($appellation_key);
+              if ($appellation->getConfig()->excludeTotal())
+                continue;
+              $this->appellations[] = $appellation->getAppellation();
+              $this->libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
+              $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
+              $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+              $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
+              $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+          }
         }
 
         $this->total_superficie = array_sum(array_values($this->superficie));
