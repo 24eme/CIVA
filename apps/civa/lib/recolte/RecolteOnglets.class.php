@@ -357,6 +357,9 @@ class RecolteOnglets {
 
     public function getPreviousUrl() {
         if (!$this->hasPreviousLieu() && !$this->hasPreviousAppellation()) {
+            if (is_null($this->_sf_route_previous_etape)) {
+                throw new sfException("sf route previous etape note defined");
+            }
             return array('sf_route' => $this->_sf_route_previous_etape);
         } elseif ($this->hasPreviousLieu()) {
             return $this->getUrl('recolte', null, $this->getPreviousLieu());
@@ -368,6 +371,9 @@ class RecolteOnglets {
 
     public function getNextUrl() {
         if (!$this->hasNextLieu() && !$this->hasNextAppellation()) {
+            if (is_null($this->_sf_route_next_etape)) {
+                throw new sfException("sf route next etape note defined");
+            }
             return array('sf_route' => $this->_sf_route_next_etape);
         } elseif($this->hasNextLieu()) {
             return $this->getUrl('recolte', null, $this->getNextLieu());
