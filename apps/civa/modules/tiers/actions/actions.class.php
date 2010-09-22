@@ -78,8 +78,9 @@ class tiersActions extends EtapesActions {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
-                }else
+                } else {
                     $this->form_gest_err = 1;
+                }
             }
             if ($request->getParameter('exploitation')) {
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
@@ -97,15 +98,18 @@ class tiersActions extends EtapesActions {
                         $ldap->ldapModify($this->getUser()->getTiers(), $values);
                     }
 
-                }else
+                } else {
                     $this->form_expl_err = 1;
+                }
             }
-	    $dr = $this->getUser()->getDeclaration();
-	    $dr->declarant->nom = $this->tiers->exploitant->nom;
-	    $dr->declarant->telephone = $this->tiers->exploitant->telephone;
-	    $dr->declarant->email = $this->tiers->email;
-	    $dr->save();
-            $this->redirectByBoutonsEtapes();
+            if (!$this->form_gest_err && !$this->form_expl_err) {
+                $dr = $this->getUser()->getDeclaration();
+                $dr->declarant->nom = $this->tiers->exploitant->nom;
+                $dr->declarant->telephone = $this->tiers->exploitant->telephone;
+                $dr->declarant->email = $this->tiers->email;
+                $dr->save();
+                $this->redirectByBoutonsEtapes();
+            }
         }
     }
 

@@ -249,7 +249,7 @@ var formExploitationAdministratif = function()
         var btn_modifier = btn.find('a.modifier');
         var btn_annuler = btn.find('a.annuler');
 
-        modification_infos.hide();
+        //modification_infos.hide();
 		
         btn_modifier.click(function()
         {
