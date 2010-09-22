@@ -104,6 +104,13 @@ class SubConfiguration extends BaseSubConfiguration {
     return false;
   }
 
+  public function hasMaxQuantite()
+  {
+    if ($this->exist('max_quantite') && $this->get('max_quantite'))
+      return true;
+    return false;
+  }
+
   public function hasNoNegociant()
   {
     if ($this->exist('no_negociant') && $this->get('no_negociant'))

@@ -234,6 +234,7 @@ class recolteActions extends EtapesActions {
         $dr = $this->declaration;
         $this->rendement = array();
         $this->min_quantite = null;
+        $this->max_quantite = null;
         foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
             if ($dr->recolte->exist($key_appellation)) {
                 $appellation = $dr->recolte->get($key_appellation);
@@ -241,6 +242,7 @@ class recolteActions extends EtapesActions {
                     foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
                         if($cepage->hasMinQuantite()) {
                             $this->min_quantite = $cepage->min_quantite * 100 ;
+                            $this->max_quantite = $cepage->max_quantite * 100 ;
                         }
                         if($cepage->getRendement()) {
                             $rd = $cepage->getRendement();

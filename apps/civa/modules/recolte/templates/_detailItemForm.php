@@ -82,7 +82,8 @@ function valider_can_submit()
       total_non_negociant -= $(this).val();
     });
     var min = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
-
+    var max = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
+    
     var rebeche_ratio_respected = true;
   $("#col_recolte_totale .caves input").each(function()
     {
@@ -103,11 +104,15 @@ function valider_can_submit()
   }
 
     if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
-    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
-    openPopup($('#popup_msg_erreur'), 0);
-    
-    
-    return false;
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+        openPopup($('#popup_msg_erreur'), 0);
+        return false;
+    }
+
+    if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+        openPopup($('#popup_msg_erreur'), 0);
+        return false;
     }
 <?php endif; ?>
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination() && $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>

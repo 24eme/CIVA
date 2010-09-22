@@ -304,6 +304,7 @@ Configuration:
                               libelle: {  }
                               rendement: { type: float }
                               min_quantite: {type: float, required: false}
+                              max_quantite: {type: float, required: false}
                               exclude_total: {type: float, required: false}
                               superficie_optionnelle: { type: integer, required: false }
                               no_negociant : { type: integer, required: false }

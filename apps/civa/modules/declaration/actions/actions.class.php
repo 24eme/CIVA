@@ -158,16 +158,27 @@ Le CIVA';
                     }
                     //check les cepages
                     foreach ($lieu->filter('cepage_') as $key => $cepage) {
-		      if($cepage->getConfig()->hasMinQuantite()) {
-			$totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite;
-			$totalVolRevendique = $cepage->getTotalVolume();
-                            if( $totalVolRatio > $totalVolRevendique ) {
-                                $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
-                                $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite');
-                                $this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
-                                $i++;
-                                $this->error = true;
-                            }
+                         if($cepage->getConfig()->hasMinQuantite()) {
+                            $totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite;
+                            $totalVolRevendique = $cepage->getTotalVolume();
+                                if( $totalVolRatio > $totalVolRevendique ) {
+                                    $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                    $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite');
+                                    $this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
+                                    $i++;
+                                    $this->error = true;
+                                }
+                        }
+                        if($cepage->getConfig()->hasMaxQuantite()) {
+                            $totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite;
+                            $totalVolRevendique = $cepage->getTotalVolume();
+                                if( $totalVolRatio < $totalVolRevendique ) {
+                                    $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                    $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite');
+                                    $this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
+                                    $i++;
+                                    $this->error = true;
+                                }
                         }
                         if($cepage->isNonSaisie()) {
                             $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));

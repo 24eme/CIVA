@@ -195,6 +195,7 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->libelle = "Rebêches";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->rendement = -1;
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->min_quantite = 0.02;
+        $json->recolte->appellation_CREMANT->lieu->cepage_RB->max_quantite = 0.1;
         $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_negociant = 1;
         $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_mout = 1;
         $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_motif_non_recolte = 1;

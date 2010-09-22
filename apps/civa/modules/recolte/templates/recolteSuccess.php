@@ -111,7 +111,7 @@
      
        <?php include_partial('emptyAcheteurs') ?>
 
-       <?php include_partial('popupRendementsMax' , array('rendement'=>$rendement, 'min_quantite'=>$min_quantite)) ?>
+       <?php include_partial('popupRendementsMax' , array('rendement'=>$rendement, 'min_quantite'=>$min_quantite, 'max_quantite'=>$max_quantite)) ?>
 
        <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
 
