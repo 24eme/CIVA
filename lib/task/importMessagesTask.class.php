@@ -107,6 +107,7 @@ EOF;
         $json->help_popup_validation_log_vigilance = "Vigilance : Message d'aide à définir.";
 
         /** INTRO **/
+        $json->intro_mon_espace_civa_dr_validee = "Vous avez deja validé votre déclaration de récolte.";
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "Veuillez saisir les destinations de la récoltes.";
         $json->intro_exploitation_lieu = "Indiquez les lieux-dits pour lesquels vous récoltez de l'AOC.";

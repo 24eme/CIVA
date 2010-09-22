@@ -479,7 +479,7 @@ a.msg_aide:hover{
     vertical-align: middle;
 }
 
-#nouvelle_declaration .ligne_btn input.btn
+#nouvelle_declaration .ligne_btn .btn
 {
     float: right;
     vertical-align: middle;
