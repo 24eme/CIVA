@@ -420,6 +420,13 @@ a.btn_inactif img
     filter: Alpha(Opacity=0.3);
 }
 
+input.btn_inactif
+{
+    cursor: default;
+    opacity: 0.3;
+    filter: Alpha(Opacity=0.3);
+}
+
 /* Popup d'aide */
 a.msg_aide
 {

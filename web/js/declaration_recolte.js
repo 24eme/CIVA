@@ -39,6 +39,11 @@ $(document).ready( function()
     {
         var val = $(this).val();
 
+        // Si touche entréé
+        if (e.which == 13) {
+            return e;
+        }
+
         var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
 
         var is_number = (e.which >= 48 && e.which <= 57);
@@ -109,7 +114,7 @@ $(document).ready( function()
         yearRange: '1900:'+annee
     });
 
-    $(document).find('a.btn_inactif').live('click', function() {
+    $(document).find('a.btn_inactif, input.btn_inactif').live('click', function() {
         return false;
     });
 
@@ -632,18 +637,21 @@ var etatChampsTableAcht = function(type)
     var champs = tables_acheteurs.find('input:checkbox');
     var btns_supprimer = tables_acheteurs.find('a.supprimer');
     var btns = tables_acheteurs.next('.btn');
+    var btns_etape = $('#btn_etape input');
 	
     if(type == 'disabled')
     {
         champs.attr('disabled', 'disabled');
         btns_supprimer.hide();
         btns.hide();
+        btns_etape.addClass('btn_inactif');
     }
     else
     {
         champs.attr('disabled', '');
         btns_supprimer.show();
         btns.show();
+        btns_etape.removeClass('btn_inactif');
     }
 };
 
