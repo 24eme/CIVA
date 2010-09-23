@@ -123,13 +123,12 @@ p.flash_message
 }
 
 #popup_msg_erreur{
-    background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 50% 10px;
+    background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 10px 50% ;
     display:none;
 }
 
 #popup_msg_erreur p{
-    text-align: center;
-    margin-top: 90px;
+    margin:20px 0 0 90px;
 }
 #popup_msg_erreur .close_btn{
     margin-top:10px;
