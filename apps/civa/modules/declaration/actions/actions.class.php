@@ -81,6 +81,8 @@ class declarationActions extends EtapesActions {
      */
     public function executeValidation(sfWebRequest $request) {
         $this->setCurrentEtape('validation');
+        
+        $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
         $tiers = $this->getUser()->getTiers();
         $annee = $this->getRequestParameter('annee', null);
@@ -141,7 +143,7 @@ Le CIVA';
                     $i++;
                     $this->error = true;
                 }else {
-                    //verifie les rebeches pour les crÃƒÂ©mants
+                    //verifie les rebeches pour les crémants
                     if($appellation->appellation=='CREMANT' && $lieu->getTotalVolumeForMinQuantite()>0) {
                         $rebeches=false;
                         foreach ($lieu->filter('cepage_') as $key => $cepage) {
@@ -157,6 +159,17 @@ Le CIVA';
                         }
 
                     }
+
+                    // vérifie le trop plein de DPLC
+                    /*if($lieu->hasRendement() && $lieu->hasRendementAppellation() && $lieu->getTotalDPLC() > $lieu->getDPLCAppellation()){
+                                $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
+                                $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
+                                $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc');
+                                //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc'));
+                                $i++;
+                                $this->logVigilance = true;
+                     }*/
+
                     //check les cepages
                     foreach ($lieu->filter('cepage_') as $key => $cepage) {
                          if($cepage->getConfig()->hasMinQuantite()) {
@@ -191,14 +204,6 @@ Le CIVA';
                             $i++;
                             $this->error = true;
                         }else {
-                            if($cepage->getTotalDPLC()>$appellation->getTotalDPLC()){
-                                $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
-                                $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc');
-                                //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc'));
-                                $i++;
-                                $this->logVigilance = true;
-                            }
                             foreach($cepage->filter('detail') as $details) {
                                 foreach ($details as $detail) {
                                      $detail_nom = '';
@@ -231,7 +236,7 @@ Le CIVA';
             }
         }
         $logs_array = array_merge($this->validLogErreur, $this->validLogVigilance);
-        $this->getUser()->setFlash('log_erreur', $logs_array);
+        $this->getUser()->setAttribute('log_erreur', $logs_array);
 
     }
 
@@ -240,7 +245,8 @@ Le CIVA';
      */
 
     public function executeSetFlashLog(sfWebRequest $request) {
-        $flash_messages = $this->getUser()->getFlash('log_erreur');
+        $flash_messages = $this->getUser()->getAttribute('log_erreur');
+        $this->getUser()->getAttributeHolder()->remove('log_erreur');
         $id = explode('-',$this->getRequestParameter('flash_message', null));
         $this->getUser()->setFlash('flash_message', $flash_messages[$id[0]][$id[1]]['log']);
         $this->redirect($flash_messages[$id[0]][$id[1]]['url_log']);

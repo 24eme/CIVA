@@ -173,9 +173,9 @@ EOF;
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir";
+	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir Rosé";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
-	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Blanc de Noir";
+	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Pinot Noir Blanc";
 	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;

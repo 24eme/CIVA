@@ -27,7 +27,7 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 	$v += $item->getVolume();
 	$s += $item->getSuperficie();
       }
-
+      
       $this->set('total_volume', $v);
       $this->set('total_superficie', $s);
 
@@ -37,6 +37,7 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 	  $this->volume_revendique = $volume_max;
 	  $this->dplc = $this->total_volume - $volume_max;
 	} else {
+          $this->dplc = 0;
 	  $this->volume_revendique = $this->total_volume;
 	}
       }
