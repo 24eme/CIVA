@@ -26,14 +26,6 @@ class recolteActions extends EtapesActions {
         $this->initRendement();
         $this->initPrecDR();
 
-        $get_flash_message = $request->getParameter('flash_message');
-
-        if(isset($get_flash_message)){
-            $this->flash_message = $get_flash_message;
-        }else{
-            $this->flash_message = false;
-        }
-
         if (!$this->details->count() > 0) {
             $this->redirect($this->onglets->getUrl('recolte_add'));
         }

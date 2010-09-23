@@ -79,6 +79,11 @@ recolte_recapitulatif:
   param: {module: recolte, action: recapitulatif }
   class: sfRouteAnchor
 
+recolte_erreur_log:
+  url:   /recolte_erreur_log
+  param: {module: declaration, action: setFlashLog }
+  class: sfRouteAnchor
+
 validation:
   url:   /validation
   param: { module: declaration, action: validation, annee: 2010 }
