@@ -27,7 +27,11 @@ class recolteActions extends EtapesActions {
         $this->initPrecDR();
 
         if (!$this->details->count() > 0) {
+            if ($this->getUser()->hasFlash('flash_message')) {
+                $this->getUser()->setFlash('flash_message', $this->getUser()->getFlash('flash_message'));
+            }
             $this->redirect($this->onglets->getUrl('recolte_add'));
+
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {

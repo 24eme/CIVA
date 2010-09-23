@@ -115,6 +115,6 @@
 
        <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
 
-<?php if($sf_user->hasFlash('flash_message')){ ?>
+<?php if($sf_user->hasFlash('flash_message')){  echo 'toto';?>
     <?php include_partial('popupRappelLog' , array('flash_message'=>$sf_user->getFlash('flash_message'))) ?>
 <?php } ?>

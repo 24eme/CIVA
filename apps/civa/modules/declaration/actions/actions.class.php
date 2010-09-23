@@ -80,9 +80,6 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
-        $this->getUser()->getAttributeHolder()->remove('log_erreur');
-        $this->getUser()->getAttributeHolder()->remove('log_vigilance');
-
         $this->setCurrentEtape('validation');
 
         $tiers = $this->getUser()->getTiers();
@@ -129,7 +126,7 @@ Le CIVA';
                 //check le total superficie
                 if($lieu->getTotalSuperficie()==0){
                     $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                    $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())));
+                    $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
                     $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero');
                     $i++;
                     $this->logVigilance = true;
@@ -138,7 +135,7 @@ Le CIVA';
                 //check le lieu
                 if ($lieu->isNonSaisie()) {
                     $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())));
+                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()));
                     $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie');
                     //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie'));
                     $i++;
@@ -152,7 +149,7 @@ Le CIVA';
                         }
                         if(!$rebeches) {
                             $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), 'cepage_RB')));
+                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), 'cepage_RB'));
                             $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches');
                             //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches'));
                             $i++;
@@ -167,7 +164,7 @@ Le CIVA';
                             $totalVolRevendique = $cepage->getTotalVolume();
                                 if( $totalVolRatio > $totalVolRevendique ) {
                                     $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                     $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite');
                                     //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
                                     $i++;
@@ -179,7 +176,7 @@ Le CIVA';
                             $totalVolRevendique = $cepage->getTotalVolume();
                                 if( $totalVolRatio < $totalVolRevendique ) {
                                     $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                    $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                     $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite');
                                     //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite'));
                                     $i++;
@@ -188,7 +185,7 @@ Le CIVA';
                         }
                         if($cepage->isNonSaisie()) {
                             $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                             $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie');
                             //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie'));
                             $i++;
@@ -196,7 +193,7 @@ Le CIVA';
                         }else {
                             if($cepage->getTotalDPLC()>$appellation->getTotalDPLC()){
                                 $this->validLogVigilance[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                $this->validLogVigilance[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                 $this->validLogVigilance[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc');
                                 //$this->getUser()->setFlash($appellation->getKey().'-'.$i, $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc'));
                                 $i++;
@@ -212,14 +209,14 @@ Le CIVA';
                                         if($detail->vtsgn!= '')        $detail_nom .= $detail->vtsgn.' ';
                                     if($detail->isNonSaisie()) {
                                         $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                        $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                        $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                         $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite');
                                         $i++;
                                         $this->error = true;
                                     }elseif($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle()=="Assemblage Edelswicker"){
                                         if(!$lieu->exist('cepage_ED') || !$lieu->cepage_ED->getVolume()){
                                             $this->validLogErreur[$appellation->getKey()][$i]['url'] = $this->generateUrl('recolte_erreur_log', array('flash_message'=>$appellation->getKey().'-'.$i));
-                                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', array_merge(array('flash_message'=>$appellation->getKey().'-'.$i), $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())));
+                                            $this->validLogErreur[$appellation->getKey()][$i]['url_log'] = $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey()));
                                             $this->validLogErreur[$appellation->getKey()][$i]['log'] = $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie');
                                             $i++;
                                             $this->error = true;
@@ -233,8 +230,8 @@ Le CIVA';
                 }
             }
         }
-        $this->getUser()->setAttribute('log_erreur', $this->validLogErreur);
-        $this->getUser()->setAttribute('log_vigilance', $this->validLogErreur);
+        $logs_array = array_merge($this->validLogErreur, $this->validLogVigilance);
+        $this->getUser()->setFlash('log_erreur', $logs_array);
 
     }
 
@@ -243,8 +240,7 @@ Le CIVA';
      */
 
     public function executeSetFlashLog(sfWebRequest $request) {
-        $flash_messages = $this->getUser()->getAttribute('log_erreur');
-        $this->getUser()->getAttributeHolder()->remove('log_erreur');
+        $flash_messages = $this->getUser()->getFlash('log_erreur');
         $id = explode('-',$this->getRequestParameter('flash_message', null));
         $this->getUser()->setFlash('flash_message', $flash_messages[$id[0]][$id[1]]['log']);
         $this->redirect($flash_messages[$id[0]][$id[1]]['url_log']);
