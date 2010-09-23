@@ -847,9 +847,9 @@ var superficieOnChange = function(input) {
 };
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if (parseFloat($(totalRecolteCssId).val()) > parseFloat($(elementCssId+'_max_volume').val()))
-        $(elementCssId+'_volume_revendique').val($(elementCssId+'_max_volume').val());
+        $(elementCssId+'_volume_revendique').val(parseFloat($(elementCssId+'_max_volume').val()));
     else
-        $(elementCssId+'_volume_revendique').val($(totalRecolteCssId).val());
+        $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()));
     res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
     res += '';
     $(elementCssId+'_volume_dplc').val(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1'));
@@ -910,10 +910,15 @@ var volumeOnChange = function(input) {
     }else{
         ($('.rendement').addClass("alerte"));
     }
-
-    var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
+    var val = parseFloat($('#appellation_total_volume').val())+'';
+    if (parseFloat($('#appellation_total_superficie').val()) > 0) {
+        var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
+    }
     $('#appellation_current_rendement').html(val.replace(/\..*/, ''));
-    val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
+    val = parseFloat($('#cepage_total_volume').val())+'';
+    if (parseFloat($('#cepage_total_superficie').val()) > 0) {
+        val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
+    }
     $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 
 };
@@ -927,7 +932,7 @@ var hauteurEgaleColRecolte = function()
 	
     hauteurEgaleLignesRecolte(col_intitules+' p', 'p');
     hauteurEgaleLignesRecolte(col_intitules+' li', 'li');
-    //$(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont').height('auto');
+    $(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont').height('auto');
     hauteurEgale(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont');
 };
 
