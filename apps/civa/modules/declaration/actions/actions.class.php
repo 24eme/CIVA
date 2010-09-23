@@ -93,12 +93,11 @@ class declarationActions extends EtapesActions {
 	    $dr->validate($tiers);
 	    $dr->save();
             $this->getUser()->initDeclarationCredentials();
-	  }
 
-           $mess = 'Bonjour '.$tiers->nom.',
+            $mess = 'Bonjour '.$tiers->nom.',
 
 Vous venez de valider votre déclaration de récolte pour l\'année '.date("Y").'. Pour la visualiser rendez-vous sur votre espace civa : '.sfConfig::get('app_base_url').'mon_espace_civa
-    
+
 Cordialement,
 
 Le CIVA';
@@ -110,9 +109,9 @@ Le CIVA';
                     $mess
             );
             $this->getMailer()->send($message);
+	  }
 
-
-            $this->redirectByBoutonsEtapes();
+          $this->redirectByBoutonsEtapes();
         }
         $this->annee = $annee;
 

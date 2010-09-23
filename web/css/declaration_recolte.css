@@ -1499,7 +1499,7 @@ a.msg_aide:hover{
     background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat;
     width: 16px;
     height: 16px;
-    margin: 0 0 0 15px;
+    margin: 4px 0 0 35px;
     vertical-align: top;
     display: none;
 }

@@ -54,14 +54,14 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         $r = $this->_get('dplc');
         if ($r)
             return $r;
-        return $this->getSumLieu('dplc');
+        return $this->getSumLieuWithMethod('getTotalDPLC');
     }
 
     public function getTotalVolumeRevendique() {
         $r = $this->_get('volume_revendique');
         if ($r)
             return $r;
-        return $this->getSumLieu('volume_revendique');
+        return $this->getSumLieuWithMethod('getTotalVolumeRevendique');
     }
 
     public function getTotalCaveParticuliere() {
@@ -76,6 +76,14 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         $sum = 0;
         foreach ($this->filter('^lieu') as $key => $lieu) {
             $sum += $lieu->get($type);
+        }
+        return $sum;
+    }
+
+    private function getSumLieuWithMethod($method) {
+        $sum = 0;
+        foreach ($this->filter('^lieu') as $key => $lieu) {
+            $sum += $lieu->$method();
         }
         return $sum;
     }
