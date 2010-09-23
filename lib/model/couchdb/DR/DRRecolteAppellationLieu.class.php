@@ -206,6 +206,23 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return $volume_revendique;
     }
 
+    public function hasSellToUniqueAcheteur() {
+        if ($this->getTotalCaveParticuliere() > 0) {
+            return false;
+        }
+        $vol_total_cvi = array();
+        foreach($this->getAcheteursFromCepage() as $item) {
+            if (!isset($vol_total_cvi[$item->cvi])) {
+                $vol_total_cvi[$item->cvi] = 0;
+            }
+            $vol_total_cvi[$item->cvi] += $item->quantite_vendue;
+        }
+        if (count($vol_total_cvi) != 1) {
+            return false;
+        }
+        return true;
+    }
+
     public function getVolumeMaxAppellation() {
       return ($this->getTotalSuperficie()/100) * $this->getRendementAppellation();
     }
