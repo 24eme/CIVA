@@ -80,6 +80,9 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
+        $this->getUser()->getAttributeHolder()->remove('log_erreur');
+        $this->getUser()->getAttributeHolder()->remove('log_vigilance');
+
         $this->setCurrentEtape('validation');
 
         $tiers = $this->getUser()->getTiers();
@@ -230,8 +233,8 @@ Le CIVA';
                 }
             }
         }
-        $this->getUser()->setFlash('log_erreur', $this->validLogErreur);
-        $this->getUser()->setFlash('log_vigilance', $this->validLogErreur);
+        $this->getUser()->setAttribute('log_erreur', $this->validLogErreur);
+        $this->getUser()->setAttribute('log_vigilance', $this->validLogErreur);
 
     }
 
@@ -240,7 +243,8 @@ Le CIVA';
      */
 
     public function executeSetFlashLog(sfWebRequest $request) {
-        $flash_messages = $this->getUser()->getFlash('log_erreur');
+        $flash_messages = $this->getUser()->getAttribute('log_erreur');
+        $this->getUser()->getAttributeHolder()->remove('log_erreur');
         $id = explode('-',$this->getRequestParameter('flash_message', null));
         $this->getUser()->setFlash('flash_message', $flash_messages[$id[0]][$id[1]]['log']);
         $this->redirect($flash_messages[$id[0]][$id[1]]['url_log']);
