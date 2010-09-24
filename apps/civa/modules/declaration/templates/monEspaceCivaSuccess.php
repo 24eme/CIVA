@@ -79,20 +79,6 @@
 
                 <ul class="bloc_vert">
                     <li>
-                        <a href="#">Déclaration de l'année</a>
-                        <ul class="declarations">
-                            <li>
-                        <?php if ($declaration && $sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>
-                        <a href="#">Rédaction en cours</a>
-                        <?php elseif($declaration && $sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
-                        <a href="#">Déclaration validée</a>
-                        <?php else: ?>
-                         <a href="#">Pas de déclaration en cours</a>
-                        <?php endif; ?>
-                        </li>
-                        </ul>
-                    </li>
-                    <li>
                         <a href="#">Années précédentes</a>
                         <?php if (count($campagnes) > 0): ?>
                         <ul class="declarations">

@@ -14,18 +14,18 @@
                 <?php echo $form->renderHiddenFields(); ?>
                 <?php echo $form->renderGlobalErrors(); ?>
                 <?php if ($need_login): ?>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['username']->renderError() ?>
                     <?php echo $form['username']->renderLabel() ?>
                     <?php echo $form['username']->render() ?>
                 </div>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['password']->renderError() ?>
                     <?php echo $form['password']->renderLabel() ?>
                     <?php echo $form['password']->render() ?>
                 </div>
                 <?php endif; ?>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['cvi']->renderError() ?>
                     <?php echo $form['cvi']->renderLabel() ?>
                     <?php echo $form['cvi']->render() ?>

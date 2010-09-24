@@ -6,8 +6,9 @@
             $this->setValidator('cvi', new sfValidatorString(array('required' => false)));
 
             if ($need_login) {
-                $this->setWidget('username', new sfWidgetFormInputText(array('label' => 'Login')));
-                $this->setWidget('password', new sfWidgetFormInputPassword(array('label' => 'Mot de passe', 'always_render_empty' => false)));
+                $this->setWidget('username', new sfWidgetFormInputText(array('label' => 'Identifiant :')));
+                $this->setWidget('password', new sfWidgetFormInputPassword(array('label' => 'Mot de passe :', 'always_render_empty' => false)));
+                $this->setWidget('cvi', new sfWidgetFormInputText(array('label' => 'CVI de la DR à éditer:')));
                 $this->setValidator('username', new sfValidatorString(array('required' => false)));
                 $this->setValidator('password', new sfValidatorString(array('required' => false)));
             }
