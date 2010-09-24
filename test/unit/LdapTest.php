@@ -20,13 +20,23 @@ $tiers->nom = 'TEST Recoltant';
 $tiers->email = 'test@example.com';
 $tiers->mot_de_passe = $tiers->make_ssha_password('password');
 
+$tiers->no_accises = 'FR000000E00';
+
+/* siege */
 $tiers->setAdresse('1 rue de test');
 $tiers->setCodePostal('75000');
 $tiers->setCommune('Test');
 
+/* Exploitant */
+$tiers->get('exploitant')->set('sexe', 'M');
+$tiers->get('exploitant')->set('nom', $tiers->nom);
+$tiers->get('exploitant')->set('adresse', '1 rue de test');
+$tiers->get('exploitant')->set('code_postal', '00000');
+$tiers->get('exploitant')->set('commune', 'test');
+$tiers->get('exploitant')->set('date_naissance', '1970-01-01');
+$tiers->get('exploitant')->set('telephone', '0102030405');
+ 
 $verify = $ldap->ldapVerifieExistence($tiers);
-
-print_r($verify);
 if($verify){
     $delete = $ldap->ldapDelete($tiers);
 }

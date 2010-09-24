@@ -27,6 +27,12 @@ class Tiers extends BaseTiers {
         return $this->get('siege')->set('commune', $c);
     }
 
+
+    public function hasNoAssices(){
+        if($this->get('no_accises')) return true;
+        else return false;
+    }
+
     public function make_ssha_password($password) {
         mt_srand((double)microtime()*1000000);
         $salt = pack("CCCC", mt_rand(), mt_rand(), mt_rand(), mt_rand());

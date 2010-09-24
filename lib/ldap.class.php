@@ -34,7 +34,6 @@ class ldap {
     }
 
     public function ldapAdd($tiers) {
-
         if($tiers){
             $ldapConnect = $this->ldapConnect();
             if($ldapConnect) {
@@ -52,12 +51,22 @@ class ldap {
                 $info['uidNumber']     = '1000';
                 $info['gidNumber']     = '1000';
                 $info['homeDirectory'] = '/home/'.$tiers->cvi;
-                $info['gecos']         = $tiers->nom;
+
+                $exploitation = $tiers->siege->adresse.' '.$tiers->siege->code_postal.' '.$tiers->siege->commune;
+
+                $exploitant = $tiers->exploitant->sexe.' '.
+                              $tiers->exploitant->nom.' '.
+                              $tiers->exploitant->adresse.' '.
+                              $tiers->exploitant->code_postal.' '.
+                              $tiers->exploitant->commune.' '.
+                              $tiers->exploitant->date_naissance.' '.
+                              $tiers->exploitant->telephone;
+
+                $info['gecos']         = $tiers->cvi.', '.$tiers->no_accises.', '.$exploitation.', '.$exploitant;
                 $info['mail']          = $tiers->email;
                 $info['postalAddress'] = $tiers->getAdresse();
                 $info['postalCode']    = $tiers->getCodePostal();
                 $info['l']             = $tiers->getCommune();
-
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);

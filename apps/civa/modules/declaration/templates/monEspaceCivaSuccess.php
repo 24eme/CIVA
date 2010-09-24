@@ -62,11 +62,13 @@
                 
             <?php endif; ?>
             <br />
+            <?php if($has_no_assices){ ?>
             <h3 class="titre_section">Gamma <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide">Test message d'aide</a></h3>
             <div class="contenu_section">
                 <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>
 
             </div>
+            <?php } ?>
         </div>
         <!-- fin #nouvelle_declaration -->
 

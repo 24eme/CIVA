@@ -19,6 +19,7 @@ class declarationActions extends EtapesActions {
         $this->getUser()->initDeclarationCredentials();
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
+        $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
         $this->declaration = $this->getUser()->getDeclaration();
         if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST)) {
             $this->processChooseDeclaration($request);
