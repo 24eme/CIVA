@@ -110,6 +110,7 @@ EOF;
 
         /** INTRO **/
         $json->intro_mon_espace_civa_dr_validee = "Vous avez deja validé votre déclaration de récolte.";
+        $json->intro_gamma = "Lien vers votre espace Gamma";
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "Veuillez saisir les destinations de la récoltes.";
         $json->intro_exploitation_lieu = "Indiquez les lieux-dits pour lesquels vous récoltez de l'AOC.";
