@@ -28,6 +28,7 @@
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<tbody>
+
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
     <td class="valeur alt"><?php echo $appellationlieu->getTotalSuperficie(); ?> ares</td>
@@ -63,7 +64,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 } */
 ?>
 									<div class="bloc_gris">
-    <?php if($appellationlieu->hasRendement() && $appellationlieu->acheteurs->count() > 0): ?>
+    <?php if($appellationlieu->acheteurs->count() > 0): ?>
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<thead>
 												<tr>
@@ -81,10 +82,18 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
     <td class="nom"><?php echo $info->getNom();?></td>
 													<td class="cvi alt"><?php echo $cvi; ?></td>
 													<td class="commune"><?php echo $info->getCommune(); ?></td>
+                                                                                                        <?php if($appellationlieu->hasRendement()){ ?>
 													<td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ha</td>
-													<td><?php echo $info->getVolume(); ?> hl</td>
+													<?php }else{ ?>
+                                                                                                        <td class="superficie"></td>
+                                                                                                        <?php } ?>
+                                                                                                        <td><?php echo $info->getVolume(); ?> hl</td>
+                                                                                                        <?php if($appellationlieu->hasRendement()){ ?>
 													<td class="dplc alt <?php echo ($form['cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
-												</tr>
+                                                                                                        <?php }else{ ?>
+                                                                                                        <td class="dplc"></td>
+                                                                                                        <?php } ?>
+                                                                                                </tr>
 <?php endforeach; ?>
 											</tbody>
 										</table>
