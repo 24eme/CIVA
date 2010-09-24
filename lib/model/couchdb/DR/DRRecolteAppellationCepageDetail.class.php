@@ -42,6 +42,8 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
             } else {
                 $this->volume_revendique = $this->volume;
             }
+        } else {
+            $this->volume_revendique = $this->volume;
         }
 
         if ($this->volume && $this->volume > 0) {

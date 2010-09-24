@@ -3,6 +3,9 @@
 <?php echo jq_form_remote_tag(array('url' => url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte')->getRawValue(), array('detail_key' => $detail_key))),
                                     'method' => 'post',
                                     'dataType' => 'json',
+                                    'before' => "$('#form_motif_non_recolte input[type=image]').hide();
+                                                 $('#form_motif_non_recolte .valider-loading').show();
+                                                 $('#form_motif_non_recolte .valider-loading').css('display','inline-block');",
                                     'update' => array('failure' => "$('#form_motif_non_recolte').replaceWith('Une erreur est survenue !');"),
                                     'success' => "if (data.action == 'render') {
                                                     $('#form_motif_non_recolte').replaceWith(data.data);
@@ -18,4 +21,5 @@
     <?php echo $form['motif_non_recolte']->render(); ?>
 
     <input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
+    <span class="valider-loading"></span>
 </form>

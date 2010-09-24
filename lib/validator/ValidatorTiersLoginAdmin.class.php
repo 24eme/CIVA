@@ -22,8 +22,6 @@ class ValidatorTiersLoginAdmin extends sfValidatorBase
         $is_login = true;
     }
     
-
-
     $cvi = isset($values['cvi']) ? $values['cvi'] : '';
 
     if ($is_login) {

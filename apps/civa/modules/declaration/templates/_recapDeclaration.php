@@ -62,7 +62,7 @@
 					<td class="premiere_colonne">Jeunes Vignes : </td><td><?php echo $jeunes_vignes; ?>&nbsp;<small>ares</small></td>
 				</tr>
 				<tr>
-					<td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>Hl</td>
+					<td class="premiere_colonne">Lies :</td><td><?php echo $lies; ?>&nbsp;Hl</td>
 				</tr>
 					<?php if (isset($vintable['superficie'])) : ?>
 				<tr>
