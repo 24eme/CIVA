@@ -6,6 +6,10 @@ login:
   url:   /
   param: { module: tiers, action: login }
 
+login_admin:
+  url:   /civa-admin
+  param: { module: tiers, action: loginAdmin }
+
 logout:
   url:   /logout
   param: { module: tiers, action: logout }

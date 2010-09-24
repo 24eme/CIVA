@@ -17,22 +17,8 @@ class tiersActions extends EtapesActions {
     public function executeLogin(sfWebRequest $request) {
 
         if ($this->getUser()->isAuthenticated()) {
-
             $this->redirect('@mon_espace_civa');
-
-        }elseif($request->getParameter('redirect') && $request->getParameter('redirect')==1) {
-
-            $this->form = new LoginForm();
-            if ($request->isMethod(sfWebRequest::POST)) {
-                $this->form->bind($request->getParameter($this->form->getName()));
-                if ($this->form->isValid()) {
-                    $this->getUser()->signIn($this->form->getValue('tiers'));
-                    $this->redirect('@mon_espace_civa');
-                }
-            }
-
         }elseif($request->getParameter('ticket')) {
-
             error_reporting(E_ALL);
             require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
             phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
@@ -43,11 +29,24 @@ class tiersActions extends EtapesActions {
             phpCAS::forceAuthentication();
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
             $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
-
         }else {
             $url = sfConfig::get('app_cas_url').'/login?service='.$request->getUri();
             $this->redirect($url);
         }
+    }
+
+    public function executeLoginAdmin(sfWebRequest $request) {
+        $this->need_login = !($this->getUser()->isAdmin());
+        $this->form = new LoginAdminForm(null, array('need_login' => $this->need_login));
+            if ($request->isMethod(sfWebRequest::POST)) {
+                $this->form->bind($request->getParameter($this->form->getName()));
+                if ($this->form->isValid()) {
+                    $this->getUser()->signOut();
+                    $this->getUser()->signIn($this->form->getValue('tiers'));
+                    $this->getUser()->addCredential(myUser::CREDENTIAL_ADMIN);
+                    $this->redirect('@mon_espace_civa');
+                }
+            }
     }
 
     public function executeLogout(sfWebRequest $request) {

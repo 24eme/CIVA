@@ -7,6 +7,7 @@ class myUser extends sfBasicSecurityUser {
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
+    const CREDENTIAL_ADMIN = 'admin';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
     const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
@@ -137,6 +138,10 @@ class myUser extends sfBasicSecurityUser {
 
     public function getTiersCvi() {
         return $this->getTiers()->getCvi();
+    }
+
+    public function isAdmin() {
+        return ($this->isAuthenticated() && $this->hasCredential(myUser::CREDENTIAL_ADMIN));
     }
 
 }

@@ -1,2 +1,5 @@
+loginAdmin:
+  is_secure: false
+
 exploitationAdministratif:
   credentials: [declaration_brouillon, etape_exploitation]
