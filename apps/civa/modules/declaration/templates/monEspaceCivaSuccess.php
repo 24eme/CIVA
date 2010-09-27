@@ -52,7 +52,7 @@
                 <?php endif; ?>
             </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
-                <h3 class="titre_section">Consulter ma déclaration validée <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide">Test message d'aide</a></h3>
+                <h3 class="titre_section">Consulter ma déclaration validée <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide">Test message d'aide</a></h3>
                 <div class="contenu_section">
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_validee'); ?></p>
                     <div class="ligne_form ligne_btn">
