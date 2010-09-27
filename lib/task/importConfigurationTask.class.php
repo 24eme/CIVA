@@ -54,7 +54,11 @@ EOF;
 	$json->campagne = "2010";
 	//	$docs[] = $json
 
+
 	$json = new stdClass();
+
+        $json->dr_non_editable = 1;
+
         $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
 	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";
         $json->recolte->appellation_ALSACEBLANC->rendement_appellation = 80;

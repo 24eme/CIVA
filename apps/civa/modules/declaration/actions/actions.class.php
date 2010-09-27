@@ -15,6 +15,8 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
+        $this->dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        
         $this->help_popup_action = "help_popup_mon_espace_civa";
         if (!$this->getUser()->isDeclarant() && !$this->getUser()->isAdmin()) {
             return $this->redirect('@logout');

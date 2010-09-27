@@ -214,6 +214,7 @@ Configuration:
       _id: {  }
       _rev: {  }
       type: {}
+      dr_non_editable : {required: false}
       intitule:
         type: array_collection
         definition:

@@ -122,6 +122,7 @@ EOF;
 
         /** INTRO **/
         $json->intro_mon_espace_civa_dr_validee = "(intro_mon_espace_civa_dr_validee) Vous avez deja validé votre déclaration de récolte.";
+        $json->intro_mon_espace_civa_dr_non_editable = "(intro_mon_espace_civa_dr_non_editable) Votre DR n'est plus éditable.";
         $json->intro_gamma = "(intro_gamma) Lien vers votre espace Gamma";
         $json->intro_exploitation_administratif = "(intro_exploitation_administratif) Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "(intro_exploitation_acheteurs) Veuillez saisir les destinations de la récoltes.";
