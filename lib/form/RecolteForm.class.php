@@ -10,7 +10,6 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
 
     public function configure() {
 
-
         $this->setWidgets(array(
             'denomination' => new sfWidgetFormInputText(),
             'vtsgn' => new sfWidgetFormSelect(array('choices' => $this->getChoicesVvtsgn())),
@@ -38,6 +37,8 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             $this->getObject()->add('mouts');
             $this->configureAcheteurs(self::FORM_NAME_MOUTS, $this->getObject()->getAcheteursValuesWithCvi('mouts'), $this->getAcheteursMouts());
         }
+
+        $this->getValidatorSchema()->setPostValidator(new ValidatorRecolte(null, array('object' => $this->getObject(), 'has_acheteurs_mout' => $this->hasAcheteursMouts())));
 
         $this->widgetSchema->setNameFormat(self::FORM_NAME);
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

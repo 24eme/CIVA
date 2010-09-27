@@ -2,10 +2,10 @@
 
 class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDetail {
 
-    public function getConfig() {
+   /* public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
-
+*/
     public function getCodeDouane() {
       return $this->getParent()->getParent()->getCodeDouane($this->vtsgn);
     }
@@ -67,12 +67,16 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
       return $sum;
     }
 
+    public function getCepage() {
+        return $this->getParent()->getParent();
+    }
+
     public function hasRendementCepage() {
-        return $this->getParent()->getParent()->hasRendement();
+        return $this->getCepage()->hasRendement();
     }
     
     public function getRendementCepage() {
-        return $this->getParent()->getParent()->getRendement();
+        return $this->getCepage()->getRendement();
     }
     
     public function save() {

@@ -122,19 +122,10 @@ function valider_can_submit()
     
     var couples_denomination_mention_is_bad = false;
     for(var couples_item_key in couples_denomination_mention_existant) {
-        var denomination_is_bad = false;
-        var mention_is_bad = false;
         couples_item = couples_denomination_mention_existant[couples_item_key];
-        <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
-            denomination_is_bad = (couples_item.denomination == denomination_val);
-        <?php endif; ?>
+        couples_denomination_mention_is_bad = (couples_item.denomination == denomination_val) && (couples_item.vtsgn == mention_val);
 
-        <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
-            mention_is_bad = (couples_item.vtsgn == mention_val);
-        <?php endif; ?>
-
-        if (denomination_is_bad && mention_is_bad) {
-            couples_denomination_mention_is_bad = true;
+        if (couples_denomination_mention_is_bad) {
             break;
         }
     }
@@ -151,13 +142,10 @@ function valider_can_submit()
         for(var couples_item_key in array_denomination_existant) {
             var denomination_is_bad = false;
             couples_item = array_denomination_existant[couples_item_key];
-            <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()): ?>
-                if(couples_item.denomination == denomination_val){
-                    denomination_is_bad = true;
-                    break;
-                }
-            <?php endif; ?>
-
+            if(couples_item.denomination == denomination_val){
+                denomination_is_bad = true;
+                break;
+            }
         }
 
         if (denomination_is_bad) {
