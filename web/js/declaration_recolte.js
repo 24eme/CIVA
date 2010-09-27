@@ -79,12 +79,6 @@ $(document).ready( function()
             $(this).removeClass('num_alerte');
     });
 
-    if($('#gestion_recolte input').val().length > 12)
-        $('#gestion_recolte inpu').addClass('num_alerte');
-    else
-        $('#gestion_recolte inpum').removeClass('num_alerte');
-
-
     /* $('input.num').live('keyup',function(e)
     {
         alert($(this).val());

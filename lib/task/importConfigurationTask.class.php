@@ -57,7 +57,7 @@ EOF;
 
 	$json = new stdClass();
 
-        $json->dr_non_editable = 1;
+        $json->dr_non_editable = 0;
 
         $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
 	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";

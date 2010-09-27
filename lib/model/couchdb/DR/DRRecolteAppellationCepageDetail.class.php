@@ -23,7 +23,7 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
 
     protected function update() {
         parent::update();
-	if ($this->getCouchdbDocument()->isValidated())
+	if (!$this->getCouchdbDocument()->canUpdate())
 	  return ;
         $v = $this->cave_particuliere;
         $v += $this->getSumAcheteur('negoces');

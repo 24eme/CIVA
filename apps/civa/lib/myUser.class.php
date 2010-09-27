@@ -121,16 +121,20 @@ class myUser extends sfBasicSecurityUser {
     
     public function initDeclarationCredentials() {
         $this->clearDeclarationCredentials();
-        $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
-        if ($declaration = $this->getDeclaration()) {
-            if ($declaration->isValidated()) {
-                if (!$this->isAdmin()) {
+        $dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        if ($dr_non_editable != 1) {
+            $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+            if ($declaration = $this->getDeclaration()) {
+                if (!$this->isAdmin() && $declaration->isValideeTiers()) {
                     $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
-                }
-                $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
-            } else {
-                if ($declaration->exist('etape') && in_array($declaration->etape, $this->_etapes)) {
-                    $this->addCredentialEtape($declaration->etape);
+                    $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
+                } elseif($this->isAdmin() && $declaration->isValideeCiva()) {
+                    $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+                    $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
+                } else {
+                    if ($declaration->exist('etape') && in_array($declaration->etape, $this->_etapes)) {
+                        $this->addCredentialEtape($declaration->etape);
+                    }
                 }
             }
         }

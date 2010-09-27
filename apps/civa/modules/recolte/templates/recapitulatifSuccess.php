@@ -157,7 +157,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
                                     return false;
                                 }
                                 <?php endif; ?>
-
+                                return true;
                             }
                         --></script>
                         <div id="popup_msg_erreur" class="popup_ajout" title="Erreur !">

@@ -49,18 +49,30 @@ class DR extends BaseDR {
       $u = $this->add('updated', 1);
     }
 
-    public function isValidee() {
-      return $this->isValidated();
+    public function canUpdate() {
+      return !$this->exist('modifiee');
     }
-    public function isValidated() {
-      if ($this->exist('validee'))
-	  return ($this->validee);
+
+    public function isValideeCiva() {
+      if ($this->exist('modifiee')) {
+          return $this->modifiee;
+      }
+      return false;
+    }
+
+    public function isValideeTiers() {
+      if ($this->exist('validee')) {
+          return $this->validee;
+      }
       return false;
     }
 
     public function validate($tiers){
         $this->remove('etape');
-        $this->add('validee', date('Y-m-d'));
+        $this->add('modifiee', date('Y-m-d'));
+        if (!$this->exist('validee') || is_null($this->validee) || empty($this->validee)) {
+            $this->add('validee', date('Y-m-d'));
+        }
         $this->declarant->nom =  $tiers->get('nom');
         $this->declarant->email =  $tiers->get('email');
         $this->declarant->telephone =  $tiers->get('telephone');

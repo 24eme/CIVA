@@ -15,7 +15,7 @@
     </li>
     <li class="suiv">
         <?php if (isset($is_recap) && $is_recap): ?>
-        <a href="<?php echo url_for($onglets->getNextUrl()->getRawValue()) ?>" onclick="document.getElementById('principal').submit(); return false;">
+        <a href="<?php echo url_for($onglets->getNextUrl()->getRawValue()) ?>" onclick="if (valider_can_submit()) { document.getElementById('principal').submit(); } return false;">
             <?php else: ?>
             <a href="<?php echo url_for($onglets->getUrlRecap(true)->getRawValue()) ?>" class="btn_recolte_can_be_inactif">
                 <?php endif; ?>
