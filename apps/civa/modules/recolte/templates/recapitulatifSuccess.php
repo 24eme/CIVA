@@ -44,7 +44,7 @@
 												</tr>
 												<tr>
 													<td>DPLC <span class="unites">(hl)</span> :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getDplcFinal(); ?> hl</td>
+													<td class="valeur alt"><?php echo $appellationlieu->getDPLCFinal(); ?> hl</td>
 												</tr>
                                                                                                 <?php endif; ?>
 											</tbody>
@@ -83,7 +83,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 													<td class="cvi alt"><?php echo $cvi; ?></td>
 													<td class="commune"><?php echo $info->getCommune(); ?></td>
                                                                                                         <?php if($appellationlieu->hasRendement()){ ?>
-													<td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ha</td>
+													<td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
 													<?php }else{ ?>
                                                                                                         <td class="superficie"></td>
                                                                                                         <?php } ?>
