@@ -63,6 +63,9 @@ EOF;
         $json->err_dr_popup_unique_mention_denomination = "(err_dr_popup_unique_mention_denomination) La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
         $json->err_dr_popup_unique_denomination = "(err_dr_popup_unique_denomination) La dénomination complémentaire de chaque colonne doit être unique";
 
+        $json->err_dr_recap_vente_popup_superficie_trop_eleve = "(err_dr_recap_vente_popup_superficie_trop_eleve) La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
+        $json->err_dr_recap_vente_popup_dplc_trop_eleve = "(err_dr_recap_vente_popup_dplc_trop_eleve) La somme des DPLC des acheteurs ne peut pas être superieure au total de l'appellation";
+
         $json->err_log_lieu_non_saisie = "(err_log_lieu_non_saisie) lieu non saisi";
         $json->err_log_cepage_non_saisie = "(err_log_cepage_non_saisie) cépage non saisi";
         $json->err_log_detail_non_saisie = "(err_log_detail_non_saisie) details non saisis";

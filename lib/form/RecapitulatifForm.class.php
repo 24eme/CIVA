@@ -5,8 +5,10 @@
 	  $lieu = $this->getObject();
           $is_unique_acheteur = $lieu->hasSellToUniqueAcheteur();
 	  foreach($lieu->acheteurs as $cvi => $acheteur) {
-            if ($is_unique_acheteur && is_null($acheteur->superficie) && is_null($acheteur->dontdplc)) {
+            if ($is_unique_acheteur && is_null($acheteur->superficie)) {
                 $acheteur->superficie = $lieu->getTotalSuperficie();
+            }
+            if ($is_unique_acheteur && is_null($acheteur->dontdplc)) {
                 $acheteur->dontdplc = $lieu->getDPLCFinal();
             }
 	    $af = new RecapitulatifAcheteurForm($acheteur);

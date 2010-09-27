@@ -164,5 +164,4 @@ function valider_can_submit()
     </form>
 </div>
 <div id="popup_msg_erreur" class="popup_ajout" title="Erreur !">
-    
 </div>

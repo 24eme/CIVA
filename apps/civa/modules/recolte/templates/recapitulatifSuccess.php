@@ -4,7 +4,7 @@
 <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
 <!-- #principal -->
-			<form id="principal" action="" method="post">
+			<form id="principal" action="" method="post" onsubmit="return valider_can_submit();">
                                 <?php echo $form->renderHiddenFields(); ?>
                                 <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                                    'onglets' => $onglets)); ?>
@@ -130,3 +130,35 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
                                                          'form_appellation' => $form_ajout_appellation,
                                                          'form_lieu' => $form_ajout_lieu,
                                                          'url_lieu' => $url_ajout_lieu)) ?>
+
+                        <script><!--
+                            function valider_can_submit()
+                            {
+                                <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->hasRendement()): ?>
+                                var total_superficie = <?php echo $appellationlieu->getTotalSuperficie(); ?>;
+                                var total_dontdplc = <?php echo $appellationlieu->getDPLCFinal(); ?>;
+                                var sum_superficie = 0;
+                                var sum_dont_dplc = 0;
+                                $('#recap_ventes table.table_donnees tr td.superficie input.num').each(function() {
+                                    sum_superficie += $(this).val();
+                                });
+
+                                $('#recap_ventes table.table_donnees tr td.dplc input.num').each(function() {
+                                    sum_dont_dplc += $(this).val();
+                                });
+                                if (sum_superficie > total_superficie) {
+                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+                                    openPopup($('#popup_msg_erreur'), 0);
+                                    return false;
+                                }
+                                if (sum_dont_dplc > total_dontdplc) {
+                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_dplc_trop_eleve')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+                                    openPopup($('#popup_msg_erreur'), 0);
+                                    return false;
+                                }
+                                <?php endif; ?>
+
+                            }
+                        --></script>
+                        <div id="popup_msg_erreur" class="popup_ajout" title="Erreur !">
+                        </div>
