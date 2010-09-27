@@ -58,11 +58,33 @@ $(document).ready( function()
             return false;
         return e;
     });
+
     $('input.num').live('change',function(e)
     {
         var val = $(this).val();
         $(this).val(val.replace(',', '.'));
+
+        if(val.length > 12)
+            $(this).addClass('num_alerte');
+        else
+            $(this).removeClass('num_alerte');
     });
+
+    
+    $('.gestion_recolte_donnees input').each(function(e)
+    {   var val = $(this).val();
+        if(val.length > 12)
+            $(this).addClass('num_alerte');
+        else
+            $(this).removeClass('num_alerte');
+    });
+
+    if($('#gestion_recolte input').val().length > 12)
+        $('#gestion_recolte inpu').addClass('num_alerte');
+    else
+        $('#gestion_recolte inpum').removeClass('num_alerte');
+
+
     /* $('input.num').live('keyup',function(e)
     {
         alert($(this).val());

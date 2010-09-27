@@ -1166,6 +1166,15 @@ a.msg_aide:hover{
     width: 88px;
 }
 
+#gestion_recolte .col_recolte input.num_alerte
+{
+    padding: 0 10px 0 5px;
+    background-image: url(../images/pictos/pi_fleche_droite.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    width: 83px;
+}
+
 #gestion_recolte #col_scroller .col_validee input,
 #gestion_recolte #col_scroller .col_validee select { background-color: #f0f0de; }
 
@@ -1174,6 +1183,8 @@ a.msg_aide:hover{
     background-image: url(../images/pictos/pi_alerte.png);
     background-position: 2px center;
     background-repeat: no-repeat;
+    padding: 0 5px;
+    width: 88px;
 }
 
 #gestion_recolte .col_recolte .vol_total_recolte input,
