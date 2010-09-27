@@ -50,8 +50,8 @@ class compteActions extends sfActions {
                 if ($this->form->isValid()) {
                     $verify = $ldap->ldapVerifieExistence($tiers);
                     if($verify) {
-                        $newData['mot_de_passe'] = $tiers->mot_de_passe;
-                        $ldap->ldapModify($tiers, $newData);
+		      $this->form->save();
+                        $ldap->ldapModify($tiers);
                         $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifié.');
                         $mess = 'Bonjour '.$tiers->nom.',
 

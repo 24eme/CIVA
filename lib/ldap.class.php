@@ -33,40 +33,38 @@ class ldap {
             return false;
     }
 
+    private function getLdapInfo($tiers) {
+      $info = array();
+      $info['uid']           = $tiers->cvi;
+      $info['sn']            = $tiers->nom;
+      $info['cn']            = $tiers->nom;
+      $info['objectClass'][0]   = 'top';
+      $info['objectClass'][1]   = 'person';
+      $info['objectClass'][2]   = 'posixAccount';
+      $info['objectClass'][3]   = 'inetOrgPerson';
+      $info['userPassword']  = $tiers->mot_de_passe;
+      $info['loginShell']    = '/bin/bash';
+      $info['uidNumber']     = '1000';
+      $info['gidNumber']     = '1000';
+      $info['homeDirectory'] = '/home/'.$tiers->cvi;
+      
+      $exploitation = $tiers->intitule.' '.$tiers->nom;
+      
+      $info['gecos']         = $tiers->cvi.', '.$tiers->no_accises.', '.$exploitation.', '.$tiers->exploitant->nom;
+      $info['mail']          = $tiers->email;
+      $info['postalAddress'] = $tiers->getAdresse();
+      $info['postalCode']    = $tiers->getCodePostal();
+      $info['l']             = $tiers->getCommune();
+      return $info;
+    }
+
     public function ldapAdd($tiers) {
         if($tiers){
             $ldapConnect = $this->ldapConnect();
             if($ldapConnect) {
                 // prepare les données
                 $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-                $info['uid']           = $tiers->cvi;
-                $info['sn']            = $tiers->nom;
-                $info['cn']            = $tiers->nom;
-                $info['objectClass'][0]   = 'top';
-                $info['objectClass'][1]   = 'person';
-                $info['objectClass'][2]   = 'posixAccount';
-                $info['objectClass'][3]   = 'inetOrgPerson';
-                $info['userPassword']  = $tiers->mot_de_passe;
-                $info['loginShell']    = '/bin/bash';
-                $info['uidNumber']     = '1000';
-                $info['gidNumber']     = '1000';
-                $info['homeDirectory'] = '/home/'.$tiers->cvi;
-
-                $exploitation = $tiers->siege->adresse.' '.$tiers->siege->code_postal.' '.$tiers->siege->commune;
-
-                $exploitant = $tiers->exploitant->sexe.' '.
-                              $tiers->exploitant->nom.' '.
-                              $tiers->exploitant->adresse.' '.
-                              $tiers->exploitant->code_postal.' '.
-                              $tiers->exploitant->commune.' '.
-                              $tiers->exploitant->date_naissance.' '.
-                              $tiers->exploitant->telephone;
-
-                $info['gecos']         = $tiers->cvi.', '.$tiers->no_accises.', '.$exploitation.', '.$exploitant;
-                $info['mail']          = $tiers->email;
-                $info['postalAddress'] = $tiers->getAdresse();
-                $info['postalCode']    = $tiers->getCodePostal();
-                $info['l']             = $tiers->getCommune();
+		$info = $this->getLadpInfo($tiers);
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);
@@ -76,7 +74,7 @@ class ldap {
         return false;
     }
     
-    public function ldapModify($tiers, $values) {
+    public function ldapModify($tiers, $values = null) {
 
         if($tiers && $values){
             $ldapConnect = $this->ldapConnect();
@@ -84,20 +82,7 @@ class ldap {
 
                 // prepare les données
                 $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-                if(isset($values['nom'])) {
-		  $info['sn']            = $values['nom'];
-		  $info['cn']            = $values['nom'];
-		  $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$values['nom'].',';
-		}
-
-                if(isset($values['mot_de_passe']))  $info['userPassword']  = $values['mot_de_passe'];
-
-                
-                if(isset($values['mail']))          $info['mail'] = $values['email'];
-                if(isset($values['adresse']))       $info['postalAddress'] = $values['adresse'];
-                if(isset($values['code_postal']))   $info['postalCode']    = $values['code_postal'];
-                if(isset($values['ville']))         $info['l']             = $values['ville'];
-
+		$info = $this->getLdapInfo($tiers);
                 // Ajoute les données au dossier
                 $r=ldap_modify($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);
