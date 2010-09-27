@@ -29,6 +29,7 @@ class tiersActions extends EtapesActions {
             phpCAS::forceAuthentication();
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
             $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
+            $this->redirect('@mon_espace_civa');
         }else {
             $url = sfConfig::get('app_cas_url').'/login?service='.$request->getUri();
             $this->redirect($url);
