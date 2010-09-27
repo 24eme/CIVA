@@ -46,13 +46,10 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
     }
 
     public function bind(array $taintedValues = null, array $taintedFiles = null) {
-        $this->bindCheckDelete(self::FORM_NAME_NEGOCES, $taintedValues);
         $this->configureAcheteursFromBind(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $taintedValues);
-        $this->bindCheckDelete(self::FORM_NAME_COOPERATIVES, $taintedValues);
         $this->configureAcheteursFromBind(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $taintedValues);
 
         if ($this->hasAcheteursMouts()) {
-            $this->bindCheckDelete(self::FORM_NAME_MOUTS, $taintedValues);
             $this->configureAcheteursFromBind(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $taintedValues);
         }
         parent::bind($taintedValues, $taintedFiles);
@@ -77,14 +74,6 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             $form->embedForm($cvi, new RecolteAcheteurForm(array('quantite_vendue' => $quantite_vendue)));
         }
         $this->embedForm($name, $form);
-    }
-
-    protected function bindCheckDelete($name, $taintedValues) {
-        foreach ($this->embeddedForms[$name] as $cvi => $form) {
-            if (!isset($taintedValues[$name][$cvi])) {
-                unset($this->widgetSchema[$name][$cvi]);
-            }
-        }
     }
 
     protected function configureAcheteursFromBind($name, $taintedValues) {

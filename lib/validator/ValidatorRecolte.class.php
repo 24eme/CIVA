@@ -39,33 +39,31 @@ class ValidatorRecolte extends sfValidatorSchema
         }
     }
     
-
     $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                      ExploitationAcheteursForm::FORM_NAME_NEGOCES,
+                                                      RecolteForm::FORM_NAME_NEGOCES,
                                                       ListAcheteursConfig::getNegoces()));
 
     $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                   ExploitationAcheteursForm::FORM_NAME_NEGOCES . ExploitationAcheteursForm::FORM_SUFFIX_NEW,
+                                                   RecolteForm::FORM_NAME_NEGOCES . RecolteForm::FORM_SUFFIX_NEW,
                                                    ListAcheteursConfig::getNegoces()));
 
     $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                   ExploitationAcheteursForm::FORM_NAME_COOPERATIVES,
+                                                   RecolteForm::FORM_NAME_COOPERATIVES,
                                                    ListAcheteursConfig::getCooperatives()));
 
     $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                   ExploitationAcheteursForm::FORM_NAME_COOPERATIVES . ExploitationAcheteursForm::FORM_SUFFIX_NEW,
+                                                   RecolteForm::FORM_NAME_COOPERATIVES . RecolteForm::FORM_SUFFIX_NEW,
                                                    ListAcheteursConfig::getCooperatives()));
 
     if ($this->hasAcheteursMouts()) {
         $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                       ExploitationAcheteursForm::FORM_NAME_MOUTS,
+                                                       RecolteForm::FORM_NAME_MOUTS,
                                                        ListAcheteursConfig::getMouts()));
 
         $errorSchema->addError($this->doCleanAcheteurs($values,
-                                                       ExploitationAcheteursForm::FORM_NAME_MOUTS . ExploitationAcheteursForm::FORM_SUFFIX_NEW,
+                                                       RecolteForm::FORM_NAME_MOUTS . RecolteForm::FORM_SUFFIX_NEW,
                                                        ListAcheteursConfig::getMouts()));
     }
-
 
     // throws the error for the main form
     if (count($errorSchema))
@@ -77,7 +75,7 @@ class ValidatorRecolte extends sfValidatorSchema
   }
 
 
-  public function doCleanAcheteurs($values, $name, $acheteurs) {
+  protected function doCleanAcheteurs($values, $name, $acheteurs) {
       $errorSchemaLocal = new sfValidatorErrorSchema($this);
       if (isset($values[$name])) {
           foreach($values[$name] as $cvi => $value) {
