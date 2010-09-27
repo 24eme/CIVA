@@ -76,19 +76,25 @@ EOF;
 
 
         /** HELP¨**/
+        $json->help_popup_exploitation_administratif = "(help_popup_exploitation_administratif)Exploitation administratif : Message d'aide à définir.";
         $json->help_popup_exploitation_administratif_exploitation = "(help_popup_exploitation_administratif_exploitation) Exploitation : Message d'aide à définir.";
         $json->help_popup_exploitation_administratif_gestionnaire = "(help_popup_exploitation_administratif_gestionnaire) Gestionnnaire : Message d'aide à définir.";
         $json->help_popup_exploitation_administratif_siret = "(help_popup_exploitation_administratif_siret) Siret : Message d'aide à définir.";
-        
+
+        $json->help_popup_mon_espace_civa = "(help_popup_mon_espace_civa) Mon espace civa : Message d'aide à définir.";
         $json->help_popup_mon_espace_civa_ma_dr = "(help_popup_mon_espace_civa_ma_dr) Ma déclaration de récolte : Message d'aide à définir.";
         $json->help_popup_mon_espace_civa_visualiser = "(help_popup_mon_espace_civa_visualiser) Visualiser mes DR : Message d'aide à définir.";
         $json->help_popup_mon_espace_civa_gamma = "(help_popup_mon_espace_civa_gamma) Gamma : Message d'aide à définir.";
 
+        $json->help_popup_exploitation_acheteur = "(help_popup_exploitation_acheteur) Exploitation acheteur : Message d'aide à définir.";
         $json->help_popup_exploitation_acheteur_vol_sur_place = "(help_popup_exploitation_acheteur_vol_sur_place) Vol sur place : Message d'aide à définir.";
         $json->help_popup_exploitation_acheteur_acheteurs_raisin = "(help_popup_exploitation_acheteur_acheteurs_raisin) Acheteurs : Message d'aide à définir.";
         $json->help_popup_exploitation_acheteur_caves_cooperatives = "(help_popup_exploitation_acheteur_caves_cooperatives) Caves : Message d'aide à définir.";
         $json->help_popup_exploitation_acheteur_acheteurs_mouts = "(help_popup_exploitation_acheteur_acheteurs_mouts) Mouts : Message d'aide à définir.";
 
+        $json->help_popup_exploitation_lieu = "(help_popup_exploitation_lieu) Exploitation lieu : Message d'aide à définir.";
+
+        $json->help_popup_DR = "(help_popup_DR) DR : Message d'aide à définir.";
         $json->help_popup_DR_denomination = "(help_popup_DR_denomination) Denomination : Message d'aide à définir.";
         $json->help_popup_DR_mention = "(help_popup_DR_mention) Mention : Message d'aide à définir.";
         $json->help_popup_DR_superficie = "(help_popup_DR_superficie) Superficie : Message d'aide à définir.";
@@ -102,9 +108,12 @@ EOF;
         $json->help_popup_DR_total_appellation = "(help_popup_DR_total_appellation) Total appellation : Message d'aide à définir.";
         $json->help_popup_DR_recap_vente = "(help_popup_DR_recap_vente) Recap Vente : Message d'aide à définir.";
 
+        $json->help_popup_autres = "(help_popup_autres) Autres : Message d'aide à définir.";
         $json->help_popup_autres_lies = "(help_popup_autres_lies) Lies : Message d'aide à définir.";
         $json->help_popup_autres_jv = "(help_popup_autres_jv) Jeunes vignes : Message d'aide à définir.";
 
+        $json->help_popup_validation = "(help_popup_validation) Validation : Message d'aide à définir.";
+        $json->help_popup_validation_log_erreur = "(help_popuplog_erreur) Erreurs : Message d'aide à définir.";
         $json->help_popup_validation_log_erreur = "(help_popup_validation_log_erreur) Erreurs : Message d'aide à définir.";
         $json->help_popup_validation_log_vigilance = "(help_popup_validation_log_vigilance) Vigilance : Message d'aide à définir.";
 

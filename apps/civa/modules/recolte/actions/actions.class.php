@@ -257,6 +257,9 @@ class recolteActions extends EtapesActions {
     }
 
     protected function initOnglets(sfWebRequest $request) {
+
+        $this->help_popup_action = "help_popup_DR";
+
         preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
         $appellation = null;
         if (isset($appellation_lieu['appellation'])) {

@@ -19,6 +19,8 @@ class acheteurActions extends EtapesActions {
         $this->setCurrentEtape('exploitation_acheteurs');
         $declaration = $this->getUser()->getDeclaration();
 
+        $this->help_popup_action = "help_popup_exploitation_acheteur";
+
         $this->appellations = ExploitationAcheteursForm::getListeAppellations();
 
 
@@ -81,6 +83,7 @@ class acheteurActions extends EtapesActions {
      */
     public function executeExploitationLieu(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_lieu');
+        $this->help_popup_action = "help_popup_exploitation_lieu";
 	
 	try{
 	$grdcru = $this->getUser()->getDeclaration()->get('/recolte/appellation_GRDCRU');

@@ -15,6 +15,7 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
         if (!$this->getUser()->isDeclarant() && !$this->getUser()->isAdmin()) {
             return $this->redirect('@logout');
         } elseif(!$this->getUser()->isDeclarant() && $this->getUser()->isAdmin()) {
@@ -69,6 +70,7 @@ class declarationActions extends EtapesActions {
      */
     public function executeExploitationAutres(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_autres');
+        $this->help_popup_action = "help_popup_autres";
 
         $this->form = new ExploitationAutresForm($this->getUser()->getDeclaration());
 
@@ -86,6 +88,8 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeValidation(sfWebRequest $request) {
+
+        $this->help_popup_action = "help_popup_validation";
         $this->setCurrentEtape('validation');
         
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
@@ -265,6 +269,7 @@ Le CIVA';
      * @param sfWebRequest $request
      */
     public function executeVisualisation(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_visualisation";
         $tiers = $this->getUser()->getTiers();
         $annee = $this->getRequestParameter('annee', null);
         $key = 'DR-'.$tiers->cvi.'-'.$annee;

@@ -312,7 +312,7 @@ table.table_donnees thead th:first-child
     background: #dcdfa9;
     vertical-align: middle;
     padding: 0;
-    width: 150px;
+    width: 155px;
 }
 
 table.table_donnees thead th span
@@ -432,11 +432,11 @@ a.msg_aide
 {
     background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
     display: inline-block;
-    height: 20px;
+    height: 17px;
     outline: 0;
     text-indent: -9999px;
     vertical-align: middle;
-    width: 14px;
+    width: 17px;
     opacity:0.5;
 }
 
@@ -1644,7 +1644,7 @@ a.msg_aide{
 
 .picto_rdt_aide_col_total{
     position:absolute;
-    left: 83px;
+    left: 78px;
 }
 
 
