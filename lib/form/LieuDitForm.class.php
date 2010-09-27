@@ -15,6 +15,8 @@
             ));
             
             $this->widgetSchema->setNameFormat('lieudit[%s]');
+            
+            $this->validatorSchema['lieu']->setMessage('required', 'Champ obligatoire');
         }
 
         public function doUpdateObject($values) {

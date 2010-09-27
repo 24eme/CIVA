@@ -16,7 +16,8 @@ class RecolteMotifNonRecolteForm extends sfCouchdbFormDocumentJson {
 
         $this->widgetSchema->setNameFormat("recolte_motif[%s]");
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
-
+        
+        $this->validatorSchema['motif_non_recolte']->setMessage('required', 'Veuillez sélectionner un motif de non récolte.');
     }
 
     public function getMotifNonRecolteChoices() {

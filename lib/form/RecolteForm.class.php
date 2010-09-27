@@ -30,6 +30,8 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
             $this->getValidator('superficie')->setOption('min', 0.01);
         }
 
+        $this->validatorSchema['superficie']->setMessage('required', 'Champ obligatoire');
+
         $this->configureAcheteurs(self::FORM_NAME_NEGOCES, $this->getObject()->getAcheteursValuesWithCvi('negoces'), $this->getAcheteursNegoces());
         $this->configureAcheteurs(self::FORM_NAME_COOPERATIVES, $this->getObject()->getAcheteursValuesWithCvi('cooperatives'), $this->getAcheteursCooperatives());
         if ($this->hasAcheteursMouts()) {
