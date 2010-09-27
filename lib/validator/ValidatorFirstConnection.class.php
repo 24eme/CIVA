@@ -15,7 +15,7 @@ class ValidatorFirstConnection extends sfValidatorBase {
         if($mdp && $cvi) {
             $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi);
             if (!$tiers)
-                 throw new Exception("$cvi n'a pas permis d'identifier un Tiers");
+                 throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'mdp_invalid')));
             if(substr($tiers->mot_de_passe, 0, 6)=='{SSHA}'){
                     throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'compte_cree')));
             }elseif ($tiers->mot_de_passe == '{TEXT}'.$mdp)
