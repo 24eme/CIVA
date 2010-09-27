@@ -47,10 +47,7 @@ class ldap {
       $info['uidNumber']     = '1000';
       $info['gidNumber']     = '1000';
       $info['homeDirectory'] = '/home/'.$tiers->cvi;
-      
-      $exploitation = $tiers->intitule.' '.$tiers->nom;
-      
-      $info['gecos']         = $tiers->cvi.', '.$tiers->no_accises.', '.$exploitation.', '.$tiers->exploitant->nom;
+      $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$tiers->intitule.' '.$tiers->nom.','.$tiers->exploitant->nom;
       $info['mail']          = $tiers->email;
       $info['postalAddress'] = $tiers->getAdresse();
       $info['postalCode']    = $tiers->getCodePostal();
@@ -63,8 +60,8 @@ class ldap {
             $ldapConnect = $this->ldapConnect();
             if($ldapConnect) {
                 // prepare les données
-                $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-		$info = $this->getLadpInfo($tiers);
+                $identifier            = 'uid='.$tiers->cvi.',ou=Declarant,ou=People,'.$this->ldapdc;
+		$info = $this->getLdapInfo($tiers);
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);
@@ -81,7 +78,7 @@ class ldap {
             if($ldapConnect) {
 
                 // prepare les données
-                $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
+                $identifier            = 'uid='.$tiers->cvi.',ou=Declarant,ou=People,'.$this->ldapdc;
 		$info = $this->getLdapInfo($tiers);
                 // Ajoute les données au dossier
                 $r=ldap_modify($ldapConnect, $identifier, $info);
@@ -97,7 +94,7 @@ class ldap {
         $ldapConnect = $this->ldapConnect();
         
         if($ldapConnect && $tiers) {
-            $identifier  = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
+            $identifier  = 'uid='.$tiers->cvi.',ou=Declarant,ou=People,'.$this->ldapdc;
             $delete      = ldap_delete($ldapConnect, $identifier);
             ldap_unbind($ldapConnect);
             return $delete;
@@ -110,7 +107,7 @@ class ldap {
         $ldapConnect = $this->ldapConnect();
         if($ldapConnect && $tiers) {
             $filter = 'uid='.$tiers->cvi;
-            $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            $search = ldap_search($ldapConnect, 'ou=Declarant,ou=People,'.$this->ldapdc, $filter);
             if($search){
                 $count = ldap_count_entries($ldapConnect, $search);
                 if($count>0)

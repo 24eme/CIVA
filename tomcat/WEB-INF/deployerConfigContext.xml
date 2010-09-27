@@ -54,7 +54,10 @@
 					| Credentials you are using.
 					+-->
 				<bean
-					class="org.jasig.cas.authentication.principal.UsernamePasswordCredentialsToPrincipalResolver" />
+					class="org.jasig.cas.authentication.principal.UsernamePasswordCredentialsToPrincipalResolver">
+                                <property name="attributeRepository"><ref bean="attributeRepository" /></property>
+				</bean>
+
 				<!--
 					| HttpBasedServiceCredentialsToPrincipalResolver supports HttpBasedCredentials.  It supports the CAS 2.0 approach of
 					| authenticating services by SSL callback, extracting the callback URL from the Credentials and representing it as a
@@ -63,8 +66,7 @@
 					| If you are representing services by something more or other than an HTTPS URL whereat they are able to
 					| receive a proxy callback, you will need to change this bean declaration (or add additional declarations).
 					+-->
-				<bean
-					class="org.jasig.cas.authentication.principal.HttpBasedServiceCredentialsToPrincipalResolver" />
+				<bean class="org.jasig.cas.authentication.principal.HttpBasedServiceCredentialsToPrincipalResolver" />
 			</list>
 		</property>
 
@@ -80,17 +82,26 @@
 					| This is the authentication handler that authenticates services by means of callback via SSL, thereby validating
 					| a server side SSL certificate.
 					+-->
-				<bean class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
-					p:httpClient-ref="httpClient" />
-				<bean
-					class="org.jasig.cas.adaptors.ldap.FastBindLdapAuthenticationHandler" >
-                		                <property name="filter" value="uid=%u,ou=people,dc=vinsalsace,dc=pro" />
-                                		<property name="contextSource" ref="contextSource" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-
+		<bean
+class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler">
+        <property name="httpClient" ref="httpClient" />
+                </bean>
+		<!--
+			| This is the authentication handler declaration that every CAS deployer will need to change before deploying CAS
+			| into production.
+			| With this configuration you'll be using LDAP FastBind authentication.
+			+-->
+		<bean
+			class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler" >
+                                <property name="filter" value="uid=%u" />
+                                <property name="searchBase" value="ou=People,dc=vinsalsace,dc=pro" />
+                                <property name="contextSource" ref="contextSource" />
+<!--
+-->
+		</bean>
+	</list>
+     </property>
+</bean>
 
 	<!--
 	This bean defines the security roles for the Services Management application.  Simple deployments can use the in-memory version.
@@ -113,17 +124,30 @@ The name of this should remain "userDetailsService" in order for Spring Security
 	Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
 	may go against a database or LDAP server.  The id should remain "attributeRepository" though.
 	 -->
-	<bean id="attributeRepository"
-		class="org.jasig.services.persondir.support.StubPersonAttributeDao">
-		<property name="backingMap">
-			<map>
-				<entry key="uid" value="uid" />
-				<entry key="eduPersonAffiliation" value="eduPersonAffiliation" /> 
-				<entry key="groupMembership" value="groupMembership" />
-			</map>
-		</property>
-	</bean>
-	
+	<bean id="attributeRepository" class="org.jasig.services.persondir.support.ldap.LdapPersonAttributeDao">
+	  <property name="contextSource" ref="contextSource" />
+	  <property name="baseDN" value="ou=People,dc=vinsalsace,dc=pro" />
+	  <property name="requireAllQueryAttributes" value="true" />
+	  <!--
+	      Attribute mapping beetween principal (key) and LDAP (value) names
+	      used to perform the LDAP search.  By default, multiple search criteria
+	      are ANDed together.  Set the queryType property to change to OR.
+	    -->
+	  <property name="queryAttributeMapping">
+	    <map>
+	      <entry key="username" value="uid" /> 
+	    </map>
+	  </property>
+
+	  <property name="resultAttributeMapping">
+	    <map>
+	      <!-- Mapping beetween LDAP entry attributes (key) and Principal's (value) -->
+	      <entry key="cn" value="cn"/>
+	      <entry value="gecosa" key="gecos" />
+	      <entry value="mail" key="mail" />
+	    </map>
+	  </property>
+	</bean>	
 	<!-- 
 	Sample, in-memory data store for the ServiceRegistry. A real implementation
 	would probably want to replace this with the JPA-backed ServiceRegistry DAO
@@ -139,6 +163,7 @@ The name of this should remain "userDetailsService" in order for Spring Security
                         <property name="name" value="HTTP" />
                         <property name="description" value="Only Allows HTTP Urls" />
                         <property name="serviceId" value="http://**" />
+			<property name="allowedAttributes" value="cn,gecos,mail" />
                     </bean>
 
                     <bean class="org.jasig.cas.services.RegisteredServiceImpl">
@@ -146,6 +171,7 @@ The name of this should remain "userDetailsService" in order for Spring Security
                         <property name="name" value="HTTPS" />
                         <property name="description" value="Only Allows HTTPS Urls" />
                         <property name="serviceId" value="https://**" />
+			<property name="allowedAttributes" value="cn,gecos,mail" />
                     </bean>
 
                     <bean class="org.jasig.cas.services.RegisteredServiceImpl">
