@@ -1,0 +1,5 @@
+xml:
+  credentials: [admin]
+
+pdf:
+  credentials: [declarant]

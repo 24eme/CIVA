@@ -1,5 +1,17 @@
+monEspaceCiva:
+  credentials: []
+
+visualisation:
+  credentials: [declarant]
+
 exploitationAutres:
-  credentials: [declaration_brouillon, etape_recolte]
+  credentials: [declarant, declaration_brouillon, etape_recolte]
 
 validation:
-  credentials: [declaration_brouillon, etape_validation]
+  credentials: [declarant, declaration_brouillon, etape_validation]
+
+setFlashLog:
+  credentials: [declarant, declaration_brouillon, etape_validation]
+
+confirmation:
+  credentials: [declarant, declaration_valide]

@@ -59,7 +59,6 @@
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
                     </div>
                 </div>
-                
             <?php endif; ?>
             <br />
             <?php if($has_no_assices){ ?>

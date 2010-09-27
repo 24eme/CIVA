@@ -8,6 +8,7 @@ class myUser extends sfBasicSecurityUser {
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
     const CREDENTIAL_ADMIN = 'admin';
+    const CREDENTIAL_DECLARANT = 'declarant';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
     const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
@@ -36,6 +37,7 @@ class myUser extends sfBasicSecurityUser {
             throw new sfCouchdbException('Tiers needed');
         $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
+        $this->addCredential(self::CREDENTIAL_DECLARANT);
     }
 
     public function signInWithCas($casUser) {
@@ -122,7 +124,9 @@ class myUser extends sfBasicSecurityUser {
         $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
         if ($declaration = $this->getDeclaration()) {
             if ($declaration->isValidated()) {
-                $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+                if (!$this->isAdmin()) {
+                    $this->removeCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
+                }
                 $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
             } else {
                 if ($declaration->exist('etape') && in_array($declaration->etape, $this->_etapes)) {
@@ -141,7 +145,11 @@ class myUser extends sfBasicSecurityUser {
     }
 
     public function isAdmin() {
-        return ($this->isAuthenticated() && $this->hasCredential(myUser::CREDENTIAL_ADMIN));
+        return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_ADMIN));
+    }
+
+    public function isDeclarant() {
+        return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_DECLARANT));
     }
 
 }

@@ -1,5 +1,5 @@
 loginAdmin:
-  is_secure: false
+  credentials: [admin]
 
 exploitationAdministratif:
-  credentials: [declaration_brouillon, etape_exploitation]
+  credentials: [declarant, declaration_brouillon, etape_exploitation]

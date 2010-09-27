@@ -15,6 +15,11 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
+        if (!$this->getUser()->isDeclarant() && !$this->getUser()->isAdmin()) {
+            return $this->redirect('@logout');
+        } elseif(!$this->getUser()->isDeclarant() && $this->getUser()->isAdmin()) {
+            return $this->redirect('@login_admin');
+        }
         $this->setCurrentEtape('mon_espace_civa');
         $this->getUser()->initDeclarationCredentials();
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));

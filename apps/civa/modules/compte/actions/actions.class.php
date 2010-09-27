@@ -148,16 +148,4 @@ Le CIVA';
 
     }
 
-    public function executeResetMDP(sfWebRequest $request) {
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi('6823700100');
-        $tiers->mot_de_passe = '{TEXT}0000';
-        $tiers->save();
-        $ldap = new ldap();
-        $ldapDelete = $ldap->ldapDelete($tiers);
-        echo "tiers remis a 0 - effacer du LDAP";
-        exit();
-    }
-
-
-
 }

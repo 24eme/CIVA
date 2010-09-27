@@ -224,16 +224,6 @@ Configuration:
         definition:
           fields:
             '*': {  }
-      compte_admin:
-        type: array_collection
-        definition:
-          fields:
-            '*':
-              type: collection
-              definition:
-                fields:
-                  login: {type: string}
-                  mot_de_passe: {type: string}
       recolte:
         type: collection
         definition:
