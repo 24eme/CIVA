@@ -22,7 +22,5 @@ class ValidatorFirstConnection extends sfValidatorBase {
                 return array_merge($values, array('tiers' => $tiers));
             throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'mdp_invalid')));
         }
-        throw new Exception('Should not pass here');
-
     }
 }
