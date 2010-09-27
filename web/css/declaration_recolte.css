@@ -477,6 +477,8 @@ a.msg_aide:hover{
 #nouvelle_declaration .ligne_form label { font-size: 14px; }
 #nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
 
+.ligne_btn_retour{text-align: right;}
+
 #nouvelle_declaration .ligne_btn select
 {
     border: 1px solid #dadad6;
