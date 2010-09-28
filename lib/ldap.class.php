@@ -79,7 +79,6 @@ class ldap {
             if($search){
                 $dn = ldap_get_entries($ldapConnect, $search);
                 $dn = explode(',', $dn[0]['dn']);
-                print_r($dn);
                 foreach($dn as $d){
                     $test = explode('=', $d);
                     if($test[0]=='ou' && $test[1]=='Declarant')
