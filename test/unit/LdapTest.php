@@ -45,6 +45,9 @@ if($verify){
 $add = $ldap->ldapAdd($tiers);
 $t->ok($add, 'ajout d\'un recoltant');
 
+$groupe = $ldap->getGroupe($tiers);
+print_r($groupe);
+
 //modification
 $newData = new Tiers();
 $newData->nom = 'TEST Modify';

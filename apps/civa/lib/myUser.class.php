@@ -37,6 +37,8 @@ class myUser extends sfBasicSecurityUser {
             throw new sfCouchdbException('Tiers needed');
         $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
+        //$ldap = new ldap();
+        //$groupe = $ldap->getGroupe($tiers);
         $this->addCredential(self::CREDENTIAL_DECLARANT);
     }
 

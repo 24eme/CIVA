@@ -70,6 +70,27 @@ class ldap {
         }
         return false;
     }
+
+    public function getGroupe($tiers) {
+        $ldapConnect = $this->ldapConnect();
+        if($ldapConnect && $tiers) {
+            $filter = 'uid='.$tiers->cvi;
+            $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            if($search){
+                $dn = ldap_get_entries($ldapConnect, $search);
+                $dn = explode(',', $dn[0]['dn']);
+                print_r($dn);
+                foreach($dn as $d){
+                    $test = explode('=', $d);
+                    if($test[0]=='ou' && $test[1]=='Declarant')
+                        return 'Declarant';
+                    elseif($test[0]=='ou' && $test[1]=='Administrateur')
+                        return 'Administrateur';
+                }
+            }
+            return false;
+        }  
+    }
     
     public function ldapModify($tiers, $values = null) {
 
