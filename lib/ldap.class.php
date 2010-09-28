@@ -81,10 +81,9 @@ class ldap {
                 $dn = explode(',', $dn[0]['dn']);
                 foreach($dn as $d){
                     $test = explode('=', $d);
-                    if($test[0]=='ou' && $test[1]=='Declarant')
-                        return 'Declarant';
-                    elseif($test[0]=='ou' && $test[1]=='Administrateur')
-                        return 'Administrateur';
+                    if($test[0]=='ou' && $test[1]!='People')
+                        return $test[1];
+                    
                 }
             }
             return false;
