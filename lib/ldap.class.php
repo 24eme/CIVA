@@ -1,6 +1,9 @@
 <?php
 class ldap {
 
+  private static $groupe2gid = array('declarant' => 1000, 'admin' => 1001);
+  private static $gid2groupe = array('1000' => 'declarant', '1001' => 'admin');
+
     protected $ldapserveur;
     protected $ldapdn;
     protected $ldapdc;
@@ -45,7 +48,7 @@ class ldap {
       $info['userPassword']  = $tiers->mot_de_passe;
       $info['loginShell']    = '/bin/bash';
       $info['uidNumber']     = '1000';
-      $info['gidNumber']     = '1000';
+      $info['gidNumber']     = $this->groupe2gid['declarant'];
       $info['homeDirectory'] = '/home/'.$tiers->cvi;
       $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$tiers->intitule.' '.$tiers->nom.','.$tiers->exploitant->nom;
       $info['mail']          = $tiers->email;
@@ -77,14 +80,8 @@ class ldap {
             $filter = 'uid='.$tiers->cvi;
             $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
             if($search){
-                $dn = ldap_get_entries($ldapConnect, $search);
-                $dn = explode(',', $dn[0]['dn']);
-                foreach($dn as $d){
-                    $test = explode('=', $d);
-                    if($test[0]=='ou' && $test[1]!='People')
-                        return $test[1];
-                    
-                }
+	      $dn = ldap_get_entries($ldapConnect, $search);
+	      return (isset($this->gid2groupe[$dn[0]['gidNumber']]) ? $this->gid2groupe[$dn[0]['gidNumber']] : false;
             }
             return false;
         }  
