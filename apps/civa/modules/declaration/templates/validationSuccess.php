@@ -13,7 +13,7 @@
         <div id="validation_dr">
         <p class="intro_declaration"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_validation'); ?></p>
 
-        <?php if($error && !empty($validLogErreur)){ ?>
+        <?php if($error && !empty($validLogErreur)){  print_r($validLogErreur);?>
             <fieldset class="message message_erreur">
                 <legend class="message_title">Points bloquants <a href="" class="msg_aide" rel="help_popup_validation_log_erreur" title="Message aide">Teste message d'aide</a> </legend>
                 <?php foreach($validLogErreur as $logs) { ?>

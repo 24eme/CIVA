@@ -138,10 +138,10 @@ Le CIVA';
 
         $this->validLogErreur = array();
         $this->validLogVigilance = array();
-        $i = 0 ;
         $this->error = false;
         $this->logVigilance = false;
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
+            $i=0;
             $onglet = new RecolteOnglets($dr);
             foreach ($appellation->filter('lieu') as $lieu) {
                 //check le total superficie
