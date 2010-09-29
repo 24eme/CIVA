@@ -6,10 +6,10 @@ all:
   base_url : http://declaration.vinsalsace.pro/
   tomcat_dir : /var/www/tomcat6/webapps/cas
   cas:
-    domain: declaration.dev.vinsalsace.pro
+    domain: login.dev.vinsalsace.pro
     port: 443
     path: cas
-    url : "https://declaration.dev.vinsalsace.pro:443/cas"
+    url : "https://login.dev.vinsalsace.pro:443/cas"
   ldap:
     serveur: "127.0.0.1"
     dn: "cn=admin,dc=vinsalsace,dc=pro"
