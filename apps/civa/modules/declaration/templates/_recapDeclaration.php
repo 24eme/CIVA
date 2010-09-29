@@ -5,7 +5,7 @@
         <table cellpadding="0" cellspacing="0" class="table_donnees">
             <thead>
                 <tr>
-                    <th><img src="/images/textes/appelations.png" alt="Appelations" /></th>
+                    <th><img src="/images/textes/appelations.png" alt="Appellations" /></th>
    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) :?>
                     <th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
                     <?php endif; ?>
@@ -54,7 +54,7 @@
 		<table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
 			<thead>
 				<tr>
-					<th><img src="/images/textes/autres_infos.png" alt="Appelations" /></th>
+					<th><img src="/images/textes/autres_infos.png" alt="Appellations" /></th>
 				</tr>
 			</thead>
 			<tbody>

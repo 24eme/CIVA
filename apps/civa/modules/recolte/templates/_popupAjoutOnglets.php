@@ -1,4 +1,4 @@
-<div id="popup_ajout_appelation" class="popup_ajout" title="Ajouter une appelation">
+<div id="popup_ajout_appelation" class="popup_ajout" title="Ajouter une appellation">
     <?php include_partial('recolte/ajoutAppellationForm', array('onglets' => $onglets,
         'form' => $form_appellation)) ?>
     

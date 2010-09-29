@@ -23,7 +23,7 @@
 							<p class="intro"></p>
 							
 							<div id="total_appelation">
-								<h2 class="titre_section">Total Appelation</h2>
+								<h2 class="titre_section">Total Appellation</h2>
 								<div class="contenu_section">
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
@@ -73,7 +73,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 													<th class="commune"><span>Commune</span></th>				
 													<th><span>Superficie</span></th>
 													<th><span>Volume total</span></th>
-													<th><span>Dont DPLC</span></th>
+													<th><span>DPLC</span></th>
 												</tr>
 											</thead>
 											<tbody>

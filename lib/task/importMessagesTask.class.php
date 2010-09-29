@@ -60,8 +60,8 @@ EOF;
         $json->err_dr_popup_max_quantite = "(err_dr_popup_max_quantite) Vous n'avez pas respecté le volume maximum";
         $json->err_dr_popup_dest_rebeches = "(err_dr_popup_dest_rebeches) Vous n'avez pas respecté la répartition des rebeches.";
 
-        $json->err_dr_popup_unique_mention_denomination = "(err_dr_popup_unique_mention_denomination) La dénomination complémentaire et/ou la mention VT/SGN de chaque colonne doit être unique";
-        $json->err_dr_popup_unique_denomination = "(err_dr_popup_unique_denomination) La dénomination complémentaire de chaque colonne doit être unique";
+        $json->err_dr_popup_unique_mention_denomination = "(err_dr_popup_unique_mention_denomination) Il faut distinguer la colonne par une mention complémentaire ou par une mention VT/SGN.";
+        $json->err_dr_popup_unique_denomination = "(err_dr_popup_unique_denomination) l faut distinguer la colonne par une mention complémentaire ou par une mention VT/SGN.";
 
         $json->err_dr_recap_vente_popup_superficie_trop_eleve = "(err_dr_recap_vente_popup_superficie_trop_eleve) La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
         $json->err_dr_recap_vente_popup_dplc_trop_eleve = "(err_dr_recap_vente_popup_dplc_trop_eleve) La somme des DPLC des acheteurs ne peut pas être superieure au total de l'appellation";
@@ -125,11 +125,11 @@ EOF;
         $json->intro_mon_espace_civa_dr_non_editable = "(intro_mon_espace_civa_dr_non_editable) Votre DR n'est plus éditable.";
         $json->intro_gamma = "(intro_gamma) Lien vers votre espace Gamma";
         $json->intro_exploitation_administratif = "(intro_exploitation_administratif) Données administratives, n'hésitez pas à les modifier en cas de changement.";
-        $json->intro_exploitation_acheteurs = "(intro_exploitation_acheteurs) Veuillez saisir les destinations de la récoltes.";
-        $json->intro_exploitation_lieu = "(intro_exploitation_lieu) Indiquez les lieux-dits pour lesquels vous récoltez de l'AOC.";
+        $json->intro_exploitation_acheteurs = "(intro_exploitation_acheteurs) Veuillez cocher les cases correspondantes à la répartition de votre récolte.";
+        $json->intro_exploitation_lieu = "(intro_exploitation_lieu) Indiquez les lieux-dits pour lesquels vous récoltez de l’AOC ALSACE GRAND CRU.";
         $json->intro_exploitation_lieu_txt_gris = "(intro_exploitation_lieu_txt_gris) Lieux-dits : ";
-        $json->intro_declaration_recolte = "(intro_declaration_recolte) Pour chaque cépage de chaque appellation, veuillez saisir les informations demandées.";
-        $json->intro_exploitation_autres = "(intro_exploitation_autres) ";
+        $json->intro_declaration_recolte = "(intro_declaration_recolte)";
+        $json->intro_exploitation_autres = "(intro_exploitation_autres)";
         $json->intro_validation = "(intro_validation) Veuillez vérifier les informations saisies avant de valider votre déclaration.";
         
 
