@@ -26,6 +26,8 @@
            <c:otherwise>
                 <link type="text/css" rel="stylesheet" href="<spring:theme code="standard.custom.css.file" />" />
                 <script type="text/javascript" src="js/common_rosters.js"></script>
+				<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+				<script type="text/javascript" src="js/sudoSlider.min.js"></script>
            </c:otherwise>
         </c:choose>
 	    <link rel="icon" href="<c:url value="/favicon.ico" />" type="image/x-icon" />
