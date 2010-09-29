@@ -11,5 +11,5 @@
         <input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
         <span class="valider-loading"></span>
     </form>
-    <div class="close_btn"><a class="close_popup" href=""><img alt="Fermer la fenetre" src="/images/boutons/btn_fermer.png"></a></div>
+    
 </div>

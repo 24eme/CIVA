@@ -147,12 +147,12 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
                                     sum_dont_dplc += $(this).val();
                                 });
                                 if (sum_superficie > total_superficie) {
-                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p>');
                                     openPopup($('#popup_msg_erreur'), 0);
                                     return false;
                                 }
                                 if (sum_dont_dplc > total_dontdplc) {
-                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_dplc_trop_eleve')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+                                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_dplc_trop_eleve')); ?></p>');
                                     openPopup($('#popup_msg_erreur'), 0);
                                     return false;
                                 }

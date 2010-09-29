@@ -70,7 +70,7 @@ function valider_can_submit()
 {
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
   if (!document.getElementById('recolte_superficie').value || !(document.getElementById('recolte_superficie').value > 0)) {
-    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_no_superficie')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_no_superficie')); ?></p>');
     openPopup($('#popup_msg_erreur'), 0);
     return false;
   }
@@ -98,19 +98,19 @@ function valider_can_submit()
   if (parseFloat($('#recolte_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0)
     rebeche_ratio_respected = false;
   if (!rebeche_ratio_respected) {
-    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
     openPopup($('#popup_msg_erreur'), 0);
     return false;
   }
 
     if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
-        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_min_quantite')); ?></p>');
         openPopup($('#popup_msg_erreur'), 0);
         return false;
     }
 
     if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
-        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p>');
         openPopup($('#popup_msg_erreur'), 0);
         return false;
     }
@@ -131,7 +131,7 @@ function valider_can_submit()
     }
         
     if (couples_denomination_mention_is_bad) {
-        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_mention_denomination')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_mention_denomination')); ?></p>');
         openPopup($('#popup_msg_erreur'), 0);
         return false;
     }
@@ -149,7 +149,7 @@ function valider_can_submit()
         }
 
         if (denomination_is_bad) {
-            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_denomination')); ?></p><div class="close_btn"><a href="" class="close_popup"><img src="/images/boutons/btn_fermer.png" alt="Fermer la fenetre" /></a></div>');
+            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_unique_denomination')); ?></p>');
             openPopup($('#popup_msg_erreur'), 0);
             return false;
         }

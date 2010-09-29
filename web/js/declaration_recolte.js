@@ -148,8 +148,14 @@ $(document).ready( function()
             draggable: false,
             resizable: false,
             width: 500,
-            modal: true
+            modal: true,
+            buttons:{
+                Fermer: function() {
+                        $(this).dialog( "close" );
+                }
+            }
         });
+
         popup.dialog('open');
 
         return false;
@@ -1287,7 +1293,12 @@ var openPopup = function(popup, fn_open_if) {
         draggable: false,
         resizable: false,
         width: 375,
-        modal: true
+        modal: true,
+        buttons:{
+                Fermer: function() {
+                        $(this).dialog( "close" );
+                }
+            }
     });
 
 

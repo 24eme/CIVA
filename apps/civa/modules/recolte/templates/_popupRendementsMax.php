@@ -50,5 +50,5 @@
         <tr><td class="vide">&nbsp;</td></tr>
         <?php endforeach; ?>
     </table>
-    <div class="close_btn"><a class="close_popup" href=""><img alt="Fermer la fenetre" src="/images/boutons/btn_fermer.png"></a></div>
+    
 </div>
