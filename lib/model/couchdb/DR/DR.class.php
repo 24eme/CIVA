@@ -44,8 +44,8 @@ class DR extends BaseDR {
             return $v;
     }
 
-    public function update() {
-      parent::update();
+    public function update($params = array()) {
+      parent::update($params);
       $u = $this->add('updated', 1);
     }
 

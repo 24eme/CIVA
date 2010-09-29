@@ -17,12 +17,18 @@ class sfCouchdbClient extends couchClient {
       $this->getList($id, $name, $view_name);
     }
     public function retrieveDocumentById($id) {
+        
         try {
              $data = $this->getDoc($id);
-             return $this->createDocumentFromData($data);
+             $debut = microtime();
+             $obj = $this->createDocumentFromData($data);
+             $interval = round(microtime() - $debut, 3);
+             sfContext::getInstance()->getLogger()->debug($id . ' : ' . $interval . '');
+             return $obj;
         } catch (couchException $exc) {
              return null;
         }
+        
     }
     public function createDocumentFromData($data) {
       if (!isset($data->type)) {

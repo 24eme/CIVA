@@ -21,8 +21,8 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
         return $values;
     }
 
-    protected function update() {
-        parent::update();
+    protected function update($params = array()) {
+        parent::update($params);
 	if (!$this->getCouchdbDocument()->canUpdate())
 	  return ;
         $v = $this->cave_particuliere;
@@ -50,6 +50,24 @@ class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDet
            $this->remove('motif_non_recolte');
         } else {
            $this->add('motif_non_recolte');
+        }
+        if (in_array('from_acheteurs',$params)) {
+            $this->checkAcheteurExist('negoces');
+            $this->checkAcheteurExist('cooperatives');
+            $this->checkAcheteurExist('mouts');
+        }
+    }
+
+    protected function checkAcheteurExist($type) {
+        $appellation_key = $this->getCepage()->getLieu()->getAppellationObj()->getKey();
+        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->exist($appellation_key)) {
+            $acheteurs = $this->getCouchdbDocument()->acheteurs->get($appellation_key)->get($type);
+            $acheteurs_detail = $this->get($type);
+            foreach($acheteurs_detail as $key => $item) {
+                if (!in_array($item->cvi, $acheteurs->toArray())) {
+                    $acheteurs_detail->remove($key);
+                }
+            }
         }
     }
 

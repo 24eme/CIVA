@@ -32,8 +32,8 @@ class DRRecolteAppellationLieuAcheteur extends BaseDRRecolteAppellationLieuAchet
     return $this->acheteur;
   }
 
-  public function update() {
-    parent::update();
+  public function update($params = array()) {
+    parent::update($params);
     $this->getNom();
     $this->getCommune();
   }

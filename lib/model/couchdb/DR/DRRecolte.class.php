@@ -20,22 +20,26 @@ class DRRecolte extends BaseDRRecolte {
     public function getAppellation($appellation) {
         return $this->get('appellation_'.$appellation);
     }
-    public function updateFromAcheteurs() {
+
+    protected function update($params = array()) {
+      parent::update($params);
+      
+      if (in_array('from_acheteurs',$params)) {
         $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-        $declaration = $this;
         $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
         foreach($acheteurs as $key => $appellation) {
 	  $cappellation = $configuration->get('recolte')->get($key);
-	  $app = $declaration->addAppellation($cappellation->appellation);
+	  $app = $this->addAppellation($cappellation->appellation);
 	  if (!$app->hasManyLieu()) {
 	    $app->add('lieu');
 	  }
         }
-        foreach($declaration as $key => $appellation) {
+        foreach($this->filter('appellation_') as $key => $appellation) {
             if (!$acheteurs->exist($key)) {
-                $declaration->remove($key);
+                $this->remove($key);
             }
         }
+      }
     }
 
     public function hasOneOrMoreAppellation() {

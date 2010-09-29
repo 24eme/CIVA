@@ -13,22 +13,24 @@ class ValidatorRecapitulatif extends sfValidatorSchema
 
   protected function doClean($values)
   {
-    $this->_count_total = 0;
-
     $errorSchema = new sfValidatorErrorSchema($this);
 
     $lieu = $this->getObject();
     $sum_superficie = 0;
     $sum_dontdplc = 0;
-    
+    sfContext::getInstance()->getLogger()->alert(json_encode($values));
     foreach($values as $cvi => $value) {
-        if (isset($value['superficie'])) {
+        if (array_key_exists('superficie', $value)) {
+
             $sum_superficie += $value['superficie'];
         }
-        if (isset($value['dontdplc'])) {
+        if (array_key_exists('dontdplc', $value)) {
             $sum_dontdplc += $value['dontdplc'];
         }
     }
+
+    sfContext::getInstance()->getLogger()->alert($sum_superficie);
+    sfContext::getInstance()->getLogger()->alert($sum_dontdplc);
 
     if ($sum_superficie > $lieu->getTotalSuperficie()) {
          $errorSchema->addError(new sfValidatorError($this, 'invalid_superficie'));

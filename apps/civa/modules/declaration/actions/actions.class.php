@@ -62,6 +62,8 @@ class declarationActions extends EtapesActions {
                 $doc->_id = 'DR-'.$tiers->cvi.'-'.$this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->removeVolumes();
+                $doc->remove('validee');
+                $doc->remove('modifiee');
                 $doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));

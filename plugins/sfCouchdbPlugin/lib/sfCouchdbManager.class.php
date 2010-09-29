@@ -61,6 +61,10 @@ class sfCouchdbManager {
         return self::getInstance()->_schema;
     }
 
+    public static function setSchema($schema) {
+        self::getInstance()->_schema = $schema;
+    }
+
     public static function getDefinition($model) {
         if (!isset(self::getInstance()->_definition[$model])) {
             $schema = self::getInstance()->getSchema();

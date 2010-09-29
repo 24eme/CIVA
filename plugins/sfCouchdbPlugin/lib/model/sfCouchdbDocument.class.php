@@ -47,8 +47,8 @@ class sfCouchdbDocument extends sfCouchdbJson {
       return sfCouchdbManager::getClient()->deleteDocument($this);
     }
     
-    public function update() {
-      return parent::update();
+    public function update($params = array()) {
+      return parent::update($params);
     }
 
     public function  __clone() {

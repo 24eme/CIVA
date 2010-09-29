@@ -8,6 +8,10 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
+    public function getAppellationObj() {
+        return $this->getParent();
+    }
+
     public function getCodeDouane($vtsgn = '') {
       if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
 	if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
@@ -105,15 +109,12 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
 	if ($cepage->excludeTotal()) {
 	  continue;
 	}
-	foreach ($cepage->detail as $key => $d) {
-          $liste_type = explode('|', $type);
-          foreach($liste_type as $item_type) {
-              foreach ($d->filter($item_type) as $key => $t) {
+	foreach ($cepage->detail as $d) {
+            foreach ($d->filter($type) as $t) {
                 foreach ($t as $key => $a) {
-                  array_push($acheteurs, $a);
+                  $acheteurs[$a->cvi] = $a;
                 }
-              }
-          }
+            }
 	}
       }
       return $acheteurs;
@@ -137,13 +138,18 @@ class DRRecolteAppellationLieu extends BaseDRRecolteAppellationLieu {
         return $this->_total_acheteurs_by_cvi[$field];
     }
 
-    public function update() {
-        parent::update();
-        $this->remove('acheteurs');
+    public function update($params = array()) {
+        parent::update($params);
 	$this->add('acheteurs');
-        foreach ($this->getAcheteursFromCepage() as $a) {
-            $acheteur = $this->add('acheteurs')->add($a->cvi);
+        $acheteurs_from_cepage = $this->getAcheteursFromCepage();
+        foreach ($acheteurs_from_cepage as $a) {
+            $acheteur = $this->acheteurs->add($a->cvi);
             $acheteur->type_acheteur = $a->getParent()->getKey();
+        }
+        foreach($this->acheteurs as $cvi => $item) {
+            if (!array_key_exists($cvi, $acheteurs_from_cepage)) {
+                $this->acheteurs->remove($cvi);
+            }
         }
     }
     public function save() {

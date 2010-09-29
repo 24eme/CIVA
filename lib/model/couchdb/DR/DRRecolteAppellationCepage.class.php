@@ -7,6 +7,10 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
+    
+    public function getLieu() {
+        return $this->getParent();
+    }
 
     public function getLibelle() {
       return $this->getConfig()->getLibelle();
@@ -19,8 +23,8 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
     public function addDetail($detail) {
       return $this->add(null, $detail);
     }
-    protected function update() {
-      parent::update();
+    protected function update($params = array()) {
+      parent::update($params);
       $s = 0;
       $v = 0;
       foreach ($this->get('detail') as $key => $item) {
@@ -41,14 +45,11 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
 	  $this->volume_revendique = $this->total_volume;
 	}
       }
-
     }
 
     public function getVolumeMax() {
       return ($this->total_superficie/100) * $this->getRendement();
     }
-
-
 
     private function getSumDetailFields($field) {
       $sum = 0;
