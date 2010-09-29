@@ -68,7 +68,7 @@ autoTotal = true;
 <?php endif; ?>
 function valider_can_submit() 
 {
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
+<?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie() && $onglets->getCurrentCepage()->getConfig()->isSuperficieRequired()) : ?>
   if (!document.getElementById('recolte_superficie').value || !(document.getElementById('recolte_superficie').value > 0)) {
     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_no_superficie')); ?></p>');
     openPopup($('#popup_msg_erreur'), 0);
