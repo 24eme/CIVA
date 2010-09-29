@@ -71,6 +71,13 @@ EOF;
 	
 	$lieu = new stdClass();
 
+
+        $lieu->cepage_ED->libelle = "Edelzwicker";
+	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
+        $lieu->cepage_ED->superficie_optionnelle = 1;
+        $lieu->cepage_ED->rendement = -1;
+        $lieu->cepage_ED->no_vtsgn = 1;
+        
         $lieu->cepage_CH->libelle = "Chasselas";
 	$lieu->cepage_CH->rendement = 100;
 	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
@@ -85,12 +92,6 @@ EOF;
 	$lieu->cepage_PB->rendement = 100;
 	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
         $lieu->cepage_PB->no_vtsgn = 1;
-
-        $lieu->cepage_ED->libelle = "Edelzwicker";
-	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
-        $lieu->cepage_ED->superficie_optionnelle = 1;
-        $lieu->cepage_ED->rendement = -1;
-        $lieu->cepage_ED->no_vtsgn = 1;
 
 	$lieu->cepage_RI->libelle = "Riesling";
 	$lieu->cepage_RI->rendement = 90;
@@ -175,26 +176,31 @@ EOF;
 	$json->recolte->appellation_CREMANT->douane->qualite = 'M';
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
-	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
+        $json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
+
+        $json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
+        $json->recolte->appellation_CREMANT->lieu->cepage_CD->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_CD->douane->code_cepage = $cepage_douane[2]['CD'];
+
+	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Pinot Noir Blanc";
+        $json->recolte->appellation_CREMANT->lieu->cepage_BN->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_BN->douane->code_cepage = $cepage_douane[2]['BN'];
+
 	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
+        $json->recolte->appellation_CREMANT->lieu->cepage_RI->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_RI->douane->code_cepage = $cepage_douane[2]['RI'];
+
+	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
+        $json->recolte->appellation_CREMANT->lieu->cepage_PG->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
+
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir Rosé";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
-	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Pinot Noir Blanc";
-	$json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
+        $json->recolte->appellation_CREMANT->lieu->cepage_PN->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_PG->no_vtsgn = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_RI->no_vtsgn = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->no_vtsgn = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_BN->no_vtsgn = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_CD->no_vtsgn = 1;
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
-	$json->recolte->appellation_CREMANT->lieu->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
-	$json->recolte->appellation_CREMANT->lieu->cepage_RI->douane->code_cepage = $cepage_douane[2]['RI'];
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
-	$json->recolte->appellation_CREMANT->lieu->cepage_BN->douane->code_cepage = $cepage_douane[2]['BN'];
-	$json->recolte->appellation_CREMANT->lieu->cepage_CD->douane->code_cepage = $cepage_douane[2]['CD'];
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->libelle = "Rebêches";
 	$json->recolte->appellation_CREMANT->lieu->cepage_RB->rendement = -1;
