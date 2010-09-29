@@ -50,10 +50,9 @@ class compteActions extends sfActions {
                 if ($this->form->isValid()) {
                     $verify = $ldap->ldapVerifieExistence($tiers);
                     if($verify) {
-		      $this->form->save();
-                        $ldap->ldapModify($tiers);
-                        $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifié.');
-                        $mess = 'Bonjour '.$tiers->nom.',
+		      $ldap->ldapModify($tiers);
+		      $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifié.');
+		      $mess = 'Bonjour '.$tiers->nom.',
 
 votre mot de passe sur le site du CIVA vient d\'etre modifié.
 
@@ -62,12 +61,16 @@ Cordialement,
 Le CIVA';
 
                         //send email
-                        $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
-                                $tiers->email,
-                                'CIVA - Changement de votre mot de passe',
-                                $mess
-                        );
-                        $this->getMailer()->send($message);
+			try {
+			  $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+								 $tiers->email,
+								 'CIVA - Changement de votre mot de passe',
+								 $mess
+								 );
+			  $this->getMailer()->send($message);
+			}catch(Exception $e) {
+			  $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
+			}
                     }else {
                         $ldap->ldapAdd($tiers);
                     }
@@ -134,13 +137,17 @@ Cordialement,
 Le CIVA';
 
                     //send email
-                    $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
-                            $tiers->email,
-                            'CIVA - Mot de passe oublié',
-                            $mess
-                    );
-                    $this->getMailer()->send($message);
-                    $this->getUser()->setFlash('email_send', 'Un email vient de vous etre envoyé. Veuillez cliquer sur le lien contenu dans cet email afin de redéfinir votre mot de passe');
+		    try {
+		      $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+							     $tiers->email,
+							     'CIVA - Mot de passe oublié',
+							     $mess
+							     );
+		      $this->getMailer()->send($message);
+		      $this->getUser()->setFlash('email_send', 'Un email vient de vous etre envoyé. Veuillez cliquer sur le lien contenu dans cet email afin de redéfinir votre mot de passe');
+		    }catch(Exception $e) {
+		      $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
+		    }
 
                 }
             }
