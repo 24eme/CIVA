@@ -79,7 +79,7 @@ function valider_can_submit()
     var total_non_negociant = parseFloat($('#appellation_total_volume').val());
     $("#col_recolte_totale .vente_raisins .acheteur").each(function() 
     {
-      total_non_negociant -= $(this).val();
+      total_non_negociant -= parseFloat($(this).val());
     });
     var min = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
     var max = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
