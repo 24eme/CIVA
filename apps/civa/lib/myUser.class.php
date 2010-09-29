@@ -123,7 +123,11 @@ class myUser extends sfBasicSecurityUser {
     
     public function initDeclarationCredentials() {
         $this->clearDeclarationCredentials();
-        $dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        if(ConfigurationClient::getConfiguration()->exist('dr_non_editable'))
+            $dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        else
+            $dr_non_editable = 0;
+
         if ($dr_non_editable != 1) {
             $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
             if ($declaration = $this->getDeclaration()) {

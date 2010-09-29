@@ -15,7 +15,10 @@ class declarationActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
-        $this->dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        if(ConfigurationClient::getConfiguration()->exist('dr_non_editable'))
+            $this->dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
+        else
+             $this->dr_non_editable = 0;
         
         $this->help_popup_action = "help_popup_mon_espace_civa";
         if (!$this->getUser()->isDeclarant() && !$this->getUser()->isAdmin()) {
