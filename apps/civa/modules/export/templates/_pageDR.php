@@ -54,7 +54,13 @@ echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 foreach ($acheteurs as $cvi => $a) {
-  echo printColonne('Vente à '.$a->nom, $colonnes_cepage, $cvi, 'hl');
+$type = 'Vente à ';
+if ($a->type_acheteur == 'cooperatives')
+$type = 'Apport à ';
+else if ($a->type_acheteur == 'mouts') {
+$type = 'Vente de mouts à ';
+}
+  echo printColonne($type.$a->nom, $colonnes_cepage, $cvi, 'hl');
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
