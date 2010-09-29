@@ -171,10 +171,20 @@ class exportActions extends sfActions
     }
     $this->forward404Unless($dr);
 
+    $validee = 'Non Validée';
+    if ($dr->exist('validee')) {
+      $validee = 'Déclaration validée le '.$dr->validee;
+      if ($dr->exist('modifiee') && $dr->modifiee != $dr->validee) {
+	$validee .= ' et modifiée le '.$dr->validee;
+      }
+    }
+
+    $header = $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
+
     if ($this->getRequestParameter('output', 'pdf') == 'html') {
-      $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $tiers->nom, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
+      $this->document = new PageableHTML('Déclaration de récolte '.$this->annee, $header, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }else {
-      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
+      $this->document = new PageablePDF('Déclaration de récolte '.$this->annee, $header, $this->annee.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf');
     }
 
     if($request->getParameter('force'))
