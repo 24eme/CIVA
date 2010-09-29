@@ -13,13 +13,13 @@
         <div id="validation_dr">
         <p class="intro_declaration"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_validation'); ?></p>
 
-        <?php if($error && !empty($validLogErreur)){  print_r($validLogErreur);?>
+        <?php if($error && !empty($validLogErreur)){ ?>
             <fieldset class="message message_erreur">
                 <legend class="message_title">Points bloquants <a href="" class="msg_aide" rel="help_popup_validation_log_erreur" title="Message aide">Teste message d'aide</a> </legend>
-                <?php foreach($validLogErreur as $logs) { ?>
+                <?php foreach($validLogErreur as $key=>$logs) { ?>
                 <ul class="messages_log">
-                    <?php foreach($logs as $log) { ?>
-                    <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
+                    <?php foreach($logs as $log_key=>$log) { ?>
+                    <li><a href="<?php echo url_for('recolte_erreur_log', array('flash_message'=>$key.'-'.$log_key)); ?>"><?php echo $log['log']; ?></a></li>
                    <?php } ?>
                 </ul>
                 <br />
@@ -29,10 +29,10 @@
         <?php if($logVigilance){ ?>
             <fieldset class="message">
                 <legend class="message_title">Points de vigilance <a href="" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide">Teste message d'aide</a></legend>
-                <?php foreach($validLogVigilance as $logs) { ?>
+                <?php foreach($validLogVigilance as $key=>$logs) { ?>
                 <ul class="messages_log">
-                    <?php foreach($logs as $log) { ?>
-                    <li><a href="<?php echo $log['url']; ?>"><?php echo $log['log']; ?></a></li>
+                    <?php foreach($logs as $log_key=>$log) { ?>
+                    <li><a href="<?php echo url_for('recolte_erreur_log', array('flash_message'=>$key.'-'.$log_key)); ?>"><?php echo $log['log']; ?></a></li>
                    <?php } ?>
                 </ul>
                 <br />
