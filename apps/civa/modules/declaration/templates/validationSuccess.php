@@ -16,27 +16,23 @@
         <?php if($error && !empty($validLogErreur)){ ?>
             <fieldset class="message message_erreur">
                 <legend class="message_title">Points bloquants <a href="" class="msg_aide" rel="help_popup_validation_log_erreur" title="Message aide">Teste message d'aide</a> </legend>
-                <?php foreach($validLogErreur as $key=>$logs) { ?>
                 <ul class="messages_log">
-                    <?php foreach($logs as $log_key=>$log) { ?>
-                    <li><a href="<?php echo url_for('recolte_erreur_log', array('flash_message'=>$key.'-'.$log_key)); ?>"><?php echo $log['log']; ?></a></li>
-                   <?php } ?>
-                </ul>
-                <br />
+                <?php foreach($validLogErreur as $key=>$log) { ?>
+                
+                    <li><a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_erreur', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a></li>
+                   
                 <?php } ?>
+                </ul>
             </fieldset>
         <?php } ?>
         <?php if($logVigilance){ ?>
             <fieldset class="message">
                 <legend class="message_title">Points de vigilance <a href="" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide">Teste message d'aide</a></legend>
-                <?php foreach($validLogVigilance as $key=>$logs) { ?>
                 <ul class="messages_log">
-                    <?php foreach($logs as $log_key=>$log) { ?>
-                    <li><a href="<?php echo url_for('recolte_erreur_log', array('flash_message'=>$key.'-'.$log_key)); ?>"><?php echo $log['log']; ?></a></li>
-                   <?php } ?>
+                    <?php foreach($validLogVigilance as $key=>$log) { ?>
+                    <li><a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_vigilance', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a></li>
+                    <?php } ?>
                 </ul>
-                <br />
-                <?php } ?>
             </fieldset>
         <?php } ?>
 
