@@ -150,7 +150,7 @@ $(document).ready( function()
             width: 500,
             modal: true,
             buttons:{
-                Fermer: function() {
+                '': function() {
                         $(this).dialog( "close" );
                 }
             }
@@ -219,12 +219,12 @@ var initMsgAide = function()
                 var message = json.message;
                 popup.html('<p></p>');
                 popup.find('p').text(message);
-                $(popup).dialog( "option" , "title" , titre);
+                $(popup).dialog( "option" , "title" , titre, "buttons", { "": function() { $(this).dialog("close"); } });
             }
             );
             
         openPopup(popup);
-        $(popup).dialog( "option" , "title" , title_msg_aide);
+        $(popup).dialog( "option" , "title" , title_msg_aide, "buttons", { "": function() { $(this).dialog("close"); } });
         
         return false;
     });
@@ -1136,7 +1136,12 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion, source_
         draggable: false,
         resizable: false,
         width: 375,
-        modal: true
+        modal: true,
+        buttons:{
+                '': function() {
+                        $(this).dialog( "close" );
+                }
+            }
     });
 	
     btn.live('click', function()
@@ -1295,7 +1300,7 @@ var openPopup = function(popup, fn_open_if) {
         width: 375,
         modal: true,
         buttons:{
-                Fermer: function() {
+                '': function() {
                         $(this).dialog( "close" );
                 }
             }
