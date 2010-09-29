@@ -48,7 +48,7 @@ class ldap {
       $info['userPassword']  = $tiers->mot_de_passe;
       $info['loginShell']    = '/bin/bash';
       $info['uidNumber']     = '1000';
-      $info['gidNumber']     = $this->groupe2gid['declarant'];
+      $info['gidNumber']     = self::$groupe2gid['declarant'];
       $info['homeDirectory'] = '/home/'.$tiers->cvi;
       $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$tiers->intitule.' '.$tiers->nom.','.$tiers->exploitant->nom;
       $info['mail']          = $tiers->email;
@@ -81,7 +81,9 @@ class ldap {
             $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
             if($search){
 	      $dn = ldap_get_entries($ldapConnect, $search);
-	      return (isset($this->gid2groupe[$dn[0]['gidNumber']]) ? $this->gid2groupe[$dn[0]['gidNumber']] : false;
+	      if (isset(self::$gid2groupe[$dn[0]['gidNumber']]))
+		return self::$gid2groupe[$dn[0]['gidNumber']];
+	      else return false;
             }
             return false;
         }  
