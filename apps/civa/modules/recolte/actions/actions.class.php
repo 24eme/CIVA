@@ -196,7 +196,11 @@ class recolteActions extends EtapesActions {
         
         $dr = $this->getUser()->getDeclaration();
         $this->appellationlieu = $this->onglets->getLieu();
-
+        if($this->onglets->getCurrentAppellation()->getKey() == 'appellation_GRDCRU'){
+            $this->isGrandCru = true;
+        }else{
+            $this->isGrandCru = false;
+        }
         $this->form = new RecapitulatifForm($this->appellationlieu);
 
         $forms = $this->form->getEmbeddedForms();

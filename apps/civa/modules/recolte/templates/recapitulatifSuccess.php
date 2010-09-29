@@ -23,7 +23,13 @@
 							<p class="intro"></p>
 							
 							<div id="total_appelation">
-								<h2 class="titre_section">Total Appellation</h2>
+								<h2 class="titre_section">
+                                                                    <?php if($isGrandCru){ ?>
+                                                                    Total Lieu-dit
+                                                                    <?php }else{ ?>
+                                                                    Total Appellation
+                                                                    <?php } ?>
+                                                                </h2>
 								<div class="contenu_section">
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
