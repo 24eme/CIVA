@@ -13,8 +13,10 @@
   <body id="declaration_recolte">
     <!-- #global -->
 	<div id="global">
-            <?php include_partial('global/header') ?>
-            <div id="contenu">
+	  <?php include_partial('global/header');
+if ($error = $sf_user->getFlash('error'))
+  echo '<p>'.$error.'</p>';
+?>            <div id="contenu">
                 <?php echo $sf_content ?>
             </div>
             <?php include_partial('global/footer') ?>

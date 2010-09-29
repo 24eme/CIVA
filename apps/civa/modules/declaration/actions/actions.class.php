@@ -120,12 +120,16 @@ Cordialement,
 Le CIVA';
 
             //send email
-            $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
-                    $tiers->email,
-                    'CIVA - Validation de votre déclaration de récolte',
-                    $mess
-            );
-            $this->getMailer()->send($message);
+	    try {
+	      $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+						     $tiers->email,
+						     'CIVA - Validation de votre déclaration de récolte',
+						     $mess
+						     );
+	      $this->getMailer()->send($message);
+	    }catch(Exception $e) {
+	      $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé :(');
+	    }
 	  }
 
           $this->redirectByBoutonsEtapes();
