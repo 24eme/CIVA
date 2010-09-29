@@ -36,6 +36,13 @@ class importTiersTask extends sfBaseTask {
 
 	$docs = array();
 	$csv = array();
+
+	$insee = array();
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/Commune') as $c) {
+	  $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+	  $insee[$csv[0]] = $csv[1];
+	}
+
         foreach (file($options['file']) as $a) {
 	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
@@ -66,7 +73,8 @@ class importTiersTask extends sfBaseTask {
 	  $json->intitule = $tiers[9];
 	  $json->regime_fiscal = '';
 	  $json->nom = preg_replace('/ +/', ' ', $tiers[6]);
-	  $json->insee_commune_declaration = $tiers[62];
+	  $json->declaration_insee = $tiers[62];
+	  $json->declaration_commune = $insee[$tiers[62]];
 	  $json->mot_de_passe = '{TEXT}0000';
 	  $json->siege->adresse = $tiers[46];
 	  $json->siege->insee_commune = $tiers[59];

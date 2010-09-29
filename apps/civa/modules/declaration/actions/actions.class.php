@@ -51,6 +51,8 @@ class declarationActions extends EtapesActions {
                 $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne());
                 $doc->cvi = $tiers->cvi;
                 $doc->campagne = $this->getUser()->getCampagne();
+		$doc->declaration_insee = $tiers->declaration_insee;
+		$doc->declaration_commune = $tiers->declaration_commune;
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {

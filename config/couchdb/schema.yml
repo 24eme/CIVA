@@ -179,7 +179,8 @@ Tiers:
       civaba: {  }
       no_accises: {  }
       cvi_acheteur: {  }
-      insee_commune_declaration: {}
+      declaration_insee: {}
+      declaration_commune: {}
       siret: { type: string }
       intitule: {  }
       nom: {  }
