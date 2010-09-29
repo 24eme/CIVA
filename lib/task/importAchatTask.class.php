@@ -54,9 +54,8 @@ EOF;
         foreach (file($options['file']) as $a) {
 	  $json = new stdClass();
 	  $achat = explode(',', preg_replace('/"/', '', $a));
-	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]) || !$achat[4])
+	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]) || ($achat[4] != 'C' && $achat[4] != 'N'))
 	    continue;
-
 	  $json->_id = 'ACHAT-'.$achat[2];
 	  $json->cvi = $achat[2];
 	  $json->civaba = $achat[1];
