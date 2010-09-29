@@ -215,7 +215,7 @@ class exportActions extends sfActions
 	$c['volume'] = $detail->volume;
 	$c['cave_particuliere'] = $detail->cave_particuliere;
 	$c['revendique'] = $detail->volume_revendique;
-	$c['dplc'] = $detail->volume_dplc;
+	//	$c['dplc'] = $detail->volume_dplc;
 	foreach($detail->negoces as $vente) {
 	  $c[$vente->cvi] = $vente->quantite_vendue;
 	}
@@ -270,7 +270,9 @@ class exportActions extends sfActions
     $c = array();
     $c['type'] = 'total';
     $c['cepage'] = 'Total';
-    $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu';
+    $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu-dit';
+    if ($lieu->appellation == 'VINTABLE') 
+      $c['denomination'] = '';
     $c['vtsgn'] = '';
     $c['superficie'] = $lieu->total_superficie;
     $c['volume'] = $lieu->total_volume;

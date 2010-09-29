@@ -56,7 +56,7 @@ echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 foreach ($acheteurs as $cvi => $a) {
   echo printColonne('Vente à '.$a->nom, $colonnes_cepage, $cvi, 'hl');
 }
-echo printColonne('Cave particulière', $colonnes_cepage, 'cave_particuliere', 'hl');
+echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
 echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 ?>
@@ -68,9 +68,9 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <?php if ($enable_identification && count($acheteurs)) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison social</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
+  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
   <?php foreach($acheteurs as $cvi => $a) : ?>
-  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' ('.$a->commune.')'; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
+  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' - '.$a->commune; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
   <?php endforeach; ?>
 </table>
 <?php endif;?>
