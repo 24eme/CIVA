@@ -46,14 +46,47 @@ String host = "";
         
             <div class="box fl-panel" id="application_dr">
               <div id="intro_accueil_civa">
-                <h2>Bienvenue sur le site du CIVA</h2>
+                <!-- <h2>Bienvenue sur le site du CIVA</h2> -->
+				
+				<div id="carrousel_cont" class="contenu_section">
+					<div id="carrousel">
+						<ul>
+							<li>
+								<img src="images/carrousel/carrousel_vi_1.jpg" alt="" />
+								<strong>Accroche 1</strong>
+							</li>
+							<li>
+								<img src="images/carrousel/carrousel_vi_2.jpg" alt="" />
+								<strong>Accroche 2</strong>
+							</li>
+							<li>
+								<img src="images/carrousel/carrousel_vi_3.jpg" alt="" />
+								<strong>Accroche 3</strong>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<script type="text/javascript">
+					$(document).ready(function()
+					{	
+						$("#carrousel").sudoSlider(
+						{ 
+							numeric: true,
+							prevNext: false,
+							controlsAttr: 'class="carrousel_btn"'
+						});
+					});
+				</script>
+				
+				
               </div>
               <div id="boxes">
                 <h2 class="titre_section">Premiere connexion</h2>
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
                         <p class="intro">S'il s'agit de votre premiere connexion, munissez vous votre numéro CVI et du mot de passe recu par courrier.</p>
-                        <p id="creer_compte" ><a href="<% out.println(host); %>/compte">Créer votre compte</a></p>
+                        <p id="creer_compte" ><a href="<% out.println(host); %>compte">Créer votre compte</a></p>
                     </div>
                 </div>
                 <br />
