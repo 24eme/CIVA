@@ -21,15 +21,15 @@ pre {display: inline;}
 </table>
 </td></tr></table>
   <div><span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle_appellation; ?></span></div>
-<table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
+<table border="1" cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
 <?php 
 
 if (!function_exists('printColonne')) {
   function printColonne($libelle, $colonnes, $key, $unite = '') {
-    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px;">'.$libelle.'</th>';
+    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">'.$libelle.'</th>';
     foreach($colonnes as $c) {
       if (isset($c[$key]) && $v = $c[$key]) {
-	echo '<td style="padding-left: 5px;width: 120px;">';
+	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black;">';
 	if ($c['type'] == 'total')    echo '<b>';
         if (is_numeric($v)) 
           $v = sprintf('%01.02f', $v);
@@ -42,7 +42,7 @@ if (!function_exists('printColonne')) {
 	  echo "&nbsp;<small>$unite</small>";
 	echo '</td>';
       }else
-	echo '<td style="width: 120px;">&nbsp;</td>';
+	echo '<td style="width: 120px;border: 1px solid black;">&nbsp;</td>';
     }
     echo '</tr>';
   }
@@ -68,9 +68,9 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <?php if ($enable_identification && count($acheteurs)) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="width: 100px;">N° CVI</th><th style="width: 300px;">Raison social</th><th style="width: 100px;">Superficie</th><th style="width: 120px;">Volume</th><th style="width: 100px;">dont DPLC</th></tr>
+  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison social</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
   <?php foreach($acheteurs as $cvi => $a) : ?>
-  <tr><td style="width: 100px;"><?php echo $cvi; ?></td><td style="width: 300px;"><?php echo $a->nom.' ('.$a->commune.')'; ?></td><td style="width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
+  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' ('.$a->commune.')'; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
   <?php endforeach; ?>
 </table>
 <?php endif;?>
@@ -79,8 +79,8 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <?php if ($nb_pages == 1) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-<tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td><?php echo $extra['lies']; ?>&nbsp;<small>hl</small></td></tr>
-<tr><td style="font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td><?php echo $extra['jeunes_vignes']; ?>&nbsp;<small>ares</small></td></tr>
+<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echo $extra['lies']; ?>&nbsp;<small>hl</small></td></tr>
+<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echo $extra['jeunes_vignes']; ?>&nbsp;<small>ares</small></td></tr>
 </table>
 <?php endif; ?>
 </td>
