@@ -146,7 +146,7 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
     clear:both;
     margin:0 0 22px;
     padding:30px 20px;
-    height: 360px;
+	overflow: hidden;
 }
 
 .contenu_section {
@@ -240,4 +240,78 @@ p.intro {
 }
 
 
+/* Carrousel introduction --------------------------------- */
+#carrousel_cont
+{
+	height: 282px;
+	padding: 15px;
+	position: relative;
+	width: 520px
+}
 
+#carrousel_cont #carrousel { }
+
+#carrousel_cont #carrousel ul
+{
+	overflow: hidden;
+	padding: 0;
+}
+
+#carrousel_cont #carrousel ul li
+{
+	position: relative;
+	width: 520px;
+	height: 282px;
+}
+
+#carrousel_cont #carrousel ul li img { display: block; }
+
+#carrousel_cont #carrousel ul li strong
+{
+	background: url(../images/carrousel/carrousel_bg_accroche.png) 0 0 repeat;
+	bottom: 30px;
+	color: #4b4c4b;
+	display: inline-block;
+	font-family: Calibri, Arial, Helvetica, sans-serif; 
+	font-size: 24px;
+	font-weight: normal;
+	padding: 8px 25px;
+	position: absolute;
+	right: 0;
+}
+
+#carrousel_cont .carrousel_btn
+{
+	display: block;
+	position: absolute;
+	text-align: center;
+	bottom: 10px;
+	left: 0;
+	width: 100%;
+}
+
+#carrousel_cont .carrousel_btn ol
+{
+	display: inline;
+	list-style: none;
+}
+
+#carrousel_cont .carrousel_btn ol li
+{
+	display: inline;
+	margin: 0 2px;
+}
+
+#carrousel_cont .carrousel_btn ol li a
+{
+	background: url(../images/carrousel/carrousel_btn.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 17px;
+	outline: 0;
+	text-indent: -9999px; !text-indent: 0;
+	width: 17px;
+}
+
+#carrousel_cont .carrousel_btn ol li.current a { background-position: 0 -17px; }
+
+#carrousel_cont .carrousel_btn ol li a span { text-indent: -9999px; }
