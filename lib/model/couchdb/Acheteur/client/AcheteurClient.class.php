@@ -30,9 +30,9 @@ class AcheteurClient extends sfCouchdbClient {
             $acheteurs_mout[$doc->getCvi()]['nom'] = $doc->getNom();
         }
 
-        uasort($acheteurs_negociant, 'self::sortByNom');
-        uasort($acheteurs_cave, 'self::sortByNom');
-        uasort($acheteurs_mout, 'self::sortByNom');
+        uasort($acheteurs_negociant, 'AcheteurClient::sortByNom');
+        uasort($acheteurs_cave, 'AcheteurClient::sortByNom');
+        uasort($acheteurs_mout, 'AcheteurClient::sortByNom');
 
         $acheteurs = array();
         $acheteurs['negoces'] = $acheteurs_negociant;
@@ -41,7 +41,7 @@ class AcheteurClient extends sfCouchdbClient {
         return $acheteurs;
     }
 
-    protected static function sortByNom($a, $b) {
+    public static function sortByNom($a, $b) {
         return strcmp($a['nom'], $b['nom']);
     }
     
