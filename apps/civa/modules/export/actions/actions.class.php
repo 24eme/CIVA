@@ -12,6 +12,12 @@
 class exportActions extends sfActions
 {
 
+  public static function sortXML($a, $b) {
+    $a = preg_replace('/L/', '', $a);
+    $b = preg_replace('/L/', '', $b);
+    return $a > $b;
+  }
+
   private static $type2douane = array('negoces' => 'L6', 'mouts' => 'L7', 'cooperatives' => 'L8');
   private function setAcheteurType($acheteurs, $type, $detail) {
     if ($detail->exist($type)) {
@@ -87,7 +93,9 @@ class exportActions extends sfActions
 
 	    if ($detail->exist('cooperatives'))
 	      foreach ($detail->cooperatives as $coop)  {
-		$col['exploitant'][] = array('L8' => array('cvi' => $coop->cvi, 'volume' => $coop->quantite_vendue));
+		if (!isset($col['exploitant']['L8']))
+		  $col['exploitant']['L8'] = array();
+		$col['exploitant']['L8'][count($col['exploitant']['L8'])] = array('cvi' => $n->cvi, 'volume' => $n->quantite_vendue);
 		$col['exploitant']['L10'] += $coop->quantite_vendue;
 	      }
 	    $col['exploitant']['L10'] += $detail->cave_particuliere;
@@ -95,12 +103,16 @@ class exportActions extends sfActions
 
 	    if ($detail->exist('negoces'))
 	      foreach ($detail->negoces as $n)  {
-		$col['exploitant'][] = array('L6' => array('cvi' => $n->cvi, 'volume' => $n->quantite_vendue));
+		if (!isset($col['exploitant']['L6']))
+		  $col['exploitant']['L6'] = array();
+		$col['exploitant']['L6'][count($col['exploitant']['L6'])] = array('cvi' => $n->cvi, 'volume' => $n->quantite_vendue);
 	      }
 
 	    if ($detail->exist('mouts'))
 	      foreach ($detail->mouts as $n)  {
-		$col['exploitant'][] = array('L7' => array('cvi' => $n->cvi, 'volume' => $n->quantite_vendue));
+		if (!isset($col['exploitant']['L7']))
+		  $col['exploitant']['L7'] = array();
+		$col['exploitant']['L7'][count($col['exploitant']['L7'])] = array('cvi' => $n->cvi, 'volume' => $n->quantite_vendue);
 	      }
 
 	    $acheteurs = $this->setAcheteurType($acheteurs, 'negoces', $detail);
@@ -115,6 +127,7 @@ class exportActions extends sfActions
 	    $col['exploitant']['L15'] = $detail->volume_revendique;
 	    $total['exploitant']['L15'] = $detail->volume_revendique;
 	    $col['exploitant']['L16'] = $detail->volume_dplc;
+	    uksort($col['exploitant'], 'exportActions::sortXML');
 	    $total['exploitant']['L16'] = $detail->volume_dplc;
 	    if ($detail->cepage == 'RB' && $detail->appellation == 'CREMANT')
 	      $colass = $col;
@@ -125,7 +138,7 @@ class exportActions extends sfActions
 
 	$total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
 	$total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
-
+	uksort($total['exploitant'], 'exportActions::sortXML');
 	//Ajout des acheteurs
 	foreach ($acheteurs as $cvi => $v) {
 	  $total['exploitant'][] = $v;
