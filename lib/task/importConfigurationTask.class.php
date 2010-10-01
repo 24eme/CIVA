@@ -72,12 +72,6 @@ EOF;
 	$lieu = new stdClass();
 
 
-        $lieu->cepage_ED->libelle = "Edelzwicker";
-	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
-        $lieu->cepage_ED->superficie_optionnelle = 1;
-        $lieu->cepage_ED->rendement = -1;
-        $lieu->cepage_ED->no_vtsgn = 1;
-        
         $lieu->cepage_CH->libelle = "Chasselas";
 	$lieu->cepage_CH->rendement = 100;
 	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
@@ -93,6 +87,12 @@ EOF;
 	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
         $lieu->cepage_PB->no_vtsgn = 1;
 
+        $lieu->cepage_ED->libelle = "Edelzwicker";
+	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
+        $lieu->cepage_ED->superficie_optionnelle = 1;
+        $lieu->cepage_ED->rendement = -1;
+        $lieu->cepage_ED->no_vtsgn = 1;
+        
 	$lieu->cepage_RI->libelle = "Riesling";
 	$lieu->cepage_RI->rendement = 90;
 	$lieu->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
