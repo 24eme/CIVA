@@ -116,6 +116,10 @@ xml:
   url: /xml/:annee
   param: {module: export, action: xml}
 
+csv_tiers:
+  url: /tiers/csv
+  param: {module: export, action: CsvTiers}
+
 message:
   url: /message
   param: {module: global, action: messageAjax}

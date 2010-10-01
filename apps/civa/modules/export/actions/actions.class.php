@@ -350,4 +350,37 @@ class exportActions extends sfActions
       $identification_enabled = 0;
     }
   }
+
+  public function executeCsvTiers() {
+      set_time_limit('240');
+      ini_set('memory_limit', '512M');
+      $tiers = sfCouchdbManager::getClient("Tiers")->getAll();
+      $content = '';
+      foreach ($tiers as $item) {
+         $ligne = array();
+         $ligne[] = $item->cvi;
+         if (strpos('{TEXT}', $item->mot_de_passe) === false) {
+             $ligne[] = str_replace('{TEXT}', '', $item->mot_de_passe);
+         } else {
+             $ligne[] = "code activé";
+         }
+         $ligne[] = $item->nom;
+         $ligne[] = $item->siege->adresse;
+         $ligne[] = $item->siege->code_postal;
+         $ligne[] = $item->siege->commune;
+         $ligne[] = $item->no_accises;
+
+         foreach($ligne as $key => $item_ligne) {
+             $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
+         }
+
+         $content .= implode(';', $ligne) . "\n";
+      }
+      
+      $this->response->setContentType('text/csv');
+      $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
+      $this->response->setHttpHeader('Pragma', 'o-cache', true);
+      $this->response->setHttpHeader('Expires', '0', true);
+      return $this->renderText($content);
+  }
 }
