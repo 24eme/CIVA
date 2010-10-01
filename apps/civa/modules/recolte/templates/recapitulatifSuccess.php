@@ -1,3 +1,4 @@
+<?php use_helper('civa') ?>
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions', array('etape' => 2, 'help_popup_action'=>$help_popup_action)) ?>
 
@@ -37,20 +38,20 @@
 
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
-    <td class="valeur alt"><?php echo $appellationlieu->getTotalSuperficie(); ?> ares</td>
+    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
 												</tr>
 												<tr>
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getTotalVolume() ;?> hl</td>
+    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
 												</tr>
                                                                                                 <?php if($appellationlieu->hasRendement()): ?>
 												<tr>
 													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getVolumeRevendiqueFinal(); ?> hl</td>
+												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendiqueFinal()); ?> hl</td>
 												</tr>
 												<tr>
 													<td>DPLC <span class="unites">(hl)</span> :</td>
-													<td class="valeur alt"><?php echo $appellationlieu->getDPLCFinal(); ?> hl</td>
+    <td class="valeur alt"><?php echoFloat( $appellationlieu->getDPLCFinal()); ?> hl</td>
 												</tr>
                                                                                                 <?php endif; ?>
 											</tbody>
@@ -93,7 +94,7 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 													<?php }else{ ?>
                                                                                                         <td class="superficie"></td>
                                                                                                         <?php } ?>
-                                                                                                        <td><?php echo $info->getVolume(); ?> hl</td>
+                                                                                                        <td><?php echoFloat( $info->getVolume()); ?> hl</td>
                                                                                                         <?php if($appellationlieu->hasRendement()){ ?>
 													<td class="dplc alt <?php echo ($form['cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
                                                                                                         <?php }else{ ?>
@@ -141,8 +142,8 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
                             function valider_can_submit()
                             {
                                 <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->hasRendement()): ?>
-                                var total_superficie = <?php echo $appellationlieu->getTotalSuperficie(); ?>;
-                                var total_dontdplc = <?php echo $appellationlieu->getDPLCFinal(); ?>;
+                                var total_superficie = <?php echoFloat( $appellationlieu->getTotalSuperficie()); ?>;
+                                var total_dontdplc = <?php echoFloat( $appellationlieu->getDPLCFinal()); ?>;
                                 var sum_superficie = 0;
                                 var sum_dont_dplc = 0;
                                 $('#recap_ventes table.table_donnees tr td.superficie input.num').each(function() {
