@@ -20,11 +20,7 @@ class sfCouchdbClient extends couchClient {
         
         try {
              $data = $this->getDoc($id);
-             $debut = microtime();
-             $obj = $this->createDocumentFromData($data);
-             $interval = round(microtime() - $debut, 3);
-             sfContext::getInstance()->getLogger()->debug($id . ' : ' . $interval . '');
-             return $obj;
+             return $this->createDocumentFromData($data);
         } catch (couchException $exc) {
              return null;
         }

@@ -51,7 +51,7 @@ class ListAcheteursConfig {
 
     public static function getNegoces() {
         if (is_null(self::$_negoces)) {
-            self::$_negoces = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
+            self::$_negoces = sfCouchdbManager::getClient('Acheteur')->getNegoces();
         } 
 
         return self::$_negoces;
@@ -64,7 +64,7 @@ class ListAcheteursConfig {
 
     public static function getCooperatives() {
         if (is_null(self::$_cooperatives)) {
-            self::$_cooperatives = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
+            self::$_cooperatives = sfCouchdbManager::getClient('Acheteur')->getCooperatives();
         } 
 
         return self::$_cooperatives;
@@ -76,7 +76,7 @@ class ListAcheteursConfig {
 
     public static function getMouts() {
         if (is_null(self::$_mouts)) {
-            self::$_mouts = include(sfConfig::get('sf_data_dir') . '/acheteurs-mout.php');
+            self::$_mouts = sfCouchdbManager::getClient('Acheteur')->getMouts();
         } 
 
         return self::$_mouts;
