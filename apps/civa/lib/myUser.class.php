@@ -91,7 +91,7 @@ class myUser extends sfBasicSecurityUser {
         if ($declaration = $this->getDeclaration()) {
            if (in_array($etape, $this->_etapes)) {
             $declaration->add('etape');
-            if ($etape != $declaration->etape && array_keys_exist($declaration->etape,  $this->_etapes_inclusion) && !in_array($etape, $this->_etapes_inclusion[$declaration->etape])) {
+            if ($etape != $declaration->etape && (!array_key_exists($declaration->etape,  $this->_etapes_inclusion) || !in_array($etape, $this->_etapes_inclusion[$declaration->etape]))) {
                 if ($this->verifyEtapeIsOk($etape)) {
                     $declaration->etape = $etape;
                     $declaration->save();
