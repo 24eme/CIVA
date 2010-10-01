@@ -55,7 +55,7 @@ class myUser extends sfBasicSecurityUser {
 
     public function getTiers() {
         if (!$this->_tiers && $cvi = $this->getAttribute(self::SESSION_CVI, null, self::NAMESPACE_TIERS)) {
-            $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi); 
+            $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi);
 
             if (!$this->_tiers) {
                 // the user does not exist anymore in the database

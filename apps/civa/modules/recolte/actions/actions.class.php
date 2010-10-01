@@ -280,10 +280,10 @@ class recolteActions extends EtapesActions {
         }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
-
-        if (!$this->onglets || !$this->onglets->init($appellation, $lieu, $cepage)) {
+        $this->onglets->init($appellation, $lieu, $cepage);
+        /*if (!$this->onglets || ($request->getParameter('appellation_lieu', null) == '' && $request->getParameter('cepage', null) == '') || !$this->onglets->init($appellation, $lieu, $cepage)) {
             $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
-        }
+        }*/
 
         /*** AjOUT APPELLATION ***/
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);

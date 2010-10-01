@@ -7,9 +7,7 @@ class CacheFunction {
     public static function cache($location, $callable, $arguments = array()) {
       $class_cache = self::CLASS_CACHE;
       $cache_dir = sfConfig::get('sf_app_cache_dir').DIRECTORY_SEPARATOR.$location;
-      $function_cache = new sfFunctionCache(new $class_cache(array('cache_dir' => $cache_dir,
-                                                                  'automatic_cleaning_factor' => self::AUTOMATIC_CLEANING_FACTOR,
-                                                                  'lifetime' => self::LIFETIME)));
+      $function_cache = new sfFunctionCache(new $class_cache(array('cache_dir' => $cache_dir)));
       return $function_cache->call($callable, $arguments);
     }
 }

@@ -256,6 +256,11 @@ class RecolteOnglets {
     }
 
     protected function getFirstKeyAppellation() {
+        foreach($this->getItemsAppellationConfig() as $key => $item) {
+            if ($this->_declaration->recolte->exist($key)) {
+                return $key;
+            }
+        }
         return $this->getItemsAppellation()->getFirstKey();
     }
 
