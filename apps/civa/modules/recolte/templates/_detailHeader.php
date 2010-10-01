@@ -40,7 +40,8 @@
         <?php
             include_partial('headerAcheteurs', array('title' => "Acheteurs de Mouts",
                 'acheteurs' => $acheteurs->mouts,
-                'list_acheteurs' => ListAcheteursConfig::getMouts()
+                'list_acheteurs' => ListAcheteursConfig::getMouts(),
+                'var_rel_help' => 'help_popup_DR_mouts'
             ))
         ?>
         </div>
