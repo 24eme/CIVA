@@ -43,18 +43,32 @@ class compteActions extends sfActions {
 
             $this->form = new CreateCompteForm();
             $this->email = $tiers->email;
+            if($request->getParameter('act')){
+                 $this->act = '?act='.$request->getParameter('act');
+            }else{
+                 $this->act = '';
+            }
 
             if ($request->isMethod(sfWebRequest::POST)) {
+                if($request->getParameter('act')== "modifMdp"){
+                     $flash_message = "Votre mot de passe a bien été modifié.";
+                     $mess_email = "votre mot de passe sur le site du CIVA vient d\'etre modifié.";
+                     $obj_email = "Changement de votre mot de passe";
+                }else{
+                     $flash_message = "Votre compte a bien été créé.";
+                     $mess_email = "votre compte a bien été créé sur le site du CIVA.";
+                     $obj_email = "Création de votre compte";
+                }
+
                 $this->form->bind($request->getParameter($this->form->getName()));
                 $ldap = new ldap();
                 if ($this->form->isValid()) {
                     $verify = $ldap->ldapVerifieExistence($tiers);
                     if($verify) {
 		      $ldap->ldapModify($tiers);
-		      $this->getUser()->setFlash('mdp_modif', 'Votre mot de passe a bien été modifié.');
 		      $mess = 'Bonjour '.$tiers->nom.',
 
-votre mot de passe sur le site du CIVA vient d\'etre modifié.
+'.$mess_email.'
 
 Cordialement,
 
@@ -64,10 +78,11 @@ Le CIVA';
 			try {
 			  $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
 								 $tiers->email,
-								 'CIVA - Changement de votre mot de passe',
+								 'CIVA - '.$obj_email,
 								 $mess
 								 );
 			  $this->getMailer()->send($message);
+                          $this->getUser()->setFlash('mdp_modif', $flash_message);
 			}catch(Exception $e) {
 			  $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
 			}
@@ -116,7 +131,7 @@ Le CIVA';
 
             if($tiers && $tiers->mot_de_passe==$mdp) {
                 $this->getUser()->signIn($tiers);
-                $this->redirect('compte/create');
+                $this->redirect('compte/create?act=modifMdp');
             }
         }else {
             if ($request->isMethod(sfWebRequest::POST)) {
@@ -135,7 +150,6 @@ vous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le 
 Cordialement,
 
 Le CIVA';
-
                     //send email
 		    try {
 		      $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',

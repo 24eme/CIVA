@@ -1,5 +1,5 @@
 <!-- #principal -->
-<form action="<?php echo url_for('compte/create') ?>" method="post" id="principal">
+<form action="<?php echo url_for('compte/create'.$act) ?>" method="post" id="principal">
 
     <h2 class="titre_principal">Création de votre compte</h2>
 
