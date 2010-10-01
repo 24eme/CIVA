@@ -2,10 +2,10 @@
 
 class DRRecolteAppellationCepageDetail extends BaseDRRecolteAppellationCepageDetail {
 
-   /* public function getConfig() {
-        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
-    }
-*/
+  public function getConfig() {
+    return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+  }
+
     public function getCodeDouane() {
       return $this->getParent()->getParent()->getCodeDouane($this->vtsgn);
     }

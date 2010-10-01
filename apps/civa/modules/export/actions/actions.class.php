@@ -206,7 +206,10 @@ class exportActions extends sfActions
     $this->nb_pages = 0;
     if (!$this->document->isCached())
       foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
-	foreach ($appellation->filter('^lieu') as $lieu) {
+	foreach ($appellation->getConfig()->filter('^lieu') as $lieu) {
+	  if (!$appellation->exist($lieu->getKey()))
+	    continue;
+	  $lieu = $appellation->{$lieu->getKey()};
 	  $this->createAppellationLieu($lieu, $tiers);
 	}
       }
@@ -226,9 +229,12 @@ class exportActions extends sfActions
     $afterTotal = array();
     $acheteurs = $lieu->acheteurs;
     $cpt = 0;
-    foreach ($lieu->filter('^cepage_') as $cepage) {
+    foreach ($lieu->getConfig()->filter('^cepage_') as $cepage) {
+      if (!$lieu->exist($cepage->getKey()))
+	continue;
+      $cepage = $lieu->{$cepage->getKey()};
       $i = 0;
-      foreach ($cepage->detail as $detail) {
+      foreach ($cepage->detail as $detail) {	
 	$c = array();
 	$c['type'] = 'detail';
 	$c['cepage'] = $cepage->getLibelle();
