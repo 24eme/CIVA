@@ -73,7 +73,7 @@ class myUser extends sfBasicSecurityUser {
                 $this->_declaration = $this->getTiers()->getDeclaration($this->getCampagne());
             } catch (Exception $exc) {
                 $this->_declaration = null;
-                $this->clearEtapeCredentials();
+                $this->clearDeclarationCredentials();
             }
         }
 

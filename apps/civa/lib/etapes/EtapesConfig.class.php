@@ -32,7 +32,7 @@
 
 
         public function needToChangeEtape() {
-            if (isset($this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'])) {
+            if (array_key_exists('next_is_new_etape', $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]])) {
                 return $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'];
             } else {
                 return false;
