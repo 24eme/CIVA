@@ -28,9 +28,9 @@ class acheteurActions extends EtapesActions {
         $this->acheteurs_cave_using = $declaration->acheteurs->getArrayCooperatives();
         $this->acheteurs_mout_using = $declaration->acheteurs->getArrayMouts();
 
-        $this->acheteurs_negociant = include(sfConfig::get('sf_data_dir') . '/acheteurs-negociant.php');
-        $this->acheteurs_cave = include(sfConfig::get('sf_data_dir') . '/acheteurs-cave.php');
-        $this->acheteurs_mout = include(sfConfig::get('sf_data_dir') . '/acheteurs-mout.php');
+        $this->acheteurs_negociant = ListAcheteursConfig::getNegoces();
+        $this->acheteurs_cave = ListAcheteursConfig::getCooperatives();
+        $this->acheteurs_mout = ListAcheteursConfig::getMouts();
 
         $this->form = new ExploitationAcheteursForm($declaration->getAcheteurs());
 
