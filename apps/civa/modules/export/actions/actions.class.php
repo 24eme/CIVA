@@ -383,7 +383,7 @@ class exportActions extends sfActions
          $content .= implode(';', $ligne) . "\n";
       }
       
-      $this->response->setContentType('text/csv');
+      $this->response->setContentType('application/csv');
       $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
       $this->response->setHttpHeader('Pragma', 'o-cache', true);
       $this->response->setHttpHeader('Expires', '0', true);

@@ -47,7 +47,7 @@ class AcheteurClient extends sfCouchdbClient {
     
     protected function loadAcheteursList($type) {
       if (is_null($this->_acheteurs)) {
-        $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'));
+        $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
       }
 
       return $this->_acheteurs[$type];
