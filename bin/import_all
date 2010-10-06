@@ -15,4 +15,8 @@ php symfony import:DR --year=$year > /tmp/dr.json
 curl -d @/tmp/dr.json -X POST http://$COUCHDBDOMAIN:5984/civa/_bulk_docs ; 
 echo "DR $year DONE";
 done
+
+php symfony civa-config:generateBaseUrlForJsp
+php symfony civa-config:generate-acheteurs
+
 rm /tmp/dr.json
