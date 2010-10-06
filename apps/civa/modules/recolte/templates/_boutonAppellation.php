@@ -8,7 +8,7 @@
         </a>
     </li>
     <?php endif; ?>
-    <li class="previsualiser" style="margin-left:<?php echo $margin; ?>" >
+    <li class="previsualiser" style="<?php if (isset($margin)) { echo "margin-left: $margin;"; } ?>" >
         <a href="" class="open_popup_rendements_max">
             <img src="/images/boutons/btn_rendements_maxs.png" alt="Voir les rendements maximumms autorisés" />
         </a>
