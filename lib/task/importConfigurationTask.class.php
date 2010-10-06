@@ -147,7 +147,7 @@ EOF;
 
 	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
-	  if ($g[1] == "99")  {
+	  if (!$g[1] || $g[1] == "99")  {
 	    continue;
 	  }
 	  if (!$g[2]) {
