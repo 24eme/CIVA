@@ -2,8 +2,6 @@
 
 class DRRecolteCepage extends BaseDRRecolteCepage {
 
-    protected $_total_acheteurs_by_cvi = array();
-
     public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
@@ -55,21 +53,22 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->store('cave_particuliere', array($this, 'getSumDetailFields'), array('cave_particuliere'));
     }
 
-    public function getTotalAcheteursByCvi($field) {
-        if (!isset($this->_total_acheteurs_by_cvi[$field])) {
-            $this->_total_acheteurs_by_cvi[$field] = array();
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
             foreach($this->detail as $object) {
-                $acheteurs = $object->getAcheteursValuesWithCvi($field);
+                $acheteurs = $object->getVolumeAcheteurs($type);
                 foreach($acheteurs as $cvi => $quantite_vendue) {
-                    if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
-                        $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
+                    if (!isset($this->_storage[$key][$cvi])) {
+                        $this->_storage[$key][$cvi] = 0;
                     }
 		    if ($quantite_vendue)
-		      $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+		      $this->_storage[$key][$cvi] += $quantite_vendue;
                 }
             }
         }
-        return $this->_total_acheteurs_by_cvi[$field];
+        return $this->_storage[$key];
     }
 
     public function getVolumeMax() {
@@ -131,8 +130,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     protected function getSumDetailFields($field) {
       $sum = 0;
-      foreach ($this->getData()->detail as $detail) {
-	$sum += $detail->{$field};
+      foreach ($this->detail as $detail) {
+	$sum += $detail->get($field);
       }
       return $sum;
     }

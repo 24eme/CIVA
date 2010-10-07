@@ -14,18 +14,20 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->getCepage()->getCodeDouane($this->vtsgn);
     }
 
-    public function getAcheteursValuesWithCvi($field) {
-        $values = array();
-        if ($this->exist($field)) {
-            $acheteurs = $this->get($field);
-            foreach ($acheteurs as $acheteur) {
-                $values[$acheteur->cvi] = $acheteur->quantite_vendue;
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
+            foreach ($this->filter($type) as $acheteurs) {
+                foreach($acheteurs as $acheteur) {
+                    $this->_storage[$key][$acheteur->cvi] = $acheteur->quantite_vendue;
+                }
             }
         }
-        return $values;
+        return $this->_storage[$key];
     }
 
-    protected function checkAcheteurExist($type) {
+    protected function deleteAcheteurUnused($type) {
         $appellation_key = $this->getCepage()->getLieu()->getAppellation()->getKey();
         if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->exist($appellation_key)) {
             $acheteurs = $this->getCouchdbDocument()->acheteurs->get($appellation_key)->get($type);
@@ -110,9 +112,9 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             $this->add('motif_non_recolte');
         }
         if (in_array('from_acheteurs', $params)) {
-            $this->checkAcheteurExist('negoces');
-            $this->checkAcheteurExist('cooperatives');
-            $this->checkAcheteurExist('mouts');
+            $this->deleteAcheteurUnused('negoces');
+            $this->deleteAcheteurUnused('cooperatives');
+            $this->deleteAcheteurUnused('mouts');
         }
     }
 

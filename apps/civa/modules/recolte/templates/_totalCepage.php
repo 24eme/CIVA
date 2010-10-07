@@ -13,7 +13,7 @@
         <div class="vente_raisins">
                 <?php
                     include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('negoces'))); ?>
+                                                              'acheteurs_value' => $cepage->getVolumeAcheteurs('negoces'))); ?>
         </div>
         <?php endif; ?>
 
@@ -21,7 +21,7 @@
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
-                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('cooperatives')))
+                                                              'acheteurs_value' => $cepage->getVolumeAcheteurs('cooperatives')))
                 ?>
         </div>
         <?php endif; ?>
@@ -30,7 +30,7 @@
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
-                                                              'acheteurs_value' => $cepage->getTotalAcheteursByCvi('mouts')))
+                                                              'acheteurs_value' => $cepage->getVolumeAcheteurs('mouts')))
                 ?>
         </div>
         <?php endif; ?>

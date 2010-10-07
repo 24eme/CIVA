@@ -50,6 +50,11 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
             $this->_storage[$key] = call_user_func_array($function, $arguments);
         }
         return $this->_storage[$key];
+   }
+
+   protected function update($params = array()) {
+        $this->_storage = array();
+        parent::update($params);
     }
 }
 

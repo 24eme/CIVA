@@ -2,8 +2,6 @@
 
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
-    protected $_total_acheteurs_by_cvi = array();
-
     public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
@@ -115,51 +113,52 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       if (!isset($this->_storage[$key])) {
           $sum = 0;
           foreach ($this->getCepages() as $key => $cepage) {
-            if ($key != 'cepage_RB')
-              $sum += $cepage->getTotalCaveParticuliere();
+             if ($cepage->getConfig()->excludeTotal()) {
+                      continue;
+             }
+             $sum += $cepage->getTotalCaveParticuliere();
           }
           $this->_storage[$key] = $sum;
       }
       return $this->_storage[$key];
     }
     
-    public function getTotalAcheteursByCvi($field) {
-        if (!isset($this->_total_acheteurs_by_cvi[$field])) {
-            $this->_total_acheteurs_by_cvi[$field] = array();
-            foreach ($this->getCepages() as $key => $object) {
-	      if ($key != 'cepage_RB') {
-                $acheteurs = $object->getTotalAcheteursByCvi($field);
-                foreach ($acheteurs as $cvi => $quantite_vendue) {
-		  if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
-		    $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
-		  }
-		  $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
+            foreach ($this->getCepages() as $cepage) {
+                if ($cepage->getConfig()->excludeTotal()) {
+                      continue;
                 }
-	      }
+                $acheteurs = $cepage->getVolumeAcheteurs($type);
+                foreach ($acheteurs as $cvi => $quantite_vendue) {
+                  if (!isset($this->_storage[$key][$cvi])) {
+                    $this->_storage[$key][$cvi] = 0;
+                  }
+                  $this->_storage[$key][$cvi] += $quantite_vendue;
+                }
             }
         }
-        return $this->_total_acheteurs_by_cvi[$field];
+        return $this->_storage[$key];
     }
 
      public function getVolumeAcheteur($cvi, $type) {
-        $key = "volume_acheteurs_".$cvi."_".$type;
-        if (!isset($this->_storage[$key])) {
-            $sum = 0;
-            foreach ($this->getAcheteursFromCepage($type) as $a) {
-                if ($a->cvi == $cvi)
-                    $sum += $a->quantite_vendue;
-            }
-            $this->_storage[$key] = $sum;
+        $volume = 0;
+        $acheteurs = $this->getVolumeAcheteurs($type);
+        if (array_key_exists($cvi, $acheteurs)) {
+            $volume = $acheteurs[$cvi];
         }
-        return $this->_storage[$key];
+        return $volume;
     }
 
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "total_volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
               $sum = 0;
-              foreach($this->getAcheteursFromCepage($type) as $acheteur) {
-                $sum += $acheteur->quantite_vendue;
+              $acheteurs = $this->getVolumeAcheteurs($type);
+              foreach($acheteurs as $volume) {
+                $sum += $volume;
               }
               $this->_storage[$key] = $sum;
         }
@@ -191,11 +190,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             return false;
         }
         $vol_total_cvi = array();
-        foreach($this->getAcheteursFromCepage() as $item) {
-            if (!isset($vol_total_cvi[$item->cvi])) {
-                $vol_total_cvi[$item->cvi] = 0;
+        foreach($this->getVolumeAcheteurs() as $cvi => $volume) {
+            if (!isset($vol_total_cvi[$cvi])) {
+                $vol_total_cvi[$cvi] = 0;
             }
-            $vol_total_cvi[$item->cvi] += $item->quantite_vendue;
+            $vol_total_cvi[$cvi] += $volume;
         }
         if (count($vol_total_cvi) != 1) {
             return false;
@@ -241,23 +240,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       return $dplc_final;
     }
 
-    protected function getAcheteursFromCepage($type = 'negoces|cooperatives|mouts', $exclude_cepage = '') {
-      $acheteurs = array();
-      foreach ($this->getCepages() as $key => $cepage) {
-	if ($cepage->getConfig()->excludeTotal()) {
-	  continue;
-	}
-	foreach ($cepage->detail as $d) {
-            foreach ($d->filter($type) as $t) {
-                foreach ($t as $key => $a) {
-                  $acheteurs[$a->cvi] = $a;
-                }
-            }
-	}
-      }
-      return $acheteurs;
-    }
-    
     protected function getSumCepageFields($field) {
       $sum = 0;
       foreach ($this->getCepages() as $key => $cepage) {
@@ -270,13 +252,18 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     protected function update($params = array()) {
         parent::update($params);
 	$this->add('acheteurs');
-        $acheteurs_from_cepage = $this->getAcheteursFromCepage();
-        foreach ($acheteurs_from_cepage as $a) {
-            $acheteur = $this->acheteurs->add($a->cvi);
-            $acheteur->type_acheteur = $a->getParent()->getKey();
+        $types = array('negoces','cooperatives','mouts');
+        foreach($types as $type) {
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $cvi => $volume) {
+                $acheteur = $this->acheteurs->add($cvi);
+                $acheteur->type_acheteur = $type;
+            }
         }
+        $acheteurs = $this->getVolumeAcheteurs();
+        
         foreach($this->acheteurs as $cvi => $item) {
-            if (!array_key_exists($cvi, $acheteurs_from_cepage)) {
+            if (!array_key_exists($cvi, $acheteurs)) {
                 $this->acheteurs->remove($cvi);
             }
         }

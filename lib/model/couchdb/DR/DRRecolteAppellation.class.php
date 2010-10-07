@@ -2,8 +2,6 @@
 
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
-    protected $_total_acheteurs_by_cvi = array();
-
     public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
@@ -53,32 +51,30 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->store('total_cave_particuliere', array($this, 'getSumLieuWithMethod'), array('getTotalCaveParticuliere'));
     }
     
-    public function getTotalAcheteursByCvi($field) {
-        if (!isset($this->_total_acheteurs_by_cvi[$field])) {
-            $this->_total_acheteurs_by_cvi[$field] = array();
-            foreach ($this->filter('^lieu') as $object) {
-                $acheteurs = $object->getTotalAcheteursByCvi($field);
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
+            foreach ($this->getLieux() as $lieu) {
+                $acheteurs = $lieu->getVolumeAcheteurs($type);
                 foreach ($acheteurs as $cvi => $quantite_vendue) {
-                    if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
-                        $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
-                    }
-                    $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+                  if (!isset($this->_storage[$key][$cvi])) {
+                    $this->_storage[$key][$cvi] = 0;
+                  }
+                  $this->_storage[$key][$cvi] += $quantite_vendue;
                 }
             }
         }
-        return $this->_total_acheteurs_by_cvi[$field];
+        return $this->_storage[$key];
     }
 
     public function getVolumeAcheteur($cvi, $type) {
-        $key = "volume_acheteurs_".$cvi."_".$type;
-        if (!isset($this->_storage[$key])) {
-            $sum = 0;
-            foreach ($this->getLieux() as $key => $lieu) {
-                $sum += $lieu->getVolumeAcheteur($cvi, $type);
-            }
-            $this->_storage[$key] = array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
+        $volume = 0;
+        $acheteurs = $this->getVolumeAcheteurs($type);
+        if (array_key_exists($cvi, $acheteurs)) {
+            $volume = $acheteurs[$cvi];
         }
-        return $this->_storage[$key];
+        return $volume;
     }
 
     public function removeVolumes() {

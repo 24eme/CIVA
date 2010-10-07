@@ -4,8 +4,12 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
 {
   private $acheteur = null;
 
+  public function getLieu() {
+      return $this->getParent()->getParent();
+  }
+
   public function getVolume() {
-    return $this->getParent()->getParent()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
+    return $this->getLieu()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
   }
   public function getNom() {
     if ($v = $this->_get('nom'))

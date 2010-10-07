@@ -31,11 +31,11 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
 
         $this->validatorSchema['superficie']->setMessage('required', 'Champ obligatoire');
 
-        $this->configureAcheteurs(self::FORM_NAME_NEGOCES, $this->getObject()->getAcheteursValuesWithCvi('negoces'), $this->getAcheteursNegoces());
-        $this->configureAcheteurs(self::FORM_NAME_COOPERATIVES, $this->getObject()->getAcheteursValuesWithCvi('cooperatives'), $this->getAcheteursCooperatives());
+        $this->configureAcheteurs(self::FORM_NAME_NEGOCES, $this->getObject()->getVolumeAcheteurs('negoces'), $this->getAcheteursNegoces());
+        $this->configureAcheteurs(self::FORM_NAME_COOPERATIVES, $this->getObject()->getVolumeAcheteurs('cooperatives'), $this->getAcheteursCooperatives());
         if ($this->hasAcheteursMouts()) {
             $this->getObject()->add('mouts');
-            $this->configureAcheteurs(self::FORM_NAME_MOUTS, $this->getObject()->getAcheteursValuesWithCvi('mouts'), $this->getAcheteursMouts());
+            $this->configureAcheteurs(self::FORM_NAME_MOUTS, $this->getObject()->getVolumeAcheteurs('mouts'), $this->getAcheteursMouts());
         }
 
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecolte(null, array('object' => $this->getObject(), 'has_acheteurs_mout' => $this->hasAcheteursMouts())));

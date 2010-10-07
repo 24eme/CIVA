@@ -21,7 +21,7 @@
         <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
                 <?php include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('negoces')));?>
+                                                              'acheteurs_value' => $lieu->getVolumeAcheteurs('negoces')));?>
         </div>
         <?php endif; ?>
 
@@ -29,7 +29,7 @@
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
-                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('cooperatives')))
+                                                              'acheteurs_value' => $lieu->getVolumeAcheteurs('cooperatives')))
                 ?>
         </div>
         <?php endif; ?>
@@ -38,7 +38,7 @@
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
-                                                              'acheteurs_value' => $lieu->getTotalAcheteursByCvi('mouts')))
+                                                              'acheteurs_value' => $lieu->getVolumeAcheteurs('mouts')))
                 ?>
         </div>
         <?php endif; ?>

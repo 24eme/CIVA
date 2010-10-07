@@ -278,15 +278,15 @@ class exportActions extends sfActions
 	$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
 	$c['revendique'] = $cepage->volume_revendique;
 	$c['dplc'] = $cepage->dplc;
-	$negoces = $cepage->getTotalAcheteursByCvi('negoces');
+	$negoces = $cepage->getVolumeAcheteurs('negoces');
 	foreach($negoces as $cvi => $total) {
 	  $c[$cvi] = $total;
 	}
-	$coop =  $cepage->getTotalAcheteursByCvi('cooperatives');
+	$coop =  $cepage->getVolumeAcheteurs('cooperatives');
 	foreach($coop as $cvi => $total) {
 	  $c[$cvi] = $total;
 	}
-	$mouts =  $cepage->getTotalAcheteursByCvi('mouts');
+	$mouts =  $cepage->getVolumeAcheteurs('mouts');
 	foreach($mouts as $cvi => $total) {
 	  $c[$cvi] = $total;
 	}
@@ -308,15 +308,15 @@ class exportActions extends sfActions
     $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
     $c['revendique'] = $lieu->volume_revendique;
     $c['dplc'] = $lieu->dplc;
-    $negoces = $lieu->getTotalAcheteursByCvi('negoces');
+    $negoces = $lieu->getVolumeAcheteurs('negoces');
     foreach($negoces as $cvi => $vente) {
       $c[$cvi] = $vente;
     }
-    $coop =  $lieu->getTotalAcheteursByCvi('cooperatives');
+    $coop =  $lieu->getVolumeAcheteurs('cooperatives');
     foreach($coop as $cvi => $vente) {
       $c[$cvi] = $vente;
     }
-    $mouts =  $lieu->getTotalAcheteursByCvi('mouts');
+    $mouts =  $lieu->getVolumeAcheteurs('mouts');
     foreach($mouts as $cvi => $vente) {
       $c[$cvi] = $vente;
     }

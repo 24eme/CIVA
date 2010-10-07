@@ -29,7 +29,7 @@
         <div class="vente_raisins">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
-                                                             'acheteurs_value' => $detail->getAcheteursValuesWithCvi('negoces')));
+                                                             'acheteurs_value' => $detail->getVolumeAcheteurs('negoces')));
              ?>
         </div>
         <?php endif; ?>
@@ -38,7 +38,7 @@
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
-                                                             'acheteurs_value' => $detail->getAcheteursValuesWithCvi('cooperatives'))) ?>
+                                                             'acheteurs_value' => $detail->getVolumeAcheteurs('cooperatives'))) ?>
         </div>
         <?php endif; ?>
 
@@ -46,7 +46,7 @@
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
-                                                             'acheteurs_value' => $detail->getAcheteursValuesWithCvi('mouts'))) ?>
+                                                             'acheteurs_value' => $detail->getVolumeAcheteurs('mouts'))) ?>
             <!--<a href="#" class="ajout_mout">Ajouter un acheteur de mouts</a>-->
         </div>
         <?php endif; ?>
