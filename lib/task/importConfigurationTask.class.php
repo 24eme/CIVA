@@ -168,8 +168,6 @@ EOF;
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->no_vtsgn = 1;
 	      
   	  }
-              }
-          }
 	}
 	$json->recolte->appellation_GRDCRU = $grdcru;
 
