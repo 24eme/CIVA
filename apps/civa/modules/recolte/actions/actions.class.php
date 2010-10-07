@@ -237,21 +237,21 @@ class recolteActions extends EtapesActions {
         foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
             if ($dr->recolte->exist($key_appellation)) {
                 $appellation = $dr->recolte->get($key_appellation);
-                foreach ($appellation->filter('lieu') as $lieu) {
-                    foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage) {
-                        if($cepage->hasMinQuantite()) {
-                            $this->min_quantite = $cepage->min_quantite * 100 ;
-                            $this->max_quantite = $cepage->max_quantite * 100 ;
+                foreach ($appellation->getLieux() as $lieu) {
+                    foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
+                        if($cepage_config->hasMinQuantite()) {
+                            $this->min_quantite = $cepage_config->min_quantite * 100 ;
+                            $this->max_quantite = $cepage_config->max_quantite * 100 ;
                         }
-                        if($cepage->getRendement()) {
-                            $rd = $cepage->getRendement();
+                        if($cepage_config->getRendement()) {
+                            $rd = $cepage_config->getRendement();
                         }else {
-                            $rd = $lieu->getRendementAppellation();
+                            $rd = $lieu->getConfig()->getRendementAppellation();
                         }
-                        if($appellation->hasManyLieu()) {
+                        if($appellation->getConfig()->hasManyLieu()) {
                             $this->rendement[$appellation->getLibelle()][$rd][$lieu->getLibelle()] = 1;
                         }else {
-                            $this->rendement[$appellation->getLibelle()][$rd][$cepage->getLibelle()] = 1;
+                            $this->rendement[$appellation->getLibelle()][$rd][$cepage_config->getLibelle()] = 1;
                         }
 
                     }
@@ -289,7 +289,7 @@ class recolteActions extends EtapesActions {
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
         $this->form_ajout_lieu = null;
         $this->url_ajout_lieu = null;
-        if ($this->onglets->getCurrentAppellation()->hasManyLieu()) {
+        if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
             $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
         }

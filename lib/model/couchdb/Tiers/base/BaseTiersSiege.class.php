@@ -5,7 +5,4 @@ abstract class BaseTiersSiege extends sfCouchdbDocumentTree {
        $this->_root_class_name = 'Tiers';
        $this->_tree_class_name = 'TiersSiege';
     }
-    public function save($doc) {
-        
-    }
 }

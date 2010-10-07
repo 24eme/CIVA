@@ -1,0 +1,284 @@
+<?php
+
+class DRRecolteLieu extends BaseDRRecolteLieu {
+
+    protected $_total_acheteurs_by_cvi = array();
+
+    public function getConfig() {
+        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+    }
+
+    public function getLibelleWithAppellation() {
+      if ($this->getLibelle())
+	return $this->getParent()->getLibelle().' - '.$this->getLibelle();
+      return $this->getParent()->getLibelle();
+    }
+
+    public function getLibelle() {
+        return ConfigurationClient::getConfiguration()->get($this->getHash())->getLibelle();
+    }
+
+    public function getAppellation() {
+        return $this->getParent();
+    }
+
+    public function getCepages() {
+        return $this->filter('^cepage');
+    }
+
+    public function getCodeDouane($vtsgn = '') {
+      if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
+	if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
+	  $vtsgn = 'AOC';
+	}
+      }
+      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+    }
+
+    public function getTotalVolume() {
+      $field = 'total_volume';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+    }
+    public function getTotalSuperficie() {
+      $field = 'total_superficie';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+    }
+
+    public function getVolumeRevendique() {
+      $field = 'volume_revendique';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
+    }
+
+    public function getVolumeRevendiqueTotal() {
+        return $this->store('volume_revendique_total', array($this, 'getSumCepageFields'), array('volume_revendique'));
+    }
+
+    public function getVolumeRevendiqueAppellation() {
+        $key = "volume_revendique_appellation";
+        if (!isset($this->_storage[$key])) {
+            $volume_revendique = 0;
+            if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxAppellation();
+                if ($volume > $volume_max) {
+                    $volume_revendique = $volume_max;
+                } else {
+                    $volume_revendique = $volume;
+                }
+            }
+            $this->_storage[$key] = $volume_revendique;
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getDplc() {
+      $field = 'dplc';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+       return $this->store($field, array($this, 'getDplcFinal'));
+    }
+
+    public function getDplcTotal() {
+       return $this->store('dplc_total', array($this, 'getSumCepageFields'), array('dplc'));
+    }
+
+    public function getDplcAppellation() {
+        $key = "dplc_appellation";
+        if (!isset($this->_storage[$key])) {
+            $volume_dplc = 0;
+            if ($this->getConfig()->hasRendementAppellation()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxAppellation();
+                if ($volume > $volume_max) {
+                    $volume_dplc = $volume - $volume_max;
+                } else {
+                    $volume_dplc = 0;
+                }
+            }
+            $this->_storage[$key] = $volume_dplc;
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getTotalCaveParticuliere() {
+      $key = "total_cave_particuliere";
+      if (!isset($this->_storage[$key])) {
+          $sum = 0;
+          foreach ($this->getCepages() as $key => $cepage) {
+            if ($key != 'cepage_RB')
+              $sum += $cepage->getTotalCaveParticuliere();
+          }
+          $this->_storage[$key] = $sum;
+      }
+      return $this->_storage[$key];
+    }
+    
+    public function getTotalAcheteursByCvi($field) {
+        if (!isset($this->_total_acheteurs_by_cvi[$field])) {
+            $this->_total_acheteurs_by_cvi[$field] = array();
+            foreach ($this->getCepages() as $key => $object) {
+	      if ($key != 'cepage_RB') {
+                $acheteurs = $object->getTotalAcheteursByCvi($field);
+                foreach ($acheteurs as $cvi => $quantite_vendue) {
+		  if (!isset($this->_total_acheteurs_by_cvi[$field][$cvi])) {
+		    $this->_total_acheteurs_by_cvi[$field][$cvi] = 0;
+		  }
+		  $this->_total_acheteurs_by_cvi[$field][$cvi] += $quantite_vendue;
+                }
+	      }
+            }
+        }
+        return $this->_total_acheteurs_by_cvi[$field];
+    }
+
+     public function getVolumeAcheteur($cvi, $type) {
+        $key = "volume_acheteurs_".$cvi."_".$type;
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            foreach ($this->getAcheteursFromCepage($type) as $a) {
+                if ($a->cvi == $cvi)
+                    $sum += $a->quantite_vendue;
+            }
+            $this->_storage[$key] = $sum;
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "total_volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+              $sum = 0;
+              foreach($this->getAcheteursFromCepage($type) as $acheteur) {
+                $sum += $acheteur->quantite_vendue;
+              }
+              $this->_storage[$key] = $sum;
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getTotalVolumeForMinQuantite() {
+      return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
+    }
+
+    public function getRendementRecoltant() {
+        if ($this->getTotalSuperficie() > 0) {
+	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
+        } else {
+            return 0;
+        }
+    }
+    public function removeVolumes() {
+      $this->volume_revendique = null;
+      $this->total_volume = null;
+      $this->dplc = null;
+      foreach($this->getCepages() as $cepage) {
+	$cepage->removeVolumes();
+      }
+    }
+
+    public function hasSellToUniqueAcheteur() {
+        if ($this->getTotalCaveParticuliere() > 0) {
+            return false;
+        }
+        $vol_total_cvi = array();
+        foreach($this->getAcheteursFromCepage() as $item) {
+            if (!isset($vol_total_cvi[$item->cvi])) {
+                $vol_total_cvi[$item->cvi] = 0;
+            }
+            $vol_total_cvi[$item->cvi] += $item->quantite_vendue;
+        }
+        if (count($vol_total_cvi) != 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getVolumeMaxAppellation() {
+      return ($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation();
+    }
+
+    public function isNonSaisie() {
+      $cpt = 0;
+      foreach($this->getCepages() as $key => $cepage) {
+	$cpt ++;
+	if (!$cepage->isNonSaisie())
+	  return false;
+      }
+      return ($cpt);
+    }
+
+    protected function getVolumeRevendiqueFinal() {
+      $volume_revendique_total = $this->getVolumeRevendiqueTotal();
+      $volume_revendique_final = $volume_revendique_total;
+      if ($this->getConfig()->hasRendementAppellation()) {
+          $volume_revendique_appellation = $this->getVolumeRevendiqueAppellation();
+          if ($volume_revendique_total > $volume_revendique_appellation) {
+            $volume_revendique_final = $volume_revendique_appellation;
+          }
+      }
+      return $volume_revendique_final;
+    }
+
+    protected function getDplcFinal() {
+      $dplc_total = $this->getDplcTotal();
+      $dplc_final = $dplc_total;
+      if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
+          $dplc_appellation = $this->getDplcAppellation();
+          if ($dplc_total < $dplc_appellation) {
+            $dplc_final = $dplc_appellation;
+          }
+      }
+      return $dplc_final;
+    }
+
+    protected function getAcheteursFromCepage($type = 'negoces|cooperatives|mouts', $exclude_cepage = '') {
+      $acheteurs = array();
+      foreach ($this->getCepages() as $key => $cepage) {
+	if ($cepage->getConfig()->excludeTotal()) {
+	  continue;
+	}
+	foreach ($cepage->detail as $d) {
+            foreach ($d->filter($type) as $t) {
+                foreach ($t as $key => $a) {
+                  $acheteurs[$a->cvi] = $a;
+                }
+            }
+	}
+      }
+      return $acheteurs;
+    }
+    
+    protected function getSumCepageFields($field) {
+      $sum = 0;
+      foreach ($this->getCepages() as $key => $cepage) {
+	if ($key != 'cepage_RB')
+	  $sum += $cepage->get($field);
+      }
+      return $sum;
+    }
+
+    protected function update($params = array()) {
+        parent::update($params);
+	$this->add('acheteurs');
+        $acheteurs_from_cepage = $this->getAcheteursFromCepage();
+        foreach ($acheteurs_from_cepage as $a) {
+            $acheteur = $this->acheteurs->add($a->cvi);
+            $acheteur->type_acheteur = $a->getParent()->getKey();
+        }
+        foreach($this->acheteurs as $cvi => $item) {
+            if (!array_key_exists($cvi, $acheteurs_from_cepage)) {
+                $this->acheteurs->remove($cvi);
+            }
+        }
+    }
+}

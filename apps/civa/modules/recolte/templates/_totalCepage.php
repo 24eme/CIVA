@@ -1,5 +1,5 @@
 <?php use_helper('civa') ?>
-<div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->hasTotalCepage()): ?>display:none;<?php endif; ?>">
+<div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage()): ?>display:none;<?php endif; ?>">
     <h2>Total <br /> <?php echo $cepage->libelle ?></h2>
 
     <div class="col_cont">
@@ -40,8 +40,8 @@
    <input type="text" id='cepage_total_cave' readonly="readonly" value="<?php echoFloat($cepage->getTotalCaveParticuliere()); ?>" />
    </p>
         <p class="vol_total_recolte">
-   <?php if ($cepage->hasRendement()): ?>
-        <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getRendement()); ?>" />
+   <?php if ($cepage->getConfig()->hasRendement()): ?>
+        <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getConfig()->getRendement()); ?>" />
         <input type="hidden" id='cepage_max_volume' value="<?php echoFloat($cepage->getVolumeMax()); ?>" />
    <?php else: ?>
         <input type="hidden" id='cepage_rendement' value="-1" />
@@ -51,17 +51,17 @@
    <input type="text" id='cepage_total_volume' readonly="readonly" value="<?php echoFloat($cepage->getTotalVolume()); ?>" />
    </p>
    <ul class="vol_revendique_dplc">
-   <?php if ($cepage->hasRendement()): ?>
-    <li class="rendement <?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>">Rdt : <strong><span id="cepage_current_rendement"><?php echo round($cepage->getRendementRecoltant(),0); ?></span> hl/ha</strong><span  class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_cepage" title="Message aide">Test message d'aide</a></span></li>
+   <?php if ($cepage->getConfig()->hasRendement()): ?>
+    <li class="rendement <?php if ($cepage->getDplc()) echo 'alerte'; ?>">Rdt : <strong><span id="cepage_current_rendement"><?php echo round($cepage->getRendementRecoltant(),0); ?></span> hl/ha</strong><span  class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_cepage" title="Message aide">Test message d'aide</a></span></li>
    <?php endif; ?>
-   <?php if ($onglets->getCurrentLieu()->hasRendement()): ?>
+   <?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
 	   <li>
-	      <input type="text" id="cepage_volume_revendique" readonly="readonly" value="<?php echoFloat($cepage->getTotalVolumeRevendique()); ?>" />
-	      <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echoFloat($cepage->getTotalVolumeRevendique()); ?>" />
+	      <input type="text" id="cepage_volume_revendique" readonly="readonly" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
+	      <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
 	      </li>
 	      <li>
-	      <input type="text" id="cepage_volume_dplc" readonly="readonly" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getTotalDPLC()); ?>" />
-	      <input type="hidden" id="cepage_volume_dplc_orig" class="<?php if ($cepage->getTotalDPLC()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getTotalDPLC()); ?>" />
+	      <input type="text" id="cepage_volume_dplc" readonly="readonly" class="<?php if ($cepage->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getDplc()); ?>" />
+	      <input type="hidden" id="cepage_volume_dplc_orig" class="<?php if ($cepage->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getDplc()); ?>" />
 	      </li>
    <?php endif; ?>
         </ul>

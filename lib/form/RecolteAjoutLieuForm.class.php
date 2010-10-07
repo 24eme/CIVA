@@ -7,7 +7,7 @@
               throw new sfException("Object must be a DRRecolteAppellation object");
           }
 
-          if (!$this->getObject()->hasManyLieu()) {
+          if (!$this->getObject()->getConfig()->hasManyLieu()) {
               throw new sfException("This appellation can't have lieu");
           }
 

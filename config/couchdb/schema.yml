@@ -67,7 +67,7 @@ DR:
                   # ------- LIEU ----------
                   '*':
                     type: collection
-                    class: DRRecolteAppellationLieu
+                    class: DRRecolteLieu
                     definition:
                       fields:
                         total_volume: {type:float}
@@ -80,7 +80,7 @@ DR:
                              fields:
                                '*':
                                  type: collection
-                                 class: DRRecolteAppellationLieuAcheteur
+                                 class: DRRecolteLieuAcheteur
                                  definition:
                                    fields:
                                      type_acheteur: {}
@@ -91,7 +91,7 @@ DR:
                         # ------ Cépage ------
                         '*':
                           type: collection
-                          class: DRRecolteAppellationCepage
+                          class: DRRecolteCepage
                           definition:
                             fields:
                               total_volume: {type: float }
@@ -104,7 +104,7 @@ DR:
                                   fields:
                                     '*':
                                       type: collection
-                                      class: DRRecolteAppellationCepageDetail
+                                      class: DRRecolteCepageDetail
                                       definition:
                                         fields:
                                           appellation: {  }
@@ -232,7 +232,7 @@ Configuration:
           fields:
             douane :
               type: collection
-              class: Douane
+              class: ConfigurationDouane
               definition:
                 fields:
                   type_aoc: {required: false}
@@ -246,7 +246,7 @@ Configuration:
             '*':
             # ------- APPELLATION ---------
               type: collection
-              class: SubConfiguration
+              class: ConfigurationAppellation
               definition:
                 fields:
                   appellation: { }
@@ -255,10 +255,10 @@ Configuration:
                   rendement_appellation: { type: float }
                   mout: {type: integer}
                   no_total_cepage: {type: integer, required: false}
-                  exclude_total: {}
+                  exclude_total: {type: integer, required: false}
                   douane :
                     type: collection
-                    class: Douane
+                    class: ConfigurationDouane
                     definition:
                       fields:
                         type_aoc: {required: false}
@@ -270,7 +270,7 @@ Configuration:
                   '*':
                   # ------------ LIEU --------------
                     type: collection
-                    class: SubConfiguration
+                    class: ConfigurationLieu
                     definition:
                       fields:
                         rendement: {type: float}
@@ -278,7 +278,7 @@ Configuration:
                         libelle: {}
                         douane :
                           type: collection
-                          class: Douane
+                          class: ConfigurationDouane
                           definition:
                             fields:
                               type_aoc: {required: false}
@@ -289,13 +289,13 @@ Configuration:
                         '*':
                         # ------------ CEPAGE -------------
                           type: collection
-                          class: SubConfiguration
+                          class: ConfigurationCepage
                           definition:
                             fields:
                               no_vtsgn: {required: false}
                               douane :
                                 type: collection
-                                class: Douane
+                                class: ConfigurationDouane
                                 definition:
                                   fields:
                                     type_aoc: {required: false}
@@ -307,7 +307,7 @@ Configuration:
                               rendement: { type: float }
                               min_quantite: {type: float, required: false}
                               max_quantite: {type: float, required: false}
-                              exclude_total: {type: float, required: false}
+                              exclude_total: {type: integer, required: false}
                               superficie_optionnelle: { type: integer, required: false }
                               no_negociant : { type: integer, required: false }
                               no_cooperative : { type: integer, required: false }

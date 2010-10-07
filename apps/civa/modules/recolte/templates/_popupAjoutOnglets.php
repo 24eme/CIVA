@@ -4,7 +4,7 @@
     
 </div>
 
-<?php if ($onglets->getCurrentAppellation()->hasManyLieu()): ?>
+<?php if ($onglets->getCurrentAppellation()->getConfig()->hasManyLieu()): ?>
         <div id="popup_ajout_lieu" class="popup_ajout" title="Ajouter un lieu dit">
     <?php
         include_partial('recolte/ajoutLieuForm', array('onglets' => $onglets,

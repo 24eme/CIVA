@@ -49,7 +49,7 @@
 
     <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide">Test message d'aide</a></p>
     <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide">Test message d'aide</a></p>
-    <?php if ($onglets->getCurrentLieu()->hasRendement()): ?>
+    <?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
     <ul class="vol_revendique_dplc">
         <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide">Test message d'aide</a></li>
         <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide">Test message d'aide</a></li>

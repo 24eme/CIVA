@@ -7,7 +7,6 @@ class sfCouchdbDocument extends sfCouchdbJson {
       return $this->get('_id').'/'.$this->get('_rev');
     }
 
-
     public function  __construct() {
       parent::__construct(null, null, $this);
       try{

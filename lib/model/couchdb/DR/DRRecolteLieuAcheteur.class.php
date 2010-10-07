@@ -1,6 +1,6 @@
 <?php
 
-class DRRecolteAppellationLieuAcheteur extends BaseDRRecolteAppellationLieuAcheteur 
+class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur 
 {
   private $acheteur = null;
 
@@ -32,7 +32,7 @@ class DRRecolteAppellationLieuAcheteur extends BaseDRRecolteAppellationLieuAchet
     return $this->acheteur;
   }
 
-  public function update($params = array()) {
+  protected function update($params = array()) {
     parent::update($params);
     $this->getNom();
     $this->getCommune();

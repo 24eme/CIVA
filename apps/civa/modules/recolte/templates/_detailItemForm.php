@@ -48,10 +48,10 @@
             <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
         </p>
         <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
-        <?php if ($detail->hasRendementCepage()): ?>
+        <?php if ($detail->getConfig()->hasRendement()): ?>
         <ul class="vol_revendique_dplc">
 	   <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-	   <input type="hidden" id="detail_rendement" value="<?php echo $detail->getRendementCepage(); ?>"/>
+	   <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
             <li><input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
             <li><input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
         </ul>
@@ -61,7 +61,7 @@
     <div class="col_btn">
         <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
 <script><!--
-<?php if ($onglets->getCurrentCepage()->excludeTotal()) : ?>
+<?php if ($onglets->getCurrentCepage()->getConfig()->excludeTotal()) : ?>
 autoTotal = false;
 <?php else : ?>
 autoTotal = true;

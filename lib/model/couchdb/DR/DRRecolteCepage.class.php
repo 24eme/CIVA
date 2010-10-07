@@ -1,6 +1,6 @@
 <?php
 
-class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
+class DRRecolteCepage extends BaseDRRecolteCepage {
 
     protected $_total_acheteurs_by_cvi = array();
 
@@ -20,74 +20,39 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
       return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
-    public function addDetail($detail) {
-      return $this->add(null, $detail);
-    }
-    protected function update($params = array()) {
-      parent::update($params);
-      $s = 0;
-      $v = 0;
-      foreach ($this->get('detail') as $key => $item) {
-	$v += $item->getVolume();
-	$s += $item->getSuperficie();
-      }
-      
-      $this->set('total_volume', $v);
-      $this->set('total_superficie', $s);
-
-      if ($this->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
-	$volume_max = $this->getVolumeMax();
-	if ($this->total_volume > $volume_max) {
-	  $this->volume_revendique = $volume_max;
-	  $this->dplc = $this->total_volume - $volume_max;
-	} else {
-          $this->dplc = 0;
-	  $this->volume_revendique = $this->total_volume;
-	}
-      }
-    }
-
-    public function getVolumeMax() {
-      return ($this->total_superficie/100) * $this->getRendement();
-    }
-
-    private function getSumDetailFields($field) {
-      $sum = 0;
-      foreach ($this->getData()->detail as $detail) {
-	$sum += $detail->{$field};
-      }
-      return $sum;
-    }
     public function getTotalVolume() {
-      if ($r = parent::_get('total_volume'))
-	return $r;
-      return $this->getSumDetailFields('volume');
-      
+      $field = 'total_volume';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumDetailFields'), array('volume'));
     }
     public function getTotalSuperficie() {
-      if ($r = parent::_get('total_superficie'))
-	return $r;
-      return $this->getSumDetailFields('superficie');
-    }
-
-    public function getDplc() {
-      return $this->getTotalDPLC();
-    }
-
-    public function getTotalDPLC() {
-      if ($r = parent::_get('dplc'))
-	return $r;
-      return $this->getSumDetailFields('volume_dplc');
+      $field = 'total_superficie';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumDetailFields'), array('superficie'));
     }
 
     public function getVolumeRevendique() {
-      return $this->getTotalVolumeRevendique();
+      $field = 'volume_revendique';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumDetailFields'), array($field));
     }
 
-    public function getTotalVolumeRevendique() {
-      if ($r = parent::_get('volume_revendique'))
-	return $r;
-      return $this->getSumDetailFields('volume_revendique');
+    public function getDplc() {
+      $field = 'dplc';
+      if ($r = $this->_get($field)) {
+        return $r;
+      }
+      return $this->store($field, array($this, 'getSumDetailFields'), array('volume_dplc'));
+    }
+
+    public function getTotalCaveParticuliere() {
+        return $this->store('cave_particuliere', array($this, 'getSumDetailFields'), array('cave_particuliere'));
     }
 
     public function getTotalAcheteursByCvi($field) {
@@ -107,37 +72,8 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
         return $this->_total_acheteurs_by_cvi[$field];
     }
 
-    public function getTotalCaveParticuliere() {
-        return $this->getSumDetailFields('cave_particuliere');
-    }
-
-    public function getRendement() {
-      return $this->getConfig()->getRendement();
-    }
-
-    public function hasTotalCepage() {
-      $cpt = 0;
-      if (!$this->getRendement())
-	return false;
-      
-      /*foreach($this->getParent()->filter('cepage_') as $c) {
-	$cpt++;
-	if ($cpt>2)
-	  break;
-      
-      if ($cpt < 2)
-	return false;
-       */
-
-      return $this->getConfig()->hasTotalCepage();
-    }
-
-    public function excludeTotal() {
-      return $this->getConfig()->excludeTotal();
-    }
-
-    public function hasRendement() {
-        return ($this->getRendement()>0);
+    public function getVolumeMax() {
+      return ($this->total_superficie/100) * $this->getConfig()->getRendement();
     }
 
     public function getRendementRecoltant() {
@@ -191,5 +127,37 @@ class DRRecolteAppellationCepage extends BaseDRRecolteAppellationCepage {
             }
         }
         return $resultat;
+    }
+
+    protected function getSumDetailFields($field) {
+      $sum = 0;
+      foreach ($this->getData()->detail as $detail) {
+	$sum += $detail->{$field};
+      }
+      return $sum;
+    }
+
+    protected function update($params = array()) {
+      parent::update($params);
+      $s = 0;
+      $v = 0;
+      foreach ($this->get('detail') as $key => $item) {
+	$v += $item->getVolume();
+	$s += $item->getSuperficie();
+      }
+
+      $this->set('total_volume', $v);
+      $this->set('total_superficie', $s);
+
+      if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
+	$volume_max = $this->getVolumeMax();
+	if ($this->total_volume > $volume_max) {
+	  $this->volume_revendique = $volume_max;
+	  $this->dplc = $this->total_volume - $volume_max;
+	} else {
+          $this->dplc = 0;
+	  $this->volume_revendique = $this->total_volume;
+	}
+      }
     }
 }

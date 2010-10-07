@@ -38,20 +38,20 @@
 
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
-    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
+                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
 												</tr>
 												<tr>
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
-    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
+                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
 												</tr>
-                                                                                                <?php if($appellationlieu->hasRendement()): ?>
+                                                                                                <?php if($appellationlieu->getConfig()->hasRendement()): ?>
 												<tr>
 													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
-												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendiqueFinal()); ?> hl</td>
+												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
 												</tr>
 												<tr>
 													<td>DPLC <span class="unites">(hl)</span> :</td>
-    <td class="valeur alt"><?php echoFloat( $appellationlieu->getDPLCFinal()); ?> hl</td>
+                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()); ?> hl</td>
 												</tr>
                                                                                                 <?php endif; ?>
 											</tbody>
@@ -64,14 +64,8 @@
 							<div id="recap_ventes">
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide">Test message d'aide</a></h2>
 								<div class="contenu_section">
-        <?php /*echo $form->renderGlobalErrors();
-foreach($appellationlieu->acheteurs as $cvi => $info) {
-  echo $form['cvi_'.$cvi]['superficie']->renderError();
-  echo $form['cvi_'.$cvi]['dontdplc']->renderError();
-} */
-?>
 									<div class="bloc_gris">
-    <?php if($appellationlieu->acheteurs->count() > 0): ?>
+                                                                        <?php if($appellationlieu->acheteurs->count() > 0): ?>
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<thead>
 												<tr>
@@ -84,24 +78,24 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
 												</tr>
 											</thead>
 											<tbody>
-    <?php foreach($appellationlieu->acheteurs as $cvi => $info) : ?>
+                                                                                            <?php foreach($appellationlieu->acheteurs as $cvi => $info) : ?>
 												<tr>
-    <td class="nom"><?php echo $info->getNom();?></td>
+                                                                                                        <td class="nom"><?php echo $info->getNom();?></td>
 													<td class="cvi alt"><?php echo $cvi; ?></td>
 													<td class="commune"><?php echo $info->getCommune(); ?></td>
-                                                                                                        <?php if($appellationlieu->hasRendement()){ ?>
-													<td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
-													<?php }else{ ?>
-                                                                                                        <td class="superficie"></td>
-                                                                                                        <?php } ?>
+                                                                                                        <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                                                                            <td class="superficie alt <?php echo ($form['cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
+													<?php else: ?>
+                                                                                                            <td class="superficie"></td>
+                                                                                                        <?php endif; ?>
                                                                                                         <td><?php echoFloat( $info->getVolume()); ?> hl</td>
-                                                                                                        <?php if($appellationlieu->hasRendement()){ ?>
-													<td class="dplc alt <?php echo ($form['cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
-                                                                                                        <?php }else{ ?>
-                                                                                                        <td class="dplc"></td>
-                                                                                                        <?php } ?>
+                                                                                                        <?php if($appellationlieu->getConfig()->hasRendement()) : ?>
+                                                                                                            <td class="dplc alt <?php echo ($form['cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
+                                                                                                        <?php else: ?>
+                                                                                                            <td class="dplc"></td>
+                                                                                                        <?php endif; ?>
                                                                                                 </tr>
-<?php endforeach; ?>
+                                                                                            <?php endforeach; ?>
 											</tbody>
 										</table>
 										<div class="btn">
@@ -141,9 +135,9 @@ foreach($appellationlieu->acheteurs as $cvi => $info) {
                         <script><!--
                             function valider_can_submit()
                             {
-                                <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->hasRendement()): ?>
+                                <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->getConfig()->hasRendement()): ?>
                                 var total_superficie = <?php echoFloat( $appellationlieu->getTotalSuperficie()); ?>;
-                                var total_dontdplc = <?php echoFloat( $appellationlieu->getDPLCFinal()); ?>;
+                                var total_dontdplc = <?php echoFloat( $appellationlieu->getDplc()); ?>;
                                 var sum_superficie = 0;
                                 var sum_dont_dplc = 0;
                                 $('#recap_ventes table.table_donnees tr td.superficie input.num').each(function() {

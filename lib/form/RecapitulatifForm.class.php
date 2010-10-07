@@ -9,7 +9,7 @@
                 $acheteur->superficie = $lieu->getTotalSuperficie();
             }
             if ($is_unique_acheteur && is_null($acheteur->dontdplc)) {
-                $acheteur->dontdplc = $lieu->getDPLCFinal();
+                $acheteur->dontdplc = $lieu->getDplc();
             }
 	    $af = new RecapitulatifAcheteurForm($acheteur);
 	    $this->embedForm('cvi_'.$cvi, $af);

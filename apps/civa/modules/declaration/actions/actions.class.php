@@ -196,7 +196,7 @@ Le CIVA';
                                 $this->error = true;
                             }else {
                                 // vérifie le trop plein de DPLC
-                                if($appellation->appellation=='ALSACEBLANC' && $cepage->hasRendement() && $cepage->getTotalDPLC() > 0){
+                                if($appellation->appellation=='ALSACEBLANC' && $cepage->getConfig()->hasRendement() && $cepage->getDplc() > 0){
                                             array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                                             $this->logVigilance = true;
                                 }

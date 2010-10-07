@@ -12,14 +12,47 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->getConfig()->getLibelle();
     }
 
-    public function addCepage($cepage, $lieu = '') {
-        return $this->add("lieu$lieu")->add('cepage_' . $cepage);
+    public function getLieux() {
+        return $this->filter('^lieu');
     }
 
-    public function getCepage($cepage, $lieu = '') {
-        return $this->get("lieu$lieu")->get('cepage_' . $cepage);
+    public function getTotalVolume() {
+        $field = 'total_volume';
+        if ($r = $this->_get($field)) {
+            return $r;
+        }
+        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
+    public function getTotalSuperficie() {
+        $field = 'total_superficie';
+        if ($r = $this->_get($field)) {
+            return $r;
+        }
+        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+    }
+
+    public function getVolumeRevendique() {
+        $field = 'volume_revendique';
+        if ($r = $this->_get($field)) {
+            return $r;
+        }
+        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+    }
+
+
+    public function getDplc() {
+        $field = 'dplc';
+        if ($r = $this->_get($field)) {
+            return $r;
+        }
+        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+    }
+
+    public function getTotalCaveParticuliere() {
+        return $this->store('total_cave_particuliere', array($this, 'getSumLieuWithMethod'), array('getTotalCaveParticuliere'));
+    }
+    
     public function getTotalAcheteursByCvi($field) {
         if (!isset($this->_total_acheteurs_by_cvi[$field])) {
             $this->_total_acheteurs_by_cvi[$field] = array();
@@ -36,83 +69,16 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->_total_acheteurs_by_cvi[$field];
     }
 
-    public function getTotalVolume() {
-        $r = $this->_get('total_volume');
-        if ($r)
-            return $r;
-        return $this->getSumLieu('total_volume');
-    }
-
-    public function getTotalSuperficie() {
-        $r = $this->_get('total_superficie');
-        if ($r)
-            return $r;
-        return $this->getSumLieu('total_superficie');
-    }
-
-    public function getTotalDPLC() {
-        $r = $this->_get('dplc');
-        if ($r)
-            return $r;
-        return $this->getSumLieuWithMethod('getTotalDPLC');
-    }
-
-    public function getTotalVolumeRevendique() {
-        $r = $this->_get('volume_revendique');
-        if ($r)
-            return $r;
-        return $this->getSumLieuWithMethod('getTotalVolumeRevendique');
-    }
-
-    public function getTotalCaveParticuliere() {
-        $sum = 0;
-        foreach ($this->filter('^lieu') as $key => $lieu) {
-            $sum += $lieu->getTotalCaveParticuliere();
-        }
-        return $sum;
-    }
-
-    private function getSumLieu($type) {
-        $sum = 0;
-        foreach ($this->filter('^lieu') as $key => $lieu) {
-            $sum += $lieu->get($type);
-        }
-        return $sum;
-    }
-
-    private function getSumLieuWithMethod($method) {
-        $sum = 0;
-        foreach ($this->filter('^lieu') as $key => $lieu) {
-            $sum += $lieu->$method();
-        }
-        return $sum;
-    }
-
-    public function save() {
-        return $this->getCouchdbDocument()->save();
-    }
-
     public function getVolumeAcheteur($cvi, $type) {
-        $sum = 0;
-        foreach ($this->filter('^lieu') as $key => $lieu) {
-            $sum += $lieu->getVolumeAcheteur($cvi, $type);
-        }
-        return array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
-    }
-
-    public function hasManyLieu() {
-        return!$this->getConfig()->exist('lieu');
-    }
-
-    public function getLieuChoices() {
-        $lieu_choices = array('' => '');
-        foreach ($this->getConfig()->filter('^lieu[0-9]') as $key => $item) {
-            if (!$this->exist($key)) {
-                $lieu_choices[$key] = $item->getLibelle();
+        $key = "volume_acheteurs_".$cvi."_".$type;
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            foreach ($this->getLieux() as $key => $lieu) {
+                $sum += $lieu->getVolumeAcheteur($cvi, $type);
             }
+            $this->_storage[$key] = array('volume' => $sum, 'ratio_superficie' => round($this->getTotalSuperficie() * $sum / $this->getTotalVolume(), 2));
         }
-        asort($lieu_choices);
-        return $lieu_choices;
+        return $this->_storage[$key];
     }
 
     public function removeVolumes() {
@@ -137,4 +103,30 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       return $this->_get('appellation');
     }
 
+    protected function getSumLieuFields($field) {
+        $sum = 0;
+        foreach ($this->getLieux() as $key => $lieu) {
+            $sum += $lieu->get($field);
+        }
+        return $sum;
+    }
+
+    protected function getSumLieuWithMethod($method) {
+        $sum = 0;
+        foreach ($this->getLieux() as $key => $lieu) {
+            $sum += $lieu->$method();
+        }
+        return $sum;
+    }
+
+    public function getLieuChoices() {
+        $lieu_choices = array('' => '');
+        foreach ($this->getConfig()->filter('^lieu[0-9]') as $key => $item) {
+            if (!$this->exist($key)) {
+                $lieu_choices[$key] = $item->getLibelle();
+            }
+        }
+        asort($lieu_choices);
+        return $lieu_choices;
+    }
 }

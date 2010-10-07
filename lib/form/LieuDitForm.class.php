@@ -20,7 +20,9 @@
         }
 
         public function doUpdateObject($values) {
-            $this->getObject()->add($values['lieu']);
+            if (isset($values['lieu'])) {
+                $this->getObject()->add($values['lieu']);
+            }
         }
     }
 

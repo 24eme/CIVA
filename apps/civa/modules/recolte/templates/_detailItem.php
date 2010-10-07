@@ -59,7 +59,7 @@
             <?php endif; ?>
         </p>
         
-        <?php if ($detail->hasRendementCepage()): ?>
+        <?php if ($detail->getConfig()->hasRendement()): ?>
         <ul class="vol_revendique_dplc">
             <li><input type="hidden" class="num revendique readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
             <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" /></li>

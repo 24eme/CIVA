@@ -1,6 +1,6 @@
 <?php
 
-class Douane extends BaseDouane {
+class ConfigurationDouane extends BaseConfigurationDouane {
   private function getParentValue($key) {
     if ($this->getParent()->getKey() == 'recolte' || !$this->getParent()->getParent()->exist('douane'))
       throw new sfCouchdbException("$key not found (".$this->getHash().")");

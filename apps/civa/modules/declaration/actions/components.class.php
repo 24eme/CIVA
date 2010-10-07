@@ -40,8 +40,8 @@ class declarationComponents extends sfComponents {
               $this->libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
               $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-              $this->revendique[$appellation->getAppellation()] = $appellation->getTotalVolumeRevendique();
-              $this->dplc[$appellation->getAppellation()] = $appellation->getTotalDPLC();
+              $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
+              $this->dplc[$appellation->getAppellation()] = $appellation->getDplc();
           }
         }
 

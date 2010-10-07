@@ -1,60 +1,48 @@
 <?php
 
 class DRRecolte extends BaseDRRecolte {
-    
     public function getConfig() {
         return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
     }
 
-    public function addAppellation($appellation) {
-        $appellation_key = 'appellation_'.$appellation;
-        if (!$this->exist($appellation_key)) {
-            $appellation_obj = $this->add($appellation_key);
-            $appellation_obj->appellation = $appellation;
-            return $appellation_obj;
-        } else {
-            return $this->get($appellation_key);
-        }
+    public function getAppellations() {
+        return $this->filter('^appellation_');
     }
 
-    public function getAppellation($appellation) {
-        return $this->get('appellation_'.$appellation);
+    public function getConfigAppellations() {
+        return $this->getConfig()->filter('^appellation_');
+    }
+
+    public function hasOneOrMoreAppellation() {
+        return $this->getAppellations()->count() > 0;
+    }
+
+    public function hasAllAppellation() {
+        return (!($this->getAppellations()->count() < $this->getConfigAppellations()->count()));
+    }
+
+    public function removeVolumes() {
+      foreach ($this->getAppellations() as $appellation) {
+	$appellation->removeVolumes();
+      }
     }
 
     protected function update($params = array()) {
       parent::update($params);
-      
+
       if (in_array('from_acheteurs',$params)) {
         $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-        $configuration = sfCouchdbManager::getClient('Configuration')->getConfiguration();
         foreach($acheteurs as $key => $appellation) {
-	  $cappellation = $configuration->get('recolte')->get($key);
-	  $app = $this->addAppellation($cappellation->appellation);
-	  if (!$app->hasManyLieu()) {
+	  $app = $this->add($key);
+	  if (!$app->getConfig()->hasManyLieu()) {
 	    $app->add('lieu');
 	  }
         }
-        foreach($this->filter('appellation_') as $key => $appellation) {
+        foreach($this->getAppellations() as $key => $appellation) {
             if (!$acheteurs->exist($key)) {
                 $this->remove($key);
             }
         }
-      }
-    }
-
-    public function hasOneOrMoreAppellation() {
-        return $this->filter('^appellation_')->count() > 0;
-    }
-
-    public function hasAllAppellation() {
-        $nb_appellation = $this->filter('^appellation')->count();
-        $nb_appellation_config = $this->getConfig()->filter('^appellation')->count();
-        return (!($nb_appellation < $nb_appellation_config));
-    }
-
-    public function removeVolumes() {
-      foreach ($this->filter('^appellation_') as $appellation) {
-	$appellation->removeVolumes();
       }
     }
 }

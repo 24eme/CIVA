@@ -146,7 +146,7 @@ class exportActions extends sfActions
 	if ($colass) {
 	  $total['colonneAss'] = $colass;
 	}
-	if ($lieu->getAppellation() != 'KLEVENER')
+	if ($lieu->getAppellation()->getAppellation() != 'KLEVENER')
 	  $xml[] = $total;
       }
     }
@@ -255,7 +255,7 @@ class exportActions extends sfActions
 	  foreach($detail->mouts as $vente) {
 	    $c[$vente->cvi] = $vente->quantite_vendue;
 	  }
-	if ($cepage->excludeTotal()) {
+	if ($cepage->getConfig()->excludeTotal()) {
 	  array_push($afterTotal, $c);
 	}else{
 	  $last = array_push($colonnes, $c) - 1;

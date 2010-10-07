@@ -1,4 +1,4 @@
-<?php if ($onglets->getItemsLieu($appellation_key)->hasManyLieu()): ?>
+<?php if ($onglets->getItemsLieu($appellation_key)->getConfig()->hasManyLieu()): ?>
 <ul class="sous_onglets">
 	<?php $first = true ?>
     <?php foreach($onglets->getItemsLieu($appellation_key) as $key => $lieu): ?>

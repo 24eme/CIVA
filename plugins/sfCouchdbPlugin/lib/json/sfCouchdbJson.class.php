@@ -406,7 +406,10 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
         return $this->_couchdb_document;
     }
-
+    
+    public function save() {
+        return $this->getCouchdbDocument()->save();
+    }
 
     public function setHash($hash) {
         $this->_object_hash = $hash;
