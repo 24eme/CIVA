@@ -65,7 +65,7 @@ class PageablePDF extends PageableOutput {
   }
 
   public function addHeaders($response) {
-    $response->setHttpHeader('content-type', 'application/force-download');
+    $response->setHttpHeader('content-type', 'application/x-pdf');
     $response->setHttpHeader('content-disposition', 'inline; filename="'.basename($this->filename).'";');
   }
 
