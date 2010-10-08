@@ -10,6 +10,7 @@
  ******************************************/
 $(document).ready( function()
 {
+
     initMsgAide();
     $('#onglets_majeurs').ready( function() {
         initOngletsMajeurs();
@@ -34,6 +35,12 @@ $(document).ready( function()
     $('.table_donnees').ready( function() {
         initTablesDonnes();
     });
+
+    if($('#appellation_volume_dplc').val() > 0){
+        ($('.rendement').addClass("alerte"));
+    }else{
+        ($('.rendement').removeClass("alerte"));
+    }
 	
     $('input.num').live('keypress',function(e)
     {
@@ -72,7 +79,8 @@ $(document).ready( function()
 
     
     $('.gestion_recolte_donnees input').each(function(e)
-    {   var val = $(this).val();
+    {
+        var val = $(this).val();
         if(val.length > 12)
             $(this).addClass('num_alerte');
         else
@@ -151,7 +159,7 @@ $(document).ready( function()
             modal: true,
             buttons:{
                 '': function() {
-                        $(this).dialog( "close" );
+                    $(this).dialog( "close" );
                 }
             }
         });
@@ -164,8 +172,8 @@ $(document).ready( function()
 
 
     if($('.col_active')){
-         $('.superficie').focus();
-         $('.superficie').select();
+        $('.superficie').focus();
+        $('.superficie').select();
     }
 
     $(document).find('a.btn_voir_dr_prec').live('click', function() {
@@ -177,9 +185,6 @@ $(document).ready( function()
         openPopup($('#popup_rappel_log'));
         return false;
     }
-
-
-
 });
 
 
@@ -222,12 +227,20 @@ var initMsgAide = function()
                 var message = json.message;
                 popup.html('<p></p>');
                 popup.find('p').text(message);
-                $(popup).dialog( "option" , "title" , titre, "buttons", { "": function() { $(this).dialog("close"); } });
+                $(popup).dialog( "option" , "title" , titre, "buttons", {
+                    "": function() {
+                        $(this).dialog("close");
+                    }
+                });
             }
             );
             
         openPopup(popup);
-        $(popup).dialog( "option" , "title" , title_msg_aide, "buttons", { "": function() { $(this).dialog("close"); } });
+        $(popup).dialog( "option" , "title" , title_msg_aide, "buttons", {
+            "": function() {
+                $(this).dialog("close");
+            }
+        });
         
         return false;
     });
@@ -939,6 +952,14 @@ var volumeOnChange = function(input) {
     }else{
         ($('.rendement').addClass("alerte"));
     }
+
+    if($('#appellation_volume_dplc').val() > 0){
+        ($('.rendement').addClass("alerte"));
+    }else{
+        ($('.rendement').removeClass("alerte"));
+    }
+  
+
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
         var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
@@ -1141,10 +1162,10 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion, source_
         width: 375,
         modal: true,
         buttons:{
-                '': function() {
-                        $(this).dialog( "close" );
-                }
+            '': function() {
+                $(this).dialog( "close" );
             }
+        }
     });
 	
     btn.live('click', function()
@@ -1303,10 +1324,10 @@ var openPopup = function(popup, fn_open_if) {
         width: 375,
         modal: true,
         buttons:{
-                '': function() {
-                        $(this).dialog( "close" );
-                }
+            '': function() {
+                $(this).dialog( "close" );
             }
+        }
     });
 
 
