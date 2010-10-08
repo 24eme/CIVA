@@ -944,8 +944,8 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#appellation_volume_dplc'));
     addClassAlerteIfNeeded($('#cepage_volume_dplc'));
 	
-    $('#appellation_total_dplc_sum').val('Σ '+$('#appellation_total_dplc_sum').val());
-    $('#appellation_total_revendique_sum').val('Σ '+$('#appellation_total_revendique_sum').val());
+    $('#appellation_total_dplc_sum').val('Σ '+parseFloat($('#appellation_total_dplc_sum').val()));
+    $('#appellation_total_revendique_sum').val('Σ '+parseFloat($('#appellation_total_revendique_sum').val()));
 
     if($('#cepage_volume_dplc').val() == 0){
         ($('.rendement').removeClass("alerte"));

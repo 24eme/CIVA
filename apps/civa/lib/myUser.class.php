@@ -32,33 +32,49 @@ class myUser extends sfBasicSecurityUser {
         }
     }
 
+    public function signInAdmin() {
+        $this->setAuthenticated(true);
+        $this->addCredential(self::CREDENTIAL_ADMIN);
+    }
+
+    public function removeTiers() {
+        $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_TIERS);
+        $this->_tiers = null;
+        $this->removeCredential(self::CREDENTIAL_DECLARANT);
+    }
+
     public function signIn($tiers) {
         if (!$tiers)
             throw new sfCouchdbException('Tiers needed');
         $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
-        //$ldap = new ldap();
-        //$groupe = $ldap->getGroupe($tiers);
         $this->addCredential(self::CREDENTIAL_DECLARANT);
     }
 
     public function signInWithCas($casUser) {
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($casUser);
-        $this->signIn($tiers);
+       $ldap = new ldap();
+       if (function_exists('ldap_connect')) {
+           $groupe = $ldap->getGroupe($casUser);
+       } else {
+           $groupe = "declarant";
+       }
+       if($groupe == "declarant") {
+           $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($casUser);
+           $this->signIn($tiers);
+       } elseif($groupe == "admin") {
+           $this->signInAdmin();
+       }
     }
 
     public function signOut() {
-        $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_TIERS);
-        $this->_tiers = null;
+        $this->removeTiers();
         $this->setAuthenticated(false);
     }
 
     public function getTiers() {
         if (!$this->_tiers && $cvi = $this->getAttribute(self::SESSION_CVI, null, self::NAMESPACE_TIERS)) {
             $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi);
-
             if (!$this->_tiers) {
-                // the user does not exist anymore in the database
                 $this->signOut();
                 throw new sfException('The user does not exist anymore in the database.');
             }

@@ -21,11 +21,6 @@ class declarationActions extends EtapesActions {
              $this->dr_non_editable = 0;
         
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        if (!$this->getUser()->isDeclarant() && !$this->getUser()->isAdmin()) {
-            return $this->redirect('@logout');
-        } elseif(!$this->getUser()->isDeclarant() && $this->getUser()->isAdmin()) {
-            return $this->redirect('@login_admin');
-        }
         $this->setCurrentEtape('mon_espace_civa');
         $this->getUser()->initDeclarationCredentials();
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));

@@ -15,7 +15,6 @@ class tiersActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeLogin(sfWebRequest $request) {
-
         if ($this->getUser()->isAuthenticated()) {
             $this->redirect('@mon_espace_civa');
         }elseif($request->getParameter('ticket')) {
@@ -28,8 +27,12 @@ class tiersActions extends EtapesActions {
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
             phpCAS::forceAuthentication();
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
-            $this->getContext()->getUser()->signInWithCas(phpCAS::getUser());
-            $this->redirect('@mon_espace_civa');
+            $this->getUser()->signInWithCas(phpCAS::getUser());
+            if ($this->getUser()->isDeclarant()) {
+                $this->redirect('@mon_espace_civa');
+            } elseif($this->getUser()->isAdmin()) {
+                $this->redirect('@login_admin');
+            }
         }else {
             $url = sfConfig::get('app_cas_url').'/login?service='.$request->getUri();
             $this->redirect($url);
@@ -37,17 +40,15 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeLoginAdmin(sfWebRequest $request) {
-        $this->need_login = !($this->getUser()->isAdmin());
-        $this->form = new LoginAdminForm(null, array('need_login' => $this->need_login));
-            if ($request->isMethod(sfWebRequest::POST)) {
-                $this->form->bind($request->getParameter($this->form->getName()));
-                if ($this->form->isValid()) {
-                    $this->getUser()->signOut();
-                    $this->getUser()->signIn($this->form->getValue('tiers'));
-                    $this->getUser()->addCredential(myUser::CREDENTIAL_ADMIN);
-                    $this->redirect('@mon_espace_civa');
-                }
+        $this->getUser()->removeTiers();
+        $this->form = new LoginForm();
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->getUser()->signIn($this->form->getValue('tiers'));
+                $this->redirect('@mon_espace_civa');
             }
+        }
     }
 
     public function executeLogout(sfWebRequest $request) {

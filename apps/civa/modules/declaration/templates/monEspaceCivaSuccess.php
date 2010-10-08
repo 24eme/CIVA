@@ -90,12 +90,7 @@
                         <?php if (count($campagnes) > 0): ?>
                         <ul class="declarations">
                             <?php foreach ($campagnes as $id => $campagne): ?>
-                            <!--<li>
-                                <a href="#"><?php echo $campagne ?></a>
-                                <ul>-->
                                     <li><?php echo link_to($campagne, '@visualisation?annee='.$campagne); ?></li>
-                               <!-- </ul>
-                            </li>-->
                             <?php endforeach; ?>
                         </ul>
                         <?php endif; ?>
@@ -112,6 +107,26 @@
                 </ul>
 
             </div>
+            <?php if ($sf_user->isAdmin()): ?>
+            <br />
+            <h3 class="titre_section">Administration</h3>
+            <div class="contenu_section">
+                <ul>
+                    <li>
+                        <a href="#"> Télécharger l'export XML</a>
+                        <ul class="declarations">
+                            <?php if ($declaration): ?>
+                            <li><?php echo link_to($declaration->campagne, '@xml?annee='.$declaration->campagne); ?></li>
+                            <?php endif; ?>
+                            <?php foreach ($campagnes as $id => $campagne): ?>
+                                <li><?php echo link_to($campagne, '@xml?annee='.$campagne); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+            <?php endif; ?>
         </div>
         <!-- fin #precedentes_declarations -->
     </div>

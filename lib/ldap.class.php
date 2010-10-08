@@ -74,10 +74,10 @@ class ldap {
         return false;
     }
 
-    public function getGroupe($tiers) {
+    public function getGroupe($uid) {
         $ldapConnect = $this->ldapConnect();
-        if($ldapConnect && $tiers) {
-            $filter = 'uid='.$tiers->cvi;
+        if($ldapConnect && $uid) {
+            $filter = 'uid='.$uid;
             $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
             if($search){
 	      $dn = ldap_get_entries($ldapConnect, $search);

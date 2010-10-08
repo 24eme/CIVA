@@ -1,5 +1,8 @@
 xml:
-  credentials: [declarant]
+  credentials: [admin]
+
+csvTiers:
+  credentials: [admin]
 
 pdf:
   credentials: [declarant]

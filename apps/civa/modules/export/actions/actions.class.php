@@ -153,7 +153,10 @@ class exportActions extends sfActions
     $this->xml = $xml;
     $this->dr = $dr;
     $this->setLayout(false);
-    $this->response->setContentType('text/xml');
+    $this->response->setContentType('application/xml');
+    $this->response->setHttpHeader('Content-disposition', 'attachment; filename='.$this->dr->cvi.'.xml', true);
+    $this->response->setHttpHeader('Pragma', 'o-cache', true);
+    $this->response->setHttpHeader('Expires', '0', true);
   }
 
   private function ajaxPdf() {
