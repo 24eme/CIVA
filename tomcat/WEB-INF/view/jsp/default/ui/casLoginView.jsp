@@ -85,7 +85,7 @@ String host = "";
                 <h2 class="titre_section">Premiere connexion</h2>
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
-                        <p class="intro">S'il s'agit de votre premiere connexion, munissez vous votre numéro CVI et du mot de passe recu par courrier.</p>
+                        <p class="intro">S'il s'agit de votre premiere connexion, munissez vous de votre numéro CVI et du mot de passe recu par courrier.</p>
                         <p id="creer_compte" ><a href="<% out.println(host); %>/compte">Créer votre compte</a></p>
                     </div>
                 </div>
