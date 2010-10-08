@@ -123,6 +123,7 @@ EOF;
         $json->intro_mon_espace_civa_dr_validee = "Le logiciel vous informe ici des problèmes rencontrés sur votre déclaration. Ces erreurs sont bloquantes. Vous ne pourrez donc pas valider définitivement votre déclaration si elles ne sont pas règlées. En cliquant sur le message vous retournez automatiquement à l'endroit où se trouve le problème et vous pouvez effectuer la modification.";
         $json->intro_mon_espace_civa_dr_non_editable = "Votre DR n'est plus éditable.";
         $json->intro_gamma = "Lien vers votre espace Gamma";
+        $json->intro_doc_aide = "En cas de besoin n'hésitez pas à consulter la notice d'aide complete au format pdf.";
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "Veuillez cocher les cases correspondantes à la répartition de votre récolte.";
         $json->intro_exploitation_lieu = "Dans l'écran précédent vous avez cochez la (ou les) case AOC Alsace Grand cru. Vous devez maintenant ici sélectionner les lieux-dits pour lesquels vous avez récolté de l'AOC Alsace Grand Cru. Vous pouvez à tout moment supprimer la sélection à l'aide de la croix rouge.";

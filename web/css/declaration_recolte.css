@@ -502,6 +502,14 @@ a.msg_aide:hover{
     width: 264px;
 }
 
+#precedentes_declarations p.intro
+{
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 10px;
+    text-align: justify;
+}
+
 #precedentes_declarations ul.ui-display-none { display: none; }
 #precedentes_declarations ul { font-size: 15px; }
 #precedentes_declarations ul li { margin: 0 0 10px; }

@@ -103,6 +103,15 @@
                 </ul>
 
             </div>
+            <br />
+            <h3 class="titre_section">Documents d'aide</h3>
+            <div class="contenu_section">
+                <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
+                <ul>
+                    <li><a href=""> Télécharger la notice</a></li>
+                </ul>
+
+            </div>
         </div>
         <!-- fin #precedentes_declarations -->
     </div>
