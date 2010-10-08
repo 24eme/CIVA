@@ -53,11 +53,7 @@ class myUser extends sfBasicSecurityUser {
 
     public function signInWithCas($casUser) {
        $ldap = new ldap();
-       if (function_exists('ldap_connect')) {
-           $groupe = $ldap->getGroupe($casUser);
-       } else {
-           $groupe = "declarant";
-       }
+       $groupe = $ldap->getGroupe($casUser);
        if($groupe == "declarant") {
            $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($casUser);
            $this->signIn($tiers);

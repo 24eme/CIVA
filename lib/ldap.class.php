@@ -81,8 +81,8 @@ class ldap {
             $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
             if($search){
 	      $dn = ldap_get_entries($ldapConnect, $search);
-	      if (isset(self::$gid2groupe[$dn[0]['gidNumber']]))
-		return self::$gid2groupe[$dn[0]['gidNumber']];
+	      if (isset(self::$gid2groupe[$dn[0]['gidnumber'][0]]))
+		return self::$gid2groupe[$dn[0]['gidnumber'][0]];
 	      else return false;
             }
             return false;
