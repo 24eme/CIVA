@@ -1264,6 +1264,10 @@ a.msg_aide:hover{
 #gestion_recolte .col_total p.denomination,
 #gestion_recolte .col_total p.mention { visibility: hidden; }
 
+#gestion_recolte p.denomination .readonly{
+    color:#aca899;
+}
+
 #gestion_recolte #col_sepage_total,
 #gestion_recolte #col_sepage_total .col_cont,
 #gestion_recolte #col_sepage_total .vol_total_recolte input { background: #acb701; }

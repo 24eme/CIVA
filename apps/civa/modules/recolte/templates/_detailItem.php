@@ -5,7 +5,7 @@
     <div class="col_cont">
         <p class="denomination">
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
-            <input type="text" disabled="disabled" value="<?php echo $detail->denomination ?>" />
+            <input type="text" readonly="readonly" class="readonly" value="<?php echo $detail->denomination ?>" title="<?php echo $detail->denomination ?>" />
 <?php endif;?>
         </p>
 
