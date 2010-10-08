@@ -6,7 +6,7 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
        return -1;
     }
     $r = $this->_get('rendement');
-    if ($r && ($r > 0 || $r == -1)) {
+    if ($r) {
       return $r;
     }
     
@@ -21,7 +21,7 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     if ($this->exist('rendement_appellation')) {
         $r = $this->_get('rendement_appellation');
     }
-    if ($r && $r > 0) {
+    if ($r) {
       return $r;
     }
 

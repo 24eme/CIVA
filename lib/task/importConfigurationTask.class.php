@@ -153,7 +153,8 @@ EOF;
 	  }
 	  if (!$g[2]) {
 	    $grdcru->{'lieu'.$g[1]}->libelle = $g[3];
-	    $r = $this->recode_number($g[4]);
+	    $r = $this->recode_number($g[4]) + $this->recode_number($g[5]);
+	    //	    echo $g[3]." rendement: $r\n";
 	    if ($r != $grdcru->rendement)
 	      $grdcru->{'lieu'.$g[1]}->rendement = $r;
 	  }else{
@@ -163,7 +164,7 @@ EOF;
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
 	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
-	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]);
+	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
 	    if ($g[2] == 'ED' || $g[2] == 'SY')
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->no_vtsgn = 1;
 	      

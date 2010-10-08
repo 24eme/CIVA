@@ -238,22 +238,23 @@ class recolteActions extends EtapesActions {
             if ($dr->recolte->exist($key_appellation)) {
                 $appellation = $dr->recolte->get($key_appellation);
                 foreach ($appellation->getLieux() as $lieu) {
-                    foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
+		  if ($lieu->getConfig()->getRendementAppellation()) {
+		    $rd = $lieu->getConfig()->getRendementAppellation();
+		    $this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
+		  }
+		  foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
                         if($cepage_config->hasMinQuantite()) {
                             $this->min_quantite = $cepage_config->min_quantite * 100 ;
                             $this->max_quantite = $cepage_config->max_quantite * 100 ;
                         }
                         if($cepage_config->getRendement()) {
                             $rd = $cepage_config->getRendement();
-                        }else {
-                            $rd = $lieu->getConfig()->getRendementAppellation();
-                        }
-                        if($appellation->getConfig()->hasManyLieu()) {
-                            $this->rendement[$appellation->getLibelle()][$rd][$lieu->getLibelle()] = 1;
-                        }else {
-                            $this->rendement[$appellation->getLibelle()][$rd][$cepage_config->getLibelle()] = 1;
-                        }
-
+			    if($appellation->getConfig()->hasManyLieu()) {
+			      $this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
+			    }else {
+			      $this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
+			    }
+			}
                     }
                 }
             }

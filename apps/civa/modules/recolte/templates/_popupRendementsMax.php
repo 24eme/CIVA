@@ -6,19 +6,18 @@
             <td class="appellation"><?php echo $app; ?></td>
             <td  class="appellation">
                     <?php
-                    $totalApp = count($appellation);
-                    if($totalApp==1) {
-                        foreach ($appellation as $rend=>$rd) {
+                        if (isset($appellation['appellation']))
+                        foreach ($appellation['appellation'] as $rend=>$rd) {
                             if($rend == '-1') echo 'Pas de butoir';
                                 else echo $rend.' hl/a';
                         }
-                    }
+                    
                     ?>
             </td>
         </tr>
             <?php
-            if($totalApp!=1) {
-                foreach ($appellation as $rend=>$rd) {
+                if (isset($appellation['cepage']))
+                foreach ($appellation['cepage'] as $rend=>$rd) {
                     $i=0;
                     $cepage = '- ';
                     foreach ($rd as $c=>$cep) {
@@ -45,7 +44,7 @@
                         <?php
                     }
                 }
-            }?>
+            ?>
 
         <tr><td class="vide">&nbsp;</td></tr>
         <?php endforeach; ?>
