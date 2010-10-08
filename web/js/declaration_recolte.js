@@ -163,7 +163,10 @@ $(document).ready( function()
 
 
 
-    if($('.col_active')) $('.superficie').focus();
+    if($('.col_active')){
+         $('.superficie').focus();
+         $('.superficie').select();
+    }
 
     $(document).find('a.btn_voir_dr_prec').live('click', function() {
         openPopup($('#popup_dr_precedentes'));
