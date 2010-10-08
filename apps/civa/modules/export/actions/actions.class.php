@@ -373,7 +373,7 @@ class exportActions extends sfActions
   public function executeCsvTiers() {
       set_time_limit('240');
       ini_set('memory_limit', '512M');
-      $tiers = sfCouchdbManager::getClient("Tiers")->getAll();
+      $tiers = sfCouchdbManager::getClient("Tiers")->getAll(true);
       $content = '';
       foreach ($tiers as $item) {
          $ligne = array();

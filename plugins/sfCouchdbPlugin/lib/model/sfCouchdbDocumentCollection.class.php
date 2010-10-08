@@ -2,14 +2,23 @@
 
 class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Countable {
     protected $_docs = array();
-    public function  __construct($data = null) {
-        $this->load($data);
+    public function  __construct($data = null, $with_doc = false, $couchdb_doc = false) {
+        $this->load($data, $with_doc, $couchdb_doc);
     }
-    private function load($data) {
+    private function load($data, $with_doc = false, $couchdb_doc = false) {
         if (!is_null($data)) {
             try {
                 foreach($data->rows as $item) {
-                    $this->_docs[$item->id] = null;
+                    if ($with_doc) {
+                        if ($couchdb_doc && isset($item->doc)) {
+                            throw new Exception('Not yet implemented');
+                            $this->_docs[$item->id] = null;
+                        } else {
+                            $this->_docs[$item->id] = $item->doc;
+                        }
+                    } else {
+                        $this->_docs[$item->id] = null;
+                    }
                 }
             } catch (Exception $exc) {
                 throw new sfCouchdbException('Load error : data invalid');
