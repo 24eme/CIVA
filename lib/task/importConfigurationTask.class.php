@@ -227,10 +227,13 @@ EOF;
 	$json->recolte->appellation_VINTABLE->douane->qualite_aoc = 'O';
 	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->libelle = "Blanc";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->douane->couleur = "Blanc";
+        $json->recolte->appellation_VINTABLE->lieu->cepage_BL->no_vtsgn = 1;
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RS->libelle = "Rosé";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RS->douane->couleur = "S";
+        $json->recolte->appellation_VINTABLE->lieu->cepage_RS->no_vtsgn = 1;
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->libelle = "Rouge";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->douane->couleur = "R";
+        $json->recolte->appellation_VINTABLE->lieu->cepage_RG->no_vtsgn = 1;
         $json->recolte->appellation_VINTABLE->rendement = -1;
 
 
