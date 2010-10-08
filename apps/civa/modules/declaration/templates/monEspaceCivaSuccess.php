@@ -116,10 +116,10 @@
                         <a href="#"> Télécharger l'export XML</a>
                         <ul class="declarations">
                             <?php if ($declaration): ?>
-                            <li><?php echo link_to($declaration->campagne, '@xml?annee='.$declaration->campagne); ?></li>
+                            <li><?php echo link_to($declaration->campagne, '@xml?annee='.$declaration->campagne, array('target' => '_blank')); ?></li>
                             <?php endif; ?>
                             <?php foreach ($campagnes as $id => $campagne): ?>
-                                <li><?php echo link_to($campagne, '@xml?annee='.$campagne); ?></li>
+                                <li><?php echo link_to($campagne, '@xml?annee='.$campagne, array('target' => '_blank')); ?></li>
                             <?php endforeach; ?>
                         </ul>
                     </li>
