@@ -108,7 +108,7 @@
             <div class="contenu_section">
                 <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
                 <ul>
-                    <li><a href=""> Télécharger la notice</a></li>
+                    <li><a href="/images/aide.pdf"> Télécharger la notice</a></li>
                 </ul>
 
             </div>
