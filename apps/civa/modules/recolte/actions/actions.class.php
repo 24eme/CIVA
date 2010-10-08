@@ -238,6 +238,8 @@ class recolteActions extends EtapesActions {
             if ($dr->recolte->exist($key_appellation)) {
                 $appellation = $dr->recolte->get($key_appellation);
                 foreach ($appellation->getLieux() as $lieu) {
+		  if ($lieu->getConfig()->getRendementAppellation() == -1) 
+		    continue;
 		  if ($lieu->getConfig()->getRendementAppellation()) {
 		    $rd = $lieu->getConfig()->getRendementAppellation();
 		    $this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;

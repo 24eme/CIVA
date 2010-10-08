@@ -237,6 +237,7 @@ EOF;
 	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->douane->couleur = "R";
         $json->recolte->appellation_VINTABLE->lieu->cepage_RG->no_vtsgn = 1;
         $json->recolte->appellation_VINTABLE->rendement = -1;
+        $json->recolte->appellation_VINTABLE->rendement_appellation = -1;
 
 
 	$json->intitule = array("CAVES", "DOMAINE", "EAR", "EARL", "EURL", "GAEC", "GFA, DU", "HERITIERS", "INDIVISION", "M.", "MADAME", "MADEME", "MAISON", "MELLE", "M., ET, MME", "MLLE", "MM.", "MME", "MMES", "MME, VEUVE", "MRS", "S.A.", "SA", "SARL", "S.A.S.", "SAS", "SASU", "S.C.A.", "SCA", "SCEA", "S.C.I.", "SCI", "S.D.F.", "SDF", "SICA", "STE", "STEF", "VEUVE", "VINS");

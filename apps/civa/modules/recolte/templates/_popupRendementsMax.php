@@ -9,7 +9,7 @@
                         if (isset($appellation['appellation']))
                         foreach ($appellation['appellation'] as $rend=>$rd) {
                             if($rend == '-1') echo 'Pas de butoir';
-                                else echo $rend.' hl/a';
+                                else echo $rend.' hl/ha';
                         }
                     
                     ?>
@@ -28,7 +28,7 @@
                     <?php if($cepage == "- Rebêches") { ?>
         <tr>
             <td class="cepage" colspan="2">
-                Les rebêche exclues du rendement autorisé doivent representer au minimum <?php echo $min_quantite; ?>% et au maximun <?php echo $max_quantite; ?>% du volume total produit.
+                Les rebêches exclues du rendement autorisé doivent representer au minimum <?php echo $min_quantite; ?>% et au maximun <?php echo $max_quantite; ?>% du volume total produit.
             </td>
         </tr>
                         <?php }else { ?>
@@ -37,7 +37,7 @@
             <td class="rendement">
                                 <?php
                                 if($rend == '-1') echo 'Pas de butoir';
-                                else echo $rend.' hl/a';
+                                else echo $rend.' hl/ha';
                                 ?>
             </td>
         </tr>
