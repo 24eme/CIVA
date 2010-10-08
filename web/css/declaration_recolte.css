@@ -90,7 +90,7 @@
 .bloc_gris { background: #e0dfdf; }
 .bloc_vert { background: #e0e1bd; }
 
-input.readonly { background-color:#F0F0DE !important; }
+input.readonly { background-color:#F0F0DE !important; color: black;}
 
 /* Etapes de la déclaration */
 ul#etape_declaration
@@ -1271,10 +1271,6 @@ a.msg_aide:hover{
 
 #gestion_recolte .col_total p.denomination,
 #gestion_recolte .col_total p.mention { visibility: hidden; }
-
-#gestion_recolte p.denomination .readonly{
-    color:#aca899;
-}
 
 #gestion_recolte #col_sepage_total,
 #gestion_recolte #col_sepage_total .col_cont,
