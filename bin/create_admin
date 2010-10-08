@@ -1,0 +1,27 @@
+#!/bin/bash
+. $(echo $0 | sed 's/[^\/]*$//')config.inc
+echo "uid=ADMIN-USER,ou=People,$LDAP_PREFIX" | ldapdelete -x -h $LDAP_HOST -D "$LDAP_USERADMIN,$LDAP_PREFIX" -w$LDAP_PASSWORD
+
+echo "dn: uid=ADMIN-USER,ou=People,$LDAP_PREFIX" > /tmp/user.ldif
+echo "uid: ADMIN-USER" >> /tmp/user.ldif
+echo "sn: CIVA" >> /tmp/user.ldif
+echo "cn: Admin" >> /tmp/user.ldif
+echo "givenName: Prenom" >> /tmp/user.ldif
+echo "objectClass: top" >> /tmp/user.ldif
+echo "objectClass: person" >> /tmp/user.ldif
+echo "objectClass: posixAccount" >> /tmp/user.ldif
+echo "objectClass: inetOrgPerson" >> /tmp/user.ldif
+echo "userPassword: {SSHA}__________SHA_PASSWORD__________" >> /tmp/user.ldif
+echo "loginShell: /bin/bash" >> /tmp/user.ldif
+echo "uidNumber: 1000" >> /tmp/user.ldif
+echo "gidNumber: 1001" >> /tmp/user.ldif
+echo "homeDirectory: /home/civa-admin" >> /tmp/user.ldif
+echo "gecos: CIVA Admin,,," >> /tmp/user.ldif
+echo "mail: dominique@civa.fr" >> /tmp/user.ldif
+echo "postalAddress: 12 avenue de la Foire aux Vins" >> /tmp/user.ldif
+echo "postalCode: 68000" >> /tmp/user.ldif
+echo "l: Colmar" >> /tmp/user.ldif
+
+cat /tmp/user.ldif |  ldapadd -x -h $LDAP_HOST -D "$LDAP_USERADMIN,$LDAP_PREFIX" -w$LDAP_PASSWORD
+
+rm /tmp/user.ldif
