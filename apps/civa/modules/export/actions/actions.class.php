@@ -243,7 +243,7 @@ class exportActions extends sfActions
 	$c['superficie'] = $detail->superficie;
 	$c['volume'] = $detail->volume;
 	$c['cave_particuliere'] = $detail->cave_particuliere;
-	$c['revendique'] = $detail->volume_revendique;
+	//	$c['revendique'] = $detail->volume_revendique;
 	//	$c['dplc'] = $detail->volume_dplc;
 	foreach($detail->negoces as $vente) {
 	  $c[$vente->cvi] = $vente->quantite_vendue;
@@ -267,33 +267,41 @@ class exportActions extends sfActions
 	  break 2;
 	*/
       }
-      if ($i > 1) {
-	$c = array();
-	$c['type'] = 'total';
-	$c['cepage'] = $cepage->getLibelle();
-	$c['denomination'] = 'Total';
-	$c['vtsgn'] = '';
-	$c['superficie'] = $cepage->total_superficie;
-	$c['volume'] = $cepage->total_volume;
-	$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
-	$c['revendique'] = $cepage->volume_revendique;
-	$c['dplc'] = $cepage->dplc;
-	$negoces = $cepage->getVolumeAcheteurs('negoces');
-	foreach($negoces as $cvi => $total) {
-	  $c[$cvi] = $total;
+      if ($cepage->getConfig()->hasTotalCepage()) {
+	if ($i > 1) {
+	  $c = array();
+	  $c['type'] = 'total';
+	  $c['cepage'] = $cepage->getLibelle();
+	  $c['denomination'] = 'Total';
+	  $c['vtsgn'] = '';
+	  $c['superficie'] = $cepage->total_superficie;
+	  $c['volume'] = $cepage->total_volume;
+	  $c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
+	  $c['revendique'] = $cepage->volume_revendique;
+	  $c['dplc'] = $cepage->dplc;
+	  if (!$c['dplc'])
+	    $c['dplc'] = '0,00';
+	  $negoces = $cepage->getVolumeAcheteurs('negoces');
+	  foreach($negoces as $cvi => $total) {
+	    $c[$cvi] = $total;
+	  }
+	  $coop =  $cepage->getVolumeAcheteurs('cooperatives');
+	  foreach($coop as $cvi => $total) {
+	    $c[$cvi] = $total;
+	  }
+	  $mouts =  $cepage->getVolumeAcheteurs('mouts');
+	  foreach($mouts as $cvi => $total) {
+	    $c[$cvi] = $total;
+	  }
+	  array_push($colonnes, $c);
+	  $cpt ++;
+	}else{
+	  $colonnes[$last]['type'] = 'total';
+	  $colonnes[$last]['revendique'] = $cepage->volume_revendique;
+	  $colonnes[$last]['dplc'] = $cepage->dplc;
+	  if (!$colonnes[$last]['dplc'])
+	    $colonnes[$last]['dplc'] = '0,00';
 	}
-	$coop =  $cepage->getVolumeAcheteurs('cooperatives');
-	foreach($coop as $cvi => $total) {
-	  $c[$cvi] = $total;
-	}
-	$mouts =  $cepage->getVolumeAcheteurs('mouts');
-	foreach($mouts as $cvi => $total) {
-	  $c[$cvi] = $total;
-	}
-	array_push($colonnes, $c);
-	$cpt ++;
-      }else{
-	$colonnes[$last]['type'] = 'total';
       }
     }
     $c = array();
@@ -308,6 +316,8 @@ class exportActions extends sfActions
     $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
     $c['revendique'] = $lieu->volume_revendique;
     $c['dplc'] = $lieu->dplc;
+    if (!$c['dplc'])
+      $c['dplc'] = '0,00';
     $negoces = $lieu->getVolumeAcheteurs('negoces');
     foreach($negoces as $cvi => $vente) {
       $c[$cvi] = $vente;
