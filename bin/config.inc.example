@@ -1,1 +1,5 @@
 COUCHDBDOMAIN=localhost
+LDAP_PASSWORD=REPLACME
+LDAP_PREFIX=dc=vinsalsace,dc=pro
+LDAP_USERADMIN=cn=admin
+LDAP_HOST=localhost
