@@ -4,7 +4,7 @@ class RecolteMotifNonRecolteForm extends sfCouchdbFormDocumentJson {
     public function configure() {
         
         $tab = $this->getMotifNonRecolteChoices();
-        if(!$this->getOption('nonEdel', false)) unset($tab['ae']);
+        if(!$this->getOption('nonEdel', false) || $this->getObject()->getCepage()->getKey() == 'cepage_ED') unset($tab['ae']);
 
         $this->setWidgets(array(
             'motif_non_recolte' => new sfWidgetFormChoice(array('choices' => $tab)),
