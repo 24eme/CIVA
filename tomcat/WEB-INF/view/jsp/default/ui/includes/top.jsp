@@ -13,7 +13,7 @@
 <spring:theme code="mobile.custom.css.file" var="mobileCss" text="" />
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
-	    <title>Portail pro vins d'alsace</title>
+	    <title>Espace des professionnels du Vignoble d’Alsace</title>
         <c:choose>
            <c:when test="${not empty requestScope['isMobile'] and not empty mobileCss}">
                 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
@@ -40,7 +40,7 @@
                 <h1 id="logo"><a href="" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="images/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
                 <div id="titre_rubrique">
-                    <h1>Portail pro vins d'alsace</h1>
+                    <h1>Espace des professionnels du Vignoble d’Alsace</h1>
                 </div>
             </div>
 
