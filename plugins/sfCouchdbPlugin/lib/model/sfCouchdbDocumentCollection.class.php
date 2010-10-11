@@ -2,22 +2,30 @@
 
 class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Countable {
     protected $_docs = array();
-    public function  __construct($data = null, $with_doc = false, $couchdb_doc = false) {
-        $this->load($data, $with_doc, $couchdb_doc);
+    protected $_hydrate = array();
+    protected $_class = null;
+
+    public function  __construct($data = null, $hydrate = sfCouchdbClient::HYDRATE_ON_DEMAND) {
+        $this->_hydrate = $hydrate;
+        $this->load($data);
     }
-    private function load($data, $with_doc = false, $couchdb_doc = false) {
+    private function load($data) {
         if (!is_null($data)) {
             try {
                 foreach($data->rows as $item) {
-                    if ($with_doc) {
-                        if ($couchdb_doc && isset($item->doc)) {
-                            throw new Exception('Not yet implemented');
-                            $this->_docs[$item->id] = null;
-                        } else {
-                            $this->_docs[$item->id] = $item->doc;
-                        }
-                    } else {
+                    if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND) {
                         $this->_docs[$item->id] = null;
+                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA) {
+                        $this->_docs[$item->id] = null;
+                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_JSON) {
+                         $this->_docs[$item->id] = $item->doc;
+                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ARRAY) {
+                         $this->_docs[$item->id] = $item["doc"];
+                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_DOCUMENT) {
+                        $class = $item->doc->type;
+                        $doc = new $class();
+                        $doc->load($item->doc);
+                        $this->_docs[$item->id] = $doc;
                     }
                 }
             } catch (Exception $exc) {

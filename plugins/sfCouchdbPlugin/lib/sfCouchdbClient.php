@@ -1,6 +1,13 @@
 <?php
 
 class sfCouchdbClient extends couchClient {
+
+    const HYDRATE_ON_DEMAND = 1;
+    const HYDRATE_ON_DEMAND_WITH_DATA = 2;
+    const HYDRATE_JSON = 3;
+    const HYDRATE_ARRAY = 4;
+    const HYDRATE_DOCUMENT = 5;
+
     public function saveDocument($document) {
         $method = 'POST';
 	$url  = '/'.urlencode($this->dbname);
@@ -35,6 +42,16 @@ class sfCouchdbClient extends couchClient {
       $doc = new $data->type();
       $doc->load($data);
       return $doc;
+    }
+
+    public function execute($hydrate = self::HYDRATE_ON_DEMAND) {
+        if ($hydrate != self::HYDRATE_ON_DEMAND) {
+            $this->include_docs(true);
+        }
+        if ($hydrate == self::HYDRATE_ARRAY) {
+            $this->asArray();
+        }
+        return new sfCouchdbDocumentCollection($this->getAllDocs(), $hydrate);
     }
     
 }
