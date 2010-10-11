@@ -6,7 +6,7 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getArchivesCampagnes($cvi, $campagne) {
-        $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute();
+        $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
         $campagnes = array();
         foreach($docs->getIds() as $doc_id) {
             preg_match('/DR-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches);

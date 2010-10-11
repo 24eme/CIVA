@@ -855,7 +855,7 @@ var updateElementRows = function (inputObj, totalObj) {
         var element = parseFloat($(this).val());
         total += element;
         if (element && parseFloat(totalObj.val()) != total) {
-            totalObj.val(total);
+            totalObj.val(truncTotal(total));
         }
     });
 };
@@ -869,7 +869,7 @@ var updateAppellationTotal = function (cepageCssId, appellationCssId) {
     var cep_now  = parseFloat($(cepageCssId).val());
     if (!cep_now)
         cep_now = 0;
-    $(appellationCssId).val(app_orig - cep_orig + cep_now);
+    $(appellationCssId).val(truncTotal(app_orig - cep_orig + cep_now));
 }
 var superficieOnChange = function(input) {
     if (!input) {
@@ -944,8 +944,8 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#appellation_volume_dplc'));
     addClassAlerteIfNeeded($('#cepage_volume_dplc'));
 	
-    $('#appellation_total_dplc_sum').val('Σ '+parseFloat($('#appellation_total_dplc_sum').val()));
-    $('#appellation_total_revendique_sum').val('Σ '+parseFloat($('#appellation_total_revendique_sum').val()));
+    $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
+    $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
 
     if($('#cepage_volume_dplc').val() == 0){
         ($('.rendement').removeClass("alerte"));
@@ -972,6 +972,17 @@ var volumeOnChange = function(input) {
     $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 
 };
+
+var truncTotal = function (val) {
+    return trunc(val, 2);
+}
+
+var trunc = function(what,howmuch) {
+        what = ''+what;
+	if (what.indexOf('.') == -1) return what;
+	pos = what.indexOf('.')+howmuch+1;
+	return what.slice(0,pos);
+}
 
 /**
      * Egalise les hauteurs des colonnes

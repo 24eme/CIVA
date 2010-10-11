@@ -31,7 +31,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $docs = sfCouchdbManager::getClient('Tiers')->getAll(sfCouchdbClient::HYDRATE_DOCUMENT);
+        $docs = sfCouchdbManager::getClient('Tiers')->getAll();
 
         foreach($docs as $id => $anyone) {
             $rec = sfCouchdbManager::getClient()->retrieveDocumentById($id);

@@ -3,12 +3,12 @@
 class AcheteurClient extends sfCouchdbClient {
     protected $_acheteurs = null;
 
-    public function getAll($hydrate = sfCouchdbClient::HYDRATE_ON_DEMAND) {
-        return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute($hydrate);
+    public function getAll() {
+        return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute();
     }
 
     public function loadAcheteurs() {
-       $docs = $this->getAll(self::HYDRATE_DOCUMENT);
+       $docs = $this->getAll();
        $acheteurs_negociant = array();
        $acheteurs_cave = array();
        $acheteurs_mout = array();

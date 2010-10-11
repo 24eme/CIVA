@@ -44,7 +44,7 @@ class sfCouchdbClient extends couchClient {
       return $doc;
     }
 
-    public function execute($hydrate = self::HYDRATE_ON_DEMAND) {
+    public function execute($hydrate = self::HYDRATE_DOCUMENT) {
         if ($hydrate != self::HYDRATE_ON_DEMAND) {
             $this->include_docs(true);
         }

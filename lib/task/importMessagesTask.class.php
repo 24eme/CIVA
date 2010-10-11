@@ -75,7 +75,7 @@ EOF;
         $json->err_log_cremant_max_quantite = "Les rebêches doivent représenter au maximum 10% des volumes produits";
 
         $json->err_log_superficie_zero = "Vous n'avez pas renseigné de detail pour cette appellation";
-        $json->err_log_dplc = "err_log_dplc";
+        $json->err_log_dplc = "Votre DPLC cépage est important. Vous pouvez replier ce volume en Edel repli. Si vous avez livré le raisin vous ne pouvez replier le DPLC qu'en accord avec votre acheteur.";
 
 
         /** HELP¨**/
