@@ -53,15 +53,15 @@ String host = "";
 						<ul>
 							<li>
 								<img src="images/carrousel/carrousel_vi_1.jpg" alt="" />
-								<strong>Accroche 1</strong>
+								<strong>Déclarez votre récolte en ligne</strong>
 							</li>
 							<li>
 								<img src="images/carrousel/carrousel_vi_2.jpg" alt="" />
-								<strong>Accroche 2</strong>
+								<strong>Testez la solution Alsace GAMM@</strong>
 							</li>
 							<li>
 								<img src="images/carrousel/carrousel_vi_3.jpg" alt="" />
-								<strong>Accroche 3</strong>
+								<strong>Accédez à votre espace personnel</strong>
 							</li>
 						</ul>
 					</div>
