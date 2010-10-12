@@ -9,9 +9,11 @@
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
 
         <h1>
-            <?php 
-                printf(html_entity_decode( substr($title,strrpos($title,'-')+1,strlen($title))) , date("Y"));
-            ?>
+            <?php if (strrpos($title,' - ') !== false) :?>
+                <?php printf(html_entity_decode(substr($title,strrpos($title,'-')+1,strlen($title))) , $sf_request->getParameter('annee', date("Y")));?>
+            <?php else: ?>
+                <?php printf(html_entity_decode($title), $sf_request->getParameter('annee', date("Y")));?>
+            <?php endif; ?>
         </h1>
         <?php if ($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) : ?>
             <p class="utilisateur"><?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@mon_espace_civa'); ?></p>

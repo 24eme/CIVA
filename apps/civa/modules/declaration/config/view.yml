@@ -16,3 +16,7 @@ validationSuccess:
 confirmationSuccess:
   metas:
     title:        Confirmation - Déclaration de récolte de %d
+
+visualisationSuccess:
+  metas:
+    title:        Visualisation - Déclaration de récolte de %d

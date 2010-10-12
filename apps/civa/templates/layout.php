@@ -5,7 +5,7 @@
     <?php include_metas() ?>
       <title>
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle();
-        printf(html_entity_decode($title) , date("Y")); ?>
+        printf(html_entity_decode($title) , $sf_request->getParameter('annee', date("Y"))); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php include_stylesheets() ?>
@@ -13,10 +13,9 @@
   <body id="declaration_recolte">
     <!-- #global -->
 	<div id="global">
-	  <?php include_partial('global/header');
-if ($error = $sf_user->getFlash('error'))
-  echo '<p>'.$error.'</p>';
-?>            <div id="contenu">
+	  <?php include_partial('global/header'); ?>
+          <?php include_partial('global/errorFlash') ?>
+           <div id="contenu">
                 <?php echo $sf_content ?>
             </div>
             <?php include_partial('global/footer') ?>
