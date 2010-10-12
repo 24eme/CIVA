@@ -16,24 +16,24 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getTotalVolume() {
         $field = 'total_volume';
-        if ($r = $this->_get($field)) {
-            return $r;
+        if ($this->issetField($field)) {
+            return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
     public function getTotalSuperficie() {
         $field = 'total_superficie';
-        if ($r = $this->_get($field)) {
-            return $r;
+        if ($this->issetField($field)) {
+            return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
     public function getVolumeRevendique() {
         $field = 'volume_revendique';
-        if ($r = $this->_get($field)) {
-            return $r;
+        if ($this->issetField($field)) {
+            return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
@@ -41,8 +41,8 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getDplc() {
         $field = 'dplc';
-        if ($r = $this->_get($field)) {
-            return $r;
+        if ($this->issetField($field)) {
+            return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
@@ -97,6 +97,10 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       if (!$v)
 	$this->_set('appellation', $this->getConfig()->getAppellation());
       return $this->_get('appellation');
+    }
+
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
     }
 
     protected function getSumLieuFields($field) {

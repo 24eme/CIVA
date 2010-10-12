@@ -66,7 +66,7 @@ EOF;
         $json->err_dr_recap_vente_popup_superficie_trop_eleve = " La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
         $json->err_dr_recap_vente_popup_dplc_trop_eleve = "La somme des DPLC des acheteurs ne peut pas être superieure au DPLC total de l'appellation";
 
-        $json->err_log_lieu_non_saisie = "Llieu non saisi";
+        $json->err_log_lieu_non_saisie = "Lieu non saisi";
         $json->err_log_cepage_non_saisie = "Cépage non saisi";
         $json->err_log_detail_non_saisie = "Details non saisis";
         $json->err_log_ED_non_saisie = "Vous nous avez indiqué comme motif de non récolte \"assemblage Edel\" mais vous n'avez pas saisi d'Edel";

@@ -35,23 +35,23 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getTotalVolume() {
       $field = 'total_volume';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if ($this->issetField($field)) {
+        return $this->_get($field);
       }
       return $this->store($field, array($this, 'getSumCepageFields'), array($field));
     }
     public function getTotalSuperficie() {
       $field = 'total_superficie';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if ($this->issetField($field)) {
+        return $this->_get($field);
       }
       return $this->store($field, array($this, 'getSumCepageFields'), array($field));
     }
 
     public function getVolumeRevendique() {
       $field = 'volume_revendique';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if ($this->issetField($field)) {
+        return $this->_get($field);
       }
       return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
@@ -80,10 +80,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getDplc() {
       $field = 'dplc';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if ($this->issetField($field)) {
+        return $this->_get($field);
       }
-       return $this->store($field, array($this, 'getDplcFinal'));
+      return $this->store($field, array($this, 'getDplcFinal'));
     }
 
     public function getDplcTotal() {
@@ -238,6 +238,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
           }
       }
       return $dplc_final;
+    }
+
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
     }
 
     protected function getSumCepageFields($field) {

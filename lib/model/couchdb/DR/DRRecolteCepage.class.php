@@ -18,35 +18,36 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
-    public function getTotalVolume() {
+    public function getTotalVolume($force_calcul = false) {
       $field = 'total_volume';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if (!$force_calcul && $this->issetField($field)) {
+        return $this->_get($field);
       }
       return $this->store($field, array($this, 'getSumDetailFields'), array('volume'));
     }
-    public function getTotalSuperficie() {
+    public function getTotalSuperficie($force_calcul = false) {
       $field = 'total_superficie';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if (!$force_calcul && $this->issetField($field)) {
+        return $this->_get($field);
       }
       return $this->store($field, array($this, 'getSumDetailFields'), array('superficie'));
     }
 
-    public function getVolumeRevendique() {
+    public function getVolumeRevendique($force_calcul = true) {
       $field = 'volume_revendique';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if (!$force_calcul && $this->issetField($field)) {
+        return $this->_get($field);
       }
-      return $this->store($field, array($this, 'getSumDetailFields'), array($field));
+      return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
-    public function getDplc() {
+    public function getDplc($force_calcul = true) {
       $field = 'dplc';
-      if ($r = $this->_get($field)) {
-        return $r;
+      if (!$force_calcul && $this->issetField($field)) {
+        return $this->_get($field);
       }
-      return $this->store($field, array($this, 'getSumDetailFields'), array('volume_dplc'));
+
+      return $this->store($field, array($this, 'getDplcFinal'));
     }
 
     public function getTotalCaveParticuliere() {
@@ -128,6 +129,36 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $resultat;
     }
 
+    protected function getDplcFinal() {
+        if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
+            $volume_max = $this->getVolumeMax();
+            if ($this->total_volume > $volume_max) {
+              return ($this->total_volume - $volume_max);
+            } else {
+              return 0;
+            }
+        } else {
+            return $this->getSumDetailFields('volume_dplc');
+        }
+    }
+
+    protected function getVolumeRevendiqueFinal() {
+        if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
+            $volume_max = $this->getVolumeMax();
+            if ($this->total_volume > $volume_max) {
+              return $volume_max;
+            } else {
+              return $this->total_volume;
+            }
+        } else {
+            return $this->getSumDetailFields('volume_revendique');
+        }
+    }
+
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
+    }
+
     protected function getSumDetailFields($field) {
       $sum = 0;
       foreach ($this->detail as $detail) {
@@ -138,25 +169,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     protected function update($params = array()) {
       parent::update($params);
-      $s = 0;
-      $v = 0;
-      foreach ($this->get('detail') as $key => $item) {
-	$v += $item->getVolume();
-	$s += $item->getSuperficie();
-      }
-
-      $this->set('total_volume', $v);
-      $this->set('total_superficie', $s);
-
-      if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
-	$volume_max = $this->getVolumeMax();
-	if ($this->total_volume > $volume_max) {
-	  $this->volume_revendique = $volume_max;
-	  $this->dplc = $this->total_volume - $volume_max;
-	} else {
-          $this->dplc = 0;
-	  $this->volume_revendique = $this->total_volume;
-	}
-      }
+      $this->total_volume = $this->getTotalVolume(true);
+      $this->total_superficie = $this->getTotalSuperficie(true);
+      $this->volume_revendique = $this->getVolumeRevendique(true);
+      $this->dplc = $this->getDplc(true);
     }
 }

@@ -887,12 +887,12 @@ var superficieOnChange = function(input) {
 };
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if (parseFloat($(totalRecolteCssId).val()) > parseFloat($(elementCssId+'_max_volume').val()))
-        $(elementCssId+'_volume_revendique').val(parseFloat($(elementCssId+'_max_volume').val()));
+        $(elementCssId+'_volume_revendique').val(truncTotal($(elementCssId+'_max_volume').val()));
     else
-        $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()));
+        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()));
     res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
     res += '';
-    $(elementCssId+'_volume_dplc').val(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1'));
+    $(elementCssId+'_volume_dplc').val(truncTotal(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1')));
 };
 
 var addClassAlerteIfNeeded = function (inputObj)
