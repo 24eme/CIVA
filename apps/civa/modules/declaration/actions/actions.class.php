@@ -10,10 +10,6 @@
  */
 class declarationActions extends EtapesActions {
 
-    /**
-     *
-     * @param sfWebRequest $request
-     */
     public function executeMonEspaceCiva(sfWebRequest $request) {
         if(ConfigurationClient::getConfiguration()->exist('dr_non_editable'))
             $this->dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;

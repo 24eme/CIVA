@@ -8,7 +8,7 @@ all:
 
 modification:
   is_secure: true
-  credentials: [declarant]
+  credentials: [[declarant, non_declarant]]
 
 
 

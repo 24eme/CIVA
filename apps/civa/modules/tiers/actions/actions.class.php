@@ -30,6 +30,8 @@ class tiersActions extends EtapesActions {
             $this->getUser()->signInWithCas(phpCAS::getUser());
             if ($this->getUser()->isDeclarant()) {
                 $this->redirect('@mon_espace_civa');
+            } elseif ($this->getUser()->isNonDeclarant()) {
+                $this->redirect('@mon_espace_civa_non_declarant');
             } elseif($this->getUser()->isAdmin()) {
                 $this->redirect('@login_admin');
             }
@@ -115,6 +117,10 @@ class tiersActions extends EtapesActions {
                 $this->redirectByBoutonsEtapes();
             }
         }
+    }
+
+    public function executeMonEspaceCivaNonDeclarant(sfWebRequest $request) {
+        $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
     }
 
 }

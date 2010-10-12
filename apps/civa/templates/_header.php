@@ -13,7 +13,7 @@
                 printf(html_entity_decode( substr($title,strrpos($title,'-')+1,strlen($title))) , date("Y"));
             ?>
         </h1>
-        <?php if ($sf_user->isDeclarant()) : ?>
+        <?php if ($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) : ?>
             <p class="utilisateur"><?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@mon_espace_civa'); ?></p>
         <?php endif; ?>
     </div>
@@ -21,11 +21,15 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($sf_user->isDeclarant()) : ?>
+            <?php if ($sf_user->isDeclarant()): ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
+            <?php endif; ?>
+            <?php if ($sf_user->isNonDeclarant()) : ?>
+                <li><a href="<?php echo url_for('@mon_espace_civa_non_declarant'); ?>">Mon espace civa</a></li>
+            <?php endif; ?>
+            <?php if ($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) : ?>
                 <li><a href="<?php echo url_for('@mon_compte'); ?>">Mon compte</a></li>
             <?php endif; ?>
-
             <?php if ($sf_user->isAdmin()) : ?>
                 <li class="admin"><a href="<?php echo url_for('@login_admin'); ?>">Administration</a></li>
             <?php endif; ?>

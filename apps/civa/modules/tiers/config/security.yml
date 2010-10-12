@@ -3,3 +3,6 @@ loginAdmin:
 
 exploitationAdministratif:
   credentials: [declarant, declaration_brouillon, etape_exploitation]
+
+monEspaceCivaNonDeclarant:
+  credentials: [non_declarant]

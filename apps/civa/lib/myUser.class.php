@@ -9,6 +9,7 @@ class myUser extends sfBasicSecurityUser {
     const ETAPE_VALIDATION = 'validation';
     const CREDENTIAL_ADMIN = 'admin';
     const CREDENTIAL_DECLARANT = 'declarant';
+    const CREDENTIAL_NON_DECLARANT = 'non_declarant';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
     const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
@@ -46,9 +47,14 @@ class myUser extends sfBasicSecurityUser {
     public function signIn($tiers) {
         if (!$tiers)
             throw new sfCouchdbException('Tiers needed');
+
         $this->setAttribute(self::SESSION_CVI, $tiers->getCvi(), self::NAMESPACE_TIERS);
         $this->setAuthenticated(true);
-        $this->addCredential(self::CREDENTIAL_DECLARANT);
+        if ($tiers->isDeclarant()) {
+            $this->addCredential(self::CREDENTIAL_DECLARANT);
+        } else {
+            $this->addCredential(self::CREDENTIAL_NON_DECLARANT);
+        }
     }
 
     public function signInWithCas($casUser) {
@@ -172,6 +178,10 @@ class myUser extends sfBasicSecurityUser {
 
     public function isDeclarant() {
         return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_DECLARANT));
+    }
+
+     public function isNonDeclarant() {
+        return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_NON_DECLARANT));
     }
 
 }

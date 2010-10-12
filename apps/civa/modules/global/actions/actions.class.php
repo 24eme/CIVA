@@ -27,11 +27,12 @@ class globalActions extends sfActions
   }
 
   public function executeSecure(){
-    if ($this->getUser()->isAdmin()) {
-        return $this->redirect("@login_admin");
-    } elseif ($this->getUser()->isDeclarant()) {
+    if ($this->getUser()->isDeclarant()) {
         return $this->redirect("@mon_espace_civa");
+    } elseif ($this->getUser()->isNonDeclarant()) {
+        return $this->redirect("@mon_espace_civa_non_declarant");
+    } elseif ($this->getUser()->isAdmin()) {
+        return $this->redirect("@login_admin");
     }
-    
   }
 }

@@ -18,6 +18,10 @@ mon_espace_civa:
   url:   /mon_espace_civa
   param: { module: declaration, action: monEspaceCiva }
 
+mon_espace_civa_non_declarant:
+  url:   /mon_espace_civa_non_declarant
+  param: { module: tiers, action: monEspaceCivaNonDeclarant }
+
 exploitation_administratif:
   url:   /exploitation_administratif
   param: { module: tiers, action: exploitationAdministratif }

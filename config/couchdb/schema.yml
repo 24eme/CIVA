@@ -170,6 +170,7 @@ Tiers:
       _rev: {  }
       type: {  }
       cvi: {  }
+      no_declarant: { type: integer, required: false }
       mot_de_passe: { }
       num: {  }
       no_stock: {  }
