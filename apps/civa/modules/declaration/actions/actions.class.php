@@ -64,6 +64,11 @@ class declarationActions extends EtapesActions {
         }
     }
 
+    public function executeDownloadNotice() {
+        $this->getResponse()->setContentType('application/x-pdf');
+        $this->getResponse()->setHttpHeader('content-disposition','inline; filename="aide.pdf";');
+        return $this->renderText(file_get_contents(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf"));
+    }
     /**
      *
      * @param sfWebRequest $request

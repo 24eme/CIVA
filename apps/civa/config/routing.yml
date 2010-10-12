@@ -112,6 +112,10 @@ mon_compte:
   url: /mon_compte
   param: { module: compte, action: modification }
 
+telecharger_la_notice:
+  url:   /telecharger_la_notice
+  param: { module: declaration, action: downloadNotice }
+
 print:
   url: /print/:annee
   param: {module: export, action: pdf}
