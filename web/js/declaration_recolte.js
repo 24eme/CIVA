@@ -227,20 +227,20 @@ var initMsgAide = function()
                 var message = json.message;
                 popup.html('<p></p>');
                 popup.find('p').text(message);
-                $(popup).dialog( "option" , "title" , titre, "buttons", {
-                    "": function() {
-                        $(this).dialog("close");
-                    }
+                popup.dialog("option" , "title" , titre);
+                popup.dialog("option" , "buttons" , {
+                    telecharger: function() { document.location.href = url_notice },
+                    fermer: function() { $(this).dialog( "close" ); }
                 });
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
             }
-            );
-            
+        );
+
         openPopup(popup);
-        $(popup).dialog( "option" , "title" , title_msg_aide, "buttons", {
-            "": function() {
-                $(this).dialog("close");
-            }
-        });
+
+
+        
         
         return false;
     });
@@ -1272,6 +1272,7 @@ var openPopup = function(popup, fn_open_if) {
                 $(this).dialog( "close" );
             }
         }
+
     });
 
 
@@ -1282,6 +1283,7 @@ var openPopup = function(popup, fn_open_if) {
 
     return true;
 };
+
 
 var initPopup = function(btn, popup, fn_open_if)
 {
