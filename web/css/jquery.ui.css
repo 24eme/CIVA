@@ -117,5 +117,5 @@
     background: url(../images/boutons/btn_telecharger_notice_popup.png) 0 0 no-repeat !important;
     float: left;
     height: 14px;
-    width:125px;
+    width:125px !important;
 }
