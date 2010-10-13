@@ -226,7 +226,7 @@ var initMsgAide = function()
                 var titre = json.titre;
                 var message = json.message;
                 popup.html('<p></p>');
-                popup.find('p').text(message);
+                popup.find('p').html(message);
                 popup.dialog("option" , "title" , titre);
                 popup.dialog("option" , "buttons" , {
                     telecharger: function() { document.location.href = url_notice },

@@ -20,6 +20,9 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
+
+        $this->help_popup_action = "help_popup_DR";
+
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
@@ -190,6 +193,9 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeRecapitulatif(sfWebRequest $request) {
+
+        $this->help_popup_action = "help_popup_recapitulatif_ventes";
+
         $this->initOnglets($request);
         $this->initRendement();
         $this->initPrecDR();
@@ -264,8 +270,6 @@ class recolteActions extends EtapesActions {
     }
 
     protected function initOnglets(sfWebRequest $request) {
-
-        $this->help_popup_action = "help_popup_DR";
 
         preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
         $appellation = null;
