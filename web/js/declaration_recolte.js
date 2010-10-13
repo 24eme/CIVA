@@ -492,7 +492,8 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     var source_autocompletion = eval(table_ajout.attr('rel'));
     var source_autocompletion_using = eval(table_ajout.attr('rel')+'_using');
     var champs = table_ajout.find('input');
-    var nom = table_ajout.find('td.nom input');
+    var nom = table_ajout.find('td.nom input[type=text]');
+    var nom_hidden = table_ajout.find('td.nom span');
     var cvi = table_ajout.find('td.cvi');
     var commune = table_ajout.find('td.commune');
     var btn = form_ajout.find('.btn a');
@@ -506,6 +507,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
         focus: function(event, ui)
         {
             nom.val(ui.item[0]);
+            nom_hidden.val(ui.item[0]);
             cvi.find('span').text(ui.item[1]);
             cvi.find('input').val(ui.item[1]);
             commune.find('span').text(ui.item[2]);
@@ -516,12 +518,24 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
         select: function(event, ui)
         {
             nom.val(ui.item[0]);
+            nom_hidden.text(ui.item[0]);
             cvi.find('span').text(ui.item[1]);
             cvi.find('input').val(ui.item[1]);
             commune.find('span').text(ui.item[2]);
             commune.find('input').val(ui.item[2]);
 				
             return false;
+        }
+    });
+
+    nom.change( function () {
+        if (cvi.find('input').val() != '' && nom.val() != nom_hidden.text()) {
+            nom.val('');
+            nom_hidden.text('');
+            cvi.find('span').text('');
+            cvi.find('input').val('');
+            commune.find('span').text('');
+            commune.find('input').val('');
         }
     });
 	
@@ -772,38 +786,11 @@ var initGestionRecolte = function()
      ******************************************/
 var initGestionRecolteDonnees = function()
 {
-    /*var col_intitules = $('#colonne_intitules');
-    var col_scroller = $('#col_scroller');
-    var col_scroller_cont = col_scroller.find('#col_scroller_cont');
-    var col_recolte = col_scroller.find('.col_recolte');
-    var col_cepage_total = $('#col_cepage_total');
-    var col_recolte_totale = $('#col_recolte_totale');
-	
-    var btn_ajout_col = col_scroller.find('a#ajout_col');
-         */
-
     etatBtnAjoutCol();
-    //etatBtnRecolteCanBeInactif();
 
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
     $('span.ombre').height($('#col_scroller').height()-15);
-	
-    /*btn_ajout_col.click(function()
-    {
-        if(!$(this).hasClass('inactif')) ajouterColRecolte($(this), col_scroller_cont);
-        return false;
-    });*/
-	
-    /*col_recolte.each(function()
-    {
-        var col = $(this);
-        initColRecolte(col);
-    });*/
-	
-    //Calcule auto du volume
-    //$('input.volume').change(volumeOnChange(this));
-    //$('#recolte_superficie').change(superficieOnChange(this));
 
     etatBtnRecolteCanBeInactif(true);
 
@@ -1033,70 +1020,6 @@ var etatBtnAjoutCol = function()
 };
 
 /**
-     * Initialise les fonctions des colonnes
-     ******************************************/
-/*var initColRecolte = function(col)
-{
-    var contenu = col.find('.col_cont');
-    var champs = contenu.find('input:text, select');
-	
-    var btn = col.find('.col_btn');
-    var btn_modifier = btn.find('a.modifier');
-    var btn_supprimer = btn.find('a.supprimer');
-    var btn_annuler = btn.find('a.annuler');
-    var btn_valider = btn.find('a.valider');
-	
-	
-    btn_modifier.click(function()
-    {
-        col.addClass('col_active').removeClass('col_validee');
-        champs.attr('disabled', '');
-        etatBtnAjoutCol();
-        return false;
-    });
-	
-    btn_supprimer.click(function()
-    {
-        col.remove();
-        largeurColScrollerCont();
-        return false;
-    });
-	
-    btn_annuler.click(function()
-    {
-        return false;
-    });
-	
-    btn_valider.click(function()
-    {
-        col.addClass('col_validee').removeClass('col_active');
-        champs.attr('disabled', 'disabled');
-        etatBtnAjoutCol();
-        return false;
-    });
-};*/
-
-/**
-     * Ajoute une colonne pour la déclaration
-     ******************************************/
-/*var ajouterColRecolte = function(btn, cont)
-{	
-    $.post(url_ajax,
-    {
-        action: "ajout_col_recolte"
-    },
-    function(data)
-    {
-        var col = $(data);
-        col.insertBefore(btn);
-        hauteurEgaleColRecolte();
-        initColRecolte(col);
-        etatBtnAjoutCol();
-        largeurColScrollerCont();
-    });
-};*/
-
-/**
      * Largeur colonne scroll conteneur
      ******************************************/
 var largeurColScrollerCont = function()
@@ -1203,6 +1126,7 @@ var loadContentPopupAjax = function(popup, url, config)
 var initPopupAutocompletion = function(popup, source_autocompletion, source_autocompletion_using)
 {
     var nom = popup.find('input.nom');
+    var nom_hidden = popup.find('span.nom_hidden');
     var cvi = popup.find('input.cvi');
     var commune = popup.find('input.commune');
     var type_cssclass = popup.find('input[name=type_cssclass]').val();
@@ -1224,18 +1148,27 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
         focus: function(event, ui)
         {
             nom.val(ui.item[0]);
+            nom_hidden.text(ui.item[0]);
             cvi.val(ui.item[1]);
             commune.val(ui.item[2]);
-			
             return false;
         },
         select: function(event, ui)
         {
             nom.val(ui.item[0]);
+            nom_hidden.text(ui.item[0]);
             cvi.val(ui.item[1]);
             commune.find('input').val(ui.item[2]);
-				
             return false;
+        }
+    });
+
+    nom.change( function () {
+        if (cvi.val() != '' && nom.val() != nom_hidden.text()) {
+            nom.val('');
+            nom_hidden.text('');
+            cvi.val('');
+            commune.val('');
         }
     });
 	

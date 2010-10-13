@@ -6,6 +6,7 @@
 
         <label for="champ_acheteur_nom">Entrez le nom de l'acheteur, son CVI ou sa commune :</label>
         <input id="champ_acheteur_nom" class="nom" type="text" name="" />
+        <span class="nom_hidden" style="display:none"></span>
         <input class="cvi" type="hidden" name="" />
         <input class="commune" type="hidden" name="" />
         <input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
