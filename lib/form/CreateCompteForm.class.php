@@ -19,7 +19,7 @@ class CreateCompteForm extends BaseForm {
         $verif_mdp = $this->getOption('verif_mdp', true);
         $this->setValidators(array(
                 'email' => new sfValidatorEmail(array('required' => true),array('required' => 'Champ obligatoire', 'invalid' => 'Adresse email invalide.')),
-                'mdp1'  => new sfValidatorString(array('required' => $verif_mdp , 'min_length' => 4), array('required' => 'Champ obligatoire.', 'min_length'=> 'Votre mot de passe doit comporter au minimum 4 caractères.')),
+                'mdp1'  => new sfValidatorString(array('required' => $verif_mdp)),
                 'mdp2'  => new sfValidatorString(array('required' => $verif_mdp), array('required' => 'Champ obligatoire'))
         ));
         $this->validatorSchema->setPostValidator(new ValidatorCreateCompte());
