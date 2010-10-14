@@ -16,7 +16,7 @@ pre {display: inline;}
 <span style="background-color: grey; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
 <table style="border: 1px solid grey;"><tr><td>
 <table border="0" style="margin: 0px; padding: 0px;">
-  <tr><td>Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '\3/\2/\1', $tiers->exploitant->date_naissance); ?></i></td></tr>
+  <tr><td>Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo $tiers->exploitant->getDateNaissanceFr(); ?></i></td></tr>
   <tr><td>Adresse complete : <i><?php echo $tiers->exploitant->adresse.', '.$tiers->exploitant->code_postal.' '.$tiers->exploitant->commune; ?></i></td><td>Tel. <i><?php echo $tiers->exploitant->telephone; ?></i></td></tr>
 </table>
 </td></tr></table>

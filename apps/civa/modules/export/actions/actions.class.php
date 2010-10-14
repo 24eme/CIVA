@@ -189,9 +189,9 @@ class exportActions extends sfActions
 
     $validee = 'Non Validée';
     if ($dr->exist('validee')) {
-      $validee = 'Déclaration validée le '.$dr->validee;
+      $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
       if ($dr->exist('modifiee') && $dr->modifiee != $dr->validee) {
-	$validee .= ' et modifiée le '.$dr->validee;
+	$validee .= ' et modifiée le '.$dr->getDateModifieeFr();
       }
     }
 

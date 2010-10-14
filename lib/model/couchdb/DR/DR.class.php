@@ -55,6 +55,14 @@ class DR extends BaseDR {
         $this->declarant->telephone =  $tiers->get('telephone');
     }
 
+    public function getDateModifieeFr() {
+        return preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->get('modifiee'));
+    }
+
+    public function getDateValideeFr() {
+        return preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->get('validee'));
+    }
+
     public function getJeunesVignes(){
         $v = $this->_get('jeunes_vignes');
         if(!$v)
