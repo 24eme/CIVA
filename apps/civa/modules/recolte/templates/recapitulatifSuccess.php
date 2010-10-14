@@ -74,7 +74,7 @@
 													<th class="commune"><span>Commune</span></th>				
 													<th><span>Superficie</span></th>
 													<th><span>Volume total</span></th>
-													<th><span>DPLC</span></th>
+													<th><span>dont DPLC</span></th>
 												</tr>
 											</thead>
 											<tbody>
