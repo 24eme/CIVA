@@ -272,4 +272,25 @@ Le CIVA';
         }
     }
 
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeRendreEditable(sfWebRequest $request) {
+        $this->setCurrentEtape('mon_espace_civa');
+        
+        $tiers = $this->getUser()->getTiers();
+        $annee = $this->getRequestParameter('annee', null);
+        $key = 'DR-'.$tiers->cvi.'-'.$annee;
+        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        
+        $dr->remove('modifiee');
+        $dr->save();
+
+        $this->getUser()->initDeclarationCredentials();
+        $this->redirectToNextEtapes();
+
+
+    }
+
 }

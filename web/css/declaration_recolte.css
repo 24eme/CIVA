@@ -491,6 +491,7 @@ a.msg_aide:hover{
 #nouvelle_declaration .ligne_btn .btn
 {
     float: right;
+    margin-left:5px;
     vertical-align: middle;
 }
 
