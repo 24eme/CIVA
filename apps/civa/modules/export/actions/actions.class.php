@@ -208,13 +208,16 @@ class exportActions extends sfActions
 
     $this->nb_pages = 0;
     if (!$this->document->isCached())
-      foreach ($dr->getRecolte()->filter('^appellation_') as $appellation) {
-	foreach ($appellation->getConfig()->filter('^lieu') as $lieu) {
-	  if (!$appellation->exist($lieu->getKey()))
-	    continue;
-	  $lieu = $appellation->{$lieu->getKey()};
-	  $this->createAppellationLieu($lieu, $tiers);
-	}
+      foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
+        if ($dr->recolte->exist($appellation_config->getKey())) {
+            $appellation = $dr->recolte->get($appellation_config->getKey());
+            foreach ($appellation->getConfig()->filter('^lieu') as $lieu) {
+              if (!$appellation->exist($lieu->getKey()))
+                continue;
+              $lieu = $appellation->{$lieu->getKey()};
+              $this->createAppellationLieu($lieu, $tiers);
+            }
+        }
       }
 
     $this->document->generatePDF();
@@ -311,7 +314,7 @@ class exportActions extends sfActions
     $c['type'] = 'total';
     $c['cepage'] = 'Total';
     $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu-dit';
-    if ($lieu->appellation == 'VINTABLE') 
+    if ($lieu->getAppellation()->getAppellation() == 'VINTABLE')
       $c['denomination'] = '';
     $c['vtsgn'] = '';
     $c['superficie'] = $lieu->total_superficie;
