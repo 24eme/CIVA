@@ -28,7 +28,7 @@
                     <?php if($cepage == "- Rebêches") { ?>
         <tr>
             <td class="cepage" colspan="2">
-                Les rebêches exclues du rendement autorisé doivent representer au minimum <?php echo $min_quantite; ?>% et au maximun <?php echo $max_quantite; ?>% du volume total produit.
+                Les rebêches exclues du rendement autorisé doivent représenter au minimum <?php echo $min_quantite; ?>% et au maximun <?php echo $max_quantite; ?>% du volume total produit.
             </td>
         </tr>
                         <?php }else { ?>
