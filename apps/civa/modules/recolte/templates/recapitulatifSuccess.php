@@ -147,7 +147,6 @@
                                 $('#recap_ventes table.table_donnees tr td.dplc input.num').each(function() {
                                     sum_dont_dplc += parseFloat($(this).val());
                                 });
-                                var_dump(sum_superficie);
                                 if (sum_superficie > total_superficie) {
                                     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p>');
                                     openPopup($('#popup_msg_erreur'), 0);
