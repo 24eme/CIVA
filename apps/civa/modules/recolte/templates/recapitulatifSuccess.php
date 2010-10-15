@@ -132,7 +132,7 @@
                                                          'form_lieu' => $form_ajout_lieu,
                                                          'url_lieu' => $url_ajout_lieu)) ?>
 
-                        <script><!--
+                        <script type="text/javascript">
                             function valider_can_submit()
                             {
                                 <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->getConfig()->hasRendement()): ?>
@@ -160,6 +160,6 @@
                                 <?php endif; ?>
                                 return true;
                             }
-                        --></script>
+                        </script>
                         <div id="popup_msg_erreur" class="popup_ajout" title="Erreur !">
                         </div>
