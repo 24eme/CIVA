@@ -171,6 +171,7 @@ Tiers:
       type: {  }
       cvi: {  }
       no_declarant: { type: integer, required: false }
+      recoltant: { type: integer }
       mot_de_passe: { }
       num: {  }
       no_stock: {  }

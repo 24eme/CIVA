@@ -100,7 +100,13 @@ class importTiersTask extends sfBaseTask {
 	  if ($tiers[25])
 	    $json->exploitant->telephone = sprintf('%010d', $tiers[38]);
 	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers[8], $tiers[69], $tiers[68]);
-	  
+
+          if ($tiers[23] == "O") {
+              $json->recoltant = 1;
+          } else {
+              $json->recoltant = 0;
+          }
+
 	  $docs[] = $json;
 	}
 
