@@ -379,24 +379,26 @@ class exportActions extends sfActions
       $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
       $content = '';
       foreach ($tiers as $item) {
-         $ligne = array();
-         $ligne[] = $item->cvi;
-         if (strpos('{TEXT}', $item->mot_de_passe) === false) {
-             $ligne[] = str_replace('{TEXT}', '', $item->mot_de_passe);
-         } else {
-             $ligne[] = "code activé";
-         }
-         $ligne[] = $item->nom;
-         $ligne[] = $item->siege->adresse;
-         $ligne[] = $item->siege->code_postal;
-         $ligne[] = $item->siege->commune;
-         $ligne[] = $item->no_accises;
+         if ($item->recoltant == 1 && $item->cvi != "7523700100") {
+             $ligne = array();
+             $ligne[] = $item->cvi;
+             if (strpos('{TEXT}', $item->mot_de_passe) === false) {
+                 $ligne[] = str_replace('{TEXT}', '', $item->mot_de_passe);
+             } else {
+                 $ligne[] = "code activé";
+             }
+             $ligne[] = $item->nom;
+             $ligne[] = $item->siege->adresse;
+             $ligne[] = $item->siege->code_postal;
+             $ligne[] = $item->siege->commune;
+             $ligne[] = $item->no_accises;
 
-         foreach($ligne as $key => $item_ligne) {
-             $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
-         }
+             foreach($ligne as $key => $item_ligne) {
+                 $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
+             }
 
-         $content .= implode(';', $ligne) . "\n";
+             $content .= implode(';', $ligne) . "\n";
+         }
       }
       
       $this->response->setContentType('application/csv');

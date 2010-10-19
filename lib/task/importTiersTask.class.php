@@ -46,14 +46,19 @@ class importTiersTask extends sfBaseTask {
         foreach (file($options['file']) as $a) {
 	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
-	    if (!isset($csv[$tiers[3]][$i]) || !$csv[$tiers[3]][$i])
-	      $csv[$tiers[3]][$i] = $tiers[$i];
+	    if (!isset($csv[$tiers[0]][$i]) || !$csv[$tiers[0]][$i])
+	      $csv[$tiers[0]][$i] = $tiers[$i];
 	    else if ($tiers[$i] && !$tiers[1]) {
-	      $csv[$tiers[3]][$i] = $tiers[$i];
+	      $csv[$tiers[0]][$i] = $tiers[$i];
 	    }
 	    if ($tiers[1] && $i == 57)
-	      $csv[$tiers[3]][99] = $tiers[57];
+	      $csv[$tiers[0]][99] = $tiers[57];
 	  }
+          /*if ($tiers[0] == 8762) {
+              print_r($tiers);
+              print_r($csv[$tiers[0]]);
+              exit;
+          }*/
 	}
 
 	foreach ($csv as $code_civa => $tiers) {
