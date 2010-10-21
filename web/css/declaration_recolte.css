@@ -264,6 +264,7 @@ ul.btn_prev_suiv li { display: inline; }
 ul.btn_prev_suiv li.prec { float: left; }
 ul.btn_prev_suiv li.suiv { float: right; }
 ul.btn_prev_suiv li.previsualiser { float: left; margin: 0 0 0 308px; }
+ul.btn_prev_suiv li.previsualiser a.msg_aide{ margin:-27px 0 0 5px; }
 ul.btn_prev_suiv li img { display: block; }
 ul#btn_etape { padding: 0 20px; }
 ul#btn_appelation { padding: 30px 60px 0; }
@@ -523,6 +524,20 @@ a.msg_aide:hover{
     outline: 0;
 }
 
+#precedentes_declarations ul li a.pdf
+{
+    background: url(../images/pictos/pi_pdf.png) 0 1px no-repeat;
+}
+
+#precedentes_declarations .pdf_link a{
+    color: #666666;
+    text-decoration: underline;
+}
+
+#precedentes_declarations .pdf_link a:hover{
+    color: #000;
+}
+
 #precedentes_declarations ul li a.ui-state-active { background-position: -12px -16px; }
 
 #precedentes_declarations ul ul
@@ -586,7 +601,7 @@ a.msg_aide:hover{
 
 #exploitation_administratif .modification .ligne_form input[type=text] { height: 15px; }
 
-#exploitation_administratif .btn
+#exploitation_administratif .btnpd
 {
     clear: both;
     padding: 10px 0 0;
@@ -1332,6 +1347,7 @@ a.msg_aide:hover{
     font-size: 13px;
     margin: 0 0 20px;
 }
+
 
 #gestion_recolte #donnees_recolte_sepage.recapitualtif .titre_section
 {

@@ -12,7 +12,10 @@
     <li class="suiv" ><input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" /></li>
     <?php endif; ?>
     <?php if(in_array('previsualiser', $display->getRawValue())): ?>
-    <li class="previsualiser"><input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser" /></li>
+    <li class="previsualiser">
+        <input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser" />
+        <a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide">Test message d'aide</a>
+    </li>
     <?php endif; ?>
 
 </ul>
