@@ -63,6 +63,7 @@ class compteActions extends sfActions {
                 $this->form->bind($request->getParameter($this->form->getName()));
                 $ldap = new ldap();
                 if ($this->form->isValid()) {
+                    $tiers = $this->form->getValue('tiers');
                     $verify = $ldap->ldapVerifieExistence($tiers);
                     if($verify) {
 		      $ldap->ldapModify($tiers);
