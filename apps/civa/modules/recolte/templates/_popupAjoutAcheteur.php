@@ -1,5 +1,5 @@
 <div id="<?php echo $id ?>" class="popup_ajout" title="<?php echo $title ?>">
-    <form action="<?php echo $action ?>" method="post">
+    <form action="<?php echo $action ?>" method="post" onsubmit="return false;">
 
         <input type="hidden" name="type_cssclass" value="<?php echo $cssclass ?>" />
         <input type="hidden" name="type_name_field" value="<?php echo $name ?>" />
