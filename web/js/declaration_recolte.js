@@ -1135,6 +1135,11 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
     var btn_loading = popup.find('.valider-loading');
     var form = popup.find('form');
 
+    form.submit(function() {
+        btn.click();
+        return false;
+    })
+
     $(popup).bind( "dialogclose", function(event, ui) {
         nom.val('');
         cvi.val('');
