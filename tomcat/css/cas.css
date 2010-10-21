@@ -96,7 +96,7 @@ http://www.positioniseverything.net/easyclearing.html and http://www.ejeliot.com
 }
 
 #header #titre_rubrique h1{
-    font-size: 30px;
+    font-size: 34px;
     font-weight: normal;
     margin: 0 0 5px;
 }
@@ -191,6 +191,23 @@ p.intro {
     margin-top: 8px
 }
 
+/* Avertissement IE6 --------------------------------- */
+#avertissement_ie6 .contenu_section { background: #feefda; }
+#avertissement_ie6 .contenu_section p { color: #000; }
+#avertissement_ie6 .contenu_section .navigateurs { text-align: center; }
+#avertissement_ie6 .contenu_section .navigateurs a { margin: 0 5px; }
+
+
+#bandeau_civa
+{
+	clear: both;
+	padding: 20px 0 0;
+	overflow: hidden;
+}
+
+#bandeau_civa * { display: block; }
+
+
 /* FOOTER --------------------------------- */
 #footer{
     color: #4d4f4f;
@@ -241,6 +258,7 @@ p.intro {
 
 
 /* Carrousel introduction --------------------------------- */
+/*
 #carrousel_cont
 {
 	height: 282px;
@@ -315,3 +333,96 @@ p.intro {
 #carrousel_cont .carrousel_btn ol li.current a { background-position: 0 -17px; }
 
 #carrousel_cont .carrousel_btn ol li a span { text-indent: -9999px; }
+*/
+
+#carrousel_presentation
+{
+	float: left;
+	overflow: hidden;
+	position: relative;
+	width: 550px;
+	zoom: 1;
+}
+
+#carrousel_presentation #carrousel_presentation_cont
+{
+	height: 312px;
+	position: relative;
+}
+
+#carrousel_presentation #carrousel_presentation_cont ul { overflow: hidden; }
+
+#carrousel_presentation #carrousel_presentation_cont ul li
+{
+	height: 312px;
+	position: relative;
+	width: 550px;
+}
+
+#carrousel_presentation #carrousel_presentation_cont ul li img { display: block; }
+
+#carrousel_presentation #carrousel_presentation_cont ul li .desc
+{
+	background: url(../images/carrousel/carrousel_desc.png) 0 0 repeat;
+	_background: #000;
+	bottom: 0;
+	color: #fff;
+	left: 0;
+	min-height: 90px; _height: 90px;
+	padding: 23px 38px 0;
+	position: absolute;
+	width: 474px;
+}
+
+#carrousel_presentation #carrousel_presentation_cont ul li .desc h2
+{
+	font-size: 28px;
+	text-transform: uppercase;
+}
+
+#carrousel_presentation #carrousel_presentation_cont ul li .desc p
+{
+	font-size: 14px;
+	padding: 0 100px 0 0;
+}
+
+#carrousel_presentation #carrousel_presentation_cont ul li .desc a
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+#carrousel_presentation .carrousel_btn
+{
+	bottom: 10px;
+	display: block;
+	font-size: 22px;
+	position: absolute;
+	right: 10px;
+}
+
+#carrousel_presentation .carrousel_btn ol { list-style: none; }
+
+#carrousel_presentation .carrousel_btn ol li
+{
+	display: inline;
+	margin: 0 0 0 5px;
+}
+
+#carrousel_presentation .carrousel_btn ol li a
+{
+	background: #606060;
+	border: 1px solid #ffffff;
+	color: #fff;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	outline: 0;
+	padding: 0 5px;
+	text-align: center;
+	text-decoration: none !important;
+}
+
+#carrousel_presentation .carrousel_btn ol li.current a { background: #bebebe; }
+
+#carrousel_presentation .carrousel_btn ol li a span {  }

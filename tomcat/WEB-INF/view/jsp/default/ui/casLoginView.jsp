@@ -35,7 +35,6 @@ String host = "";
 
 %>
 
-
 <%@ page contentType="text/html; charset=UTF-8" %>
 <jsp:directive.include file="includes/top.jsp" />
 
@@ -48,7 +47,7 @@ String host = "";
               <div id="intro_accueil_civa">
                 <!-- <h2>Bienvenue sur le site du CIVA</h2> -->
 				
-				<div id="carrousel_cont" class="contenu_section">
+				<!--<div id="carrousel_cont" class="contenu_section">
 					<div id="carrousel">
 						<ul>
 							<li>
@@ -65,16 +64,47 @@ String host = "";
 							</li>
 						</ul>
 					</div>
+				</div>-->
+				
+				
+				<div id="carrousel_presentation">
+					<div id="carrousel_presentation_cont">
+						<ul>
+							<li>
+								<img src="images/carrousel/carrousel_vi_1.jpg" alt="" />
+								<div class="desc">
+									<h2>Déclarez votre récolte en ligne</h2>
+									<!--<p><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum massa nibh.</a></p>-->
+								</div>
+							</li>
+							<li>
+								<img src="images/carrousel/carrousel_vi_2.jpg" alt="" />
+								<div class="desc">
+									<h2>Testez la solution Alsace GAMM@</h2>
+									<!--<p><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum massa nibh.</a></p>-->
+								</div>
+							</li>
+							<li>
+								<img src="images/carrousel/carrousel_vi_3.jpg" alt="" />
+								<div class="desc">
+									<h2>Accédez à votre espace personnel</h2>
+									<!--<p><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum massa nibh.</a></p>-->
+								</div>
+							</li>
+						</ul>
+					</div>
 				</div>
+				
 				
 				<script type="text/javascript">
 					$(document).ready(function()
 					{	
-						$("#carrousel").sudoSlider(
+						$("#carrousel_presentation_cont").sudoSlider(
 						{ 
 							numeric: true,
 							prevNext: false,
-							controlsAttr: 'class="carrousel_btn"'
+							controlsAttr: 'class="carrousel_btn"',
+							continuous: true
 						});
 					});
 				</script>
@@ -82,6 +112,23 @@ String host = "";
 				
               </div>
               <div id="boxes">
+			  
+			  	<!--[if lte IE 6 ]>
+				<h2 class="titre_section">Avertissement</h2>
+				<div id="avertissement_ie6">
+					<div class="contenu_section">
+						<p class="intro">Vous utilisez un navigateur dépassé depuis près de 8 ans. Afin de pouvoir correctement utiliser le site et bénéficier de toutes ses fonctionnalités, nous vous conseillons de mettre à jour votre navigateur.</p>
+						<div class="navigateurs">
+							<a href='http://fr.www.mozilla.com/fr/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' alt='Obtenir Firefox 3.5'/></a>
+							<a href='http://www.microsoft.com/downloads/details.aspx?FamilyID=341c2ad5-8c3d-4347-8c03-08cdecd8852b&DisplayLang=fr' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' alt='Obtenir Internet Explorer 8'/></a>
+							<a href='http://www.apple.com/fr/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' alt='Obtenir Safari 4'/></a>
+							<a href='http://www.google.com/chrome?hl=fr' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' alt='Obtenir Google Chrome'/></a>
+						</div>
+					</div>
+				</div>
+				<![endif]--> 
+			  
+			  	<!--[if (gt IE 6)|!(IE)]><!-->
                 <h2 class="titre_section">Premiere connexion</h2>
                 <div id="nouvelle_declaration">
                     <div class="contenu_section">
@@ -99,34 +146,29 @@ String host = "";
 
                         <div class="ligne_form row fl-controls-left">
                             <label for="username" class="fl-label">Identifiant : </label>
-                                                    <c:if test="${not empty sessionScope.openIdLocalId}">
-                                                    <strong>${sessionScope.openIdLocalId}</strong>
-                                                    <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-                                                    </c:if>
+							<c:if test="${not empty sessionScope.openIdLocalId}">
+							<strong>${sessionScope.openIdLocalId}</strong>
+							<input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
+							</c:if>
 
-                                                    <c:if test="${empty sessionScope.openIdLocalId}">
-                                                    <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
-                                                    <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="false" htmlEscape="true" />
-                                                    </c:if>
+							<c:if test="${empty sessionScope.openIdLocalId}">
+							<spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
+							<form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="false" htmlEscape="true" />
+							</c:if>
                         </div>
 
 
                         <div class="ligne_form row fl-controls-left">
                             <label for="password" class="fl-label">Mot de passe :</label>
-                                                    <%--
-                                                    NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
-                                                    "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
-                                                    information, see the following web page:
-                                                    http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
-                                                    --%>
-                                                    <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
-                                                    <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
+							<%--
+							NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
+							"autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
+							information, see the following web page:
+							http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
+							--%>
+							<spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
+							<form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
                         </div>
-
-                        <!--div class="ligne_form row check">
-                            <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
-                            <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
-                        </div-->
 
                         <div class="ligne_form link">
                             <a href="<% out.println(host); %>compte/motdepasseOublie">Mot de passe oublié</a>
@@ -139,7 +181,16 @@ String host = "";
                        </div>
                     </div>
                 </div>
-              </div>
+              	<!--<![endif]-->
+			  
+			  
+			  </div>
+			  
+			  
+				<div id="bandeau_civa">
+					<a href="#"><img src="images/bandeau_civa.png" alt="Site officiel des Vins d'Alsace" /></a>
+				</div>
+			  
             </div>
 
     </form:form>
