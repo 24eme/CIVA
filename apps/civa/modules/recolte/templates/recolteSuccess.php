@@ -93,17 +93,17 @@
 
         <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_acheteur',
                                                           'title' => 'Ajouter un acheteur',
-                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null)->getRawValue()),
                                                           'name' => 'negoces',
                                                           'cssclass' => 'vente_raisins')) ?>
         <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_cave',
                                                           'title' => 'Ajouter une cave',
-                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null)->getRawValue()),
                                                           'name' => 'cooperatives',
                                                           'cssclass' => 'caves')) ?>
         <?php include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_mout',
                                                           'title' => 'Ajouter un acheteur de mout',
-                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur')->getRawValue()),
+                                                          'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null)->getRawValue()),
                                                           'name' => 'mouts',
                                                           'cssclass' => 'mouts')) ?>
 

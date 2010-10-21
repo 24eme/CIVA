@@ -162,7 +162,7 @@ class recolteActions extends EtapesActions {
 
         if ($request->hasParameter('force_appellation')) {
             $this->forward404Unless($this->declaration->recolte->getConfig()->exist($request->getParameter('force_appellation')));
-            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu'), array('force_appellation' => $request->getParameter('force_appellation')));
+            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu', null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->add($request->getParameter('force_appellation')));
         }
 
@@ -298,7 +298,7 @@ class recolteActions extends EtapesActions {
         $this->url_ajout_lieu = null;
         if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu');
+            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null);
         }
     }
 
