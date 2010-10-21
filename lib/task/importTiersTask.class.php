@@ -43,27 +43,33 @@ class importTiersTask extends sfBaseTask {
 	  $insee[$csv[0]] = $csv[1];
 	}
 
+        $csv_no_stock = array();
+        $csv_no = array();
+
         foreach (file($options['file']) as $a) {
 	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
-	    if (!isset($csv[$tiers[0]][$i]) || !$csv[$tiers[0]][$i])
-	      $csv[$tiers[0]][$i] = $tiers[$i];
+	    if (!isset($csv_no[$tiers[0]][$i]) || !$csv_no[$tiers[0]][$i])
+	      $csv_no[$tiers[0]][$i] = $tiers[$i];
 	    else if ($tiers[$i] && !$tiers[1]) {
-	      $csv[$tiers[0]][$i] = $tiers[$i];
+	      $csv_no[$tiers[0]][$i] = $tiers[$i];
 	    }
-	    if ($tiers[1] && $i == 57)
-	      $csv[$tiers[0]][99] = $tiers[57];
+            
+            if (!isset($csv_no_stock[$tiers[3]][$i]) || !$csv_no_stock[$tiers[3]][$i])
+              $csv_no_stock[$tiers[3]][$i] = $tiers[$i];
+            else if ($tiers[$i] && !$tiers[1]) {
+              $csv_no_stock[$tiers[3]][$i] = $tiers[$i];
+            }
+            if ($tiers[1] && $i == 57)
+	      $csv_no_stock[$tiers[3]][99] = $tiers[57];
 	  }
-          /*if ($tiers[0] == 8762) {
-              print_r($tiers);
-              print_r($csv[$tiers[0]]);
-              exit;
-          }*/
 	}
 
-	foreach ($csv as $code_civa => $tiers) {
+	foreach ($csv_no as $code_civa => $tiers) {
 	  if (!$tiers[57])
 	    continue;
+
+          $tiers_stock = $csv_no_stock[$tiers[3]];
 
 	  $json = new stdClass();
 	  $json->type = "Tiers";
@@ -71,11 +77,11 @@ class importTiersTask extends sfBaseTask {
 	  $json->cvi = $tiers[57];
 	  $json->num = $tiers[0];
 	  $json->no_stock = $tiers[3];
-	  $json->maison_mere = $tiers[10];
-	  $json->civaba = $tiers[1];
-	  $json->no_accises = $tiers[70];
+	  $json->maison_mere = $tiers_stock[10];
+	  $json->civaba = $tiers_stock[1];
+	  $json->no_accises = $tiers_stock[70];
 	  $json->siret = $tiers[58].'';
-	  $json->intitule = $tiers[9];
+	  $json->intitule = $tiers_stock[9];
 	  $json->regime_fiscal = '';
 	  $json->nom = preg_replace('/ +/', ' ', $tiers[6]);
 	  $json->declaration_insee = $tiers[62];
@@ -85,26 +91,26 @@ class importTiersTask extends sfBaseTask {
 	  $json->siege->insee_commune = $tiers[59];
 	  $json->siege->code_postal = $tiers[60];
 	  $json->siege->commune = $tiers[61];
-	  if (isset($tiers[99]))
-	    $json->cvi_acheteur = $tiers[99];
-	  if ($tiers[37]) 
-	    $json->telephone = sprintf('%010d', $tiers[37]);
-	  if ($tiers[39]) 
-	    $json->fax = sprintf('%010d', $tiers[39]);
-	  if($tiers[40])
-	    $json->email = $tiers[40];
-	  if($tiers[82])
-	    $json->web = $tiers[82];
-	  $json->exploitant->sexe = $tiers[41];
-	  $json->exploitant->nom = $tiers[42];
-	  if ($tiers[13]) {
-	    $json->exploitant->adresse = $tiers[12].", ".$tiers[13];
-	    $json->exploitant->code_postal = $tiers[15];
-	    $json->exploitant->commune = $tiers[14];
+	  if (isset($tiers_stock[99]))
+	    $json->cvi_acheteur = $tiers_stock[99];
+	  if ($tiers_stock[37])
+	    $json->telephone = sprintf('%010d', $tiers_stock[37]);
+	  if ($tiers_stock[39])
+	    $json->fax = sprintf('%010d', $tiers_stock[39]);
+	  if($tiers_stock[40])
+	    $json->email = $tiers_stock[40];
+	  if($tiers_stock[82])
+	    $json->web = $tiers_stock[82];
+	  $json->exploitant->sexe = $tiers_stock[41];
+	  $json->exploitant->nom = $tiers_stock[42];
+	  if ($tiers_stock[13]) {
+	    $json->exploitant->adresse = $tiers_stock[12].", ".$tiers_stock[13];
+	    $json->exploitant->code_postal = $tiers_stock[15];
+	    $json->exploitant->commune = $tiers_stock[14];
 	  }
-	  if ($tiers[25])
-	    $json->exploitant->telephone = sprintf('%010d', $tiers[38]);
-	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers[8], $tiers[69], $tiers[68]);
+	  if ($tiers_stock[25])
+	    $json->exploitant->telephone = sprintf('%010d', $tiers_stock[38]);
+	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers_stock[8], $tiers_stock[69], $tiers_stock[68]);
 
           if ($tiers[23] == "O") {
               $json->recoltant = 1;
