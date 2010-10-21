@@ -110,10 +110,10 @@ Le CIVA';
             $this->form->bind($request->getParameter($this->form->getName()));
 
             if ($this->form->isValid()) {
-                $values['email'] = $tiers->email;
-                $values['mot_de_passe'] = $tiers->mot_de_passe;
+                /*$values['email'] = $tiers->email;
+                $values['mot_de_passe'] = $tiers->mot_de_passe;*/
                 $ldap = new ldap();
-                $ldap->ldapModify($tiers, $values);
+                $ldap->ldapModify($tiers);
                 $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
                 $this->redirect('@mon_compte');
             }else {

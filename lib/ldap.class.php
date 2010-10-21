@@ -89,9 +89,9 @@ class ldap {
         }  
     }
     
-    public function ldapModify($tiers, $values = null) {
+    public function ldapModify($tiers) {
 
-        if($tiers && $values){
+        if($tiers){
             $ldapConnect = $this->ldapConnect();
             if($ldapConnect) {
 

@@ -97,11 +97,11 @@ class tiersActions extends EtapesActions {
 
                     if($tiers && $ldap) {
 
-                        $values['nom'] = $tiers->nom;
+                        /*$values['nom'] = $tiers->nom;
                         $values['adresse'] = $tiers->siege->adresse;
                         $values['code_postal'] = $tiers->siege->code_postal;
-                        $values['ville'] = $tiers->siege->commune;
-                        $ldap->ldapModify($this->getUser()->getTiers(), $values);
+                        $values['ville'] = $tiers->siege->commune;*/
+                        $ldap->ldapModify($this->getUser()->getTiers());
                     }
 
                 } else {
