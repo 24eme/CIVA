@@ -63,7 +63,7 @@ recolte_add:
   class: sfRouteAnchor
 
 recolte_motif_non_recolte:
-  url:   /recolte/:appellation_lieu/:cepage/motif_non_recolte/:detail_key/test
+  url:   /recolte/:appellation_lieu/:cepage/:detail_key/motif_non_recolte
   param: { module: recolte, action: motifNonRecolte }
   class: sfRouteAnchor
 
