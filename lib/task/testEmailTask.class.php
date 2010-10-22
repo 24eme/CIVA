@@ -11,12 +11,12 @@ class testEmailTask extends sfBaseTask
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
     ));
 
-    $this->namespace        = '';
+    $this->namespace        = 'civa-config';
     $this->name             = 'testEmail';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
@@ -41,7 +41,7 @@ EOF;
 								 'CIVA - '.$obj_email,
 								 $mess
 								 );
-			  $this->log(var_dump($this->getMailer()->send($message)));
+   $this->log(var_dump($this->getMailer()->send($message)));
 
     // add your code here
   }
