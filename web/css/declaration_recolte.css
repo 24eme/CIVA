@@ -1703,3 +1703,24 @@ a.msg_aide{
     margin-top:15px;
     text-align:center;
 }
+
+/** pages statiques **/
+.pages-statiques p{
+    margin-bottom: 10px;
+}
+
+.pages-statiques p a.picto{
+    background: url(../images/puces/puces_accordeon.png) -27px 0 no-repeat;
+    display: inline-block;
+    padding: 0 0 0 15px;
+    outline: 0;
+    margin-top: 10px;
+    text-decoration: underline;
+}
+
+
+.pages-statiques h3{
+    margin: 15px 0   ;
+    font-size: 15px;
+    text-decoration: underline;
+}
