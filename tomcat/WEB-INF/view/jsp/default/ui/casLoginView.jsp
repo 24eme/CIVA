@@ -117,7 +117,7 @@ String host = "";
 				<h2 class="titre_section">Avertissement</h2>
 				<div id="avertissement_ie6">
 					<div class="contenu_section">
-						<p class="intro">Vous utilisez un navigateur dépassé depuis près de 8 ans. Afin de pouvoir correctement utiliser le site et bénéficier de toutes ses fonctionnalités, nous vous conseillons de mettre à jour votre navigateur.</p>
+						<p class="intro">La version de votre navigateur n'est plus à jour. Afin de pouvoir correctement utiliser le site et bénéficier de toutes ses fonctionnalités, nous vous conseillons de télécharger l'un des navigateurs que nous vous proposons ci-dessous.</p>
 						<div class="navigateurs">
 							<a href='http://fr.www.mozilla.com/fr/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' alt='Obtenir Firefox 3.5'/></a>
 							<a href='http://www.microsoft.com/downloads/details.aspx?FamilyID=341c2ad5-8c3d-4347-8c03-08cdecd8852b&DisplayLang=fr' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' alt='Obtenir Internet Explorer 8'/></a>
@@ -188,7 +188,7 @@ String host = "";
 			  
 			  
 				<div id="bandeau_civa">
-					<a href="http://www.vinsalsace.com" target="_blank"><img src="images/bandeau_civa.png" alt="Site officiel des Vins d'Alsace" /></a>
+					<a href="http://www.vinsalsace.com/espaces-professionnels/espaces-professionnels-art238.html" target="_blank"><img src="images/bandeau_civa.png" alt="Site officiel des Vins d'Alsace" /></a>
 				</div>
 			  
             </div>
