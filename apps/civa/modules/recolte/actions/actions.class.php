@@ -120,7 +120,7 @@ class recolteActions extends EtapesActions {
             if ($this->form->isValid()) {
                 $this->form->save();
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                        'data' => 'http://www.google.fr')));
+                        'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
             }
             return $this->renderText(json_encode(array('action' => 'render',
                     'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
