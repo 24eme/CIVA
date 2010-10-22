@@ -116,7 +116,6 @@ class recolteActions extends EtapesActions {
         $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key), array('nonEdel'=> $nonEdel));
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            return $this->renderText(json_encode(array('action' => 'render', 'data' => 'test')));
             $this->form ->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
