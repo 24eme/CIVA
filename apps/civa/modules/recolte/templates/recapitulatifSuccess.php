@@ -62,7 +62,7 @@
                                                        
                                                         
 							<div id="recap_ventes">
-								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide">Test message d'aide</a></h2>
+								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
 									<div class="bloc_gris">
                                                                         <?php if($appellationlieu->acheteurs->count() > 0): ?>

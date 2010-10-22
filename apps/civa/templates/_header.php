@@ -1,5 +1,5 @@
-<ul id="liens_evitement" class="clearfix">
-</ul>
+<!--<ul id="liens_evitement" class="clearfix">
+</ul>-->
 
 <!-- #header -->
 <div id="header" class="clearfix pngfix">

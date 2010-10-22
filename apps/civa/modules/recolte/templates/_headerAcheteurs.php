@@ -1,4 +1,4 @@
-<h3><?php echo $title ?> <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="<?php echo $var_rel_help; ?>" title="Message aide">Test message d'aide</a></h3>
+<h3><?php echo $title ?> <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="<?php echo $var_rel_help; ?>" title="Message aide"></a></h3>
 <?php if (count($acheteurs) > 0): ?>
 <ul class="acheteurs">
     <?php foreach ($acheteurs as $cvi): ?>

@@ -1,18 +1,18 @@
 <div id="colonne_intitules">
     <p class="denomination">
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
-   Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide">Test message d'aide</a>
+   Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide"></a>
 
 <?php endif; ?>&nbsp;
    </p>
 
     <p class="mention">
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
-   Mention VT/SGN <a href="" class="msg_aide" rel="help_popup_DR_mention" title="Message aide">Test message d'aide</a>
+   Mention VT/SGN <a href="" class="msg_aide" rel="help_popup_DR_mention" title="Message aide"></a>
 <?php endif; ?>&nbsp;
    </p>
 
-   <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide">Test message d'aide</a> </p>
+   <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide"></a> </p>
     <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
     <div class="vente_raisins">
         <?php
@@ -47,12 +47,12 @@
         </div>
     <?php endif; ?>
 
-    <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide">Test message d'aide</a></p>
-    <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide">Test message d'aide</a></p>
+    <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide"></a></p>
+    <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide"></a></p>
     <?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
     <ul class="vol_revendique_dplc">
-        <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide">Test message d'aide</a></li>
-        <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide">Test message d'aide</a></li>
+        <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
+        <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
     </ul>
     <?php endif; ?>
 </div>

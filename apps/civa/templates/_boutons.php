@@ -14,7 +14,7 @@
     <?php if(in_array('previsualiser', $display->getRawValue())): ?>
     <li class="previsualiser">
         <input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser" />
-        <a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide">Test message d'aide</a>
+        <a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
     </li>
     <?php endif; ?>
 
