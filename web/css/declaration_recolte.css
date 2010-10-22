@@ -1244,6 +1244,7 @@ a.msg_aide:hover{
 {
     background: #e0e1bd;
     padding: 4px;
+    zoom: 1;
 }
 
 #gestion_recolte #col_scroller .col_active .col_btn a.supprimer,
@@ -1672,6 +1673,8 @@ a.msg_aide{
 .picto_rdt_aide_col_total{
     position:absolute;
     left: 78px;
+    z-index: 500;
+    zoom: 1;
 }
 
 
