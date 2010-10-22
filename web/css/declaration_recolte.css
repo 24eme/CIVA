@@ -414,11 +414,12 @@ a.btn_inactif
     outline: 0;
 }
 
-a.btn_inactif img
+a.btn_inactif
 {
     cursor: default;
     opacity: 0.3;
     filter: Alpha(Opacity=0.3);
+    zoom: 1;
 }
 
 input.btn_inactif
@@ -438,10 +439,12 @@ a.msg_aide
     vertical-align: middle;
     width: 17px;
     opacity:0.5;
+    filter: Alpha(Opacity=0.5);
 }
 
 a.msg_aide:hover{
     opacity:1;
+    filter: Alpha(Opacity=1);
 }
 
 #popup_msg_aide { display: none;  }
