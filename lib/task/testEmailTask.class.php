@@ -41,7 +41,7 @@ EOF;
 								 'CIVA - '.$obj_email,
 								 $mess
 								 );
-			  $this->getMailer()->send($message);
+			  $this->log(var_dump($this->getMailer()->send($message)));
 
     // add your code here
   }
