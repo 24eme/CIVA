@@ -132,6 +132,18 @@ message:
   url: /message
   param: {module: global, action: messageAjax}
 
+mentions-legales:
+  url: /mentions-legales
+  param: {module: global, action: mentionsLegales}
+
+contact:
+  url: /contact
+  param: {module: global, action: contact}
+
+aProposDuCiva:
+  url: /a-propos-du-civa
+  param: {module: global, action: aProposDuCiva}
+
 default_index:
   url:   /:module
   param: { action: index }
