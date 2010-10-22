@@ -418,14 +418,14 @@ a.btn_inactif img
 {
     cursor: default;
     opacity: 0.3;
-    !filter: Alpha(Opacity=30);
+    filter: Alpha(Opacity=30);
 }
 
 input.btn_inactif
 {
     cursor: default;
     opacity: 0.3;
-    !filter: Alpha(Opacity=30);
+    filter: Alpha(Opacity=30);
 }
 
 /* Popup d'aide */
@@ -438,12 +438,12 @@ a.msg_aide
     vertical-align: middle;
     width: 17px;
     opacity:0.5;
-    !filter: Alpha(Opacity=50);
+    filter: Alpha(Opacity=50);
 }
 
 a.msg_aide:hover{
     opacity:1;
-    !filter: Alpha(Opacity=100);
+    filter: Alpha(Opacity=100);
 }
 
 #popup_msg_aide { display: none;  }
