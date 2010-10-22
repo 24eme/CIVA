@@ -10,10 +10,6 @@ prod:
   mailer:
     param:
       delivery_strategy: spool
-      transport:
-        class: Swift_SmtpTransport
-        param:
-          host: declaration.vinsalsace.pro
 
 test:
   storage:
