@@ -9,7 +9,11 @@ prod:
       loggers: ~
   mailer:
     param:
-      delivery_strategy: spool
+      delivery_strategy: realtime
+      transport:
+        class: Swift_SmtpTransport
+        param:
+          host: mail.aquitaine-valley.fr
 
 test:
   storage:
