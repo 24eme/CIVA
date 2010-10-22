@@ -36,7 +36,7 @@ EOF;
     $mess = "test email";
     $obj_email = "Test Objet";
 
-    $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+    $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
 								 'vince.laurent@gmail.com',
 								 'CIVA - '.$obj_email,
 								 $mess

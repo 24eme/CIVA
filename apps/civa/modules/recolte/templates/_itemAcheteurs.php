@@ -1,3 +1,4 @@
+<?php if (count($acheteurs) > 0): ?>
 <ul>
     <?php foreach ($acheteurs as $cvi): ?>
     <?php if (isset($acheteurs_value[$cvi])): ?>
@@ -7,3 +8,4 @@
     <?php endif; ?>
     <?php endforeach; ?>
 </ul>
+<?php endif; ?>

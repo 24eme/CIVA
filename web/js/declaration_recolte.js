@@ -1135,10 +1135,10 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
     var btn_loading = popup.find('.valider-loading');
     var form = popup.find('form');
 
-    form.submit(function() {
+    /*form.submit(function() {
         btn.click();
         return false;
-    })
+    })*/
 
     $(popup).bind( "dialogclose", function(event, ui) {
         nom.val('');
@@ -1217,6 +1217,12 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
 
                 html_acheteur_item.find('input').addClass(css_class_acheteur);
 
+                if (!($('#colonne_intitules, .col_recolte').find('.'+type_cssclass+' ul').length > 0)) {
+                    $('#colonne_intitules, .col_recolte').find('.'+type_cssclass).append('<ul></ul>');
+                    $('#colonne_intitules').find('.'+type_cssclass+' ul').addClass('acheteurs');
+                }
+
+                
                 $('#colonne_intitules').
                 find('.'+type_cssclass+' ul').
                 append(html_header_item.html());

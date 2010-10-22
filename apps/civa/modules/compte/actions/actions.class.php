@@ -77,7 +77,7 @@ Le CIVA';
 
                         //send email
 			try {
-			  $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+			  $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
 								 $tiers->email,
 								 'CIVA - '.$obj_email,
 								 $mess
@@ -153,7 +153,7 @@ Cordialement,
 Le CIVA';
                     //send email
 		    try {
-		      $message = $this->getMailer()->compose('ne_pas_repondre@civa.fr',
+		      $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
 							     $tiers->email,
 							     'CIVA - Mot de passe oublié',
 							     $mess
