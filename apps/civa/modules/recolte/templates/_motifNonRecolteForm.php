@@ -1,6 +1,6 @@
 <?php use_helper('jQuery') ?>
 
-<?php echo jq_form_remote_tag(array('url' => url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null)->getRawValue(), array('detail_key' => $detail_key)), true),
+<?php echo jq_form_remote_tag(array('url' => '/index.php'.url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null)->getRawValue(), array('detail_key' => $detail_key)), true),
                                     'method' => 'post',
                                     'dataType' => 'json',
                                     'before' => "$('#form_motif_non_recolte input[type=image]').hide();
