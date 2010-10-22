@@ -13,6 +13,7 @@ class recolteActions extends EtapesActions {
     public function preExecute() {
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getUser()->getDeclaration();
+        $this->help_popup_action = "help_popup_DR";
     }
 
     /**
@@ -20,8 +21,6 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-
-        $this->help_popup_action = "help_popup_DR";
 
         $this->initOnglets($request);
         $this->initDetails();

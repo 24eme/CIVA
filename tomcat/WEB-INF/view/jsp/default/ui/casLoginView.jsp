@@ -188,7 +188,7 @@ String host = "";
 			  
 			  
 				<div id="bandeau_civa">
-					<a href="#"><img src="images/bandeau_civa.png" alt="Site officiel des Vins d'Alsace" /></a>
+					<a href="http://www.vinsalsace.com"><img src="images/bandeau_civa.png" alt="Site officiel des Vins d'Alsace" /></a>
 				</div>
 			  
             </div>
