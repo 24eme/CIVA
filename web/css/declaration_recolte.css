@@ -414,7 +414,7 @@ a.btn_inactif
     outline: 0;
 }
 
-a.btn_inactif
+a.btn_inactif img
 {
     cursor: default;
     opacity: 0.3;
