@@ -379,7 +379,7 @@ class exportActions extends sfActions
       $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
       $content = '';
       foreach ($tiers as $item) {
-         if ($item->recoltant == 1 && $item->cvi != "7523700100" && strpos('{TEXT}', $item->mot_de_passe) !== false) {
+         if ($item->recoltant == 1 && $item->cvi != "7523700100" && strlen($item->mot_de_passe) == 4) {
              $ligne = array();
              $ligne[] = $item->cvi;
              if (strpos('{TEXT}', $item->mot_de_passe) === false) {
