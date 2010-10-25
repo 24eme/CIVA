@@ -392,6 +392,7 @@ class exportActions extends sfActions
              $ligne[] = $item->siege->code_postal;
              $ligne[] = $item->siege->commune;
              $ligne[] = $item->no_accises;
+             $ligne[] = $item->mot_de_passe;
 
              foreach($ligne as $key => $item_ligne) {
                  $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
