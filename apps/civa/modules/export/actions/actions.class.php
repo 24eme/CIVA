@@ -379,7 +379,7 @@ class exportActions extends sfActions
       $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
       $content = '';
       foreach ($tiers as $item) {
-         if ($item->recoltant == 1 && $item->cvi != "7523700100" && strlen($item->mot_de_passe) == 4) {
+         if ($item->recoltant == 1 && $item->cvi != "7523700100") {
              $ligne = array();
              $ligne[] = $item->cvi;
              if (strpos('{TEXT}', $item->mot_de_passe) === false) {
@@ -392,7 +392,6 @@ class exportActions extends sfActions
              $ligne[] = $item->siege->code_postal;
              $ligne[] = $item->siege->commune;
              $ligne[] = $item->no_accises;
-             $ligne[] = $item->mot_de_passe;
 
              foreach($ligne as $key => $item_ligne) {
                  $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
