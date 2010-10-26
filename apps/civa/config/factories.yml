@@ -13,12 +13,7 @@ prod:
       transport:
         class: Swift_SmtpTransport
         param:
-          #host: mail.aquitaine-valley.fr
-          host: smtp.gmail.com
-          username: civa.vinsalsace.pro
-          password: 'hopla2010'
-          port: 465
-          encryption: 'ssl'
+          host: mail.aquitaine-valley.fr
 
 test:
   storage:
