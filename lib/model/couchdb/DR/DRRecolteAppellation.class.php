@@ -78,6 +78,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function removeVolumes() {
+        $this->total_superficie = null;
         $this->volume_revendique = null;
         $this->total_volume = null;
         $this->dplc = null;

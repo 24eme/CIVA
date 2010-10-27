@@ -5,6 +5,10 @@ class DRClient extends sfCouchdbClient {
         return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne);
     }
 
+    public function getAllByCampagne($campagne) {
+        return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
+    }
+
     public function getArchivesCampagnes($cvi, $campagne) {
         $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
         $campagnes = array();
