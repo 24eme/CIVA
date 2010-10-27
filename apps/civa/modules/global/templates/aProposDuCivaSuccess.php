@@ -10,6 +10,5 @@
 
     <p>Ainsi le Comité Interprofessionnel du Vin d’Alsace tel qu’il était dénommé au départ, est-il devenu par la suite "Conseil Interprofessionnel des Vins d’Alsace" notamment pour tenir compte de la diversité des vins d’Alsace et de leurs appellations.</p>
 
-    <p><a href="<?php echo url_for('@contact'); ?>" class="picto">Contactez nous</a></p>
 </div>
 <!-- fin #application_dr -->

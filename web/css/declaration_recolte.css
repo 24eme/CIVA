@@ -1724,3 +1724,7 @@ a.msg_aide{
     font-size: 15px;
     text-decoration: underline;
 }
+
+.msg_mon_espace_civa{
+    margin:15px 0 0 0 !important;
+}

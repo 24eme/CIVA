@@ -7,9 +7,10 @@
         12 avenue de la Foire-Aux-Vins<br />
         BP 11217<br />
         68012 Colmar Cedex<br />
-        France<br />
-        Tél. : (+33) 03 89 20 16 20<br />
-        Fax : (+33) 03 89 20 16 30<br />
+        France<br /><br />
+        <strong>Tél. :</strong> (+33) 03 89 20 16 20<br />
+        <strong>Fax :</strong> (+33) 03 89 20 16 30<br />
+        <strong>E-mail :</strong> <a href="mailto:civa@civa.fr" >civa@civa.fr</a>
     </p>
 </div>
 <!-- fin #application_dr -->

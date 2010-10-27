@@ -12,7 +12,7 @@
         <br />
         <br /><strong>Tél.&nbsp;:</strong> (33) 03 89 20 16 20
         <br /><strong>Fax&nbsp;:</strong> (33) 03 89 20 16 30
-        <!--br /><strong>E-mail&nbsp;:</strong> <a class="spip_out" onclick="location.href=lien(this.title); return false;" title="civa..åt..civa.fr" href="#">civa</a-->
+        <br /><strong>E-mail&nbsp;:</strong> <a href="mailto:civa@civa.fr" >civa@civa.fr</a>
         <br />
         <br /><strong>RCS&nbsp;:</strong> 778 904 706 000 26
         <br /><strong>Numéro de TVA&nbsp;:</strong> FR 38 778 904 706
@@ -38,6 +38,9 @@
             <br />BP 11217
             <br />68012 Colmar Cedex
             <br />France</li></ul>
+            <br />
+    <ul style="margin-left: 10px;"><li><strong>Envoyer un email</strong>
+            <br /><a href="mailto:civa@civa.fr" >civa@civa.fr</a></li></ul>
 
     <h3>Liens Hypertextes</h3>
     <p>www.vinsalsace.com propose de nombreux liens vers d’autres sites. Nous indiquons systématiquement vers quel site nous vous proposons d’aller.
