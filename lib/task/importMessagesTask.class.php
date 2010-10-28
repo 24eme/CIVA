@@ -122,7 +122,7 @@ EOF;
         $json->help_popup_validation_log_vigilance = "Le logiciel vous informe ici des problèmes rencontrés sur votre déclaration. Ces erreurs ne sont pas bloquantes et ne vous empêcheront pas de valider votre déclaration de récolte. <br /> En cliquant sur le message vous retournez automatiquement à l'endroit où se trouve le problème et vous pouvez effectuer la modification si besoin";
 
         /** INTRO **/
-        $json->intro_mon_espace_civa_dr = "Vous pouvez interrompre la saisie de la déclaration à tout moment, vos données seront conservées.";
+        $json->intro_mon_espace_civa_dr = "Vous pouvez interrompre la saisie de votre déclaration à tout moment, vos données seront conservées.";
         $json->intro_mon_espace_civa_dr_validee = "Vous avez déjà validé votre déclaration. Vous ne pouvez plus la modifier. Vous pouvez uniquement la visualiser et l'imprimer. En cas de problème contactez nous";
         $json->intro_mon_espace_civa_dr_non_editable = "Le service est momentanément indisponible. Essayez de vous reconnecter ultérieurement.";
         $json->intro_gamma = "Vous aurez, ici, bientôt accès à l'application AlsaceGamm@.";
