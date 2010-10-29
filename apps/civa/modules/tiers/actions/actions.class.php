@@ -43,7 +43,7 @@ class tiersActions extends EtapesActions {
 
     public function executeLoginAdmin(sfWebRequest $request) {
         $this->getUser()->removeTiers();
-        $this->form = new LoginForm();
+        $this->form = new LoginForm(null, array('need_create' => false));
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {

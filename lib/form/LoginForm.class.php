@@ -9,7 +9,7 @@
                 'cvi' => new sfValidatorString(array('required' => false)),
             ));
 
-            $this->validatorSchema->setPostValidator(new ValidatorTiersLogin());
+            $this->validatorSchema->setPostValidator(new ValidatorTiersLogin(array('create_required' => $this->getOption('need_create', true))));
 
             $this->widgetSchema->setNameFormat('tiers[%s]');
         }
