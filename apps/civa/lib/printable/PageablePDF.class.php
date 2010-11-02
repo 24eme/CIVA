@@ -65,14 +65,13 @@ class PageablePDF extends PageableOutput {
     }
 
     public function addHeaders($response) {
-        //$response->setHttpHeader('content-type', 'application/pdf');
-        //$response->setHttpHeader('content-disposition', 'attachment; filename="'.basename($this->filename).'";');
-        $response->setHttpHeader('Content-disposition:', 'attachment; filename="' . basename($this->filename) . '"');
-        $response->setHttpHeader('Content-Type:', 'application/force-download');
-        $response->setHttpHeader('Content-Transfer-Encoding:', 'binary');
-        $response->setHttpHeader('Pragma:', 'no-cache');
-        $response->setHttpHeader('Cache-Control:', 'must-revalidate, post-check=0, pre-check=0');
-        $response->setHttpHeader('Expires:', '0');
+        $response->setHttpHeader('Content-Type', 'application/pdf');
+        $response->setHttpHeader('Content-disposition', 'attachment; filename="' . basename($this->filename) . '"');
+        $response->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $response->setHttpHeader('Content-Length', filesize($this->pdf_file));
+        $response->setHttpHeader('Pragma', 'no-cache');
+        $response->setHttpHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
+        $response->setHttpHeader('Expires', '0');
     }
 
     public function addPage($html) {
