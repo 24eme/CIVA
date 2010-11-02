@@ -65,10 +65,17 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeDownloadNotice() {
-        $this->getResponse()->setHttpHeader('Content-disposition:', 'attachment; filename="aide.pdf";');
-        $this->getResponse()->setHttpHeader('Content-Type:', 'application/force-download');
+        $filename = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf";
+
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="aide.pdf"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($filename));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
         
-        return $this->renderText(file_get_contents(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf"));
+        return $this->renderText($filename);
     }
     /**
      *
