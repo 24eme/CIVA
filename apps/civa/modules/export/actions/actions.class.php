@@ -176,7 +176,7 @@ class exportActions extends sfActions
     $this->annee = $this->getRequestParameter('annee', null);
 
     if ($request->getParameter('from_js')) {
-        return $this->redirect('@print?direct=1&annee='.$this->annee.'&ajax='.$request->getParameter('ajax'));
+        return $this->redirect('@print?direct=1&annee='.$this->annee);
     }
 
     $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
