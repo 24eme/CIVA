@@ -1,2 +1,1 @@
-<?php
-echo $document->output();
+<?php $document->output(); ?>
