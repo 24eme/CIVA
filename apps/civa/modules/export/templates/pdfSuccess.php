@@ -1,1 +1,0 @@
-<?php $document->output(); ?>

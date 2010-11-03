@@ -160,10 +160,8 @@ class exportActions extends sfActions
   }
 
   private function ajaxPdf() {
-    $this->url = array('sf_route'=>'print', 'annee'=>$this->annee);
-    $this->setTemplate('ajaxRedirect');
     sfConfig::set('sf_web_debug', false);
-    return sfView::SUCCESS;
+    return $this->renderText($this->generateUrl('print', array('annee'=>$this->annee)));
   }
  /**
   * Executes index action
