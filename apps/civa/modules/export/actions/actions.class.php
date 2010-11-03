@@ -231,6 +231,8 @@ class exportActions extends sfActions
       return $this->ajaxPdf();
     }
     $this->document->addHeaders($this->getResponse());
+
+    return $this->renderText($this->document->output());
   }
 
   private function createAppellationLieu($lieu, $tiers) {

@@ -91,7 +91,7 @@ class PageablePDF extends PageableOutput {
         if (!$this->isCached()) {
             $this->generatePDF();
         }
-        echo file_get_contents($this->pdf_file);
+        return file_get_contents($this->pdf_file);
     }
 }
 
