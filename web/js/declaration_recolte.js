@@ -734,7 +734,7 @@ var initValidDRPopup = function()
             url: ajax_url_to_print,
             success: function(data) {
                 alert('hey' + data + 'hey');
-                document.location.href=data;
+                window.location.href=data;
                 setTimeout("closeValidDRPopup()", 1000);
             }
         });
