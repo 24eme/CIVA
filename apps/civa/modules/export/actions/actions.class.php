@@ -160,10 +160,10 @@ class exportActions extends sfActions
   }
 
   private function ajaxPdf() {
-    $this->url = array('sf_route'=>'print', 'direct'=>'1', 'annee'=>$this->annee, 'from_js' => '1');
+    $this->url = array('sf_route'=>'print', 'annee'=>$this->annee);
     $this->setTemplate('ajaxRedirect');
     sfConfig::set('sf_web_debug', false);
-    return ;
+    return sfView::SUCCESS;
   }
  /**
   * Executes index action
@@ -174,10 +174,6 @@ class exportActions extends sfActions
   {
     $tiers = $this->getUser()->getTiers();
     $this->annee = $this->getRequestParameter('annee', null);
-
-    if ($request->getParameter('from_js')) {
-        return $this->redirect('@print?direct=1&annee='.$this->annee, '301');
-    }
 
     $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
