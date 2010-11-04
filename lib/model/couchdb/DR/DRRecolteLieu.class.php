@@ -30,7 +30,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 	  $vtsgn = 'AOC';
 	}
       }
-      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+      if($this->getAppellation()->getConfig()->hasManyLieu()) {
+          return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+      } else {
+          return $this->getAppellation()->getConfig()->getDouane()->getFullAppCode($vtsgn);
+      }
     }
 
     public function getTotalVolume() {

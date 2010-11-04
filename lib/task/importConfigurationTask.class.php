@@ -59,18 +59,20 @@ EOF;
 
         $json->dr_non_editable = 0;
 
-        $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
-	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";
-        $json->recolte->appellation_ALSACEBLANC->rendement_appellation = 80;
         $json->recolte->douane->appellation_lieu = '001';
         $json->recolte->douane->type_aoc = '1';
         $json->recolte->douane->couleur = 'B';
         $json->recolte->douane->qualite = 'S ';
         $json->recolte->douane->qualite_vt = 'D7';
         $json->recolte->douane->qualite_sgn = 'D6';
-	
-	$lieu = new stdClass();
 
+        $json->recolte->appellation_ALSACEBLANC->appellation = "ALSACEBLANC";
+	$json->recolte->appellation_ALSACEBLANC->libelle = "AOC Alsace blanc";
+        $json->recolte->appellation_ALSACEBLANC->rendement_appellation = 80;
+        $json->recolte->appellation_ALSACEBLANC->douane->qualite = '';
+        
+	$lieu = new stdClass();
+        $lieu->douane->qualite = 'S ';
 
         $lieu->cepage_CH->libelle = "Chasselas";
 	$lieu->cepage_CH->rendement = 100;
@@ -175,6 +177,8 @@ EOF;
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
 	$json->recolte->appellation_CREMANT->douane->qualite = 'M';
+
+        $json->recolte->appellation_CREMANT->lieu->douane->qualite = 'M0';
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
         $json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;

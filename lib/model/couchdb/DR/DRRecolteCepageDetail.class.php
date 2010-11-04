@@ -6,6 +6,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->getCepage()->getConfig();
     }
 
+    public function getCepageLibelle() {
+        return $this->getParent()->getParent();
+    }
+
     public function getCepage() {
         return $this->getParent()->getParent();
     }
@@ -23,6 +27,19 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
                     $this->_storage[$key][$acheteur->cvi] = $acheteur->quantite_vendue;
                 }
             }
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "total_volume_acheteurs_".$type;
+        if (!isset($this->_storage[$key])) {
+              $sum = 0;
+              $acheteurs = $this->getVolumeAcheteurs($type);
+              foreach($acheteurs as $volume) {
+                $sum += $volume;
+              }
+              $this->_storage[$key] = $sum;
         }
         return $this->_storage[$key];
     }
