@@ -3,14 +3,6 @@
 
 # for all modules
 
-mentionsLegales:
-  is_secure: false
-
-aProposDuCiva:
-  is_secure: false
-
-contact:
-  is_secure: false
 
 
 

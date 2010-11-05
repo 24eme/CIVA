@@ -33,16 +33,4 @@ class globalActions extends sfActions {
             return $this->redirect("@login_admin");
         }
     }
-
-    public function executeMentionsLegales(){
-
-    }
-
-    public function executeAProposDuCiva(){
-
-    }
-
-    public function executeContact(){
-
-    }
 }
