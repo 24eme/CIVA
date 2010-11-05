@@ -27,9 +27,7 @@ class statistiquesActions extends sfActions {
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
 
         foreach ($tiers as $item) {
-            if ( 1 == 1 /*$item->recoltant == 1 && $item->cvi != "7523700100"*/) {
-                //nb inscrits
-
+            if ($item->recoltant == 1 && $item->cvi != "7523700100") {
                 if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
                     $this->nbInscrit++;
                     try {
@@ -44,12 +42,7 @@ class statistiquesActions extends sfActions {
                     }catch (Exception $e) {
                         $this->etapeNoDr++;
                     }
-
                 }
-
-
-
-
             }
         }
     }
