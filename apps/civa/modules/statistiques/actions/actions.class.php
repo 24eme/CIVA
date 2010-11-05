@@ -32,8 +32,8 @@ class statistiquesActions extends sfActions {
 
                 if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
                     $this->nbInscrit++;
-                    $dr = sfCouchdbManager::getClient()->getDoc('DR-'.$item->cvi.'-2010');
                     try {
+                        $dr = sfCouchdbManager::getClient()->getDoc('DR-'.$item->cvi.'-2010');
                         if(!isset($dr->validee) || !$dr->validee) {
                             if(isset($dr->etape) && $dr->etape=="validation") $this->etapeValidation++;
                             if(isset($dr->etape) && $dr->etape=="recolte") $this->etapeRecolte++;
