@@ -27,6 +27,7 @@
             <div class="contenu_section">
                 <ul>
                     <li><a href="<?php echo url_for('@csv_tiers') ?>">Export CSV des tiers</a></li>
+                    <li><a href="<?php echo url_for('/statistiques') ?>">Statistiques</a></li>
                 </ul>
             </div>
         </div>

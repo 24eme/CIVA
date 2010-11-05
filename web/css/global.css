@@ -320,3 +320,12 @@ ul#liens_evitement li.deconnexion a
 #error_page li{
     list-style: square;
 }
+
+ul.statistiques ul li{
+    list-style: square;
+    margin: 2px 0 1px 25px;
+}
+
+ul.statistiques li{
+    margin-bottom: 5px;
+}

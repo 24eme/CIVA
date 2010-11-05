@@ -6,7 +6,17 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getAllByCampagne($campagne) {
-        return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
+        $docs = $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute(sfCouchdbClient::HYDRATE_JSON);
+        $i = 0;
+        $keys = array_keys($docs->getDocs());
+        foreach($keys as $key) {
+            //echo substr($key, strlen($key) - 4, 4);
+            if (substr($key, strlen($key) - 4, 4) != $campagne) {
+                unset($docs[$key]);
+            }
+        }
+        return $docs;
+
     }
 
     public function getArchivesCampagnes($cvi, $campagne) {

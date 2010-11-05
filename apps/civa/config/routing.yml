@@ -139,7 +139,7 @@ mentions-legales:
 contact:
   url: /contact
   param: {module: global, action: contact}
-
+  
 aProposDuCiva:
   url: /a-propos-du-civa
   param: {module: global, action: aProposDuCiva}
