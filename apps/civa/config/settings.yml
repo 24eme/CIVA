@@ -35,7 +35,6 @@ all:
 
     # Enable the database manager
     use_database:           true
-    etag: on
     error_404_module:       global
     error_404_action:       error404
 

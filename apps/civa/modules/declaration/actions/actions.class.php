@@ -74,8 +74,7 @@ class declarationActions extends EtapesActions {
         $this->getResponse()->setHttpHeader('Pragma', '');
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
-        
-        return $this->renderText($filename);
+        return $this->renderText(file_get_contents($filename));
     }
     /**
      *
