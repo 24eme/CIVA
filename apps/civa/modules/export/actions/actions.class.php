@@ -36,6 +36,13 @@ class exportActions extends sfActions
     $this->annee = $this->getRequestParameter('annee', null);
     $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
     $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+    try {
+      if (!$dr->updated)
+	throw new Exception();
+    }catch(Exception $e) {
+      $dr->update();
+      $dr->save();
+    }
     $xml = array();
     foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
       if (!$dr->recolte->exist($appellation_config->getKey())) {
@@ -213,7 +220,22 @@ class exportActions extends sfActions
     }
     $this->forward404Unless($dr);
 
-    $validee = 'Non Validée';
+    $this->document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+
+    if($request->getParameter('force')) {
+        $this->document->removeCache();
+    }
+    $this->document->generatePDF();
+    
+    if ($request->getParameter('ajax')) {
+      return $this->ajaxPdf();
+    }
+    
+    $this->document->addHeaders($this->getResponse());
+
+    return $this->renderText($this->document->output());
+
+    /*$validee = 'Non Validée';
     if ($dr->exist('validee')) {
       $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
       if ($dr->exist('modifiee') && $dr->modifiee != $dr->validee) {
@@ -253,151 +275,151 @@ class exportActions extends sfActions
     }
     $this->document->addHeaders($this->getResponse());
 
-    return $this->renderText($this->document->output());
+    return $this->renderText($this->document->output());*/
   }
 
-  private function createAppellationLieu($lieu, $tiers) {
-    $colonnes = array();
-    $afterTotal = array();
-    $acheteurs = $lieu->acheteurs;
-    $cpt = 0;
-    foreach ($lieu->getConfig()->filter('^cepage_') as $cepage) {
-      if (!$lieu->exist($cepage->getKey()))
-	continue;
-      $cepage = $lieu->{$cepage->getKey()};
-      $i = 0;
-      foreach ($cepage->detail as $detail) {	
-	$c = array();
-	$c['type'] = 'detail';
-	$c['cepage'] = $cepage->getLibelle();
-	$c['denomination'] = $detail->denomination;
-	$c['vtsgn'] = $detail->vtsgn;
-	$c['superficie'] = $detail->superficie;
-	$c['volume'] = $detail->volume;
-	$c['cave_particuliere'] = $detail->cave_particuliere;
-	//	$c['revendique'] = $detail->volume_revendique;
-	//	$c['dplc'] = $detail->volume_dplc;
-	foreach($detail->negoces as $vente) {
-	  $c[$vente->cvi] = $vente->quantite_vendue;
-	}
-	foreach($detail->cooperatives as $vente) {
-	  $c[$vente->cvi] = $vente->quantite_vendue;
-	}
-	if ($detail->exist('mouts'))
-	  foreach($detail->mouts as $vente) {
-	    $c[$vente->cvi] = $vente->quantite_vendue;
-	  }
-	if ($cepage->getConfig()->excludeTotal()) {
-	  array_push($afterTotal, $c);
-	}else{
-	  $last = array_push($colonnes, $c) - 1;
-	}
-	$i++;
-	$cpt ++;
-	/*
-	if ($cpt > 8)
-	  break 2;
-	*/
-      }
-      if ($cepage->getConfig()->hasTotalCepage()) {
-	if ($i > 1) {
-	  $c = array();
-	  $c['type'] = 'total';
-	  $c['cepage'] = $cepage->getLibelle();
-	  $c['denomination'] = 'Total';
-	  $c['vtsgn'] = '';
-	  $c['superficie'] = $cepage->total_superficie;
-	  $c['volume'] = $cepage->total_volume;
-	  $c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
-	  $c['revendique'] = $cepage->volume_revendique;
-	  $c['dplc'] = $cepage->dplc;
-	  if (!$c['dplc'])
-	    $c['dplc'] = '0,00';
-	  $negoces = $cepage->getVolumeAcheteurs('negoces');
-	  foreach($negoces as $cvi => $total) {
-	    $c[$cvi] = $total;
-	  }
-	  $coop =  $cepage->getVolumeAcheteurs('cooperatives');
-	  foreach($coop as $cvi => $total) {
-	    $c[$cvi] = $total;
-	  }
-	  $mouts =  $cepage->getVolumeAcheteurs('mouts');
-	  foreach($mouts as $cvi => $total) {
-	    $c[$cvi] = $total;
-	  }
-	  array_push($colonnes, $c);
-	  $cpt ++;
-	}else{
-	  $colonnes[$last]['type'] = 'total';
-	  $colonnes[$last]['revendique'] = $cepage->volume_revendique;
-	  $colonnes[$last]['dplc'] = $cepage->dplc;
-	  if (!$colonnes[$last]['dplc'])
-	    $colonnes[$last]['dplc'] = '0,00';
-	}
-      }
-    }
-    $c = array();
-    $c['type'] = 'total';
-    $c['cepage'] = 'Total';
-    $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu-dit';
-    if ($lieu->getAppellation()->getAppellation() == 'VINTABLE')
-      $c['denomination'] = '';
-    $c['vtsgn'] = '';
-    $c['superficie'] = $lieu->total_superficie;
-    $c['volume'] = $lieu->total_volume;
-    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
-    $c['revendique'] = $lieu->volume_revendique;
-    $c['dplc'] = $lieu->dplc;
-    if (!$c['dplc'])
-      $c['dplc'] = '0,00';
-    $negoces = $lieu->getVolumeAcheteurs('negoces');
-    foreach($negoces as $cvi => $vente) {
-      $c[$cvi] = $vente;
-    }
-    $coop =  $lieu->getVolumeAcheteurs('cooperatives');
-    foreach($coop as $cvi => $vente) {
-      $c[$cvi] = $vente;
-    }
-    $mouts =  $lieu->getVolumeAcheteurs('mouts');
-    foreach($mouts as $cvi => $vente) {
-      $c[$cvi] = $vente;
-    }
-    array_push($colonnes, $c);
-
-    //add afterTOtal columns
-    $colonnes = array_merge($colonnes, $afterTotal);
-    
-    $pages = array();
-    
-    //On peut pas mettre plus de 6 colonnes par page, si plus de 6 colonnes cepage
-    //alors on coupe au total précédent
-    $nb_colonnes_by_page = 6;
-    $lasti = 0;
-    for ($i = 0 ; $i < count($colonnes); ) {
-      $page = array_slice($colonnes, $i, $nb_colonnes_by_page);
-      $i += count($page) - 1;
-      /*
-      if (count($page) == $nb_colonnes_by_page) {
-	while($page[$i - $lasti]['type'] != 'total') {
-	  unset($page[$i - $lasti]);
-	  $i--;
-	}
-      }
-      */
-      array_push($pages, $page);
-      $lasti = ++$i;
-    }
-
-    $extra = array('lies' => $lieu->getCouchdbDocument()->lies, 'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
-
-    //L'identification des acheteurs ne peut apparaitre qu'une fois par cépage
-    $identification_enabled = 1;
-    foreach($pages as $p) {
-      $this->nb_pages++;
-      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages)));
-      $identification_enabled = 0;
-    }
-  }
+//  private function createAppellationLieu($lieu, $tiers) {
+//    $colonnes = array();
+//    $afterTotal = array();
+//    $acheteurs = $lieu->acheteurs;
+//    $cpt = 0;
+//    foreach ($lieu->getConfig()->filter('^cepage_') as $cepage) {
+//      if (!$lieu->exist($cepage->getKey()))
+//	continue;
+//      $cepage = $lieu->{$cepage->getKey()};
+//      $i = 0;
+//      foreach ($cepage->detail as $detail) {
+//	$c = array();
+//	$c['type'] = 'detail';
+//	$c['cepage'] = $cepage->getLibelle();
+//	$c['denomination'] = $detail->denomination;
+//	$c['vtsgn'] = $detail->vtsgn;
+//	$c['superficie'] = $detail->superficie;
+//	$c['volume'] = $detail->volume;
+//	$c['cave_particuliere'] = $detail->cave_particuliere;
+//	//	$c['revendique'] = $detail->volume_revendique;
+//	//	$c['dplc'] = $detail->volume_dplc;
+//	foreach($detail->negoces as $vente) {
+//	  $c[$vente->cvi] = $vente->quantite_vendue;
+//	}
+//	foreach($detail->cooperatives as $vente) {
+//	  $c[$vente->cvi] = $vente->quantite_vendue;
+//	}
+//	if ($detail->exist('mouts'))
+//	  foreach($detail->mouts as $vente) {
+//	    $c[$vente->cvi] = $vente->quantite_vendue;
+//	  }
+//	if ($cepage->getConfig()->excludeTotal()) {
+//	  array_push($afterTotal, $c);
+//	}else{
+//	  $last = array_push($colonnes, $c) - 1;
+//	}
+//	$i++;
+//	$cpt ++;
+//	/*
+//	if ($cpt > 8)
+//	  break 2;
+//	*/
+//      }
+//      if ($cepage->getConfig()->hasTotalCepage()) {
+//	if ($i > 1) {
+//	  $c = array();
+//	  $c['type'] = 'total';
+//	  $c['cepage'] = $cepage->getLibelle();
+//	  $c['denomination'] = 'Total';
+//	  $c['vtsgn'] = '';
+//	  $c['superficie'] = $cepage->total_superficie;
+//	  $c['volume'] = $cepage->total_volume;
+//	  $c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
+//	  $c['revendique'] = $cepage->volume_revendique;
+//	  $c['dplc'] = $cepage->dplc;
+//	  if (!$c['dplc'])
+//	    $c['dplc'] = '0,00';
+//	  $negoces = $cepage->getVolumeAcheteurs('negoces');
+//	  foreach($negoces as $cvi => $total) {
+//	    $c[$cvi] = $total;
+//	  }
+//	  $coop =  $cepage->getVolumeAcheteurs('cooperatives');
+//	  foreach($coop as $cvi => $total) {
+//	    $c[$cvi] = $total;
+//	  }
+//	  $mouts =  $cepage->getVolumeAcheteurs('mouts');
+//	  foreach($mouts as $cvi => $total) {
+//	    $c[$cvi] = $total;
+//	  }
+//	  array_push($colonnes, $c);
+//	  $cpt ++;
+//	}else{
+//	  $colonnes[$last]['type'] = 'total';
+//	  $colonnes[$last]['revendique'] = $cepage->volume_revendique;
+//	  $colonnes[$last]['dplc'] = $cepage->dplc;
+//	  if (!$colonnes[$last]['dplc'])
+//	    $colonnes[$last]['dplc'] = '0,00';
+//	}
+//      }
+//    }
+//    $c = array();
+//    $c['type'] = 'total';
+//    $c['cepage'] = 'Total';
+//    $c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu-dit';
+//    if ($lieu->getAppellation()->getAppellation() == 'VINTABLE')
+//      $c['denomination'] = '';
+//    $c['vtsgn'] = '';
+//    $c['superficie'] = $lieu->total_superficie;
+//    $c['volume'] = $lieu->total_volume;
+//    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
+//    $c['revendique'] = $lieu->volume_revendique;
+//    $c['dplc'] = $lieu->dplc;
+//    if (!$c['dplc'])
+//      $c['dplc'] = '0,00';
+//    $negoces = $lieu->getVolumeAcheteurs('negoces');
+//    foreach($negoces as $cvi => $vente) {
+//      $c[$cvi] = $vente;
+//    }
+//    $coop =  $lieu->getVolumeAcheteurs('cooperatives');
+//    foreach($coop as $cvi => $vente) {
+//      $c[$cvi] = $vente;
+//    }
+//    $mouts =  $lieu->getVolumeAcheteurs('mouts');
+//    foreach($mouts as $cvi => $vente) {
+//      $c[$cvi] = $vente;
+//    }
+//    array_push($colonnes, $c);
+//
+//    //add afterTOtal columns
+//    $colonnes = array_merge($colonnes, $afterTotal);
+//
+//    $pages = array();
+//
+//    //On peut pas mettre plus de 6 colonnes par page, si plus de 6 colonnes cepage
+//    //alors on coupe au total précédent
+//    $nb_colonnes_by_page = 6;
+//    $lasti = 0;
+//    for ($i = 0 ; $i < count($colonnes); ) {
+//      $page = array_slice($colonnes, $i, $nb_colonnes_by_page);
+//      $i += count($page) - 1;
+//      /*
+//      if (count($page) == $nb_colonnes_by_page) {
+//	while($page[$i - $lasti]['type'] != 'total') {
+//	  unset($page[$i - $lasti]);
+//	  $i--;
+//	}
+//      }
+//      */
+//      array_push($pages, $page);
+//      $lasti = ++$i;
+//    }
+//
+//    $extra = array('lies' => $lieu->getCouchdbDocument()->lies, 'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
+//
+//    //L'identification des acheteurs ne peut apparaitre qu'une fois par cépage
+//    $identification_enabled = 1;
+//    foreach($pages as $p) {
+//      $this->nb_pages++;
+//      $this->document->addPage($this->getPartial('pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages)));
+//      $identification_enabled = 0;
+//    }
+//  }
 
   public function executeCsvTiers() {
       set_time_limit('240');

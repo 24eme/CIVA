@@ -5,8 +5,8 @@ class DRClient extends sfCouchdbClient {
         return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne);
     }
 
-    public function getAllByCampagne($campagne) {
-        $docs = $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute(sfCouchdbClient::HYDRATE_JSON);
+    public function getAllByCampagne($campagne, $hydrate = sfCouchdbClient::HYDRATE_JSON) {
+        $docs = $this->getAll($hydrate);
         $i = 0;
         $keys = array_keys($docs->getDocs());
         foreach($keys as $key) {
@@ -16,7 +16,6 @@ class DRClient extends sfCouchdbClient {
             }
         }
         return $docs;
-
     }
 
     public function getArchivesCampagnes($cvi, $campagne) {
@@ -27,5 +26,9 @@ class DRClient extends sfCouchdbClient {
             $campagnes[$doc_id] = $matches['campagne'];
         }
         return $campagnes;
+    }
+
+    public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute($hydrate);
     }
 }

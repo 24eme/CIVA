@@ -5,6 +5,7 @@ require_once(sfConfig::get('sf_lib_dir').'/vendor/tcpdf/tcpdf.php');
 class PageablePDF extends PageableOutput {
 
     protected $pdf;
+    protected $pdf_file;
 
     protected function init() {
         // create new PDF document
@@ -41,14 +42,17 @@ class PageablePDF extends PageableOutput {
         //set some language-dependent strings
         $this->pdf->setLanguageArray('fra');
 
-        // ---------------------------------------------------------
-        umask(0002);
-        $this->pdf_dir = sfConfig::get('sf_cache_dir').'/pdf/';
-        if (!file_exists($this->pdf_dir)) {
-            mkdir($this->pdf_dir);
+         /* Defaulf file_dir */
+        if (!$this->file_dir) {
+            umask(0002);
+            $this->file_dir = sfConfig::get('sf_cache_dir').'/pdf/';
+            if (!file_exists($this->file_dir)) {
+                mkdir($this->file_dir);
+            }
         }
+        /******************/
 
-        $this->pdf_file = $this->pdf_dir.$this->filename;
+        $this->pdf_file = $this->file_dir.$this->filename;
 
         // set font
         $this->pdf->SetFont('dejavusans', '', 10);
@@ -82,6 +86,8 @@ class PageablePDF extends PageableOutput {
     public function generatePDF($no_cache = false) {
         if (!$no_cache && $this->isCached()) {
             return true;
+        } else {
+            $this->removeCache();
         }
         $this->pdf->lastPage();
         return $this->pdf->Output($this->pdf_file, 'F');
