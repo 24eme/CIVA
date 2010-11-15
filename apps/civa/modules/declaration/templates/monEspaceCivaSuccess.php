@@ -34,9 +34,6 @@
                     <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
                     <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
                 </div>
-                <div class="ligne_form ligne_btn">
-                    <input type="image" class="btn" name="boutons[valider]" id="mon_espace_civa_valider" src="../images/boutons/btn_valider.png" alt="Valider" />
-                </div>
                 <?php else: ?>
                 <div class="ligne_form">
                     <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" checked="checked" />
@@ -53,11 +50,13 @@
                         <option value="<?php echo $campagne ?>">DR <?php echo $campagne ?></option>
                                 <?php endforeach; ?>
                     </select>
-
-                    <input type="image" name="boutons[valider]"  class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
                 </div>
                     <?php endif; ?>
                 <?php endif; ?>
+
+                <div class="ligne_form ligne_btn">
+                    <input type="image" name="boutons[valider]"  class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+                </div>
                 <p class="intro msg_mon_espace_civa"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr'); ?></p>
             </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
