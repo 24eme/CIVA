@@ -1,3 +1,4 @@
+<?php use_helper('civa') ?>
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
 pre {display: inline;}
@@ -84,7 +85,7 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
   <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
   <?php foreach($acheteurs as $cvi => $a) : ?>
-  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' - '.$a->commune; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->superficie; ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echo $a->volume; ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echo $a->dontdplc; ?>&nbsp;</td></tr>
+  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' - '.$a->commune; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echoFloatFr($a->volume); ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;</td></tr>
   <?php endforeach; ?>
 </table>
 <?php endif;?>
@@ -93,8 +94,8 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <?php if ($nb_pages == 1) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echo $extra['lies']; ?>&nbsp;<small>hl</small></td></tr>
-<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echo $extra['jeunes_vignes']; ?>&nbsp;<small>ares</small></td></tr>
+    <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echoFloatFr($extra['lies']); ?>&nbsp;<small>hl</small></td></tr>
+<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echoFloatFr($extra['jeunes_vignes']); ?>&nbsp;<small>ares</small></td></tr>
 </table>
 <?php endif; ?>
 </td>
