@@ -33,7 +33,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->store($field, array($this, 'getSumDetailFields'), array('superficie'));
     }
 
-    public function getVolumeRevendique($force_calcul = true) {
+    public function getVolumeRevendique($force_calcul = false) {
       $field = 'volume_revendique';
       if (!$force_calcul && $this->issetField($field)) {
         return $this->_get($field);
@@ -41,7 +41,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
-    public function getDplc($force_calcul = true) {
+    public function getDplc($force_calcul = false) {
       $field = 'dplc';
       if (!$force_calcul && $this->issetField($field)) {
         return $this->_get($field);

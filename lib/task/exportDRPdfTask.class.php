@@ -63,16 +63,34 @@ EOF;
                 if (!$dr->updated)
                     throw new Exception();
             } catch (Exception $e) {
-                $dr->update();
-                $dr->save();
+                try {
+                    $dr->update();
+                    $dr->save();
+                } catch (Exception $exc) {
+                    $this->logSection("failed update", $dr->_id, null, "ERROR");
+                    continue;
+                }
             }
-            $tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($dr->cvi);
-            if (!$options['valid'] || $dr->isValideeTiers()) {
-                $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf', $file_dir, false);
-                $document->generatePDF();
-                $this->logSection($dr->_id, 'pdf generated');
+            
+            try {
+                $tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($dr->cvi);
+                if (!$tiers) {
+                    $this->logSection("unknow tiers", $dr->_id, null, "ERROR");
+                    continue;
+                }
+                if (!$options['valid'] || $dr->isValideeTiers()) {
+                    $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf', $file_dir, false);
+                    $document->generatePDF();
+                    $this->logSection($dr->_id, 'pdf generated');
+                }
+            } catch (Exception $exc) {
+                $this->logSection("failed pdf", $dr->_id, null, "ERROR");
+                continue;
             }
         }
+
+        $dr = null;
+        $tiers = null;
 
         $this->logSection("done", $file_dir);
     }
