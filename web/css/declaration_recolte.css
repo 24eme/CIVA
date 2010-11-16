@@ -1100,11 +1100,12 @@ a.msg_aide:hover{
 {
     background: url(../images/fonds/bg_ombre_scroll.png) 0 0 repeat-y;
     float: left;
-    left: 10px;
+    left: 10px; !left: 0;
     margin-left: -10px;
     position: relative;
     width: 10px;
     z-index: 200;
+
 }
 
 #gestion_recolte span.ombre_droite
@@ -1117,14 +1118,20 @@ a.msg_aide:hover{
 #col_scroller_cont 
 {
     padding-right: 10px;
+    overflow: hidden;
+    position: relative;
+    zoom: 1;
 }
 
 #gestion_recolte #col_scroller
 {
     float: left;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 0 10px 15px;
     width: 380px;
+    position: relative;
+    zoom: 1;
 }
 
 #gestion_recolte .col_recolte
