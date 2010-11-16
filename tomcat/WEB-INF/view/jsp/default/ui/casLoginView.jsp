@@ -106,6 +106,19 @@ String host = "";
 							controlsAttr: 'class="carrousel_btn"',
 							continuous: true
 						});
+
+                                                var formSubmitted;
+                                                formSubmitted = false;
+                                                $('#fm1').submit(
+
+                                                     function () {
+                                                            if (!formSubmitted) {
+                                                              $('.btn').attr('disabled', 'disabled');
+                                                              formSubmitted = true;
+                                                          }
+                                                          return true;
+                                                     }
+                                                );
 					});
 				</script>
 				
