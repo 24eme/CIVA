@@ -65,7 +65,11 @@
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_validee'); ?></p>
                     <div class="ligne_form ligne_btn">
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
-                        <?php if ($sf_user->isAdmin()) echo '<a href="declaration/rendreEditable?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Si vous éditez cette DR, pensez à la revalider. \')" /><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>'; ?>
+                        <?php if ($sf_user->isAdmin()){
+                            echo '<a href="declaration/rendreEditable?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Si vous éditez cette DR, pensez à la revalider. \')" /><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>';
+                            echo '<a href="declaration/devalider?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Etes-vous sûr de vouloir dévalider cette DR ? \')" /><img src="../images/boutons/btn_devalider_dr.png" alt="" class="btn" id=""  /></a>';
+                        }
+                        ?>
                         
                     </div>
                 </div>

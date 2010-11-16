@@ -300,4 +300,25 @@ Le CIVA';
 
     }
 
+     /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeDevalider(sfWebRequest $request) {
+
+        $tiers = $this->getUser()->getTiers();
+        $annee = $this->getRequestParameter('annee', null);
+        $key = 'DR-'.$tiers->cvi.'-'.$annee;
+        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+
+        $dr->remove('modifiee');
+        $dr->remove('validee');
+        $dr->save();
+
+        $this->getUser()->initDeclarationCredentials();
+        $this->redirect('@mon_espace_civa');
+
+
+    }
+
 }
