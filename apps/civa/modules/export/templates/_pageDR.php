@@ -29,7 +29,7 @@ if (!function_exists('printColonne')) {
   function printColonne($libelle, $colonnes, $key, $unite = '') {
     $cpt = 0;
     foreach($colonnes as $c) {
-      if (isset($c[$key])) {
+      if (array_key_exists($key, $c->getRawValue())) {
          $cpt++;
       }
     }
@@ -37,18 +37,28 @@ if (!function_exists('printColonne')) {
       return ;
     echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">'.$libelle.'</th>';
     foreach($colonnes as $c) {
-      if (isset($c[$key]) && $v = $c[$key]) {
+      if (array_key_exists($key, $c->getRawValue())) {
+        $v = $c[$key];
 	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black;">';
 	if ($c['type'] == 'total')    echo '<b>';
+
+        if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'dplc', 'cave_particuliere'))) {
+            $v = 0;
+        }
+
         if (is_numeric($v)) 
           $v = sprintf('%01.02f', $v);
 	if ($unite) {
 	  $v = preg_replace('/\./', ',', $v);
-	} 
-	echo $v;
+	}
+        echo $v;
 	if ($c['type'] == 'total')    echo '</b>';
 	if ($unite)
 	  echo "&nbsp;<small>$unite</small>";
+
+        if ($key == 'volume' && isset($c['motif_non_recolte'])) {
+                echo '<br /><small><i>'.$c['motif_non_recolte'].'</i></small>';
+        }
 	echo '</td>';
       }else
 	echo '<td style="width: 120px;border: 1px solid black;">&nbsp;</td>';
@@ -62,6 +72,7 @@ echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denominati
 echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
+//echo printColonne('Motif de non recolte', $colonnes_cepage, 'motif_non_recolte');
 foreach ($acheteurs as $cvi => $a) {
 $type = 'Vente à ';
 if ($a->type_acheteur == 'cooperatives')

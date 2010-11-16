@@ -92,6 +92,9 @@ class DocumentDR {
 	$c['vtsgn'] = $detail->vtsgn;
 	$c['superficie'] = $detail->superficie;
 	$c['volume'] = $detail->volume;
+        if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
+            $c['motif_non_recolte'] = $detail->getMotifNonRecolteLibelle();
+        }
 	$c['cave_particuliere'] = $detail->cave_particuliere;
 	//	$c['revendique'] = $detail->volume_revendique;
 	//	$c['dplc'] = $detail->volume_dplc;
