@@ -3,8 +3,8 @@
 
         public function configure() {
 	  $this->setWidgets(array(
-				  'superficie' => new sfWidgetFormInputText(array()),
-				  'dontdplc' => new sfWidgetFormInputText(array()),
+				  'superficie' => new sfWidgetFormInputFloat(array()),
+				  'dontdplc' => new sfWidgetFormInputFloat(array()),
 				  )
 			    );
             $this->setValidators(array(
