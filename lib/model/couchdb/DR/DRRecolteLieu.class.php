@@ -170,7 +170,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getTotalVolumeForMinQuantite() {
-      return $this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces');
+      return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'),2);
     }
 
     public function getRendementRecoltant() {

@@ -31,8 +31,7 @@ class ValidatorRecapitulatif extends sfValidatorSchema
     if ($sum_superficie.'' > $lieu->getTotalSuperficie().'') {
          $errorSchema->addError(new sfValidatorError($this, 'invalid_superficie'));
     }
-
-    if ($sum_dontdplc.'' > $lieu->getDplc().'') {
+    if ($sum_dontdplc.'' > round($lieu->getDplc(),2).'') {
          $errorSchema->addError(new sfValidatorError($this, 'invalid_dontdplc'));
     }
 
