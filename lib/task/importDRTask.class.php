@@ -72,10 +72,12 @@ EOF;
             $cvi = $csv[1];
 	    if ($options['cvi'] && $cvi != $options['cvi'])
 	      continue;
+
             $campagne = $csv[0];
             $_id = 'DR' . '-' . $cvi . '-' . $campagne;
             $appellation = $csv[3];
             $cepage = $csv[4];
+            $cepage_bis = $csv[5];
 
             $doc = new stdClass();
             if (!isset($list_documents[$_id])) {
@@ -92,7 +94,7 @@ EOF;
 
             if (in_array($cepage, array('LA', 'LR', 'LN', 'LC', 'LM', 'LT', 'LG', 'LE', 'LS', 'LK', 'LR'))) { /* Prise en compte des lies */
 
-                if (is_null($doc->lies)) {
+                if (!isset($doc->lies) || is_null($doc->lies)) {
                     $doc->lies = 0;
                 }
 		$doc->lies += $this->recode_number($csv[12]);
@@ -115,7 +117,7 @@ EOF;
 
 	        $detail = new stdClass();
                 $detail->denomination = $csv[6];
-		if ($campagne == 2007 && $cepage == 'PN' && $csv[5] == 'RG') {
+		if ($campagne == 2007 && $cepage == 'PN' && $cepage_bis == 'RG') {
 		  if (!$detail->denomination)
 		    $detail->denomination = 'Rouge';
 		  else if (!preg_match('/rouge/i', $detail->denomination)) {
@@ -125,7 +127,7 @@ EOF;
 		$detail->appellation = $this->convertappellation($appellation, $cepage);
                 $detail->vtsgn = $this->toVtSgn($csv[9]);
                 $detail->code_lieu = $csv[10];
-                $detail->cepage = $cepage;
+                $detail->cepage = $this->convertcepage($cepage, $cepage_bis);
                 $detail->superficie = $this->recode_number($csv[11]);
                 $detail->volume = $this->recode_number($csv[12]);
                 $detail->cave_particuliere = $this->recode_number($csv[21]);
@@ -152,7 +154,7 @@ EOF;
                     }
                 }
 		$doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->appellation = $this->convertappellation($appellation, $cepage);
-                $doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->{'lieu'.$csv[10]}->{"cepage_$cepage"}->detail[] = $detail;
+                $doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->{'lieu'.$csv[10]}->{"cepage_".$this->convertcepage($cepage, $cepage_bis)}->detail[] = $detail;
 
             }
 	    $nb++;
@@ -167,7 +169,7 @@ EOF;
         foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year'] ."/Dcltot".$options['year']) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             $cvi = $csv[1];
-	    if ($options['civ'] && $cvi != $options['civ'])
+	    if ($options['cvi'] && $cvi != $options['cvi'])
 	      continue;
             $campagne = $csv[0];
             $_id = 'DR' . '-' . $cvi . '-' . $campagne;
@@ -210,6 +212,10 @@ EOF;
 		}
 	      $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
 	      $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
+
+              if ($nomappellation == "appellation_VINTABLE") {
+                  $doc->acheteurs->appellation_VINTABLE->cave_particuliere = 1;
+              }
 	    }
 	  }
 	}
@@ -217,7 +223,7 @@ EOF;
 	foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']. "/Dclent".$options['year']) as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
-	  if ($options['civ'] && $cvi != $options['civ'])
+	  if ($options['cvi'] && $cvi != $options['cvi'])
 	    continue;
 	  $campagne = $csv[0];
 	  $_id = 'DR' . '-' . $cvi . '-' . $campagne;
@@ -268,7 +274,7 @@ EOF;
 	foreach (file(sfConfig::get('sf_data_dir') . '/import/' . "Dclgc09") as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
 	  $cvi = $csv[1];
-	  if ($options['civ'] && $cvi != $options['civ'])
+	  if ($options['cvi'] && $cvi != $options['cvi'])
 	    continue;
 	  $campagne = $csv[0];
 	  $_id = 'DR' . '-' . $cvi . '-' . $campagne;
@@ -310,6 +316,7 @@ EOF;
     private function recode_number($val) {
         return preg_replace('/^\./', '0.', $val) + 0;
     }
+    
     private function convertappellation($appellation_db2, $cepage) {
       if ($appellation_db2 == 2)
 	return 'CREMANT';
@@ -325,5 +332,15 @@ EOF;
 	return 'VINTABLE';
       return 'ALSACEBLANC';
     }
+
+    private function convertcepage($cepage, $cepage_bis) {
+      if ($cepage == 'VT' && in_array($cepage_bis, array('BL', 'RS', 'RG'))) {
+          return $cepage_bis;
+      } else {
+          return $cepage;
+      }
+    }
+
+
 
 }
