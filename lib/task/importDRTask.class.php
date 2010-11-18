@@ -196,6 +196,7 @@ EOF;
 	  foreach ($doc->recolte as $nomappellation => $app) {
 	    $acheteurs = array();
 	    $coop = array();
+            $cave_particuliere = 0;
 	    foreach($app as $nom => $lieu) {
 	      if ($lieu instanceOf stdClass)
 		foreach($lieu as $nom => $cep) {
@@ -208,12 +209,15 @@ EOF;
 		      foreach ($detail->cooperatives as $c) {
 			$coop[$c->cvi] = $c->cvi;
 		      }
+                    if (isset($detail->cave_particuliere) && $detail->cave_particuliere > 0) {
+                        $cave_particuliere = 1;
+                    }
 		  }
 		}
 	      $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
 	      $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
 
-              if ($nomappellation == "appellation_VINTABLE") {
+              if ($nomappellation == "appellation_VINTABLE" && $cave_particuliere) {
                   $doc->acheteurs->appellation_VINTABLE->cave_particuliere = 1;
               }
 	    }
