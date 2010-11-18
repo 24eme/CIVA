@@ -75,10 +75,11 @@ function valider_can_submit()
     return false;
   }
 <?php endif; ?>
+
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
     var total_non_negociant = <?php echo $onglets->getCurrentLieu()->getTotalVolumeForMinQuantite() ?>;
-    var min = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
-    var max = total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
+    var min = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>);
+    var max = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>);
     
     var rebeche_ratio_respected = true;
   $("#col_recolte_totale .caves input").each(function()
