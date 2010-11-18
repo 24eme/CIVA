@@ -179,7 +179,7 @@ Le CIVA';
                          if ($lieu->exist($key)) {
                              $cepage = $lieu->get($key);
                              if($cepage->getConfig()->hasMinQuantite()) {
-                                $totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite;
+                                $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
                                 $totalVolRevendique = $cepage->getTotalVolume();
                                     if( $totalVolRatio > $totalVolRevendique ) {
                                         array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
@@ -187,7 +187,7 @@ Le CIVA';
                                     }
                             }
                             if($cepage->getConfig()->hasMaxQuantite()) {
-                                $totalVolRatio = $lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite;
+                                $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
                                 $totalVolRevendique = $cepage->getTotalVolume();
                                     if( $totalVolRatio < $totalVolRevendique ) {
                                         array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')) );
