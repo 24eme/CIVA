@@ -162,7 +162,7 @@ Le CIVA';
                     $this->error = true;
                 }else {
                     //verifie les rebeches pour les crémants
-                    if($appellation->appellation=='CREMANT' && $lieu->getTotalVolumeForMinQuantite()>0) {
+                    if($appellation->appellation=='CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
                         $rebeches=false;
                         foreach ($lieu->filter('cepage_') as $key => $cepage) {
                             if($key == 'cepage_RB') $rebeches = true;
@@ -199,7 +199,7 @@ Le CIVA';
                                 $this->error = true;
                             }else {
                                 // vérifie le trop plein de DPLC
-                                if($appellation->appellation=='ALSACEBLANC' && $cepage->getConfig()->hasRendement() && $cepage->getDplc() > 0){
+                                if($appellation->appellation=='ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0){
                                             array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                                             $this->logVigilance = true;
                                 }
