@@ -481,10 +481,9 @@ Le CIVA';
                           ->setBody($mess);
             
 
-            $file_name = $dr->id.'.pdf';
+            $file_name = $dr->_id.'.pdf';
 
-            $attachment = new Swift_Message_Attachment($pdfContent, $file_name, 'application/pdf');
-
+            $attachment = new Swift_Attachment($pdfContent, $file_name, 'application/pdf');
             $message->attach($attachment);
 
             $this->getMailer()->send($message);

@@ -125,6 +125,7 @@ $(document).ready( function()
 
     if ($('#confirmation_fin_declaration').length > 0) {
         $('#confirmation_fin_declaration').ready( function() {
+            initValidationDr();
             initSendDRPopup();
         });
     }
@@ -730,10 +731,6 @@ var initValidationDr = function(type)
 /**
  * Initalise la popup previsualisation de DR
  ******************************************/
-var closeValidDRPopup = function () {
-    $('#popup_loader').dialog('close');
-
-};
 var initValidDRPopup = function()
 {
     $('#previsualiser').click(function() {
@@ -754,16 +751,12 @@ var initValidDRPopup = function()
 /**
  * Initalise la popup d'envoie par mail de la DR
  ******************************************/
-var closeSendDRPopup = function () {
-    $('#popup_loader').dialog('close');
-
-};
 var initSendDRPopup = function()
 {
     $('#btn-email').click(function() {
-        openPopup($("#popup_loader"));
+        openPopup($("#popup_loader_send"));
         $.ajax({
-            url: ajax_url_to_print,
+            url: ajax_url_to_send_email_pdf,
             success: function(data) {
 
                 $('.popup-loading').empty();
