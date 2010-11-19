@@ -476,7 +476,7 @@ Le CIVA';
 
              $message = Swift_Message::newInstance()
                           ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                          ->setTo(array('vlaurent@actualys.com', 'cdevichet@actualys.com'))
+                          ->setTo($tiers->email)
                           ->setSubject('CIVA - Votre déclaration de récolte')
                           ->setBody($mess);
             
