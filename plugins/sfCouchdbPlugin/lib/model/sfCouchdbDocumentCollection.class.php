@@ -12,17 +12,21 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
     private function load($data) {
         if (!is_null($data)) {
             try {
-                foreach($data->rows as $item) {
-                    if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND) {
-                        $this->_docs[$item->id] = null;
-                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA) {
-                        $this->_docs[$item->id] = $item->doc;
-                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_JSON) {
-                        $this->_docs[$item->id] = $item->doc;
-                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ARRAY) {
-                        $this->_docs[$item->id] = $item["doc"];
-                    } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_DOCUMENT) {
-                        $this->_docs[$item->id] = $this->getNewDocument($item->doc);
+                if ($this->_hydrate == sfCouchdbClient::HYDRATE_ARRAY) {
+                    foreach($data["rows"] as $item) {
+                            $this->_docs[$item['id']] = $item["doc"];
+                    }
+                } else {
+                    foreach($data->rows as $item) {
+                        if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND) {
+                            $this->_docs[$item->id] = null;
+                        } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA) {
+                            $this->_docs[$item->id] = $item->doc;
+                        } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_JSON) {
+                            $this->_docs[$item->id] = $item->doc;
+                        } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_DOCUMENT) {
+                            $this->_docs[$item->id] = $this->getNewDocument($item->doc);
+                        }
                     }
                 }
             } catch (Exception $exc) {

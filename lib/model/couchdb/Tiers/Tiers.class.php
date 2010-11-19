@@ -8,6 +8,10 @@ class Tiers extends BaseTiers {
         return sfCouchdbManager::getClient('DR')->getArchivesCampagnes($this->cvi, $campagne);
     }
 
+    public function getDeclarations($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        return sfCouchdbManager::getClient('DR')->getAllByCvi($this->cvi, $hydrate);
+    }
+
     public function isDeclarant() {
         return !($this->exist('no_declarant') && $this->get('no_declarant'));
     }

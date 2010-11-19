@@ -23,10 +23,19 @@ class sfCouchdbClient extends couchClient {
 
       $this->getList($id, $name, $view_name);
     }
-    public function retrieveDocumentById($id) {
+    public function retrieveDocumentById($id, $hydrate = self::HYDRATE_DOCUMENT) {
         try {
-             $data = $this->getDoc($id);
-             return $this->createDocumentFromData($data);
+             
+             if ($hydrate == self::HYDRATE_DOCUMENT) {
+                $data = $this->getDoc($id);
+                return $this->createDocumentFromData($data);
+             } elseif($hydrate == self::HYDRATE_JSON) {
+                 return $this->getDoc($id);
+             } elseif($hydrate == self::HYDRATE_ARRAY) {
+                 return $this->asArray()->getDoc($id);
+             } else {
+                 throw new sfCouchdbException('This hyrdate method does not exist');
+             }
         } catch (couchException $exc) {
              return null;
         }
