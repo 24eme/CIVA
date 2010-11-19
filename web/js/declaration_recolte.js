@@ -122,6 +122,12 @@ $(document).ready( function()
             initValidationDr();
         });
     }
+
+    if ($('#confirmation_fin_declaration').length > 0) {
+        $('#confirmation_fin_declaration').ready( function() {
+            initSendDRPopup();
+        });
+    }
 	
     var annee = new Date().getFullYear();
 	
@@ -185,6 +191,8 @@ $(document).ready( function()
         openPopup($('#popup_rappel_log'));
         return false;
     }
+
+
 });
 
 
@@ -736,7 +744,32 @@ var initValidDRPopup = function()
                 $('.popup-loading').empty();
                 $('.popup-loading').css('background', 'none');
                 $('.popup-loading').css('padding-top', '10px');
-                $('.popup-loading').append('</p>Le PDF de votre déclaration de récolte à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-dr"></a></p>');
+                $('.popup-loading').append('<p>Le PDF de votre déclaration de récolte à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-dr"></a></p>');
+            }
+        });
+        return false;
+    });
+}
+
+/**
+ * Initalise la popup d'envoie par mail de la DR
+ ******************************************/
+var closeSendDRPopup = function () {
+    $('#popup_loader').dialog('close');
+
+};
+var initSendDRPopup = function()
+{
+    $('#btn-email').click(function() {
+        openPopup($("#popup_loader"));
+        $.ajax({
+            url: ajax_url_to_print,
+            success: function(data) {
+
+                $('.popup-loading').empty();
+                $('.popup-loading').css('background', 'none');
+                $('.popup-loading').css('padding-top', '10px');
+                $('.popup-loading').append('<p>' + data + '</p>');
             }
         });
         return false;

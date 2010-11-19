@@ -1506,6 +1506,19 @@ a.msg_aide:hover{
     margin: 0 0 5px;
 }
 
+#div-btn-email{
+    margin:14px 0 30px;
+}
+
+#btn-email{
+    background: url(../images/boutons/btn-recevoir-ma-dr-par-email.png);
+    display: block;
+    float:right;
+    width: 155px;
+    height: 19px;
+}
+
+
 /**
  * Popup d'ajout
  ******************************************/

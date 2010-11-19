@@ -120,6 +120,10 @@ print:
   url: /print/:annee
   param: {module: export, action: pdf}
 
+sendEmail:
+  url: /sendEmail/:annee
+  param: {module: export, action: sendPdf}
+
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}
