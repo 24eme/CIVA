@@ -1571,6 +1571,19 @@ a.msg_aide:hover{
     text-align: center;
 }
 
+.popup-loading a{ color: #888; text-decoration: underline; }
+.popup-loading a:hover, .popup-loading a:focus { color: #000 }
+
+.telecharger-dr{
+    background:url("../images/boutons/btn_telecharger_votre_dr.png") no-repeat scroll 0 0 transparent;
+    display:block;
+    height:19px;
+    margin-left:115px;
+    !margin-left:0px;
+    width:130px;
+}
+
+
 /*.ui-autocomplete-loading {
     background: transparent url('../css/jquery.ui/images/ui-anim_basic_16x16.gif') center center no-repeat ; min-height: 93px; width: 100%; display: none;}*/
 

@@ -229,8 +229,8 @@ var initMsgAide = function()
                 popup.find('p').html(message);
                 popup.dialog("option" , "title" , titre);
                 popup.dialog("option" , "buttons" , {
-                    telecharger: function() { document.location.href = url_notice },
-                    fermer: function() { $(this).dialog( "close" ); }
+                    telecharger: function() {document.location.href = url_notice},
+                    fermer: function() {$(this).dialog( "close" );}
                 });
                 $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
                 $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
@@ -733,8 +733,10 @@ var initValidDRPopup = function()
         $.ajax({
             url: ajax_url_to_print,
             success: function(data) {
-                document.location.href=data;
-                setTimeout("closeValidDRPopup()", 1000);
+                $('.popup-loading').empty();
+                $('.popup-loading').css('background', 'none');
+                $('.popup-loading').css('padding-top', '10px');
+                $('.popup-loading').append('</p>Le PDF de votre déclaration de récolte à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-dr"></a></p>');
             }
         });
         return false;
