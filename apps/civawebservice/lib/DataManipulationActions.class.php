@@ -54,6 +54,9 @@ class DataManipulationActions extends sfActions
         } else {
             $new_item['validee'] = '0';
         }
+        sfContext::switchTo('civa');
+        $new_item['url_pdf'] = sfContext::getInstance()->getRouting()->generate('print', array('annee' => $item['campagne']), true);
+        sfContext::switchTo('civawebservice');
         return $new_item;
     }
     
@@ -72,7 +75,7 @@ class DataManipulationActions extends sfActions
    protected function buildTiersData($items, $root = "tiers") {
       $datas = array($root => array());
       foreach($items as $item) {
-        $datas[$root][$item['_id']] = $this->keepData($item, $keep_data);;
+        $datas[$root][$item['_id']] = $item;
       }
       return $datas;
    }

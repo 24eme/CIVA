@@ -45,10 +45,7 @@ class tiersActions extends DataManipulationActions
   }
 
   protected function getTiers($cvi = null) {
-      if (is_null($tiers)) {
-          $cvi = $this->getRequest()->getParameter('cvi');
-      }
-      $this->forward404Unless($tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($cvi, sfCouchdbClient::HYDRATE_ARRAY));
+      $this->forward404Unless($tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($this->getRequest()->getParameter('cvi'), sfCouchdbClient::HYDRATE_ARRAY));
       return $tiers;
   }
 }

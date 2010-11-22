@@ -12,6 +12,7 @@ class declarationActions extends DataManipulationActions
 {
      public function executeFindAll(sfWebRequest $request) {
          ini_set('memory_limit', '256M');
+         set_time_limit('180');
          $ids = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
          $this->declarations = array();
          foreach($ids as $id) {
