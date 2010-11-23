@@ -46,6 +46,8 @@ class importTiersTask extends sfBaseTask {
         $csv_no_stock = array();
         $csv_no = array();
 
+        $this->logSection('use file', $options['file']);
+
         foreach (file($options['file']) as $a) {
 	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
