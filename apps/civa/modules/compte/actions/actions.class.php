@@ -41,7 +41,7 @@ class compteActions extends sfActions {
             $this->redirect('@mon_espace_civa');
         }elseif($tiers) {
 
-            $this->form = new CreateCompteForm();
+            $this->form = new CreateCompteForm(array('email' => $tiers->email));
             $this->email = $tiers->email;
             if($request->getParameter('act')){
                  $this->act = '?act='.$request->getParameter('act');
@@ -64,10 +64,14 @@ class compteActions extends sfActions {
                 $ldap = new ldap();
                 if ($this->form->isValid()) {
                     $tiers = $this->form->getValue('tiers');
+                    $tiers->save();
                     $verify = $ldap->ldapVerifieExistence($tiers);
                     if($verify) {
 		      $ldap->ldapModify($tiers);
-		      $mess = 'Bonjour '.$tiers->nom.',
+                    }else {
+                        $ldap->ldapAdd($tiers);
+                    }
+                    $mess = 'Bonjour '.$tiers->nom.',
 
 '.$mess_email.'
 
@@ -76,19 +80,16 @@ Cordialement,
 Le CIVA';
 
                         //send email
-			try {
-			  $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-								 $tiers->email,
-								 'CIVA - '.$obj_email,
-								 $mess
-								 );
-			  $this->getMailer()->send($message);
-                          $this->getUser()->setFlash('mdp_modif', $flash_message);
-			}catch(Exception $e) {
-			  $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-			}
-                    }else {
-                        $ldap->ldapAdd($tiers);
+                    try {
+                      $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
+                                                             $tiers->email,
+                                                             'CIVA - '.$obj_email,
+                                                             $mess
+                                                             );
+                      $this->getMailer()->send($message);
+                      $this->getUser()->setFlash('mdp_modif', $flash_message);
+                    }catch(Exception $e) {
+                      $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                     }
                     $this->redirect('@mon_espace_civa');
                 }
@@ -99,17 +100,18 @@ Le CIVA';
     }
 
     public function executeModification(sfWebRequest $request) {
-
-        $this->form = new CreateCompteForm(null, array('verif_mdp'=>false));
+        $tiers = $this->getUser()->getTiers();
+        $this->form = new CreateCompteForm(array('email' => $tiers->email), array('verif_mdp'=>false));
         $this->form_modif_err = 0;
 
-        $tiers = $this->getUser()->getTiers();
         $this->email = $tiers->email;
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
 
             if ($this->form->isValid()) {
+                $tiers = $this->form->getValue('tiers');
+                $tiers->save();
                 /*$values['email'] = $tiers->email;
                 $values['mot_de_passe'] = $tiers->mot_de_passe;*/
                 $ldap = new ldap();

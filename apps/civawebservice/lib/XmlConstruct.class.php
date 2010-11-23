@@ -46,7 +46,9 @@ class XmlConstruct extends XMLWriter
     public function fromArray($prm_array){
       if(is_array($prm_array)){
         foreach ($prm_array as $index => $element){
-          $index = str_replace('_', '', $index);
+          if (strpos($index, '_') === 0) {
+              $index = str_replace('_', '', $index);
+          }
           if(is_numeric($index)) {
               $index = 'item';
           }

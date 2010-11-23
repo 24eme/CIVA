@@ -32,7 +32,7 @@
 
                         <?php echo $form['email']->renderError() ?>
                         <?php echo $form['email']->renderLabel() ?>
-                        <?php echo $form['email']->render(array('value'=>$email)) ?>
+                        <?php echo $form['email']->render() ?>
                     </div>
                     <div class="ligne_form ligne_form_label">
                         <?php echo $form['mdp1']->renderError() ?>

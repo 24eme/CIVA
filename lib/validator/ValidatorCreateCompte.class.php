@@ -7,13 +7,12 @@ class ValidatorCreateCompte extends sfValidatorBase {
     }
 
     protected function doClean($values) {
-        if(strlen($values['mdp1'])<4){
+        if(strlen($values['mdp1']) > 0 && strlen($values['mdp1'])<4){
             throw new sfValidatorErrorSchema($this, array($this->getOption('mdp1') => new sfValidatorError($this, 'mdp_trop_court')));
         }elseif($values['mdp1'] == $values['mdp2']) {
             $tiers = sfContext::getInstance()->getUser()->getTiers();
             if($values['mdp1']!= '' ) $tiers->mot_de_passe = $tiers->make_ssha_password($values['mdp1']);
             $tiers->email = $values['email'];
-            $tiers->save();
 
             return array_merge($values, array('tiers' => $tiers));
 
