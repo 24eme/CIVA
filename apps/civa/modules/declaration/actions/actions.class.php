@@ -267,6 +267,14 @@ class declarationActions extends EtapesActions {
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         $this->forward404Unless($dr);
 
+        try {
+            if (!$dr->updated)
+                throw new Exception();
+        }catch(Exception $e) {
+            $dr->update();
+            $dr->save();
+        }
+
         $this->annee = $annee;
 
     }
