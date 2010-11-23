@@ -67,7 +67,7 @@
 				</tr>
 					<?php if (isset($vintable['superficie'])) : ?>
 				<tr>
-				   <td class="premiere_colonne">Vin de table : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> Hl</td>
+				   <td class="premiere_colonne">Vins sans IG : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> Hl</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>
