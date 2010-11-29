@@ -79,7 +79,9 @@
             <h3 class="titre_section">Gamma <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide"></a></h3>
             <div class="contenu_section">
                 <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>
-
+                <?php if ($sf_user->getTiers()->cvi == '7523700100'): ?>
+                <a href="http://qualif.gamma.vinsalsace.pro/" target="_blank">Accéder à Gamm@ test</a>
+                <?php endif; ?>
             </div>
             <?php } ?>
         </div>
