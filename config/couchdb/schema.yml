@@ -78,16 +78,48 @@ DR:
                            type: collection
                            definition:
                              fields:
-                               '*':
+                               negoces:
                                  type: collection
-                                 class: DRRecolteLieuAcheteur
                                  definition:
                                    fields:
-                                     type_acheteur: {}
-                                     nom: {}
-                                     commune: {}
-                                     superficie: {type:float}
-                                     dontdplc: {type:float}
+                                     '*':
+                                       type: collection
+                                       class: DRRecolteLieuAcheteur
+                                       definition:
+                                         fields:
+                                           type_acheteur: {}
+                                           nom: {}
+                                           commune: {}
+                                           superficie: {type:float}
+                                           dontdplc: {type:float}
+                               cooperatives:
+                                 type: collection
+                                 definition:
+                                   fields:
+                                     '*':
+                                       type: collection
+                                       class: DRRecolteLieuAcheteur
+                                       definition:
+                                         fields:
+                                           type_acheteur: {}
+                                           nom: {}
+                                           commune: {}
+                                           superficie: {type:float}
+                                           dontdplc: {type:float}
+                               mouts:
+                                 type: collection
+                                 definition:
+                                   fields:
+                                     '*':
+                                       type: collection
+                                       class: DRRecolteLieuAcheteur
+                                       definition:
+                                         fields:
+                                           type_acheteur: {}
+                                           nom: {}
+                                           commune: {}
+                                           superficie: {type:float}
+                                           dontdplc: {type:float}
                         # ------ Cépage ------
                         '*':
                           type: collection

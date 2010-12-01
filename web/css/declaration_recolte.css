@@ -1384,6 +1384,12 @@ a.msg_aide:hover{
 
 #gestion_recolte #recap_ventes table thead th { }
 
+#gestion_recolte #recap_ventes table tbody td.nom small
+{
+    font-size: 10px;
+    font-style: italic;
+}
+
 #gestion_recolte #recap_ventes table tbody td.superficie
 {
     color: #000;

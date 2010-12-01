@@ -206,6 +206,15 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return true;
     }
 
+    public function hasAcheteurs() {
+       $nb_acheteurs = 0;
+       foreach($this->acheteurs as $type => $type_acheteurs) {
+           $nb_acheteurs += $type_acheteurs->count();
+       }
+
+       return $nb_acheteurs > 0;
+    }
+
     public function getVolumeMaxAppellation() {
       return ($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation();
     }
@@ -264,16 +273,15 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         foreach($types as $type) {
             $acheteurs = $this->getVolumeAcheteurs($type);
             foreach ($acheteurs as $cvi => $volume) {
-                $acheteur = $this->acheteurs->add($cvi);
+                $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
             }
-        }
-        $acheteurs = $this->getVolumeAcheteurs();
-        
-        foreach($this->acheteurs as $cvi => $item) {
-            if (!array_key_exists($cvi, $acheteurs)) {
-                $this->acheteurs->remove($cvi);
+            foreach($this->acheteurs->get($type) as $cvi => $item) {
+                if (!array_key_exists($cvi, $acheteurs)) {
+                    $this->acheteurs->get($type)->remove($cvi);
+                }
             }
         }
+        
     }
 }

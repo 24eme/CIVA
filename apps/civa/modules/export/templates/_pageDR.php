@@ -73,14 +73,16 @@ echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 //echo printColonne('Motif de non recolte', $colonnes_cepage, 'motif_non_recolte');
-foreach ($acheteurs as $cvi => $a) {
-$type = 'Vente à ';
-if ($a->type_acheteur == 'cooperatives')
-$type = 'Apport à ';
-else if ($a->type_acheteur == 'mouts') {
-$type = 'Vente de mouts à ';
-}
-  echo printColonne($type.$a->nom, $colonnes_cepage, $cvi, 'hl');
+foreach ($acheteurs as $type_key => $acheteurs_type) {
+    foreach ($acheteurs_type as $cvi => $a) {
+        $type = 'Vente à ';
+        if ($a->type_acheteur == 'cooperatives') {
+        $type = 'Apport à ';
+        } else if ($a->type_acheteur == 'mouts') {
+        $type = 'Vente de mouts à ';
+        }
+        echo printColonne($type.$a->nom, $colonnes_cepage, $cvi, 'hl');
+    }
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
@@ -91,12 +93,24 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 <table>
 <tr>
 <td style="width: 750px">
-<?php if ($enable_identification && count($acheteurs)) : ?>
+<?php if ($enable_identification && count($acheteurs->getParent()->hasAcheteurs())) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
   <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
-  <?php foreach($acheteurs as $cvi => $a) : ?>
-  <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td><td style="border: 1px solid black;width: 300px;"><?php echo $a->nom.' - '.$a->commune; ?></td><td style="border: 1px solid black;width: 100px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;</td><td  style="border: 1px solid black;width: 120px;"><?php echoFloatFr($a->volume); ?>&nbsp;<small>hl</small></td><td style="border: 1px solid black;width: 100px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;</td></tr>
+  <?php foreach ($acheteurs as $type_key => $acheteurs_type) : ?>
+    <?php foreach($acheteurs_type as $cvi => $a) : ?>
+        <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td>
+            <td style="border: 1px solid black;width: 300px;">
+                <?php echo $a->nom.' - '.$a->commune; ?>
+                <?php if ($type_key == 'mouts'): ?>
+                    <br />
+                    <small><i>(Acheteur de mouts)</i></small>
+                <?php endif; ?>
+            </td>
+            <td style="border: 1px solid black;width: 100px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;</td>
+            <td  style="border: 1px solid black;width: 120px;"><?php echoFloatFr($a->volume); ?>&nbsp;<small>hl</small></td>
+            <td style="border: 1px solid black;width: 100px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;</td></tr>
+    <?php endforeach; ?>
   <?php endforeach; ?>
 </table>
 <?php endif;?>

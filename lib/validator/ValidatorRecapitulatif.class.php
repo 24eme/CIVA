@@ -19,7 +19,7 @@ class ValidatorRecapitulatif extends sfValidatorSchema
     $sum_superficie = 0;
     $sum_dontdplc = 0;
     
-    foreach($values as $cvi => $value) {
+    foreach($values as $value) {
         if (is_array($value) && array_key_exists('superficie', $value)) {
             $sum_superficie += $value['superficie'];
         }

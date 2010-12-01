@@ -5,7 +5,7 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   private $acheteur = null;
 
   public function getLieu() {
-      return $this->getParent()->getParent();
+      return $this->getParent()->getParent()->getParent();
   }
 
   public function getVolume() {
@@ -32,7 +32,7 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
     if (!$this->acheteur)
       $this->acheteur = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$this->getKey());
     if (!$this->acheteur)
-      throw new Exception("Unknown CVI ".$this->getKey());
+      throw new Exception("Unknown CVI ".$this->getCVI());
     return $this->acheteur;
   }
 
