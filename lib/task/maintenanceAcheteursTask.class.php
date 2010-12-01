@@ -1,6 +1,6 @@
 <?php
 
-class maintenanceDRVTTask extends sfBaseTask
+class maintenanceAcheteursTask extends sfBaseTask
 {
   protected function configure()
   {
