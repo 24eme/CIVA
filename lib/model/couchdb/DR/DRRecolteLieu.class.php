@@ -289,7 +289,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             }
         }
         if ($this->hasSellToUniqueAcheteur()) {
-            echo '1';
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
         }
