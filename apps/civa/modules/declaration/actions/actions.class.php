@@ -158,7 +158,6 @@ class declarationActions extends EtapesActions {
                 if($lieu->getTotalSuperficie()==0) {
                     array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
                     $this->logVigilance = true;
-
                 }
                 //check le lieu
                 if ($lieu->isNonSaisie()) {
@@ -177,6 +176,19 @@ class declarationActions extends EtapesActions {
                         }
 
                     }
+
+                    //Verifie que le recapitulatif des ventes est rempli
+                    if (!$lieu->hasCompleteRecapitulatifVente()) {
+                        array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+                        $this->logVigilance = true;
+                    }
+
+                    //Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
+                    if (!$lieu->isValidRecapitulatifVente()) {
+                        array_push($this->validLogErreur, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+                        $this->error = true;
+                    }
+
 
                     //check les cepages
                     foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage_config) {

@@ -79,6 +79,9 @@ EOF;
         $json->err_log_superficie_zero = "Vous n'avez pas renseigné de detail pour cette appellation";
         $json->err_log_dplc = "Vous dépassez le rendement butoir de ce cépage. Vous pouvez le replier en Edel. Si vous livrez votre raisin, ce repli ne peut se faire qu'en accord avec votre acheteur.";
 
+        $json->err_log_recap_vente_non_saisie = "Vous n'avez pas complété la superficie dans le récapitulatif des ventes";
+        $json->err_log_recap_vente_invalide = "La surface et/ou le dplc du récapitulatif des ventes est supérieur au total de l'appellation";
+
         /** HELP¨**/
         $json->help_popup_exploitation_administratif = "Identification de l'exploitation : les renseignements affichés correspondent aux données que nous connaissons vous concernant. Vous pouvez procéder à des modifications, mais elles ne seront définitivement prises en compte, qu'après validation des Services de la Viticulture de la DGDDI (Douanes). ";
         $json->help_popup_exploitation_administratif_exploitation = "Nom déclaré auprès du Service de la viticulture (nom de l'exploitant ou nom déclaré de la Société)";

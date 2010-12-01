@@ -210,6 +210,56 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return true;
     }
 
+    public function hasCompleteRecapitulatifVente() {
+        if (!$this->getConfig()->hasRendement() || !$this->hasAcheteurs()) {
+            return true;
+        }
+
+        foreach($this->acheteurs as $type => $type_acheteurs) {
+            foreach($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->superficie) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function getTotalSuperficieRecapitulatifVente() {
+        $total_superficie = 0;
+        foreach($this->acheteurs as $type => $type_acheteurs) {
+            foreach($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->superficie) {
+                    $total_superficie += $acheteur->superficie;
+                }
+            }
+        }
+
+        return $total_superficie;
+    }
+
+    public function getTotalDontDplcRecapitulatifVente() {
+        $total_dontdplc = 0;
+        foreach($this->acheteurs as $type => $type_acheteurs) {
+            foreach($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->dontdplc) {
+                    $total_dontdplc += $acheteur->dontdplc;
+                }
+            }
+        }
+
+        return $total_dontdplc;
+    }
+
+    public function isValidRecapitulatifVente() {
+        if (!$this->getConfig()->hasRendement()) {
+            return true;
+        }
+        return (round($this->getTotalSuperficie(), 2) >= round($this->getTotalSuperficieRecapitulatifVente(), 2) &&
+                round($this->getDplc(), 2) >= round($this->getTotalDontDplcRecapitulatifVente(), 2));
+    }
+
     public function hasAcheteurs() {
        $nb_acheteurs = 0;
        foreach($this->acheteurs as $type => $type_acheteurs) {
@@ -288,7 +338,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                 }
             }
         }
-        if ($this->hasSellToUniqueAcheteur()) {
+        if ($this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
         }
