@@ -194,11 +194,17 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             return false;
         }
         $vol_total_cvi = array();
-        foreach($this->getVolumeAcheteurs() as $cvi => $volume) {
-            if (!isset($vol_total_cvi[$cvi])) {
-                $vol_total_cvi[$cvi] = 0;
+        $acheteurs = array();
+        $acheteurs['negoces'] = $this->getVolumeAcheteurs('negoces');
+        $acheteurs['cooperatives'] = $this->getVolumeAcheteurs('cooperatives');
+        $acheteurs['mouts'] = $this->getVolumeAcheteurs('mouts');
+        foreach($acheteurs as $type => $acheteurs_type) {
+            foreach($acheteurs_type as $cvi => $volume) {
+                if (!isset($vol_total_cvi[$type.'_'.$cvi])) {
+                    $vol_total_cvi[$type.'_'.$cvi] = 0;
+                }
+                $vol_total_cvi[$type.'_'.$cvi] += $volume;
             }
-            $vol_total_cvi[$cvi] += $volume;
         }
         if (count($vol_total_cvi) != 1) {
             return false;
