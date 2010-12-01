@@ -81,7 +81,7 @@ foreach ($acheteurs as $type_key => $acheteurs_type) {
         } else if ($a->type_acheteur == 'mouts') {
         $type = 'Vente de mouts à ';
         }
-        echo printColonne($type.$a->nom, $colonnes_cepage, $cvi, 'hl');
+        echo printColonne($type.$a->nom, $colonnes_cepage, $type_key.'_'.$cvi, 'hl');
     }
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');

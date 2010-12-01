@@ -99,14 +99,14 @@ class DocumentDR {
 	//	$c['revendique'] = $detail->volume_revendique;
 	//	$c['dplc'] = $detail->volume_dplc;
 	foreach($detail->negoces as $vente) {
-	  $c[$vente->cvi] = $vente->quantite_vendue;
+	  $c['negoces_'.$vente->cvi] = $vente->quantite_vendue;
 	}
 	foreach($detail->cooperatives as $vente) {
-	  $c[$vente->cvi] = $vente->quantite_vendue;
+	  $c['cooperatives_'.$vente->cvi] = $vente->quantite_vendue;
 	}
 	if ($detail->exist('mouts'))
 	  foreach($detail->mouts as $vente) {
-	    $c[$vente->cvi] = $vente->quantite_vendue;
+	    $c['mouts_'.$vente->cvi] = $vente->quantite_vendue;
 	  }
 	if ($cepage->getConfig()->excludeTotal()) {
 	  array_push($afterTotal, $c);
@@ -136,15 +136,15 @@ class DocumentDR {
 	    $c['dplc'] = '0,00';
 	  $negoces = $cepage->getVolumeAcheteurs('negoces');
 	  foreach($negoces as $cvi => $total) {
-	    $c[$cvi] = $total;
+	    $c['negoces_'.$cvi] = $total;
 	  }
 	  $coop =  $cepage->getVolumeAcheteurs('cooperatives');
 	  foreach($coop as $cvi => $total) {
-	    $c[$cvi] = $total;
+	    $c['cooperatives_'.$cvi] = $total;
 	  }
 	  $mouts =  $cepage->getVolumeAcheteurs('mouts');
 	  foreach($mouts as $cvi => $total) {
-	    $c[$cvi] = $total;
+	    $c['mouts_'.$cvi] = $total;
 	  }
 	  array_push($colonnes, $c);
 	  $cpt ++;
@@ -173,15 +173,15 @@ class DocumentDR {
       $c['dplc'] = '0,00';
     $negoces = $lieu->getVolumeAcheteurs('negoces');
     foreach($negoces as $cvi => $vente) {
-      $c[$cvi] = $vente;
+      $c['negoces_'.$cvi] = $vente;
     }
     $coop =  $lieu->getVolumeAcheteurs('cooperatives');
     foreach($coop as $cvi => $vente) {
-      $c[$cvi] = $vente;
+      $c['cooperatives_'.$cvi] = $vente;
     }
     $mouts =  $lieu->getVolumeAcheteurs('mouts');
     foreach($mouts as $cvi => $vente) {
-      $c[$cvi] = $vente;
+      $c['mouts_'.$cvi] = $vente;
     }
     array_push($colonnes, $c);
 
