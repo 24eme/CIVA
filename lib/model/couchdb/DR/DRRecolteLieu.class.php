@@ -195,11 +195,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
         $vol_total_cvi = array();
         $acheteurs = array();
-        $acheteurs['negoces'] = $this->getVolumeAcheteurs('negoces');
-        $acheteurs['cooperatives'] = $this->getVolumeAcheteurs('cooperatives');
-        $acheteurs['mouts'] = $this->getVolumeAcheteurs('mouts');
-        foreach($acheteurs as $type => $acheteurs_type) {
-            foreach($acheteurs_type as $cvi => $volume) {
+        $types = array('negoces','cooperatives','mouts');
+        foreach($types as $type) {
+            foreach($this->getVolumeAcheteurs($type) as $cvi => $volume) {
                 if (!isset($vol_total_cvi[$type.'_'.$cvi])) {
                     $vol_total_cvi[$type.'_'.$cvi] = 0;
                 }
@@ -276,11 +274,13 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         parent::update($params);
 	$this->add('acheteurs');
         $types = array('negoces','cooperatives','mouts');
+        $unique_acheteur = null;
         foreach($types as $type) {
             $acheteurs = $this->getVolumeAcheteurs($type);
             foreach ($acheteurs as $cvi => $volume) {
                 $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
+                $unique_acheteur = $acheteur;
             }
             foreach($this->acheteurs->get($type) as $cvi => $item) {
                 if (!array_key_exists($cvi, $acheteurs)) {
@@ -288,6 +288,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                 }
             }
         }
-        
+        if ($this->hasSellToUniqueAcheteur()) {
+            echo '1';
+            $unique_acheteur->superficie = $this->getTotalSuperficie();
+            $unique_acheteur->dontdplc = $this->getDplc();
+        }
     }
 }
