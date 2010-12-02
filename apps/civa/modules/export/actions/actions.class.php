@@ -87,6 +87,12 @@ class exportActions extends sfActions {
                         $col = array();
                         //	    $col['hash'] = $detail->getHash();
                         $col['L1'] = $detail->getCodeDouane();
+
+                        // SI PAS D'AUTRE AOC
+                        if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getAppellations()->count() == 1) {
+                            $col['L1'] .= 'O';
+                        }
+
                         $col['L3'] = 'B';
                         $col['mentionVal'] = $detail->denomination;
                         $col['L4'] = $detail->superficie;
@@ -178,8 +184,9 @@ class exportActions extends sfActions {
                 if ($colass) {
                     $total['colonneAss'] = $colass;
                 }
-                if ($lieu->getAppellation()->getAppellation() != 'KLEVENER')
+                if ($lieu->getAppellation()->getAppellation() != 'KLEVENER' && $lieu->getAppellation()->getAppellation() != 'VINTABLE') {
                     $xml[] = $total;
+                }
             }
         }
         $this->xml = $xml;
