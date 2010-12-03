@@ -475,7 +475,7 @@ class exportActions extends sfActions {
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
                     $ligne[] = $item->email;
-                    $ligne[] = $dr->recoltant;
+                    $ligne[] = $item->recoltant;
                     $ligne[] = $dr->etape;
                     foreach($ligne as $key => $item_ligne) {
                         $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
@@ -508,7 +508,7 @@ class exportActions extends sfActions {
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
                     $ligne[] = $item->email;
-                    $ligne[] = $dr->recoltant;
+                    $ligne[] = $item->recoltant;
                     $ligne[] = $dr->etape;
                     foreach($ligne as $key => $item_ligne) {
                         $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
