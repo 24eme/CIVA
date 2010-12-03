@@ -64,7 +64,7 @@ EOF;
                 $nb_email_send++;
                 $this->logSection('sended', $item->cvi . ' : ' . $item->email);
             } else {
-                 $this->logSection('send error', $item->cvi . ' : ' . $item->email, null, 'ERROR');
+                $this->logSection('send error', $item->cvi . ' : ' . $item->email, null, 'ERROR');
             }
         }
     }
