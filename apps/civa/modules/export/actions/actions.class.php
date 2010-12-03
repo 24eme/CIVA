@@ -475,7 +475,11 @@ class exportActions extends sfActions {
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
                     $ligne[] = $item->email;
-                    $ligne[] = $item->recoltant;
+                    $inscrit = 'non_inscrit';
+                    if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
+                        $inscrit = 'inscrit';
+                    }
+                    $ligne[] = $inscrit;
                     $ligne[] = $dr->etape;
                     foreach($ligne as $key => $item_ligne) {
                         $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
@@ -508,7 +512,11 @@ class exportActions extends sfActions {
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
                     $ligne[] = $item->email;
-                    $ligne[] = $item->recoltant;
+                    $inscrit = 'non_inscrit';
+                    if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
+                        $inscrit = 'inscrit';
+                    }
+                    $ligne[] = $inscrit;
                     $ligne[] = $dr->etape;
                     foreach($ligne as $key => $item_ligne) {
                         $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
