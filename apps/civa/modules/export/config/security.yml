@@ -4,5 +4,11 @@ xml:
 csvTiers:
   credentials: [admin]
 
+csvTiersDREncours:
+  credentials: [admin]
+
+csvTiersNonValideeCiva:
+  credentials: [admin]
+
 pdf:
   credentials: [declarant]

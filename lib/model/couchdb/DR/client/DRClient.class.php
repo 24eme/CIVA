@@ -1,8 +1,8 @@
 <?php
 
 class DRClient extends sfCouchdbClient {
-    public function retrieveByCampagneAndCvi($cvi, $campagne) {
-        return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne);
+    public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
 
     public function getAllByCampagne($campagne, $hydrate = sfCouchdbClient::HYDRATE_JSON) {

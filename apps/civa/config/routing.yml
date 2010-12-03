@@ -130,7 +130,19 @@ xml:
 
 csv_tiers:
   url: /tiers/csv
-  param: {module: export, action: CsvTiers}
+  param: {module: export, action: csvTiers}
+
+csv_tiers_dr_en_cours:
+  url: /tiers/dr-en-cours/csv
+  param: {module: export, action: csvTiersDREncours}
+
+csv_tiers_non_validee_civa:
+  url: /tiers/non-validee-civa/csv
+  param: {module: export, action: csvTiersNonValideeCiva}
+
+statistiques:
+  url: /statistiques
+  param: {module: statistiques, action: index}
 
 message:
   url: /message

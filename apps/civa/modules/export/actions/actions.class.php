@@ -425,7 +425,7 @@ class exportActions extends sfActions {
 //    }
 //  }
 
-    public function executeCsvTiers() {
+    public function executeCsvTiers(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
@@ -450,6 +450,70 @@ class exportActions extends sfActions {
                 }
 
                 $content .= implode(';', $ligne) . "\n";
+            }
+        }
+
+        $this->response->setContentType('application/csv');
+        $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
+        $this->response->setHttpHeader('Pragma', 'o-cache', true);
+        $this->response->setHttpHeader('Expires', '0', true);
+        return $this->renderText($content);
+    }
+
+    public function executeCsvTiersDREncours(sfWebRequest $request) {
+        set_time_limit('240');
+        ini_set('memory_limit', '512M');
+        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $content = '';
+        foreach ($tiers as $item) {
+            if ($item->cvi != "7523700100") {
+                $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
+                if ($dr && (!isset($dr->validee) || !$dr->validee)) {
+                    $ligne = array();
+                    $ligne[] = $item->cvi;
+                    $ligne[] = $item->nom;
+                    $ligne[] = $item->declaration_commune;
+                    $ligne[] = $item->telephone;
+                    $ligne[] = $item->email;
+                    $ligne[] = $dr->etape;
+                    foreach($ligne as $key => $item_ligne) {
+                        $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
+                    }
+
+                    $content .= implode(';', $ligne) . "\n";
+                }
+            }
+        }
+
+        $this->response->setContentType('application/csv');
+        $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
+        $this->response->setHttpHeader('Pragma', 'o-cache', true);
+        $this->response->setHttpHeader('Expires', '0', true);
+        return $this->renderText($content);
+    }
+
+    public function executeCsvTiersNonValideeCiva(sfWebRequest $request) {
+        set_time_limit('240');
+        ini_set('memory_limit', '512M');
+        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $content = '';
+        foreach ($tiers as $item) {
+            if ($item->cvi != "7523700100") {
+                $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
+                if ($dr && isset($dr->validee) && $dr->validee && (!isset($dr->modifiee) || !$dr->modifiee)) {
+                    $ligne = array();
+                    $ligne[] = $item->cvi;
+                    $ligne[] = $item->nom;
+                    $ligne[] = $item->declaration_commune;
+                    $ligne[] = $item->telephone;
+                    $ligne[] = $item->email;
+                    $ligne[] = $dr->etape;
+                    foreach($ligne as $key => $item_ligne) {
+                        $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
+                    }
+
+                    $content .= implode(';', $ligne) . "\n";
+                }
             }
         }
 

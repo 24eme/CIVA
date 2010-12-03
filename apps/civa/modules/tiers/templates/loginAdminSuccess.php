@@ -23,11 +23,19 @@
             </div>
         </div>
         <div id="precedentes_declarations">
-            <h3 class="titre_section">Actions</h3>
+            <h3 class="titre_section">Export CSV des tiers</h3>
             <div class="contenu_section">
                 <ul>
-                    <li><a href="<?php echo url_for('@csv_tiers') ?>">Export CSV des tiers</a></li>
-                    <li><a href="<?php echo url_for('/statistiques') ?>">Statistiques</a></li>
+                    <li><a href="<?php echo url_for('@csv_tiers') ?>">Tiers</a></li>
+                    <li><a href="<?php echo url_for('@csv_tiers_dr_en_cours') ?>">Tiers ayant une déclaration en cours</a></li>
+                    <li><a href="<?php echo url_for('@csv_tiers_non_validee_civa') ?>">Tiers ayant une déclaration validée mais non validée par le civa</a></li>
+                </ul>
+            </div>
+            <br />
+            <h3 class="titre_section">Statistiques</h3>
+            <div class="contenu_section">
+                <ul>
+                    <li><a href="<?php echo url_for('@statistiques') ?>">Statistiques</a></li>
                 </ul>
             </div>
         </div>
