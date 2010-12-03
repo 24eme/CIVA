@@ -10,7 +10,7 @@
                 <ul class="statistiques">
                     <li><strong>Nombre d'inscrits : <?php echo $nbInscrit; ?></strong>
                     <li><strong>Nombre de déclarations validées : <?php echo $etapeDrValidee; ?></strong></li>
-                    <li><strong>Nombre de déclarations en cours : </strong>
+                    <li><strong>Nombre de déclarations en cours : <?php echo $etapeDrNonValidee; ?></strong>
                         <ul>
                             <li>à l'étape exploitation : <?php echo $etapeExploitation; ?></li>
                             <li>à l'étape récolte : <?php echo $etapeRecolte; ?></li>

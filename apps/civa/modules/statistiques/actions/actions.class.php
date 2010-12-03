@@ -22,6 +22,7 @@ class statistiquesActions extends sfActions {
         $this->etapeValidation = 0;
         $this->etapeRecolte = 0;
         $this->etapeExploitation = 0;
+        $this->etapeDrNonValidee = 0;
         $this->etapeNoDr = 0;
 
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
@@ -36,6 +37,7 @@ class statistiquesActions extends sfActions {
                             if(isset($dr->etape) && $dr->etape=="validation") $this->etapeValidation++;
                             if(isset($dr->etape) && $dr->etape=="recolte") $this->etapeRecolte++;
                             if(isset($dr->etape) && $dr->etape=="exploitation") $this->etapeExploitation++;
+                            $this->etapeDrNonValidee++;
                         }elseif(isset($dr->validee) && $dr->validee) {
                             $this->etapeDrValidee++;
                         }
