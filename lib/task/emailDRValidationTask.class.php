@@ -49,10 +49,10 @@ EOF;
                 continue;
             }
             $message = $this->getMailer()->compose()
-                      ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                      ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
                       //->setTo($item->email)
                       ->setTo('vince.laurent@gmail.com')
-                      ->setSubject('CIVA - Votre déclaration de récolte')
+                      ->setSubject('RAPPEL DR 2010')
                       ->setBody($this->getMessageBody($item));
             try {
                 $sended = $this->getMailer()->send($message);
@@ -73,6 +73,13 @@ EOF;
   }
 
   protected function getMessageBody($tiers) {
-      return 'Attention fin des déclarations imminentes';
+      return "Bonjour ".$tiers->nom.",
+
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte 2010.
+Nous vous rappelons que la date limite de validation est le 10 Décembre.
+
+Cordialement,
+
+Le CIVA";
   }
 }
