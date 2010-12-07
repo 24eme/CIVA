@@ -48,7 +48,7 @@ EOF;
                 $this->logSection('no email', $item->cvi, null, 'ERROR');
                 continue;
             }
-            $message = $this->getMailer()->()
+            $message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
                       ->setTo($item->email)
                       //->setTo('vince.laurent@gmail.com')
