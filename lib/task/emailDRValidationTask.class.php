@@ -50,7 +50,8 @@ EOF;
             }
             $message = $this->getMailer()->()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
-                      ->setTo('vince.laurent@gmail.com')
+                      ->setTo($item->email)
+                      //->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR 2010')
                       ->setBody($this->getMessageBody($item));
             try {
