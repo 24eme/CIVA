@@ -11,7 +11,7 @@ class emailDRValidationTask extends sfBaseTask
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
       new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, "Année de déclaration", '2010'),
@@ -48,9 +48,8 @@ EOF;
                 $this->logSection('no email', $item->cvi, null, 'ERROR');
                 continue;
             }
-            $message = $this->getMailer()->compose()
+            $message = $this->getMailer()->()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
-                      //->setTo($item->email)
                       ->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR 2010')
                       ->setBody($this->getMessageBody($item));
