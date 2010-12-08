@@ -8,13 +8,13 @@ class DocumentDR {
     protected $file_dir;
     protected $no_cache;
 
-    public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false) {
+    public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
 
-        $this->init($dr, $tiers);
+        $this->init($dr, $tiers, $filename);
         $this->create($dr, $tiers);
     }
 
@@ -38,7 +38,7 @@ class DocumentDR {
         return $this->document->output();
     }
 
-    protected function init($dr, $tiers) {
+    protected function init($dr, $tiers, $filename = null) {
         $validee = 'Non Validée';
         if ($dr->exist('validee')) {
           $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
@@ -49,7 +49,9 @@ class DocumentDR {
         
         $title = 'Déclaration de récolte '.$dr->campagne;
         $header = $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
-        $filename = $dr->campagne.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf';
+        if (!$filename) {
+            $filename = $dr->campagne.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf';
+        }
 
         if ($this->type == 'html') {
           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir);

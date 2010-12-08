@@ -79,7 +79,23 @@ EOF;
                     continue;
                 }
                 if (!$options['valid'] || $dr->isValideeTiers()) {
-                    $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf', $file_dir, false);
+                    if ($dr->declaration_insee && strlen($dr->declaration_insee) > 1) {
+                        $departement = substr($dr->declaration_insee, 0, 2);
+                    } else {
+                        $departement = "autres";
+                    }
+                    $dr_file_dir = $file_dir.$dr->campagne.'/';
+                    if (!file_exists($dr_file_dir)) {
+                        mkdir($dr_file_dir);
+                        $this->logSection($dr_file_dir, 'folder created');
+                    }
+                    $dr_file_dir = $dr_file_dir.$departement.'/';
+                    if (!file_exists($dr_file_dir)) {
+                        mkdir($dr_file_dir);
+                        $this->logSection($dr_file_dir, 'folder created');
+                    }
+                    $filename = $dr->campagne.'_DR_'.$tiers->cvi.'.pdf';
+                    $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf', $dr_file_dir, true, $filename);
                     $document->generatePDF();
                     $this->logSection($dr->_id, 'pdf generated');
                 }

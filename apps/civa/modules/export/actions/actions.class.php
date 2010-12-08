@@ -109,7 +109,7 @@ class exportActions extends sfActions {
                         //$total['exploitant']['L5'] += $col['exploitant']['L5'];
                         $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
                         //$total['exploitant']['L9'] += $detail->cave_particuliere; //Volume revendique sur place
-                        $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs(); //Volume revendique non negoces
+                        $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
                         $col['exploitant']['L11'] = 0; //HS
                         $col['exploitant']['L12'] = 0; //HS
                         $col['exploitant']['L13'] = 0; //HS
@@ -158,7 +158,7 @@ class exportActions extends sfActions {
                         } else {
                             $col['exploitant']['L15'] = $detail->volume_revendique;
                             //$total['exploitant']['L15'] = $detail->volume_revendique;
-                            $col['exploitant']['L16'] = $detail->volume_dplc;
+                            //$col['exploitant']['L16'] = $detail->volume_dplc;
                         }
 
 
@@ -175,6 +175,7 @@ class exportActions extends sfActions {
                 }
 
                 $total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
+                $total['exploitant']['L10'] += $total['exploitant']['L9'] * $dr->getRatioLies();
                 $total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
                 uksort($total['exploitant'], 'exportActions::sortXML');
                 //Ajout des acheteurs
@@ -347,6 +348,19 @@ class exportActions extends sfActions {
         $this->response->setHttpHeader('Pragma', 'o-cache', true);
         $this->response->setHttpHeader('Expires', '0', true);
         return $this->renderText($content);
+    }
+
+    public function executeTiersChange(sfWebRequest $request) {
+        $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        foreach($tiers_ids as $id) {
+            $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $revs = $data_revs->_revs_info;
+            $first_revision = $revs[count($revs)-1]->rev;
+            $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+            $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+            $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
+        }
+        return sfView::NONE;
     }
 
     public function executeSendPdf(sfWebRequest $request) {

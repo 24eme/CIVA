@@ -20,7 +20,6 @@
           $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
 
 	  $this->widgetSchema->setNameFormat('recapitulatif[%s]');
-
 	}
     }
 

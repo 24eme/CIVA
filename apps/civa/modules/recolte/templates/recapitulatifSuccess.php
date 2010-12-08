@@ -153,12 +153,15 @@
                                         sum_superficie += parseFloat($(this).val());
                                     }
                                 });
+                                sum_superficie = trunc(sum_superficie, 2);
 
                                 $('#recap_ventes table.table_donnees tr td.dplc input.num').each(function() {
                                     if ($(this).val()) {
                                         sum_dont_dplc += parseFloat($(this).val());
                                     }
                                 });
+                                sum_dont_dplc = trunc(sum_dont_dplc, 2);
+
                                 if (sum_superficie > total_superficie) {
                                     $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p>');
                                     openPopup($('#popup_msg_erreur'), 0);

@@ -53,7 +53,7 @@ class couchClient extends couch {
 		"conflicts" 		=> array ("name" => "conflicts", "filter"=>"staticValue", "staticValue"=> "true"),
 		"revs" 				=> array ("name" => "revs", "filter"=>"staticValue", "staticValue"=> "true"),
 		"revs_info" 		=> array ("name" => "revs_info", "filter"=>"staticValue", "staticValue"=> "true"),
-		"rev" 				=> array ("name" => "rev", "filter"=>null),
+		"rev" 				=> array ("name" => "rev", "filter"=> "string"),
 		"key"				=> array ("name" => "key", "filter"=> "jsonEncode"),
 		"keys"				=> array ("name" => "keys", "filter"=> "ensureArray"),
 		"startkey"			=> array ("name" => "startkey", "filter"=> "jsonEncode"),
