@@ -13,12 +13,11 @@ class exportDRPdfTask extends sfBaseTask {
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
             // add your own options here
-            new sfCommandOption('valid', null, sfCommandOption::PARAMETER_REQUIRED, 'campagne must be valid', true),
             new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'export pdf only for a given cvi (put "all" fo all cvi)', 'all'),
             new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, 'export cvi only for a campagne (put "all" fo all campagnes)', '2010'),
             new sfCommandOption('clean', null, sfCommandOption::PARAMETER_REQUIRED, 'Supprime les pdf ayant une révision obsolète', true),
             new sfCommandOption('publier', null, sfCommandOption::PARAMETER_REQUIRED, 'Publie les fichiers', false),
-            new sfCommandOption('htaccess', null, sfCommandOption::PARAMETER_REQUIRED, 'En cas de publication force la recréation des htaccess', false),
+            new sfCommandOption('htaccess', null, sfCommandOption::PARAMETER_REQUIRED, 'En cas de publication, la recréation des htaccess', false),
         ));
 
         $this->namespace = 'export';
@@ -33,7 +32,7 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
-        ini_set('memory_limit', '128M');
+        ini_set('memory_limit', '256M');
 
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
@@ -75,7 +74,7 @@ EOF;
                     $this->logSection("unknow tiers", $dr->_id, null, "ERROR");
                     continue;
                 }
-                if (!$options['valid'] || $dr->isValideeTiers()) {
+                if ($dr->isValideeTiers()) {
                     $filename = $this->getDRFilename($dr, $tiers);
                     $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf',  $this->getFileDir(), false, $filename);
                     $document->generatePDF();
