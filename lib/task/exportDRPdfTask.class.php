@@ -22,7 +22,7 @@ class exportDRPdfTask extends sfBaseTask {
         ));
 
         $this->namespace = 'export';
-        $this->name = 'DRPdf';
+        $this->name = 'dr-pdf';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
 The [exportDRPdf|INFO] task does things.
@@ -33,6 +33,8 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
+        memory_limit('128M');
+
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
