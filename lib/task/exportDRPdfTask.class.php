@@ -163,7 +163,7 @@ EOF;
 
     protected function publishFile($options) {
         $publish_dir = $this->getPublishDir();
-        $this->createHtaccess($file_dir, $this->getHtaccessGlobal(), $options['htaccess']);
+        $this->createHtaccess($publish_dir, $this->getHtaccessGlobal(), $options['htaccess']);
         $files = $this->getFiles();
         $clear_directory = array();
         $htaccess = array();
