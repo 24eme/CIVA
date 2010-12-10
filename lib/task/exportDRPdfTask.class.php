@@ -177,7 +177,7 @@ EOF;
                 $this->createHtaccess($dr_publish_dir, $this->getHtaccessDepartement($departement), $options['htaccess']);
                 $htaccess[$dr_publish_dir] = true;
             }
-            $filename_zip = $departement.'_'.$matches['annee'].'_DRS.zip';
+            $filename_zip = $departement.'_'.$matches['annee'].'_DR.zip';
             if (!array_key_exists($filename_zip, $zips)) {
                 $zips[$filename_zip] = new ZipArchive();
                 $zips[$filename_zip]->open($dr_publish_dir.$filename_zip, ZIPARCHIVE::OVERWRITE);
