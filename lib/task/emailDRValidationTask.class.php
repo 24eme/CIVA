@@ -75,8 +75,8 @@ EOF;
   protected function getMessageBody($tiers) {
       return "Bonjour ".$tiers->nom.",
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte 2010.
-Nous vous rappelons que la date limite de validation est le 10 Décembre.
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte 2010 sur le site VinsAlsace.pro et ne l’avez pas encore validé.
+Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit dernier délai.
 
 Cordialement,
 
