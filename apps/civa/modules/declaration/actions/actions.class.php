@@ -24,7 +24,12 @@ class declarationActions extends EtapesActions {
         $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
         $this->declaration = $this->getUser()->getDeclaration();
         if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST)) {
-            $this->processChooseDeclaration($request);
+            if ($this->getRequestParameter('dr')) {
+                $this->processChooseDeclaration($request);
+            }
+            if ($this->getRequestParameter('gamma')) {
+                $this->processGamma($request);
+            }
         }
     }
 
@@ -62,6 +67,10 @@ class declarationActions extends EtapesActions {
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
+    }
+
+    public function processGamma(sfWebRequest $request) {
+        $this->redirect('http://qualif.gamma.vinsalsace.pro/');
     }
 
     public function executeDownloadNotice() {
