@@ -32,7 +32,7 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '700M');
 
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
@@ -79,11 +79,14 @@ EOF;
                     $document = new DocumentDR($dr, $tiers, array($this, 'getPartial'), 'pdf',  $this->getFileDir(), false, $filename);
                     $document->generatePDF();
                     $this->logSection($dr->_id, 'pdf generated ('. $this->getFileDir().$filename.')');
+                    unset($document);
                 }
             } catch (Exception $exc) {
                 $this->logSection("failed pdf", $dr->_id, null, "ERROR");
                 continue;
             }
+            unset($dr);
+            unset($tiers);
         }
         $this->logSection("export", "done");
 
