@@ -127,7 +127,8 @@ EOF;
         /** INTRO **/
         $json->intro_mon_espace_civa_dr = "Vous pouvez interrompre la saisie de votre déclaration à tout moment, vos données seront conservées.";
         $json->intro_mon_espace_civa_dr_validee = "Vous avez déjà validé votre déclaration. Vous ne pouvez plus la modifier. Vous pouvez uniquement la visualiser et l'imprimer. En cas de problème contactez nous";
-        $json->intro_mon_espace_civa_dr_non_editable = "Le service est momentanément indisponible. Essayez de vous reconnecter ultérieurement.";
+        //$json->intro_mon_espace_civa_dr_non_editable = "Le service est momentanément indisponible. Essayez de vous reconnecter ultérieurement.";
+        $json->intro_mon_espace_civa_dr_non_editable = "Le délai de saisie des télédéclarations est écoulé. Pour toute demande, veuillez contacter directement le CIVA.";
         $json->intro_gamma = "Vous aurez, ici, bientôt accès à l'application AlsaceGamm@.";
         $json->intro_doc_aide = "En cas de besoin n'hésitez pas à consulter la notice d'aide complete au format pdf.";
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
