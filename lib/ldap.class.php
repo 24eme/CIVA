@@ -1,8 +1,8 @@
 <?php
 class ldap {
 
-  private static $groupe2gid = array('declarant' => 1000, 'admin' => 1001);
-  private static $gid2groupe = array('1000' => 'declarant', '1001' => 'admin');
+    private static $groupe2gid = array('declarant' => 1000, 'admin' => 1001, 'exterieur' => 1002);
+    private static $gid2groupe = array('1000' => 'declarant', '1001' => 'admin', '1002' => 'exterieur');
 
     protected $ldapserveur;
     protected $ldapdn;
@@ -36,7 +36,10 @@ class ldap {
             return false;
     }
 
-    private function getLdapInfo($tiers) {
+    private function getLdapInfo($tiers, $groupe = null) {
+      if (!$groupe) {
+          $groupe = 'declarant';
+      }
       $info = array();
       $info['uid']           = $tiers->cvi;
       $info['sn']            = $tiers->nom;
@@ -48,7 +51,7 @@ class ldap {
       $info['userPassword']  = $tiers->mot_de_passe;
       $info['loginShell']    = '/bin/bash';
       $info['uidNumber']     = '1000';
-      $info['gidNumber']     = self::$groupe2gid['declarant'];
+      $info['gidNumber']     = self::$groupe2gid[$groupe];
       $info['homeDirectory'] = '/home/'.$tiers->cvi;
       $info['gecos']         = $tiers->cvi.','.$tiers->no_accises.','.$tiers->intitule.' '.$tiers->nom.','.$tiers->exploitant->nom;
       $info['mail']          = $tiers->email;
@@ -58,13 +61,13 @@ class ldap {
       return $info;
     }
 
-    public function ldapAdd($tiers) {
+    public function ldapAdd($tiers, $groupe = null) {
         if($tiers){
             $ldapConnect = $this->ldapConnect();
             if($ldapConnect) {
                 // prepare les données
                 $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-		$info = $this->getLdapInfo($tiers);
+		$info = $this->getLdapInfo($tiers, $groupe);
                 // Ajoute les données au dossier
                 $r=ldap_add($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);
@@ -89,7 +92,7 @@ class ldap {
         }  
     }
     
-    public function ldapModify($tiers) {
+    public function ldapModify($tiers, $groupe = null) {
 
         if($tiers){
             $ldapConnect = $this->ldapConnect();
@@ -97,7 +100,7 @@ class ldap {
 
                 // prepare les données
                 $identifier            = 'uid='.$tiers->cvi.',ou=People,'.$this->ldapdc;
-		$info = $this->getLdapInfo($tiers);
+		$info = $this->getLdapInfo($tiers, $groupe);
                 // Ajoute les données au dossier
                 $r=ldap_modify($ldapConnect, $identifier, $info);
                 ldap_unbind($ldapConnect);
@@ -134,6 +137,45 @@ class ldap {
             return false;
             
         }
+    }
+
+    public function getTiersFromLdap($uid) {
+        $ldapConnect = $this->ldapConnect();
+        if($ldapConnect) {
+            $filter = 'uid='.$uid;
+            $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            if($search && ldap_count_entries($ldapConnect, $search) > 0){
+                   $dn = ldap_get_entries($ldapConnect, $search);
+                   $entrie = $dn[0];
+                   $tiers = new Tiers();
+                   $tiers->set('_id', 'TIERS-TEMP-'.$entrie['uid'][0]);
+                   $tiers->cvi = $entrie['uid'][0];
+                   $tiers->nom = $entrie['sn'][0];
+                   $tiers->email =  $entrie['mail'][0];
+                   $tiers->mot_de_passe = $entrie['userPassword'][0];
+                   $tiers->setAdresse($entrie['postalAddress'][0]);
+                   $tiers->setCommune($entrie['l'][0]);
+                   $tiers->setCodePostal($entrie['postalcode'][0]);
+                   return $tiers;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public function getEntriesByGroupe($groupe) {
+        $ldapConnect = $this->ldapConnect();
+        $result = array();
+        if($ldapConnect) {
+            $filter = 'gidNumber='.self::$groupe2gid[$groupe];
+            $search = ldap_search($ldapConnect, 'ou=People,'.$this->ldapdc, $filter);
+            if ($search) {
+                $result = ldap_get_entries($ldapConnect, $search);
+            } else {
+                return $result;
+            }
+        }
+        return $result;
     }
 
 }

@@ -16,7 +16,6 @@ curl -d @/tmp/dr.json -X POST http://$COUCHDBDOMAIN:5984/civa/_bulk_docs ;
 echo "DR $year DONE";
 done
 
-php symfony civa-config:generateBaseUrlForJsp
-php symfony civa-config:generate-acheteurs
+php symfony config:generate-base-url-for-jsp
 
 rm /tmp/dr.json

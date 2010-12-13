@@ -29,7 +29,7 @@
             <?php if ($sf_user->isNonDeclarant()) : ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa_non_declarant'); ?>">Mon espace civa</a></li>
             <?php endif; ?>
-            <?php if ($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) : ?>
+            <?php if (($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) && !$sf_user->isFictif()) : ?>
                 <li><a href="<?php echo url_for('@mon_compte'); ?>">Mon compte</a></li>
             <?php endif; ?>
             <?php if ($sf_user->isAdmin()) : ?>

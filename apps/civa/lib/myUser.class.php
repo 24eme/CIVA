@@ -10,6 +10,7 @@ class myUser extends sfBasicSecurityUser {
     const CREDENTIAL_ADMIN = 'admin';
     const CREDENTIAL_DECLARANT = 'declarant';
     const CREDENTIAL_NON_DECLARANT = 'non_declarant';
+    const CREDENTIAL_FICTIF = 'fictif';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'etape_exploitation';
     const CREDENTIAL_ETAPE_RECOLTE = 'etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'etape_validation';
@@ -65,6 +66,10 @@ class myUser extends sfBasicSecurityUser {
            $this->signIn($tiers);
        } elseif($groupe == "admin") {
            $this->signInAdmin();
+       } elseif($groupe == "exterieur") {
+           $tiers = $this->getTiersFictif($casUser);
+           $this->signIn($tiers);
+           $this->addCredential(self::CREDENTIAL_FICTIF);
        }
     }
 
@@ -75,7 +80,11 @@ class myUser extends sfBasicSecurityUser {
 
     public function getTiers() {
         if (!$this->_tiers && $cvi = $this->getAttribute(self::SESSION_CVI, null, self::NAMESPACE_TIERS)) {
-            $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi);
+            if (!$this->isFictif()) {
+                $this->_tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($cvi);
+            } else {
+                $this->_tiers = $this->getTiersFictif($cvi);
+            }
             if (!$this->_tiers) {
                 $this->signOut();
                 throw new sfException('The user does not exist anymore in the database.');
@@ -180,8 +189,21 @@ class myUser extends sfBasicSecurityUser {
         return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_DECLARANT));
     }
 
-     public function isNonDeclarant() {
+    public function isNonDeclarant() {
         return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_NON_DECLARANT));
+    }
+
+    public function isFictif() {
+        return ($this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_FICTIF));
+    }
+
+    protected function getTiersFictif($uid) {
+        $ldap = new ldap();
+        $tiers = $ldap->getTiersFromLdap($uid);
+        $tiers->add('no_declarant', 1);
+        $tiers->no_accises = '1';
+        $tiers->setIsTiersFictif(true);
+        return $tiers;
     }
 
 }

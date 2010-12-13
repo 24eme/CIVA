@@ -1,5 +1,7 @@
 <?php
 class Tiers extends BaseTiers {
+    protected $is_tiers_fictif = false;
+
     public function getDeclaration($campagne) {
         return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }
@@ -59,6 +61,22 @@ class Tiers extends BaseTiers {
             return True;
         } else {
             return False;
+        }
+    }
+
+    public function setIsTiersFictif($value) {
+        $this->is_tiers_fictif = $value;
+    }
+
+    public function save() {
+        if (!$this->is_tiers_fictif) {
+            parent::save();
+        }
+    }
+
+    public function delete() {
+        if (!$this->is_tiers_fictif) {
+            parent::delete();
         }
     }
 }
