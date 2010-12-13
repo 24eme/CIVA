@@ -1,6 +1,6 @@
 <?php
 
-class testEmailTask extends sfBaseTask
+class emailTestTask extends sfBaseTask
 {
   protected function configure()
   {
@@ -16,8 +16,8 @@ class testEmailTask extends sfBaseTask
       // add your own options here
     ));
 
-    $this->namespace        = 'civa-config';
-    $this->name             = 'testEmail';
+    $this->namespace        = 'email';
+    $this->name             = 'test';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [testEmail|INFO] task does things.

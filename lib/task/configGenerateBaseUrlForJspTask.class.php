@@ -1,6 +1,6 @@
 <?php
 
-class generateBaseUrlForJspTask extends sfBaseTask
+class configGenerateBaseUrlForJspTask extends sfBaseTask
 {
   protected function configure()
   {
@@ -16,8 +16,8 @@ class generateBaseUrlForJspTask extends sfBaseTask
       // add your own options here
     ));
 
-    $this->namespace        = 'civa-config';
-    $this->name             = 'generateBaseUrlForJsp';
+    $this->namespace        = 'config';
+    $this->name             = 'generate-base-url-for-jsp';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [generateBaseUrlForJsp|INFO] task does things.

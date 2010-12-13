@@ -1,6 +1,6 @@
 <?php
 
-class setTiersPasswordTask extends sfBaseTask {
+class tiersSetPasswordTask extends sfBaseTask {
     protected function configure() {
         // // add your own arguments here
         // $this->addArguments(array(
@@ -14,8 +14,8 @@ class setTiersPasswordTask extends sfBaseTask {
                 // add your own options here
         ));
 
-        $this->namespace        = 'civa-config';
-        $this->name             = 'setTiersPassword';
+        $this->namespace        = 'tiers';
+        $this->name             = 'set-password';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
 The [setTiersPassword|INFO] task does things.
