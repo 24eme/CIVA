@@ -100,7 +100,6 @@ EOF;
                 $this->cleanFile();
             }
             $this->publishFile($options);
-            $this->logSection("publish", "done");
         }
     }
 
@@ -168,6 +167,7 @@ EOF;
         $clear_directory = array();
         $htaccess = array();
         $zips = array();
+        $nb_declaration = 0;
         foreach($files as $file) {
             $filename = basename($file);
             preg_match($this->getRexexpFilename(true), $filename, $matches);
@@ -191,9 +191,12 @@ EOF;
             }
             $publish_filename = $matches['code_postal'] . '-' . $matches['annee'] . '-DR-' . $matches['cvi'].'.pdf';
             copy($file, $dr_publish_dir.$publish_filename);
+            $nb_declaration++;
             $zips[$filename_zip]->addFile($dr_publish_dir.$publish_filename, $publish_filename);
             $this->logSection('publier', $dr_publish_dir .$publish_filename);
         }
+
+        $this->logSection('publier', $nb_declaration);
 
         foreach($zips as $filename_zip => $zip) {
             $zip->close();
