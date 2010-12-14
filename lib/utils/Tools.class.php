@@ -23,7 +23,7 @@ class Tools {
     }
 
      public static function getCsvFromArray($values) {
-        $content = "\xEF\xBB\xBF";
+        $content = "";
         foreach($values as $ligne) {
             foreach($ligne as $key => $item_ligne) {
                 $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
