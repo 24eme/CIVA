@@ -348,6 +348,9 @@ class exportActions extends sfActions {
         foreach($tiers_ids as $id) {
             $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             $revs = $data_revs->_revs_info;
+            if (count($revs) < 4) {
+                echo $id.'<br />';
+            }
             $first_revision = $revs[count($revs)-1]->rev;
             $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
@@ -378,6 +381,7 @@ class exportActions extends sfActions {
                 $values[] = $value;
             }
         }
+        exit;
         
         $this->setResponseCsv('tiers-modifications.csv');
         return $this->renderText(Tools::getCsvFromArray($values));
