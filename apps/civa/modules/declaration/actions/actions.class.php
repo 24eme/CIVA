@@ -23,10 +23,9 @@ class declarationActions extends EtapesActions {
         krsort($this->campagnes);
         $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
         $this->declaration = $this->getUser()->getDeclaration();
-        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST && $request->hasParameter('dr'))) {
+        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST) && $request->hasParameter('dr')) {
             $this->processChooseDeclaration($request);
-        }
-        if ($request->isMethod(sfWebRequest::POST) && $request->hasParameter('gamma')) {
+        } elseif($request->isMethod(sfWebRequest::POST) && $request->hasParameter('gamma')) {
             $this->processGamma($request);
         }
     }

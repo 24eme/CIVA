@@ -245,7 +245,7 @@ class exportActions extends sfActions {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        $content = '';
+        $values = array();
         foreach ($tiers as $item) {
             if ($item->recoltant == 1 && $item->cvi != "7523700100") {
                 $ligne = array();
@@ -261,26 +261,19 @@ class exportActions extends sfActions {
                 $ligne[] = $item->siege->commune;
                 $ligne[] = $item->no_accises;
 
-                foreach($ligne as $key => $item_ligne) {
-                    $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
-                }
-
-                $content .= implode(';', $ligne) . "\n";
+                $values[] = $ligne;
             }
         }
 
-        $this->response->setContentType('application/csv');
-        $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
-        $this->response->setHttpHeader('Pragma', 'o-cache', true);
-        $this->response->setHttpHeader('Expires', '0', true);
-        return $this->renderText($content);
+        $this->setResponseCsv('tiers.csv');
+        return $this->renderText(Tools::getCsvFromArray($values));
     }
 
     public function executeCsvTiersDREncours(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        $content = '';
+        $values = array();
         foreach ($tiers as $item) {
             if ($item->cvi != "7523700100") {
                 $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
@@ -297,27 +290,20 @@ class exportActions extends sfActions {
                     }
                     $ligne[] = $inscrit;
                     $ligne[] = $dr->etape;
-                    foreach($ligne as $key => $item_ligne) {
-                        $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
-                    }
-
-                    $content .= implode(';', $ligne) . "\n";
+                    $values[] = $ligne;
                 }
             }
         }
 
-        $this->response->setContentType('application/csv');
-        $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
-        $this->response->setHttpHeader('Pragma', 'o-cache', true);
-        $this->response->setHttpHeader('Expires', '0', true);
-        return $this->renderText($content);
+        $this->setResponseCsv('tiers.csv');
+        return $this->renderText(Tools::getCsvFromArray($values));
     }
 
     public function executeCsvTiersNonValideeCiva(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
         $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        $content = '';
+        $values = array();
         foreach ($tiers as $item) {
             if ($item->cvi != "7523700100") {
                 $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
@@ -334,24 +320,31 @@ class exportActions extends sfActions {
                     }
                     $ligne[] = $inscrit;
                     $ligne[] = $dr->etape;
-                    foreach($ligne as $key => $item_ligne) {
-                        $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
-                    }
-
-                    $content .= implode(';', $ligne) . "\n";
+                    $values[] = $ligne;
                 }
             }
         }
-
-        $this->response->setContentType('application/csv');
-        $this->response->setHttpHeader('Content-disposition', 'filename=tiers.csv', true);
-        $this->response->setHttpHeader('Pragma', 'o-cache', true);
-        $this->response->setHttpHeader('Expires', '0', true);
-        return $this->renderText($content);
+        $this->setResponseCsv('tiers.csv');
+        return $this->renderText(Tools::getCsvFromArray($values));
     }
 
-    public function executeTiersChange(sfWebRequest $request) {
+    public function executeCsvTiersModifications(sfWebRequest $request) {
+        set_time_limit(0);
         $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        
+        $values = array();
+        $values[] = array("Exploitation - N° CVI",
+                        "Exploitation - N° SIRET",
+                        "Exploitation - Nom",
+                        "Exploitation - Adresse",
+                        "Exploitation - Code Postal",
+                        "Exploitation - Commune",
+                        "Exploitation - Téléphone",
+                        "Exploitation - Fax",
+                        "Exploitant - Nom",
+                        "Exploitant - Adresse",
+                        "Exploitant - Naissance",
+                        "Exploitant - Téléphone");
         foreach($tiers_ids as $id) {
             $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             $revs = $data_revs->_revs_info;
@@ -359,8 +352,49 @@ class exportActions extends sfActions {
             $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
+
+            $value = array();
+            $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('siret' => true), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('nom' => true), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('siege' => array('adresse' => true)), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('siege' => array('code_postal' => true)), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('siege' => array('commune' => true)), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('telephone' => true), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('fax' => true), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('exploitant' => array('nom' => true)), $tiers_current, $values_changed);
+            $value[] = $this->formatModifiedValue(array('exploitant' => array('adresse' => true)), $tiers_current, $values_changed);
+            $value[] = preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->formatModifiedValue(array('exploitant' => array('date_naissance' => true)), $tiers_current, $values_changed));
+            $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
+            $values[] = $value;
         }
-        return sfView::NONE;
+        
+        $this->setResponseCsv('tiers-modifications.csv');
+        return $this->renderText(Tools::getCsvFromArray($values));
+    }
+
+    protected function setResponseCsv($filename) {
+        $this->response->setContentType('application/csv');
+        $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);
+        $this->response->setHttpHeader('Pragma', 'o-cache', true);
+        $this->response->setHttpHeader('Expires', '0', true);
+    }
+
+    protected function formatModifiedValue($keys, $values, $values_changed, $indicator = '*') {
+        foreach($keys as $key => $value_key) {
+            if (array_key_exists($key, $values_changed)) {
+                if (is_array($value_key)) {
+                    return $this->formatModifiedValue($value_key, $values[$key], $values_changed[$key]);
+                } else {
+                    return $indicator.$values[$key];
+                }
+            } elseif (is_array($value_key)) {
+                return $this->formatModifiedValue($value_key, $values[$key], array());
+            } else {
+                return $values[$key];
+            }
+        }
+        return '';
     }
 
     public function executeSendPdf(sfWebRequest $request) {

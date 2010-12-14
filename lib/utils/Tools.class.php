@@ -21,5 +21,16 @@ class Tools {
         }
         return $diff;
     }
+
+     public static function getCsvFromArray($values) {
+        $content = "\xEF\xBB\xBF";
+        foreach($values as $ligne) {
+            foreach($ligne as $key => $item_ligne) {
+                $ligne[$key] = '"'.str_replace('"', '\"', $item_ligne).'"';
+            }
+            $content .= implode(';', $ligne) . "\n";
+        }
+        return $content;
+    }
 }
 

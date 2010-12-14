@@ -85,7 +85,7 @@
                     <label for="type_declaration_brouillon">Plateforme de test</label>
                 </div>
                 <div class="ligne_form ligne_btn">
-                    <input type="image" name="gamma" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+                    <input type="image" name="gamma_button" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
                 </div>
             </div>
             <?php else: ?>
