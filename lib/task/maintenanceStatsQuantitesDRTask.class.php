@@ -30,7 +30,7 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    ini_set("memory_limit", "256M");
+    ini_set("memory_limit", "512M");
 
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
@@ -43,9 +43,11 @@ EOF;
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             if ($dr->isValideeTiers()) {
                 foreach($dr->recolte->getAppellations() as $key => $appellation) {
-                    $appellations[$key]['superficie'] = $appellation->getTotalSuperficie();
-                    $appellations[$key]['volume'] = $appellation->getTotalVolume();
-                    $appellations[$key]['name'] = $appellation->getLibelle();
+                    if (array_key_exists($key, $appellations)) {
+                        $appellations[$key] = array('superficie' => 0, 'volume' => 0, 'name' => $appellation->getLibelle());
+                    }
+                    $appellations[$key]['superficie'] += $appellation->getTotalSuperficie();
+                    $appellations[$key]['volume'] += $appellation->getTotalVolume();
                 }
             }
     }
