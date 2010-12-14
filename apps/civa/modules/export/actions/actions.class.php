@@ -352,7 +352,6 @@ class exportActions extends sfActions {
             $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
-
             $value = array();
             $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);
             $value[] = $this->formatModifiedValue(array('siret' => true), $tiers_current, $values_changed);
@@ -366,7 +365,18 @@ class exportActions extends sfActions {
             $value[] = $this->formatModifiedValue(array('exploitant' => array('adresse' => true)), $tiers_current, $values_changed);
             $value[] = preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->formatModifiedValue(array('exploitant' => array('date_naissance' => true)), $tiers_current, $values_changed));
             $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
-            $values[] = $value;
+
+            $keys_used = array('cvi', 'siret', 'nom', 'siege', 'telephone', 'fax', 'exploitant');
+            $nb_change = 0;
+            foreach($keys_used as $key_use) {
+                if (array_key_exists($key_use, $values_changed)) {
+                    $nb_change++;
+                }
+            }
+
+            if ($nb_change > 0) {
+                $values[] = $value;
+            }
         }
         
         $this->setResponseCsv('tiers-modifications.csv');
