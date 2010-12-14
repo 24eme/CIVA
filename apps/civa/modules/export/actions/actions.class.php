@@ -350,10 +350,11 @@ class exportActions extends sfActions {
             $revs = $data_revs->_revs_info;
             if (count($revs) < 4) {
                 $first_revision = $revs[count($revs)-3]->rev;
-            } else {
+            } elseif(count($revs) < 3) {
                 $first_revision = $revs[count($revs)-2]->rev;
+            } else {
+                $first_revision = $revs[count($revs)-1]->rev;
             }
-            $first_revision = $revs[count($revs)-1]->rev;
             $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
             $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
