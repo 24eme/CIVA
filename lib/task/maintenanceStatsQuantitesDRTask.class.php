@@ -43,7 +43,7 @@ EOF;
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             if ($dr->isValideeTiers()) {
                 foreach($dr->recolte->getAppellations() as $key => $appellation) {
-                    if (array_key_exists($key, $appellations)) {
+                    if (!array_key_exists($key, $appellations)) {
                         $appellations[$key] = array('superficie' => 0, 'volume' => 0, 'name' => $appellation->getLibelle());
                     }
                     $appellations[$key]['superficie'] += $appellation->getTotalSuperficie();
