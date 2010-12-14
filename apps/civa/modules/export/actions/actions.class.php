@@ -373,12 +373,12 @@ class exportActions extends sfActions {
             $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
 
             $keys_used = array('cvi', 'siret', 'nom', 'siege', 'telephone', 'fax', 'exploitant');
-            $nb_change = 1;
-           /* foreach($keys_used as $key_use) {
+            $nb_change = 0;
+            foreach($keys_used as $key_use) {
                 if (array_key_exists($key_use, $values_changed)) {
                     $nb_change++;
                 }
-            }*/
+            }
 
             if ($nb_change > 0) {
                 $values[] = $value;
