@@ -348,9 +348,9 @@ class exportActions extends sfActions {
         foreach($tiers_ids as $id) {
             $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             $revs = $data_revs->_revs_info;
-            if (count($revs) > 3) {
+            if (count($revs) > 2) {
                 $first_revision = $revs[count($revs)-3]->rev;
-            } elseif(count($revs) > 2) {
+            } elseif(count($revs) > 1) {
                 $first_revision = $revs[count($revs)-2]->rev;
             } else {
                 $first_revision = $revs[count($revs)-1]->rev;
