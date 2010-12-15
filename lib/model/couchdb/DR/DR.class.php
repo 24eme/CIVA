@@ -11,8 +11,15 @@ class DR extends BaseDR {
       }
       return $v;
     }
+    public function getTotalCaveParticuliere() {
+      $v = 0;
+      foreach($this->recolte->filter('^appellation_') as $appellation) {
+	$v += $appellation->getTotalCaveParticuliere();
+      }
+      return $v;
+    }
     public function getRatioLies() {
-      if (!($v = $this->getTotalVolume())) {
+      if (!($v = $this->getTotalCaveParticuliere())) {
 	return 0;
       }
       return $this->lies / $v;

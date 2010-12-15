@@ -39,6 +39,7 @@ class exportActions extends sfActions {
                 throw new Exception();
         }catch(Exception $e) {
             $dr->update();
+            $dr->update();
             $dr->save();
         }
         $xml = array();
@@ -89,8 +90,8 @@ class exportActions extends sfActions {
                         $col['L1'] = $detail->getCodeDouane();
 
                         // SI PAS D'AUTRE AOC
-                        if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getAppellations()->count() == 1) {
-                            $col['L1'] .= 'O';
+                        if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getAppellations()->count() > 1) {
+                            $col['L1'] = $detail->getCepage()->getCodeDouane('AOC');
                         }
 
                         $col['L3'] = 'B';
@@ -156,7 +157,7 @@ class exportActions extends sfActions {
                             $col['exploitant']['L14'] = $detail->volume;
                             //$total['exploitant']['L14'] =+ $detail->volume;
                         } else {
-                            $col['exploitant']['L15'] = $detail->volume_revendique;
+                            $col['exploitant']['L15'] = $detail->volume;
                             //$total['exploitant']['L15'] = $detail->volume_revendique;
                             //$col['exploitant']['L16'] = $detail->volume_dplc;
                         }
@@ -174,9 +175,11 @@ class exportActions extends sfActions {
                     }
                 }
 
-                $total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
-                $total['exploitant']['L10'] += $total['exploitant']['L9'] * $dr->getRatioLies();
-                $total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
+                if ($lieu->getTotalCaveParticuliere()) {
+                    $total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
+                    $total['exploitant']['L9'] += $total['exploitant']['L9'] * $dr->getRatioLies();
+                    $total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
+                }
                 uksort($total['exploitant'], 'exportActions::sortXML');
                 //Ajout des acheteurs
                 /*foreach ($acheteurs as $cvi => $v) {
