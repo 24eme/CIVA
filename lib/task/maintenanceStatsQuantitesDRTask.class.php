@@ -39,6 +39,7 @@ EOF;
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $values = array();
     $appellations = array();
+    $nb_dr = 0;
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             if ($dr->isValideeTiers()) {
@@ -51,6 +52,7 @@ EOF;
                     $appellations[$key]['volume_revendique'] += $appellation->getVolumeRevendique();
                     $appellations[$key]['dplc'] += $appellation->getDplc();
                 }
+                $nb_dr++;
             }
     }
 
@@ -60,8 +62,11 @@ EOF;
         $this->logSection('volume', $appellation['volume'].' hl');
         $this->logSection('volume_revendique', $appellation['volume_revendique'].' hl');
         $this->logSection('dplc', $appellation['dplc'].' hl');
-
     }
+    $this->log('total');
+    $this->logSection('volume', $dr->getTotalVolume().' hl');
+
+    $this->logSection('finish', $nb_dr);
     // add your code here
   }
 }
