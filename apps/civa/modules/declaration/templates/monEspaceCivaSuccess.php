@@ -19,6 +19,10 @@
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_non_editable'); ?></p>
                     <div class="ligne_form ligne_btn">
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
+                        <?php if ($sf_user->isAdmin()){
+                            echo '<a href="declaration/rendreEditable?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Si vous éditez cette DR, pensez à la revalider. \')" /><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>';
+                              }
+                        ?>
                     </div>
                 </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>

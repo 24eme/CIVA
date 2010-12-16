@@ -155,7 +155,7 @@ class myUser extends sfBasicSecurityUser {
         else
             $dr_non_editable = 0;
 
-        if ($dr_non_editable != 1) {
+        if ($dr_non_editable != 1 || $this->isAdmin()) {
             $this->addCredential(self::CREDENTIAL_DECLARATION_BROUILLON);
             if ($declaration = $this->getDeclaration()) {
                 if (!$this->isAdmin() && $declaration->isValideeTiers()) {
