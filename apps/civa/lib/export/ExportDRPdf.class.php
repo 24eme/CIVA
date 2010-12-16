@@ -1,6 +1,6 @@
 <?php
 
-class DocumentDR {
+class ExportDRPdf {
     protected $type;
     protected $document;
     protected $nb_pages;

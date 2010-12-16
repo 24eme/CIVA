@@ -309,6 +309,50 @@ class declarationActions extends EtapesActions {
         }
     }
 
+    public function executeSendPdf(sfWebRequest $request) {
+
+        $tiers = $this->getUser()->getTiers();
+        $dr = $this->getUser()->getDeclaration();
+
+        $document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'));
+        $document->generatePDF();
+
+        $pdfContent = $document->output();
+
+        $mess = 'Bonjour '.$tiers->nom.',
+
+Vous trouverez ci-joint votre déclaration de récolte que vous venez de valider.
+
+Cordialement,
+
+Le CIVA';
+
+        //send email
+        try {
+
+             $message = Swift_Message::newInstance()
+                          ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                          ->setTo($tiers->email)
+                          ->setSubject('CIVA - Votre déclaration de récolte')
+                          ->setBody($mess);
+
+
+            $file_name = $dr->_id.'.pdf';
+
+            $attachment = new Swift_Attachment($pdfContent, $file_name, 'application/pdf');
+            $message->attach($attachment);
+
+            $this->getMailer()->send($message);
+
+            $this->emailSend = true;
+
+        }catch(Exception $e) {
+
+            $this->emailSend = false;
+        }
+
+    }
+
     /**
      *
      * @param sfWebRequest $request

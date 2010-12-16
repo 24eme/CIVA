@@ -1,0 +1,153 @@
+<?php
+
+class ExportDRXml {
+    protected $content = null;
+    protected $partial_function = null;
+
+
+    public static function sortXML($a, $b) {
+        $a = preg_replace('/L/', '', $a);
+        $b = preg_replace('/L/', '', $b);
+        return $a > $b;
+    }
+
+    private static $type2douane = array('negoces' => 'L6', 'mouts' => 'L7', 'cooperatives' => 'L8');
+
+    private function setAcheteursForXml(&$xml, $obj, $type) {
+        $acheteurs = array();
+        foreach($obj->getVolumeAcheteurs($type) as $cvi => $volume) {
+            $item = array('numCvi' => $cvi, 'volume' => $volume);
+            $acheteurs[] = $item;
+        }
+        if(count($acheteurs) > 0) {
+            $xml[self::$type2douane[$type]] = $acheteurs;
+        }
+    }
+
+    public function  __construct($dr, $tiers, $partial_function) {
+        $this->partial_function = $partial_function;
+        $this->create($dr, $tiers);
+    }
+    
+    public function getContent() {
+        return $this->content;
+    }
+
+    protected function getPartial($templateName, $vars = null) {
+      return call_user_func_array($this->partial_function, array($templateName, $vars));
+    }
+
+    protected function create($dr, $tiers) {
+        $xml = array();
+        foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
+            if (!$dr->recolte->exist($appellation_config->getKey())) {
+                continue;
+            }
+            $appellation = $dr->recolte->get($appellation_config->getKey());
+            foreach ($appellation->getConfig()->getLieux() as $lieu_config) {
+                if (!$appellation->exist($lieu_config->getKey())) {
+                    continue;
+                }
+                $lieu = $appellation->get($lieu_config->getKey());
+                //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
+                $acheteurs = array();
+                $total = array();
+
+                $total['L1'] = $lieu->getCodeDouane();
+                $total['L3'] = 'B';
+                $total['L4'] = $lieu->getTotalSuperficie();
+                $total['exploitant'] = array();
+                $total['exploitant']['L5'] = $lieu->getTotalVolume();
+                $this->setAcheteursForXml($total['exploitant'], $lieu, 'negoces');
+                $this->setAcheteursForXml($total['exploitant'], $lieu, 'mouts');
+                $this->setAcheteursForXml($total['exploitant'], $lieu, 'cooperatives');
+                $total['exploitant']['L9'] = $lieu->getTotalCaveParticuliere();
+                $total['exploitant']['L10'] = $lieu->getTotalCaveParticuliere() + $lieu->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                $total['exploitant']['L11'] = 0; //HS
+                $total['exploitant']['L12'] = 0; //HS
+                $total['exploitant']['L13'] = 0; //HS
+                $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                $total['exploitant']['L15'] = $lieu->volume_revendique; //Volume revendique
+                $total['exploitant']['L16'] = $lieu->dplc; //DPLC
+                $total['exploitant']['L17'] = 0; //HS
+                $total['exploitant']['L18'] = 0; //HS
+                $total['exploitant']['L19'] = 0; //HS
+                $colass = null;
+                foreach ($lieu->getConfig()->getCepages() as $cepage_config) {
+                    if (!$lieu->exist($cepage_config->getKey())) {
+                        continue;
+                    }
+                    $cepage = $lieu->get($cepage_config->getKey());
+                    foreach ($cepage->detail as $detail) {
+
+                        $col = array();
+
+                        $col['L1'] = $detail->getCodeDouane();
+
+                        // SI PAS D'AUTRE AOC
+                        if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getAppellations()->count() > 1) {
+                            $col['L1'] = $detail->getCepage()->getCodeDouane('AOC');
+                        }
+
+                        $col['L3'] = 'B';
+                        $col['mentionVal'] = $detail->denomination;
+                        $col['L4'] = $detail->superficie;
+                        if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte)
+                            $col['motifSurfZero'] = $detail->motif_non_recolte;
+                        $col['exploitant'] = array();
+                        $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
+
+                        $this->setAcheteursForXml($col['exploitant'], $detail, 'negoces');
+                        $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
+                        $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
+
+                        $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
+                        $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        $col['exploitant']['L11'] = 0; //HS
+                        $col['exploitant']['L12'] = 0; //HS
+                        $col['exploitant']['L13'] = 0; //HS
+                        $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                        $col['exploitant']['L15'] = 0; //Volume revendique
+                        $col['exploitant']['L16'] = 0; //DPLC
+                        $col['exploitant']['L17'] = 0; //HS
+                        $col['exploitant']['L18'] = 0; //HS
+                        $col['exploitant']['L19'] = 0; //HS
+
+                        if (($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') || $appellation->getKey() == 'appellation_VINTABLE') {
+                            $col['exploitant']['L14'] = $detail->volume;
+                        } else {
+                            $col['exploitant']['L15'] = $detail->volume;
+                        }
+
+
+                        uksort($col['exploitant'], 'exportDRXml::sortXML');
+
+                        if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
+                            unset($col['L3'], $col['L4'], $col['mentionVal']);
+                            $colass = $col;
+                        } else {
+                            $xml[] = $col;
+                        }
+                    }
+                }
+
+                if ($lieu->getTotalCaveParticuliere()) {
+                    $total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
+                    $total['exploitant']['L9'] += $total['exploitant']['L9'] * $dr->getRatioLies();
+                    $total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
+                }
+                uksort($total['exploitant'], 'exportDRXml::sortXML');
+
+                if ($colass) {
+                    $total['colonneAss'] = $colass;
+                }
+                if ($lieu->getAppellation()->getAppellation() != 'KLEVENER' && $lieu->getAppellation()->getAppellation() != 'VINTABLE') {
+                    $xml[] = $total;
+                }
+            }
+        }
+
+        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
+    }
+}
+?>
