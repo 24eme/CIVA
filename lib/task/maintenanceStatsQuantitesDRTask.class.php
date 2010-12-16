@@ -40,6 +40,7 @@ EOF;
     $values = array();
     $appellations = array();
     $nb_dr = 0;
+    $total_volume = 0;
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             if ($dr->isValideeTiers()) {
@@ -52,6 +53,7 @@ EOF;
                     $appellations[$key]['volume_revendique'] += $appellation->getVolumeRevendique();
                     $appellations[$key]['dplc'] += $appellation->getDplc();
                 }
+                $total_volume += $dr->getTotalVolume();
                 $nb_dr++;
             }
     }
@@ -64,7 +66,7 @@ EOF;
         $this->logSection('dplc', $appellation['dplc'].' hl');
     }
     $this->log('total');
-    $this->logSection('volume', $dr->getTotalVolume().' hl');
+    $this->logSection('volume', $total_volume.' hl');
 
     $this->logSection('finish', $nb_dr);
     // add your code here
