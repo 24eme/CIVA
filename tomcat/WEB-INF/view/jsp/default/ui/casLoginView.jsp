@@ -73,7 +73,7 @@ String host = "";
 							<li>
 								<img src="images/carrousel/carrousel_vi_1.jpg" alt="" />
 								<div class="desc">
-									<h2>Déclarez votre récolte en ligne</h2>
+									<h2>Déclarez en ligne</h2>
 									<!--<p><a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum massa nibh.</a></p>-->
 								</div>
 							</li>
