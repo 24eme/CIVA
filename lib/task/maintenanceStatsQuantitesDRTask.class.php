@@ -41,6 +41,7 @@ EOF;
     $appellations = array();
     $nb_dr = 0;
     $total_volume = 0;
+    $total_superficie = 0;
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             if ($dr->isValideeTiers()) {
