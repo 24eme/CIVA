@@ -93,11 +93,21 @@ EOF;
             $this->logSection("zip created", $filename_zip);
         }
 
+        $insee = $this->getInsee();
         foreach($web_path as $key => $item) {
-            $this->logSection($key, $item);
+            $this->logSection($key, $insee[$key] . ';' . $item);
         }
 
         $this->logSection('publier', $nb_declaration . ' declaration(s)');
+    }
+
+    protected function getInsee() {
+        $insee = array();
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/Commune') as $c) {
+	  $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+	  $insee[$csv[0]] = $csv[1];
+	}
+        return $insee;
     }
 
     protected function getPublishDir() {
