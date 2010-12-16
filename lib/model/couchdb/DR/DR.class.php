@@ -4,6 +4,13 @@ class DR extends BaseDR {
       $this->lies = null;
       return $this->recolte->removeVolumes();
     }
+    public function getTotalSuperficie() {
+      $v = 0;
+      foreach($this->recolte->filter('^appellation_') as $appellation) {
+	$v += $appellation->getTotalSuperficie();
+      }
+      return $v;
+    }
     public function getTotalVolume() {
       $v = 0;
       foreach($this->recolte->filter('^appellation_') as $appellation) {

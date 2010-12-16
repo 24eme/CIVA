@@ -53,6 +53,7 @@ EOF;
                     $appellations[$key]['volume_revendique'] += $appellation->getVolumeRevendique();
                     $appellations[$key]['dplc'] += $appellation->getDplc();
                 }
+                $total_superficie += $dr->getTotalSuperficie();
                 $total_volume += $dr->getTotalVolume();
                 $nb_dr++;
             }
@@ -66,6 +67,7 @@ EOF;
         $this->logSection('dplc', $appellation['dplc'].' hl');
     }
     $this->log('total');
+    $this->logSection('superficie', $total_superficie.' ares');
     $this->logSection('volume', $total_volume.' hl');
 
     $this->logSection('finish', $nb_dr);
