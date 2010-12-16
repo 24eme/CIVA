@@ -52,7 +52,7 @@ String host = "";
 						<ul>
 							<li>
 								<img src="images/carrousel/carrousel_vi_1.jpg" alt="" />
-								<strong>Déclarez votre récolte en ligne</strong>
+								<strong>Déclarez en ligne</strong>
 							</li>
 							<li>
 								<img src="images/carrousel/carrousel_vi_2.jpg" alt="" />
