@@ -54,7 +54,7 @@ class DR extends BaseDR {
     public function validate($tiers){
         $this->remove('etape');
         $this->add('modifiee', date('Y-m-d'));
-        if (!$this->exist('validee') || is_null($this->validee) || empty($this->validee)) {
+        if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', date('Y-m-d'));
         }
         $this->declarant->nom =  $tiers->get('nom');
