@@ -44,10 +44,12 @@ EOF;
             if ($dr->isValideeTiers()) {
                 foreach($dr->recolte->getAppellations() as $key => $appellation) {
                     if (!array_key_exists($key, $appellations)) {
-                        $appellations[$key] = array('superficie' => 0, 'volume' => 0, 'name' => $appellation->getLibelle());
+                        $appellations[$key] = array('superficie' => 0, 'volume' => 0, 'volume_revendique' => 0, 'dplc' => 0, 'name' => $appellation->getLibelle());
                     }
                     $appellations[$key]['superficie'] += $appellation->getTotalSuperficie();
                     $appellations[$key]['volume'] += $appellation->getTotalVolume();
+                    $appellations[$key]['volume_revendique'] += $appellation->getVolumeRevendique();
+                    $appellations[$key]['dplc'] += $appellation->getDplc();
                 }
             }
     }
@@ -56,6 +58,9 @@ EOF;
         $this->log($appellation['name']);
         $this->logSection('superficie', $appellation['superficie'].' ares');
         $this->logSection('volume', $appellation['volume'].' hl');
+        $this->logSection('volume_revendique', $appellation['volume_revendique'].' hl');
+        $this->logSection('dplc', $appellation['dplc'].' hl');
+
     }
     // add your code here
   }
