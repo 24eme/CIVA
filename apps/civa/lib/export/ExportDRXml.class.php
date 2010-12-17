@@ -132,9 +132,10 @@ class ExportDRXml {
                 }
 
                 if ($lieu->getTotalCaveParticuliere()) {
-                    $total['exploitant']['L5'] += $total['exploitant']['L5'] * $dr->getRatioLies();  //Volume total avec lies
-                    $total['exploitant']['L9'] += $total['exploitant']['L9'] * $dr->getRatioLies();
-                    $total['exploitant']['L10'] += $total['exploitant']['L10'] * $dr->getRatioLies();
+
+                    $total['exploitant']['L5'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();  //Volume total avec lies
+                    $total['exploitant']['L9'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();
+                    $total['exploitant']['L10'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();
                 }
                 uksort($total['exploitant'], 'exportDRXml::sortXML');
 
