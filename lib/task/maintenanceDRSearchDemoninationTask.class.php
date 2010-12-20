@@ -37,7 +37,7 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-    $expressions = array('1ER CRU', '1 ER CRU', 'PREMIER CRU');
+    $expressions = array('ESTIMATION');
     $values = array();
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
@@ -47,7 +47,7 @@ EOF;
                         foreach($lieu->getCepages() as $cepage) {
                             foreach($cepage->getDetail() as $detail) {
                                 foreach($expressions as $expression) {
-                                    if (strpos(strtoupper($detail->denomination), strtoupper($expression)) !== false) {
+                                    if ($detail->vtsgn && strpos(strtoupper($detail->denomination), strtoupper($expression)) !== false) {
                                         $this->logSection($dr->cvi, $detail->denomination);
                                         if (!array_key_exists($dr->cvi, $values)) {
                                             $values[$dr->cvi] = array($dr->cvi, $cepage->getConfig()->getLibelle() . ' : ' . $detail->denomination);
@@ -68,7 +68,7 @@ EOF;
 
     $content_csv = Tools::getCsvFromArray($values);
     $filedir = sfConfig::get('sf_web_dir').'/';
-    $filename = 'CVI-DR-'.$options['campagne'].'-PREMIER-CRU.csv';
+    $filename = 'CVI-DR-'.$options['campagne'].'-ESTIMATION.csv';
     file_put_contents($filedir.$filename, $content_csv);
     $this->logSection("created", $filedir.$filename);
 
