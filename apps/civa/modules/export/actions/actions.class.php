@@ -166,53 +166,63 @@ class exportActions extends sfActions {
         $values = array();
         $values[] = array("Exploitation - N° CVI",
                         "Exploitation - N° SIRET",
+                        "Exploitation - Intitulé",
                         "Exploitation - Nom",
                         "Exploitation - Adresse",
                         "Exploitation - Code Postal",
                         "Exploitation - Commune",
                         "Exploitation - Téléphone",
                         "Exploitation - Fax",
+                        "Exploitant - Sexe",
                         "Exploitant - Nom",
                         "Exploitant - Adresse",
+                        "Exploitant - Code Postal",
+                        "Exploitant - Commune",
                         "Exploitant - Naissance",
                         "Exploitant - Téléphone");
         foreach($tiers_ids as $id) {
             $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-            $revs = $data_revs->_revs_info;
-            if (count($revs) > 2) {
-                $first_revision = $revs[count($revs)-3]->rev;
-            } elseif(count($revs) > 1) {
-                $first_revision = $revs[count($revs)-2]->rev;
-            } else {
-                $first_revision = $revs[count($revs)-1]->rev;
-            }
-            $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
-            $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
-            $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
-            $value = array();
-            $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('siret' => true), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('nom' => true), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('siege' => array('adresse' => true)), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('siege' => array('code_postal' => true)), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('siege' => array('commune' => true)), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('telephone' => true), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('fax' => true), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('exploitant' => array('nom' => true)), $tiers_current, $values_changed);
-            $value[] = $this->formatModifiedValue(array('exploitant' => array('adresse' => true)), $tiers_current, $values_changed);
-            $value[] = preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->formatModifiedValue(array('exploitant' => array('date_naissance' => true)), $tiers_current, $values_changed));
-            $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
-
-            $keys_used = array('cvi', 'siret', 'nom', 'siege', 'telephone', 'fax', 'exploitant');
-            $nb_change = 0;
-            foreach($keys_used as $key_use) {
-                if (array_key_exists($key_use, $values_changed)) {
-                    $nb_change++;
+            if ($id != "TIERS-7523700100") {
+                $revs = $data_revs->_revs_info;
+                if (count($revs) > 2) {
+                    $first_revision = $revs[count($revs)-3]->rev;
+                } elseif(count($revs) > 1) {
+                    $first_revision = $revs[count($revs)-2]->rev;
+                } else {
+                    $first_revision = $revs[count($revs)-1]->rev;
                 }
-            }
+                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
+                $value = array();
+                $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('siret' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('intitule' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('nom' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('siege' => array('adresse' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('siege' => array('code_postal' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('siege' => array('commune' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('telephone' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('fax' => true), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('sexe' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('nom' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('adresse' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('code_postal' => true)), $tiers_current, $values_changed);
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('commune' => true)), $tiers_current, $values_changed);
+                $value[] = preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->formatModifiedValue(array('exploitant' => array('date_naissance' => true)), $tiers_current, $values_changed));
+                $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
 
-            if ($nb_change > 0) {
-                $values[] = $value;
+                $keys_used = array('cvi', 'siret', 'intitule', 'nom', 'siege', 'telephone', 'fax', 'exploitant');
+                $nb_change = 0;
+                foreach($keys_used as $key_use) {
+                    if (array_key_exists($key_use, $values_changed)) {
+                        $nb_change++;
+                    }
+                }
+
+                if ($nb_change > 0) {
+                    $values[] = $value;
+                }
             }
         }
         
