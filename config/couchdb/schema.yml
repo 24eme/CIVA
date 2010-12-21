@@ -242,6 +242,12 @@ Tiers:
             commune: {  }
             date_naissance: {  }
             telephone: {  }
+      metteur_marche:
+        type: collection
+        required: false
+        definition:
+          fields:
+            nom: {  }
 
 Configuration:
   definition:

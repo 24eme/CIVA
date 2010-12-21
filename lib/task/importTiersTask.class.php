@@ -10,7 +10,7 @@ class importTiersTask extends sfBaseTask {
                 // add your own options here
 	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
-            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-maj-20101123'),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-2010'),
 	    new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
 
 				));
@@ -22,7 +22,7 @@ class importTiersTask extends sfBaseTask {
 
     protected function execute($arguments = array(), $options = array()) {
         ini_set('memory_limit', '512M');
-        set_time_limit('3600');
+
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
@@ -33,6 +33,9 @@ class importTiersTask extends sfBaseTask {
 	  }
 	  sfCouchdbManager::getClient()->createDatabase();
 	}
+
+        $nb_modified = 0;
+        $nb_add = 0;
 
 	$docs = array();
 	$csv = array();
@@ -47,7 +50,7 @@ class importTiersTask extends sfBaseTask {
         $csv_no = array();
 
         $this->logSection('use file', $options['file']);
-
+        
         foreach (file($options['file']) as $a) {
 	  $tiers = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a)));
 	  for($i = 0 ; $i < count($tiers) ; $i++) {
@@ -56,7 +59,6 @@ class importTiersTask extends sfBaseTask {
 	    else if ($tiers[$i] && !$tiers[1]) {
 	      $csv_no[$tiers[0]][$i] = $tiers[$i];
 	    }
-            
             if (!isset($csv_no_stock[$tiers[3]][$i]) || !$csv_no_stock[$tiers[3]][$i])
               $csv_no_stock[$tiers[3]][$i] = $tiers[$i];
             else if ($tiers[$i] && !$tiers[1]) {
@@ -65,65 +67,116 @@ class importTiersTask extends sfBaseTask {
             if ($tiers[1] && $i == 57)
 	      $csv_no_stock[$tiers[3]][99] = $tiers[57];
 	  }
+          if ($tiers[1] && !$tiers[57]) {
+            $csv_no_stock[$tiers[3]]['no_metteur_marche'] = $tiers[0];
+          }
 	}
+
+        $index_keep_tiers_stock = array(10, 1, 9, 99, 37, 39, 40, 82, 41, 42, 12, 13, 14, 15, 38, 8 ,69, 68, 70);
 
 	foreach ($csv_no as $code_civa => $tiers) {
 	  if (!$tiers[57])
 	    continue;
 
           $tiers_stock = $csv_no_stock[$tiers[3]];
+          $tiers_metteur_marche = null;
 
-	  $json = new stdClass();
-	  $json->type = "Tiers";
-	  $json->_id = "TIERS-".$tiers[57];
-	  $json->cvi = $tiers[57];
-	  $json->num = $tiers[0];
-	  $json->no_stock = $tiers[3];
-	  $json->maison_mere = $tiers_stock[10];
-	  $json->civaba = $tiers_stock[1];
-	  $json->no_accises = $tiers_stock[70];
-	  $json->siret = $tiers[58].'';
-	  $json->intitule = $tiers_stock[9];
-	  $json->regime_fiscal = '';
-	  $json->nom = preg_replace('/ +/', ' ', $tiers[6]);
-	  $json->declaration_insee = $tiers[62];
-	  $json->declaration_commune = $insee[$tiers[62]];
-	  $json->mot_de_passe = '{TEXT}0000';
-	  $json->siege->adresse = $tiers[46];
-	  $json->siege->insee_commune = $tiers[59];
-	  $json->siege->code_postal = $tiers[60];
-	  $json->siege->commune = $tiers[61];
-	  if (isset($tiers_stock[99]))
-	    $json->cvi_acheteur = $tiers_stock[99];
-	  if ($tiers_stock[37])
-	    $json->telephone = sprintf('%010d', $tiers_stock[37]);
-	  if ($tiers_stock[39])
-	    $json->fax = sprintf('%010d', $tiers_stock[39]);
-	  if($tiers_stock[40])
-	    $json->email = $tiers_stock[40];
-	  if($tiers_stock[82])
-	    $json->web = $tiers_stock[82];
-	  $json->exploitant->sexe = $tiers_stock[41];
-	  $json->exploitant->nom = $tiers_stock[42];
-	  if ($tiers_stock[13]) {
-	    $json->exploitant->adresse = $tiers_stock[12].", ".$tiers_stock[13];
-	    $json->exploitant->code_postal = $tiers_stock[15];
-	    $json->exploitant->commune = $tiers_stock[14];
-	  }
-	  if ($tiers_stock[25])
-	    $json->exploitant->telephone = sprintf('%010d', $tiers_stock[38]);
-	  $json->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers_stock[8], $tiers_stock[69], $tiers_stock[68]);
-
-          if ($tiers[23] == "O") {
-              $json->recoltant = 1;
-          } else {
-              $json->recoltant = 0;
+          if (isset($tiers_stock['no_metteur_marche']) && isset($csv_no[$tiers_stock['no_metteur_marche']])) {
+              $tiers_metteur_marche = $csv_no[$tiers_stock['no_metteur_marche']];
           }
 
-	  $docs[] = $json;
+          if (!$tiers[1]) {
+              foreach($index_keep_tiers_stock as $index) {
+                  if (isset($tiers_stock[$index])) {
+                    $tiers[$index] = $tiers_stock[$index];
+                  }
+              }
+          }
+
+          $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
+
+          if (!$tiers_object) {
+              $tiers_object = new Tiers();
+              $tiers_object->set('_id', "TIERS-".$tiers[57]);
+              $tiers_object->cvi = $tiers[57];
+              $tiers_object->mot_de_passe = '{NOUVEAU}';
+              if($tiers[40])
+                $tiers_object->email = $tiers[40];
+          }
+
+          $tiers_object->num = $tiers[0];
+          $tiers_object->no_stock = $tiers[3];
+          $tiers_object->maison_mere = $tiers[10];
+          $tiers_object->civaba = $tiers[1];
+          $tiers_object->no_accises = $tiers[70];
+          $tiers_object->siret = $tiers[58].'';
+          $tiers_object->intitule = $tiers[9];
+          $tiers_object->regime_fiscal = '';
+          $tiers_object->nom = preg_replace('/ +/', ' ', $tiers[6]);
+          $tiers_object->declaration_insee = $tiers[62];
+          $tiers_object->declaration_commune = $insee[$tiers[62]];
+          $tiers_object->siege->adresse = $tiers[46];
+          $tiers_object->siege->insee_commune = $tiers[59];
+          $tiers_object->siege->code_postal = $tiers[60];
+          $tiers_object->siege->commune = $tiers[61];
+          if (isset($tiers[99]))
+            $tiers_object->cvi_acheteur = $tiers[99];
+          if ($tiers[37])
+            $tiers_object->telephone = sprintf('%010d', $tiers[37]);
+          if ($tiers[39])
+            $tiers_object->fax = sprintf('%010d', $tiers[39]);
+          if(isset($tiers[82]) && $tiers[82]) {
+            $tiers_object->web = $tiers[82];
+          }
+          $tiers_object->exploitant->sexe = $tiers[41];
+          if ($tiers[42]) {
+            $tiers_object->exploitant->nom = $tiers[42];
+          } else {
+            $tiers_object->exploitant->nom = $tiers_object->nom;
+          }
+          if ($tiers[13]) {
+            $tiers_object->exploitant->adresse = $tiers[12].", ".$tiers[13];
+            $tiers_object->exploitant->code_postal = $tiers[15];
+            $tiers_object->exploitant->commune = $tiers[14];
+          } else {
+            $tiers_object->exploitant->adresse = $tiers_object->siege->adresse;
+            $tiers_object->exploitant->code_postal = $tiers_object->siege->code_postal;
+            $tiers_object->exploitant->commune = $tiers_object->siege->commune;
+          }
+          if ($tiers[38]) {
+            $tiers_object->exploitant->telephone = sprintf('%010d', $tiers[38]);
+          } else {
+            $tiers_object->exploitant->telephone = $tiers_object->telephone;
+          }
+          $tiers_object->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $tiers[8], $tiers[69], $tiers[68]);
+
+          if ($tiers[23] == "O") {
+              $tiers_object->recoltant = 1;
+          } else {
+              $tiers_object->recoltant = 0;
+          }
+
+          if ($tiers_metteur_marche) {
+            $tiers_object->add('metteur_marche')->nom = preg_replace('/ +/', ' ', $tiers_metteur_marche[6]);
+          }
+
+          if ($tiers_object->isNew()) {
+              $nb_add++;
+              $this->logSection($tiers_object->cvi, 'added');
+          } else {
+              $nb_modified++;
+              $this->logSection($tiers_object->cvi, 'updated');
+          }
+
+          $tiers_object->save();
+          
+          unset($tiers_object);
 	}
 
-	if ($options['import'] == 'couchdb') {
+        $this->logSection("added", $nb_add);
+        $this->logSection("updated", $nb_modified);
+
+	/*if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
 	    if ($doc) {
@@ -136,11 +189,15 @@ class importTiersTask extends sfBaseTask {
 	}
 	echo '{"docs":';
 	echo json_encode($docs);
-	echo '}';
+	echo '}';*/
     }
     
     private function recode_number($val) {
       return preg_replace('/^\./', '0.', $val) + 0;
+    }
+
+    private function generatePass() {
+        return sprintf("{TEXT}%04d", rand(0, 9999));
     }
     
   }
