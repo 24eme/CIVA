@@ -92,8 +92,19 @@ class ExportDRXml {
                         $col['L3'] = 'B';
                         $col['mentionVal'] = $detail->denomination;
                         $col['L4'] = $detail->superficie;
-                        if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte)
+                        if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte) {
                             $col['motifSurfZero'] = $detail->motif_non_recolte;
+                        } elseif(!$detail->volume || $detail->volume == 0) {
+                            if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
+                                $dr->recolte->exist('appellation_ALSACEBLANC') &&
+                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->exist('cepage_ED') &&
+                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->get('cepage_ED')->getTotalVolume() > 0) {
+                                $col['motifSurfZero'] = 'AE';
+                            } else {
+                                $col['motifSurfZero'] = 'PC';
+                            }
+
+                        }
                         $col['exploitant'] = array();
                         $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
 
