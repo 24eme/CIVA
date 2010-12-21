@@ -79,4 +79,7 @@ class Tiers extends BaseTiers {
             parent::delete();
         }
     }
+    public function isInscrit() {
+        return substr($this->mot_de_passe, 0, 6) !== "{TEXT}" && substr($this->mot_de_passe, 0, 9) !== "{NOUVEAU}";
+    }
 }
