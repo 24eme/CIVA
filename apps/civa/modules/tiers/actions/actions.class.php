@@ -120,7 +120,16 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeMonEspaceCivaNonDeclarant(sfWebRequest $request) {
-        $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
+        $this->tiers = $this->getUser()->getTiers();
+        if ($request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_bouton')) {
+            $this->redirect('http://qualif.gamma.vinsalsace.pro/');
+        }
+    }
+
+    public function executeGamma(sfWebRequest $request) {
+        if ($this->getUser()->hasNoAssices() && $request->isMethod(sfWebRequest::POST)) {
+            $this->redirect('http://qualif.gamma.vinsalsace.pro/');
+        }
     }
 
 }

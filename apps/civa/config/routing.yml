@@ -22,6 +22,10 @@ mon_espace_civa_non_declarant:
   url:   /mon_espace_civa_non_declarant
   param: { module: tiers, action: monEspaceCivaNonDeclarant }
 
+gamma:
+  url:   /gamma
+  param: { module: tiers, action: gamma }
+
 exploitation_administratif:
   url:   /exploitation_administratif
   param: { module: tiers, action: exploitationAdministratif }
@@ -115,6 +119,10 @@ mon_compte:
 telecharger_la_notice:
   url:   /telecharger_la_notice
   param: { module: declaration, action: downloadNotice }
+
+telecharger_la_notice_gamma:
+  url:   /telecharger_la_notice_gamma
+  param: { module: declaration, action: downloadNoticeGamma }
 
 print:
   url: /print/:annee

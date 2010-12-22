@@ -1,8 +1,5 @@
 <?php include_partial('global/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
 
-<!-- #principal -->
-<form id="principal" action="<?php echo url_for('@mon_espace_civa') ?>" method="post">
-
     <h2 class="titre_principal">Mon espace CIVA</h2>
 
     <!-- #application_dr -->
@@ -26,6 +23,7 @@
                     </div>
                 </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>
+            <form id="form_dr" action="<?php echo url_for('@mon_espace_civa') ?>" method="post">
             <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
             <div class="contenu_section">
                 <p class="intro">Vous souhaitez faire une nouvelle déclaration :</p>
@@ -63,6 +61,7 @@
                 </div>
                 <p class="intro msg_mon_espace_civa"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr'); ?></p>
             </div>
+            </form>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
                 <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
                 <div class="contenu_section">
@@ -79,26 +78,9 @@
                 </div>
             <?php endif; ?>
             <br />
-            <?php if($has_no_assices){ ?>
-            <?php if ($sf_user->getTiers()->cvi == '7523700100'): ?>
-            <h3 class="titre_section">Alsace Gamm@ <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide"></a></h3>
-            <div class="contenu_section">
-                <!--<p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>-->
-                <div class="ligne_form">
-                    <input type="radio" id="gamma_type_acces_test" name="gamma[type_acces]" value="test" checked="checked" />
-                    <label for="type_declaration_brouillon">Plateforme de test</label>
-                </div>
-                <div class="ligne_form ligne_btn">
-                    <input type="image" name="gamma_button" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
-                </div>
-            </div>
-            <?php else: ?>
-            <h3 class="titre_section">Gamma <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide"></a></h3>
-            <div class="contenu_section">
-                <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>
-            </div>
+            <?php if($tiers->hasNoAssices()): ?>
+                <?php include_partial('tiers/accesGamma') ?>
             <?php endif; ?>
-            <?php } ?>
         </div>
         <!-- fin #nouvelle_declaration -->
 
@@ -122,14 +104,17 @@
 
             </div>
             <br />
-            <h3 class="titre_section">Documents d'aide</h3>
+            <!--<h3 class="titre_section">Documents d'aide</h3>
             <div class="contenu_section">
                 <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
                 <ul>
                     <li><a href="<?php echo url_for('@telecharger_la_notice') ?>" class="pdf"> Télécharger la notice</a></li>
                 </ul>
                 <p class="intro pdf_link"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
-            </div>
+            </div>-->
+            <?php if($tiers->hasNoAssices()): ?>
+                <?php include_partial('tiers/helpGamma') ?>
+            <?php endif; ?>
             <?php if ($sf_user->isAdmin()): ?>
             <br />
             <h3 class="titre_section">Administration</h3>

@@ -21,12 +21,10 @@ class declarationActions extends EtapesActions {
         $this->getUser()->initDeclarationCredentials();
         $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
-        $this->has_no_assices = $this->getUser()->getTiers()->hasNoAssices();
+        $this->tiers = $this->getUser()->getTiers();
         $this->declaration = $this->getUser()->getDeclaration();
-        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST) && $request->hasParameter('dr')) {
+        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST)) {
             $this->processChooseDeclaration($request);
-        } elseif($request->isMethod(sfWebRequest::POST) && $request->hasParameter('gamma')) {
-            $this->processGamma($request);
         }
     }
 
@@ -66,15 +64,24 @@ class declarationActions extends EtapesActions {
         }
     }
 
-    public function processGamma(sfWebRequest $request) {
-        $this->redirect('http://qualif.gamma.vinsalsace.pro/');
-    }
-
     public function executeDownloadNotice() {
         $filename = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf";
 
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="aide.pdf"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($filename));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($filename));
+    }
+
+    public function executeDownloadNoticeGamma() {
+        $filename = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf";
+
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="aide_gamma.pdf"');
         $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
         $this->getResponse()->setHttpHeader('Content-Length', filesize($filename));
         $this->getResponse()->setHttpHeader('Pragma', '');
