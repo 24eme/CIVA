@@ -38,6 +38,7 @@ EOF;
         $tiers_gamma = array();
 
         $nb = 0;
+        $nb_unknow = 0;
         foreach($ids as $id) {
             $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
             if ($tiers->hasNoAssices()) {
@@ -84,8 +85,9 @@ EOF;
                         $tiers_gamma[$key][$tiers->civaba][] = '';
                         $tiers_gamma[$key][$tiers->civaba][] = '';
                     }
+                } else {
+                    $nb_unknow++;
                 }
-
             }
         }
 
@@ -98,5 +100,6 @@ EOF;
         }
 
         $this->logSection("done", $nb);
+        $this->logSection("done", $nb_unknow);
     }
 }
