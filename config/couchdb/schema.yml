@@ -248,6 +248,7 @@ Tiers:
         definition:
           fields:
             nom: {  }
+      revision_dernieres_modifications: {required: false}
 
 Configuration:
   definition:
