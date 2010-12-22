@@ -85,23 +85,22 @@ class importTiersTask extends sfBaseTask {
           $no_declarant = false;
 
           if (!$tiers[57] && !$tiers_stock[57] && $tiers[1]) {
-            if ($tiers[1]) {
                 $tiers[57] = 'C'.$tiers[1];
                 $no_declarant = true;
-            }
           } elseif(!$tiers[57]) {
               continue;
           }
-
-          if (!$tiers[1]) {
+          
+          if (!$no_declarant && $tiers_metteur_marche) {
               foreach($index_keep_tiers_stock as $index) {
                   if (isset($tiers_stock[$index])) {
                     $tiers[$index] = $tiers_stock[$index];
                   }
               }
-              if ($tiers_metteur_marche && isset($tiers_stock[70])) {
-                  $tiers[70] = $tiers_stock[70];
-              }
+          }
+
+          if ($tiers_metteur_marche && isset($tiers_stock[70])) {
+              $tiers[70] = $tiers_stock[70];
           }
 
           $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
