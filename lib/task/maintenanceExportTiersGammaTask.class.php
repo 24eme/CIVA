@@ -41,7 +41,7 @@ EOF;
         $nb_unknow = 0;
         foreach($ids as $id) {
             $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
-            if ($tiers->hasNoAssices()) {
+            if ($tiers->hasNoAssices() && $tiers->cvi != "7523700100") {
                 $key = null;
                 if ($tiers->isInscrit() && $tiers->recoltant == 1) {
                     $key = 'inscrit_recoltant';
@@ -65,25 +65,30 @@ EOF;
                                                      "Identifiant",
                                                      "Mot de passe");
                     }
-                    $tiers_gamma[$key][$tiers->civaba] = array();
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->civaba;
-                    if ($tiers->hasNoCvi()) {
-                       $tiers_gamma[$key][$tiers->civaba][] = '';
-                    } else {
-                       $tiers_gamma[$key][$tiers->civaba][] = $tiers->cvi;
+                    $key_item = $tiers->civaba.'_'.$tiers->cvi;
+                    if (array_key_exists($key_item, $tiers_gamma[$key])) {
+                        $this->log($tiers->cvi);
+                        $this->log($tiers_gamma[$key][$key_item][1]);
                     }
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->intitule;
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->nom;
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->adresse;
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->code_postal;
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->commune;
-                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->no_accises;
-                    if (!$tiers->isInscrit()) {
-                        $tiers_gamma[$key][$tiers->civaba][] = $tiers->cvi;
-                        $tiers_gamma[$key][$tiers->civaba][] = str_replace('{TEXT}', '', $tiers->mot_de_passe);
+                    $tiers_gamma[$key][$key_item] = array();
+                    $tiers_gamma[$key][$key_item][] = $tiers->civaba;
+                    if ($tiers->hasNoCvi()) {
+                       $tiers_gamma[$key][$key_item][] = '';
                     } else {
-                        $tiers_gamma[$key][$tiers->civaba][] = '';
-                        $tiers_gamma[$key][$tiers->civaba][] = '';
+                       $tiers_gamma[$key][$key_item][] = $tiers->cvi;
+                    }
+                    $tiers_gamma[$key][$key_item][] = $tiers->intitule;
+                    $tiers_gamma[$key][$key_item][] = $tiers->nom;
+                    $tiers_gamma[$key][$key_item][] = $tiers->siege->adresse;
+                    $tiers_gamma[$key][$key_item][] = $tiers->siege->code_postal;
+                    $tiers_gamma[$key][$key_item][] = $tiers->siege->commune;
+                    $tiers_gamma[$key][$key_item][] = $tiers->no_accises;
+                    if (!$tiers->isInscrit()) {
+                        $tiers_gamma[$key][$key_item][] = $tiers->cvi;
+                        $tiers_gamma[$key][$key_item][] = str_replace('{TEXT}', '', $tiers->mot_de_passe);
+                    } else {
+                        $tiers_gamma[$key][$key_item][] = '';
+                        $tiers_gamma[$key][$key_item][] = '';
                     }
                 } else {
                     $nb_unknow++;
@@ -91,13 +96,21 @@ EOF;
             }
         }
 
+        exit;
+
+        $global_contents = '';
+        $filedir = sfConfig::get('sf_web_dir').'/';
         foreach($tiers_gamma as $key => $item) {
             $content_csv = Tools::getCsvFromArray($item);
-            $filedir = sfConfig::get('sf_web_dir').'/';
+            $global_contents .= $content_csv;
             $filename = 'GAMMA-'.  strtoupper($key).'.csv';
             file_put_contents($filedir.$filename, $content_csv);
             $this->logSection("created", $filedir.$filename);
         }
+
+        $filename = 'GAMMA-TOUS.csv';
+        file_put_contents($filedir.$filename, $content_csv);
+        $this->logSection("created", $filedir.$filename);
 
         $this->logSection("done", $nb);
         $this->logSection("done", $nb_unknow);
