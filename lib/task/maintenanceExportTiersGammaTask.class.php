@@ -96,8 +96,6 @@ EOF;
             }
         }
 
-        exit;
-
         $global_contents = '';
         $filedir = sfConfig::get('sf_web_dir').'/';
         foreach($tiers_gamma as $key => $item) {
