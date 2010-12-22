@@ -127,7 +127,7 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeGamma(sfWebRequest $request) {
-        if ($this->getUser()->hasNoAssices() && $request->isMethod(sfWebRequest::POST)) {
+        if ($this->getUser()->getTiers()->hasNoAssices() && $request->isMethod(sfWebRequest::POST)) {
             $this->redirect('http://qualif.gamma.vinsalsace.pro/');
         }
     }
