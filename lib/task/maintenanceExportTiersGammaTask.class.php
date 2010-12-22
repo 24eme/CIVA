@@ -107,7 +107,7 @@ EOF;
         }
 
         $filename = 'GAMMA-TOUS.csv';
-        file_put_contents($filedir.$filename, $content_csv);
+        file_put_contents($filedir.$filename, $global_contents);
         $this->logSection("created", $filedir.$filename);
 
         $this->logSection("done", $nb);
