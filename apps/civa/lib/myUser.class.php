@@ -43,6 +43,7 @@ class myUser extends sfBasicSecurityUser {
         $this->getAttributeHolder()->removeNamespace(self::NAMESPACE_TIERS);
         $this->_tiers = null;
         $this->removeCredential(self::CREDENTIAL_DECLARANT);
+        $this->removeCredential(self::CREDENTIAL_NON_DECLARANT);
     }
 
     public function signIn($tiers) {

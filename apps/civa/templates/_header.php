@@ -15,7 +15,7 @@
                 <?php printf(html_entity_decode($title), $sf_request->getParameter('annee', date("Y")));?>
             <?php endif; ?>
         </h1>
-        <?php if (!$sf_user->isAdmin() && ($sf_user->isDeclarant() || $sf_user->isNonDeclarant())) : ?>
+        <?php if ($sf_user->isDeclarant() || $sf_user->isNonDeclarant()) : ?>
             <p class="utilisateur"><?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@mon_espace_civa'); ?></p>
         <?php endif; ?>
     </div>
