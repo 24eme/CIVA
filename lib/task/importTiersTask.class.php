@@ -72,7 +72,7 @@ class importTiersTask extends sfBaseTask {
           }
 	}
 
-        $index_keep_tiers_stock = array(10, 1, 9, 99, 37, 39, 40, 82, 41, 42, 12, 13, 14, 15, 38, 8 ,69, 68, 70);
+        $index_keep_tiers_stock = array(10, 1, 9, 99, 37, 39, 40, 82, 41, 42, 12, 13, 14, 15, 38, 8 ,69, 68);
 
 	foreach ($csv_no as $code_civa => $tiers) {
 	  if (!$tiers[57])
@@ -91,7 +91,12 @@ class importTiersTask extends sfBaseTask {
                     $tiers[$index] = $tiers_stock[$index];
                   }
               }
+              if ($tiers_metteur_marche && isset($tiers_stock[70])) {
+                  $tiers[70] = $tiers_stock[70];
+              }
           }
+
+
 
           $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
 
