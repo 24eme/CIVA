@@ -31,8 +31,10 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids = sfCouchdbManager::getClient('Tiers')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-
+        $ids_cvi = sfCouchdbManager::getClient('Tiers')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_civaba = sfCouchdbManager::getClient('Tiers')->getAllCivaba(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids = array_merge($ids_cvi, $ids_civaba);
+        
         $tiers_gamma = array();
 
         $nb = 0;
@@ -51,7 +53,8 @@ EOF;
                     $nb++;
                     if (!array_key_exists($key, $tiers_gamma)) {
                         $tiers_gamma[$key] = array();
-                        $tiers_gamma[$key]['legende'] = array("CVI",
+                        $tiers_gamma[$key]['legende'] = array("CIVABA",
+                                                     "CVI",
                                                      "Intitulé",
                                                      "Nom Prénom",
                                                      "Adresse",
@@ -61,20 +64,25 @@ EOF;
                                                      "Identifiant",
                                                      "Mot de passe");
                     }
-                    $tiers_gamma[$key][$tiers->cvi] = array();
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->cvi;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->intitule;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->nom;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->siege->adresse;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->siege->code_postal;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->siege->commune;
-                    $tiers_gamma[$key][$tiers->cvi][] = $tiers->no_accises;
-                    if (!$tiers->isInscrit()) {
-                        $tiers_gamma[$key][$tiers->cvi][] = $tiers->cvi;
-                        $tiers_gamma[$key][$tiers->cvi][] = str_replace('{TEXT}', '', $tiers->mot_de_passe);
+                    $tiers_gamma[$key][$tiers->civaba] = array();
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->civaba;
+                    if ($tiers->hasNoCvi()) {
+                       $tiers_gamma[$key][$tiers->civaba][] = '';
                     } else {
-                        $tiers_gamma[$key][$tiers->cvi][] = '';
-                        $tiers_gamma[$key][$tiers->cvi][] = '';
+                       $tiers_gamma[$key][$tiers->civaba][] = $tiers->cvi;
+                    }
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->intitule;
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->nom;
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->adresse;
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->code_postal;
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->siege->commune;
+                    $tiers_gamma[$key][$tiers->civaba][] = $tiers->no_accises;
+                    if (!$tiers->isInscrit()) {
+                        $tiers_gamma[$key][$tiers->civaba][] = $tiers->cvi;
+                        $tiers_gamma[$key][$tiers->civaba][] = str_replace('{TEXT}', '', $tiers->mot_de_passe);
+                    } else {
+                        $tiers_gamma[$key][$tiers->civaba][] = '';
+                        $tiers_gamma[$key][$tiers->civaba][] = '';
                     }
                 }
 

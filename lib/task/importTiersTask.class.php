@@ -75,14 +75,22 @@ class importTiersTask extends sfBaseTask {
         $index_keep_tiers_stock = array(10, 1, 9, 99, 37, 39, 40, 82, 41, 42, 12, 13, 14, 15, 38, 8 ,69, 68);
 
 	foreach ($csv_no as $code_civa => $tiers) {
-	  if (!$tiers[57])
-	    continue;
-
           $tiers_stock = $csv_no_stock[$tiers[3]];
           $tiers_metteur_marche = null;
 
           if (isset($tiers_stock['no_metteur_marche']) && isset($csv_no[$tiers_stock['no_metteur_marche']])) {
               $tiers_metteur_marche = $csv_no[$tiers_stock['no_metteur_marche']];
+          }
+
+          $no_declarant = false;
+
+          if (!$tiers[57] && !$tiers_stock[57] && $tiers[1]) {
+            if ($tiers[1]) {
+                $tiers[57] = 'C'.$tiers[1];
+                $no_declarant = true;
+            }
+          } elseif(!$tiers[57]) {
+              continue;
           }
 
           if (!$tiers[1]) {
@@ -96,18 +104,20 @@ class importTiersTask extends sfBaseTask {
               }
           }
 
-
-
           $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
 
           if (!$tiers_object) {
               $tiers_object = new Tiers();
               $tiers_object->set('_id', "TIERS-".$tiers[57]);
               $tiers_object->cvi = $tiers[57];
-              $tiers_object->mot_de_passe = '{NOUVEAU}';
+              $tiers_object->mot_de_passe = $this->generatePass();
               if($tiers[40])
                 $tiers_object->email = $tiers[40];
           }
+
+          /*if ($no_declarant) {
+              $tiers_object->add('no_declarant', 1);
+          }*/
 
           $tiers_object->num = $tiers[0];
           $tiers_object->no_stock = $tiers[3];
@@ -119,7 +129,9 @@ class importTiersTask extends sfBaseTask {
           $tiers_object->regime_fiscal = '';
           $tiers_object->nom = preg_replace('/ +/', ' ', $tiers[6]);
           $tiers_object->declaration_insee = $tiers[62];
-          $tiers_object->declaration_commune = $insee[$tiers[62]];
+          if ($tiers[62]) {
+            $tiers_object->declaration_commune = $insee[$tiers[62]];
+          }
           $tiers_object->siege->adresse = $tiers[46];
           $tiers_object->siege->insee_commune = $tiers[59];
           $tiers_object->siege->code_postal = $tiers[60];

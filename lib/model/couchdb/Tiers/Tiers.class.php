@@ -15,7 +15,8 @@ class Tiers extends BaseTiers {
     }
 
     public function isDeclarant() {
-        return !($this->exist('no_declarant') && $this->get('no_declarant'));
+        return !($this->exist('no_declarant') && $this->get('no_declarant')) &&
+               $this->recoltant == 1;
     }
 
     public function getAdresse() {
@@ -37,6 +38,9 @@ class Tiers extends BaseTiers {
         return $this->get('siege')->set('commune', $c);
     }
 
+    public function hasNoCvi() {
+        return strpos($this->cvi, 'C') !== false;
+    }
 
     public function hasNoAssices(){
         if($this->get('no_accises')) return true;
