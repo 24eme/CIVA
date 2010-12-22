@@ -136,7 +136,7 @@ class ExportDRXml {
                         if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                             unset($col['L3'], $col['L4'], $col['mentionVal']);
                             $colass = $col;
-                        } else {
+                        } elseif($lieu->getAppellation()->getAppellation() != 'KLEVENER') {
                             $xml[] = $col;
                         }
                     }
@@ -153,7 +153,7 @@ class ExportDRXml {
                 if ($colass) {
                     $total['colonneAss'] = $colass;
                 }
-                if ($lieu->getAppellation()->getAppellation() != 'KLEVENER' && $lieu->getAppellation()->getAppellation() != 'VINTABLE') {
+                if ($lieu->getAppellation()->getAppellation() != 'VINTABLE') {
                     $xml[] = $total;
                 }
             }

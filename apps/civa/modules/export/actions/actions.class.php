@@ -193,6 +193,9 @@ class exportActions extends sfActions {
                 }
                 $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
                 $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                if ($tiers_current->recoltant != 1) {
+                    continue;
+                }
                 $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
                 $value = array();
                 $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);

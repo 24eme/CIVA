@@ -121,6 +121,8 @@ EOF;
 	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->no_vtsgn = 1;
 	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
 	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
+        $json->recolte->appellation_KLEVENER->douane->qualite = 'S';
+        
 	$json->_id = 'CONFIGURATION';
 	$json->type = 'Configuration';
 
