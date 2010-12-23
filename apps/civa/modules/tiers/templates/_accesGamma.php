@@ -11,8 +11,9 @@
         </div>
     </div>
 </form>
-<div style="display: none" id="popup_loader" title="Ouverture d'Alsace Gamm@">
-    <div class="popup-loading" style="background: transparent url('/css/jquery.ui/images/ui-anim_basic_16x16.gif') center 20px no-repeat;">
+<div style="display: none;" id="popup_loader" title="Ouverture d'Alsace Gamm@">
+    <div class="popup-loading" style="background: none; padding-top: 20px;">
+        <img src="/css/jquery.ui/images/ui-anim_basic_16x16.gif" style="padding-bottom: 9px;" />
     <p>L'ouverture de votre compte Alsace Gamm@ est en cours.<br />Merci de patienter.<br /><small>A la première ouverture, la procédure peut prendre du temps.</small></p>
     </div>
 </div>
