@@ -91,7 +91,7 @@ class importTiersTask extends sfBaseTask {
               continue;
           }
           
-          if (!$no_declarant && $tiers_metteur_marche) {
+          if (!$no_declarant && $tiers_metteur_marche && !$tiers[1]) {
               foreach($index_keep_tiers_stock as $index) {
                   if (isset($tiers_stock[$index])) {
                     $tiers[$index] = $tiers_stock[$index];
