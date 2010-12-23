@@ -20,6 +20,7 @@ $(document).ready( function()
     });
     $('#nouvelle_declaration').ready( function() {
         choixPrecDecla();
+        accesGamma();
     });
     if ($('#exploitation_administratif').length > 0) {
         $('#exploitation_administratif').ready( function() {
@@ -279,6 +280,16 @@ var choixPrecDecla = function()
     });
 
     
+};
+
+/**
+ * Bloc Mon espace Alsace Gamm@
+ ******************************************/
+var accesGamma = function()
+{
+    $('#mon_espace_civa_gamma_valider').bind('click', function() {
+        openPopup($("#popup_loader"));
+    });
 };
 
 /**
