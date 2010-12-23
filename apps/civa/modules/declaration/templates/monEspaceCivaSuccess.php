@@ -1,12 +1,11 @@
 <?php include_partial('global/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
 
     <h2 class="titre_principal">Mon espace CIVA</h2>
-
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
-        <?php if($sf_user->hasFlash('mdp_modif')) { ?>
+        <?php if($sf_user->hasFlash('mdp_modif')) : ?>
             <p class="flash_message"><?php echo $sf_user->getFlash('mdp_modif'); ?></p>
-        <?php } ?>
+        <?php endif; ?>
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
@@ -16,10 +15,9 @@
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_non_editable'); ?></p>
                     <div class="ligne_form ligne_btn">
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
-                        <?php if ($sf_user->isAdmin()){
-                            echo '<a href="declaration/rendreEditable?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Si vous éditez cette DR, pensez à la revalider. \')" /><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>';
-                              }
-                        ?>
+                        <?php if ($sf_user->isAdmin()): ?>
+                            <a href="<?php echo url_for('@declaration_rendre_editable') ?>" onclick="return confirm('Si vous éditez cette DR, pensez à la revalider.')"><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>
@@ -57,7 +55,7 @@
                 <?php endif; ?>
 
                 <div class="ligne_form ligne_btn">
-                    <input type="image" name="boutons[valider]"  class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+                    <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
                 </div>
                 <p class="intro msg_mon_espace_civa"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr'); ?></p>
             </div>
@@ -68,11 +66,10 @@
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_validee'); ?></p>
                     <div class="ligne_form ligne_btn">
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
-                        <?php if ($sf_user->isAdmin()){
-                            echo '<a href="declaration/rendreEditable?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Si vous éditez cette DR, pensez à la revalider. \')" /><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>';
-                            echo '<a href="declaration/devalider?annee='.$sf_user->getCampagne().'" onclick="return confirm(\'Etes-vous sûr de vouloir dévalider cette DR ? \')" /><img src="../images/boutons/btn_devalider_dr.png" alt="" class="btn" id=""  /></a>';
-                        }
-                        ?>
+                        <?php if ($sf_user->isAdmin()): ?>
+                            <a href="<?php echo url_for('@declaration_rendre_editable') ?>" onclick="return confirm('Si vous éditez cette DR, pensez à la revalider.')"><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
+                            <a href="<?php echo url_for('@declaration_devalider') ?>" onclick="return confirm('Etes-vous sûr de vouloir dévalider cette DR ?')"><img src="../images/boutons/btn_devalider_dr.png" alt="" class="btn" id=""  /></a>
+                        <?php endif; ?>
                         
                     </div>
                 </div>
@@ -88,7 +85,6 @@
         <div id="precedentes_declarations">
             <h3 class="titre_section">Visualiser mes DRécolte <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_visualiser" title="Message aide"></a></h3>
             <div class="contenu_section">
-
                 <ul class="bloc_vert">
                     <li>
                         <a href="#">Années précédentes</a>
@@ -101,7 +97,6 @@
                         <?php endif; ?>
                     </li>
                 </ul>
-
             </div>
             <br />
             <!--<h3 class="titre_section">Documents d'aide</h3>
@@ -139,6 +134,4 @@
         <!-- fin #precedentes_declarations -->
     </div>
     <!-- fin #application_dr -->
-
-</form>
 <!-- fin #principal -->

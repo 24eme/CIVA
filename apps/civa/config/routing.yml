@@ -22,6 +22,14 @@ mon_espace_civa_non_declarant:
   url:   /mon_espace_civa_non_declarant
   param: { module: tiers, action: monEspaceCivaNonDeclarant }
 
+declaration_rendre_editable:
+  url:   /declaration/rendre_editable
+  param: { module: declaration, action: rendreEditable }
+
+declaration_devalider:
+  url:   /declaration/devalider
+  param: { module: declaration, action: devalider }
+
 gamma:
   url:   /gamma
   param: { module: tiers, action: gamma }

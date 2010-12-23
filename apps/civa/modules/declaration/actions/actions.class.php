@@ -65,29 +65,22 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeDownloadNotice() {
-        $filename = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf";
-
-        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
-        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="aide.pdf"');
-        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
-        $this->getResponse()->setHttpHeader('Content-Length', filesize($filename));
-        $this->getResponse()->setHttpHeader('Pragma', '');
-        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
-        $this->getResponse()->setHttpHeader('Expires', '0');
-        return $this->renderText(file_get_contents($filename));
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf", "aide.pdf");
     }
 
     public function executeDownloadNoticeGamma() {
-        $filename = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf";
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf", "aide_gamma.pdf");
+    }
 
+    protected function renderPdf($path, $filename) {
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
-        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="aide_gamma.pdf"');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="'.$filename.'"');
         $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
-        $this->getResponse()->setHttpHeader('Content-Length', filesize($filename));
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
         $this->getResponse()->setHttpHeader('Pragma', '');
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
-        return $this->renderText(file_get_contents($filename));
+        return $this->renderText(file_get_contents($path));
     }
     /**
      *
@@ -315,7 +308,6 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeSendPdf(sfWebRequest $request) {
-
         $tiers = $this->getUser()->getTiers();
         $dr = $this->getUser()->getDeclaration();
 
@@ -363,20 +355,14 @@ Le CIVA';
      * @param sfWebRequest $request
      */
     public function executeRendreEditable(sfWebRequest $request) {
-        $this->setCurrentEtape('mon_espace_civa');
-
-        $tiers = $this->getUser()->getTiers();
-        $annee = $this->getRequestParameter('annee', null);
-        $key = 'DR-'.$tiers->cvi.'-'.$annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-
-        $dr->remove('modifiee');
-        $dr->save();
+        $dr = $this->getUser()->getDeclaration();
+        if ($dr) {
+            $dr->remove('modifiee');
+            $dr->save();
+        }
 
         $this->getUser()->initDeclarationCredentials();
         $this->redirectToNextEtapes();
-
-
     }
 
     /**
@@ -384,20 +370,15 @@ Le CIVA';
      * @param sfWebRequest $request
      */
     public function executeDevalider(sfWebRequest $request) {
-
-        $tiers = $this->getUser()->getTiers();
-        $annee = $this->getRequestParameter('annee', null);
-        $key = 'DR-'.$tiers->cvi.'-'.$annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-
-        $dr->remove('modifiee');
-        $dr->remove('validee');
-        $dr->save();
+        $dr = $this->getUser()->getDeclaration();
+        if ($dr) {
+            $dr->remove('modifiee');
+            $dr->remove('validee');
+            $dr->save();
+        }
 
         $this->getUser()->initDeclarationCredentials();
         $this->redirect('@mon_espace_civa');
-
-
     }
 
 }
