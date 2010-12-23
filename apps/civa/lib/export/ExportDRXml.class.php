@@ -24,9 +24,9 @@ class ExportDRXml {
         }
     }
 
-    public function  __construct($dr, $tiers, $partial_function) {
+    public function  __construct($dr, $partial_function) {
         $this->partial_function = $partial_function;
-        $this->create($dr, $tiers);
+        $this->create($dr);
     }
     
     public function getContent() {
@@ -37,7 +37,7 @@ class ExportDRXml {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
-    protected function create($dr, $tiers) {
+    protected function create($dr) {
         $xml = array();
         foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
             if (!$dr->recolte->exist($appellation_config->getKey())) {

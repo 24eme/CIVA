@@ -355,6 +355,7 @@ Le CIVA';
      * @param sfWebRequest $request
      */
     public function executeRendreEditable(sfWebRequest $request) {
+        $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getUser()->getDeclaration();
         if ($dr) {
             $dr->remove('modifiee');
