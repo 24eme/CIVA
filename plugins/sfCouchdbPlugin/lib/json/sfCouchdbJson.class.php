@@ -52,12 +52,22 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     public function load($data) {
+        $this->_load($data, true);
+    }
+
+    public function _load($data, $first = false) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
                 if (!$this->hasField($key)) {
                     $this->_add($key);
                 }
+                if($first) {
+                    $this->getField($key)->setIsNew(false);
+                }
                 $this->_set($key, $item);
+                if ($first) {
+                    $this->getField($key)->setIsModified(false);
+                }
             }
         }
     }
@@ -86,11 +96,11 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     private function setFromDataOrObject($key, $data_or_object) {
         $field = $this->getField($key);
         if ($data_or_object instanceof sfCouchdbJson) {
-            $field->getValue()->load($data_or_object->getData());
+            $field->getValue()->_load($data_or_object->getData());
         } elseif ($data_or_object instanceof stdClass) {
-            $field->getValue()->load($data_or_object);
+            $field->getValue()->_load($data_or_object);
         } elseif (is_array($data_or_object)) {
-            $field->getValue()->load($data_or_object);
+            $field->getValue()->_load($data_or_object);
         } else {
             $field->setValue($data_or_object);
         }
@@ -326,7 +336,6 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     public function getData() {
-
         $data = array();
 
         foreach ($this->_fields as $field) {
@@ -342,6 +351,33 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         } else {
             return (Object) $data;
         }
+    }
+
+    public function getDataModified() {
+        $data = array();
+
+        foreach ($this->_fields as $field) {
+            if ($this->_is_array) {
+                $data[] = $field->getDataModified();
+            } else {
+                $data[$field->getName()] = $field->getDataModified();
+            }
+        }
+
+        if ($this->_is_array) {
+            return $data;
+        } else {
+            return (Object) $data;
+        }
+    }
+
+    public function isDataModified() {
+        foreach ($this->_fields as $field) {
+            if ($field->isNewOrModified()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function fromArray($values) {

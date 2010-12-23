@@ -38,10 +38,14 @@ EOF;
 
     sfContext::createInstance($this->configuration);
 
-    $xml_content = "<?xml version='1.0' encoding='utf-8' ?>";
+    $filename = $this->getFileDir().'DR-'.$options['campagne'].'.xml';
+    if (file_exists($filename)) {
+        unlink($filename);
+    }
+    
+    file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-
     foreach ($dr_ids as $id) {
         $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
         try {
@@ -58,26 +62,19 @@ EOF;
         }
 
         try {
-            $tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($dr->cvi);
-            if (!$tiers) {
-                $this->logSection("unknow tiers", $dr->_id, null, "ERROR");
-                continue;
-            }
             if ($dr->isValideeTiers()) {
-                $xml = new ExportDRXml($dr, $tiers, array($this, 'getPartial'));
-                $xml_content .= $xml->getContent();
+                $xml = new ExportDRXml($dr, array($this, 'getPartial'));
+                file_put_contents($filename, $xml->getContent(), FILE_APPEND);
                 $this->logSection($dr->_id, 'xml generated');
                 unset($xml);
             }
         } catch (Exception $exc) {
             $this->logSection("failed xml", $dr->_id, null, "ERROR");
-            continue;
         }
         unset($dr);
-        unset($tiers); 
     }
-    $filename = $options['campagne'].'.xml';
-    file_put_contents($this->getFileDir().$filename, $xml_content);
+    
+    file_put_contents($filename, '\n</listeDecRec>', FILE_APPEND);
     $this->logSection("done", $this->getFileDir().$filename, $xml_content);
     // add your code here
   }

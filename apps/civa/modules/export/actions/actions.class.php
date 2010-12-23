@@ -25,7 +25,7 @@ class exportActions extends sfActions {
             $dr->save();
         }
 
-        $xml = new ExportDRXml($dr, $tiers, array($this, 'getPartial'));
+        $xml = new ExportDRXml($dr, array($this, 'getPartial'));
         $this->response->setContentType('text/xml');
         return $this->renderText($xml->getContent());
     }

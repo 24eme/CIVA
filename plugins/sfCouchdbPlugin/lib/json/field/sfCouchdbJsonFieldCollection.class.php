@@ -8,6 +8,13 @@ class sfCouchdbJsonFieldCollection extends sfCouchdbJsonField {
     public function getData() {
         return $this->value->getData();
     }
+    public function isNewOrModified() {
+        return $this->value->isDataModified();
+    }
+
+    public function getDataModified() {
+        return $this->value->getDataModified();
+    }
     public function isValid($value) {
         if (!($value instanceof sfCouchdbJson)) {
             throw new sfCouchdbException(sprintf('Not valid : %s', $this->key));
