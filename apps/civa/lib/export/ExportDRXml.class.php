@@ -92,19 +92,7 @@ class ExportDRXml {
                         $col['L3'] = 'B';
                         $col['mentionVal'] = $detail->denomination;
                         $col['L4'] = $detail->superficie;
-                        if (isset($detail->motif_non_recolte) && $detail->motif_non_recolte) {
-                            $col['motifSurfZero'] = $detail->motif_non_recolte;
-                        } elseif(!$detail->volume || $detail->volume == 0) {
-                            if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
-                                $dr->recolte->exist('appellation_ALSACEBLANC') &&
-                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->exist('cepage_ED') &&
-                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->get('cepage_ED')->getTotalVolume() > 0) {
-                                $col['motifSurfZero'] = 'AE';
-                            } else {
-                                $col['motifSurfZero'] = 'PC';
-                            }
-
-                        }
+                        
                         $col['exploitant'] = array();
                         $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
 
@@ -133,11 +121,32 @@ class ExportDRXml {
 
                         uksort($col['exploitant'], 'exportDRXml::sortXML');
 
+                        if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                            $col['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                        } elseif(!$detail->volume || $detail->volume == 0) {
+                            if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
+                                $dr->recolte->exist('appellation_ALSACEBLANC') &&
+                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->exist('cepage_ED') &&
+                                $dr->recolte->get('appellation_ALSACEBLANC')->lieu->get('cepage_ED')->getTotalVolume() > 0) {
+                                $col['motifSurfZero'] = 'AE';
+                            } else {
+                                $col['motifSurfZero'] = 'PC';
+                            }
+                        }
+
                         if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                             unset($col['L3'], $col['L4'], $col['mentionVal']);
                             $colass = $col;
                         } elseif($lieu->getAppellation()->getAppellation() != 'KLEVENER') {
                             $xml[] = $col;
+                        } elseif($lieu->getAppellation()->getAppellation() == 'KLEVENER') {
+                            if (!($lieu->getTotalVolume() > 0)) {
+                                if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                                    $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                } elseif(!isset($total['motifSurfZero'])) {
+                                    $total['motifSurfZero'] = 'PC';
+                                }
+                            }
                         }
                     }
                 }
