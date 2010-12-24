@@ -75,7 +75,7 @@ EOF;
     }
     
     file_put_contents($filename, '\n</listeDecRec>', FILE_APPEND);
-    $this->logSection("done", $this->getFileDir().$filename, $xml_content);
+    $this->logSection("done", $filename);
     // add your code here
   }
 
