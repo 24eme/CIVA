@@ -30,7 +30,7 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    ini_set('memory_limit', '2048M');
+    ini_set('memory_limit', '2500M');
     
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
