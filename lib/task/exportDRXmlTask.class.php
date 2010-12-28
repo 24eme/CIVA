@@ -47,34 +47,36 @@ EOF;
 
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     foreach ($dr_ids as $id) {
-        $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-        try {
-            if (!$dr->updated)
-                throw new Exception();
-        } catch (Exception $e) {
+        if ($id !== 'DR-7523700100-'.$options['campagne']) {
+            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             try {
-                $dr->update();
-                $dr->save();
-            } catch (Exception $exc) {
-                $this->logSection("failed update", $dr->_id, null, "ERROR");
-                continue;
+                if (!$dr->updated)
+                    throw new Exception();
+            } catch (Exception $e) {
+                try {
+                    $dr->update();
+                    $dr->save();
+                } catch (Exception $exc) {
+                    $this->logSection("failed update", $dr->_id, null, "ERROR");
+                    continue;
+                }
             }
-        }
 
-        try {
-            if ($dr->isValideeTiers()) {
-                $xml = new ExportDRXml($dr, array($this, 'getPartial'));
-                file_put_contents($filename, $xml->getContent(), FILE_APPEND);
-                $this->logSection($dr->_id, 'xml generated');
-                unset($xml);
+            try {
+                if ($dr->isValideeTiers()) {
+                    $xml = new ExportDRXml($dr, array($this, 'getPartial'));
+                    file_put_contents($filename, $xml->getContent(), FILE_APPEND);
+                    $this->logSection($dr->_id, 'xml generated');
+                    unset($xml);
+                }
+            } catch (Exception $exc) {
+                $this->logSection("failed xml", $dr->_id, null, "ERROR");
             }
-        } catch (Exception $exc) {
-            $this->logSection("failed xml", $dr->_id, null, "ERROR");
+            unset($dr);
         }
-        unset($dr);
     }
     
-    file_put_contents($filename, '\n</listeDecRec>', FILE_APPEND);
+    file_put_contents($filename, '</listeDecRec>', FILE_APPEND);
     $this->logSection("done", $filename);
     // add your code here
   }
