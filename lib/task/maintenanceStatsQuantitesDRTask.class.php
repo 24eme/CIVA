@@ -43,6 +43,9 @@ EOF;
     $total_volume = 0;
     $total_superficie = 0;
     foreach ($dr_ids as $id) {
+            if($id === 'DR-7523700100-'.$options['campagne']) {
+                continue;
+            }
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
             try {
                 if (!$dr->updated)
