@@ -49,6 +49,9 @@ EOF;
     foreach ($dr_ids as $id) {
         if ($id !== 'DR-7523700100-'.$options['campagne']) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            if ($campagne == "2010" && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+                continue;
+            }
             try {
                 if (!$dr->updated)
                     throw new Exception();
