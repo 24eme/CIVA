@@ -30,7 +30,7 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    ini_set("memory_limit", "512M");
+    ini_set("memory_limit", "1024M");
 
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
@@ -69,6 +69,7 @@ EOF;
                 $total_superficie += $dr->getTotalSuperficie();
                 $total_volume += $dr->getTotalVolume();
                 $nb_dr++;
+                $this->logSection("calcul", $dr->_id);
             }
     }
 
