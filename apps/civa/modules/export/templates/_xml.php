@@ -3,8 +3,12 @@
 if (!function_exists('printXml')) {
     function printXml($xml) {
       foreach ($xml as $k => $v) {
-        if (!is_numeric($k))
-        echo "<$k>";
+        if (!is_numeric($k) && in_array(substr($k, 0, 3), array("L6_", "L7_", "L8_"))) {
+                $k = substr($k, 0, 2);
+        }
+        if (!is_numeric($k)) {
+            echo "<$k>";
+        }
         if (is_object($v) && get_class($v))
           printXml($v);
         else if (is_array($v)) {
@@ -20,8 +24,9 @@ if (!function_exists('printXml')) {
           }
         } else
           echo $v;
-        if (!is_numeric($k))
-        echo "</$k>";
+        if (!is_numeric($k)) {
+            echo "</$k>";
+        }
     }
   }
 }

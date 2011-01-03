@@ -17,10 +17,7 @@ class ExportDRXml {
         $acheteurs = array();
         foreach($obj->getVolumeAcheteurs($type) as $cvi => $volume) {
             $item = array('numCvi' => $cvi, 'volume' => $volume);
-            $acheteurs[] = $item;
-        }
-        if(count($acheteurs) > 0) {
-            $xml[self::$type2douane[$type]] = $acheteurs;
+            $xml[self::$type2douane[$type].'_'.$cvi] = $item;
         }
     }
 
