@@ -44,6 +44,18 @@ EOF;
     $total_superficie = 0;
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            try {
+                if (!$dr->updated)
+                    throw new Exception();
+            } catch (Exception $e) {
+                try {
+                    $dr->update();
+                    $dr->save();
+                } catch (Exception $exc) {
+                    $this->logSection("failed update", $dr->_id, null, "ERROR");
+                    continue;
+                }
+            }
             if ($dr->isValideeTiers()) {
                 foreach($dr->recolte->getAppellations() as $key => $appellation) {
                     if (!array_key_exists($key, $appellations)) {
