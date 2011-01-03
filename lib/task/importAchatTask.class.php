@@ -71,8 +71,15 @@ EOF;
 	}
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
+            $this->log($data->_id);
+            $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
+            if ($doc) {
+                $doc->delete();
+                unset($doc);
+            }
 	    $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
+            unset($doc);
 	  }
 	  return;
 	}
