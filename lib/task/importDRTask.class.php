@@ -138,7 +138,7 @@ EOF;
 		  $val = $this->recode_number($csv[12 + $i]);
 		  if ($val > 0) {
 		    $acheteur = new stdClass();
-		    $acheteur->cvi = $achat[$campagne][$cvi][$appellation][$i];
+		    $acheteur->cvi = $achat[$campagne][$cvi][$this->getNumeroAppellationVente($detail->appellation)][$i];
 		    $acheteur->quantite_vendue = $val;
 		    $detail->negoces[] = $acheteur;
 		  }
@@ -148,7 +148,7 @@ EOF;
                     $val = $this->recode_number($csv[13 + $i]);
                     if ($val > 0) {
 		      $cooperative = new stdClass();
-		      $cooperative->cvi = $achat[$campagne][$cvi][$appellation][$i];
+		      $cooperative->cvi = $achat[$campagne][$cvi][$this->getNumeroAppellationVente($detail->appellation)][$i];
 		      $cooperative->quantite_vendue = $val;
 		      $detail->cooperatives[] = $cooperative;
                     }
@@ -335,6 +335,26 @@ EOF;
       if ($cepage == 'VT')
 	return 'VINTABLE';
       return 'ALSACEBLANC';
+    }
+
+    private function getNumeroAppellationVente($appellation_nom) {
+        if ($appellation_nom == 'ALSACEBLANC') {
+            return 1;
+        } elseif($appellation_nom == 'CREMANT') {
+            return 2;
+        } elseif($appellation_nom == 'GRDCRU') {
+            return 3;
+        } elseif($appellation_nom == 'PINOTNOIR') {
+            return 4;
+        } elseif($appellation_nom == 'PINOTNOIRROUGE') {
+            return 6;
+        } elseif($appellation_nom == 'KLEVENER') {
+            return 5;
+        } elseif($appellation_nom == 'VINTABLE') {
+            return 9;
+        } else {
+            exit;
+        }
     }
 
     private function convertcepage($cepage, $cepage_bis) {
