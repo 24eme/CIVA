@@ -39,7 +39,7 @@ EOF;
     $values = array();
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            if ($dr->isValideeTiers()) {
+            if ($dr->isValideeTiers() && $dr->exist('import_db2') && $dr->import_db2 == 1) {
                 $values[][] = $dr->cvi;
             }
     }

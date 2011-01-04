@@ -45,7 +45,7 @@ EOF;
     $dr_update_error = array();
     $dr_invalid = array();
     foreach ($dr_ids as $id) {
-            if($id === 'DR-7523700100-'.$options['campagne']) {
+            if($id == 'DR-7523700100-'.$options['campagne']) {
                 continue;
             }
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
