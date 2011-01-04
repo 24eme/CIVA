@@ -36,10 +36,6 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if ($options['campagne'] > 2009) {
-        throw new sfCommandException('Campagne must be inforior to 2010');
-    }
-
     if (!$this->askConfirmation('Voulez supprimer les DR '.$options['campagne'].' ?', 'QUESTION', false)) {
         exit;
     }
@@ -49,11 +45,12 @@ EOF;
     $nb_dr = 0;
 
     foreach ($dr_ids as $id) {
-            $dr_json = sfCouchdbManager::getClient()->getDoc($id);
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            $dr->delete();
-            $this->logSection("delete", $dr_json->_id);
+        $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+        if (isset($dr->import_db2) && $dr->import_db2 == 1) {
+            sfCouchdbManager::getClient()->deleteDoc($dr);
+            $this->logSection("delete", $id);
             $nb_dr++;
+        }
     }
 
     $this->log($nb_dr);
