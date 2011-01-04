@@ -42,6 +42,8 @@ EOF;
     $nb_dr = 0;
     $total_volume = 0;
     $total_superficie = 0;
+    $dr_update_error = array();
+    $dr_invalid = array();
     foreach ($dr_ids as $id) {
             if($id === 'DR-7523700100-'.$options['campagne']) {
                 continue;
@@ -56,6 +58,7 @@ EOF;
                     $dr->save();
                 } catch (Exception $exc) {
                     $this->logSection("failed update", $dr->_id, null, "ERROR");
+                    $dr_update_error[] = $id;
                     continue;
                 }
             }
@@ -73,6 +76,8 @@ EOF;
                 $total_volume += $dr->getTotalVolume();
                 $nb_dr++;
                 $this->logSection("calcul", $dr->_id);
+            } else {
+                $dr_invalid[] = $id;
             }
     }
 
@@ -88,6 +93,9 @@ EOF;
     $this->logSection('volume', $total_volume.' hl');
 
     $this->logSection('finish', $nb_dr);
+    $this->logSection('update failed', implode(", ", $dr_update_error));
+    $this->logSection('pas valider', implode(", ", $dr_invalid));
+
     // add your code here
   }
 }
