@@ -9,15 +9,12 @@
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-    <?php   if($dr_non_editable): ?>
+    <?php   if($dr_non_editable && !$sf_user->isAdmin()): ?>
             <h3 class="titre_section">Déclaration de l'année <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
                 <div class="contenu_section">
                     <p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr_non_editable'); ?></p>
                     <div class="ligne_form ligne_btn">
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
-                        <?php if ($sf_user->isAdmin()): ?>
-                            <a href="<?php echo url_for('@declaration_rendre_editable') ?>" onclick="return confirm('Si vous éditez cette DR, pensez à la revalider.')"><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
-                        <?php endif; ?>
                     </div>
                 </div>
             <?php elseif($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON)): ?>
@@ -68,7 +65,9 @@
                         <?php echo link_to('<img src="../images/boutons/btn_visualiser.png" alt="" class="btn" />', '@visualisation?annee='.$sf_user->getCampagne()); ?>
                         <?php if ($sf_user->isAdmin()): ?>
                             <a href="<?php echo url_for('@declaration_rendre_editable') ?>" onclick="return confirm('Si vous éditez cette DR, pensez à la revalider.')"><img src="../images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
-                            <a href="<?php echo url_for('@declaration_devalider') ?>" onclick="return confirm('Etes-vous sûr de vouloir dévalider cette DR ?')"><img src="../images/boutons/btn_devalider_dr.png" alt="" class="btn" id=""  /></a>
+                            <?php if (!$dr_non_editable): ?>
+                                <a href="<?php echo url_for('@declaration_devalider') ?>" onclick="return confirm('Etes-vous sûr de vouloir dévalider cette DR ?')"><img src="../images/boutons/btn_devalider_dr.png" alt="" class="btn" id=""  /></a>
+                            <?php endif; ?>
                         <?php endif; ?>
                         
                     </div>

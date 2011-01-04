@@ -86,6 +86,7 @@ EOF;
                 $doc->cvi = $cvi;
                 $doc->campagne = $campagne;
                 $doc->validee = $campagne.'-11-25';
+                $doc->modifiee = $campagne.'-11-25';
                 $doc->import_db2 = 1;
                 $list_documents[$_id] = $doc;
             } else {

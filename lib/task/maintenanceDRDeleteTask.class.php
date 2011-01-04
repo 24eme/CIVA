@@ -46,11 +46,12 @@ EOF;
 
     foreach ($dr_ids as $id) {
         $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-        if (isset($dr->import_db2) && $dr->import_db2 == 1) {
+        if ($options['campagne'] == '2010' && (!isset($dr->import_db2) || $dr->import_db2 != 1)) {
+            continue;
+        }
             sfCouchdbManager::getClient()->deleteDoc($dr);
             $this->logSection("delete", $id);
             $nb_dr++;
-        }
     }
 
     $this->log($nb_dr);
