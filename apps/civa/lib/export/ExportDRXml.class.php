@@ -8,6 +8,10 @@ class ExportDRXml {
     public static function sortXML($a, $b) {
         $a = preg_replace('/L/', '', $a);
         $b = preg_replace('/L/', '', $b);
+
+        $a = preg_replace('/_[0-9]+/', '', $a);
+        $b = preg_replace('/_[0-9]+/', '', $b);
+        
         return $a > $b;
     }
 
