@@ -38,8 +38,8 @@ EOF;
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $values = array();
     foreach ($dr_ids as $id) {
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            if ($dr->isValideeTiers() && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            if ($dr->exist('validee') && $dr->validee  && $dr->exist('import_db2') && $dr->import_db2 == 1) {
                 $values[][] = $dr->cvi;
             }
     }
