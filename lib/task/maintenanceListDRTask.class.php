@@ -39,7 +39,7 @@ EOF;
     $values = array();
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-            if ($dr->exist('validee') && $dr->validee  && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+            if (isset($dr->validee) && $dr->validee && isset($dr->import_db2) && $dr->import_db2 == 1) {
                 $values[][] = $dr->cvi;
             }
     }
