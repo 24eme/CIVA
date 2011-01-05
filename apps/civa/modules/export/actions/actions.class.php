@@ -259,7 +259,12 @@ class exportActions extends sfActions {
                 $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
                 $value = array();
                 $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed, '');
-                $value[] = $this->formatModifiedValue(array('email' => true), $tiers_current, $values_changed, '');
+                $separator = '';
+                if (!$tiers_old['email']) {
+                    $separator = '*';
+                }
+                $value[] = $this->formatModifiedValue(array('email' => true), $tiers_current, $values_changed, $separator);
+
                 $keys_used = array('cvi', 'email');
                 $nb_change = 0;
                 foreach($keys_used as $key_use) {
