@@ -160,6 +160,10 @@ csv_tiers_modifications:
   url: /tiers/modifications/csv
   param: {module: export, action: csvTiersModifications}
 
+csv_tiers_modifications_email:
+  url: /tiers/modifications-email/csv
+  param: {module: export, action: csvTiersModificationsEmail}
+
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}

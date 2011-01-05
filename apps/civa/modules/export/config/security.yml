@@ -10,5 +10,11 @@ csvTiersDREncours:
 csvTiersNonValideeCiva:
   credentials: [admin]
 
+csvTiersModifications:
+  credentials: [admin]
+
+csvTiersModificationsEmail:
+  credentials: [admin]
+
 pdf:
   credentials: [declarant]

@@ -233,6 +233,50 @@ class exportActions extends sfActions {
         return $this->renderText(Tools::getCsvFromArray($values));
     }
 
+    public function executeCsvTiersModificationsEmail(sfWebRequest $request) {
+        set_time_limit(0);
+        $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+
+        $values = array();
+        $values[] = array("Exploitation - N° CVI",
+                          "Email");
+        foreach($tiers_ids as $id) {
+            $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            if ($id != "TIERS-7523700100") {
+                $revs = $data_revs->_revs_info;
+                if (count($revs) > 2) {
+                    $first_revision = $revs[count($revs)-3]->rev;
+                } elseif(count($revs) > 1) {
+                    $first_revision = $revs[count($revs)-2]->rev;
+                } else {
+                    $first_revision = $revs[count($revs)-1]->rev;
+                }
+                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                if ($tiers_current->recoltant != 1) {
+                    continue;
+                }
+                $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
+                $value = array();
+                $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed, '');
+                $value[] = $this->formatModifiedValue(array('email' => true), $tiers_current, $values_changed, '');
+                $keys_used = array('cvi', 'email');
+                $nb_change = 0;
+                foreach($keys_used as $key_use) {
+                    if (array_key_exists($key_use, $values_changed)) {
+                        $nb_change++;
+                    }
+                }
+
+                if ($nb_change > 0) {
+                    $values[] = $value;
+                }
+            }
+        }
+        $this->setResponseCsv('tiers-modifications-email.csv');
+        return $this->renderText(Tools::getCsvFromArray($values));
+    }
+
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');
         $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);
