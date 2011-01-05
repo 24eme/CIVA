@@ -10,7 +10,7 @@ class importTiersTask extends sfBaseTask {
                 // add your own options here
 	    new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
-            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-maj-20110103'),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-2010-2011'),
 	    new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
 
 				));
@@ -84,7 +84,7 @@ class importTiersTask extends sfBaseTask {
 
           $no_declarant = false;
 
-          if (!$tiers[57] && !$tiers_stock[57] && $tiers[1]) {
+          if ((!$tiers[57] && !$tiers_stock[57] && $tiers[1]) || (!$tiers[57] && $tiers[1] && $tiers[70] && $tiers_stock[70] != $tiers[70])) {
                 $tiers[57] = 'C'.$tiers[1];
                 $no_declarant = true;
           } elseif(!$tiers[57]) {
@@ -99,7 +99,7 @@ class importTiersTask extends sfBaseTask {
               }
           }
 
-          if ($tiers_metteur_marche && isset($tiers_stock[70])) {
+          if ($tiers_metteur_marche && isset($tiers_stock[70]) && !$tiers[70]) {
               $tiers[70] = $tiers_stock[70];
           }
 
