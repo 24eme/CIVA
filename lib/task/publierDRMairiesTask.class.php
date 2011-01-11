@@ -117,7 +117,7 @@ EOF;
     }
 
     protected function generateKey($code_postal) {
-        return md5($code_postal.'MAIRIE-PASSWD');
+        return md5($code_postal.sfConfig::get('app_cle_secrete_publication_mairies'));
     }
     
     protected function getHtaccessGlobal() {

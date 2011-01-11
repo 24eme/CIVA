@@ -11,7 +11,7 @@ echo "objectClass: top" >> /tmp/user.ldif
 echo "objectClass: person" >> /tmp/user.ldif
 echo "objectClass: posixAccount" >> /tmp/user.ldif
 echo "objectClass: inetOrgPerson" >> /tmp/user.ldif
-echo "userPassword: {SSHA}__________SHA_PASSWORD__________" >> /tmp/user.ldif
+echo "userPassword: {SSHA}$LDAP_ADMIN_SSHA_PASSWORD" >> /tmp/user.ldif
 echo "loginShell: /bin/bash" >> /tmp/user.ldif
 echo "uidNumber: 1000" >> /tmp/user.ldif
 echo "gidNumber: 1001" >> /tmp/user.ldif
