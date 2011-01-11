@@ -15,13 +15,13 @@ $t->ok($conf, 'document configuration exists');
 $t->is($conf->get('recolte/appellation_GRDCRU/libelle'), 'AOC Alsace Grand Cru', 'Libelle on Grand Cru');
 $t->is($conf->get('recolte/appellation_GRDCRU/rendement'), 61, "rendement Grand Cru");
 $t->is($conf->get('recolte/appellation_GRDCRU/lieu30/cepage_MU/rendement'), $conf->get('recolte/appellation_GRDCRU/rendement'), "rendement inheritance");
-$t->isnt($conf->get('recolte/appellation_GRDCRU/lieu25/cepage_MU')->getConfig()->getRendement(), $conf->get('recolte/appellation_GRDCRU')->getConfig()->getRendement(), "specific rendement");
+$t->isnt($conf->get('recolte/appellation_GRDCRU/lieu25/cepage_MU')->getRendement(), $conf->get('recolte/appellation_GRDCRU')->getRendement(), "specific rendement");
 
 /*** TEST FILTRE ***/
-$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->filter('cepage')->getFirst()->getLibelle(), 'Pinot Gris', "direct key recuperation of first 'cepage' from an 'appellation'");
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->filter('cepage')->getFirst()->getLibelle(), 'Chasselas', "direct key recuperation of first 'cepage' from an 'appellation'");
 $conf->get('recolte/appellation_ALSACEBLANC/lieu')->filter('cepage', true);
-$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->getFirstKey(), 'cepage_PG', "key recuperation of first 'cepage' from an 'appellation'");
-$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->getFirst()->libelle, 'Pinot Gris', "libelle recuperation of first 'cepage' from an 'appellation'");
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->getFirstKey(), 'cepage_CH', "key recuperation of first 'cepage' from an 'appellation'");
+$t->is($conf->get('recolte/appellation_ALSACEBLANC/lieu')->getFirst()->libelle, 'Chasselas', "libelle recuperation of first 'cepage' from an 'appellation'");
 $iterator_ok = true;
 $iterator_nb = 0;
 foreach($conf->get('recolte/appellation_ALSACEBLANC/lieu') as $key => $item) {

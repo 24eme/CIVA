@@ -47,12 +47,11 @@ $t->ok($add, 'ajout d\'un recoltant');
 
 
 //modification
-$newData = new Tiers();
-$newData->nom = 'TEST Modify';
-$newData->email = 'modify@example.com';
-$newData->mot_de_passe = $tiers->make_ssha_password('modify');
+$tiers->nom = 'TEST Modify';
+$tiers->email = 'modify@example.com';
+$tiers->mot_de_passe = $tiers->make_ssha_password('modify');
 
-$modify = $ldap->ldapModify($tiers, $newData);
+$modify = $ldap->ldapModify($tiers);
 $t->ok($modify, 'modification d\'un recoltant');
 
 //suppression du lDAP

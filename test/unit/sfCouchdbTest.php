@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 {}
-$t = new lime_test(46);
+$t = new lime_test(47);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -54,7 +54,9 @@ $t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revi
 
 /*** NEW TEST ****/
 
-$detail = new DRRecolteAppellationCepageDetail();
+
+$t->ok($detail = $doc->recolte->add('appellation_ALSACEBLANC')->add('lieu')->add('cepage_PG')->detail->add(), 'add detail');
+
 $detail->setAppellation("ALSACEBLANC");
 $detail->setCepage("PG");
 $detail->setSuperficie(100);
@@ -63,7 +65,6 @@ $detail->setCaveParticuliere(5);
 $acheteur = $detail->getNegoces()->add();
 $acheteur->setCvi("CVI_FICTIF");
 $acheteur->setQuantiteVendue(5);
-$t->ok($doc->addRecolte($detail), 'add detail');
 
 $obj = $doc->getRecolte()->get('appellation_ALSACEBLANC')->get('lieu')->get('cepage_PG');
 $t->ok($obj, 'can retrieve detail object');
@@ -82,7 +83,7 @@ $doc->save();
 $t->isnt($rev, $doc->_rev, 'revision number has changed after saving');
 /*** NEW TEST ****/
 
-$doc->getRecolte()->addAppellation(2);
+$doc->getRecolte()->add("appellation_2");
 $iterator_ok = true;
 $iterator_nb = 0;
 foreach($doc->getRecolte() as $key => $item) {
@@ -139,7 +140,8 @@ $t->is($doc->get('/recolte/appellation_2')->getHash(), '/recolte/appellation_2',
 /*** NEW TEST ****/
 $t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/superficie'), 150, 'can access to original superficie value');
 
-$detail2 = new DRRecolteAppellationCepageDetail();
+$t->ok($detail2 = $doc->recolte->add('appellation_ALSACEBLANC')->add('lieu')->add('cepage_PG')->detail->add($detail2), 'add detail');
+
 $detail2->setAppellation("ALSACEBLANC");
 $detail2->setCepage("PG");
 $detail2->setSuperficie(100);
@@ -148,8 +150,6 @@ $detail2->setCaveParticuliere(10);
 $acheteur = $detail2->getNegoces()->add();
 $acheteur->setCvi("CVI_FICTIF");
 $acheteur->setQuantiteVendue(10);
-
-$doc->addRecolte($detail2);
 
 $t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1')->getHash(), '/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1', 'can access field hash from a array collection');
 $t->is($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/1/superficie'), 100, 'can access superficie value');
@@ -166,7 +166,7 @@ $t->is($nb, 2, 'iterator on detail');
 foreach($doc->get('/recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail') as $i => $class) {
   break;
 }
-$t->is(get_class($class), 'DRRecolteAppellationCepageDetail', 'Test the class name of a detail');
+$t->is(get_class($class), 'DRRecolteCepageDetail', 'Test the class name of a detail');
 $data = $class->getData();
 $t->ok($data->appellation, 'Test detail iterator data (appellation)');
 $t->ok($data->superficie, 'Test detail iterator data (superficie)');
