@@ -83,17 +83,16 @@ EOF;
                             $cepages_stats[$appellation->getKey()][$cepage->getKey()]['volume'] += $cepage->getTotalVolume();
                         }
                     }
-                }
 
-                if (!array_key_exists($appellation->getKey(), $appellation_stats)) {
+                    if (!array_key_exists($appellation->getKey(), $appellation_stats)) {
                         $appellation_stats[$appellation->getKey()] = array('superficie' => 0, 'volume' => 0, 'volume_revendique' => 0, 'dplc' => 0, 'nom' => $appellation->getLibelle());
+                    }
+
+                    $appellation_stats[$appellation->getKey()]['superficie'] += $appellation->getTotalSuperficie();
+                    $appellation_stats[$appellation->getKey()]['volume'] += $appellation->getTotalVolume();
+                    $appellation_stats[$appellation->getKey()]['volume_revendique'] += $appellation->getVolumeRevendique();
+                    $appellation_stats[$appellation->getKey()]['dplc'] += $appellation->getDplc();
                 }
-
-                $appellation_stats[$appellation->getKey()]['superficie'] += $appellation->getTotalSuperficie();
-                $appellation_stats[$appellation->getKey()]['volume'] += $appellation->getTotalVolume();
-                $appellation_stats[$appellation->getKey()]['volume_revendique'] += $appellation->getVolumeRevendique();
-                $appellation_stats[$appellation->getKey()]['dplc'] += $appellation->getDplc();
-
                 $dr_stats['superficie'] += $dr->getTotalSuperficie();
                 $dr_stats['volume'] += $dr->getTotalVolume();
                 $dr_stats['volume_revendique'] += $dr->getVolumeRevendique();
