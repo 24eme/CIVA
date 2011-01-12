@@ -18,6 +18,20 @@ class DR extends BaseDR {
       }
       return $v;
     }
+    public function getVolumeRevendique() {
+      $v = 0;
+      foreach($this->recolte->filter('^appellation_') as $appellation) {
+	$v += $appellation->getVolumeRevendique();
+      }
+      return $v;
+    }
+    public function getDplc() {
+      $v = 0;
+      foreach($this->recolte->filter('^appellation_') as $appellation) {
+	$v += $appellation->getDplc();
+      }
+      return $v;
+    }
     public function getTotalCaveParticuliere() {
       $v = 0;
       foreach($this->recolte->filter('^appellation_') as $appellation) {
