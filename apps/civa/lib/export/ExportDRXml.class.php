@@ -68,7 +68,11 @@ class ExportDRXml {
                 $total['exploitant']['L12'] = 0; //HS
                 $total['exploitant']['L13'] = 0; //HS
                 $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                $total['exploitant']['L15'] = $lieu->volume_revendique; //Volume revendique
+                $l15 = $lieu->volume_revendique - $lieu->getTotalVolumeAcheteurs('negoces') - $lieu->getTotalVolumeAcheteurs('mouts');
+                if ($l15 < 0) {
+                    $l15 = 0;
+                }
+                $total['exploitant']['L15'] = $l15; //Volume revendique
                 $total['exploitant']['L16'] = $lieu->dplc; //DPLC
                 $total['exploitant']['L17'] = 0; //HS
                 $total['exploitant']['L18'] = 0; //HS

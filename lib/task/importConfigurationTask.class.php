@@ -204,8 +204,10 @@ EOF;
 
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir Rosé";
 	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
+        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->qualite = 'M ';
+        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = '1';
         $json->recolte->appellation_CREMANT->lieu->cepage_PN->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
+        //$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
 
 
 
