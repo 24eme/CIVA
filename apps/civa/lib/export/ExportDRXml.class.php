@@ -120,7 +120,11 @@ class ExportDRXml {
                         if (($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') || $appellation->getKey() == 'appellation_VINTABLE') {
                             $col['exploitant']['L14'] = $detail->volume;
                         } else {
-                            $col['exploitant']['L15'] = $detail->volume;
+                            $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
+                            if ($l15 < 0) {
+                                $l15 = 0;
+                            }
+                            $col['exploitant']['L15'] = $l15;
                         }
 
 

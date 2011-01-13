@@ -148,6 +148,7 @@ EOF;
         $grdcru->appellation = "GRDCRU";
 	$grdcru->libelle = "AOC Alsace Grand Cru";
 	$grdcru->rendement = 61;
+        $grdcru->douane->qualite = '';
 
 	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
@@ -166,6 +167,7 @@ EOF;
 	      continue;
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
+            $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->qualite = 'S ';
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
 	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
