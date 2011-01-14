@@ -236,7 +236,7 @@ EOF;
 	$json->recolte->appellation_VINTABLE->libelle = "Vins sans IG";
 	$json->recolte->appellation_VINTABLE->douane->type_aoc = 4;
 	$json->recolte->appellation_VINTABLE->douane->appellation_lieu = 999;
-	$json->recolte->appellation_VINTABLE->douane->qualite_aoc = 'O';
+	$json->recolte->appellation_VINTABLE->douane->qualite_aoc = '';
         $json->recolte->appellation_VINTABLE->douane->qualite = '';
 	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->libelle = "Blanc";
 	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->douane->couleur = "B";

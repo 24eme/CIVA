@@ -77,6 +77,11 @@ class ExportDRXml {
                 $total['exploitant']['L17'] = 0; //HS
                 $total['exploitant']['L18'] = 0; //HS
                 $total['exploitant']['L19'] = 0; //HS
+
+                if (!($lieu->getTotalVolume() > 0)) {
+                    $total['motifSurfZero'] = 'PC';
+                }
+                
                 $colass = null;
                 foreach ($lieu->getConfig()->getCepages() as $cepage_config) {
                     if (!$lieu->exist($cepage_config->getKey())) {
@@ -117,8 +122,14 @@ class ExportDRXml {
                         $col['exploitant']['L18'] = 0; //HS
                         $col['exploitant']['L19'] = 0; //HS
 
-                        if (($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') || $appellation->getKey() == 'appellation_VINTABLE') {
+                        if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                             $col['exploitant']['L14'] = $detail->volume;
+                        } elseif($appellation->getKey() == 'appellation_VINTABLE') {
+                            $l14 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
+                            if ($l14 < 0) {
+                                $l14 = 0;
+                            }
+                            $col['exploitant']['L14'] = $l14;
                         } else {
                             $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                             if ($l15 < 0) {
@@ -152,8 +163,6 @@ class ExportDRXml {
                             if (!($lieu->getTotalVolume() > 0)) {
                                 if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
                                     $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                } elseif(!isset($total['motifSurfZero'])) {
-                                    $total['motifSurfZero'] = 'PC';
                                 }
                             }
                         }
@@ -161,7 +170,6 @@ class ExportDRXml {
                 }
 
                 if ($lieu->getTotalCaveParticuliere()) {
-
                     $total['exploitant']['L5'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();  //Volume total avec lies
                     $total['exploitant']['L9'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();
                     $total['exploitant']['L10'] += $lieu->getTotalCaveParticuliere() * $dr->getRatioLies();
