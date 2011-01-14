@@ -155,6 +155,7 @@ EOF;
 		      $detail->cooperatives[] = $cooperative;
                     }
                 }
+
 		$doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->appellation = $this->convertappellation($appellation, $cepage);
                 $doc->recolte->{'appellation_'.$this->convertappellation($appellation, $cepage)}->{'lieu'.$csv[10]}->{"cepage_".$this->convertcepage($cepage, $cepage_bis)}->detail[] = $detail;
 
@@ -193,37 +194,48 @@ EOF;
 	    ->dplc = $this->recode_number($csv[37]); //37
 	}
 
-	//reconstruction des acheteurs
-	  foreach ($doc->recolte as $nomappellation => $app) {
-	    $acheteurs = array();
-	    $coop = array();
-            $cave_particuliere = 0;
-	    foreach($app as $nom => $lieu) {
-	      if ($lieu instanceOf stdClass)
-		foreach($lieu as $nom => $cep) {
-		  foreach ($cep->detail as $detail) {
-		    if (isset($detail->negoces))
-		      foreach ($detail->negoces as $a) {
-			$acheteurs[$a->cvi] = $a->cvi;
-		      }
-		    if (isset($detail->cooperatives))
-		      foreach ($detail->cooperatives as $c) {
-			$coop[$c->cvi] = $c->cvi;
-		      }
-                    if (isset($detail->cave_particuliere) && $detail->cave_particuliere > 0) {
-                        $cave_particuliere = 1;
+        foreach ($list_documents as $doc) {
+            //reconstruction des acheteurs
+              foreach ($doc->recolte as $nomappellation => $app) {
+                $acheteurs = array();
+                $coop = array();
+                $cave_particuliere = 0;
+                foreach($app as $nom => $lieu) {
+                  if ($lieu instanceOf stdClass) {
+                    foreach($lieu as $nom => $cep) {
+                      foreach ($cep->detail as $detail) {
+                        if (isset($detail->negoces))
+                          foreach ($detail->negoces as $a) {
+                            $acheteurs[$a->cvi] = $a->cvi;
+                          }
+                        if (isset($detail->cooperatives))
+                          foreach ($detail->cooperatives as $c) {
+                            $coop[$c->cvi] = $c->cvi;
+                          }
+                        if (isset($detail->cave_particuliere) && $detail->cave_particuliere > 0) {
+                            $cave_particuliere = 1;
+                        }
+                        if (!$detail->volume > 0) {
+                            if ($nomappellation == 'appellation_ALSACEBLANC' &&
+                               isset($doc->recolte->appellation_ALSACEBLANC->lieu->cepage_ED->total_volume) &&
+                               $doc->recolte->appellation_ALSACEBLANC->lieu->cepage_ED->total_volume > 0) {
+                               $detail->motif_non_recolte = "ae";
+                            } else {
+                               $detail->motif_non_recolte = "pc";
+                            }
+                        }
+                      }
                     }
-		  }
-		}
-	      $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
-	      $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
-
-              if ($nomappellation == "appellation_VINTABLE" && $cave_particuliere) {
-                  $doc->acheteurs->appellation_VINTABLE->cave_particuliere = 1;
+                  }
+                  if (!count($acheteurs) > 0 && !count($coop) > 0) {
+                    $cave_particuliere = 1;
+                  }
+                  $doc->acheteurs->{$nomappellation}->negoces = array_keys($acheteurs);
+                  $doc->acheteurs->{$nomappellation}->cooperatives = array_keys($coop);
+                  $doc->acheteurs->{$nomappellation}->cave_particuliere = $cave_particuliere;
+                }
               }
-	    }
-	  }
-	
+        }
 
 	foreach (file(sfConfig::get('sf_data_dir') . '/import/' . $options['year']. "/Dclent".$options['year']) as $l) {
 	  $csv = explode(',', preg_replace('/"/', '', $l));
@@ -245,33 +257,33 @@ EOF;
 	  if ($this->recode_number($csv[93])) {
 	    $doc->recolte->appellation_ALSACEBLANC->lieu->volume_revendique =  $this->recode_number($csv[93]); //93
 	    $doc->recolte->appellation_ALSACEBLANC->lieu->dplc =  $this->recode_number($csv[94]); //94
-	    $doc->acheteurs->appellation_ALSACEBLANC->cave_particuliere = ($this->recode_number($csv[10]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_ALSACEBLANC->cave_particuliere = ($this->recode_number($csv[10]) > 0) ? 1 : 0;
 	  }
           if ($this->recode_number($csv[105])) {
 	    $doc->recolte->appellation_KLEVENER->lieu->volume_revendique =  $this->recode_number($csv[105]); //105
 	    $doc->recolte->appellation_KLEVENER->lieu->dplc =  $this->recode_number($csv[106]); //106
-	    $doc->acheteurs->appellation_KLEVENER->cave_particuliere = ($this->recode_number($csv[43]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_KLEVENER->cave_particuliere = ($this->recode_number($csv[43]) > 0) ? 1 : 0;
 	  }
 
 	  if ($this->recode_number($csv[97])) {
 	    $doc->recolte->appellation_PINOTNOIR->lieu->volume_revendique =  $this->recode_number($csv[97]); //97
 	    $doc->recolte->appellation_PINOTNOIR->lieu->dplc =  $this->recode_number($csv[98]); //98
-	    $doc->acheteurs->appellation_PINOTNOIR->cave_particuliere = ($this->recode_number($csv[21]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_PINOTNOIR->cave_particuliere = ($this->recode_number($csv[21]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[101])) {
 	    $doc->recolte->appellation_PINOTNOIRROUGE->lieu->volume_revendique =  $this->recode_number($csv[101]); //101
 	    $doc->recolte->appellation_PINOTNOIRROUGE->lieu->dplc =  $this->recode_number($csv[102]); //102
-	    $doc->acheteurs->appellation_PINOTNOIRROUGE->cave_particuliere = ($this->recode_number($csv[32]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_PINOTNOIRROUGE->cave_particuliere = ($this->recode_number($csv[32]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[113])) {
 	    $doc->recolte->appellation_GRDCRU->volume_revendique =  $this->recode_number($csv[113]); //113
 	    $doc->recolte->appellation_GRDCRU->dplc =  $this->recode_number($csv[114]); //114
-	    $doc->acheteurs->appellation_GRDCRU->cave_particuliere = ($this->recode_number($csv[65]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_GRDCRU->cave_particuliere = ($this->recode_number($csv[65]) > 0) ? 1 : 0;
 	  }
 	  if ($this->recode_number($csv[109])) {
 	    $doc->recolte->appellation_CREMANT->lieu->volume_revendique =  $this->recode_number($csv[109]); //109
 	    $doc->recolte->appellation_CREMANT->lieu->dplc =  $this->recode_number($csv[110]); //110
-	    $doc->acheteurs->appellation_CREMANT->cave_particuliere = ($this->recode_number($csv[54]) > 0) ? 1 : 0;
+	    //$doc->acheteurs->appellation_CREMANT->cave_particuliere = ($this->recode_number($csv[54]) > 0) ? 1 : 0;
 	  }
 	}
 

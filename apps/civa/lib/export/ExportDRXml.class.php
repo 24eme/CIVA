@@ -78,10 +78,6 @@ class ExportDRXml {
                 $total['exploitant']['L18'] = 0; //HS
                 $total['exploitant']['L19'] = 0; //HS
 
-                if (!($lieu->getTotalVolume() > 0)) {
-                    $total['motifSurfZero'] = 'PC';
-                }
-                
                 $colass = null;
                 foreach ($lieu->getConfig()->getCepages() as $cepage_config) {
                     if (!$lieu->exist($cepage_config->getKey())) {
@@ -154,17 +150,21 @@ class ExportDRXml {
                             }
                         }
 
+                         if (!($lieu->getTotalVolume() > 0)) {
+                                if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                                    $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                } elseif(!isset($total['motifSurfZero'])) {
+                                    $total['motifSurfZero'] = 'PC';
+                                }
+                          }
+
                         if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                             unset($col['L3'], $col['L4'], $col['mentionVal']);
                             $colass = $col;
                         } elseif($lieu->getAppellation()->getAppellation() != 'KLEVENER') {
                             $xml[] = $col;
                         } elseif($lieu->getAppellation()->getAppellation() == 'KLEVENER') {
-                            if (!($lieu->getTotalVolume() > 0)) {
-                                if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
-                                    $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                }
-                            }
+                           
                         }
                     }
                 }
