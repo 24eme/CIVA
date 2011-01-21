@@ -1,9 +1,9 @@
 #!/bin/bash
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
-echo "uid=ADMIN-USER,ou=People,$LDAP_PREFIX" | ldapdelete -x -h $LDAP_HOST -D "$LDAP_USERADMIN,$LDAP_PREFIX" -w$LDAP_PASSWORD
+echo "uid=$LDAP_ADMIN_UID,ou=People,$LDAP_PREFIX" | ldapdelete -x -h $LDAP_HOST -D "$LDAP_USERADMIN,$LDAP_PREFIX" -w$LDAP_PASSWORD
 
-echo "dn: uid=ADMIN-USER,ou=People,$LDAP_PREFIX" > /tmp/user.ldif
-echo "uid: ADMIN-USER" >> /tmp/user.ldif
+echo "dn: uid=$LDAP_ADMIN_UID,ou=People,$LDAP_PREFIX" > /tmp/user.ldif
+echo "uid: $LDAP_ADMIN_UID" >> /tmp/user.ldif
 echo "sn: CIVA" >> /tmp/user.ldif
 echo "cn: Admin" >> /tmp/user.ldif
 echo "givenName: Prenom" >> /tmp/user.ldif
@@ -15,12 +15,12 @@ echo "userPassword: {SSHA}$LDAP_ADMIN_SSHA_PASSWORD" >> /tmp/user.ldif
 echo "loginShell: /bin/bash" >> /tmp/user.ldif
 echo "uidNumber: 1000" >> /tmp/user.ldif
 echo "gidNumber: 1001" >> /tmp/user.ldif
-echo "homeDirectory: /home/civa-admin" >> /tmp/user.ldif
+echo "homeDirectory: /home/$LDAP_ADMIN_UID" >> /tmp/user.ldif
 echo "gecos: CIVA Admin,,," >> /tmp/user.ldif
-echo "mail: dominique@civa.fr" >> /tmp/user.ldif
-echo "postalAddress: 12 avenue de la Foire aux Vins" >> /tmp/user.ldif
-echo "postalCode: 68000" >> /tmp/user.ldif
-echo "l: Colmar" >> /tmp/user.ldif
+echo "mail: $LDAP_ADMIN_EMAIL" >> /tmp/user.ldif
+echo "postalAddress: $LDAP_ADMIN_ADDRESS" >> /tmp/user.ldif
+echo "postalCode: $LDAP_ADMIN_CODE_POSTAL" >> /tmp/user.ldif
+echo "l: $LDAP_ADMIN_VILLE" >> /tmp/user.ldif
 
 cat /tmp/user.ldif |  ldapadd -x -h $LDAP_HOST -D "$LDAP_USERADMIN,$LDAP_PREFIX" -w$LDAP_PASSWORD
 
