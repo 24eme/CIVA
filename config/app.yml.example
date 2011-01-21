@@ -14,7 +14,7 @@ all:
     serveur: "127.0.0.1"
     dn: "cn=admin,dc=vinsalsace,dc=pro"
     dc: "dc=vinsalsace,dc=pro"
-    pass: "my_passw"
+    pass: "LDAP_ADMIN_PASSWORD"
   secret_key:
     publication_mairies: "cle_secrete"
 
