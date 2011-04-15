@@ -27,6 +27,17 @@ class tiersActions extends DataManipulationActions
      return $this->renderData($this->buildTiersData($this->tiers));
   }
 
+  public function executeFindAllMetteurMarche(sfWebRequest $request) {
+     ini_set('memory_limit', '256M');
+     $this->tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ARRAY);
+     foreach($this->tiers as $key => $item) {
+         if (!isset($item['no_accises'])  || !$item['no_accises']) {
+             unset($this->tiers[$key]);
+         }
+     }
+     return $this->renderData($this->buildTiersData($this->tiers));
+  }
+
   public function executeFindAllDeclarations(sfWebRequest $request) {
     $this->tiers = $this->getTiers();
     $this->declarations = sfCouchdbManager::getClient("DR")->getAllByCvi($this->tiers['cvi'], sfCouchdbClient::HYDRATE_ARRAY);

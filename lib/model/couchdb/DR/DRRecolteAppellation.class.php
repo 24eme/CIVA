@@ -14,17 +14,17 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->filter('^lieu');
     }
 
-    public function getTotalVolume() {
+    public function getTotalVolume($force_calcul = false) {
         $field = 'total_volume';
-        if ($this->issetField($field)) {
+        if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
-    public function getTotalSuperficie() {
+    public function getTotalSuperficie($force_calcul = false) {
         $field = 'total_superficie';
-        if ($this->issetField($field)) {
+        if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
@@ -129,5 +129,13 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         }
         asort($lieu_choices);
         return $lieu_choices;
+    }
+
+    protected function update($params = array()) {
+        parent::update($params);
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->total_volume = $this->getTotalVolume(true);
+            $this->total_superficie = $this->getTotalSuperficie(true);
+        }
     }
 }

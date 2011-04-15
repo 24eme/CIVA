@@ -22,13 +22,17 @@
             </div>
             </form>
             <br />
-            <form id="form_gamma" action="<?php echo url_for('@gamma') ?>" method="post">
+            <form id="form_gamma" action="<?php echo url_for('@gamma-admin') ?>" method="post">
             <h3 class="titre_section">Alsace Gamm@ <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide"></a></h3>
             <div class="contenu_section">
                 <!--<p class="intro"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>-->
                 <div class="ligne_form">
-                    <input type="radio" id="gamma_type_acces_test" name="gamma[type_acces]" value="test" checked="checked" />
-                    <label for="type_declaration_brouillon">Administrateur (Plateforme de test)</label>
+                    <input type="radio" id="gamma_type_acces_test" name="gamma_type_acces" value="prod" checked="checked" />
+                    <label for="type_declaration_brouillon">Administrateur Alsace Gamm@</label>
+                </div>
+                <div class="ligne_form">
+                    <input type="radio" id="gamma_type_acces_test" name="gamma_type_acces" value="test" />
+                    <label for="type_declaration_brouillon">Administrateur Plateforme de test</label>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
@@ -49,7 +53,8 @@
                     <li><a href="<?php echo url_for('@csv_tiers') ?>">Tous</a></li>
                     <li><a href="<?php echo url_for('@csv_tiers_dr_en_cours') ?>">Déclaration en cours</a></li>
                     <li><a href="<?php echo url_for('@csv_tiers_non_validee_civa') ?>">Non validée par le CIVA</a></li>
-                    <li><a href="<?php echo url_for('@csv_tiers_modifications') ?>">Modifications</a></li>
+                    <!--<li><a href="<?php echo url_for('@csv_tiers_modifications') ?>">Modifications</a></li>-->
+                    <li><a href="<?php echo url_for('@csv_tiers_modifications_email') ?>">Email Modifications</a></li>
                 </ul>
             </div>
             <br />

@@ -40,6 +40,7 @@ class exportActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executePdf(sfWebRequest $request) {
+        set_time_limit(180);
         $tiers = $this->getUser()->getTiers();
         $this->annee = $this->getRequestParameter('annee', null);
 
@@ -103,7 +104,7 @@ class exportActions extends sfActions {
     public function executeCsvTiersDREncours(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($tiers as $item) {
             if ($item->cvi != "7523700100") {
@@ -133,7 +134,7 @@ class exportActions extends sfActions {
     public function executeCsvTiersNonValideeCiva(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($tiers as $item) {
             if ($item->cvi != "7523700100") {
@@ -193,9 +194,9 @@ class exportActions extends sfActions {
                 }
                 $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
                 $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
-                if ($tiers_current['recoltant'] != 1) {
+                /*if ($tiers_current['recoltant'] != 1) {
                     continue;
-                }
+                }*/
                 $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
                 $value = array();
                 $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed);
@@ -235,27 +236,36 @@ class exportActions extends sfActions {
 
     public function executeCsvTiersModificationsEmail(sfWebRequest $request) {
         set_time_limit(0);
-        $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-
+        $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAllIds();
+        
         $values = array();
-        $values[] = array("Exploitation - N° CVI",
+        $values[] = array("N° CVI/CIVABA",
                           "Email");
         foreach($tiers_ids as $id) {
-            $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            
             if ($id != "TIERS-7523700100") {
-                $revs = $data_revs->_revs_info;
-                if (count($revs) > 2) {
-                    $first_revision = $revs[count($revs)-3]->rev;
-                } elseif(count($revs) > 1) {
-                    $first_revision = $revs[count($revs)-2]->rev;
-                } else {
-                    $first_revision = $revs[count($revs)-1]->rev;
-                }
-                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                
                 $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
-                if ($tiers_current['recoltant'] != 1) {
-                    continue;
+                $rev_last_update = null;
+                if (isset($tiers_current['export_db2_revision'])) {
+                    $rev_last_update = $tiers_current['export_db2_revision'];
+                } else {
+                    $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+                    $revs = $data_revs->_revs_info;
+                    /*if (count($revs) > 2) {
+                        $rev_last_update = $revs[count($revs)-3]->rev;
+                    } elseif(count($revs) > 1) {
+                        $rev_last_update = $revs[count($revs)-2]->rev;
+                    } else {
+                        $rev_last_update = $revs[count($revs)-1]->rev;
+                    }*/
+                    $rev_last_update = $revs[count($revs)-1]->rev;
                 }
+                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($rev_last_update)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                
+                /*if ($tiers_current['recoltant'] != 1) {
+                    continue;
+                }*/
                 $values_changed = Tools::array_diff_recursive($tiers_current, $tiers_old);
                 $value = array();
                 $value[] = $this->formatModifiedValue(array('cvi' => true), $tiers_current, $values_changed, '');

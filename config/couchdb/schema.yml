@@ -204,6 +204,7 @@ Tiers:
       type: {  }
       cvi: {  }
       no_declarant: { type: integer, required: false }
+      gamma: {type: string, required: false}
       recoltant: { type: integer }
       mot_de_passe: { }
       num: {  }
@@ -250,6 +251,8 @@ Tiers:
           fields:
             nom: {  }
       revision_dernieres_modifications: {required: false}
+      import_db2_date: {required: false}
+      export_db2_revision: {required: false}
 
 Configuration:
   definition:

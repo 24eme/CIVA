@@ -39,7 +39,7 @@ EOF;
 
     $nb_item = 0;
     $nb_email_send = 0;
-    $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+    $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
     foreach ($tiers as $item) {
         $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $options['campagne'], sfCouchdbClient::HYDRATE_JSON);
         if ($dr && (!isset($dr->validee) || !$dr->validee)) {

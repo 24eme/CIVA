@@ -52,9 +52,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       return $this->store($field, array($this, 'getSumCepageFields'), array($field));
     }
 
-    public function getVolumeRevendique() {
+    public function getVolumeRevendique($force_calcul = false) {
       $field = 'volume_revendique';
-      if ($this->issetField($field)) {
+      if (!$force_calcul && $this->issetField($field)) {
         return $this->_get($field);
       }
       return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
@@ -82,9 +82,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->_storage[$key];
     }
 
-    public function getDplc() {
+    public function getDplc($force_calcul = false) {
       $field = 'dplc';
-      if ($this->issetField($field)) {
+      if (!$force_calcul && $this->issetField($field)) {
         return $this->_get($field);
       }
       return $this->store($field, array($this, 'getDplcFinal'));
@@ -341,6 +341,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         if ($this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
+        }
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->volume_revendique = $this->getVolumeRevendique(true);
+            $this->dplc = $this->getDplc(true);
         }
     }
 }

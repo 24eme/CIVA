@@ -169,9 +169,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     protected function update($params = array()) {
       parent::update($params);
-      $this->total_volume = $this->getTotalVolume(true);
-      $this->total_superficie = $this->getTotalSuperficie(true);
-      $this->volume_revendique = $this->getVolumeRevendique(true);
-      $this->dplc = $this->getDplc(true);
+      if ($this->getCouchdbDocument()->canUpdate()) {
+          $this->total_volume = $this->getTotalVolume(true);
+          $this->total_superficie = $this->getTotalSuperficie(true);
+          $this->volume_revendique = $this->getVolumeRevendique(true);
+          $this->dplc = $this->getDplc(true);
+      }
     }
 }

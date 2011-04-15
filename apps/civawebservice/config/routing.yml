@@ -16,6 +16,11 @@ tiers_all:
   param: { module: tiers, action: findAll }
   requirements: { sf_method: get}
 
+tiers_all_metteur_marche:
+  url:   /tiers/metteur-marche/all.:sf_format
+  param: { module: tiers, action: findAllMetteurMarche }
+  requirements: { sf_method: get}
+
 tiers_all_declarations:
   url:   /tiers/:cvi/all-declarations.:sf_format
   param: { module: tiers, action: findAllDeclarations }

@@ -1,6 +1,6 @@
 <?php
 
-class tiersLdapUpdateTask extends sfBaseTask
+class tiersDeleteCloturerTask extends sfBaseTask
 {
   protected function configure()
   {
@@ -17,7 +17,7 @@ class tiersLdapUpdateTask extends sfBaseTask
     ));
 
     $this->namespace        = 'tiers';
-    $this->name             = 'ldap-update';
+    $this->name             = 'delete-cloturer';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [tiers:ldap-update|INFO] task does things.
@@ -37,17 +37,29 @@ EOF;
 
     $ids = sfCouchdbManager::getClient('Tiers')->getAllIds();
 
+    $csv_values = array();
+    $csv_values[] = array("N° TIERS", "ID", "N° CVI", "N° CIVABA");
+    
     $nb = 0;
     foreach($ids as $id) {
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
-        $ldap = new ldap();
-        if($ldap->ldapVerifieExistence($tiers)) {
-            $ldap->ldapModify($tiers);
-            $nb++;
+        if ($id != 'TIERS-7523700100') {
+            $tiers_json = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            if (!isset($tiers_json->import_db2_date)) {
+                $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
+                $this->logSection('delete', $id);
+                $csv_values[] = array($tiers->num, $tiers->get('_id'), $tiers->cvi, $tiers->civaba);
+                $nb++;
+            }
         }
     }
 
     $this->logSection("done", $nb);
+
+    $content_csv = Tools::getCsvFromArray($csv_values);
+    $filedir = sfConfig::get('sf_web_dir').'/';
+    $filename = 'TIERS-DELETE.csv';
+    file_put_contents($filedir.$filename, $content_csv);
+    $this->logSection("created", $filedir.$filename);
 
     // add your code here
   }

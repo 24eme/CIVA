@@ -72,6 +72,10 @@ class declarationActions extends EtapesActions {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf", "aide_gamma.pdf");
     }
 
+    public function executeDownloadAdhesionGamma() {
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/AdhesionGamma_EDI_CIVA.pdf", "AdhesionGamma_EDI_CIVA.pdf");
+    }
+
     protected function renderPdf($path, $filename) {
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="'.$filename.'"');

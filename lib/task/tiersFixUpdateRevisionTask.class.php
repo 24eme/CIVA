@@ -35,15 +35,13 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = sfCouchdbManager::getClient('Tiers')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $ids = sfCouchdbManager::getClient('Tiers')->getAllIds();
     $nb = 0;
     foreach($ids as $id) {
         $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
-        if ($tiers->recoltant == 1) {
-            $tiers->add('revision_dernieres_modifications', $tiers->get('_rev'));
-            $tiers->save();
-            $nb++;
-        }
+        $tiers->add('export_db2_revision', $tiers->get('_rev'));
+        $tiers->save();
+        $nb++;
     }
     $this->logSection("done", $nb);
     // add your code here

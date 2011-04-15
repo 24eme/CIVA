@@ -176,9 +176,7 @@ $(document).ready( function()
 
         return false;
     });
-
-
-
+    
     if($('.col_active')){
         $('.superficie').focus();
         $('.superficie').select();
@@ -239,13 +237,17 @@ var initMsgAide = function()
                 popup.find('p').html(message);
                 popup.dialog("option" , "title" , titre);
                 popup.dialog("option" , "buttons" , {
-                    telecharger: function() {document.location.href = url_notice},
-                    fermer: function() {$(this).dialog( "close" );}
+                    telecharger: function() {
+                        document.location.href = url_notice
+                        },
+                    fermer: function() {
+                        $(this).dialog( "close" );
+                    }
                 });
                 $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
                 $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
             }
-        );
+            );
 
         openPopup(popup);
 
@@ -288,9 +290,17 @@ var choixPrecDecla = function()
 var accesGamma = function()
 {
     $('#mon_espace_civa_gamma_valider').bind('click', function() {
-        openPopup($("#popup_loader"));
+        var choix = $('#form_gamma input[name="gamma[type_acces]"]:checked');
+        if (choix.val() == 'plateforme_test') {
+          openPopup($("#popup_loader"));
+        } else if(choix.val() == 'inscription') {
+          openPopupWithoutButton($("#popup_inscription_gamma"));
+          return false;
+        }
+        
     });
 };
+
 
 /**
  * Accordéon précédentes déclarations
@@ -1004,10 +1014,10 @@ var truncTotal = function (val) {
 }
 
 var trunc = function(what,howmuch) {
-        what = ''+what;
-	if (what.indexOf('.') == -1) return what;
-	pos = what.indexOf('.')+howmuch+1;
-	return what.slice(0,pos);
+    what = ''+what;
+    if (what.indexOf('.') == -1) return what;
+    pos = what.indexOf('.')+howmuch+1;
+    return what.slice(0,pos);
 }
 
 /**
@@ -1287,6 +1297,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
     });
 };
 
+
 /**
  * Supprime un CVI de la liste autocomplete de la recolte
  *
@@ -1334,6 +1345,21 @@ var openPopup = function(popup, fn_open_if) {
     return true;
 };
 
+var openPopupWithoutButton = function(popup) {
+
+    popup.dialog
+    ({
+        autoOpen: false,
+        draggable: false,
+        resizable: false,
+        width: 375,
+        modal: true
+    });
+
+    popup.dialog('open');
+    return false;
+};
+
 
 var initPopup = function(btn, popup, fn_open_if)
 {
@@ -1342,3 +1368,5 @@ var initPopup = function(btn, popup, fn_open_if)
         return openPopup(popup, fn_open_if);
     });
 };
+
+

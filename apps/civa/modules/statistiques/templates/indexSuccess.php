@@ -20,5 +20,12 @@
                     <li><strong>Nombre d'inscrits n'ayant pas commencé de DR : <?php echo $etapeNoDr; ?></strong></li>
                 </ul>
             </div>
+            <br />
+            <h3 class="titre_section">Statistiques Alsace Gamm@</h3>
+            <div class="contenu_section">
+                <ul class="statistiques">
+                    <li><strong>Nombre d'inscrits : <?php echo $nbInscritGamma; ?></strong>
+                </ul>
+            </div>
         </div>
     </div>

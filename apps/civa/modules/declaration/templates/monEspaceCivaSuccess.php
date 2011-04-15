@@ -75,7 +75,7 @@
             <?php endif; ?>
             <br />
             <?php if($tiers->hasNoAssices()): ?>
-                <?php include_partial('tiers/accesGamma') ?>
+                <?php include_partial('tiers/accesGamma', array('tiers' => $tiers)); ?>
             <?php endif; ?>
         </div>
         <!-- fin #nouvelle_declaration -->

@@ -1767,3 +1767,70 @@ a.msg_aide{
 .msg_mon_espace_civa{
     margin:15px 0 0 0 !important;
 }
+
+.popup_inscription_gamma {
+    display: none;
+}
+
+.popup_inscription_gamma #popup_inscription_gamma_content {
+   padding: 0 10px 5px 10px;
+}
+
+.popup_inscription_gamma p.warning {
+    text-transform: uppercase;
+    color: #000;
+    font-size: 14px;
+    text-align: center;
+}
+
+.popup_inscription_gamma p {
+    color: #000;
+    font-size: 14px;
+    margin: 0 0 10px 0;
+}
+
+.popup_inscription_gamma p.intro {
+    color: #666;
+}
+
+.popup_inscription_gamma label {
+    color: #000;
+    font-size: 14px;
+    float:left;
+    width: 30px;
+    padding: 0 0 0 10px;
+}
+
+.popup_inscription_gamma .ligne_form {
+    margin: 0 0 8px 0;
+}
+
+.popup_inscription_gamma .ligne_form.ligne_btn {
+    margin: 15px 0 0 0;
+}
+
+.popup_inscription_gamma .ligne_form.ligne_btn input{
+    float:right;
+}
+
+.popup_inscription_gamma input.check_choix{
+    float:left;
+}
+
+
+.popup_inscription_gamma span {
+    font-size: 14px;
+    float:left;
+    width: 269px;
+    padding: 0 0 0 20px;
+    color: #666;
+}
+
+.popup_inscription_gamma a.telecharger-documentation-gamma{
+    background:url("../images/boutons/btn_adhesion_gamma.png") no-repeat scroll 0 0 transparent;
+    display:inline;
+    height:19px;
+    width:192px;
+    float: left;
+    margin: 5px 0 0 74px;
+}

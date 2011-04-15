@@ -29,7 +29,7 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
-        ini_set('memory_limit', '700M');
+        ini_set('memory_limit', '1800M');
 
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
@@ -56,6 +56,11 @@ EOF;
         
         foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+
+            if ($dr->exist('import_db2') && $dr->get('import_db2'))  {
+                continue;
+            }
+
             try {
                 if (!$dr->updated)
                     throw new Exception();

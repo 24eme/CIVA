@@ -24,10 +24,14 @@ class statistiquesActions extends sfActions {
         $this->etapeExploitation = 0;
         $this->etapeDrNonValidee = 0;
         $this->etapeNoDr = 0;
+        $this->nbInscritGamma = 0;
 
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
 
         foreach ($tiers as $item) {
+            if ($item->cvi == "7523700100") {
+                continue;
+            }
             if ($item->recoltant == 1 && $item->cvi != "7523700100") {
                 if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
                     $this->nbInscrit++;
@@ -45,6 +49,9 @@ class statistiquesActions extends sfActions {
                         $this->etapeNoDr++;
                     }
                 }
+            }
+            if (isset($item->gamma) && $item->gamma == 'INSCRIT') {
+                $this->nbInscritGamma++;
             }
         }
     }

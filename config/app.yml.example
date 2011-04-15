@@ -17,6 +17,9 @@ all:
     pass: "LDAP_ADMIN_PASSWORD"
   secret_key:
     publication_mairies: "cle_secrete"
+  gamma:
+    url_qualif: "http://url_a_remplacer.com/"
+    url_prod: "http://url_a_remplacer.com/"
 
 
 

@@ -62,7 +62,7 @@ class ExportDRPdf {
 
     protected function create($dr, $tiers) {
         $this->nb_pages = 0;
-        if (!$this->isCached())
+        if (!$this->isCached()) {
           foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->get($appellation_config->getKey());
@@ -74,6 +74,11 @@ class ExportDRPdf {
                 }
             }
           }
+          if ($this->nb_pages == 0) {
+              $extra = array('lies' => $dr->lies, 'jeunes_vignes' => $dr->jeunes_vignes);
+              $this->document->addPage($this->getPartial('export/pageNoAppellationDR', array('tiers'=> $tiers, 'extra' => $extra)));
+          }
+        }
     }
 
     private function createAppellationLieu($lieu, $tiers) {

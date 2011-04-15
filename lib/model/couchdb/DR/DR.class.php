@@ -98,6 +98,33 @@ class DR extends BaseDR {
         else
             return $v;
     }
+
+    public function clean() {
+        $clean = false;
+        foreach($this->recolte->getAppellations() as $appellation)  {
+            if (count($appellation->getLieux()) < 1) {
+                $this->recolte->remove($appellation->getKey());
+                $this->acheteurs->remove($appellation->getKey());
+                $clean = true;
+            }
+            foreach($appellation->getLieux() as $lieu) {
+                if (count($lieu->getCepages()) < 1) {
+                    $this->recolte->remove($appellation->getKey());
+                    $this->acheteurs->remove($appellation->getKey());
+                    $clean = true;
+                }
+                foreach($lieu->getCepages() as $cepage) {
+                    if (count($cepage->detail) < 1) {
+                        $this->recolte->remove($appellation->getKey());
+                        $this->acheteurs->remove($appellation->getKey());
+                        $clean = true;
+                    }
+                }
+            }
+        }
+
+        return $clean;
+    }
     
     public function update($params = array()) {
       parent::update($params);

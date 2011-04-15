@@ -34,6 +34,10 @@ gamma:
   url:   /gamma
   param: { module: tiers, action: gamma }
 
+gamma-admin:
+  url:   /gamma-admin
+  param: { module: tiers, action: gammaAdmin }
+
 exploitation_administratif:
   url:   /exploitation_administratif
   param: { module: tiers, action: exploitationAdministratif }

@@ -122,14 +122,37 @@ class tiersActions extends EtapesActions {
     public function executeMonEspaceCivaNonDeclarant(sfWebRequest $request) {
         $this->tiers = $this->getUser()->getTiers();
         if ($request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_bouton')) {
-            $this->redirect('http://qualif.gamma.vinsalsace.pro/');
+            $this->redirect($this->redirect(sfConfig::get('app_gamma_url_qualif')));
         }
     }
 
     public function executeGamma(sfWebRequest $request) {
-        if (($this->getUser()->isAdmin() || $this->getUser()->getTiers()->hasNoAssices()) && $request->isMethod(sfWebRequest::POST)) {
-            $this->redirect('http://qualif.gamma.vinsalsace.pro/');
+        $inscription = $request->getParameter('gamma_inscription');
+        $this->tiers = $this->getUser()->getTiers();
+	$type = $request->getParameter('gamma') ;
+        if (isset($inscription) && $inscription['choix']) {
+		$this->tiers->add('gamma', "INSCRIT");
+		$this->tiers->save();
+		return $this->redirect(sfConfig::get('app_gamma_url_prod'));
+	}
+	if (isset($inscription) || !isset($type) || !$this->tiers->hasNoAssices()) {
+		return $this->redirect('@mon_espace_civa');
+	}
+        if ($type['type_acces'] == 'plateforme') {
+            return $this->redirect(sfConfig::get('app_gamma_url_prod'));
+        }
+	return $this->redirect(sfConfig::get('app_gamma_url_qualif'));
+    }
+
+    public function executeGammaAdmin(sfWebRequest $request) {
+        if (($this->getUser()->isAdmin() || $this->getUser()->getTiers()->hasNoAssices()) && $request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_type_acces')=='prod' ) {
+            $this->redirect(sfConfig::get('app_gamma_url_prod'));
+        }
+        elseif (($this->getUser()->isAdmin() || $this->getUser()->getTiers()->hasNoAssices()) && $request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_type_acces')=='test' ) {
+            $this->redirect(sfConfig::get('app_gamma_url_qualif'));
         }
     }
+
+     
 
 }
