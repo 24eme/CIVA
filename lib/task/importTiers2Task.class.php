@@ -217,6 +217,30 @@ class importTiers2Task extends sfBaseTask {
 
         $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
 
+        if ($tiers_object) {
+            if ($tiers_metteur_marche) {
+                $tiers_object->add('metteur_marche');
+                $modifications += $this->checkModification($tiers_object->metteur_marche->nom, preg_replace('/ +/', ' ', $tiers_metteur_marche[6]), 'metteur_marche/nom', !$tiers_object->isNew());
+                $modifications += $this->checkModification($tiers_object->metteur_marche->num, $tiers_metteur_marche[0], 'metteur_marche/num', !$tiers_object->isNew());
+                $tiers_object->metteur_marche->nom = preg_replace('/ +/', ' ', $tiers_metteur_marche[6]);
+                $tiers_object->metteur_marche->num = preg_replace('/ +/', ' ', $tiers_metteur_marche[0]);
+            } elseif($tiers_object->exist('metteur_marche')) {
+                $modifications += $this->checkModification(true, false, 'metteur_marche', !$tiers_object->isNew());
+                $tiers_object->remove('metteur_marche');
+            }
+            $tiers_object->save();
+
+            unset($tiers_object);
+
+            if($modifications) {
+                return 2;
+            } else  {
+                return 3;
+            }
+        } else {
+            return 1;
+        }
+
         if (!$tiers_object) {
             $tiers_object = new Tiers();
             $tiers_object->set('_id', "TIERS-" . $tiers[57]);
@@ -267,10 +291,10 @@ class importTiers2Task extends sfBaseTask {
         $modifications += $this->checkModification($tiers_object->siege->adresse, $tiers[46], 'siege/adresse', !$tiers_object->isNew());
         $tiers_object->siege->adresse = $tiers[46];
 
-        $modifications += $this->checkModification($tiers_object->siege->insee_commune, $tiers[59], 'siege/adresse', !$tiers_object->isNew());
+        $modifications += $this->checkModification($tiers_object->siege->insee_commune, $tiers[59], 'siege/insee_commune', !$tiers_object->isNew());
         $tiers_object->siege->insee_commune = $tiers[59];
 
-        $modifications += $this->checkModification($tiers_object->siege->code_postal, $tiers[60], 'siege/adresse', !$tiers_object->isNew());
+        $modifications += $this->checkModification($tiers_object->siege->code_postal, $tiers[60], 'siege/code_postal', !$tiers_object->isNew());
         $tiers_object->siege->code_postal = $tiers[60];
 
         $modifications += $this->checkModification($tiers_object->siege->commune, $tiers[61], 'siege/commune', !$tiers_object->isNew());
@@ -361,9 +385,11 @@ class importTiers2Task extends sfBaseTask {
         if ($tiers_metteur_marche) {
             $tiers_object->add('metteur_marche');
             $modifications += $this->checkModification($tiers_object->metteur_marche->nom, preg_replace('/ +/', ' ', $tiers_metteur_marche[6]), 'metteur_marche/nom', !$tiers_object->isNew());
+            $modifications += $this->checkModification($tiers_object->metteur_marche->num, $tiers_metteur_marche[0], 'metteur_marche/num', !$tiers_object->isNew());
             $tiers_object->metteur_marche->nom = preg_replace('/ +/', ' ', $tiers_metteur_marche[6]);
+            $tiers_object->metteur_marche->num = preg_replace('/ +/', ' ', $tiers_metteur_marche[0]);
         } elseif($tiers_object->exist('metteur_marche')) {
-            $modifications += $this->checkModification($tiers_object->metteur_marche->nom, null, 'metteur_marche/nom', !$tiers_object->isNew());
+            $modifications += $this->checkModification(true, false, 'metteur_marche', !$tiers_object->isNew());
             $tiers_object->remove('metteur_marche');
         }
 

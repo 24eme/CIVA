@@ -250,6 +250,7 @@ Tiers:
         definition:
           fields:
             nom: {  }
+            num: {  }
       revision_dernieres_modifications: {required: false}
       import_db2_date: {required: false}
       export_db2_revision: {required: false}
