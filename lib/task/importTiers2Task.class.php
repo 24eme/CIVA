@@ -13,7 +13,7 @@ class importTiers2Task extends sfBaseTask {
             // add your own options here
             new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
             new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
-            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-20110325'),
+            new sfCommandOption('file', null, sfCommandOption::PARAMETER_REQUIRED, 'import from file', sfConfig::get('sf_data_dir') . '/import/Tiers-maj-20110512'),
             new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'year', '09'),
         ));
 
@@ -216,30 +216,6 @@ class importTiers2Task extends sfBaseTask {
         }
 
         $tiers_object = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($tiers[57]);
-
-        if ($tiers_object) {
-            if ($tiers_metteur_marche) {
-                $tiers_object->add('metteur_marche');
-                $modifications += $this->checkModification($tiers_object->metteur_marche->nom, preg_replace('/ +/', ' ', $tiers_metteur_marche[6]), 'metteur_marche/nom', !$tiers_object->isNew());
-                $modifications += $this->checkModification($tiers_object->metteur_marche->num, $tiers_metteur_marche[0], 'metteur_marche/num', !$tiers_object->isNew());
-                $tiers_object->metteur_marche->nom = preg_replace('/ +/', ' ', $tiers_metteur_marche[6]);
-                $tiers_object->metteur_marche->num = preg_replace('/ +/', ' ', $tiers_metteur_marche[0]);
-            } elseif($tiers_object->exist('metteur_marche')) {
-                $modifications += $this->checkModification(true, false, 'metteur_marche', !$tiers_object->isNew());
-                $tiers_object->remove('metteur_marche');
-            }
-            $tiers_object->save();
-
-            unset($tiers_object);
-
-            if($modifications) {
-                return 2;
-            } else  {
-                return 3;
-            }
-        } else {
-            return 1;
-        }
 
         if (!$tiers_object) {
             $tiers_object = new Tiers();
