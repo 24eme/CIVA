@@ -2,6 +2,8 @@
 
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
 
+php symfony cc
+
 php symfony import:Configuration --removedb=yes
 echo "Configuration DONE"
 php symfony import:Messages
