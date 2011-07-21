@@ -214,8 +214,8 @@ Tiers:
       civaba: {  }
       no_accises: {  }
       cvi_acheteur: {  }
-      declaration_insee: {}
-      declaration_commune: {}
+      declaration_insee: {  }
+      declaration_commune: {  }
       siret: { type: string }
       intitule: {  }
       nom: {  }
@@ -254,6 +254,133 @@ Tiers:
       revision_dernieres_modifications: {required: false}
       import_db2_date: {required: false}
       export_db2_revision: {required: false}
+
+_Compte:
+  type: abstract
+  definition:
+    fields:
+      login: { }
+      mot_de_passe: {  }
+      email: {  }
+      statut: {  }
+      droits:
+        type: array_collection
+        definition:
+          fields:
+            '*': { }
+
+CompteProxy:
+  inheritance: _Compte
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      compte_reference: {  }
+      
+CompteTiers:
+  inheritance: _Compte
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      db2:
+        type: collection
+        definition:
+          fields:
+            no_stock: { type: integer }
+      tiers:
+        type: collection
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  id: {  }
+                  type: {  }
+                  nom: {  }
+                  
+CompteVirtuel:
+  inheritance: _Compte
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      
+      
+_Tiers:
+  type: abstract
+  definition:
+    fields:
+      compte: {  }
+      civaba: {  }
+      intitule: {  }
+      nom: {  }
+      telephone: {  }
+      fax: {  }
+      email: {  }
+      web: {  }
+      exploitant:
+        type: collection
+        definition:
+          fields:
+            sexe: {  }
+            nom: {  }
+            adresse: {  }
+            code_postal: {  }
+            commune: {  }
+            date_naissance: {  }
+            telephone: {  }
+      siege:
+        type: collection
+        definition:
+          fields:
+            adresse: {  }
+            insee_commune: {  }
+            code_postal: { }
+            commune: {  }
+      categorie: { }
+      db2:
+        type: collection
+        definition:
+          fields:
+            num: { }
+            no_stock: { }
+            import_date: {  }
+            export_revision: {  }                
+                
+Recoltant:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      cvi: {  }
+      declaration_insee: {  }
+      declaration_commune: {  }
+      siret: {  }
+      cave_cooperative: {  }
+
+MetteurEnMarche:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      cvi_acheteur: {  }
+      no_accises: {  }
+      gamma: {type: string, required: false}
+      siren: {  }
+      db2:
+        type: collection
+        definition:
+          fields:
+            maison_mere: {  }
 
 Configuration:
   definition:
