@@ -382,6 +382,14 @@ MetteurEnMarche:
           fields:
             maison_mere: {  }
 
+Current:
+  definition:
+    fields:
+      _id: {}
+      _rev: {}
+      type: {}
+      year: {}
+
 Configuration:
   definition:
     fields:
