@@ -8,7 +8,7 @@ class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function  __construct() {
-      parent::__construct(null, null, $this);
+      parent::__construct(null, null, $this, "/");
       try{
 	if (isset($this->_definition_model)) {
 	  $this->type = $this->_definition_model;

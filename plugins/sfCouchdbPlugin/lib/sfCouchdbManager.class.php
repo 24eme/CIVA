@@ -67,8 +67,9 @@ class sfCouchdbManager {
 
     public static function getDefinition($model) {
         if (!isset(self::getInstance()->_definition[$model])) {
-            $schema = self::getInstance()->getSchema();
-            self::getInstance()->_definition[$model] = sfCouchdbJsonDefinitionParser::parse($model, $schema[$model]);
+            self::getInstance()->_definition[$model] = sfCouchdbJsonDefinitionParser::parse($model, 
+                                                                                            self::getInstance()->getSchema(), 
+                                                                                            new sfCouchdbJsonDefinition($model, ''));
         }
 
         return self::getInstance()->_definition[$model];

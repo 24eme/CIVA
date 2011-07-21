@@ -23,6 +23,7 @@ class sfCouchdbJsonDefinition {
 
     public function add(sfCouchdbJsonDefinitionField $field) {
         if ($this->has($field->getKey())) {
+            return $this->get($field->getKey());
             throw new sfCouchdbException(sprintf("This field already exist %s", $field->getKey()));
         }
         $this->_fields[$field->getKey()] = $field;

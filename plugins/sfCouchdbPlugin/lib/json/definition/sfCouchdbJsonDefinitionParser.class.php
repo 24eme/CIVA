@@ -2,8 +2,18 @@
 
 class sfCouchdbJsonDefinitionParser {
 
-    public static function parse($model, $data) {
-        return (self::parseDefinition(new sfCouchdbJsonDefinition($model, ''), self::getValueRequired($data, 'definition', 'global')));
+    public static function parse($model, $schema, $definition) {
+        return (self::parseDefinition(self::parseInheritance($model, $schema, $definition), 
+                                      self::getValueRequired($schema[$model], 'definition', 'global')));
+    }
+    
+    protected static function parseInheritance($model, $schema, $definition) {
+        $inheritance_model = self::getValue($schema[$model], "inheritance", false);
+        if ($inheritance_model !== false) {
+            return self::parse($inheritance_model, $schema, $definition);
+        } else {
+            return $definition;
+        }
     }
     
     protected static function parseDefinition($definition, $data_definition) {
