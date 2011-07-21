@@ -4,6 +4,6 @@
   orm=couchdb
 [inte]
   host=tangui.eu.org
-  port=2222
-  user=REPLACME
+  port=22
+  user=actualys
   dir=/home/actualys/declaration
