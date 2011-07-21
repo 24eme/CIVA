@@ -17,6 +17,6 @@ class TiersClient extends sfCouchdbClient {
     }
 
     public function getAllIds() {
-        return $this->getAll()->getIds();
+        return $this->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     }
 }
