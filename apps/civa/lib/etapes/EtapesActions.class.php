@@ -19,7 +19,7 @@ class EtapesActions extends sfActions {
         } elseif (!is_null($boutons_suppl) && is_array($boutons_suppl)) {
             foreach($boutons_suppl as $bouton_suppl => $action) {
                 if (in_array($bouton_suppl, $this->getBoutons())) {
-                    if ($action == 'next') {
+                    if ($action == 'next') {  
                         $this->redirectToNextEtapes();
                     } elseif ($action == 'previous') {
                         $this->redirectToPreviousEtapes();
@@ -55,9 +55,11 @@ class EtapesActions extends sfActions {
 
     protected function redirectToNextEtapes() {
         if ($new_etape = $this->_etapes_config->needToChangeEtape()) {
-            $this->getUser()->addEtape($new_etape);
+            $this->getUser()->addEtapeDeclaration($new_etape);
         }
         
+        //echo $this->_etapes_config->nextUrl();
+        //exit;
         $this->redirect($this->_etapes_config->nextUrl());
     }
 
