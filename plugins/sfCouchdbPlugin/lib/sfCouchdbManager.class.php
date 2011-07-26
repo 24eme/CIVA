@@ -34,6 +34,11 @@ class sfCouchdbManager {
 	return self::getInstance()->_client;
     }
 
+    /**
+     *
+     * @param string $model
+     * @return sfCouchdbClient 
+     */
     public static function getClient($model = null) {
         if (is_null($model)) {
             return self::getInstance()->_client;
