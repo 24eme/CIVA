@@ -9,64 +9,46 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class tiersActions extends EtapesActions {
+
     /**
      * Executes index action
      *
      * @param sfRequest $request A request object
      */
     public function executeLogin(sfWebRequest $request) {
-        if ($this->getUser()->isAuthenticated()) {
-            $this->redirect('@mon_espace_civa');
-        }elseif($request->getParameter('ticket')) {
-            error_reporting(E_ALL);
-            require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
-            phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
+        $this->getUser()->signOutTiers();
+        $this->compte = $this->getUser()->getCompte();
 
-            phpCAS::setNoCasServerValidation();
-            
-            $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
-            phpCAS::forceAuthentication();
-            $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
-            $this->getUser()->signInWithCas(phpCAS::getUser());
-            if ($this->getUser()->isDeclarant()) {
-                $this->redirect('@mon_espace_civa');
-            } elseif ($this->getUser()->isNonDeclarant()) {
-                $this->redirect('@mon_espace_civa_non_declarant');
-            } elseif($this->getUser()->isAdmin()) {
-                $this->redirect('@login_admin');
-            }
-        }else {
-            $url = sfConfig::get('app_cas_url').'/login?service='.$request->getUri();
-            $this->redirect($url);
+        if (count($this->compte->tiers) == 1) {
+            $this->getUser()->signInTiers(sfCouchdbManager::getClient()->retrieveDocumentById($this->compte->tiers->getFirst()->id));
+            $this->redirect("@mon_espace_civa");
         }
-    }
 
-    public function executeLoginAdmin(sfWebRequest $request) {
-        $this->getUser()->removeTiers();
-        $this->form = new LoginForm(null, array('need_create' => false));
+        $this->form = new TiersLoginForm($this->compte);
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $this->getUser()->signIn($this->form->getValue('tiers'));
-                $this->redirect('@mon_espace_civa');
+                $tiers = $this->form->process();
+                $this->getUser()->signInTiers($tiers);
+                $this->redirect("@mon_espace_civa");
             }
         }
     }
 
-    public function executeLogout(sfWebRequest $request) {
-        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
-        $this->getUser()->signOut();
-        $url = 'http://'.$request->getHost();
-        error_reporting(E_ALL);
-        phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
-        phpCAS::logoutWithRedirectService($url);
-        $this->redirect($url);
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeMonEspaceCiva(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
     }
+
     /**
      *
      * @param sfWebRequest $request
      */
-
     public function executeExploitationAdministratif(sfWebRequest $request) {
 
         $this->setCurrentEtape('exploitation_administratif');
@@ -93,17 +75,15 @@ class tiersActions extends EtapesActions {
                 if ($this->form_expl->isValid()) {
 
                     $tiers = $this->form_expl->save();
-                    $ldap = new ldap();
+                    // $ldap = new ldap();
 
-                    if($tiers && $ldap) {
-
-                        /*$values['nom'] = $tiers->nom;
-                        $values['adresse'] = $tiers->siege->adresse;
-                        $values['code_postal'] = $tiers->siege->code_postal;
-                        $values['ville'] = $tiers->siege->commune;*/
-                        $ldap->ldapModify($this->getUser()->getTiers());
+                    if ($tiers) {
+                        /* $values['nom'] = $tiers->nom;
+                          $values['adresse'] = $tiers->siege->adresse;
+                          $values['code_postal'] = $tiers->siege->code_postal;
+                          $values['ville'] = $tiers->siege->commune; */
+                        //$ldap->ldapModify($this->getUser()->getTiers());
                     }
-
                 } else {
                     $this->form_expl_err = 1;
                 }
@@ -118,41 +98,5 @@ class tiersActions extends EtapesActions {
             }
         }
     }
-
-    public function executeMonEspaceCivaNonDeclarant(sfWebRequest $request) {
-        $this->tiers = $this->getUser()->getTiers();
-        if ($request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_bouton')) {
-            $this->redirect($this->redirect(sfConfig::get('app_gamma_url_qualif')));
-        }
-    }
-
-    public function executeGamma(sfWebRequest $request) {
-        $inscription = $request->getParameter('gamma_inscription');
-        $this->tiers = $this->getUser()->getTiers();
-	$type = $request->getParameter('gamma') ;
-        if (isset($inscription) && $inscription['choix']) {
-		$this->tiers->add('gamma', "INSCRIT");
-		$this->tiers->save();
-		return $this->redirect(sfConfig::get('app_gamma_url_prod'));
-	}
-	if (isset($inscription) || !isset($type) || !$this->tiers->hasNoAssices()) {
-		return $this->redirect('@mon_espace_civa');
-	}
-        if ($type['type_acces'] == 'plateforme') {
-            return $this->redirect(sfConfig::get('app_gamma_url_prod'));
-        }
-	return $this->redirect(sfConfig::get('app_gamma_url_qualif'));
-    }
-
-    public function executeGammaAdmin(sfWebRequest $request) {
-        if (($this->getUser()->isAdmin() || $this->getUser()->getTiers()->hasNoAssices()) && $request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_type_acces')=='prod' ) {
-            $this->redirect(sfConfig::get('app_gamma_url_prod'));
-        }
-        elseif (($this->getUser()->isAdmin() || $this->getUser()->getTiers()->hasNoAssices()) && $request->isMethod(sfWebRequest::POST) && $request->getParameter('gamma_type_acces')=='test' ) {
-            $this->redirect(sfConfig::get('app_gamma_url_qualif'));
-        }
-    }
-
-     
 
 }

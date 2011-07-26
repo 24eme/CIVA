@@ -1,8 +1,14 @@
-loginAdmin:
-  credentials: [admin]
+default:
+  credentials: [tiers]
+
+login:
+  credentials: [compte_tiers]
+
+#loginAdmin:
+#  credentials: [admin]
 
 exploitationAdministratif:
-  credentials: [declarant, declaration_brouillon, etape_exploitation]
+  credentials: [declaration_etape_exploitation]
 
-monEspaceCivaNonDeclarant:
-  credentials: [non_declarant]
+#monEspaceCivaNonDeclarant:
+#  credentials: [non_declarant]
