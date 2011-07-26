@@ -1,42 +1,95 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
-# default rules
+  
+# *********** COMPTE ***********
+
 login:
   url:   /
-  param: { module: tiers, action: login }
-
-login_admin:
-  url:   /civa-admin
-  param: { module: tiers, action: loginAdmin }
+  param: { module: compte, action: login }
 
 logout:
   url:   /logout
-  param: { module: tiers, action: logout }
+  param: { module: compte, action: logout }
+  
+compte:
+  url: /compte
+  param: { module: compte, action: first }
+  
+compte_creation:
+  url: /compte/creation
+  param: { module: compte, action: creation }
+  
+compte_modification_oublie:
+  url: /compte/mot_de_passe_oublie
+  param: { module: compte, action: modificationOublie }
+
+compte_modification:
+  url: /mon_compte
+  param: { module: compte, action: modification }
+  
+compte_mot_de_passe_oublie_login:
+  url: /mot_de_passe_oublie/login/:login/:mdp
+  param: { module: compte, action: motDePasseOublieLogin }
+  
+compte_mot_de_passe_oublie:
+  url: /mot_de_passe_oublie
+  param: { module: compte, action: motDePasseOublie }
+  
+compte_mot_de_passe_oublie_confirm:
+  url: /mot_de_passe_oublie/confirm
+  param: { module: compte, action: motDePasseOublieConfirm }
+
+# *********** TIERS ***********
+
+tiers:
+  url: /tiers
+  param: { module: tiers, action: login }
 
 mon_espace_civa:
   url:   /mon_espace_civa
-  param: { module: declaration, action: monEspaceCiva }
+  param: { module: tiers, action: monEspaceCiva }
 
-mon_espace_civa_non_declarant:
-  url:   /mon_espace_civa_non_declarant
-  param: { module: tiers, action: monEspaceCivaNonDeclarant }
+# *********** DECLARATION ***********
 
-declaration_rendre_editable:
-  url:   /declaration/rendre_editable
-  param: { module: declaration, action: rendreEditable }
+declaration_init:
+  url:   /declaration/init
+  param: { module: declaration, action: init }
+  
+declaration_invalider_recoltant:
+  url:   /admin/declaration/invalider_recoltant
+  param: { module: declaration, action: invaliderRecoltant }
 
-declaration_devalider:
-  url:   /declaration/devalider
-  param: { module: declaration, action: devalider }
+declaration_invalider_civa:
+  url:   /admin/declaration/invalider_civa
+  param: { module: declaration, action: invaliderCiva }
+
+
+# *********** GAMMA ***********
 
 gamma:
   url:   /gamma
-  param: { module: tiers, action: gamma }
+  param: { module: gamma, action: process }
+  
+gamma_telecharger_la_notice:
+  url:   /gamma/telecharger_la_notice
+  param: { module: gamma, action: downloadNotice }
+  
+gamma_telecharger_l_adhesion:
+  url:   /gamma/telecharger_l_adhesion
+  param: { module: gamma, action: downloadAdhesion }
+  
+# *********** ADMIN ***********
 
-gamma-admin:
-  url:   /gamma-admin
-  param: { module: tiers, action: gammaAdmin }
+admin:
+  url: /admin
+  param: { module: admin, action: index }
+
+admin_gamma:
+  url:   /admin/gamma
+  param: { module: admin, action: gamma }
+  
+# *********** EXPLOITATION ***********
 
 exploitation_administratif:
   url:   /exploitation_administratif
@@ -57,6 +110,8 @@ exploitation_lieu_delete:
 exploitation_autres:
   url:   /exploitation_autres
   param: { module: declaration, action: exploitationAutres }
+
+# *********** RECOLTE ***********
 
 recolte:
   url:   /recolte/:appellation_lieu/:cepage
@@ -120,22 +175,10 @@ confirmation:
   url:   /confirmation
   param: { module: declaration, action: confirmation, annee: 2010 }
 
-compte:
-  url: /compte
-  param: { module: compte, action: index }
-
-mon_compte:
-  url: /mon_compte
-  param: { module: compte, action: modification }
-
 telecharger_la_notice:
   url:   /telecharger_la_notice
   param: { module: declaration, action: downloadNotice }
-
-telecharger_la_notice_gamma:
-  url:   /telecharger_la_notice_gamma
-  param: { module: declaration, action: downloadNoticeGamma }
-
+  
 print:
   url: /print/:annee
   param: {module: export, action: pdf}
