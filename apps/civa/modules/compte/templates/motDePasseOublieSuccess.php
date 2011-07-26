@@ -8,28 +8,21 @@
     <div id="nouvelle_declaration">
         <h3 class="titre_section">Mot de passe oublié</h3>
         <div class="contenu_section">
-
-            <?php if($sf_user->hasFlash('email_send')) { ?>
-                <p class="intro"><?php echo $sf_user->getFlash('email_send'); ?></p>
-                <p class="ligne_btn_retour"><a href="<?php echo url_for('@compte'); ?>"><img src="/images/boutons/btn_retour.png" alt="Retour" /></a></p>
-            <?php }else { ?>
-            <form action="<?php echo url_for('compte/motdepasseOublie') ?>" method="post" id="principal">
+            <form action="<?php echo url_for('@compte_mot_de_passe_oublie') ?>" method="post" id="principal">
                 <p class="intro">Merci d'indiquer votre numéro CVI :</p>
 
                 <div class="ligne_form">
-                        <?php echo $form->renderHiddenFields(); ?>
-                        <?php echo $form->renderGlobalErrors(); ?>
+                    <?php echo $form->renderHiddenFields(); ?>
+                    <?php echo $form->renderGlobalErrors(); ?>
 
-                        <?php echo $form['cvi']->renderError() ?>
-                        <?php echo $form['cvi']->renderLabel() ?>
-                        <?php echo $form['cvi']->render() ?>
+                    <?php echo $form['login']->renderError() ?>
+                    <?php echo $form['login']->renderLabel() ?>
+                    <?php echo $form['login']->render() ?>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
                 </div>
             </form>
-            <?php } ?>
-
         </div>
     </div>
     <!-- fin #nouvelle_declaration -->

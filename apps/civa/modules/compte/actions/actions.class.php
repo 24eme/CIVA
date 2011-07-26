@@ -11,165 +11,156 @@
 class compteActions extends sfActions {
 
     /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeLogin(sfWebRequest $request) {
+        if ($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential("compte")) {
+            $this->redirect('@tiers');
+        } elseif ($request->getParameter('ticket')) {
+            /** CAS * */
+            error_reporting(E_ALL);
+            require_once(sfConfig::get('sf_lib_dir') . '/vendor/phpCAS/CAS.class.php');
+            phpCAS::client(CAS_VERSION_2_0, sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
+            phpCAS::setNoCasServerValidation();
+            $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
+            phpCAS::forceAuthentication();
+            $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
+            /** ***** */
+            $this->getUser()->signIn(phpCAS::getUser());
+            $this->redirect('@tiers');
+        } else {
+            $url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
+            $this->redirect($url);
+        }
+    }
+    
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeLogout(sfWebRequest $request) {
+        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
+        $this->getUser()->signOut();
+        $url = 'http://'.$request->getHost();
+        error_reporting(E_ALL);
+        phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
+        phpCAS::logoutWithRedirectService($url);
+        $this->redirect($url);
+    }
+
+    /**
      * Executes index action
      *
      * @param sfRequest $request A request object
      */
-    public function executeIndex(sfWebRequest $request) {
-
-        $tiers = $this->getUser()->getTiers();
-
-        if(isset($tiers) && substr($tiers->mot_de_passe,0,6) == '{SSHA}') {
-            $this->redirect('@mon_espace_civa');
-        }else {
-            $this->form = new FirstConnectionForm();
-            if ($request->isMethod(sfWebRequest::POST)) {
-                $this->form->bind($request->getParameter($this->form->getName()));
-
-                if ($this->form->isValid()) {
-                    if(!$tiers) $this->getUser()->signIn($this->form->getValue('tiers'));
-                    $this->redirect('compte/create');
-                }
+    public function executeFirst(sfWebRequest $request) {
+        $this->form = new CompteLoginFirstForm();
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->getUser()->signInCompte($this->form->getValue('compte'));
+                $this->redirect('@compte_creation');
             }
-        }
-
-    }
-
-    public function executeCreate(sfWebRequest $request) {
-        $tiers = $this->getUser()->getTiers();
-        if(isset($tiers) && substr($tiers->mot_de_passe,0,6) == '{SSHA}') {
-            $this->redirect('@mon_espace_civa');
-        }elseif($tiers) {
-
-            $this->form = new CreateCompteForm(array('email' => $tiers->email));
-            $this->email = $tiers->email;
-            if($request->getParameter('act')){
-                 $this->act = '?act='.$request->getParameter('act');
-            }else{
-                 $this->act = '';
-            }
-
-            if ($request->isMethod(sfWebRequest::POST)) {
-                if($request->getParameter('act')== "modifMdp"){
-                     $flash_message = "Votre mot de passe a bien été modifié.";
-                     $mess_email = "votre mot de passe sur le site du CIVA vient d\'etre modifié.";
-                     $obj_email = "Changement de votre mot de passe";
-                }else{
-                     $flash_message = "Votre compte a bien été créé.";
-                     $mess_email = "votre compte a bien été créé sur le site du CIVA.";
-                     $obj_email = "Création de votre compte";
-                }
-
-                $this->form->bind($request->getParameter($this->form->getName()));
-                $ldap = new ldap();
-                if ($this->form->isValid()) {
-                    $tiers = $this->form->getValue('tiers');
-                    $tiers->save();
-                    $verify = $ldap->ldapVerifieExistence($tiers);
-                    if($verify) {
-		      $ldap->ldapModify($tiers);
-                    }else {
-                        $ldap->ldapAdd($tiers);
-                    }
-                    $mess = 'Bonjour '.$tiers->nom.',
-
-'.$mess_email.'
-
-Cordialement,
-
-Le CIVA';
-
-                        //send email
-                    try {
-                      $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-                                                             $tiers->email,
-                                                             'CIVA - '.$obj_email,
-                                                             $mess
-                                                             );
-                      $this->getMailer()->send($message);
-                      $this->getUser()->setFlash('mdp_modif', $flash_message);
-                    }catch(Exception $e) {
-                      $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-                    }
-                    $this->redirect('@mon_espace_civa');
-                }
-            }
-        }else {
-            $this->redirect('compte');
         }
     }
 
-    public function executeModification(sfWebRequest $request) {
-        $tiers = $this->getUser()->getTiers();
-        $this->form = new CreateCompteForm(array('email' => $tiers->email), array('verif_mdp'=>false));
-        $this->form_modif_err = 0;
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeCreation(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
+        $this->forward404Unless($this->compte->getStatus() == _Compte::STATUS_NOUVEAU);
 
-        $this->email = $tiers->email;
+        $this->form = new CreationCompteForm($this->compte);
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
-
             if ($this->form->isValid()) {
-                $tiers = $this->form->getValue('tiers');
-                $tiers->save();
-                /*$values['email'] = $tiers->email;
-                $values['mot_de_passe'] = $tiers->mot_de_passe;*/
-                $ldap = new ldap();
-                $ldap->ldapModify($tiers);
-                $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
-                $this->redirect('@mon_compte');
-            }else {
-                $this->form_modif_err = 1;
+                $this->compte = $this->form->save();
+                try {
+                    $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\n votre compte a bien été créé sur le site du CIVA. \n\n Cordialement, \n\n Le CIVA");
+                    $this->getUser()->setFlash('mdp_modif', "Votre compte a bien été créé.");
+                } catch (Exception $e) {
+                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
+                }
+                $this->redirect('@tiers');
             }
         }
-
     }
 
-    public function executeMotdepasseOublie(sfWebRequest $request) {
-        $this->form = new LoginForm();
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($request->getParameter('cvi'));
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeModificationOublie(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
+        $this->forward404Unless($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE);
 
-        if($request->getParameter('cvi')) {
-            $mdp =$request->getParameter('mdp');
+        $this->form = new CompteModificationOublieForm($this->compte);
 
-            if($tiers && $tiers->mot_de_passe==$mdp) {
-                $this->getUser()->signIn($tiers);
-                $this->redirect('compte/create?act=modifMdp');
-            }
-        }else {
-            if ($request->isMethod(sfWebRequest::POST)) {
-                $this->form->bind($request->getParameter($this->form->getName()));
-                if ($this->form->isValid()) {
-                    $tiers = $this->form->getValue('tiers');
-                    $tiers->mot_de_passe = sprintf("%04d", rand(0, 9999));
-                    $tiers->save();
-
-                    $mess = 'Bonjour '.$tiers->nom.',
-
-vous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant :
-
-'.sfConfig::get('app_base_url').'compte/motdepasseOublie?cvi='.$tiers->cvi.'&mdp='.$tiers->mot_de_passe.'
-
-Cordialement,
-
-Le CIVA';
-                    //send email
-		    try {
-		      $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-							     $tiers->email,
-							     'CIVA - Mot de passe oublié',
-							     $mess
-							     );
-		      $this->getMailer()->send($message);
-		      $this->getUser()->setFlash('email_send', 'Un email vient de vous etre envoyé. Veuillez cliquer sur le lien contenu dans cet email afin de redéfinir votre mot de passe');
-		    }catch(Exception $e) {
-		      $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-		    }
-
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->compte = $this->form->save();
+                try {
+                    $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Changement de votre mot de passe", "Bonjour " . $this->compte->nom . ",\n\n votre mot de passe sur le site du CIVA vient d'etre modifié. \n\n Cordialement, \n\n Le CIVA");
+                    $this->getUser()->setFlash('mdp_modif', "Votre mot de passe a bien été modifié.");
+                } catch (Exception $e) {
+                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
+                $this->redirect('@mon_espace_civa');
             }
         }
+    }
 
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeModification(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
+        $this->forward404Unless(in_array($this->compte->getStatus(), array(_Compte::STATUS_MOT_DE_PASSE_OUBLIE, _Compte::STATUS_INSCRIT)));
+
+        $this->form = new CompteModificationForm($this->compte);
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->compte = $this->form->save();
+                $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
+                $this->redirect('@compte_modification');
+            }
+        }
+    }
+
+    public function executeMotDePasseOublieLogin(sfWebRequest $request) {
+        $this->forward404Unless($compte = sfCouchdbManager::getClient('Tiers')->retrieveByCvi($request->getParameter('login', null)));
+        $this->forward404Unless($compte->mot_de_passe == '{OUBLIE}' . $request->getParameter('mdp', null));
+        $this->getUser()->signIn($compte);
+        $this->redirect('@compte_modification_oublie');
+    }
+
+    public function executeMotDePasseOublie(sfWebRequest $request) {
+        $this->form = new CompteMotDePasseOublieForm();
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $compte = $this->form->save();
+                $lien = sfConfig::get('app_base_url') . $this->generateUrl("@compte_mot_de_passe_oublie_login?login=" . $compte->login . "&mdp=" . str_replace("{OUBLIE}", "", $compte->mot_de_passe));
+                try {
+                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", /n/n vous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant :" . $lien . "\n\n Cordialement, \n\n Le CIVA");
+                } catch (Exception $e) {
+                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
+                }
+                $this->redirect('@compte_mot_de_passe_oublie_confirm');
+            }
+        }
+    }
+    
+    public function executeMotDePasseOublieConfirm(sfWebRequest $request) {
+        
     }
 
 }

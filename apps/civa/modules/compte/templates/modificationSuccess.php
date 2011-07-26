@@ -8,12 +8,12 @@
 
         <h2 class="titre_section">Identifiants</h2>
         <div class="contenu_section" id="modification_compte">
-            <div class="presentation clearfix"<?php if ($form_modif_err) echo ' style="display:none;"'; ?>>
+            <div class="presentation clearfix"<?php if ($form->hasErrors()) echo ' style="display:none;"'; ?>>
                 <p class="intro">Vos identifiants de connexion :</p>
-                <?php if($sf_user->hasFlash('maj')){ ?>
+                <?php if($sf_user->hasFlash('maj')) : ?>
                     <p class="flash_message"><?php echo $sf_user->getFlash('maj'); ?></p>
-                <?php } ?>
-                <p><span>Email :</span> <?php echo $email; ?></p>
+                <?php endif; ?>
+                <p><span>Email :</span> <?php echo $compte->email; ?></p>
                 <p><span>Mot de passe :</span> ****** </p>
                 <div class="btn">
                     <a href="#" class="modifier"><img src="/images/boutons/btn_modifier_infos.png" alt="Modifier les informations" /></a>
@@ -21,13 +21,12 @@
             </div>
 
 
-            <div class="modification clearfix"<?php if (!$form_modif_err) echo ' style="display:none;"'; ?>>
+            <div class="modification clearfix"<?php if (!$form->hasErrors()) echo ' style="display:none;"'; ?>>
                 <p class="intro">Modification de vos identifiants de connexion :</p>
                 
-                <form method="POST" action="">
+                <form method="post" action="<?php echo url_for("@compte_modification") ?>">
                     <div class="ligne_form ligne_form_label">
                         <?php echo $form->renderHiddenFields(); ?>
-
                         <?php echo $form->renderGlobalErrors(); ?>
 
                         <?php echo $form['email']->renderError() ?>
