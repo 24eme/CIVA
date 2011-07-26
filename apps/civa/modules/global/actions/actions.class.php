@@ -25,12 +25,15 @@ class globalActions extends sfActions {
     }
 
     public function executeSecure() {
-        if ($this->getUser()->isDeclarant()) {
+        if (!$this->getUser()->hasCredential('tiers') && $this->getUser()->hasCredential('admin')) {
+            return $this->redirect("@admin");
+        } elseif (!$this->getUser()->hasCredential('tiers') && $this->getUser()->hasCredential('compte-tiers')) {
+            return $this->redirect("@tiers");
+        } elseif(!$this->getUser()->hasCredential('tiers')) {
+            $this->getUser()->signOut();
+            return $this->redirect("@login");
+        } else {
             return $this->redirect("@mon_espace_civa");
-        } elseif ($this->getUser()->isNonDeclarant()) {
-            return $this->redirect("@mon_espace_civa_non_declarant");
-        } elseif ($this->getUser()->isAdmin()) {
-            return $this->redirect("@login_admin");
         }
     }
 }

@@ -39,7 +39,7 @@ all:
     error_404_action:       error404
 
   .actions:
-    login_module:           tiers
+    login_module:           compte
     login_action:           login
     secure_module:          global
     secure_action:          secure

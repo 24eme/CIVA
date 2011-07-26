@@ -17,4 +17,4 @@ csvTiersModificationsEmail:
   credentials: [admin]
 
 pdf:
-  credentials: [declarant]
+  credentials: [declaration]

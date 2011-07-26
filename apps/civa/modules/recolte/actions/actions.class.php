@@ -316,7 +316,7 @@ class recolteActions extends EtapesActions {
     }
 
     protected function initPrecDR(){
-        $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getTiers()->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
     }
 

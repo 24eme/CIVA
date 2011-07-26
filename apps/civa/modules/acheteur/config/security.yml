@@ -1,2 +1,2 @@
 default:
-  credentials: [declarant, declaration_brouillon, etape_exploitation]
+  credentials: [declaration_etape_exploitation]
