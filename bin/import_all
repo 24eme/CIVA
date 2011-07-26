@@ -10,8 +10,11 @@ php symfony import:Messages
 echo "Messages DONE"
 php symfony import:Achat
 echo "Acheteurs DONE";
-php symfony import:Tiers
+php symfony import:Tiers data/import/Tiers-20110325
+php symfony import:Tiers data/import/Tiers-maj-20110512
 echo "Tiers DONE";
+php symfony compte:update
+echo "Compte DONE";
 for year in 09 08 07 ; do 
 php symfony import:DR --year=$year > /tmp/dr.json
 curl -d @/tmp/dr.json -X POST http://$COUCHDBDOMAIN:5984/civa/_bulk_docs ; 

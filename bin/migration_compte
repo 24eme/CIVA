@@ -1,0 +1,16 @@
+#!/bin/bash
+
+. $(echo $0 | sed 's/[^\/]*$//')config.inc
+
+php symfony cc
+
+php symfony import:Tiers data/import/Tiers-20110325
+php symfony import:Tiers data/import/Tiers-maj-20110512
+echo "Tiers DONE";
+
+php symfony compte:update
+echo "Compte DONE";
+
+php symfony maintenance:tiers-to-compte
+echo "Migration DONE";
+
