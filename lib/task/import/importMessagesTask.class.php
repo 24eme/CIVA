@@ -51,6 +51,8 @@ EOF;
 	$json->type = 'Messages';
 
 	$json->msg_compte_index_intro = "Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code de création de compte (ceux que le CIVA vous a communiqués par courrier de compte)";
+        $json->msg_tiers_index_intro = "Merci de choisir un profil parmi la liste ci-dessous";
+        
         $json->telecharger_pdf_mon_espace = "Cette notice est au format PDF. Pour la visualiser, veuillez télécharger le logiciel <a href=\"http://get.adobe.com/fr/reader/\" >Adobe Reader</a>.";
         $json->telecharger_pdf = "Le fichier généré est au format PDF. Pour la visualiser, veuillez télécharger le logiciel <a href=\"http://get.adobe.com/fr/reader/\" >Adobe Reader</a>.";
 
