@@ -17,7 +17,7 @@ class declarationComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspace(sfWebRequest $request) {
-        $this->dr_editable = !ConfigurationClient::getConfiguration()->exist('dr_non_editable') || ConfigurationClient::getConfiguration()->dr_non_editable == '0';
+      $this->dr_editable = $this->getUser()->isDrEditable();
     }
     
     /**
@@ -58,7 +58,6 @@ class declarationComponents extends sfComponents {
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
         $cvi = array();
-        $conf = ConfigurationClient::getConfiguration();
         foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($dr->recolte->exist($appellation_key)) {
               $appellation = $dr->recolte->get($appellation_key);

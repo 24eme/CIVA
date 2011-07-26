@@ -3,7 +3,7 @@
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getConfig() {
-        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
     public function getLibelleWithAppellation() {
@@ -13,7 +13,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getLibelle() {
-        return ConfigurationClient::getConfiguration()->get($this->getHash())->getLibelle();
+      return $this->getConfig()->getLibelle();
     }
 
     public function getAppellation() {

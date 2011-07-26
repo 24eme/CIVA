@@ -7,11 +7,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getCepageLibelle() {
-        return $this->getParent()->getParent();
+      return $this->getCepage()->getLibelle();
     }
 
     public function getCepage() {
-        return $this->getParent()->getParent();
+      return $this->getParent()->getParent();
     }
 
     public function getCodeDouane() {
@@ -91,7 +91,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         if ($this->volume)
             return '';
 
-        if ($this->exist('motif_non_recolte') && ConfigurationClient::getConfiguration()->motif_non_recolte->exist($this->motif_non_recolte)) {
+        if ($this->exist('motif_non_recolte') && $this->getConfig()->motif_non_recolte->exist($this->motif_non_recolte)) {
             return ConfigurationClient::getConfiguration()->motif_non_recolte->get($this->motif_non_recolte);
         } else {
             return 'Déclaration en cours';

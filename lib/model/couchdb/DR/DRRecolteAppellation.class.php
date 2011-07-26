@@ -3,7 +3,7 @@
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getConfig() {
-        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
+      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
     public function getLibelle() {

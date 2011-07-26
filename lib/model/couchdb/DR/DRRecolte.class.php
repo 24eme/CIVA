@@ -6,9 +6,9 @@ class DRRecolte extends BaseDRRecolte {
      *
      * @return Configuration
      */
-    public function getConfig() {
-        return sfCouchdbManager::getClient('Configuration')->getConfiguration()->get($this->getHash());
-    }
+  public function getConfig() {
+    return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
+  }
 
     /**
      *

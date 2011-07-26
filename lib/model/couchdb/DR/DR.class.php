@@ -247,4 +247,8 @@ class DR extends BaseDR {
       parent::update($params);
       $u = $this->add('updated', 1);
     }
+
+    public function getConfigurationCampagne() {
+      return sfCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
+    }
 }

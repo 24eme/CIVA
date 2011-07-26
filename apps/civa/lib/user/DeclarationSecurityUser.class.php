@@ -74,9 +74,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
      * @return string
      */
     public function getCampagne() {
-        return '2010';
+      return CurrentClient::getCurrent()->year;
     }
-    
+
     /**
      *
      * @param string $etape 
@@ -104,7 +104,15 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
             }
         }
     }
-    
+    /**
+     * returns trus if editable
+     */
+    public function isDrEditable() {
+      if(ConfigurationClient::getConfiguration($this->getCampagne())->exist('dr_non_editable'))
+	return ! ConfigurationClient::getConfiguration()->dr_non_editable;
+      return 1;
+    }
+
     /**
      * 
      */
@@ -112,8 +120,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
         $this->requireDeclaration();
         $declaration = $this->getDeclaration();
         $this->clearCredentialsDeclaration();
-        $dr_editable = !(ConfigurationClient::getConfiguration()->exist('dr_non_editable') && ConfigurationClient::getConfiguration()->dr_non_editable);
-        if ($dr_editable) {
+        if ($this->isDrEditable()) {
             if ($declaration->isValideeTiers() || $declaration->isValideeCiva()) {
                 $this->addCredential(self::CREDENTIAL_DECLARATION_VALIDE);
             } else {
