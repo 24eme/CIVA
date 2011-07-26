@@ -17,8 +17,8 @@ class DR extends BaseDR {
             throw new sfException("etape does not exist");
         }
         if ($this->checkEtape($etape)) {
-            $declaration->add('etape');
-            $declaration->etape = $etape;
+            $this->add('etape');
+            $this->etape = $etape;
             return true;
         } else {
             return false;
@@ -31,7 +31,7 @@ class DR extends BaseDR {
      * @return boolean 
      */
     protected function checkEtape($etape) {
-        if ($this->exist('etape') && $this->etape && !in_array($etape, self::$_etapes_inclusion[$this->etape]) && $this->checkEtape($etape)) {
+        if ($this->exist('etape') && $this->etape && !in_array($this->etape, self::$_etapes_inclusion[$etape])) {
             return false;
         }      
         if ($etape == self::ETAPE_EXPLOITATION) {

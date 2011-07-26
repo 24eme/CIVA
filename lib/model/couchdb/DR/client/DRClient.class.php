@@ -22,7 +22,13 @@ class DRClient extends sfCouchdbClient {
        return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
     }
 
-    public function getArchivesCampagnes($cvi, $campagne) {
+    /**
+     *
+     * @param string $cvi
+     * @param string $campagne
+     * @return array 
+     */
+    public function getArchivesSince($cvi, $campagne) {
         $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
         $campagnes = array();
         foreach($docs->getIds() as $doc_id) {
