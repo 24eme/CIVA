@@ -9,12 +9,40 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class declarationComponents extends sfComponents {
+    
+    
+    
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeMonEspace(sfWebRequest $request) {
+        $this->dr_editable = !ConfigurationClient::getConfiguration()->exist('dr_non_editable') || ConfigurationClient::getConfiguration()->dr_non_editable == '0';
+    }
+    
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeMonEspaceEnCours(sfWebRequest $request) {
+        $this->declaration = $this->getUser()->getDeclaration();
+        $this->campagnes = $this->getUser()->getTiers()->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        krsort($this->campagnes);
+    }
+    
+    /**
+     *
+     * @param sfWebRequest $request 
+     */
+    public function executeMonEspaceColonne(sfWebRequest $request) {
+        $this->campagnes = $this->getUser()->getTiers()->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        krsort($this->campagnes);
+    }
 
     /**
      *
      * @param sfWebRequest $request
      */
-
     public function executeRecapDeclaration(sfWebRequest $request) {
         
         $tiers = $this->getUser()->getTiers();

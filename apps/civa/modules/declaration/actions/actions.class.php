@@ -10,25 +10,10 @@
  */
 class declarationActions extends EtapesActions {
 
-    public function executeMonEspaceCiva(sfWebRequest $request) {
-        if(ConfigurationClient::getConfiguration()->exist('dr_non_editable'))
-            $this->dr_non_editable = ConfigurationClient::getConfiguration()->dr_non_editable;
-        else
-            $this->dr_non_editable = 0;
-
-        $this->help_popup_action = "help_popup_mon_espace_civa";
+    public function executeInit(sfWebRequest $request) {
+        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
+        $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
-        $this->getUser()->initDeclarationCredentials();
-        $this->campagnes = $this->getUser()->getTiers()->getDeclarationArchivesCampagne(($this->getUser()->getCampagne()-1));
-        krsort($this->campagnes);
-        $this->tiers = $this->getUser()->getTiers();
-        $this->declaration = $this->getUser()->getDeclaration();
-        if ($this->getUser()->hasCredential(myUser::CREDENTIAL_DECLARATION_BROUILLON) && $request->isMethod(sfWebRequest::POST)) {
-            $this->processChooseDeclaration($request);
-        }
-    }
-
-    protected function processChooseDeclaration(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers();
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
@@ -62,18 +47,11 @@ class declarationActions extends EtapesActions {
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
+        $this->redirect('@mon_espace_civa');
     }
-
+   
     public function executeDownloadNotice() {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf", "aide.pdf");
-    }
-
-    public function executeDownloadNoticeGamma() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf", "aide_gamma.pdf");
-    }
-
-    public function executeDownloadAdhesionGamma() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/AdhesionGamma_EDI_CIVA.pdf", "AdhesionGamma_EDI_CIVA.pdf");
     }
 
     protected function renderPdf($path, $filename) {
@@ -126,7 +104,7 @@ class declarationActions extends EtapesActions {
             if ($this->askRedirectToNextEtapes()) {
                 $dr->validate($tiers);
                 $dr->save();
-                $this->getUser()->initDeclarationCredentials();
+                $this->getUser()->initCredentialsDeclaration();
 
                 $mess = 'Bonjour '.$tiers->nom.',
 
@@ -353,12 +331,12 @@ Le CIVA';
         }
 
     }
-
+    
     /**
      *
      * @param sfWebRequest $request
      */
-    public function executeRendreEditable(sfWebRequest $request) {
+    public function executeInvaliderCiva(sfWebRequest $request) {
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getUser()->getDeclaration();
         if ($dr) {
@@ -366,7 +344,7 @@ Le CIVA';
             $dr->save();
         }
 
-        $this->getUser()->initDeclarationCredentials();
+        $this->getUser()->initCredentialsDeclaration();
         $this->redirectToNextEtapes();
     }
 
@@ -374,7 +352,7 @@ Le CIVA';
      *
      * @param sfWebRequest $request
      */
-    public function executeDevalider(sfWebRequest $request) {
+    public function executeInvaliderRecoltant(sfWebRequest $request) {
         $dr = $this->getUser()->getDeclaration();
         if ($dr) {
             $dr->remove('modifiee');
@@ -382,7 +360,7 @@ Le CIVA';
             $dr->save();
         }
 
-        $this->getUser()->initDeclarationCredentials();
+        $this->getUser()->initCredentialsDeclaration();
         $this->redirect('@mon_espace_civa');
     }
 
