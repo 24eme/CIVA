@@ -48,6 +48,8 @@ EOF;
 	  $cepage_douane[$csv[1]][$csv[0]] = $csv[14];
 	}
 
+	$annee = "2010";
+
 	$docs = array();
 	$json = new stdClass();
 	$json->_id = 'CONFIGURATION';
@@ -56,8 +58,27 @@ EOF;
 	$docs[] = $json;
 
 	$json = new stdClass();
-        $json->dr_non_editable = 0;
+	$json->_id = 'CONFIGURATION-2009';
+	$json->type = 'Configuration';
+	$json->campagne = '2009';
+	$json->virtual = "2010";
+	$docs[] = $json;
 
+	$json = new stdClass();
+	$json->_id = 'CONFIGURATION-2008';
+	$json->type = 'Configuration';
+	$json->campagne = '2008';
+	$json->virtual = "2010";
+	$docs[] = $json;
+
+	$json = new stdClass();
+	$json->_id = 'CONFIGURATION-2007';
+	$json->type = 'Configuration';
+	$json->campagne = '2007';
+	$json->virtual = "2010";
+	$docs[] = $json;
+
+	$json = new stdClass();
         $json->recolte->douane->appellation_lieu = '001';
         $json->recolte->douane->type_aoc = '1';
         $json->recolte->douane->couleur = 'B';
@@ -124,6 +145,7 @@ EOF;
         
 	$json->_id = 'CONFIGURATION-'.$annee;
 	$json->type = 'Configuration';
+	$json->campagne = $annee;
 
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
@@ -152,7 +174,7 @@ EOF;
 	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
                 
-	  if (!$g[1] || $g[1] == "99")  {
+	  if (!isset($g[1]) || $g[1] == "99")  {
 	    continue;
 	  }
 	  if (!$g[2]) {
@@ -168,7 +190,7 @@ EOF;
 	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
             $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->qualite = 'S ';
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
-	    if ($grdcru->{'lieu'.$g[1]}->rendement != $g[4])
+	    if (isset($grdcru->{'lieu'.$g[1]}->rendement) && $grdcru->{'lieu'.$g[1]}->rendement != $g[4])
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
 	    if ($g[2] == 'ED' || $g[2] == 'SY')
 	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->no_vtsgn = 1;

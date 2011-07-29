@@ -13,6 +13,9 @@ class ConfigurationClient extends sfCouchdbClient {
     if (!isset(self::$configuration[$campagne])) {
         self::$configuration[$campagne] = CacheFunction::cache('model', array(sfCouchdbManager::getClient(), 'retrieveDocumentById'), array('CONFIGURATION-'.$campagne));
     }
+    if (isset(self::$configuration[$campagne]->virtual) && self::$configuration[$campagne]->virtual != $campagne)
+      self::$configuration[$campagne] = self::getConfiguration(self::$configuration[$campagne]->virtual);
+
     return self::$configuration[$campagne];
   }
   public function retrieveConfiguration($campagne = '') {

@@ -400,7 +400,9 @@ Configuration:
       _id: {  }
       _rev: {  }
       type: {}
-      dr_non_editable : {required: false}
+      campagne: {}
+      virtual : {required: false}
+      dr_non_editable: {required: false}
       intitule:
         type: array_collection
         definition:
