@@ -18,7 +18,6 @@ class Configuration extends BaseConfiguration {
         foreach ($appellations->filter('^appellation') as $appellation_key => $appellation) {
             $appellations_array[$appellation_key] = $appellation;
         }
-
         return $appellations_array;
     }
 

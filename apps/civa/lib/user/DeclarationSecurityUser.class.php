@@ -108,8 +108,8 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
      * returns trus if editable
      */
     public function isDrEditable() {
-      if(ConfigurationClient::getConfiguration($this->getCampagne())->exist('dr_non_editable'))
-	return ! ConfigurationClient::getConfiguration()->dr_non_editable;
+      if(CurrentClient::getCurrent()->exist('dr_non_editable'))
+	return ! CurrentClient::getCurrent()->dr_non_editable;
       return 1;
     }
 
