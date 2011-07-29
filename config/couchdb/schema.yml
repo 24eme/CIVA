@@ -391,7 +391,8 @@ Current:
       _id: {}
       _rev: {}
       type: {}
-      year: {}
+      campagne: {}
+      dr_non_editable: {required: false}
 
 Configuration:
   definition:

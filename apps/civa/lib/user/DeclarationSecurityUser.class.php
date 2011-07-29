@@ -74,7 +74,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
      * @return string
      */
     public function getCampagne() {
-      return CurrentClient::getCurrent()->year;
+      return CurrentClient::getCurrent()->campagne;
     }
 
     /**

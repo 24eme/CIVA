@@ -50,13 +50,12 @@ EOF;
 
 	$docs = array();
 	$json = new stdClass();
-	$json->_id = 'CAMPAGNE_COURANTE';
-	$json->campagne = "2010";
-	//	$docs[] = $json
-
+	$json->_id = 'CONFIGURATION';
+	$json->type = 'Configuration';
+	$json->delete = 1;
+	$docs[] = $json;
 
 	$json = new stdClass();
-
         $json->dr_non_editable = 0;
 
         $json->recolte->douane->appellation_lieu = '001';
@@ -123,7 +122,7 @@ EOF;
 	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
         $json->recolte->appellation_KLEVENER->douane->qualite = 'S';
         
-	$json->_id = 'CONFIGURATION';
+	$json->_id = 'CONFIGURATION-'.$annee;
 	$json->type = 'Configuration';
 
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
@@ -260,17 +259,26 @@ EOF;
         
 	$docs[] = $json;
 
+	$json = new stdClass();
+	$json->_id = 'CURRENT';
+	$json->type = 'Current';
+	$json->campagne = $annee;
+	$json->dr_non_editable = 0;
+	$docs[] = $json;
+
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
 	    if ($doc) {
 	      $doc->delete();
 	    }
+	    if (isset($data->delete))
+	      continue;
             $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
 	  return;
-}
+	}
 	echo '{"docs":';
 	echo json_encode($docs);
 	echo '}';
