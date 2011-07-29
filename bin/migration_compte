@@ -4,6 +4,8 @@
 
 php symfony cc
 
+bash bin/update
+
 php symfony import:Tiers data/import/Tiers-20110325
 php symfony import:Tiers data/import/Tiers-maj-20110512
 echo "Tiers DONE";
