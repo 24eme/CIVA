@@ -76,6 +76,7 @@ EOF;
       $tiers->fax = $db2->get(Db2Tiers::COL_FAX) ? sprintf('%010d', $db2->get(Db2Tiers::COL_FAX)) : null;
       $tiers->email = $db2->get(Db2Tiers::COL_EMAIL);
       $tiers->web = $db2->get(Db2Tiers::COL_SITE_INTERNET);
+      $tiers->add('exploitant');
       $tiers->exploitant->sexe = $db2->get(Db2Tiers::COL_SEXE_CHEF_ENTR);
       $tiers->exploitant->nom = $db2->get(Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR);
       $tiers->exploitant->adresse = $db2->get(Db2Tiers::COL_NUMERO) ? $db2->get(Db2Tiers::COL_NUMERO). ', ' . $db2->get(Db2Tiers::COL_ADRESSE) : $db2->get(Db2Tiers::COL_ADRESSE);

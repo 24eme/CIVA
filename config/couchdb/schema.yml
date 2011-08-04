@@ -196,65 +196,6 @@ Acheteur:
       commune: {  }
       achnum: {  }
 
-Tiers:
-  definition:
-    fields:
-      _id: {  }
-      _rev: {  }
-      type: {  }
-      cvi: {  }
-      no_declarant: { type: integer, required: false }
-      gamma: {type: string, required: false}
-      recoltant: { type: integer }
-      mot_de_passe: { }
-      num: {  }
-      no_stock: {  }
-      maison_mere: {  }
-      regime_fiscal: { }
-      civaba: {  }
-      no_accises: {  }
-      cvi_acheteur: {  }
-      declaration_insee: {  }
-      declaration_commune: {  }
-      siret: { type: string }
-      intitule: {  }
-      nom: {  }
-      siege:
-        type: collection
-        class: TiersSiege
-        definition:
-          fields:
-            adresse: {  }
-            insee_commune: {  }
-            code_postal: { }
-            commune: {  }
-      telephone: {  }
-      fax: {  }
-      email: {  }
-      web: {  }
-      exploitant:
-        class: TiersExploitant
-        type: collection
-        definition:
-          fields:
-            sexe: {  }
-            nom: {  }
-            adresse: {  }
-            code_postal: {  }
-            commune: {  }
-            date_naissance: {  }
-            telephone: {  }
-      metteur_marche:
-        type: collection
-        required: false
-        definition:
-          fields:
-            nom: {  }
-            num: {  }
-      revision_dernieres_modifications: {required: false}
-      import_db2_date: {required: false}
-      export_db2_revision: {required: false}
-
 _Compte:
   type: abstract
   definition:
@@ -327,6 +268,7 @@ _Tiers:
       exploitant:
         class: _TiersExploitant
         type: collection
+        required: false
         definition:
           fields:
             sexe: {  }
