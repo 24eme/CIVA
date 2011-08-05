@@ -7,7 +7,7 @@ base=$(grep 'dbname:' $CONFIGFILE | sed 's/.*dbname: //' | sed 's/\W*$//')
 COUCHDBURL=$url$base
 design=DR
 
-curl -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
 
 cat <<EOF > $TMPFILE
 {
@@ -22,6 +22,8 @@ cat <<EOF > $TMPFILE
 }
 EOF
 
-curl -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 
-echo curl $COUCHDBURL/_design/$design/_view/campagne_acheteur
+curl -s $COUCHDBURL/_design/$design/_view/campagne_acheteur > /dev/null & 
+sleep 1
+kill %1
