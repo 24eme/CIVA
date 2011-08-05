@@ -2,7 +2,16 @@
 
 class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
-
+    protected $_loaded_data = null;
+    
+    public function loadFromCouchdb(stdClass $data) {
+        if(!is_null($this->_loaded_data)) {
+            throw new sfCouchdbException("data already load");
+        }
+        $this->_loaded_data = serialize($data);
+        $this->load($data);
+    }
+    
     public function __toString() {
       return $this->get('_id').'/'.$this->get('_rev');
     }
@@ -25,9 +34,13 @@ class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function save() {
-      $ret = sfCouchdbManager::getClient()->saveDocument($this);
-      $this->_rev = $ret->rev;
-      return $ret;
+      if($this->isModified()) {
+          $ret = sfCouchdbManager::getClient()->saveDocument($this);
+          $this->_rev = $ret->rev;
+          $this->_loaded_data = serialize($this->getData());
+          return $ret;
+      }
+      return false;
     }
 
     public function getData() {
@@ -48,6 +61,10 @@ class sfCouchdbDocument extends sfCouchdbJson {
     
     public function update($params = array()) {
       return parent::update($params);
+    }
+    
+    public function isModified() {
+        return $this->isNew() || (unserialize($this->_loaded_data) != $this->getData());
     }
 
     public function  __clone() {

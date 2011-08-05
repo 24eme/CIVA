@@ -47,7 +47,7 @@ class sfCouchdbClient extends couchClient {
 	throw new sfCouchdbException('class '.$data->type.' not found');
       }
       $doc = new $data->type();
-      $doc->load($data);
+      $doc->loadFromCouchdb($data);
       return $doc;
     }
 

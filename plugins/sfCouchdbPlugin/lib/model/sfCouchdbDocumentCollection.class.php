@@ -1,23 +1,25 @@
 <?php
 
 class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Countable {
+
     protected $_docs = array();
     protected $_hydrate = array();
     protected $_class = null;
 
-    public function  __construct($data = null, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function __construct($data = null, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
         $this->_hydrate = $hydrate;
         $this->load($data);
     }
-    private function load($data) {
+
+    protected function load($data) {
         if (!is_null($data)) {
             try {
                 if ($this->_hydrate == sfCouchdbClient::HYDRATE_ARRAY) {
-                    foreach($data["rows"] as $item) {
-                            $this->_docs[$item['id']] = $item["doc"];
+                    foreach ($data["rows"] as $item) {
+                        $this->_docs[$item['id']] = $item["doc"];
                     }
                 } else {
-                    foreach($data->rows as $item) {
+                    foreach ($data->rows as $item) {
                         if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND) {
                             $this->_docs[$item->id] = null;
                         } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA) {
@@ -25,7 +27,7 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
                         } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_JSON) {
                             $this->_docs[$item->id] = $item->doc;
                         } elseif ($this->_hydrate == sfCouchdbClient::HYDRATE_DOCUMENT) {
-                            $this->_docs[$item->id] = $this->getNewDocument($item->doc);
+                            $this->_docs[$item->id] = sfCouchdbManager::getClient()->createDocumentFromData($item->doc);
                         }
                     }
                 }
@@ -34,18 +36,7 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
             }
         }
     }
-
-    private function getNewDocument($data) {
-        if (isset($data->type) && class_exists($data->type)) {
-           $class = $data->type;
-           $doc = new $class();
-           $doc->load($data);
-           return $doc;
-        } else {
-            throw new sfCouchdbException("Class doesn't exist");
-        }
-    }
-
+    
     public function getIds() {
         return array_keys($this->_docs);
     }
@@ -59,9 +50,9 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
     }
 
     public function get($id) {
-        if($this->contains($id)) {
+        if ($this->contains($id)) {
             if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA && !($this->_docs[$id] instanceof sfCouchdbDocument)) {
-                $this->_docs[$id] = $this->getNewDocument($this->_docs[$id]);
+                $this->_docs[$id] = sfCouchdbManager::getClient()->createDocumentFromData($this->_docs[$id]);
             }
             if ($this->_hydrate == sfCouchdbClient::HYDRATE_ON_DEMAND && is_null($this->_docs[$id])) {
                 $this->_docs[$id] = sfCouchdbManager::getClient()->retrieveDocumentById($id);
@@ -94,7 +85,7 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
     }
 
     public function offsetExists($index) {
-       return $this->contains($index);
+        return $this->contains($index);
     }
 
     public function offsetUnset($offset) {
@@ -104,4 +95,5 @@ class sfCouchdbDocumentCollection implements IteratorAggregate, ArrayAccess, Cou
     public function count() {
         return count($this->_docs);
     }
+
 }
