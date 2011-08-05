@@ -69,41 +69,10 @@ class ExportDRAcheteurCsv extends ExportCsv {
         $this->_debug = $debug;
         $this->load($campagne, $cvi_acheteur);
     }
-
-    /*protected function findDrIds($campagne, $cvi_acheteur) {
-        $drs_id_acheteur = array();
-        $drs_id = sfCouchdbManager::getClient("DR")->getAllByCampagne($campagne, sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-
-        foreach ($drs_id as $dr_id) {
-            $dr_json = sfCouchdbManager::getClient()->retrieveDocumentById($dr_id, sfCouchdbClient::HYDRATE_ARRAY);
-            if (array_key_exists('acheteurs', $dr_json)) {
-                foreach ($dr_json['acheteurs'] as $appellation => $types) {
-                    foreach ($types as $type => $cvis) {
-                        if (is_array($cvis)) {
-                            foreach ($cvis as $cvi) {
-                                if ($cvi_acheteur == $cvi) {
-                                    if (!in_array($dr_id, $drs_id_acheteur)) {
-                                        echo $dr_id . "\n";
-                                        $drs_id_acheteur[] = $dr_id;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if ($this->_debug) {
-            echo "\n";
-            print_r($drs_id_acheteur);
-            echo "\n";
-        }
-        return $drs_id_acheteur;
-    }*/
-
+    
     protected function load($campagne, $cvi_acheteur) {
         $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA);
-        //exit;
+
         foreach ($drs as $dr) {
             if (substr($dr->cvi, 0, 1) == "6") {
                 if ($this->_debug) {
@@ -134,8 +103,9 @@ class ExportDRAcheteurCsv extends ExportCsv {
             }
             unset($dr);
         }
-        
-        echo count($drs)." DRs \n";
+        if ($this->_debug) {
+            echo "------------ \n" . count($drs)." DRs \n ------------\n";
+        }
     }
 
     protected function addDetail($cvi, $acheteur) {
@@ -143,7 +113,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         $type = $acheteur->getParent()->getKey();
         echo $this->add(array(
             "cvi_acheteur" => $cvi,
-            "nom_acheteur" => "",//$detail->getCepage()->getLieu()->acheteurs->$type->$cvi->getNom(),
+            "nom_acheteur" => $detail->getCepage()->getLieu()->acheteurs->$type->$cvi->getNom(),
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
@@ -165,7 +135,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         $lieu = $acheteur->getLieu();
         echo $this->add(array(
             "cvi_acheteur" => $cvi,
-            "nom_acheteur" => "", //$acheteur->getNom(),
+            "nom_acheteur" => $acheteur->getNom(),
             "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "appellation" => $acheteur->getLieu()->getAppellation()->getConfig()->getLibelle(),
