@@ -1,0 +1,27 @@
+
+CONFIGFILE=config/databases.yml
+TMPFILE=/tmp/couchdb.$$.tmp
+
+url=$(grep 'dsn:' $CONFIGFILE | sed 's/.*dsn: //' | sed 's/[^\/]*$//')
+base=$(grep 'dbname:' $CONFIGFILE | sed 's/.*dbname: //' | sed 's/\W*$//')
+COUCHDBURL=$url$base
+design=DR
+
+curl -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+  "_id":"_design/DR",
+  "language": "javascript",
+  "views":
+  {
+    "campagne_acheteur": {
+      "map": "function(doc) {  if (doc.type && doc.type != 'DR')      return;  for(appellation in doc.acheteurs) {     if (doc.acheteurs[appellation].negoces)     for (id in doc.acheteurs[appellation].negoces) {       emit([doc.campagne, doc.acheteurs[appellation].negoces[id], doc.cvi], doc);     }     if (doc.acheteurs[appellation].cooperatives)     for (id in doc.acheteurs[appellation].cooperatives) {       emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id]. doc.cvi], doc);     }  } }",
+    },
+  }
+}
+EOF
+
+curl -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+echo curl $COUCHDBURL/_design/$design/_view/campagne_acheteur

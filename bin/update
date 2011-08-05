@@ -4,5 +4,6 @@
 
 php symfony import:Configuration 
 echo "Configuration updated";
+. views
 php symfony import:Message
 echo "Messages updated";
