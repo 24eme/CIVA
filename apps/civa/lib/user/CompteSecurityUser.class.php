@@ -41,7 +41,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         parent::initialize($dispatcher, $storage, $options);
 
         if (!$this->isAuthenticated()) {
-            $this->signOutCompte();
+            $this->signOut();
         }
     }
 

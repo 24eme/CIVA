@@ -188,4 +188,3 @@ class ExportDRXml {
         $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
     }
 }
-?>

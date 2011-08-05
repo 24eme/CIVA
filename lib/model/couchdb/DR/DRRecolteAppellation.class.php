@@ -30,18 +30,18 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
-    public function getVolumeRevendique() {
+    public function getVolumeRevendique($force_calcul = false) {
         $field = 'volume_revendique';
-        if ($this->issetField($field)) {
+        if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
     }
 
 
-    public function getDplc() {
+    public function getDplc($force_calcul = false) {
         $field = 'dplc';
-        if ($this->issetField($field)) {
+        if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
         return $this->store($field, array($this, 'getSumLieuFields'), array($field));
@@ -136,6 +136,8 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
+            /*$this->volume_revendique = $this->getVolumeRevendique(true);
+            $this->total_superficie = $this->getTotalSuperficie(true);*/
         }
     }
 }
