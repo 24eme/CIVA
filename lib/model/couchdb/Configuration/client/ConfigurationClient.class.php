@@ -11,10 +11,12 @@ class ConfigurationClient extends sfCouchdbClient {
       $campagne = self::$current->campagne;
     }
     if (!isset(self::$configuration[$campagne])) {
-        self::$configuration[$campagne] = CacheFunction::cache('model', array(sfCouchdbManager::getClient(), 'retrieveDocumentById'), array('CONFIGURATION-'.$campagne));
+      self::$configuration[$campagne] = CacheFunction::cache('model', array(sfCouchdbManager::getClient(), 'retrieveDocumentById'), array('CONFIGURATION-'.$campagne));
     }
-    if (isset(self::$configuration[$campagne]->virtual) && self::$configuration[$campagne]->virtual != $campagne)
+    if (self::$configuration[$campagne]->exist('virtual') && self::$configuration[$campagne]->virtual != $campagne) {
+      echo "virtual $campagne !!!\n";
       self::$configuration[$campagne] = self::getConfiguration(self::$configuration[$campagne]->virtual);
+    }
 
     return self::$configuration[$campagne];
   }
