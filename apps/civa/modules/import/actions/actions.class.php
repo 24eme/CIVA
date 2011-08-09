@@ -24,17 +24,5 @@ class importActions extends sfActions
     if (!$this->csvform->isValid())
       return ;
  
-    $file = $this->csvform->getValue('file');
-
-    $this->csv = array();
-
-    if (($handle = fopen($file->getTempName(), "r")) !== FALSE) {
-      while (($data = fgetcsv($handle)) !== FALSE) {
-	$this->csv[] = $data;
-      }
-      fclose($handle);
-    }else{
-      throw new Exception('cannot open the file');
-    }	
   }
 }
