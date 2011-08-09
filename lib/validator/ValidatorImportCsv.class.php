@@ -39,7 +39,7 @@ class ValidatorImportCsv extends sfValidatorFile
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
 
-    if (!preg_match('/("?)[0-9]{10}("?)([,;])/', $buffer, $match)) {
+    if (!preg_match('/("?)[0-9]{10}("?)([,;\t])/', $buffer, $match)) {
       $errorSchema->addError(new sfValidatorError($this, 'invalid_csv_file'));
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
