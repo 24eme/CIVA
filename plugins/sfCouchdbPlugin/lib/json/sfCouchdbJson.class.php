@@ -2,74 +2,144 @@
 
 class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
+    /**
+     *
+     * @var array
+     */
     private $_fields = null;
+    /**
+     *
+     * @var array 
+     */
+    private $_fields_name = null;
+    /**
+     *
+     * @var bool
+     */
     private $_is_array = false;
-    protected $_definition_hash = null;
-    protected $_definition_model = null;
+    
+    /**
+     *
+     * @var string 
+     */
+    private $_definition_model = null;
+    
+    /**
+     *
+     * @var string
+     */
+    private $_definition_hash = null;
+    
+    /**
+     *
+     * @var sfCouchdbDocument 
+     */
     private $_couchdb_document = null;
-    private $_object_hash = null;
+    /**
+     *
+     * @var string
+     */
+    private $_hash = null;
     private $_filter = null;
     private $_filter_persisent = false;
 
-    public function __construct($definition_model = null, $definition_hash = null, $couchdoc = null, $my_hash = null) {
+    /**
+     *
+     * @param sfCouchdbJsonDefinition $definition
+     * @param sfCouchdbDocument $couchdb_document
+     * @param string $hash 
+     */
+    public function __construct(sfCouchdbJsonDefinition $definition, $couchdb_document, $hash) {
         $this->_fields = array();
+        $this->_fields_name = array();
         $this->_is_array = false;
-        if (is_null($definition_model) || is_null($definition_hash)) {
-            $this->setupDefinition();
-        } else {
-            $this->_definition_model = $definition_model;
-            $this->_definition_hash = $definition_hash;
-        }
-        if ($couchdoc) {
-            $this->_couchdb_document = $couchdoc;
-        }
-        if ($my_hash) {
-            $this->_object_hash = $my_hash;
-        }
+
+        $this->_definition_model = $definition->getModel();
+        $this->_definition_hash = $definition->getHash();
+
+        $this->_couchdb_document = $couchdb_document;
+        $this->_hash = $hash;
         $this->initializeDefinition();
     }
-
-    protected function setupDefinition() {
-        throw new sfCouchdbException('Definition not found');
+    
+    /**
+     * Retourne le document conteneur (permet donc de retourner à la racine)
+     * @return sfCouchdbDocument 
+     */
+    public function getCouchdbDocument() {
+        return $this->_couchdb_document;
     }
 
+    /**
+     * Ajoute les différents champs requis du modèle
+     */
     private function initializeDefinition() {
         foreach ($this->getDefinition()->getRequiredFields() as $field_definition) {
             $this->_add($field_definition->getKey(), null);
         }
     }
-
-    public function setIsArray($value) {
-        $this->_is_array = $value;
-    }
-
+    
+    /**
+     * Retourne la définition du modèle associé
+     * 
+     * @return sfCouchdbJsonDefinition 
+     */
     public function getDefinition() {
         return sfCouchdbManager::getDefinitionByHash($this->_definition_model, $this->_definition_hash);
     }
 
+    /**
+     * Permet de passer l'objet en mode "Tableau", il possédera donc des clés numériques
+     * 
+     * @param bool $value 
+     */
+    public function setIsArray($value) {
+        $this->_is_array = $value;
+    }
+
+    /**
+     * Permet de savoir si l'objet est en mode tableau
+     * @return bool 
+     */
     public function isArray() {
         return $this->_is_array;
     }
 
+    /**
+     * Charge les données à partir de différents types : array, stdClass et sfCouchdbJson
+     * @param mixed $data 
+     */
     public function load($data) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
-                if (!$this->hasField($key)) {
-                    $this->_add($key);
-                }
-                $this->_set($key, $item);
+                $this->_add($key, $item);
             }
         }
     }
 
+    /**
+     *
+     * @param string $key
+     * @return mixed 
+     */
     public function __get($key) {
         return $this->get($key);
     }
 
+    /**
+     *
+     * @param string $key
+     * @return mixed 
+     */
     protected function _get($key) {
-        return $this->getField($key)->getValue();
+        return $this->getField($key);
     }
 
+    /**
+     *
+     * @param string $key_or_hash
+     * @return mixed 
+     */
     public function get($key_or_hash) {
         $obj_hash = new sfCouchdbHash($key_or_hash);
         if ($obj_hash->isAlone()) {
@@ -83,16 +153,22 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
+    /**
+     *
+     * @param string $key
+     * @param mixed $data_or_object
+     * @return mixed 
+     */
     private function setFromDataOrObject($key, $data_or_object) {
         $field = $this->getField($key);
         if ($data_or_object instanceof sfCouchdbJson) {
-            $field->getValue()->load($data_or_object->getData());
+            $field->load($data_or_object->getData());
         } elseif ($data_or_object instanceof stdClass) {
-            $field->getValue()->load($data_or_object);
+            $field->load($data_or_object);
         } elseif (is_array($data_or_object)) {
-            $field->getValue()->load($data_or_object);
+            $field->load($data_or_object);
         } else {
-            $field->setValue($data_or_object);
+            $this->_fields[sfInflector::underscore(sfInflector::camelize($key))] = $data_or_object;
         }
 
         return $field;
@@ -123,8 +199,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             } else {
                 return $this->removeNormal($key_or_hash);
             }
+        } else {
+            return $this->getField($obj_hash->getFirst())->remove($obj_hash->getAllWithoutFirst());
         }
-        return $this->getField($obj_hash->getFirst())->getValue()->remove($obj_hash->getAllWithoutFirst());
     }
 
     private function removeNormal($key) {
@@ -145,13 +222,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     public function clear() {
         if ($this->_is_array) {
-            $this->removeFields();
-        }
-    }
-    
-    protected function removeFields() {
-        foreach($this->_fields as $key => $field) {
-            $this->remove($key);
+            foreach ($this->_fields as $key => $field) {
+                $this->remove($key);
+            }
         }
     }
 
@@ -164,6 +237,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     protected function _add($key = null, $item = null) {
+        if (!$this->getDefinition()->exist($key)) {
+            throw new sfCouchdbException(sprintf("Definition error : %s (%s)", $key, $this->getHash()));
+        }
         if ($this->_is_array) {
             $ret = $this->addNumeric();
         } else {
@@ -181,19 +257,25 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     private function addNormal($key = null) {
         if ($this->hasField($key)) {
-            return $this->get($key);
+            return $this->getField($key);
         }
-
-        $field = $this->getDefinition()->getJsonField($key, false, $this->_couchdb_document, $this->_object_hash . '/' . $key);
-        $this->_fields[$field->getKey()] = $field;
-        return $field->getValue();
+        $name = $key;
+        $key = sfInflector::underscore(sfInflector::camelize($key));
+        // ajouter le hash et le document
+        $field = $this->getDefinition()->get($key)->getDefaultValue($this->_couchdb_document, $this->_hash . '/' . $name);
+        $this->_fields[$key] = $field;
+        if ($this->getDefinition()->get($key)->isMultiple()) {
+            $this->_fields_name[$key] = $name;
+        }
+        return $field;
     }
 
     private function addNumeric() {
-        $field = $this->getDefinition()->getJsonField(null, true, $this->_couchdb_document, $this->_object_hash . '/' . count($this->_fields));
+        $field = $this->getDefinition()->get('*')->getDefaultValue($this->_couchdb_document, $this->_hash . '/' . count($this->_fields));
+        //$field = $this->getDefinition()->getJsonField(null, true, $this->_couchdb_document, $this->_hash . '/' . count($this->_fields));
         $this->_fields[] = $field;
 
-        return $field->getValue();
+        return $field;
     }
 
     public function exist($key) {
@@ -209,11 +291,43 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     private function hasFieldNormal($key) {
-        return isset($this->_fields[sfInflector::underscore(sfInflector::camelize($key))]);
+        return array_key_exists(sfInflector::underscore(sfInflector::camelize($key)), $this->_fields);
     }
 
     private function hasFieldNumeric($key) {
-        return isset($this->_fields[$key]);
+        return array_key_exists($key, $this->_fields);
+    }
+
+    public function getFieldName($key) {
+        if ($this->_is_array) {
+            return $this->getFieldNameNumeric($key);
+        } else {
+            return $this->getFieldNameNormal($key);
+        }
+    }
+
+    private function getFieldNameNormal($key) {
+        if ($this->hasField($key)) {
+            if ($this->getDefinition()->get($key)->isMultiple()) {
+                return $this->_fields_name[sfInflector::underscore(sfInflector::camelize($key))];
+            } else {
+                return $this->getDefinition()->get($key)->getName();
+            }
+        } else {
+            throw new sfCouchdbException(sprintf('field inexistant : %s (%s)', $key, $this->getHash()));
+        }
+    }
+
+    private function getFieldNameNumeric($key) {
+        if ($this->hasField($key)) {
+            return $key;
+        } else {
+            throw new sfCouchdbException(sprintf('field inexistant : %s', $key));
+        }
+    }
+
+    public function getFields() {
+        return $this->_fields;
     }
 
     public function getField($key) {
@@ -224,15 +338,11 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
-    public function getFields() {
-        return $this->_fields;
-    }
-
     private function getFieldNormal($key) {
         if ($this->hasField($key)) {
             return $this->_fields[sfInflector::underscore(sfInflector::camelize($key))];
         } else {
-	  throw new sfCouchdbException(sprintf('field inexistant : %s (%s)', $key, $this->getHash()));
+            throw new sfCouchdbException(sprintf('field inexistant : %s (%s%s)', $key, $this->_definition_model, $this->getHash()));
         }
     }
 
@@ -240,7 +350,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         if ($this->hasField($key)) {
             return $this->_fields[$key];
         } else {
-            throw new sfCouchdbException(sprintf('field inexistant : %s', $key));
+            throw new sfCouchdbException(sprintf('field inexistant : %s (%s%s)', $key, $this->_definition_model, $this->getHash()));
         }
     }
 
@@ -249,8 +359,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             $name = sfInflector::underscore(sfInflector::camelize(substr($method, 3)));
             if ($this->hasField($name)) {
                 return call_user_func_array(
-                        array($this, $verb),
-                        array_merge(array($name), $arguments)
+                        array($this, $verb), array_merge(array($name), $arguments)
                 );
             } else {
                 throw new sfCouchdbException(sprintf('Method undefined : %s', $method));
@@ -330,14 +439,13 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     public function getData() {
-
         $data = array();
 
-        foreach ($this->_fields as $field) {
-            if ($this->_is_array) {
-                $data[] = $field->getData();
+        foreach ($this->_fields as $key => $field) {
+            if ($this->getDefinition()->get($key)->isCollection()) {
+                $data[$this->getFieldName($key)] = $field->getData();
             } else {
-                $data[$field->getName()] = $field->getData();
+                $data[$this->getFieldName($key)] = $field;
             }
         }
 
@@ -359,7 +467,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function getSimpleFields() {
         $simple_fields = array();
         foreach ($this->_fields as $key => $field) {
-            if (!$field->isCollection()) {
+            if (!$this->getDefinition()->get($key)->isCollection()) {
                 $simple_fields[$key] = $field;
             }
         }
@@ -376,66 +484,43 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             }
         } elseif ($deep) {
             foreach ($this->_fields as $key => $field) {
-                if (!$field->isCollection()) {
-                    $array_fields[$key] = $this->get($key);
+                if ($this->getDefinition()->get($key)->isCollection()) {
+                    $array_fields[$key] = $field->toArray($deep);
                 } else {
-                    $array_fields[$key] = $field->getValue()->toArray($deep);
+                    $array_fields[$key] = $this->get($key);
                 }
             }
         }
         return $array_fields;
     }
 
-    public function setCouchdbDocumentAndHash($document, $hash, $internal = 0) {
-        if ($this->_couchdb_document)
-            return;
-        $this->_couchdb_document = $document;
-        $this->_object_hash = $hash;
-        foreach ($this->_fields as $key => $item) {
-            $value = $item->getValue();
-            if ($value instanceOf sfCouchdbJson) {
-                $value->setCouchdbDocumentAndHash($document, $hash . '/' . $key, 1);
+    protected function definitionValidation() {
+        foreach ($this->_fields as $key => $field) {
+            if (!$this->getDefinition()->get($key)->isValid($field)) {
+                throw new sfCouchdbException(sprintf("Value not valid : %s required %s (%s)", gettype($field), $this->getDefinition()->get($key)->getType(), $this->getHash() . "/" . $key));
+            }
+            if ($this->getDefinition()->get($key)->isCollection()) {
+                $field->definitionValidation();
             }
         }
-        /*
-          if (!$internal) {
-          $this->update();
-          }
-         */
     }
 
-    public function getCouchdbDocument() {
-        if (!$this->_couchdb_document) {
-            throw new sfCouchdbException('document not yet associated');
-        }
-        return $this->_couchdb_document;
-    }
     
-    public function save() {
-        return $this->getCouchdbDocument()->save();
-    }
-
-    public function setHash($hash) {
-        $this->_object_hash = $hash;
-    }
 
     public function getParentHash() {
         return preg_replace('/\/[^\/]+$/', '', $this->getHash());
     }
 
     public function getParent() {
-      return $this->getCouchdbDocument()->get($this->getParentHash());
+        return $this->getCouchdbDocument()->get($this->getParentHash());
     }
 
     public function getKey() {
-      return preg_replace('/^.*\//', '\1', $this->getHash());
+        return preg_replace('/^.*\//', '\1', $this->getHash());
     }
 
     public function getHash() {
-        if (!$this->_object_hash) {
-            throw new sfCouchdbException('document not yet associated');
-        }
-        return $this->_object_hash;
+        return $this->_hash;
     }
 
     public function getFirst() {
@@ -445,7 +530,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function getFirstKey() {
         return $this->getIterator()->getFirstKey();
     }
-    
+
     public function getLast() {
         return $this->getIterator()->getLast();
     }
@@ -455,10 +540,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     }
 
     protected function update($params = array()) {
-        foreach ($this->_fields as $key => $item) {
-            $value = $item->getValue();
-            if ($value instanceOf sfCouchdbJson) {
-                $value->update($params);
+        foreach ($this->_fields as $key => $field) {
+            if ($this->getDefinition()->get($key)->isCollection()) {
+                $field->update($params);
             }
         }
     }

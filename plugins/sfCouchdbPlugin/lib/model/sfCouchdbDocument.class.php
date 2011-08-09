@@ -1,6 +1,6 @@
 <?php
 
-class sfCouchdbDocument extends sfCouchdbJson {
+abstract class sfCouchdbDocument extends sfCouchdbJson {
     protected $_is_new = true;
     protected $_loaded_data = null;
     
@@ -17,13 +17,13 @@ class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function  __construct() {
-      parent::__construct(null, null, $this, "/");
-      try{
-	if (isset($this->_definition_model)) {
-	  $this->type = $this->_definition_model;
-	}
-      }catch(Exception $e) {
-	throw new sfCouchdbException('Model should include Type field in the document root');
+      parent::__construct(sfCouchdbManager::getDefinitionByHash($this->getDocumentDefinitionModel(), '/'), 
+                         $this, 
+                         "");
+      $this->type = $this->getDefinition()->getModel();
+      
+      if (!$this->type) {
+          throw new sfCouchdbException('Model should include Type field in the document root');
       }
     }
 
@@ -34,6 +34,7 @@ class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function save() {
+      $this->definitionValidation();
       if($this->isModified()) {
           $ret = sfCouchdbManager::getClient()->saveDocument($this);
           $this->_rev = $ret->rev;
@@ -51,7 +52,7 @@ class sfCouchdbDocument extends sfCouchdbJson {
         return $data;
     }
 
-    public static function getDocumentDefinitionModel() {
+    public function getDocumentDefinitionModel() {
         throw new sfCouchdbException('Definition model not implemented');
     }    
 

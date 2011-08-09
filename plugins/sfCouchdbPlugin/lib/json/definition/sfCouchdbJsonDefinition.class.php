@@ -57,8 +57,12 @@ class sfCouchdbJsonDefinition {
 
         return false;
     }
+    
+    public function exist($key) {
+        return $this->hasField($key);
+    }
 
-    protected function get($key) {
+    public function get($key) {
         if ($this->has($key)) {
             return $this->_fields[$key];
         }
@@ -96,7 +100,7 @@ class sfCouchdbJsonDefinition {
         return null;
     }
 
-    public function getJsonField($key, $numeric_key, $couchdb_document, $hash) {
+    /*public function getJsonField($key, $numeric_key, $couchdb_document, $hash) {
         if (!$this->hasField($key)) {
 	  throw new sfCouchdbException(sprintf("Definition error : %s (%s)", $key, $hash));
         }
@@ -107,5 +111,5 @@ class sfCouchdbJsonDefinition {
 	  return $field->getJsonField($numeric_key, $couchdb_document, $hash, $key);
         else
 	  return $field->getJsonField($numeric_key, $couchdb_document, $hash);
-    }
+    }*/
 }

@@ -28,4 +28,3 @@ class sfCouchdbDocumentCollectionArrayIterator extends ArrayIterator {
         return $this->_doc_collection->offsetUnset($index);
     }
 }
-?>

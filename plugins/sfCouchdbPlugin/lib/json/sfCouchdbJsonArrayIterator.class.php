@@ -59,11 +59,7 @@ class sfCouchdbJsonArrayIterator extends ArrayIterator {
     }
 
     public function key() {
-        if ($this->_json->isArray()) {
-            return parent::key();
-        } else {
-            return $this->_json->getField(parent::key())->getName();
-        }
+        return $this->_json->getFieldName(parent::key());
     }
  
     public function offsetGet($index) {
@@ -82,4 +78,3 @@ class sfCouchdbJsonArrayIterator extends ArrayIterator {
         return $this->_json->offsetUnset($index);
     }
 }
-?>

@@ -6,27 +6,25 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
    protected $_is_new = false;
    protected $_storage = array();
 
-   public function  __construct($definition_model = null, $definition_hash = null) {
+   public function  __construct($definition, $_couchdb_document, $hash) {
 
-       $this->_is_new = (is_null($definition_model) && is_null($definition_hash));
-
+       //$this->_is_new = (is_null($definition_model) && is_null($definition_hash));
         $this->configureTree();
-        parent::__construct($definition_model, $definition_hash);
+        parent::__construct($definition, $_couchdb_document, $hash);
    }
 
    abstract public function configureTree();
 
-   public function setupDefinition() {
+   /*public function setupDefinition() {
        $this->_definition_model = call_user_func_array(array($this->getRootClassName(), 'getDocumentDefinitionModel'), array());
        $this->_definition_hash = sfCouchdbManager::getDefinitionHashTree($this->getRootClassName(), $this->getTreeClassName());
        if (is_null($this->_definition_hash)) {
            throw new sfCouchdbException('definition hash not find');
        }
-    }
+    }*/
 
    public function getRootClassName() {
        if (!class_exists($this->_root_class_name)) {
-            echo $this->_root_class_name;
             throw new sfCouchdbException("Root class name don't exist");
        } else {
            return $this->_root_class_name;
@@ -57,5 +55,3 @@ abstract class sfCouchdbDocumentTree extends sfCouchdbJson {
         parent::update($params);
     }
 }
-
-?>
