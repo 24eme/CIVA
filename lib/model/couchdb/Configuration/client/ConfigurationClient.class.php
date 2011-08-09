@@ -19,9 +19,6 @@ class ConfigurationClient extends sfCouchdbClient {
     return self::$configuration[$campagne];
   }
   public function retrieveConfiguration($campagne = '') {
-    if (!$campagne) {
-      $campagne = parent::retrieveDocumentById('CURRENT');
-    }
-    return parent::retrieveDocumentById('CONFIGURATION-'.$campagne);
+    return self::getConfiguration($campagne);
   }
 }
