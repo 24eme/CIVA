@@ -91,8 +91,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         if ($this->volume)
             return '';
 
-        if ($this->exist('motif_non_recolte') && $this->getConfig()->motif_non_recolte->exist($this->motif_non_recolte)) {
-            return ConfigurationClient::getConfiguration()->motif_non_recolte->get($this->motif_non_recolte);
+        if ($this->exist('motif_non_recolte') && $this->getConfig()->getCouchdbDocument()->motif_non_recolte->exist($this->motif_non_recolte)) {
+            return $this->getConfig()->getCouchdbDocument()->motif_non_recolte->get($this->motif_non_recolte);
         } else {
             return 'Déclaration en cours';
         }
