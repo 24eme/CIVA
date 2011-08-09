@@ -42,4 +42,59 @@ class Configuration extends BaseConfiguration {
         return false;
     }
 
+    private static function normalizeLibelle($libelle) {
+      $libelle = preg_replace('/&nbsp;/', '', strtolower($libelle));
+      $libelle = str_replace(array('é', 'è'), 'e', $libelle);
+      $libelle = preg_replace('/[^a-z ]/', '', preg_replace('/  */', ' ', preg_replace('/&([a-z])[^;]+;/i', '\1', $libelle)));
+      return $libelle;
+    }
+
+    public function identifyProduct($appellation, $lieu, $cepage) {
+      $appid = null;
+      $lieuid = 'lieu';
+      $cepageid = null;
+      $libelle = self::normalizeLibelle($appellation);
+      foreach ( $this->getRecolte()->filter('^appellation') as $appellation_key => $appellation) {
+	if ($libelle == self::normalizeLibelle($appellation->getLibelle())) {
+	  $appid=$appellation_key;
+	  break;
+	}
+      }
+      if (!$appid)
+	return null;
+
+      if ($lieu) {
+	$libelle = self::normalizeLibelle($lieu);
+	foreach($appellation->filter('^lieu') as $lieu_key => $lieu) {
+	  if ($libelle == self::normalizeLibelle($lieu->getLibelle())) {
+	    $lieuid=$lieu_key;
+	    break;
+	  }
+	}
+      }
+
+      $libelle = self::normalizeLibelle($cepage);
+      $eval = null;
+      foreach($appellation->get($lieuid)->filter('^cepage') as $cepage_key => $cepage) {
+	$cepage_libelle = self::normalizeLibelle($cepage->getLibelle());
+	if ($libelle == $cepage_libelle) {
+	  $cepageid = $cepage_key;
+	  break;
+	}
+	if (preg_match('/^'.$cepage_libelle.'/', $libelle)) {
+	  if ($eval === null)
+	    $eval = $cepage_key;
+	  else
+	    $eval = 0;
+	}
+      }
+      if (!$cepageid) {
+	if ($eval)
+	  $cepageid = $eval;
+	else
+	  return null;
+      }
+      return $appid.'/'.$lieuid.'/'.$cepageid;
+    }
+
 }

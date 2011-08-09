@@ -1,6 +1,6 @@
 <?php
 
-class ValidatorImportCsv extends sfValidatorBase
+class ValidatorImportCsv extends sfValidatorFile
 {
   protected function configure($options = array(), $messages = array())
   {
@@ -12,40 +12,47 @@ class ValidatorImportCsv extends sfValidatorBase
     */
     $this->addMessage('invalid_file', "Le fichier fourni ne peut être lu");
     $this->addMessage('invalid_csv_file', "Le fichier fourni n'est pas un CSV");
-    /*    $options['mime_types'] = array('text/plain');
+    $options['mime_types'] = array('text/plain');
     $options['required'] = true;
-    */
+
+    return parent::configure($options, $messages);
 
   }
 
   protected function doClean($values)
   {
+    $csvValidated = new CsvValidatedFile(parent::doClean($values));
+    
     $errorSchema = new sfValidatorErrorSchema($this);
 
-    if (($handle = fopen($values['file']->getTempName(), "r")) === FALSE) {
-	$errorSchema->addError(new sfValidatorError($this, 'invalid_file'));
-	throw new sfValidatorErrorSchema($this, $errorSchema);
-    }
+    //Conversion UTF8
+    $fc = htmlentities(utf8_decode(file_get_contents($csvValidated->getTempName())),ENT_NOQUOTES);
+    $handle=fopen("php://memory", "rw");
+    fwrite($handle, $fc);
+    fseek($handle, 0);
+
     $buffer = fread($handle, 500);
-
     $buffer = preg_replace('/$[^\n]*\n/', '', $buffer);
-
 
     if (!$buffer) {
       $errorSchema->addError(new sfValidatorError($this, 'invalid_file'));
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
+
     if (!preg_match('/("?)[0-9]{10}("?)([,;])/', $buffer, $match)) {
       $errorSchema->addError(new sfValidatorError($this, 'invalid_csv_file'));
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
+    $separateur = $match[3];
+
     rewind($handle);
-    $values['csv'] = array();
-    while (($data = fgetcsv($handle, $match[3])) !== FALSE) {
-      $values['csv'][] = $data;
+    $csv = array();
+    while (($data = fgetcsv($handle, 0, $separateur)) !== FALSE) {
+      $csv[] = $data;
     }
     fclose($handle);
-    return $values;
+    $csvValidated->setCsv($csv);
+    return $csvValidated;
   }
 
 }
