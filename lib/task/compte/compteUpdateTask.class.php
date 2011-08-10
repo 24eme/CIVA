@@ -32,6 +32,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $ids_compte = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+
         $ids_tiers = array_merge(sfCouchdbManager::getClient("Recoltant")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
 
         $this->logSection("nb compte", count($ids_compte));
@@ -70,16 +71,9 @@ EOF;
             foreach($stock['tiers'] as $num => $id) {
                 $tiers_json[$id] = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             }
-            $compte = ($stock["compte"]) ? sfCouchdbManager::getClient()->retrieveDocumentById($stock["compte"]) : null;
-            if (!$compte) {
-                $login = $this->getLogin($tiers_json);
-                $compte = new CompteTiers();
-                $compte->set('_id', 'COMPTE-'.$login);
-                $compte->login = $login;
-                $compte->mot_de_passe = $this->generatePass();
-                $compte->db2->no_stock = $no_stock;
-            }
-            $compte->email = $this->combiner($tiers_json, 'email');
+	    $login = $this->getLogin($tiers_json);
+	    $compte = $this->getCompteOrGenerateIt($stock['compte'], $login, $no_stock);
+	    $compte->email = $this->combiner($tiers_json, 'email');
             $compte->remove("tiers");
             $compte->add("tiers");
             
@@ -98,6 +92,33 @@ EOF;
             $compte->save();
             $this->logSection("saved",$compte->get('_id'));
         }
+
+	foreach(sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds() as $id) {
+	  $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id);  
+	  $login = preg_replace('/ACHAT-/', '', $id);
+	  $compte = $this->getCompteOrGenerateIt('COMPTE-'.$login, $login);
+	  $obj = $compte->tiers->add($tiers->_id);
+	  $obj->id = $tiers->_id;
+	  $obj->type = $tiers->type;
+	  $obj->nom = $tiers->nom;
+	  $compte->save();
+	  $tiers->compte = $compte->get('_id');
+	  $tiers->save();
+	  $this->logSection("acheteur saved",$compte->get('_id'));
+	}
+    }
+
+    private function getCompteOrGenerateIt($compteid, $login, $no_stock = null) {
+      $compte = ($compteid) ? sfCouchdbManager::getClient()->retrieveDocumentById($compteid) : null;
+      if (!$compte) {
+	$compte = new CompteTiers();
+	$compte->set('_id', 'COMPTE-'.$login);
+                $compte->login = $login;
+                $compte->mot_de_passe = $this->generatePass();
+		if ($no_stock) 
+		  $compte->db2->no_stock = $no_stock;
+      }
+      return $compte;
     }
 
     private function getLogin($tiers_json) {

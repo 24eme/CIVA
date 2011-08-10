@@ -184,6 +184,7 @@ DR:
                                           volume_dplc: { type: float }
 
 Acheteur:
+  inheritance: _Tiers
   definition:
     fields:
       _id: {  }
@@ -230,7 +231,7 @@ CompteTiers:
         type: collection
         definition:
           fields:
-            no_stock: { type: integer }
+            no_stock: { }
       tiers:
         type: collection
         definition:
@@ -265,7 +266,7 @@ _Tiers:
       fax: {  }
       email: {  }
       web: {  }
-      exploitant:
+      exploitants:
         class: _TiersExploitant
         type: collection
         required: false
