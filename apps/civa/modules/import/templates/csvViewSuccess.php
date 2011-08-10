@@ -5,8 +5,8 @@ if (!$csv)
 <div>
 <style>
    .error{color: red;}
-.titre{background-color: grey;}
 .csv td{font-family: "Arial,sans-serif,sans";border: 1px solid grey;padding:2px;}
+.titre{background-color: grey;}
 </style>
 <table class="csv">
 <tr class="titre"><td>&nbsp;</td><td>CVI acheteur</td><td>Nom acheteur</td><td>CVI récoltant</td><td>Nom récoltant</td><td>Appellation</td><td>Lieu</td><td>Couleur</td><td>Cepage</td><td>VT/SGN</td><td>Denomination</td><td>Volume acheté</td><td>Superficie acheté</td></tr>
