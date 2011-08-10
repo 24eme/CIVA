@@ -23,9 +23,17 @@ class importActions extends sfActions
     $this->csvform->bind($request->getParameter('csv'),$request->getFiles('csv'));
     if (!$this->csvform->isValid())
       return ;
+    return $this->redirect('import/csvView?md5='.$this->csvform->getValue('file')->getMd5());
+  }
+
+  public function executeCsvView(sfWebRequest $request) 
+  {
+    $md5 = $request->getParameter('md5');
+
+    $this->csv = new CsvFile(sfConfig::get('sf_data_dir').'/upload/'.$md5);
     $cpt = -1;
     $this->errors = array();
-    foreach ($this->csvform->getValue('file')->getCsv() as $line) {
+    foreach ($this->csv->getCsv() as $line) {
       $cpt++;
       $this->errors[$cpt] = array();
       if (!$this->hasCVI($line)) {

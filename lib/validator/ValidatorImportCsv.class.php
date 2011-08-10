@@ -24,25 +24,21 @@ class ValidatorImportCsv extends sfValidatorFile
     $fc = htmlentities(utf8_decode(file_get_contents($csvValidated->getTempName())),ENT_NOQUOTES);
     $md5 = md5($fc);
     $file = $this->getOption('file_path').'/'.$md5;
+    $csvValidated->setMd5($md5);
     $handle=fopen($file, "w+");
     fwrite($handle, $fc);
     fseek($handle, 0);
-
-    $buffer = fread($handle, 500);
     fclose($handle);
-    $buffer = preg_replace('/$[^\n]*\n/', '', $buffer);
 
-    if (!$buffer) {
-      $errorSchema->addError(new sfValidatorError($this, 'invalid_file'));
+    try {
+      $csv = new CsvFile($file);
+    }catch(Exception $e) {
+      $csv = null;
+      $errorSchema->addError(new sfValidatorError($this, $e->getMessage()));
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
 
-    if (!preg_match('/("?)[0-9]{10}("?)([,;\t])/', $buffer, $match)) {
-      $errorSchema->addError(new sfValidatorError($this, 'invalid_csv_file'));
-      throw new sfValidatorErrorSchema($this, $errorSchema);
-    }
-    $csvValidated->setSeparator($match[3]);
-    $csvValidated->setCsvFile($file);
+    $csvValidated->setCsv($csv);
     return $csvValidated;
   }
 
