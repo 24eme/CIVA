@@ -4,12 +4,7 @@ class ValidatorImportCsv extends sfValidatorFile
 {
   protected function configure($options = array(), $messages = array())
   {
-    /*
-    $this->addRequiredOption('object');
-    $this->addRequiredOption('has_acheteurs_mout');
-    $this->addMessage('invalid_acheteur', "L'acheteur n'existe pas");
-    $this->addMessage('invalid_demonination_vtsgn', "La dénomination et la mention VT/SGN doivent être uniques.");
-    */
+    $this->addRequiredOption('file_path');
     $this->addMessage('invalid_file', "Le fichier fourni ne peut être lu");
     $this->addMessage('invalid_csv_file', "Le fichier fourni n'est pas un CSV");
     $options['mime_types'] = array('text/plain');
@@ -27,11 +22,14 @@ class ValidatorImportCsv extends sfValidatorFile
 
     //Conversion UTF8
     $fc = htmlentities(utf8_decode(file_get_contents($csvValidated->getTempName())),ENT_NOQUOTES);
-    $handle=fopen("php://memory", "rw");
+    $md5 = md5($fc);
+    $file = $this->getOption('file_path').'/'.$md5;
+    $handle=fopen($file, "w+");
     fwrite($handle, $fc);
     fseek($handle, 0);
 
     $buffer = fread($handle, 500);
+    fclose($handle);
     $buffer = preg_replace('/$[^\n]*\n/', '', $buffer);
 
     if (!$buffer) {
@@ -43,15 +41,8 @@ class ValidatorImportCsv extends sfValidatorFile
       $errorSchema->addError(new sfValidatorError($this, 'invalid_csv_file'));
       throw new sfValidatorErrorSchema($this, $errorSchema);
     }
-    $separateur = $match[3];
-
-    rewind($handle);
-    $csv = array();
-    while (($data = fgetcsv($handle, 0, $separateur)) !== FALSE) {
-      $csv[] = $data;
-    }
-    fclose($handle);
-    $csvValidated->setCsv($csv);
+    $csvValidated->setSeparator($match[3]);
+    $csvValidated->setCsvFile($file);
     return $csvValidated;
   }
 

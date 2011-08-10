@@ -15,7 +15,7 @@ class importActions extends sfActions
   *
   * @param sfRequest $request A request object
   */
-  public function executeCsv(sfWebRequest $request)
+  public function executeCsvUpload(sfWebRequest $request)
   {
     $this->csvform = new ImportCSVForm();
     if (!$request->isMethod('post'))

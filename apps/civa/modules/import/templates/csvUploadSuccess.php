@@ -8,13 +8,18 @@
     </tr>
   </table>
 </form>
+<?php 
+$csv = $csvform->getValue('file');
+if (!$csv) 
+  return;
+?>
 <div>
 <style>
    .error{color: red;}
 </style>
-<table><?php 
-   $cpt = 0;
-foreach ($csvform->getValue('file')->getCsv() as $line) 
+<table>
+<?php   $cpt = 0;
+foreach ($csv->getCsv() as $line) 
 {
   echo '<tr';
   if (count($errors[$cpt]))
