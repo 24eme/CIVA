@@ -5,9 +5,10 @@ class csvFile
   private $file = null;
   private $separator = null;
   private $csvdata = null;
+  private $ignore = null;
 
-  public function __construct($file) {
-    
+  public function __construct($file, $ignore_first_if_comment = 1) {
+    $this->ignore = $ignore_first_if_comment;
     if (!file_exists($file))
       throw new Exception("Cannont access $file");
     $this->file = $file;
@@ -38,6 +39,8 @@ class csvFile
       $this->csvdata[] = $data;
     }
     fclose($handler);
+    if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
+      array_shift($this->csvdata);
     return $this->csvdata;
   }
 }
