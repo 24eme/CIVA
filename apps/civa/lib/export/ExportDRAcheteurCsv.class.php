@@ -25,9 +25,9 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "dplc_total" => "dplc total",
     );
     protected $_validation_detail = array(
-        "cvi_acheteur" => array("type" => "int", "required" => true),
+        "cvi_acheteur" => array("type" => "double", "required" => true),
         "nom_acheteur" => array("type" => "string", "required" => true),
-        "cvi_recoltant" => array("type" => "int", "required" => true),
+        "cvi_recoltant" => array("type" => "double", "required" => true),
         "nom_recoltant" => array("type" => "string", "required" => true),
         "appellation" => array("type" => "string", "required" => true),
         "lieu" => array("type" => "string", "required" => false),
@@ -42,9 +42,9 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
     );
     protected $_validation_total = array(
-        "cvi_acheteur" => array("type" => "int", "required" => true),
+        "cvi_acheteur" => array("type" => "double", "required" => true),
         "nom_acheteur" => array("type" => "string", "required" => true),
-        "cvi_recoltant" => array("type" => "int", "required" => true),
+        "cvi_recoltant" => array("type" => "double", "required" => true),
         "nom_recoltant" => array("type" => "string", "required" => true),
         "appellation" => array("type" => "string", "required" => true),
         "lieu" => array("type" => "string", "required" => false),
@@ -67,12 +67,11 @@ class ExportDRAcheteurCsv extends ExportCsv {
     public function __construct($campagne, $cvi_acheteur, $debug = false) {
         parent::__construct($this->_headers);
         $this->_debug = $debug;
-        $this->load($campagne, $cvi_acheteur);
+        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA);
+        $this->load($drs, $campagne, $cvi_acheteur);
     }
     
-    protected function load($campagne, $cvi_acheteur) {
-        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, sfCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA);
-
+    protected function load($drs, $campagne, $cvi_acheteur = null) {
         foreach ($drs as $dr) {
             if (substr($dr->cvi, 0, 1) == "6") {
                 if ($this->_debug) {
@@ -84,7 +83,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
                             foreach ($cepage->getDetail() as $detail) {
                                 foreach ($detail->filter('negoces|cooperatives|mouts') as $acheteurs) {
                                     foreach ($acheteurs as $acheteur) {
-                                        if ($acheteur->cvi == $cvi_acheteur) {
+                                        if (is_null($cvi_acheteur) || $acheteur->cvi == $cvi_acheteur) {
                                             $this->addDetail($acheteur->cvi, $acheteur);
                                         }
                                     }
@@ -93,7 +92,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
                         }
                         foreach ($lieu->acheteurs as $acheteurs) {
                             foreach ($acheteurs as $cvi_a => $acheteur) {
-                                if ($cvi_a == $cvi_acheteur) {
+                                if(is_null($cvi_acheteur) || $cvi_a == $cvi_acheteur) {
                                     $this->addTotal($cvi_a, $acheteur);
                                 }
                             }
@@ -111,7 +110,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
     protected function addDetail($cvi, $acheteur) {
         $detail = $acheteur->getParent()->getParent();
         $type = $acheteur->getParent()->getKey();
-        echo $this->add(array(
+        $this->add(array(
             "cvi_acheteur" => $cvi,
             "nom_acheteur" => $detail->getCepage()->getLieu()->acheteurs->$type->$cvi->getNom(),
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
@@ -133,7 +132,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
 
     protected function addTotal($cvi, DRRecolteLieuAcheteur $acheteur) {
         $lieu = $acheteur->getLieu();
-        echo $this->add(array(
+        $this->add(array(
             "cvi_acheteur" => $cvi,
             "nom_acheteur" => $acheteur->getNom(),
             "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
@@ -150,6 +149,14 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "volume_total" => $acheteur->getLieu()->getTotalVolume(),
             "dplc_total" => $acheteur->getLieu()->getDplc(),
                 ), $this->_validation_total);
+    }
+    
+    public function add($data, $validation = array()) {
+        $line = parent::add($data, $validation);
+        if ($this->_debug) {
+            echo $line;
+        }
+        return $line;
     }
 
 }

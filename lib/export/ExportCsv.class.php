@@ -15,7 +15,7 @@ class ExportCsv {
 
     public function __construct($headers = null) {
         if ($headers) {
-            $this->add($headers);
+            $this->add($headers, array());
         }
     }
 
@@ -28,9 +28,11 @@ class ExportCsv {
     protected function implode($data, $validation) {
         foreach ($data as $key => $value) {
             if (array_key_exists($key, $validation)) {
-                $value = $this->cast($value, $validation[$key]['type']);
+                //$value = $this->cast($value, $validation[$key]['type']);
                 $this->validate($key, $value, $validation[$key]);
                 $data[$key] = $this->filter($value, $validation[$key]);
+            } else {
+                $data[$key] = $this->filterDefault($value);
             }
         }
 
@@ -40,9 +42,10 @@ class ExportCsv {
     protected function validate($key, $value, $options) {
         $type = $options['type'];
         $fn_type = "is_" . $type;
-        /*if (!is_null($value) && !($fn_type($value))) {
+        if (!is_null($value) && !$fn_type($value) && $this->cast($value, $type) != $value) {
             throw new sfException("not " . $type . " : " . $value . " (" . $key . ")");
-        }*/
+        }
+        $this->cast($value, $type);
         if ($options['required'] && (!array_key_exists("default", $options) || $options['default'] === false)) {
             if ($value === null) {
                 throw new sfException("required : ".$value." (".$key.")");
@@ -52,7 +55,7 @@ class ExportCsv {
     }
     
     protected function cast($value, $type) {
-        /*if ($value === null) {
+        if ($value === null) {
            return $value;
         }
         if ($type == "string") {
@@ -61,9 +64,12 @@ class ExportCsv {
         if ($type == "int") {
            return (int) $value; 
         }
+        if ($type == "double") {
+           return (double) $value; 
+        }
         if ($type == "float") {
            return (float) $value; 
-        }*/
+        }
         return $value;
     }
 
@@ -76,6 +82,10 @@ class ExportCsv {
             $value = sprintf($options['format'], $value);
         }
         return $value;
+    }
+    
+    protected function filterDefault($value) {
+        return '"' . str_replace('"', '\"', $value) . '"';
     }
 
     /**

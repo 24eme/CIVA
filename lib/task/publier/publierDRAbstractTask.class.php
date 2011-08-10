@@ -21,7 +21,7 @@ abstract class publierDRAbstractTask extends sfBaseTask {
             mkdir(sfConfig::get('sf_data_dir') . '/export/');
             mkdir(sfConfig::get('sf_data_dir') . '/export/dr/');
             mkdir(sfConfig::get('sf_data_dir') . '/export/dr/pdf/');
-            $this->logSection($file_dir, 'folder created');
+            $this->logSection($this->getFileDir(), 'folder created');
         }
     }
 

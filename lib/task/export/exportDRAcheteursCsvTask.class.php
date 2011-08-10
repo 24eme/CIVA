@@ -1,39 +1,77 @@
 <?php
 
-class exportDRAcheteursCsvTask extends sfBaseTask
-{
-  protected function configure()
-  {
-    // // add your own arguments here
-    // $this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+class exportDRAcheteursCsvTask extends sfBaseTask {
 
-    $this->addOptions(array(
-      new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-      // add your own options here
-    ));
+    protected $campagne = null;
+    
+    protected function configure() {
+        // // add your own arguments here
+        $this->addArguments(array(
+            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'Année'),
+        ));
 
-    $this->namespace        = 'export';
-    $this->name             = 'dr-acheteurs-csv';
-    $this->briefDescription = '';
-    $this->detailedDescription = <<<EOF
+        $this->addOptions(array(
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+                // add your own options here
+            new sfCommandOption('debug', null, sfCommandOption::PARAMETER_REQUIRED, 'Debug mode', false),
+        ));
+
+        $this->namespace = 'export';
+        $this->name = 'dr-acheteurs-csv';
+        $this->briefDescription = '';
+        $this->detailedDescription = <<<EOF
 The [exportDRAcheteursCsv|INFO] task does things.
 Call it with:
 
   [php symfony exportDRAcheteursCsv|INFO]
 EOF;
-  }
+    }
 
-  protected function execute($arguments = array(), $options = array())
-  {
-    // initialize the database connection
-    $databaseManager = new sfDatabaseManager($this->configuration);
-    $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+    protected function execute($arguments = array(), $options = array()) {
+        
+        // initialize the database connection
+        $databaseManager = new sfDatabaseManager($this->configuration);
+        $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        
+        $this->campagne = $arguments['campagne'];
 
+        $export = new ExportDRAcheteursCsv($arguments['campagne'], $options['debug']);
+        
+        $outputs = $export->output();
+        if (count($outputs) > 0) {
+            $this->createFileDir();
+            $this->cleanFiles();
+            foreach($outputs as $cvi => $csv) {
+                file_put_contents($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$cvi.'.csv', $csv);
+            }
+        }
+    }
     
-    $export = new ExportDRAcheteursCsv('2010', true);
-  }
+    protected function getFiles() {
+        return sfFinder::type('file')->in($this->getFileDir());
+    }
+    
+    protected function cleanFiles() {
+        $files = $this->getFiles();
+        foreach($files as $file) {
+            unlink($file);
+        }
+    }
+
+    protected function getFileDir() {
+        return sfConfig::get('sf_data_dir') . '/export/dr-acheteur/csv/' . $this->campagne;
+    }
+
+    protected function createFileDir() {
+        if (!file_exists($this->getFileDir())) {
+            mkdir(sfConfig::get('sf_data_dir') . '/export/');
+            mkdir(sfConfig::get('sf_data_dir') . '/export/dr-acheteur/');
+            mkdir(sfConfig::get('sf_data_dir') . '/export/dr-acheteur/csv');
+            mkdir(sfConfig::get('sf_data_dir') . '/export/dr-acheteur/csv/' . $this->campagne);
+            $this->logSection($this->getFileDir(), 'folder created');
+        }
+    }
+
 }

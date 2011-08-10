@@ -6,6 +6,7 @@ class exportDRAcheteurCsvTask extends sfBaseTask
   {
     // // add your own arguments here
      $this->addArguments(array(
+       new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, "Année"),
        new sfCommandArgument('cvi', sfCommandArgument::REQUIRED, "Numéro cvi de l'acheteur"),
      ));
 
@@ -14,6 +15,7 @@ class exportDRAcheteurCsvTask extends sfBaseTask
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
+      new sfCommandOption('debug', null, sfCommandOption::PARAMETER_REQUIRED, 'Debug mode', false),
     ));
 
     $this->namespace        = 'export';
@@ -34,6 +36,8 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     
-    $export = new ExportDRAcheteurCsv('2010', $arguments['cvi'], true);
+    $export = new ExportDRAcheteurCsv($arguments['campagne'], $arguments['cvi'], $options['debug']);
+    
+    echo $export->output();
   }
 }
