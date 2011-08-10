@@ -12,10 +12,10 @@ class ImportCSVForm extends BaseForm {
       $this->widgetSchema->setNameFormat('csv[%s]');
       
       $this->setValidators(array(
-				 'file'    => new sfValidatorFile(array('mime_types' => array('text/plain'),'required' => true))
+				 'file'    => new ValidatorImportCsv(array('file_path' => sfConfig::get('sf_data_dir').'/upload'))
 				 ));
-      
-      //      $this->validatorSchema['file']->setMessage('required', 'Champ obligatoire');
+
+      //      $this->getValidatorSchema()->setPostValidator(new ValidatorImportCsv());
     }
 
 }
