@@ -13,7 +13,7 @@ class TiersClient extends sfCouchdbClient {
     }
 
     public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-        return $this->startkey('TIERS-')->execute($hydrate);
+        return $this->startkey('TIERS-0')->endkey('TIERS-Z')->execute($hydrate);
     }
 
     public function getAllIds() {
