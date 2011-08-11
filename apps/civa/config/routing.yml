@@ -194,7 +194,7 @@ send_email_pdf:
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}
-
+  
 csv_tiers:
   url: /tiers/csv
   param: {module: export, action: csvTiers}
@@ -214,7 +214,11 @@ csv_tiers_modifications:
 csv_tiers_modifications_email:
   url: /tiers/modifications-email/csv
   param: {module: export, action: csvTiersModificationsEmail}
-
+  
+export_dr_acheteur_csv:
+  url: /acheteur/import/dr/csv
+  param: {module: export, action: drAcheteurCsv}
+  
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}

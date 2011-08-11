@@ -291,6 +291,22 @@ class exportActions extends sfActions {
         $this->setResponseCsv('tiers-modifications-email.csv');
         return $this->renderText(Tools::getCsvFromArray($values));
     }
+    
+    public function executeDrAcheteurCsv(sfWebRequest $request) {
+        $filename = $this->getUser()->getCampagne().'_DR_ACHETEUR_'.$this->getUser()->getTiers()->cvi.'.csv';
+        $existing_file = sfConfig::get('sf_data_dir').'/export/dr-acheteur/csv/'.$this->getUser()->getCampagne().'/'.$filename;
+        
+        if (!$request->hasParameter('force') && file_exists($existing_file)) {
+            $content = file_get_contents($existing_file);
+        } else {
+            $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
+            $content = $export->output();
+            file_put_contents($existing_file, $content);
+        }
+        
+        $this->setResponseCsv($filename);
+        return $this->renderText($content);
+    }
 
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');

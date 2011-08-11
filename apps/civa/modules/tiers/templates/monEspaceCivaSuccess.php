@@ -15,6 +15,9 @@
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
                  <?php include_partial('gamma/monEspace') ?>
             <?php endif; ?>
+            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
+                 <?php include_partial('acheteur/monEspace') ?>
+            <?php endif; ?>
         </div>
         <!-- fin #nouvelle_declaration -->
 
