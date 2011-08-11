@@ -13,7 +13,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getLibelle() {
-      return $this->getConfig()->getLibelle();
+        return $this->store('libelle', array($this, 'getInternalLibelle'));
+    }
+    
+    protected function getInternalLibelle() {
+        return $this->getConfig()->getLibelle();
     }
 
     public function getAppellation() {

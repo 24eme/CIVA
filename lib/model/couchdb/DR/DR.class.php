@@ -249,6 +249,6 @@ class DR extends BaseDR {
     }
 
     public function getConfigurationCampagne() {
-      return sfCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
+      return sfCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne);
     }
 }

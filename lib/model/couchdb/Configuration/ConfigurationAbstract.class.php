@@ -1,7 +1,12 @@
 <?php
 
 abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
+
   public function getRendement() {
+      return $this->store('rendement', array($this, 'getInternalRendement'));
+  }
+  
+  protected function getInternalRendement() {
     if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
        return -1;
     }

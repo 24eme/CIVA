@@ -3,10 +3,14 @@
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getConfig() {
-      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
     public function getLibelle() {
+        return $this->store('libelle', array($this, 'getInternalLibelle'));
+    }
+    
+    protected function getInternalLibelle() {
         return $this->getConfig()->getLibelle();
     }
 

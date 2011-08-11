@@ -11,7 +11,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getLibelle() {
-      return $this->getConfig()->getLibelle();
+        return $this->store('libelle', array($this, 'getInternalLibelle'));
+    }
+    
+    public function getInternalLibelle() {
+        return $this->getConfig()->getLibelle();
     }
 
     public function getCodeDouane($vtsgn = '') {
