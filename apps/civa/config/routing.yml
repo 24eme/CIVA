@@ -157,7 +157,11 @@ recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif }
   class: sfRouteAnchor
-
+  
+recolte_rendements_max:
+  url:   /rendements_max
+  param: { module: recolte, action: rendementsMaxAjax}
+  
 recolte_erreur_log:
   url:   /recolte_erreur_log
   param: {module: declaration, action: setFlashLog }

@@ -1,4 +1,4 @@
-<div id="popup_rendements_max" class="popup_ajout" title="Rendements maximums autorisés">
+
     <p><strong>Exprimés <u>en vin clair</u></strong> c'est à dire après séparation des bourbes et des lies (décret du 05/11/02).</p><br />
     <table>
         <?php foreach ($rendement as $app=>$appellation) : ?>
@@ -49,5 +49,3 @@
         <tr><td class="vide">&nbsp;</td></tr>
         <?php endforeach; ?>
     </table>
-    
-</div>

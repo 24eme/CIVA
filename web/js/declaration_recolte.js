@@ -157,6 +157,8 @@ $(document).ready( function()
     
     $(document).find('a.open_popup_rendements_max').live('click', function() {
         popup = $("#popup_rendements_max");
+        
+        $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
         popup.dialog
         ({
@@ -171,6 +173,16 @@ $(document).ready( function()
                 }
             }
         });
+        
+        $.get(
+            url_ajax_rendements_max,
+            function(data)
+            {
+                popup.html(data);
+            }
+        );
+
+        openPopup(popup);
 
         popup.dialog('open');
 

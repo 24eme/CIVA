@@ -11,6 +11,7 @@
 class recolteActions extends EtapesActions {
 
     public function preExecute() {
+        parent::preExecute();
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getUser()->getDeclaration();
         $this->help_popup_action = "help_popup_DR";
@@ -21,11 +22,9 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-        $this->initRendement();
         $this->initPrecDR();
 
         if (!$this->details->count() > 0) {
@@ -39,14 +38,12 @@ class recolteActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
-
     }
 
     public function executeUpdate(sfWebRequest $request) {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-        $this->initRendement();
         $this->initPrecDR();
 
         $this->detail_action_mode = 'update';
@@ -68,7 +65,6 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
-        $this->initRendement();
         $this->initPrecDR();
 
         $this->detail_action_mode = 'add';
@@ -196,7 +192,6 @@ class recolteActions extends EtapesActions {
         $this->help_popup_action = "help_popup_recapitulatif_ventes";
 
         $this->initOnglets($request);
-        $this->initRendement();
         $this->initPrecDR();
         
         $dr = $this->getUser()->getDeclaration();
@@ -222,19 +217,10 @@ class recolteActions extends EtapesActions {
         }
 
     }
-
-    protected function processFormDetail($form, $request) {
-        $form->bind($request->getParameter($form->getName()));
-        if ($form->isValid()) {
-            $detail = $form->save();
-            if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
-                $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
-            }
-            $this->redirect($this->onglets->getUrl('recolte'));
-        }
-    }
-
-    protected function initRendement() {
+    
+    public function executeRendementsMaxAjax(sfWebRequest $request) {
+        $this->forward404Unless($request->isXmlHttpRequest());
+        
         $dr = $this->declaration;
         $this->rendement = array();
         $this->min_quantite = null;
@@ -265,6 +251,21 @@ class recolteActions extends EtapesActions {
                     }
                 }
             }
+        }
+        
+        return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement, 
+                                                                        'min_quantite'=> $this->min_quantite, 
+                                                                        'max_quantite'=> $this->max_quantite));
+    }
+
+    protected function processFormDetail($form, $request) {
+        $form->bind($request->getParameter($form->getName()));
+        if ($form->isValid()) {
+            $detail = $form->save();
+            if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
+                $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
+            }
+            $this->redirect($this->onglets->getUrl('recolte'));
         }
     }
 
