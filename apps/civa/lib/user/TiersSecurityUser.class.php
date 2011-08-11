@@ -9,12 +9,14 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     const CREDENTIAL_DECLARATION = 'declaration';
     const CREDENTIAL_METTEUR_EN_MARCHE = 'metteur_en_marche';
     const CREDENTIAL_GAMMA = 'gamma';
+    const CREDENTIAL_ACHETEUR = 'acheteur';
     
     protected $_credentials_tiers = array(self::CREDENTIAL_TIERS, 
                                           self::CREDENTIAL_RECOLTANT, 
                                           self::CREDENTIAL_DECLARATION, 
                                           self::CREDENTIAL_METTEUR_EN_MARCHE, 
-                                          self::CREDENTIAL_GAMMA);
+                                          self::CREDENTIAL_GAMMA,
+                                          self::CREDENTIAL_ACHETEUR);
     
     /**
      *
@@ -48,6 +50,8 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             if ($tiers->no_accises) {
                 $this->addCredential(self::CREDENTIAL_GAMMA);
             }
+        } elseif($tiers->type == "Acheteur") {
+            $this->addCredential(self::CREDENTIAL_ACHETEUR);
         }
     }
     
