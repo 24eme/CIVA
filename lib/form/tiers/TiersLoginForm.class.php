@@ -54,6 +54,8 @@ class TiersLoginForm extends BaseForm {
                 $type = "Récoltant";
             } elseif($item->type == "MetteurEnMarche") {
                 $type = "Metteur en marché";
+            } else {
+                $type = $item->type;
             }
             $choices[$id] = $item->nom . ' - ' . $type;
         }
