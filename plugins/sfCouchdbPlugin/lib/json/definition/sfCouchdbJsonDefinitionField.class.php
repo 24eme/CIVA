@@ -19,7 +19,7 @@ class sfCouchdbJsonDefinitionField {
     const TYPE_ARRAY_COLLECTION = 'array_collection';
 
     public function __construct($name, $type = self::TYPE_STRING, $required = true) {
-        $this->key = sfInflector::underscore(sfInflector::camelize($name));
+        $this->key = sfInflector::underscore($name);
         $this->name = $name;
         $this->type = $type;
         
