@@ -31,6 +31,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
+
         $ids_compte = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
         $ids_tiers = array_merge(sfCouchdbManager::getClient("Recoltant")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
@@ -39,6 +40,7 @@ EOF;
         $this->logSection("nb tiers", count($ids_tiers));
 
         $stocks = array();
+	$cvi2stock = array();
         $db2 = array();
 
         foreach ($ids_tiers as $id) {
@@ -46,8 +48,25 @@ EOF;
             if (!array_key_exists($tiers_json->db2->no_stock, $stocks)) {
                 $stocks[$tiers_json->db2->no_stock] = array("tiers" => array(), "compte" => null);
             }
-            $stocks[$tiers_json->db2->no_stock]["tiers"][$tiers_json->db2->num] = $id;
+            $stocks[$tiers_json->db2->no_stock]["tiers"][$id] = $id;
+	    if (isset($tiers_json->cvi)) {
+	      $cvi2stock[$tiers_json->cvi] = $tiers_json->db2->no_stock;
+	    }
+	    if (isset($tiers_json->cvi_acheteur) && $tiers_json->cvi_acheteur) {
+	      $cvi2stock[$tiers_json->cvi_acheteur] = $tiers_json->db2->no_stock;
+	    }
         }
+
+
+	foreach(sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds() as $id) {
+	  $cvi = preg_replace('/ACHAT-/', '', $id);
+	  if (isset($cvi2stock[$cvi]))
+	    $stocks[$cvi2stock[$cvi]]["tiers"][$id] = $id;
+	  else
+	    $stocks['NOSTOCK'.$cvi]["tiers"][$id] = $id;
+	  
+	}
+
 
         foreach ($ids_compte as $id) {
             $compte_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
@@ -71,8 +90,18 @@ EOF;
             foreach($stock['tiers'] as $num => $id) {
                 $tiers_json[$id] = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             }
-	    $login = $this->getLogin($tiers_json);
-	    $compte = $this->getCompteOrGenerateIt($stock['compte'], $login, $no_stock);
+	    $compte = (isset($stock['compte'])) ? sfCouchdbManager::getClient()->retrieveDocumentById($stock['compte']) : null;
+	    if (get_class($compte) == 'CompteProxy')
+	      $compte = $compte->getCompteReferenceObject();
+	    if (!$compte) {
+	      $compte = new CompteTiers();
+	      $login = $this->getLogin($tiers_json);
+	      $compte->set('_id', 'COMPTE-'.$login);
+	      $compte->login = $login;
+	      $compte->mot_de_passe = $this->generatePass();
+	      if ($no_stock) 
+		$compte->db2->no_stock = $no_stock;
+	    }
 	    $compte->email = $this->combiner($tiers_json, 'email');
             $compte->remove("tiers");
             $compte->add("tiers");
@@ -93,40 +122,19 @@ EOF;
             $this->logSection("saved",$compte->get('_id'));
         }
 
-	foreach(sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds() as $id) {
-	  $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id);  
-	  $login = preg_replace('/ACHAT-/', '', $id);
-	  $compte = $this->getCompteOrGenerateIt('COMPTE-'.$login, $login);
-	  $obj = $compte->tiers->add($tiers->_id);
-	  $obj->id = $tiers->_id;
-	  $obj->type = $tiers->type;
-	  $obj->nom = $tiers->nom;
-	  $compte->save();
-	  $tiers->compte = $compte->get('_id');
-	  $tiers->save();
-	  $this->logSection("acheteur saved",$compte->get('_id'));
-	}
     }
 
     private function getCompteOrGenerateIt($compteid, $login, $no_stock = null) {
-      $compte = ($compteid) ? sfCouchdbManager::getClient()->retrieveDocumentById($compteid) : null;
-      if (!$compte) {
-	$compte = new CompteTiers();
-	$compte->set('_id', 'COMPTE-'.$login);
-                $compte->login = $login;
-                $compte->mot_de_passe = $this->generatePass();
-		if ($no_stock) 
-		  $compte->db2->no_stock = $no_stock;
-      }
       return $compte;
     }
 
     private function getLogin($tiers_json) {
         $login = null;
         foreach($tiers_json as $tiers) {
-          if ($tiers->type == 'Recoltant' && $tiers->cvi) {
+          if (($tiers->type == 'Recoltant' || $tiers->type == 'Acheteur') && $tiers->cvi) {
               return $tiers->cvi;
-          } elseif(is_null($login) && $tiers->civaba) {
+          } 
+	  if(is_null($login) && $tiers->civaba) {
               $login = 'C'.$tiers->civaba;
           }
         }
