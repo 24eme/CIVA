@@ -239,12 +239,12 @@ a_propos_du_civa:
   url: /a-propos-du-civa
   param: {module: contenu, action: aProposDuCiva}
 
-import_csv:
-  url: /import/csv
+upload_csv:
+  url: /upload/csv
   param: {module: import, action: csvUpload}
 
 csv_view:
-  url: /import/csv/:md5
+  url: /upload/csv/:md5
   param: {module: import, action: csvView}
 
 default_index:
