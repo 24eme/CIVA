@@ -266,7 +266,7 @@ _Tiers:
       fax: {  }
       email: {  }
       web: {  }
-      exploitants:
+      exploitant:
         class: _TiersExploitant
         type: collection
         required: false
