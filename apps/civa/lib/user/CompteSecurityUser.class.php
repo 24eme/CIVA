@@ -58,6 +58,16 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->signInCompte($compte);
         $this->setAuthenticated(true);
     }
+    
+    /**
+     *
+     * @param _Compte $compte 
+     */
+    public function signInFirst($compte) {
+        $this->addCredential(self::CREDENTIAL_COMPTE);
+        $this->signInCompte($compte);
+        $this->setAuthenticated(true);
+    }
 
     /**
      * 

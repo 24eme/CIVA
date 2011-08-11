@@ -59,7 +59,7 @@ class compteActions extends sfActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $this->getUser()->signInCompte($this->form->getValue('compte'));
+                $this->getUser()->signInFirst($this->form->getValue('compte'));
                 $this->redirect('@compte_creation');
             }
         }
