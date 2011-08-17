@@ -3,7 +3,8 @@
 class CompteTiers extends BaseCompteTiers {
 
     protected $_tiers = null;
-
+    protected $_duplicated = null;
+    
     public function getNom() {
         $nom = null;
         foreach ($this->tiers as $tiers) {
@@ -22,12 +23,12 @@ class CompteTiers extends BaseCompteTiers {
      */
     public function getTiersObject() {
         if (is_null($this->_tiers)) {
-            $this->_tiers = array();
-            foreach ($this->tiers as $tiers) {
-                $this->_tiers[] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id);
-            }
+	  $this->_duplicated = null;
+	  $this->_tiers = array();
+	  foreach ($this->tiers as $tiers) {
+	    $this->_tiers[] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id);
+	  }
         }
-
         return $this->_tiers;
     }
 
@@ -68,4 +69,19 @@ class CompteTiers extends BaseCompteTiers {
         return $this->getTiersField('commune');
     }
 
+    public function getDuplicatedTiers() {
+      if ($this->_duplicated)
+	return $this->_duplicated;
+
+      $type = array();
+      $this->_duplicated = array();
+      foreach ($this->tiers as $id => $t) {
+	if (isset($type[$t->type])) {
+	  $this->_duplicated[$t->id] = $t;
+	  $this->_duplicated[$type[$t->type]->id] = $type[$t->type];
+	}
+	$type[$t->type] = $t;
+      }
+      return $this->_duplicated;
+    }
 }

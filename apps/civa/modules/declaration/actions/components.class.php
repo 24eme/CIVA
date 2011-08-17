@@ -26,7 +26,7 @@ class declarationComponents extends sfComponents {
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->declaration = $this->getUser()->getDeclaration();
-        $this->campagnes = $this->getUser()->getTiers()->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
     }
     
@@ -35,7 +35,7 @@ class declarationComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->campagnes = $this->getUser()->getTiers()->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
     }
 
@@ -45,7 +45,7 @@ class declarationComponents extends sfComponents {
      */
     public function executeRecapDeclaration(sfWebRequest $request) {
         
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', null);
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);

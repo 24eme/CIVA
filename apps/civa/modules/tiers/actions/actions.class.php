@@ -18,10 +18,21 @@ class tiersActions extends EtapesActions {
     public function executeLogin(sfWebRequest $request) {
         $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
-
-        if (count($this->compte->tiers) == 1) {
-            $this->getUser()->signInTiers(sfCouchdbManager::getClient()->retrieveDocumentById($this->compte->tiers->getFirst()->id));
-            $this->redirect("@mon_espace_civa");
+	
+	$not_uniq = 0;
+	$tiers = array();
+        if (count($this->compte->tiers) >= 1) {
+	  foreach ($this->compte->tiers as $t) {
+	    if (isset($tiers[$t->type])) {
+	      $not_uniq = 1;
+	      continue;
+	    }
+	    $tiers[$t->type] = sfCouchdbManager::getClient()->retrieveDocumentById($t->id);
+	  }
+	  if (!$not_uniq) {
+	    $this->getUser()->signInTiers(array_values($tiers));
+	    return $this->redirect("@mon_espace_civa");
+	  }
         }
 
         $this->form = new TiersLoginForm($this->compte);
@@ -29,8 +40,9 @@ class tiersActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $tiers = $this->form->process();
-                $this->getUser()->signInTiers($tiers);
+                $t = $this->form->process();
+		$tiers[$t->type] = $t;
+                $this->getUser()->signInTiers(array_values($tiers));
                 $this->redirect("@mon_espace_civa");
             }
         }

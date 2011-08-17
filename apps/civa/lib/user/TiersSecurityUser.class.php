@@ -40,19 +40,24 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     public function signInTiers($tiers) {
         $this->requireCompte();
         $this->signOutTiers();
-        $this->setAttribute(self::SESSION_TIERS, $tiers->get('_id'), self::NAMESPACE_TIERS);
         $this->addCredential(self::CREDENTIAL_TIERS);
-        if ($tiers->type == "Recoltant") {
+	if (!is_array($tiers))
+	  $tiers = array($tiers);
+	foreach ($tiers as $t) {
+	  if ($t->type == "Recoltant") {
             $this->addCredential(self::CREDENTIAL_RECOLTANT);
             $this->addCredential(self::CREDENTIAL_DECLARATION);
-        } elseif($tiers->type == "MetteurEnMarche") {
+	  } elseif($t->type == "MetteurEnMarche") {
             $this->addCredential(self::CREDENTIAL_METTEUR_EN_MARCHE);
-            if ($tiers->no_accises) {
-                $this->addCredential(self::CREDENTIAL_GAMMA);
+            if ($t->no_accises) {
+	      $this->addCredential(self::CREDENTIAL_GAMMA);
             }
-        } elseif($tiers->type == "Acheteur") {
+	  } elseif($t->type == "Acheteur") {
             $this->addCredential(self::CREDENTIAL_ACHETEUR);
-        }
+	  }
+	  $ids[] = $t->_id;
+	}
+	$this->setAttribute(self::SESSION_TIERS, join(',', $ids), self::NAMESPACE_TIERS);
     }
     
     /**
@@ -76,28 +81,47 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     /**
      * @return _Tiers
      */
-    public function getTiers() {
+    public function getTiers($type = null) {
         $this->requireTiers();
         
         if (is_null($this->_tiers)) {
-            $this->_tiers = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS));
-            
-            if(!$this->_tiers) {
-                $this->signOutCompte();
-                throw new sfException("The tiers does not exist");
-            }
+	  $this->_tiers = array();
+	  foreach (split(',', $this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) as $id) {
+	    $t = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+	    if (isset($this->_tiers[$t->type]))
+		throw new sfException('An user cannot have more than two tiers of the same type');
+            $this->_tiers[$t->type] = $t;
+	  }
+	  if(!$this->_tiers) {
+	    $this->signOutCompte();
+	    throw new sfException("The tiers does not exist");
+	  }
         }
-        
-        return $this->_tiers;
+	if (!$type) {
+	  if (isset($this->_tiers['Recoltant']))
+	    $type = 'Recoltant';
+	  else if (isset($this->tiers['Acheteur']))
+	    $type = 'Acheteur';
+	  else 
+	    $type = 'MetteurEnMarche';
+	}
+
+	if (!isset($this->_tiers[$type]))
+	  throw new sfException('no tiers for type "'.$type.'"');
+	return $this->_tiers[$type];
     }
     
+    public function getDeclarant() {
+      return $this->getTiers('Recoltant');
+    }
+
     /**
      * 
      */
     protected function requireTiers() {
         $this->requireCompte();
         if (!$this->hasCredential(self::CREDENTIAL_TIERS)) {
-            throw new sfException("you must be logged in with a tiers");
+	  throw new sfException("you must be logged in with a tiers");
         }
     }
     

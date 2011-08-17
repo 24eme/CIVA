@@ -48,7 +48,7 @@ class TiersLoginForm extends BaseForm {
     
     public function getChoiceTiers() {
         $choices = array();
-        foreach($this->_compte->tiers as $id => $item) {
+        foreach($this->_compte->getDuplicatedTiers() as $id => $item) {
             $type = null;
             if ($item->type == "Recoltant") {
                 $type = "Récoltant";

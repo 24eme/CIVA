@@ -14,7 +14,7 @@ class declarationActions extends EtapesActions {
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
         $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiers('Recoltant');
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
@@ -94,7 +94,7 @@ class declarationActions extends EtapesActions {
 
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', null);
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
@@ -259,7 +259,7 @@ class declarationActions extends EtapesActions {
      */
     public function executeVisualisation(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_visualisation";
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', null);
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
@@ -290,7 +290,7 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeSendPdf(sfWebRequest $request) {
-        $tiers = $this->getUser()->getTiers();
+        $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getUser()->getDeclaration();
 
         $document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'));

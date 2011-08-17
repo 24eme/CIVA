@@ -144,7 +144,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     protected function requireCompte() {
         if (!$this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_COMPTE)) {
-            throw new sfException("you must be logged with a tiers");
+	  throw new sfException("you must be logged with a tiers");
         }
     }
 

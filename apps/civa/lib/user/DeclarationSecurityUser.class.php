@@ -59,10 +59,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
         $this->requireDeclaration();
         $this->requireTiers();
         if (is_null($this->_declaration)) {
-            $this->_declaration = $this->getTiers()->getDeclaration($this->getCampagne());
+            $this->_declaration = $this->getDeclarant()->getDeclaration($this->getCampagne());
             if (!$this->_declaration) {
                 $declaration = new DR();
-                $declaration->set('_id', 'DR-'.$this->getTiers()->cvi.'-'.$this->getCampagne());
+                $declaration->set('_id', 'DR-'.$this->getDeclarant()->cvi.'-'.$this->getCampagne());
                 return $declaration;
             }
         }
