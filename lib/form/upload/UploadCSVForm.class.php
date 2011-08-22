@@ -1,6 +1,6 @@
 <?php
 
-class ImportCSVForm extends BaseForm {
+class UploadCSVForm extends BaseForm {
 
     /**
      * 
@@ -14,7 +14,7 @@ class ImportCSVForm extends BaseForm {
       $this->setValidators(array(
 				 'file'    => new ValidatorImportCsv(array('file_path' => sfConfig::get('sf_data_dir').'/upload'))
 				 ));
-
+      
       //      $this->getValidatorSchema()->setPostValidator(new ValidatorImportCsv());
     }
 
