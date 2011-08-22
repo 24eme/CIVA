@@ -1,14 +1,14 @@
 <?php
 
 /**
- * import actions.
+ * upload actions.
  *
  * @package    civa
- * @subpackage import
+ * @subpackage upload
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class importActions extends sfActions
+class uploadActions extends sfActions
 {
  /**
   * Executes index action
@@ -17,13 +17,13 @@ class importActions extends sfActions
   */
   public function executeCsvUpload(sfWebRequest $request)
   {
-    $this->csvform = new ImportCSVForm();
+    $this->csvform = new UploadCSVForm();
     if (!$request->isMethod('post'))
       return;
     $this->csvform->bind($request->getParameter('csv'),$request->getFiles('csv'));
     if (!$this->csvform->isValid())
       return ;
-    return $this->redirect('import/csvView?md5='.$this->csvform->getValue('file')->getMd5());
+    return $this->redirect('upload/csvView?md5='.$this->csvform->getValue('file')->getMd5());
   }
 
   public function executeCsvView(sfWebRequest $request) 
@@ -33,9 +33,11 @@ class importActions extends sfActions
     $this->csv = new CsvFile(sfConfig::get('sf_data_dir').'/upload/'.$md5);
     $cpt = -1;
     $this->errors = array();
+    $this->warnings = array();
     foreach ($this->csv->getCsv() as $line) {
       $cpt++;
       $this->errors[$cpt] = array();
+      $this->warnings[$cpt] = array();
       if (!$this->hasCVI($line)) {
 	if (!$cpt)
 	  continue;
@@ -49,6 +51,9 @@ class importActions extends sfActions
 	$this->errors[$cpt][] = 'wrong superficie';
       if (!$this->isVTSGNOk($line))
 	$this->errors[$cpt][] = 'incorrect VT/SGN';
+      if (!$this->hasGoodUnit($line)) {
+	$this->warnings[$cpt][] = 'Les unités ne semblent pas en ares et hectolitres';
+      }
     }
   }
   
@@ -80,6 +85,13 @@ class importActions extends sfActions
       return false;
     return true;
   }
+
+  protected function hasGoodUnit($line) {
+    if ((!$line[10] || preg_match('/^[0-9,\.]+$/', $line[10])) && (preg_match('/^[0-9,\.]+$/', $line[11]) || !$line[11]))
+      return true;
+    return false;
+  }
+
   protected function hasVolume($line) {
     return $this->isPositive($line[10]);
   }

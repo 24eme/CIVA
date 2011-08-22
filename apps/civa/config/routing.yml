@@ -241,11 +241,11 @@ a_propos_du_civa:
 
 upload_csv:
   url: /upload/csv
-  param: {module: import, action: csvUpload}
+  param: {module: upload, action: csvUpload}
 
 csv_view:
   url: /upload/csv/:md5
-  param: {module: import, action: csvView}
+  param: {module: upload, action: csvView}
 
 default_index:
   url:   /:module

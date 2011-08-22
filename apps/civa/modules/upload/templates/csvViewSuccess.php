@@ -18,11 +18,18 @@ foreach ($csv->getRawValue()->getCsv() as $line)
     echo ' class="error"';
   echo '><td class="titre">'.($cpt+1).'</td><td>'.$line[0].'</td><td>'.$line[1].'</td><td>'.$line[2].'</td><td>'.$line[3].'</td><td>'.$line[4].'</td><td>'.$line[5].'</td><td>'.$line[6].'</td><td>'.$line[7].'</td><td>'.$line[8].'</td><td>'.$line[9].'</td><td>'.$line[10].'</td><td>'.$line[11].'</td><tr>';
   if (count($errors[$cpt])) {
-    echo '<tr class="error"><td class="titre">&nbsp;</td><td colspan="12">';
     foreach($errors[$cpt] as $error) {
-      echo $error.' | ';
+      echo '<tr class="error"><td class="titre">&nbsp;</td><td colspan="12">';
+      echo $error;
+      echo '</td></tr>';
     }
-    echo '</td></tr>';
+  }
+  if (count($warnings[$cpt])) {
+    foreach($warnings[$cpt] as $error) {
+      echo '<tr class="error warnings"><td class="titre">&nbsp;</td><td colspan="12">';
+      echo $error;
+      echo '</td></tr>';
+    }
   }
   $cpt++;
 }
