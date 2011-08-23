@@ -10,13 +10,16 @@
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-                <?php include_component('declaration', 'monEspace') ?>
+                 <?php include_component('declaration', 'monEspace') ?>
+                 <br />
             <?php endif; ?>
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
                  <?php include_partial('gamma/monEspace') ?>
+                 <br />
             <?php endif; ?>
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
                  <?php include_partial('acheteur/monEspace') ?>
+                 <br />
             <?php endif; ?>
         </div>
         <!-- fin #nouvelle_declaration -->
