@@ -39,6 +39,10 @@ class AcheteurClient extends sfCouchdbClient {
         $acheteurs['mouts'] = $acheteurs_mout;
         return $acheteurs;
     }
+    
+    public function retrieveByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        return parent::retrieveDocumentById('ACHAT-'.$cvi, $hydrate);
+    }
 
     public static function sortByNom($a, $b) {
         return strcmp($a['nom'], $b['nom']);
