@@ -87,7 +87,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         if (is_null($this->_tiers)) {
 	  $this->_tiers = array();
 	  foreach (explode(',', $this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) as $id) {
-	    $t = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+	    $t = sfCouchdbManager::getClient()->retrieveDocumentById($id);
 	    if (isset($this->_tiers[$t->type]))
 		throw new sfException('An user cannot have more than two tiers of the same type');
             $this->_tiers[$t->type] = $t;
@@ -97,13 +97,14 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 	    throw new sfException("The tiers does not exist");
 	  }
         }
-	if (!$type) {
-	  if (isset($this->_tiers['Recoltant']))
+        if (!$type) {
+	  if (array_key_exists('Recoltant', $this->_tiers)) {
 	    $type = 'Recoltant';
-	  else if (isset($this->tiers['Acheteur']))
+          } elseif (array_key_exists('Acheteur', $this->_tiers)) {
 	    $type = 'Acheteur';
-	  else 
+          } else {
 	    $type = 'MetteurEnMarche';
+          }
 	}
 
 	if (!isset($this->_tiers[$type]))

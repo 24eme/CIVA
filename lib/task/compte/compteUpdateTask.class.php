@@ -40,7 +40,7 @@ EOF;
         $this->logSection("nb tiers", count($ids_tiers));
 
         $stocks = array();
-	$cvi2stock = array();
+	//$cvi2stock = array();
         $db2 = array();
 
         foreach ($ids_tiers as $id) {
@@ -49,28 +49,33 @@ EOF;
                 $stocks[$tiers_json->db2->no_stock] = array("tiers" => array(), "compte" => null);
             }
             $stocks[$tiers_json->db2->no_stock]["tiers"][$id] = $id;
-	    if (isset($tiers_json->cvi)) {
+	    /*if (isset($tiers_json->cvi)) {
 	      $cvi2stock[$tiers_json->cvi] = $tiers_json->db2->no_stock;
-	    }
-	    if (isset($tiers_json->cvi_acheteur) && $tiers_json->cvi_acheteur) {
+	    }*/
+	    /*if (isset($tiers_json->cvi_acheteur) && $tiers_json->cvi_acheteur) {
 	      $cvi2stock[$tiers_json->cvi_acheteur] = $tiers_json->db2->no_stock;
-	    }
+	    }*/
         }
 
 
 	foreach(sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds() as $id) {
-	  $cvi = preg_replace('/ACHAT-/', '', $id);
-	  if (isset($cvi2stock[$cvi]))
-	    $stocks[$cvi2stock[$cvi]]["tiers"][$id] = $id;
-	  else
-	    $stocks['NOSTOCK'.$cvi]["tiers"][$id] = $id;
+            $no_stock = 'NOSTOCK'.preg_replace('/ACHAT-/', '', $id);
+            if (!array_key_exists($no_stock, $stocks)) {
+            $stocks[$no_stock] = array("tiers" => array(), "compte" => null);
+                }
 	  
+          $stocks[$no_stock]["tiers"][$id] = $id;
 	}
 
 
         foreach ($ids_compte as $id) {
             $compte_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             if ($compte_json->type == "CompteTiers") {
+                if(!array_key_exists($compte_json->db2->no_stock, $stocks)) {
+                    $this->logSection("compte deleted", $compte_json->_id, null, "ERROR");
+                    sfCouchdbManager::getClient()->deleteDoc($compte_json);
+                    continue;
+                }
                 if (!array_key_exists($compte_json->db2->no_stock, $stocks)) {
                     $stocks[$compte_json->db2->no_stock] = array("tiers" => array(), "compte" => null);
                 }
