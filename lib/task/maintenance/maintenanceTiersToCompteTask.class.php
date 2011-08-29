@@ -50,6 +50,7 @@ EOF;
                     continue;
                 }
             }
+            
             $this->logSection("compte proxy", $id);
 
             if (isset($tiers->gamma)) {
@@ -59,7 +60,7 @@ EOF;
                     $met->save();
                     $this->logSection("gamma", $met->get('_id'));
                 }
-
+            }
             
             $compte->mot_de_passe = preg_replace("/^([0-9]{4})$/", "{OUBLIE}$0", $tiers->mot_de_passe);
             
