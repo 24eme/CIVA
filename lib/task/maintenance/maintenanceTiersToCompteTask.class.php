@@ -59,17 +59,19 @@ EOF;
                     $met->save();
                     $this->logSection("gamma", $met->get('_id'));
                 }
-            }
 
+            
+            $compte->mot_de_passe = preg_replace("/^([0-9]{4})$/", "{OUBLIE}$0", $tiers->mot_de_passe);
+            
+            
             if(!$compte->email) {
                 $compte->email = $tiers->email;
             }
             
-            if (!$compte->email) {
-                throw new sfCommandException("email", $compte->get('_id'));
+            if (!$compte->email && $compte->getStatut() == 'INSCRIT') {
+                throw new sfCommandException("email : ". $compte->get('_id'));
             }
             
-            $compte->mot_de_passe = preg_replace("/^([0-9]{4})$/", "{OUBLIE}$0", $tiers->mot_de_passe);
             $compte->save();
         }
     }
