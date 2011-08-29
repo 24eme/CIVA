@@ -34,34 +34,36 @@ EOF;
         $ids_tiers = sfCouchdbManager::getClient("Tiers")->getAllIds();
 
         foreach ($ids_tiers as $id) {
-	  $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-	  $compte = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-" . $tiers->cvi);
-	  if (!$compte) {
-	      $compte = new CompteProxy();
-	      $compte->set('_id', 'COMPTE-' . $tiers->cvi);
-	      if ($rec = sfCouchdbManager::getClient()->retrieveDocumentById("REC-" . $tiers->cvi)) {
-		$compte->compte_reference = $rec->compte;
-	      } elseif ($met = sfCouchdbManager::getClient()->retrieveDocumentById("MET-" . $tiers->civaba)) {
-                        $compte->compte_reference = $met->compte;
-	      } else {
-		$this->log($id);
-		continue;
-	      }
-              
-	      $this->logSection("compte proxy", $id);
-              
-	      if(isset($tiers->gamma)) {
-                   $met = sfCouchdbManager::getClient()->retrieveDocumentById('MET-'.$tiers->civaba);
-                   if ($met) {
-                        $met->add('gamma', $tiers->gamma);
-                        $met->save();
-                   }
-	      }
-                
+            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $compte = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-" . $tiers->cvi);
+
+            if (!$compte) {
+                $compte = new CompteProxy();
+                $compte->set('_id', 'COMPTE-' . $tiers->cvi);
                 $compte->login = $tiers->cvi;
-                $compte->mot_de_passe = preg_replace("/^[0-9]{4}$/", "{OUBLIE}", $tiers->mot_de_passe);
-                $compte->save();
+                if ($rec = sfCouchdbManager::getClient()->retrieveDocumentById("REC-" . $tiers->cvi)) {
+                    $compte->compte_reference = $rec->compte;
+                } elseif ($met = sfCouchdbManager::getClient()->retrieveDocumentById("MET-" . $tiers->civaba)) {
+                    $compte->compte_reference = $met->compte;
+                } else {
+                    $this->log($id);
+                    continue;
+                }
             }
+            $this->logSection("compte proxy", $id);
+
+            if (isset($tiers->gamma)) {
+                $met = sfCouchdbManager::getClient()->retrieveDocumentById('MET-' . $tiers->civaba);
+                if ($met) {
+                    $met->add('gamma', $tiers->gamma);
+                    $met->save();
+                    $this->logSection("gamma", $met->get('_id'));
+                }
+            }
+
+            $compte->mot_de_passe = preg_replace("/^([0-9]{4})$/", "{OUBLIE}$0", $tiers->mot_de_passe);
+
+            $compte->save();
         }
     }
 
