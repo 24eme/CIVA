@@ -58,19 +58,18 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function getAdresse() {
-        $adresse = $this->getTiersField('adresse');
-        return $adresse ? $adresse : parent::getAdresse();
+        $value = $this->getTiersField('adresse');
+        return $value ? $value : parent::getAdresse();
     }
 
     public function getCodePostal() {
         $value = $this->getTiersField('code_postal');
         return $value ? $value : parent::getCodePostal();
-        return $this->getTiersField('code_postal');
     }
 
     public function getCommune() {
         $value = $this->getTiersField('commune');
-        return $value ? $value : parent::getCommune();;
+        return $value ? $value : parent::getCommune();
     }
 
     public function getDuplicatedTiers() {

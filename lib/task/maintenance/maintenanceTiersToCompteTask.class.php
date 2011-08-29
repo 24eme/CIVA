@@ -70,7 +70,7 @@ EOF;
             }
             
             if (!$compte->email && $compte->getStatut() == 'INSCRIT') {
-                throw new sfCommandException("email : ". $compte->get('_id'));
+                $this->logSection("email", $compte->get('_id'), null, 'ERROR');
             }
             
             $compte->save();
