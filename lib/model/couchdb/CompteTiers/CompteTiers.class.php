@@ -45,7 +45,7 @@ class CompteTiers extends BaseCompteTiers {
             }
             if ($tiers->type == 'Recoltant') {
                 return $tiers->get($hash);
-            } elseif ($tiers->type == 'MetteurEnMarche' && is_null($value)) {
+            } elseif (is_null($value)) {
                 $value = $tiers->get($hash);
             }
             
