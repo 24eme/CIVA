@@ -71,6 +71,9 @@ class Configuration extends BaseConfiguration {
 	    break;
 	  }
 	}
+      }else {
+	if (!$appellation->exist('lieu'))
+	  return null;
       }
 
       $libelle = self::normalizeLibelle($cepage);
