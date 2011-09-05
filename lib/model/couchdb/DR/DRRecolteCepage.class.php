@@ -5,9 +5,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     public function getConfig() {
       return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
-    
+    public function getCouleur() {
+      return $this->getParent();
+    }
     public function getLieu() {
-        return $this->getParent();
+      return $this->getCouleur()->getLieu();
     }
 
     public function getLibelle() {

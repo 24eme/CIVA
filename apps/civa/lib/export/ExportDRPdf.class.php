@@ -86,10 +86,11 @@ class ExportDRPdf {
     $afterTotal = array();
     $acheteurs = $lieu->acheteurs;
     $cpt = 0;
-    foreach ($lieu->getConfig()->filter('^cepage_') as $cepage) {
-      if (!$lieu->exist($cepage->getKey()))
+    $couleur = $lieu->getCouleur();
+    foreach ($couleur->getConfig()->getCepages() as $cepage) {
+      if (!$couleur->exist($cepage->getKey()))
 	continue;
-      $cepage = $lieu->{$cepage->getKey()};
+      $cepage = $couleur->{$cepage->getKey()};
       $i = 0;
       foreach ($cepage->detail as $detail) {
 	$c = array();

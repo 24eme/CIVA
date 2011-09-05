@@ -121,68 +121,74 @@ DR:
                                            commune: {}
                                            superficie: {type:float}
                                            dontdplc: {type:float}
-                        # ------ Cépage ------
+                        # ------ Couleur ------
                         '*':
                           type: collection
-                          class: DRRecolteCepage
+                          class: DRRecolteCouleur
                           definition:
                             fields:
-                              total_volume: {type: float }
-                              total_superficie: {type:float }
-                              volume_revendique: {type:float }
-                              dplc: {type:float }
-                              detail:
-                                type: array_collection
+                            # ------ Cépage ------
+                              '*':
+                                type: collection
+                                class: DRRecolteCepage
                                 definition:
                                   fields:
-                                    '*':
-                                      type: collection
-                                      class: DRRecolteCepageDetail
+                                    total_volume: {type: float }
+                                    total_superficie: {type:float }
+                                    volume_revendique: {type:float }
+                                    dplc: {type:float }
+                                    detail:
+                                      type: array_collection
                                       definition:
                                         fields:
-                                          appellation: {  }
-                                          cepage: {  }
-                                          denomination: {  }
-                                          vtsgn: {  }
-                                          code_lieu: {  }
-                                          volume: { type: float }
-                                          superficie: { type: float }
-                                          motif_non_recolte: { required: false}
-                                          negoces:
-                                            type: array_collection
+                                          '*':
+                                            type: collection
+                                            class: DRRecolteCepageDetail
                                             definition:
                                               fields:
-                                                '*':
-                                                  type: collection
+                                                appellation: {  }
+                                                cepage: {  }
+                                                denomination: {  }
+                                                vtsgn: {  }
+                                                code_lieu: {  }
+                                                volume: { type: float }
+                                                superficie: { type: float }
+                                                motif_non_recolte: { required: false}
+                                                negoces:
+                                                  type: array_collection
                                                   definition:
                                                     fields:
-                                                      cvi: {  }
-                                                      quantite_vendue: { type: float }
-                                          cooperatives:
-                                            type: array_collection
-                                            definition:
-                                              fields:
-                                                '*':
-                                                  type: collection
+                                                      '*':
+                                                        type: collection
+                                                        definition:
+                                                          fields:
+                                                            cvi: {  }
+                                                            quantite_vendue: { type: float }
+                                                cooperatives:
+                                                  type: array_collection
                                                   definition:
                                                     fields:
-                                                      cvi: {  }
-                                                      quantite_vendue: { type: float }
-                                          mouts:
-                                            type: array_collection
-                                            required: false
-                                            definition:
-                                              fields:
-                                                '*':
-                                                  type: collection
+                                                      '*':
+                                                        type: collection
+                                                        definition:
+                                                          fields:
+                                                            cvi: {  }
+                                                            quantite_vendue: { type: float }
+                                                mouts:
+                                                  type: array_collection
+                                                  required: false
                                                   definition:
                                                     fields:
-                                                      cvi: {  }
-                                                      quantite_vendue: { type: float }
-                                          cave_particuliere: { type: float }
-                                          volume_revendique: { type: float }
-                                          volume_dplc: { type: float }
-
+                                                      '*':
+                                                        type: collection
+                                                        definition:
+                                                          fields:
+                                                            cvi: {  }
+                                                            quantite_vendue: { type: float }
+                                                cave_particuliere: { type: float }
+                                                volume_revendique: { type: float }
+                                                volume_dplc: { type: float }
+ 
 Acheteur:
   inheritance: _Tiers
   definition:
@@ -416,33 +422,39 @@ Configuration:
                               appellation_lieu: {required: false}
                               qualite: {required: false}
                               code_cepage: {required: false}
-                        '*':
-                        # ------------ CEPAGE -------------
+                        # ------------ Couleur --------------
+                        '*' :
                           type: collection
-                          class: ConfigurationCepage
+                          class: ConfigurationCouleur
                           definition:
                             fields:
-                              no_vtsgn: {required: false}
-                              douane :
+                              '*':
+                              # ------------ CEPAGE -------------
                                 type: collection
-                                class: ConfigurationDouane
+                                class: ConfigurationCepage
                                 definition:
                                   fields:
-                                    type_aoc: {required: false}
-                                    couleur: {required: false}
-                                    appellation_lieu: {required: false}
-                                    qualite: {required: false}
-                                    code_cepage: {required: false}
-                              libelle: {  }
-                              rendement: { type: float }
-                              min_quantite: {type: float, required: false}
-                              max_quantite: {type: float, required: false}
-                              exclude_total: {type: integer, required: false}
-                              superficie_optionnelle: { type: integer, required: false }
-                              no_negociant : { type: integer, required: false }
-                              no_cooperative : { type: integer, required: false }
-                              no_mout : { type: integer, required: false }
-                              no_motif_non_recolte : { type: integer, required: false }
+                                    no_vtsgn: {required: false}
+                                    douane :
+                                      type: collection
+                                      class: ConfigurationDouane
+                                      definition:
+                                        fields:
+                                          type_aoc: {required: false}
+                                          couleur: {required: false}
+                                          appellation_lieu: {required: false}
+                                          qualite: {required: false}
+                                          code_cepage: {required: false}
+                                    libelle: {  }
+                                    rendement: { type: float }
+                                    min_quantite: {type: float, required: false}
+                                    max_quantite: {type: float, required: false}
+                                    exclude_total: {type: integer, required: false}
+                                    superficie_optionnelle: { type: integer, required: false }
+                                    no_negociant : { type: integer, required: false }
+                                    no_cooperative : { type: integer, required: false }
+                                    no_mout : { type: integer, required: false }
+                                    no_motif_non_recolte : { type: integer, required: false }
 
 
 Messages:

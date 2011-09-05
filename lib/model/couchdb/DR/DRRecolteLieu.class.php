@@ -24,8 +24,22 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->getParent();
     }
 
+    public function getCouleurs() {
+      return $this->filter('^couleur');
+    }
+
+    public function getCouleur() {
+      if ($this->getNbCouleurs() > 1) 
+	throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
+      return $this->_get('couleur');
+    }
+
+    public function getNbCouleurs() {
+      return count($this->filter('^couleur'));
+    }
+
     public function getCepages() {
-        return $this->filter('^cepage');
+      return $this->getCouleur()->getCepages();
     }
 
     public function getCodeDouane($vtsgn = '') {
