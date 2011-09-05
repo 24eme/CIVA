@@ -185,13 +185,13 @@ EOF;
             }
 	    $doc = $list_documents[$_id];
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
-	    ->total_superficie = $this->recode_number($csv[32]); //32
+	    ->total_superficie = $this->recode_number($csv[32]); //total surface cepage calc
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
-	    ->total_volume = $this->recode_number($csv[33]); //33
+	    ->total_volume = $this->recode_number($csv[33]); //Total Vol cepage calc
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
-	    ->volume_revendique = $this->recode_number($csv[36]); //36
+	    ->volume_revendique = $this->recode_number($csv[37]); //Vol Revendiqué Cep Calc
 	    $doc->recolte->{'appellation_'.$appellation_new}->{'lieu'.$lieu}->{'cepage_'.$cepage}
-	    ->dplc = $this->recode_number($csv[37]); //37
+	    ->dplc = $this->recode_number($csv[38]); //Vol DPLC Cepage Calc
 	}
 
         foreach ($list_documents as $doc) {
