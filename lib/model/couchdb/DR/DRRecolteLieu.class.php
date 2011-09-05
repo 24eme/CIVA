@@ -111,7 +111,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                     $volume_dplc = 0;
                 }
             }
-            $this->_storage[$key] = $volume_dplc;
+            $this->_storage[$key] = round($volume_dplc, 2);
         }
         return $this->_storage[$key];
     }
@@ -174,7 +174,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getTotalVolumeForMinQuantite() {
-      return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'),2);
+      return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
     }
 
     public function getRendementRecoltant() {
@@ -274,7 +274,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getVolumeMaxAppellation() {
-      return ($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation();
+      return round(($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation(), 2);
     }
 
     public function isNonSaisie() {

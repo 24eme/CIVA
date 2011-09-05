@@ -58,7 +58,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getVolumeMax() {
-        return ($this->superficie / 100) * $this->getConfig()->getRendement();
+        return round(($this->superficie / 100) * $this->getConfig()->getRendement(), 2);
     }
 
     private function getSumAcheteur($field) {

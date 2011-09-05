@@ -77,7 +77,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getVolumeMax() {
-      return ($this->total_superficie/100) * $this->getConfig()->getRendement();
+      return round(($this->total_superficie/100) * $this->getConfig()->getRendement(), 2);
     }
 
     public function getRendementRecoltant() {
@@ -137,7 +137,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
             $volume_max = $this->getVolumeMax();
             if ($this->total_volume > $volume_max) {
-              return ($this->total_volume - $volume_max);
+              return round($this->total_volume - $volume_max, 2);
             } else {
               return 0;
             }
