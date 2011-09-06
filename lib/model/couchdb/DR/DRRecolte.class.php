@@ -63,7 +63,10 @@ class DRRecolte extends BaseDRRecolte {
         foreach($acheteurs as $key => $appellation) {
 	  $app = $this->add($key);
 	  if (!$app->getConfig()->hasManyLieu()) {
-	    $app->add('lieu');
+	    $lieu = $app->add('lieu');
+	    foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
+	      $lieu->add($k);
+	    }
 	  }
         }
         foreach($this->getAppellations() as $key => $appellation) {

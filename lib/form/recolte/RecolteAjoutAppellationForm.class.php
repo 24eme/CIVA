@@ -42,7 +42,10 @@
             $this->getObject()->getCouchdbDocument()->acheteurs->add($appellation_key)->cave_particuliere = 1;
 
             if ($config_appellation->exist('lieu')) {
-                $this->getObject()->add($appellation_key)->add('lieu');
+                $lieu = $this->getObject()->add($appellation_key)->add('lieu');
+		foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
+		  $lieu->add($k);
+		}
                 $this->_need_lieu = false;
             } else {
                 $this->_need_lieu = true;

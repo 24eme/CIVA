@@ -21,7 +21,10 @@
 
         public function doUpdateObject($values) {
             if (isset($values['lieu'])) {
-                $this->getObject()->add($values['lieu']);
+                $lieu = $this->getObject()->add($values['lieu']);
+		foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
+		  $lieu->add($k);
+		}
             }
         }
     }

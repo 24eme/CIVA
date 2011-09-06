@@ -280,15 +280,24 @@ class recolteActions extends EtapesActions {
         if (isset($appellation_lieu['lieu'])) {
             $lieu = $appellation_lieu['lieu'];
         }
-        $cepage = $request->getParameter('cepage', null);
+        preg_match('/(?P<couleur>\w*-|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
+        $couleur = null;
+        if (isset($couleur_cepage['couleur'])) {
+            $couleur = $couleur_cepage['couleur'];
+        }
+        $cepage = null;
+        if (isset($couleur_cepage['cepage'])) {
+            $cepage = $couleur_cepage['cepage'];
+        }
+
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
         }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
-        $this->onglets->init($appellation, $lieu, $cepage);
-        /*if (!$this->onglets || ($request->getParameter('appellation_lieu', null) == '' && $request->getParameter('cepage', null) == '') || !$this->onglets->init($appellation, $lieu, $cepage)) {
+        $this->onglets->init($appellation, $lieu, $couleur, $cepage);
+        /*if (!$this->onglets || ($request->getParameter('appellation_lieu', null) == '' && $request->getParameter('couleur_cepage', null) == '') || !$this->onglets->init($appellation, $lieu, $cepage)) {
             $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
         }*/
 
@@ -303,7 +312,7 @@ class recolteActions extends EtapesActions {
     }
 
     protected function initDetails() {
-        $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCepage())->add('detail');
+        $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
         $this->nb_details_current = $this->details->count();
 
         $this->detail_key = null;

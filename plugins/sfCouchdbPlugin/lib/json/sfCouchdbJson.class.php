@@ -484,7 +484,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         }
     }
 
-    public function getSimpleFields() {
+    public function toSimpleFields() {
         $simple_fields = array();
         foreach ($this->_fields as $key => $field) {
             if (!$this->getDefinition()->get($key)->isCollection()) {
@@ -494,22 +494,14 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         return $simple_fields;
     }
 
-    public function toArray($deep = false) {
+    public function toArray($deep = 1) {
         $array_fields = array();
-        if ($deep === false || $deep < 1) {
-            $simple_fields_keys = array_keys($this->getSimpleFields());
-            foreach ($simple_fields_keys as $key) {
-                $v = $this->get($key);
-                $array_fields[$key] = $v;
-            }
-        } elseif ($deep) {
-            foreach ($this->_fields as $key => $field) {
-                if ($this->getDefinition()->get($key)->isCollection()) {
-                    $array_fields[$key] = $field->toArray($deep);
-                } else {
-                    $array_fields[$key] = $this->get($key);
-                }
-            }
+	foreach ($this as $key => $field) {
+	  if ($deep > 1 && $this->getDefinition()->get($key)->isCollection()) {
+	    $array_fields[$key] = $field->toArray($deep);
+	    continue;
+	  }
+	  $array_fields[$key] = $this->get($key);
         }
         return $array_fields;
     }

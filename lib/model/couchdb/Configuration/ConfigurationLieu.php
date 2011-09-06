@@ -16,7 +16,11 @@ class ConfigurationLieu extends BaseConfigurationLieu {
   }
 
   public function getCepages() {
-    return $this->getCouleur()->getCepages();
+    $cepage = array();
+    foreach ($this->getCouleurs() as $couleur) {
+      $cepage = array_merge($cepage, $couleur->getCepages());
+    }
+    return $cepage;
   }
 
   public function hasRendementCepage() {

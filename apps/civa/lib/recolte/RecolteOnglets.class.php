@@ -4,9 +4,11 @@ class RecolteOnglets {
     protected $_declaration = null;
     protected $_current_key_appellation = null;
     protected $_current_key_lieu = null;
+    protected $_current_key_couleur = null;
     protected $_current_key_cepage = null;
     protected $_prefix_key_appellation = null;
     protected $_prefix_key_lieu = null;
+    protected $_prefix_key_couleur = null;
     protected $_prefix_key_cepage = null;
     protected $_sf_route_previous_etape = null;
     protected $_sf_route_next_etape = null;
@@ -16,13 +18,15 @@ class RecolteOnglets {
         $this->_prefix_key_appellation = 'appellation_';
         $this->_prefix_key_lieu = 'lieu';
         $this->_prefix_key_cepage = 'cepage_';
+        $this->_prefix_key_couleur = 'couleur';
         $this->_sf_route_previous_etape = str_replace('@', '', $sf_route_previous_etape);
         $this->_sf_route_next_etape = str_replace('@', '', $sf_route_next_etape);
     }
 
-    public function init($appellation, $lieu, $cepage) {
+    public function init($appellation, $lieu, $couleur, $cepage) {
         return (($this->_current_key_appellation = $this->verifyCurrent($appellation, $this->_prefix_key_appellation, 'getItemsAppellation', 'getFirstKeyAppellation'))
            &&  ($this->_current_key_lieu = $this->verifyCurrent($lieu, $this->_prefix_key_lieu, 'getItemsLieu', 'getFirstKeyLieu'))
+           &&  ($this->_current_key_couleur = $this->verifyCurrent($couleur, $this->_prefix_key_couleur, 'getItemsCouleur', 'getFirstKeyCouleur'))
            &&  ($this->_current_key_cepage = $this->verifyCurrent($cepage, $this->_prefix_key_cepage, 'getItemsCepage', 'getFirstKeyCepage')));
     }
 
@@ -32,6 +36,13 @@ class RecolteOnglets {
 
     public function getItemsAppellationConfig() {
         return $this->_declaration->get('recolte')->getConfig()->filter('^appellation');
+    }
+
+    public function getCouleur($appellation = null, $lieu = null, $couleur = null) {
+      if (!$couleur)
+	$couleur = $this->getCurrentKeyCouleur();
+      $couleur = $this->convertValueToKey($couleur, $this->_prefix_key_couleur);
+      return $this->getLieu($appellation, $lieu)->get($couleur);
     }
 
     public function getLieu($appellation = null, $lieu = null) {
@@ -55,8 +66,12 @@ class RecolteOnglets {
         return $this->_declaration->get('recolte')->get($appellation)->filter('^lieu');
     }
     
-    public function getItemsCepage($appellation = null, $lieu = null) {
-        return $this->getLieu($appellation, $lieu)->getConfig()->filter('^cepage');
+    public function getItemsCepage($appellation = null, $lieu = null, $couleur = null) {
+      return $this->getCouleur($appellation, $lieu, $couleur)->getConfig()->filter('^cepage');
+    }
+
+    public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
+      return $this->getLieu($appellation, $lieu)->getConfig()->filter('^couleur');
     }
 
     public function setCurrentAppellation($value = null) {
@@ -73,6 +88,10 @@ class RecolteOnglets {
             $this->setCurrentCepage();
         }
         return $result;
+    }
+
+    public function setCurrentCouleur($value = null) {
+        return $this->_current_key_couleur = $this->verifyCurrent($value, $this->_prefix_key_couleur, 'getItemsCouleur', 'getFirstKeyCouleur');
     }
 
     public function setCurrentCepage($value = null) {
@@ -95,12 +114,20 @@ class RecolteOnglets {
         return $this->getCurrentAppellation()->get($this->_current_key_lieu);
     }
 
+    public function getCurrentKeyCouleur() {
+        return $this->_current_key_couleur;
+    }
+
+    public function getCurrentCouleur() {
+        return $this->getCurrentLieu()->get($this->_current_key_couleur);
+    }
+
     public function getCurrentKeyCepage() {
         return $this->_current_key_cepage;
     }
 
     public function getCurrentCepage() {
-        return $this->getCurrentLieu()->get($this->_current_key_cepage);
+        return $this->getCurrentCouleur()->get($this->_current_key_cepage);
     }
 
     public function getCurrentValueAppellation() {
@@ -109,6 +136,10 @@ class RecolteOnglets {
 
     public function getCurrentValueLieu() {
         return $this->convertKeyToValue($this->getCurrentKeyLieu(), $this->_prefix_key_lieu);
+    }
+
+    public function getCurrentValueCouleur() {
+        return $this->convertKeyToValue($this->getCurrentKeyCouleur(), $this->_prefix_key_couleur);
     }
 
     public function getCurrentValueCepage() {
@@ -133,7 +164,6 @@ class RecolteOnglets {
 
     public function nextAppellation() {
         $key = $this->getNextAppellation();
-        echo $key;
         if ($key) {
             $this->setCurrentAppellation($key);
         }
@@ -170,7 +200,6 @@ class RecolteOnglets {
 
     public function nextLieu() {
         $key = $this->getNextLieu();
-        echo $key;
         if ($key) {
             $this->setCurrentLieu($key);
         }
@@ -187,6 +216,42 @@ class RecolteOnglets {
 
     public function getLastLieu() {
         return $this->last('getItemsLieu');
+    }
+
+    public function getLastCouleur() {
+        return $this->last('getItemsCouleur');
+    }
+
+    public function getPreviousCouleur() {
+        return $this->previous('getItemsCouleur', 'getItemsCouleur', 'getCurrentKeyCouleur');
+    }
+
+    public function hasPreviousCouleur() {
+        return ($this->getPreviousCouleur() !== false);
+    }
+
+    public function previousCouleur() {
+        $key = $this->getPreviousCouleur();
+        if ($key) {
+            $this->setCurrentCouleur($key);
+        }
+        return $key;
+    }
+
+    public function getNextCouleur() {
+        return $this->next('getItemsCouleur', 'getItemsCouleur', 'getCurrentKeyCouleur');
+    }
+
+    public function hasNextCouleur() {
+        return ($this->getNextCepage() !== false);
+    }
+
+    public function nextCouleur() {
+        $key = $this->getNextCepage();
+        if ($key) {
+            $this->setCurrentCepage($key);
+        }
+        return $key;
     }
 
     public function getLastCepage() {
@@ -270,56 +335,76 @@ class RecolteOnglets {
       return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
-    protected function getFirstKeyCepage($appellation = null, $lieu = null) {
-        foreach($this->getItemsCepage($appellation, $lieu) as $key => $item) {
-            if ($this->getLieu($appellation, $lieu)->exist($key)) {
-                return $key;
-            }
-        }
-        
-        return $this->getItemsCepage($appellation, $lieu)->getFirstKey();
+    protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
+      if (!$appellation)
+	$appellation = $this->getFirstKeyAppellation();
+      if (!$lieu) 
+	$lieu = $this->getFirstKeyLieu($appellation);
+      return $this->getItemsCouleur($appellation, $lieu)->getFirstKey();
+    }
+
+    protected function getFirstKeyCepage($appellation = null, $lieu = null, $couleur = null) {
+      foreach($this->getItemsCepage($appellation, $lieu, $couleur) as $key => $item) {
+	if ($this->getCouleur($appellation, $lieu, $couleur)->exist($key)) {
+	  return $key;
+	}
+      }        
+      return $this->getItemsCepage($appellation, $lieu, $couleur)->getFirstKey();
     }
 
     protected function last($method_items) {
         return $this->$method_items()->getLastKey();
     }
 
-    public function getUrl($sf_route, $appellation = null, $lieu = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
+    public function getUrl($sf_route, $appellation = null, $lieu = null, $couleur = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
         if (is_null($appellation)) {
             if (!is_null($this->getCurrentKeyAppellation())) {
                 $appellation = $this->getCurrentValueAppellation();
             } else {
                 $appellation = $this->getFirstKeyAppellation();
                 $lieu = $this->getFirstKeylieu($appellation);
-                $cepage = $this->getFirstKeyCepage($appellation, $lieu);
+		$couleur = $this->getFirstKeyCouleur($appellation, $lieu);
+                $cepage = $this->getFirstKeyCepage($appellation, $lieu, $couleur);
             }
         }
         $appellation = $this->convertKeyToValue($appellation, $this->_prefix_key_appellation);
-
+	
         if (is_null($lieu)) {
-            if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
-                $lieu = $this->getCurrentValueLieu();
-            } else {
-                $lieu = $this->getFirstKeylieu($appellation);
-                $cepage = $this->getFirstKeyCepage($appellation, $lieu);
-            }
+	  if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
+	    $lieu = $this->getCurrentValueLieu();
+	  } else {
+	    $lieu = $this->getFirstKeylieu($appellation);
+	    $couleur = $this->getFirstKeyCouleur($appellation, $lieu);
+	    $cepage = $this->getFirstKeyCepage($appellation, $lieu);
+	  }
         }
         $lieu = $this->convertKeyToValue($lieu, $this->_prefix_key_lieu);
+	
+        if (!$couleur) {
+	  if (!is_null($this->getCurrentKeyCouleur()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
+	    $couleur = $this->getCurrentValueCouleur();
+	  } 
+	  if (!$couleur) {
+	    $couleur = $this->getFirstKeyCouleur($appellation, $lieu);
+	    $cepage = $this->getFirstKeyCepage($appellation, $lieu);
+	  }
+        }
+        $couleur = $this->convertKeyToValue($couleur, $this->_prefix_key_couleur);
 
         if (is_null($cepage)) {
-            if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
-               $cepage = $this->getCurrentValueCepage();
-            } 
-	    if (!$cepage) {
-	      $cepage = $this->getFirstKeyCepage($appellation, $lieu);
-            }
+	  if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueCouleur() == $couleur && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
+	    $cepage = $this->getCurrentValueCepage();
+	  } 
+	  if (!$cepage) {
+	    $cepage = $this->getFirstKeyCepage($appellation, $lieu, $couleur);
+	  }
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
 
         if ($sf_route == 'recolte') {
             $cepage_key = $this->convertValueToKey($cepage, $this->_prefix_key_cepage);
             if (!$this->getLieu($appellation, $lieu)->exist($cepage_key) || !$this->getLieu($appellation, $lieu)->get($cepage_key)->detail->count() > 0) {
-                $sf_route = 'recolte_add';
+	      $sf_route = 'recolte_add';
             }
         }
 
@@ -328,14 +413,16 @@ class RecolteOnglets {
 	  $lieu_str = '-'.$lieu;
 	}
 
-        if (!$cepage) {
-            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'sf_anchor' => $sf_anchor);
-        } else {
-            return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'cepage' => $cepage, 'sf_anchor' => $sf_anchor);
-        }
+	$couleur_str = '';
+	if ($couleur) {
+	  $couleur_str = '-'.$couleur;
+	}
+
+	return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation.$lieu_str, 'couleur_cepage' => $couleur_str.$cepage, 'sf_anchor' => $sf_anchor);
+
     }
 
-     public function getUrlParams($appellation = null, $lieu = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
+    public function getUrlParams($appellation = null, $lieu = null, $couleur = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
          $url = $this->getUrl(null, $appellation, $lieu, $cepage, $sf_anchor);
          unset($url['sf_route']);
          return $url;
@@ -346,7 +433,7 @@ class RecolteOnglets {
         if (!$this->hasPreviousCepage()) {
             return false;
         } else {
-            return $this->getUrl('recolte', null, null, $this->getPreviousCepage());
+	  return $this->getUrl('recolte', null, null, null, $this->getPreviousCepage());
         }
 
     }
@@ -355,7 +442,7 @@ class RecolteOnglets {
         if (!$this->hasNextCepage()) {
             return false;
         } else {
-            return $this->getUrl('recolte', null, null, $this->getNextCepage());
+	  return $this->getUrl('recolte', null, null, null, $this->getNextCepage());
         }
 
     }
