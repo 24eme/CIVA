@@ -46,6 +46,7 @@ class Configuration extends BaseConfiguration {
       $libelle = preg_replace('/&nbsp;/', '', strtolower($libelle));
       $libelle = str_replace(array('é', 'è'), 'e', $libelle);
       $libelle = preg_replace('/[^a-z ]/', '', preg_replace('/  */', ' ', preg_replace('/&([a-z])[^;]+;/i', '\1', $libelle)));
+      $libelle = preg_replace('/^\s+/', '', preg_replace('/\s+$/', '', $libelle));
       return $libelle;
     }
 
@@ -54,50 +55,57 @@ class Configuration extends BaseConfiguration {
       $lieuid = 'lieu';
       $cepageid = null;
       $libelle = self::normalizeLibelle($appellation);
-      foreach ( $this->getRecolte()->filter('^appellation') as $appellation_key => $appellation) {
-	if ($libelle == self::normalizeLibelle($appellation->getLibelle())) {
+      foreach ( $this->getRecolte()->filter('^appellation') as $appellation_key => $appellation_obj) {
+	if ($libelle == self::normalizeLibelle($appellation_obj->getLibelle())) {
 	  $appid=$appellation_key;
 	  break;
 	}
       }
       if (!$appid)
-	return null;
+	return array("error" => $appellation);
 
       if ($lieu) {
 	$libelle = self::normalizeLibelle($lieu);
-	foreach($appellation->filter('^lieu') as $lieu_key => $lieu) {
-	  if ($libelle == self::normalizeLibelle($lieu->getLibelle())) {
+	foreach($appellation_obj->filter('^lieu') as $lieu_key => $lieu_obj) {
+	  if ($libelle == self::normalizeLibelle($lieu_obj->getLibelle())) {
 	    $lieuid=$lieu_key;
 	    break;
 	  }
 	}
-      }else {
-	if (!$appellation->exist('lieu'))
-	  return null;
+      }
+      if ($lieuid == 'lieu') {
+	if (!$appellation_obj->exist('lieu'))
+	  return array("error" => $lieu);
       }
 
       $libelle = self::normalizeLibelle($cepage);
+      $prodhash = '';
+      $evalhash = '';
       $eval = null;
-      foreach($appellation->get($lieuid)->filter('^cepage') as $cepage_key => $cepage) {
-	$cepage_libelle = self::normalizeLibelle($cepage->getLibelle());
+      foreach($appellation_obj->get($lieuid)->getCepages() as $cepage_key => $cepage_obj) {
+	$cepage_libelle = self::normalizeLibelle($cepage_obj->getLibelle());
 	if ($libelle == $cepage_libelle) {
 	  $cepageid = $cepage_key;
+	  $prodhash = $cepage_obj->getHash();
 	  break;
 	}
+	//Gestion des cépages tronqués (Gewurzt)
 	if (preg_match('/^'.$cepage_libelle.'/', $libelle)) {
-	  if ($eval === null)
+	  if ($eval === null) {
 	    $eval = $cepage_key;
-	  else
+	    $evalhash = $cepage_obj->getHash();
+	  } else
 	    $eval = 0;
 	}
       }
       if (!$cepageid) {
-	if ($eval)
+	if ($eval) {
 	  $cepageid = $eval;
-	else
-	  return null;
+	  $prodhash = $evalhash;
+	} else
+	  return array("error" => $cepage);
       }
-      return $appid.'/'.$lieuid.'/'.$cepageid;
+      return array("ids" => $appid.'/'.$lieuid.'/'.$cepageid, "hash" => $prodhash);
     }
 
 }
