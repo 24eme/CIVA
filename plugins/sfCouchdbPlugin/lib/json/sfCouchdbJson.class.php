@@ -17,19 +17,16 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
      * @var bool
      */
     private $_is_array = false;
-    
     /**
      *
      * @var string 
      */
     private $_definition_model = null;
-    
     /**
      *
      * @var string
      */
     private $_definition_hash = null;
-    
     /**
      *
      * @var sfCouchdbDocument 
@@ -61,7 +58,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         $this->_hash = $hash;
         $this->initializeDefinition();
     }
-    
+
     /**
      * Retourne le document conteneur (permet donc de retourner à la racine)
      * @return sfCouchdbDocument 
@@ -78,7 +75,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             $this->_add($field_definition->getKey(), null);
         }
     }
-    
+
     /**
      * Retourne la définition du modèle associé
      * 
@@ -112,14 +109,14 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function load($data) {
         if (!is_null($data)) {
             foreach ($data as $key => $item) {
-                if (!$this->exist($key)) { 
-                    $this->_add($key); 
- 		}
-                $this->_set($key, $item); 
+                if (!$this->exist($key)) {
+                    $this->_add($key);
+                }
+                $this->_set($key, $item);
             }
         }
     }
-    
+
     protected function formatFieldKey($key) {
         return sfInflector::underscore($key);
     }
@@ -460,12 +457,19 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
 
     public function getData() {
         $data = array();
-
         foreach ($this->_fields as $key => $field) {
-            if ($this->getDefinition()->get($key)->isCollection()) {
-                $data[$this->getFieldName($key)] = $field->getData();
+            if ($this->_is_array) {
+               if ($this->getDefinition()->get($key)->isCollection()) {
+                    $data[] = $field->getData();
+                } else {
+                    $data[] = $field;
+                } 
             } else {
-                $data[$this->getFieldName($key)] = $field;
+                if ($this->getDefinition()->get($key)->isCollection()) {
+                    $data[$this->getFieldName($key)] = $field->getData();
+                } else {
+                    $data[$this->getFieldName($key)] = $field;
+                }
             }
         }
 
@@ -516,8 +520,6 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             }
         }
     }
-
-    
 
     public function getParentHash() {
         return preg_replace('/\/[^\/]+$/', '', $this->getHash());
