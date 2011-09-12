@@ -105,7 +105,11 @@ class ExportCsv {
      * @return string 
      */
     public function output() {
-        return $this->_content;
+        $content = htmlentities($this->_content, ENT_NOQUOTES, "UTF-8");
+        $content = preg_replace('/\&(.)[^;]*;/', '\1', $content);
+        return $content;
     }
+    
+    
 
 }
