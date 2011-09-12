@@ -53,20 +53,33 @@ EOF;
 
         foreach (file($options['file']) as $a) {
 	  $json = new stdClass();
-	  $achat = explode(',', preg_replace('/"/', '', $a));
-	  if (!isset($achat[2]) || !$achat[2] || !strlen($achat[2]) || ($achat[4] != 'C' && $achat[4] != 'N' && $achat[4] != 'X' ))
+          $achat = new Db2Achat(explode(',',  preg_replace('/"/', '', $a)));
+
+	  if (!$achat->get(Db2Achat::COL_CVI) || 
+              !strlen($achat->get(Db2Achat::COL_CVI)) || 
+              ($achat->get(Db2Achat::COL_QUALITE) != 'C' && 
+               $achat->get(Db2Achat::COL_QUALITE) != 'N' && 
+               $achat->get(Db2Achat::COL_QUALITE) != 'X' )) {
 	    continue;
-	  $json->_id = 'ACHAT-'.$achat[2];
-	  $json->cvi = $achat[2];
-	  $json->civaba = $achat[1];
+          }
+          
+	  $json->_id = 'ACHAT-'.$achat->get(Db2Achat::COL_CVI);
+	  $json->cvi = $achat->get(Db2Achat::COL_CVI);
+	  $json->civaba = $achat->get(Db2Achat::COL_CIVABA);
 	  $json->type = "Acheteur";
-          if($achat[4] == 'N' || $achat[4] == 'X')
+          
+          if($achat->get(Db2Achat::COL_QUALITE) == 'N') {
             $json->qualite = 'Negociant';
-          else if($achat[4] == 'C')
+          } else if($achat->get(Db2Achat::COL_QUALITE) == 'C') {
             $json->qualite = 'Cooperative';
-	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat[5]));
-	  $json->commune = rtrim($achat[6]);
-	  $json->achnum = $achat[0];
+          } elseif($achat->get(Db2Achat::COL_QUALITE) == 'X') {
+            $json->qualite = 'NegoCave';
+          } 
+	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat->get(Db2Achat::COL_NOM)));
+	  $json->commune = rtrim($achat->get(Db2Achat::COL_COMMUNE));
+	  $json->db2->num = $achat->get(Db2Achat::COL_NUM);
+          $json->db2->import_date = date("Y-m-d");
+          
 	  $docs[] = $json;
 	}
 	if ($options['import'] == 'couchdb') {
