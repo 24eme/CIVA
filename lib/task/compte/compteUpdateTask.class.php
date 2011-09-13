@@ -46,7 +46,10 @@ EOF;
         foreach ($ids_tiers as $id) {
             $tiers_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             if (!array_key_exists($tiers_json->db2->no_stock, $stocks)) {
-                $stocks[$tiers_json->db2->no_stock] = array("tiers" => array(), "compte" => null);
+                $stocks[$tiers_json->db2->no_stock] = array("tiers" => array(), "compte" => null, "no_stock" => $tiers_json->db2->no_stock, "nb_metteur_marche" => 0);
+            }
+            if ($tiers_json->type == 'MetteurEnMarche') {
+                $stocks[$tiers_json->db2->no_stock]['nb_metteur_marche'] += 1;
             }
             $stocks[$tiers_json->db2->no_stock]["tiers"][$id] = $id;
 	    /*if (isset($tiers_json->cvi)) {
@@ -61,12 +64,26 @@ EOF;
 	foreach(sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds() as $id) {
             $no_stock = 'NOSTOCK'.preg_replace('/ACHAT-/', '', $id);
             if (!array_key_exists($no_stock, $stocks)) {
-            $stocks[$no_stock] = array("tiers" => array(), "compte" => null);
-                }
-	  
-          $stocks[$no_stock]["tiers"][$id] = $id;
+                $stocks[$no_stock] = array("tiers" => array(), "compte" => null, "no_stock" => $no_stock, "nb_metteur_marche" => 0);
+            }
+            $stocks[$no_stock]["tiers"][$id] = $id;
 	}
-
+        
+        foreach ($stocks as $no_stock => $stock) {
+            $tiers_json = array();
+            if ($stock['nb_metteur_marche'] > 1) {
+               foreach($stock['tiers'] as $num => $id) {
+                    $tiers_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+                    if($tiers_json->type == 'MetteurEnMarche' && $tiers_json->db2->num == $tiers_json->db2->no_stock) {
+                        $this->logSection('Metteur en marché en double', $no_stock, null, 'ERROR');
+                    } elseif($tiers_json->type == 'MetteurEnMarche') {
+                        $stocks[$tiers_json->db2->no_stock.'-'.$tiers_json->civaba] = array("tiers" => array($num => $id), "compte" => null, "no_stock" => $tiers_json->db2->no_stock, "nb_metteur_marche" => 1);
+                        unset($stocks[$no_stock]['tiers'][$num]);
+                        $stock['nb_metteur_marche'] -= 1;
+                    }
+               }
+            }
+        }
 
         foreach ($ids_compte as $id) {
             $compte_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
@@ -77,11 +94,13 @@ EOF;
                     continue;
                 }
                 if (!array_key_exists($compte_json->db2->no_stock, $stocks)) {
-                    $stocks[$compte_json->db2->no_stock] = array("tiers" => array(), "compte" => null);
+                    $stocks[$compte_json->db2->no_stock] = array("tiers" => array(), "compte" => null, "no_stock" => $compte_json->db2->no_stock);
                 }
                 $stocks[$compte_json->db2->no_stock]["compte"] = $id;
             }
         }
+        
+        
 
         $this->logSection("nb stock", count($stocks));
 
@@ -99,14 +118,21 @@ EOF;
 	    if (get_class($compte) == 'CompteProxy')
 	      $compte = $compte->getCompteReferenceObject();
 	    if (!$compte) {
+              $login = $this->getLogin($tiers_json);
+              $mot_de_passe = $this->generatePass();
+              if($compte_existant = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$login, sfCouchdbClient::HYDRATE_JSON)) {
+                  $mot_de_passe = $compte_existant->mot_de_passe;
+                  sfCouchdbManager::getClient()->deleteDoc($compte_existant);
+              }
+
 	      $compte = new CompteTiers();
-	      $login = $this->getLogin($tiers_json);
 	      $compte->set('_id', 'COMPTE-'.$login);
 	      $compte->login = $login;
-	      $compte->mot_de_passe = $this->generatePass();
-	      if ($no_stock) 
-		$compte->db2->no_stock = $no_stock;
+	      $compte->mot_de_passe = $mot_de_passe;
 	    }
+            
+            $compte->db2->no_stock = $no_stock;
+            
 	    $compte->email = $this->combiner($tiers_json, 'email');
             $compte->remove("tiers");
             $compte->add("tiers");
@@ -122,15 +148,11 @@ EOF;
                     $tiers_obj->save();
                 }
             }
-           
+            $this->logSection("saving",$compte->get('_id'));
             $compte->save();
             $this->logSection("saved",$compte->get('_id'));
         }
 
-    }
-
-    private function getCompteOrGenerateIt($compteid, $login, $no_stock = null) {
-      return $compte;
     }
 
     private function getLogin($tiers_json) {
