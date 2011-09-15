@@ -162,6 +162,8 @@ class exportActions extends sfActions {
 
     public function executeCsvTiersModifications(sfWebRequest $request) {
         set_time_limit(0);
+	ini_set('memory_limit', '512M');
+
         $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         
         $values = array();
@@ -180,20 +182,27 @@ class exportActions extends sfActions {
                         "Exploitant - Code Postal",
                         "Exploitant - Commune",
                         "Exploitant - Naissance",
-                        "Exploitant - Téléphone");
+                        "Exploitant - Téléphone",
+		 	"Email");
         foreach($tiers_ids as $id) {
-            $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-            if ($id != "TIERS-7523700100") {
-                $revs = $data_revs->_revs_info;
-                if (count($revs) > 2) {
-                    $first_revision = $revs[count($revs)-3]->rev;
-                } elseif(count($revs) > 1) {
-                    $first_revision = $revs[count($revs)-2]->rev;
-                } else {
-                    $first_revision = $revs[count($revs)-1]->rev;
-                }
-                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($first_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+             if ($id != "TIERS-7523700100") {
                 $tiers_current = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
+                $rev_last_update = null;
+                if (isset($tiers_current['export_db2_revision'])) {
+                    $rev_last_update = $tiers_current['export_db2_revision'];
+                } else {
+                    $data_revs = sfCouchdbManager::getClient("Tiers")->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+                    $revs = $data_revs->_revs_info;
+                    /*if (count($revs) > 2) {
+                        $rev_last_update = $revs[count($revs)-3]->rev;
+                    } elseif(count($revs) > 1) {
+                        $rev_last_update = $revs[count($revs)-2]->rev;
+                    } else {
+                        $rev_last_update = $revs[count($revs)-1]->rev;
+                    }*/
+                    $rev_last_update = $revs[count($revs)-1]->rev;
+                }
+                $tiers_old = sfCouchdbManager::getClient("Tiers")->rev($rev_last_update)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY);
                 /*if ($tiers_current['recoltant'] != 1) {
                     continue;
                 }*/
@@ -215,8 +224,9 @@ class exportActions extends sfActions {
                 $value[] = $this->formatModifiedValue(array('exploitant' => array('commune' => true)), $tiers_current, $values_changed);
                 $value[] = preg_replace('/(\d+)\-(\d+)\-(\d+)/', '\3/\2/\1', $this->formatModifiedValue(array('exploitant' => array('date_naissance' => true)), $tiers_current, $values_changed));
                 $value[] = $this->formatModifiedValue(array('exploitant' => array('telephone' => true)), $tiers_current, $values_changed);
+		$value[] = $this->formatModifiedValue(array('email' => true), $tiers_current, $values_changed);
 
-                $keys_used = array('cvi', 'siret', 'intitule', 'nom', 'siege', 'telephone', 'fax', 'exploitant');
+                $keys_used = array('cvi', 'siret', 'intitule', 'nom', 'siege', 'telephone', 'fax', 'exploitant', 'email');
                 $nb_change = 0;
                 foreach($keys_used as $key_use) {
                     if (array_key_exists($key_use, $values_changed)) {
@@ -236,6 +246,7 @@ class exportActions extends sfActions {
 
     public function executeCsvTiersModificationsEmail(sfWebRequest $request) {
         set_time_limit(0);
+        ini_set('memory_limit', '512M');
         $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAllIds();
         
         $values = array();
