@@ -201,7 +201,7 @@ Acheteur:
       qualite: {  }
       nom: {  }
       commune: {  }
-      achnum: {  }
+      achnum: { required: false }
 
 _Compte:
   type: abstract
@@ -258,8 +258,7 @@ CompteVirtuel:
       _rev: {  }
       type: {  }
       nom: {  }
-      
-      
+ 
 _Tiers:
   type: abstract
   definition:
