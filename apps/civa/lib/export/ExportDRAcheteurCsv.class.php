@@ -59,6 +59,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
     );
     protected $_debug = false;
+    
+    protected $_md5 = null;
 
     /**
      *
@@ -72,6 +74,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     }
     
     protected function load($drs, $campagne, $cvi_acheteur = null) {
+        $revisions = "";
+        $this->_md5 = null;
         foreach ($drs as $dr) {
             if (substr($dr->cvi, 0, 1) == "6") {
                 if ($this->_debug) {
@@ -99,11 +103,15 @@ class ExportDRAcheteurCsv extends ExportCsv {
                         }
                     }
                 }
+                $revisions .= $dr->get('_rev');
             }
             unset($dr);
         }
         if ($this->_debug) {
             echo "------------ \n" . count($drs)." DRs \n ------------\n";
+        }
+        if ($revisions) {
+            $this->_md5 = md5($revisions);
         }
     }
 
@@ -157,6 +165,26 @@ class ExportDRAcheteurCsv extends ExportCsv {
             echo $line;
         }
         return $line;
+    }
+    
+    public function getMd5() {
+        return $this->_md5;
+    }
+    
+    public static function calculMd5($campagne, $cvi_acheteur) {
+        $revisions = "";
+        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, sfCouchdbClient::HYDRATE_JSON);
+        foreach ($drs as $dr) {
+            if (substr($dr->cvi, 0, 1) == "6") {
+                $revisions .= $dr->_rev;
+            }
+            unset($dr);
+        }
+        if ($revisions) {
+            return md5($revisions);
+        } else {
+            return null;
+        }
     }
 
 }
