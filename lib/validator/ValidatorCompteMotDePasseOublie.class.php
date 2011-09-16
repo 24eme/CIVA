@@ -18,7 +18,7 @@ class ValidatorCompteMotDePasseOublie extends sfValidatorBase {
             throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'invalid')));
         }
 
-        if (in_array($compte->getStatus(), array(_Compte::STATUS_INSCRIT, _Compte::STATUS_MOT_DE_PASSE_OUBLIE))) {
+        if (!in_array($compte->getStatus(), array(_Compte::STATUS_INSCRIT, _Compte::STATUS_MOT_DE_PASSE_OUBLIE))) {
             throw new sfValidatorErrorSchema($this, array($this->getOption('mdp') => new sfValidatorError($this, 'invalid_status')));
         }
 

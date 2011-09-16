@@ -21,7 +21,7 @@ class CompteMotDePasseOublieForm extends BaseForm {
     public function save() {
         if ($this->isValid()) {
             $compte = $this->getValue('compte');
-            $compte->password = "{OUBLIE}" . sprintf("%04d", rand(0, 9999));
+            $compte->mot_de_passe = "{OUBLIE}" . sprintf("%04d", rand(0, 9999));
             $compte->save();
         } else {
             throw new sfException("form must be valid");
