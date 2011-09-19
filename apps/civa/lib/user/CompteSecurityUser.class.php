@@ -90,9 +90,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->setAttribute(self::SESSION_COMPTE, $compte->login, $namespace);
         $this->addCredential($this->_namespace_credential_compte[$namespace]);
         foreach ($compte->droits as $credential) {
-            if (in_array($credential, $this->_credentials_compte)) {
+            //if (in_array($credential, $this->_credentials_compte)) {
                 $this->addCredential($credential);
-            }
+            //}
         }
         if ($compte->type == 'CompteProxy') {
             $this->signInCompte(sfCouchdbManager::getClient()->retrieveDocumentById($compte->compte_reference));
@@ -115,11 +115,12 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     public function getCompte() {
         $this->requireCompte();
-
+        print_r($this->getNamespaceCompte());
+        //exit;
         if (is_null($this->_compte)) {
             $this->_compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $this->getNamespaceCompte()));
             if (!$this->_compte) {
-                $this->signOutCompte();
+                $this->signOut();
                 throw new sfException("The compte does not exist");
             }
         }
