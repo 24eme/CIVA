@@ -94,11 +94,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
                     $this->_tiers[$t->type] = $t;
                 }
             } else {
-                $this->_tiers = null;
-                if(!$type) {
-                    $type = 'MetteurEnMarche';
-                }
-                return new $type();
+                $this->_tiers = $this->getCompte()->getTiers();
             }
             if (!$this->_tiers) {
                 $this->signOutCompte();

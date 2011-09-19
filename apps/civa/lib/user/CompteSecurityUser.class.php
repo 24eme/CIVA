@@ -115,8 +115,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     public function getCompte() {
         $this->requireCompte();
-        print_r($this->getNamespaceCompte());
-        //exit;
+        
         if (is_null($this->_compte)) {
             $this->_compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $this->getNamespaceCompte()));
             if (!$this->_compte) {
