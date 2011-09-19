@@ -37,6 +37,8 @@ all:
     use_database:           true
     error_404_module:       global
     error_404_action:       error404
+    
+    check_lock:             true
 
   .actions:
     login_module:           compte
