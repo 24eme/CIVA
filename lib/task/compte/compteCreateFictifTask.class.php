@@ -12,6 +12,7 @@ class compteCreateVirtuelTask extends sfBaseTask
         new sfCommandArgument('email', sfCommandArgument::REQUIRED, 'Email'),
         new sfCommandArgument('commune', sfCommandArgument::REQUIRED, 'Commune'),
         new sfCommandArgument('code_postal', sfCommandArgument::REQUIRED, 'Code Postal'),
+        new sfCommandArgument('droits', sfCommandArgument::IS_ARRAY, 'Droits'),
      ));
 
     $this->addOptions(array(
@@ -43,7 +44,7 @@ EOF;
     }
 
     if (sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
-        throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $tiers->cvi));
+        throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $arguments['login']));
     }
     
     $compte = new CompteVirtuel();
