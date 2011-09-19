@@ -1,6 +1,6 @@
 <?php
 
-class tiersLdapUpdateTask extends sfBaseTask
+class compteLdapUpdateTask extends sfBaseTask
 {
   protected function configure()
   {
@@ -16,7 +16,7 @@ class tiersLdapUpdateTask extends sfBaseTask
       // add your own options here
     ));
 
-    $this->namespace        = 'tiers';
+    $this->namespace        = 'compte';
     $this->name             = 'ldap-update';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
@@ -35,15 +35,15 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = sfCouchdbManager::getClient('Tiers')->getAllIds();
+    $ids = sfCouchdbManager::getClient('_Compte')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     $nb = 0;
     foreach($ids as $id) {
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
-        $ldap = new ldap();
-        if($ldap->ldapVerifieExistence($tiers)) {
-            $ldap->ldapModify($tiers);
+        $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+        if ($compte->getStatus() == _Compte::STATUS_INSCRIT) {
+            $this->log($id);
             $nb++;
+            $compte->updateLdap();
         }
     }
 

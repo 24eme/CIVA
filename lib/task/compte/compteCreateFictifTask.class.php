@@ -1,12 +1,12 @@
 <?php
 
-class tiersCreateFictifTask extends sfBaseTask
+class compteCreateVirtuelTask extends sfBaseTask
 {
   protected function configure()
   {
     // // add your own arguments here
      $this->addArguments(array(
-        new sfCommandArgument('uid', sfCommandArgument::REQUIRED, 'Identifiant'),
+        new sfCommandArgument('login', sfCommandArgument::REQUIRED, 'Login'),
         new sfCommandArgument('pass', sfCommandArgument::REQUIRED, 'Mot de passe'),
         new sfCommandArgument('nom', sfCommandArgument::REQUIRED, 'Nom'),
         new sfCommandArgument('email', sfCommandArgument::REQUIRED, 'Email'),
@@ -21,8 +21,8 @@ class tiersCreateFictifTask extends sfBaseTask
       // add your own options here
     ));
 
-    $this->namespace        = 'tiers';
-    $this->name             = 'create-fictif';
+    $this->namespace        = 'compte';
+    $this->name             = 'create-virtuel';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [tiersCreateFictif|INFO] task does things.
@@ -38,28 +38,24 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if (substr($arguments['uid'], 0, 4) != 'ext-') {
+    if (substr($arguments['login'], 0, 4) != 'ext-') {
         throw new sfCommandException("L'identifiant doit commencer par \"ext-\"");
     }
 
-    $tiers = new Tiers();
-    $tiers->cvi = $arguments['uid'];
-    $tiers->mot_de_passe = $tiers->make_ssha_password($arguments['pass']);
-    $tiers->nom = $arguments['nom'];
-    $tiers->email = $arguments['email'];
-    $tiers->setCommune($arguments['commune']);
-    $tiers->setCodePostal($arguments['code_postal']);
-
-    $ldap = new ldap();
-    if (!$ldap->ldapVerifieExistence($tiers)) {
-        if ($ldap->ldapAdd($tiers, 'exterieur')) {
-            $this->logSection("created", $tiers->cvi);
-        } else {
-            throw new sfCommandException("Une erreur est survenue lors de la création");
-        }   
-    } else {
+    if (sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
         throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $tiers->cvi));
     }
-    // add your code here
+    
+    $compte = new CompteVirtuel();
+    $compte->set('_id', 'COMPTE-'.$arguments['login']);
+    $compte->login = $arguments['login'];
+    $compte->setPasswordSSHA($arguments['pass']);
+    $compte->email = $arguments['email'];
+    $compte->nom = $arguments['nom'];
+    $compte->commune = $arguments['commune'];
+    $compte->code_postal = $arguments['code_postal'];
+    $compte->save();
+    
+    $this->logSection("created", $compte->login);
   }
 }
