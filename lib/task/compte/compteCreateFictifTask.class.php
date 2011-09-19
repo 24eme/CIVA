@@ -55,6 +55,7 @@ EOF;
     $compte->nom = $arguments['nom'];
     $compte->commune = $arguments['commune'];
     $compte->code_postal = $arguments['code_postal'];
+    $compte->droits = $arguments['droits'];
     $compte->save();
     
     $this->logSection("created", $compte->login);
