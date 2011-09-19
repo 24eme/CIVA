@@ -258,6 +258,8 @@ CompteVirtuel:
       _rev: {  }
       type: {  }
       nom: {  }
+      commune: {  }
+      code_postal: {  }
  
 _Tiers:
   type: abstract
