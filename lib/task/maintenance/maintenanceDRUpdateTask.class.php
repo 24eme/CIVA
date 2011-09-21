@@ -30,7 +30,7 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    ini_set('memory_limit', '128M');
+
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
@@ -39,11 +39,43 @@ EOF;
 
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
-            $dr->remove('modifiee');
-            $dr->update();
-            $dr->save();
-            $this->logSection('updated', $dr->_id);
+            if ($dr->exist('modifiee')) {
+                $modifiee = $dr->get('modifiee');
+                $dr->remove('modifiee');
+                $dr->update();
+                $dr->add('modifiee', $modifiee);
+                $dr->save();
+                $this->logSection('updated', $dr->_id);
+            }
+            /*$dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
             
+            foreach($dr->recolte->getAppellations() as $appellation) {
+                foreach($appellation->getLieux() as $lieu) {
+                    
+                    foreach($lieu->acheteurs as $types) {
+                        foreach($types as $acheteur) {
+			    if(round($acheteur->dontdplc, 2) != $acheteur->dontdplc) {
+		             $this->logSection("DR", $id);
+		             $this->logSection("acheteur", $acheteur->dontdplc);
+		             $this->logSection("dplc", $lieu->getDplc());
+		            }
+                            if ($acheteur->dontdplc == $lieu->getTotalDontDplcRecapitulatifVente()) {
+                                if ($lieu->getTotalSuperficieRecapitulatifVente() == $lieu->getTotalSuperficie() && $acheteur->dontdplc != $lieu->getDplc()) {
+                                    $this->logSection("DR", $id);
+ 				    $this->logSection("total", $lieu->getTotalDontDplcRecapitulatifVente());
+                                    $this->logSection("acheteur", $acheteur->dontdplc);
+                                    $acheteur->dontdplc = $lieu->getDplc();
+                                    $this->logSection("new acheteur", $acheteur->dontdplc);
+                                    $this->logSection("lieu", $lieu->getDplc());
+                                    $this->log("--------------------------");
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
+           
     }
     // add your code here
   }

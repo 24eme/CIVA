@@ -117,10 +117,10 @@ EOF;
                     $compte = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-C" . $met->civaba);
                     $compte_acheteur = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-" . $met->cvi_acheteur);
                     if ($compte) {
-                        $this->log($met->_id);
+                        /*$this->log($met->_id);
                         $this->logSection("metteur", $met->cvi_acheteur);
                         $this->logSection("ancien login", $tiers_cvi->cvi);
-                        $this->logSection("nouveau login", "C" . $met->civaba);
+                        $this->logSection("nouveau login", "C" . $met->civaba);*/
 
                         $export->add(array(
                             "ancien_tiers" => $tiers_cvi->_id,
