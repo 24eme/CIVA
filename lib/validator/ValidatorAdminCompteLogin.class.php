@@ -16,6 +16,10 @@ class ValidatorAdminCompteLogin extends sfValidatorBase {
         if (!$compte) {
             throw new sfValidatorErrorSchema($this, array($this->getOption('login') => new sfValidatorError($this, 'invalid')));
         }
+        
+        if ($compte->getType() != 'CompteTiers') {
+            throw new sfValidatorErrorSchema($this, array($this->getOption('login') => new sfValidatorError($this, 'invalid')));
+        }
             
         return array_merge($values, array('compte' => $compte));
     }
