@@ -55,7 +55,7 @@
             </div>
             <!-- #footer -->
             <div id="footer">
-                <p>&copy; Vins d'alsace 2010</p>
+                <p>&copy; Vins d'alsace</p>
                 <ul>
                     <li><a href="#">A propos de CIVA</a></li>
 

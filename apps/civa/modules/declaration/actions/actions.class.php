@@ -95,7 +95,7 @@ class declarationActions extends EtapesActions {
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', null);
+        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
 
@@ -260,7 +260,7 @@ class declarationActions extends EtapesActions {
     public function executeVisualisation(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_visualisation";
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', null);
+        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         $this->forward404Unless($dr);
@@ -283,7 +283,7 @@ class declarationActions extends EtapesActions {
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
-        $this->annee = $request->getParameter('annee');
+        $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }

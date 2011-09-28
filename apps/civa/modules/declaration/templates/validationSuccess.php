@@ -42,8 +42,8 @@
         </div>
     </div>
     <!-- fin #application_dr -->
-    <?php if ($annee == '2010') : ?>
-        <?php if($error){ ?>
+	  <?php if ($annee == $sf_user->getCampagne()) : ?>
+	    <?php if($error){ ?>
             <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser'))) ?>
         <?php }else{?>
             <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser','valider'))) ?>

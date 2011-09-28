@@ -13,7 +13,7 @@ class exportActions extends sfActions {
     
     public function executeXml(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers();
-        $this->annee = $this->getRequestParameter('annee', null);
+        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
 
@@ -42,7 +42,7 @@ class exportActions extends sfActions {
     public function executePdf(sfWebRequest $request) {
         set_time_limit(180);
         $tiers = $this->getUser()->getTiers();
-        $this->annee = $this->getRequestParameter('annee', null);
+        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
 
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);

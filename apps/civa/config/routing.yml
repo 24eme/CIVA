@@ -169,7 +169,7 @@ recolte_erreur_log:
 
 validation:
   url:   /validation
-  param: { module: declaration, action: validation, annee: 2010 }
+  param: { module: declaration, action: validation }
 
 visualisation:
   url: /visualisation/:annee
@@ -177,7 +177,7 @@ visualisation:
 
 confirmation:
   url:   /confirmation
-  param: { module: declaration, action: confirmation, annee: 2010 }
+  param: { module: declaration, action: confirmation }
 
 telecharger_la_notice:
   url:   /telecharger_la_notice

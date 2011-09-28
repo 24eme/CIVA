@@ -46,7 +46,7 @@ class declarationComponents extends sfComponents {
     public function executeRecapDeclaration(sfWebRequest $request) {
         
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', null);
+        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         $this->appellations = array();
