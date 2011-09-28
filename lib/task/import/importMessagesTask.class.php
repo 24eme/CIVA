@@ -59,13 +59,13 @@ EOF;
         /** ERRORS **/
         $json->err_exploitation_acheteurs_popup_no_required = "Veuillez cocher au moins une case pour continuer !";
         $json->err_exploitation_lieudits_popup_no_required = "Veuillez séléctionner au moins un lieu-dit !";
+        $json->err_dr_popup_no_lieu = "Vous n'avez pas saisi de Lieu.";
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie. La surface est obligatoire sauf dans l'Edel";
 	$json->err_dr_popup_min_quantite = "Les rebêches doivent représenter au minimum 2 % du volume total produit";
         $json->err_dr_popup_max_quantite = "Les rebêches doivent représenter au maximum 10% du volume total produit";
         $json->err_dr_popup_dest_rebeches = "Vous n'avez pas respecté la répartition des rebêches.";
 
-        $json->err_dr_popup_unique_mention_denomination = "Il faut distinguer la colonne par une mention complémentaire ou par une mention VT/SGN.";
-        $json->err_dr_popup_unique_denomination = "Il faut distinguer la colonne par une mention complémentaire ou par une mention VT/SGN.";
+        $json->err_dr_popup_unique_lieu_denomination_vtsgn = "Il faut distinguer la colonne par un lieu, une mention complémentaire ou par une mention VT/SGN.";
 
         $json->err_dr_recap_vente_popup_superficie_trop_eleve = " La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
         $json->err_dr_recap_vente_popup_dplc_trop_eleve = "La somme des DPLC des acheteurs ne peut pas être superieure au DPLC total de l'appellation";

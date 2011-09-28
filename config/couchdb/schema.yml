@@ -148,12 +148,13 @@ DR:
                                               fields:
                                                 appellation: {  }
                                                 cepage: {  }
+                                                lieu: {  }
                                                 denomination: {  }
                                                 vtsgn: {  }
                                                 code_lieu: {  }
                                                 volume: { type: float }
                                                 superficie: { type: float }
-                                                motif_non_recolte: { required: false}
+                                                motif_non_recolte: { required: false }
                                                 negoces:
                                                   type: array_collection
                                                   definition:
@@ -392,6 +393,7 @@ Configuration:
                   rendement_appellation: { type: float }
                   mout: {type: integer}
                   no_total_cepage: {type: integer, required: false}
+                  lieu-editable: {type: integer, required: false}
                   exclude_total: {type: integer, required: false}
                   douane :
                     type: collection

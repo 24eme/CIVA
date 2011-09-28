@@ -331,7 +331,9 @@ class recolteActions extends EtapesActions {
     }
 
     protected function getFormDetailsOptions() {
-        return array('superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
+        return array(
+                'lieu_required' => $this->onglets->getCurrentAppellation()->getConfig()->hasLieuEditable(),
+                'superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
                 'acheteurs_negoce' => $this->acheteurs->negoces,
                 'acheteurs_cooperative' => $this->acheteurs->cooperatives,
                 'acheteurs_mout' => $this->acheteurs->mouts,

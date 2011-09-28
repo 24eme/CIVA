@@ -1,58 +1,67 @@
 <div id="colonne_intitules">
-    <p class="denomination">
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
-   Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide"></a>
 
-<?php endif; ?>&nbsp;
-   </p>
+    <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+        <p class="lieu">
+            Lieu
+        </p>
+    <?php endif; ?>
+
+    <p class="denomination">
+        <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
+            Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide"></a>
+
+        <?php endif; ?>&nbsp;
+    </p>
 
     <p class="mention">
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
-   Mention VT/SGN <a href="" class="msg_aide" rel="help_popup_DR_mention" title="Message aide"></a>
-<?php endif; ?>&nbsp;
-   </p>
+        <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
+            Mention VT/SGN <a href="" class="msg_aide" rel="help_popup_DR_mention" title="Message aide"></a>
+        <?php endif; ?>&nbsp;
+    </p>
 
-   <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide"></a> </p>
+    <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide"></a> </p>
     <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
-    <div class="vente_raisins">
-        <?php
+        <div class="vente_raisins">
+            <?php
             include_partial('headerAcheteurs', array('title' => "Ventes de Raisins",
                 'acheteurs' => $acheteurs->negoces,
                 'list_acheteurs' => ListAcheteursConfig::getNegoces(),
                 'var_rel_help' => 'help_popup_DR_vente_raisins'
-        )); ?>
-    </div>
+            ));
+            ?>
+        </div>
     <?php endif; ?>
 
-    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
-    <div class="caves">
-        <?php
-        include_partial('headerAcheteurs', array('title' => "Caves Coopératives",
-            'acheteurs' => $acheteurs->cooperatives,
-            'list_acheteurs' => ListAcheteursConfig::getCooperatives(),
+        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
+        <div class="caves">
+            <?php
+            include_partial('headerAcheteurs', array('title' => "Caves Coopératives",
+                'acheteurs' => $acheteurs->cooperatives,
+                'list_acheteurs' => ListAcheteursConfig::getCooperatives(),
                 'var_rel_help' => 'help_popup_DR_caves'
-        )) ?>
-    </div>
+            ))
+            ?>
+        </div>
     <?php endif; ?>
 
-    <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
         <div class="mouts">
-        <?php
+            <?php
             include_partial('headerAcheteurs', array('title' => "Acheteurs de Mouts",
                 'acheteurs' => $acheteurs->mouts,
                 'list_acheteurs' => ListAcheteursConfig::getMouts(),
                 'var_rel_help' => 'help_popup_DR_mouts'
             ))
-        ?>
+            ?>
         </div>
-    <?php endif; ?>
+<?php endif; ?>
 
     <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide"></a></p>
     <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide"></a></p>
-    <?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
-    <ul class="vol_revendique_dplc">
-        <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
-        <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
-    </ul>
-    <?php endif; ?>
+<?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
+        <ul class="vol_revendique_dplc">
+            <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
+            <li>DPLC <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
+        </ul>
+<?php endif; ?>
 </div>

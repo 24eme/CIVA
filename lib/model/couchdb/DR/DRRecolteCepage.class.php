@@ -109,26 +109,12 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return true;
     }
 
-    public function getArrayVtSgnDenomination($out = array()) {
+    public function getArrayUniqueKey($out = array()) {
         $resultat = array();
         if ($this->exist('detail')) {
             foreach($this->detail as $key => $item) {
                 if (!in_array($key, $out)) {
-                    $resultat[$key] = array('denomination' => null, 'vtsgn' => null);
-                    $resultat[$key]['denomination'] = (string)$item->denomination;
-                    $resultat[$key]['vtsgn'] = (string)$item->vtsgn;
-                }
-            }
-        }
-        return $resultat;
-    }
-
-    public function getArrayDenomination($out = array()) {
-        $resultat = array();
-        if ($this->exist('detail')) {
-            foreach($this->detail as $key => $item) {
-                if (!in_array($key, $out)) {
-                    $resultat[$key]['denomination'] = (string)$item->denomination;
+                    $resultat[$key] = $item->getUniqueKey();
                 }
             }
         }

@@ -97,6 +97,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             return 'Déclaration en cours';
         }
     }
+    
+    public function getUniqueKey() {
+        return 'lieu:'.$this->lieu.',denomination:'.$this->denomination.',vtsgn:'.$this->vtsgn;
+    }
 
     protected function update($params = array()) {
         parent::update($params);

@@ -3,6 +3,9 @@
     <h2>Total <br /> <?php echo $cepage->libelle ?></h2>
 
     <div class="col_cont">
+        <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+            <p class="lieu">&nbsp;</p>
+        <?php endif; ?>
         <p class="denomination">&nbsp;</p>
         <p class="mention">&nbsp;</p>
         <p class="superficie">

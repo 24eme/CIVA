@@ -11,6 +11,7 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
     public function configure() {
 
         $this->setWidgets(array(
+            'lieu' => new sfWidgetFormInputText(),
             'denomination' => new sfWidgetFormInputText(),
             'vtsgn' => new sfWidgetFormSelect(array('choices' => $this->getChoicesVvtsgn())),
             'superficie' => new sfWidgetFormInputFloat(),
@@ -18,11 +19,16 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
         ));
 
         $this->setValidators(array(
+            'lieu' => new sfValidatorString(array('required' => false)),
             'denomination' => new sfValidatorString(array('required' => false)),
             'vtsgn' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getChoicesVvtsgn()))),
             'superficie' => new sfValidatorNumber(array('required' => false)),
             'cave_particuliere' => new sfValidatorNumber(array('required' => false)),
         ));
+        
+        if ($this->getOption('lieu_required', false)) {
+            $this->getValidator('lieu')->setOption('required', true);
+        }
 
         if ($this->getOption('superficie_required', true)) {
             $this->getValidator('superficie')->setOption('required', true);
