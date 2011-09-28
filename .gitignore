@@ -1,0 +1,9 @@
+bin/config.inc
+config/app.yml
+config/databases.yml
+config/properties.ini
+web/civa_dev.php
+lib/vendor/symfony/
+data/
+cache/
+log/
