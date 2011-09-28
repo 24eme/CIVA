@@ -23,7 +23,7 @@ class uploadActions extends sfActions
   const CSV_DENOMINATION = 8;
   const CSV_SUPERFICIE = 9;
   const CSV_VOLUME = 10;
-  const CSV_VOLUME_DPLC = 10;
+  const CSV_VOLUME_DPLC = 11;
 
  /**
   * Executes index action
@@ -91,12 +91,12 @@ class uploadActions extends sfActions
     
     foreach ($this->errors as $line => $array) {
       foreach ($array as $value) {
-	$this->recap->errors[$value][] = $line;
+	$this->recap->errors[$value][] = $line +1;
       }
     }
     foreach ($this->warnings as $line => $array) {
       foreach ($array as $value) {
-	$this->recap->warnings[$value][] = $line;
+	$this->recap->warnings[$value][] = $line +1;
       }
     }
   }
@@ -121,10 +121,19 @@ class uploadActions extends sfActions
     $this->no_surface = false;
     $this->is_rebeche = false;
 
+    if (!preg_match('/[a-z]/i', $line[self::CSV_APPELLATION])) {
+	return "appellation vide";
+    }
+
     if (strtolower($line[self::CSV_APPELLATION]) == 'jeunes vignes') {
       $this->no_volume = true;
       return false;
     }
+
+    if (!preg_match('/[a-z]/i', $line[self::CSV_CEPAGE])) {
+        return "cepage vide";
+    }
+
     $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[self::CSV_APPELLATION], 
 								     $line[self::CSV_LIEU], 
 								     $line[self::CSV_CEPAGE]);
