@@ -368,7 +368,7 @@ class RecolteOnglets {
             }
         }
         $appellation = $this->convertKeyToValue($appellation, $this->_prefix_key_appellation);
-	
+        
         if (is_null($lieu)) {
 	  if (!is_null($this->getCurrentKeyLieu()) && $this->getCurrentValueAppellation() == $appellation) {
 	    $lieu = $this->getCurrentValueLieu();
@@ -379,18 +379,17 @@ class RecolteOnglets {
 	  }
         }
         $lieu = $this->convertKeyToValue($lieu, $this->_prefix_key_lieu);
-	
+        
         if (!$couleur) {
 	  if (!is_null($this->getCurrentKeyCouleur()) && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
 	    $couleur = $this->getCurrentValueCouleur();
-	  } 
-	  if (!$couleur) {
+	  } else {
 	    $couleur = $this->getFirstKeyCouleur($appellation, $lieu);
 	    $cepage = $this->getFirstKeyCepage($appellation, $lieu);
 	  }
         }
         $couleur = $this->convertKeyToValue($couleur, $this->_prefix_key_couleur);
-
+        
         if (is_null($cepage)) {
 	  if (!is_null($this->getCurrentKeyCepage()) && $this->getCurrentValueCouleur() == $couleur && $this->getCurrentValueAppellation() == $appellation && $this->getCurrentValueLieu() == $lieu) {
 	    $cepage = $this->getCurrentValueCepage();
@@ -400,7 +399,7 @@ class RecolteOnglets {
 	  }
         }
         $cepage = $this->convertKeyToValue($cepage, $this->_prefix_key_cepage);
-
+        
         if ($sf_route == 'recolte') {
             $cepage_key = $this->convertValueToKey($cepage, $this->_prefix_key_cepage);
             if (!$this->getLieu($appellation, $lieu)->exist($cepage_key) || !$this->getLieu($appellation, $lieu)->get($cepage_key)->detail->count() > 0) {
