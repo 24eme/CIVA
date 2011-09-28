@@ -22,7 +22,7 @@ class CompteProxy extends BaseCompteProxy {
     }
     
     public function getGecos() {
-        return $this->getCompteReferenceObject()->getGecos();    
+        return $this->getLogin() . ',' . $this->getCompteReferenceObject()->getTiersField('no_accises', true) . ',' . $this->getCompteReferenceObject()->getTiersField('intitule') . ' ' . $this->getCompteReferenceObject()->getTiersField('nom') . ',' . $this->getCompteReferenceObject()->getTiersField('exploitant/nom', true);  
     }
     
     public function getAdresse() {
