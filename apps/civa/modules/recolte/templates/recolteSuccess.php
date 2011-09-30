@@ -38,12 +38,17 @@
                                                                                                        'form' => $form_detail,
                                                                                                        'acheteurs' => $acheteurs,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
-                                                   
+                                                        <?php if ($onglets->getCurrentCouleur()->getConfig()->hasRendementCouleur()): ?>
+                                                            <?php echo include_partial('totalCouleur', array('couleur' => $onglets->getCurrentCouleur(),
+                                                                                                        'onglets' => $onglets,
+                                                                                                        'acheteurs' => $acheteurs,
+                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
+                                                        <?php else: ?>
                                                         <?php echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
                                                                                                     'onglets' => $onglets,
                                                                                                     'acheteurs' => $acheteurs,
                                                                                                     'has_acheteurs_mout' => $has_acheteurs_mout)) ; ?>
-						
+                                                        <?php endif; ?>                                             
 							<ul id="btn_cepage" class="btn_prev_suiv clearfix">
                                                                 <?php if ($onglets->hasPreviousCepage()): ?>
                                                                     <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
@@ -54,12 +59,18 @@
 							</ul>
 						
 						</div>
-
+                                                
+                                                <?php if ($onglets->getCurrentCouleur()->getConfig()->hasRendementCouleur()): ?>
+                                                    <?php echo include_partial('totalCouleur', array('couleur' => $onglets->getCurrentCouleur(),
+                                                                                                        'onglets' => $onglets,
+                                                                                                        'acheteurs' => $acheteurs,
+                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
+                                                <?php else: ?>
                                                 <?php echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),
                                                                                                     'onglets' => $onglets,
                                                                                                     'acheteurs' => $acheteurs,
                                                                                                     'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
-					
+                                                <?php endif; ?>
 					</div>
 					<!-- fin #gestion_recolte -->
 

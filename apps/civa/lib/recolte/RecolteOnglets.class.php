@@ -68,7 +68,7 @@ class RecolteOnglets {
     }
     
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
-        return $this->getLieu($appellation, $lieu)->getConfig()->filter('^couleur');
+        return $this->getLieu($appellation, $lieu)->filter('^couleur');
     }
 
     public function getItemsCepage($appellation = null, $lieu = null, $couleur = null) {

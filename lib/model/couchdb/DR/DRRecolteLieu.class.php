@@ -203,6 +203,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             return 0;
         }
     }
+    
     public function removeVolumes() {
       $this->volume_revendique = null;
       $this->total_volume = null;
