@@ -8,29 +8,34 @@ class AcheteurClient extends sfCouchdbClient {
     }
 
     public function loadAcheteurs() {
-       $docs = $this->getAll();
+       $cooperatives = $this->startkey(array('Cooperative'))
+       		->endkey(array('Cooperative', array()))
+            ->executeView('ACHAT', 'qualite');
+       $negociants = $this->startkey(array('Negociant'))
+       		->endkey(array('Negociant', array()))
+            ->executeView('ACHAT', 'qualite');
+       
        $acheteurs_negociant = array();
        $acheteurs_cave = array();
        $acheteurs_mout = array();
-
-        foreach($docs as $id => $anyone) {
-            $doc = $docs->get($id);
-            if ($doc->getQualite() == "Negociant") {
-                $acheteurs_negociant[$doc->getCvi()]['cvi'] = $doc->getCvi();
-                $acheteurs_negociant[$doc->getCvi()]['commune'] = $doc->getCommune();
-                $acheteurs_negociant[$doc->getCvi()]['nom'] = $doc->getNom();
-            } elseif($doc->getQualite() == "Cooperative") {
-                $acheteurs_cave[$doc->getCvi()]['cvi'] = $doc->getCvi();
-                $acheteurs_cave[$doc->getCvi()]['commune'] = $doc->getCommune();
-                $acheteurs_cave[$doc->getCvi()]['nom'] = $doc->getNom();
-            }
-            $acheteurs_mout[$doc->getCvi()]['cvi'] = $doc->getCvi();
-            $acheteurs_mout[$doc->getCvi()]['commune'] = $doc->getCommune();
-            $acheteurs_mout[$doc->getCvi()]['nom'] = $doc->getNom();
-        }
-
-        uasort($acheteurs_negociant, 'AcheteurClient::sortByNom');
-        uasort($acheteurs_cave, 'AcheteurClient::sortByNom');
+       foreach ($cooperatives as $key => $value) {
+       		$acheteurs_cave[$value->cvi]['cvi'] = $value->cvi;
+            $acheteurs_cave[$value->cvi]['commune'] = $value->commune;
+            $acheteurs_cave[$value->cvi]['nom'] = $value->nom;
+            
+       		$acheteurs_mout[$value->cvi]['cvi'] = $value->cvi;
+            $acheteurs_mout[$value->cvi]['commune'] = $value->commune;
+            $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
+       }
+       foreach ($negociants as $key => $value) {
+       		$acheteurs_negociant[$value->cvi]['cvi'] = $value->cvi;
+            $acheteurs_negociant[$value->cvi]['commune'] = $value->commune;
+            $acheteurs_negociant[$value->cvi]['nom'] = $value->nom;
+            
+       		$acheteurs_mout[$value->cvi]['cvi'] = $value->cvi;
+            $acheteurs_mout[$value->cvi]['commune'] = $value->commune;
+            $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
+       }
         uasort($acheteurs_mout, 'AcheteurClient::sortByNom');
 
         $acheteurs = array();

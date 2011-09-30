@@ -51,14 +51,11 @@ class sfCouchdbClient extends couchClient {
       return $doc;
     }
 
-    public function executeView($id, $name, $hydrate = self::HYDRATE_DOCUMENT) {
-        if ($hydrate != self::HYDRATE_ON_DEMAND) {
-            $this->include_docs(true);
-        }
+    public function executeView($id, $name, $hydrate = self::HYDRATE_JSON) {
         if ($hydrate == self::HYDRATE_ARRAY) {
             $this->asArray();
         }
-        return new sfCouchdbDocumentCollection($this->getView($id, $name), $hydrate);
+        return new sfCouchdbvalueCollection($this->getView($id, $name), $hydrate);
     }
     
     public function execute($hydrate = self::HYDRATE_DOCUMENT) {

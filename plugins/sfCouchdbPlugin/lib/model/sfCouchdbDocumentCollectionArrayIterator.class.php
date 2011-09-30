@@ -2,10 +2,10 @@
 class sfCouchdbDocumentCollectionArrayIterator extends ArrayIterator {
     private $_doc_collection;
 
-    public function __construct(sfCouchdbDocumentCollection $doc_collection)
+    public function __construct(sfCouchdbCollection $doc_collection)
     {
         $this->_doc_collection = $doc_collection;
-        parent::__construct($doc_collection->getDocs());
+        parent::__construct($doc_collection->getDatas());
     }
 
     public function current() {
