@@ -41,6 +41,27 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
       $r = $this->getRendementAppellation();
       return ($r && $r > 0);
   }
+  
+  public function getRendementCouleur() {
+    $r = null;
+    if ($this->exist('rendement_couleur')) {
+        $r = $this->_get('rendement_couleur');
+    }
+    if ($r) {
+      return $r;
+    }
+
+    if ($this->getParent() instanceof ConfigurationAbstract) {
+        return $this->getParent()->getRendementCouleur();
+    } else {
+        return 0;
+    }
+  }
+  
+  public function hasRendementCouleur() {
+      $r = $this->getRendementCouleur();
+      return ($r && $r > 0);
+  }
 
   public function hasMout() {
       if ($this->exist('mout')) {

@@ -127,6 +127,10 @@ DR:
                           class: DRRecolteCouleur
                           definition:
                             fields:
+                              total_volume: {type:float}
+                              total_superficie: {type:float}
+                              volume_revendique: {type: float}
+                              dplc: {type: float}
                             # ------ Cépage ------
                               '*':
                                 type: collection
@@ -431,6 +435,7 @@ Configuration:
                           class: ConfigurationCouleur
                           definition:
                             fields:
+                              rendement_couleur: { type: float }
                               '*':
                               # ------------ CEPAGE -------------
                                 type: collection

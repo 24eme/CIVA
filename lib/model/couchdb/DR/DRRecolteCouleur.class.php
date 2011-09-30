@@ -3,19 +3,161 @@
 class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
     public function getConfig() {
-      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
     public function getLieu() {
-      return $this->getParent();
+        return $this->getParent();
     }
 
     public function getAppellation() {
-      return $this->getLieu()->getAppellation();
+        return $this->getLieu()->getAppellation();
     }
 
     public function getCepages() {
-      return $this->filter('^cepage');
+        return $this->filter('^cepage');
+    }
+
+    public function getTotalVolume() {
+        $field = 'total_volume';
+        if ($this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+    }
+
+    public function getTotalSuperficie() {
+        $field = 'total_superficie';
+        if ($this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+    }
+
+    public function getVolumeRevendique($force_calcul = false) {
+        $field = 'volume_revendique';
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getDplcFinal'));
+    }
+    
+    protected function getVolumeRevendiqueFinal() {
+      $volume_revendique_total = $this->getVolumeRevendiqueTotal();
+      $volume_revendique_final = $volume_revendique_total;
+      if ($this->getConfig()->hasRendementCouleur()) {
+          $volume_revendique_couleur = $this->getVolumeRevendiqueCouleur();
+          if ($volume_revendique_total > $volume_revendique_couleur) {
+            $volume_revendique_final = $volume_revendique_couleur;
+          }
+      }
+      return $volume_revendique_final;
+    }
+    
+    public function getVolumeRevendiqueTotal() {
+        return $this->store('volume_revendique_total', array($this, 'getSumCepageFields'), array('volume_revendique'));
+    }
+    
+    public function getVolumeMaxCouleur() {
+      return round(($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementCouleur(), 2);
+    }
+
+    public function getVolumeRevendiqueCouleur() {
+        $key = "volume_revendique_couleur";
+        if (!isset($this->_storage[$key])) {
+            $volume_revendique = 0;
+            if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementCouleur()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxCouleur();
+                if ($volume > $volume_max) {
+                    $volume_revendique = $volume_max;
+                } else {
+                    $volume_revendique = $volume;
+                }
+            }
+            $this->_storage[$key] = $volume_revendique;
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getDplc($force_calcul = false) {
+        $field = 'dplc';
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getDplcFinal'));
+    }
+    
+    protected function getDplcFinal() {
+      $dplc_total = $this->getDplcTotal();
+      $dplc_final = $dplc_total;
+      if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementCouleur()) {
+          $dplc_couleur = $this->getDplcCouleur();
+          if ($dplc_total < $dplc_couleur) {
+            $dplc_final = $dplc_couleur;
+          }
+      }
+      return $dplc_final;
+    }
+    
+    public function getDplcTotal() {
+       return $this->store('dplc_total', array($this, 'getSumCepageFields'), array('dplc'));
+    }
+
+    public function getDplcCouleur() {
+        $key = "dplc_couleur";
+        if (!isset($this->_storage[$key])) {
+            $volume_dplc = 0;
+            if ($this->getConfig()->hasRendementCouleur()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxCouleur();
+                if ($volume > $volume_max) {
+                    $volume_dplc = $volume - $volume_max;
+                } else {
+                    $volume_dplc = 0;
+                }
+            }
+            $this->_storage[$key] = round($volume_dplc, 2);
+        }
+        return $this->_storage[$key];
+    }
+    
+    public function getTotalCaveParticuliere() {
+        $key = "total_cave_particuliere";
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            foreach ($couleur->getCepages() as $key => $cepage) {
+                if ($cepage->getConfig()->excludeTotal()) {
+                    continue;
+                }
+                $sum += $cepage->getTotalCaveParticuliere();
+            }
+            $this->_storage[$key] = $sum;
+        }
+        return $this->_storage[$key];
+    }
+    
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
+    }
+
+    protected function getSumCepageFields($field) {
+        $sum = 0;
+        foreach ($this->getCepages() as $key => $cepage) {
+            if ($key != 'cepage_RB')
+                $sum += $cepage->get($field);
+        }
+        return $sum;
+    }
+    
+    protected function update($params = array()) {
+        parent::update($params);
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->total_volume = $this->getTotalVolume(true);
+            $this->total_superficie = $this->getTotalSuperficie(true);
+            $this->volume_revendique = $this->getVolumeRevendique(true);
+            $this->dplc = $this->getDplc(true);
+        }
     }
 
 }

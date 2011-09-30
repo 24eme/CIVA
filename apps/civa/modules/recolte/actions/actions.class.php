@@ -280,10 +280,11 @@ class recolteActions extends EtapesActions {
         if (isset($appellation_lieu['lieu'])) {
             $lieu = $appellation_lieu['lieu'];
         }
-        preg_match('/(?P<couleur>\w*-|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
+        preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
+
         $couleur = null;
         if (isset($couleur_cepage['couleur'])) {
-            $couleur = $couleur_cepage['couleur'];
+            $couleur = preg_replace('/-$/', '', $couleur_cepage['couleur']);
         }
         $cepage = null;
         if (isset($couleur_cepage['cepage'])) {

@@ -39,7 +39,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCepages() {
-      return $this->getCouleur()->getCepages();
+        throw new sfException("La liste des cépages est impossible à partir du lieu");
+        return $this->getCouleur()->getCepages();
     }
 
     public function getCodeDouane($vtsgn = '') {
@@ -134,11 +135,13 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       $key = "total_cave_particuliere";
       if (!isset($this->_storage[$key])) {
           $sum = 0;
-          foreach ($this->getCepages() as $key => $cepage) {
-             if ($cepage->getConfig()->excludeTotal()) {
-                      continue;
-             }
-             $sum += $cepage->getTotalCaveParticuliere();
+          foreach($this->getCouleurs() as $couleur) {
+              foreach ($couleur->getCepages() as $key => $cepage) {
+                 if ($cepage->getConfig()->excludeTotal()) {
+                          continue;
+                 }
+                 $sum += $cepage->getTotalCaveParticuliere();
+              }
           }
           $this->_storage[$key] = $sum;
       }
@@ -149,16 +152,18 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
             $this->_storage[$key] = array();
-            foreach ($this->getCepages() as $cepage) {
-                if ($cepage->getConfig()->excludeTotal()) {
-                      continue;
-                }
-                $acheteurs = $cepage->getVolumeAcheteurs($type);
-                foreach ($acheteurs as $cvi => $quantite_vendue) {
-                  if (!isset($this->_storage[$key][$cvi])) {
-                    $this->_storage[$key][$cvi] = 0;
-                  }
-                  $this->_storage[$key][$cvi] += $quantite_vendue;
+            foreach($this->getCouleurs() as $couleur) {
+                foreach ($couleur->getCepages() as $cepage) {
+                    if ($cepage->getConfig()->excludeTotal()) {
+                          continue;
+                    }
+                    $acheteurs = $cepage->getVolumeAcheteurs($type);
+                    foreach ($acheteurs as $cvi => $quantite_vendue) {
+                      if (!isset($this->_storage[$key][$cvi])) {
+                        $this->_storage[$key][$cvi] = 0;
+                      }
+                      $this->_storage[$key][$cvi] += $quantite_vendue;
+                    }
                 }
             }
         }
@@ -202,8 +207,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       $this->volume_revendique = null;
       $this->total_volume = null;
       $this->dplc = null;
-      foreach($this->getCepages() as $cepage) {
-	$cepage->removeVolumes();
+      foreach($this->getCouleurs() as $couleur) {
+          foreach($couleur->getCepages() as $cepage) {
+            $cepage->removeVolumes();
+          }
       }
     }
 
@@ -293,10 +300,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function isNonSaisie() {
       $cpt = 0;
-      foreach($this->getCepages() as $key => $cepage) {
-	$cpt ++;
-	if (!$cepage->isNonSaisie())
-	  return false;
+      foreach($this->getCouleurs() as $couleur) {
+          foreach($couleur->getCepages() as $key => $cepage) {
+            $cpt ++;
+            if (!$cepage->isNonSaisie())
+              return false;
+          }
       }
       return ($cpt);
     }
@@ -331,9 +340,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     protected function getSumCepageFields($field) {
       $sum = 0;
-      foreach ($this->getCepages() as $key => $cepage) {
-	if ($key != 'cepage_RB')
-	  $sum += $cepage->get($field);
+      foreach($this->getCouleurs() as $couleur) {
+          foreach ($couleur->getCepages() as $key => $cepage) {
+            if ($key != 'cepage_RB')
+              $sum += $cepage->get($field);
+          }
       }
       return $sum;
     }
