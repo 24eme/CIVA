@@ -89,15 +89,27 @@ class uploadActions extends sfActions
     $this->recap->errors = array();
     $this->recap->warnings = array();
     
+    $nb_errors = 0;
     foreach ($this->errors as $line => $array) {
       foreach ($array as $value) {
+	$nb_errors++;
 	$this->recap->errors[$value][] = $line +1;
       }
     }
+
+    $nb_warnings = 0;
     foreach ($this->warnings as $line => $array) {
       foreach ($array as $value) {
+	$nb_warnings++;
 	$this->recap->warnings[$value][] = $line +1;
       }
+    }
+
+    if (!$nb_errors) {
+      $cvi = $this->getUser()->getTiers()->cvi;
+      $csv = sfCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
+      $csv->storeCSV($this->csv);
+      $csv->save();
     }
   }
   

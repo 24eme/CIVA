@@ -465,6 +465,19 @@ Configuration:
                                     no_mout : { type: integer, required: false }
                                     no_motif_non_recolte : { type: integer, required: false }
 
+CSV:
+  definition:
+    fields:
+      _id: {}
+      _rev: {}
+      type: {}
+      campagne: {}
+      cvi: {}
+      recoltants : 
+        type: array_collection
+        definition:
+          fields:
+            '*': { }
 
 Messages:
   definition:

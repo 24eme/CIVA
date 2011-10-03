@@ -7,6 +7,10 @@ class csvFile
   private $csvdata = null;
   private $ignore = null;
 
+  public function getFileName() {
+    return $this->file;
+  }
+
   public function __construct($file, $ignore_first_if_comment = 1) {
     $this->ignore = $ignore_first_if_comment;
     if (!file_exists($file))
@@ -25,6 +29,10 @@ class csvFile
       throw new Exception('invalid_csv_file');
     }
     $this->separator = $match[3];
+  }
+
+  public function freeMemory() {
+    $this->csvdata = null;
   }
 
   public function getCsv() {
