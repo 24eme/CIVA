@@ -2,44 +2,42 @@
 
 class DRAcheteurs extends BaseDRAcheteurs {
 
+  public function addAppellationTypeCVI($appellation, $type, $cvi) {
+    $tab = $this->getArrayTypeWithAppellation($type);
+    if (isset($tab[$cvi][$appellation]) && $tab[$cvi][$appellation])
+      return true;
+    return ($this->add($appellation)->add($type)->add(null,$cvi));
+  }
+  
+  public function getArrayTypeWithAppellation($type) {
+    $tab = array();
+    foreach($this as $appellation => $acheteurs) {
+      foreach($acheteurs->{$type} as $acheteur_cvi) {
+	$tab[$acheteur_cvi][$appellation] = true;
+      }
+    }
+    return $tab;
+  }
+
+  public function getArrayType($type) {
+    return array_keys($this->getArrayTypeWithAppellation($type));
+  }
+
+
     public function getArrayNegoces() {
-        $negoces = array();
-        foreach($this as $appellation => $acheteurs) {
-            foreach($acheteurs->negoces as $acheteur_cvi) {
-                $negoces[] = $acheteur_cvi;
-            }
-        }
-        return $negoces;
+      return $this->getArrayType('negoces');
     }
 
     public function getArrayNegocesWithAppellation() {
-        $negoces = array();
-        foreach($this as $appellation => $acheteurs) {
-            foreach($acheteurs->negoces as $acheteur_cvi) {
-                $negoces[$acheteur_cvi][$appellation] = true;
-            }
-        }
-        return $negoces;
+      return $this->getArrayTypeWithAppellation('negoces');
     }
 
     public function getArrayCooperatives() {
-        $cooperatives = array();
-        foreach($this as $appellation => $acheteurs) {
-            foreach($acheteurs->cooperatives as $acheteur_cvi) {
-                $cooperatives[] = $acheteur_cvi;
-            }
-        }
-        return $cooperatives;
+      return $this->getArrayType('cooperatives');
     }
 
     public function getArrayCooperativesWithAppellation() {
-        $cooperatives = array();
-        foreach($this as $appellation => $acheteurs) {
-            foreach($acheteurs->cooperatives as $acheteur_cvi) {
-                $cooperatives[$acheteur_cvi][$appellation] = true;
-            }
-        }
-        return $cooperatives;
+      return $this->getArrayTypeWithAppellation('cooperatives');
     }
 
     public function getArrayMouts() {
