@@ -2,6 +2,20 @@
 
 class csvFile 
 {
+  const CSV_ACHETEUR_CVI = 0;
+  const CSV_ACHETEUR_LIBELLE = 1;
+  const CSV_RECOLTANT_CVI = 2;
+  const CSV_RECOLTANT_LIBELLE = 3;
+  const CSV_APPELLATION = 4;
+  const CSV_LIEU = 5;
+  //  const CSV_COULEUR = 6;
+  const CSV_CEPAGE = 6;
+  const CSV_VTSGN = 7;
+  const CSV_DENOMINATION = 8;
+  const CSV_SUPERFICIE = 9;
+  const CSV_VOLUME = 10;
+  const CSV_VOLUME_DPLC = 11;
+
   private $file = null;
   private $separator = null;
   private $csvdata = null;
@@ -13,8 +27,9 @@ class csvFile
 
   public function __construct($file, $ignore_first_if_comment = 1) {
     $this->ignore = $ignore_first_if_comment;
-    if (!file_exists($file))
+    if (!file_exists($file) && !preg_match('/^http/', $file))
       throw new Exception("Cannont access $file");
+      
     $this->file = $file;
     $handle = fopen($this->file, 'r');
     if (!$handle)
@@ -31,8 +46,13 @@ class csvFile
     $this->separator = $match[3];
   }
 
-  public function freeMemory() {
-    $this->csvdata = null;
+  public function getCsvRecoltant($cvi) {
+    $lignes = array();
+    foreach ($this->getCsv() as $line) {
+      if ($line[self::CSV_RECOLTANT_CVI] == $cvi)
+	$lignes[] = $line;
+    }
+    return $lignes;
   }
 
   public function getCsv() {

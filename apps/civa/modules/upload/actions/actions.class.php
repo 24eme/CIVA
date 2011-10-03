@@ -11,20 +11,6 @@
 class uploadActions extends sfActions
 {
 
-  const CSV_ACHETEUR_CVI = 0;
-  const CSV_ACHETEUR_LIBELLE = 1;
-  const CSV_RECOLTANT_CVI = 2;
-  const CSV_RECOLTANT_LIBELLE = 3;
-  const CSV_APPELLATION = 4;
-  const CSV_LIEU = 5;
-  //  const CSV_COULEUR = 6;
-  const CSV_CEPAGE = 6;
-  const CSV_VTSGN = 7;
-  const CSV_DENOMINATION = 8;
-  const CSV_SUPERFICIE = 9;
-  const CSV_VOLUME = 10;
-  const CSV_VOLUME_DPLC = 11;
-
  /**
   * Executes index action
   *
@@ -114,17 +100,17 @@ class uploadActions extends sfActions
   }
   
   protected function isVTSGNOk($line) {
-    if (!$line[self::CSV_VTSGN])
+    if (!$line[CsvFile::CSV_VTSGN])
       return true;
-    if ($line[self::CSV_VTSGN] == 'VT')
+    if ($line[CsvFile::CSV_VTSGN] == 'VT')
       return true;
-    if ($line[self::CSV_VTSGN] == 'SGN')
+    if ($line[CsvFile::CSV_VTSGN] == 'SGN')
       return true;
     return false;
   }
 
   protected function hasCVI($line) {
-    if (preg_match('/^6[78]\d{8}$/', $line[self::CSV_ACHETEUR_CVI]) && preg_match('/^6[78]\d{8}$/', $line[self::CSV_RECOLTANT_CVI]))
+    if (preg_match('/^6[78]\d{8}$/', $line[CsvFile::CSV_ACHETEUR_CVI]) && preg_match('/^6[78]\d{8}$/', $line[CsvFile::CSV_RECOLTANT_CVI]))
       return true;
     return false;
   }
@@ -133,22 +119,22 @@ class uploadActions extends sfActions
     $this->no_surface = false;
     $this->is_rebeche = false;
 
-    if (!preg_match('/[a-z]/i', $line[self::CSV_APPELLATION])) {
+    if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
 	return "appellation vide";
     }
 
-    if (strtolower($line[self::CSV_APPELLATION]) == 'jeunes vignes') {
+    if (strtolower($line[CsvFile::CSV_APPELLATION]) == 'jeunes vignes') {
       $this->no_volume = true;
       return false;
     }
 
-    if (!preg_match('/[a-z]/i', $line[self::CSV_CEPAGE])) {
+    if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_CEPAGE])) {
         return "cepage vide";
     }
 
-    $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[self::CSV_APPELLATION], 
-								     $line[self::CSV_LIEU], 
-								     $line[self::CSV_CEPAGE]);
+    $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION], 
+								     $line[CsvFile::CSV_LIEU], 
+								     $line[CsvFile::CSV_CEPAGE]);
     if (isset($prod['hash'])) {
       if (preg_match('/_(RB|ED)$/', $prod['hash'])) {
 	$this->no_surface = true;
@@ -186,11 +172,11 @@ class uploadActions extends sfActions
 
   protected function hasGoodUnit($line) {
     if (
-	(preg_match('/^[0-9,\.]+$/', $line[self::CSV_SUPERFICIE]) || !$line[self::CSV_SUPERFICIE]) &&
-	(!$line[self::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[self::CSV_VOLUME]))
+	(preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]) &&
+	(!$line[CsvFile::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_VOLUME]))
 	)
       return true;
-    if (	$line[self::CSV_VOLUME] * 100 / $line[self::CSV_SUPERFICIE] > 10)
+    if (	$line[CsvFile::CSV_VOLUME] * 100 / $line[CsvFile::CSV_SUPERFICIE] > 10)
       return true;
     return false;
   }
@@ -198,18 +184,18 @@ class uploadActions extends sfActions
   protected function hasVolume($line) {
     if ($this->no_volume)
       return true;
-    return $this->isPositive($line[self::CSV_VOLUME]);
+    return $this->isPositive($line[CsvFile::CSV_VOLUME]);
   }
   protected function mayHaveSuperficie($line) {
-    if (!isset($line[self::CSV_SUPERFICIE]) || !$line[self::CSV_SUPERFICIE])
+    if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
       return true;
-    return $this->isPositive($line[self::CSV_SUPERFICIE]);
+    return $this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
   }
   protected function needSuperficie($line) {
     if ($this->no_superficie)
       return true;
     try {
-    if (!$this->getUser()->getTiers('Acheteur')->getQualite() != 'negociant' && (!isset($line[self::CSV_SUPERFICIE]) || !$line[self::CSV_SUPERFICIE]))
+    if (!$this->getUser()->getTiers('Acheteur')->getQualite() != 'negociant' && (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]))
       return false;
     }catch(Exception $e) {return true;}
     return true;
