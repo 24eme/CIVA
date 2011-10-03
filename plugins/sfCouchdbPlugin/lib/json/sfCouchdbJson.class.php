@@ -147,7 +147,7 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
     public function get($key_or_hash) {
         $obj_hash = new sfCouchdbHash($key_or_hash);
         if ($obj_hash->isAlone()) {
-            if (!$this->isArray() && $this->hasAccessor($obj_hash->getFirst())) {
+	  if (!$this->isArray() && $this->hasAccessor($obj_hash->getFirst())) {
                 $method = $this->getAccessor($obj_hash->getFirst());
                 return $this->$method();
             }
@@ -155,6 +155,19 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         } else {
             return $this->get($obj_hash->getFirst())->get($obj_hash->getAllWithoutFirst());
         }
+    }
+
+    /**
+     *
+     * @param string $key_or_hash
+     * @return mixed 
+     */
+    public function getOrAdd($key_or_hash) {
+        $obj_hash = new sfCouchdbHash($key_or_hash);
+        if ($obj_hash->isAlone()) {
+	  return $this->add($obj_hash->getFirst());
+        } 
+	return $this->add($obj_hash->getFirst())->getOrAdd($obj_hash->getAllWithoutFirst());
     }
 
     /**
