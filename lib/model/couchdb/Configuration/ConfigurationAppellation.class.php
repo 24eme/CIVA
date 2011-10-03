@@ -7,7 +7,7 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
     }
 
     public function hasManyLieu() {
-        return (!$this->exist('lieu') || $this->filter('^lieu[0-9]')->count() > 0);
+        return (!$this->exist('lieu') || $this->filter('^lieu.+')->count() > 0);
     }
 
     public function hasLieuEditable() {

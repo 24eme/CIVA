@@ -65,12 +65,12 @@
 						
 						</div>
                                                 
-                                                <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
+                                                <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && count($onglets->getCurrentLieu()->getCouleurs()->count()) > 1): ?>
                                                     <?php echo include_partial('totalCouleurAlternatif', array('couleur' => $onglets->getCurrentCouleur()->getAutreCouleur(),
                                                                                                      'onglets' => $onglets,
                                                                                                      'acheteurs' => $acheteurs,
                                                                                                      'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
-                                                <?php else: ?>
+                                                <?php elseif(!$onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
                                                 <?php echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),
                                                                                                     'onglets' => $onglets,
                                                                                                     'acheteurs' => $acheteurs,

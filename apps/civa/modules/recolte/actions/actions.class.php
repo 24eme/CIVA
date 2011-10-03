@@ -282,8 +282,8 @@ class recolteActions extends EtapesActions {
         }
         preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
 
-        $couleur = null;
-        if (isset($couleur_cepage['couleur'])) {
+        $couleur = 'couleur';
+        if (isset($couleur_cepage['couleur']) && $couleur_cepage['couleur']) {
             $couleur = preg_replace('/-$/', '', $couleur_cepage['couleur']);
         }
         $cepage = null;

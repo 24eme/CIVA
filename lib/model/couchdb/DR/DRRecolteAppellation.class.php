@@ -126,7 +126,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getLieuChoices() {
         $lieu_choices = array('' => '');
-        foreach ($this->getConfig()->filter('^lieu[0-9]') as $key => $item) {
+        foreach ($this->getConfig()->filter('^lieu.+') as $key => $item) {
             if (!$this->exist($key)) {
                 $lieu_choices[$key] = $item->getLibelle();
             }
