@@ -49,3 +49,25 @@ curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 curl -s $COUCHDBURL/_design/$design/_view/qualite > /dev/null & 
 sleep 1
 kill %1
+
+design=import
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+  "_id":"_design/import",
+  "language": "javascript",
+  "views":
+  {
+    "csv": {
+      "map": "function(doc) {  if (!doc.type || doc.type != 'CSV')    return ;  for(id in doc.recoltants)   emit([doc.recoltants[id], doc._id], 1);}",
+    },
+  }
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+sleep 1
+kill %1
