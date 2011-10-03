@@ -15,6 +15,10 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     public function getLibelle() {
         return $this->store('libelle', array($this, 'getInternalLibelle'));
     }
+    
+    protected function getInternalLibelle() {
+        return $this->getConfig()->getLibelle();
+    }
 
     public function getLieu() {
         return $this->getParent();
