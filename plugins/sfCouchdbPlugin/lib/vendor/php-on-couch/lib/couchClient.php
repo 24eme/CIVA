@@ -537,6 +537,13 @@ class couchClient extends couch {
 		return $response['body'];
 	}
 
+	public function getAttachmentUri($doc, $filename) {
+	  if ( !is_object($doc) )	throw new InvalidArgumentException ("Document should be an object");
+	  if ( !$doc->_id )       throw new InvalidArgumentException ("Document should have an ID");
+	  $url  = '/'.urlencode($this->dbname).'/'.urlencode($doc->_id).'/'.urlencode($filename);
+	  return $url;
+	}
+
 	/**
 	* store a CouchDB attachment
 	*

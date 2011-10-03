@@ -61,8 +61,12 @@ abstract class sfCouchdbDocument extends sfCouchdbJson {
         return sfCouchdbManager::getClient()->deleteDocument($this);
     }
 
-    public function storeAttachment($file, $content_type = 'application/octet-stream', $filename = null) {
+    public function storeAttachment($file, $content_type = 'application/octet-stream', $filename = null) { 
       return sfCouchdbManager::getClient()->storeAttachment($this, $file, $content_type, $filename);
+   }
+
+    public function getAttachmentUri($filename) {
+      return 'http://localhost:5984'.sfCouchdbManager::getClient()->getAttachmentUri($this, $filename);
     }
 
     public function update($params = array()) {
