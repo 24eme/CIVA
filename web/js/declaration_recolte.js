@@ -963,7 +963,7 @@ var volumeOnChange = function(input) {
     $('ul.acheteurs li').each(function () {
         var css_class = $(this).attr('class');
         updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
-        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_recolte_totale input.'+css_class);
+        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_couleur_totale input.'+css_class, '#col_recolte_totale input.'+css_class);
     });
 
 

@@ -1,11 +1,9 @@
 <?php use_helper('civa') ?>
-<div id="col_couleur_totale" class="col_recolte col_total col_calcule">
+<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule">
     <h2>Total 
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
         <?php echo $couleur->getLibelle() ?>
     </h2>
-
-
 
     <div class="col_cont">
         <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
@@ -14,8 +12,7 @@
         <p class="denomination">&nbsp;</p>
         <p class="mention">&nbsp;</p>
         <p class="superficie">
-            <input id="appellation_total_superficie_orig" type="hidden" value="<?php echoFloat($couleur->getTotalSuperficie()); ?>" />
-            <input id="appellation_total_superficie" type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalSuperficie()); ?>" />
+            <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalSuperficie()); ?>" />
         </p>
 
         <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
@@ -44,12 +41,10 @@
         <?php endif; ?>
 
         <p class="vol_place">
-            <input type="hidden" id="appellation_total_cave_orig" value="<?php echoFloat($couleur->getTotalCaveParticuliere()); ?>" />
-            <input type="text" id="appellation_total_cave" readonly="readonly" value="<?php echoFloat($couleur->getTotalCaveParticuliere()); ?>" />
+            <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalCaveParticuliere()); ?>" />
         </p>
         <p class="vol_total_recolte">
-            <input id="appellation_total_volume_orig" type="hidden" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
-            <input id="appellation_total_volume" type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
+            <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
             <?php if ($couleur->getConfig()->hasRendement()): ?>
@@ -58,25 +53,21 @@
             <?php endif; ?>
             <?php if ($couleur->getConfig()->hasRendement()): ?>
     <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
-                    <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($couleur->getVolumeMaxCouleur()); ?>"/>
-                    <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getConfig()->getRendementCouleur()); ?>"/>
-
                     <li>
-                        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
-                        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+                        
+                        <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
                     </li>
-                    <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
-                        <input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/></li>
+                    <li>
+                        <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
+            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                    </li>
     <?php endif; ?>
     <?php if ($couleur->getConfig()->hasRendementCepage()) : ?>
                     <li>
-                        <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueTotal()); ?>" />
-                        <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat($couleur->getVolumeRevendiqueTotal()); ?>" />
+                        <input type="text" readonly="readonly" value="Σ <?php echoFloat($couleur->getVolumeRevendiqueTotal()); ?>" />
                     </li>
                     <li>
-                        <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
-                        <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($couleur->getDplcTotal())
+                        <input type="text" readonly="readonly" class="<?php if ($couleur->getDplcTotal())
             echo 'alerte'; ?>" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
                     </li>
     <?php endif; ?>

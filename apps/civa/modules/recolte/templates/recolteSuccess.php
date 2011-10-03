@@ -38,11 +38,16 @@
                                                                                                        'form' => $form_detail,
                                                                                                        'acheteurs' => $acheteurs,
                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
-                                                        <?php if ($onglets->getCurrentCouleur()->getConfig()->hasRendementCouleur()): ?>
+                                                        <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
+                                                            <?php echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
+                                                                                                    'onglets' => $onglets,
+                                                                                                    'acheteurs' => $acheteurs,
+                                                                                                    'has_acheteurs_mout' => $has_acheteurs_mout)) ; ?>
                                                             <?php echo include_partial('totalCouleur', array('couleur' => $onglets->getCurrentCouleur(),
                                                                                                         'onglets' => $onglets,
                                                                                                         'acheteurs' => $acheteurs,
                                                                                                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
+                                                    
                                                         <?php else: ?>
                                                         <?php echo include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
                                                                                                     'onglets' => $onglets,
@@ -60,11 +65,11 @@
 						
 						</div>
                                                 
-                                                <?php if ($onglets->getCurrentCouleur()->getConfig()->hasRendementCouleur()): ?>
-                                                    <?php echo include_partial('totalCouleur', array('couleur' => $onglets->getCurrentCouleur(),
-                                                                                                        'onglets' => $onglets,
-                                                                                                        'acheteurs' => $acheteurs,
-                                                                                                        'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
+                                                <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
+                                                    <?php echo include_partial('totalCouleurAlternatif', array('couleur' => $onglets->getCurrentCouleur()->getAutreCouleur(),
+                                                                                                     'onglets' => $onglets,
+                                                                                                     'acheteurs' => $acheteurs,
+                                                                                                     'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
                                                 <?php else: ?>
                                                 <?php echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),
                                                                                                     'onglets' => $onglets,
