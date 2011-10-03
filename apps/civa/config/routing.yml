@@ -106,6 +106,10 @@ exploitation_lieu:
 exploitation_lieu_delete:
   url:  /exploitation_lieu/delete/:lieu
   param: {module: acheteur, action: exploitationLieuDelete }
+  
+  exploitation_lieu_delete:
+  url:  /exploitation_lieu/delete/:appellation/:lieu
+  param: {module: acheteur, action: exploitationLieuDelete }
 
 exploitation_autres:
   url:   /exploitation_autres

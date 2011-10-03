@@ -14,7 +14,7 @@
                 'lieu' => new sfValidatorChoice(array('required' => $this->getOption('lieu_required', true), 'choices' => array_keys($lieu_choices))),
             ));
             
-            $this->widgetSchema->setNameFormat('lieudit[%s]');
+            $this->widgetSchema->setNameFormat('lieudit_'.$this->getObject()->getKey().'[%s]');
             
             $this->validatorSchema['lieu']->setMessage('required', 'Champ obligatoire');
         }

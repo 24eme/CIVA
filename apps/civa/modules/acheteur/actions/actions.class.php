@@ -70,7 +70,7 @@ class acheteurActions extends EtapesActions {
                 'cvi' => $cvi,
                 'commune' => $commune,
                 'appellations' => ExploitationAcheteursForm::getListeAppellations(),
-                'form_item' => $form[$name.ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
+                'form_item' => $form[$name . ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
                 'mout' => $mout));
         } else {
             $this->forward404();
@@ -84,37 +84,55 @@ class acheteurActions extends EtapesActions {
     public function executeExploitationLieu(sfWebRequest $request) {
         $this->setCurrentEtape('exploitation_lieu');
         $this->help_popup_action = "help_popup_exploitation_lieu";
-	
-	try{
-	$grdcru = $this->getUser()->getDeclaration()->get('/recolte/appellation_GRDCRU');
-	}catch(Exception $e) {
-          if ($this->hasRequestParameter('from_recolte')) {
-             return $this->redirectToPreviousEtapes();
-          } else {
-             return $this->redirectToNextEtapes();
-          }
-	}
-	$this->lieux = array();
-	foreach ($grdcru->filter('lieu[0-9]') as $key => $lieu) {
-	  $this->lieux[$key] = $lieu->getLibelle();
-	}
+        $this->appellations = array();
+        $this->forms = array();
 
-	$this->form = new LieuDitForm($grdcru, array('lieu_required' => !(count($this->lieux) > 0)));
+        foreach ($this->getUser()->getDeclaration()->recolte->getAppellations() as $appellation) {
+            if ($appellation->getConfig()->hasManyLieu()) {
+                $this->appellations[$appellation->getKey()] = $appellation;
+                
+                $lieux = array();
+                foreach ($appellation->filter('lieu[0-9]') as $key => $lieu) {
+                    $lieux[$key] = $lieu->getLibelle();
+                }
+                $form = new LieuDitForm($appellation, array('lieu_required' => !(count($lieux) > 0), 'lieux' => $lieux));
+                $this->forms[$appellation->getKey()] = $form;
+            }
+        }
+
+        if (count($this->appellations) == 0) {
+            if ($this->hasRequestParameter('from_recolte')) {
+                return $this->redirectToPreviousEtapes();
+            } else {
+                return $this->redirectToNextEtapes();
+            }
+        }
 
         if ($request->isMethod(sfWebRequest::POST)) {
-	  $this->form->bind($request->getParameter($this->form->getName()));
-	  if ($this->form->isValid()) {
-	    $this->form->save();
-	    return  $this->redirectByBoutonsEtapes();
-	  }
+            $valid = true;
+            foreach($this->forms as $form) {;
+                $form->bind($request->getParameter($form->getName()));
+                if ($form->isValid()) {
+                    $form->save();
+                } else {
+                    $valid = false;
+                }
+            }
+            if ($valid) {
+                return $this->redirectByBoutonsEtapes();
+            }
         }
     }
 
     public function executeExploitationLieuDelete(sfWebRequest $request) {
-      $declaration = $this->getUser()->getDeclaration();
-      $declaration->get('/recolte/appellation_GRDCRU')->remove($request->getParameter('lieu'));
-      $declaration->save();
-      return $this->redirect('@exploitation_lieu');
+        $declaration = $this->getUser()->getDeclaration();
+        $appellation_key = $request->getParameter('appellation');
+        $this->forward404Unless($declaration->recolte->exist('appellation_'.$appellation_key));
+        $appellation = $declaration->recolte->get('appellation_'.$appellation_key);
+        $this->forward404Unless($appellation->getConfig()->hasManyLieu());
+        $appellation->remove($request->getParameter('lieu'));
+        $declaration->save();
+        return $this->redirect('@exploitation_lieu');
     }
 
 }
