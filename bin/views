@@ -5,8 +5,8 @@ TMPFILE=/tmp/couchdb.$$.tmp
 url=$(grep 'dsn:' $CONFIGFILE | sed 's/.*dsn: //' | sed 's/[^\/]*$//')
 base=$(grep 'dbname:' $CONFIGFILE | sed 's/.*dbname: //' | sed 's/\W*$//')
 COUCHDBURL=$url$base
-design=DR
 
+design=DR
 curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
 
 cat <<EOF > $TMPFILE
@@ -25,5 +25,27 @@ EOF
 curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 
 curl -s $COUCHDBURL/_design/$design/_view/campagne_acheteur > /dev/null & 
+sleep 1
+kill %1
+
+design=ACHAT
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+  "_id":"_design/ACHAT",
+  "language": "javascript",
+  "views":
+  {
+    "qualite": {
+      "map": "function(doc) { if (doc['type'] == 'Acheteur') { emit([doc.qualite, doc.nom], {cvi: doc.cvi, nom: doc.nom, commune: doc.commune});}}",
+    },
+  }
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/qualite > /dev/null & 
 sleep 1
 kill %1
