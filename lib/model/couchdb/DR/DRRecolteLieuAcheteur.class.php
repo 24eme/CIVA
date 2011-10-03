@@ -40,5 +40,10 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
     parent::update($params);
     $this->getNom();
     $this->getCommune();
+    $this->synchronizeRecolteAcheteur();
+  }
+
+  protected function synchronizeRecolteAcheteur() {
+    $this->getCouchdbDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
   }
 }
