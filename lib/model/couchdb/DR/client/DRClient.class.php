@@ -14,7 +14,6 @@ class DRClient extends sfCouchdbClient {
     $doc->declaration_commune = $tiers->declaration_commune;
     foreach ($csvs as $csv) {
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
-	print_r($line);
 	if ($line[CsvFile::CSV_APPELLATION] == 'JEUNES VIGNES') {
 	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
 	  continue;
