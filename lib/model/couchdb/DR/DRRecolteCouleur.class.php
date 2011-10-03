@@ -5,6 +5,16 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     public function getConfig() {
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
+    
+    public function getLibelleWithAppellation() {
+      if ($this->getLibelle())
+	return $this->getAppellation()->getLibelle().' - '.$this->getLibelle();
+      return $this->getAppellation()->getLibelle();
+    }
+
+    public function getLibelle() {
+        return $this->store('libelle', array($this, 'getInternalLibelle'));
+    }
 
     public function getLieu() {
         return $this->getParent();
@@ -187,6 +197,16 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         }
     }
 
+    public function getAutreCouleur() {
+        $couleurs = $this->getParent()->getCouleurs();
+        foreach($couleurs as $couleur) {
+            if ($couleur->getKey() != $this->getKey()) {
+                return $couleur;
+            }
+        }
+        throw new sfException("Pas d'autre couleur");
+    }
+    
     protected function issetField($field) {
         return ($this->_get($field) || $this->_get($field) === 0);
     }

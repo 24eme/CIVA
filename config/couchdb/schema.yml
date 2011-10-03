@@ -418,7 +418,7 @@ Configuration:
                       fields:
                         rendement: {type: float}
                         rendement_appellation: { type: float }
-                        libelle: {}
+                        libelle: { }
                         douane :
                           type: collection
                           class: ConfigurationDouane
@@ -429,13 +429,14 @@ Configuration:
                               appellation_lieu: {required: false}
                               qualite: {required: false}
                               code_cepage: {required: false}
-                        # ------------ Couleur --------------
+                        # ------------ COULEUR --------------
                         '*' :
                           type: collection
                           class: ConfigurationCouleur
                           definition:
                             fields:
                               rendement_couleur: { type: float }
+                              libelle: { }
                               '*':
                               # ------------ CEPAGE -------------
                                 type: collection
