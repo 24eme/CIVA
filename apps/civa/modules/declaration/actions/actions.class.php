@@ -31,6 +31,10 @@ class declarationActions extends EtapesActions {
                 $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($dr_data['type_declaration'] == 'import') {
+	      $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers);
+	      $dr->save();
+	      $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
                 if (!$old_doc) {
@@ -157,7 +161,7 @@ class declarationActions extends EtapesActions {
                             if($key == 'cepage_RB') $rebeches = true;
                         }
                         if(!$rebeches) {
-                            array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), 'cepage_RB')), $lieu->getKey(), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+			  array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB')), $lieu->getKey(), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                             $this->error = true;
                         }
 

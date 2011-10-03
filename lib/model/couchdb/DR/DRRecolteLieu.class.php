@@ -28,9 +28,15 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       return $this->filter('^couleur');
     }
 
-    public function getCouleur() {
-      if ($this->getNbCouleurs() > 1) 
+    public function getCouleur($cepage = null) {
+      if (!$cepage && $this->getNbCouleurs() > 1) 
 	throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
+      $couleur = 'couleur';
+      if ($cepage)
+	foreach ($this->getCouleurs() as $couleur => $obj) {
+	  if ($obj->exist($cepage))
+	    break;
+	}
       return $this->_get('couleur');
     }
 
@@ -368,6 +374,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                 }
             }
         }
+	$this->acheteurs->update();
         if ($this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();

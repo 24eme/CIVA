@@ -16,7 +16,12 @@
                 <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" checked="checked" />
                 <label for="type_declaration_vierge">A partir d'une déclaration vierge</label>
             </div>
-            <?php if (count($campagnes) > 0): ?>
+   <?php if ($has_import) : ?>
+            <div class="ligne_form">
+                    <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" />
+                    <label for="type_declaration_import">A partir des informations des coopératives ou acheteurs</label>
+            </div>
+   <?php endif; if (count($campagnes) > 0): ?>
                 <div class="ligne_form">
                     <input type="radio" id="type_declaration_precedente" name="dr[type_declaration]" value="precedente" />
                     <label for="type_declaration_precedente">A partir d'une précédente déclaration</label>
