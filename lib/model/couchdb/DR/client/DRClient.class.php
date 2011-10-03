@@ -1,6 +1,43 @@
 <?php
 
 class DRClient extends sfCouchdbClient {
+  public function createFromCSVRecoltant($tiers) {
+    $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($tiers->cvi);
+    if (!$csvs || !count($csvs))
+      throw new sfException('no csv found for '.$tiers->cvi) ;
+    $campagne = $csvs[0]->campagne;
+    $doc = new DR();
+    $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $campagne);
+    $doc->cvi = $tiers->cvi;
+    $doc->campagne = $campagne;
+    $doc->declaration_insee = $tiers->declaration_insee;
+    $doc->declaration_commune = $tiers->declaration_commune;
+    foreach ($csvs as $csv) {
+      foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
+	print_r($line);
+	if ($line[CsvFile::CSV_APPELLATION] == 'JEUNES VIGNES') {
+	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
+	  continue;
+	}
+	$prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION], 
+									 $line[CsvFile::CSV_LIEU], 
+									 $line[CsvFile::CSV_CEPAGE]);
+	if (!isset($prod['hash']))
+	  throw new sfException($prod['error']);
+	$cepage = $doc->getOrAdd($prod['hash']);
+	$detail = $cepage->detail->add();
+	$detail->denomination = $line[CsvFile::CSV_DENOMINATION];
+	$detail->superficie = $line[CsvFile::CSV_SUPERFICIE]*1;
+	$detail->volume = $line[CsvFile::CSV_VOLUME]*1;
+	$acheteur = $detail->add('cooperatives')->add();
+	$acheteur->cvi = $line[CsvFile::CSV_ACHETEUR_CVI];
+	$acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
+	$detail->volume_dplc = $line[CsvFile::CSV_VOLUME_DPLC]*1;
+      }
+    }
+    $doc->update();
+    return $doc;
+  }
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
         return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
