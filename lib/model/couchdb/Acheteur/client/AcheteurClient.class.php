@@ -7,7 +7,7 @@ class AcheteurClient extends sfCouchdbClient {
         return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute();
     }
 
-    public function loadAcheteurs() {
+    public function loadAcheteurs() {	
        $cooperatives = $this->startkey(array('Cooperative'))
        		->endkey(array('Cooperative', array()))
             ->executeView('ACHAT', 'qualite');

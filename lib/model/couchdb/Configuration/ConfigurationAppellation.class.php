@@ -11,7 +11,7 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
     }
 
     public function hasLieuEditable() {
-        if ($this->exist('lieu_editable') && $this->get('lieu_editable'))
+        if ($this->exist('detail_lieu_editable') && $this->get('detail_lieu_editable'))
             return true;
         return false;
     }

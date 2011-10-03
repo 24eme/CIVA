@@ -397,7 +397,7 @@ Configuration:
                   rendement_appellation: { type: float }
                   mout: {type: integer}
                   no_total_cepage: {type: integer, required: false}
-                  lieu-editable: {type: integer, required: false}
+                  detail_lieu_editable: {type: integer, required: false}
                   exclude_total: {type: integer, required: false}
                   douane :
                     type: collection
