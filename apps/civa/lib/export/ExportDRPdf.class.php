@@ -173,7 +173,10 @@ class ExportDRPdf {
 		    	$c = array();
 			    $c['type'] = 'total';
 			    $c['cepage'] = 'Total';
-			    $c['denomination'] = $couleur->libelle;
+				if ($hasLieuEditable)
+					$c['lieu'] = $couleur->libelle;
+				else
+			    	$c['denomination'] = $couleur->libelle;
 			    $c['vtsgn'] = '';
 			    $c['superficie'] = $couleur->total_superficie;
 			    $c['volume'] = $couleur->total_volume;
