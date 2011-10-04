@@ -58,6 +58,9 @@ class uploadActions extends sfActions
       if ($this->shouldHaveRebeche($line)) {
 	$this->errors[$cpt-1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
       }
+      if ($this->errorOnCVIAcheteur($line)) {
+	$this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
+      }
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
       else if (!$this->hasVolume($line))
@@ -174,8 +177,12 @@ class uploadActions extends sfActions
 
 
   private function shouldHaveRebeche($line) {
+    try{
     if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
       return false;
+    }catch(Exception $e) {
+      return false;
+    }
     if (!isset($this->previous_recoltant))
       $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
     if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
@@ -217,8 +224,12 @@ class uploadActions extends sfActions
     return $this->isPositive($line[CsvFile::CSV_VOLUME]);
   }
   protected function shouldHaveSuperficie($line) {
-    if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
-      return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
+    try{
+      if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
+	return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
+    }catch(Exception $e) {
+      return false;
+    }
     return !$this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
   }
   protected function couldHaveSuperficie($line) {
@@ -229,5 +240,12 @@ class uploadActions extends sfActions
 	return ($this->getUser()->getTiers('Acheteur')->getQualite() == Acheteur::ACHETEUR_NEGOCIANT);
     }catch(Exception $e) {return false;}
     return false;
+  }
+  protected function errorOnCVIAcheteur($line) {
+    try{
+      return ($this->getUser()->getTiers('Acheteur')->cvi != $line[CsvFile::CSV_ACHETEUR_CVI]);
+    }catch(Exception $e) {
+      return true;
+    }
   }
 }
