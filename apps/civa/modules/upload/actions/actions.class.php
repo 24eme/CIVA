@@ -42,6 +42,8 @@ class uploadActions extends sfActions
     $cpt = -1;
     $this->errors = array();
     $this->warnings = array();
+    if (isset($this->previous_recoltant))
+      unset($this->previous_recoltant);
     foreach ($this->csv->getCsv() as $line) {
       $line = self::cleanTable($line);
       $cpt++;
@@ -53,23 +55,29 @@ class uploadActions extends sfActions
 	$this->errors[$cpt][] = 'no cvi';
       }
       ;
+      if ($this->shouldHaveRebeche($line)) {
+	$this->errors[$cpt-1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
+      }
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
       else if (!$this->hasVolume($line))
 	$this->errors[$cpt][] = 'Le volume ne devrait pas être absent ou null.';
-      else if (!$this->mayHaveSuperficie($line))
+      else if ($this->shouldHaveSuperficie($line))
 	$this->errors[$cpt][] = 'La superficie erronnée.';
       if (!$this->isVTSGNOk($line))
 	$this->errors[$cpt][] = 'Le champ VT/SGN est non valide.';
       if (!$this->hasGoodUnit($line)) {
 	$this->warnings[$cpt][] = 'Les unités ne semblent pas en ares et hectolitres.';
       }
-      if (!$this->needSuperficie($line)) {
-	$this->warnings[$cpt][] = 'La superficie devrait être renseignée';
+      if ($this->couldHaveSuperficie($line)) {
+	$this->warnings[$cpt][] = 'La superficie pourrait être renseignée';
       }
-      if (!$this->canHaveRebeche($line)) {
-	$this->warnings[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche';
+      if ($this->cannotHaveRebeche($line)) {
+	$this->errors[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche. (Seule les caves peuvent le faire)';
       }
+    }
+    if ($this->shouldHaveRebeche(array())) {
+      $this->errors[$cpt-1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
     }
     $this->recap = new stdClass();
     $this->recap->errors = array();
@@ -142,6 +150,10 @@ class uploadActions extends sfActions
       
       if (preg_match('/_RB$/', $prod['hash'])) {
 	$this->is_rebeche = true;
+	$this->nb_rebeche++;
+      }
+      if (preg_match('/_CREMANT/', $prod['hash'])) {
+	$this->nb_cremant++;
       }
     }
 
@@ -150,16 +162,34 @@ class uploadActions extends sfActions
     return $prod['error'];
   }
 
-  protected function canHaveRebeche($line) {
+  protected function cannotHaveRebeche($line) {
     if (!$this->is_rebeche)
-      return true;
-    try {
-    if (!$this->getUser()->getTiers('Acheteur')->getQualite() != 'cave')
       return false;
-    }catch(Exception $e) { return true;}
-    return true;
+    try {
+      if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
+	return true;
+    }catch(Exception $e) { return false;}
+    return false;
   }
 
+
+  private function shouldHaveRebeche($line) {
+    if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
+      return false;
+    if (!isset($this->previous_recoltant))
+      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
+      return false;
+    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]))
+      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+    if ($this->nb_cremant && !$this->nb_rebeche) {
+      $this->nb_cremant = 0;
+      return true;
+    }
+    $this->nb_cremant = 0;
+    $this->nb_rebeche = 0;
+    return false;
+  }
 
   private function isPositive($val) {
     $val = preg_replace('/,/', '.', $val);
@@ -186,18 +216,18 @@ class uploadActions extends sfActions
       return true;
     return $this->isPositive($line[CsvFile::CSV_VOLUME]);
   }
-  protected function mayHaveSuperficie($line) {
+  protected function shouldHaveSuperficie($line) {
     if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
-      return true;
-    return $this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
+      return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
+    return !$this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
   }
-  protected function needSuperficie($line) {
+  protected function couldHaveSuperficie($line) {
     if ($this->no_superficie)
-      return true;
-    try {
-    if (!$this->getUser()->getTiers('Acheteur')->getQualite() != 'negociant' && (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]))
       return false;
-    }catch(Exception $e) {return true;}
-    return true;
+    try {
+      if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
+	return ($this->getUser()->getTiers('Acheteur')->getQualite() == Acheteur::ACHETEUR_NEGOCIANT);
+    }catch(Exception $e) {return false;}
+    return false;
   }
 }
