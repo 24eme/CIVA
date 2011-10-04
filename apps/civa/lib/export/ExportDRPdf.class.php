@@ -78,7 +78,55 @@ class ExportDRPdf {
               $extra = array('lies' => $dr->lies, 'jeunes_vignes' => $dr->jeunes_vignes);
               $this->document->addPage($this->getPartial('export/pageNoAppellationDR', array('tiers'=> $tiers, 'extra' => $extra)));
           }
+          $this->document->addPage($this->getPartial('export/recapitulatif', array('infos'=> $this->getRecapitulatifInfos($dr))));
         }
+    }
+    
+    private function getRecapitulatifInfos($dr)
+    {
+        $appellations = array();
+        $superficie = array();
+        $volume = array();
+        $revendique = array();
+        $dplc = array();
+        $libelle = array();
+        $volume_negoces = array();
+        $volume_cooperatives = array();
+        $cvi = array();
+        foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($dr->recolte->exist($appellation_key)) {
+              $appellation = $dr->recolte->get($appellation_key);
+              if ($appellation->getConfig()->excludeTotal())
+                continue;
+              $appellations[] = $appellation->getAppellation();
+              $libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
+              $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
+              $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+              $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
+              $dplc[$appellation->getAppellation()] = $appellation->getDplc();
+          }
+        }
+        $infos = array();
+        $infos['appellations'] = $appellations;
+        $infos['libelle'] = $libelle;
+        $infos['superficie'] = $superficie;
+        $infos['volume'] = $volume;
+        $infos['revendique'] = $revendique;
+        $infos['dplc'] = $dplc;
+        $infos['total_superficie'] = array_sum(array_values($superficie));
+        $infos['total_volume'] = array_sum(array_values($volume));
+        $infos['total_dplc'] = array_sum(array_values($dplc));
+        $infos['total_revendique'] = array_sum(array_values($revendique));
+        $infos['lies'] = $dr->lies;
+        $infos['jeunes_vignes'] = $dr->jeunes_vignes;
+		$vintable = array();
+		if ($dr->recolte->exist('appellation_VINTABLE')) {
+	 		$vintable['superficie'] = $dr->recolte->appellation_VINTABLE->getTotalSuperficie();
+	  		$vintable['volume'] = $dr->recolte->appellation_VINTABLE->getTotalVolume();
+		}
+		$infos['vintable'] = $vintable;
+        $infos['$annee'] = $dr->campagne;
+        return $infos;
     }
     
 	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable, $hasManyCouleur) {
