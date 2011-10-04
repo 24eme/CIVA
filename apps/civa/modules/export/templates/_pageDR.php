@@ -69,6 +69,8 @@ if (!function_exists('printColonne')) {
 
 echo printColonne('Cépage', $colonnes_cepage, 'cepage');
 echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');
+if ($hasLieuEditable)
+echo printColonne('Lieu', $colonnes_cepage, 'lieu');	
 echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');

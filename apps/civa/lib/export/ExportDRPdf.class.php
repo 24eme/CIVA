@@ -70,10 +70,11 @@ class ExportDRPdf {
                   if (!$appellation->exist($lieu->getKey()))
                     continue;
                   $lieu = $appellation->{$lieu->getKey()};
+                  $this->hasLieuEditable = $appellation->getConfig()->hasLieuEditable();
                   if ($lieu->getConfig()->hasManyCouleur()) {
-                  	$this->createAppellationCouleur($lieu, $tiers);
+                  	$this->createAppellationCouleur($lieu, $tiers, $this->hasLieuEditable);
                   } else {
-                  	$this->createAppellationLieu($lieu, $tiers);
+                  	$this->createAppellationLieu($lieu, $tiers, $this->hasLieuEditable);
                   }
                 }
             }
@@ -85,7 +86,7 @@ class ExportDRPdf {
         }
     }
     
-    private function createAppellationCouleur($lieu, $tiers) {
+    private function createAppellationCouleur($lieu, $tiers, $hasLieuEditable) {
 	    foreach ($lieu->getConfig()->getCouleurs() as $couleur) {
 		    $colonnes = array();
 		    $afterTotal = array();
@@ -105,6 +106,8 @@ class ExportDRPdf {
 			$c['vtsgn'] = $detail->vtsgn;
 			$c['superficie'] = $detail->superficie;
 			$c['volume'] = $detail->volume;
+			if ($hasLieuEditable)
+				$c['lieu'] = $detail->lieu;
 		        if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
 		            $c['motif_non_recolte'] = $detail->getMotifNonRecolteLibelle();
 		        }
@@ -211,13 +214,13 @@ class ExportDRPdf {
 	    $identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $couleur->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages)));
+	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $couleur->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable)));
 	      $identification_enabled = 0;
 	    }
 	}
   }
 
-    private function createAppellationLieu($lieu, $tiers) {
+    private function createAppellationLieu($lieu, $tiers, $hasLieuEditable) {
     $colonnes = array();
     $afterTotal = array();
     $acheteurs = $lieu->acheteurs;
@@ -236,6 +239,9 @@ class ExportDRPdf {
 	$c['vtsgn'] = $detail->vtsgn;
 	$c['superficie'] = $detail->superficie;
 	$c['volume'] = $detail->volume;
+	if ($hasLieuEditable)
+		$c['lieu'] = $detail->lieu;
+	
         if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
             $c['motif_non_recolte'] = $detail->getMotifNonRecolteLibelle();
         }
@@ -359,7 +365,7 @@ class ExportDRPdf {
     $identification_enabled = 1;
     foreach($pages as $p) {
       $this->nb_pages++;
-      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages)));
+      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable)));
       $identification_enabled = 0;
     }
   }
