@@ -69,11 +69,11 @@ EOF;
 	  $json->type = "Acheteur";
           
           if($achat->get(Db2Achat::COL_QUALITE) == 'N') {
-            $json->qualite = 'Negociant';
+            $json->qualite = Acheteur::ACHETEUR_NEGOCE;
           } else if($achat->get(Db2Achat::COL_QUALITE) == 'C') {
-            $json->qualite = 'Cooperative';
+            $json->qualite = Acheteur::ACHETEUR_COOPERATIVE;
           } elseif($achat->get(Db2Achat::COL_QUALITE) == 'X') {
-            $json->qualite = 'NegoCave';
+            $json->qualite = Acheteur::ACHETEUR_NEGOCAVE;
           } 
 	  $json->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $achat->get(Db2Achat::COL_NOM)));
 	  $json->commune = rtrim($achat->get(Db2Achat::COL_COMMUNE));
