@@ -251,4 +251,33 @@ class DR extends BaseDR {
     public function getConfigurationCampagne() {
       return sfCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne);
     }
+
+    public function setCampagne($campagne) {
+      $nextCampagne = sfCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
+      foreach ($this->recolte->getAppellations() as $k => $a) {
+	if (!$nextCampagne->get($a->getParent()->getHash())->exist($k)) {
+	    $this->recolte->remove($k);
+	    continue;
+	}
+	foreach ($a->filter('^lieu') as $k => $l) {
+	  if (!$nextCampagne->get($l->getParent()->getHash())->exist($k)) {
+	    $this->recolte->remove($k);
+	    continue;
+	  }
+	  foreach ($l->filter('^couleur') as $k => $co) {
+	    if (!$nextCampagne->get($co->getParent()->getHash())->exist($k)) {
+	      $this->recolte->remove($k);
+	      continue;
+	    }
+	    foreach ($co->filter('^cepage') as $k => $c) {
+	      if (!$nextCampagne->get($c->getParent()->getHash())->exist($k)) {
+		$this->recolte->remove($k);
+		continue;
+	      }
+	    }
+	  }
+	}
+      }
+      return $this->_set('campagne', $campagne);
+    }
 }
