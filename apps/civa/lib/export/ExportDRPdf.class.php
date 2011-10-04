@@ -200,7 +200,7 @@ class ExportDRPdf {
     	$c = array();
     	$c['type'] = 'total';
     	$c['cepage'] = 'Total';
-    	$c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : 'Lieu-dit';
+    	$c['denomination'] = 'Appellation';
     	if ($lieu->getAppellation()->getAppellation() == 'VINTABLE')
       		$c['denomination'] = '';
     	$c['vtsgn'] = '';
