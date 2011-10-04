@@ -64,8 +64,8 @@
 							</ul>
 						
 						</div>
-                                                
-                                                <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && count($onglets->getCurrentLieu()->getCouleurs()->count()) > 1): ?>
+
+                                                <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && $onglets->getCurrentLieu()->getNbCouleurs() > 1): ?>
                                                     <?php echo include_partial('totalCouleurAlternatif', array('couleur' => $onglets->getCurrentCouleur()->getAutreCouleur(),
                                                                                                      'onglets' => $onglets,
                                                                                                      'acheteurs' => $acheteurs,
