@@ -61,6 +61,9 @@ class uploadActions extends sfActions
       if ($this->errorOnCVIAcheteur($line)) {
 	$this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
       }
+      if ($this->errorOnCVIRecoltant($line)) {
+	$this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu';
+      }
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
       else if (!$this->hasVolume($line))
@@ -244,6 +247,14 @@ class uploadActions extends sfActions
   protected function errorOnCVIAcheteur($line) {
     try{
       return ($this->getUser()->getTiers('Acheteur')->cvi != $line[CsvFile::CSV_ACHETEUR_CVI]);
+    }catch(Exception $e) {
+      return true;
+    }
+  }
+  protected function errorOnCVIRecoltant($line) {
+    try{
+      $rec = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
+      return !($rec);
     }catch(Exception $e) {
       return true;
     }
