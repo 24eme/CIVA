@@ -155,12 +155,12 @@ class declarationActions extends EtapesActions {
                     $this->error = true;
                 }else {
                     //verifie les rebeches pour les crémants
-                    if($appellation->appellation=='CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
-                        $rebeches=false;
-                        foreach ($lieu->filter('cepage_') as $key => $cepage) {
-                            if($key == 'cepage_RB') $rebeches = true;
-                        }
-                        if(!$rebeches) {
+		  if($appellation->appellation=='CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
+		    $rebeches=false;
+		    foreach ($lieu->filter('couleur') as $key => $couleur)
+		      foreach ($couleur->filter('cepage_') as $key => $cepage)
+		      if($key == 'cepage_RB') $rebeches = true;
+		    if(!$rebeches) {
 			  array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB')), $lieu->getKey(), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                             $this->error = true;
                         }
