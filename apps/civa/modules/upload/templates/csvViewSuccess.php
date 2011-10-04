@@ -37,7 +37,7 @@ foreach ($csv->getRawValue()->getCsv() as $line)
   echo '<tr';
   if (count($errors[$cpt]))
     echo ' class="error"';
-  echo '><td class="titre maintitre" id="l'.($cpt+1).'">'.($cpt+1).'</td><td>'.$line[0].'</td><td>'.$line[1].'</td><td>'.$line[2].'</td><td>'.$line[3].'</td><td>'.$line[4].'</td><td>'.$line[5].'</td><td>'.$line[6].'</td><td>'.$line[7].'</td><td>'.$line[8].'</td><td>'.$line[9].'</td><td>'.$line[10].'</td><tr>';
+  echo '><td class="titre maintitre" id="l'.($cpt+1).'">'.($cpt+1).'</td><td>'.$line[0].'</td><td>'.$line[1].'</td><td>'.$line[2].'</td><td>'.$line[3].'</td><td>'.$line[4].'</td><td>'.$line[5].'</td><td>'.$line[6].'</td><td>'.$line[7].'</td><td>'.$line[8].'</td><td class="csv_num">'.sprintf('%.02f', $line[9]).'</td><td class="csv_num">'.sprintf('%.02f', $line[10]).'</td><tr>';
   if (count($errors[$cpt])) {
     foreach($errors[$cpt] as $error) {
       echo '<tr class="error"><td class="titre" style="color:gray;">'.($cpt+1).'</td><td colspan="12">';

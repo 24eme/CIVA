@@ -1850,3 +1850,7 @@ a.msg_aide{
     float: left;
     margin: 5px 0 0 74px;
 }
+
+td.csv_num {
+    text-align: right;
+}
