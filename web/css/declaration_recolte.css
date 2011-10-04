@@ -1304,11 +1304,17 @@ a.msg_aide:hover{
 #gestion_recolte #col_recolte_totale .col_cont,
 #gestion_recolte #col_recolte_totale .vol_total_recolte input { background: #ffa913; }
 
+#gestion_recolte #col_couleur_totale { margin-top: 24px; }
+
 #gestion_recolte #col_couleur_totale,
 #gestion_recolte #col_couleur_totale .col_cont,
 #gestion_recolte #col_couleur_totale .vol_total_recolte input { background: #ffa913; }
 
-#gestion_recolte #col_couleur_totale_alternatif { margin-top: 24px; }
+#gestion_recolte #col_couleur_totale_alternatif { 
+    margin-top: 24px; 
+    opacity: 0.6;
+    filter: Alpha(Opacity=60);
+}
 
 #gestion_recolte #col_couleur_totale_alternatif,
 #gestion_recolte #col_couleur_totale_alternatif .col_cont,
