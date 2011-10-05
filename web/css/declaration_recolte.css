@@ -456,30 +456,64 @@ a.msg_aide:hover{
 }
 
 /**
- * Nouvelle déclaration
+ * Alsace récolte
  ******************************************/
-#nouvelle_declaration
+#espace_alsace_recolte
+{
+    margin: 0 0 20px;
+}
+
+#espace_alsace_recolte h2
+{
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_alsace_recolte .contenu
+{
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+
+/**
+ * Nouvelle déclaration / Form Gamma
+ ******************************************/
+#nouvelle_declaration,
+#form_gamma
 {
     float: left;
     margin: 0 20px 0 0;
     width: 488px;
 }
 
-#nouvelle_declaration p.intro
+#form_gamma { width: 504px; }
+
+#nouvelle_declaration p.intro,
+#form_gamma p.intro
 {
     color: #666;
     font-size: 14px;
     margin: 0 0 10px;
 }
 
-#nouvelle_declaration .ligne_form { margin: 0 0 5px 25px; }
-#nouvelle_declaration .ligne_form input[type=radio] { margin: 0 3px 0 0; }
-#nouvelle_declaration .ligne_form label { font-size: 14px; }
-#nouvelle_declaration .ligne_btn { margin: 15px 0 0 85px; }
+#nouvelle_declaration .ligne_form,
+#form_gamma .ligne_form { margin: 0 0 5px 25px; }
+#nouvelle_declaration .ligne_form input[type=radio],
+#form_gamma .ligne_form input[type=radio] { margin: 0 3px 0 0; }
+#nouvelle_declaration .ligne_form label,
+#form_gamma .ligne_form label { font-size: 14px; }
+#nouvelle_declaration .ligne_btn,
+#form_gamma .ligne_btn { margin: 15px 0 0 85px; }
 
 .ligne_btn_retour{text-align: right;}
 
-#nouvelle_declaration .ligne_btn select
+#nouvelle_declaration .ligne_btn select,
+#form_gamma .ligne_btn select
 {
     border: 1px solid #dadad6;
     color: #7a7a7a;
@@ -488,7 +522,8 @@ a.msg_aide:hover{
     vertical-align: middle;
 }
 
-#nouvelle_declaration .ligne_btn .btn
+#nouvelle_declaration .ligne_btn .btn,
+#form_gamma .ligne_btn .btn
 {
     float: right;
     margin-left:5px;
@@ -555,6 +590,47 @@ a.msg_aide:hover{
     background: url(../images/pictos/pi_declaration_recolte.png) 0 center no-repeat;
     color: #666;
     padding: 0 0 0 20px;
+}
+
+/**
+ * Documents d'aide
+ ******************************************/
+#documents_aide
+{
+    float: left;
+    width: 264px;
+}
+
+#documents_aide p.intro
+{
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 10px;
+    text-align: justify;
+}
+
+#documents_aide ul { font-size: 15px; }
+#documents_aide ul li { margin: 0 0 10px; }
+#documents_aide ul li a
+{
+    background: url(../images/puces/puces_accordeon.png) -27px 0 no-repeat;
+    display: inline-block;
+    padding: 0 0 0 15px;
+    outline: 0;
+}
+
+#documents_aide ul li a.pdf
+{
+    background: url(../images/pictos/pi_pdf.png) 0 1px no-repeat;
+}
+
+#documents_aide .pdf_link a{
+    color: #666666;
+    text-decoration: underline;
+}
+
+#documents_aide .pdf_link a:hover{
+    color: #000;
 }
 
 /**
