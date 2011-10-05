@@ -1023,6 +1023,10 @@ a.msg_aide:hover{
     width: 714px;
 }
 
+#gestion_recolte #donnees_recolte_sepage.deux_totaux {
+   width: 614px; 
+}
+
 /* Colonne intitulés */
 #gestion_recolte #colonne_intitules
 {
@@ -1304,14 +1308,17 @@ a.msg_aide:hover{
 #gestion_recolte #col_recolte_totale .col_cont,
 #gestion_recolte #col_recolte_totale .vol_total_recolte input { background: #ffa913; }
 
-#gestion_recolte #col_couleur_totale { margin-top: 24px; }
+#gestion_recolte #col_couleur_totale, #gestion_recolte #col_couleur_totale_alternatif {
+    margin-top: 24px; 
+    float: left; 
+    margin-left: 5px;
+}
 
 #gestion_recolte #col_couleur_totale,
 #gestion_recolte #col_couleur_totale .col_cont,
 #gestion_recolte #col_couleur_totale .vol_total_recolte input { background: #ffa913; }
 
 #gestion_recolte #col_couleur_totale_alternatif { 
-    margin-top: 24px; 
     opacity: 0.6;
     filter: Alpha(Opacity=60);
 }
