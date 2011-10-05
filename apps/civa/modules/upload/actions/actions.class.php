@@ -227,6 +227,8 @@ class uploadActions extends sfActions
     return $this->isPositive($line[CsvFile::CSV_VOLUME]);
   }
   protected function shouldHaveSuperficie($line) {
+    if ($this->is_rebeche || $this->no_surface)
+      return false;
     try{
       if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
 	return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
