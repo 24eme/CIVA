@@ -47,6 +47,12 @@ EOF;
 	  $csv = explode(',', preg_replace('/"/', '', $a));
 	  $cepage_douane[$csv[1]][$csv[0]] = $csv[14];
 	}
+        
+        $rendement_couleur_blanc_lieux_dits = 68;
+        $rendement_couleur_rouge_lieux_dits = 60;
+        
+        $rendement_couleur_blanc_communale = 72;
+        $rendement_couleur_rouge_communale = 60;
 
 	$annee = "2011";
 
@@ -70,59 +76,124 @@ EOF;
 	$lieu = new stdClass();
         $lieu->douane->qualite = 'S ';
 
-        $lieu->couleur->cepage_CH->libelle = "Chasselas";
-	$lieu->couleur->cepage_CH->rendement = 100;
-	$lieu->couleur->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
-        $lieu->couleur->cepage_CH->no_vtsgn = 1;
-
-	$lieu->couleur->cepage_SY->libelle = "Sylvaner";
-	$lieu->couleur->cepage_SY->rendement = 100;
-	$lieu->couleur->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
-        $lieu->couleur->cepage_SY->no_vtsgn = 1;
-
-        $lieu->couleur->cepage_PB->libelle = "Pinot Blanc";
-	$lieu->couleur->cepage_PB->rendement = 100;
-	$lieu->couleur->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
-        $lieu->couleur->cepage_PB->no_vtsgn = 1;
-
-        $lieu->couleur->cepage_ED->libelle = "Assemblage";
-	$lieu->couleur->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
-        $lieu->couleur->cepage_ED->superficie_optionnelle = 1;
-        $lieu->couleur->cepage_ED->rendement = -1;
-        $lieu->couleur->cepage_ED->no_vtsgn = 1;
+        $lieu->couleur->cepage_CH = $this->getCepage('CH', $cepage_douane[1]['CH'], true);
+        $lieu->couleur->cepage_SY = $this->getCepage('SY', $cepage_douane[1]['SY'], true);
+        $lieu->couleur->cepage_AU = $this->getCepage('AU', $cepage_douane[1]['AU'], true);
+        $lieu->couleur->cepage_PB = $this->getCepage('PB', $cepage_douane[1]['PB'], true);
+        $lieu->couleur->cepage_PI = $this->getCepage('PI', $cepage_douane[1]['PI'], true);
+        $lieu->couleur->cepage_ED = $this->getCepage('ED', $cepage_douane[1]['ED'], true);
+        $lieu->couleur->cepage_RI = $this->getCepage('RI', $cepage_douane[1]['RI'], true);
+        $lieu->couleur->cepage_PG = $this->getCepage('PG', $cepage_douane[1]['PG'], true);
+        $lieu->couleur->cepage_MU = $this->getCepage('MU', $cepage_douane[1]['MU'], true);
+        $lieu->couleur->cepage_MO = $this->getCepage('MO', $cepage_douane[1]['MO'], true);
+        $lieu->couleur->cepage_GW = $this->getCepage('GW', $cepage_douane[1]['GW'], true);
         
-	$lieu->couleur->cepage_RI->libelle = "Riesling";
-	$lieu->couleur->cepage_RI->rendement = 90;
-	$lieu->couleur->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
-
-	$lieu->couleur->cepage_PG->libelle = "Pinot Gris";
-	$lieu->couleur->cepage_PG->rendement = 80;
-	$lieu->couleur->cepage_PG->douane->code_cepage = $cepage_douane[1]['PG'];
-
-	$lieu->couleur->cepage_MU->libelle = "Muscat d'Alsace";
-	$lieu->couleur->cepage_MU->rendement = 90;
-	$lieu->couleur->cepage_MU->douane->code_cepage = $cepage_douane[1]['MU'];
-
-	$lieu->couleur->cepage_GW->libelle = "Gewurzt.";
-	$lieu->couleur->cepage_GW->rendement = 80;
-	$lieu->couleur->cepage_GW->douane->code_cepage = $cepage_douane[1]['GW'];
-
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
+        
+        $json->recolte->appellation_LIEUDIT->appellation = "LIEUDIT";
+        $json->recolte->appellation_LIEUDIT->libelle = "AOC Alsace Lieu-dit";
+        $json->recolte->appellation_LIEUDIT->detail_lieu_editable = 1;
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->rendement_couleur = 60;
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->libelle = "Blanc";
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_CH = $this->getCepage('CH');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_SY = $this->getCepage('SY');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_AU = $this->getCepage('AU');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_PB = $this->getCepage('PB');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_PI = $this->getCepage('PI');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_ED = $this->getCepage('ED');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_RI = $this->getCepage('RI');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_PG = $this->getCepage('PG');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_MU = $this->getCepage('MU');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_MO = $this->getCepage('MO');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_GW = $this->getCepage('GW');
+        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->rendement_couleur = 80;
+        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->libelle = "Rouge";
+        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->cepage_PR = $this->getCepage('PR');
+        
+        $appellation = new stdClass();
+        
+        $appellation->appellation = "COMMUNALE";
+        $appellation->libelle = "AOC Alsace Communale";
+        
+        $appellation->lieuBLIE->libelle = "Blienschwiller";
+        $appellation->lieuBLIE->couleurBlanc->rendement_couleur = 60;
+        $appellation->lieuBLIE->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuBLIE->couleurBlanc->cepage_SY = $this->getCepage('SY');
+        
+        $appellation->lieuBARR->libelle = "Côtes de Barr";
+        $appellation->lieuBARR->couleurBlanc->rendement_couleur = 60;
+        $appellation->lieuBARR->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuBARR->couleurBlanc->cepage_SY = $this->getCepage('SY');
+        
+        $appellation->lieuROUF->libelle = "Côte de Rouffach";
+        $appellation->lieuROUF->couleurBlanc->rendement_couleur = 60;
+        $appellation->lieuROUF->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuROUF->couleurBlanc->cepage_RI = $this->getCepage('RI');
+        $appellation->lieuROUF->couleurBlanc->cepage_PG = $this->getCepage('PG');
+        $appellation->lieuROUF->couleurBlanc->cepage_GW = $this->getCepage('GW');
+        $appellation->lieuROUF->couleurRouge->rendement_couleur = 80;
+        $appellation->lieuROUF->couleurRouge->libelle = "Rouge";
+        $appellation->lieuROUF->couleurRouge->cepage_PR = $this->getCepage('PR');
+        
+        $appellation->lieuKLEV->libelle = "Klevener de Heiligenstein";
+        $appellation->lieuKLEV->couleurBlanc->rendement_couleur = 60;
+        $appellation->lieuKLEV->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuKLEV->couleurBlanc->cepage_KL->libelle = "Klevener";
+        $appellation->lieuKLEV->couleurBlanc->cepage_KL->no_vtsgn = 1;
+        
+        $appellation->lieuOTTR->libelle = "Ottrott";
+        $appellation->lieuOTTR->couleurRouge->rendement_couleur = 80;
+        $appellation->lieuOTTR->couleurRouge->libelle = "Rouge";
+        $appellation->lieuOTTR->couleurRouge->cepage_PR = $this->getCepage('PR');
+        
+        $appellation->lieuRODE->libelle = "Rodern";
+        $appellation->lieuRODE->couleurRouge->rendement_couleur = 80;
+        $appellation->lieuRODE->couleurRouge->libelle = "Rouge";
+        $appellation->lieuRODE->couleurRouge->cepage_PR = $this->getCepage('PR');
+        
+        $appellation->lieuSTHI->libelle = "Saint Hippolyte";
+        $appellation->lieuSTHI->couleurRouge->rendement_couleur = 80;
+        $appellation->lieuSTHI->couleurRouge->libelle = "Rouge";
+        $appellation->lieuSTHI->couleurRouge->cepage_PR = $this->getCepage('PR');
+
+        $appellation->lieuNOBL->libelle = "Vallée Noble";
+        $appellation->lieuNOBL->couleurBlanc->rendement_couleur = 80;
+        $appellation->lieuNOBL->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuNOBL->couleurBlanc->cepage_RI = $this->getCepage('RI');
+        $appellation->lieuNOBL->couleurBlanc->cepage_PG = $this->getCepage('PG');
+        $appellation->lieuNOBL->couleurBlanc->cepage_GW = $this->getCepage('GW');
+        
+        $appellation->lieuSTGR->libelle = "Val Saint Grégoire";
+        $appellation->lieuSTGR->couleurBlanc->rendement_couleur = 80;
+        $appellation->lieuSTGR->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuSTGR->couleurBlanc->cepage_AU = $this->getCepage('AU');
+        $appellation->lieuSTGR->couleurBlanc->cepage_PB = $this->getCepage('PB');
+        $appellation->lieuSTGR->couleurBlanc->cepage_PG = $this->getCepage('PG');
+        
+        $appellation->lieuSCHE->libelle = "Scherwiller";
+        $appellation->lieuSCHE->couleurBlanc->rendement_couleur = 80;
+        $appellation->lieuSCHE->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuSCHE->couleurBlanc->cepage_RI = $this->getCepage('RI');
+        
+        $appellation->lieuWOLX->libelle = "Wolxheim";
+        $appellation->lieuWOLX->couleurBlanc->rendement_couleur = 80;
+        $appellation->lieuWOLX->couleurBlanc->libelle = "Blanc";
+        $appellation->lieuWOLX->couleurBlanc->cepage_RI = $this->getCepage('RI');
+
+        $json->recolte->appellation_COMMUNALE = $appellation;
 
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN->no_vtsgn = 1;
+	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN = $this->getCepage('PN');
 	$json->recolte->appellation_PINOTNOIR->rendement_appellation = 75;
 	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
 	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
 
         $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
-	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
+	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace PN rouge";
 	$json->recolte->appellation_PINOTNOIRROUGE->rendement_appellation = 60;
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR->no_vtsgn = 1;
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR = $this->getCepage('PR');
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
@@ -234,69 +305,6 @@ EOF;
         $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RG->no_vtsgn = 1;
         $json->recolte->appellation_VINTABLE->rendement = -1;
         $json->recolte->appellation_VINTABLE->rendement_appellation = -1;
-        
-        $json->recolte->appellation_LIEUDIT->appellation = "LIEUDIT";
-        $json->recolte->appellation_LIEUDIT->libelle = "AOC Alsace Lieu-dit";
-        $json->recolte->appellation_LIEUDIT->detail_lieu_editable = 1;
-        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->rendement_couleur = 60;
-        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->libelle = "Blanc";
-        $json->recolte->appellation_LIEUDIT->lieu->couleurBlanc->cepage_RI->libelle = "Riesling";        
-        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->rendement_couleur = 80;
-        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->libelle = "Rouge";
-        $json->recolte->appellation_LIEUDIT->lieu->couleurRouge->cepage_PN->libelle = "Pinot noir";
-        
-        $appellation = new stdClass();
-        
-        $appellation->appellation = "COMMUNALE";
-        $appellation->libelle = "AOC Alsace Communale";
-        
-        $appellation->lieuBLIE->libelle = "Blienschwiller";
-        $appellation->lieuBLIE->couleurBlanc->rendement_couleur = 60;
-        $appellation->lieuBLIE->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuBLIE->couleurBlanc->cepage_SY->libelle = "Sylvaner";
-        
-        $appellation->lieuBARR->libelle = "Côtes de Barr";
-        $appellation->lieuBARR->couleurBlanc->rendement_couleur = 60;
-        $appellation->lieuBARR->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuBARR->couleurBlanc->cepage_SY->libelle = "Sylvaner";
-        
-        $appellation->lieuROUF->libelle = "Côtes de Rouffach";
-        $appellation->lieuROUF->couleurBlanc->rendement_couleur = 60;
-        $appellation->lieuROUF->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuROUF->couleurBlanc->cepage_GW->libelle = "Gewurzt.";
-        $appellation->lieuROUF->couleurBlanc->cepage_PG->libelle = "Pinot Gris";
-        $appellation->lieuROUF->couleurBlanc->cepage_RI->libelle = "Riesling";
-        $appellation->lieuROUF->couleurRouge->rendement_couleur = 80;
-        $appellation->lieuROUF->couleurRouge->libelle = "Rouge";
-        $appellation->lieuROUF->couleurRouge->cepage_PN->libelle = "Pinot Noir";
-        
-        $appellation->lieuKLEV->libelle = "Klevener de Heiligenstein";
-        $appellation->lieuKLEV->couleurBlanc->rendement_couleur = 60;
-        $appellation->lieuKLEV->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuKLEV->couleurBlanc->cepage_SR->libelle = "Savagnin Rose";
-        
-        $appellation->lieuOTTR->libelle = "Ottrott";
-        $appellation->lieuOTTR->couleurRouge->rendement_couleur = 80;
-        $appellation->lieuOTTR->couleurRouge->libelle = "Rouge";
-        $appellation->lieuOTTR->couleurRouge->cepage_PN->libelle = "Pinot Noir";
-        
-        $appellation->lieuRODE->libelle = "Rodern";
-        $appellation->lieuRODE->couleurRouge->rendement_couleur = 80;
-        $appellation->lieuRODE->couleurRouge->libelle = "Rouge";
-        $appellation->lieuRODE->couleurRouge->cepage_PN->libelle = "Pinot Noir";
-        
-        $appellation->lieuSTHI->libelle = "Saint Hippolyte";
-        $appellation->lieuSTHI->couleurRouge->rendement_couleur = 80;
-        $appellation->lieuSTHI->couleurRouge->libelle = "Rouge";
-        $appellation->lieuSTHI->couleurRouge->cepage_PN->libelle = "Pinot Noir";
-        
-        /*$appellation->lieuVSGR->libelle = "Val Saint Grégoire";
-        $appellation->lieuNOBL->libelle = "Vallée Noble";
-        
-        $appellation->lieuWOLX->libelle = "Wolxheim";
-        $appellation->lieuSCHE->libelle = "Scherwiller";*/
-        
-        $json->recolte->appellation_COMMUNALE = $appellation;
 
 	$json->intitule = array("CAVES", "DOMAINE", "EAR", "EARL", "EURL", "GAEC", "GFA, DU", "HERITIERS", "INDIVISION", "M.", "MADAME", "MADEME", "MAISON", "MELLE", "M., ET, MME", "MLLE", "MM.", "MME", "MMES", "MME, VEUVE", "MRS", "S.A.", "SA", "SARL", "S.A.S.", "SAS", "SASU", "S.C.A.", "SCA", "SCEA", "S.C.I.", "SCI", "S.D.F.", "SDF", "SICA", "STE", "STEF", "VEUVE", "VINS");
 
@@ -341,7 +349,7 @@ EOF;
       case 'PG':
 	return 'Pinot Gris';
       case 'MU':
-	return "Muscat d'Alsace";
+	return "Muscat";
       case 'ED':
 	return 'Assemblage';
       case 'SY':
@@ -350,6 +358,84 @@ EOF;
 	echo "definition for $c missing\n";
 	return ;
       }
+    }
+    
+    public function getCepage($code, $code_depage = null, $rendement = null) {
+        
+        $cepages = new stdClass();
+        
+        $cepages->cepage_CH->libelle = "Chasselas";
+        $cepages->cepage_CH->rendement = 100;
+	$cepages->cepage_CH->douane->code_cepage = $code_depage;
+        $cepages->cepage_CH->no_vtsgn = 1;
+        
+        $cepages->cepage_SY->libelle = "Sylvaner";
+	$cepages->cepage_SY->rendement = 100;
+	$cepages->cepage_SY->douane->code_cepage = $code_depage;
+        $cepages->cepage_SY->no_vtsgn = 1;
+        
+        $cepages->cepage_AU->libelle = "Auxerrois";
+	$cepages->cepage_AU->rendement = 100;
+	$cepages->cepage_AU->douane->code_cepage = $code_depage;
+        $cepages->cepage_AU->no_vtsgn = 1;
+        
+        $cepages->cepage_PB->libelle = "Pinot Blanc";
+	$cepages->cepage_PB->rendement = 100;
+	$cepages->cepage_PB->douane->code_cepage = $code_depage;
+        $cepages->cepage_PB->no_vtsgn = 1;
+        
+        $cepages->cepage_PI->libelle = "Pinot";
+	$cepages->cepage_PI->rendement = 100;
+	$cepages->cepage_PI->douane->code_cepage = $code_depage;
+        $cepages->cepage_PI->no_vtsgn = 1;
+
+        $cepages->cepage_ED->libelle = "Assemblage";
+	$cepages->cepage_ED->douane->code_cepage = $code_depage;
+        $cepages->cepage_ED->superficie_optionnelle = 1;
+        $cepages->cepage_ED->rendement = -1;
+        $cepages->cepage_ED->no_vtsgn = 1;
+        
+	$cepages->cepage_RI->libelle = "Riesling";
+	$cepages->cepage_RI->rendement = 90;
+	$cepages->cepage_RI->douane->code_cepage = $code_depage;
+
+	$cepages->cepage_PG->libelle = "Pinot Gris";
+	$cepages->cepage_PG->rendement = 80;
+	$cepages->cepage_PG->douane->code_cepage = $code_depage;
+
+	$cepages->cepage_MU->libelle = "Muscat";
+	$cepages->cepage_MU->rendement = 90;
+	$cepages->cepage_MU->douane->code_cepage = $code_depage;
+        
+        $cepages->cepage_MO->libelle = "Muscat Ottonel";
+	$cepages->cepage_MO->rendement = 90;
+	$cepages->cepage_MO->douane->code_cepage = $code_depage;
+
+	$cepages->cepage_GW->libelle = "Gewurzt.";
+	$cepages->cepage_GW->rendement = 80;
+	$cepages->cepage_GW->douane->code_cepage = $code_depage;
+        
+        $cepages->cepage_PN->libelle = "Pinot noir";
+	$cepages->cepage_PN->no_vtsgn = 1;
+        
+        $cepages->cepage_PR->libelle = "Pinot noir rouge";
+	$cepages->cepage_PR->no_vtsgn = 1;
+        
+        $code_entier = "cepage_".$code;
+        
+        if (isset($cepages->{$code_entier})) {
+            $cepage = $cepages->{$code_entier};
+            if (!$rendement && isset($cepage->rendement)) {
+                $cepage->rendement = null;
+            }
+            if (!$code_depage && isset($code_depage->douane->code_cepage)) {
+                $code_depage->douane->code_cepage = null;
+            }
+            return $cepage;
+        } else {
+            throw new sfCommandException("Cépage does not exist : ".$code);
+        }
+        
     }
 
 }
