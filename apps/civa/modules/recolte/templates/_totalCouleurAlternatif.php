@@ -48,31 +48,22 @@
             <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <?php if ($couleur->getConfig()->hasRendement()): ?>
-                <li class="rendement <?php if ($couleur->getDplcTotal())
-                echo 'alerte'; ?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
-            <?php endif; ?>
-            <?php if ($couleur->getConfig()->hasRendement()): ?>
-    <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
-                    <li>
-                        
-                        <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
-                    </li>
-                    <li>
-                        <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
-                    </li>
-    <?php endif; ?>
-    <?php if ($couleur->getConfig()->hasRendementCepage()) : ?>
-                    <li>
-                        <input type="text" readonly="readonly" value="Σ <?php echoFloat($couleur->getVolumeRevendiqueTotal()); ?>" />
-                    </li>
-                    <li>
-                        <input type="text" readonly="readonly" class="<?php if ($couleur->getDplcTotal())
-            echo 'alerte'; ?>" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
-                    </li>
-    <?php endif; ?>
-<?php endif; ?>
+            <li class="rendement <?php if ($couleur->getDplcTotal())
+            echo 'alerte'; ?>">
+                Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong>
+                <span class="picto_rdt_aide_col_total">
+                    <a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a>
+                </span>
+            </li>
+            <li>
+
+                <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+            </li>
+            <li>
+                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
+    echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+            </li>
+
 
         </ul>
     </div>
