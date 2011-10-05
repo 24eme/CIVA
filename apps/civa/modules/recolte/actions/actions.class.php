@@ -239,12 +239,13 @@ class recolteActions extends EtapesActions {
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleur->getLibelle()] = 1;
     					}
     				} else {
+    					
 	    				if ($lieu->getConfig()->getRendementAppellation()) {
 	    					$rd = $lieu->getConfig()->getRendementAppellation();
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
-	
-	    				foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
+						foreach($lieu->getCouleurs() as $couleur) {
+	    				foreach ($couleur->getConfig()->filter('^cepage') as $key => $cepage_config) {
 	    					if($cepage_config->hasMinQuantite()) {
 	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
 	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
@@ -258,6 +259,7 @@ class recolteActions extends EtapesActions {
 	    						}
 	    					}
 	    				}
+						}
     				}
     			}
     		}
