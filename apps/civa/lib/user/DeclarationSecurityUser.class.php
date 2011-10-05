@@ -109,10 +109,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
      */
     public function isDrEditable() {
       if(CurrentClient::getCurrent()->exist('dr_non_editable')) {
-	return CurrentClient::getCurrent()->dr_non_editable;
+	return !CurrentClient::getCurrent()->dr_non_editable;
       }
       if(CurrentClient::getCurrent()->exist('dr_non_ouverte')) {
-	return CurrentClient::getCurrent()->dr_non_ouverte;
+	return !CurrentClient::getCurrent()->dr_non_ouverte;
       }
       return 1;
     }
