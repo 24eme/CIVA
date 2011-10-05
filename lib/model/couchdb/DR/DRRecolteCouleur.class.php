@@ -53,7 +53,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
-        return $this->store($field, array($this, 'getDplcFinal'));
+        return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
     protected function getVolumeRevendiqueFinal() {
@@ -80,7 +80,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         $key = "volume_revendique_couleur";
         if (!isset($this->_storage[$key])) {
             $volume_revendique = 0;
-            if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementCouleur()) {
+            if ($this->getConfig()->hasRendementCouleur()) {
                 $volume = $this->getTotalVolume();
                 $volume_max = $this->getVolumeMaxCouleur();
                 if ($volume > $volume_max) {
