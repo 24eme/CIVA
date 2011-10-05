@@ -131,7 +131,7 @@ EOF;
         $appellation->lieuROUF->couleurBlanc->cepage_RI = $this->getCepage('RI');
         $appellation->lieuROUF->couleurBlanc->cepage_PG = $this->getCepage('PG');
         $appellation->lieuROUF->couleurBlanc->cepage_GW = $this->getCepage('GW');
-        $appellation->lieuROUF->couleurRouge->rendement_couleur = 80;
+        $appellation->lieuROUF->couleurRouge->rendement_couleur = $rendement_couleur_rouge_communale;
         $appellation->lieuROUF->couleurRouge->libelle = "Rouge";
         $appellation->lieuROUF->couleurRouge->cepage_PR = $this->getCepage('PR');
         

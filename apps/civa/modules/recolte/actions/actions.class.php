@@ -232,11 +232,10 @@ class recolteActions extends EtapesActions {
     				if ($lieu->getConfig()->getRendementAppellation() == -1)
     				continue;
     				if ($lieu->getConfig()->hasRendementCouleur()) {
-    					$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
+    					//$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
     					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
 	    					$rd = $couleurConfig->getRendementCouleur();
-	    					$couleur = $lieu->{$couleurConfig->getKey()};
-    						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleur->getLibelle()] = 1;
+    						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
     					}
     				} else {
     					
