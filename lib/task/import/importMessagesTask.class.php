@@ -50,6 +50,7 @@ EOF;
 	$json->_id = 'MESSAGES';
 	$json->type = 'Messages';
 
+	$json->msg_declaration_ecran_warning = "A définir";
 	$json->msg_compte_index_intro = "Pour créer votre compte, merci d'indiquer votre numéro CVI et votre code de création de compte (ceux que le CIVA vous a communiqués par courrier de compte)";
         $json->msg_tiers_index_intro = "Votre compte semble relié à plusieurs entitées ayant des roles identiques. Afin d'éviter toute confusion, veuillez sélectionner celui que vous souhaitez utiliser lors de cette session.";
         

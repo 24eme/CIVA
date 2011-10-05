@@ -30,10 +30,12 @@ class declarationActions extends EtapesActions {
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->save();
+                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'import') {
 	      $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers);
 	      $dr->save();
+	      $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
 	      $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
@@ -46,14 +48,28 @@ class declarationActions extends EtapesActions {
                 $doc->removeVolumes();
                 $doc->remove('validee');
                 $doc->remove('modifiee');
+                $doc->remove('etape');
                 $doc->update();
                 $doc->save();
+                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
         $this->redirect('@mon_espace_civa');
     }
-   
+    public function executeFlashPage(sfWebRequest $request) {
+    	$boutons = $this->getRequestParameter('boutons', null);
+    	$this->setCurrentEtape('exploitation_message');
+    	if (!$this->getUser()->hasFlash('flash_message') && !$boutons)
+    		$this->redirect('@mon_espace_civa');
+    	if ($boutons && in_array('previous', array_keys($boutons))) {
+        	$this->getUser()->getDeclaration()->delete();
+            $this->redirect('@mon_espace_civa');
+    	} elseif ($boutons && in_array('next', array_keys($boutons))) {
+            $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+    	}
+   		
+    }
     public function executeDownloadNotice() {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide.pdf", "aide.pdf");
     }
