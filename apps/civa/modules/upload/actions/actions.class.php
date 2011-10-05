@@ -42,9 +42,15 @@ class uploadActions extends sfActions
     $cpt = -1;
     $this->errors = array();
     $this->warnings = array();
+    $this->has_edel = 0;
+    $this->nb_noVolumes = 0;
+    $this->nb_cremant = 0;
+    $this->nb_rebeche = 0;
+
     if (isset($this->previous_recoltant))
       unset($this->previous_recoltant);
     foreach ($this->csv->getCsv() as $line) {
+      $this->has_changed_recoltant = false;
       $line = self::cleanTable($line);
       $cpt++;
       $this->errors[$cpt] = array();
@@ -66,8 +72,6 @@ class uploadActions extends sfActions
       }
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
-      else if (!$this->hasVolume($line))
-	$this->errors[$cpt][] = 'Le volume ne devrait pas être absent ou null.';
       else if ($this->shouldHaveSuperficie($line))
 	$this->errors[$cpt][] = 'La superficie erronnée.';
       if (!$this->isVTSGNOk($line))
@@ -81,9 +85,15 @@ class uploadActions extends sfActions
       if ($this->cannotHaveRebeche($line)) {
 	$this->errors[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche. (Seule les caves peuvent le faire)';
       }
-    }
+      if (!$this->hasVolume($line))
+	//	$this->warnings[$cpt][] = 'Le volume est null ou absence, .';
+	$this->nb_noVolumes++;
+    } 
     if ($this->shouldHaveRebeche(array())) {
       $this->errors[$cpt-1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
+    }
+    if ($this->shouldHaveVolume(array())) {
+      $this->errors[$cpt-1][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
     }
     $this->recap = new stdClass();
     $this->recap->errors = array();
@@ -150,11 +160,13 @@ class uploadActions extends sfActions
 								     $line[CsvFile::CSV_LIEU], 
 								     $line[CsvFile::CSV_CEPAGE]);
     if (isset($prod['hash'])) {
-      if (preg_match('/_(RB|ED)$/', $prod['hash'])) {
+      if (preg_match('/_ED$/', $prod['hash'])) {
 	$this->no_surface = true;
+	$this->has_edel = 1;
       }
       
       if (preg_match('/_RB$/', $prod['hash'])) {
+	$this->no_surface = true;
 	$this->is_rebeche = true;
 	$this->nb_rebeche++;
       }
@@ -178,7 +190,30 @@ class uploadActions extends sfActions
     return false;
   }
 
+  private function hasChangedRecoltant($line) {
+    if (!isset($this->previous_recoltant))
+      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
+      return false;
+    if ($this->has_changed_recoltant)
+      return true;
+    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]))
+      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+    $this->has_changed_recoltant = true;
+    return true;
+  }
 
+  private function shouldHaveVolume($line) {
+    if (!$this->hasChangedRecoltant($line))
+      return false;
+    if (!$this->has_edel && $this->nb_noVolumes) {
+      $this->nb_noVolumes = 0;
+      return true;
+    }
+    $this->has_edel = 0;
+    $this->nb_noVolumes = 0;
+    return false;
+  }
   private function shouldHaveRebeche($line) {
     try{
     if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
@@ -186,12 +221,8 @@ class uploadActions extends sfActions
     }catch(Exception $e) {
       return false;
     }
-    if (!isset($this->previous_recoltant))
-      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
-    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
+    if (!$this->hasChangedRecoltant($line))
       return false;
-    if (isset($line[CsvFile::CSV_RECOLTANT_CVI]))
-      $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
     if ($this->nb_cremant && !$this->nb_rebeche) {
       $this->nb_cremant = 0;
       return true;
@@ -201,6 +232,9 @@ class uploadActions extends sfActions
     return false;
   }
 
+  private function isPositiveOrZero($val) {
+    return $this->isPositive($val) || $val == 0;
+  }
   private function isPositive($val) {
     $val = preg_replace('/,/', '.', $val);
     if (!is_numeric($val))
@@ -224,7 +258,7 @@ class uploadActions extends sfActions
   protected function hasVolume($line) {
     if ($this->no_volume)
       return true;
-    return $this->isPositive($line[CsvFile::CSV_VOLUME]);
+    return $this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);
   }
   protected function shouldHaveSuperficie($line) {
     if ($this->is_rebeche || $this->no_surface)
