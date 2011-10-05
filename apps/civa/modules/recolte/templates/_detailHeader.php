@@ -2,7 +2,7 @@
 
     <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
         <p class="lieu">
-            Lieu
+            Lieu-dit <a href="" class="msg_aide" rel="help_popup_DR_lieu-dit" title="Message aide"></a>
         </p>
     <?php endif; ?>
 

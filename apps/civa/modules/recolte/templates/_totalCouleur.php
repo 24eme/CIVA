@@ -2,7 +2,8 @@
 <div id="col_couleur_totale" class="col_recolte col_total col_calcule">
     <h2>Total 
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
-        <?php echo $couleur->getLibelle() ?>
+        <strong><?php echo $couleur->getLibelle() ?></strong>
+        <a href="" class="msg_aide" rel="help_popup_DR_total_couleur" title="Message aide"></a>
     </h2>
 
 

@@ -59,13 +59,13 @@ EOF;
         /** ERRORS **/
         $json->err_exploitation_acheteurs_popup_no_required = "Veuillez cocher au moins une case pour continuer !";
         $json->err_exploitation_lieudits_popup_no_required = "Veuillez séléctionner au moins un lieu-dit !";
-        $json->err_dr_popup_no_lieu = "Vous n'avez pas saisi de Lieu.";
+        $json->err_dr_popup_no_lieu = "Vous n'avez pas saisi de Lieu-dit.";
 	$json->err_dr_popup_no_superficie = "Vous n'avez pas saisi de superficie. La surface est obligatoire sauf dans l'Edel";
 	$json->err_dr_popup_min_quantite = "Les rebêches doivent représenter au minimum 2 % du volume total produit";
         $json->err_dr_popup_max_quantite = "Les rebêches doivent représenter au maximum 10% du volume total produit";
         $json->err_dr_popup_dest_rebeches = "Vous n'avez pas respecté la répartition des rebêches.";
 
-        $json->err_dr_popup_unique_lieu_denomination_vtsgn = "Il faut distinguer la colonne par un lieu, une mention complémentaire ou par une mention VT/SGN.";
+        $json->err_dr_popup_unique_lieu_denomination_vtsgn = "Il faut distinguer la colonne par un lieu-dit, une dénomination complémentaire ou une mention VT/SGN.";
 
         $json->err_dr_recap_vente_popup_superficie_trop_eleve = " La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
         $json->err_dr_recap_vente_popup_dplc_trop_eleve = "La somme des DPLC des acheteurs ne peut pas être superieure au DPLC total de l'appellation";
@@ -113,6 +113,8 @@ EOF;
         $json->help_popup_DR_vol_revendique = "Correspond au volume maximum que vous pouvez revendiquer dans le cépage ou l'appellation";
         $json->help_popup_DR_dplc = "Nous vous indiquons ici votre dplc en fonction de ce que vous avez saisi. <br />  Nous vous rappelons que dans l'AOC Alsace, en cas de dépassement d'un butoir cépage, c'est le DPLC de ce cépage qu'il faudra obligatoirement livrer en distillerie même si vous avez moins (ou pas du tout) de DPLC sur le total de l'appellation. Voir les exemples dans la notice explicative générale.";
         $json->help_popup_DR_total_cepage = "Nous vous indiquons ici, en fonction de ce que vous avez saisi, la répartition de votre rendement dans le total cépage (volume revendiqué et DPLC éventuel). <br /> Dans l'AOC Alsace, si le rendement à l'ha apparaît en rouge c'est que vous dépassez le rendement maximum butoir de ce cépage.<br />  Dans l'AOC Grand Cru le rendement se calcule également par cépage dans chacun des lieux-dits. S'il apparaît en rouge c'est que vous dépassez le maximum autorisé de ce cépage dans le lieu-dit concerné.";
+        $json->help_popup_DR_total_couleur = "total couleur";
+        $json->help_popup_DR_total_couleur_alternatif = "total couleur désactivé";
         $json->help_popup_DR_total_appellation = "Nous vous indiquons ici sur le total appellation, le rendement à l'ha, le volume revendiqué et le DPLC éventuel. <br />Si vous êtes en dépassement, le rendement apparaît en rouge. <br />  ATTENTION : dans l'AOC Alsace, les zones \"volume revendiqué\" et \"dplc\" sont doublées. Les 2 premières correspondent au calcul du rendement de l'appellation. Les 2 suivantes correspondent à la somme des volumes revendiqués et dépassements des cépages. Voir les exemples dans la notice.";
         $json->help_popup_DR_recap_vente = "Il s'agit du récapitulatif des ventes en fonction de ce que vous avez saisi dans les écrans précédents. Vous complétez ici, la surface correspondante à chaque négociant et/ou cave coopérative ainsi que, le cas échéant, le DPLC qui revient à chacun. Si vous décidez de livrer vous même le DPLC vous ne mettez rien dans la zone \"dont DPLC\"";
 
