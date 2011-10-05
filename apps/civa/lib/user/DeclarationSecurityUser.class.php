@@ -114,7 +114,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
       if(CurrentClient::getCurrent()->exist('dr_non_ouverte')) {
 	return !CurrentClient::getCurrent()->dr_non_ouverte;
       }
-      return 1;
+      return true;
     }
 
     /**

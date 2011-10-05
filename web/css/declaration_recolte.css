@@ -208,7 +208,7 @@ ul#onglets_majeurs.onglets_recolte
     line-height: 1;
 }
 
-ul#onglets_majeurs.onglets_recolte li a { padding: 2px 15px 2px 5px; }
+ul#onglets_majeurs.onglets_recolte li a { padding: 2px 9px 2px 5px; }
 
 ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a
 {

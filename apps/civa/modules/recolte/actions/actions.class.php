@@ -290,6 +290,10 @@ class recolteActions extends EtapesActions {
         if (isset($couleur_cepage['cepage'])) {
             $cepage = $couleur_cepage['cepage'];
         }
+        
+        if(!$cepage) {
+           $couleur = null; 
+        }
 
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {

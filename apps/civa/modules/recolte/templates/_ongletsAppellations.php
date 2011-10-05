@@ -12,6 +12,6 @@
         <?php endif; ?>
     <?php endforeach; ?>
         <?php if (!$declaration->recolte->hasAllAppellation()): ?>
-        <li class="ajouter ajouter_appelation"><a href="#">Ajouter<br /> une appellation</a></li>
+        <li class="ajouter ajouter_appelation"><a href="#">Ajouter une<br /> appellation</a></li>
         <?php endif; ?>
 </ul>
