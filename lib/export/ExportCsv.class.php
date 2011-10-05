@@ -29,7 +29,11 @@ class ExportCsv {
         foreach ($data as $key => $value) {
             if (array_key_exists($key, $validation)) {
                 //$value = $this->cast($value, $validation[$key]['type']);
-                $this->validate($key, $value, $validation[$key]);
+                try {
+                    $this->validate($key, $value, $validation[$key]);
+                } catch (Exception $exc) {
+                    throw new sfException(implode(";", $data)."\n ".$exc->getMessage());
+                }
                 $data[$key] = $this->filter($value, $validation[$key]);
             } else {
                 $data[$key] = $this->filterDefault($value);
@@ -104,9 +108,14 @@ class ExportCsv {
      *
      * @return string 
      */
-    public function output() {
-        $content = htmlentities($this->_content, ENT_NOQUOTES, "UTF-8");
-        $content = preg_replace('/\&(.)[^;]*;/', '\1', $content);
+    public function output($without_special_caracters = true) {
+        if ($without_special_caracters) {
+            $content = htmlentities($this->_content, ENT_NOQUOTES, "UTF-8");
+            $content = preg_replace('/\&(.)[^;]*;/', '\1', $content);
+        } else {
+            $content = $this->_content;
+        }
+        
         return $content;
     }
     
