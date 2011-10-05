@@ -32,6 +32,10 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         }
         return false;
     }
+    
+    public function hasRendementCouleur() {
+        return $this->hasManyCouleur();
+    }
 
     public function hasRendement() {
         return ($this->hasRendementCepage() || $this->hasRendementAppellation());
