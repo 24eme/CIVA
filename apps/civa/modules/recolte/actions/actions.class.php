@@ -219,41 +219,50 @@ class recolteActions extends EtapesActions {
     }
     
     public function executeRendementsMaxAjax(sfWebRequest $request) {
-        $this->forward404Unless($request->isXmlHttpRequest());
-        
-        $dr = $this->declaration;
-        $this->rendement = array();
-        $this->min_quantite = null;
-        $this->max_quantite = null;
-        foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
-            if ($dr->recolte->exist($key_appellation)) {
-                $appellation = $dr->recolte->get($key_appellation);
-                foreach ($appellation->getLieux() as $lieu) {
-		  if ($lieu->getConfig()->getRendementAppellation() == -1) 
-		    continue;
-		  if ($lieu->getConfig()->getRendementAppellation()) {
-		    $rd = $lieu->getConfig()->getRendementAppellation();
-		    $this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
-		  }
-		  foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
-                        if($cepage_config->hasMinQuantite()) {
-                            $this->min_quantite = $cepage_config->min_quantite * 100 ;
-                            $this->max_quantite = $cepage_config->max_quantite * 100 ;
-                        }
-                        if($cepage_config->getRendement()) {
-                            $rd = $cepage_config->getRendement();
-			    if($appellation->getConfig()->hasManyLieu()) {
-			      $this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
-			    }else {
-			      $this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
-			    }
-			}
-                    }
-                }
-            }
-        }
-        
-        return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement, 
+    	$this->forward404Unless($request->isXmlHttpRequest());
+
+    	$dr = $this->declaration;
+    	$this->rendement = array();
+    	$this->min_quantite = null;
+    	$this->max_quantite = null;
+    	foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
+    		if ($dr->recolte->exist($key_appellation)) {
+    			$appellation = $dr->recolte->get($key_appellation);
+    			foreach ($appellation->getLieux() as $lieu) {
+    				if ($lieu->getConfig()->getRendementAppellation() == -1)
+    				continue;
+    				if ($lieu->getConfig()->hasRendementCouleur()) {
+    					$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
+    					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
+	    					$rd = $couleurConfig->getRendementCouleur();
+	    					$couleur = $lieu->{$couleurConfig->getKey()};
+    						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleur->getLibelle()] = 1;
+    					}
+    				} else {
+	    				if ($lieu->getConfig()->getRendementAppellation()) {
+	    					$rd = $lieu->getConfig()->getRendementAppellation();
+	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
+	    				}
+	
+	    				foreach ($lieu->getConfig()->getCepages() as $key => $cepage_config) {
+	    					if($cepage_config->hasMinQuantite()) {
+	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
+	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
+	    					}
+	    					if($cepage_config->getRendement()) {
+	    						$rd = $cepage_config->getRendement();
+	    						if($appellation->getConfig()->hasManyLieu()) {
+	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
+	    						}else {
+	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
+	    						}
+	    					}
+	    				}
+    				}
+    			}
+    		}
+    	}
+    	return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite, 
                                                                         'max_quantite'=> $this->max_quantite));
     }

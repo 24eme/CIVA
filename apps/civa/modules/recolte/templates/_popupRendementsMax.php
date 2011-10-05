@@ -8,8 +8,12 @@
                     <?php
                         if (isset($appellation['appellation']))
                         foreach ($appellation['appellation'] as $rend=>$rd) {
-                            if($rend == '-1') echo 'Pas de butoir';
-                                else echo $rend.' hl/ha';
+                            if($rend == '-1')
+                            	echo 'Pas de butoir';
+                            else {
+                            	if ($rend)
+                            		echo $rend.' hl/ha';
+                            }
                         }
                     
                     ?>
