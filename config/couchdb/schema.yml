@@ -437,6 +437,7 @@ Configuration:
                           definition:
                             fields:
                               rendement_couleur: { type: float }
+                              rendement: { type: float }
                               libelle: { }
                               '*':
                               # ------------ CEPAGE -------------
