@@ -348,6 +348,7 @@ Current:
       type: {}
       campagne: {}
       dr_non_editable: {required: false}
+      dr_non_ouverte: {required: false}
 
 Configuration:
   definition:
