@@ -321,7 +321,7 @@ class recolteActions extends EtapesActions {
         $this->url_ajout_lieu = null;
         if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null);
+            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null);
         }
     }
 
