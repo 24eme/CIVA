@@ -290,8 +290,8 @@ class recolteActions extends EtapesActions {
         if (isset($appellation_lieu['lieu'])) {
             $lieu = $appellation_lieu['lieu'];
         }
+        
         preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
-
         $couleur = 'couleur';
         if (isset($couleur_cepage['couleur']) && $couleur_cepage['couleur']) {
             $couleur = preg_replace('/-$/', '', $couleur_cepage['couleur']);
@@ -304,7 +304,6 @@ class recolteActions extends EtapesActions {
         if(!$cepage) {
            $couleur = null; 
         }
-
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');

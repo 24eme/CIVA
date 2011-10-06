@@ -24,7 +24,7 @@ class RecolteOnglets {
         $this->_sf_route_next_etape = str_replace('@', '', $sf_route_next_etape);
     }
 
-    public function init($appellation, $lieu, $couleur, $cepage) {
+    public function init($appellation, $lieu, $couleur, $cepage) { 
         return (($this->_current_key_appellation = $this->verifyCurrent($appellation, $this->_prefix_key_appellation, 'getItemsAppellation', 'getFirstKeyAppellation'))
         && ($this->_current_key_lieu = $this->verifyCurrent($lieu, $this->_prefix_key_lieu, 'getItemsLieu', 'getFirstKeyLieu'))
         && ($this->_current_key_couleur = $this->verifyCurrent($couleur, $this->_prefix_key_couleur, 'getItemsCouleur', 'getFirstKeyCouleur'))
@@ -336,13 +336,14 @@ class RecolteOnglets {
 
     protected function getFirstKeyLieu($appellation = null) {
         if (!$appellation)
-            $appellation = $this->getFirstKeyAppellation();
+            $appellation = $this->getCurrentKeyAppellation ();
         return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
-        if (!$lieu)
+        if (!$lieu) {
             $lieu = $this->getFirstKeyLieu($appellation);
+        }
         return $this->getItemsCouleur($appellation, $lieu)->getFirstKey();
     }
 
@@ -415,12 +416,12 @@ class RecolteOnglets {
             $lieu_str = '-' . $lieu;
         }
 
-        $couleur_str = '';
+        $couleur_cepage = $cepage;
         if ($couleur) {
-            $couleur_str = $couleur . '-';
+            $couleur_cepage = $couleur . '-'. $cepage;
         }
 
-        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation . $lieu_str, 'couleur_cepage' => $couleur_str . $cepage, 'sf_anchor' => $sf_anchor);
+        return array('sf_route' => $sf_route, 'appellation_lieu' => $appellation . $lieu_str, 'couleur_cepage' => $couleur_cepage, 'sf_anchor' => $sf_anchor);
     }
 
     public function getUrlParams($appellation = null, $lieu = null, $couleur = null, $cepage = null, $sf_anchor = '#onglets_majeurs') {
@@ -472,7 +473,9 @@ class RecolteOnglets {
     }
 
     public function getUrlRecap($with_redirect = false) {
-        $url = $this->getUrl('recolte_recapitulatif', null, null, false);
+        $url = $this->getUrl('recolte_recapitulatif');
+        unset($url['couleur_cepage']);
+        
         if (!$with_redirect) {
             return $url;
         } else {
