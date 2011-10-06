@@ -78,7 +78,46 @@ class ExportDRPdf {
               $extra = array('lies' => $dr->lies, 'jeunes_vignes' => $dr->jeunes_vignes);
               $this->document->addPage($this->getPartial('export/pageNoAppellationDR', array('tiers'=> $tiers, 'extra' => $extra)));
           }
-          $this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $this->getRecapitulatifInfos($dr))));
+          $infos = $this->getRecapitulatifInfos($dr);
+          $infosPage = array();
+		  $nb_colonnes_by_page = 6;
+		  $infos = $this->getRecapitulatifInfos($dr);
+          $nb_colonnes = count($infos['appellations']) - 1;
+          if ($nb_colonnes >= $nb_colonnes_by_page) {
+			$pages = array();
+    		for ($i = 0 ; $i <= $nb_colonnes; ) {
+      			$page = array_slice($infos['appellations'], $i, $nb_colonnes_by_page);
+      			$infosPage[] = array(
+      				'appellations' => $page,
+      				'libelle' => array_slice($infos['libelle'], $i, $nb_colonnes_by_page),
+      				'superficie' => array_slice($infos['superficie'], $i, $nb_colonnes_by_page),
+      				'volume' => array_slice($infos['volume'], $i, $nb_colonnes_by_page),
+      				'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
+      				'dplc' => array_slice($infos['dplc'], $i, $nb_colonnes_by_page),
+      				'total_superficie' => $infos['total_superficie'],
+        			'total_volume' => $infos['total_volume'],
+        			'total_dplc' => $infos['total_dplc'],
+        			'total_revendique' => $infos['total_revendique'],
+        			'lies' => $infos['lies'],
+        			'jeunes_vignes' => $infos['jeunes_vignes']
+      			);
+      			$i += count($page);
+      			$pages[] = $page;
+    		}
+    		$nb_pages = count($pages);
+    		$currentPage = 1;
+    		foreach ($pages as $key => $page) {
+    			if ($currentPage == $nb_pages)
+    				$has_total = true;
+    			else 
+    				$has_total = false;
+    			$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total)));
+    			$currentPage++;
+    		}
+          	
+          } else {
+          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total)));
+          }
         }
     }
     
@@ -119,13 +158,6 @@ class ExportDRPdf {
         $infos['total_revendique'] = array_sum(array_values($revendique));
         $infos['lies'] = $dr->lies;
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
-		$vintable = array();
-		if ($dr->recolte->exist('appellation_VINTABLE')) {
-	 		$vintable['superficie'] = $dr->recolte->appellation_VINTABLE->getTotalSuperficie();
-	  		$vintable['volume'] = $dr->recolte->appellation_VINTABLE->getTotalVolume();
-		}
-		$infos['vintable'] = $vintable;
-        $infos['$annee'] = $dr->campagne;
         return $infos;
     }
     

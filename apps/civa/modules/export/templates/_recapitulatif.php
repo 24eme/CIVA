@@ -37,7 +37,9 @@ pre {display: inline;}
 			<?php foreach ($appellations as $a): ?>
 			<th style="border: 1px solid black;font-weight: bold;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
 			<?php endforeach; ?>
+			<?php if ($has_total): ?>
 			<th style="border: 1px solid black;font-weight: bold;">Total général</th>
+			<?php endif; ?>
 		</tr>
 	</thead>
 	<tbody>
@@ -46,34 +48,44 @@ pre {display: inline;}
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $superficie[$a]); ?> <small>ares</small></td>
 			<?php endforeach; ?>
+			<?php if ($has_total): ?>
 			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
+			<?php endif; ?>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
+			<?php if ($has_total): ?>
 			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_volume']);?></strong> <small>hl</small></td>
+			<?php endif; ?>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Revendiqué (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
+			<?php if ($has_total): ?>
 			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_revendique']);?></strong> <small>hl</small></td>
+			<?php endif; ?>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">DPLC (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $dplc[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
+			<?php if ($has_total): ?>
 			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_dplc']);?></strong> <small>hl</small></td>
+			<?php endif; ?>
 		</tr>
 	</tbody>
 </table>
+<?php if ($has_total): ?>
 <br />
 <span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
     <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echoFloatFr($infos['lies']); ?>&nbsp;<small>hl</small></td></tr>
 <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echoFloatFr($infos['jeunes_vignes']); ?>&nbsp;<small>ares</small></td></tr>
 </table>
+<?php endif; ?>
