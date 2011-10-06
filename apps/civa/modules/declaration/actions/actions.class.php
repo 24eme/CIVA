@@ -18,6 +18,7 @@ class declarationActions extends EtapesActions {
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
+                $this->setCurrentEtape('exploitation_message');
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->getDeclaration()->delete();
