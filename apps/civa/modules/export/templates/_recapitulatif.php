@@ -7,41 +7,56 @@
 	$revendique = $infos['revendique'];
 	$dplc = $infos['dplc'];
 ?>
+<style>
+.tableau td, .tableau th, .tableau table {border: 1px solid black; }
+pre {display: inline;}
+</style>
+
+<span style="background-color: grey; color: white; font-weight: bold;">Exploitation</span><br/>
+<table style="border: 1px solid grey;"><tr><td>
+<table border="0">
+  <tr><td>N° CVI : <i><?php echo $tiers->cvi; ?></i></td><td>Nom : <i><?php echo $tiers->intitule.' '.$tiers->nom; ?></i></td></tr>
+  <tr><td>SIRET : <i><?php echo $tiers->siret; ?></i></td><td>Adresse : <i><?php echo $tiers->siege->adresse; ?></i></td></tr>
+  <tr><td>Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
+  <tr><td>Fax : <i><?php echo $tiers->fax; ?></i></td><td>&nbsp;</td></tr>
+</table>
+</td></tr></table>
+<br />
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br/>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
 	<thead>
 		<tr>
-			<th>Appellations</th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: left;">Appellations</th>
 			<?php foreach ($appellations as $a): ?>
-			<th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+			<th style="border: 1px solid black;font-weight: bold;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
 			<?php endforeach; ?>
-			<th>Total général</th>
+			<th style="border: 1px solid black;font-weight: bold;">Total général</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>Superficie (ares)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Superficie (ares)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $superficie[$a]); ?></td>
 			<?php endforeach; ?>
 			<td><?php echoFloat( $infos['total_superficie']);?></td>
 		</tr>
 		<tr>
-			<td>Volume Total (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $volume[$a]); ?></td>
 			<?php endforeach; ?>
 			<td><?php echoFloat( $infos['total_volume']);?></td>
 		</tr>
 		<tr>
-			<td>Volume Revendiqué (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Revendiqué (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $revendique[$a]); ?></td>
 			<?php endforeach; ?>
 			<td><?php echoFloat( $infos['total_revendique']);?></td>
 		</tr>
 		<tr>
-			<td>DPLC (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left;">DPLC (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $dplc[$a]); ?></td>
 			<?php endforeach; ?>

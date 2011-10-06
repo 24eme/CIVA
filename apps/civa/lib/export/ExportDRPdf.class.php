@@ -78,7 +78,7 @@ class ExportDRPdf {
               $extra = array('lies' => $dr->lies, 'jeunes_vignes' => $dr->jeunes_vignes);
               $this->document->addPage($this->getPartial('export/pageNoAppellationDR', array('tiers'=> $tiers, 'extra' => $extra)));
           }
-          $this->document->addPage($this->getPartial('export/recapitulatif', array('infos'=> $this->getRecapitulatifInfos($dr))));
+          $this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $this->getRecapitulatifInfos($dr))));
         }
     }
     
