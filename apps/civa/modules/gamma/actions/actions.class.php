@@ -16,7 +16,7 @@ class gammaActions extends sfActions
      */
     public function executeProcess(sfWebRequest $request) {
         $inscription = $request->getParameter('gamma_inscription');
-        $this->tiers = $this->getUser()->getTiers();
+        $this->tiers = $this->getUser()->getTiers('MetteurEnMarche');
 	$type = $request->getParameter('gamma') ;
         if (isset($inscription) && $inscription['choix']) {
 		$this->tiers->add('gamma', "INSCRIT");
