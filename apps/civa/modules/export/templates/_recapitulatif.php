@@ -46,28 +46,28 @@ pre {display: inline;}
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $superficie[$a]); ?></td>
 			<?php endforeach; ?>
-			<td><?php echoFloat( $infos['total_superficie']);?></td>
+			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_superficie']);?></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $volume[$a]); ?></td>
 			<?php endforeach; ?>
-			<td><?php echoFloat( $infos['total_volume']);?></td>
+			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_volume']);?></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Revendiqué (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $revendique[$a]); ?></td>
 			<?php endforeach; ?>
-			<td><?php echoFloat( $infos['total_revendique']);?></td>
+			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_revendique']);?></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">DPLC (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td><?php echoFloat( $dplc[$a]); ?></td>
 			<?php endforeach; ?>
-			<td><?php echoFloat( $infos['total_dplc']);?></td>
+			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_dplc']);?></td>
 		</tr>
 	</tbody>
 </table>
