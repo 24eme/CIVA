@@ -110,13 +110,26 @@ class acheteurActions extends EtapesActions {
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $valid = true;
-            foreach($this->forms as $form) {;
-                $form->bind($request->getParameter($form->getName()));
-                if ($form->isValid()) {
-                    $form->save();
-                } else {
-                    $valid = false;
-                }
+            if ($_POST['boutons']) {
+	            foreach($this->forms as $form) {
+	                $form->bind($request->getParameter($form->getName()));
+	                if ($form->isValid()) {
+	                    $form->save();
+	                } else {
+	                    $valid = false;
+	                }
+	            }
+            } else {
+	            foreach($this->forms as $form) {
+	            	if (isset($_POST[$form->getName().'_x']) && isset($_POST[$form->getName().'_y'])) {
+		                $form->bind($request->getParameter($form->getName()));
+		                if ($form->isValid()) {
+		                    $form->save();
+		                } else {
+		                    $valid = false;
+		                }
+	            	}
+	            }
             }
             if ($valid) {
                 return $this->redirectByBoutonsEtapes();

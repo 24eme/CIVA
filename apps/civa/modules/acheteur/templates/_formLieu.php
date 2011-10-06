@@ -23,7 +23,7 @@
         <div class="ligne_form <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <label for="champ_ajout_lieu_dit"><?php echo $form['lieu']->renderLabel("Ajoutez un lieu-dit :"); ?></label>
             <?php echo $form['lieu']->render(); ?>
-            <input type="image" alt="valider" src="../images/boutons/btn_valider.png" class="btn">
+            <input name="<?php echo $form->getName() ?>" type="image" alt="valider" src="../images/boutons/btn_valider.png" class="btn">
         </div>
 
     </div>
