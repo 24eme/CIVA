@@ -44,30 +44,30 @@ pre {display: inline;}
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Superficie (ares)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $superficie[$a]); ?></td>
+			<td><?php echoFloat( $superficie[$a]); ?> <small>ares</small></td>
 			<?php endforeach; ?>
-			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_superficie']);?></td>
+			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $volume[$a]); ?></td>
+			<td><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
-			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_volume']);?></td>
+			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_volume']);?></strong> <small>hl</small></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Revendiqué (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $revendique[$a]); ?></td>
+			<td><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
-			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_revendique']);?></td>
+			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_revendique']);?></strong> <small>hl</small></td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left;">DPLC (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $dplc[$a]); ?></td>
+			<td><?php echoFloat( $dplc[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
-			<td style="border: 1px solid black;font-weight: bold;"><?php echoFloat( $infos['total_dplc']);?></td>
+			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_dplc']);?></strong> <small>hl</small></td>
 		</tr>
 	</tbody>
 </table>
