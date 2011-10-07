@@ -116,7 +116,7 @@ class ExportDRPdf {
     		}
           	
           } else {
-          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total)));
+          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true)));
           }
         }
     }
