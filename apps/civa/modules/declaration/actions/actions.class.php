@@ -18,10 +18,9 @@ class declarationActions extends EtapesActions {
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
-                $this->setCurrentEtape('exploitation_message');
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
-                $this->getUser()->getDeclaration()->delete();
+                $this->getUser()->removeDeclaration();
                 $this->redirect('@mon_espace_civa');
             } elseif ($dr_data['type_declaration'] == 'vierge') {
                 $doc = new DR();
@@ -61,13 +60,14 @@ class declarationActions extends EtapesActions {
     public function executeFlashPage(sfWebRequest $request) {
     	$boutons = $this->getRequestParameter('boutons', null);
     	$this->setCurrentEtape('exploitation_message');
-    	if (!$this->getUser()->hasFlash('flash_message') && !$boutons)
-    		$this->redirect('@mon_espace_civa');
+    	if (!$this->getUser()->hasFlash('flash_message') && !$boutons) {
+    		$this->redirectToNextEtapes();
+    	}
     	if ($boutons && in_array('previous', array_keys($boutons))) {
-        	$this->getUser()->getDeclaration()->delete();
+        	$this->getUser()->removeDeclaration();
             $this->redirect('@mon_espace_civa');
     	} elseif ($boutons && in_array('next', array_keys($boutons))) {
-            $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            $this->redirectToNextEtapes();
     	}
    		
     }
@@ -364,7 +364,6 @@ Le CIVA';
             $dr->remove('modifiee');
             $dr->save();
         }
-
         $this->getUser()->initCredentialsDeclaration();
         $this->redirectToNextEtapes();
     }

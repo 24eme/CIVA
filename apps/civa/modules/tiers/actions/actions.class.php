@@ -62,7 +62,6 @@ class tiersActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeExploitationAdministratif(sfWebRequest $request) {
-
         $this->setCurrentEtape('exploitation_administratif');
         $this->help_popup_action = "help_popup_exploitation_administratif";
 

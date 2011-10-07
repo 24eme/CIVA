@@ -168,4 +168,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
         $this->signOutDeclaration();
         parent::signOutTiers();
     }
+    
+    public function removeDeclaration() {
+    	$this->getDeclaration()->delete();
+        $this->signOutDeclaration();
+        $this->initCredentialsDeclaration();
+    }
 }
