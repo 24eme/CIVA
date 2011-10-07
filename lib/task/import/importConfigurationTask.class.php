@@ -94,42 +94,42 @@ EOF;
 	$lieu = new stdClass();
         $lieu->douane->qualite = 'S ';
 
-        $lieu->cepage_CH->libelle = "Chasselas";
-	$lieu->cepage_CH->rendement = 100;
-	$lieu->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
-        $lieu->cepage_CH->no_vtsgn = 1;
+        $lieu->couleur->cepage_CH->libelle = "Chasselas";
+	$lieu->couleur->cepage_CH->rendement = 100;
+	$lieu->couleur->cepage_CH->douane->code_cepage = $cepage_douane[1]['CH'];
+        $lieu->couleur->cepage_CH->no_vtsgn = 1;
 
-	$lieu->cepage_SY->libelle = "Sylvaner";
-	$lieu->cepage_SY->rendement = 100;
-	$lieu->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
-        $lieu->cepage_SY->no_vtsgn = 1;
+	$lieu->couleur->cepage_SY->libelle = "Sylvaner";
+	$lieu->couleur->cepage_SY->rendement = 100;
+	$lieu->couleur->cepage_SY->douane->code_cepage = $cepage_douane[1]['SY'];
+        $lieu->couleur->cepage_SY->no_vtsgn = 1;
 
-        $lieu->cepage_PB->libelle = "Pinot Blanc";
-	$lieu->cepage_PB->rendement = 100;
-	$lieu->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
-        $lieu->cepage_PB->no_vtsgn = 1;
+        $lieu->couleur->cepage_PB->libelle = "Pinot Blanc";
+	$lieu->couleur->cepage_PB->rendement = 100;
+	$lieu->couleur->cepage_PB->douane->code_cepage = $cepage_douane[1]['PB'];
+        $lieu->couleur->cepage_PB->no_vtsgn = 1;
 
-        $lieu->cepage_ED->libelle = "Edelzwicker";
-	$lieu->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
-        $lieu->cepage_ED->superficie_optionnelle = 1;
-        $lieu->cepage_ED->rendement = -1;
-        $lieu->cepage_ED->no_vtsgn = 1;
+        $lieu->couleur->cepage_ED->libelle = "Edelzwicker";
+	$lieu->couleur->cepage_ED->douane->code_cepage = $cepage_douane[1]['ED'];
+        $lieu->couleur->cepage_ED->superficie_optionnelle = 1;
+        $lieu->couleur->cepage_ED->rendement = -1;
+        $lieu->couleur->cepage_ED->no_vtsgn = 1;
         
-	$lieu->cepage_RI->libelle = "Riesling";
-	$lieu->cepage_RI->rendement = 90;
-	$lieu->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
+	$lieu->couleur->cepage_RI->libelle = "Riesling";
+	$lieu->couleur->cepage_RI->rendement = 90;
+	$lieu->couleur->cepage_RI->douane->code_cepage = $cepage_douane[1]['RI'];
 
-	$lieu->cepage_PG->libelle = "Pinot Gris";
-	$lieu->cepage_PG->rendement = 80;
-	$lieu->cepage_PG->douane->code_cepage = $cepage_douane[1]['PG'];
+	$lieu->couleur->cepage_PG->libelle = "Pinot Gris";
+	$lieu->couleur->cepage_PG->rendement = 80;
+	$lieu->couleur->cepage_PG->douane->code_cepage = $cepage_douane[1]['PG'];
 
-	$lieu->cepage_MU->libelle = "Muscat d'Alsace";
-	$lieu->cepage_MU->rendement = 90;
-	$lieu->cepage_MU->douane->code_cepage = $cepage_douane[1]['MU'];
+	$lieu->couleur->cepage_MU->libelle = "Muscat d'Alsace";
+	$lieu->couleur->cepage_MU->rendement = 90;
+	$lieu->couleur->cepage_MU->douane->code_cepage = $cepage_douane[1]['MU'];
 
-	$lieu->cepage_GW->libelle = "Gewurzt.";
-	$lieu->cepage_GW->rendement = 80;
-	$lieu->cepage_GW->douane->code_cepage = $cepage_douane[1]['GW'];
+	$lieu->couleur->cepage_GW->libelle = "Gewurzt.";
+	$lieu->couleur->cepage_GW->rendement = 80;
+	$lieu->couleur->cepage_GW->douane->code_cepage = $cepage_douane[1]['GW'];
 
 	$json->recolte->appellation_ALSACEBLANC->lieu = $lieu;
 
@@ -137,8 +137,8 @@ EOF;
 	$json->recolte->appellation_KLEVENER->libelle = "AOC Klevener de Heiligenstein";
 	$json->recolte->appellation_KLEVENER->rendement_appellation = 75;
         $json->recolte->appellation_KLEVENER->no_total_cepage = 1;
-	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->libelle = "Klevener";
-	$json->recolte->appellation_KLEVENER->lieu->cepage_KL->no_vtsgn = 1;
+	$json->recolte->appellation_KLEVENER->lieu->couleur->cepage_KL->libelle = "Klevener";
+	$json->recolte->appellation_KLEVENER->lieu->couleur->cepage_KL->no_vtsgn = 1;
 	$json->recolte->appellation_KLEVENER->douane->appellation_lieu = '054';
 	$json->recolte->appellation_KLEVENER->douane->code_cepage = '';
         $json->recolte->appellation_KLEVENER->douane->qualite = 'S';
@@ -149,8 +149,8 @@ EOF;
 
         $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
 	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->cepage_PN->no_vtsgn = 1;
+	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN->no_vtsgn = 1;
 	$json->recolte->appellation_PINOTNOIR->rendement_appellation = 75;
 	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
@@ -159,8 +159,8 @@ EOF;
         $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
 	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace Pinot noir rouge";
 	$json->recolte->appellation_PINOTNOIRROUGE->rendement_appellation = 60;
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->libelle = "Pinot noir";
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->cepage_PR->no_vtsgn = 1;
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR->libelle = "Pinot noir";
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR->no_vtsgn = 1;
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
 	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
@@ -186,14 +186,14 @@ EOF;
 	  }else{
 	    if (preg_match('/^L/', $g[2]))
 	      continue;
-	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
-	    $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
-            $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->douane->qualite = 'S ';
+	    $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
+	    $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
+            $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->douane->qualite = 'S ';
 	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
 	    if (isset($grdcru->{'lieu'.$g[1]}->rendement) && $grdcru->{'lieu'.$g[1]}->rendement != $g[4])
-	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
+	      $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
 	    if ($g[2] == 'ED' || $g[2] == 'SY')
-	      $grdcru->{'lieu'.$g[1]}->{'cepage_'.$g[2]}->no_vtsgn = 1;
+	      $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->no_vtsgn = 1;
 	      
   	  }
 	}
@@ -205,47 +205,47 @@ EOF;
 
         $json->recolte->appellation_CREMANT->lieu->douane->qualite = 'M0';
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_PB->libelle = "Pinot Blanc";
-        $json->recolte->appellation_CREMANT->lieu->cepage_PB->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PB->libelle = "Pinot Blanc";
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PB->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PB->douane->code_cepage = $cepage_douane[2]['PB'];
 
-        $json->recolte->appellation_CREMANT->lieu->cepage_CD->libelle = "Chardonnay";
-        $json->recolte->appellation_CREMANT->lieu->cepage_CD->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_CD->douane->code_cepage = $cepage_douane[2]['CD'];
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_CD->libelle = "Chardonnay";
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_CD->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_CD->douane->code_cepage = $cepage_douane[2]['CD'];
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_BN->libelle = "Pinot Noir Blanc";
-        $json->recolte->appellation_CREMANT->lieu->cepage_BN->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_BN->douane->code_cepage = $cepage_douane[2]['BN'];
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_BN->libelle = "Pinot Noir Blanc";
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_BN->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_BN->douane->code_cepage = $cepage_douane[2]['BN'];
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_RI->libelle = "Riesling";
-        $json->recolte->appellation_CREMANT->lieu->cepage_RI->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_RI->douane->code_cepage = $cepage_douane[2]['RI'];
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RI->libelle = "Riesling";
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RI->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RI->douane->code_cepage = $cepage_douane[2]['RI'];
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_PG->libelle = "Pinot Gris";
-        $json->recolte->appellation_CREMANT->lieu->cepage_PG->no_vtsgn = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PG->libelle = "Pinot Gris";
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PG->no_vtsgn = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PG->douane->code_cepage = $cepage_douane[2]['PG'];
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->libelle = "Pinot Noir Rosé";
-	$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->couleur = 'S';
-        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->qualite = 'M ';
-        $json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = '1';
-        $json->recolte->appellation_CREMANT->lieu->cepage_PN->no_vtsgn = 1;
-        //$json->recolte->appellation_CREMANT->lieu->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->libelle = "Pinot Noir Rosé";
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->couleur = 'S';
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->qualite = 'M ';
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->code_cepage = '1';
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->no_vtsgn = 1;
+        //$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
 
 
 
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->libelle = "Rebêches";
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->rendement = -1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->min_quantite = 0.02;
-        $json->recolte->appellation_CREMANT->lieu->cepage_RB->max_quantite = 0.1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_negociant = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_mout = 1;
-        $json->recolte->appellation_CREMANT->lieu->cepage_RB->no_motif_non_recolte = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->exclude_total = 1;
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->type_aoc = 4;
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->appellation_lieu = '999';
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->qualite = 'B';
-	$json->recolte->appellation_CREMANT->lieu->cepage_RB->douane->code_cepage = '';
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->libelle = "Rebêches";
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->rendement = -1;
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->min_quantite = 0.02;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->max_quantite = 0.1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->no_negociant = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->no_mout = 1;
+        $json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->no_motif_non_recolte = 1;
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->exclude_total = 1;
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->douane->type_aoc = 4;
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->douane->appellation_lieu = '999';
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->douane->qualite = 'B';
+	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->douane->code_cepage = '';
 
 	$json->recolte->appellation_CREMANT->rendement_appellation = 80;
         $json->recolte->appellation_CREMANT->mout = 1;
@@ -259,18 +259,18 @@ EOF;
 	$json->recolte->appellation_VINTABLE->douane->appellation_lieu = 999;
 	$json->recolte->appellation_VINTABLE->douane->qualite_aoc = '';
         $json->recolte->appellation_VINTABLE->douane->qualite = '';
-	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->libelle = "Blanc";
-	$json->recolte->appellation_VINTABLE->lieu->cepage_BL->douane->couleur = "B";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_BL->douane->code_cepage = "";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_BL->no_vtsgn = 1;
-	$json->recolte->appellation_VINTABLE->lieu->cepage_RS->libelle = "Rosé";
-	$json->recolte->appellation_VINTABLE->lieu->cepage_RS->douane->couleur = "S";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_RS->douane->code_cepage = "";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_RS->no_vtsgn = 1;
-	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->libelle = "Rouge";
-	$json->recolte->appellation_VINTABLE->lieu->cepage_RG->douane->couleur = "R";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_RG->douane->code_cepage = "";
-        $json->recolte->appellation_VINTABLE->lieu->cepage_RG->no_vtsgn = 1;
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_BL->libelle = "Blanc";
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_BL->douane->couleur = "B";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_BL->douane->code_cepage = "";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_BL->no_vtsgn = 1;
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RS->libelle = "Rosé";
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RS->douane->couleur = "S";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RS->douane->code_cepage = "";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RS->no_vtsgn = 1;
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RG->libelle = "Rouge";
+	$json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RG->douane->couleur = "R";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RG->douane->code_cepage = "";
+        $json->recolte->appellation_VINTABLE->lieu->couleur->cepage_RG->no_vtsgn = 1;
         $json->recolte->appellation_VINTABLE->rendement = -1;
         $json->recolte->appellation_VINTABLE->rendement_appellation = -1;
 
