@@ -108,13 +108,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser {
      * returns trus if editable
      */
     public function isDrEditable() {
-      if(CurrentClient::getCurrent()->exist('dr_non_editable')) {
-	return !CurrentClient::getCurrent()->dr_non_editable;
-      }
-      if(CurrentClient::getCurrent()->exist('dr_non_ouverte')) {
-	return !CurrentClient::getCurrent()->dr_non_ouverte;
-      }
-      return true;
+    	if (CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0)
+    		return true;
+    	else 
+    		return false;
     }
 
     /**

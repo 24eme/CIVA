@@ -347,8 +347,8 @@ Current:
       _rev: {}
       type: {}
       campagne: {}
-      dr_non_editable: {required: false}
-      dr_non_ouverte: {required: false}
+      dr_non_editable: {}
+      dr_non_ouverte: {}
 
 Configuration:
   definition:
