@@ -117,15 +117,6 @@ echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
 </table>
 <?php endif;?>
 </td>
-<td valign="top" style="width: 200px;">
-<?php if ($nb_pages == 1) : ?>
-<span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
-<table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-    <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echoFloatFr($extra['lies']); ?>&nbsp;<small>hl</small></td></tr>
-<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echoFloatFr($extra['jeunes_vignes']); ?>&nbsp;<small>ares</small></td></tr>
-</table>
-<?php endif; ?>
-</td>
 </tr>
 </table>
 
