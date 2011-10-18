@@ -2,8 +2,8 @@
 
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
 
-php symfony import:Configuration 
+php symfony import:Configuration --trace
 echo "Configuration updated";
-. views
+. $(echo $0 | sed 's/[^\/]*$//')views
 php symfony import:Message
 echo "Messages updated";
