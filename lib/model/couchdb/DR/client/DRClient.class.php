@@ -1,11 +1,12 @@
 <?php
 
 class DRClient extends sfCouchdbClient {
-  public function createFromCSVRecoltant($tiers) {
+  public function createFromCSVRecoltant($tiers, &$import) {
     $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($tiers->cvi);
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
+    $import[] = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csvs[0]->cvi);
     $doc = new DR();
     $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $campagne);
     $doc->cvi = $tiers->cvi;

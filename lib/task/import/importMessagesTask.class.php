@@ -144,7 +144,9 @@ EOF;
         $json->intro_declaration_recolte = "Saisissez ici votre récolte par cépage dans chaque appellation et lieu dit Grand Cru.";
         $json->intro_exploitation_autres = "Saisissez ici votre volume global de lies et vos jeunes vignes sans production.";
         $json->intro_validation = "Veuillez vérifier les informations saisies avant de valider votre déclaration. Vous pouvez à tout moment visualiser votre déclaration de récolte au format pdf en cliquant sur le bouton \"prévisualiser\" en bas de l'écran";
-        
+	$json->msg_declaration_ecran_warning_precedente = "Nous sommes sur le point d'importer votre déclaration précédente. Sachez que cette année, le bidule n'est pas pris en compte de la même manière. Ces sépages n'ont donc pas pu être automatiquement importés.";
+	$json->msg_declaration_ecran_warning_pre_import = "L'import des données a été effectué depuis les données qui nous ont été fourniées par les caves ou acheteurs suivants : ";
+	$json->msg_declaration_ecran_warning_post_import = "Il est possible que certains de vos caves ou acheteurs ne nous ont pas encore fait parvenir les données vous concernant. Nous vous conseillons dans ce cas de prendre contact avec eux pour les inciter à nous les faire parvenir et tenter dans quelques jours un nouvel import.";
 
 
 	$docs[] = $json;

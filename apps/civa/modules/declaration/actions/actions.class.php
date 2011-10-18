@@ -30,12 +30,19 @@ class declarationActions extends EtapesActions {
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->save();
-                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'import') {
-	      $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers);
+	      $import_from = array();
+	      $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
 	      $dr->save();
-	      $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
+	      $msg  = '<p>'.sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_pre_import').'</p>';
+	      $msg .= '<ul>';
+	      foreach ($import_from as $i) {
+		$msg .= '<li>'.$i->nom.'</li>';
+	      }
+	      $msg .= '</ul>';
+	      $msg .= '<p>'.sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_post_import').'</p>';
+	      $this->getUser()->setFlash('flash_message', $msg);
 	      $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
@@ -51,7 +58,7 @@ class declarationActions extends EtapesActions {
                 $doc->remove('etape');
                 $doc->update();
                 $doc->save();
-                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning'));
+                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_precedente'));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
