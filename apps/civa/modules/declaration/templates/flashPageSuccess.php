@@ -9,7 +9,7 @@
     <!-- #exploitation_administratif -->
     <div id="exploitation_administratif">
 
-        <p class="intro_declaration"><?php echo $sf_user->getFlash('flash_message') ?></p>
+   <div class="intro_declaration"><?php echo $sf_user->getFlash('flash_message', ESC_RAW); ?></div>
 
     </div>
     <!-- fin #exploitation_administratif -->
