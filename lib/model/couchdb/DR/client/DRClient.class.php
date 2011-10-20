@@ -34,9 +34,14 @@ class DRClient extends sfCouchdbClient {
 	$detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
 	$detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
 	$detail->volume += $line[CsvFile::CSV_VOLUME]*1;
-	$acheteur = $detail->add('cooperatives')->add();
-	$acheteur->cvi = $line[CsvFile::CSV_ACHETEUR_CVI];
-	$acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
+	if ($line[CsvFile::CSV_VOLUME]*1 == 0) {
+	  $detail->denomination = 'repli';
+	  $detail->add('motif_non_recolte', 'AE');
+	}else{
+	  $acheteur = $detail->add('cooperatives')->add();
+	  $acheteur->cvi = $line[CsvFile::CSV_ACHETEUR_CVI];
+	  $acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
+	}
 	$detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
       }
     }
