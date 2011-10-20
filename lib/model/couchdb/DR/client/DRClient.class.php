@@ -6,7 +6,6 @@ class DRClient extends sfCouchdbClient {
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
-    $import[] = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csvs[0]->cvi);
     $doc = new DR();
     $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $campagne);
     $doc->cvi = $tiers->cvi;
@@ -14,6 +13,7 @@ class DRClient extends sfCouchdbClient {
     $doc->declaration_insee = $tiers->declaration_insee;
     $doc->declaration_commune = $tiers->declaration_commune;
     foreach ($csvs as $csv) {
+      $import[] = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
 	if ($line[CsvFile::CSV_APPELLATION] == 'JEUNES VIGNES') {
 	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
@@ -25,14 +25,13 @@ class DRClient extends sfCouchdbClient {
 	if (!isset($prod['hash']))
 	  throw new sfException($prod['error']);
 	$cepage = $doc->getOrAdd($prod['hash']);
-	$detail = $cepage->detail->add();
-	$detail->denomination = $line[CsvFile::CSV_DENOMINATION];
-	$detail->superficie = $line[CsvFile::CSV_SUPERFICIE]*1;
-	$detail->volume = $line[CsvFile::CSV_VOLUME]*1;
+	$detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN]);
+	$detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
+	$detail->volume += $line[CsvFile::CSV_VOLUME]*1;
 	$acheteur = $detail->add('cooperatives')->add();
 	$acheteur->cvi = $line[CsvFile::CSV_ACHETEUR_CVI];
 	$acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
-	$detail->volume_dplc = $line[CsvFile::CSV_VOLUME_DPLC]*1;
+	$detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
       }
     }
     $doc->update();

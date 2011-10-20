@@ -98,8 +98,12 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
     }
     
+    public static function getUKey($denom, $vtsgn, $lieu = '') {
+      return 'lieu:'.strtolower($lieu).',denomination:'.strtolower($denom).',vtsgn:'.strtolower($vtsgn);
+    }
+
     public function getUniqueKey() {
-        return 'lieu:'.$this->lieu.',denomination:'.$this->denomination.',vtsgn:'.$this->vtsgn;
+      return self::getUKey($this->lieu, $this->denomination, $this->vtsgn);
     }
 
     protected function update($params = array()) {

@@ -121,6 +121,26 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $resultat;
     }
 
+    public function getHashUniqueKey($out = array()) {
+      $resultat = array();
+      foreach ($this->getArrayUniqueKey($out) as $key => $item) {
+	$resultat[$item] = $this->detail[$key];
+      }
+      return $resultat;
+    }
+
+    public function retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $lieu = '') {
+      $uk = DRRecolteCepageDetail::getUKey($denom, $vtsgn, $lieu);
+      $hash = $this->getHashUniqueKey();
+      if (isset($hash[$uk]))
+	return $hash[$uk];
+      $ret = $this->detail->add();
+      $ret->denomination = $denom;
+      $ret->vtsgn = $vtsgn;
+      $ret->lieu = $lieu;
+      return $ret;
+    }
+
     protected function getDplcFinal() {
         if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
             $volume_max = $this->getVolumeMax();
