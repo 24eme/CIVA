@@ -67,6 +67,8 @@ class Configuration extends BaseConfiguration {
       if ($lieu) {
 	$libelle = self::normalizeLibelle($lieu);
 	foreach($appellation_obj->filter('^lieu') as $lieu_key => $lieu_obj) {
+	  if ($lieu_key == 'lieu')
+	    break;
 	  if ($libelle == self::normalizeLibelle($lieu_obj->getLibelle())) {
 	    $lieuid=$lieu_key;
 	    break;
