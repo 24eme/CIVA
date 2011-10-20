@@ -143,7 +143,7 @@ class uploadActions extends sfActions
   }
 
   protected function cannotHaveDenomLieu($line) {
-    if (!$this->may_have_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+    if (!$this->may_have_denomlieu && $this->has_lieudit && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
       return true;
     return false;
   }
@@ -153,6 +153,7 @@ class uploadActions extends sfActions
     $this->no_surface = false;
     $this->is_rebeche = false;
     $this->may_have_denomlieu = false;
+    $this->has_lieudit = false;
 
     if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
 	return "appellation vide";
@@ -175,7 +176,10 @@ class uploadActions extends sfActions
     if (isset($prod['hash'])) {
 
       $cepage = ConfigurationClient::getConfiguration()->get($prod['hash']);
-      if ($cepage->getParent()->getParent()->getParent()->exist('detail_lieu_editable'))
+      $lieu = $cepage->getParent()->getParent();
+      if ($lieu->getKey() != 'lieu')
+	$this->has_lieudit = true;
+      if ($lieu->getParent()->exist('detail_lieu_editable'))
 	$this->may_have_denomlieu = true;
 
       if (preg_match('/_ED$/', $prod['hash'])) {
