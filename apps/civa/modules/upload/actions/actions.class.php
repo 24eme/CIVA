@@ -82,6 +82,9 @@ class uploadActions extends sfActions
       if ($this->couldHaveSuperficie($line)) {
 	$this->warnings[$cpt][] = 'La superficie pourrait être renseignée';
       }
+      if ($this->cannotHaveDenomLieu($line)) {
+	$this->errors[$cpt][] = 'Un dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
+      }
       if ($this->cannotHaveRebeche($line)) {
 	$this->errors[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche. (Seule les caves peuvent le faire)';
       }
@@ -138,10 +141,18 @@ class uploadActions extends sfActions
       return true;
     return false;
   }
+
+  protected function cannotHaveDenomLieu($line) {
+    if (!$this->may_have_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+      return true;
+    return false;
+  }
+
   protected function cannotIdentifyProduct($line) {
     $this->no_volume = false;
     $this->no_surface = false;
     $this->is_rebeche = false;
+    $this->may_have_denomlieu = false;
 
     if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
 	return "appellation vide";
@@ -159,7 +170,14 @@ class uploadActions extends sfActions
     $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION], 
 								     $line[CsvFile::CSV_LIEU], 
 								     $line[CsvFile::CSV_CEPAGE]);
+    
+
     if (isset($prod['hash'])) {
+
+      $cepage = ConfigurationClient::getConfiguration()->get($prod['hash']);
+      if ($cepage->getParent()->getParent()->getParent()->exist('detail_lieu_editable'))
+	$this->may_have_denomlieu = true;
+
       if (preg_match('/_ED$/', $prod['hash'])) {
 	$this->no_surface = true;
 	$this->has_edel = 1;
