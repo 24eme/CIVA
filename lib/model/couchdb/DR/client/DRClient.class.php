@@ -30,7 +30,6 @@ class DRClient extends sfCouchdbClient {
 	$denomlieu = '';
 	if ($cepage->getLieu()->getKey() == 'lieu')
 	  $denomlieu = $line[CsvFile::CSV_LIEU];
-	echo "denomlieu : $denomlieu<br>";
 	$detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
 	$detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
 	$detail->volume += $line[CsvFile::CSV_VOLUME]*1;
