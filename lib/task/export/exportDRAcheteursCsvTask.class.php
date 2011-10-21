@@ -38,13 +38,13 @@ EOF;
         $this->campagne = $arguments['campagne'];
 
         $this->createFileDir();
-        $this->cleanFiles();
         
         $acheteurs = sfCouchdbManager::getClient("Acheteur")->getAll($arguments['campagne']);
         foreach($acheteurs as $acheteur) {
             $export = new ExportDRAcheteurCsv($arguments['campagne'], $acheteur, $options['debug']);
-            if ($export->hasDR()) {
-                file_put_contents($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$acheteur->cvi.'.csv', $export->output());
+            if ($export->hasDR() && !is_file($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$acheteur->cvi.'_'.$export->getMd5().'.csv')) {
+                $export->export();
+                file_put_contents($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$acheteur->cvi.'_'.$export->getMd5().'.csv', $export->output());
             }
         }
     }

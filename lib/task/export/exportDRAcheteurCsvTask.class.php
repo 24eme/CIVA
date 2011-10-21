@@ -37,7 +37,7 @@ EOF;
 
     
     $export = new ExportDRAcheteurCsv($arguments['campagne'], $arguments['cvi'], $options['debug']);
-    
+    $export->export();
     echo $export->output();
   }
 }

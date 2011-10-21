@@ -113,6 +113,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     protected $_debug = false;
     protected $_md5 = null;
     protected $_has_dr = null;
+    protected $_ids_dr = null;
+    protected $_campagne = null;
 
     /**
      *
@@ -121,6 +123,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
     public function __construct($campagne, $acheteur_or_cvi, $debug = false) {
         parent::__construct($this->_headers);
         $this->_debug = $debug;
+        $this->_campagne = $campagne;
         if ($acheteur_or_cvi instanceof Acheteur) {
             $this->_acheteur = $acheteur_or_cvi;
         } else {
@@ -129,17 +132,16 @@ class ExportDRAcheteurCsv extends ExportCsv {
         if (!$this->_acheteur) {
             throw new sfException("Acheteur not find");
         }
-
-        $dr_ids = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $this->_acheteur->cvi, sfCouchdbClient::HYDRATE_JSON)->getIds();
-        $this->load($dr_ids, $campagne);
-        $this->_has_dr = (count($dr_ids) > 0);
+        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($this->_campagne, $this->_acheteur->cvi, sfCouchdbClient::HYDRATE_JSON);
+        $this->_md5 = $this->calculMd5($drs);
+        $this->_ids_dr = $drs->getIds();
+        $this->_has_dr = (count($this->_ids_dr) > 0);
     }
 
-    protected function load($dr_ids, $campagne) {
+    public function export() {
         $revisions = "";
-        $this->_md5 = null;
-        foreach ($dr_ids as $dr_id) {
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($dr_id);
+        foreach ($this->_ids_dr as $id_dr) {
+            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id_dr);
             if (substr($dr->cvi, 0, 1) == "6") {
                 if ($this->_debug) {
                     echo "\n\n ------------ \n" . $dr->get('_id') . "\n ----------- \n";
@@ -176,10 +178,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             unset($dr);
         }
         if ($this->_debug) {
-            echo "------------ \n" . count($dr_ids) . " DRs \n ------------\n";
-        }
-        if ($revisions) {
-            $this->_md5 = md5($revisions);
+            echo "------------ \n" . count($this->_ids_dr) . " DRs \n ------------\n";
         }
     }
 
@@ -302,9 +301,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
         return $this->_has_dr;
     }
 
-    public static function calculMd5($campagne, $cvi_acheteur) {
+    protected function calculMd5($drs) {
         $revisions = "";
-        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, sfCouchdbClient::HYDRATE_JSON);
         foreach ($drs as $dr) {
             if (substr($dr->cvi, 0, 1) == "6") {
                 $revisions .= $dr->_rev;
