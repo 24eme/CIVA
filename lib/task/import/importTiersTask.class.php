@@ -1,6 +1,6 @@
 <?php
 
-class importTiers3Task extends sfBaseTask
+class importTiersTask extends sfBaseTask
 {
     
   protected $_insee = null;
