@@ -92,6 +92,23 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
     );
+    protected $_validation_jeunes_vignes = array(
+        "cvi_acheteur" => array("type" => "double", "required" => true),
+        "nom_acheteur" => array("type" => "string", "required" => true),
+        "cvi_recoltant" => array("type" => "double", "required" => true),
+        "nom_recoltant" => array("type" => "string", "required" => false),
+        "appellation" => array("type" => "string", "required" => true),
+        "lieu" => array("type" => "string", "required" => false),
+        "cepage" => array("type" => "string", "required" => false),
+        "vtsgn" => array("type" => "string", "required" => false),
+        "denomination" => array("type" => "string", "required" => false),
+        "superficie_livree" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => true),
+        "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
+    );
     protected $_acheteur = null;
     protected $_debug = false;
     protected $_md5 = null;
@@ -153,6 +170,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
                         $this->addLieuTotal($lieu);
                     }
                 }
+                $this->addJeunesVignes($dr);
                 $revisions .= $dr->get('_rev');
             }
             unset($dr);
@@ -246,6 +264,26 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "volume_total" => $lieu->getTotalVolume(),
             "dplc_total" => $lieu->getDplc(),
                 ), $this->_validation_lieu_total);
+    }
+    
+    protected function addJeunesVignes(DR $dr) {
+        $this->add(array(
+            "cvi_acheteur" => $this->_acheteur->cvi,
+            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_recoltant" => $dr->cvi,
+            "nom_recoltant" => $dr->declarant->nom,
+            "appellation" => "Jeunes Vignes",
+            "lieu" => null,
+            "cepage" => null,
+            "vtsgn" => null,
+            "denomination" => null,
+            "superficie_livree" => null,
+            "volume_livre" => null,
+            "dont_dplc" => null,
+            "superficie_totale" => $dr->jeunes_vignes,
+            "volume_total" => null,
+            "dplc_total" => null,
+                ), $this->_validation_jeunes_vignes);
     }
 
     public function add($data, $validation = array()) {
