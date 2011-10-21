@@ -280,4 +280,8 @@ class DR extends BaseDR {
       }
       return $this->_set('campagne', $campagne);
     }
+    
+    public function getRecoltantObject() {
+       return sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->cvi); 
+    }
 }

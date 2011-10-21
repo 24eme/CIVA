@@ -37,14 +37,14 @@ EOF;
         
         $this->campagne = $arguments['campagne'];
 
-        $export = new ExportDRAcheteursCsv($arguments['campagne'], $options['debug']);
+        $this->createFileDir();
+        $this->cleanFiles();
         
-        $outputs = $export->output();
-        if (count($outputs) > 0) {
-            $this->createFileDir();
-            $this->cleanFiles();
-            foreach($outputs as $cvi => $csv) {
-                file_put_contents($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$cvi.'.csv', $csv);
+        $acheteurs = sfCouchdbManager::getClient("Acheteur")->getAll($arguments['campagne']);
+        foreach($acheteurs as $acheteur) {
+            $export = new ExportDRAcheteurCsv($arguments['campagne'], $acheteur, $options['debug']);
+            if ($export->hasDR()) {
+                file_put_contents($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$acheteur->cvi.'.csv', $export->output());
             }
         }
     }

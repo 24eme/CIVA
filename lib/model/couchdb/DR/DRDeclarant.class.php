@@ -4,7 +4,12 @@ class DRDeclarant extends BaseDRDeclarant {
   private function getOrViaDocument($key) {
     if ($this->exist($key) && ($v = $this->_get($key)))
       return $v;
-    return sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->getCouchdbDocument()->cvi)->exploitant->get($key);
+    $recoltant = $this->getCouchdbDocument()->getRecoltantObject();
+    if ($recoltant) {
+        return $recoltant->exploitant->get($key);
+    } else {
+        return null;
+    }
   }
   public function getNom() {
     return $this->getOrViaDocument('nom');
