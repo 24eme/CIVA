@@ -3,8 +3,7 @@
 class ExportDRXml {
     protected $content = null;
     protected $partial_function = null;
-
-
+    
     public static function sortXML($a, $b) {
         $a = preg_replace('/L/', '', $a);
         $b = preg_replace('/L/', '', $b);
