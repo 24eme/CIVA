@@ -105,7 +105,12 @@ class tiersActions extends EtapesActions {
                 $dr->declarant->telephone = $this->tiers->exploitant->telephone;
                 $dr->declarant->email = $this->tiers->email;
                 $dr->save();
-                $this->redirectByBoutonsEtapes();
+                $boutons = $this->getRequestParameter('boutons', null);
+            	if ($boutons && in_array('previous', array_keys($boutons))) {
+		            $this->redirect('@mon_espace_civa');
+		    	} else {
+                	$this->redirectByBoutonsEtapes();
+		    	}
             }
         }
     }
