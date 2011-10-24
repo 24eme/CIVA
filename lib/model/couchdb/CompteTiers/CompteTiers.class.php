@@ -34,21 +34,6 @@ class CompteTiers extends BaseCompteTiers {
 
     /**
      *
-     * @return array 
-     */
-    public function getTiersObject() {
-        if (is_null($this->_tiers)) {
-	  $this->_duplicated = null;
-	  $this->_tiers = array();
-	  foreach ($this->tiers as $tiers) {
-	    $this->_tiers[] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id);
-	  }
-        }
-        return $this->_tiers;
-    }
-
-    /**
-     *
      * @param string $hash
      * @return string 
      */

@@ -144,9 +144,9 @@ EOF;
         $json->intro_declaration_recolte = "Saisissez ici votre récolte par cépage dans chaque appellation et lieu dit Grand Cru.";
         $json->intro_exploitation_autres = "Saisissez ici votre volume global de lies et vos jeunes vignes sans production.";
         $json->intro_validation = "Veuillez vérifier les informations saisies avant de valider votre déclaration. Vous pouvez à tout moment visualiser votre déclaration de récolte au format pdf en cliquant sur le bouton \"prévisualiser\" en bas de l'écran";
-	$json->msg_declaration_ecran_warning_precedente = "Nous sommes sur le point d'importer votre déclaration précédente. Sachez que cette année, le bidule n'est pas pris en compte de la même manière. Ces sépages n'ont donc pas pu être automatiquement importés.";
-	$json->msg_declaration_ecran_warning_pre_import = "L'import des données a été effectué depuis les données qui nous ont été fourniées par les caves ou acheteurs suivants : ";
-	$json->msg_declaration_ecran_warning_post_import = "Il est possible que certains de vos caves ou acheteurs ne nous ont pas encore fait parvenir les données vous concernant. Nous vous conseillons dans ce cas de prendre contact avec eux pour les inciter à nous les faire parvenir et tenter dans quelques jours un nouvel import.";
+	$json->msg_declaration_ecran_warning_precedente = "<u>Attention :</u> afin de respecter les dispositions prévues dans le cahier des charges de l'AOC Alsace en matière de revendication des  nouvelles appellations  \"communales\" et \"lieux-dits géographiques\" :<ul><li>le Klevener de Heiligenstein doit être déclaré maintenant dans l'onglet \"Alsace Communale\". Si vous démarrez votre déclaration 2011 à partir de la déclaration d'une année précédente dans laquelle vous aviez déclaré du Klevener de Heiligenstein, les données correspondantes au KdeH ne seront pas récupérées (lié à des difficultés techniques)</li><li>les \"lieux-dits géographiques\" revendiqués seraient à saisir dans l'onglet \"Alsace lieu-dit\"</li></ul></li>";
+	$json->msg_declaration_ecran_warning_pre_import = "Ci-dessous la liste de vos caves ou acheteurs qui ont pré-rempli à ce jour les données vous concernant :";
+	$json->msg_declaration_ecran_warning_post_import = "Vous pourrez aisément compléter, rectifier et valider les données pré-remplies.";
 
 
 	$docs[] = $json;
