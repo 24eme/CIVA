@@ -484,6 +484,56 @@ a.msg_aide:hover{
 }
 
 /**
+ * Alsace récolte / Espace admin
+ ******************************************/
+#espace_admin
+{
+    margin: 0 0 20px;
+}
+
+#espace_admin h2
+{
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_admin .contenu
+{
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+
+/**
+ * Alsace récolte / Espace gamma
+ ******************************************/
+#espace_gamma
+{
+    margin: 0 0 20px;
+}
+
+#espace_gamma h2
+{
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_gamma .contenu
+{
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+
+/**
  * Nouvelle déclaration / Form Gamma
  ******************************************/
 #nouvelle_declaration,

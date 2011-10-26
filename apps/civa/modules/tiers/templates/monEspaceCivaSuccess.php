@@ -29,9 +29,19 @@
             <?php endif; ?>
             </div>
         </div>
+        
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+        <div id="espace_admin">
+            <h2>Espace Admin</h2>
+            <div class="contenu clearfix">
+            </div>
+        </div>
+        <?php endif; ?>
              
 
-        <div class="clearfix">
+        <div id="espace_gamma">
+            <h2>Espace Gamm@</h2>
+            <div class="contenu clearfix">
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
                  <?php include_partial('gamma/monEspace') ?>
             <?php endif; ?>
@@ -39,6 +49,7 @@
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
                  <?php include_partial('gamma/monEspaceColonne') ?>
             <?php endif; ?>
+            </div>
         </div>
             
         <!-- #nouvelle_declaration -->
