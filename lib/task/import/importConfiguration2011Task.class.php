@@ -230,6 +230,7 @@ EOF;
   	  }
 	}
 	$json->recolte->appellation_GRDCRU = $grdcru;
+	print_r($grdcru);
 
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
