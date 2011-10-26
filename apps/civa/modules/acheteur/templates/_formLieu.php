@@ -16,15 +16,19 @@
 
         <?php echo $form->renderHiddenFields(); ?>
 
-        <p class="txt_gris">Sélectionnez un lieu-dit dans la liste suivante :</p>
+        <p class="txt_gris">
+            <!--Sélectionnez un lieu-dit dans la liste suivante :-->
+            <?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_consigne'); ?>
+        </p>
 
         <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
         <div class="ligne_form <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
             <label for="champ_ajout_lieu_dit"><?php echo $form['lieu']->renderLabel("Ajoutez un lieu-dit :"); ?></label>
             <?php echo $form['lieu']->render(); ?>
+        </div>
+        <div class="ligne_form_btn">
             <input name="<?php echo $form->getName() ?>" type="image" alt="valider" src="../images/boutons/btn_valider.png" class="btn">
         </div>
-
-    </div>
+   </div>
 </div>

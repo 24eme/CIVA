@@ -728,6 +728,8 @@ a.msg_aide:hover{
     text-align: right;
 }
 
+#exploitation_administratif .btn { clear: both; padding: 10px 0 0; }
+
 #exploitation_administratif .btn a,
 #exploitation_administratif .btn input
 {
@@ -851,6 +853,11 @@ a.msg_aide:hover{
 
 #infos_exploitation .col_2 .ligne_form input[type=text],
 #infos_exploitation .col_2 .ligne_form textarea { width: 200px; }
+
+#infos_exploitation .modification .btn
+{
+    text-align: center;
+}
 
 /**
  * Gestionnaire de l'exploitation
@@ -1015,7 +1022,7 @@ a.msg_aide:hover{
     top:6px;
 }
 
-#gestion_grands_crus .ligne_form { margin: 0; }
+#gestion_grands_crus .ligne_form { margin: 0 0 10px; }
 
 #gestion_grands_crus .ligne_form label
 {
@@ -1033,13 +1040,10 @@ a.msg_aide:hover{
     float: left;
     font-size: 14px;
     vertical-align: middle;
+    width: 234px;
 }
 
-#gestion_grands_crus .ligne_form input.btn
-{
-    float: right;
-    vertical-align: middle;
-}
+#gestion_grands_crus .ligne_form_btn {text-align: right; }
 
 /**
  * Autres exploitations
