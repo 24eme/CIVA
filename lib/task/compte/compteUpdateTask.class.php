@@ -44,13 +44,19 @@ EOF;
             foreach ($nums as $num => $tiers) {
                 if ($num == $no_stock && count($tiers) == 1 && $tiers[0]->type == 'MetteurEnMarche') {
                     $met_en_attente = $tiers[0];
-                } elseif ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant') {
-                    $tiers[] = $met_en_attente;
-                    $comptes[$this->getLogin($tiers)] = $tiers;
-                    $met_en_attente = null;
-                } else {
-                    $comptes[$this->getLogin($tiers)] = $tiers;
                 }
+            }
+            foreach ($nums as $num => $tiers) {
+                if ($met_en_attente && $num == $met_en_attente->db2->num) {
+                    continue;
+                }
+                
+                if ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant') {
+                    $tiers[] = $met_en_attente;
+                    $met_en_attente = null;
+                }
+                
+                $comptes[$this->getLogin($tiers)] = $tiers;
             }
             if ($met_en_attente) {
                 $comptes[$this->getLogin(array($met_en_attente))] = array($met_en_attente);
@@ -61,14 +67,24 @@ EOF;
         $ids_compte = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         foreach ($ids_compte as $id) {
             $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            
+            if (array_key_exists($compte->login, $comptes) && $compte->type == "CompteProxy") {
+                $compte->type = "CompteTiers";
+                unset($compte->compte_reference);
+                $compte_object = sfCouchdbManager::getClient()->createDocumentFromData($compte);
+                $compte_object->save();
+                $this->logSection("Compte proxy has been transformed", $compte->_id, null, "ERROR");
+            }
+            
             if ($compte->type == "CompteTiers") {
                 if(!array_key_exists($compte->login, $comptes)) {
                     $this->logSection("compte deleted", $compte->_id, null, "ERROR");
                     sfCouchdbManager::getClient()->deleteDoc($compte);
-                    continue;
                 }
             }
         }
+        
+        $tiers_compte = array();
 
         // Mise à jour ou création des comptes
         foreach ($comptes as $login => $tiers) {
@@ -87,21 +103,30 @@ EOF;
             $compte->add("tiers");
 
             foreach ($tiers as $t) {
+                $tiers_compte[$t->_id][] = $compte->_id;
                 $obj = $compte->tiers->add($t->_id);
                 $obj->id = $t->_id;
                 $obj->type = $t->type;
                 $obj->nom = $t->nom;
-                if ($t->compte != $compte->get('_id')) {
-                    $tiers_obj = sfCouchdbManager::getClient()->retrieveDocumentById($t->_id);
-                    $tiers_obj->compte = $compte->get('_id');
-                    $tiers_obj->save();
-                }
             }
             
             if ($compte->isModified()) {
                 $this->logSection("saved", $compte->get('_id'));
             }
             $compte->save();
+        }
+        
+        foreach($tiers_compte as $id_tiers => $ids_compte) {
+            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id_tiers, sfCouchdbClient::HYDRATE_DOCUMENT);
+            $tiers->remove("compte");
+            $tiers->add("compte");
+            foreach($ids_compte as $id_compte) {
+                 $tiers->compte->add(null, $id_compte);
+            }
+            $tiers->save();
+            if ($tiers->isModified()) {
+                $this->logSection("saved", $compte->get('_id'));
+            }
         }
     }
 
