@@ -270,7 +270,11 @@ _Tiers:
   type: abstract
   definition:
     fields:
-      compte: {  }
+      compte:
+        type: array_collection
+        definition:
+          fields:
+            '*': {  }
       civaba: {  }
       intitule: {  }
       nom: {  }
@@ -332,7 +336,13 @@ MetteurEnMarche:
       type: {  }
       cvi_acheteur: {  }
       no_accises: {  }
-      gamma: {type: string, required: false}
+      gamma:
+        required: false
+        type: collection
+        definition:
+          fields:
+            statut: {  }
+            num_cotisant: {  }
       siren: {  }
       db2:
         type: collection

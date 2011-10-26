@@ -19,7 +19,9 @@ class gammaActions extends sfActions
         $this->tiers = $this->getUser()->getTiers('MetteurEnMarche');
 	$type = $request->getParameter('gamma') ;
         if (isset($inscription) && $inscription['choix']) {
-		$this->tiers->add('gamma', "INSCRIT");
+		$this->tiers->add('gamma');
+                $this->tiers->gamma->statut = "INSCRIT";
+                $this->tiers->gamma->num_cotisant = $this->getUser()->getCompte()->login;
 		$this->tiers->save();
 		return $this->redirect(sfConfig::get('app_gamma_url_prod'));
 	}

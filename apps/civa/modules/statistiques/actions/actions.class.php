@@ -50,7 +50,7 @@ class statistiquesActions extends sfActions {
                     }
                 }
             }
-            if (isset($item->gamma) && $item->gamma == 'INSCRIT') {
+            if (isset($item->gamma) && $item->gamma->statut == 'INSCRIT') {
                 $this->nbInscritGamma++;
             }
         }
