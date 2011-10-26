@@ -93,6 +93,7 @@ class recolteActions extends EtapesActions {
         if ($this->details->count() == 0) {
             $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
         }
+        $this->declaration->update();
         $this->declaration->save();
 
         $this->redirect($this->onglets->getUrl('recolte'));
