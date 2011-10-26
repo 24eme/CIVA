@@ -456,14 +456,16 @@ a.msg_aide:hover{
 }
 
 /**
- * Alsace récolte
+ * Alsace récolte / Espace acheteurs
  ******************************************/
-#espace_alsace_recolte
+#espace_alsace_recolte,
+#espace_acheteurs
 {
     margin: 0 0 20px;
 }
 
-#espace_alsace_recolte h2
+#espace_alsace_recolte h2,
+#espace_acheteurs h2
 {
     background: #dcdfa9;
     color: #848C03;
@@ -473,7 +475,8 @@ a.msg_aide:hover{
     padding: 0 10px;
 }
 
-#espace_alsace_recolte .contenu
+#espace_alsace_recolte .contenu,
+#espace_acheteurs .contenu
 {
     background: #edecec;
     border: 1px solid #c7c9c8;
@@ -528,6 +531,48 @@ a.msg_aide:hover{
     float: right;
     margin-left:5px;
     vertical-align: middle;
+}
+
+/**
+ * Import / Export
+ ******************************************/
+#espace_acheteurs #import,
+#espace_acheteurs #export { float: left; }
+
+#espace_acheteurs #import
+{
+    margin: 0 20px 0 0;
+    width: 488px;
+}
+
+#espace_acheteurs #import ul { font-size: 15px; }
+#espace_acheteurs #import ul li { margin: 0 0 5px; }
+#espace_acheteurs #import ul li a
+{
+    background: url("../images/puces/puces_accordeon.png") no-repeat scroll -27px 0 transparent;
+    display: inline-block;
+    padding: 0 0 0 20px;
+}
+
+#espace_acheteurs #export { width: 418px;  }
+
+#espace_acheteurs p.intro
+{
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 10px;
+}
+
+
+#espace_acheteurs #export form .form_ligne
+{
+    margin: 0 0 10px;
+}
+
+#espace_acheteurs #export form label
+{
+    display: inline-block;
+    margin: 0 10px 0 0;
 }
 
 /**

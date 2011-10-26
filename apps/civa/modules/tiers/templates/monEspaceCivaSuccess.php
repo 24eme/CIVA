@@ -20,13 +20,20 @@
                 <?php endif; ?>
             </div>
         </div>
+            
+        <div id="espace_acheteurs">
+            <h2>Acheteurs</h2>
+            <div class="contenu clearfix">
+            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
+                 <?php include_partial('acheteur/monEspace') ?>
+            <?php endif; ?>
+            </div>
+        </div>
+             
 
         <div class="clearfix">
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
                  <?php include_partial('gamma/monEspace') ?>
-            <?php endif; ?>
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
-                 <?php include_partial('acheteur/monEspace') ?>
             <?php endif; ?>
             
             <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
