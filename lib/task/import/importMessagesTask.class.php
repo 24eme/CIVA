@@ -147,6 +147,10 @@ EOF;
 	$json->msg_declaration_ecran_warning_precedente = "<u>Attention :</u> afin de respecter les dispositions prévues dans le cahier des charges de l'AOC Alsace en matière de revendication des  nouvelles appellations  \"communales\" et \"lieux-dits géographiques\" :<ul><li>le Klevener de Heiligenstein doit être déclaré maintenant dans l'onglet \"Alsace Communale\". Si vous démarrez votre déclaration 2011 à partir de la déclaration d'une année précédente dans laquelle vous aviez déclaré du Klevener de Heiligenstein, les données correspondantes au KdeH ne seront pas récupérées (lié à des difficultés techniques)</li><li>les \"lieux-dits géographiques\" revendiqués seraient à saisir dans l'onglet \"Alsace lieu-dit\"</li></ul></li>";
 	$json->msg_declaration_ecran_warning_pre_import = "Ci-dessous la liste de vos caves ou acheteurs qui ont pré-rempli à ce jour les données vous concernant :";
 	$json->msg_declaration_ecran_warning_post_import = "Vous pourrez aisément compléter, rectifier et valider les données pré-remplies.";
+	$json->intro_exploitation_lieu_txt_consigne_communale = "Sélectionnez un lieu-dit dans la liste suivante :";
+	$json->intro_exploitation_lieu_txt_consigne_grdcru = "Sélectionnez un lieu-dit dans la liste suivante :";
+	$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez un lieu-dit :";
+	$json->intro_exploitation_lieu_txt_label_grdcru = "Ajoutez un lieu-dit :";
 
 
 	$docs[] = $json;
