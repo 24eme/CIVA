@@ -204,7 +204,7 @@ EOF;
 	$grdcru->rendement = 61;
         $grdcru->douane->qualite = '';
 
-	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
+	foreach(file(sfConfig::get('sf_data_dir') . '/import/11/Grdcrv11') as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
 	  if ($g[0] == $annee && !isset($g[1]) || $g[1] == "99")  {
 	    continue;
@@ -229,6 +229,7 @@ EOF;
 	      
   	  }
 	}
+
 	$json->recolte->appellation_GRDCRU = $grdcru;
 	print_r($grdcru);
 

@@ -171,7 +171,7 @@ EOF;
 	$grdcru->rendement = 61;
         $grdcru->douane->qualite = '';
 
-	foreach(file(sfConfig::get('sf_data_dir') . '/import/' .$options['year'] .'/Grdcrv'.$options['year']) as $l) {
+	foreach(file(sfConfig::get('sf_data_dir') . '/import/10/Grdcrv10') as $l) {
 	  $g = explode(',', preg_replace('/"/', '', $l));
                 
 	  if (!isset($g[1]) || $g[1] == "99")  {
