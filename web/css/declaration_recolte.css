@@ -1386,6 +1386,9 @@ a.msg_aide:hover{
 
 #gestion_recolte #col_couleur_totale, #gestion_recolte #col_couleur_totale_alternatif {
     margin-top: 24px; 
+}
+
+#gestion_recolte .col_double#col_couleur_totale, #gestion_recolte .col_double#col_couleur_totale_alternatif {
     float: left; 
     margin-left: 5px;
 }
