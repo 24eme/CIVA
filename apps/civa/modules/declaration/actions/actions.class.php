@@ -165,97 +165,100 @@ class declarationActions extends EtapesActions {
         $this->validLogVigilance = array();
         $this->error = false;
         $this->logVigilance = false;
+        
         foreach ($dr->recolte->filter('appellation_') as $appellation) {
-            $onglet = new RecolteOnglets($dr);
-            foreach ($appellation->filter('lieu') as $lieu) {
-                //check le total superficie
-                if($lieu->getTotalSuperficie()==0) {
-                    array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
-                    $this->logVigilance = true;
-                }
-                //check le lieu
-                if ($lieu->isNonSaisie()) {
-                    array_push($this->validLogErreur, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
-                    $this->error = true;
-                }else {
-                    //verifie les rebeches pour les crémants
-		  if($appellation->appellation=='CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
-		    $rebeches=false;
-		    foreach ($lieu->filter('couleur') as $key => $couleur)
-		      foreach ($couleur->filter('cepage_') as $key => $cepage)
-		      if($key == 'cepage_RB') $rebeches = true;
-		    if(!$rebeches) {
-			  array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB')), $lieu->getKey(), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
-                            $this->error = true;
+        	$onglet = new RecolteOnglets($dr);
+        	foreach ($appellation->filter('lieu') as $lieu) {
+        		//check le total superficie
+        		if($lieu->getTotalSuperficie()==0) {
+        			array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
+        			$this->logVigilance = true;
+        		}
+        		//check le lieu
+        		if ($lieu->isNonSaisie()) {
+        			array_push($this->validLogErreur, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
+        			$this->error = true;
+        		}else {
+        			//verifie les rebeches pour les crémants
+        			if($appellation->getConfig()->appellation=='CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
+        				$rebeches=false;
+        				foreach ($lieu->filter('couleur') as $key => $couleur)
+        				foreach ($couleur->filter('cepage_') as $key => $cepage)
+        				if($key == 'cepage_RB') $rebeches = true;
+        				if(!$rebeches) {
+        					array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB')), $lieu->getKey(), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+        					$this->error = true;
+        				}
+
+        			}
+
+        			//Verifie que le recapitulatif des ventes est rempli
+        			if (!$lieu->hasCompleteRecapitulatifVente()) {
+        				array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+        				$this->logVigilance = true;
+        			}
+
+        			//Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
+        			if (!$lieu->isValidRecapitulatifVente()) {
+        				array_push($this->validLogErreur, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+        				$this->error = true;
+        			}
+
+        			//check les cepages
+        			foreach ($lieu->filter('couleur') as $couleur) {
+        			foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
+        				
+        				if ($couleur->exist($key)) {
+        					$cepage = $couleur->get($key);
+        					if($cepage->getConfig()->hasMinQuantite()) {
+        						$totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+        						$totalVolRevendique = $cepage->getTotalVolume();
+        						if( $totalVolRatio > $totalVolRevendique ) {
+        							array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+        							$this->error = true;
+        						}
+        					}
+        					if($cepage->getConfig()->hasMaxQuantite()) {
+        						$totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
+        						$totalVolRevendique = $cepage->getTotalVolume();
+        						if( $totalVolRatio < $totalVolRevendique ) {
+        							array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')) );
+        							$this->error = true;
+        						}
+        					}
+        					if($cepage->isNonSaisie()) {
+        						array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log'=> $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
+        						$this->error = true;
+        					}else {
+        						// vérifie le trop plein de DPLC
+        						if($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0){
+        							array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
+        							$this->logVigilance = true;
+        						}
+        						foreach($cepage->filter('detail') as $details) {
+        							foreach ($details as $detail) {
+        								$detail_nom = '';
+        								if($detail->denomination!= '' || $detail->vtsgn!= '') {
+        									$detail_nom .= ' - ';
+        								}
+        								if($detail->denomination!= '') $detail_nom .= $detail->denomination.' ';
+        								if($detail->vtsgn!= '')        $detail_nom .= $detail->vtsgn.' ';
+        								if($detail->isNonSaisie()) {
+        									array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())),'log'=> $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie') ));
+        									$this->error = true;
+        								}elseif($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle()=="Assemblage Edelzwicker") {
+        									if(!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getVolume()) {
+        										array_push($this->validLogErreur, array('url_log' =>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
+        										$this->error = true;
+        									}
+
+        								}
+        							}
+                                }
+                            }
                         }
-
                     }
-
-                    //Verifie que le recapitulatif des ventes est rempli
-                    if (!$lieu->hasCompleteRecapitulatifVente()) {
-                        array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
-                        $this->logVigilance = true;
-                    }
-
-                    //Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
-                    if (!$lieu->isValidRecapitulatifVente()) {
-                        array_push($this->validLogErreur, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
-                        $this->error = true;
-                    }
-
-
-                    //check les cepages
-                    foreach ($lieu->getConfig()->filter('cepage_') as $key => $cepage_config) {
-                        if ($lieu->exist($key)) {
-                            $cepage = $lieu->get($key);
-                            if($cepage->getConfig()->hasMinQuantite()) {
-                                $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
-                                $totalVolRevendique = $cepage->getTotalVolume();
-                                if( $totalVolRatio > $totalVolRevendique ) {
-                                    array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
-                                    $this->error = true;
-                                }
-                            }
-                            if($cepage->getConfig()->hasMaxQuantite()) {
-                                $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
-                                $totalVolRevendique = $cepage->getTotalVolume();
-                                if( $totalVolRatio < $totalVolRevendique ) {
-                                    array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log'=>$lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')) );
-                                    $this->error = true;
-                                }
-                            }
-                            if($cepage->isNonSaisie()) {
-                                array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log'=> $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
-                                $this->error = true;
-                            }else {
-                                // vérifie le trop plein de DPLC
-                                if($appellation->appellation=='ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0){
-                                            array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
-                                            $this->logVigilance = true;
-                                }
-                                foreach($cepage->filter('detail') as $details) {
-                                    foreach ($details as $detail) {
-                                        $detail_nom = '';
-                                        if($detail->denomination!= '' || $detail->vtsgn!= '') {
-                                            $detail_nom .= ' - ';
-                                        }
-                                        if($detail->denomination!= '') $detail_nom .= $detail->denomination.' ';
-                                        if($detail->vtsgn!= '')        $detail_nom .= $detail->vtsgn.' ';
-                                        if($detail->isNonSaisie()) {
-                                            array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())),'log'=> $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite') ));
-                                            $this->error = true;
-                                        }elseif($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle()=="Assemblage Edelswicker") {
-                                            if(!$lieu->exist('cepage_ED') || !$lieu->cepage_ED->getVolume()) {
-                                                array_push($this->validLogErreur, array('url_log' =>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
-                                                $this->error = true;
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        		}
                 }
             }
         }
@@ -369,6 +372,11 @@ Le CIVA';
         $dr = $this->getUser()->getDeclaration();
         if ($dr) {
             $dr->remove('modifiee');
+            if (!$dr->exist('etape')) {
+            	$dr->add('etape', 'validation');
+            } else {
+            	$dr->set('etape', 'validation');
+            }
             $dr->save();
         }
         $this->getUser()->initCredentialsDeclaration();
@@ -384,6 +392,11 @@ Le CIVA';
         if ($dr) {
             $dr->remove('modifiee');
             $dr->remove('validee');
+            if (!$dr->exist('etape')) {
+            	$dr->add('etape', 'validation');
+            } else {
+            	$dr->set('etape', 'validation');
+            }
             $dr->save();
         }
 
