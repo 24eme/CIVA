@@ -55,6 +55,13 @@ class tiersActions extends EtapesActions {
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
+        $this->formUploadCsv = new UploadCSVForm();
+        if ($request->isMethod(sfWebRequest::POST)) {
+        	$this->formUploadCsv->bind($request->getParameter('csv'),$request->getFiles('csv'));
+        	if ($this->formUploadCsv->isValid()) {
+        		$this->redirect('upload/csvView?md5='.$this->formUploadCsv->getValue('file')->getMd5());
+        	}
+        }
     }
 
     /**

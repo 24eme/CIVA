@@ -8,27 +8,35 @@
         <?php endif; ?>
 
             
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
         <div id="espace_alsace_recolte">
             <h2>Alsace récolte</h2>
             <div class="contenu clearfix">  
-                <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
                  <?php include_component('declaration', 'monEspace') ?>
-                <?php endif; ?>
-
-                <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-                    <?php include_component('declaration', 'monEspaceColonne') ?>
-                <?php endif; ?>
+                 <?php include_component('declaration', 'monEspaceColonne') ?>
             </div>
         </div>
-            
+        <?php endif; ?>
+        
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
             <div class="contenu clearfix">
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
-                 <?php include_partial('acheteur/monEspace') ?>
-            <?php endif; ?>
+                 <?php include_partial('acheteur/monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
         </div>
+        <?php endif; ?>
+             
+
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
+        <div id="espace_gamma">
+            <h2>Espace Gamm@</h2>
+            <div class="contenu clearfix">
+                 <?php include_partial('gamma/monEspace') ?>
+                 <?php include_partial('gamma/monEspaceColonne') ?>
+            </div>
+        </div>
+        <?php endif; ?>
         
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
         <div id="espace_admin">
@@ -37,20 +45,6 @@
             </div>
         </div>
         <?php endif; ?>
-             
-
-        <div id="espace_gamma">
-            <h2>Espace Gamm@</h2>
-            <div class="contenu clearfix">
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
-                 <?php include_partial('gamma/monEspace') ?>
-            <?php endif; ?>
-            
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
-                 <?php include_partial('gamma/monEspaceColonne') ?>
-            <?php endif; ?>
-            </div>
-        </div>
             
         <!-- #nouvelle_declaration -->
         <?php /*<div id="nouvelle_declaration">
