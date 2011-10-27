@@ -3,8 +3,6 @@
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
 
 php symfony cc
-
-bash bin/update
 bash bin/views
 echo "Views DONE";
 
@@ -20,6 +18,6 @@ echo "Import gamma DONE";
 php -d memory_limit=1024M symfony compte:update
 echo "Compte DONE";
 
-bash bin/update
+php symfony cc
 
 
