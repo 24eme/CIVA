@@ -1,7 +1,6 @@
-<?php 
-if (!$csv) 
-  return;
-?>
+<?php if($sf_user->hasFlash('confirmation')) : ?>
+    <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
+<?php endif; ?>
 <div>
 <style>
    .error{color: red;}
@@ -15,14 +14,32 @@ td.maintitre{border-top: 1px solid black;}
   if (count($recap->errors)) {
     echo "<p>Des erreurs ont été repérées concernant le fichier CSV que vous venez de nous fournir</p><table><tr><th>Message</th><th>Numéros de ligne</th></tr>";
     foreach ($recap->errors as $msg => $lines) {
-      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>".implode(', ', $lines->getRawValue())."</td></tr>";
+      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>";
+      $c = 0;
+      foreach ($lines->getRawValue() as $l) {
+	if ($c)
+	  echo ", ";
+	else
+	  $c = 1;
+	echo "<a href='#l$l'>$l</a>";
+      }
+      echo "</td></tr>";
     }
     echo "</table>";
   }
   if (count($recap->warnings)) {
     echo "<p>Des alertes ont été repérées concernant le fichier CSV que vous venez de nous fournir</p><table><tr><th>Message</th><th>Numéros de ligne</th></tr>";
     foreach ($recap->warnings as $msg => $lines) {
-      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>".implode(', ', $lines->getRawValue())."</td></tr>";
+      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>";
+      $c = 0;
+      foreach ($lines->getRawValue() as $l) {
+	if ($c)
+	  echo ", ";
+	else
+	  $c = 1;
+	echo "<a href='#l$l'>$l</a>";
+      }
+      echo "</td></tr>";
     }
     echo "</table>";
   }
