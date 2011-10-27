@@ -1,9 +1,9 @@
 <div id="gestion_grands_crus" style="margin-right: 30px;">
-    <p class="intro_declaration"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu'); ?></p>
+    <p class="intro_declaration"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_'.strtolower($appellation->getConfig()->getAppellation())); ?></p>
 
     <h2 class="titre_section"><?php echo $appellation->getLibelle() ?></h2>
     <div class="contenu_section">
-        <p class="txt_gris"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_gris'); ?></p>
+        <p class="txt_gris"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_gris_'.strtolower($appellation->getConfig()->getAppellation())); ?></p>
         <?php if (count($form->getOption('lieux', array()))) : ?>
             <ul id="liste_grands_crus">
                 <?php foreach ($form->getOption('lieux', array()) as $k => $l) : ?>

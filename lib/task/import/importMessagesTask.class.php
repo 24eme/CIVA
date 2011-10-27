@@ -139,18 +139,20 @@ EOF;
         $json->intro_doc_aide = "En cas de besoin n'hésitez pas à consulter la notice d'aide complete au format pdf.";
         $json->intro_exploitation_administratif = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
         $json->intro_exploitation_acheteurs = "Veuillez cocher les cases correspondantes à la répartition de votre récolte.";
-        $json->intro_exploitation_lieu = "Dans l'écran précédent vous avez cochez la (ou les) case AOC Alsace Grand cru. Vous devez maintenant ici sélectionner les lieux-dits pour lesquels vous avez récolté de l'AOC Alsace Grand Cru. Vous pouvez à tout moment supprimer la sélection à l'aide de la croix rouge.";
-        $json->intro_exploitation_lieu_txt_gris = "Lieux-dits : ";
+        $json->intro_exploitation_lieu_grdcru = "Dans l'écran précédent vous avez cochez la (ou les) case AOC Alsace Grand cru. Vous devez maintenant ici sélectionner les lieux-dits pour lesquels vous avez récolté de l'AOC Alsace Grand Cru. Vous pouvez à tout moment supprimer la sélection à l'aide de la croix rouge.";
+        $json->intro_exploitation_lieu_communale = "Dans l'écran précédent vous avez coché \"Alsace communale\". Vous devez maintenant ici sélectionner les appellations communales concernées. Vous pouvez à tout moment supprimer la sélection à l'aide de la croix rouge.";
+        $json->intro_exploitation_lieu_txt_gris_grdcru = "Lieux-dits Grand Cru :";
+        $json->intro_exploitation_lieu_txt_gris_communale = "Communales :";
         $json->intro_declaration_recolte = "Saisissez ici votre récolte par cépage dans chaque appellation et lieu dit Grand Cru.";
         $json->intro_exploitation_autres = "Saisissez ici votre volume global de lies et vos jeunes vignes sans production.";
         $json->intro_validation = "Veuillez vérifier les informations saisies avant de valider votre déclaration. Vous pouvez à tout moment visualiser votre déclaration de récolte au format pdf en cliquant sur le bouton \"prévisualiser\" en bas de l'écran";
 	$json->msg_declaration_ecran_warning_precedente = "<u>Attention :</u> afin de respecter les dispositions prévues dans le cahier des charges de l'AOC Alsace en matière de revendication des  nouvelles appellations  \"communales\" et \"lieux-dits géographiques\" :<ul><li>le Klevener de Heiligenstein doit être déclaré maintenant dans l'onglet \"Alsace Communale\". Si vous démarrez votre déclaration 2011 à partir de la déclaration d'une année précédente dans laquelle vous aviez déclaré du Klevener de Heiligenstein, les données correspondantes au KdeH ne seront pas récupérées (lié à des difficultés techniques)</li><li>les \"lieux-dits géographiques\" revendiqués seraient à saisir dans l'onglet \"Alsace lieu-dit\"</li></ul></li>";
 	$json->msg_declaration_ecran_warning_pre_import = "Ci-dessous la liste de vos caves ou acheteurs qui ont pré-rempli à ce jour les données vous concernant :";
 	$json->msg_declaration_ecran_warning_post_import = "Vous pourrez aisément compléter, rectifier et valider les données pré-remplies.";
-	$json->intro_exploitation_lieu_txt_consigne_communale = "Sélectionnez un lieu-dit dans la liste suivante :";
-	$json->intro_exploitation_lieu_txt_consigne_grdcru = "Sélectionnez un lieu-dit dans la liste suivante :";
-	$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez un lieu-dit :";
-	$json->intro_exploitation_lieu_txt_label_grdcru = "Ajoutez un lieu-dit :";
+	$json->intro_exploitation_lieu_txt_consigne_communale = "Sélectionnez une commune dans la liste suivante :";
+	$json->intro_exploitation_lieu_txt_consigne_grdcru = "Sélectionnez un lieu-dit Grand Cru dans la liste suivante :";
+	$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez une commune :";
+	$json->intro_exploitation_lieu_txt_label_grdcru = "Ajoutez un lieu-dit Grand Cru :";
 
 
 	$docs[] = $json;
