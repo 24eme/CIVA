@@ -3,8 +3,8 @@
     <h2 class="titre_principal">Mon espace CIVA</h2>
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
-        <?php if($sf_user->hasFlash('mdp_modif')) : ?>
-            <p class="flash_message"><?php echo $sf_user->getFlash('mdp_modif'); ?></p>
+        <?php if($sf_user->hasFlash('confirmation')) : ?>
+            <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
 
             

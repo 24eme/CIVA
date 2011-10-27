@@ -81,7 +81,7 @@ class compteActions extends sfActions {
                 $this->compte = $this->form->save();
                 try {
                     $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\n votre compte a bien été créé sur le site du CIVA. \n\n Cordialement, \n\n Le CIVA");
-                    $this->getUser()->setFlash('mdp_modif', "Votre compte a bien été créé.");
+                    $this->getUser()->setFlash('confirmation', "Votre compte a bien été créé.");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
@@ -106,7 +106,7 @@ class compteActions extends sfActions {
                 $this->compte = $this->form->save();
                 try {
                     $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Changement de votre mot de passe", "Bonjour " . $this->compte->nom . ",\n\n votre mot de passe sur le site du CIVA vient d'etre modifié. \n\n Cordialement, \n\n Le CIVA");
-                    $this->getUser()->setFlash('mdp_modif', "Votre mot de passe a bien été modifié.");
+                    $this->getUser()->setFlash('confirmation', "Votre mot de passe a bien été modifié.");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
