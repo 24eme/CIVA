@@ -46,19 +46,20 @@ EOF;
     
     foreach($acheteurs as $acheteur) {
         $acheteur_object = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->_id);
-        if (array_key_exists($acheteur->cvi, $cvi_acheteur_no_stock)) {
-            $met = $cvi_acheteur_no_stock[$acheteur->cvi];
-            $acheteur_object->db2->no_stock = $met->db2->no_stock;
-            $acheteur_object->db2->num = $met->db2->num;
-            if ($acheteur_object->isModified()) {
-                $this->logSection($acheteur->_id, "lier");
+        if($acheteur_object) {
+            if (array_key_exists($acheteur->cvi, $cvi_acheteur_no_stock)) {
+                $met = $cvi_acheteur_no_stock[$acheteur->cvi];
+                $acheteur_object->db2->no_stock = $met->db2->no_stock;
+                $acheteur_object->db2->num = $met->db2->num;
+                if ($acheteur_object->isModified()) {
+                    $this->logSection($acheteur->_id, "lier");
+                }
+            } else {
+                $acheteur_object->db2->no_stock = "NOSTOCK".$acheteur_object->cvi;
+                $acheteur_object->db2->num = "NOSTOCK".$acheteur_object->cvi;
+                $this->logSection($acheteur->_id, "pas lier", null, 'ERROR');
             }
-        } else {
-            $acheteur_object->db2->no_stock = "NOSTOCK".$acheteur_object->cvi;
-            $acheteur_object->db2->num = "NOSTOCK".$acheteur_object->cvi;
-            $this->logSection($acheteur->_id, "pas lier", null, 'ERROR');
         }
-        
         $acheteur_object->save();
     }
 
