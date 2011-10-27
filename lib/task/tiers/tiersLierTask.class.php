@@ -51,6 +51,11 @@ EOF;
                 $met = $cvi_acheteur_no_stock[$acheteur->cvi];
                 $acheteur_object->db2->no_stock = $met->db2->no_stock;
                 $acheteur_object->db2->num = $met->db2->num;
+                if (is_string($acheteur->compte)) {
+                    $acheteur_object->remove('compte');
+                    $acheteur_object->add('compte');
+                    $acheteur_object->compte->add(null, $acheteur->compte);
+                }
                 if ($acheteur_object->isModified()) {
                     $this->logSection($acheteur->_id, "lier");
                 }
