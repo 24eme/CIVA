@@ -71,3 +71,25 @@ curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
 sleep 1
 kill %1
+
+design=TIERS
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+   "_id": "_design/TIERS",
+   "language": "javascript",
+   "views": {
+       "liaison": {
+           "map": "function(doc) {\n  if (doc.type == \"Recoltant\" || doc.type == \"MetteurEnMarche\" || doc.type == \"Acheteur\") {\n  emit([doc.db2.no_stock, doc.db2.num, doc._id], 1);\n  }\n}",
+           "reduce": "function (keys, values, rereduce) {\n     return sum(values);\n}\n"
+       }
+   }
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+sleep 1
+kill %1
