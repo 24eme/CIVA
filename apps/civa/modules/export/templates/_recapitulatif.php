@@ -33,50 +33,50 @@ pre {display: inline;}
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
 	<thead>
 		<tr>
-			<th style="border: 1px solid black;font-weight: bold; text-align: left;">Appellations</th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Appellations</th>
 			<?php foreach ($appellations as $a): ?>
-			<th style="border: 1px solid black;font-weight: bold;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+			<th style="border: 1px solid black;font-weight: bold; width: 120px;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<th style="border: 1px solid black;font-weight: bold;">Total général</th>
+			<th style="border: 1px solid black;font-weight: bold; width: 120px;">Total général</th>
 			<?php endif; ?>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Superficie (ares)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Superficie (ares)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $superficie[$a]); ?> <small>ares</small></td>
+			<td style="width: 120px;"><?php echoFloat( $superficie[$a]); ?> <small>ares</small></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
+			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Total (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_volume']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume']);?></strong> <small>hl</small></td>
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left;">Volume Revendiqué (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Revendiqué (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_revendique']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_revendique']);?></strong> <small>hl</small></td>
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left;">DPLC (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">DPLC (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td><?php echoFloat( $dplc[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoFloat( $dplc[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black;"><strong><?php echoFloat( $infos['total_dplc']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_dplc']);?></strong> <small>hl</small></td>
 			<?php endif; ?>
 		</tr>
 	</tbody>
