@@ -77,7 +77,7 @@ class Configuration extends BaseConfiguration {
       }
       if ($lieuid == 'lieu') {
 	if (!$appellation_obj->exist('lieu'))
-	  return array("error" => $lieu);
+	  return array("error" => $appellation.' / '.$lieu);
       }
 
       $libelle = self::normalizeLibelle($cepage);
@@ -105,7 +105,7 @@ class Configuration extends BaseConfiguration {
 	  $cepageid = $eval;
 	  $prodhash = $evalhash;
 	} else
-	  return array("error" => $cepage);
+	  return array("error" => $appellation.' / '.$lieu.' / '.$cepage);
       }
       return array("ids" => $appid.'/'.$lieuid.'/'.$cepageid, "hash" => $prodhash);
     }
