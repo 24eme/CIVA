@@ -1,6 +1,6 @@
 <!-- #principal -->
 <ul id="onglets_majeurs" class="clearfix">
-    <li class="ui-tabs-selected"><a href="#warning"></a></li>
+    <li class="ui-tabs-selected"><a href="#warning">Informations</a></li>
 </ul>
 
 <!-- #application_dr -->
