@@ -123,6 +123,13 @@ class uploadActions extends sfActions
       $csv = sfCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
       $csv->storeCSV($this->csv);
       $csv->save();
+      $this->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
+      if (!$nb_warnings)
+	return $this->redirect('@mon_espace_civa');
+    }
+    if (!$this->csv) {
+      $this->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');      
+      return $this->redirect('@mon_espace_civa');      
     }
   }
   
@@ -213,6 +220,9 @@ class uploadActions extends sfActions
   }
 
   private function hasChangedRecoltant($line) {
+    if (!isset($line[CsvFile::CSV_RECOLTANT_CVI])) {
+      return false;
+    }
     if (!isset($this->previous_recoltant))
       $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
     if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
