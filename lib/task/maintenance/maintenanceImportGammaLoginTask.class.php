@@ -52,7 +52,7 @@ EOF;
                 } else {
                     $nb_find++;
                     $m = sfCouchdbManager::getClient()->retrieveDocumentById($met->_id);
-                    $m->gamma->num_cotisant = $tab[1];
+                    $m->gamma->num_cotisant = $accises_cotisant[$met->no_accises];
                     $m->save();
                     $this->logSection($met->civaba, "updated num_cotisant");
                 }
