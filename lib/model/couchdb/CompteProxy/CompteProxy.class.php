@@ -2,6 +2,10 @@
 class CompteProxy extends BaseCompteProxy {
     protected $_compte_reference = null;
     
+    /**
+     *
+     * @return _Compte
+     */
     public function getCompteReferenceObject() {
         if (is_null($this->_compte_reference)) {
             $this->_compte_reference = sfCouchdbManager::getClient()->retrieveDocumentById($this->compte_reference);
@@ -22,7 +26,7 @@ class CompteProxy extends BaseCompteProxy {
     }
     
     public function getGecos() {
-        return $this->getLogin() . ',' . $this->getCompteReferenceObject()->getTiersField('no_accises', true) . ',' . $this->getCompteReferenceObject()->getTiersField('intitule') . ' ' . $this->getCompteReferenceObject()->getTiersField('nom') . ',' . $this->getCompteReferenceObject()->getTiersField('exploitant/nom', true);  
+        return $this->getCompteReferenceObject()->getGecos(); 
     }
     
     public function getAdresse() {

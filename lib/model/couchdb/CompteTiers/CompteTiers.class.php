@@ -54,7 +54,12 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function getGecos() {
-        return $this->getLogin() . ',' . $this->getTiersField('no_accises', true) . ',' . $this->getTiersField('intitule') . ' ' . $this->getTiersField('nom') . ',' . $this->getTiersField('exploitant/nom', true);
+        $login = $this->getLogin();
+        $gamma = $this->getTiersField('gamma', true);
+        if($gamma && $gamma->num_cotisant) {
+            $login = $gamma->num_cotisant;
+        }
+        return $login . ',' . $this->getTiersField('no_accises', true) . ',' . $this->getTiersField('intitule') . ' ' . $this->getTiersField('nom') . ',' . $this->getTiersField('exploitant/nom', true);
     }
 
     public function getAdresse() {
