@@ -823,8 +823,7 @@ var initConfirmeValidation = function()
  ******************************************/
 var initGestionGrandsCrus = function()
 {
-    //$('form input[type!="hidden"], form select').first().focus();
-    
+    hauteurEgale('p.intro_declaration');
     initPopup($('#btn_etape li.prec input, #btn_etape li.suiv input'), $('#popup_msg_erreur'),
         function() {
             return ($('ul#liste_grands_crus').find('li').length < 1);
