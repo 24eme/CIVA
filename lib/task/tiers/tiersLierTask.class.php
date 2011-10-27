@@ -45,11 +45,6 @@ EOF;
         foreach ($acheteurs as $acheteur) {
             $acheteur_object = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->_id);
             if ($acheteur_object) {
-                if (is_string($acheteur->compte)) {
-                    $acheteur_object->remove('compte');
-                    $acheteur_object->add('compte');
-                    $acheteur_object->compte->add(null, $acheteur->compte);
-                }
                 if (array_key_exists($acheteur->cvi, $cvi_acheteur_no_stock)) {
                     $met = $cvi_acheteur_no_stock[$acheteur->cvi];
                     $acheteur_object->db2->no_stock = $met->db2->no_stock;

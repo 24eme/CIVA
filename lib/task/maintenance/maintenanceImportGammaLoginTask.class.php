@@ -46,15 +46,6 @@ EOF;
         $mets = sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_JSON);
         $nb_find = 0;
         foreach($mets as $met) {
-            if(isset($met->gamma)) {
-                    $m = sfCouchdbManager::getClient()->retrieveDocumentById($met->_id);
-                    $m->remove('gamma');
-                    $m->add('gamma');
-                    $m->gamma->statut = 'INSCRIT';
-                    $m->save();
-                    $this->logSection($met->civaba, "updated field gamma");
-            }
-            
             if (array_key_exists($met->no_accises, $accises_cotisant)) {
                 if(!isset($met->gamma)) {
                     $this->logSection($met->civaba, "not inscrit in couchdb", null, "ERROR");
