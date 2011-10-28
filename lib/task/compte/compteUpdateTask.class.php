@@ -41,24 +41,25 @@ EOF;
         $comptes = array();
         foreach ($stocks as $no_stock => $nums) {
             $met_en_attente = null;
+            $met_en_attente_add = false;
             foreach ($nums as $num => $tiers) {
                 if ($num == $no_stock && count($tiers) == 1 && $tiers[0]->type == 'MetteurEnMarche') {
                     $met_en_attente = $tiers[0];
                 }
             }
             foreach ($nums as $num => $tiers) {
-                if ($met_en_attente && $num == $met_en_attente->db2->num) {
+                if (($met_en_attente && $num == $met_en_attente->db2->num) || $met_en_attente_add) {
                     continue;
                 }
                 
                 if ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant') {
                     $tiers[] = $met_en_attente;
-                    $met_en_attente = null;
+                    $met_en_attente_add = true;
                 }
                 
                 $comptes[$this->getLogin($tiers)] = $tiers;
             }
-            if ($met_en_attente) {
+            if ($met_en_attente && !$met_en_attente_add) {
                 $comptes[$this->getLogin(array($met_en_attente))] = array($met_en_attente);
             }
         }
@@ -114,6 +115,10 @@ EOF;
                 $this->logSection("saved", $compte->get('_id'));
             }
             $compte->save();
+            
+            if ($compte->getStatut() == "INSCRIT" && !$compte->email) {
+                $this->logSection("inscrit ne possédant pas d'email", $compte->get('_id'));
+            }
         }
         
         foreach($tiers_compte as $id_tiers => $ids_compte) {
@@ -125,7 +130,7 @@ EOF;
             }
             $tiers->save();
             if ($tiers->isModified()) {
-                $this->logSection("saved", $compte->get('_id'));
+                $this->logSection("saved", $tiers->get('_id'));
             }
         }
     }
