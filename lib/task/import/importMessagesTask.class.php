@@ -81,6 +81,7 @@ EOF;
         $json->err_log_dplc = "Vous dépassez le rendement butoir de ce cépage. Vous pouvez le replier en Edel. Si vous livrez votre raisin, ce repli ne peut se faire qu'en accord avec votre acheteur.";
 
         $json->err_log_recap_vente_non_saisie = "Vous n'avez pas complété la superficie dans le récapitulatif des ventes";
+        $json->err_log_recap_vente_non_saisie_dplc = "Vous n'avez pas complété de dplc dans le récapitulatif des ventes";
         $json->err_log_recap_vente_invalide = "La surface et/ou le dplc du récapitulatif des ventes est supérieur au total de l'appellation";
 
         /** HELP¨**/
