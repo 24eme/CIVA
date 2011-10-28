@@ -68,7 +68,7 @@ class uploadActions extends sfActions
 	$this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
       }
       if ($this->errorOnCVIRecoltant($line)) {
-	$this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu';
+	$this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu dans la base du CIVA.';
       }
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
@@ -186,7 +186,7 @@ class uploadActions extends sfActions
       $lieu = $cepage->getParent()->getParent();
       if ($lieu->getKey() != 'lieu')
 	$this->has_lieudit = true;
-      if ($lieu->getParent()->exist('detail_lieu_editable'))
+      if ($lieu->getParent()->exist('detail_lieu_editable') || preg_match('/_GRDCRU/', $prod['hash']))
 	$this->may_have_denomlieu = true;
 
       if (preg_match('/_ED$/', $prod['hash'])) {
