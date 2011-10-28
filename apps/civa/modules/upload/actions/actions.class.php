@@ -71,7 +71,7 @@ class uploadActions extends sfActions
 	$this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu dans la base du CIVA.';
       }
       if ($errorprod = $this->cannotIdentifyProduct($line))
-	$this->errors[$cpt][] = 'Il nous  est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
+	$this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
       else if ($this->shouldHaveSuperficie($line))
 	$this->errors[$cpt][] = 'La superficie erronnée.';
       if (!$this->isVTSGNOk($line))
@@ -123,13 +123,13 @@ class uploadActions extends sfActions
       $csv = sfCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
       $csv->storeCSV($this->csv);
       $csv->save();
-      $this->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
+      $this->getUser()->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
       if (!$nb_warnings)
 	return $this->redirect('@mon_espace_civa');
     }
     if (!$this->csv) {
-      $this->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');      
-      return $this->redirect('@mon_espace_civa');      
+      $this->getUser()->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');
+      return $this->redirect('@mon_espace_civa');
     }
   }
   
