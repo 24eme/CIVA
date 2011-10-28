@@ -232,6 +232,7 @@ var initMsgAide = function()
     {
         var id_msg_aide = $(this).attr('rel');
         var title_msg_aide = $(this).attr('title');
+	var url_doc = $(this).attr('doc');
         $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
 		
@@ -239,18 +240,20 @@ var initMsgAide = function()
             url_ajax_msg_aide,
             {
                 id: id_msg_aide,
+                url_doc: url_doc,
                 title: title_msg_aide
             },
             function(json)
             {
                 var titre = json.titre;
                 var message = json.message;
+                var url = json.url_doc;
                 popup.html('<p></p>');
                 popup.find('p').html(message);
                 popup.dialog("option" , "title" , titre);
                 popup.dialog("option" , "buttons" , {
                     telecharger: function() {
-                        document.location.href = url_notice
+                        document.location.href = url
                         },
                     fermer: function() {
                         $(this).dialog( "close" );
