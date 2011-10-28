@@ -181,23 +181,7 @@ EOF;
         $appellation->lieuWOLX->couleurBlanc->cepage_RI = $this->getCepage('RI');
 
         $json->recolte->appellation_COMMUNALE = $appellation;
-
-        $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
-	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
-	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN = $this->getCepage('PN');
-	$json->recolte->appellation_PINOTNOIR->rendement_appellation = 75;
-	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
-	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
-	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
-
-        $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
-	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace PN rouge";
-	$json->recolte->appellation_PINOTNOIRROUGE->rendement_appellation = 60;
-	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR = $this->getCepage('PR');
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
-	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
-
+        
         $grdcru = new stdClass();
         $grdcru->appellation = "GRDCRU";
 	$grdcru->libelle = "AOC Alsace Grand Cru";
@@ -232,6 +216,22 @@ EOF;
 
 	$json->recolte->appellation_GRDCRU = $grdcru;
 
+        $json->recolte->appellation_PINOTNOIR->appellation = "PINOTNOIR";
+	$json->recolte->appellation_PINOTNOIR->libelle = "AOC Alsace Pinot noir";
+	$json->recolte->appellation_PINOTNOIR->lieu->couleur->cepage_PN = $this->getCepage('PN');
+	$json->recolte->appellation_PINOTNOIR->rendement_appellation = 75;
+	$json->recolte->appellation_PINOTNOIR->douane->appellation_lieu = '001';
+	$json->recolte->appellation_PINOTNOIR->douane->couleur = 'S';
+	$json->recolte->appellation_PINOTNOIR->douane->code_cepage = '1';
+
+        $json->recolte->appellation_PINOTNOIRROUGE->appellation = "PINOTNOIRROUGE";
+	$json->recolte->appellation_PINOTNOIRROUGE->libelle = "AOC Alsace PN rouge";
+	$json->recolte->appellation_PINOTNOIRROUGE->rendement_appellation = 60;
+	$json->recolte->appellation_PINOTNOIRROUGE->lieu->couleur->cepage_PR = $this->getCepage('PR');
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->appellation_lieu = '001';
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->couleur = 'R';
+	$json->recolte->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
+
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
 	$json->recolte->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
 	$json->recolte->appellation_CREMANT->douane->qualite = 'M';
@@ -264,8 +264,6 @@ EOF;
         $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->code_cepage = '1';
         $json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->no_vtsgn = 1;
         //$json->recolte->appellation_CREMANT->lieu->couleur->cepage_PN->douane->code_cepage = $cepage_douane[2]['PN'];
-
-
 
 	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->libelle = "Rebêches";
 	$json->recolte->appellation_CREMANT->lieu->couleur->cepage_RB->rendement = -1;
