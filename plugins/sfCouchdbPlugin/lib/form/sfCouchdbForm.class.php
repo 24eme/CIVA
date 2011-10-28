@@ -38,9 +38,9 @@ abstract class sfCouchdbForm extends sfFormObject {
 
         // update defaults for the main object
         if ($this->isNew()) {
-            $defaults = $defaults + $this->getObject()->toSimpleFields();
+            $defaults = $defaults + $this->getObject()->toArray(false);
         } else {
-            $defaults = $this->getObject()->toSimpleFields() + $defaults;
+            $defaults = $this->getObject()->toArray(false) + $defaults;
         }
 
         foreach ($this->embeddedForms as $name => $form) {
