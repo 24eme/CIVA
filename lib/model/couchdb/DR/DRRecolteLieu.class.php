@@ -67,14 +67,14 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
       if ($this->issetField($field)) {
         return $this->_get($field);
       }
-      return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+      return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
     }
     public function getTotalSuperficie() {
       $field = 'total_superficie';
       if ($this->issetField($field)) {
         return $this->_get($field);
       }
-      return $this->store($field, array($this, 'getSumCepageFields'), array($field));
+      return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -86,7 +86,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getVolumeRevendiqueTotal() {
-        return $this->store('volume_revendique_total', array($this, 'getSumCepageFields'), array('volume_revendique'));
+        return $this->store('volume_revendique_total', array($this, 'getSumCouleurFields'), array('volume_revendique'));
     }
 
     public function getVolumeRevendiqueAppellation() {
@@ -116,7 +116,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getDplcTotal() {
-       return $this->store('dplc_total', array($this, 'getSumCepageFields'), array('dplc'));
+       return $this->store('dplc_total', array($this, 'getSumCouleurFields'), array('dplc'));
     }
 
     public function getDplcAppellation() {
@@ -345,13 +345,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return ($this->_get($field) || $this->_get($field) === 0);
     }
 
-    protected function getSumCepageFields($field) {
+    protected function getSumCouleurFields($field) {
       $sum = 0;
-      foreach($this->getCouleurs() as $couleur) {
-          foreach ($couleur->getCepages() as $key => $cepage) {
-            if ($key != 'cepage_RB')
-              $sum += $cepage->get($field);
-          }
+      foreach($this->getCouleurs() as $k => $couleur) {
+	$sum += $couleur->get($field);
       }
       return $sum;
     }
