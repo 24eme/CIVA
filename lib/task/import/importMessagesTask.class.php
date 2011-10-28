@@ -3,11 +3,9 @@
 class importMessagesTask extends sfBaseTask {
 
     protected function configure() {
-        // // add your own arguments here
-        // $this->addArguments(array(
-        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-        // ));
-
+		$this->addArguments(array(
+			new sfCommandArgument('file', sfCommandArgument::OPTIONAL, 'Update from file'),
+		));
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
@@ -153,6 +151,26 @@ EOF;
 	$json->intro_exploitation_lieu_txt_consigne_grdcru = "Sélectionnez un lieu-dit Grand Cru dans la liste suivante :";
 	$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez une commune :";
 	$json->intro_exploitation_lieu_txt_label_grdcru = "Ajoutez un lieu-dit Grand Cru :";
+	
+
+    /* Mise a jour des messages si un csv est passé en argument */
+    if (isset($arguments['file']) && !empty($arguments['file'])) {
+    	if (file_exists($arguments['file'])) {
+	        foreach (file($arguments['file']) as $numero => $ligne) {
+	        	$datas = explode(';', $ligne);
+	        	$field = $this->getCsvValueAfterTreatment($datas[0]);
+	        	$value = $this->getCsvValueAfterTreatment($datas[1]);
+	        	if (isset($json->{$field})) {
+	        		$this->logSection("ligne ".($numero + 1), "update success", null);
+	        	} else {
+	        		$this->logSection("ligne ".($numero + 1), $field." doesn't exist, it was created", null, 'ERROR');
+	        	}
+	        	$json->{$field} = $value;
+	        } 
+    	} else {
+    		$this->logSection("update", "the file given can not be found", null, 'ERROR');
+    	}
+    }
 
 
 	$docs[] = $json;
@@ -172,5 +190,19 @@ EOF;
 	echo json_encode($docs);
 	echo '}';
     }
+  protected function deleteFirstAndLastCharacter($string) 
+  {
+  	$string = substr($string, 0, -1); // delete last
+  	$string = substr($string, 1); // delete first
+  	return $string;
+  }
+  protected function getCsvValueAfterTreatment($string)
+  {
+  	$string = trim($string);
+  	if (strlen($string) > 2) {
+  		$string = $this->deleteFirstAndLastCharacter($string);
+  	}
+  	return $string;
+  }
 
 }
