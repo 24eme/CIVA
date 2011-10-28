@@ -66,7 +66,7 @@ abstract class sfCouchdbDocument extends sfCouchdbJson {
    }
 
     public function getAttachmentUri($filename) {
-      return 'http://localhost:5984'.sfCouchdbManager::getClient()->getAttachmentUri($this, $filename);
+      return sfCouchdbManager::getClient()->dsn().sfCouchdbManager::getClient()->getAttachmentUri($this, $filename);
     }
 
     public function update($params = array()) {
