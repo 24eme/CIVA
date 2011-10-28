@@ -73,7 +73,7 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
         $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
-
+		
         $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
         $this->form_gest_err = 0;
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
