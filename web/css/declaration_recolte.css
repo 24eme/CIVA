@@ -541,7 +541,7 @@ a.msg_aide:hover{
 {
     float: left;
     margin: 0 20px 0 0;
-    width: 488px;
+    width: 408px;
 }
 
 #form_gamma { width: 504px; }
@@ -631,7 +631,8 @@ a.msg_aide:hover{
 #precedentes_declarations
 {
     float: left;
-    width: 264px;
+    width: 244px;
+    margin: 0 20px 0 0;
 }
 
 #precedentes_declarations p.intro
@@ -694,6 +695,11 @@ a.msg_aide:hover{
 {
     float: left;
     width: 264px;
+}
+
+#espace_alsace_recolte #documents_aide
+{
+    width: 234px;
 }
 
 #documents_aide p.intro
