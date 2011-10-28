@@ -110,7 +110,7 @@ class acheteurActions extends EtapesActions {
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $valid = true;
-            if ($_POST['boutons']) {
+            if ($request->getParameter('boutons')) {
 	            foreach($this->forms as $form) {
 	                $form->bind($request->getParameter($form->getName()));
 	                if ($form->isValid()) {
@@ -121,7 +121,7 @@ class acheteurActions extends EtapesActions {
 	            }
             } else {
 	            foreach($this->forms as $form) {
-	            	if (isset($_POST[$form->getName().'_x']) && isset($_POST[$form->getName().'_y'])) {
+		      if ($request->getParameter($form->getName().'_x') && $request->getParameter($form->getName().'_y')) {
 		                $form->bind($request->getParameter($form->getName()));
 		                if ($form->isValid()) {
 		                    $form->save();
