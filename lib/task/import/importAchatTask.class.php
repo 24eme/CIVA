@@ -62,7 +62,7 @@ EOF;
             }
             $acheteur->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $db2->get(Db2Achat::COL_NOM)));
             $acheteur->commune = rtrim($db2->get(Db2Achat::COL_COMMUNE));
-            $acheteur->db2->num = $db2->get(Db2Achat::COL_NUM);
+            //$acheteur->db2->num = $db2->get(Db2Achat::COL_NUM);
             
             if($acheteur->isModified()) {
                 $acheteur->db2->import_date = date("Y-m-d");
