@@ -111,8 +111,10 @@ EOF;
                 $obj->nom = $t->nom;
             }
             
-            if ($compte->isModified()) {
-                $this->logSection("saved", $compte->get('_id'));
+            if ($compte->isNew()) {
+                $this->logSection("new", $compte->get('_id'));
+            } elseif ($compte->isModified()) {
+                $this->logSection("modified", $compte->get('_id'));
             }
             $compte->save();
             

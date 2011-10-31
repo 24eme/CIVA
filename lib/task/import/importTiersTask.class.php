@@ -41,7 +41,11 @@ EOF;
         $db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
         $tiers = $this->loadTiers($db2_tiers);
         if ($tiers) {
-            $this->log($tiers->get('_id'));
+            if($tiers->isNew()) {
+               $this->logSection("new", $tiers->get('_id')); 
+            } elseif($tiers->isModified()) {
+               $this->logSection("modified", $tiers->get('_id'));  
+            }
             $tiers->save(); 
         } else {
             $nb_not_use++;
@@ -95,8 +99,11 @@ EOF;
       $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
-      $tiers->db2->import_date = date("Y-m-d");
-      $tiers->db2->export_revision = null; 
+      $tiers->db2->export_revision = null;
+      
+      if($tiers->isModified()) {
+        $tiers->db2->import_date = date("Y-m-d");
+      }
       
       return $tiers;
   }
@@ -132,7 +139,6 @@ EOF;
       if(!$metteur) {
           $metteur = new MetteurEnMarche();
           $metteur->set('_id', "MET-" . $db2->get(Db2Tiers::COL_CIVABA));
-          $metteur->compte = 'COMPTE-';
       }
       
       $metteur->cvi_acheteur = $db2->get(Db2Tiers::COL_CVI);
