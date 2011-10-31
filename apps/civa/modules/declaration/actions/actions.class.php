@@ -199,7 +199,7 @@ class declarationActions extends EtapesActions {
         			}
                                 
                                 //Verifie que le recapitulatif des ventes à du dplc si le total dplc du lieu est > 0
-        			if ($lieu->hasCompleteRecapitulatifVente() && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
+        			if ($lieu->getConfig()->hasRendement() && $lieu->hasAcheteurs() && $lieu->hasCompleteRecapitulatifVente()  && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
         				array_push($this->validLogVigilance, array('url_log'=>$this->generateUrl('recolte_recapitulatif', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey())), 'log' => $lieu->getLibelleWithAppellation().' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
         				$this->logVigilance = true;
         			}
