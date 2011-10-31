@@ -80,10 +80,11 @@ EOF;
             "commune" => array("required" => false, "type" => "string")
         );
 
-        foreach ($comptes as $tiers_c) {
-            foreach ($tiers_c as $t) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($t->compte, sfCouchdbClient::HYDRATE_JSON);
-                if ($compte) {
+        foreach ($comptes as $id_compte => $tiers_c) {
+            $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
+            if ($compte) {
+                foreach ($tiers_c as $t) {
+
                     $intitule = $t->intitule;
                     $nom = $t->nom;
                     $adresse = $t->siege;
@@ -120,9 +121,9 @@ EOF;
                     } catch (Exception $exc) {
                         $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
                     }
-                } else {
-                    $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
                 }
+            } else {
+                $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
             }
         }
 
