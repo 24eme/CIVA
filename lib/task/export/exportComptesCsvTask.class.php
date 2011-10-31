@@ -80,9 +80,9 @@ EOF;
             "commune" => array("required" => false, "type" => "string")
         );
 
-        foreach ($comptes as $tiers) {
-            foreach ($tiers as $t) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
+        foreach ($comptes as $tiers_c) {
+            foreach ($tiers_c as $t) {
+                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($t->compte, sfCouchdbClient::HYDRATE_JSON);
                 if ($compte) {
                     $intitule = $t->intitule;
                     $nom = $t->nom;
