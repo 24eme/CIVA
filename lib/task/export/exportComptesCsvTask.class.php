@@ -33,10 +33,10 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $tiers = array();
-        foreach($arguments['tiers_types'] as $tiers_type) {
+        foreach ($arguments['tiers_types'] as $tiers_type) {
             $tiers = array_merge($tiers, sfCouchdbManager::getClient($tiers_type)->getAll(sfCouchdbClient::HYDRATE_JSON)->getDocs());
         }
-        
+
         $comptes = array();
         foreach ($tiers as $t) {
             if (count($t->compte) == 0) {
@@ -44,16 +44,12 @@ EOF;
                 continue;
             }
             foreach ($t->compte as $id_compte) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
-                if ($compte) {
-                    $comptes[$compte->_id] = $compte;
-                } else {
-                    $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
-                }
+                $comptes[$id_compte][] = $t;
             }
         }
 
         $csv = new ExportCsv(array(
+                    "type" => "Type",
                     "login" => "Login",
                     "statut" => "Statut",
                     "mot_de_passe" => "Code de création",
@@ -69,6 +65,7 @@ EOF;
                 ));
 
         $validation = array(
+            "type" => array("required" => true, "type" => "string"),
             "login" => array("required" => true, "type" => "string"),
             "statut" => array("required" => true, "type" => "string"),
             "mot_de_passe" => array("required" => true, "type" => "string"),
@@ -83,41 +80,49 @@ EOF;
             "commune" => array("required" => false, "type" => "string")
         );
 
-        foreach ($comptes as $compte) {
-            $intitule = $t->intitule;
-            $nom = $t->nom;
-            $adresse = $t->siege;
-            if (!$adresse->adresse && isset($t->exploitant)) {
-                if ($t->exploitant->nom) {
-                    $intitule = $t->exploitant->sexe;
-                    $nom = $t->exploitant->nom;
+        foreach ($comptes as $tiers) {
+            foreach ($tiers as $t) {
+                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
+                if ($compte) {
+                    $intitule = $t->intitule;
+                    $nom = $t->nom;
+                    $adresse = $t->siege;
+                    if (!$adresse->adresse && isset($t->exploitant)) {
+                        if ($t->exploitant->nom) {
+                            $intitule = $t->exploitant->sexe;
+                            $nom = $t->exploitant->nom;
+                        }
+                        $adresse = $t->exploitant;
+                    }
+
+                    if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
+                        $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
+                    } else {
+                        $mot_de_passe = "Compte déjà créé";
+                    }
+
+                    try {
+                        $csv->add(array(
+                            "type" => $t->type,
+                            "login" => $compte->login,
+                            "statut" => $compte->statut,
+                            "mot_de_passe" => $mot_de_passe,
+                            "cvi" => $this->getTiersField($t, 'cvi'),
+                            "civaba" => $this->getTiersField($t, 'civaba'),
+                            "siret" => $this->getTiersField($t, 'siret'),
+                            "qualite" => $this->getTiersField($t, 'qualite'),
+                            "civilite" => $intitule,
+                            "nom" => $nom,
+                            "adresse" => $adresse->adresse,
+                            "code postal" => $adresse->code_postal,
+                            "commune" => $adresse->commune
+                                ), $validation);
+                    } catch (Exception $exc) {
+                        $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
+                    }
+                } else {
+                    $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
                 }
-                $adresse = $t->exploitant;
-            }
-
-            if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
-                $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
-            } else {
-                $mot_de_passe = "Compte déjà créé";
-            }
-
-            try {
-                $csv->add(array(
-                    "login" => $compte->login,
-                    "statut" => $compte->statut,
-                    "mot_de_passe" => $mot_de_passe,
-                    "cvi" => $this->getTiersField($t, 'cvi'),
-                    "civaba" => $this->getTiersField($t, 'civaba'),
-                    "siret" => $this->getTiersField($t, 'siret'),
-                    "qualite" => $this->getTiersField($t, 'qualite'),
-                    "civilite" => $intitule,
-                    "nom" => $nom,
-                    "adresse" => $adresse->adresse,
-                    "code postal" => $adresse->code_postal,
-                    "commune" => $adresse->commune
-                        ), $validation);
-            } catch (Exception $exc) {
-                $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
             }
         }
 
