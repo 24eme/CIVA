@@ -1,11 +1,11 @@
 <?php
 
-class exportComptesCsvCask extends sfBaseTask {
+class exportComptesCsvTask extends sfBaseTask {
 
     protected function configure() {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('tiers_type', sfCommandArgument::REQUIRED, 'Type du tiers : Recoltant|MetteurEnMarche|Acheteur'),
+            new sfCommandArgument('tiers_types', sfCommandArgument::IS_ARRAY, 'Type du tiers : Recoltant|MetteurEnMarche|Acheteur', array("Recoltant", "MetteurEnMarche", "Acheteur")),
         ));
 
         $this->addOptions(array(
@@ -32,7 +32,26 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $tiers = sfCouchdbManager::getClient($arguments['tiers_type'])->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = array();
+        foreach($arguments['tiers_types'] as $tiers_type) {
+            $tiers = array_merge($tiers, sfCouchdbManager::getClient($tiers_type)->getAll(sfCouchdbClient::HYDRATE_JSON)->getDocs());
+        }
+        
+        $comptes = array();
+        foreach ($tiers as $t) {
+            if (count($t->compte) == 0) {
+                $this->logSection($t->cvi, "COMPTE VIDE", null, 'ERROR');
+                continue;
+            }
+            foreach ($t->compte as $id_compte) {
+                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
+                if ($compte) {
+                    $comptes[$compte->_id] = $compte;
+                } else {
+                    $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
+                }
+            }
+        }
 
         $csv = new ExportCsv(array(
                     "login" => "Login",
@@ -64,52 +83,41 @@ EOF;
             "commune" => array("required" => false, "type" => "string")
         );
 
-        foreach ($tiers as $t) {
-            if (count($t->compte) == 0) {
-                $this->logSection($t->cvi, "COMPTE VIDE", null, 'ERROR');
-                continue;
-            }
-            foreach ($t->compte as $id_compte) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte, sfCouchdbClient::HYDRATE_JSON);
-                if ($compte) {
-                    $intitule = $t->intitule;
-                    $nom = $t->nom;
-                    $adresse = $t->siege;
-                    if (!$adresse->adresse && isset($t->exploitant)) {
-                        if ($t->exploitant->nom) {
-                            $intitule = $t->exploitant->sexe;
-                            $nom = $t->exploitant->nom;
-                        }
-                        $adresse = $t->exploitant;
-                    }
-
-                    if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
-                        $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
-                    } else {
-                        $mot_de_passe = "Compte déjà créé";
-                    }
-                    
-                    try {
-                        $csv->add(array(
-                            "login" => $compte->login,
-                            "statut" => $compte->statut,
-                            "mot_de_passe" => $mot_de_passe,
-                            "cvi" => $this->getTiersField($t, 'cvi'),
-                            "civaba" => $this->getTiersField($t, 'civaba'),
-                            "siret" => $this->getTiersField($t, 'siret'),
-                            "qualite" => $this->getTiersField($t, 'qualite'),
-                            "civilite" => $intitule,
-                            "nom" => $nom,
-                            "adresse" => $adresse->adresse,
-                            "code postal" => $adresse->code_postal,
-                            "commune" => $adresse->commune
-                         ), $validation);
-                    } catch (Exception $exc) {
-                        $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
-                    }
-                } else {
-                    $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
+        foreach ($comptes as $compte) {
+            $intitule = $t->intitule;
+            $nom = $t->nom;
+            $adresse = $t->siege;
+            if (!$adresse->adresse && isset($t->exploitant)) {
+                if ($t->exploitant->nom) {
+                    $intitule = $t->exploitant->sexe;
+                    $nom = $t->exploitant->nom;
                 }
+                $adresse = $t->exploitant;
+            }
+
+            if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
+                $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
+            } else {
+                $mot_de_passe = "Compte déjà créé";
+            }
+
+            try {
+                $csv->add(array(
+                    "login" => $compte->login,
+                    "statut" => $compte->statut,
+                    "mot_de_passe" => $mot_de_passe,
+                    "cvi" => $this->getTiersField($t, 'cvi'),
+                    "civaba" => $this->getTiersField($t, 'civaba'),
+                    "siret" => $this->getTiersField($t, 'siret'),
+                    "qualite" => $this->getTiersField($t, 'qualite'),
+                    "civilite" => $intitule,
+                    "nom" => $nom,
+                    "adresse" => $adresse->adresse,
+                    "code postal" => $adresse->code_postal,
+                    "commune" => $adresse->commune
+                        ), $validation);
+            } catch (Exception $exc) {
+                $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
             }
         }
 
