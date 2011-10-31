@@ -7,3 +7,5 @@ lib/vendor/symfony/
 data/
 cache/
 log/
+web/images/AdhesionGamma_EDI_CIVA.pdf
+web/images/aide_gamma.pdf
