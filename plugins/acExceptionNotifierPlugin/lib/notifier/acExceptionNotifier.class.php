@@ -13,7 +13,7 @@ abstract class acExceptionNotifier
 	{	
 		//!sfConfig::get('sf_debug') && 
 		if (is_object($exception = $event->getSubject())) {
-			$this->notify(self::renderTraces(new acException($exception, sfConfig::get('app_ac_exception_notifier_class'))));
+			acExceptionEmailNotifier::notify(self::renderTraces(new acException($exception, sfConfig::get('app_ac_exception_notifier_class'))));
 		}
 	}
 	protected static function renderTraces(acException $acException)
