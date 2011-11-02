@@ -1,0 +1,1 @@
+<h1>acExceptionNotifier : <?php echo sfConfig::get('app_ac_exception_notifier_email_subject') ?></h1>
