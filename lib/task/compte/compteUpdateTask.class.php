@@ -79,8 +79,10 @@ EOF;
             
             if ($compte->type == "CompteTiers") {
                 if(!array_key_exists($compte->login, $comptes)) {
-                    $this->logSection("compte deleted", $compte->_id, null, "ERROR");
-                    sfCouchdbManager::getClient()->deleteDoc($compte);
+                    //Todo : si le compte n'existe en faire un compte proxy
+
+                    //$this->logSection("compte deleted", $compte->_id, null, "ERROR");
+                    //sfCouchdbManager::getClient()->deleteDoc($compte);
                 }
             }
         }
