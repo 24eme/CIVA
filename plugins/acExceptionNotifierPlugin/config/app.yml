@@ -3,7 +3,7 @@ all:
     class: "acExceptionEmailNotifier"
     format: "html"
     email:
-      from: "lemetayer.jb@gmail.com"
+      from: "email@email.email"
       from_name: "acExceptionNotifierPlugin"
-      to: "lemetayer.jb@gmail.com"
+      to: "email@email.email"
       subject: "500 | Internal Server Error | Exception"
