@@ -24,5 +24,8 @@ abstract class acExceptionNotifier
 		return $traces;
 	}
 	
-	abstract protected static function notify($message);
+	protected static function notify($message)
+	{
+		return;
+	}
 }
