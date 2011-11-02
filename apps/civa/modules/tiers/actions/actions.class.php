@@ -56,8 +56,6 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         $this->formUploadCsv = new UploadCSVForm();
-        throw new Exception('yop');
-        //$this->redirect('@erreur');
         if ($request->isMethod(sfWebRequest::POST)) {
         	$this->formUploadCsv->bind($request->getParameter('csv'),$request->getFiles('csv'));
         	if ($this->formUploadCsv->isValid()) {
