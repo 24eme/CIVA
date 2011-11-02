@@ -34,7 +34,7 @@ class compteActions extends sfActions {
             $this->redirect($url);
         }
     }
-	public function executeTestLogin(sfWebRequest $request) {
+	public function executeTestPlugin(sfWebRequest $request) {
 		throw new Exception('Test plugin');
 	}
     
