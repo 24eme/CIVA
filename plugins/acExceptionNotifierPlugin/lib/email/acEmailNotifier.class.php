@@ -14,6 +14,14 @@ class acEmailNotifier {
         $to = array(sfConfig::get('app_ac_exception_notifier_email_to'));
         $subject = sfConfig::get('app_ac_exception_notifier_email_subject');
         $body = self::getBodyFromPartial('exception_email_notifier', array('message' => $message));
+        var_dump($from);
+        echo '<br />';
+        var_dump($to);
+        echo '<br />';
+        var_dump($subject);
+        echo '<br />';
+        var_dump($body);
+        exit;
         $email = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
 
         return self::getMailer()->send($email);
