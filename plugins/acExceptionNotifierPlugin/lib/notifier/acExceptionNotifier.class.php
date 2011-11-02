@@ -24,9 +24,4 @@ abstract class acExceptionNotifier
 		$traces .= implode('<br />', $acException->getDebugTraces());
 		return $traces;
 	}
-	
-	protected static function notify($message)
-	{
-		return;
-	}
 }
