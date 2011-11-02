@@ -51,6 +51,7 @@ class AcheteurClient extends sfCouchdbClient {
             $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
         }
 
+        uasort($acheteurs_negociant, 'AcheteurClient::sortByNom');
         uasort($acheteurs_mout, 'AcheteurClient::sortByNom');
 
         $acheteurs = array();
