@@ -3,7 +3,10 @@
 
   
 # *********** COMPTE ***********
-
+test_plugin:
+  url:   /test-plugin
+  param: { module: compte, action: testPlugin }
+  
 login:
   url:   /
   param: { module: compte, action: login }
