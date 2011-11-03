@@ -176,8 +176,10 @@ class ExportDRPdf {
     		$nbCepageCouleur = 0;
 	    	foreach ($couleur->getConfig()->getCepages() as $cepage) {
 	      		if (!$couleur->exist($cepage->getKey()))
-					continue;
+			  continue;
 	      		$cepage = $couleur->{$cepage->getKey()};
+			if (!count($cepage->detail))
+			  continue;
 	      		$i = 0;
 	      		foreach ($cepage->detail as $detail) {
 					$c = array();
