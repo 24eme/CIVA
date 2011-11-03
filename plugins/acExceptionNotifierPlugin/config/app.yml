@@ -5,5 +5,5 @@ all:
     email:
       from: "email@email.email"
       from_name: "acExceptionNotifierPlugin"
-      to: "email@email.email"
+      to: ["email@email.email"]
       subject: "500 | Internal Server Error | Exception"
