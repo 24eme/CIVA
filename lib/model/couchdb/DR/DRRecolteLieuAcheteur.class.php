@@ -29,10 +29,12 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
     return $this->getKey();
   }
   private function getAcheteurFromCVI() {
-    if (!$this->acheteur)
+    if (!$this->acheteur) {
       $this->acheteur = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$this->getKey());
-    if (!$this->acheteur)
-      throw new Exception("Unknown CVI ".$this->getCVI());
+    }
+    if (!$this->acheteur) {
+        $this->acheteur = new Acheteur();
+    }
     return $this->acheteur;
   }
 
