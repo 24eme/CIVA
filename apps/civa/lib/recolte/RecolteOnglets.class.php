@@ -40,8 +40,9 @@ class RecolteOnglets {
     }
 
     public function getCouleur($appellation = null, $lieu = null, $couleur = null) {
-        if (!$couleur)
+        if (is_null($couleur)) {
             $couleur = $this->getCurrentKeyCouleur();
+        }
         $couleur = $this->convertValueToKey($couleur, $this->_prefix_key_couleur);
         return $this->getLieu($appellation, $lieu)->get($couleur);
     }
@@ -412,7 +413,7 @@ class RecolteOnglets {
 
         if ($sf_route == 'recolte') {
             $cepage_key = $this->convertValueToKey($cepage, $this->_prefix_key_cepage);
-            if (!$this->getLieu($appellation, $lieu)->exist($cepage_key) || !$this->getLieu($appellation, $lieu)->get($cepage_key)->detail->count() > 0) {
+            if (!$this->getCouleur($appellation, $lieu, $couleur)->exist($cepage_key) || !$this->getCouleur($appellation, $lieu, $couleur)->get($cepage_key)->detail->count() > 0) {
                 $sf_route = 'recolte_add';
             }
         }
