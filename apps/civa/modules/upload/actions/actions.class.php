@@ -39,6 +39,7 @@ class uploadActions extends sfActions
     $md5 = $request->getParameter('md5');
 
     $this->csv = new CsvFile(sfConfig::get('sf_data_dir').'/upload/'.$md5);
+    $this->cache = array();
     $cpt = -1;
     $this->errors = array();
     $this->warnings = array();
@@ -320,11 +321,14 @@ class uploadActions extends sfActions
     }
   }
   protected function errorOnCVIRecoltant($line) {
-    try{
-      $rec = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
-      return !($rec);
-    }catch(Exception $e) {
-      return true;
+    if (!isset($this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]])) {
+      try{
+	$rec = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
+	$this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = !($rec);
+      }catch(Exception $e) {
+	$this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = true;
+      }
     }
+    return $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]];
   }
 }
