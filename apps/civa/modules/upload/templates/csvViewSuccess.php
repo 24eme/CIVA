@@ -54,16 +54,26 @@ foreach ($csv->getRawValue()->getCsv() as $line)
   echo '<tr';
   if (count($errors[$cpt]))
     echo ' class="error"';
-  echo '><td class="titre maintitre" id="l'.($cpt+1).'">'.($cpt+1).'</td><td>'.$line[0].'</td><td>'.$line[1].'</td><td>'.$line[2].'</td><td>'.$line[3].'</td><td>'.$line[4].'</td><td>'.$line[5].'</td><td>'.$line[6].'</td><td>'.$line[7].'</td><td>'.$line[8].'</td><td class="csv_num">'.sprintf('%.02f', $line[9]).'</td><td class="csv_num">'.sprintf('%.02f', $line[10]).'</td><tr>';
+  echo '><td class="titre maintitre" id="l'.($cpt+1).'">'.($cpt+1).'</td><td>'.$line[0].'</td><td>'.$line[1].'</td><td>'.$line[2].'</td><td>'.$line[3].'</td><td>'.$line[4].'</td><td>'.$line[5].'</td><td>'.$line[6].'</td><td>'.$line[7].'</td><td>'.$line[8].'</td><td class="csv_num">';
+  if (preg_match('/[^0-9,\.]/', $line[9]))
+    echo $line[9];
+  else
+    printf('%.02f', $line[9]);
+  echo '</td><td class="csv_num">';
+  if (preg_match('/[^0-9,\.]/', $line[10]))
+    echo $line[10];
+  else
+    printf('%.02f', $line[10]);
+  echo '</td><tr>';
   if (count($errors[$cpt])) {
-    foreach($errors[$cpt] as $error) {
+    foreach($errors[$cpt]->getRawValue() as $error) {
       echo '<tr class="error"><td class="titre" style="color:gray;">'.($cpt+1).'</td><td colspan="12">';
       echo $error;
       echo '</td></tr>';
     }
   }
   if (count($warnings[$cpt])) {
-    foreach($warnings[$cpt] as $error) {
+    foreach($warnings[$cpt]->getRawValue() as $error) {
       echo '<tr class="error warnings"><td class="titre" style:"color:gray">'.($cpt+1).'</td><td colspan="12">';
       echo $error;
       echo '</td></tr>';

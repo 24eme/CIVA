@@ -74,11 +74,11 @@ class uploadActions extends sfActions
       if ($errorprod = $this->cannotIdentifyProduct($line))
 	$this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «'.$errorprod.'», merci de vérifier les libellés.';
       else if ($this->shouldHaveSuperficie($line))
-	$this->errors[$cpt][] = 'La superficie erronnée.';
+	$this->errors[$cpt][] = 'La superficie erronée.';
       if (!$this->isVTSGNOk($line))
 	$this->errors[$cpt][] = 'Le champ VT/SGN est non valide.';
       if (!$this->hasGoodUnit($line)) {
-	$this->warnings[$cpt][] = 'Les unités ne semblent pas en ares et hectolitres.';
+	$this->warnings[$cpt][] = 'Les unités ne semblent pas être en ares et en hectolitres.';
       }
       if ($this->couldHaveSuperficie($line)) {
 	$this->warnings[$cpt][] = 'La superficie pourrait être renseignée';
@@ -89,8 +89,9 @@ class uploadActions extends sfActions
       if ($this->cannotHaveRebeche($line)) {
 	$this->errors[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche. (Seule les caves peuvent le faire)';
       }
-      if (!$this->hasVolume($line))
-	//	$this->warnings[$cpt][] = 'Le volume est null ou absence, .';
+      if ($this->isVolumeNotCorrect($line))
+	$this->errors[$cpt][] = 'Le volume n\'est pas correct';
+      else if (!$this->hasVolume($line))
 	$this->nb_noVolumes++;
     } 
     if ($this->shouldHaveRebeche(array())) {
@@ -266,11 +267,15 @@ class uploadActions extends sfActions
   }
 
   private function isPositiveOrZero($val) {
-    return $this->isPositive($val) || $val == 0;
+    if (preg_match('/[^0-9\.\,]/', $val))
+      return false;
+    return $this->isPositive($val) || !$val;
   }
   private function isPositive($val) {
     $val = preg_replace('/,/', '.', $val);
     if (!is_numeric($val))
+      return false;
+    if (preg_match('/[^0-9\.\,]/', $val))
       return false;
     if ($val <= 0)
       return false;
@@ -292,6 +297,10 @@ class uploadActions extends sfActions
     if ($this->no_volume)
       return true;
     return $this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);
+  }
+
+  protected function isVolumeNotCorrect($line) {
+    return !$this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);    
   }
   protected function shouldHaveSuperficie($line) {
     if ($this->is_rebeche || $this->no_surface)
