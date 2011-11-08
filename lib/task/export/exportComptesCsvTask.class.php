@@ -97,6 +97,11 @@ EOF;
                         }
                         $adresse = $t->exploitant;
                     }
+                    
+                    $email = $compte->email;
+                    if (!$email) {
+                        $email = $t->email;
+                    }
 
                     if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
                         $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
@@ -110,8 +115,8 @@ EOF;
                             "login" => $compte->login,
                             "statut" => $compte->statut,
                             "mot_de_passe" => $mot_de_passe,
-                            "statut" => $compte->email,
-                            "cvi" => $this->getTiersField($t, 'cvi'),
+                            "email" => $email,
+                            "cvi" => $this->getTiersField($t, 'cvi', true),
                             "civaba" => $this->getTiersField($t, 'civaba'),
                             "siret" => $this->getTiersField($t, 'siret'),
                             "qualite" => $this->getTiersField($t, 'qualite'),
