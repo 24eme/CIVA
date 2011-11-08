@@ -75,10 +75,21 @@ class DataManipulationActions extends sfActions
    protected function buildTiersData($items, $root = "tiers") {
       $datas = array($root => array());
       foreach($items as $item) {
+        unset($item['db2']);
         $datas[$root][$item['_id']] = $item;
       }
       return $datas;
    }
 
+   
+   protected function buildCompteData($items, $root = "compte") {
+      $datas = array($root => array());
+      foreach($items as $item) {
+        unset($item['mot_de_passe']);
+        unset($item['db2']);
+        $datas[$root][$item['_id']] = $item;
+      }
+      return $datas;
+   }
 
 }
