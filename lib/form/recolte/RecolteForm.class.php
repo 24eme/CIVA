@@ -114,6 +114,7 @@ class RecolteForm extends sfCouchdbFormDocumentJson {
         //exit;
 
         $this->getObject()->getCouchdbDocument()->update();
+        $this->getObject()->getCouchdbDocument()->update();
     }
 
     protected function updateAcheteurs($value_name, $values, $object, $with_add_acheteurs = false) {
