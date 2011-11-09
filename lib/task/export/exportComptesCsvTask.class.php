@@ -124,7 +124,9 @@ EOF;
                             "nom" => $nom,
                             "adresse" => $adresse->adresse,
                             "code postal" => $adresse->code_postal,
-                            "commune" => $adresse->commune
+                            "commune" => $adresse->commune,
+                            "sexe de l'exploitant" => $t->exploitant->sexe,
+                            "nom de l'exploitant" => $t->exploitant->nom,
                                 ), $validation);
                     } catch (Exception $exc) {
                         $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
