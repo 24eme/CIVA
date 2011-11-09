@@ -355,6 +355,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     protected function update($params = array()) {
         parent::update($params);
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            /*$this->total_volume = $this->getTotalVolume(true);
+            $this->total_superficie = $this->getTotalSuperficie(true);*/
+            $this->volume_revendique = $this->getVolumeRevendique(true);
+            $this->dplc = $this->getDplc(true);
+        }
 	$this->add('acheteurs');
         $types = array('negoces','cooperatives','mouts');
         $unique_acheteur = null;
@@ -375,12 +381,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         if ($this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
-        }
-        if ($this->getCouchdbDocument()->canUpdate()) {
-            /*$this->total_volume = $this->getTotalVolume(true);
-            $this->total_superficie = $this->getTotalSuperficie(true);*/
-            $this->volume_revendique = $this->getVolumeRevendique(true);
-            $this->dplc = $this->getDplc(true);
         }
     }
 }
