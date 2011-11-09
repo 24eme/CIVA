@@ -62,7 +62,9 @@ EOF;
                     "nom" => "Nom Prénom",
                     "adresse" => "Adresse",
                     "code postal" => "Code postal",
-                    "commune" => "Commune"
+                    "commune" => "Commune",
+                    "exploitant_sexe" => "Sexe de l'exploitant",
+                    "exploitant_nom" => "Nom de l'exploitant"
                 ));
 
         $validation = array(
@@ -79,7 +81,9 @@ EOF;
             "nom" => array("required" => true, "type" => "string"),
             "adresse" => array("required" => false, "type" => "string"),
             "code postal" => array("required" => false, "type" => "string"),
-            "commune" => array("required" => false, "type" => "string")
+            "commune" => array("required" => false, "type" => "string"),
+            "exploitant_sexe" => array("required" => false, "type" => "string"),
+            "exploitant_nom" => array("required" => false, "type" => "string")
         );
 
         foreach ($comptes as $id_compte => $tiers_c) {
