@@ -93,3 +93,29 @@ curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
 sleep 1
 kill %1
+
+design=STATS
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+   "_id": "_design/STATS",
+   "language": "javascript",
+   "views": {
+       "DR": {
+           "map": "function(doc) {\nif (doc.type == \"DR\" && doc.campagne == \"2011\") {\n  emit([doc.validee != null, doc.modifiee != null, doc.validee, doc.etape], 1);\n}\n}",
+           "reduce": "function (keys, values, rereduce) {\n     return sum(values);\n}"
+       },
+       "COMPTE": {
+           "map": "function(doc) {\n\tif ((doc.type == \"CompteTiers\" || doc.type == \"CompteProxy\")) {\n  \t\temit([doc.statut], 1);\n\t}\n}",
+           "reduce": "function (keys, values, rereduce) {\n     return sum(values);\n}"
+       }
+   }
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+sleep 1
+kill %1

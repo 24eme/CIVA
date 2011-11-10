@@ -9,6 +9,7 @@
             <div class="contenu_section">
                 <ul class="statistiques">
                     <li><strong>Nombre d'inscrits : <?php echo $nbInscrit; ?></strong>
+                    <li><strong>Nombre d'inscrits en cours de mot de passe oublié  : <?php echo $nbOublie; ?></strong>
                     <li><strong>Nombre de déclarations validées : <?php echo $etapeDrValidee; ?></strong></li>
                     <li><strong>Nombre de déclarations en cours : <?php echo $etapeDrNonValidee; ?></strong>
                         <ul>
@@ -17,7 +18,6 @@
                             <li>à l'étape validation : <?php echo $etapeValidation; ?></li>
                         </ul>
                     </li>
-                    <li><strong>Nombre d'inscrits n'ayant pas commencé de DR : <?php echo $etapeNoDr; ?></strong></li>
                 </ul>
             </div>
             <br />
