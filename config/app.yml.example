@@ -21,6 +21,14 @@ all:
     url_qualif: "http://url_a_remplacer.com/"
     url_prod: "http://url_a_remplacer.com/"
 
+  ac_exception_notifier:
+    enabled: false
+    email:
+      from: "email@email.email"
+      from_name: "acExceptionNotifierPlugin"
+      to: ["email@email.email"]
+      subject: "500 | Internal Server Error | Exception"
+
 
 
 
