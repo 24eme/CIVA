@@ -253,7 +253,7 @@ class declarationActions extends EtapesActions {
         									array_push($this->validLogErreur, array('url_log' => $this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())),'log'=> $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie') ));
         									$this->error = true;
         								}elseif($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle()=="Assemblage Edelzwicker") {
-        									if(!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getVolume()) {
+        									if(!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
         										array_push($this->validLogErreur, array('url_log' =>$this->generateUrl('recolte', $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey())), 'log' => $lieu->getLibelleWithAppellation().' - '.$cepage->getLibelle().$detail_nom.' => '.sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
         										$this->error = true;
         									}
