@@ -14,7 +14,7 @@ class maintenanceDRUpdateTask extends sfBaseTask
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
-      new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, 'Campagne', '2010'),
+      new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, 'Campagne', '2011'),
     ));
 
     $this->namespace        = 'maintenance';
@@ -40,12 +40,17 @@ EOF;
     foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
             if ($dr->exist('modifiee')) {
+                $this->logSection('try', $dr->get('_id'));
                 $modifiee = $dr->get('modifiee');
                 $dr->remove('modifiee');
                 $dr->update();
                 $dr->add('modifiee', $modifiee);
+                if ($dr->isModified()) {
+                    $this->logSection('updated', $dr->get('_id'));
+                }
+                
                 $dr->save();
-                $this->logSection('updated', $dr->_id);
+                
             }
             /*$dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
             
