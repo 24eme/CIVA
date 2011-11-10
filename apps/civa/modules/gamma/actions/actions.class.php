@@ -41,6 +41,14 @@ class gammaActions extends sfActions
     public function executeDownloadNotice(sfWebRequest $request) {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/aide_gamma.pdf", "aide_gamma.pdf");
     }
+    
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeDownloadNomenclatures(sfWebRequest $request) {
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/liste_nomenclatures_douanieres.pdf", "liste_nomenclatures_douanieres.pdf");
+    }
 
     /**
      *
