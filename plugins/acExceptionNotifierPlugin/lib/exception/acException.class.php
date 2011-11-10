@@ -5,6 +5,7 @@
  * @package    acExceptionNotifier
  * @subpackage exception
  * @author     Jean-Baptiste Le Metayer <lemetayer.jb@gmail.com>
+ * @author     Vincent Laurent <vince.laurent@gmail.com>
  * @version    0.1
  */
 class acException extends sfException
@@ -12,40 +13,96 @@ class acException extends sfException
 	protected $exception;
 	protected $format;
 	
+  /**
+   * Construct
+   * 
+   * @param Exception $exception  An Exception implementation instance
+   * @param string    $format     The trace format (txt or html)
+   * @access public
+   */
 	public function __construct($exception, $format = 'html')
 	{
 		$this->setException($exception);
 		$this->setFormat($format);
 	}
+	
+  /**
+   * Set the exception object
+   * 
+   * @param Exception $exception  An Exception implementation instance
+   * @access public
+   */
 	public function setException($exception)
 	{
 		$this->exception = $exception;
 	}
+	
+  /**
+   * Get the exception
+   * 
+   * @access public
+   * @return Exception Exception implementation instance
+   */
 	public function getException()
 	{
 		return $this->exception;
 	}
+	
+  /**
+   * Set the trace format
+   * 
+   * @param string $format (txt or html)
+   * @access public
+   */
 	public function setFormat($format)
 	{
 		$this->format = $format;
 	}
+	
+  /**
+   * Get the trace format
+   * 
+   * @access public
+   * @return string the trace format
+   */
 	public function getFormat()
 	{
 		return $this->format;
 	}
+
+  /**
+   * Returns an array of exception informations header.
+   * 
+   * @access public
+   * @return array An array of exception informations header
+   */
 	public function getExceptionInformations()
 	{
 		$exception = $this->getException();
+		$message = (null === $this->getException()->getMessage()) ? 'n/a' : $exception->getMessage();
 		$informations = array();
    		$informations[] = '<strong>500 | Internal Server Error | '.get_class($exception).'</strong>';
-   		$message = (null === $this->getException()->getMessage()) ? 'n/a' : $exception->getMessage();
 		$informations[] = '<span style="display: block; background-color: #EEEEEE; border-radius: 10px 10px 10px 10px; margin: 10px 0px; padding: 10px;">'.$message.'</span>';
    		return $informations;
 	}
+
+  /**
+   * Returns an array of exception traces.
+   * 
+   * @access public
+   * @return array An array of traces
+   */
 	public function getExceptionTraces()
 	{
 		return self::getTraces($this->getException(), $this->getFormat());
 	}
+
+  /**
+   * Returns an array of main objects values
+   * 
+   * @access public
+   * @return array An array of traces
+   */
 	public function getDebugTraces()
 	{
 		$traces = array();
@@ -65,6 +122,16 @@ class acException extends sfException
 	    }
 	    return $traces;
 	}
+
+  /**
+   * Returns an array of exception traces.
+   *
+   * @param Exception $exception  An Exception implementation instance
+   * @param string    $format     The trace format (txt or html)
+   * @access protected
+   * @static
+   * @return array An array of traces
+   */
 	static protected function getTraces($exception, $format = 'html')
   	{
 	    $traceData = $exception->getTrace();
@@ -76,17 +143,12 @@ class acException extends sfException
 	    ));
 	
 	    $traces = array();
-	    if ($format == 'html')
-	    {
+	    if ($format == 'html') {
 	      $lineFormat = 'at <strong>%s%s%s</strong>(%s)<br />in <em>%s</em> line %s<br /><ul class="code" id="%s" style="display: %s">%s</ul>';
-	    }
-	    else
-	    {
+	    } else {
 	      $lineFormat = 'at %s%s%s(%s) in %s line %s';
 	    }
-	
-	    for ($i = 0, $count = count($traceData); $i < $count; $i++)
-	    {
+	    for ($i = 0, $count = count($traceData); $i < $count; $i++) {
 	      $line = isset($traceData[$i]['line']) ? $traceData[$i]['line'] : null;
 	      $file = isset($traceData[$i]['file']) ? $traceData[$i]['file'] : null;
 	      $args = isset($traceData[$i]['args']) ? $traceData[$i]['args'] : array();
@@ -102,7 +164,6 @@ class acException extends sfException
 	        self::fileExcerpt($file, $line)
 	      );
 	    }
-	
 	    return $traces;
   	}
 }
