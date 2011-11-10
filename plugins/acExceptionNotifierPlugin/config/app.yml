@@ -1,6 +1,6 @@
 all:
   ac_exception_notifier:
-    enabled: true
+    enabled: false
     class: "acExceptionEmailNotifier"
     format: "html"
     email:
