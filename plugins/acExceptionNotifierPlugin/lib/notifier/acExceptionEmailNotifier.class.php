@@ -14,7 +14,7 @@
  * @author     Vincent Laurent <vince.laurent@gmail.com>
  * @version    0.1
  */
-class acExceptionEmailNotifier implements INotifier
+class acExceptionEmailNotifier implements IExceptionNotifier
 {
 
   /**
