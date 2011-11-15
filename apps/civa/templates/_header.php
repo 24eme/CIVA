@@ -33,7 +33,7 @@
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
-            <?php else: ?>
+            <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE): ?>
                 <li><a href="<?php echo url_for('@compte_modification_oublie'); ?>">Mon compte</a></li>
             <?php endif; ?>
             <?php  if ($sf_user->hasCredential('admin')) : ?>
