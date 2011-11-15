@@ -130,7 +130,7 @@ class declarationActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
-                $dr->validate($tiers);
+                $dr->validate($tiers, $this->getUser()->getCompte());
                 $dr->save();
                 $this->getUser()->initCredentialsDeclaration();
 
@@ -145,7 +145,7 @@ class declarationActions extends EtapesActions {
                 //send email
                 try {
                     $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-                            $tiers->email,
+                            $this->getUser()->getCompte()->email,
                             'CIVA - Validation de votre déclaration de récolte',
                             $mess
                     );
@@ -348,7 +348,7 @@ Le CIVA';
 
              $message = Swift_Message::newInstance()
                           ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                          ->setTo($tiers->email)
+                          ->setTo($this->getUser()->getCompte()->email)
                           ->setSubject('CIVA - Votre déclaration de récolte')
                           ->setBody($mess);
 
