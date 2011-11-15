@@ -31,8 +31,10 @@
             <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mon espace civa</a></li>
             <?php endif; ?>
-            <?php if ($sf_user->hasCredential('compte')) : ?>
+            <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
+            <?php else: ?>
+                <li><a href="<?php echo url_for('@compte_modification_oublie'); ?>">Mon compte</a></li>
             <?php endif; ?>
             <?php  if ($sf_user->hasCredential('admin')) : ?>
                 <li class="admin"><a href="<?php echo url_for('@admin'); ?>">Administration</a></li>

@@ -109,6 +109,12 @@ abstract class _Compte extends Base_Compte {
         parent::save();
     }
     
-    
+    public function resetMotDePasseFromLdap() {
+        $ldap = new Ldap();
+        $info = $ldap->get($this);
+        if($info && is_array($info['userpassword']) && count($info['userpassword']) > 0 && $info['userpassword'][0]) {
+            $this->mot_de_passe = $info['userpassword'][0];
+        }
+    }
     
 }

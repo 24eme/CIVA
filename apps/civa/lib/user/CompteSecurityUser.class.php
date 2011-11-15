@@ -57,6 +57,11 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->addCredential(self::CREDENTIAL_COMPTE);
         $this->signInCompte($compte);
         $this->setAuthenticated(true);
+        
+        if ($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE) {
+            $compte->resetMotDePasseFromLdap();
+            $compte->save();
+        }
     }
     
     /**

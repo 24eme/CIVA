@@ -107,6 +107,25 @@ class Ldap {
      * @param _Compte $compte
      * @return array 
      */
+    public function get($compte) {
+        $con = $this->connect();
+        if($con) {
+            $search = ldap_search($con, 'ou=People,'.$this->dc, 'uid='.$compte->login);
+            $count = ldap_count_entries($con, $search);
+                if($count > 0) {
+                    $entries = ldap_get_entries($con, $search);
+                    return $entries[0];
+                }
+            
+        }
+        return null;
+    }
+    
+    /**
+     *
+     * @param _Compte $compte
+     * @return array 
+     */
     protected function info($compte) {
       $info = array();
       $info['uid']           = $compte->login;

@@ -8,7 +8,7 @@
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration">
-            <h3 class="titre_section">Connexion</h3>
+            <h3 class="titre_section">Nouveau mot de passe</h3>
             <div class="contenu_section">
                 <p class="intro">Merci d'indiquer un nouveau mot de passe: </p>
                 <div class="ligne_form ligne_form_label">
