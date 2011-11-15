@@ -334,7 +334,7 @@ class uploadActions extends EtapesActions {
     }
 
     protected function couldHaveSuperficie($line) {
-        if ($this->no_superficie)
+        if ($this->is_rebeche || $this->no_surface)
             return false;
         try {
             if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
