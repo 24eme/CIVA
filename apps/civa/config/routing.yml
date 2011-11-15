@@ -255,12 +255,16 @@ a_propos_du_civa:
 
 upload_csv:
   url: /upload/csv
-  param: {module: upload, action: csvUpload}
+  param: {module: upload, action: monEspaceCiva}
 
 csv_view:
   url: /upload/csv/:md5
   param: {module: upload, action: csvView}
-
+  
+csv_download:
+  url: /download/csv
+  param: {module: upload, action: csvDownload}
+  
 default_index:
   url:   /:module
   param: { action: index }

@@ -22,7 +22,7 @@
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
             <div class="contenu clearfix">
-                 <?php include_partial('acheteur/monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
+                 <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
         </div>
         <?php endif; ?>

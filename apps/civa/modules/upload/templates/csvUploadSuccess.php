@@ -6,5 +6,5 @@
         <?php echo $csvform['file']->renderLabel() ?>
         <?php echo $csvform['file']->render() ?>
     </div>
-    <input type="image" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+    <input type="image" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
 </form>

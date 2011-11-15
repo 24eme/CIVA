@@ -604,6 +604,15 @@ a.msg_aide:hover{
     padding: 0 0 0 20px;
 }
 
+#espace_acheteurs #export ul { font-size: 15px; }
+#espace_acheteurs #export ul li { margin: 0 0 5px; }
+#espace_acheteurs #export ul li a
+{
+    background: url("../images/puces/puces_accordeon.png") no-repeat scroll -27px 0 transparent;
+    display: inline-block;
+    padding: 0 0 0 20px;
+}
+
 #espace_acheteurs #export { width: 418px;  }
 
 #espace_acheteurs p.intro
