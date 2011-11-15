@@ -21,7 +21,7 @@ class ValidatorImportCsv extends sfValidatorFile
     $errorSchema = new sfValidatorErrorSchema($this);
 
     //Conversion UTF8
-    $fc = htmlentities(str_replace('&', '', utf8_decode(file_get_contents($csvValidated->getTempName()))),ENT_NOQUOTES);
+    $fc = preg_replace('/&([a-z])[^;]+;([^&])/i', '\1\2', htmlentities(str_replace('&', '', utf8_decode(file_get_contents($csvValidated->getTempName()))),ENT_NOQUOTES));
     $md5 = md5($fc);
     $file = $this->getOption('file_path').'/'.$md5;
     $csvValidated->setMd5($md5);
