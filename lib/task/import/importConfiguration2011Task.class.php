@@ -418,7 +418,7 @@ EOF;
         $cepages->cepage_PN->libelle = "Pinot noir";
 	$cepages->cepage_PN->no_vtsgn = 1;
         
-        $cepages->cepage_PR->libelle = "Pinot noir rouge";
+        $cepages->cepage_PR->libelle = "Pinot noir";
 	$cepages->cepage_PR->no_vtsgn = 1;
         
         $code_entier = "cepage_".$code;
