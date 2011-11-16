@@ -75,7 +75,7 @@ class uploadActions extends EtapesActions {
             if (!$this->hasCVI($line)) {
                 if (!$cpt)
                     continue;
-                $this->errors[$cpt][] = 'no cvi';
+                $this->errors[$cpt][] = 'Numero CVI invalide';
             }
             ;
             if ($this->shouldHaveRebeche($line)) {
@@ -90,10 +90,13 @@ class uploadActions extends EtapesActions {
             if ($errorprod = $this->cannotIdentifyProduct($line))
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $errorprod . '», merci de vérifier les libellés.';
             else if ($this->shouldHaveSuperficie($line))
-                $this->errors[$cpt][] = 'La superficie erronée.';
+                $this->errors[$cpt][] = 'La superficie est erronée.';
             if (!$this->isVTSGNOk($line))
                 $this->errors[$cpt][] = 'Le champ VT/SGN est non valide.';
-            if (!$this->hasGoodUnit($line)) {
+
+	    if ($this->hasWrongUnit($line)) {
+                $this->errors[$cpt][] = 'Les unités doivent être en ares et en hectolitres.';
+	    }else if (!$this->hasGoodUnit($line)) {
                 $this->warnings[$cpt][] = 'Les unités ne semblent pas être en ares et en hectolitres.';
             }
             if ($this->couldHaveSuperficie($line)) {
@@ -304,15 +307,22 @@ class uploadActions extends EtapesActions {
         return true;
     }
 
+    protected function hasWrongUnit($line) {
+      if ($line[CsvFile::CSV_VOLUME] > 1000)
+	return true;
+      if ($line[CsvFile::CSV_SUPERFICIE] > 1000)
+	return true;
+      return false;
+    }
     protected function hasGoodUnit($line) {
-        if (
-                (preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]) &&
-                (!$line[CsvFile::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_VOLUME]))
-        )
+      if (
+	  (preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]) &&
+	  (!$line[CsvFile::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_VOLUME]))
+	  )
             return true;
-        if ($line[CsvFile::CSV_VOLUME] * 100 / $line[CsvFile::CSV_SUPERFICIE] > 10)
-            return true;
-        return false;
+      if ($line[CsvFile::CSV_VOLUME] * 100 / $line[CsvFile::CSV_SUPERFICIE] > 10)
+	return true;
+      return false;
     }
 
     protected function hasVolume($line) {

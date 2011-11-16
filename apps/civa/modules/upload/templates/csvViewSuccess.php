@@ -3,7 +3,9 @@
 <?php endif; ?>
 <div>
 <style>
-   .error{color: red;}
+.error{color: red;}
+td.error, td.warning{width: 700px; vertical-align: top;}
+.warning{color: orange;}
 .csv td{font-family: "Arial,sans-serif,sans";border: 1px solid grey;padding:2px;}
 .error td.titre{border-bottom: none;}
 .titre{background-color: grey;}
@@ -14,7 +16,7 @@ td.maintitre{border-top: 1px solid black;}
   if (count($recap->errors)) {
     echo "<p>Des erreurs ont été repérées concernant le fichier CSV que vous venez de nous fournir</p><table><tr><th>Message</th><th>Numéros de ligne</th></tr>";
     foreach ($recap->errors as $msg => $lines) {
-      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>";
+      echo "<tr><td class='error'>$msg</td><td>";
       $c = 0;
       foreach ($lines->getRawValue() as $l) {
 	if ($c)
@@ -30,7 +32,7 @@ td.maintitre{border-top: 1px solid black;}
   if (count($recap->warnings)) {
     echo "<p>Des alertes ont été repérées concernant le fichier CSV que vous venez de nous fournir</p><table><tr><th>Message</th><th>Numéros de ligne</th></tr>";
     foreach ($recap->warnings as $msg => $lines) {
-      echo "<tr><td style='width: 700px; vertical-align: top; color: red;'>$msg</td><td>";
+      echo "<tr><td class='warning'>$msg</td><td>";
       $c = 0;
       foreach ($lines->getRawValue() as $l) {
 	if ($c)
@@ -74,7 +76,7 @@ foreach ($csv->getRawValue()->getCsv() as $line)
   }
   if (count($warnings[$cpt])) {
     foreach($warnings[$cpt]->getRawValue() as $error) {
-      echo '<tr class="error warnings"><td class="titre" style:"color:gray">'.($cpt+1).'</td><td colspan="12">';
+      echo '<tr class="warning"><td class="titre" style:"color:gray">'.($cpt+1).'</td><td colspan="12">';
       echo $error;
       echo '</td></tr>';
     }
