@@ -31,6 +31,10 @@ class uploadActions extends EtapesActions {
         $this->setTemplate('monEspaceCiva', 'tiers');
     }
     
+    public function executeCsvList(sfWebRequest $request) {
+      $this->csv = sfCouchdbManager::getClient('CSV')->getCSVsAcheteurs();
+    }
+
     public function executeCsvDownload(sfWebRequest $request) {
         $this->forward404Unless($this->csv = sfCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
         $this->setResponseCsv($this->csv->getCsvFilename());

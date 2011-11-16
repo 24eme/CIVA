@@ -18,6 +18,7 @@
                             <li>à l'étape validation : <?php echo $etapeValidation; ?></li>
                         </ul>
                     </li>
+			    <li><strong>Nombre de CSV acheteurs uploadés : <?php echo link_to($nb_csv_acheteurs, '@upload_list'); ?></strong></li>
                 </ul>
             </div>
             <br />

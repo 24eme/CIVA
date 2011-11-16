@@ -77,6 +77,8 @@ class statistiquesActions extends sfActions {
                                               ->endkey(array('MOT_DE_PASSE_OUBLIE'))
                                               ->getView("STATS", "COMPTE");
         
+	$this->nb_csv_acheteurs = sfCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
+
         $this->etapeDrValidee = $dr_validees->rows[0]->value;
         $this->etapeDrNonValidee = $dr_non_validees->rows[0]->value;
         

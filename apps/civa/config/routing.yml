@@ -257,6 +257,10 @@ upload_csv:
   url: /upload/csv
   param: {module: upload, action: monEspaceCiva}
 
+upload_list:
+  url: /upload/list
+  param: {module: upload, action: csvList}
+
 csv_view:
   url: /upload/csv/:md5
   param: {module: upload, action: csvView}

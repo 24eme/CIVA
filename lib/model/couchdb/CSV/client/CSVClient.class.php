@@ -2,11 +2,25 @@
 
 class CSVClient extends sfCouchdbClient {
   private function getCSVsFromRecoltantArray($cvi) {
-    $csv = $this->startkey(array($cvi))->endkey(array(($cvi+1).''))->executeView('import', 'csv');
+    $csv = $this->startkey(array($cvi))->endkey(array(($cvi+1).''))->executeView('CSV', 'recoltant');
     $ids = array();
     foreach ($csv as $k => $c) 
       $ids[] = $k;
     return $ids;
+  }
+
+  public function getCSVsAcheteurs($campagne = null) {
+    if (!$campagne) 
+      $campagne = CurrentClient::getCurrent()->campagne;
+    $csv = $this->startkey(array($campagne))->endkey(array(($campagne+1).''))->executeView('CSV', 'acheteur');
+    $ids = array();
+    foreach ($csv as $k => $c) 
+      $ids[] = $k;
+    return $ids;
+  }
+
+  public function countCSVsAcheteurs($campagne = null) {
+    return count($this->getCSVsAcheteurs($campagne));
   }
 
   public function countCSVsFromRecoltant($cvi) {
