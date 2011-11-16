@@ -12,8 +12,12 @@ class DRClient extends sfCouchdbClient {
     $doc->campagne = $campagne;
     $doc->declaration_insee = $tiers->declaration_insee;
     $doc->declaration_commune = $tiers->declaration_commune;
+
     foreach ($csvs as $csv) {
-      $import[] = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+      $acheteur_cvi = $csv->cvi;
+      $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+      $import[] = $acheteur_obj;      
+
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
 	if ($line[CsvFile::CSV_APPELLATION] == 'JEUNES VIGNES') {
 	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
@@ -37,11 +41,12 @@ class DRClient extends sfCouchdbClient {
 	  $detail->denomination = 'repli';
 	  $detail->add('motif_non_recolte', 'AE');
 	}else{
-	  $acheteur = $detail->add('cooperatives')->add();
-	  $acheteur->cvi = $line[CsvFile::CSV_ACHETEUR_CVI];
+	  $acheteur = $detail->add($acheteur_obj->getAcheteurDRType())->add();
+	  $acheteur->cvi = $acheteur_cvi;
 	  $acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
 	}
-	$detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
+	if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
+	  $detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
       }
     }
     $doc->update();
