@@ -93,8 +93,13 @@ class uploadActions extends EtapesActions {
             }
             if ($errorprod = $this->cannotIdentifyProduct($line))
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $errorprod . '», merci de vérifier les libellés.';
-            else if ($this->shouldHaveSuperficie($line))
+            else {
+	      if ($this->shouldHaveSuperficie($line))
                 $this->errors[$cpt][] = 'La superficie est erronée.';
+	      if ($this->cannotHaveDenomLieu($line)) {
+                $this->errors[$cpt][] = 'Un dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
+            }
+	    }
             if (!$this->isVTSGNOk($line))
                 $this->errors[$cpt][] = 'Le champ VT/SGN est non valide.';
 
@@ -105,9 +110,6 @@ class uploadActions extends EtapesActions {
             }
             if ($this->couldHaveSuperficie($line)) {
                 $this->warnings[$cpt][] = 'La superficie pourrait être renseignée';
-            }
-            if ($this->cannotHaveDenomLieu($line)) {
-                $this->errors[$cpt][] = 'Un dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
             }
             if ($this->cannotHaveRebeche($line)) {
                 $this->errors[$cpt][] = 'Vous ne pouvez pas déclarer de rebeche. (Seule les caves peuvent le faire)';
