@@ -168,9 +168,13 @@ class uploadActions extends EtapesActions {
     }
 
     protected function cannotHaveDenomLieu($line) {
-        if (!$this->may_have_denomlieu && $this->has_lieudit && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
-            return true;
-        return false;
+        if ($this->has_lieudit && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+            return false;
+	if ($this->may_have_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+	  return false;
+	if (isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+	  return true;
+	return false;
     }
 
     protected function cannotIdentifyProduct($line) {
