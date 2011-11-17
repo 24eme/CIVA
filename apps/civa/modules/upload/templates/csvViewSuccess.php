@@ -47,7 +47,9 @@ td.maintitre{border-top: 1px solid black;}
   }
 ?>
 </div>
-
+<div class="linkback">
+    <p style="float:right; margin: 15px;"><?php echo link_to("Retour à votre espace CIVA", "@mon_espace_civa"); ?></p>
+</div>
 <table class="csv">
 <tr class="titre"><td>&nbsp;</td><td>CVI acheteur</td><td>Nom acheteur</td><td>CVI récoltant</td><td>Nom récoltant</td><td>Appellation</td><td>Lieu</td><td>Cepage</td><td>VT/SGN</td><td>Denomination</td><td>Superficie acheté</td><td>Volume acheté</td></tr>
 <?php   $cpt = 0;
