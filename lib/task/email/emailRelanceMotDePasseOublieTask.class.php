@@ -46,7 +46,7 @@ EOF;
             
             try {
               $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), 
-                                               "vince.laurent@gmail.com", 
+                                               $compte->email, 
                                                "CIVA - Mot de passe oublié", 
                                                $this->getMessageBody($compte));
               $nb_email_send++;
