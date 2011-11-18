@@ -304,10 +304,10 @@ class exportActions extends sfActions {
     }
     
     public function executeDrAcheteurCsv(sfWebRequest $request) {
-        $filename = $this->getUser()->getCampagne().'_DR_ACHETEUR_'.$this->getUser()->getTiers('Acheteur')->cvi.'.csv';
+        $filename = $this->getUser()->getCampagne().'_DR_ACHETEUR_'.$this->getUser()->getTiers('Acheteur')->cvi;
 
         $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);
-        $existing_file = sfConfig::get('sf_data_dir').'/export/dr-acheteur/csv/'.$this->getUser()->getCampagne().'/'.$filename.'_'.$export->getMd5();
+        $existing_file = sfConfig::get('sf_data_dir').'/export/dr-acheteur/csv/'.$this->getUser()->getCampagne().'/'.$filename.'_'.$export->getMd5().'.csv';
         
         if (!$request->hasParameter('force') && file_exists($existing_file)) {
             $content = file_get_contents($existing_file);
@@ -317,7 +317,7 @@ class exportActions extends sfActions {
             file_put_contents($existing_file, $content);
         }
         
-        $this->setResponseCsv($filename);
+        $this->setResponseCsv($filename.'.csv');
         return $this->renderText($content);
     }
 
