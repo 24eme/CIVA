@@ -151,8 +151,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
                         foreach($lieu->getCouleurs() as $couleur) {
                             foreach ($couleur->getCepages() as $cepage) {
                                 foreach ($cepage->getDetail() as $detail) {
+                                    $added = false;
                                     foreach ($detail->filter('negoces|cooperatives|mouts') as $acheteurs) {
-                                        $added = false;
                                         foreach ($acheteurs as $acheteur) {
                                             if ($acheteur->cvi == $this->_acheteur->cvi) {
                                                 $this->addDetailAcheteur($acheteur);
@@ -167,8 +167,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
                                 }
                             }
                         }
+                        $added = false;
                         foreach ($lieu->acheteurs as $acheteurs) {
-                            $added = false;
                             foreach ($acheteurs as $cvi_a => $acheteur) {
                                 if ($cvi_a == $this->_acheteur->cvi) {
                                     $this->addLieuAcheteur($acheteur);
