@@ -312,7 +312,7 @@ class exportActions extends sfActions {
         if (!$request->hasParameter('force') && file_exists($existing_file)) {
             $content = file_get_contents($existing_file);
         } else {            
-            $this->export();
+            $export->export();
             $content = $export->output();
             file_put_contents($existing_file, $content);
         }
