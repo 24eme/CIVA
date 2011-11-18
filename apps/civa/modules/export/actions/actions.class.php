@@ -305,19 +305,17 @@ class exportActions extends sfActions {
     
     public function executeDrAcheteurCsv(sfWebRequest $request) {
         $filename = $this->getUser()->getCampagne().'_DR_ACHETEUR_'.$this->getUser()->getTiers('Acheteur')->cvi.'.csv';
-        $existing_file = sfConfig::get('sf_data_dir').'/export/dr-acheteur/csv/'.$this->getUser()->getCampagne().'/'.$filename;
+
+        $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);
+        $existing_file = sfConfig::get('sf_data_dir').'/export/dr-acheteur/csv/'.$this->getUser()->getCampagne().'/'.$filename.'_'.$export->getMd5();
         
-        /*if (!$request->hasParameter('force') && file_exists($existing_file)) {
+        if (!$request->hasParameter('force') && file_exists($existing_file)) {
             $content = file_get_contents($existing_file);
-        } else {
-            $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);
+        } else {            
+            $this->export();
             $content = $export->output();
             file_put_contents($existing_file, $content);
-        }*/
-        
-        $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);
-        $content = $export->output();
-        file_put_contents($existing_file, $content);
+        }
         
         $this->setResponseCsv($filename);
         return $this->renderText($content);
