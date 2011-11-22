@@ -64,7 +64,7 @@
         <p class="vol_total_recolte">
             <input type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->hasMotifNonRecolteLibelle()) : ?>
-                <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null)->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif <?php if ($detail->getMotifNonRecolteLibelle() != 'Déclaration en cours')
+                <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null, null)->getRawValue(), array('detail_key' => $detail->getKey()))) ?>" class="ajout ajout_motif <?php if ($detail->getMotifNonRecolteLibelle() != 'Déclaration en cours')
                 echo 'ajout_lien'; ?>"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
         <?php endif; ?>
         </p>
