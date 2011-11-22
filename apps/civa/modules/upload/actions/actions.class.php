@@ -57,6 +57,7 @@ class uploadActions extends EtapesActions {
 
     public function executeCsvView(sfWebRequest $request) {
         $md5 = $request->getParameter('md5');
+        set_time_limit(600);
 
         $this->csv = new CsvFile(sfConfig::get('sf_data_dir') . '/upload/' . $md5);
         $this->cache = array();
