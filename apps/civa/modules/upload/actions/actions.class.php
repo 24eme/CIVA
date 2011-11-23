@@ -339,6 +339,8 @@ class uploadActions extends EtapesActions {
     }
 
     protected function isVolumeNotCorrect($line) {
+        if ($this->no_volume)
+            return false;
         return!$this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);
     }
 
