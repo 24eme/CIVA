@@ -17,9 +17,10 @@ class DRClient extends sfCouchdbClient {
       $acheteur_cvi = $csv->cvi;
       $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
       $import[] = $acheteur_obj;      
-
+      $linenum = 0;
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
-	if ($line[CsvFile::CSV_APPELLATION] == 'JEUNES VIGNES') {
+	$linenum++;
+	if (strtoupper($line[CsvFile::CSV_APPELLATION]) == 'JEUNES VIGNES') {
 	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
 	  continue;
 	}
@@ -27,7 +28,7 @@ class DRClient extends sfCouchdbClient {
 									 $line[CsvFile::CSV_LIEU], 
 									 $line[CsvFile::CSV_CEPAGE]);
 	if (!isset($prod['hash']))
-	  throw new sfException($prod['error']);
+	  throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
 	
 	$cepage = $doc->getOrAdd($prod['hash']);
 
