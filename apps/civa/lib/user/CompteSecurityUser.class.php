@@ -2,11 +2,14 @@
 
 abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
-    protected $_compte = null;
+    protected $_compte = array();
+    
     const SESSION_COMPTE = 'compte';
+    const NAMESPACE_COMPTE_AUTHENTICATED = "CompteSecurityUser_Authenticated";
     const NAMESPACE_COMPTE_TIERS = "CompteSecurityUser_Tiers";
     const NAMESPACE_COMPTE_PROXY = "CompteSecurityUser_Proxy";
     const NAMESPACE_COMPTE_VIRTUEL = "CompteSecurityUser_Virtuel";
+    
     const CREDENTIAL_COMPTE = 'compte';
     const CREDENTIAL_COMPTE_TIERS = 'compte_tiers';
     const CREDENTIAL_COMPTE_PROXY = 'compte_proxy';
@@ -21,7 +24,8 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
                                                    self::NAMESPACE_COMPTE_PROXY => self::CREDENTIAL_COMPTE_PROXY,
                                                    self::NAMESPACE_COMPTE_VIRTUEL => self::CREDENTIAL_COMPTE_VIRTUEL);
     
-    protected $_namespaces_compte = array(self::NAMESPACE_COMPTE_TIERS, 
+    protected $_namespaces_compte = array(self::NAMESPACE_COMPTE_AUTHENTICATED,
+                                          self::NAMESPACE_COMPTE_TIERS, 
                                           self::NAMESPACE_COMPTE_PROXY, 
                                           self::NAMESPACE_COMPTE_VIRTUEL);
     
@@ -55,7 +59,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
             throw new sfException('compte does not exist');
         }
         $this->addCredential(self::CREDENTIAL_COMPTE);
+        $this->signInCompteAutenticated($compte);
         $this->signInCompte($compte);
+        
         $this->setAuthenticated(true);
         
         if ($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE) {
@@ -84,6 +90,14 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->setAuthenticated(false);
         $this->clearCredentials();
     }
+    
+    /**
+     *
+     * @param _Compte $compte 
+     */
+    public function signInCompteAutenticated($compte) {
+        $this->setAttribute(self::SESSION_COMPTE, $compte->login, self::NAMESPACE_COMPTE_AUTHENTICATED);
+    }
 
     /**
      *
@@ -109,7 +123,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      * @param string $namespace 
      */
     public function signOutCompte($namespace) {
-        $this->_compte = null;
+        $this->_compte = array();
         $this->removeCredential($this->_namespace_credential_compte[$namespace]);
         $this->getAttributeHolder()->removeNamespace($namespace);
     }
@@ -118,18 +132,22 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      *
      * @return _Compte $compte 
      */
-    public function getCompte() {
+    public function getCompte($namespace = null) {
         $this->requireCompte();
         
-        if (is_null($this->_compte)) {
-            $this->_compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $this->getNamespaceCompte()));
-            if (!$this->_compte) {
+        if (!$namespace) {
+            $namespace = $this->getNamespaceCompte();
+        }
+        
+        if (!array_key_exists($namespace, $this->_compte)) {
+            $this->_compte[$namespace] = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
+            if (!$this->_compte[$namespace]) {
                 $this->signOut();
                 throw new sfException("The compte does not exist");
             }
         }
 
-        return $this->_compte;
+        return $this->_compte[$namespace];
     }
     
     protected function getNamespaceCompte() {
