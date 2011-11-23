@@ -43,7 +43,7 @@ class Configuration extends BaseConfiguration {
     }
 
     private static function normalizeLibelle($libelle) {
-      //$libelle = str_replace('Alsace Pinot Noir rouge', 'alsace PN rouge', $libelle);
+      $libelle = str_ireplace('Alsace Pinot Noir rouge', 'alsace PN rouge', $libelle);
       $libelle = str_ireplace('SAINT-', 'saint ', $libelle);
       $libelle = preg_replace('/&nbsp;/', '', strtolower($libelle));
       $libelle = str_replace(array('é', 'è', 'ê'), 'e', $libelle);
