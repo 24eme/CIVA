@@ -20,7 +20,7 @@ class DRClient extends sfCouchdbClient {
       $linenum = 0;
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
 	$linenum++;
-	if (strtoupper($line[CsvFile::CSV_APPELLATION]) == 'JEUNES VIGNES') {
+	if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
 	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
 	  continue;
 	}
