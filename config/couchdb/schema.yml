@@ -8,6 +8,11 @@ DR:
       updated: { required: false }
       validee: { required: false }
       modifiee: { required: false }
+      utilisateurs:
+        type: collection
+        definition:
+          fields:
+            '*': {  }
       import_db2: {type: integer, required: false }
       declarant:
         type: collection

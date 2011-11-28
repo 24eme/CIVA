@@ -288,4 +288,8 @@ class DR extends BaseDR {
     public function getRecoltantObject() {
        return sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->cvi); 
     }
+    
+    public function save() {
+        parent::save();
+    }
 }
