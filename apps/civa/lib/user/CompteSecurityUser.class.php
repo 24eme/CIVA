@@ -14,6 +14,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     const CREDENTIAL_COMPTE_TIERS = 'compte_tiers';
     const CREDENTIAL_COMPTE_PROXY = 'compte_proxy';
     const CREDENTIAL_COMPTE_VIRTUEL = 'compte_virtuel';
+    const CREDENTIAL_OPERATEUR = 'operateur';
     const CREDENTIAL_ADMIN = 'admin';
 
     protected $_couchdb_type_namespace_compte= array("CompteTiers" => self::NAMESPACE_COMPTE_TIERS, 
@@ -32,7 +33,8 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     protected $_credentials_compte = array(self::CREDENTIAL_COMPTE, 
                                            self::CREDENTIAL_COMPTE_TIERS, 
                                            self::CREDENTIAL_COMPTE_PROXY, 
-                                           self::CREDENTIAL_COMPTE_VIRTUEL, 
+                                           self::CREDENTIAL_COMPTE_VIRTUEL,
+                                           self::CREDENTIAL_OPERATEUR,
                                            self::CREDENTIAL_ADMIN);
 
     /**
