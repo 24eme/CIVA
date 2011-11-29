@@ -39,10 +39,6 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if (substr($arguments['login'], 0, 4) != 'ext-') {
-        throw new sfCommandException("L'identifiant doit commencer par \"ext-\"");
-    }
-
     if (sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
         throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $arguments['login']));
     }
