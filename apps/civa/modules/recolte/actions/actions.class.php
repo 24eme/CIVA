@@ -94,7 +94,7 @@ class recolteActions extends EtapesActions {
             $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
         }
         $this->declaration->update();
-        $this->declaration->utilisateurs->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
+        $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
         $this->declaration->save();
 
         $this->redirect($this->onglets->getUrl('recolte'));
@@ -273,7 +273,7 @@ class recolteActions extends EtapesActions {
     protected function processFormDetail($form, $request) {
         $form->bind($request->getParameter($form->getName()));
         if ($form->isValid()) {
-            $form->getObject()->getCouchdbDocument()->utilisateurs->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
+            $form->getObject()->getCouchdbDocument()->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
             $detail = $form->save();
             if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());

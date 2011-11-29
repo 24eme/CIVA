@@ -133,7 +133,7 @@ class declarationActions extends EtapesActions {
 
             if ($this->askRedirectToNextEtapes()) {
                 $dr->validate($tiers, $this->getUser()->getCompte());
-                $dr->utilisateurs->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
+                $dr->utilisateurs->validation->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
                 $dr->save();
                 $this->getUser()->initCredentialsDeclaration();
 

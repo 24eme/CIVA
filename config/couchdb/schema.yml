@@ -12,7 +12,16 @@ DR:
         type: collection
         definition:
           fields:
-            '*': {  }
+            edition:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }
+            validation:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }
       import_db2: {type: integer, required: false }
       declarant:
         type: collection
