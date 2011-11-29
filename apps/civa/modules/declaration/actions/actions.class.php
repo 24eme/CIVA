@@ -151,7 +151,7 @@ class declarationActions extends EtapesActions {
                                                        $this->getUser()->getCompte()->email, 
                                                        'CIVA - Validation de votre déclaration de récolte', $mess);
                 
-                if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+                if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
                     try {
                         $this->getMailer()->send($message);
                     } catch (Exception $e) {

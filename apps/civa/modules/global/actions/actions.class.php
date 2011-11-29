@@ -26,11 +26,11 @@ class globalActions extends sfActions {
     }
 
     public function executeSecure() {
-        if (!$this->getUser()->hasCredential('tiers') && $this->getUser()->hasCredential('admin')) {
+        if (!$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS) && $this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
             return $this->redirect("@admin");
-        } elseif (!$this->getUser()->hasCredential('tiers') && $this->getUser()->hasCredential('compte-tiers')) {
+        } elseif (!$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS) && $this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE_TIERS)) {
             return $this->redirect("@tiers");
-        } elseif(!$this->getUser()->hasCredential('tiers')) {
+        } elseif(!$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS)) {
             $this->getUser()->signOut();
             return $this->redirect("@login");
         } else {

@@ -36,7 +36,7 @@
             <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE): ?>
                 <li><a href="<?php echo url_for('@compte_modification_oublie'); ?>">Mon compte</a></li>
             <?php endif; ?>
-            <?php  if ($sf_user->hasCredential('admin')) : ?>
+            <?php  if ($sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)): ?>
                 <li class="admin"><a href="<?php echo url_for('@admin'); ?>">Administration</a></li>
             <?php endif;  ?>
 

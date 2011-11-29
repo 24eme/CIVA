@@ -30,7 +30,6 @@ class compteActions extends sfActions {
             $this->getUser()->signIn(phpCAS::getUser());
             $this->redirect('@tiers');
         } else {
-            $this->getUser()->signIn('admin-civa');
             $url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
             $this->redirect($url);
         }
