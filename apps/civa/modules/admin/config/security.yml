@@ -1,2 +1,5 @@
 default:
   credentials: [operateur]
+  
+login:
+  is_secure: false

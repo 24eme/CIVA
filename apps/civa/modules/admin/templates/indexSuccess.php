@@ -6,7 +6,7 @@
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration" style="width: 504px;">
             <form action="<?php echo url_for('@admin') ?>" method="post" id="principal">
-            <h3 class="titre_section">Connexion</h3>
+            <h3 class="titre_section">Connexion à un compte</h3>
             <div class="contenu_section">
                 <p class="intro">Pour vous connecter, merci d'indiquer le login :</p>
                 <?php echo $form->renderHiddenFields(); ?>

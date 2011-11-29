@@ -12,12 +12,29 @@ class adminActions extends sfActions {
 
     /**
      *
+     * @param sfWebRequest $request 
+     */
+    public function executeLogin(sfWebRequest $request) {
+         $this->forward404Unless($this->getUser()->hasCredential('admin-login'));
+         $this->getUser()->signOut();
+         $this->form = new AdminCompteLoginForm(null, array('comptes_type' => array('CompteVirtuel')), false);
+         if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->getUser()->signIn($this->form->process()->login);
+                $this->redirect('@tiers');
+            }
+        }
+    }
+    
+    /**
+     *
      * @param sfRequest $request A request object
      */
     public function executeIndex(sfWebRequest $request) {
         $this->getUser()->signOutCompte(myUser::NAMESPACE_COMPTE_PROXY);
         $this->getUser()->signOutCompte(myUser::NAMESPACE_COMPTE_TIERS);
-        $this->form = new AdminCompteLoginForm();
+        $this->form = new AdminCompteLoginForm(null, array('comptes_type' => array('CompteTiers', 'CompteProxy')));
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {

@@ -88,6 +88,14 @@ gamma_telecharger_l_adhesion:
   
 # *********** ADMIN ***********
 
+admin-login:
+  url: /admin/login
+  param: { module: admin, action: login }
+  
+admin-logout:
+  url: /admin/logout
+  param: { module: admin, action: login }
+
 admin:
   url: /admin
   param: { module: admin, action: index }

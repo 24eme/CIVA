@@ -126,7 +126,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     public function signOutCompte($namespace) {
         $this->_compte = array();
-        $this->removeCredential($this->_namespace_credential_compte[$namespace]);
+        if(array_key_exists($namespace, $this->_namespace_credential_compte)) {
+            $this->removeCredential($this->_namespace_credential_compte[$namespace]);
+        }
         $this->getAttributeHolder()->removeNamespace($namespace);
     }
 

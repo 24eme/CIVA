@@ -3,7 +3,8 @@
 
 # for all modules
 
-
+error404:
+  is_secure: false
 
 
 

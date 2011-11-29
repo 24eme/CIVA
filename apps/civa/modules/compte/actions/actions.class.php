@@ -48,7 +48,9 @@ class compteActions extends sfActions {
         $url = 'http://'.$request->getHost();
         error_reporting(E_ALL);
         phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
-        phpCAS::logoutWithRedirectService($url);
+        if (phpCas::isAuthenticated()) {
+            phpCAS::logoutWithRedirectService($url);
+        }
         $this->redirect($url);
     }
 

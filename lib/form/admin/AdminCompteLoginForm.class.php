@@ -21,7 +21,7 @@ class AdminCompteLoginForm extends BaseForm {
         $this->widgetSchema->setNameFormat('admin[%s]');
 
         $this->validatorSchema['login']->setMessage('required', 'Champ obligatoire');
-        $this->validatorSchema->setPostValidator(new ValidatorAdminCompteLogin());
+        $this->validatorSchema->setPostValidator(new ValidatorAdminCompteLogin(array('comptes_type' => $this->getOption('comptes_type', array()))));
     }
 
     /**
