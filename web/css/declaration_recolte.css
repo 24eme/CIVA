@@ -555,13 +555,23 @@ a.msg_aide:hover{
 }
 
 #nouvelle_declaration .ligne_form,
-#form_gamma .ligne_form { margin: 0 0 5px 25px; }
+#form_gamma .ligne_form { margin: 0 0 7px 20px; }
 #nouvelle_declaration .ligne_form input[type=radio],
 #form_gamma .ligne_form input[type=radio] { margin: 0 3px 0 0; }
 #nouvelle_declaration .ligne_form label,
 #form_gamma .ligne_form label { font-size: 14px; }
+#nouvelle_declaration .ligne_form label {
+    display: inline-block;
+    zoom: 1;
+    width: 334px;
+}
+#nouvelle_declaration .ligne_form label small {
+    font-size: 13px;
+    color: #666;
+}
+
 #nouvelle_declaration .ligne_btn,
-#form_gamma .ligne_btn { margin: 15px 0 0 85px; }
+#form_gamma .ligne_btn { margin: 7px 0 0 40px; }
 
 .ligne_btn_retour{text-align: right;}
 

@@ -15,18 +15,18 @@
             <?php if ($has_import) : ?>
                 <div class="ligne_form">
                     <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" checked="checked" />
-                    <label for="type_declaration_import">Visualiser, compléter et valider les données fournies par vos acheteurs (négociants ou caves coopératives)</label>
+                    <label for="type_declaration_import">Visualiser, compléter et valider les données fournies par vos acheteurs <small>(négociants ou caves coopératives)</small></label>
                 </div>
             <?php endif; ?>
             <div class="ligne_form">
                 <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" <?php if(!$has_import): ?>checked="checked"<?php endif; ?> />
-                <label for="type_declaration_vierge">Démarrer à partir d'une déclaration vierge</label>
+                <label for="type_declaration_vierge">Démarrer d'une déclaration vierge</label>
             </div>
 
             <?php if (count($campagnes) > 0): ?>
                 <div class="ligne_form">
                     <input type="radio" id="type_declaration_precedente" name="dr[type_declaration]" value="precedente" />
-                    <label for="type_declaration_precedente">Démarrer à partir d'une déclaration d'un année précédente</label>
+                    <label for="type_declaration_precedente">Démarrer d'une déclaration d'une année précédente</label>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <select id="liste_precedentes_declarations" name="dr[liste_precedentes_declarations]">
