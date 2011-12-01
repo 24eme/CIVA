@@ -3,19 +3,19 @@
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getConfig() {
-      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
     public function getLibelleWithAppellation() {
-      if ($this->getLibelle())
-	return $this->getParent()->getLibelle().' - '.$this->getLibelle();
-      return $this->getParent()->getLibelle();
+        if ($this->getLibelle())
+            return $this->getParent()->getLibelle() . ' - ' . $this->getLibelle();
+        return $this->getParent()->getLibelle();
     }
 
     public function getLibelle() {
         return $this->store('libelle', array($this, 'getInternalLibelle'));
     }
-    
+
     protected function getInternalLibelle() {
         return $this->getConfig()->getLibelle();
     }
@@ -25,23 +25,23 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCouleurs() {
-      return $this->filter('^couleur');
+        return $this->filter('^couleur');
     }
 
     public function getCouleur($cepage = null) {
-      if (!$cepage && $this->getNbCouleurs() > 1) 
-	throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
-      $couleur = 'couleur';
-      if ($cepage)
-	foreach ($this->getCouleurs() as $couleur => $obj) {
-	  if ($obj->exist($cepage))
-	    break;
-	}
-      return $this->_get('couleur');
+        if (!$cepage && $this->getNbCouleurs() > 1)
+            throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
+        $couleur = 'couleur';
+        if ($cepage)
+            foreach ($this->getCouleurs() as $couleur => $obj) {
+                if ($obj->exist($cepage))
+                    break;
+            }
+        return $this->_get('couleur');
     }
 
     public function getNbCouleurs() {
-      return count($this->filter('^couleur'));
+        return count($this->filter('^couleur'));
     }
 
     public function getCepages() {
@@ -50,39 +50,40 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCodeDouane($vtsgn = '') {
-      if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
-	if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
-	  $vtsgn = 'AOC';
-	}
-      }
-      if($this->getAppellation()->getConfig()->hasManyLieu()) {
-          return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
-      } else {
-          return $this->getAppellation()->getConfig()->getDouane()->getFullAppCode($vtsgn);
-      }
+        if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
+            if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
+                $vtsgn = 'AOC';
+            }
+        }
+        if ($this->getAppellation()->getConfig()->hasManyLieu()) {
+            return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+        } else {
+            return $this->getAppellation()->getConfig()->getDouane()->getFullAppCode($vtsgn);
+        }
     }
 
     public function getTotalVolume() {
-      $field = 'total_volume';
-      if ($this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
+        $field = 'total_volume';
+        if ($this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
     }
+
     public function getTotalSuperficie() {
-      $field = 'total_superficie';
-      if ($this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
+        $field = 'total_superficie';
+        if ($this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
-      $field = 'volume_revendique';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
+        $field = 'volume_revendique';
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
     public function getVolumeRevendiqueTotal() {
@@ -108,15 +109,15 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getDplc($force_calcul = false) {
-      $field = 'dplc';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getDplcFinal'));
+        $field = 'dplc';
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getDplcFinal'));
     }
 
     public function getDplcTotal() {
-       return $this->store('dplc_total', array($this, 'getSumCouleurFields'), array('dplc'));
+        return $this->store('dplc_total', array($this, 'getSumCouleurFields'), array('dplc'));
     }
 
     public function getDplcAppellation() {
@@ -138,37 +139,37 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getTotalCaveParticuliere() {
-      $key = "total_cave_particuliere";
-      if (!isset($this->_storage[$key])) {
-          $sum = 0;
-          foreach($this->getCouleurs() as $couleur) {
-              foreach ($couleur->getCepages() as $key => $cepage) {
-                 if ($cepage->getConfig()->excludeTotal()) {
-                          continue;
-                 }
-                 $sum += $cepage->getTotalCaveParticuliere();
-              }
-          }
-          $this->_storage[$key] = $sum;
-      }
-      return $this->_storage[$key];
+        $key = "total_cave_particuliere";
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            foreach ($this->getCouleurs() as $couleur) {
+                foreach ($couleur->getCepages() as $key => $cepage) {
+                    if ($cepage->getConfig()->excludeTotal()) {
+                        continue;
+                    }
+                    $sum += $cepage->getTotalCaveParticuliere();
+                }
+            }
+            $this->_storage[$key] = $sum;
+        }
+        return $this->_storage[$key];
     }
-    
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "volume_acheteurs_".$type;
+        $key = "volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
             $this->_storage[$key] = array();
-            foreach($this->getCouleurs() as $couleur) {
+            foreach ($this->getCouleurs() as $couleur) {
                 foreach ($couleur->getCepages() as $cepage) {
                     if ($cepage->getConfig()->excludeTotal()) {
-                          continue;
+                        continue;
                     }
                     $acheteurs = $cepage->getVolumeAcheteurs($type);
                     foreach ($acheteurs as $cvi => $quantite_vendue) {
-                      if (!isset($this->_storage[$key][$cvi])) {
-                        $this->_storage[$key][$cvi] = 0;
-                      }
-                      $this->_storage[$key][$cvi] += $quantite_vendue;
+                        if (!isset($this->_storage[$key][$cvi])) {
+                            $this->_storage[$key][$cvi] = 0;
+                        }
+                        $this->_storage[$key][$cvi] += $quantite_vendue;
                     }
                 }
             }
@@ -176,7 +177,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->_storage[$key];
     }
 
-     public function getVolumeAcheteur($cvi, $type) {
+    public function getVolumeAcheteur($cvi, $type) {
         $volume = 0;
         $acheteurs = $this->getVolumeAcheteurs($type);
         if (array_key_exists($cvi, $acheteurs)) {
@@ -186,39 +187,39 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "total_volume_acheteurs_".$type;
+        $key = "total_volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
-              $sum = 0;
-              $acheteurs = $this->getVolumeAcheteurs($type);
-              foreach($acheteurs as $volume) {
+            $sum = 0;
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $volume) {
                 $sum += $volume;
-              }
-              $this->_storage[$key] = $sum;
+            }
+            $this->_storage[$key] = $sum;
         }
         return $this->_storage[$key];
     }
 
     public function getTotalVolumeForMinQuantite() {
-      return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
+        return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
     }
 
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
-	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
+            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100), 0);
         } else {
             return 0;
         }
     }
-    
+
     public function removeVolumes() {
-      $this->volume_revendique = null;
-      $this->total_volume = null;
-      $this->dplc = null;
-      foreach($this->getCouleurs() as $couleur) {
-          foreach($couleur->getCepages() as $cepage) {
-            $cepage->removeVolumes();
-          }
-      }
+        $this->volume_revendique = null;
+        $this->total_volume = null;
+        $this->dplc = null;
+        foreach ($this->getCouleurs() as $couleur) {
+            foreach ($couleur->getCepages() as $cepage) {
+                $cepage->removeVolumes();
+            }
+        }
     }
 
     public function hasSellToUniqueAcheteur() {
@@ -227,13 +228,13 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
         $vol_total_cvi = array();
         $acheteurs = array();
-        $types = array('negoces','cooperatives','mouts');
-        foreach($types as $type) {
-            foreach($this->getVolumeAcheteurs($type) as $cvi => $volume) {
-                if (!isset($vol_total_cvi[$type.'_'.$cvi])) {
-                    $vol_total_cvi[$type.'_'.$cvi] = 0;
+        $types = array('negoces', 'cooperatives', 'mouts');
+        foreach ($types as $type) {
+            foreach ($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+                if (!isset($vol_total_cvi[$type . '_' . $cvi])) {
+                    $vol_total_cvi[$type . '_' . $cvi] = 0;
                 }
-                $vol_total_cvi[$type.'_'.$cvi] += $volume;
+                $vol_total_cvi[$type . '_' . $cvi] += $volume;
             }
         }
         if (count($vol_total_cvi) != 1) {
@@ -247,8 +248,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             return true;
         }
 
-        foreach($this->acheteurs as $type => $type_acheteurs) {
-            foreach($type_acheteurs as $cvi => $acheteur) {
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($acheteur->superficie) {
                     return true;
                 }
@@ -260,8 +261,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getTotalSuperficieRecapitulatifVente() {
         $total_superficie = 0;
-        foreach($this->acheteurs as $type => $type_acheteurs) {
-            foreach($type_acheteurs as $cvi => $acheteur) {
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($acheteur->superficie) {
                     $total_superficie += $acheteur->superficie;
                 }
@@ -273,8 +274,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getTotalDontDplcRecapitulatifVente() {
         $total_dontdplc = 0;
-        foreach($this->acheteurs as $type => $type_acheteurs) {
-            foreach($type_acheteurs as $cvi => $acheteur) {
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($acheteur->dontdplc) {
                     $total_dontdplc += $acheteur->dontdplc;
                 }
@@ -293,52 +294,52 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function hasAcheteurs() {
-       $nb_acheteurs = 0;
-       foreach($this->acheteurs as $type => $type_acheteurs) {
-           $nb_acheteurs += $type_acheteurs->count();
-       }
+        $nb_acheteurs = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            $nb_acheteurs += $type_acheteurs->count();
+        }
 
-       return $nb_acheteurs > 0;
+        return $nb_acheteurs > 0;
     }
 
     public function getVolumeMaxAppellation() {
-      return round(($this->getTotalSuperficie()/100) * $this->getConfig()->getRendementAppellation(), 2);
+        return round(($this->getTotalSuperficie() / 100) * $this->getConfig()->getRendementAppellation(), 2);
     }
 
     public function isNonSaisie() {
-      $cpt = 0;
-      foreach($this->getCouleurs() as $couleur) {
-          foreach($couleur->getCepages() as $key => $cepage) {
-            $cpt ++;
-            if (!$cepage->isNonSaisie())
-              return false;
-          }
-      }
-      return ($cpt);
+        $cpt = 0;
+        foreach ($this->getCouleurs() as $couleur) {
+            foreach ($couleur->getCepages() as $key => $cepage) {
+                $cpt++;
+                if (!$cepage->isNonSaisie())
+                    return false;
+            }
+        }
+        return ($cpt);
     }
 
     protected function getVolumeRevendiqueFinal() {
-      $volume_revendique_total = $this->getVolumeRevendiqueTotal();
-      $volume_revendique_final = $volume_revendique_total;
-      if ($this->getConfig()->hasRendementAppellation()) {
-          $volume_revendique_appellation = $this->getVolumeRevendiqueAppellation();
-          if ($volume_revendique_total > $volume_revendique_appellation) {
-            $volume_revendique_final = $volume_revendique_appellation;
-          }
-      }
-      return $volume_revendique_final;
+        $volume_revendique_total = $this->getVolumeRevendiqueTotal();
+        $volume_revendique_final = $volume_revendique_total;
+        if ($this->getConfig()->hasRendementAppellation()) {
+            $volume_revendique_appellation = $this->getVolumeRevendiqueAppellation();
+            if ($volume_revendique_total > $volume_revendique_appellation) {
+                $volume_revendique_final = $volume_revendique_appellation;
+            }
+        }
+        return $volume_revendique_final;
     }
 
     protected function getDplcFinal() {
-      $dplc_total = $this->getDplcTotal();
-      $dplc_final = $dplc_total;
-      if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
-          $dplc_appellation = $this->getDplcAppellation();
-          if ($dplc_total < $dplc_appellation) {
-            $dplc_final = $dplc_appellation;
-          }
-      }
-      return $dplc_final;
+        $dplc_total = $this->getDplcTotal();
+        $dplc_final = $dplc_total;
+        if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
+            $dplc_appellation = $this->getDplcAppellation();
+            if ($dplc_total < $dplc_appellation) {
+                $dplc_final = $dplc_appellation;
+            }
+        }
+        return $dplc_final;
     }
 
     protected function issetField($field) {
@@ -346,41 +347,55 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     protected function getSumCouleurFields($field) {
-      $sum = 0;
-      foreach($this->getCouleurs() as $k => $couleur) {
-	$sum += $couleur->get($field);
-      }
-      return $sum;
+        $sum = 0;
+        foreach ($this->getCouleurs() as $k => $couleur) {
+            $sum += $couleur->get($field);
+        }
+        return $sum;
     }
 
     protected function update($params = array()) {
+
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $total_superficie_before = $this->getTotalSuperficie();
+            $total_volume_before = $this->getTotalVolume();
+            unset($this->_storage['total_superficie']);
+            unset($this->_storage['total_volume']);
+        }
+
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
-            /*$this->total_volume = $this->getTotalVolume(true);
-            $this->total_superficie = $this->getTotalSuperficie(true);*/
+            /* $this->total_volume = $this->getTotalVolume(true);
+              $this->total_superficie = $this->getTotalSuperficie(true); */
             $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
         }
-	$this->add('acheteurs');
-        $types = array('negoces','cooperatives','mouts');
+        $this->add('acheteurs');
+        $types = array('negoces', 'cooperatives', 'mouts');
         $unique_acheteur = null;
-        foreach($types as $type) {
+        foreach ($types as $type) {
             $acheteurs = $this->getVolumeAcheteurs($type);
             foreach ($acheteurs as $cvi => $volume) {
                 $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
                 $unique_acheteur = $acheteur;
+                if ($this->getCouchdbDocument()->canUpdate() && ($this->getTotalSuperficie() != $total_superficie_before ||  $this->getTotalVolume() != $total_volume_before)) {
+                    $acheteur->superficie = null;
+                    $acheteur->dontdplc = null;
+                }
             }
-            foreach($this->acheteurs->get($type) as $cvi => $item) {
+            foreach ($this->acheteurs->get($type) as $cvi => $item) {
                 if (!array_key_exists($cvi, $acheteurs)) {
                     $this->acheteurs->get($type)->remove($cvi);
                 }
             }
         }
-	$this->acheteurs->update();
-        if ($this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
-            //$unique_acheteur->superficie = $this->getTotalSuperficie();
-            //$unique_acheteur->dontdplc = $this->getDplc();
+        $this->acheteurs->update();
+
+        if ($this->getCouchdbDocument()->canUpdate() && $this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
+            $unique_acheteur->superficie = $this->getTotalSuperficie();
+            $unique_acheteur->dontdplc = $this->getDplc();
         }
     }
+
 }
