@@ -170,7 +170,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
                         $added = false;
                         foreach ($lieu->acheteurs as $acheteurs) {
                             foreach ($acheteurs as $cvi_a => $acheteur) {
-                                if ($cvi_a == $this->_acheteur->cvi) {
+                                if ($cvi_a == $this->_acheteur->cvi && $acheteur->type_acheteur != "mouts") {
                                     $this->addLieuAcheteur($acheteur);
                                     $added = true;
                                 }
