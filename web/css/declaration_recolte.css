@@ -571,7 +571,9 @@ a.msg_aide:hover{
 }
 
 #nouvelle_declaration .ligne_btn,
-#form_gamma .ligne_btn { margin: 7px 0 0 40px; }
+#form_gamma .ligne_btn { margin: 15px 0 0 85px; }
+
+#nouvelle_declaration .ligne_selection { margin: 7px 0 0 40px; }
 
 .ligne_btn_retour{text-align: right;}
 

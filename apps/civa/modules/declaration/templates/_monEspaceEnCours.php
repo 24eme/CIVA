@@ -28,7 +28,7 @@
                     <input type="radio" id="type_declaration_precedente" name="dr[type_declaration]" value="precedente" />
                     <label for="type_declaration_precedente">Démarrer d'une déclaration d'une année précédente</label>
                 </div>
-                <div class="ligne_form ligne_btn">
+                <div class="ligne_form ligne_selection">
                     <select id="liste_precedentes_declarations" name="dr[liste_precedentes_declarations]">
                         <?php foreach ($campagnes as $id => $campagne): ?>
                             <option value="<?php echo $campagne ?>">DR <?php echo $campagne ?></option>
