@@ -77,6 +77,11 @@ class statistiquesActions extends sfActions {
                                               ->endkey(array('MOT_DE_PASSE_OUBLIE'))
                                               ->getView("STATS", "COMPTE");
         
+        $utilisateurs_edition = sfCouchdbManager::getClient()->group(true)
+                                              ->group_level(1)
+                                              ->getView("STATS", "edition");
+
+
 	$this->nb_csv_acheteurs = sfCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
 
         $this->etapeDrValidee = $dr_validees->rows[0]->value;
@@ -100,5 +105,10 @@ class statistiquesActions extends sfActions {
             $this->nbInscrit += $compte_mot_de_passe_oublie->rows[0]->value;
             $this->nbOublie = $compte_mot_de_passe_oublie->rows[0]->value;
         }
+	$this->utilisateurs_edition = array(); $cpt = 0;
+	foreach ($utilisateurs_edition->rows as $u) {
+		$this->utilisateurs_edition[$u->key[0]] = $u->value;
+	}
+	arsort($this->utilisateurs_edition);
     }
 }

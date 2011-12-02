@@ -19,6 +19,14 @@
                         </ul>
                     </li>
 			    <li><strong>Nombre de CSV acheteurs uploadés : <?php echo link_to($nb_csv_acheteurs, '@upload_list'); ?></strong></li>
+		<li><strong>Utililisateurs éditeurs :</strong><ul>
+<?php 
+foreach ($utilisateurs_edition as $u => $nb) {
+	$u = str_replace('COMPTE-', '', $u);
+	echo "<li>$u : $nb</li>";
+}
+?>
+		</li></ul>
                 </ul>
             </div>
             <br />
