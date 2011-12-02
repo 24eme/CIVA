@@ -1143,7 +1143,7 @@ var initDRPopups = function()
     if (popup_ajout_acheteur.length > 0 && popup_ajout_cave.length > 0 && popup_ajout_mout.length > 0 && popup_ajout_motif.length > 0) {
         initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs, var_liste_acheteurs_using);
         initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves, var_liste_caves_using);
-        initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs, var_liste_acheteurs_using);
+        initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs_mouts, var_liste_acheteurs_mouts_using);
         initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
     }
     
