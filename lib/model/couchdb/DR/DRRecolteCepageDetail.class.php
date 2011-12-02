@@ -106,6 +106,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
       return self::getUKey($this->lieu, $this->denomination, $this->vtsgn);
     }
 
+    public function getVtsgn() {
+      return str_replace(' ', '', $this->_get('vtsgn'));
+    }
+
     protected function update($params = array()) {
         parent::update($params);
         if (!$this->getCouchdbDocument()->canUpdate())

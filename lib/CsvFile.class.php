@@ -55,6 +55,13 @@ class csvFile
     return $lignes;
   }
 
+  private static function clean($array) {
+    for($i = 0 ; $i < count($array) ; $i++) {
+      $array[$i] = preg_replace('/^ +/', '', preg_replace('/ +$/', '', $array[$i]));
+    }
+    return $array;
+  }
+
   public function getCsv() {
     if ($this->csvdata)
       return $this->csvdata;
@@ -64,7 +71,7 @@ class csvFile
       throw new Exception('Cannot open csv file anymore');
     $this->csvdata = array();
     while (($data = fgetcsv($handler, 0, $this->separator)) !== FALSE) {
-      $this->csvdata[] = $data;
+      $this->csvdata[] = self::clean($data);
     }
     fclose($handler);
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
