@@ -59,7 +59,6 @@ class EtapesActions extends sfActions {
         }
         
         //echo $this->_etapes_config->nextUrl();
-        //exit;
         $this->redirect($this->_etapes_config->nextUrl());
     }
 

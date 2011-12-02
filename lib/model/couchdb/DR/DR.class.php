@@ -37,7 +37,8 @@ class DR extends BaseDR {
         if ($etape == self::ETAPE_EXPLOITATION) {
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
-            return ($this->recolte->hasOneOrMoreAppellation());
+            return true;
+            //return ($this->recolte->hasOneOrMoreAppellation());
         } elseif ($etape == self::ETAPE_VALIDATION) {
             return true;
         }

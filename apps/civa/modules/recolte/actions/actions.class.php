@@ -15,6 +15,9 @@ class recolteActions extends EtapesActions {
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getUser()->getDeclaration();
         $this->help_popup_action = "help_popup_DR";
+        if (!$this->declaration->recolte->hasOneOrMoreAppellation()) {
+            $this->redirectToNextEtapes();
+        }
     }
 
     /**

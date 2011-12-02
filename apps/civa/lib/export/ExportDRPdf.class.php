@@ -74,10 +74,7 @@ class ExportDRPdf {
                 }
             }
           }
-          if ($this->nb_pages == 0) {
-              $extra = array('lies' => $dr->lies, 'jeunes_vignes' => $dr->jeunes_vignes);
-              $this->document->addPage($this->getPartial('export/pageNoAppellationDR', array('tiers'=> $tiers, 'extra' => $extra)));
-          }
+
           $infos = $this->getRecapitulatifInfos($dr);
           $infosPage = array();
 		  $nb_colonnes_by_page = 6;
