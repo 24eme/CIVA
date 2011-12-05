@@ -304,6 +304,8 @@ class exportActions extends sfActions {
     }
     
     public function executeDrAcheteurCsv(sfWebRequest $request) {
+        ini_set('memory_limit', '128M');
+        set_time_limit(180);
         $filename = $this->getUser()->getCampagne().'_DR_ACHETEUR_'.$this->getUser()->getTiers('Acheteur')->cvi;
 
         $export = new ExportDRAcheteurCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);

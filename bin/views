@@ -16,7 +16,7 @@ cat <<EOF > $TMPFILE
   "views":
   {
     "campagne_acheteur": {
-      "map": "function(doc) { if (doc.type && doc.type != 'DR') return; for(appellation in doc.acheteurs) { if (doc.acheteurs[appellation].negoces) { for (id in doc.acheteurs[appellation].negoces) { emit([doc.campagne, doc.acheteurs[appellation].negoces[id], doc.cvi], doc);}} if (doc.acheteurs[appellation].cooperatives) { for (id in doc.acheteurs[appellation].cooperatives) { emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id], doc.cvi], doc);}} if (doc.acheteurs[appellation].mouts)  { for (id in doc.acheteurs[appellation].mouts) { emit([doc.campagne, doc.acheteurs[appellation].mouts[id], doc.cvi], doc);}}}}",
+      "map": "function(doc) { if (doc.type && doc.type != 'DR') return; if (!doc.validee || !doc.modifiee) return; for(appellation in doc.acheteurs) { if (doc.acheteurs[appellation].negoces) { for (id in doc.acheteurs[appellation].negoces) { emit([doc.campagne, doc.acheteurs[appellation].negoces[id], doc.cvi], doc);}} if (doc.acheteurs[appellation].cooperatives) { for (id in doc.acheteurs[appellation].cooperatives) { emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id], doc.cvi], doc);}} if (doc.acheteurs[appellation].mouts)  { for (id in doc.acheteurs[appellation].mouts) { emit([doc.campagne, doc.acheteurs[appellation].mouts[id], doc.cvi], doc);}}}}",
     },
   }
 }
