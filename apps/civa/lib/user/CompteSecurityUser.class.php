@@ -60,11 +60,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         if (!$compte) {
             throw new sfException('compte does not exist');
         }
-        $this->addCredential(self::CREDENTIAL_COMPTE);
-        $this->signInCompteAutenticated($compte);
-        $this->signInCompte($compte);
-        
-        $this->setAuthenticated(true);
+        $this->signInFirst($compte);
         
         if ($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE) {
             $compte->resetMotDePasseFromLdap();
@@ -79,6 +75,8 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     public function signInFirst($compte) {
         $this->addCredential(self::CREDENTIAL_COMPTE);
         $this->signInCompte($compte);
+        $this->signInCompteAutenticated($compte);
+        
         $this->setAuthenticated(true);
     }
 
