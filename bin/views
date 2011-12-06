@@ -117,7 +117,7 @@ cat <<EOF > $TMPFILE
            "reduce": "function (keys, values, rereduce) {\n     return sum(values);\n}"
        },
        "edition": {
-           "map": "function(doc) {\n\tif (doc.type == \"DR\" && doc.campagne == \"2011\" && doc.utilisateurs&& doc.utilisateurs.edition) {\n\t  for (u  in doc.utilisateurs.edition)\n\t  emit([u], 1);\n\t}\t}",
+           "map": "function(doc) {\n\tif (doc.type == \"DR\" && doc.campagne == \"2011\" && doc.utilisateurs&& doc.utilisateurs.edition) {\n\t  for (u  in doc.utilisateurs.edition) {\n\t  emit([u], 1);\n\tbreak;\n}\n\t}\t}",
            "reduce": "function (keys, values, rereduce) {\n\t     return sum(values);\n}"
        }
    }
