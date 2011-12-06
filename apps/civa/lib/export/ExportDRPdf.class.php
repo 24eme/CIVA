@@ -77,9 +77,11 @@ class ExportDRPdf {
 
           $infos = $this->getRecapitulatifInfos($dr);
           $infosPage = array();
-		  $nb_colonnes_by_page = 6;
-		  $infos = $this->getRecapitulatifInfos($dr);
+	  $nb_colonnes_by_page = 6;
+	  $infos = $this->getRecapitulatifInfos($dr);
           $nb_colonnes = count($infos['appellations']) - 1;
+	  if ($nb_colonnes == 5) 
+		$nb_colonnes_by_page = 5;
           if ($nb_colonnes >= $nb_colonnes_by_page) {
 			$pages = array();
     		for ($i = 0 ; $i <= $nb_colonnes; ) {
