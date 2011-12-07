@@ -43,33 +43,35 @@ EOF;
     if (isset($arguments['campagne']) && !empty($arguments['campagne'])) {
 	    $nb_item = 0;
 	    $nb_email_send = 0;
-	    $tiers = sfCouchdbManager::getClient()->getView("DR", "non_validees");
-	    foreach ($tiers->rows as $item) {
+	    $drs = sfCouchdbManager::getClient()->getView("DR", "non_validees");
+	    foreach ($drs->rows as $item) {
 	    	$this->logSection('cvi', $item->value->declarant->email);
 	    	
+	    	$compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$item->value->cvi);
 	    	
             $nb_item++;
-            if(!$item->value->declarant->email) {
+            if(!$compte->getEmail()) {
                 $this->logSection('no email', $item->value->cvi, null, 'ERROR');
                 continue;
             }
             $message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
-                      ->setTo($item->value->declarant->email)
+                      ->setTo($compte->getEmail())
                       //->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
-                      ->setBody($this->getMessageBody($item->value->declarant, $arguments['campagne']));
+                      ->setBody($this->getMessageBody($compte, $arguments['campagne']));
             try {
                 $sended = true;//$this->getMailer()->send($message);
+                echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
             } catch (Exception $exc) {
                 $sended = false;
             }
             
             if ($sended) {
                 $nb_email_send++;
-                $this->logSection('sended', $item->value->cvi . ' : ' . $item->value->declarant->email);
+                $this->logSection('sended', $item->value->cvi . ' : ' . $compte->getEmail());
             } else {
-                $this->logSection('send error', $item->value->cvi . ' : ' . $item->value->declarant->email, null, 'ERROR');
+                $this->logSection('send error', $item->value->cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
             }
             
             
@@ -78,8 +80,8 @@ EOF;
     }
   }
 
-  protected function getMessageBody($tiers, $campagne) {
-      return "Bonjour ".$tiers->nom.",
+  protected function getMessageBody($compte, $campagne) {
+      return "Bonjour ".$compte->getNom().",
 
 Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validé.
 Nous vous rappelons que vous devez impérativement la valider avant le 10 décembre minuit.
