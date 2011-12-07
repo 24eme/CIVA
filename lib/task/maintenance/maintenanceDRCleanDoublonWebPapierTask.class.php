@@ -37,7 +37,7 @@ EOF;
     	if (file_exists($arguments['file'])) {
 	        foreach (file($arguments['file']) as $numero => $ligne) {
 	        	$datas = explode(';', $ligne);
-	        	$value = $this->getCsvValueAfterTreatment($datas[0]);
+	        	$value = $datas[0];
 	    		$dr = sfCouchdbManager::getClient('DR')->retrieveDocumentById($value);
 	    		if ($dr) {
 	    			$this->logSection('Doublons have been detected', $dr->_id);
