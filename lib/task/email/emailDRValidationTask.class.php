@@ -54,15 +54,17 @@ EOF;
                 $this->logSection('no email', $item->value->cvi, null, 'ERROR');
                 continue;
             }
-            $message = $this->getMailer()->compose()
+            
+            try {
+            	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
                       ->setTo($compte->getEmail())
                       //->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
-            try {
-                $sended = true;//$this->getMailer()->send($message);
-                echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
+                $sended = $this->getMailer()->send($message);
+                
+                //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
             } catch (Exception $exc) {
                 $sended = false;
             }
