@@ -8,13 +8,16 @@ class emailDRValidationTask extends sfBaseTask
     // $this->addArguments(array(
     //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
     // ));
+	$this->addArguments(array(
+		new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'Année de déclaration'),
+	));
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
-      new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, "Année de déclaration", '2010'),
+      //new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, "Année de déclaration", '2010'),
     ));
 
     $this->namespace        = 'email';
@@ -37,45 +40,48 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $nb_item = 0;
-    $nb_email_send = 0;
-    $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
-    foreach ($tiers as $item) {
-        $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $options['campagne'], sfCouchdbClient::HYDRATE_JSON);
-        if ($dr && (!isset($dr->validee) || !$dr->validee)) {
+    if (isset($arguments['campagne']) && !empty($arguments['campagne'])) {
+	    $nb_item = 0;
+	    $nb_email_send = 0;
+	    $tiers = sfCouchdbManager::getClient()->getView("DR", "non_validees");
+	    foreach ($tiers->rows as $item) {
+	    	$this->logSection('cvi', $item->value->declarant->email);
+	    	
+	    	
             $nb_item++;
-            if(!$item->email) {
-                $this->logSection('no email', $item->cvi, null, 'ERROR');
+            if(!$item->value->declarant->email) {
+                $this->logSection('no email', $item->value->cvi, null, 'ERROR');
                 continue;
             }
             $message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
-                      ->setTo($item->email)
+                      ->setTo($item->value->declarant->email)
                       //->setTo('vince.laurent@gmail.com')
-                      ->setSubject('RAPPEL DR 2010')
-                      ->setBody($this->getMessageBody($item));
+                      ->setSubject('RAPPEL DR '.$arguments['campagne'])
+                      ->setBody($this->getMessageBody($item->value->declarant, $arguments['campagne']));
             try {
-                $sended = $this->getMailer()->send($message);
+                $sended = true;//$this->getMailer()->send($message);
             } catch (Exception $exc) {
                 $sended = false;
             }
             
             if ($sended) {
                 $nb_email_send++;
-                $this->logSection('sended', $item->cvi . ' : ' . $item->email);
+                $this->logSection('sended', $item->value->cvi . ' : ' . $item->value->declarant->email);
             } else {
-                $this->logSection('send error', $item->cvi . ' : ' . $item->email, null, 'ERROR');
+                $this->logSection('send error', $item->value->cvi . ' : ' . $item->value->declarant->email, null, 'ERROR');
             }
-        }
+            
+            
+	    }
+	    $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
     }
-
-    $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
   }
 
-  protected function getMessageBody($tiers) {
+  protected function getMessageBody($tiers, $campagne) {
       return "Bonjour ".$tiers->nom.",
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte 2010 sur le site VinsAlsace.pro et ne l’avez pas encore validé.
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validé.
 Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit dernier délai.
 
 Cordialement,
