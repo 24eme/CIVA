@@ -4,7 +4,7 @@ class maintenanceDRCleanDoublonWebPapierTask extends sfBaseTask {
 
     protected function configure() {
 		$this->addArguments(array(
-			new sfCommandArgument('csv', sfCommandArgument::REQUIRED, 'CSV'),
+			new sfCommandArgument('file', sfCommandArgument::REQUIRED, 'CSV'),
 		));
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
