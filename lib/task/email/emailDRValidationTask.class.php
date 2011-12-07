@@ -82,7 +82,9 @@ EOF;
       return "Bonjour ".$tiers->nom.",
 
 Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validé.
-Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit dernier délai.
+Nous vous rappelons que vous devez impérativement la valider avant le 10 décembre minuit.
+
+Si vous avez déposé une Déclaration de Récolte 'papier' veuillez SVP la supprimer sur le site.
 
 Cordialement,
 
