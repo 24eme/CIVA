@@ -40,7 +40,7 @@ EOF;
 	        	$value = $datas[0];
 	    		$dr = sfCouchdbManager::getClient('DR')->retrieveDocumentById($value);
 	    		if ($dr) {
-	    			$this->logSection('Doublons have been detected', $dr->_id, 'ERROR');
+	    			$this->logSection('Doublons', '->'.$value);
 	    		}
 	        }
     	}
