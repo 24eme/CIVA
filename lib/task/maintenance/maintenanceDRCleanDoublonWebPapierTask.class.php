@@ -38,9 +38,10 @@ EOF;
 	        foreach (file($arguments['file']) as $numero => $ligne) {
 	        	$datas = explode(';', $ligne);
 	        	$value = $datas[0];
+	        	$this->logSection('DR', $value);
 	    		$dr = sfCouchdbManager::getClient('DR')->retrieveDocumentById($value);
 	    		if ($dr) {
-	    			$this->logSection('Doublons have been detected', $dr->_id);
+	    			$this->logSection('Doublons have been detected', $dr->_id, 'ERROR');
 	    		}
 	        }
     	}
