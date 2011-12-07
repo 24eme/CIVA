@@ -40,6 +40,7 @@ EOF;
 	        	$value = $datas[0];
 	    		$dr = sfCouchdbManager::getClient('DR')->retrieveDocumentById($value);
 	    		if ($dr) {
+	    			$dr->delete();
 	    			$this->logSection('Doublons', '->'.$value);
 	    		}
 	        }
