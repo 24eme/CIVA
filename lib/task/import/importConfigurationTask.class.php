@@ -2,6 +2,8 @@
 
 class importConfigurationTask extends sfBaseTask {
 
+    protected $cepage_order = array("CH", "SY", "AU", "PB", "PI", "ED", "RI", "PG", "MU", "MO", "GW");
+    
     protected function configure() {
         // // add your own arguments here
         // $this->addArguments(array(
@@ -171,32 +173,60 @@ EOF;
 	$grdcru->rendement = 61;
         $grdcru->douane->qualite = '';
 
-	foreach(file(sfConfig::get('sf_data_dir') . '/import/10/Grdcrv10') as $l) {
-	  $g = explode(',', preg_replace('/"/', '', $l));
-                
-	  if (!isset($g[1]) || $g[1] == "99")  {
-	    continue;
-	  }
-	  if (!$g[2]) {
-	    $grdcru->{'lieu'.$g[1]}->libelle = $g[3];
-	    $r = $this->recode_number($g[4]) + $this->recode_number($g[5]);
-	    //	    echo $g[3]." rendement: $r\n";
-	    if ($r != $grdcru->rendement)
-	      $grdcru->{'lieu'.$g[1]}->rendement = $r;
-	  }else{
-	    if (preg_match('/^L/', $g[2]))
-	      continue;
-	    $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
-	    $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
-            $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->douane->qualite = 'S ';
-	    $grdcru->{'lieu'.$g[1]}->douane->appellation_lieu = $g[7];
-	    if (isset($grdcru->{'lieu'.$g[1]}->rendement) && $grdcru->{'lieu'.$g[1]}->rendement != $g[4])
-	      $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
-	    if ($g[2] == 'ED' || $g[2] == 'SY')
-	      $grdcru->{'lieu'.$g[1]}->couleur->{'cepage_'.$g[2]}->no_vtsgn = 1;
-	      
-  	  }
-	}
+	$grdcru_from_file = new stdClass();
+
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/10/Grdcrv10') as $l) {
+            $g = explode(',', preg_replace('/"/', '', $l));
+            if ($g[0] == $annee && !isset($g[1]) || $g[1] == "99") {
+                continue;
+            }
+            if (!$g[2]) {
+                $grdcru_from_file->{'lieu' . $g[1]}->libelle = $g[3];
+                $r = $this->recode_number($g[4]) + $this->recode_number($g[5]);
+                //	    echo $g[3]." rendement: $r\n";
+                if ($r != $grdcru->rendement)
+                    $grdcru_from_file->{'lieu' . $g[1]}->rendement = $r;
+            }else {
+                if (preg_match('/^L/', $g[2]))
+                    continue;
+                $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
+                $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
+                $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->douane->qualite = 'S ';
+                $grdcru_from_file->{'lieu' . $g[1]}->douane->appellation_lieu = $g[7];
+                if (isset($grdcru_from_file->{'lieu' . $g[1]}->rendement) && $grdcru_from_file->{'lieu' . $g[1]}->rendement != $g[4])
+                    $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->rendement = $this->recode_number($g[4]) + $this->recode_number($g[5]);
+                if ($g[2] == 'ED' || $g[2] == 'SY')
+                    $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->no_vtsgn = 1;
+            }
+        }
+        
+        foreach($grdcru_from_file as $lieu_key => $lieu) {
+            $grdcru->{$lieu_key}->libelle = $lieu->libelle;
+            if (isset($lieu->rendement)) {
+                $grdcru->{$lieu_key}->rendement = $lieu->rendement;
+            }
+            $grdcru->{$lieu_key}->douane->appellation_lieu = $lieu->douane->appellation_lieu;
+            foreach($this->cepage_order as $cepage_key) {
+                $cepage = 'cepage_'.$cepage_key;
+                if (isset($lieu->couleur->{$cepage})) {
+                    $grdcru->{$lieu_key}->couleur->{$cepage}->libelle = $lieu->couleur->{$cepage}->libelle;
+                    $grdcru->{$lieu_key}->couleur->{$cepage}->douane->code_cepage = $lieu->couleur->{$cepage}->douane->code_cepage;
+                    $grdcru->{$lieu_key}->couleur->{$cepage}->douane->qualite =  $lieu->couleur->{$cepage}->douane->qualite;
+                    if (isset($grdcru->{$lieu_key}->couleur->{$cepage}->rendement)) {
+                        $grdcru->{$lieu_key}->couleur->{$cepage}->rendement = $lieu->couleur->{$cepage}->rendement;
+                    }
+                    if (isset($grdcru->{$lieu_key}->couleur->{$cepage}->no_vtsgn)) {
+                        $grdcru->{$lieu_key}->couleur->{$cepage}->no_vtsgn = $lieu->couleur->{$cepage}->no_vtsgn;
+                    }
+                    unset($lieu->couleur->{$cepage});
+                }
+            }
+            
+            foreach($lieu->couleur as $couleur) {
+                throw new sfCommandException("Tous les cepages ne sont pas dans le tableau \$this->scepage_order");
+            }
+        }
+        
 	$json->recolte->appellation_GRDCRU = $grdcru;
 
         $json->recolte->appellation_CREMANT->appellation = "CREMANT";
@@ -309,24 +339,29 @@ EOF;
     private function recode_number($val) {
         return preg_replace('/^\./', '0.', $val) + 0;
     }
-    private function convertCepage2Libelle($c) {
-      switch ($c) {
-      case 'RI':
-	return 'Riesling';
-      case 'GW':
-	return 'Gewurzt.';
-      case 'PG':
-	return 'Pinot Gris';
-      case 'MU':
-	return "Muscat d'Alsace";
-      case 'ED':
-	return 'Assemblage';
-      case 'SY':
-	return 'Sylvaner';
-      default:
-	echo "definition for $c missing\n";
-	return ;
-      }
+    private function convertCepage2Libelle($c)
+    {
+        switch ($c) {
+            case 'AU':
+                return 'Auxerrois';
+            case 'RI':
+                return 'Riesling';
+            case 'GW':
+                return 'Gewurzt.';
+            case 'PG':
+                return 'Pinot Gris';
+            case 'MU':
+                return "Muscat";
+            case 'MO':
+                return "Muscat Ottonel";
+            case 'ED':
+                return 'Assemblage';
+            case 'SY':
+                return 'Sylvaner';
+            default:
+                echo "definition for $c missing\n";
+                return;
+        }
     }
 
 }
