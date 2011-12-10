@@ -104,9 +104,9 @@ class exportActions extends sfActions {
     public function executeCsvTiersDREncours(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
+        $recoltants = sfCouchdbManager::getClient("Recoltant")->getAlls(sfCouchdbClient::HYDRATE_JSON);
         $values = array();
-        foreach ($tiers as $item) {
+        foreach ($recoltants as $item) {
             if ($item->cvi != "7523700100") {
                 $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
                 if ($dr && (!isset($dr->validee) || !$dr->validee)) {
@@ -115,12 +115,8 @@ class exportActions extends sfActions {
                     $ligne[] = $item->nom;
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
-                    $ligne[] = $item->email;
-                    $inscrit = 'non_inscrit';
-                    if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
-                        $inscrit = 'inscrit';
-                    }
-                    $ligne[] = $inscrit;
+                    $ligne[] = $compte->email;
+                    $ligne[] = $compte->statut;
                     $ligne[] = $dr->etape;
                     $values[] = $ligne;
                 }
