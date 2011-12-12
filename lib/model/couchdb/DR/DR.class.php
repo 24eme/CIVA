@@ -170,7 +170,7 @@ class DR extends BaseDR {
      *
      * @param Tiers $tiers 
      */
-    public function validate($tiers, $compte = null){
+    public function validate($tiers, $compte = null, $compteValidateurId = null){
         $this->remove('etape');
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
@@ -183,6 +183,9 @@ class DR extends BaseDR {
             $this->declarant->email =  $tiers->get('email');
         }
         $this->declarant->telephone =  $tiers->get('telephone');
+	if ($compteValidateurId) {
+	  $dr->utilisateurs->validation->add($compteValidateurId, date('d/m/Y'));
+	}
     }
 
     /**

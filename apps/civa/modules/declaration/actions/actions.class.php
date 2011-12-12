@@ -132,12 +132,11 @@ class declarationActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
-                $dr->validate($tiers, $this->getUser()->getCompte());
-                $dr->utilisateurs->validation->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
-                $dr->save();
-                $this->getUser()->initCredentialsDeclaration();
-
-                $mess = 'Bonjour ' . $tiers->nom . ',
+	      $dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+	      $dr->save();
+	      $this->getUser()->initCredentialsDeclaration();
+	      
+	      $mess = 'Bonjour ' . $tiers->nom . ',
 
     Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
