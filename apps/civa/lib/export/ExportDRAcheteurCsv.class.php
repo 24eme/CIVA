@@ -23,6 +23,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "superficie_totale" => "superficie totale",
         "volume_total" => "volume total",
         "dplc_total" => "dplc total",
+        "validation_date" => "date de validation",
+        "validation_user" => "validateur",
     );
     protected $_validation_detail_acheteur = array(
         "cvi_acheteur" => array("type" => "double", "required" => true),
@@ -137,6 +139,22 @@ class ExportDRAcheteurCsv extends ExportCsv {
         $this->_ids_dr = $drs->getIds();
         $this->_has_dr = (count($this->_ids_dr) > 0);
     }
+    
+    public function add($data, $validation = array()) {
+        $line = parent::add($data, $validation);
+        if ($this->_debug) {
+            echo $line;
+        }
+        return $line;
+    }
+
+    public function getMd5() {
+        return $this->_md5;
+    }
+    
+    public function hasDR() {
+        return $this->_has_dr;
+    }
 
     public function export() {
         $revisions = "";
@@ -211,6 +229,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "dplc_total" => null,
+            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
                 ), $this->_validation_detail_acheteur);
     }
 
@@ -231,6 +251,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "dplc_total" => null,
+            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
                 ), $this->_validation_detail_total);
     }
 
@@ -252,6 +274,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
             "dplc_total" => $lieu->getDplc(),
+            "validation_date" => $acheteur->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
                 ), $this->_validation_lieu_acheteur);
     }
     
@@ -272,6 +296,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
             "dplc_total" => $lieu->getDplc(),
+            "validation_date" => $lieu->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($lieu->getCouchdbDocument()),
                 ), $this->_validation_lieu_total);
     }
     
@@ -292,29 +318,15 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $dr->jeunes_vignes,
             "volume_total" => null,
             "dplc_total" => null,
+            "validation_date" => $dr->validee,
+            "validation_user" => $this->getValidationUser($dr),
                 ), $this->_validation_jeunes_vignes);
-    }
-
-    public function add($data, $validation = array()) {
-        $line = parent::add($data, $validation);
-        if ($this->_debug) {
-            echo $line;
-        }
-        return $line;
-    }
-
-    public function getMd5() {
-        return $this->_md5;
-    }
-    
-    public function hasDR() {
-        return $this->_has_dr;
     }
 
     protected function calculMd5($drs) {
         $revisions = "";
-        foreach ($drs as $dr) {
-            if (substr($dr->cvi, 0, 1) == "6") {
+        foreach ($drs as $id => $dr) {
+            if (substr($id, 0, 4) == "DR-6") {
                 $revisions .= $dr->_rev;
             }
             unset($dr);
@@ -324,6 +336,29 @@ class ExportDRAcheteurCsv extends ExportCsv {
         } else {
             return null;
         }
+    }
+    
+    private function getValidationUser($dr) {
+        $user = null;
+        if ($dr->exist('utilisateurs')) {
+            foreach($dr->utilisateurs->validation as $compte => $date_fr) {
+                if (preg_match('/^COMPTE-[0-9]+$/', $compte)) {
+                    $user = "Récoltant";
+                } elseif(preg_match('/^COMPTE-.*civa.*$/', $compte)) {
+                    $user = "CIVA";
+                } elseif(!preg_match('/^COMPTE-/', $compte)) {
+                    $user = $compte;
+                }
+            }
+        }
+        
+        if (!$user && strtotime($dr->validee) > strtotime($this->_campagne.'-12-10')) {
+            $user = 'Automatique';
+        } elseif(!$user) {
+            $user = 'Récoltant';
+        }
+        
+        return $user;
     }
 
 }
