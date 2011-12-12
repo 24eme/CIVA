@@ -293,4 +293,101 @@ class DR extends BaseDR {
     public function save() {
         parent::save();
     }
-}
+
+    public function check() {
+      $onglet = new RecolteOnglets($this);
+      $validLogVigilance = array();
+      $validLogErreur = array();
+      foreach ($this->recolte->filter('appellation_') as $appellation) {
+	foreach ($appellation->filter('lieu') as $lieu) {
+	  //check le total superficie
+	  if ($lieu->getTotalSuperficie() == 0) {
+	    array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
+	  }
+	  //check le lieu
+	  if ($lieu->isNonSaisie()) {
+	    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
+	  } else {
+	    //verifie les rebeches pour les crémants
+	    if ($appellation->getConfig()->appellation == 'CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
+	      $rebeches = false;
+	      foreach ($lieu->filter('couleur') as $key => $couleur)
+		foreach ($couleur->filter('cepage_') as $key => $cepage)
+		if ($key == 'cepage_RB')
+		  $rebeches = true;
+	      if (!$rebeches) {
+		array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+	      }
+	    }
+
+	    //Verifie que le recapitulatif des ventes est rempli
+	    if (!$lieu->hasCompleteRecapitulatifVente()) {
+	      array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+	    }
+
+	    //Verifie que le recapitulatif des ventes à du dplc si le total dplc du lieu est > 0
+	    if ($lieu->getConfig()->hasRendement() && $lieu->hasAcheteurs() && $lieu->hasCompleteRecapitulatifVente() && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
+	      array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
+	    }
+
+	    //Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
+	    if (!$lieu->isValidRecapitulatifVente()) {
+	      array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+	    }
+
+	    //check les cepages
+	    foreach ($lieu->filter('couleur') as $couleur) {
+	      foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
+		
+		if ($couleur->exist($key)) {
+		  $cepage = $couleur->get($key);
+		  if ($cepage->getConfig()->hasMinQuantite()) {
+		    $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+		    $totalVolRevendique = $cepage->getTotalVolume();
+		    if ($totalVolRatio > $totalVolRevendique) {
+		      array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+		    }
+		  }
+		  if ($cepage->getConfig()->hasMaxQuantite()) {
+		    $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
+		    $totalVolRevendique = $cepage->getTotalVolume();
+		    if ($totalVolRatio < $totalVolRevendique) {
+		      array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
+		    }
+		  }
+		  if ($cepage->isNonSaisie()) {
+		    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
+		  } else {
+		    // vérifie le trop plein de DPLC
+		    if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0) {
+		      array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
+		    }
+		    foreach ($cepage->filter('detail') as $details) {
+		      foreach ($details as $detail) {
+			$detail_nom = '';
+			if ($detail->denomination != '' || $detail->vtsgn != '') {
+			  $detail_nom .= ' - ';
+			}
+			if ($detail->denomination != '')
+			  $detail_nom .= $detail->denomination . ' ';
+			if ($detail->vtsgn != '')
+			  $detail_nom .= $detail->vtsgn . ' ';
+			if ($detail->isNonSaisie()) {
+			  array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie')));
+			} elseif ($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle() == "Assemblage Edelzwicker") {
+			  if (!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
+			    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
+			  }
+			}
+		      }
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+      }
+      return array('erreur' => $validLogErreur, 'vigilance' => $validLogVigilance);
+    }
+  }
