@@ -16,7 +16,7 @@ cat <<EOF > $TMPFILE
   "views":
   {
     "campagne_acheteur": {
-      "map": "function(doc) {\n    if (doc.type &amp;&amp; doc.type != 'DR') return;\n    if (!doc.validee || !doc.modifiee) return;\n    for(appellation in doc.acheteurs) {\n        if (doc.acheteurs[appellation].negoces) {\n            for (id in doc.acheteurs[appellation].negoces) {\n                emit([doc.campagne, doc.acheteurs[appellation].negoces[id]+'', doc.cvi], doc);\n            }\n        }\n        if (doc.acheteurs[appellation].cooperatives) {\n            for (id in doc.acheteurs[appellation].cooperatives) {\n                emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id]+'', doc.cvi], doc);\n            }\n        }\n    }\n}",
+      "map": "function(doc) {\n    if (doc.type &amp;&amp; doc.type != 'DR') return;\n    if (!doc.validee || !doc.modifiee) return;\n    for(appellation in doc.acheteurs) {\n        if (doc.acheteurs[appellation].negoces) {\n            for (id in doc.acheteurs[appellation].negoces) {\n                emit([doc.campagne, doc.acheteurs[appellation].negoces[id]+'', doc.cvi], {"_rev": doc._rev});\n            }\n        }\n        if (doc.acheteurs[appellation].cooperatives) {\n            for (id in doc.acheteurs[appellation].cooperatives) {\n                emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id]+'', doc.cvi], {"_rev": doc._rev});\n            }\n        }\n    }\n}",
     },
   }
 }
