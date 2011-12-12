@@ -104,12 +104,13 @@ class exportActions extends sfActions {
     public function executeCsvTiersDREncours(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $recoltants = sfCouchdbManager::getClient("Recoltant")->getAlls(sfCouchdbClient::HYDRATE_JSON);
+        $recoltants = sfCouchdbManager::getClient("Recoltant")->getAll(sfCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($recoltants as $item) {
             if ($item->cvi != "7523700100") {
                 $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
                 if ($dr && (!isset($dr->validee) || !$dr->validee)) {
+                    $compte = sfCouchdbManager::getClient()->retrieveDocumentById($item->compte[0], sfCouchdbClient::HYDRATE_JSON);
                     $ligne = array();
                     $ligne[] = $item->cvi;
                     $ligne[] = $item->nom;
@@ -123,7 +124,7 @@ class exportActions extends sfActions {
             }
         }
 
-        $this->setResponseCsv('tiers.csv');
+        $this->setResponseCsv('recoltant_declaration_en_cours.csv');
         return $this->renderText(Tools::getCsvFromArray($values));
     }
 
