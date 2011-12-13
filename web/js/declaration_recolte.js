@@ -482,6 +482,7 @@ var initTablesAcheteurs = function()
             return (tables_acheteurs.find('input[type=checkbox]:checked').length < 1);
         }
         );
+
 };
 
 

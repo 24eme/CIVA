@@ -285,11 +285,8 @@ Le CIVA';
         $dr = $this->getUser()->getDeclaration();
         if ($dr) {
             $dr->remove('modifiee');
-            if (!$dr->exist('etape')) {
-                $dr->add('etape', 'validation');
-            } else {
-                $dr->set('etape', 'validation');
-            }
+            $dr->add('etape');
+            $dr->etape = 'validation';
             $dr->save();
         }
         $this->getUser()->initCredentialsDeclaration();

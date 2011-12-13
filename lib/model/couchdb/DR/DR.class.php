@@ -184,7 +184,7 @@ class DR extends BaseDR {
         }
         $this->declarant->telephone =  $tiers->get('telephone');
 	if ($compteValidateurId) {
-	  $dr->utilisateurs->validation->add($compteValidateurId, date('d/m/Y'));
+	  $this->utilisateurs->validation->add($compteValidateurId, date('d/m/Y'));
 	}
     }
 
