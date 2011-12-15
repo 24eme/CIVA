@@ -164,8 +164,10 @@ class declarationActions extends EtapesActions {
         $this->annee = $annee;
 
 	$check = $dr->check();
+
 	$this->validLogErreur = $this->updateUrlLog($check['erreur']);
 	$this->validLogVigilance = $this->updateUrlLog($check['vigilance']);
+
         $this->error = count($check['erreur']);
         $this->logVigilance = count($check['vigilance']);
 
@@ -174,12 +176,14 @@ class declarationActions extends EtapesActions {
     }
 
     private function updateUrlLog($array) {
+      $ret = array();
       foreach ($array as $log) {
 	if (!isset($log['url_log_page']))
 	  $log['url_log_page'] = 'recolte';
 	$log['url_log'] = $this->generateUrl($log['url_log_page'], $log['url_log_param']);
+	array_push($ret, $log);
       }
-      return $array;
+      return $ret;
     }
 
 

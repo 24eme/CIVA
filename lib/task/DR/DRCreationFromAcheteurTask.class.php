@@ -3,47 +3,93 @@
 class DRCreationFromAcheteur extends sfBaseTask {
 
     protected function configure() {
-        // // add your own arguments here
-        // $this->addArguments(array(
-        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-        // ));
+      $this->addOptions(array(
+			      new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
+			      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+			      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+			      new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
+			      new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
+			      new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_OPTIONAL, 'CVI du récoltant dont il faut générer une DR', ''),
+			      new sfCommandOption('save-error', null, sfCommandOption::PARAMETER_OPTIONAL, 'Sauve la DR même si les données importée sont en erreur', ''),
+			      new sfCommandOption('save-vigilance', null, sfCommandOption::PARAMETER_OPTIONAL, 'Sauve la DR même si les données importée sont en vigileance', ''),
+			      new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'Année de la DR à générer', '')
+			      ));
 
-        $this->addOptions(array(
-            new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'CVI du récoltant dont il faut générer une DR'),
-            new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'Année de la DR à générer'),
-	));
-
-        $this->namespace = 'DR';
-        $this->name = 'creationFromAcheteur';
-        $this->briefDescription = '';
-        $this->detailedDescription = <<<EOF
-Generate DR
+      $this->namespace = 'DR';
+      $this->name = 'creationFromAcheteur';
+      $this->briefDescription = '';
+      $this->detailedDescription = <<<EOF
+	Generate DR
 EOF;
     }
 
-    protected function execute($arguments = array(), $options = array()) {
-        ini_set('memory_limit', '1024M');
-        set_time_limit('3600');
-        // initialize the database connection
-        $databaseManager = new sfDatabaseManager($this->configuration);
-        $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
-	$dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($option['cvi'], $option['year']);
+    protected function createOne($cvi, $year) {
+	$tiers = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
+	if (!$tiers) {
+	  print "ERROR: ".$cvi." n'existe pas\n";
+	  return false;
+	}
+	$dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
-	  print "LOG : ".$option['cvi'].' existes\n';
-	  return ;
+	  print "LOG: DR pour ".$cvi." existe\n";
+	  return false;
 	}
 
 	$import_from = array();
-	$dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
-	$check = $dr->check();
-	if (count($check['erreur']) || count($check['vigilance'])) {
-	  print "ERROR: ".$dr->id." a des erreurs ou des points de vigilance\n";
-	}else{
-	  $tiers = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($dr->getCVI());
-	  $dr->validate($tiers);
+	try{
+	  $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
+	  $check = $dr->check();
+	  if (count($check['erreur']) || count($check['vigilance'])) {
+	    print "ERROR: ".$dr->_id." a des erreurs ou des points de vigilance\n";
+	    if (count($check['vigilance']) && !$this->save_vigilance)
+	      return false;
+	    if (count($check['erreur']) && !$this->save_error)
+		return false;
+	    
+	  }else{
+	    $tiers = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($dr->getCVI());
+	    if (!$tiers) {
+	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
+	      return false;
+	    }
+	    $dr->validate($tiers);
+	  }
+	}catch(sfException $e) {
+	  print 'ERROR: '.$e->getMessage()."\n";
+	  return false;
 	}
-	$dr->save();
+	try {
+	  $dr->save();
+	}catch(sfException $e) {	
+	  print "ERROR: ".$dr->_id." NOT saved\n";
+	  return false;
+	}
+	print "LOG: ".$dr->_id." saved\n";
+	return true;
+    }
+
+    protected function execute($arguments = array(), $options = array()) {
+        // initialize the database connection
+        $databaseManager = new sfDatabaseManager($this->configuration);
+        $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+	$this->save_error = $options['save-error'];
+	$this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
+	  
+	if ($options['cvi'] && $options['year']) {
+	  return $this->createOne($options['cvi'], $options['year']);
+	}
+
+	if (!$options['year']) {
+	  print "ERROR : options --year needed\n";
+	  return ;
+	}
+
+	$CVIs = sfCouchdbManager::getClient()
+	  ->getView("CSV", "recoltant");
+
+	foreach ($CVIs->rows as $o) {
+	  $this->createOne($o->key[0], $options['year']);
+	}
     }
 
   }

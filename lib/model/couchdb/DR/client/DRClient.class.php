@@ -16,6 +16,10 @@ class DRClient extends sfCouchdbClient {
     foreach ($csvs as $csv) {
       $acheteur_cvi = $csv->cvi;
       $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+
+      if (!$acheteur_obj)
+	throw new sfException($acheteur_cvi.' acheteur inconnu');
+
       $import[] = $acheteur_obj;      
       $linenum = 0;
       foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
