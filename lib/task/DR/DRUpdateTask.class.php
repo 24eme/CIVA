@@ -38,7 +38,7 @@ EOF;
 
         foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
-            $dr->update();
+            //$dr->update();
             if ($dr->isModified()) {
                 $this->logSection('updated', $dr->get('_id'));
             }
