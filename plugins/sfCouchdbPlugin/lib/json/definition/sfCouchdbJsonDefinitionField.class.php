@@ -98,6 +98,14 @@ class sfCouchdbJsonDefinitionField {
         return $this->collection;
     }
     
+    public function filter($value) {
+        if ($value !== null && $this->type == self::TYPE_STRING) {
+            $value = (string) $value;
+        }
+        
+        return $value;
+    }
+    
     public function isValid($value) {
         if ($this->type == self::TYPE_STRING) {
             return true;

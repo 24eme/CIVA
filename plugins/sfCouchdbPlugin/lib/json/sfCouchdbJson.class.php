@@ -472,16 +472,16 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
         $data = array();
         foreach ($this->_fields as $key => $field) {
             if ($this->_is_array) {
-               if ($this->getDefinition()->get($key)->isCollection()) {
+                if ($this->getDefinition()->get($key)->isCollection()) {
                     $data[] = $field->getData();
                 } else {
-                    $data[] = $field;
+                    $data[] = $this->getDefinition()->get($key)->filter($field);
                 } 
             } else {
                 if ($this->getDefinition()->get($key)->isCollection()) {
                     $data[$this->getFieldName($key)] = $field->getData();
                 } else {
-                    $data[$this->getFieldName($key)] = $field;
+                    $data[$this->getFieldName($key)] = $this->getDefinition()->get($key)->filter($field);
                 }
             }
         }
