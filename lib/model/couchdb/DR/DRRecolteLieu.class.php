@@ -379,7 +379,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                 $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
                 $unique_acheteur = $acheteur;
-                if ($this->getCouchdbDocument()->canUpdate() && ($this->getTotalSuperficie() != $total_superficie_before ||  $this->getTotalVolume() != $total_volume_before)) {
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($total_superficie_before, 2) ||  
+                                                                 round($this->getTotalVolume(), 2) != round($total_volume_before, 2))) {
                     $acheteur->superficie = null;
                     $acheteur->dontdplc = null;
                 }
