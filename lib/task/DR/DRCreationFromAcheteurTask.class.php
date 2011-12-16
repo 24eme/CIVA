@@ -88,7 +88,8 @@ EOF;
 	  ->getView("CSV", "recoltant");
 
 	foreach ($CVIs->rows as $o) {
-	  $this->createOne($o->key[0], $options['year']);
+	  print $o->key[0]."\n";
+//	  $this->createOne($o->key[0], $options['year']);
 	}
     }
 
