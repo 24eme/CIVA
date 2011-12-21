@@ -11,6 +11,24 @@
  */
 abstract class publierDRAbstractTask extends sfBaseTask {
     
+    protected function updateDR() {
+        try {
+            if (!$dr->updated)
+                throw new Exception();
+        } catch (Exception $e) {
+            try {
+                $dr->update();
+                $dr->save();
+            } catch (Exception $exc) {
+                $this->logSection("failed update", $dr->_id, null, "ERROR");
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected function getFileDir() {
         $file_dir = sfConfig::get('sf_data_dir') . '/export/dr/pdf/';
         return $file_dir;

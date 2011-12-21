@@ -1,6 +1,12 @@
 <?php
 
 class DRClient extends sfCouchdbClient {
+  
+  public static function getInstance() {
+
+    return sfCouchdbManager::getClient('DR');
+  }
+
   public function createFromCSVRecoltant($tiers, &$import) {
     $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($tiers->cvi);
     if (!$csvs || !count($csvs))
@@ -95,14 +101,18 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        
         return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute($hydrate);
     }
     
     public function findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        
         return $this->startkey(array($campagne, $cvi_acheteur))->endkey(array($campagne, (string)($cvi_acheteur + 1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }
     
     public function findAllByCampagneAcheteurs($campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+        
         return $this->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }
+    
 }

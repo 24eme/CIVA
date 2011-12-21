@@ -1,20 +1,12 @@
 <?php
 
-class exportDRPdfTask extends publierDRAbstractTask {
+class exportDRPdfTask extends sfBaseTask {
 
     protected function configure() {
-        // // add your own arguments here
-        // $this->addArguments(array(
-        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-        // ));
-
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-            // add your own options here
-            new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'export pdf only for a given cvi (put "all" fo all cvi)', 'all'),
-            new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, 'export cvi only for a campagne (put "all" fo all campagnes)', '2010'),
         ));
 
         $this->namespace = 'export';
@@ -37,73 +29,16 @@ EOF;
 
         sfContext::createInstance($this->configuration);
 
-        $dr_ids = array();
-        $nb_declaration = 0;
+        $ids = ExportClient::getInstance()->findAll(sfCouchdbClient::HYDRATE_JSON)->getIds();
 
-        if ($options['cvi'] == 'all' && $options['campagne'] == 'all') {
-            $dr_ids = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-        } elseif ($options['cvi'] && $options['campagne'] == "all") {
-            $dr_ids = array_keys(sfCouchdbManager::getClient("DR")->getArchivesCampagnes($options['cvi'], '2010'));
-        } elseif ($options['cvi'] == 'all' && $options['campagne']) {
-            $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-        } elseif ($options['cvi'] && $options['campagne']) {
-            $dr_ids = array(sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($options['cvi'], $options['campagne'])->_id);
-        } else {
-            new sfCommandException('invalid cvi and campagne');
+        foreach($ids as $id) {
+            $export = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $this->logSection($export->get('_id'), 'exporting ...');
+            $export_dr = new ExportDR($export, true);
+            $export_dr->cleanFolder();
+            $export_dr->export(array($this, 'getPartial'));
+            $export_dr->createZip();
         }
-
-        $this->createFileDir();
-        
-        foreach ($dr_ids as $id) {
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-
-            if ($dr->exist('import_db2') && $dr->get('import_db2'))  {
-                continue;
-            }
-
-            try {
-                if (!$dr->updated)
-                    throw new Exception();
-            } catch (Exception $e) {
-                try {
-                    $dr->update();
-                    $dr->save();
-                } catch (Exception $exc) {
-                    $this->logSection("failed update", $dr->_id, null, "ERROR");
-                    continue;
-                }
-            }
-            
-            try {
-                $tiers = sfCouchdbManager::getClient("Tiers")->retrieveByCvi($dr->cvi);
-                if (!$tiers) {
-                    $this->logSection("unknow tiers", $dr->_id, null, "ERROR");
-                    continue;
-                }
-                if ($dr->isValideeTiers()) {
-                    $filename = $this->getDRFilename($dr, $tiers);
-                    $document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'), 'pdf',  $this->getFileDir(), false, $filename);
-                    $cache = $document->isCached();
-                    $document->generatePDF();
-                    if (!$cache) {
-                        $this->logSection($dr->_id, 'pdf generated ('. $this->getFileDir().$filename.')');
-                    } else {
-                        $this->logSection($dr->_id, 'pdf exist');
-                    }
-                    $nb_declaration ++;
-                    unset($document);
-                }
-            } catch (Exception $exc) {
-                $this->logSection("failed pdf", $dr->_id, null, "ERROR");
-                continue;
-            }
-            unset($dr);
-            unset($tiers);
-        }
-
-        $this->cleanFile();
-        
-        $this->logSection('export', $nb_declaration . ' declaration(s)');
     }
 
     public function getPartial($templateName, $vars = null) {

@@ -4,6 +4,11 @@ class AcheteurClient extends sfCouchdbClient {
 
     protected $_acheteurs = null;
 
+    public static function getInstance() {
+    
+        return sfCouchdbManager::getClient('Acheteur'); 
+    }
+
     public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute($hydrate);
     }

@@ -18,6 +18,9 @@ Options +FollowSymLinks +ExecCGI
   RewriteCond %{REQUEST_URI} "/mairies/"
   RewriteRule (.*) $1 [L]
 
+  RewriteCond %{REQUEST_URI} "/mise_a_disposition/"
+  RewriteRule (.*) $1 [L]
+
   # we check if the .html version is here (caching)
   RewriteRule ^$ index.html [QSA]
   RewriteRule ^([^.]+)$ $1.html [QSA]

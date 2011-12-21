@@ -207,7 +207,7 @@ DR:
                                                 cave_particuliere: { type: float }
                                                 volume_revendique: { type: float }
                                                 volume_dplc: { type: float }
- 
+
 Acheteur:
   inheritance: _Tiers
   definition:
@@ -244,7 +244,7 @@ CompteProxy:
       _rev: {  }
       type: {  }
       compte_reference: {  }
-      
+
 CompteTiers:
   inheritance: _Compte
   definition:
@@ -268,7 +268,7 @@ CompteTiers:
                   id: {  }
                   type: {  }
                   nom: {  }
-                  
+
 CompteVirtuel:
   inheritance: _Compte
   definition:
@@ -279,7 +279,7 @@ CompteVirtuel:
       nom: {  }
       commune: {  }
       code_postal: {  }
- 
+
 _Tiers:
   type: abstract
   definition:
@@ -326,8 +326,8 @@ _Tiers:
             num: { }
             no_stock: { }
             import_date: {  }
-            export_revision: {  }                
-                
+            export_revision: {  }
+
 Recoltant:
   inheritance: _Tiers
   definition:
@@ -512,3 +512,45 @@ Messages:
       _rev: {  }
       type: {}
       '*': {}
+
+Export:
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      destinataire: {  }
+      identifiant: {  }
+      compte: {  }
+      cle: {  }
+      nom: {  }
+      drs:
+        type: collection
+        definition:
+          fields:
+            'ids':
+              type: array_collection
+              definition:
+                fields:
+                  '*': {  }
+            'views':
+              type: array_collection
+              definition:
+                fields:
+                  '*':
+                    type: collection
+                    definition:
+                      fields:
+                        id: {  }
+                        nom: {  }
+                        startkey:
+                          type: array_collection
+                          definition:
+                            fields:
+                              '*' : {  }
+                        endkey:
+                          type: array_collection
+                          definition:
+                            fields:
+                              '*' : {  }
+

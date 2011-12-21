@@ -1,6 +1,12 @@
 <?php
 
 class CSVClient extends sfCouchdbClient {
+
+  public static function getInstance() {
+    
+    return sfCouchdbManager::getClient('CSV'); 
+  }
+
   private function getCSVsFromRecoltantArray($cvi) {
     $csv = $this->startkey(array($cvi))->endkey(array(($cvi+1).''))->executeView('CSV', 'recoltant');
     $ids = array();
@@ -17,6 +23,10 @@ class CSVClient extends sfCouchdbClient {
     foreach ($csv as $k => $c) 
       $ids[] = $k;
     return $ids;
+  }
+
+  public function findAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+      return $this->executeView('CSV', 'acheteur', $hydrate);
   }
 
   public function countCSVsAcheteurs($campagne = null) {

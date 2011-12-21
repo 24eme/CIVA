@@ -15,15 +15,19 @@ cat <<EOF > $TMPFILE
   "language": "javascript",
   "views":
   {
-    "campagne_acheteur": {
-      "map": "function(doc) {\n    if (doc.type &amp;&amp; doc.type != 'DR') return;\n    if (!doc.validee || !doc.modifiee) return;\n    for(appellation in doc.acheteurs) {\n        if (doc.acheteurs[appellation].negoces) {\n            for (id in doc.acheteurs[appellation].negoces) {\n                emit([doc.campagne, doc.acheteurs[appellation].negoces[id]+'', doc.cvi], {"_rev": doc._rev});\n            }\n        }\n        if (doc.acheteurs[appellation].cooperatives) {\n            for (id in doc.acheteurs[appellation].cooperatives) {\n                emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id]+'', doc.cvi], {"_rev": doc._rev});\n            }\n        }\n    }\n}",
+    "campagne_declaration_insee": {
+      "map": "function(doc) {\n\n if (doc.type && doc.type == \"DR\")  {\n    emit([doc.campagne, doc.declaration_insee, doc.cvi], 1);\n  }\n}"
     },
+    "campagne_acheteur": {
+      "map": "function(doc) {\n    if (doc.type && doc.type != 'DR') return;\n    if (!doc.validee || !doc.modifiee) return;\n    for(appellation in doc.acheteurs) {\n        if (doc.acheteurs[appellation].negoces) {\n            for (id in doc.acheteurs[appellation].negoces) {\n                emit([doc.campagne, doc.acheteurs[appellation].negoces[id]+'', doc.cvi], {\"_rev\": doc._rev});\n            }\n        }\n        if (doc.acheteurs[appellation].cooperatives) {\n            for (id in doc.acheteurs[appellation].cooperatives) {\n                emit([doc.campagne, doc.acheteurs[appellation].cooperatives[id]+'', doc.cvi], {\"_rev\": doc._rev});\n            }\n        }\n    }\n}"
+    }
   }
 }
 EOF
 
 curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 
+curl -s $COUCHDBURL/_design/$design/_view/campagne_declaration_insee > /dev/null &
 curl -s $COUCHDBURL/_design/$design/_view/campagne_acheteur > /dev/null & 
 sleep 1
 kill %1
@@ -38,8 +42,8 @@ cat <<EOF > $TMPFILE
   "views":
   {
     "qualite": {
-      "map": "function(doc) { if (doc['type'] == 'Acheteur') { emit([doc.qualite, doc.nom], {cvi: doc.cvi, nom: doc.nom, commune: doc.commune});}}",
-    },
+      "map": "function(doc) { if (doc['type'] == 'Acheteur') { emit([doc.qualite, doc.nom], {cvi: doc.cvi, nom: doc.nom, commune: doc.commune});}}"
+    }
   }
 }
 EOF
@@ -74,7 +78,8 @@ EOF
 
 curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 
-curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+curl -s $COUCHDBURL/_design/$design/_view/recoltant > /dev/null &
+curl -s $COUCHDBURL/_design/$design/_view/acheteur > /dev/null & 
 sleep 1
 kill %1
 
@@ -95,8 +100,7 @@ cat <<EOF > $TMPFILE
 EOF
 
 curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
-
-curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+curl -s $COUCHDBURL/_design/$design/_view/liaison > /dev/null & 
 sleep 1
 kill %1
 
@@ -119,6 +123,43 @@ cat <<EOF > $TMPFILE
        "edition": {
            "map": "function(doc) {\n\tif (doc.type == \"DR\" && doc.campagne == \"2011\" && doc.utilisateurs&& doc.utilisateurs.edition) {\n\t  for (u  in doc.utilisateurs.edition) {\n\t  emit([u], 1);\n\tbreak;\n}\n\t}\t}",
            "reduce": "function (keys, values, rereduce) {\n\t     return sum(values);\n}"
+       },
+       "RECOLTE": {
+            "map": "function(doc) {\n  if (!(doc.type && doc.type == \"DR\" && doc.cvi.match('^(67|68)') && doc.validee && doc.modifiee )) {\n  return;\n  }\n\n  for(appellation_key in doc.recolte) {\n if(appellation_key.match('^appellation')) {\n   var appellation_dplc = 0;\n   var appellation_volume_revendique = 0;\n    for(lieu_key in doc.recolte[appellation_key]) {\n     if(lieu_key.match('^lieu')) {\n       appellation_dplc += doc.recolte[appellation_key][lieu_key].dplc;\n        appellation_volume_revendique += doc.recolte[appellation_key][lieu_key].volume_revendique;\n        for(couleur_key in doc.recolte[appellation_key][lieu_key]) {\n          if(couleur_key.match('^couleur')) {\n           for(cepage_key in doc.recolte[appellation_key][lieu_key][couleur_key]) {\n              if(cepage_key.match('^cepage')) {\n               emit([doc.campagne, appellation_key, cepage_key], \n                     {\n                       \"nb_declarations_cepage\": 0,\n                      \"total_volume\": doc.recolte[appellation_key][lieu_key][couleur_key][cepage_key].total_volume,\n                       \"total_superficie\": doc.recolte[appellation_key][lieu_key][couleur_key][cepage_key].total_superficie,  \n                     });\n              }\n           }\n         }\n       }\n     }\n   }\n   emit([doc.campagne, appellation_key, null], \n        {\n         \"nb_declarations_appellation\": 0,\n         \"dplc\": appellation_dplc,\n         \"vol_revendique\": appellation_volume_revendique \n        });\n }\n  }\n\n\n   emit([doc.campagne, null, null], \n        {\n         \"nb_declarations\": 1  \n        });\n\n}",
+            "reduce": "function (keys, values, rereduce) {\n\n  var total_volume = 0;\n var total_superficie = 0;\n var dplc = 0;\n var volume_revendique = 0;\n  var nb_declarations = 0;\n  var nb_declarations_appellation = 0;\n  var nb_declarations_cepage = 0;\n\n //var key_ask = keys[0][0];\n\n for(item in values) {\n   if (values[item]['total_volume']) {\n     total_volume += values[item]['total_volume'];\n   }\n   if (values[item]['total_superficie']) {\n     total_superficie += values[item]['total_superficie'];\n   }\n   if (values[item]['dplc']) {\n     dplc += values[item]['dplc'];\n   }\n   if (values[item]['volume_revendique']) {\n      volume_revendique += values[item]['volume_revendique'];\n   }\n\n   if (values[item]['nb_declarations']) {\n      nb_declarations += values[item]['nb_declarations'];\n   }\n\n   /*if (values[item]['nb_declarations']) {\n      nb_declarations += values[item]['nb_declarations'];\n   }*/\n\n   /*if (values[item]['nb_declarations_appellation']) {\n      nb_declarations_appellation += values[item]['nb_declarations_appellation'];\n   }\n\n   if (values[item]['nb_declarations_cepage']) {\n     nb_declarations_cepage += values[item]['nb_declarations_cepage'];\n   }*/ \n  }\n\n total_volume = Math.round(total_volume*100)/100;\n  total_superficie = Math.round(total_superficie*100)/100;\n  dplc = Math.round(dplc*100)/100;\n  volume_revendique = Math.round(volume_revendique*100)/100;\n\n  /*if (key_ask[0] == null || key_ask[1] == null) {\n   return {\"nb_declarations\": nb_declarations, \"total_volume\": total_volume, \"total_superficie\": total_superficie, \"dplc\": dplc, \"volume_revendique\": volume_revendique};\n  } else if(key_ask[0] != null && key_ask[1] != null && key_ask[2] == null) {\n   return {\"nb_declarations\": nb_declarations_appellation, \"total_volume\": total_volume, \"total_superficie\": total_superficie, \"dplc\": dplc, \"volume_revendique\": volume_revendique};\n  } else if(key_ask[0] != null && key_ask[1] != null && key_ask[2] != null) {\n   return {\"nb_declarations\": nb_declarations_cepage, \"total_volume\": total_volume, \"total_superficie\": total_superficie};\n } else {\n    return \"nop\";\n }*/\n\n return {\"nb_declarations\": nb_declarations, \"total_volume\": total_volume, \"total_superficie\": total_superficie, \"dplc\": dplc, \"volume_revendique\": volume_revendique};\n}"
+       } 
+   }
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/DR > /dev/null &
+sleep 1
+kill %1
+
+curl -s $COUCHDBURL/_design/$design/_view/COMPTE > /dev/null &
+sleep 1
+kill %1
+
+curl -s $COUCHDBURL/_design/$design/_view/edition > /dev/null &
+sleep 1
+kill %1
+
+curl -s $COUCHDBURL/_design/$design/_view/RECOLTE > /dev/null &
+sleep 1
+kill %1
+
+design=EXPORT
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+   "_id": "_design/EXPORT",
+   "language": "javascript",
+   "views": {
+       "tous": {
+           "map": "function(doc) {\n  if (doc.type && doc.type == \"Export\") {\n  \temit([doc.destinataire, doc.identifiant, doc.nom, doc.cle], 1);\n  }\n}"
        }
    }
 }
@@ -126,6 +167,6 @@ EOF
 
 curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
 
-curl -s $COUCHDBURL/_design/$design/_view/csv > /dev/null & 
+curl -s $COUCHDBURL/_design/$design/_view/tous > /dev/null & 
 sleep 1
 kill %1

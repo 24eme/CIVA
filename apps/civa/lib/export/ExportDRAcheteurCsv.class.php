@@ -157,7 +157,6 @@ class ExportDRAcheteurCsv extends ExportCsv {
     }
 
     public function export() {
-        $revisions = "";
         foreach ($this->_ids_dr as $id_dr) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id_dr);
             if (substr($dr->cvi, 0, 1) == "6") {
@@ -201,7 +200,6 @@ class ExportDRAcheteurCsv extends ExportCsv {
                     }
                 }
                 $this->addJeunesVignes($dr);
-                $revisions .= $dr->get('_rev');
             }
             unset($dr);
         }

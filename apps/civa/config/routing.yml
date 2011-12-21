@@ -1,12 +1,12 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
-  
+
 # *********** COMPTE ***********
 test_plugin:
   url:   /test-plugin
   param: { module: compte, action: testPlugin }
-  
+
 login:
   url:   /
   param: { module: compte, action: login }
@@ -14,15 +14,15 @@ login:
 logout:
   url:   /logout
   param: { module: compte, action: logout }
-  
+
 compte:
   url: /compte
   param: { module: compte, action: first }
-  
+
 compte_creation:
   url: /compte/creation
   param: { module: compte, action: creation }
-  
+
 compte_modification_oublie:
   url: /compte/mot_de_passe_oublie
   param: { module: compte, action: modificationOublie }
@@ -30,15 +30,15 @@ compte_modification_oublie:
 compte_modification:
   url: /mon_compte
   param: { module: compte, action: modification }
-  
+
 compte_mot_de_passe_oublie_login:
   url: /mot_de_passe_oublie/login/:login/:mdp
   param: { module: compte, action: motDePasseOublieLogin }
-  
+
 compte_mot_de_passe_oublie:
   url: /mot_de_passe_oublie
   param: { module: compte, action: motDePasseOublie }
-  
+
 compte_mot_de_passe_oublie_confirm:
   url: /mot_de_passe_oublie/confirm
   param: { module: compte, action: motDePasseOublieConfirm }
@@ -58,7 +58,7 @@ mon_espace_civa:
 declaration_init:
   url:   /declaration/init
   param: { module: declaration, action: init }
-  
+
 declaration_invalider_recoltant:
   url:   /admin/declaration/invalider_recoltant
   param: { module: declaration, action: invaliderRecoltant }
@@ -73,25 +73,25 @@ declaration_invalider_civa:
 gamma:
   url:   /gamma
   param: { module: gamma, action: process }
-  
+
 gamma_telecharger_la_notice:
   url:   /gamma/telecharger_la_notice
   param: { module: gamma, action: downloadNotice }
-  
+
 gamma_telecharger_la_liste_nomenclature:
   url:   /gamma/telecharger_la_liste_nomenclature
   param: { module: gamma, action: downloadNomenclatures }
-  
+
 gamma_telecharger_l_adhesion:
   url:   /gamma/telecharger_l_adhesion
   param: { module: gamma, action: downloadAdhesion }
-  
+
 # *********** ADMIN ***********
 
 admin-login:
   url: /admin/login
   param: { module: admin, action: login }
-  
+
 admin-logout:
   url: /admin/logout
   param: { module: admin, action: login }
@@ -103,12 +103,12 @@ admin:
 admin_gamma:
   url:   /admin/gamma
   param: { module: admin, action: gamma }
-  
+
 # *********** EXPLOITATION ***********
 exploitation_message:
   url:   /exploitation_message
   param: { module: declaration, action: flashPage }
-  
+
 exploitation_administratif:
   url:   /exploitation_administratif
   param: { module: tiers, action: exploitationAdministratif }
@@ -124,7 +124,7 @@ exploitation_lieu:
 exploitation_lieu_delete:
   url:  /exploitation_lieu/delete/:lieu
   param: {module: acheteur, action: exploitationLieuDelete }
-  
+
   exploitation_lieu_delete:
   url:  /exploitation_lieu/delete/:appellation/:lieu
   param: {module: acheteur, action: exploitationLieuDelete }
@@ -179,11 +179,11 @@ recolte_recapitulatif:
   url:   /recapitulatif/:appellation_lieu
   param: {module: recolte, action: recapitulatif }
   class: sfRouteAnchor
-  
+
 recolte_rendements_max:
   url:   /rendements_max
   param: { module: recolte, action: rendementsMaxAjax}
-  
+
 recolte_erreur_log:
   url:   /recolte_erreur_log
   param: {module: declaration, action: setFlashLog }
@@ -204,7 +204,7 @@ confirmation:
 telecharger_la_notice:
   url:   /telecharger_la_notice
   param: { module: declaration, action: downloadNotice }
-  
+
 print:
   url: /print/:annee
   param: {module: export, action: pdf}
@@ -216,7 +216,7 @@ send_email_pdf:
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}
-  
+
 csv_tiers:
   url: /tiers/csv
   param: {module: export, action: csvTiers}
@@ -236,11 +236,11 @@ csv_tiers_modifications:
 csv_tiers_modifications_email:
   url: /tiers/modifications-email/csv
   param: {module: export, action: csvTiersModificationsEmail}
-  
+
 export_dr_acheteur_csv:
   url: /acheteur/import/dr/csv
   param: {module: export, action: drAcheteurCsv}
-  
+
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}
@@ -256,7 +256,7 @@ mentions_legales:
 contact:
   url: /contact
   param: {module: contenu, action: contact}
-  
+
 a_propos_du_civa:
   url: /a-propos-du-civa
   param: {module: contenu, action: aProposDuCiva}
@@ -272,11 +272,11 @@ upload_list:
 csv_view:
   url: /upload/csv/:md5
   param: {module: upload, action: csvView}
-  
+
 csv_download:
   url: /download/csv
   param: {module: upload, action: csvDownload}
-  
+
 default_index:
   url:   /:module
   param: { action: index }
