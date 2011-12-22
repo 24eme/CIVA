@@ -34,45 +34,40 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $departements = array("67" => "Bas-Rhin", 
-                          "68" => "Haut-Rhin");
+    $departements = array("6768" => "Bas-Rhin et Haut-Rhin");
 
     $annees = array("2011");
 
-    foreach($departements as $departement => $nom) {
-        $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-'. $departement , sfCouchdbClient::HYDRATE_JSON);
+    $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-6768', sfCouchdbClient::HYDRATE_JSON);
 
-        $cle = null;
+    $cle = null;
 
-        if ($export && $options['delete']) {
-          $cle = $export->cle;
-          sfCouchdbManager::getClient()->deleteDoc($export);
-          $export = null;
-        }
+    if ($export && $options['delete']) {
+      $cle = $export->cle;
+      sfCouchdbManager::getClient()->deleteDoc($export);
+      $export = null;
+    }
 
-        if (!$export) {
-          $export = new Export();
-          $export->set('_id', 'EXPORT-DOUANES-' . $departement);
-          $export->nom = $nom . ' (' . $departement . ')';
-          $export->destinataire = 'Douanes';
-          $export->identifiant = $departement;
-          
-          foreach($annees as $annee) {
-            $view = $export->drs->views->add();
-            $view->id = 'DR';
-            $view->nom = 'campagne_declaration_insee';
-            $view->startkey = array($annee, $departement.'000', '0000000000');
-            $view->endkey = array($annee, $departement.'999', '9999999999');
-          }
+    if (!$export) {
+      $export = new Export();
+      $export->set('_id', 'EXPORT-DOUANES-6768');
+      $export->nom = $departements["6768"];
+      $export->destinataire = 'Douanes';
+      $export->identifiant = "6768";
 
-          $export->cle = $cle;
-          if (!$export->cle) {
-            $export->generateCle();
-          }
+      $view = $export->drs->views->add();
+      $view->id = 'DR';
+      $view->nom = 'campagne_declaration_insee';
+      $view->startkey = array($annees[0], '67000', '0000000000');
+      $view->endkey = array($annees[0], '68999', '9999999999');
 
-          $export->save();
-          $this->logSection($export->get('_id'), 'created');
-        }
+      $export->cle = $cle;
+      if (!$export->cle) {
+        $export->generateCle();
+      }
+
+      $export->save();
+      $this->logSection($export->get('_id'), 'created');
     }
 
   }

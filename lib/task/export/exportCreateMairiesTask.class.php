@@ -35,15 +35,15 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $csv = array();
-    $insee = array();
-    foreach (file(sfConfig::get('sf_data_dir') . '/import/Commune') as $c) {
-        $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
-        $insee[$csv[0]] = $csv[1];
+    $communes = array();
+    foreach (file(sfConfig::get('sf_data_dir') . '/import/communes_declaration.csv') as $c) {
+        $csv = explode(';', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+        $communes[$csv[0]] = $csv[1];
     }
 
     $annees = array("2011");
 
-    foreach($insee as $code_postal => $nom) {
+    foreach($communes as $code_postal => $nom) {
         $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal , sfCouchdbClient::HYDRATE_JSON);
 
         $cle = null;
