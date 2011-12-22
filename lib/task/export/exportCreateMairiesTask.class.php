@@ -41,14 +41,17 @@ EOF;
         $insee[$csv[0]] = $csv[1];
     }
 
-    $annees = array("2010", "2011");
+    $annees = array("2011");
 
     foreach($insee as $code_postal => $nom) {
         $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal , sfCouchdbClient::HYDRATE_JSON);
 
+        $cle = null;
+
         if ($export && $options['delete']) {
-           sfCouchdbManager::getClient()->deleteDoc($export);
-           $export = null;
+          $cle = $export->cle;
+          sfCouchdbManager::getClient()->deleteDoc($export);
+          $export = null;
         }
 
         if (!$export) {
@@ -66,7 +69,11 @@ EOF;
             $view->endkey = array($annee, $code_postal, '9999999999');
           }
           
-          $export->generateCle();
+          $export->cle = $cle;
+          if (!$export->cle) {
+            $export->generateCle();
+          }
+
           $export->save();
           $this->logSection($export->get('_id'), 'created');
         }

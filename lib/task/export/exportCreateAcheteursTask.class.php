@@ -45,9 +45,12 @@ EOF;
       $compte = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->compte[0], sfCouchdbClient::HYDRATE_JSON);
       $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-ACHETEURS-'. $acheteur->cvi , sfCouchdbClient::HYDRATE_JSON);
 
+      $cle = null;
+
       if ($export && $options['delete']) {
-         sfCouchdbManager::getClient()->deleteDoc($export);
-         $export = null;
+        $cle = $export->cle;
+        sfCouchdbManager::getClient()->deleteDoc($export);
+        $export = null;
       }
 
       if (!$export) {
@@ -62,7 +65,11 @@ EOF;
           $export->drs->ids->add(null, 'DR-' . $cvi . '-' .$csv->campagne);
         }
         
-        $export->generateCle();
+        $export->cle = $cle;
+        if (!$export->cle) {
+          $export->generateCle();
+        }
+
         $export->save();
         $this->logSection($export->get('_id'), 'created');
       }

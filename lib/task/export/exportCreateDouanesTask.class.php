@@ -42,9 +42,12 @@ EOF;
     foreach($departements as $departement => $nom) {
         $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-'. $departement , sfCouchdbClient::HYDRATE_JSON);
 
+        $cle = null;
+
         if ($export && $options['delete']) {
-           sfCouchdbManager::getClient()->deleteDoc($export);
-           $export = null;
+          $cle = $export->cle;
+          sfCouchdbManager::getClient()->deleteDoc($export);
+          $export = null;
         }
 
         if (!$export) {
@@ -62,7 +65,11 @@ EOF;
             $view->endkey = array($annee, $departement.'999', '9999999999');
           }
 
-          $export->generateCle();
+          $export->cle = $cle;
+          if (!$export->cle) {
+            $export->generateCle();
+          }
+
           $export->save();
           $this->logSection($export->get('_id'), 'created');
         }
