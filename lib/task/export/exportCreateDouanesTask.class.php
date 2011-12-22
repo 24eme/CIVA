@@ -37,7 +37,7 @@ EOF;
     $departements = array("67" => "Bas-Rhin", 
                           "68" => "Haut-Rhin");
 
-    $annees = array("2010", "2011");
+    $annees = array("2011");
 
     foreach($departements as $departement => $nom) {
         $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-'. $departement , sfCouchdbClient::HYDRATE_JSON);
