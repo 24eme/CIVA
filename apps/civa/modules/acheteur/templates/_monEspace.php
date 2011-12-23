@@ -6,7 +6,7 @@
             <ul>
                 <li><a href="<?php echo url_for('@export_dr_acheteur_csv') ?>">Télécharger l'import en CSV</a></li>
                 <?php if ($export): ?>
-                    <li><a target="_blank" href="https://<?php echo $sf_request->getHost().'/'.$export->cle.'/declarations_de_recolte'; ?>">Télécharger les PDFs des déclarations de récolte</a></li>
+                    <li><a target="_blank" href="https://<?php echo $sf_request->getHost().'/mise_a_disposition/'.$export->cle.'/declarations_de_recolte'; ?>">Télécharger les PDFs des déclarations de récolte</a></li>
                 <?php endif ?>
             </ul>
         <?php else: ?>
