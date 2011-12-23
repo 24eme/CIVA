@@ -5,14 +5,15 @@
         <?php if ($csv): ?>
             <ul>
                 <li><a href="<?php echo url_for('@export_dr_acheteur_csv') ?>">Télécharger l'import en CSV</a></li>
+                <?php if ($export): ?>
+                    <li><a target="_blank" href="https://<?php echo $sf_request->getHost().'/'.$export->cle.'/declarations_de_recolte'; ?>">Télécharger les PDFs des déclarations de récolte</a></li>
+                <?php endif ?>
             </ul>
         <?php else: ?>
             <p> Le téléchargement des données sera accessible à partir du moment où vous avez soumis vos propres données. </p>
         <?php endif; ?>
     </div>
 </div>
-
-
 
 <div id="export">
     <h3 class="titre_section">Export</h3>
