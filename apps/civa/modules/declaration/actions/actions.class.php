@@ -132,6 +132,7 @@ class declarationActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
+          $dr->clean();
 	      $dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
 	      $dr->save();
 	      $this->getUser()->initCredentialsDeclaration();
