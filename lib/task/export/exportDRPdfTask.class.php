@@ -7,6 +7,7 @@ class exportDRPdfTask extends sfBaseTask {
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('clean', null, sfCommandOption::PARAMETER_REQUIRED, 'Clean All before', false),
         ));
 
         $this->namespace = 'export';
@@ -34,10 +35,20 @@ EOF;
         foreach($ids as $id) {
             $export = sfCouchdbManager::getClient()->retrieveDocumentById($id);
             $this->logSection($export->get('_id'), 'exporting ...');
-            $export_dr = new ExportDR($export, true);
-            $export_dr->cleanFolder();
-            $export_dr->export(array($this, 'getPartial'));
-            $export_dr->createZip();
+            $export_dr = new ExportDR($export, array($this, 'getPartial'), true);
+            if($options['clean']) {
+                $export_dr->export();
+                $export_dr->clean();
+                $export_dr->publication();
+                $export_dr->zip();
+            } else {
+                $exported_ids = $export_dr->export();
+                if (count($exported_ids) > 0) {
+                    $export_dr->publicationByIds($exported_ids);
+                    $export_dr->zip();
+                }
+            }
+           
         }
     }
 

@@ -7,60 +7,118 @@ class ExportDR
     protected $_filename = null;
     protected $_export = null;
     protected $_debug = false;
+    protected $_export_queue = array();
 
-	public function __construct(Export $export, $debug = false) {
+	public function __construct(Export $export, $function_get_partial, $debug = false) {
 		$this->_export = $export;
 		$this->_debug = $debug;
 		$this->_ids = $this->findIds($export->drs);
+        $this->_file_export_dr_pdfs = $this->generateFileExportDRPdfs($function_get_partial);
 		$this->_file_dir = sfConfig::get('sf_web_dir') . '/mise_a_disposition/'.$this->_export->cle.'/declarations_de_recolte';
 		$this->createFolder();
 	}
 
 	public function getIds() {
-
 		return $this->_ids;
 	}
 
-	public function exportById($id, $function_get_partial) {
-			if ($this->_debug) {
-            	echo sprintf("%s\n", $id);
-            }
+    public function exportById($id) {
+        $exported = false;
 
-			$file_export_dr = new FileExportDRPdf($id, $function_get_partial);
-            
-            if (!$file_export_dr->isExported()) {
-                $file_export_dr->export();
-            }
-            
-            if (!$file_export_dr->isExported()) {
-            	throw new sfException("Export failed : ".$id);
-        	}
+        if (!array_key_exists($id, $this->_file_export_dr_pdfs)) {
+            throw new sfException("This dr not existing in this export : ".$id);
+        }
 
-        	$this->publication($file_export_dr);
+        $file_export_dr = $this->_file_export_dr_pdfs[$id];
+        
+        if (!$file_export_dr->isExported()) {
+            $file_export_dr->export();
+            $exported = $file_export_dr->isExported();
 
-        	if ($this->_debug) {
-            	echo sprintf("-- export success\n\n", $id);
+            if ($exported && $this->_debug) {
+                echo sprintf("-- export success : %s\n\n", $id);
             }
+        }
+        
+        if (!$file_export_dr->isExported()) {
+            throw new sfException("Export failed : ".$id);
+        }
+
+        return $exported; 
     }
 
-    public function export($function_get_partial) {
-		foreach ($this->getIds() as $id) {
-			try {
-				$this->exportById($id, $function_get_partial);
-			} catch (Exception $e) {
-				if ($this->_debug) {
-            		echo sprintf("-- export FAILED\n\n", $id);
-            	}
-			}
+    public function exportByIds($ids) {
+        $ids_exported = array();
+
+        foreach ($ids as $id) {
+            try {
+                if ($this->exportById($id)) {
+                    $ids_exported[] = $id;            
+                }
+            } catch (Exception $e) {
+                if ($this->_debug) {
+                    echo sprintf("-- export FAILED : %s\n\n", $id);
+                }
+            }
+        }
+
+        return $ids_exported;
+    }
+
+    public function export() {
+        return $this->exportByIds($this->getIds());
+    }
+
+    public function publicationById($id) {
+
+        if (!array_key_exists($id, $this->_file_export_dr_pdfs)) {
+            throw new sfException("This dr not existing in this export : ".$id);
+        }
+
+        $file_export_dr = $this->_file_export_dr_pdfs[$id];
+
+        $path = $this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne.'/'.$file_export_dr->getDrJson()->_id.'.pdf';
+        $this->mkdirUnlessFolder($this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne);
+
+        if (is_file($path)) {
+            echo sprintf("(remove existing pdf %s)\n", $path);
+            unlink($path);
+        }
+
+        copy($file_export_dr->getPath(), $path);
+
+        if ($this->_debug) {
+            echo sprintf("-- publication success: %s\n\n", $id);
         }
     }
 
-    public function createZip() {
+    public function publicationByIds($ids) {
+        foreach($ids as $id) {
+            try {
+                $this->publicationById($id);
+            } catch (Exception $e) {
+                if ($this->_debug) {
+                    echo sprintf("-- publication FAILED : %s\n\n", $id);
+                }
+            }
+           
+        }
+    }
+
+    public function publication() {
+        $this->publicationByIds($this->getIds());
+    }
+
+    public function zip() {
         $directories = sfFinder::type('directory')->relative()->in($this->_file_dir);
         foreach($directories as $directory) {
             $files = sfFinder::type('file')->in($this->_file_dir . '/' . $directory);
             if (count($files) > 0) {
                 $zip_path = $this->_file_dir . '/' . $directory.'.zip';
+                if (is_file($zip_path)) {
+                    echo sprintf("(remove existing zip %s)\n", $zip_path);
+                    unlink($zip_path);
+                }
                 $zip = new ZipArchive();
                 $zip->open($zip_path, ZIPARCHIVE::OVERWRITE);
                 foreach($files as $file) {
@@ -75,6 +133,27 @@ class ExportDR
         }
     }
 
+    public function clean() {
+        sfToolkit::clearDirectory($this->_file_dir);
+        if ($this->_debug) {
+                echo sprintf("(clean folder %s)\n\n", $this->_file_dir);
+            }
+    }
+
+    protected function generateFileExportDRPdfs($function_get_partial) {
+        $file_export_dr_pdfs = array();
+        foreach ($this->getIds() as $id) {
+            try {
+                $file_export_dr_pdfs[$id] = new FileExportDRPdf($id, $function_get_partial);
+            } catch (Exception $e) {
+                if ($this->_debug) {
+                    echo sprintf("-- find FAILED : %s\n\n", $id);
+                }
+            }
+        }
+        return $file_export_dr_pdfs;
+    }
+
     protected function createFolder() {
     	$this->mkdirUnlessFolder(sfConfig::get('sf_web_dir') . '/mise_a_disposition');
     	$this->createHtaccess(sfConfig::get('sf_web_dir') . '/mise_a_disposition', $this->getHtaccessDeny());
@@ -83,19 +162,6 @@ class ExportDR
     	$this->createHtaccess(sfConfig::get('sf_web_dir') . '/mise_a_disposition/'.$this->_export->cle, $this->getHtaccessAllow());
 
     	$this->mkdirUnlessFolder($this->_file_dir);
-    }
-
-    public function cleanFolder() {
-    	sfToolkit::clearDirectory($this->_file_dir);
-        if ($this->_debug) {
-                echo sprintf("(clean folder %s)\n\n", $this->_file_dir);
-            }
-    }
-
-    protected function publication($file_export_dr) {
-    	$path = $this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne.'/'.$file_export_dr->getDrJson()->_id.'.pdf';
-    	$this->mkdirUnlessFolder($this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne);
-    	copy($file_export_dr->getPath(), $path);
     }
 
     protected function createHtaccess($path, $content, $force = false) {
