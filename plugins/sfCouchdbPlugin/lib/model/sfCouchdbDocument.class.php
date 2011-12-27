@@ -74,7 +74,7 @@ abstract class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function isModified() {
-        return $this->isNew() || (unserialize($this->_loaded_data) != $this->getData());
+        return $this->isNew() || ($this->_loaded_data !== serialize($this->getData()));
     }
 
     public function __clone() {
