@@ -223,24 +223,28 @@ class DR extends BaseDR {
     public function clean() {
         $clean = false;
         foreach($this->recolte->getAppellations() as $appellation)  {
+            foreach($appellation->getLieux() as $lieu) {
+                 foreach($lieu->getCouleurs() as $couleur) {
+                    foreach($couleur->getCepages() as $cepage) {
+                        if (count($cepage->detail) < 1) {
+                            $cepage->getParent()->remove($cepage->getKey());
+                            $clean = true;
+                        }
+                    }
+                    if (count($couleur->getCepages()) < 1) {
+                        $couleur->getParent()->remove($couleur->getKey());
+                        $clean = true;
+                    }
+                }
+                if (count($lieu->getCouleurs()) < 1) {
+                    $lieu->getParent()->remove($lieu->getKey());
+                    $clean = true;
+                }
+            }
             if (count($appellation->getLieux()) < 1) {
                 $this->recolte->remove($appellation->getKey());
                 $this->acheteurs->remove($appellation->getKey());
                 $clean = true;
-            }
-            foreach($appellation->getLieux() as $lieu) {
-                if (count($lieu->getCepages()) < 1) {
-                    $this->recolte->remove($appellation->getKey());
-                    $this->acheteurs->remove($appellation->getKey());
-                    $clean = true;
-                }
-                foreach($lieu->getCepages() as $cepage) {
-                    if (count($cepage->detail) < 1) {
-                        $this->recolte->remove($appellation->getKey());
-                        $this->acheteurs->remove($appellation->getKey());
-                        $clean = true;
-                    }
-                }
             }
         }
 
