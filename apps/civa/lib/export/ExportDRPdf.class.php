@@ -167,6 +167,7 @@ class ExportDRPdf {
     	$acheteurs = $lieu->acheteurs;
    		$cpt = 0;
     	foreach ($lieu->getCouleurs() as $couleur) {
+        $nbCepageCouleur = 0;
 	    	foreach ($couleur->getCepages() as $cepage) {
 			    if (!count($cepage->detail))
 			     continue;
