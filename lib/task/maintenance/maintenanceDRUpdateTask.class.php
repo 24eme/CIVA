@@ -43,7 +43,7 @@ EOF;
                 //$dr->update();
                 //$dr->add('modifiee', $modifiee);
               //}
-              $dr->clean();
+              //$dr->clean();
                 if ($dr->isModified()) {
                     $this->logSection('validaded updated', $dr->get('_id'));
                 }

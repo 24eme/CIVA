@@ -70,7 +70,7 @@ class ExportDRPdf {
                   if (!$appellation->exist($lieu->getKey()))
                     continue;
                   $lieu = $appellation->{$lieu->getKey()};
-                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasManyCouleur());
+                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable());
                 }
             }
           }
@@ -160,93 +160,84 @@ class ExportDRPdf {
         return $infos;
     }
     
-	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable, $hasManyCouleur) {
+	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable) {
+      $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
     	$colonnes = array();
     	$afterTotal = array();
     	$acheteurs = $lieu->acheteurs;
    		$cpt = 0;
-   		if ($hasManyCouleur)
-   			$couleurs = $lieu->getConfig()->getCouleurs();
-   		else 
-   			$couleurs = array($lieu->getCouleur());
-    	foreach ($couleurs as $couleur) {
-   			if ($hasManyCouleur)
-    			$couleur = $lieu->{$couleur->getKey()};
-    		$nbCepageCouleur = 0;
-	    	foreach ($couleur->getConfig()->getCepages() as $cepage) {
-	      		if (!$couleur->exist($cepage->getKey()))
-			  continue;
-	      		$cepage = $couleur->{$cepage->getKey()};
-			if (!count($cepage->detail))
-			  continue;
-	      		$i = 0;
-	      		foreach ($cepage->detail as $detail) {
-					$c = array();
-					$c['type'] = 'detail';
-					$c['cepage'] = $cepage->getLibelle();
-					$c['denomination'] = $detail->denomination;
-					$c['vtsgn'] = $detail->vtsgn;
-					$c['superficie'] = $detail->superficie;
-					$c['volume'] = $detail->volume;
-					if ($hasLieuEditable)
-						$c['lieu'] = $detail->lieu;
-	        		if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
-	            		$c['motif_non_recolte'] = $detail->getMotifNonRecolteLibelle();
-	        		}
-					$c['cave_particuliere'] = $detail->cave_particuliere;
-					foreach($detail->negoces as $vente) {
-		  				$c['negoces_'.$vente->cvi] = $vente->quantite_vendue;
-					}
-					foreach($detail->cooperatives as $vente) {
-		  				$c['cooperatives_'.$vente->cvi] = $vente->quantite_vendue;
-					}
-					if ($detail->exist('mouts'))
-		  				foreach($detail->mouts as $vente) {
-		    				$c['mouts_'.$vente->cvi] = $vente->quantite_vendue;
-		  				}
-					if ($cepage->getConfig()->excludeTotal()) {
-		  				array_push($afterTotal, $c);
-					}else{
-		  				$last = array_push($colonnes, $c) - 1;
-					}
-					$i++;
-					$cpt ++;
-	      		} // endforeach; details des cepages
-	      		if ($cepage->getConfig()->hasTotalCepage()) {
-					if ($i > 1) {
-		  				$c = array();
-		  				$c['type'] = 'total';
-		  				$c['cepage'] = $cepage->getLibelle();
-		  				$c['denomination'] = 'Total';
-		  				$c['vtsgn'] = '';
-		  				$c['superficie'] = $cepage->total_superficie;
-		  				$c['volume'] = $cepage->total_volume;
-		  				$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
-		  				$c['revendique'] = $cepage->volume_revendique;
-		  				$c['dplc'] = $cepage->dplc;
-		  				if (!$c['dplc'])
-		    				$c['dplc'] = '0,00';
-		  				$negoces = $cepage->getVolumeAcheteurs('negoces');
-					  	foreach($negoces as $cvi => $total) {
-					    	$c['negoces_'.$cvi] = $total;
-					  	}
-					  	$coop =  $cepage->getVolumeAcheteurs('cooperatives');
-					  	foreach($coop as $cvi => $total) {
-					    	$c['cooperatives_'.$cvi] = $total;
-					  	}
-					  	$mouts =  $cepage->getVolumeAcheteurs('mouts');
-					  	foreach($mouts as $cvi => $total) {
-					    	$c['mouts_'.$cvi] = $total;
-					  	}
-		  				array_push($colonnes, $c);
-		  				$cpt ++;
-						}else{
-		  					$colonnes[$last]['type'] = 'total';
-		  					$colonnes[$last]['revendique'] = $cepage->volume_revendique;
-		  					$colonnes[$last]['dplc'] = $cepage->dplc;
-		  					if (!$colonnes[$last]['dplc'])
-		    					$colonnes[$last]['dplc'] = '0,00';
-						}
+    	foreach ($lieu->getCouleurs() as $couleur) {
+	    	foreach ($couleur->getCepages() as $cepage) {
+			    if (!count($cepage->detail))
+			     continue;
+    		  $i = 0;
+    		  foreach ($cepage->detail as $detail) {
+  					$c = array();
+  					$c['type'] = 'detail';
+  					$c['cepage'] = $cepage->getLibelle();
+  					$c['denomination'] = $detail->denomination;
+  					$c['vtsgn'] = $detail->vtsgn;
+  					$c['superficie'] = $detail->superficie;
+  					$c['volume'] = $detail->volume;
+  					if ($hasLieuEditable)
+  						$c['lieu'] = $detail->lieu;
+  	        		if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
+  	            		$c['motif_non_recolte'] = $detail->getMotifNonRecolteLibelle();
+  	        		}
+  					$c['cave_particuliere'] = $detail->cave_particuliere;
+  					foreach($detail->negoces as $vente) {
+  		  				$c['negoces_'.$vente->cvi] = $vente->quantite_vendue;
+  					}
+  					foreach($detail->cooperatives as $vente) {
+  		  				$c['cooperatives_'.$vente->cvi] = $vente->quantite_vendue;
+  					}
+  					if ($detail->exist('mouts'))
+  		  				foreach($detail->mouts as $vente) {
+  		    				$c['mouts_'.$vente->cvi] = $vente->quantite_vendue;
+  		  				}
+  					if ($cepage->getConfig()->excludeTotal()) {
+  		  				array_push($afterTotal, $c);
+  					}else{
+  		  				$last = array_push($colonnes, $c) - 1;
+  					}
+  					$i++;
+  					$cpt ++;
+      		} // endforeach; details des cepages
+      		if ($cepage->getConfig()->hasTotalCepage()) {
+  					if ($i > 1) {
+  		  				$c = array();
+  		  				$c['type'] = 'total';
+  		  				$c['cepage'] = $cepage->getLibelle();
+  		  				$c['denomination'] = 'Total';
+  		  				$c['vtsgn'] = '';
+  		  				$c['superficie'] = $cepage->total_superficie;
+  		  				$c['volume'] = $cepage->total_volume;
+  		  				$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
+  		  				$c['revendique'] = $cepage->volume_revendique;
+  		  				$c['dplc'] = $cepage->dplc;
+  		  				if (!$c['dplc'])
+  		    				$c['dplc'] = '0,00';
+  		  				$negoces = $cepage->getVolumeAcheteurs('negoces');
+  					  	foreach($negoces as $cvi => $total) {
+  					    	$c['negoces_'.$cvi] = $total;
+  					  	}
+  					  	$coop =  $cepage->getVolumeAcheteurs('cooperatives');
+  					  	foreach($coop as $cvi => $total) {
+  					    	$c['cooperatives_'.$cvi] = $total;
+  					  	}
+  					  	$mouts =  $cepage->getVolumeAcheteurs('mouts');
+  					  	foreach($mouts as $cvi => $total) {
+  					    	$c['mouts_'.$cvi] = $total;
+  					  	}
+  		  				array_push($colonnes, $c);
+  		  				$cpt ++;
+  						}else{
+  		  					$colonnes[$last]['type'] = 'total';
+  		  					$colonnes[$last]['revendique'] = $cepage->volume_revendique;
+  		  					$colonnes[$last]['dplc'] = $cepage->dplc;
+  		  					if (!$colonnes[$last]['dplc'])
+  		    					$colonnes[$last]['dplc'] = '0,00';
+  						}
 	      		}
 	      		$nbCepageCouleur++;
 	    	} // endforeach; cepages
