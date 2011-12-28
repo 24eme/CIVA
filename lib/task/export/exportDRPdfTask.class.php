@@ -41,12 +41,12 @@ EOF;
                 $export_dr->clean();
                 $export_dr->publication();
                 $export_dr->zip();
+                $export_dr->createHashMd5File();
             } else {
-                $exported_ids = $export_dr->export();
-                if (count($exported_ids) > 0) {
-                    $export_dr->publicationByIds($exported_ids);
-                    $export_dr->zip();
-                }
+                $export_dr->export();
+                $export_dr->publication();
+                $export_dr->zip();
+                $export_dr->createHashMd5File();
             }
            
         }

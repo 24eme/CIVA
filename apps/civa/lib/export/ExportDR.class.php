@@ -8,6 +8,9 @@ class ExportDR
     protected $_export = null;
     protected $_debug = false;
     protected $_export_queue = array();
+    protected $_hash_md5 = array();
+    protected $_hash_md5_from_file = array();
+    protected $_campagnes = null;
 
 	public function __construct(Export $export, $function_get_partial, $debug = false) {
 		$this->_export = $export;
@@ -57,7 +60,7 @@ class ExportDR
                 }
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- export FAILED : %s\n", $id);
+                    echo sprintf("-- export FAILED : %s (%s)\n", $id, $e->getMessage());
                 }
             }
         }
@@ -70,19 +73,27 @@ class ExportDR
     }
 
     public function publicationById($id) {
-
         if (!array_key_exists($id, $this->_file_export_dr_pdfs)) {
             throw new sfException("This dr not existing in this export : ".$id);
         }
 
         $file_export_dr = $this->_file_export_dr_pdfs[$id];
+        $campagne = $file_export_dr->getDrJson()->campagne;
+
+        if ($this->getHashMd5($campagne) && $this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
+            return;
+        }
 
         $path = $this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne.'/'.$file_export_dr->getDrJson()->_id.'.pdf';
         $this->mkdirUnlessFolder($this->_file_dir.'/'.$file_export_dr->getDrJson()->campagne);
 
         if (is_file($path)) {
-            echo sprintf("(remove existing pdf %s)\n", $path);
+            echo sprintf("remove existing pdf %s\n", $path);
             unlink($path);
+        }
+
+        if (!($file_export_dr->getDrJson()->validee && $file_export_dr->getDrJson()->modifiee && !$file_export_dr->getDrJson()->import_db2)) {
+            throw new sfException("This dr in not valid or has been imported from db2 : ".$id);
         }
 
         copy($file_export_dr->getPath(), $path);
@@ -98,7 +109,7 @@ class ExportDR
                 $this->publicationById($id);
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- publication FAILED : %s\n", $id);
+                    echo sprintf("-- publication FAILED : %s (%s)\n", $id, $e->getMessage());
                 }
             }
            
@@ -109,35 +120,82 @@ class ExportDR
         $this->publicationByIds($this->getIds());
     }
 
-    public function zip() {
-        $directories = sfFinder::type('directory')->relative()->in($this->_file_dir);
-        foreach($directories as $directory) {
-            $files = sfFinder::type('file')->in($this->_file_dir . '/' . $directory);
-            if (count($files) > 0) {
-                $zip_path = $this->_file_dir . '/' . $directory.'.zip';
-                if (is_file($zip_path)) {
-                    echo sprintf("(remove existing zip %s)\n", $zip_path);
-                    unlink($zip_path);
-                }
-                $zip = new ZipArchive();
-                $zip->open($zip_path, ZIPARCHIVE::OVERWRITE);
-                foreach($files as $file) {
-                    $zip->addFile($file, basename($file));
-                }
-                $zip->close();
+    public function zipByCampagne($campagne) {
+        if ($this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
+            return;
+        }
 
-                if ($this->_debug) {
-                    echo sprintf("zip created %s\n", $zip_path);
-                }
+        $files = sfFinder::type('file')->in($this->_file_dir . '/' . $campagne);
+        if (count($files) > 0) {
+            $zip_path = $this->_file_dir . '/' . $campagne.'.zip';
+            if (is_file($zip_path)) {
+                echo sprintf("remove existing zip %s\n", $zip_path);
+                unlink($zip_path);
+            }
+            $zip = new ZipArchive();
+            $zip->open($zip_path, ZIPARCHIVE::OVERWRITE);
+            foreach($files as $file) {
+                $zip->addFile($file, basename($file));
+            }
+            $zip->close();
+
+            if ($this->_debug) {
+                echo sprintf("zip created %s\n", $zip_path);
             }
         }
+    }
+
+    public function zip() {
+        foreach($this->_campagnes as $campagne) {
+            $this->zipByCampagne($campagne);
+        }
+    }
+
+    public function getHashMd5($campagne) {
+        if (!array_key_exists($campagne, $this->_hash_md5)) {
+            $hash_md5 = '';
+            foreach($this->_file_export_dr_pdfs as $id => $file_export_dr_pdf) {
+                if ($file_export_dr_pdf->getDrJson()->campagne == $campagne) {
+                    $hash_md5 .=  $id.$file_export_dr_pdf->getDrJson()->_rev;
+                }
+            }
+            $this->_hash_md5[$campagne] = md5($hash_md5);
+        }
+
+        return $this->_hash_md5[$campagne];
     }
 
     public function clean() {
         sfToolkit::clearDirectory($this->_file_dir);
         if ($this->_debug) {
                 echo sprintf("(clean folder %s)\n", $this->_file_dir);
-            }
+        }
+    }
+
+    public function createHashMd5File() {
+        foreach($this->_campagnes as $campagne) {
+            $this->createHashMd5FileByCampagne($campagne);
+        }
+    }
+
+    public function createHashMd5FileByCampagne($campagne) {
+        $path = $this->_file_dir.'/'.$campagne.'.checksum';
+
+        if (is_file($path)) {
+            echo sprintf("remove checksum file %s\n", $path);
+            unlink($path);
+        }
+
+        if ($this->getHashMd5($campagne)) {
+            file_put_contents($path, $this->getHashMd5($campagne));
+            if ($this->_debug) {
+                echo sprintf("-- create checksum file %s\n", $path);
+            }   
+        }
+
+        if(array_key_exists($campagne, $this->_hash_md5_from_file)) {
+            unset($this->_hash_md5_from_file[$campagne]);
+        }
     }
 
     protected function generateFileExportDRPdfs($function_get_partial) {
@@ -145,13 +203,33 @@ class ExportDR
         foreach ($this->getIds() as $id) {
             try {
                 $file_export_dr_pdfs[$id] = new FileExportDRPdf($id, $function_get_partial);
+
+                if (!in_array($file_export_dr_pdfs[$id]->getDrJson()->campagne, $this->_campagnes)) {
+                    $this->_campagnes[] = $file_export_dr_pdfs[$id]->getDrJson()->campagne;
+                }
             } catch (Exception $e) {
                 if ($this->_debug) {
                     echo sprintf("-- find FAILED : %s\n", $id);
                 }
             }
         }
+
         return $file_export_dr_pdfs;
+    }
+
+    protected function getHashMd5FileFromFile($campagne) {
+
+        if (!array_key_exists($campagne, $this->_hash_md5_from_file)) {
+            $path = $this->_file_dir.'/'.$campagne.'.checksum';
+
+            $this->_hash_md5_from_file[$campagne] = null;
+
+            if (is_file($path)) {
+               $this->_hash_md5_from_file[$campagne] = file_get_contents($path);
+            }
+        }
+
+        return $this->_hash_md5_from_file[$campagne];
     }
 
     protected function createFolder() {
@@ -175,11 +253,13 @@ class ExportDR
     }
 
     protected function getHtaccessDeny() {
+
         return sprintf(
                 "Options -Indexes\nDeny from all");
     }
 
     protected function getHtaccessAllow() {
+
         return sprintf(
                 "Options +Indexes\nAllow from all");
     }
@@ -190,8 +270,10 @@ class ExportDR
             if ($this->_debug) {
             	echo sprintf("(folder created %s)\n", $path);
             }
+
             return true;
         }
+
         return true;
     }
 
