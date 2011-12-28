@@ -179,8 +179,10 @@ class ExportDR
     }
 
     public function createHashMd5FileByCampagne($campagne) {
+        if ($this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
+            return;
+        }
         $path = $this->_file_dir.'/'.$campagne.'.checksum';
-
         if (is_file($path)) {
             echo sprintf("remove checksum file %s\n", $path);
             unlink($path);
