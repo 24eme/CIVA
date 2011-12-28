@@ -36,7 +36,7 @@ class ExportDR
             $exported = $file_export_dr->isExported();
 
             if ($exported && $this->_debug) {
-                echo sprintf("-- export success : %s\n\n", $id);
+                echo sprintf("-- export success : %s\n", $id);
             }
         }
         
@@ -57,7 +57,7 @@ class ExportDR
                 }
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- export FAILED : %s\n\n", $id);
+                    echo sprintf("-- export FAILED : %s\n", $id);
                 }
             }
         }
@@ -88,7 +88,7 @@ class ExportDR
         copy($file_export_dr->getPath(), $path);
 
         if ($this->_debug) {
-            echo sprintf("-- publication success: %s\n\n", $id);
+            echo sprintf("-- publication success: %s\n", $id);
         }
     }
 
@@ -98,7 +98,7 @@ class ExportDR
                 $this->publicationById($id);
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- publication FAILED : %s\n\n", $id);
+                    echo sprintf("-- publication FAILED : %s\n", $id);
                 }
             }
            
@@ -127,7 +127,7 @@ class ExportDR
                 $zip->close();
 
                 if ($this->_debug) {
-                    echo sprintf("zip created %s\n\n", $zip_path);
+                    echo sprintf("zip created %s\n", $zip_path);
                 }
             }
         }
@@ -136,7 +136,7 @@ class ExportDR
     public function clean() {
         sfToolkit::clearDirectory($this->_file_dir);
         if ($this->_debug) {
-                echo sprintf("(clean folder %s)\n\n", $this->_file_dir);
+                echo sprintf("(clean folder %s)\n", $this->_file_dir);
             }
     }
 
@@ -147,7 +147,7 @@ class ExportDR
                 $file_export_dr_pdfs[$id] = new FileExportDRPdf($id, $function_get_partial);
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- find FAILED : %s\n\n", $id);
+                    echo sprintf("-- find FAILED : %s\n", $id);
                 }
             }
         }

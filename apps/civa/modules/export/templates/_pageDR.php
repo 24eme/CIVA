@@ -33,8 +33,8 @@ if (!function_exists('printColonne')) {
          $cpt++;
       }
     }
-    if (!$cpt)
-      return ;
+    /*if (!$cpt)
+      return ;*/
     echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">'.$libelle.'</th>';
     foreach($colonnes as $c) {
       if (array_key_exists($key, $c->getRawValue())) {
