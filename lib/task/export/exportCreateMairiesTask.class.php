@@ -41,7 +41,7 @@ EOF;
         $communes[$csv[0]] = $csv[1];
     }
 
-    $annees = array("2011");
+    $annees = array("2010", "2011");
 
     foreach($communes as $code_postal => $nom) {
         $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal , sfCouchdbClient::HYDRATE_JSON);
