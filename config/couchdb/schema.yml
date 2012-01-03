@@ -463,6 +463,16 @@ Configuration:
                               rendement_couleur: { type: float }
                               rendement: { type: float }
                               libelle: { }
+                              douane :
+                                type: collection
+                                class: ConfigurationDouane
+                                definition:
+                                  fields:
+                                    type_aoc: {required: false}
+                                    couleur: {required: false}
+                                    appellation_lieu: {required: false}
+                                    qualite: {required: false}
+                                    code_cepage: {required: false}
                               '*':
                               # ------------ CEPAGE -------------
                                 type: collection

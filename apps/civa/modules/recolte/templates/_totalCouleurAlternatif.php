@@ -1,5 +1,5 @@
 <?php use_helper('civa') ?>
-<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo ($onglets->getCurrentLieu()->getNbCouleurs() > 1) ? "col_double" : "" ?>">
+<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo ($onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "col_double" : "" ?>">
     <h2>Total 
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
         <strong><?php echo $couleur->getLibelle() ?></strong>

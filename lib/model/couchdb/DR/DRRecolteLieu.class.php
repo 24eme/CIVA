@@ -29,7 +29,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCouleur($cepage = null) {
-        if (!$cepage && $this->getNbCouleurs() > 1)
+        if (!$cepage && $this->getConfig()->getNbCouleurs() > 1)
             throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
         $couleur = 'couleur';
         if ($cepage)
@@ -40,9 +40,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->_get('couleur');
     }
 
-    public function getNbCouleurs() {
+    /*public function getNbCouleurs() {
         return count($this->filter('^couleur'));
-    }
+    }*/
 
     public function getCepages() {
         throw new sfException("La liste des cépages est impossible à partir du lieu");

@@ -224,6 +224,14 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $sum;
     }
 
+    public function getCodeDouane($vtsgn = '') {
+        if ($this->getLieu()->getConfig()->hasManyCouleur()) {
+            return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
+        } else {
+            return $this->getLieu()->getCodeDouane($vtsgn);
+        }
+    }
+
     protected function update($params = array()) {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {

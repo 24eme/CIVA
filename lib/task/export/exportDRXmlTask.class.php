@@ -5,16 +5,16 @@ class exportDRXmlTask extends sfBaseTask
   protected function configure()
   {
     // // add your own arguments here
-    // $this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+    $this->addArguments(array(
+       new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'Campagne'),
+    ));
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
-      new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, 'export for a campagne', '2010'),
+      
     ));
 
     $this->namespace        = 'export';
@@ -38,33 +38,33 @@ EOF;
 
     sfContext::createInstance($this->configuration);
 
-    $filename = $this->getFileDir().'DR-'.$options['campagne'].'.xml';
+    $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'.xml';
     if (file_exists($filename)) {
         unlink($filename);
     }
 
     $nb_exported = 0;
 
-    $drs_id_file = array();
+    /*$drs_id_file = array();
     foreach (file(sfConfig::get('sf_data_dir') . '/Fichier99DRrejetees.csv') as $a) {
         $csv = explode(',', preg_replace('/"/', '', $a));
         if (trim($csv[0])) {
-          $drs_id_file[] = 'DR-'.trim($csv[0]).'-'.$options['campagne'];
+          $drs_id_file[] = 'DR-'.trim($csv[0]).'-'.$arguments['campagne'];
         }
     }
-
     $this->logSection("dr impacter", count($drs_id_file));
-    
+    */
+
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     foreach ($dr_ids as $id) {
-        if ($id !== 'DR-7523700100-'.$options['campagne'] /*&& in_array($id, $drs_id_file)*/) {
+        if ($id !== 'DR-7523700100-'.$arguments['campagne'] /*&& in_array($id, $drs_id_file)*/) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            /*if ($options['campagne'] == "2010" && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+            /*if ($arguments['campagne'] == "2010" && $dr->exist('import_db2') && $dr->import_db2 == 1) {
                 continue;
             }*/
-            try {
+            /*try {
                 if (!$dr->updated)
                     throw new Exception();
             } catch (Exception $e) {
@@ -75,19 +75,20 @@ EOF;
                     $this->logSection("failed update", $dr->_id, null, "ERROR");
                     continue;
                 }
-            }
+            }*/
 
-            try {
+            //try {
                 if ($dr->isValideeTiers()) {
-                    $xml = new ExportDRXml($dr, array($this, 'getPartial'));
+                    $xml = new ExportDRXml($dr, array($this, 'getPartial'), 'Civa');
                     file_put_contents($filename, $xml->getContent(), FILE_APPEND);
                     $this->logSection($dr->_id, 'xml generated');
                     $nb_exported++;
                     unset($xml);
                 }
-            } catch (Exception $exc) {
+            /*} catch (Exception $e) {
                 $this->logSection("failed xml", $dr->_id, null, "ERROR");
-            }
+                $this->logSection("erreur", $e->getMessage(), null, "ERROR");
+            }*/
             unset($dr);
         }
     }

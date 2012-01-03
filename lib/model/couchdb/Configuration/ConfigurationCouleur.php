@@ -2,7 +2,7 @@
 
 class ConfigurationCouleur extends BaseConfigurationCouleur {
     public function getCepages() {
-      return $this->filter('^cepage')->toArray();
+      return $this->filter('^cepage');
     }
 
     public function hasRendement() {
