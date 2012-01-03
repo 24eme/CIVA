@@ -20,7 +20,7 @@ class ConfigurationLieu extends BaseConfigurationLieu {
     public function getCepages() {
         $cepage = array();
         foreach ($this->getCouleurs() as $couleur) {
-            $cepage = array_merge($cepage, $couleur->getCepages());
+            $cepage = array_merge($cepage, $couleur->getCepages()->toArray());
         }
         return $cepage;
     }
