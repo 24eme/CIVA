@@ -14,6 +14,8 @@ class DRUpdateTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_REQUIRED, 'Cvi', null),
+            new sfCommandOption('devalidation', null, sfCommandOption::PARAMETER_REQUIRED, 'Dévalidation', false)
         ));
 
         $this->namespace = 'dr';
@@ -34,11 +36,31 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        if (!$options['cvi']) {
+            $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        } else {
+            $dr_ids = array('DR-'.$options['cvi'].'-'.$arguments['campagne']);
+        }
 
         foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
-            //$dr->update();
+
+            $data = $dr->getData();
+
+            $dr->update();
+
+            $modifiee = $dr->get('modifiee');
+            
+            if ($options['devalidation']) {
+                $dr->remove('modifiee');
+            }
+
+            $dr->update();
+
+            if ($options['devalidation']) {
+                $dr->add('modifiee', $modifiee);
+            }
+
             if ($dr->isModified()) {
                 $this->logSection('updated', $dr->get('_id'));
             }

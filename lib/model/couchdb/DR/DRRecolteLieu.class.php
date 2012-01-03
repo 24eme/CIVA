@@ -393,7 +393,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
         $this->acheteurs->update();
 
-        if ($this->getCouchdbDocument()->canUpdate() && $this->getConfig()->hasRendement() && $this->hasSellToUniqueAcheteur()) {
+        if ($this->getCouchdbDocument()->canUpdate() /*&& $this->getConfig()->hasRendement()*/ && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
         }
