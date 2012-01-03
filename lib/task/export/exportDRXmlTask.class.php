@@ -90,6 +90,10 @@ EOF;
                 $this->logSection("erreur", $e->getMessage(), null, "ERROR");
             }*/
             unset($dr);
+
+            if($nb_exported == 250) {
+                break;
+            }
         }
     }
 
