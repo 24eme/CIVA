@@ -210,17 +210,17 @@ class ExportDRAcheteurCsv extends ExportCsv {
 
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
-        
+              
         $this->add(array(
             "cvi_acheteur" => $this->_acheteur->cvi,
             "nom_acheteur" => $this->_acheteur->nom,
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
+            "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
             "vtsgn" => $detail->vtsgn,
-            "denomination" => $detail->denomination,
+            "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
             "superficie_livree" => (($detail->volume == $acheteur->quantite_vendue) ? $detail->superficie : null),
             "volume_livre" => $acheteur->quantite_vendue,
             "dont_dplc" => null,
@@ -233,16 +233,19 @@ class ExportDRAcheteurCsv extends ExportCsv {
     }
 
     protected function addDetailTotal($detail) {
+        $lieu = "";
+        $denomination = "";
+
         $this->add(array(
             "cvi_acheteur" => $this->_acheteur->cvi,
             "nom_acheteur" => $this->_acheteur->nom,
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
+            "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
             "vtsgn" => $detail->vtsgn,
-            "denomination" => $detail->denomination,
+            "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
             "superficie_livree" => null,
             "volume_livre" => null,
             "dont_dplc" => null,
