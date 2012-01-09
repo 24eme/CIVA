@@ -119,8 +119,17 @@ class DR extends BaseDR {
      */
     public function getRatioLies() {
       if (!($v = $this->getTotalCaveParticuliere())) {
-	return 0;
+       return 0;
       }
+
+      if ($this->recolte->exist('appellation_VINTABLE')) {
+        $v -= $this->recolte->get('appellation_VINTABLE')->getTotalCaveParticuliere();
+      }
+
+      if($v <= 0) {
+          return 0;
+      }
+
       return $this->lies / $v;
     }
 
