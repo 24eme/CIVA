@@ -46,18 +46,13 @@ EOF;
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
 
             $data = $dr->getData();
-
-            $dr->update();
-
             $modifiee = null;
-            if ($dr->exist('modifiee')) {
-                $modifiee = $dr->get('modifiee');
-            }
-
+            
             if ($options['devalidation']) {
                 if ($dr->exist('modifiee')) {
                     $dr->modifiee = null;
                 }
+                $dr->modifiee = null;
             }
 
             $dr->update();
