@@ -49,16 +49,23 @@ EOF;
 
             $dr->update();
 
-            $modifiee = $dr->get('modifiee');
-            
+            $modifiee = null;
+            if ($dr->exist('modifiee')) {
+                $modifiee = $dr->get('modifiee');
+            }
+
             if ($options['devalidation']) {
-                $dr->remove('modifiee');
+                if ($dr->exist('modifiee')) {
+                    $dr->modifiee = null;
+                }
             }
 
             $dr->update();
 
             if ($options['devalidation']) {
-                $dr->add('modifiee', $modifiee);
+                if ($modifiee) {
+                    $dr->add('modifiee', $modifiee);
+                }
             }
 
             if ($dr->isModified()) {

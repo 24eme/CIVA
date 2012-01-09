@@ -141,7 +141,7 @@ class DR extends BaseDR {
      * @return boolean 
      */
     public function canUpdate() {
-      return !$this->exist('modifiee');
+      return !$this->exist('modifiee') || !$this->modifiee;
     }
 
     /**
