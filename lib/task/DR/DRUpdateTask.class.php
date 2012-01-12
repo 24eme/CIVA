@@ -49,9 +49,12 @@ EOF;
             $modifiee = null;
             
             if ($options['devalidation']) {
+<<<<<<< HEAD
                 if ($dr->exist('modifiee')) {
                     $dr->modifiee = null;
                 }
+=======
+>>>>>>> Modification Update DR
                 $dr->modifiee = null;
             }
 
