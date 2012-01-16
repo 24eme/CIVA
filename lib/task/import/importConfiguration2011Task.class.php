@@ -137,14 +137,14 @@ EOF;
         $appellation->lieuBLIE->couleurBlanc->douane->couleur = 'B';
         $appellation->lieuBLIE->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->lieuBLIE->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuBLIE->couleurBlanc->cepage_SY = $this->getCepage('SY', $cepage_douane[7]['SY'], 'S0');
+        $appellation->lieuBLIE->couleurBlanc->cepage_SY = $this->getCepage('SY', $cepage_douane[7]['SY'], 'S ');
 
         $appellation->lieuBARR->libelle = "Côtes de Barr";
         $appellation->lieuBARR->couleurBlanc->douane->appellation_lieu = $cepcom['BARR']['SY'];
         $appellation->lieuBARR->couleurBlanc->douane->couleur = 'B';
         $appellation->lieuBARR->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->lieuBARR->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuBARR->couleurBlanc->cepage_SY = $this->getCepage('SY', $cepage_douane[7]['SY'], 'S0');
+        $appellation->lieuBARR->couleurBlanc->cepage_SY = $this->getCepage('SY', $cepage_douane[7]['SY'], 'S ');
 
         $appellation->lieuROUF->libelle = "Côte de Rouffach";
         $appellation->lieuROUF->couleurBlanc->douane->appellation_lieu = $cepcom['ROUF']['AL'];
@@ -158,7 +158,7 @@ EOF;
         $appellation->lieuROUF->couleurRouge->douane->couleur = 'R';
         $appellation->lieuROUF->couleurRouge->rendement_couleur = $rendement_couleur_rouge_communale;
         $appellation->lieuROUF->couleurRouge->libelle = "Rouge";
-        $appellation->lieuROUF->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S0');
+        $appellation->lieuROUF->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S ');
 
         $appellation->lieuKLEV->libelle = "Klevener de Heiligenstein";
         $appellation->lieuKLEV->couleurBlanc->douane->appellation_lieu = $cepcom['KLEV']['KL'];
@@ -167,7 +167,7 @@ EOF;
         $appellation->lieuKLEV->couleurBlanc->libelle = "Blanc";
         $appellation->lieuKLEV->couleurBlanc->cepage_KL->libelle = "Klevener";
         $appellation->lieuKLEV->couleurBlanc->cepage_KL->douane->code_cepage = $cepage_douane[7]['KL'];
-        $appellation->lieuKLEV->couleurBlanc->cepage_KL->douane->qualite = 'S0';
+        $appellation->lieuKLEV->couleurBlanc->cepage_KL->douane->qualite = 'S ';
         $appellation->lieuKLEV->couleurBlanc->cepage_KL->no_vtsgn = 1;
 
         $appellation->lieuOTTR->libelle = "Ottrott";
@@ -175,21 +175,21 @@ EOF;
         $appellation->lieuOTTR->couleurRouge->douane->couleur = 'R';
         $appellation->lieuOTTR->couleurRouge->rendement_couleur = $rendement_couleur_rouge_communale;
         $appellation->lieuOTTR->couleurRouge->libelle = "Rouge";
-        $appellation->lieuOTTR->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S0');
+        $appellation->lieuOTTR->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S ');
 
         $appellation->lieuRODE->libelle = "Rodern";
         $appellation->lieuRODE->couleurRouge->douane->appellation_lieu = $cepcom['RODE']['PR'];
         $appellation->lieuRODE->couleurRouge->douane->couleur = 'R';
         $appellation->lieuRODE->couleurRouge->rendement_couleur = $rendement_couleur_rouge_communale;
         $appellation->lieuRODE->couleurRouge->libelle = "Rouge";
-        $appellation->lieuRODE->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S0');
+        $appellation->lieuRODE->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S ');
 
         $appellation->lieuSTHI->libelle = "Saint Hippolyte";
         $appellation->lieuSTHI->couleurRouge->douane->appellation_lieu = $cepcom['STHI']['PR'];
         $appellation->lieuSTHI->couleurRouge->douane->couleur = 'R';
         $appellation->lieuSTHI->couleurRouge->rendement_couleur = $rendement_couleur_rouge_communale;
         $appellation->lieuSTHI->couleurRouge->libelle = "Rouge";
-        $appellation->lieuSTHI->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S0');
+        $appellation->lieuSTHI->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[7]['PR'], 'S ');
 
         $appellation->lieuNOBL->libelle = "Vallée Noble";
         $appellation->lieuNOBL->couleurBlanc->douane->appellation_lieu = $cepcom['NOBL']['AL'];
@@ -214,14 +214,14 @@ EOF;
         $appellation->lieuSCHE->couleurBlanc->douane->couleur = 'B';
         $appellation->lieuSCHE->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->lieuSCHE->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuSCHE->couleurBlanc->cepage_RI = $this->getCepage('RI', $cepage_douane[7]['RI'], 'S0');
+        $appellation->lieuSCHE->couleurBlanc->cepage_RI = $this->getCepage('RI', $cepage_douane[7]['RI'], 'S ');
 
         $appellation->lieuWOLX->libelle = "Wolxheim";
         $appellation->lieuWOLX->couleurBlanc->douane->appellation_lieu = $cepcom['WOLX']['RI'];
         $appellation->lieuWOLX->couleurBlanc->douane->couleur = 'B';
         $appellation->lieuWOLX->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->lieuWOLX->couleurBlanc->libelle = "Blanc";
-        $appellation->lieuWOLX->couleurBlanc->cepage_RI = $this->getCepage('RI', $cepage_douane[7]['RI'], 'S0');
+        $appellation->lieuWOLX->couleurBlanc->cepage_RI = $this->getCepage('RI', $cepage_douane[7]['RI'], 'S ');
 
         $json->recolte->appellation_COMMUNALE = $appellation;
 
