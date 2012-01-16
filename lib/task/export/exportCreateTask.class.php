@@ -45,7 +45,7 @@ EOF;
       }
       foreach (file($options['csvfile_ids']) as $c) {
         $csv = explode(';', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
-        $ids[] = $csv[0];
+        $ids[] = str_replace("\n", "", "DR-".$csv[0]."-2011");
       }
     }
 

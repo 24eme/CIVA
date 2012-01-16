@@ -98,23 +98,24 @@ class ExportDRXml {
 
                     if ($this->destinataire == self::DEST_DOUANE && 
                         count($couleur_config->getCepages()) == 1 && 
-                        count($couleur->getCepages()) == 1 &&
-                        !$couleur_config->getCepages()->getFirst()->hasVtsgn()) {
+                        count($couleur->getCepages()) == 1 /*&&
+                        !$couleur_config->getCepages()->getFirst()->hasVtsgn()*/) {
                         $cepage = $couleur->getCepages()->getFirst();
-                        $total['mentionVal'] = '';
+                        //$total['mentionVal'] = '';
                         foreach ($cepage->detail as $detail) {
                             if(count($cepage->detail) == 1) {
+                                $detail = $cepage->detail[0];
                                 if ($appellation_config->hasLieuEditable()) {
-                                    $total['mentionVal'] = $cepage->detail->lieu;    
+                                    //$total['mentionVal'] = $detail->lieu;    
                                 } else {
-                                    $total['mentionVal'] = $cepage->detail->denomination;
+                                    //$total['mentionVal'] = $detail->denomination;
                                 }
-                            }
-                            if (!($object->getTotalVolume() > 0)) {
-                                if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
-                                    $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                } elseif(!isset($total['motifSurfZero'])) {
-                                    $total['motifSurfZero'] = 'PC';
+                                if (!($object->getTotalVolume() > 0)) {
+                                    if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
+                                        $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                    } elseif(!isset($total['motifSurfZero'])) {
+                                        $total['motifSurfZero'] = 'PC';
+                                    }
                                 }
                             }
                         }
@@ -179,6 +180,13 @@ class ExportDRXml {
                                         $l14 = 0;
                                     }
                                     $col['exploitant']['L14'] = $l14;
+                                /*} elseif($appellation->getKey() == 'appellation_GRDCRU') {
+                                    $l15 = $detail->volume_revendique - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
+                                    if ($l15 < 0) {
+                                        $l15 = 0;
+                                    }
+                                    $col['exploitant']['L15'] = $l15;
+                                    $col['exploitant']['L16'] = $detail->volume_dplc;*/
                                 } else {
                                     $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                                     if ($l15 < 0) {
@@ -187,6 +195,15 @@ class ExportDRXml {
                                     $col['exploitant']['L15'] = $l15;
                                 }
 
+                                if ($this->destinataire == self::DEST_DOUANE) {
+                                    if ($appellation->getKey() == 'appellation_GRDCRU') {
+                                        if ($detail->cave_particuliere) {
+                                            $col['exploitant']['L5'] += $detail->cave_particuliere * $dr->getRatioLies();  //Volume total avec lies
+                                            $col['exploitant']['L9'] += $detail->cave_particuliere * $dr->getRatioLies();
+                                            $col['exploitant']['L10'] += $detail->cave_particuliere * $dr->getRatioLies();
+                                        }
+                                    }
+                                }
 
                                 uksort($col['exploitant'], 'exportDRXml::sortXML');
 
@@ -236,9 +253,8 @@ class ExportDRXml {
                                         unset($groupe_cols[0]);
                                     }
                                     foreach($groupe_cols as $col) {
-                                        print_r($col);
                                         $col_final['L4'] += $col['L4'];
-                                        $col_final['mentionVal'] = '';
+                                        unset($col_final['mentionVal']);
                                         if ($cepage->getTotalVolume() != 0) {
                                             unset($col_final['motifSurfZero']);
                                         }
@@ -259,6 +275,17 @@ class ExportDRXml {
                                             }
                                         }
                                     }
+                                    uksort($col_final['exploitant'], 'exportDRXml::sortXML');
+
+                                    if($appellation->getKey() == 'appellation_GRDCRU') {
+                                        $l15 = $cepage->volume_revendique - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts');
+                                        if ($l15 < 0) {
+                                            $l15 = 0;
+                                        }
+                                        $col_final['exploitant']['L15'] = $l15;
+                                        $col_final['exploitant']['L16'] = $cepage->dplc;
+                                    }
+
                                     $xml[] = $col_final;
                                 }
                             } elseif($this->destinataire == self::DEST_CIVA) {

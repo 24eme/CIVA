@@ -45,25 +45,12 @@ EOF;
         foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
 
-            $data = $dr->getData();
-            $modifiee = null;
             
-            if ($options['devalidation']) {
-<<<<<<< HEAD
-                if ($dr->exist('modifiee')) {
-                    $dr->modifiee = null;
-                }
-=======
->>>>>>> Modification Update DR
-                $dr->modifiee = null;
+            if ($dr->exist('modifiee')) {
+                $modifiee = $dr->get('modifiee');
             }
 
-            $dr->update();
-
             if ($options['devalidation']) {
-                if ($modifiee) {
-                    $dr->add('modifiee', $modifiee);
-                }
             }
 
             if ($dr->isModified()) {

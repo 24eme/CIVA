@@ -7,6 +7,7 @@ class exportDRXmlTask extends sfBaseTask
     // // add your own arguments here
     $this->addArguments(array(
        new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'Campagne'),
+       new sfCommandArgument('destinataire', sfCommandArgument::REQUIRED, 'Destinataire'),
     ));
 
     $this->addOptions(array(
@@ -38,7 +39,11 @@ EOF;
 
     sfContext::createInstance($this->configuration);
 
-    $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'.xml';
+    if (!in_array($arguments['destinataire'], array("Civa", "Douane"))) {
+        throw new sfCommandException("Le destinataire est invalide !");
+    }
+
+    $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'.xml';
     if (file_exists($filename)) {
         unlink($filename);
     }
@@ -79,11 +84,13 @@ EOF;
 
             //try {
                 if ($dr->isValideeTiers()) {
-                    $xml = new ExportDRXml($dr, array($this, 'getPartial'), 'Civa');
-                    file_put_contents($filename, $xml->getContent(), FILE_APPEND);
-                    $this->logSection($dr->_id, 'xml generated');
-                    $nb_exported++;
-                    unset($xml);
+                    if (count($dr->recolte->getAppellations()) > 0) {
+                        $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+                        file_put_contents($filename, $xml->getContent(), FILE_APPEND);
+                        $this->logSection($dr->_id, 'xml generated');
+                        $nb_exported++;
+                        unset($xml);
+                    }
                 }
             /*} catch (Exception $e) {
                 $this->logSection("failed xml", $dr->_id, null, "ERROR");
@@ -91,9 +98,9 @@ EOF;
             }*/
             unset($dr);
 
-            if($nb_exported == 250) {
+            /*if($nb_exported == 250) {
                 break;
-            }
+            }*/
         }
     }
 

@@ -78,6 +78,19 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->_storage[$key];
     }
 
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "total_volume_acheteurs_" . $type;
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $volume) {
+                $sum += $volume;
+            }
+            $this->_storage[$key] = $sum;
+        }
+        return $this->_storage[$key];
+    }
+
     public function getVolumeMax() {
       return round(($this->total_superficie/100) * $this->getConfig()->getRendement(), 2);
     }

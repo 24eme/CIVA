@@ -18,12 +18,12 @@ if (!function_exists('printXml')) {
         }else if (is_numeric($v) && preg_match('/^(L|volume)/', $k) && $v) {
           if ($k == 'L4' && $v) {
             $v = $v / 100;
-            printf('%04.04f', $v);
+            printf('%04.04f', round($v, 4));
           }else {
-            printf('%04.02f', $v);
+            printf('%04.02f', round($v, 2));
           }
         } else
-          echo $v;
+          echo str_replace('&', 'et', $xml->getRaw($k));
         if (!is_numeric($k)) {
             echo "</$k>";
         }
@@ -32,7 +32,7 @@ if (!function_exists('printXml')) {
 }
 ?>
 <decRec numCvi="<?php echo $dr->cvi; ?>" campagne="<?php echo $dr->campagne; ?>-<?php echo ($dr->campagne+1); ?>" typeDec="DR">
-<rensComp><typeViti>C</typeViti><modeFV>P</modeFV><persCtc><?php echo $dr->declarant->nom; ?></persCtc><numTel><?php echo $dr->declarant->telephone; ?></numTel><mel><?php echo $dr->declarant->email; ?></mel></rensComp>
+<rensComp><typeViti>C</typeViti><modeFV>P</modeFV><persCtc><?php echo str_replace('&', 'et', $dr->declarant->getNom(ESC_RAW)) ?></persCtc><numTel><?php echo $dr->declarant->telephone; ?></numTel><mel><?php echo $dr->declarant->email; ?></mel></rensComp>
 <?php foreach($xml as $colonne) : ?><colonne><?php printXml($colonne); ?></colonne>
 <?php endforeach; ?><qteLies><?php printf('%04.02f', $dr->lies); ?></qteLies>
 </decRec>
