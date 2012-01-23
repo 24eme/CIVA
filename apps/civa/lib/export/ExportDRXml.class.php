@@ -181,12 +181,12 @@ class ExportDRXml {
                                     }
                                     $col['exploitant']['L14'] = $l14;
                                 /*} elseif($appellation->getKey() == 'appellation_GRDCRU') {
-                                    $l15 = $detail->volume_revendique - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
+                                    $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                                     if ($l15 < 0) {
                                         $l15 = 0;
                                     }
                                     $col['exploitant']['L15'] = $l15;
-                                    $col['exploitant']['L16'] = $detail->volume_dplc;*/
+                                    //$col['exploitant']['L16'] = $detail->volume_dplc; */
                                 } else {
                                     $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                                     if ($l15 < 0) {
@@ -247,7 +247,7 @@ class ExportDRXml {
 
                             if ($this->destinataire == self::DEST_DOUANE) {
                                 $col_final = null;
-                                foreach($cols as $groupe_cols) {
+                                foreach($cols as $vtsgn => $groupe_cols) {
                                     if (count($groupe_cols) > 0) {
                                         $col_final = $groupe_cols[0];
                                         unset($groupe_cols[0]);
@@ -277,8 +277,8 @@ class ExportDRXml {
                                     }
                                     uksort($col_final['exploitant'], 'exportDRXml::sortXML');
 
-                                    if($appellation->getKey() == 'appellation_GRDCRU') {
-                                        $l15 = $cepage->volume_revendique - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts');
+                                    if(!$vtsgn && $appellation->getKey() == 'appellation_GRDCRU') {
+                                        $l15 = $col_final['exploitant']['L5'] - $cepage->dplc;
                                         if ($l15 < 0) {
                                             $l15 = 0;
                                         }
