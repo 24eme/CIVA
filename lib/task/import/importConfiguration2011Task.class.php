@@ -163,7 +163,7 @@ EOF;
         $appellation->lieuKLEV->libelle = "Klevener de Heiligenstein";
         $appellation->lieuKLEV->couleurBlanc->douane->appellation_lieu = $cepcom['KLEV']['KL'];
         $appellation->lieuKLEV->couleurBlanc->douane->couleur = 'B';
-        $appellation->lieuKLEV->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
+        $appellation->lieuKLEV->couleurBlanc->rendement_couleur = 75;
         $appellation->lieuKLEV->couleurBlanc->libelle = "Blanc";
         $appellation->lieuKLEV->couleurBlanc->cepage_KL->libelle = "Klevener";
         $appellation->lieuKLEV->couleurBlanc->cepage_KL->douane->code_cepage = $cepage_douane[7]['KL'];
