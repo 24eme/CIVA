@@ -120,6 +120,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->store('dplc_total', array($this, 'getSumCouleurFields'), array('dplc'));
     }
 
+    public function getDplcRendement() {
+
+        return $this->getDplcAppellation();
+    }
+
     public function getDplcAppellation() {
         $key = "dplc_appellation";
         if (!isset($this->_storage[$key])) {

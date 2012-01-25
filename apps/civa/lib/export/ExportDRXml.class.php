@@ -89,7 +89,7 @@ class ExportDRXml {
                         $l15 = 0;
                     }
                     $total['exploitant']['L15'] = $l15; //Volume revendique
-                    $total['exploitant']['L16'] = $object->dplc; //DPLC
+                    $total['exploitant']['L16'] = $object->getDplcRendement(); //DPLC
                     $total['exploitant']['L17'] = 0; //HS
                     $total['exploitant']['L18'] = 0; //HS
                     $total['exploitant']['L19'] = 0; //HS
@@ -193,6 +193,7 @@ class ExportDRXml {
                                         $l15 = 0;
                                     }
                                     $col['exploitant']['L15'] = $l15;
+                                    $col['exploitant']['L16'] = $cepage->dplc;
                                 }
 
                                 if ($this->destinataire == self::DEST_DOUANE) {
@@ -277,7 +278,7 @@ class ExportDRXml {
                                     }
                                     uksort($col_final['exploitant'], 'exportDRXml::sortXML');
 
-                                    if(!$vtsgn && $appellation->getKey() == 'appellation_GRDCRU') {
+                                    if(!$vtsgn && in_array($appellation->getKey(), array('appellation_GRDCRU'))) {
                                         $l15 = $col_final['exploitant']['L5'] - $cepage->dplc;
                                         if ($l15 < 0) {
                                             $l15 = 0;

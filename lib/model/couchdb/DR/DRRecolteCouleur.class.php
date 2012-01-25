@@ -118,6 +118,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->store('dplc_total', array($this, 'getSumCepageFields'), array('dplc'));
     }
 
+    public function getDplcRendement() {
+
+        return $this->getDplcCouleur();
+    }
+
     public function getDplcCouleur() {
         $key = "dplc_couleur";
         if (!isset($this->_storage[$key])) {
