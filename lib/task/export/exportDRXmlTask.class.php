@@ -63,6 +63,7 @@ EOF;
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    
     foreach ($dr_ids as $id) {
         if ($id !== 'DR-7523700100-'.$arguments['campagne'] /*&& in_array($id, $drs_id_file)*/) {
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);

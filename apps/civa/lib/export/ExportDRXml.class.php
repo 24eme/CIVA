@@ -180,20 +180,13 @@ class ExportDRXml {
                                         $l14 = 0;
                                     }
                                     $col['exploitant']['L14'] = $l14;
-                                /*} elseif($appellation->getKey() == 'appellation_GRDCRU') {
-                                    $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
-                                    if ($l15 < 0) {
-                                        $l15 = 0;
-                                    }
-                                    $col['exploitant']['L15'] = $l15;
-                                    //$col['exploitant']['L16'] = $detail->volume_dplc; */
                                 } else {
                                     $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                                     if ($l15 < 0) {
                                         $l15 = 0;
                                     }
                                     $col['exploitant']['L15'] = $l15;
-                                    $col['exploitant']['L16'] = $cepage->dplc;
+                                    //$col['exploitant']['L16'] = $cepage->dplc;
                                 }
 
                                 if ($this->destinataire == self::DEST_DOUANE) {
@@ -278,8 +271,8 @@ class ExportDRXml {
                                     }
                                     uksort($col_final['exploitant'], 'exportDRXml::sortXML');
 
-                                    if(!$vtsgn && in_array($appellation->getKey(), array('appellation_GRDCRU'))) {
-                                        $l15 = $col_final['exploitant']['L5'] - $cepage->dplc;
+                                    if(!$vtsgn) {
+                                        $l15 = $col_final['exploitant']['L15'] - $cepage->dplc;
                                         if ($l15 < 0) {
                                             $l15 = 0;
                                         }
