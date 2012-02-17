@@ -1,4 +1,4 @@
-<?php
+11<?php
 
 class ExportDRXml {
 
@@ -64,6 +64,13 @@ class ExportDRXml {
                     $object = $lieu;
                     if ($lieu_config->hasManyCouleur()) {
                         $object = $couleur;
+                    }
+
+                    if($this->destinataire == self::DEST_DOUANE) {
+                        if($appellation->getKey() == 'appellation_CREMANT') {
+                            $col_total_cremant_blanc = null;
+                            $col_total_cremant_rose = null;
+                        }
                     }
 
                     //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
@@ -180,13 +187,15 @@ class ExportDRXml {
                                         $l14 = 0;
                                     }
                                     $col['exploitant']['L14'] = $l14;
+                                    if ($this->destinataire == self::DEST_CIVA) {
+                                        $col['exploitant']['L14'] = $detail->volume;
+                                    }
                                 } else {
                                     $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
                                     if ($l15 < 0) {
                                         $l15 = 0;
                                     }
                                     $col['exploitant']['L15'] = $l15;
-                                    //$col['exploitant']['L16'] = $cepage->dplc;
                                 }
 
                                 if ($this->destinataire == self::DEST_DOUANE) {
@@ -247,27 +256,11 @@ class ExportDRXml {
                                         unset($groupe_cols[0]);
                                     }
                                     foreach($groupe_cols as $col) {
-                                        $col_final['L4'] += $col['L4'];
-                                        unset($col_final['mentionVal']);
+                                        unset($cols['mentionVal']);
                                         if ($cepage->getTotalVolume() != 0) {
-                                            unset($col_final['motifSurfZero']);
+                                            unset($cols['motifSurfZero']);
                                         }
-                                        foreach($col_final['exploitant'] as $expl_key => $value) {
-                                            if(is_array($value)) {
-                                                if(array_key_exists($expl_key, $col['exploitant'])) {
-                                                    $col_final['exploitant'][$expl_key]['volume'] += $col['exploitant'][$expl_key]['volume'];
-                                                }
-                                            } else {
-                                                $col_final['exploitant'][$expl_key] += $col['exploitant'][$expl_key];
-                                            }
-                                        }
-                                        foreach($col['exploitant'] as $expl_key => $value) {
-                                            if(is_array($value)) {
-                                                if(!array_key_exists($expl_key, $col_final['exploitant'])) {
-                                                    $col_final['exploitant'][$expl_key] = $value;
-                                                }
-                                            }
-                                        }
+                                        $col_final = $this->sumColonnes($col_final, $col);
                                     }
                                     uksort($col_final['exploitant'], 'exportDRXml::sortXML');
 
@@ -280,7 +273,19 @@ class ExportDRXml {
                                         $col_final['exploitant']['L16'] = $cepage->dplc;
                                     }
 
-                                    $xml[] = $col_final;
+                                    if (in_array($appellation->getKey(), array('appellation_CREMANT'))) {
+                                        if ($cepage->getKey() == 'cepage_PN') {
+                                            $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
+                                            unset($col_total_cremant_rose['mentionVal']);
+                                            unset($col_total_cremant_rose['motifSurfZero']);
+                                        } else {
+                                            $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
+                                            unset($col_total_cremant_blanc['mentionVal']);
+                                            unset($col_total_cremant_blanc['motifSurfZero']);
+                                        }
+                                    } else {
+                                        $xml[] = $col_final;
+                                    }
                                 }
                             } elseif($this->destinataire == self::DEST_CIVA) {
                                 foreach($cols as $groupe_cols) {
@@ -304,6 +309,20 @@ class ExportDRXml {
                     if ($colass) {
                         $total['colonneAss'] = $colass;
                     }
+
+                    if ($this->destinataire == self::DEST_DOUANE) {
+                        if($appellation->getKey() == 'appellation_CREMANT') {
+                            if ($col_total_cremant_blanc) {
+                                $col_total_cremant_blanc['L1'] = '1B001M';
+                                $xml[] = $col_total_cremant_blanc;
+                            }
+                            if ($col_total_cremant_rose) {
+                                $col_total_cremant_rose['L1'] = '1S001M';
+                                $xml[] = $col_total_cremant_rose;
+                            }
+                        }
+                    }
+
                     if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
                         $xml[] = $total;
                     }
@@ -312,5 +331,32 @@ class ExportDRXml {
         }
 
         $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
+    }
+
+    protected function sumColonnes($cols, $col) {
+        if (is_null($cols)) {
+            $cols = $col;
+
+            return $cols;
+        }
+        $cols['L4'] += $col['L4'];
+        foreach($cols['exploitant'] as $expl_key => $value) {
+            if(is_array($value)) {
+                if(array_key_exists($expl_key, $col['exploitant'])) {
+                    $cols['exploitant'][$expl_key]['volume'] += $col['exploitant'][$expl_key]['volume'];
+                }
+            } else {
+                $cols['exploitant'][$expl_key] += $col['exploitant'][$expl_key];
+            }
+        }
+        foreach($col['exploitant'] as $expl_key => $value) {
+            if(is_array($value)) {
+                if(!array_key_exists($expl_key, $cols['exploitant'])) {
+                    $cols['exploitant'][$expl_key] = $value;
+                }
+            }
+        }
+
+        return $cols;
     }
 }
