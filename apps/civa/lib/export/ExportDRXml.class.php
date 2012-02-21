@@ -262,7 +262,6 @@ class ExportDRXml {
                                         }
                                         $col_final = $this->sumColonnes($col_final, $col);
                                     }
-                                    uksort($col_final['exploitant'], 'exportDRXml::sortXML');
 
                                     if(!$vtsgn) {
                                         $l15 = $col_final['exploitant']['L15'] - $cepage->dplc;
@@ -284,6 +283,7 @@ class ExportDRXml {
                                             unset($col_total_cremant_blanc['motifSurfZero']);
                                         }
                                     } else {
+                                        uksort($col_final['exploitant'], 'exportDRXml::sortXML');
                                         $xml[] = $col_final;
                                     }
                                 }
@@ -314,10 +314,12 @@ class ExportDRXml {
                         if($appellation->getKey() == 'appellation_CREMANT') {
                             if ($col_total_cremant_blanc) {
                                 $col_total_cremant_blanc['L1'] = '1B001M';
+                                uksort($col_total_cremant_blanc['exploitant'], 'exportDRXml::sortXML');
                                 $xml[] = $col_total_cremant_blanc;
                             }
                             if ($col_total_cremant_rose) {
                                 $col_total_cremant_rose['L1'] = '1S001M';
+                                uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
                                 $xml[] = $col_total_cremant_rose;
                             }
                         }
