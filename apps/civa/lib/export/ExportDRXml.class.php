@@ -256,9 +256,9 @@ class ExportDRXml {
                                         unset($groupe_cols[0]);
                                     }
                                     foreach($groupe_cols as $col) {
-                                        unset($cols['mentionVal']);
+                                        unset($col_final['mentionVal']);
                                         if ($cepage->getTotalVolume() != 0) {
-                                            unset($cols['motifSurfZero']);
+                                            unset($col_final['motifSurfZero']);
                                         }
                                         $col_final = $this->sumColonnes($col_final, $col);
                                     }
