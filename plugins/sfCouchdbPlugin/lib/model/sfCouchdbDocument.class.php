@@ -9,8 +9,10 @@ abstract class sfCouchdbDocument extends sfCouchdbJson {
         if (!is_null($this->_loaded_data)) {
             throw new sfCouchdbException("data already load");
         }
-	if (isset($data->_attachments))
-	  unset($data->_attachments);
+        if (isset($data->_attachments)) {
+	       unset($data->_attachments);
+        }
+
         $this->_loaded_data = serialize($data);
         $this->load($data);
     }
@@ -74,8 +76,30 @@ abstract class sfCouchdbDocument extends sfCouchdbJson {
     }
 
     public function isModified() {
-        return $this->isNew() || ($this->_loaded_data !== serialize($this->getData()));
+        if ($this->isNew()) {
+            return true;
+        }
+
+        $data_loaded = $this->sortStdClass(unserialize($this->_loaded_data));
+        $data_final = $this->sortStdClass($this->getData());
+        return (serialize($data_loaded) !== serialize($data_final));
     }
+
+    private function sortStdClass($data) {
+        $data = json_decode(json_encode($data), true);
+        $this->deep_ksort($data);
+        $data = json_decode(json_encode($data));
+        return $data;
+    }
+
+    private function deep_ksort(&$arr) {
+        ksort($arr, SORT_STRING);
+        foreach ($arr as &$a) { 
+            if (is_array($a) && !empty($a)) { 
+                $this->deep_ksort($a); 
+            } 
+        } 
+    } 
 
     public function __clone() {
         $this->_rev = null;
