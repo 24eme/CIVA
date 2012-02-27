@@ -44,22 +44,48 @@ EOF;
 
         foreach ($dr_ids as $id) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $datas_origin = $dr->getData();
 
-            
+            //print_r($datas_origin);
             if ($dr->exist('modifiee')) {
                 $modifiee = $dr->get('modifiee');
             }
 
             if ($options['devalidation']) {
+                $dr->remove('modifiee');
+            }
+
+            $dr->update();
+
+            if ($options['devalidation']) {
+                $dr->add('modifiee', $modifiee);
             }
 
             if ($dr->isModified()) {
+                $array_origin = $this->apalatirTableau(json_decode(json_encode($datas_origin), true));
+                $array_final = $this->apalatirTableau(json_decode(json_encode($dr->getData()), true));
+                $diffs = array_diff_assoc($array_origin, $array_final);
+                foreach($diffs as $key => $diff) {
+                    echo $key . ' : ' . $array_origin[$key] . ' origin ' . $array_final[$key] ." final \n";
+                }
                 $this->logSection('updated', $dr->get('_id'));
             }
             
-            $dr->save();
+            //$dr->save();
         }
         // add your code here
+    }
+
+    protected function apalatirTableau($tab, $prefix = '') {
+        $resultat = array();
+        foreach($tab as $key => $item) {
+            if (!is_array($item)) {
+                $resultat[$prefix.'/'.$key] = $item;
+            } else {
+                $resultat = array_merge($resultat, $this->apalatirTableau($item, $prefix.'/'.$key));
+            }
+        }
+        return $resultat;
     }
 
 }

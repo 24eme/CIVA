@@ -127,7 +127,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             $volume_max = $this->getVolumeMax();
             if ($this->volume > $volume_max) {
                 $this->volume_revendique = $volume_max;
-                $this->volume_dplc = $this->volume - $volume_max;
+                $this->volume_dplc = round($this->volume - $volume_max, 2);
             } else {
                 $this->volume_revendique = $this->volume;
             }
