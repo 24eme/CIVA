@@ -94,6 +94,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->_storage[$key];
     }
 
+    public function getVolumeRevendiqueRendement() {
+        
+        return $this->getVolumeRevendiqueCouleur();
+    }
+
     public function getDplc($force_calcul = false) {
         $field = 'dplc';
         if (!$force_calcul && $this->issetField($field)) {

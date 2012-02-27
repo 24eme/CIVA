@@ -86,6 +86,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
+    public function getVolumeRevendiqueRendement() {
+
+        return $this->getVolumeRevendiqueAppellation();
+    }
+
     public function getVolumeRevendiqueTotal() {
         return $this->store('volume_revendique_total', array($this, 'getSumCouleurFields'), array('volume_revendique'));
     }
