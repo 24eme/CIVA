@@ -91,11 +91,12 @@ class ExportDRXml {
                     $total['exploitant']['L12'] = 0; //HS
                     $total['exploitant']['L13'] = 0; //HS
                     $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                    $l15 = $object->volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+                    $l15 = $object->getVolumeRevendiqueRendement() - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
                     if ($l15 < 0) {
                         $l15 = 0;
                     }
                     $total['exploitant']['L15'] = $l15; //Volume revendique
+                    // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
                     $total['exploitant']['L16'] = $object->getDplcRendement(); //DPLC
                     $total['exploitant']['L17'] = 0; //HS
                     $total['exploitant']['L18'] = 0; //HS
@@ -328,6 +329,7 @@ class ExportDRXml {
                     if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
                         $xml[] = $total;
                     }
+                    
                 }
             }
         }
