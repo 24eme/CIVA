@@ -71,7 +71,7 @@ EOF;
                 $this->logSection('updated', $dr->get('_id'));
             }
             
-            //$dr->save();
+            $dr->save();
         }
         // add your code here
     }
