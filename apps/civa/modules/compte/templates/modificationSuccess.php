@@ -49,6 +49,8 @@
                         <?php echo $form['mdp2']->render() ?>
                     </div>
 
+		    <input type="hidden" value="<?php echo $redirect;?>" name="redirect"/>
+
                     <div class="btn">
                         <a href="#" class="annuler"><img src="/images/boutons/btn_annuler.png" alt="Annuler" /></a>
                         <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />

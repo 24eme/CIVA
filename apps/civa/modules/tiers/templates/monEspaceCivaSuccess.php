@@ -1,6 +1,6 @@
 <?php include_partial('global/actions', array('etape' => 0, 'help_popup_action' => $help_popup_action)) ?>
 
-    <h2 class="titre_principal">Mon espace CIVA</h2>
+    <h2 class="titre_principal">Mon espace déclaratif</h2>
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
         <?php if($sf_user->hasFlash('confirmation')) : ?>

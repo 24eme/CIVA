@@ -129,12 +129,16 @@ class compteActions extends sfActions {
         $this->forward404Unless(in_array($this->compte->getStatus(), array(_Compte::STATUS_MOT_DE_PASSE_OUBLIE, _Compte::STATUS_INSCRIT)));
 
         $this->form = new CompteModificationForm($this->compte);
+	$this->redirect = $request->getParameter('redirect');
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->compte = $this->form->save();
                 $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
+		if ($this->redirect) {
+		  return $this->redirect($this->redirect);
+		}
                 $this->redirect('@compte_modification');
             }
         }
