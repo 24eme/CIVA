@@ -29,7 +29,7 @@
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
-                <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mon espace civa</a></li>
+                <li><a href="http://vinsalsace.pro/">Mon espace civa</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
