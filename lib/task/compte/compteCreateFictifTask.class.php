@@ -46,7 +46,11 @@ EOF;
     $compte = new CompteVirtuel();
     $compte->set('_id', 'COMPTE-'.$arguments['login']);
     $compte->login = $arguments['login'];
-    $compte->setPasswordSSHA($arguments['pass']);
+    if (substr($arguments['pass'], 0, 6) == "{SSHA}") {
+      $compte->mot_de_passe = $arguments['pass'];
+    } else {
+      $compte->setPasswordSSHA($arguments['pass']);
+    }
     $compte->email = $arguments['email'];
     $compte->nom = $arguments['nom'];
     $compte->commune = $arguments['commune'];

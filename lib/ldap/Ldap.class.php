@@ -1,8 +1,8 @@
 <?php
 class Ldap {
 
-    private static $groupe2gid = array('declarant' => 1000, 'admin' => 1001, 'exterieur' => 1002);
-    private static $gid2groupe = array('1000' => 'declarant', '1001' => 'admin', '1002' => 'exterieur');
+    private static $groupe2gid = array('declarant' => 1000, 'admin' => 1001, 'exterieur' => 1002, 'civa' => 1003);
+    private static $gid2groupe = array('1000' => 'declarant', '1001' => 'admin', '1002' => 'exterieur', '1003' => 'civa');
 
     protected $serveur;
     protected $dn;
@@ -155,16 +155,24 @@ class Ldap {
      */
     protected function getGid($compte) {
         if ($compte->type == 'CompteTiers') {
+
             return self::$groupe2gid["declarant"];
         } elseif($compte->type == 'CompteProxy') {
+
             return $this->getGid($compte->getCompteReferenceObject());
         } elseif($compte->type == 'CompteVirtuel') {
             if (in_array("admin", $compte->droits->toArray())) {
+                
                 return self::$groupe2gid["admin"];
+            } elseif(in_array("civa", $compte->droits->toArray())) {
+
+                return self::$groupe2gid["civa"];
             } else {
+
                 return self::$groupe2gid["exterieur"];
             }
         } else {
+            
             return self::$groupe2gid["declarant"];
         }
     }
