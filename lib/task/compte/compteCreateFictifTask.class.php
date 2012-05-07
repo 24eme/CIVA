@@ -20,6 +20,7 @@ class compteCreateVirtuelTask extends sfBaseTask
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       // add your own options here
+      new sfCommandOption('suppression', null, sfCommandOption::PARAMETER_REQUIRED, 'Supprime si existant', false),
     ));
 
     $this->namespace        = 'compte';
@@ -39,8 +40,12 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if (sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
-        throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $arguments['login']));
+    if ($compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
+        if ($options['suppression']) {
+          $compte->delete();
+        } else {
+          throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $arguments['login']));
+        }
     }
     
     $compte = new CompteVirtuel();
