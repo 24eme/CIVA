@@ -53,6 +53,14 @@ abstract class _Compte extends Base_Compte {
     public function getNom() {
         return ' ';
     }
+
+    /**
+     *
+     * @return string 
+     */
+    public function getIntitule() {
+        return '';
+    }
     
     /**
      *

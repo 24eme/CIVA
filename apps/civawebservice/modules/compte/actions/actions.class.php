@@ -21,9 +21,13 @@ class compteActions extends DataManipulationActions
      $this->forward404Unless($compte_object = sfCouchdbManager::getClient("_Compte")->retrieveByLogin($request->getParameter('login')));
      $this->compte = $compte_object->toArray(2);
      $this->compte['nom'] = $compte_object->getNom();
+     $this->compte['intitule'] = $compte_object->getIntitule();
      $tiers = array();
-     foreach ($compte_object->getTiersObject() as $t)
-       $tiers[get_class($t)] = $t->toArray(1);
+     if($compte_object instanceof CompteTiers) {
+        foreach ($compte_object->getTiersObject() as $t) {
+          $tiers[get_class($t)] = $t->toArray(2);
+        }
+     }
      $this->compte['tiers'] = $tiers;
      return $this->renderData($this->buildCompteData(array($this->compte)));
   }

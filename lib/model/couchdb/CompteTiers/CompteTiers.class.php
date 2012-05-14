@@ -6,15 +6,13 @@ class CompteTiers extends BaseCompteTiers {
     protected $_duplicated = null;
     
     public function getNom() {
-        $nom = null;
-        foreach ($this->tiers as $tiers) {
-            if ($tiers->type == "Recoltant") {
-                return $tiers->nom;
-            } elseif (is_null($nom)) {
-                $nom = $tiers->nom;
-            }
-        }
-        return $nom;
+        
+        return $this->getTiersField('nom');
+    }
+
+    public function getIntitule() {
+
+        return $this->getTiersField('intitule');
     }
 
     /**
