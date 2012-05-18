@@ -83,6 +83,27 @@ curl -s $COUCHDBURL/_design/$design/_view/acheteur > /dev/null &
 sleep 1
 kill %1
 
+design=COMPTE
+curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
+
+cat <<EOF > $TMPFILE
+{
+  "_id":"_design/COMPTE",
+  "language": "javascript",
+  "views": {
+    "tous": {
+        "map": "function(doc) {\n\tif (doc.type && (doc.type == \"CompteVirtuel\" || doc.type == \"CompteTiers\" || doc.type == \"CompteProxy\")) {\n  \t\temit([doc.type, doc._id], doc);\n\t}\n}"
+    }
+}
+}
+EOF
+
+curl -s -X PUT -d "@$TMPFILE" $COUCHDBURL/_design/$design
+
+curl -s $COUCHDBURL/_design/$design/_view/ > /dev/null & 
+sleep 1
+kill %1
+
 design=TIERS
 curl -s -X DELETE "$COUCHDBURL/_design/$design?rev=$(curl --stderr /dev/null $COUCHDBURL/_design/$design | sed 's/.*_rev":"//' | sed 's/",".*//' 2> /dev/null)" > /dev/null 2>&1
 
