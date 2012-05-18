@@ -200,13 +200,5 @@ EOF;
 
         echo $csv->output(false);
     }
-
-    protected function getTiersField($tiers, $field, $default = null) {
-        $value = $default;
-        if (isset($tiers->{$field})) {
-            $value = $tiers->{$field};
-        }
-        return $value;
-    }
-
+    
 }
