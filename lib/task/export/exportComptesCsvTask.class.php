@@ -144,8 +144,8 @@ EOF;
                     $cvis[] = isset($tiers->cvi) ? $tiers->cvi : null;
                     $civabas[] = isset($tiers->civaba) ? $tiers->civaba : null;
                     $sirets[] = isset($tiers->siret) ? $tiers->siret : null;
-                    $qualites[] = isset($tiers->qualite) ? $tiers->civaba : null;
-                    $civilites[] = isset($tiers->civilite) ? $tiers->civilite : null;
+                    $qualites[] = isset($tiers->qualite) ? $tiers->qualite : null;
+                    $civilites[] = isset($tiers->intitule) ? $tiers->intitule : null;
                     $noms[] = isset($tiers->nom) ? $tiers->nom : null;
                     $adresse = $tiers->siege;
                     if (!$adresse->adresse && isset($tiers->exploitant)) {
@@ -196,49 +196,6 @@ EOF;
                         "nom de l'exploitant" => null,
                             ), $validation_proxy);
             }
-
-            /* foreach ($tiers_c as $t) {
-                $intitule = $t->intitule;
-                $nom = $t->nom;
-                $adresse = $t->siege;
-                if (!$adresse->adresse && isset($t->exploitant)) {
-                    if ($t->exploitant->nom) {
-                        $intitule = $t->exploitant->sexe;
-                        $nom = $t->exploitant->nom;
-                    }
-                    $adresse = $t->exploitant;
-                }
-                
-                $email = $compte->email;
-                if (!$email) {
-                    $email = $t->email;
-                }
-
-               
-
-                try {
-                    $csv->add(array(
-                        "type" => $t->type,
-                        "login" => $compte->login,
-                        "statut" => $compte->statut,
-                        "mot_de_passe" => $mot_de_passe,
-                        "email" => $email,
-                        "cvi" => $this->getTiersField($t, 'cvi', true),
-                        "civaba" => $this->getTiersField($t, 'civaba'),
-                        "siret" => $this->getTiersField($t, 'siret'),
-                        "qualite" => $this->getTiersField($t, 'qualite'),
-                        "civilite" => $intitule,
-                        "nom" => $nom,
-                        "adresse" => $adresse->adresse,
-                        "code postal" => $adresse->code_postal,
-                        "commune" => $adresse->commune,
-                        "sexe de l'exploitant" => $t->exploitant->sexe,
-                        "nom de l'exploitant" => $t->exploitant->nom,
-                            ), $validation);
-                } catch (Exception $exc) {
-                    $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
-                }
-            } */
         }
 
         echo $csv->output(false);
