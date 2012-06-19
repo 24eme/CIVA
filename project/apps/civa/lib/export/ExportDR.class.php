@@ -96,7 +96,7 @@ class ExportDR
             throw new sfException("This dr in not valid or has been imported from db2 : ".$id);
         }
 
-        copy($file_export_dr->getPath(), $path);
+        link($file_export_dr->getPath(), $path);
 
         if ($this->_debug) {
             echo sprintf("-- publication success: %s\n", $id);
