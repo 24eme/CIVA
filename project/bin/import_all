@@ -8,7 +8,7 @@ php symfony import:Configuration --removedb=yes
 echo "Configuration DONE"
 php symfony import:Messages
 echo "Messages DONE"
-php symfony import:Achat
+php symfony import:Achat data/import/11/Achat11
 echo "Acheteurs DONE";
 php symfony import:Tiers data/import/Tiers-20110325
 php symfony import:Tiers data/import/Tiers-maj-20110512
