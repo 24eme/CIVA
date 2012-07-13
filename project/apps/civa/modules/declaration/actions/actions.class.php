@@ -147,8 +147,8 @@ class declarationActions extends EtapesActions {
 
                 //send email
 
-                $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), 
-                                                       $this->getUser()->getCompte()->email, 
+                $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
+                                                       $this->getUser()->getCompte()->email,
                                                        'CIVA - Validation de votre déclaration de récolte', $mess);
                 
                 if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
@@ -247,6 +247,20 @@ class declarationActions extends EtapesActions {
         $document->generatePDF();
 
         $pdfContent = $document->output();
+        $annee = $this->getRequestParameter('annee', null);
+
+        // si l'on vient de la page de visualisation
+        if($this->getRequestParameter('message', null) == "custom" && !is_null(($annee)))
+        {
+            $mess = 'Bonjour ' . $tiers->nom . ',
+
+Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $annee . '.
+
+Cordialement,
+
+Le CIVA';
+
+        }else{
 
         $mess = 'Bonjour ' . $tiers->nom . ',
 
@@ -255,6 +269,8 @@ Vous trouverez ci-joint votre déclaration de récolte que vous venez de valider
 Cordialement,
 
 Le CIVA';
+
+        }
 
         //send email
 

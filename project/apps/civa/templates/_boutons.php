@@ -17,5 +17,11 @@
         <a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
     </li>
     <?php endif; ?>
+    <?php if(in_array('email', $display->getRawValue())): ?>
+    <li id="email-visualisation">
+        <a href="#" id="btn-email"></a>
+    </li>
+    <?php endif; ?>
+
 
 </ul>

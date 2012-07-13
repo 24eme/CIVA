@@ -1740,6 +1740,11 @@ a.msg_aide:hover{
     margin: 0 0 5px;
 }
 
+.btn_prev_suiv #email-visualisation #btn-email{
+     margin: 7px 0 0 0;
+}
+
+
 #div-btn-email{
     margin:14px 0 30px;
 }

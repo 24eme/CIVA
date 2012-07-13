@@ -130,7 +130,14 @@ $(document).ready( function()
             initSendDRPopup();
         });
     }
-	
+
+    if ($('#validation_dr').length > 0) {
+        $('#validation_dr').ready( function() {
+            initValidationDr();
+            initSendDRPopup();
+        });
+    }
+
     var annee = new Date().getFullYear();
 	
     $('.datepicker').datepicker(
