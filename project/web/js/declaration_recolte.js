@@ -289,7 +289,7 @@ var choixPrecDecla = function()
 	
     type_decla.change(function()
     {
-        if(type_decla.filter(':checked').val() == 'vierge' || type_decla.filter(':checked').val() == 'import') liste_prec_decla.hide();
+        if(type_decla.filter(':checked').val() == 'vierge' || type_decla.filter(':checked').val() == 'import' || type_decla.filter(':checked').val() == 'visualisation_avant_import') liste_prec_decla.hide();
         else liste_prec_decla.show();
     });
 

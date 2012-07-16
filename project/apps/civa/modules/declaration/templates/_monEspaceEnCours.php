@@ -14,9 +14,10 @@
         <?php else: ?>
             <?php if ($has_import) : ?>
                 <div class="ligne_form">
-                    <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" checked="checked" />
-                    <label for="type_declaration_import">Visualiser, compléter et valider les données fournies par vos acheteurs <small>(négociants ou caves coopératives)</small></label>
+                    <input type="radio" id="type_declaration_visualisation_avant_import" name="dr[type_declaration]" value="visualisation_avant_import" checked="checked" />
+                    <label for="type_declaration_visualisation_avant_import">Visualiser les données fournies par vos acheteurs <small>(négociants ou caves coopératives)</small></label>
                 </div>
+
             <?php endif; ?>
             <div class="ligne_form">
                 <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" <?php if(!$has_import): ?>checked="checked"<?php endif; ?> />
@@ -36,6 +37,13 @@
                     </select>
                 </div>
             <?php endif; ?>
+            <?php if ($has_import) : ?>
+                <div class="ligne_form">
+                    <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" checked="checked" />
+                    <label for="type_declaration_import">Compléter et valider les données fournies par vos acheteurs <small>(négociants ou caves coopératives)</small></label>
+                </div>
+            <?php endif; ?>
+
         <?php endif; ?>
 
         <div class="ligne_form ligne_btn">

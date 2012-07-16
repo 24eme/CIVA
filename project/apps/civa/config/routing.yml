@@ -105,9 +105,15 @@ admin_gamma:
   param: { module: admin, action: gamma }
 
 # *********** EXPLOITATION ***********
+visualisation_avant_import:
+  url:   /visualisation_avant_import
+  param: { module: declaration, action: visualisationAvantImport }
+
+
 exploitation_message:
   url:   /exploitation_message
   param: { module: declaration, action: flashPage }
+
 
 exploitation_administratif:
   url:   /exploitation_administratif

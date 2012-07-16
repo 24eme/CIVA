@@ -31,10 +31,13 @@ class declarationActions extends EtapesActions {
                 $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
+                $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $import_from = array();
                 $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
                 $dr->save();
+
                 $msg = '<p>' . sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_pre_import') . '</p>';
                 $msg .= '<ul>';
                 foreach ($import_from as $i) {
@@ -42,6 +45,7 @@ class declarationActions extends EtapesActions {
                 }
                 $msg .= '</ul>';
                 $msg .= '<p>' . sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_post_import') . '</p>';
+
                 $this->getUser()->setFlash('flash_message', $msg);
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
@@ -63,20 +67,6 @@ class declarationActions extends EtapesActions {
             }
         }
         $this->redirect('@mon_espace_civa');
-    }
-
-    public function executeFlashPage(sfWebRequest $request) {
-        $boutons = $this->getRequestParameter('boutons', null);
-        $this->setCurrentEtape('exploitation_message');
-        if (!$this->getUser()->hasFlash('flash_message') && !$boutons) {
-            $this->redirectToNextEtapes();
-        }
-        if ($boutons && in_array('previous', array_keys($boutons))) {
-            $this->getUser()->removeDeclaration();
-            $this->redirect('@mon_espace_civa');
-        } elseif ($boutons && in_array('next', array_keys($boutons))) {
-            $this->redirectToNextEtapes();
-        }
     }
 
     public function executeDownloadNotice() {
@@ -335,4 +325,23 @@ Le CIVA';
         $this->redirect('@mon_espace_civa');
     }
 
+    public function executeVisualisationAvantImport(sfWebRequest $request) {
+
+        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+        $this->visualisation_avant_import = true;
+    }
+
+    public function executeFlashPage(sfWebRequest $request) {
+        $boutons = $this->getRequestParameter('boutons', null);
+        $this->setCurrentEtape('exploitation_message');
+        if (!$this->getUser()->hasFlash('flash_message') && !$boutons) {
+            $this->redirectToNextEtapes();
+        }
+        if ($boutons && in_array('previous', array_keys($boutons))) {
+            $this->getUser()->removeDeclaration();
+            $this->redirect('@mon_espace_civa');
+        } elseif ($boutons && in_array('next', array_keys($boutons))) {
+            $this->redirectToNextEtapes();
+        }
+    }
 }

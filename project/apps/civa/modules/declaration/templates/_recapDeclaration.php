@@ -1,4 +1,5 @@
 <?php use_helper('civa') ?>
+
 <div id="recolte_totale" class="clearfix">
 
     <div id="appelations">

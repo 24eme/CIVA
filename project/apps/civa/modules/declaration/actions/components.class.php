@@ -50,8 +50,14 @@ class declarationComponents extends sfComponents {
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
 
+        if(isset($this->visualisation_avant_import) && $this->visualisation_avant_import == true )
+        {
+            $import_from = array();
+            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
+        }else{
+            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        }
 
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         $this->appellations = array();
         $this->superficie = array();
         $this->volume = array();
@@ -91,10 +97,7 @@ class declarationComponents extends sfComponents {
 	  $this->vintable['superficie'] = $dr->recolte->appellation_VINTABLE->getTotalSuperficie();
 	  $this->vintable['volume'] = $dr->recolte->appellation_VINTABLE->getTotalVolume();
 	}
-
         $this->annee = $annee;
-
     }
-
 
 }
