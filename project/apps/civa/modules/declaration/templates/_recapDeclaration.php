@@ -20,6 +20,12 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
+                    <td>Volume sur place</td>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td><?php echoFloat( $volume_sur_place[$a]); ?></td>
+                    <?php endif; ?>
+                </tr>
+                <tr>
                     <td>Volume Total (Hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume[$a]); ?></td>
@@ -39,13 +45,13 @@
                 </tr>
             </tbody>
         </table>
-
-    </div>
+   </div>
 
     <div id="total_general">
         <h2 class="titre_section">Total général</h2>
         <ul class="contenu_section">
             <li><input type="text" value="<?php echoFloat( $total_superficie);?> ares" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> Hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_volume);?> Hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_revendique);?> Hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_dplc);?> Hl" readonly="readonly"></li>

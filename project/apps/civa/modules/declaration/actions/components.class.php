@@ -49,6 +49,8 @@ class declarationComponents extends sfComponents {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$annee;
+
+
         $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         $this->appellations = array();
         $this->superficie = array();
@@ -58,6 +60,7 @@ class declarationComponents extends sfComponents {
         $this->libelle = array();
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
+        $this->volume_sur_place = array();
         $cvi = array();
         foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($dr->recolte->exist($appellation_key)) {
@@ -70,13 +73,15 @@ class declarationComponents extends sfComponents {
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $this->dplc[$appellation->getAppellation()] = $appellation->getDplc();
-          }
-        }
+              $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
 
+            }
+        }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
         $this->total_dplc = array_sum(array_values($this->dplc));
         $this->total_revendique = array_sum(array_values($this->revendique));
+        $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
 
         $this->lies = $dr->lies;
         $this->jeunes_vignes = $dr->jeunes_vignes;

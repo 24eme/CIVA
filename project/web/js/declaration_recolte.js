@@ -190,7 +190,6 @@ $(document).ready( function()
         );
 
         openPopup(popup);
-
         popup.dialog('open');
 
         return false;
@@ -273,9 +272,6 @@ var initMsgAide = function()
 
         openPopup(popup);
 
-
-        
-        
         return false;
     });
 };
@@ -778,7 +774,6 @@ var initValidationDr = function(type)
 var initValidDRPopup = function()
 {
     $('#previsualiser').click(function() {
-        openPopup($("#popup_loader"));
         $.ajax({
             url: ajax_url_to_print,
             success: function(data) {
@@ -786,6 +781,9 @@ var initValidDRPopup = function()
                 $('.popup-loading').css('background', 'none');
                 $('.popup-loading').css('padding-top', '10px');
                 $('.popup-loading').append('<p>Le PDF de votre déclaration de récolte à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-dr"></a></p>');
+                openPopup($("#popup_loader"));
+
+
             }
         });
         return false;
@@ -798,7 +796,6 @@ var initValidDRPopup = function()
 var initSendDRPopup = function()
 {
     $('#btn-email').click(function() {
-        openPopup($("#popup_loader_send"));
         $.ajax({
             url: ajax_url_to_send_email_pdf,
             success: function(data) {
@@ -807,6 +804,8 @@ var initSendDRPopup = function()
                 $('.popup-loading').css('background', 'none');
                 $('.popup-loading').css('padding-top', '10px');
                 $('.popup-loading').append('<p>' + data + '</p>');
+                openPopup($("#popup_loader_send"));
+
             }
         });
         return false;
@@ -1168,6 +1167,7 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion, source_
         modal: true,
         buttons:{
             '': function() {
+
                 $(this).dialog( "close" );
             }
         }
@@ -1352,7 +1352,7 @@ var openPopup = function(popup, fn_open_if) {
         modal: true,
         buttons:{
             '': function() {
-                $(this).dialog( "close" );
+                $(this).dialog( "close");
             }
         }
 
@@ -1381,7 +1381,6 @@ var openPopupWithoutButton = function(popup) {
     popup.dialog('open');
     return false;
 };
-
 
 var initPopup = function(btn, popup, fn_open_if)
 {
