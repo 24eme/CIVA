@@ -23,6 +23,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "superficie_totale" => "superficie totale",
         "volume_total" => "volume total",
         "dplc_total" => "dplc total",
+        "creation_date" => "date de création",
         "validation_date" => "date de validation",
         "validation_user" => "validateur",
     );
@@ -40,6 +41,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "creation_date" => array("type" => "string", "required" => false),
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
     );
@@ -57,6 +59,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => false),
+        "creation_date" => array("type" => "string", "required" => false),
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
     );
@@ -74,6 +77,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => true, "default" => true),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => true),
+        "creation_date" => array("type" => "string", "required" => false),
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
     );
@@ -91,6 +95,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => true),
+        "creation_date" => array("type" => "string", "required" => false),
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => true),
     );
@@ -108,6 +113,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
         "volume_livre" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f", "required" => true),
+        "creation_date" => array("type" => "string", "required" => false),
         "volume_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
         "dplc_total" => array("type" => "float", "format" => "%01.02f", "required" => false),
     );
@@ -135,6 +141,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             throw new sfException("Acheteur not find");
         }
         $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($this->_campagne, $this->_acheteur->cvi, sfCouchdbClient::HYDRATE_JSON);
+
         $this->_md5 = $this->calculMd5($drs);
         $this->_ids_dr = $drs->getIds();
         $this->_has_dr = (count($this->_ids_dr) > 0);
@@ -159,6 +166,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     public function export() {
         foreach ($this->_ids_dr as $id_dr) {
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id_dr);
+            $this->dr = $dr;
+
             if (substr($dr->cvi, 0, 1) == "6") {
                 if ($this->_debug) {
                     echo "\n\n ------------ \n" . $dr->get('_id') . "\n ----------- \n";
@@ -210,7 +219,6 @@ class ExportDRAcheteurCsv extends ExportCsv {
 
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
-              
         $this->add(array(
             "cvi_acheteur" => $this->_acheteur->cvi,
             "nom_acheteur" => $this->_acheteur->nom,
@@ -227,6 +235,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "dplc_total" => null,
+            "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $detail->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
                 ), $this->_validation_detail_acheteur);
@@ -252,6 +261,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "dplc_total" => null,
+            "creation_date" =>  $this->dr->getPremiereModificationDr(),
             "validation_date" => $detail->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
                 ), $this->_validation_detail_total);
@@ -275,6 +285,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
             "dplc_total" => $lieu->getDplc(),
+            "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $acheteur->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
                 ), $this->_validation_lieu_acheteur);
@@ -297,6 +308,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
             "dplc_total" => $lieu->getDplc(),
+            "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $lieu->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($lieu->getCouchdbDocument()),
                 ), $this->_validation_lieu_total);
@@ -319,6 +331,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
             "superficie_totale" => $dr->jeunes_vignes,
             "volume_total" => null,
             "dplc_total" => null,
+            "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $dr->validee,
             "validation_user" => $this->getValidationUser($dr),
                 ), $this->_validation_jeunes_vignes);
@@ -352,14 +365,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
                 }
             }
         }
-        
-        if (!$user && strtotime($dr->validee) > strtotime($this->_campagne.'-12-10')) {
-            $user = 'Automatique';
-        } elseif(!$user) {
-            $user = 'Récoltant';
-        }
-        
-        return $user;
     }
+
+
 
 }

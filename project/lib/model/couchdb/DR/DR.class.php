@@ -411,4 +411,20 @@ class DR extends BaseDR {
       }
       return array('erreur' => $validLogErreur, 'vigilance' => $validLogVigilance);
     }
+
+    public function getPremiereModificationDr() {
+
+         $arr_date = array();
+         if ($this->exist('utilisateurs') && $this->utilisateurs->exist('edition')) {
+             foreach($this->utilisateurs->edition as $date) {
+                   $arr_date[]= $date;
+             }
+         }
+         if(count($arr_date) > 0)
+         {
+             return min($arr_date);
+         }else
+            return null;
   }
+
+}
