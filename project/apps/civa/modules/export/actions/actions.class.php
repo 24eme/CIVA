@@ -320,6 +320,22 @@ class exportActions extends sfActions {
         return $this->renderText($content);
     }
 
+    public function executeDrValideeCsv(sfWebRequest $request) {
+        ini_set('memory_limit', '128M');
+        set_time_limit(180);
+
+        $filename = $this->getUser()->getCampagne().'_UTILISATEURS_DR_VALIDEE_'.$this->getUser()->getTiers('Acheteur')->cvi;
+
+        $export = new ExportUserDRValideeCsv($this->getUser()->getCampagne(), $this->getUser()->getTiers('Acheteur')->cvi);
+        $export->export();
+        $content = $export->output();
+
+        $this->setResponseCsv($filename.'.csv');
+        return $this->renderText($content);
+    }
+
+
+
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');
         $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);

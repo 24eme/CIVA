@@ -247,6 +247,11 @@ export_dr_acheteur_csv:
   url: /acheteur/import/dr/csv
   param: {module: export, action: drAcheteurCsv}
 
+export_dr_validee_csv:
+  url: /acheteur/import/utilisateurs/csv
+  param: {module: export, action: drValideeCsv}
+
+
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}

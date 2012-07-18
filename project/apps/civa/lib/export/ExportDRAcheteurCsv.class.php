@@ -365,6 +365,13 @@ class ExportDRAcheteurCsv extends ExportCsv {
                 }
             }
         }
+        if (!$user && strtotime($dr->validee) > strtotime($this->_campagne.'-12-10')) {
+            $user = 'Automatique';
+        } elseif(!$user) {
+            $user = 'Récoltant';
+        }
+
+        return $user;
     }
 
 
