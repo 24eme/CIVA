@@ -13,7 +13,7 @@ prod:
       transport:
         class: Swift_SmtpTransport
         param:
-          host: mail.aquitaine-valley.fr
+          host: localhost
 
 test:
   storage:
