@@ -1,44 +1,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<?php $path = preg_replace('#/[^/]+\.php5?$#', '', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_SERVER['ORIG_SCRIPT_NAME']) ? $_SERVER['ORIG_SCRIPT_NAME'] : '')) ?>
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, post-check=0, pre-check=0" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="title" content="Espace des professionnels du Vignoble d’Alsace" />
+    <meta name="pragma" content="no-cache" />
+    <title>
+        Espace des professionnels du Vignoble d’Alsace      </title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/global.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/declaration_recolte.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/jquery.ui.css" />
+</head>
+<body id="declaration_recolte">
+<!-- #global -->
+<div id="global">
+    <!--<ul id="liens_evitement" class="clearfix">
+    </ul>-->
 
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo sfConfig::get('sf_charset', 'utf-8') ?>" />
-<meta name="title" content="symfony project" />
-<meta name="robots" content="index, follow" />
-<meta name="description" content="symfony project" />
-<meta name="keywords" content="symfony, project" />
-<meta name="language" content="en" />
-<title>symfony project</title>
+    <!-- #header -->
+    <div id="header" class="clearfix pngfix">
+        <h1 id="logo"><a href="#" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace "><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $path ?>/sf/sf_default/css/screen.css" />
-<!--[if lt IE 7.]>
-<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $path ?>/sf/sf_default/css/ie.css" />
+        <div id="titre_rubrique">
+
+            <h1>
+                Espace des professionnels du Vignoble d’Alsace                    </h1>
+
+        </div>
+    </div>
+    <!-- fin #header -->                     <div id="contenu">
+
+    <div id="application_dr" class="clearfix">
+        <div id="espace_alsace_recolte">
+            <h2>Ce site est temporairement inaccessible</h2>
+<p>En raison d'une migration serveur, les services vinsalsace.pro sont indisponibles, ils seront de retour dans quelques heures.</p><p>Veuillez nous excuser pour la gêne occasionnée.</p>
+            </div>
+
+    </div>
+    <!-- fin #application_dr -->
+
+</div>
+    <!-- #footer -->
+    <div id="footer">
+        <p>&copy; CIVA 2010</p>
+
+    </div>
+    <!-- fin #footer -->
+</div>
+<!-- fin #global -->
+
+
 <![endif]-->
 
-</head>
-<body>
-<div class="sfTContainer">
-  <a title="symfony website" href="http://www.symfony-project.org/"><img alt="symfony PHP Framework" class="sfTLogo" src="<?php echo $path ?>/sf/sf_default/images/sfTLogo.png" height="39" width="186" /></a>
-  <div class="sfTMessageContainer sfTAlert">
-    <img alt="page not found" class="sfTMessageIcon" src="<?php echo $path ?>/sf/sf_default/images/icons/tools48.png" height="48" width="48" />
-    <div class="sfTMessageWrap">
-      <h1>Website Temporarily Unavailable</h1>
-      <h5>Please try again in a few seconds...</h5>
-    </div>
-  </div>
-
-  <dl class="sfTMessageInfo">
-    <dt>What's next</dt>
-    <dd>
-      <ul class="sfTIconList">
-        <li class="sfTReloadMessage"><a href="javascript:window.location.reload()">Try again: Reload Page</a></li>
-      </ul>
-    </dd>
-  </dl>
-</div>
 </body>
 </html>
