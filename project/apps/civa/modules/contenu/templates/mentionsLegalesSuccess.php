@@ -63,21 +63,15 @@
         <br /><strong>Site Internet&nbsp;:</strong> <a target="_blank" href="http://www.actualys.com">http://www.actualys.com</a></p><br />
 
     <h3>Hébergement</h3>
-    <p><strong>CIS Valley</strong>
-        <br />Rue de l'Hermite
-        <br />BP 70081
-        <br />33523 BRUGES Cedex
+    <p><strong>Enovance</strong>
+        <br />10 rue de la Victoire
+        <br />75009 Paris - France
         <br />
-        <br /><strong>Tél.&nbsp;:</strong> (33) 05 56 11 22 22
-        <br /><strong>Fax&nbsp;:</strong> (33) 05 56 11 22 23
+        <br /><strong>Tél.&nbsp;:</strong> (33) 01 49 70 99 70
+        <br /><strong>Fax&nbsp;:</strong> (33) 01 49 70 99 71
         <br />
-        <br /><strong>Site Internet&nbsp;:</strong> <a target="_blank" href="http://www.cis-valley.fr">http://www.cis-valley.fr</a></p><br />
-
-
-
-    <br />
-    <br />
-
-
+        <br /><strong>Site Internet&nbsp;:</strong> <a target="_blank" href="http://www.enovance.com">http://www.enovance.com</a></p><br />
+        <br />
+        <br />
 </div>
 <!-- fin #application_dr -->

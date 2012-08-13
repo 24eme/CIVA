@@ -205,6 +205,7 @@ p.intro {
 	clear: both;
 	padding: 20px 0 0;
 	overflow: hidden;
+	display: none;
 }
 
 #bandeau_civa * { display: block; }
