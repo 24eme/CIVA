@@ -39,7 +39,6 @@ EOF;
 	  sfCouchdbManager::getClient()->createDatabase();
 	}
 
-
 	$docs = array();
 
 	$json = new stdClass();
