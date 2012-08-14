@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -X GET http://localhost:5984/civa/MESSAGES | sed "s/{//g" | sed "s/}//g" | sed "s/:/;/g" | sed "s/\",\"/\"\\n\"/g" |  sed -e '/^"_rev/d' | sed -e '/^"_id/d' | sed -e '/^"type/d'  > data/configuration/messages.csv
