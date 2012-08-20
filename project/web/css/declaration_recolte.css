@@ -1757,6 +1757,12 @@ a.msg_aide:hover{
     height: 19px;
 }
 
+/**
+ * Popup de confirmation d'envoi de mail
+ ******************************************/
+#popup_confirme_mail #btns{
+    margin: 15px 0 0 95px;
+}
 
 /**
  * Popup d'ajout

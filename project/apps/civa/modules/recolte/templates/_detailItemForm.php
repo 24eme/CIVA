@@ -116,13 +116,13 @@
             }
 
             if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
-                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_min_quantite')); ?></p>');
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_min_quantite')); ?></p><p>Soit au minimumn ' + min + ' HL</p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
             }
 
             if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
-                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_max_quantite')); ?></p>');
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_max_quantite')); ?></p><p>Soit au maximum ' + max +' HL</p>' );
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
             }

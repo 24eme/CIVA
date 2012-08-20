@@ -121,18 +121,12 @@ $(document).ready( function()
     if ($('#validation_dr').length > 0) {
         $('#validation_dr').ready( function() {
             initValidationDr();
+            initSendDRPopup();
         });
     }
 
     if ($('#confirmation_fin_declaration').length > 0) {
         $('#confirmation_fin_declaration').ready( function() {
-            initValidationDr();
-            initSendDRPopup();
-        });
-    }
-
-    if ($('#validation_dr').length > 0) {
-        $('#validation_dr').ready( function() {
             initValidationDr();
             initSendDRPopup();
         });
@@ -774,6 +768,7 @@ var initValidationDr = function(type)
 var initValidDRPopup = function()
 {
     $('#previsualiser').click(function() {
+        openPopup($("#popup_loader"));
         $.ajax({
             url: ajax_url_to_print,
             success: function(data) {
@@ -782,7 +777,6 @@ var initValidDRPopup = function()
                 $('.popup-loading').css('padding-top', '10px');
                 $('.popup-loading').append('<p>Le PDF de votre déclaration de récolte à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-dr"></a></p>');
                 openPopup($("#popup_loader"));
-
 
             }
         });
@@ -793,39 +787,16 @@ var initValidDRPopup = function()
 /**
  * Initalise la popup d'envoie par mail de la DR
  ******************************************/
+
 var initSendDRPopup = function()
 {
     $('#btn-email').click(function() {
-        $.ajax({
-            url: ajax_url_to_send_email_pdf,
-            success: function(data) {
-
-                $('.popup-loading').empty();
-                $('.popup-loading').css('background', 'none');
-                $('.popup-loading').css('padding-top', '10px');
-                $('.popup-loading').append('<p>' + data + '</p>');
-                openPopup($("#popup_loader_send"));
-
-            }
-        });
+        openPopup($("#popup_confirme_mail"));
         return false;
     });
+
 }
 
-/* Confirmation de la validation */
-
-var initConfirmeValidation = function()
-{
-    $('#valideDR').click(function() {
-        openPopup($("#popup_confirme_validation"));
-        return false;
-    });
-    $('#valideDR_OK').click(function() {
-        $("#popup_confirme_validation").dialog('close');
-        $("#principal").submit();
-        return false;
-    });
-}
 
 /**
  * Initialise les fonctions des tables
