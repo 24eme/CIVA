@@ -344,4 +344,8 @@ Le CIVA';
             $this->redirectToNextEtapes();
         }
     }
+
+    public function executeConfirmationMailDR(sfWebRequest $request) {
+
+    }
 }
