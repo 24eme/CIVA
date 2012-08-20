@@ -8,9 +8,10 @@
 
     <p class="denomination">
         <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
-            Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide"></a>
-
-        <?php endif; ?>&nbsp;
+            Dénom. complémentaire <a href="" class="msg_aide" rel="help_popup_DR_denomination" title="Message aide"></a>&nbsp;
+        <?php else: ?>
+            &nbsp;<br />&nbsp;
+        <?php endif; ?>
     </p>
 
     <p class="mention">
