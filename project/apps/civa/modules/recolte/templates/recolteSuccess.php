@@ -19,6 +19,8 @@
 <div id="application_dr" class="clearfix">
     <!-- #gestion_recolte -->
     <div id="gestion_recolte" class="clearfix gestion_recolte_donnees">
+
+        <?php include_partial('messageRepli', array('onglets' => $onglets)); ?>
         <?php
         include_partial('ongletsCepages', array('declaration' => $declaration,
             'nb_details_current' => $nb_details_current,
