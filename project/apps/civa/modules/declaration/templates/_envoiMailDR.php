@@ -1,5 +1,4 @@
 <script type="text/javascript">
-    ajax_url_to_confirmation = "<?php echo url_for('declaration/confirmationMailDR'); ?>";
     ajax_url_to_process = "<?php echo url_for('@send_email_pdf?annee='.$annee.'&message=custom'); ?>;"
 
     var sendMail = function(){
