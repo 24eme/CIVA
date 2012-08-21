@@ -337,9 +337,7 @@ class DR extends BaseDR {
                  $max_quantite = round($total_non_negociant * $cepage_RB->getConfig()->max_quantite, 0 );
 
                   if( !is_null($min_quantite)
-                   && !is_null($max_quantite)
-                   &&  $min_quantite <= $cepage_RB->getTotalVolume()
-                   &&  $max_quantite >= $cepage_RB->getTotalVolume() )
+                   &&  $min_quantite <= $cepage_RB->getTotalVolume())
                       $rebeches = true;
                   else
                       $rebeches = false;
@@ -349,8 +347,6 @@ class DR extends BaseDR {
                       // prevoir points de vigilance pour le max et pour le min ??
                       if( !($min_quantite <= $cepage_RB->getVolumeTotal()) )
                          array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
-                      elseif( !($max_quantite <= $cepage_RB->getVolumeTotal()) )
-                          array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                   }
               }else{
                   array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
