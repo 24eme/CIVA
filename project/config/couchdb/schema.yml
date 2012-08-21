@@ -79,6 +79,7 @@ DR:
                   total_superficie: {type: float}
                   volume_revendique: {type:float }
                   dplc: {type:float }
+
                   # ------- LIEU ----------
                   '*':
                     type: collection
@@ -89,6 +90,7 @@ DR:
                         total_superficie: {type:float}
                         volume_revendique: {type: float}
                         dplc: {type: float}
+                        usages_industriels: {type:float }
                         acheteurs: 
                            type: collection
                            definition:

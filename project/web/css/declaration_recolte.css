@@ -1629,6 +1629,21 @@ a.msg_aide:hover{
 
 #gestion_recolte #recap_ventes .btn { text-align: right; }
 
+#gestion_recolte #recapitulatif_usages_industriels{
+    width: 96px;
+
+}
+
+#gestion_recolte #recapitulatif_usages_industriels.readonly{
+    color: #9FAC01;
+    font-weight: bold;
+    text-align: center;
+}
+
+#gestion_recolte .btn{
+    margin: 7px 0 0 241px;
+}
+
 /**
  * Validation Acheteurs et caves
  ******************************************/

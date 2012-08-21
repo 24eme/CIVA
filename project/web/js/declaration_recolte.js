@@ -758,7 +758,6 @@ var etatChampsTableAcht = function(type)
 var initValidationDr = function(type)
 {
     initValidDRPopup();
-    initConfirmeValidation();
 }
 
 
@@ -862,6 +861,7 @@ var initGestionRecolteDonnees = function()
 /**
      * Initialise la page recapitulatif de la recolte
      ******************************************/
+
 var initGestionRecolteRecapitulatif = function() {
     $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
 }

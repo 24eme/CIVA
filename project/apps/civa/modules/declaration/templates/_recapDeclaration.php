@@ -39,7 +39,7 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>DPLC (Hl)</td>
+                    <td>Usages industriels (Hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $dplc[$a]); ?></td>
                     <?php endif; ?>

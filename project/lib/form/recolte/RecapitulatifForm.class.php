@@ -3,7 +3,28 @@
 class RecapitulatifForm extends sfCouchdbFormDocumentJson {
 
     public function configure() {
+
         $lieu = $this->getObject();
+
+    if($lieu->getTotalCaveParticuliere()){
+        if( $lieu->dplc != 0 )
+        {
+            // on met le widget en read only si le dplc est =! 0
+            $this->setWidgets(array('usages_industriels' => new sfWidgetFormInput()));
+            $this->widgetSchema['usages_industriels']->setAttributes(array('value'=> $lieu->dplc, 'readonly' => 'true', 'class'=> 'readonly'));
+
+        }else{
+            $this->setWidgets(array(
+                'usages_industriels' => new sfWidgetFormInput(array()),
+            ));
+        }
+
+        $this->setValidators(array(
+            'usages_industriels' => new sfValidatorString(array('required' => false)),
+        ));
+    }
+
+
         //$is_unique_acheteur = $lieu->hasSellToUniqueAcheteur();
         foreach ($lieu->acheteurs as $type => $acheteurs_type) {
             foreach ($acheteurs_type as $cvi => $acheteur) {
@@ -21,10 +42,17 @@ class RecapitulatifForm extends sfCouchdbFormDocumentJson {
         }
 
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
-
         $this->widgetSchema->setNameFormat('recapitulatif[%s]');
     }
 
+    public function doUpdateObject($values) {
+        parent::doUpdateObject($values);
+        $lieu = $this->getObject();
+        $usages_indus = $values['usages_industriels'];
+
+        if( isset($values['usages_industriels']))
+            $lieu ->set("usages_industriels", (float)$usages_indus);
+    }
 }
 
 ?>

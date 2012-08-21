@@ -67,7 +67,10 @@
 		       <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat( $lieu->getVolumeRevendiqueAppellation()); ?>" />
 		       </li>
                     <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplcAppellation()); ?>"/>
-                    <input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($lieu->getDplcAppellation()) echo 'alerte'; ?>" value="<?php echoFloat( $lieu->getDplcAppellation()); ?>"/></li>
+                      <input type="text" id="appellation_volume_dplc" readonly="readonly"
+                             class="<?php if ($lieu->getDplcAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
+                             value="<?php (!is_null( $lieu->usages_industriels )  && $lieu->dplc == 0) ? echoFloat($lieu->usages_industriels )  : echoFloat( $lieu->getDplcAppellation()) ; ?>" />
+                     </li>
                 <?php endif; ?>
     <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
                 <li>

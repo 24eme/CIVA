@@ -38,7 +38,7 @@
 
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
-                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
 												</tr>
 												<tr>
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
@@ -49,13 +49,25 @@
 													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
 												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
 												</tr>
+
+                                                <?php if( isset($form['usages_industriels'] )) :?>
 												<tr>
-													<td>DPLC <span class="unites">(hl)</span> :</td>
-                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()); ?> hl</td>
+													<td>Usages industriels <span class="unites">(hl)</span> :</td>
+                                                    <td class="valeur alt">
+                                                        <?php echo $form['usages_industriels'] ?> hl
+                                                    </td>
 												</tr>
-                                                                                                <?php endif; ?>
+                                                <?php endif; ?>                                                                <?php endif; ?>
 											</tbody>
 										</table>
+
+                                    <?php if( isset($form['usages_industriels'])
+                                           && !$form['usages_industriels']->getWidget()->getAttribute('readonly')) :?>
+                                        <div class="btn">
+                                            <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
+                                        </div>
+                                    <?php endif; ?>
+
 									</div>
 								</div>
 							</div>
