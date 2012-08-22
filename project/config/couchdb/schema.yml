@@ -90,8 +90,9 @@ DR:
                         total_superficie: {type:float}
                         volume_revendique: {type: float}
                         dplc: {type: float}
-                        usages_industriels: {type:float }
-                        acheteurs: 
+                        usages_industriels_saisi: {type:float }
+                        usages_industriels_calcule: {type:float }
+                        acheteurs:
                            type: collection
                            definition:
                              fields:

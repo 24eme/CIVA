@@ -1629,12 +1629,12 @@ a.msg_aide:hover{
 
 #gestion_recolte #recap_ventes .btn { text-align: right; }
 
-#gestion_recolte #recapitulatif_usages_industriels{
+#gestion_recolte #recapitulatif_usages_industriels_saisi{
     width: 96px;
 
 }
 
-#gestion_recolte #recapitulatif_usages_industriels.readonly{
+#gestion_recolte #recapitulatif_usages_industriels_saisi.readonly{
     color: #9FAC01;
     font-weight: bold;
     text-align: center;

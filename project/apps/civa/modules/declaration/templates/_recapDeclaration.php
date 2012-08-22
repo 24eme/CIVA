@@ -41,7 +41,7 @@
                 <tr>
                     <td>Usages industriels (Hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
-                    <td><?php echoFloat( $dplc[$a]); ?></td>
+                    <td><?php echoFloat( $usages_industriels[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
             </tbody>

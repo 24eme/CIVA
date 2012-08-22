@@ -307,7 +307,16 @@ class DR extends BaseDR {
     }
     
     public function save() {
+
+
+        foreach( $this->recolte->filter("appellation") as $appellation)
+                    foreach( $appellation->filter('lieu') as $lieu )
+                        if( $lieu->exist("usages_industriels_saisi")
+                        && ($lieu->usages_industriels_saisi == 0 || $lieu->dplc == 0 ) )
+
+                            $lieu->usages_industriels_calcule = $lieu->usages_industriels_saisi + $lieu->dplc;
         parent::save();
+
     }
 
     public function check() {

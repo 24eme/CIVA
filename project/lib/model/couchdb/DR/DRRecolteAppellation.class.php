@@ -81,6 +81,16 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $volume;
     }
 
+    public function getTotalUsagesIndustriels(){
+
+        $total = 0;
+        foreach( $this->filter('^lieu') as $lieu)
+        {
+            $total += $lieu->usages_industriels_calcule;
+        }
+        return $total;
+    }
+
     public function removeVolumes() {
         $this->total_superficie = null;
         $this->volume_revendique = null;

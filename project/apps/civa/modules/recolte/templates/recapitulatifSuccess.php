@@ -50,19 +50,19 @@
 												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
 												</tr>
 
-                                                <?php if( isset($form['usages_industriels'] )) :?>
+                                                <?php if( isset($form['usages_industriels_saisi'] )) :?>
 												<tr>
 													<td>Usages industriels <span class="unites">(hl)</span> :</td>
                                                     <td class="valeur alt">
-                                                        <?php echo $form['usages_industriels'] ?> hl
+                                                        <?php echo $form['usages_industriels_saisi'] ?> hl
                                                     </td>
 												</tr>
                                                 <?php endif; ?>                                                                <?php endif; ?>
 											</tbody>
 										</table>
 
-                                    <?php if( isset($form['usages_industriels'])
-                                           && !$form['usages_industriels']->getWidget()->getAttribute('readonly')) :?>
+                                    <?php if( isset($form['usages_industriels_saisi'])
+                                           && !$form['usages_industriels_saisi']->getWidget()->getAttribute('readonly')) :?>
                                         <div class="btn">
                                             <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
                                         </div>

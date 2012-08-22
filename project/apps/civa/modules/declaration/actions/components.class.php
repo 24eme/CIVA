@@ -62,7 +62,7 @@ class declarationComponents extends sfComponents {
         $this->superficie = array();
         $this->volume = array();
         $this->revendique = array();
-        $this->dplc = array();
+        $this->usages_industriels = array();
         $this->libelle = array();
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
@@ -78,14 +78,14 @@ class declarationComponents extends sfComponents {
               $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $this->dplc[$appellation->getAppellation()] = $appellation->getDplc();
+              $this->usages_industriels[$appellation->getAppellation()] = $appellation->getTotalUsagesIndustriels();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
 
             }
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
-        $this->total_dplc = array_sum(array_values($this->dplc));
+        $this->total_dplc = array_sum(array_values($this->usages_industriels));
         $this->total_revendique = array_sum(array_values($this->revendique));
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
 

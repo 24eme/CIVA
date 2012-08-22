@@ -49,6 +49,16 @@ class recolteActions extends EtapesActions {
         $this->initAcheteurs();
         $this->initPrecDR();
 
+
+        if( $this->onglets->getCurrentLieu()->dplc != 0)
+        {
+           $appellation = $this->declaration->recolte->get($this->onglets->getCurrentAppellation()->getKey());
+           $lieu = $appellation->get($this->onglets->getCurrentLieu()->getKey());
+           $lieu->set("usages_industriels_saisi", 0);
+           $this->declaration->save();
+
+        }
+
         $this->detail_action_mode = 'update';
         $this->is_detail_edit = true;
 
@@ -289,6 +299,7 @@ class recolteActions extends EtapesActions {
 
         preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
         $appellation = null;
+
         if (isset($appellation_lieu['appellation'])) {
             $appellation = $appellation_lieu['appellation'];
         }
