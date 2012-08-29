@@ -271,6 +271,17 @@ CompteTiers:
                   id: {  }
                   type: {  }
                   nom: {  }
+      delegation:
+              type: collection
+              definition:
+                fields:
+                  '*':
+                    type: collection
+                    definition:
+                      fields:
+                        id: {  }
+                        type: {  }
+                        nom: {  }
 
 CompteVirtuel:
   inheritance: _Compte
@@ -366,7 +377,6 @@ MetteurEnMarche:
         definition:
           fields:
             maison_mere: {  }
-
 Current:
   definition:
     fields:

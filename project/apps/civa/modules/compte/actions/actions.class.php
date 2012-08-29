@@ -54,6 +54,9 @@ class compteActions extends sfActions {
         $this->redirect($url);
     }
 
+
+
+
     /**
      * Executes index action
      *

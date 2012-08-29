@@ -16,7 +16,13 @@
             <?php endif; ?>
         </h1>
         <?php if ($sf_user->hasCredential('tiers')) : ?>
-            <p class="utilisateur"><?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@tiers'); ?></p>
+            <p class="utilisateur">
+                <?php if ($sf_user->isInDelegateMode()):?>
+                        <?php echo sprintf('%s , vous êtes connecté en tant que %s', $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->getNom(), $sf_user->getCompte()->getNom()) ;?>
+                <?php else : ?>
+                        <?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@tiers');  ?>
+                <?php endif; ?>
+            </p>
         <?php elseif ($sf_user->hasCredential('compte')) : ?>  
             <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNom(), '@tiers'); ?></p>
         <?php endif; ?>
@@ -25,7 +31,7 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($sf_user->hasCredential('recoltant')): ?>
+            <?php if ($sf_user->hasCredential('recoltant') && !$sf_user->isInDelegateMode()): ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
@@ -41,7 +47,12 @@
             <?php endif;  ?>
 
             <?php if($sf_user->isAuthenticated()): ?>
-                <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
+
+                <?php if($sf_user->isInDelegateMode()):?>
+                     <li class="red"><a href="<?php echo url_for('@delegate_mode_retour_espace_civa'); ?>">Retour à mon espace</a></li>
+                <?php else : ?>
+                     <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
+                <?php endif; ?>
             <?php else : ?>
                 <li><a href="<?php echo url_for('@login'); ?>">Connexion</a></li>
             <?php endif; ?>

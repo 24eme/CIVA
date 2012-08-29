@@ -1,6 +1,11 @@
 <?php include_partial('global/actions', array('etape' => 0, 'help_popup_action' => $help_popup_action)) ?>
 
+<?php if($sf_user->isInDelegateMode()): ?>
+    <h2 class="titre_principal">Espace de <?php echo $sf_user->getCompte(myUser::NAMESPACE_COMPTE_USED)->getNom()?></h2>
+<?php else: ?>
     <h2 class="titre_principal">Mon espace déclaratif</h2>
+<?php endif; ?>
+
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
         <?php if($sf_user->hasFlash('confirmation')) : ?>
@@ -45,6 +50,13 @@
             </div>
         </div>
         <?php endif; ?>
+
+
+        <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
+        <div class="contenu clearfix">
+            <?php include_component('tiers', 'delegationForm') ?>
+        </div>
+        <?php endif;?>
             
         <!-- #nouvelle_declaration -->
         <?php /*<div id="nouvelle_declaration">

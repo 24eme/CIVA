@@ -107,6 +107,7 @@ abstract class _Compte extends Base_Compte {
             }
         }
     }
+
     
     /**
      * 
@@ -123,6 +124,10 @@ abstract class _Compte extends Base_Compte {
         if($info && is_array($info['userpassword']) && count($info['userpassword']) > 0 && $info['userpassword'][0]) {
             $this->mot_de_passe = $info['userpassword'][0];
         }
+    }
+
+    public function hasDelegation(){
+        return false;
     }
     
 }

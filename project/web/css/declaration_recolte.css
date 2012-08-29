@@ -596,6 +596,15 @@ a.msg_aide:hover{
 }
 
 /**
+ * Alsace récolte / Espace delegation
+ ******************************************/
+
+#header #acces_directs ul li.red a{
+    color: red;
+
+}
+
+/**
  * Import / Export
  ******************************************/
 #espace_acheteurs #import,

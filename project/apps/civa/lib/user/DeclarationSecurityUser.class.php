@@ -180,7 +180,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      *
      * @param string $namespace 
      */
-    public function signOutCompte($namespace)
+    public function signOutCompte($namespace = self::NAMESPACE_COMPTE_USED)
     {
         $this->signOutDeclaration();
         parent::signOutCompte($namespace);

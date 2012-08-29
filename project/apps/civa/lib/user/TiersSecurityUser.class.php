@@ -12,6 +12,9 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     const CREDENTIAL_GAMMA = 'gamma';
     const CREDENTIAL_ACHETEUR = 'acheteur';
 
+
+
+
     protected $_credentials_tiers = array(self::CREDENTIAL_TIERS,
         self::CREDENTIAL_RECOLTANT,
         self::CREDENTIAL_DECLARATION,
@@ -38,9 +41,11 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
      * @param _Tiers $tiers 
      */
     public function signInTiers($tiers) {
+
         $this->requireCompte();
         $this->signOutTiers();
         $this->addCredential(self::CREDENTIAL_TIERS);
+
         if (!is_array($tiers))
             $tiers = array($tiers);
         foreach ($tiers as $t) {
@@ -58,6 +63,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             $ids[] = $t->_id;
         }
         $this->setAttribute(self::SESSION_TIERS, join(',', $ids), self::NAMESPACE_TIERS);
+
     }
 
     /**
@@ -134,7 +140,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
      *
      * @param string $namespace 
      */
-    public function signOutCompte($namespace) {
+    public function signOutCompte($namespace = self::NAMESPACE_COMPTE_USED) {
         $this->signOutTiers();
         parent::signOutCompte($namespace);
     }

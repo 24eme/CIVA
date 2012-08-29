@@ -16,9 +16,9 @@ class tiersActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeLogin(sfWebRequest $request) {
-        $this->getUser()->signOutTiers();
+
+       $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
-	
 	$not_uniq = 0;
 	$tiers = array();
         if (count($this->compte->tiers) >= 1) {
@@ -29,6 +29,7 @@ class tiersActions extends EtapesActions {
 	    }
 	    $tiers[$t->type] = sfCouchdbManager::getClient()->retrieveDocumentById($t->id);
 	  }
+
 	  if (!$not_uniq) {
 	    $this->getUser()->signInTiers(array_values($tiers));
 	    return $this->redirect("@mon_espace_civa");
@@ -41,7 +42,7 @@ class tiersActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $t = $this->form->process();
-		$tiers[$t->type] = $t;
+		        $tiers[$t->type] = $t;
                 $this->getUser()->signInTiers(array_values($tiers));
                 $this->redirect("@mon_espace_civa");
             }
@@ -114,6 +115,41 @@ class tiersActions extends EtapesActions {
 		    	}
             }
         }
+    }
+
+    /**
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeDelegation(sfWebRequest $request) {
+
+        $this->forward404Unless($this->getUser()->hasCredential('delegation'));
+        $this->compte = $this->getUser()->getCompte();
+        $this->form = new DelegationTiersLoginForm($this->getUser()->getCompte());
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+
+            if ($this->form->isValid()) {
+                $this->getUser()->signInCompteUsed($this->form->process());
+                $this->redirect('@tiers');
+            }
+
+            $this->executeMonEspaceCiva($request);
+            $this->setTemplate("monEspaceCiva");
+        }
+    }
+
+
+    /**
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeSignoutByCompteDelegue(sfWebRequest $request) {
+
+        $login_current_user = $this->getUser()->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->login;
+        $this->getUser()->signIn($login_current_user);
+        $this->redirect('@mon_espace_civa');
     }
 
 }

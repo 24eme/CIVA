@@ -53,6 +53,10 @@ mon_espace_civa:
   url:   /mon_espace_civa
   param: { module: tiers, action: monEspaceCiva }
 
+delegation:
+  url: /delegation
+  param: { module: tiers, action: delegation}
+
 # *********** DECLARATION ***********
 
 declaration_init:
@@ -103,6 +107,10 @@ admin:
 admin_gamma:
   url:   /admin/gamma
   param: { module: admin, action: gamma }
+
+delegate_mode_retour_espace_civa:
+   url : /tiers/retour_mon_espace
+   param: { module: tiers, action: signoutByCompteDelegue }
 
 # *********** EXPLOITATION ***********
 visualisation_avant_import:
