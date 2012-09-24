@@ -1,14 +1,11 @@
 <?php
 
 class DRRecolte extends BaseDRRecolte {
-    
-    /**
-     *
-     * @return Configuration
-     */
-  public function getConfig() {
-    return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
-  }
+
+    public function getNoeuds() {
+
+        return $this->getAppellations();
+    }
 
     /**
      *
@@ -56,18 +53,23 @@ class DRRecolte extends BaseDRRecolte {
      * @param array $params 
      */
     protected function update($params = array()) {
-      parent::update($params);
+
+        parent::update($params);
 
       if (in_array('from_acheteurs',$params)) {
         $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
         foreach($acheteurs as $key => $appellation) {
-	  $app = $this->add($key);
-	  if (!$app->getConfig()->hasManyLieu()) {
-	    $lieu = $app->add('lieu');
-	    foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
-	      $lieu->add($k);
-	    }
-	  }
+          $app = $this->add($key);
+          foreach( $app->getConfig()->getMentions() as  $key => $mention  )
+          {
+            $men = $app->add($key);
+            if (!$men->getConfig()->hasManyLieu()) {
+                $lieu = $men->add('lieu');
+                foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
+                    $lieu->add($k);
+                }
+            }
+          }
         }
         foreach($this->getAppellations() as $key => $appellation) {
             if (!$acheteurs->exist($key)) {

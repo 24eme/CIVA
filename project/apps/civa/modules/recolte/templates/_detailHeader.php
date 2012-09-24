@@ -14,12 +14,6 @@
         <?php endif; ?>
     </p>
 
-    <p class="mention">
-        <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
-            Mention VT/SGN <a href="" class="msg_aide" rel="help_popup_DR_mention" title="Message aide"></a>
-        <?php endif; ?>&nbsp;
-    </p>
-
     <p class="superficie">Superficie <span class="unites">(ares)</span><a href="" class="msg_aide" rel="help_popup_DR_superficie" title="Message aide"></a> </p>
     <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">

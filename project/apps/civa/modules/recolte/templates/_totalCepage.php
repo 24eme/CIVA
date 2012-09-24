@@ -1,6 +1,6 @@
 <?php use_helper('civa') ?>
 <div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage() || $onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>display:none;<?php endif; ?>">
-    <h2>Total <br /> <?php echo $cepage->libelle ?></h2>
+    <h2>Total <br /> <?php echo $cepage->libelle ?> <br /> <?php  echo $onglets->getRawValue()->getCurrentMention()->getConfig()->getLibelle() ?></h2>
 
     <div class="col_cont">
         <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>

@@ -182,7 +182,9 @@ class sfCouchdbJson implements IteratorAggregate, ArrayAccess, Countable {
             $field->load($data_or_object->getData());
         } elseif ($data_or_object instanceof stdClass) {
             $field = $this->_get($key);
-            $field->load($data_or_object);
+            if (is_object($field)) {
+                $field->load($data_or_object);
+            }
         } elseif (is_array($data_or_object)) {
             $field = $this->_get($key);
             $field->load($data_or_object);

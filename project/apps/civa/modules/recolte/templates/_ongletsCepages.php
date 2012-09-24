@@ -3,7 +3,7 @@
         <?php foreach ($couleur->getConfig()->getCepages() as $key => $cepage): ?>
             <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>
                 <li class="ui-tabs-selected">
-                    <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, $key_couleur, $key)->getRawValue()) ?>">
+                    <a href="<?php echo url_for($onglets->getUrl('recolte',null, null, null, $key_couleur, $key)->getRawValue()) ?>">
                         <?php echo $cepage->libelle ?>
                         <?php if ($nb_details_current && $nb_details_current > 0): ?>
                             &nbsp;<span>(<?php echo $nb_details_current ?>)</span>
@@ -12,7 +12,7 @@
                 </li>
             <?php else: ?>
                 <li>
-                    <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, $key_couleur, $key)->getRawValue()) ?>">
+                    <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, null, $key_couleur, $key)->getRawValue()) ?>">
                         <?php echo $cepage->libelle ?>
                         <?php if ($couleur->exist($key) && $couleur->get($key)->detail->count() > 0): ?>
                             &nbsp;<span>(<?php echo $couleur->get($key)->detail->count() ?>)</span>

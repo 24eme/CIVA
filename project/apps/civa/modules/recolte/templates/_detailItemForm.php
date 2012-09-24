@@ -17,12 +17,6 @@
                 <?php endif; ?>
             </p>
 
-            <p class="mention <?php echo ($form['vtsgn']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
-                    <?php echo $form['vtsgn']->render() ?>
-                <?php endif; ?>
-            </p>
-
             <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
                     <?php echo $form['superficie']->render(array('class' => 'superficie num')) ?>

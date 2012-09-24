@@ -2,22 +2,10 @@
 
 class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
-    public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
-    }
-    
     public function getLibelleWithAppellation() {
       if ($this->getLibelle())
 	return $this->getAppellation()->getLibelle().' - '.$this->getLibelle();
       return $this->getAppellation()->getLibelle();
-    }
-
-    public function getLibelle() {
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
-    }
-    
-    protected function getInternalLibelle() {
-        return $this->getConfig()->getLibelle();
     }
 
     public function getLieu() {
@@ -25,10 +13,17 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getAppellation() {
+
         return $this->getLieu()->getAppellation();
     }
 
+    public function getNoeuds() {
+
+        return $this->getCepages();
+    }
+
     public function getCepages() {
+
         return $this->filter('^cepage');
     }
 
@@ -260,5 +255,4 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             }
         }
     }
-
 }

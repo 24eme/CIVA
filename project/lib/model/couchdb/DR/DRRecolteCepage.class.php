@@ -2,22 +2,19 @@
 
 class DRRecolteCepage extends BaseDRRecolteCepage {
 
-    public function getConfig() {
-      return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
-    }
     public function getCouleur() {
+
       return $this->getParent();
     }
+
     public function getLieu() {
+
       return $this->getCouleur()->getLieu();
     }
 
-    public function getLibelle() {
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
-    }
-    
-    public function getInternalLibelle() {
-        return $this->getConfig()->getLibelle();
+    public function getNoeuds() {
+
+        return $this->detail;
     }
 
     public function getCodeDouane($vtsgn = '') {

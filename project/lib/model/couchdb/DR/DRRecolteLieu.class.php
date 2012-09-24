@@ -2,26 +2,23 @@
 
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
-    public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
-    }
-
     public function getLibelleWithAppellation() {
         if ($this->getLibelle())
             return $this->getParent()->getLibelle() . ' - ' . $this->getLibelle();
         return $this->getParent()->getLibelle();
     }
 
-    public function getLibelle() {
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
-    }
-
-    protected function getInternalLibelle() {
-        return $this->getConfig()->getLibelle();
+    public function getMention() {
+        return $this->getParent();
     }
 
     public function getAppellation() {
-        return $this->getParent();
+        return $this->getMention()->getAppellation();
+    }
+
+    public function getNoeuds() {
+
+        return $this->getCouleurs();
     }
 
     public function getCouleurs() {
@@ -422,4 +419,14 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
     }
 
+    public function isInManyMention(){
+
+        $arr_lieux = array();
+        foreach( $this->getAppellation()->getMentions() as $mention){
+            if($mention->filter($this)){
+                $arr_lieux[] = $this;
+            }
+        }
+        return (count($arr_lieux) > 1) ? true : false;
+    }
 }

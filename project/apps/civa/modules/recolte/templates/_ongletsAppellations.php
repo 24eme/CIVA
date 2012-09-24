@@ -5,8 +5,8 @@
             <a href="<?php echo url_for($onglets->getUrl('recolte', $key)->getRawValue()) ?>"><?php echo str_replace('AOC', '<span>AOC</span> <br />',$appellation->libelle) ?></a>
             <?php if ($onglets->getCurrentAppellation()->getConfig()->hasManyLieu() && $onglets->getCurrentKeyAppellation() == $key): ?>
             <?php include_partial('ongletsLieux', array('declaration' => $declaration,
-                                                 'appellation_key' => $key,
-                                                 'onglets' => $onglets)); ?>
+                                                        'appellation_key' => $key,
+                                                        'onglets' => $onglets)); ?>
             <?php endif; ?>
         </li>
         <?php endif; ?>

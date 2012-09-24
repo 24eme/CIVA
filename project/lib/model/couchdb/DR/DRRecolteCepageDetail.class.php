@@ -14,6 +14,18 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
       return $this->getParent()->getParent();
     }
 
+    public function getCouleur() {
+        return $this->getCepage()->getCouleur();
+    }
+
+    public function getLieu(){
+        return $this->getCepage()->getCouleur()->getLieu();
+    }
+
+    public function getMention() {
+        return $this->getLieu()->getMention();
+    }
+
     public function getCodeDouane() {
         return $this->getCepage()->getCodeDouane($this->vtsgn);
     }
@@ -104,10 +116,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function getUniqueKey() {
       return self::getUKey($this->lieu, $this->denomination, $this->vtsgn);
-    }
-
-    public function getVtsgn() {
-      return str_replace(' ', '', $this->_get('vtsgn'));
     }
 
     protected function update($params = array()) {

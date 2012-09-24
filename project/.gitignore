@@ -3,7 +3,9 @@ config/app.yml
 config/databases.yml
 config/properties.ini
 web/civa_dev.php
-data/[^.]*
+data/*.lck
+data/import
+data/upload
 cache/[^.]*
 log/[^.]*
 web/images/liste_nomenclatures_douanieres.pdf

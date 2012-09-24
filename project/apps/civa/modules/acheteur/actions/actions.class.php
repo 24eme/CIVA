@@ -90,11 +90,12 @@ class acheteurActions extends EtapesActions {
         foreach ($this->getUser()->getDeclaration()->recolte->getAppellations() as $appellation) {
             if ($appellation->getConfig()->hasManyLieu()) {
                 $this->appellations[$appellation->getKey()] = $appellation;
-                
                 $lieux = array();
-                foreach ($appellation->filter('^lieu.+') as $key => $lieu) {
+
+                foreach ($appellation->getDistinctLieux() as $key => $lieu) {
                     $lieux[$key] = $lieu->getLibelle();
-                }
+               }
+
                 $form = new LieuDitForm($appellation, array('lieu_required' => !(count($lieux) > 0), 'lieux' => $lieux));
                 $this->forms[$appellation->getKey()] = $form;
             }
@@ -143,7 +144,12 @@ class acheteurActions extends EtapesActions {
         $this->forward404Unless($declaration->recolte->exist('appellation_'.$appellation_key));
         $appellation = $declaration->recolte->get('appellation_'.$appellation_key);
         $this->forward404Unless($appellation->getConfig()->hasManyLieu());
-        $appellation->remove($request->getParameter('lieu'));
+
+        foreach($appellation->getMentions() as $mention){
+            if($mention->exist($request->getParameter('lieu'))){
+                $mention->remove($request->getParameter('lieu'));
+            }
+        }
         $declaration->save();
         return $this->redirect('@exploitation_lieu');
     }

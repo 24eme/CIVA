@@ -31,6 +31,7 @@ class adminActions extends sfActions {
      * @param sfWebRequest $request 
      */
     public function executeGamma(sfWebRequest $request) {
+
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
         if ($request->getParameter('gamma_type_acces') == 'prod') {
             $this->redirect(sfConfig::get('app_gamma_url_prod'));

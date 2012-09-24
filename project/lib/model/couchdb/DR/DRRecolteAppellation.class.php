@@ -2,28 +2,37 @@
 
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
-    public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
-    }
+    public function getNoeuds() {
 
-    public function getLibelle() {
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
-    }
-    
-    protected function getInternalLibelle() {
-        return $this->getConfig()->getLibelle();
+        return $this->getMentions();
     }
 
     public function getLieux() {
-        return $this->filter('^lieu');
+
+        if( $this->getConfig()->hasManyMention())
+            throw new sfException("getLieux() ne peut être appelé d'une appellation qui a plusieurs mentions...");
+
+        return $this->getMention()->filter('^lieu');
     }
 
+    public function getMentions(){
+        return $this->filter('^mention');
+    }
+
+/*
+    public function getMention(){
+        if ($this->getConfig()->hasManyMention())
+            throw new sfException("getMention ne peut être appelé d'une appellation qui a plusieurs mentions...");
+
+        return $this->_get('mention');
+    }
+*/
     public function getTotalVolume($force_calcul = false) {
         $field = 'total_volume';
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
-        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
     }
 
     public function getTotalSuperficie($force_calcul = false) {
@@ -31,7 +40,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
-        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -39,7 +48,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
-        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
     }
 
 
@@ -48,13 +57,19 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
         }
-        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
+    }
+
+    public function hasAllDistinctLieu() {
+        $nb_lieu = count($this->getDistinctLieux());
+        $nb_lieu_config = count($this->getConfig()->getDistinctLieux());
+        return (!($nb_lieu < $nb_lieu_config));
     }
 
     public function getTotalCaveParticuliere() {
-        return $this->store('total_cave_particuliere', array($this, 'getSumLieuWithMethod'), array('getTotalCaveParticuliere'));
+        return $this->store('total_cave_particuliere', array($this, 'getSumMentionWithMethod'), array('getTotalCaveParticuliere'));
     }
-    
+    /*** ???? ***/
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
@@ -72,6 +87,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->_storage[$key];
     }
 
+    /*** ???? ***/
     public function getVolumeAcheteur($cvi, $type) {
         $volume = 0;
         $acheteurs = $this->getVolumeAcheteurs($type);
@@ -81,16 +97,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $volume;
     }
 
-    public function getTotalUsagesIndustriels(){
-
-        $total = 0;
-        foreach( $this->filter('^lieu') as $lieu)
-        {
-            $total += $lieu->usages_industriels_calcule;
-        }
-        return $total;
-    }
-
+    /*** ???? ***/
     public function removeVolumes() {
         $this->total_superficie = null;
         $this->volume_revendique = null;
@@ -101,12 +108,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         }
     }
 
-    public function hasAllLieu() {
-        $nb_lieu = $this->filter('^lieu')->count();
-        $nb_lieu_config = $this->getConfig()->filter('^lieu')->count();
-        return (!($nb_lieu < $nb_lieu_config));
-    }
-
     public function getAppellation() {
       $v = $this->_get('appellation');
       if (!$v)
@@ -114,35 +115,59 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
       return $this->_get('appellation');
     }
 
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumLieuFields($field) {
-        $sum = 0;
-        foreach ($this->getLieux() as $key => $lieu) {
-            $sum += $lieu->get($field);
+    public function getDistinctLieux()
+    {
+        $arrLieux = array();
+        foreach($this->getMentions() as $mention){
+            foreach( $mention->getLieux() as $key =>  $lieu){
+                if(!array_key_exists($key, $arrLieux)){
+                    $arrLieux[$key] = $lieu;
+                }
+            }
         }
-        return $sum;
-    }
-
-    protected function getSumLieuWithMethod($method) {
-        $sum = 0;
-        foreach ($this->getLieux() as $key => $lieu) {
-            $sum += $lieu->$method();
-        }
-        return $sum;
+        return $arrLieux;
     }
 
     public function getLieuChoices() {
         $lieu_choices = array('' => '');
-        foreach ($this->getConfig()->filter('^lieu.+') as $key => $item) {
-            if (!$this->exist($key)) {
-                $lieu_choices[$key] = $item->getLibelle();
+        foreach ($this->getConfig()->getDistinctLieux() as $key => $item) {
+            foreach( $this->getMentions() as $mention ){
+                if (!$mention->exist($key)) {
+                    $lieu_choices[$key] = $item->getLibelle();
+                }
             }
         }
         asort($lieu_choices);
         return $lieu_choices;
+    }
+
+    public function getTotalUsagesIndustriels($force_calcul = false){
+
+        $field = 'usages_industriels_calcule';
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
+    }
+
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
+    }
+
+    protected function getSumMentionFields($field) {
+        $sum = 0;
+        foreach ($this->getMentions() as $key => $mention) {
+            $sum += $mention->get($field);
+        }
+        return $sum;
+    }
+
+    protected function getSumMentionWithMethod($method) {
+        $sum = 0;
+        foreach ($this->getMentions() as $key => $mention) {
+            $sum += $mention->$method();
+        }
+        return $sum;
     }
 
     protected function update($params = array()) {
@@ -154,4 +179,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
             $this->total_superficie = $this->getTotalSuperficie(true);*/
         }
     }
+
+
+
 }

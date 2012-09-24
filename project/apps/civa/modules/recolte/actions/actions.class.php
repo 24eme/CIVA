@@ -25,17 +25,16 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
+
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
         $this->initPrecDR();
-
         if (!$this->details->count() > 0) {
             if ($this->getUser()->hasFlash('flash_message')) {
                 $this->getUser()->setFlash('flash_message', $this->getUser()->getFlash('flash_message'));
             }
             $this->redirect($this->onglets->getUrl('recolte_add'));
-
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -70,7 +69,6 @@ class recolteActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->processFormDetail($this->form_detail, $request);
         }
-
         $this->setTemplate('recolte');
     }
 
@@ -142,7 +140,6 @@ class recolteActions extends EtapesActions {
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-
         $this->initOnglets($request);
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -172,7 +169,7 @@ class recolteActions extends EtapesActions {
 
         if ($request->hasParameter('force_appellation')) {
             $this->forward404Unless($this->declaration->recolte->getConfig()->exist($request->getParameter('force_appellation')));
-            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu', null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
+            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->add($request->getParameter('force_appellation')));
         }
 
@@ -187,8 +184,6 @@ class recolteActions extends EtapesActions {
 
         return $this->renderText(json_encode(array('action' => 'render',
                 'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
-
-
     }
 
     public function executeAjoutAcheteurAjax(sfWebRequest $request) {
@@ -209,7 +204,6 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
         $this->initPrecDR();
         
-        $dr = $this->getUser()->getDeclaration();
         $this->appellationlieu = $this->onglets->getLieu();
         if($this->onglets->getCurrentAppellation()->getKey() == 'appellation_GRDCRU'){
             $this->isGrandCru = true;
@@ -243,7 +237,7 @@ class recolteActions extends EtapesActions {
     	foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
     		if ($dr->recolte->exist($key_appellation)) {
     			$appellation = $dr->recolte->get($key_appellation);
-    			foreach ($appellation->getLieux() as $lieu) {
+    			foreach ($appellation->getDistinctLieux() as $lieu) {
     				if ($lieu->getConfig()->getRendementAppellation() == -1)
     				continue;
     				if ($lieu->getConfig()->hasRendementCouleur()) {
@@ -297,15 +291,21 @@ class recolteActions extends EtapesActions {
 
     protected function initOnglets(sfWebRequest $request) {
 
-        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
+
+        preg_match('/(?P<appellation>\w+)-?(?P<mention>\w*)-?(?P<lieu>\w*)/', $request->getParameter('appellation_mention_lieu', null), $appellation_mention_lieu);
         $appellation = null;
 
-        if (isset($appellation_lieu['appellation'])) {
-            $appellation = $appellation_lieu['appellation'];
+        if (isset($appellation_mention_lieu['appellation'])) {
+            $appellation = $appellation_mention_lieu['appellation'];
         }
+
+        if (isset($appellation_mention_lieu['mention'])) {
+            $mention = $appellation_mention_lieu['mention'];
+        }
+
         $lieu = null;
-        if (isset($appellation_lieu['lieu'])) {
-            $lieu = $appellation_lieu['lieu'];
+        if (isset($appellation_mention_lieu['lieu'])) {
+            $lieu = $appellation_mention_lieu['lieu'];
         }
         
         preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
@@ -324,13 +324,10 @@ class recolteActions extends EtapesActions {
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
-        }
+        }var_dump($mention);die;
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
-        $this->onglets->init($appellation, $lieu, $couleur, $cepage);
-        /*if (!$this->onglets || ($request->getParameter('appellation_lieu', null) == '' && $request->getParameter('couleur_cepage', null) == '') || !$this->onglets->init($appellation, $lieu, $cepage)) {
-            $this->redirect($this->onglets->getUrl('recolte', null, null, null, null));
-        }*/
+        $this->onglets->init($appellation, $mention, $lieu, $couleur, $cepage);
 
         /*** AjOUT APPELLATION ***/
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
@@ -338,11 +335,18 @@ class recolteActions extends EtapesActions {
         $this->url_ajout_lieu = null;
         if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null);
+            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu',null, null, null, null, null, null);
         }
     }
 
     protected function initDetails() {
+        try{
+            $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
+        }catch (Exception $e){
+            var_dump( $this->onglets->getCurrentKeyLieu());
+            echo "<br />".$e->getMessage();die;
+        }
+
         $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
         $this->nb_details_current = $this->details->count();
 

@@ -224,6 +224,15 @@ ul#onglets_majeurs.onglets_recolte li.ajouter a
     padding-left: 30px;
 }
 
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets_mentions
+{
+    left: 0;
+    position: absolute;
+    top: 10px;
+    width: 850px;
+    z-index: 100;
+}
+
 ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets
 {
     left: 0;

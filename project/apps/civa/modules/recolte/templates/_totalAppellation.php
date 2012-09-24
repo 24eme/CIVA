@@ -3,8 +3,12 @@
     <h2>Total 
     <?php if($onglets->getCurrentAppellation()->getConfig()->hasManyLieu()): ?>
         <?php echo $lieu->getConfig()->libelle ?>
+            <br />
+            <?php echo $onglets->getRawValue()->getCurrentMention()->getConfig()->libelle ?>
     <?php else: ?>
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
+            <br />
+        <?php echo $onglets->getRawValue()->getCurrentMention()->getConfig()->libelle ?>
     <?php endif; ?>
     </h2>
 

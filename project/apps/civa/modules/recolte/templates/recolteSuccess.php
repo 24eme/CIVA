@@ -60,7 +60,6 @@
                     <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
                         <?php endif; ?>
             </ul>
-
         </div>
 
         <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
@@ -111,7 +110,7 @@
     var_config_popup_ajout_motif = { ajax: true , auto_open: false};
 <?php if ($sf_user->hasFlash('open_popup_ajout_motif')): ?>
         var_config_popup_ajout_motif.auto_open = true;
-        var_config_popup_ajout_motif.auto_open_url = '<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null, null)->getRawValue(), array('detail_key' => $sf_user->getFlash('open_popup_ajout_motif')))) ?>';
+        var_config_popup_ajout_motif.auto_open_url = '<?php echo url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null, null, null)->getRawValue(), array('detail_key' => $sf_user->getFlash('open_popup_ajout_motif')))) ?>';
 <?php endif; ?>
 </script>
 
@@ -125,21 +124,21 @@ include_partial('popupAjoutOnglets', array('onglets' => $onglets,
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_acheteur',
     'title' => 'Ajouter un acheteur',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null)->getRawValue()),
+    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
     'name' => 'negoces',
     'cssclass' => 'vente_raisins'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_cave',
     'title' => 'Ajouter une cave',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null)->getRawValue()),
+    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
     'name' => 'cooperatives',
     'cssclass' => 'caves'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_mout',
     'title' => 'Ajouter un acheteur de mout',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null)->getRawValue()),
+    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
     'name' => 'mouts',
     'cssclass' => 'mouts'))
 ?>

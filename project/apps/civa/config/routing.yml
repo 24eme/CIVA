@@ -150,47 +150,47 @@ exploitation_autres:
 # *********** RECOLTE ***********
 
 recolte:
-  url:   /recolte/:appellation_lieu/:couleur_cepage
-  param: { module: recolte, action: recolte, appellation_lieu: null, couleur_cepage: null}
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage
+  param: { module: recolte, action: recolte, appellation_mention_lieu: null, mention: null, couleur_cepage: null}
   class: sfRouteAnchor
 
 recolte_update:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/update/:detail_key
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/update/:detail_key
   param: { module: recolte, action: update }
   class: sfRouteAnchor
 
 recolte_delete:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/delete/:detail_key
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/delete/:detail_key
   param: { module: recolte, action: delete }
   class: sfRouteAnchor
 
 recolte_add:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/add
   param: { module: recolte, action: add}
   class: sfRouteAnchor
 
 recolte_motif_non_recolte:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/:detail_key/motif_non_recolte
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/:detail_key/motif_non_recolte
   param: { module: recolte, action: motifNonRecolte }
   class: sfRouteAnchor
 
 recolte_add_appellation:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_appellation
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/add_appellation
   param: { module: recolte, action: ajoutAppellationAjax }
   class: sfRouteAnchor
 
 recolte_add_lieu:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_lieu
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/add_lieu
   param: { module: recolte, action: ajoutLieuAjax }
   class: sfRouteAnchor
 
 recolte_add_acheteur:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_acheteur
+  url:   /recolte/:appellation_mention_lieu/:couleur_cepage/add_acheteur
   param: { module: recolte, action: ajoutAcheteurAjax }
   class: sfRouteAnchor
 
 recolte_recapitulatif:
-  url:   /recapitulatif/:appellation_lieu
+  url:   /recapitulatif/:appellation_mention_lieu
   param: {module: recolte, action: recapitulatif }
   class: sfRouteAnchor
 
