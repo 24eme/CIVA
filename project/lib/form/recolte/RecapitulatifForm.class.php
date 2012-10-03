@@ -1,11 +1,10 @@
 <?php
 
-class RecapitulatifForm extends sfCouchdbFormDocumentJson {
+class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
 
     public function configure() {
 
         $lieu = $this->getObject();
-
     if($lieu->getTotalCaveParticuliere()){
         if( $lieu->dplc != 0 )
         {

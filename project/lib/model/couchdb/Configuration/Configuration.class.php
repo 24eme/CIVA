@@ -2,7 +2,7 @@
 
 class Configuration extends BaseConfiguration {
     public function getArrayAppellationsMout() {
-        $appellations = $this->getRecolte();
+        $appellations = $this->getRecolte()->certification->genre;
         $appellations_array_mouts = array();
         foreach ($appellations->filter('^appellation') as $appellation_key => $appellation) {
             if ($appellation->getMout() == 1) {
@@ -13,7 +13,7 @@ class Configuration extends BaseConfiguration {
     }
 
     public function getArrayAppellations() {
-        $appellations = $this->getRecolte();
+        $appellations = $this->getRecolte()->certification->genre;
         $appellations_array = array();
         foreach ($appellations->filter('^appellation') as $appellation_key => $appellation) {
             $appellations_array[$appellation_key] = $appellation;

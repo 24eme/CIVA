@@ -9,10 +9,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getMention() {
+
         return $this->getParent();
     }
 
     public function getAppellation() {
+
         return $this->getMention()->getAppellation();
     }
 
@@ -50,9 +52,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return (count($cepage_rebeche) == 1) ? $cepage_rebeche[0] : null;
     }
 
-    /*public function getNbCouleurs() {
+    public function getNbCouleurs() {
         return count($this->filter('^couleur'));
-    }*/
+    }
 
     public function getCepages() {
         throw new sfException("La liste des cépages est impossible à partir du lieu");
@@ -72,37 +74,19 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
     }
 
-    public function getTotalVolume() {
-        $field = 'total_volume';
-        if ($this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
-    }
+    public function getVolumeRevendiqueTotal() {
 
-    public function getTotalSuperficie() {
-        $field = 'total_superficie';
-        if ($this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumCouleurFields'), array($field));
+        return parent::getDataByFieldAndMethod("volume_revendique_total", array($this,"getSumNoeudFields"), true, array('volume_revendique'));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
-        $field = 'volume_revendique';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
+
+        return parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul);
     }
 
     public function getVolumeRevendiqueRendement() {
 
         return $this->getVolumeRevendiqueAppellation();
-    }
-
-    public function getVolumeRevendiqueTotal() {
-        return $this->store('volume_revendique_total', array($this, 'getSumCouleurFields'), array('volume_revendique'));
     }
 
     public function getVolumeRevendiqueAppellation() {
@@ -124,16 +108,15 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getDplc($force_calcul = false) {
-        $field = 'dplc';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getDplcFinal'));
+
+        return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
     }
 
     public function getDplcTotal() {
-        return $this->store('dplc_total', array($this, 'getSumCouleurFields'), array('dplc'));
+
+        return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
     }
+
 
     public function getDplcRendement() {
 
@@ -338,6 +321,17 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return ($cpt);
     }
 
+    public function isInManyMention(){
+
+        $arr_lieux = array();
+        foreach( $this->getAppellation()->getMentions() as $mention){
+            if($mention->filter($this)){
+                $arr_lieux[] = $this;
+            }
+        }
+        return (count($arr_lieux) > 1) ? true : false;
+    }
+
     protected function getVolumeRevendiqueFinal() {
         $volume_revendique_total = $this->getVolumeRevendiqueTotal();
         $volume_revendique_final = $volume_revendique_total;
@@ -360,18 +354,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             }
         }
         return $dplc_final;
-    }
-
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumCouleurFields($field) {
-        $sum = 0;
-        foreach ($this->getCouleurs() as $k => $couleur) {
-            $sum += $couleur->get($field);
-        }
-        return $sum;
     }
 
     protected function update($params = array()) {
@@ -419,14 +401,4 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
     }
 
-    public function isInManyMention(){
-
-        $arr_lieux = array();
-        foreach( $this->getAppellation()->getMentions() as $mention){
-            if($mention->filter($this)){
-                $arr_lieux[] = $this;
-            }
-        }
-        return (count($arr_lieux) > 1) ? true : false;
-    }
 }

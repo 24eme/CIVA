@@ -2,6 +2,22 @@
 
 abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
 
+    abstract public function getNoeuds();
+
+    public function getNoeudsSuivant() {
+        if( $this->hasManyNoeuds())
+            throw new sfException("getNoeudsSuivant() ne peut être appelé d'un noeud qui contient plusieurs noeuds...");
+
+        return $this->getNoeuds()->getFirst()->getNoeuds();
+    }
+
+    public function hasManyNoeuds(){
+        if(count($this->getNoeuds()) > 1){
+            return true;
+        }
+        return false;
+    }
+
   public function getRendement() {
       return $this->store('rendement', array($this, 'getInternalRendement'));
   }
@@ -10,6 +26,7 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
        return -1;
     }
+
     $r = $this->_get('rendement');
     if ($r) {
       return $r;
@@ -88,4 +105,5 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     }
     return true;
   }
+
 }

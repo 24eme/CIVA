@@ -3,6 +3,7 @@
 class DRRecolteMention extends BaseDRRecolteMention {
 
     public function getAppellation(){
+
         return $this->getParent();
     }
 
@@ -18,16 +19,13 @@ class DRRecolteMention extends BaseDRRecolteMention {
     }
 
     public function getLieux(){
+
         return $this->filter('^lieu');
     }
 
-    public function getTotalUsagesIndustriels($force_calcul = false){
+    public function getTotalCaveParticuliere() {
 
-        $field = 'usages_industriels_calcule';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumLieuFields'), array($field));
+        return parent::getDataByFieldAndMethod("total_cave_particuliere", array($this,"getSumNoeudWithMethod"), true, array('getTotalCaveParticuliere'));
     }
 
     public function hasAllLieu() {
@@ -36,40 +34,18 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return (!($nb_lieu < $nb_lieu_config));
     }
 
-    protected function getSumLieuFields($field) {
-        $sum = 0;
-        foreach ($this->getLieux() as $key => $lieu) {
-            $sum += $lieu->get($field);
-        }
-        return $sum;
+    public function getTotalUsagesIndustriels($force_calcul = false){
+
+        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array('usages_industriels_calcule'));
     }
 
-    protected function getSumLieuWithMethod($method) {
-        $sum = 0;
-        foreach ($this->getLieux() as $key => $lieu) {
-            $sum += $lieu->$method();
-        }
-        return $sum;
-    }
-
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-
-    public function getTotalCaveParticuliere() {
-        return $this->store('total_cave_particuliere', array($this, 'getSumLieuWithMethod'), array('getTotalCaveParticuliere'));
-    }
-
-
-    /****/
     protected function update($params = array()) {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
-            $this->volume_revendique = $this->getVolumeRevendique(true);
-            $this->dplc = $this->getDplc(true);
+            $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
+
         }
     }
 }

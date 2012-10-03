@@ -68,9 +68,9 @@ class declarationComponents extends sfComponents {
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
         $cvi = array();
-        foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
-          if ($dr->recolte->exist($appellation_key)) {
-              $appellation = $dr->recolte->get($appellation_key);
+        foreach ($dr->recolte->certification->genre->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($dr->recolte->certification->genre->exist($appellation_key)) {
+              $appellation = $dr->recolte->certification->genre->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
                 continue;
               $this->appellations[] = $appellation->getAppellation();
@@ -93,9 +93,9 @@ class declarationComponents extends sfComponents {
         $this->jeunes_vignes = $dr->jeunes_vignes;
 	
 	$this->vintable = array();
-	if ($dr->recolte->exist('appellation_VINTABLE')) {
-	  $this->vintable['superficie'] = $dr->recolte->appellation_VINTABLE->getTotalSuperficie();
-	  $this->vintable['volume'] = $dr->recolte->appellation_VINTABLE->getTotalVolume();
+	if ($dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
+	  $this->vintable['superficie'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
+	  $this->vintable['volume'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
 	}
         $this->annee = $annee;
     }

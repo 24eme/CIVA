@@ -3,61 +3,32 @@
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getNoeuds() {
-
         return $this->getMentions();
     }
 
-    public function getLieux() {
+    public function getNoeudAppellations() {
 
-        if( $this->getConfig()->hasManyMention())
-            throw new sfException("getLieux() ne peut être appelé d'une appellation qui a plusieurs mentions...");
-
-        return $this->getMention()->filter('^lieu');
+        return $this->getNoeudSuivant();
     }
 
     public function getMentions(){
         return $this->filter('^mention');
     }
 
-/*
-    public function getMention(){
-        if ($this->getConfig()->hasManyMention())
-            throw new sfException("getMention ne peut être appelé d'une appellation qui a plusieurs mentions...");
-
-        return $this->_get('mention');
-    }
-*/
-    public function getTotalVolume($force_calcul = false) {
-        $field = 'total_volume';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
-    }
-
-    public function getTotalSuperficie($force_calcul = false) {
-        $field = 'total_superficie';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
+    public function getLieux() {
+        return $this->getNoeudsSuivant();
     }
 
     public function getVolumeRevendique($force_calcul = false) {
-        $field = 'volume_revendique';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
+
+        return parent::getDataByFieldAndMethod("volume_revendique", array($this,"getSumNoeudFields") , $force_calcul);
+
     }
 
-
     public function getDplc($force_calcul = false) {
-        $field = 'dplc';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
+
+        return parent::getDataByFieldAndMethod("dplc", array($this,"getSumNoeudFields") , $force_calcul);
+
     }
 
     public function hasAllDistinctLieu() {
@@ -67,9 +38,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getTotalCaveParticuliere() {
-        return $this->store('total_cave_particuliere', array($this, 'getSumMentionWithMethod'), array('getTotalCaveParticuliere'));
+
+        return parent::getDataByFieldAndMethod("total_cave_particuliere", array($this,"getSumNoeudWithMethod") , true, array('getTotalCaveParticuliere'));
+
     }
-    /*** ???? ***/
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
@@ -87,7 +60,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->_storage[$key];
     }
 
-    /*** ???? ***/
     public function getVolumeAcheteur($cvi, $type) {
         $volume = 0;
         $acheteurs = $this->getVolumeAcheteurs($type);
@@ -97,7 +69,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $volume;
     }
 
-    /*** ???? ***/
     public function removeVolumes() {
         $this->total_superficie = null;
         $this->volume_revendique = null;
@@ -141,42 +112,12 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $lieu_choices;
     }
 
-    public function getTotalUsagesIndustriels($force_calcul = false){
-
-        $field = 'usages_industriels_calcule';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumMentionFields'), array($field));
-    }
-
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumMentionFields($field) {
-        $sum = 0;
-        foreach ($this->getMentions() as $key => $mention) {
-            $sum += $mention->get($field);
-        }
-        return $sum;
-    }
-
-    protected function getSumMentionWithMethod($method) {
-        $sum = 0;
-        foreach ($this->getMentions() as $key => $mention) {
-            $sum += $mention->$method();
-        }
-        return $sum;
-    }
-
     protected function update($params = array()) {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
-            /*$this->volume_revendique = $this->getVolumeRevendique(true);
-            $this->total_superficie = $this->getTotalSuperficie(true);*/
+            $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
         }
     }
 

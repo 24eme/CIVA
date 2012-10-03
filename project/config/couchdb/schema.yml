@@ -68,162 +68,186 @@ DR:
         class: DRRecolte
         definition:
           fields:
-            # ------ Appellation ------
-            '*':
+            'certification':
+              #------ Certification ------
               type: collection
-              class: DRRecolteAppellation
+              class: DRRecolteCertification
               definition:
                 fields:
-                  appellation: {}
                   total_volume: {type: float}
                   total_superficie: {type: float}
+                  total_usages_industriels: {type:float }
                   volume_revendique: {type:float }
                   dplc: {type:float }
                   usages_industriels_saisi: {type:float }
-                  usages_industriels_calcule: {type:float }
-                  # ------- MENTION ----------
-                  '*':
-                    type : collection
-                    class: DRRecolteMention
+                  'genre':
+                  #------ Genre ------
+                    type: collection
+                    class: DRRecolteGenre
                     definition:
                       fields:
-                        libelle: {}
-                        total_volume: {type: float }
-                        total_superficie: {type:float }
+                        total_volume: {type: float}
+                        total_superficie: {type: float}
+                        total_usages_industriels: {type:float }
                         volume_revendique: {type:float }
                         dplc: {type:float }
                         usages_industriels_saisi: {type:float }
-                        usages_industriels_calcule: {type:float }
-                        # ------- LIEU ----------
                         '*':
+                          # ------ Appellation ------
                           type: collection
-                          class: DRRecolteLieu
+                          class: DRRecolteAppellation
                           definition:
                             fields:
-                              total_volume: {type:float}
-                              total_superficie: {type:float}
-                              volume_revendique: {type: float}
-                              dplc: {type: float}
+                              appellation: {}
+                              total_volume: {type: float}
+                              total_superficie: {type: float}
+                              total_usages_industriels: {type:float }
+                              volume_revendique: {type:float }
+                              dplc: {type:float }
                               usages_industriels_saisi: {type:float }
-                              usages_industriels_calcule: {type:float }
-                              acheteurs:
-                                 type: collection
-                                 definition:
-                                   fields:
-                                     negoces:
-                                       type: collection
-                                       definition:
-                                         fields:
-                                           '*':
-                                             type: collection
-                                             class: DRRecolteLieuAcheteur
-                                             definition:
-                                               fields:
-                                                 type_acheteur: {}
-                                                 nom: {}
-                                                 commune: {}
-                                                 superficie: {type:float}
-                                                 dontdplc: {type:float}
-                                     cooperatives:
-                                       type: collection
-                                       definition:
-                                         fields:
-                                           '*':
-                                             type: collection
-                                             class: DRRecolteLieuAcheteur
-                                             definition:
-                                               fields:
-                                                 type_acheteur: {}
-                                                 nom: {}
-                                                 commune: {}
-                                                 superficie: {type:float}
-                                                 dontdplc: {type:float}
-                                     mouts:
-                                       type: collection
-                                       definition:
-                                         fields:
-                                           '*':
-                                             type: collection
-                                             class: DRRecolteLieuAcheteur
-                                             definition:
-                                               fields:
-                                                 type_acheteur: {}
-                                                 nom: {}
-                                                 commune: {}
-                                                 superficie: {type:float}
-                                                 dontdplc: {type:float}
-                              # ------ Couleur ------
-                              '*':
-                                type: collection
-                                class: DRRecolteCouleur
+                              # ------- MENTION ----------
+                              'mention':
+                                type : collection
+                                class: DRRecolteMention
                                 definition:
                                   fields:
-                                    total_volume: {type:float}
-                                    total_superficie: {type:float}
-                                    volume_revendique: {type: float}
-                                    dplc: {type: float}
-                                  # ------ Cépage ------
+                                    libelle: {}
+                                    total_volume: {type: float }
+                                    total_superficie: {type:float }
+                                    total_usages_industriels: {type:float }
+                                    volume_revendique: {type:float }
+                                    dplc: {type:float }
+                                    usages_industriels_saisi: {type:float }
+                                    # ------- LIEU ----------
                                     '*':
                                       type: collection
-                                      class: DRRecolteCepage
+                                      class: DRRecolteLieu
                                       definition:
                                         fields:
-                                          total_volume: {type: float }
-                                          total_superficie: {type:float }
-                                          volume_revendique: {type:float }
-                                          dplc: {type:float }
-                                          detail:
-                                            type: array_collection
+                                          total_volume: {type:float}
+                                          total_superficie: {type:float}
+                                          volume_revendique: {type: float}
+                                          dplc: {type: float}
+                                          usages_industriels_saisi: {type:float }
+                                          usages_industriels_calcule: {type:float }
+                                          acheteurs:
+                                             type: collection
+                                             definition:
+                                               fields:
+                                                 negoces:
+                                                   type: collection
+                                                   definition:
+                                                     fields:
+                                                       '*':
+                                                         type: collection
+                                                         class: DRRecolteLieuAcheteur
+                                                         definition:
+                                                           fields:
+                                                             type_acheteur: {}
+                                                             nom: {}
+                                                             commune: {}
+                                                             superficie: {type:float}
+                                                             dontdplc: {type:float}
+                                                 cooperatives:
+                                                   type: collection
+                                                   definition:
+                                                     fields:
+                                                       '*':
+                                                         type: collection
+                                                         class: DRRecolteLieuAcheteur
+                                                         definition:
+                                                           fields:
+                                                             type_acheteur: {}
+                                                             nom: {}
+                                                             commune: {}
+                                                             superficie: {type:float}
+                                                             dontdplc: {type:float}
+                                                 mouts:
+                                                   type: collection
+                                                   definition:
+                                                     fields:
+                                                       '*':
+                                                         type: collection
+                                                         class: DRRecolteLieuAcheteur
+                                                         definition:
+                                                           fields:
+                                                             type_acheteur: {}
+                                                             nom: {}
+                                                             commune: {}
+                                                             superficie: {type:float}
+                                                             dontdplc: {type:float}
+                                          # ------ Couleur ------
+                                          '*':
+                                            type: collection
+                                            class: DRRecolteCouleur
                                             definition:
                                               fields:
+                                                total_volume: {type:float}
+                                                total_superficie: {type:float}
+                                                volume_revendique: {type: float}
+                                                dplc: {type: float}
+                                              # ------ Cépage ------
                                                 '*':
                                                   type: collection
-                                                  class: DRRecolteCepageDetail
+                                                  class: DRRecolteCepage
                                                   definition:
                                                     fields:
-                                                      appellation: {  }
-                                                      cepage: {  }
-                                                      lieu: {  }
-                                                      denomination: {  }
-                                                      vtsgn: {  }
-                                                      code_lieu: {  }
-                                                      volume: { type: float }
-                                                      superficie: { type: float }
-                                                      motif_non_recolte: { required: false }
-                                                      negoces:
+                                                      total_volume: {type: float }
+                                                      total_superficie: {type:float }
+                                                      volume_revendique: {type:float }
+                                                      dplc: {type:float }
+                                                      detail:
                                                         type: array_collection
                                                         definition:
                                                           fields:
                                                             '*':
                                                               type: collection
+                                                              class: DRRecolteCepageDetail
                                                               definition:
                                                                 fields:
-                                                                  cvi: {  }
-                                                                  quantite_vendue: { type: float }
-                                                      cooperatives:
-                                                        type: array_collection
-                                                        definition:
-                                                          fields:
-                                                            '*':
-                                                              type: collection
-                                                              definition:
-                                                                fields:
-                                                                  cvi: {  }
-                                                                  quantite_vendue: { type: float }
-                                                      mouts:
-                                                        type: array_collection
-                                                        required: false
-                                                        definition:
-                                                          fields:
-                                                            '*':
-                                                              type: collection
-                                                              definition:
-                                                                fields:
-                                                                  cvi: {  }
-                                                                  quantite_vendue: { type: float }
-                                                      cave_particuliere: { type: float }
-                                                      volume_revendique: { type: float }
-                                                      volume_dplc: { type: float }
+                                                                  appellation: {  }
+                                                                  cepage: {  }
+                                                                  lieu: {  }
+                                                                  denomination: {  }
+                                                                  vtsgn: {  }
+                                                                  code_lieu: {  }
+                                                                  volume: { type: float }
+                                                                  superficie: { type: float }
+                                                                  motif_non_recolte: { required: false }
+                                                                  negoces:
+                                                                    type: array_collection
+                                                                    definition:
+                                                                      fields:
+                                                                        '*':
+                                                                          type: collection
+                                                                          definition:
+                                                                            fields:
+                                                                              cvi: {  }
+                                                                              quantite_vendue: { type: float }
+                                                                  cooperatives:
+                                                                    type: array_collection
+                                                                    definition:
+                                                                      fields:
+                                                                        '*':
+                                                                          type: collection
+                                                                          definition:
+                                                                            fields:
+                                                                              cvi: {  }
+                                                                              quantite_vendue: { type: float }
+                                                                  mouts:
+                                                                    type: array_collection
+                                                                    required: false
+                                                                    definition:
+                                                                      fields:
+                                                                        '*':
+                                                                          type: collection
+                                                                          definition:
+                                                                            fields:
+                                                                              cvi: {  }
+                                                                              quantite_vendue: { type: float }
+                                                                  cave_particuliere: { type: float }
+                                                                  volume_revendique: { type: float }
+                                                                  volume_dplc: { type: float }
 
 Acheteur:
   inheritance: _Tiers
@@ -437,50 +461,32 @@ Configuration:
                   qualite_sgn: {required: false}
                   qualite_aoc: {required: false}
                   code_cepage: {required: false}
-            '*':
-            # ------- APPELLATION ---------
+            'certification':
+              # ------- Certification ---------
               type: collection
-              class: ConfigurationAppellation
+              class: ConfigurationCertification
               definition:
                 fields:
-                  appellation: { }
-                  libelle: {  }
-                  rendement : { type: float }
-                  rendement_appellation: { type: float }
-                  mout: {type: integer}
-                  no_total_cepage: {type: integer, required: false}
-                  detail_lieu_editable: {type: integer, required: false}
-                  exclude_total: {type: integer, required: false}
-                  douane :
+                  'genre':
+                  # ------- Genre ---------
                     type: collection
-                    class: ConfigurationDouane
+                    class: ConfigurationGenre
                     definition:
                       fields:
-                        type_aoc: {required: false}
-                        couleur: {required: false}
-                        appellation_lieu: {required: false}
-                        qualite: {required: false}
-                        qualite_aoc: {required: false}
-                        code_cepage: {required: false}
-                  # ------- MENTION ----------
-                  '*':
-                    type : collection
-                    class: ConfigurationMention
-                    definition:
-                      fields:
-                        libelle: {  }
-                        rendement: { type: float  }
-                        rendement_mention: { type: float  }
                         '*':
-                        # ------------ LIEU --------------
+                        # ------- APPELLATION ---------
                           type: collection
-                          class: ConfigurationLieu
+                          class: ConfigurationAppellation
                           definition:
                             fields:
-                              rendement: {type: float}
-                              rendement_mention: { type: float  }
+                              appellation: { }
+                              libelle: {  }
+                              rendement : { type: float }
                               rendement_appellation: { type: float }
-                              libelle: { }
+                              mout: {type: integer}
+                              no_total_cepage: {type: integer, required: false}
+                              detail_lieu_editable: {type: integer, required: false}
+                              exclude_total: {type: integer, required: false}
                               douane :
                                 type: collection
                                 class: ConfigurationDouane
@@ -490,33 +496,27 @@ Configuration:
                                     couleur: {required: false}
                                     appellation_lieu: {required: false}
                                     qualite: {required: false}
+                                    qualite_aoc: {required: false}
                                     code_cepage: {required: false}
-                              # ------------ COULEUR --------------
-                              '*' :
-                                type: collection
-                                class: ConfigurationCouleur
+                              # ------- MENTION ----------
+                              '*':
+                                type : collection
+                                class: ConfigurationMention
                                 definition:
                                   fields:
-                                    rendement_couleur: { type: float }
-                                    rendement: { type: float }
-                                    libelle: { }
-                                    douane :
-                                      type: collection
-                                      class: ConfigurationDouane
-                                      definition:
-                                        fields:
-                                          type_aoc: {required: false}
-                                          couleur: {required: false}
-                                          appellation_lieu: {required: false}
-                                          qualite: {required: false}
-                                          code_cepage: {required: false}
+                                    libelle: {  }
+                                    rendement: { type: float  }
+                                    rendement_mention: { type: float  }
                                     '*':
-                                    # ------------ CEPAGE -------------
+                                    # ------------ LIEU --------------
                                       type: collection
-                                      class: ConfigurationCepage
+                                      class: ConfigurationLieu
                                       definition:
                                         fields:
-                                          no_vtsgn: {required: false}
+                                          rendement: {type: float}
+                                          rendement_mention: { type: float  }
+                                          rendement_appellation: { type: float }
+                                          libelle: { }
                                           douane :
                                             type: collection
                                             class: ConfigurationDouane
@@ -527,16 +527,52 @@ Configuration:
                                                 appellation_lieu: {required: false}
                                                 qualite: {required: false}
                                                 code_cepage: {required: false}
-                                          libelle: {  }
-                                          rendement: { type: float }
-                                          min_quantite: {type: float, required: false}
-                                          max_quantite: {type: float, required: false}
-                                          exclude_total: {type: integer, required: false}
-                                          superficie_optionnelle: { type: integer, required: false }
-                                          no_negociant : { type: integer, required: false }
-                                          no_cooperative : { type: integer, required: false }
-                                          no_mout : { type: integer, required: false }
-                                          no_motif_non_recolte : { type: integer, required: false }
+                                          # ------------ COULEUR --------------
+                                          '*' :
+                                            type: collection
+                                            class: ConfigurationCouleur
+                                            definition:
+                                              fields:
+                                                rendement_couleur: { type: float }
+                                                rendement: { type: float }
+                                                libelle: { }
+                                                douane :
+                                                  type: collection
+                                                  class: ConfigurationDouane
+                                                  definition:
+                                                    fields:
+                                                      type_aoc: {required: false}
+                                                      couleur: {required: false}
+                                                      appellation_lieu: {required: false}
+                                                      qualite: {required: false}
+                                                      code_cepage: {required: false}
+                                                '*':
+                                                # ------------ CEPAGE -------------
+                                                  type: collection
+                                                  class: ConfigurationCepage
+                                                  definition:
+                                                    fields:
+                                                      no_vtsgn: {required: false}
+                                                      douane :
+                                                        type: collection
+                                                        class: ConfigurationDouane
+                                                        definition:
+                                                          fields:
+                                                            type_aoc: {required: false}
+                                                            couleur: {required: false}
+                                                            appellation_lieu: {required: false}
+                                                            qualite: {required: false}
+                                                            code_cepage: {required: false}
+                                                      libelle: {  }
+                                                      rendement: { type: float }
+                                                      min_quantite: {type: float, required: false}
+                                                      max_quantite: {type: float, required: false}
+                                                      exclude_total: {type: integer, required: false}
+                                                      superficie_optionnelle: { type: integer, required: false }
+                                                      no_negociant : { type: integer, required: false }
+                                                      no_cooperative : { type: integer, required: false }
+                                                      no_mout : { type: integer, required: false }
+                                                      no_motif_non_recolte : { type: integer, required: false }
 
 CSV:
   definition:

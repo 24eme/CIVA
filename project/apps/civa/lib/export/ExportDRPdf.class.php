@@ -63,9 +63,9 @@ class ExportDRPdf {
     protected function create($dr, $tiers) {
         $this->nb_pages = 0;
         if (!$this->isCached()) {
-          foreach ($dr->recolte->getConfigAppellations() as $appellation_config) {
-            if ($dr->recolte->exist($appellation_config->getKey())) {
-                $appellation = $dr->recolte->get($appellation_config->getKey());
+          foreach ($dr->recolte->certification->genre->getConfigAppellations() as $appellation_config) {
+            if ($dr->recolte->certification->genre->exist($appellation_config->getKey())) {
+                $appellation = $dr->recolte->certification->genre->get($appellation_config->getKey());
                 foreach ($appellation->getConfig()->filter('^lieu') as $lieu) {
                   if (!$appellation->exist($lieu->getKey()))
                     continue;
@@ -131,9 +131,9 @@ class ExportDRPdf {
         $volume_negoces = array();
         $volume_cooperatives = array();
         $cvi = array();
-        foreach ($dr->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
-          if ($dr->recolte->exist($appellation_key)) {
-              $appellation = $dr->recolte->get($appellation_key);
+        foreach ($dr->certification->genre->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($dr->recolte->certification->genre->exist($appellation_key)) {
+              $appellation = $dr->recolte->certification->genre->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
                 continue;
               $appellations[] = $appellation->getAppellation();

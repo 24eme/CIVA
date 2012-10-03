@@ -5,6 +5,11 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
       return $this->filter('^cepage');
     }
 
+    public function getNoeuds() {
+
+        return $this->getCepages();
+    }
+
     public function hasRendement() {
       return ($this->hasRendementCouleur());
     }

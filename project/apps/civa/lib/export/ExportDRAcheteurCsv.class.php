@@ -172,7 +172,7 @@ class ExportDRAcheteurCsv extends ExportCsv {
                 if ($this->_debug) {
                     echo "\n\n ------------ \n" . $dr->get('_id') . "\n ----------- \n";
                 }
-                foreach ($dr->recolte->appellations as $appellation) {
+                foreach ($dr->recolte->certification->genre->appellations as $appellation) {
                     foreach ($appellation->getLieux() as $lieu) {
                         foreach($lieu->getCouleurs() as $couleur) {
                             foreach ($couleur->getCepages() as $cepage) {

@@ -6,6 +6,11 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $this->filter('^couleur');
     }
 
+    public function getNoeuds() {
+
+        return $this->getCouleurs();
+    }
+
     public function getCouleur() {
         if ($this->getNbCouleurs() > 1) {
             throw new sfException('Pas getCouleur si plusieurs couleurs');
@@ -14,6 +19,7 @@ class ConfigurationLieu extends BaseConfigurationLieu {
     }
 
     public function getNbCouleurs() {
+
         return count($this->getCouleurs());
     }
 

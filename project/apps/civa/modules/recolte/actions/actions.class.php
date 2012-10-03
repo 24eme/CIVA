@@ -15,7 +15,7 @@ class recolteActions extends EtapesActions {
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getUser()->getDeclaration();
         $this->help_popup_action = "help_popup_DR";
-        if (!$this->declaration->recolte->hasOneOrMoreAppellation()) {
+        if (!$this->declaration->recolte->certification->genre->hasOneOrMoreAppellation()) {
             $this->redirectToNextEtapes();
         }
     }
@@ -51,11 +51,10 @@ class recolteActions extends EtapesActions {
 
         if( $this->onglets->getCurrentLieu()->dplc != 0)
         {
-           $appellation = $this->declaration->recolte->get($this->onglets->getCurrentAppellation()->getKey());
-           $lieu = $appellation->get($this->onglets->getCurrentLieu()->getKey());
+           $appellation = $this->declaration->recolte->certification->genre->get($this->onglets->getCurrentAppellation()->getKey());
+           $lieu = $appellation->getLieux()->get($this->onglets->getCurrentLieu()->getKey());
            $lieu->set("usages_industriels_saisi", 0);
            $this->declaration->save();
-
         }
 
         $this->detail_action_mode = 'update';
@@ -168,9 +167,9 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
 
         if ($request->hasParameter('force_appellation')) {
-            $this->forward404Unless($this->declaration->recolte->getConfig()->exist($request->getParameter('force_appellation')));
+            $this->forward404Unless($this->declaration->recolte->certification->genre->getConfig()->exist($request->getParameter('force_appellation')));
             $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->add($request->getParameter('force_appellation')));
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->certification->genre->add($request->getParameter('force_appellation')));
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -224,7 +223,6 @@ class recolteActions extends EtapesActions {
                 return $this->redirect($this->onglets->getNextUrl());
             }
         }
-
     }
     
     public function executeRendementsMaxAjax(sfWebRequest $request) {
@@ -234,9 +232,9 @@ class recolteActions extends EtapesActions {
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
-    	foreach ($dr->recolte->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
-    		if ($dr->recolte->exist($key_appellation)) {
-    			$appellation = $dr->recolte->get($key_appellation);
+    	foreach ($dr->recolte->certification->genre->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
+    		if ($dr->recolte->certification->genre->exist($key_appellation)) {
+    			$appellation = $dr->recolte->certification->genre->get($key_appellation);
     			foreach ($appellation->getDistinctLieux() as $lieu) {
     				if ($lieu->getConfig()->getRendementAppellation() == -1)
     				continue;
@@ -292,20 +290,16 @@ class recolteActions extends EtapesActions {
     protected function initOnglets(sfWebRequest $request) {
 
 
-        preg_match('/(?P<appellation>\w+)-?(?P<mention>\w*)-?(?P<lieu>\w*)/', $request->getParameter('appellation_mention_lieu', null), $appellation_mention_lieu);
+        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
         $appellation = null;
 
-        if (isset($appellation_mention_lieu['appellation'])) {
-            $appellation = $appellation_mention_lieu['appellation'];
-        }
-
-        if (isset($appellation_mention_lieu['mention'])) {
-            $mention = $appellation_mention_lieu['mention'];
+        if (isset($appellation_lieu['appellation'])) {
+            $appellation = $appellation_lieu['appellation'];
         }
 
         $lieu = null;
-        if (isset($appellation_mention_lieu['lieu'])) {
-            $lieu = $appellation_mention_lieu['lieu'];
+        if (isset($appellation_lieu['lieu'])) {
+            $lieu = $appellation_lieu['lieu'];
         }
         
         preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
@@ -324,10 +318,10 @@ class recolteActions extends EtapesActions {
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
             $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
-        }var_dump($mention);die;
+        }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
-        $this->onglets->init($appellation, $mention, $lieu, $couleur, $cepage);
+        $this->onglets->init($appellation, $lieu, $couleur, $cepage);
 
         /*** AjOUT APPELLATION ***/
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
@@ -335,18 +329,12 @@ class recolteActions extends EtapesActions {
         $this->url_ajout_lieu = null;
         if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu',null, null, null, null, null, null);
+            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null);
         }
     }
 
     protected function initDetails() {
-        try{
-            $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
-        }catch (Exception $e){
-            var_dump( $this->onglets->getCurrentKeyLieu());
-            echo "<br />".$e->getMessage();die;
-        }
-
+        $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
         $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
         $this->nb_details_current = $this->details->count();
 

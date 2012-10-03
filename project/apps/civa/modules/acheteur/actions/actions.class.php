@@ -22,8 +22,6 @@ class acheteurActions extends EtapesActions {
         $this->help_popup_action = "help_popup_exploitation_acheteur";
 
         $this->appellations = ExploitationAcheteursForm::getListeAppellations();
-
-
         $this->acheteurs_negociant_using = $declaration->acheteurs->getArrayNegoces();
         $this->acheteurs_cave_using = $declaration->acheteurs->getArrayCooperatives();
         $this->acheteurs_mout_using = $declaration->acheteurs->getArrayMouts();
@@ -87,11 +85,11 @@ class acheteurActions extends EtapesActions {
         $this->appellations = array();
         $this->forms = array();
 
-        foreach ($this->getUser()->getDeclaration()->recolte->getAppellations() as $appellation) {
+        foreach ($this->getUser()->getDeclaration()->recolte->certification->genre->getAppellations() as $appellation) {
+
             if ($appellation->getConfig()->hasManyLieu()) {
                 $this->appellations[$appellation->getKey()] = $appellation;
                 $lieux = array();
-
                 foreach ($appellation->getDistinctLieux() as $key => $lieu) {
                     $lieux[$key] = $lieu->getLibelle();
                }
@@ -141,8 +139,8 @@ class acheteurActions extends EtapesActions {
     public function executeExploitationLieuDelete(sfWebRequest $request) {
         $declaration = $this->getUser()->getDeclaration();
         $appellation_key = $request->getParameter('appellation');
-        $this->forward404Unless($declaration->recolte->exist('appellation_'.$appellation_key));
-        $appellation = $declaration->recolte->get('appellation_'.$appellation_key);
+        $this->forward404Unless($declaration->recolte->certification->genre->exist('appellation_'.$appellation_key));
+        $appellation = $declaration->recolte->certification->genre->get('appellation_'.$appellation_key);
         $this->forward404Unless($appellation->getConfig()->hasManyLieu());
 
         foreach($appellation->getMentions() as $mention){

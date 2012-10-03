@@ -1,5 +1,5 @@
 <div class="col_recolte col_active">
-    <form id="form_detail" action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post" onsubmit="return valider_can_submit();">
+    <form id=" " action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post" onsubmit="return valider_can_submit();">
         <?php echo $form->renderHiddenFields(); ?>
         <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 
@@ -14,6 +14,12 @@
             <p class="denomination <?php echo ($form['denomination']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
                     <?php echo $form['denomination']->render() ?>
+                <?php endif; ?>
+            </p>
+
+            <p class="mention <?php echo ($form['vtsgn']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
+                <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
+                    <?php echo $form['vtsgn']->render() ?>
                 <?php endif; ?>
             </p>
 

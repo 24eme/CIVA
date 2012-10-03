@@ -2,23 +2,23 @@
 
 class ConfigurationAppellation extends BaseConfigurationAppellation {
 
-
-
     public function getMentions() {
         return $this->filter('^mention');
     }
 
     public function getLieux() {
-        return $this->filter('^lieu');
+
+        return $this->getNoeudsSuivant();
+    }
+
+    public function getNoeuds() {
+
+        return $this->getMentions();
     }
 
     public function hasManyLieu() {
-        foreach( $this->getMentions() as $key => $mention) {
-            if( $mention->hasManyLieu()) {
-                return true;
-            }
-        }
-        return false;
+
+        return $this->getNoeudsSuivant()->hasManyNoeuds();
     }
 
     public function hasLieuEditable() {

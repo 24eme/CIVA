@@ -57,8 +57,6 @@ class EtapesActions extends sfActions {
         if ($new_etape = $this->_etapes_config->needToChangeEtape()) {
         	$this->getUser()->addEtapeDeclaration($new_etape);
         }
-        
-        //echo $this->_etapes_config->nextUrl();
         $this->redirect($this->_etapes_config->nextUrl());
     }
 

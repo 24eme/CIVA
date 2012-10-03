@@ -3,9 +3,13 @@
 class ConfigurationMention extends BaseConfigurationMention {
 
     public function hasManyLieu() {
-            if( count($this->filter('^lieu')) > 1 )
-                return true;
-        return false;
+
+        return $this->hasManyNoeuds();
+    }
+
+    public function getNoeuds() {
+
+        return $this->getLieux();
     }
 
     public function getLieux(){

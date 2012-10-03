@@ -90,58 +90,55 @@
 												</tr>
 											</thead>
 											<tbody>
-                                                                                            <?php foreach($appellationlieu->acheteurs as $type => $acheteurs_type) : ?>
-                                                                                                <?php foreach($acheteurs_type as $cvi => $info): ?>
-                                                                                                    <tr>
-                                                                                                            <td class="nom">
-                                                                                                                <?php echo $info->getNom();?>
-                                                                                                                <?php if ($type == 'mouts'): ?>
-                                                                                                                <br />
-                                                                                                                <small>(Acheteur de mouts)</small>
-                                                                                                                <?php endif; ?>
-                                                                                                            </td>
-                                                                                                            <td class="cvi alt"><?php echo $cvi; ?></td>
-                                                                                                            <td class="commune"><?php echo $info->getCommune(); ?></td>
-                                                                                                            <?php if($appellationlieu->getConfig()->hasRendement()): ?>
-                                                                                                                <td class="superficie alt <?php echo ($form[$type.'_cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
-                                                                                                            <?php else: ?>
-                                                                                                                <td class="superficie"></td>
-                                                                                                            <?php endif; ?>
-                                                                                                            <td><?php echoFloat( $info->getVolume()); ?> hl</td>
-                                                                                                            <?php if($appellationlieu->getConfig()->hasRendement()) : ?>
-                                                                                                                <td class="dplc alt <?php echo ($form[$type.'_cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
-                                                                                                            <?php else: ?>
-                                                                                                                <td class="dplc"></td>
-                                                                                                            <?php endif; ?>
-                                                                                                    </tr>
-                                                                                                <?php endforeach; ?>
-                                                                                            <?php endforeach; ?>
+                                            <?php foreach($appellationlieu->acheteurs as $type => $acheteurs_type) : ?>
+                                                <?php foreach($acheteurs_type as $cvi => $info): ?>
+                                                    <tr>
+                                                            <td class="nom">
+                                                                <?php echo $info->getNom();?>
+                                                                <?php if ($type == 'mouts'): ?>
+                                                                <br />
+                                                                <small>(Acheteur de mouts)</small>
+                                                                <?php endif; ?>
+                                                            </td>
+                                                            <td class="cvi alt"><?php echo $cvi; ?></td>
+                                                            <td class="commune"><?php echo $info->getCommune(); ?></td>
+                                                            <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                                <td class="superficie alt <?php echo ($form[$type.'_cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
+                                                            <?php else: ?>
+                                                                <td class="superficie"></td>
+                                                            <?php endif; ?>
+                                                            <td><?php echoFloat( $info->getVolume()); ?> hl</td>
+                                                            <?php if($appellationlieu->getConfig()->hasRendement()) : ?>
+                                                                <td class="dplc alt <?php echo ($form[$type.'_cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
+                                                            <?php else: ?>
+                                                                <td class="dplc"></td>
+                                                            <?php endif; ?>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endforeach; ?>
 											</tbody>
 										</table>
 										<div class="btn">
 											<input type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 										</div>
-                                                                                <?php else: ?>
-                                                                                <p> Aucune vente </p>
-                                                                                <?php endif; ?>
+                                        <?php else: ?>
+                                        <p> Aucune vente </p>
+                                        <?php endif; ?>
 									</div>
 								</div>
 							</div>
-                                                        
-						
-						</div>					</div>	
+						</div>
+                    </div>
 					<!-- fin #gestion_recolte -->
-					
-                                                <?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
-					
-				</div>
+					<?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
+			    </div>
 				<!-- fin #application_dr -->
 				
 				<?php include_partial('boutons') ?>
 
-                                <?php include_partial('initRendementsMax') ?>
-                                
-                                <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
+                <?php include_partial('initRendementsMax') ?>
+
+                <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
 
 				
 			</form>

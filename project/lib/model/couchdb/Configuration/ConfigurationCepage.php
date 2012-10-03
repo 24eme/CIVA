@@ -2,6 +2,11 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
+  public function getNoeuds() {
+
+      return $this->detail;
+  }
+
   public function hasRendement() {
       return ($this->getRendement()>0);
   }

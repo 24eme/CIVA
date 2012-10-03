@@ -42,7 +42,7 @@ EOF;
 
     $csv = new ExportCsv();
 
-    foreach($config->recolte->filter('appellation_') as $appellation) {
+    foreach($config->recolte->certification->genre->filter('appellation_') as $appellation) {
       foreach($appellation->getLieux() as $lieu) {
         foreach($lieu->getCouleurs() as $couleur) {
           foreach($couleur->getCepages() as $cepage) {

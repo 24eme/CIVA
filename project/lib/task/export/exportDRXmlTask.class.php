@@ -85,7 +85,7 @@ EOF;
 
             //try {
                 if ($dr->isValideeTiers()) {
-                    if (count($dr->recolte->getAppellations()) > 0) {
+                    if (count($dr->recolte->certification->genre->getAppellations()) > 0) {
                         $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
                         file_put_contents($filename, $xml->getContent(), FILE_APPEND);
                         $this->logSection($dr->_id, 'xml generated');

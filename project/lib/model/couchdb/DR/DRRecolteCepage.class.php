@@ -21,40 +21,32 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
-    public function getTotalVolume($force_calcul = false) {
-      $field = 'total_volume';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getSumDetailFields'), array('volume'));
-    }
-    public function getTotalSuperficie($force_calcul = false) {
-      $field = 'total_superficie';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getSumDetailFields'), array('superficie'));
-    }
-
     public function getVolumeRevendique($force_calcul = false) {
-      $field = 'volume_revendique';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
-      return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
+
+        return parent::getDataByFieldAndMethod('volume_revendique',  array($this, 'getVolumeRevendiqueFinal'), $force_calcul );
     }
 
     public function getDplc($force_calcul = false) {
-      $field = 'dplc';
-      if (!$force_calcul && $this->issetField($field)) {
-        return $this->_get($field);
-      }
 
-      return $this->store($field, array($this, 'getDplcFinal'));
+        return parent::getDataByFieldAndMethod('dplc',  array($this, 'getDplcFinal'), $force_calcul);
+
     }
 
     public function getTotalCaveParticuliere() {
-        return $this->store('cave_particuliere', array($this, 'getSumDetailFields'), array('cave_particuliere'));
+
+         return parent::getDataByFieldAndMethod('cave_particuliere',  array($this, 'getSumNoeudFields'), true);
+    }
+
+    public function getTotalVolume($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('total_volume',  array($this, 'getSumNoeudFields'), $force_calcul,  array('volume'));
+
+    }
+
+    public function getTotalSuperficie($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie'));
+
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -134,7 +126,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     public function getHashUniqueKey($out = array()) {
       $resultat = array();
       foreach ($this->getArrayUniqueKey($out) as $key => $item) {
-	$resultat[$item] = $this->detail[$key];
+	     $resultat[$item] = $this->detail[$key];
       }
       return $resultat;
     }
@@ -143,7 +135,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       $uk = DRRecolteCepageDetail::getUKey($denom, $vtsgn, $lieu);
       $hash = $this->getHashUniqueKey();
       if (isset($hash[$uk]))
-	return $hash[$uk];
+    	return $hash[$uk];
       $ret = $this->detail->add();
       $ret->denomination = $denom;
       $ret->vtsgn = $vtsgn;
@@ -160,7 +152,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
               return 0;
             }
         } else {
-            return $this->getSumDetailFields('volume_dplc');
+            return $this->getSumNoeudFields('volume_dplc');
         }
     }
 
@@ -173,20 +165,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
               return $this->total_volume;
             }
         } else {
-            return $this->getSumDetailFields('volume_revendique');
+            return $this->getSumNoeudFields('volume_revendique');
         }
-    }
-
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumDetailFields($field) {
-      $sum = 0;
-      foreach ($this->detail as $detail) {
-	$sum += $detail->get($field);
-      }
-      return $sum;
     }
 
     protected function update($params = array()) {

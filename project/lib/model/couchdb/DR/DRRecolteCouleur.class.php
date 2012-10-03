@@ -3,12 +3,14 @@
 class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
     public function getLibelleWithAppellation() {
-      if ($this->getLibelle())
-	return $this->getAppellation()->getLibelle().' - '.$this->getLibelle();
-      return $this->getAppellation()->getLibelle();
+        if ($this->getLibelle())
+	        return $this->getAppellation()->getLibelle().' - '.$this->getLibelle();
+
+        return $this->getAppellation()->getLibelle();
     }
 
     public function getLieu() {
+
         return $this->getParent();
     }
 
@@ -25,22 +27,6 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     public function getCepages() {
 
         return $this->filter('^cepage');
-    }
-
-    public function getTotalVolume($force_calcul = false) {
-        $field = 'total_volume';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumCepageFields'), array($field));
-    }
-
-    public function getTotalSuperficie($force_calcul = false) {
-        $field = 'total_superficie';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getSumCepageFields'), array($field));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -64,7 +50,8 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getVolumeRevendiqueTotal() {
-        return $this->store('volume_revendique_total', array($this, 'getSumCepageFields'), array('volume_revendique'));
+
+        return parent::getDataByFieldAndMethod('volume_revendique_total', array($this, 'getSumNoeudFields'), true, array('volume_revendique'));
     }
 
     public function getVolumeMaxCouleur() {
@@ -95,11 +82,8 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getDplc($force_calcul = false) {
-        $field = 'dplc';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getDplcFinal'));
+
+        return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
     }
 
     protected function getDplcFinal() {
@@ -115,7 +99,8 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getDplcTotal() {
-        return $this->store('dplc_total', array($this, 'getSumCepageFields'), array('dplc'));
+
+        return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'), true, array('dplc'));
     }
 
     public function getDplcRendement() {
@@ -214,19 +199,6 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             }
         }
         throw new sfException("Pas d'autre couleur");
-    }
-    
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumCepageFields($field) {
-        $sum = 0;
-        foreach ($this->getCepages() as $key => $cepage) {
-            if ($key != 'cepage_RB')
-                $sum += $cepage->get($field);
-        }
-        return $sum;
     }
 
     public function getCodeDouane($vtsgn = '') {
