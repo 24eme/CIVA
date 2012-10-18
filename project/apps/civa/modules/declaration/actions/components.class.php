@@ -27,7 +27,7 @@ class declarationComponents extends sfComponents {
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->declaration = $this->getUser()->getDeclaration();
         $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
-	$this->has_import =  sfCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getTiers()->cvi);
+	    $this->has_import =  sfCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getTiers()->cvi);
         krsort($this->campagnes);
     }
     
@@ -80,24 +80,21 @@ class declarationComponents extends sfComponents {
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getTotalUsagesIndustriels();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-
-            }
+          }
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
-        $this->total_dplc = array_sum(array_values($this->usages_industriels));
+        $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
         $this->total_revendique = array_sum(array_values($this->revendique));
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
-
         $this->lies = $dr->lies;
         $this->jeunes_vignes = $dr->jeunes_vignes;
 	
-	$this->vintable = array();
-	if ($dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
-	  $this->vintable['superficie'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
-	  $this->vintable['volume'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
-	}
-        $this->annee = $annee;
-    }
-
+        $this->vintable = array();
+        if ($dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
+          $this->vintable['superficie'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
+          $this->vintable['volume'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
+        }
+            $this->annee = $annee;
+        }
 }

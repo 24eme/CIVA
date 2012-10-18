@@ -39,12 +39,19 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array('usages_industriels_calcule'));
     }
 
+    public function getVolumeRevendique($force_calcul = false){
+
+        return $this->getDataByFieldAndMethod("volume_revendique", array($this,"getSumNoeudFields"), $force_calcul);
+    }
+
+
     protected function update($params = array()) {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
             $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
+            $this->volume_revendique = $this->getVolumeRevendique(true);
 
         }
     }

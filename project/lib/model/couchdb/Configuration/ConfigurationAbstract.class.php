@@ -19,6 +19,7 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     }
 
   public function getRendement() {
+
       return $this->store('rendement', array($this, 'getInternalRendement'));
   }
   
@@ -26,6 +27,11 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
        return -1;
     }
+      if(get_class($this) == "ConfigurationCouleur" && !is_null($this->getRendementCouleur())){
+
+          return  $this->getRendementCouleur();
+      }
+
 
     $r = $this->_get('rendement');
     if ($r) {

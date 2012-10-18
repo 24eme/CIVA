@@ -212,7 +212,10 @@ class recolteActions extends EtapesActions {
         $this->form = new RecapitulatifForm($this->appellationlieu);
 
         $forms = $this->form->getEmbeddedForms();
-        if (!count($forms) && $request->getParameter('redirect')) {
+
+        if (!count($forms) && $request->getParameter('redirect')
+           || count($forms) && $request->getParameter('redirect') && $this->onglets->getCurrentLieu()->getDplc() != 0) {
+
             return $this->redirect($this->onglets->getNextUrl());
         }
 

@@ -14,4 +14,10 @@ class tiersComponents extends sfComponents {
     {
         $this->form = new DelegationTiersLoginForm($this->getUser()->getCompte());
     }
+
+    public function executeCreateNewCvi(){
+
+        $this->form = new NewCviForm($this->getUser()->getCompte());
+
+    }
 }

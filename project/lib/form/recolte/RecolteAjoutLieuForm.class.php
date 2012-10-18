@@ -13,7 +13,7 @@
 
           $lieu_choices = $this->getObject()->getLieuChoices();
 
-	  $this->setWidgets(array(
+	      $this->setWidgets(array(
             'appellation' => new sfWidgetFormChoice(array('choices'  => array($this->getObject()->getKey() => $this->getObject()->getConfig()->getLibelle())), array('disabled' => 'disabled')),
             'lieu' => new sfWidgetFormChoice(array('choices'  => $lieu_choices)),
           ));
@@ -27,7 +27,7 @@
         }
 
         public function doUpdateObject($values) {
-            $lieu = $this->getObject()->add($values['lieu']);
+            $lieu = $this->getObject()->mention->add($values['lieu']);
 	    foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
 	      $lieu->add($k);
 	    }

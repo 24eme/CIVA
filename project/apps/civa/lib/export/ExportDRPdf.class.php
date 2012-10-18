@@ -75,8 +75,8 @@ class ExportDRPdf {
             }
           }
 
-          $infos = $this->getRecapitulatifInfos($dr);
-          $infosPage = array();
+      $infos = $this->getRecapitulatifInfos($dr);
+      $infosPage = array();
 	  $nb_colonnes_by_page = 6;
 	  $infos = $this->getRecapitulatifInfos($dr);
           $nb_colonnes = count($infos['appellations']) - 1;
@@ -91,11 +91,12 @@ class ExportDRPdf {
       				'libelle' => array_slice($infos['libelle'], $i, $nb_colonnes_by_page),
       				'superficie' => array_slice($infos['superficie'], $i, $nb_colonnes_by_page),
       				'volume' => array_slice($infos['volume'], $i, $nb_colonnes_by_page),
-      				'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
-      				'dplc' => array_slice($infos['dplc'], $i, $nb_colonnes_by_page),
+                    'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
+                    'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
+      				'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
       				'total_superficie' => $infos['total_superficie'],
         			'total_volume' => $infos['total_volume'],
-        			'total_dplc' => $infos['total_dplc'],
+                    'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
         			'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes']
@@ -125,13 +126,14 @@ class ExportDRPdf {
         $appellations = array();
         $superficie = array();
         $volume = array();
+        $volume_sur_place = array();
         $revendique = array();
-        $dplc = array();
+        $usages_industriels = array();
         $libelle = array();
         $volume_negoces = array();
         $volume_cooperatives = array();
         $cvi = array();
-        foreach ($dr->certification->genre->recolte->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+        foreach ($dr->recolte->certification->genre->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($dr->recolte->certification->genre->exist($appellation_key)) {
               $appellation = $dr->recolte->certification->genre->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
@@ -141,7 +143,8 @@ class ExportDRPdf {
               $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $dplc[$appellation->getAppellation()] = $appellation->getDplc();
+              $usages_industriels[$appellation->getAppellation()] = $appellation->getTotalUsagesIndustriels();
+              $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
           }
         }
         $infos = array();
@@ -149,11 +152,13 @@ class ExportDRPdf {
         $infos['libelle'] = $libelle;
         $infos['superficie'] = $superficie;
         $infos['volume'] = $volume;
+        $infos['volume_sur_place'] = $volume_sur_place;
         $infos['revendique'] = $revendique;
-        $infos['dplc'] = $dplc;
+        $infos['usages_industriels'] = $usages_industriels;
         $infos['total_superficie'] = array_sum(array_values($superficie));
         $infos['total_volume'] = array_sum(array_values($volume));
-        $infos['total_dplc'] = array_sum(array_values($dplc));
+        $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
+        $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
         $infos['total_revendique'] = array_sum(array_values($revendique));
         $infos['lies'] = $dr->lies;
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;

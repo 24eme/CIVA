@@ -32,7 +32,7 @@ $(document).ready( function()
             formModificationCompte();
         });
     }
-    
+
     $('.table_donnees').ready( function() {
         initTablesDonnes();
     });
@@ -42,7 +42,7 @@ $(document).ready( function()
     }else{
         ($('.rendement').removeClass("alerte"));
     }
-	
+
     $('input.num').live('keypress',function(e)
     {
         var val = $(this).val();
@@ -78,7 +78,7 @@ $(document).ready( function()
             $(this).removeClass('num_alerte');
     });
 
-    
+
     $('.gestion_recolte_donnees input').each(function(e)
     {
         var val = $(this).val();
@@ -133,7 +133,7 @@ $(document).ready( function()
     }
 
     var annee = new Date().getFullYear();
-	
+
     $('.datepicker').datepicker(
     {
         changeMonth: true,
@@ -155,10 +155,10 @@ $(document).ready( function()
         $('.popup_ajout').dialog('close');
         return false;
     });
-    
+
     $(document).find('a.open_popup_rendements_max').live('click', function() {
         popup = $("#popup_rendements_max");
-        
+
         $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
         popup.dialog
@@ -174,7 +174,7 @@ $(document).ready( function()
                 }
             }
         });
-        
+
         $.get(
             url_ajax_rendements_max,
             function(data)
@@ -188,7 +188,7 @@ $(document).ready( function()
 
         return false;
     });
-    
+
     if($('.col_active')){
         $('.superficie').focus();
         $('.superficie').select();
@@ -214,7 +214,7 @@ $(document).ready( function()
 var initOngletsMajeurs = function()
 {
     var onglets = $('#onglets_majeurs');
-	
+
     hauteurEgale(onglets.find('>li>a'));
     hauteurEgale(onglets.find('ul.sous_onglets li a'));
     if(onglets.hasClass('ui-tabs-nav')) $("#principal").tabs();
@@ -227,7 +227,7 @@ var initMsgAide = function()
 {
     var liens = $('a.msg_aide');
     var popup = $('#popup_msg_aide');
-	
+
     liens.live('click', function()
     {
         var id_msg_aide = $(this).attr('rel');
@@ -235,7 +235,7 @@ var initMsgAide = function()
 	var url_doc = $(this).attr('doc');
         $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
-		
+
         $.getJSON(
             url_ajax_msg_aide,
             {
@@ -278,9 +278,9 @@ var choixPrecDecla = function()
     var nouvelle_decla = $('#nouvelle_declaration');
     var liste_prec_decla = nouvelle_decla.find('select');
     var type_decla = nouvelle_decla.find('input[name="dr[type_declaration]"]');
-	
+
     liste_prec_decla.hide();
-	
+
     type_decla.change(function()
     {
         if(type_decla.filter(':checked').val() == 'vierge' || type_decla.filter(':checked').val() == 'import' || type_decla.filter(':checked').val() == 'visualisation_avant_import') liste_prec_decla.hide();
@@ -293,7 +293,7 @@ var choixPrecDecla = function()
             return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
     });
 
-    
+
 };
 
 /**
@@ -309,7 +309,7 @@ var accesGamma = function()
           openPopupWithoutButton($("#popup_inscription_gamma"));
           return false;
         }
-        
+
     });
 };
 
@@ -334,7 +334,7 @@ var formExploitationAdministratif = function()
 {
     var blocs = $('#infos_exploitation, #gestionnaire_exploitation');
     var btns_modifier = blocs.find('a.modifier');
-	
+
     blocs.each(function()
     {
         var bloc = $(this);
@@ -345,7 +345,7 @@ var formExploitationAdministratif = function()
         var btn_annuler = btn.find('a.annuler');
 
         //modification_infos.hide();
-		
+
         btn_modifier.click(function()
         {
             presentation_infos.hide();
@@ -355,7 +355,7 @@ var formExploitationAdministratif = function()
             bloc.find('form input[type!="hidden"], form select').first().focus();
             return false;
         });
-		
+
         btn_annuler.click(function()
         {
             presentation_infos.show();
@@ -403,13 +403,13 @@ var formModificationCompte = function()
 };
 
 /**
- * Initialise les fonctions des tables 
+ * Initialise les fonctions des tables
  * de données
  ******************************************/
 var initTablesDonnes = function()
 {
     var tables = $('table.table_donnees');
-	
+
     tables.each(function()
     {
         var table = $(this);
@@ -425,7 +425,7 @@ var initTablesDonnes = function()
 var styleTables = function(table)
 {
     var tr = table.find('tbody tr');
-	
+
     tr.each(function()
     {
         $(this).find('td:odd').addClass('alt');
@@ -433,7 +433,7 @@ var styleTables = function(table)
 };
 
 /**
- * Initialise les fonctions des tables 
+ * Initialise les fonctions des tables
  * d'acheteurs
  ******************************************/
 var initTablesAcheteurs = function()
@@ -441,23 +441,23 @@ var initTablesAcheteurs = function()
     $('form input[type!="hidden"], form select').first().focus();
 
     var tables_acheteurs = $('#exploitation_acheteurs table.tables_acheteurs');
-	
+
     tables_acheteurs.each(function()
     {
         var table_achet = $(this);
-		
+
         var bloc = table_achet.parent();
         var form_ajout = bloc.next(".form_ajout");
         var btn_ajout = bloc.children('.btn');
-		
+
         if(bloc.attr('id') != 'vol_sur_place')
         {
             toggleTrVide(table_achet);
             supprimerLigneTable(table_achet, form_ajout);
-			
+
             initTableAjout(table_achet, form_ajout, btn_ajout);
             masquerTableAjout(table_achet, form_ajout, 0);
-			
+
             btn_ajout.children('a.ajouter').click(function()
             {
                 afficherTableAjout(table_achet, form_ajout, btn_ajout);
@@ -488,7 +488,7 @@ var initTablesAcheteurs = function()
  * d'un tableau
  ******************************************/
 var toggleTrVide = function(table_achet)
-{	
+{
     var tr = table_achet.find('tbody tr');
     var tr_vide = tr.filter('.vide');
     tr_vide.next('tr').addClass('premier');
@@ -503,14 +503,14 @@ var toggleTrVide = function(table_achet)
 var supprimerLigneTable = function(table_achet, form_ajout)
 {
     var btn = table_achet.find('tbody tr a.supprimer');
-	
+
     btn.live('click', function()
     {
         var choix = confirm('Confirmez-vous la suppression de cette ligne ?');
         if(choix)
         {
             reinsertAcheteurFromAutocompletion($(this).parents('tr').find('td.cvi').html(), form_ajout);
-            
+
             $(this).parents('tr').remove();
             toggleTrVide(table_achet);
 
@@ -526,7 +526,7 @@ var filtrer_source = function(i)
 };
 
 /**
- * Initialise les fonctions des tables 
+ * Initialise les fonctions des tables
  * d'ajout
  ******************************************/
 var initTableAjout = function(table_achet, form_ajout, btn_ajout)
@@ -542,7 +542,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     var btn = form_ajout.find('.btn a');
     var acheteur_mouts = 0;
     var qualite_name = '';
-	
+
     nom.autocomplete(
     {
         minLength: 0,
@@ -555,7 +555,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
             cvi.find('input').val(ui.item[1]);
             commune.find('span').text(ui.item[2]);
             commune.find('input').val(ui.item[2]);
-			
+
             return false;
         },
         select: function(event, ui)
@@ -566,7 +566,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
             cvi.find('input').val(ui.item[1]);
             commune.find('span').text(ui.item[2]);
             commune.find('input').val(ui.item[2]);
-				
+
             return false;
         }
     });
@@ -581,8 +581,8 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
             commune.find('input').val('');
         }
     });
-	
-	
+
+
     nom.data('autocomplete')._renderItem = function(ul, item)
     {
         var tab = item['value'].split('|@');
@@ -591,13 +591,13 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
         .append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
         .appendTo(ul);
     };
-	
+
     btn.click(function()
     {
         if(table_achet.parent().attr('id') == 'acheteurs_mouts') acheteur_mouts = 1;
 
         qualite_name = form_ajout.attr('rel');
-		
+
         if($(this).hasClass('valider'))
         {
             if(cvi.find('input').val() == '')
@@ -608,7 +608,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
             else
             {
                 var donnees = Array();
-				
+
                 champs.each(function()
                 {
                     var chp = $(this)
@@ -619,7 +619,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
                         else donnees.push("0");
                     }
                 });
-				
+
                 $.post(url_ajax,
                 {
                     action: "ajout_ligne_table",
@@ -638,7 +638,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
                 });
             }
         }
-		
+
         masquerTableAjout(table_achet, form_ajout, 1);
         btn_ajout.show();
 
@@ -700,15 +700,15 @@ var masquerTableAjout = function(table_achet, form_ajout, nb)
     var spans = form_ajout.find('tbody td span');
     var champs_txt = table.find('input:text,input[type=hidden]');
     var champs_cb = table.find('input:checkbox');
-	
+
     spans.text('');
-    
+
     champs_txt.attr('value','');
     champs_cb.attr('checked','');
     champs_cb.filter('.cremant_alsace').attr('checked','checked');
     form_ajout.hide();
     if(nb == 1) etatChampsTableAcht('');
-    
+
 };
 
 /**
@@ -733,7 +733,7 @@ var etatChampsTableAcht = function(type)
     var btns_supprimer = tables_acheteurs.find('a.supprimer');
     var btns = tables_acheteurs.next('.btn');
     var btns_etape = $('#btn_etape input');
-	
+
     if(type == 'disabled')
     {
         champs.attr('disabled', 'disabled');
@@ -903,7 +903,7 @@ var superficieOnChange = function(input) {
     if (!input) {
         input = this;
     }
-    
+
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
     $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
@@ -934,7 +934,7 @@ var volumeOnChange = function(input) {
     if (!input) {
         input = this;
     }
-    
+
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
 
@@ -971,7 +971,7 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'));
     addClassAlerteIfNeeded($('#appellation_volume_dplc'));
     addClassAlerteIfNeeded($('#cepage_volume_dplc'));
-	
+
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
 
@@ -986,7 +986,7 @@ var volumeOnChange = function(input) {
     }else{
         ($('.rendement').removeClass("alerte"));
     }
-  
+
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
@@ -1018,7 +1018,7 @@ var trunc = function(what,howmuch) {
 var hauteurEgaleColRecolte = function()
 {
     var col_intitules = '#colonne_intitules';
-	
+
     hauteurEgaleLignesRecolte(col_intitules+' p', 'p');
     hauteurEgaleLignesRecolte(col_intitules+' li', 'li');
     $(col_intitules + ', #col_scroller .col_recolte .col_cont, #gestion_recolte .col_total .col_cont').height('auto');
@@ -1029,21 +1029,21 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 {
     var col_recolte = '#col_scroller .col_recolte';
     var col_total = '#gestion_recolte .col_total'
-	
+
     $(intitule).each(function(i)
     {
         var s = intitule+':eq('+i+')';
-		
+
         $(col_recolte).each(function(j)
         {
             s += ', '+col_recolte+':eq('+j+') .col_cont '+elem+':eq('+i+')';
         });
-		
+
         $(col_total).each(function(j)
         {
             s += ', '+col_total+':eq('+j+') .col_cont '+elem+':eq('+i+')';
         });
-		
+
         hauteurEgale(s);
     });
 };
@@ -1055,7 +1055,7 @@ var etatBtnAjoutCol = function()
 {
     var col_recolte = $('#col_scroller .col_recolte');
     var btn = $('a#ajout_col');
-	
+
     if(col_recolte.filter('.col_active').size() > 0) btn.addClass('btn_inactif');
     else btn.removeClass('btn_inactif');
 };
@@ -1069,16 +1069,16 @@ var largeurColScrollerCont = function()
     var cols = cont.find('.col_recolte');
     var col_active = cont.find('.col_active');
     var btn = cont.find('a#ajout_col');
-	
+
     var largeur = btn.width();
-	
+
     cols.each(function()
     {
         largeur += $(this).width() + parseInt($(this).css('marginRight'));
     });
-	
+
     cont.width(largeur);
-	
+
     if(col_active.size() > 0)
         cont.parent().scrollTo(col_active, 0 );
     else
@@ -1103,7 +1103,7 @@ var initDRPopups = function()
     var btn_ajout_cave = col_recolte_cont.find('a.ajout_cave');
     var btn_ajout_mout = col_recolte_cont.find('a.ajout_mout');
     var btn_ajout_motif = col_recolte_cont.find('a.ajout_motif');
-	
+
     var popup_ajout_appelation = $('#popup_ajout_appelation');
     var popup_ajout_lieu = $('#popup_ajout_lieu');
     var popup_ajout_acheteur = $('#popup_ajout_acheteur');
@@ -1117,14 +1117,14 @@ var initDRPopups = function()
     };
     initPopupAjout(btn_ajout_appelation, popup_ajout_appelation, config_default);
     initPopupAjout(btn_ajout_lieu, popup_ajout_lieu, config_default);
-    
+
     if (popup_ajout_acheteur.length > 0 && popup_ajout_cave.length > 0 && popup_ajout_mout.length > 0 && popup_ajout_motif.length > 0) {
         initPopupAjout(btn_ajout_acheteur, popup_ajout_acheteur,config_default, var_liste_acheteurs, var_liste_acheteurs_using);
         initPopupAjout(btn_ajout_cave, popup_ajout_cave, config_default, var_liste_caves, var_liste_caves_using);
         initPopupAjout(btn_ajout_mout, popup_ajout_mout, config_default, var_liste_acheteurs_mouts, var_liste_acheteurs_mouts_using);
         initPopupAjout(btn_ajout_motif, popup_ajout_motif, var_config_popup_ajout_motif);
     }
-    
+
 };
 
 var initPopupAjout = function(btn, popup, config, source_autocompletion, source_autocompletion_using)
@@ -1143,7 +1143,7 @@ var initPopupAjout = function(btn, popup, config, source_autocompletion, source_
             }
         }
     });
-	
+
     btn.live('click', function()
     {
         if(config.ajax == true) {
@@ -1187,7 +1187,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
         cvi.val('');
         commune.val('');
     });
-	
+
     nom.autocomplete(
     {
         minLength: 0,
@@ -1218,11 +1218,11 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
             commune.val('');
         }
     });
-	
+
     nom.data('autocomplete')._renderItem = function(ul, item)
     {
         var tab = item['value'].split('|@');
-		
+
         return $('<li></li>')
         .data("item.autocomplete", tab)
         .append('<a><span class="nom">'+tab[0]+'</span><span class="cvi">'+tab[1]+'</span><span class="commune">'+tab[2]+'</span></a>' )
@@ -1264,7 +1264,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
                     $('#colonne_intitules').find('.'+type_cssclass+' ul').addClass('acheteurs');
                 }
 
-                
+
                 $('#colonne_intitules').
                 find('.'+type_cssclass+' ul').
                 append(html_header_item.html());
@@ -1286,7 +1286,7 @@ var initPopupAutocompletion = function(popup, source_autocompletion, source_auto
 
             return false;
         }
-		
+
     });
 };
 
@@ -1313,7 +1313,7 @@ var deleteRecolteAcheteurFromAutocompletion = function(cvi, champ_autocompletion
      * Initialise une popup
      ******************************************/
 var openPopup = function(popup, fn_open_if) {
-    
+
     popup.dialog
     ({
         autoOpen: false,

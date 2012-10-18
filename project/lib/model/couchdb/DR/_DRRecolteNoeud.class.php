@@ -21,12 +21,12 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
 
         return $this->getNoeudSuivant()->getNoeuds();
     }
-
+/*
     public function getTotalUsagesIndustriels($force_calcul = false){
 
-        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul);
+        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array("usages_industriels_calcule"));
     }
-
+*/
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);

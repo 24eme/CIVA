@@ -36,6 +36,7 @@ class acheteurActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
+                $declaration->save();
                 $this->redirectByBoutonsEtapes();
             }
         }

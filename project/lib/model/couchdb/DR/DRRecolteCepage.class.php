@@ -132,7 +132,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $lieu = '') {
-      $uk = DRRecolteCepageDetail::getUKey($denom, $vtsgn, $lieu);
+      $uk = DRRecolteCepageDetail::getUKey($lieu, $denom, $vtsgn);
       $hash = $this->getHashUniqueKey();
       if (isset($hash[$uk]))
     	return $hash[$uk];

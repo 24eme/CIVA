@@ -1,6 +1,6 @@
 <?php use_helper('jQuery') ?>
 
-<?php echo jq_form_remote_tag(array('url' => url_for($onglets->getUrl('recolte_add_appellation', null, null, null, null, null, null)->getRawValue()),
+<?php echo jq_form_remote_tag(array('url' => url_for($onglets->getUrl('recolte_add_appellation', null, null, null, null, null)->getRawValue()),
                                     'method' => 'post',
                                     'dataType' => 'json',
                                     'before' => "$('#form_ajout_appellation input[type=image]').hide();

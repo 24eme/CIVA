@@ -43,7 +43,7 @@ class DRRecolte extends BaseDRRecolte {
             }
             foreach($this->getAppellations() as $key => $appellation) {
                 if (!$acheteurs->exist($key)) {
-                    $this->remove($key);
+                    $this->certification->genre->remove($key);
                 }
             }
         }

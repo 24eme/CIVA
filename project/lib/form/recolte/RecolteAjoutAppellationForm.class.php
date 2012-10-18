@@ -24,9 +24,8 @@
 
         public function getAppellationChoices() {
             if (is_null($this->_appellation_choices)) {
-                $this->_appellation_choices = array('' => '');
-                foreach ($this->getObject()->getConfig()->filter('^appellation') as $key => $item) {
-                    if (!$this->getObject()->exist($key)) {
+                foreach ($this->getObject()->getNoeudAppellations()->getConfig()->filter('^appellation') as $key => $item) {
+                    if (!$this->getObject()->getNoeudAppellations()->exist($key)) {
                         $this->_appellation_choices[$key] = $item->getLibelle();
                     }
                 }
@@ -37,15 +36,15 @@
 
         public function doUpdateObject($values) {
             $appellation_key = $values['appellation'];
-            $config_appellation = $this->getObject()->getConfig()->get($appellation_key);
+                $config_appellation = $this->getObject()->getNoeudAppellations()->getConfig()->get($appellation_key);
             
             $this->getObject()->getCouchdbDocument()->acheteurs->add($appellation_key)->cave_particuliere = 1;
 
-            if ($config_appellation->exist('lieu')) {
-                $lieu = $this->getObject()->add($appellation_key)->add('lieu');
-		foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
-		  $lieu->add($k);
-		}
+            if ($config_appellation->mention->exist('lieu')) {
+                $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->add('lieu');
+                foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
+                  $lieu->add($k);
+                }
                 $this->_need_lieu = false;
             } else {
                 $this->_need_lieu = true;

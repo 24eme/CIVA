@@ -6,11 +6,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $this->getMentions();
     }
 
-    public function getNoeudAppellations() {
-
-        return $this->getNoeudSuivant();
-    }
-
     public function getMentions(){
         return $this->filter('^mention');
     }
@@ -22,7 +17,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     public function getVolumeRevendique($force_calcul = false) {
 
         return parent::getDataByFieldAndMethod("volume_revendique", array($this,"getSumNoeudFields") , $force_calcul);
-
     }
 
     public function getDplc($force_calcul = false) {
@@ -42,6 +36,17 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return parent::getDataByFieldAndMethod("total_cave_particuliere", array($this,"getSumNoeudWithMethod") , true, array('getTotalCaveParticuliere'));
 
     }
+
+    public function getTotalUsagesIndustriels(){
+
+        $total = 0;
+        foreach( $this->mention->filter('^lieu') as $lieu)
+        {
+            $total += $lieu->usages_industriels_calcule;
+        }
+        return $total;
+    }
+
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;

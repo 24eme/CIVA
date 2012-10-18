@@ -25,12 +25,12 @@
 							
 							<div id="total_appelation">
 								<h2 class="titre_section">
-                                                                    <?php if($isGrandCru){ ?>
-                                                                    Total Lieu-dit
-                                                                    <?php }else{ ?>
-                                                                    Total Appellation
-                                                                    <?php } ?>
-                                                                </h2>
+                                    <?php if($isGrandCru){ ?>
+                                    Total Lieu-dit
+                                    <?php }else{ ?>
+                                    Total Appellation
+                                    <?php } ?>
+                                </h2>
 								<div class="contenu_section">
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
@@ -42,9 +42,9 @@
 												</tr>
 												<tr>
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
-                                                                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
 												</tr>
-                                                                                                <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                  <?php if($appellationlieu->getConfig()->hasRendement()): ?>
 												<tr>
 													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
 												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>

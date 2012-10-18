@@ -28,7 +28,7 @@
             'recapitulatif' => false));
         ?>
 
-    <!--<a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>">Ajouter</a>-->
+    <!--<a href="<?php /*echo url_for($onglets->getUrl('recolte_add')->getRawValue()) */?>">Ajouter</a>-->
         <div id="donnees_recolte_sepage" class="clearfix <?php echo ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && $onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "deux_totaux" : "" ?>">
 
             <?php

@@ -21,7 +21,7 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Volume sur place</td>
+                    <td>Volume sur place (Hl)</td>
                     <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume_sur_place[$a]); ?></td>
                     <?php endif; ?>
@@ -55,7 +55,7 @@
             <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> Hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_volume);?> Hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_revendique);?> Hl" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_dplc);?> Hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_usages_industriels);?> Hl" readonly="readonly"></li>
         </ul>
     </div>
 	<div id="recap_autres">

@@ -3,9 +3,10 @@
 	$appellations = $infos['appellations'];
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];
+    $volume_sur_place = $infos['volume_sur_place'];
 	$volume = $infos['volume'];
 	$revendique = $infos['revendique'];
-	$dplc = $infos['dplc'];
+	$usages_industriels = $infos['usages_industriels'];
 ?>
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
@@ -52,6 +53,15 @@ pre {display: inline;}
 			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
 			<?php endif; ?>
 		</tr>
+        <tr>
+            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume sur place (Hl)</td>
+            <?php foreach ($appellations as $a): ?>
+            <td style="width: 120px;"><?php echoFloat( $volume_sur_place[$a]); ?> <small>hl</small></td>
+            <?php endforeach; ?>
+            <?php if ($has_total): ?>
+            <td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_sur_place']);?></strong> <small>hl</small></td>
+            <?php endif; ?>
+        </tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Total (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
@@ -71,12 +81,12 @@ pre {display: inline;}
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">DPLC (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Usages industriels (Hl)</td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $dplc[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoFloat( $usages_industriels[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_dplc']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_usages_industriels']);?></strong> <small>hl</small></td>
 			<?php endif; ?>
 		</tr>
 	</tbody>
