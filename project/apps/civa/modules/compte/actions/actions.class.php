@@ -30,8 +30,14 @@ class compteActions extends sfActions {
             $this->getUser()->signIn(phpCAS::getUser());
             $this->redirect('@tiers');
         } else {
-            $url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
-            $this->redirect($url);
+		if(sfConfig::has('app_autologin') && sfConfig::get('app_autologin')) {
+			$this->getUser()->signIn(sfConfig::get('app_autologin'));
+			   	           
+			return $this->redirect('@tiers');
+		}	   
+		
+	    	$url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
+	    	$this->redirect($url);
         }
     }
 	public function executeTestPlugin(sfWebRequest $request) {

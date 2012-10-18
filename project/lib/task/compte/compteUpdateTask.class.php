@@ -34,7 +34,14 @@ EOF;
 
         $liaisons = sfCouchdbManager::getClient()->group_level(3)->getView("TIERS", "liaison");
         $stocks = array();
+        $acheteurs = array();
         foreach ($liaisons->rows as $liaison) {
+            if (preg_match('/^ACHAT-/', $liaison->key[2])) {
+                $acheteurs[] = sfCouchdbManager::getClient()->retrieveDocumentById($liaison->key[2], sfCouchdbClient::HYDRATE_JSON);
+
+                continue;
+            }
+            
             $stocks[$liaison->key[0]][$liaison->key[1]][] = sfCouchdbManager::getClient()->retrieveDocumentById($liaison->key[2], sfCouchdbClient::HYDRATE_JSON);
         }
 
@@ -62,6 +69,11 @@ EOF;
             if ($met_en_attente && !$met_en_attente_add) {
                 $comptes[$this->getLogin(array($met_en_attente))] = array($met_en_attente);
             }
+        }
+
+        foreach($acheteurs as $acheteur) {
+           $tiers = array($acheteur);
+           $comptes[$this->getLogin($tiers)] = $tiers;     
         }
 
         // Suppression des comptes inexistants
