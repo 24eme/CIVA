@@ -636,4 +636,13 @@ Export:
                           definition:
                             fields:
                               '*' : {  }
+LS:
+  class: LienSymbolique
+  definition:
+    fields:
+      _id: { }
+      _rev: { }
+      type: { }
+      pointeur: { }
+
 

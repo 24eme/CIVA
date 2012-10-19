@@ -21,12 +21,12 @@ class sfCouchdbClient extends couchClient {
     public function deleteDocument($document) {
       return $this->deleteDoc($document->getData());
     }
-    public function retrieveDocumentById($id, $hydrate = self::HYDRATE_DOCUMENT) {
+    public function retrieveDocumentById($id, $hydrate = self::HYDRATE_DOCUMENT, $force_return_ls = false) {
         try {
              
              if ($hydrate == self::HYDRATE_DOCUMENT) {
                 $data = $this->getDoc($id);
-                return $this->createDocumentFromData($data);
+                return $this->createDocumentFromData($data, $force_return_ls);
              } elseif($hydrate == self::HYDRATE_JSON) {
                  return $this->getDoc($id);
              } elseif($hydrate == self::HYDRATE_ARRAY) {
@@ -39,7 +39,7 @@ class sfCouchdbClient extends couchClient {
         }
         
     }
-    public function createDocumentFromData($data) {
+    public function createDocumentFromData($data, $force_return_ls = false) {
       if (!isset($data->type)) {
 	throw new sfCouchdbException('data should have a type');
       }
@@ -48,6 +48,10 @@ class sfCouchdbClient extends couchClient {
       }
       $doc = new $data->type();
       $doc->loadFromCouchdb($data);
+
+      if($doc->getType() == "LS" && $force_return_ls == false )
+          return $this->retrieveDocumentById($doc->getPointeur());
+
       return $doc;
     }
 

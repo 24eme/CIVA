@@ -11,7 +11,6 @@ class ValidatorImportCsv extends sfValidatorFile
     $options['required'] = true;
 
     return parent::configure($options, $messages);
-
   }
 
   protected function doClean($values)

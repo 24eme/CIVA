@@ -145,6 +145,26 @@ class tiersActions extends EtapesActions {
      *
      * @param sfRequest $request A request object
      */
+    public function executeMigrationCompte(sfWebRequest $request) {
+
+        $this->form = new NewCviForm($this->getUser()->getCompte());
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+
+            if ($this->form->isValid()) {
+                $postParameters = $request->getPostParameters();
+                $nouveau_cvi = $postParameters["new_cvi"]["nouveau_cvi"];
+                $compte = $this->getUser()->getCompte();
+                $new_compte = new migrationCompte($compte, $nouveau_cvi);
+                $this->success = $new_compte->init();
+            }
+        }
+    }
+
+    /**
+     *
+     * @param sfRequest $request A request object
+     */
     public function executeSignoutByCompteDelegue(sfWebRequest $request) {
 
         $login_current_user = $this->getUser()->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->login;

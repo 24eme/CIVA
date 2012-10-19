@@ -57,9 +57,9 @@ delegation:
   url: /delegation
   param: { module: tiers, action: delegation}
 
-new_cvi:
-  url: /nouveau_cvi
-  param: { module: tiers, action: newCvi}
+migration_compte:
+  url: /migration_compte
+  param: { module: tiers, action: migrationCompte}
 
 
 # *********** DECLARATION ***********

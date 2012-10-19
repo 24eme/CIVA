@@ -20,45 +20,45 @@ class DRClient extends sfCouchdbClient {
     $doc->declaration_commune = $tiers->declaration_commune;
 
     foreach ($csvs as $csv) {
-      $acheteur_cvi = $csv->cvi;
-      $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+          $acheteur_cvi = $csv->cvi;
+          $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
 
-      if (!$acheteur_obj)
-	throw new sfException($acheteur_cvi.' acheteur inconnu');
+          if (!$acheteur_obj)
+        throw new sfException($acheteur_cvi.' acheteur inconnu');
 
-      $import[] = $acheteur_obj;      
-      $linenum = 0;
-      foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
-	$linenum++;
-	if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
-	  $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
-	  continue;
-	}
-	$prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION], 
-									 $line[CsvFile::CSV_LIEU], 
-									 $line[CsvFile::CSV_CEPAGE]);
-	if (!isset($prod['hash']))
-	  throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
-	
-	$cepage = $doc->getOrAdd($prod['hash']);
+          $import[] = $acheteur_obj;
+          $linenum = 0;
+          foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
+        $linenum++;
+        if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
+          $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
+          continue;
+        }
+        $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION],
+                                         $line[CsvFile::CSV_LIEU],
+                                         $line[CsvFile::CSV_CEPAGE]);
+        if (!isset($prod['hash']))
+          throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
 
-	$denomlieu = '';
-	if ($cepage->getLieu()->getKey() == 'lieu')
-	  $denomlieu = $line[CsvFile::CSV_LIEU];
-	$detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
-	$detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
-	$detail->volume += $line[CsvFile::CSV_VOLUME]*1;
-	if ($line[CsvFile::CSV_VOLUME]*1 == 0) {
-	  $detail->denomination = 'repli';
-	  $detail->add('motif_non_recolte', 'AE');
-	}else{
-	  $acheteur = $detail->add($acheteur_obj->getAcheteurDRType())->add();
-	  $acheteur->cvi = $acheteur_cvi;
-	  $acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
-	}
-	if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
-	  $detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
-      }
+        $cepage = $doc->getOrAdd($prod['hash']);
+
+        $denomlieu = '';
+        if ($cepage->getLieu()->getKey() == 'lieu')
+          $denomlieu = $line[CsvFile::CSV_LIEU];
+        $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
+        $detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
+        $detail->volume += $line[CsvFile::CSV_VOLUME]*1;
+        if ($line[CsvFile::CSV_VOLUME]*1 == 0) {
+          $detail->denomination = 'repli';
+          $detail->add('motif_non_recolte', 'AE');
+        }else{
+          $acheteur = $detail->add($acheteur_obj->getAcheteurDRType())->add();
+          $acheteur->cvi = $acheteur_cvi;
+          $acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
+        }
+        if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
+          $detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
+          }
     }
     $doc->update();
     return $doc;
@@ -81,10 +81,10 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getAllByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-       return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
+       return $this->startkey('DR-'.$cvi.'-2011')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
     }
 
-    /**
+    /*
      *
      * @param string $cvi
      * @param string $campagne
