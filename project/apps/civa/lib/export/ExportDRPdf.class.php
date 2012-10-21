@@ -66,10 +66,10 @@ class ExportDRPdf {
           foreach ($dr->recolte->certification->genre->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->certification->genre->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->certification->genre->get($appellation_config->getKey());
-                foreach ($appellation->getConfig()->filter('^lieu') as $lieu) {
-                  if (!$appellation->exist($lieu->getKey()))
+                foreach ($appellation->getConfig()->getLieux() as $lieu) {
+                  if (!$appellation->getLieux()->exist($lieu->getKey()))
                     continue;
-                  $lieu = $appellation->{$lieu->getKey()};
+                  $lieu = $appellation->getLieux()->get($lieu->getKey());
                   $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable());
                 }
             }
@@ -133,7 +133,7 @@ class ExportDRPdf {
         $volume_negoces = array();
         $volume_cooperatives = array();
         $cvi = array();
-        foreach ($dr->recolte->certification->genre->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+        foreach ($dr->recolte->certification->genre->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
           if ($dr->recolte->certification->genre->exist($appellation_key)) {
               $appellation = $dr->recolte->certification->genre->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
