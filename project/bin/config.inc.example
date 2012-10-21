@@ -9,3 +9,7 @@ LDAP_ADMIN_EMAIL=admin@admin.com
 LDAP_ADMIN_ADDRESS="Adresse"
 LDAP_ADMIN_CODE_POSTAL=75000
 LDAP_ADMIN_VILLE="Ville"
+
+REDMINE_PREFIX=https://clients.actualys.com
+REDMINE_USER=utilisateur
+REDMINE_PASS=***********
