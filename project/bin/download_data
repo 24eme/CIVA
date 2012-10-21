@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. bin/config.inc
+
+if ! test "$1"; then
+    echo "Téléchargement des données";
+    . bin/download_redmine_file https://clients.actualys.com/attachments/download/4475/ALSACERECOLTE_DATA.tar.gz /tmp/ALSACERECOLTE_DATA.tar.gz
+fi
+
+SYMFODIR=$(pwd);
+
+LOGDATE=$SYMFODIR/$(date +%Y%m%d%H%M%S_import_data.log)
+
+{
+
+echo "Dézippage";
+rm -rf /tmp/ALSACERECOLTE_DATA 2>/dev/null;
+mkdir /tmp/ALSACERECOLTE_DATA;
+cd /tmp/ALSACERECOLTE_DATA;
+tar -xzf /tmp/ALSACERECOLTE_DATA.tar.gz;
+
+TMP_DIR=$(pwd);
+
+mkdir /tmp/ALSACERECOLTE_DATA_DUMP 2>/dev/null;
+TMP_DUMP_DIR=$(date +%Y%m%d%H%M%S)
+mkdir /tmp/ALSACERECOLTE_DATA_DUMP/$TMP_DUMP_DIR
+mv $SYMFODIR/data/import /tmp/ALSACERECOLTE_DATA_DUMP/$TMP_DUMP_DIR/import 2>/dev/null;
+
+cp -R $TMP_DIR/import $SYMFODIR/data/import
+
+}
