@@ -33,7 +33,11 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-		$drs[] = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_JSON);
+		//$drs[] = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_JSON);
+
+        $drs = array();
+
+        $drs[] = sfCouchdbManager::getClient()->retrieveDocumentById('DR-6823700100-2011', sfCouchdbClient::HYDRATE_JSON);
 
 		$appellations = array();
 		foreach ($drs as $dr){
@@ -55,7 +59,7 @@ EOF;
 			}		
 		}
 		$o_dr= $this->getObjectFromArray($dr);
-		$doc = sfCouchdbManager::getClient()->createDocumentFromData($o_dr);
+        $doc = sfCouchdbManager::getClient()->createDocumentFromData($o_dr);
     	$doc->save();    
 	}
 	

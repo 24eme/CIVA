@@ -461,18 +461,34 @@ Configuration:
                   qualite_sgn: {required: false}
                   qualite_aoc: {required: false}
                   code_cepage: {required: false}
-            'certification':
+            '*':
               # ------- Certification ---------
               type: collection
               class: ConfigurationCertification
               definition:
                 fields:
-                  'genre':
+                  rendement: { type: float }
+                  libelle: { }
+                  douane:
+                    type: collection
+                    class: ConfigurationDouane
+                    definition:
+                      fields:
+                        '*': {  }
+                  '*':
                   # ------- Genre ---------
                     type: collection
                     class: ConfigurationGenre
                     definition:
                       fields:
+                        rendement: { type: float }
+                        libelle: { }
+                        douane:
+                          type: collection
+                          class: ConfigurationDouane
+                          definition:
+                            fields:
+                              '*': {  }
                         '*':
                         # ------- APPELLATION ---------
                           type: collection
