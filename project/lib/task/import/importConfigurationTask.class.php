@@ -45,7 +45,7 @@ EOF;
 	  sfCouchdbManager::getClient()->createDatabase();
 	}
 
-	foreach (file(sfConfig::get('sf_data_dir') . '/import/Ceprec') as $a) {
+	foreach (file(sfConfig::get('sf_data_dir') . '/import/10/Ceprec10') as $a) {
 	  $csv = explode(',', preg_replace('/"/', '', $a));
 	  $cepage_douane[$csv[1]][$csv[0]] = $csv[14];
 	}
