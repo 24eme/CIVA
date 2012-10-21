@@ -58,8 +58,8 @@ EOF;
         $rendement_couleur_blanc_communale = 72;
         $rendement_couleur_rouge_communale = 60;
 
-        $rendement_couleur_blanc_cremant = 72;
-        $rendement_couleur_rouge_cremant = 60;
+        $rendement_couleur_blanc_cremant = 80;
+        $rendement_couleur_rouge_cremant = 80;
 
         $annee = "2012";
 
@@ -492,7 +492,7 @@ EOF;
         $cepages->cepage_PG->rendement = 80;
         $cepages->cepage_PG->douane->code_cepage = $code_depage;
 
-        $cepages->cepage_MU->libelle = "Muscat";
+        $cepages->cepage_MU->libelle = "Muscat Alsace";
         $cepages->cepage_MU->rendement = 90;
         $cepages->cepage_MU->douane->code_cepage = $code_depage;
 
