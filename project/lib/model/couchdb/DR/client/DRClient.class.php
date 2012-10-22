@@ -7,8 +7,8 @@ class DRClient extends sfCouchdbClient {
     return sfCouchdbManager::getClient('DR');
   }
 
-  public function createFromCSVRecoltant($tiers, &$import) {
-    $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($tiers->cvi);
+  public function createFromCSVRecoltant($campagne, $tiers, &$import) {
+    $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;

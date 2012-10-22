@@ -27,7 +27,7 @@ class declarationComponents extends sfComponents {
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->declaration = $this->getUser()->getDeclaration();
         $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
-	    $this->has_import =  sfCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getTiers()->cvi);
+	    $this->has_import =  sfCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
         krsort($this->campagnes);
     }
     
@@ -53,7 +53,7 @@ class declarationComponents extends sfComponents {
         if(isset($this->visualisation_avant_import) && $this->visualisation_avant_import == true )
         {
             $import_from = array();
-            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
+            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $import_from);
         }else{
             $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
         }

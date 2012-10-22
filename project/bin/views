@@ -67,7 +67,7 @@ cat <<EOF > $TMPFILE
   "views":
   {
     "recoltant": {
-      "map": "function(doc) {  if (!doc.type || doc.type != 'CSV')    return ;  for(id in doc.recoltants)   emit([doc.recoltants[id]+'', doc._id], 1);}",
+      "map": "function(doc) {  if (!doc.type || doc.type != 'CSV')    return ;  for(id in doc.recoltants)   emit([doc.campagne+'', doc.recoltants[id]+'', doc._id], 1);}",
     },
     "acheteur": {
       "map": "function(doc) {  if (!doc.type || doc.type != 'CSV')    return ;   emit([doc.campagne+'', doc.cvi+'', doc._id], 1);}",

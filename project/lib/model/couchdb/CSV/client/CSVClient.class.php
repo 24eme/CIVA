@@ -7,8 +7,8 @@ class CSVClient extends sfCouchdbClient {
     return sfCouchdbManager::getClient('CSV'); 
   }
 
-  private function getCSVsFromRecoltantArray($cvi) {
-    $csv = $this->startkey(array($cvi))->endkey(array(($cvi+1).''))->executeView('CSV', 'recoltant');
+  private function getCSVsFromRecoltantArray($campagne, $cvi) {
+    $csv = $this->startkey(array($campagne, $cvi))->endkey(array($campagne, $cvi, array()))->executeView('CSV', 'recoltant');
     $ids = array();
     foreach ($csv as $k => $c) 
       $ids[] = $k;
@@ -33,13 +33,13 @@ class CSVClient extends sfCouchdbClient {
     return count($this->getCSVsAcheteurs($campagne));
   }
 
-  public function countCSVsFromRecoltant($cvi) {
-    return count($this->getCSVsFromRecoltantArray($cvi));
+  public function countCSVsFromRecoltant($campagne, $cvi) {
+    return count($this->getCSVsFromRecoltantArray($campagne, $cvi));
   }
 
-  public function getCSVsFromRecoltant($cvi) {
+  public function getCSVsFromRecoltant($campagne, $cvi) {
     $docs = array();
-    foreach($this->getCSVsFromRecoltantArray($cvi) as $id) {
+    foreach($this->getCSVsFromRecoltantArray($campagne, $cvi) as $id) {
       $docs[] = parent::retrieveDocumentById($id);
     }
     return $docs;

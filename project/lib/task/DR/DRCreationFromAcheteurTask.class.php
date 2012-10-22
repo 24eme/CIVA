@@ -37,7 +37,7 @@ EOF;
 
 	$import_from = array();
 	try{
-	  $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($tiers, $import_from);
+	  $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
 	  $check = $dr->check();
 	  if (count($check['erreur']) || count($check['vigilance'])) {
 	    print "ERROR: ".$dr->_id." a des erreurs ou des points de vigilance\n";
