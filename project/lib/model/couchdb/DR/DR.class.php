@@ -323,8 +323,8 @@ class DR extends BaseDR {
         $onglet = new RecolteOnglets($this);
         $validLogVigilance = array();
         $validLogErreur = array();
-        foreach ($this->recolte->certification->genre->filter('appellation_') as $appellation) {
-            foreach ($appellation->mention->filter('lieu') as $lieu) {
+        foreach ($this->recolte->getAppellations() as $appellation) {
+            foreach ($appellation->getLieux() as $lieu) {
                 //check le total superficie
                 if ($lieu->getTotalSuperficie() == 0) {
                     array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
@@ -333,32 +333,6 @@ class DR extends BaseDR {
                 if ($lieu->isNonSaisie()) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
                 } else {
-
-                    //verifie les rebeches pour les crémants
-                    if ($appellation->getConfig()->appellation == 'CREMANT' && round($lieu->getTotalVolumeForMinQuantite(), 2) > 0) {
-
-                        $rebeches = false;
-                        $cepage_RB = $lieu->getCepageRB();
-                        if(!is_null($cepage_RB)) {
-
-                            $total_non_negociant = $lieu->getTotalVolumeForMinQuantite() ;
-                            $min_quantite = round($total_non_negociant *  $cepage_RB->getConfig()->min_quantite, 0 );
-
-                            if( !is_null($min_quantite)
-                                &&  $min_quantite <= $cepage_RB->getTotalVolume())
-                                $rebeches = true;
-                            else
-                                $rebeches = false;
-
-                            if (!$rebeches) {
-
-                                if( !($min_quantite <= $cepage_RB->getVolumeTotal()) )
-                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
-                            }
-                        }else{
-                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $lieu->getCouleur('cepage_RB')->getKey(), 'cepage_RB'), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
-                        }
-                    }
 
                     //Verifie que le recapitulatif des ventes est rempli
                     if (!$lieu->hasCompleteRecapitulatifVente()) {
@@ -378,7 +352,11 @@ class DR extends BaseDR {
                     //check les cepages
                     foreach ($lieu->filter('couleur') as $couleur) {
                         foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
-
+                            if ($cepage_config->hasMinQuantite()) {
+                                if(!$couleur->exist($key)) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage_config->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                                }
+                            }
                             if ($couleur->exist($key)) {
                                 $cepage = $couleur->get($key);
                                 if ($cepage->getConfig()->hasMinQuantite()) {
@@ -386,13 +364,6 @@ class DR extends BaseDR {
                                     $totalVolRevendique = $cepage->getTotalVolume();
                                     if ($totalVolRatio > $totalVolRevendique) {
                                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
-                                    }
-                                }
-                                if ($cepage->getConfig()->hasMaxQuantite()) {
-                                    $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
-                                    $totalVolRevendique = $cepage->getTotalVolume();
-                                    if ($totalVolRatio < $totalVolRevendique) {
-                                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
                                     }
                                 }
                                 if ($cepage->isNonSaisie()) {

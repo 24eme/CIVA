@@ -1,6 +1,6 @@
 <?php
 
-class migrationCompte {
+class MigrationCompte {
 
     const PREFIX_KEY_COMPTE= "COMPTE-";
     const PREFIX_KEY_REC= "REC-";
@@ -17,7 +17,7 @@ class migrationCompte {
         $this->_nouveau_cvi = $nouveau_cvi;
     }
 
-    public function init(){
+    public function process(){
         $this->createNewCompte();
         $this->createCompteTiers();
         $this->createLienSymbolique();

@@ -37,6 +37,8 @@ class DRClient extends sfCouchdbClient {
         $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION],
                                          $line[CsvFile::CSV_LIEU],
                                          $line[CsvFile::CSV_CEPAGE]);
+
+
         if (!isset($prod['hash']))
           throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
 

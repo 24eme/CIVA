@@ -6,7 +6,7 @@ class DRAcheteurs extends BaseDRAcheteurs {
     $tab = $this->getArrayTypeWithAppellation($type);
     if (isset($tab[$cvi][$appellation]) && $tab[$cvi][$appellation])
       return true;
-    return ($this->add($appellation)->add($type)->add(null,$cvi));
+    return ($this->certification->genre->add($appellation)->add($type)->add(null,$cvi));
   }
   
   public function getArrayTypeWithAppellation($type) {

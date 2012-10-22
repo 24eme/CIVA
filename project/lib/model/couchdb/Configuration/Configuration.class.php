@@ -57,7 +57,7 @@ class Configuration extends BaseConfiguration {
       $lieuid = 'lieu';
       $cepageid = null;
       $libelle = self::normalizeLibelle($appellation);
-      foreach ( $this->getRecolte()->filter('^appellation') as $appellation_key => $appellation_obj) {
+      foreach ($this->getRecolte()->certification->genre->getAppellations() as $appellation_key => $appellation_obj) {
 	if ($libelle == self::normalizeLibelle($appellation_obj->getLibelle())) {
 	  $appid=$appellation_key;
 	  break;
@@ -68,7 +68,7 @@ class Configuration extends BaseConfiguration {
 
       if ($lieu) {
 	$libelle = self::normalizeLibelle($lieu);
-	foreach($appellation_obj->filter('^lieu') as $lieu_key => $lieu_obj) {
+	foreach($appellation_obj->getLieux() as $lieu_key => $lieu_obj) {
 	  if ($lieu_key == 'lieu')
 	    break;
 	  if ($libelle == self::normalizeLibelle($lieu_obj->getLibelle())) {
@@ -78,7 +78,7 @@ class Configuration extends BaseConfiguration {
 	}
       }
       if ($lieuid == 'lieu') {
-	if (!$appellation_obj->exist('lieu'))
+	if (!$appellation_obj->getLieux()->exist('lieu'))
 	  return array("error" => $appellation.' / '.$lieu);
       }
 
@@ -86,7 +86,7 @@ class Configuration extends BaseConfiguration {
       $prodhash = '';
       $evalhash = '';
       $eval = null;
-      foreach($appellation_obj->get($lieuid)->getCepages() as $cepage_key => $cepage_obj) {
+      foreach($appellation_obj->getLieux()->get($lieuid)->getCepages() as $cepage_key => $cepage_obj) {
 	$cepage_libelle = self::normalizeLibelle($cepage_obj->getLibelle());
 	if ($libelle == $cepage_libelle) {
 	  $cepageid = $cepage_key;
