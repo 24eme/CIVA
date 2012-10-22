@@ -155,8 +155,8 @@ class tiersActions extends EtapesActions {
                 $postParameters = $request->getPostParameters();
                 $nouveau_cvi = $postParameters["new_cvi"]["nouveau_cvi"];
                 $compte = $this->getUser()->getCompte();
-                $new_compte = new migrationCompte($compte, $nouveau_cvi);
-                $this->success = $new_compte->init();
+                $new_compte = new MigrationCompte($compte, $nouveau_cvi);
+                $this->success = $new_compte->process();
             }
         }
     }
