@@ -604,6 +604,75 @@ a.msg_aide:hover{
     vertical-align: middle;
 }
 
+
+
+/**
+ * Alsace récolte / Espace migration
+ ******************************************/
+#espace_migration
+{
+    margin: 0 0 20px;
+}
+
+#espace_migration h2
+{
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_migration .contenu
+{
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+
+#migration_compte{
+	line-height: 1.2;
+	color: #666666;
+    font-size: 14px;
+    margin: 0 0 10px;
+    text-align: justify;
+    width: 900px;
+	}
+
+
+#migration_compte div{
+	margin: 0 0 5px;
+	line-height: 1.6;!important;
+}
+div#migration_compte .contenu_section{
+	width : 450px;
+
+}
+#espace_migration a{
+    font-family: Calibri,Arial,Verdana,Helvetica,sans-serif;
+    font-size: 15px;
+    color: #000000;
+    	
+}
+
+#migration_compte p{
+    font-family: Calibri,Arial,Verdana,Helvetica,sans-serif;
+    font-size: 15px;
+    color: #000000;
+    	
+}
+#migration_compte label{
+    font-family: Calibri,Arial,Verdana,Helvetica,sans-serif;
+    font-size: 15px;
+color: #666666;	    
+}
+
+
+#migration_compte .ligne_form input{
+	float: right;
+	margin-right: 300px ;
+}
 /**
  * Alsace récolte / Espace delegation
  ******************************************/
