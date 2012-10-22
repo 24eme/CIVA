@@ -28,7 +28,7 @@ class NewCviForm extends BaseForm {
         $this->widgetSchema['ancien_cvi']->setAttributes(array('value'=> preg_replace('/COMPTE-/', "", $this->_compte->_id) , 'readonly' => 'true', 'class'=> 'readonly'));
         
         $this->setWidget("nouveau_cvi", new sfWidgetFormInput());
-        $this->setValidator("nouveau_cvi", new sfValidatorString(array("required" => true)));
+        $this->setValidator("nouveau_cvi", new ValidatorNewCvi(array("required" => true, "min" => 1000000000, 'max' => 9999999999)));
         
         $this->widgetSchema->setNameFormat('new_cvi[%s]');
     }

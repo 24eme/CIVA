@@ -644,11 +644,26 @@ a.msg_aide:hover{
 #migration_compte div{
 	margin: 0 0 5px;
 	line-height: 1.6;!important;
+    display: inline-block;
 }
 div#migration_compte .contenu_section{
-	width : 450px;
+	width : 250px;
+    vertical-align: top;
 
 }
+
+div#migration_compte .contenu_section#infos_traitement{
+    height : 191px;
+
+}
+
+#migration_compte .contenu_section#infos_traitement div{
+display: block;
+    width : 400px;
+
+}
+
+
 #espace_migration a{
     font-family: Calibri,Arial,Verdana,Helvetica,sans-serif;
     font-size: 15px;
@@ -671,7 +686,7 @@ color: #666666;
 
 #migration_compte .ligne_form input{
 	float: right;
-	margin-right: 300px ;
+	margin-right: 231px ;
 }
 /**
  * Alsace récolte / Espace delegation

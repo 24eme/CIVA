@@ -8,7 +8,9 @@ class ValidatorNewCvi extends sfValidatorInteger
 	    parent::configure();
 	    $this->setMessage("required", "Champs obligatoire");
 		$this->addMessage('cvi_exist', "Ce Cvi existe déja");
-	    $this->setMessage('invalid', "Le cvi doit être composé de 10 digits");
+	    $this->setMessage('max', "Le cvi doit être composé de 10 digits");
+      $this->setMessage('min', "Le cvi doit être composé de 10 digits");
+      $this->setMessage('invalid', "Le cvi doit être composé de 10 digits");
   }
 
   protected function doClean($value)
