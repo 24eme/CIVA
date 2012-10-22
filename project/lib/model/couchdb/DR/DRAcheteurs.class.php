@@ -11,9 +11,9 @@ class DRAcheteurs extends BaseDRAcheteurs {
   
   public function getArrayTypeWithAppellation($type) {
     $tab = array();
-    foreach($this as $appellation => $acheteurs) {
+    foreach($this->certification->genre as $appellation => $acheteurs) {
       foreach($acheteurs->{$type} as $acheteur_cvi) {
-	$tab[$acheteur_cvi][$appellation] = true;
+			$tab[$acheteur_cvi][$appellation] = true;
       }
     }
     return $tab;
@@ -42,7 +42,7 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayMouts() {
         $mouts = array();
-        foreach($this as $appellation => $acheteurs) {
+        foreach($this->certification->genre as $appellation => $acheteurs) {
             foreach($acheteurs->mouts as $acheteur_cvi) {
                 $mouts[] = $acheteur_cvi;
             }
@@ -52,7 +52,7 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayMoutsWithAppellation() {
         $mouts = array();
-        foreach($this as $appellation => $acheteurs) {
+        foreach($this->certification->genre as $appellation => $acheteurs) {
             foreach($acheteurs->mouts as $acheteur_cvi) {
                 $mouts[$acheteur_cvi][$appellation] = true;
             }
@@ -62,7 +62,7 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayCaveParticuliereWithAppellation() {
         $cave_particuliere = array();
-        foreach($this as $appellation => $acheteurs) {
+        foreach($this->certification->genre as $appellation => $acheteurs) {
             $cave_particuliere[$appellation] = ($acheteurs->cave_particuliere == 1);
         }
         return $cave_particuliere;

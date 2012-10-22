@@ -36,27 +36,37 @@ DR:
         class: DRAcheteurs
         definition:
           fields:
-          # -------- rappel des appellations -------
-            '*':
+            certification:
+              #------ Certification ------
               type: collection
               definition:
                 fields:
-                  'negoces':
-                    type: array_collection
-                    definition: 
-                      fields: 
-                        '*': {  }
-                  'cooperatives':
-                    type: array_collection
-                    definition: 
-                      fields: 
-                        '*': {  }
-                  'cave_particuliere': {type: integer}
-                  'mouts':
-                    type: array_collection
+                  genre:
+                  #------ Genre ------
+                    type: collection
                     definition:
                       fields:
-                        '*': {  }
+                        '*':
+                        # -------- rappel des appellations -------
+                          type: collection
+                          definition:
+                            fields:
+                              negoces:
+                                type: array_collection
+                                definition:
+                                  fields:
+                                    '*': {  }
+                              cooperatives:
+                                type: array_collection
+                                definition:
+                                  fields:
+                                    '*': {  }
+                              cave_particuliere: {type: integer}
+                              mouts:
+                                type: array_collection
+                                definition:
+                                  fields:
+                                    '*': {  }
       cvi: {  }
       lies: {type: float}
       jeunes_vignes: {type: float}
@@ -461,34 +471,18 @@ Configuration:
                   qualite_sgn: {required: false}
                   qualite_aoc: {required: false}
                   code_cepage: {required: false}
-            '*':
+            'certification':
               # ------- Certification ---------
               type: collection
               class: ConfigurationCertification
               definition:
                 fields:
-                  rendement: { type: float }
-                  libelle: { }
-                  douane:
-                    type: collection
-                    class: ConfigurationDouane
-                    definition:
-                      fields:
-                        '*': {  }
-                  '*':
+                  'genre':
                   # ------- Genre ---------
                     type: collection
                     class: ConfigurationGenre
                     definition:
                       fields:
-                        rendement: { type: float }
-                        libelle: { }
-                        douane:
-                          type: collection
-                          class: ConfigurationDouane
-                          definition:
-                            fields:
-                              '*': {  }
                         '*':
                         # ------- APPELLATION ---------
                           type: collection

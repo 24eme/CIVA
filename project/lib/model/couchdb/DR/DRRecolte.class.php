@@ -32,7 +32,7 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-            foreach($acheteurs as $key => $appellation) {
+            foreach($acheteurs->certification->genre as $key => $appellation) {
                 $app = $this->certification->genre->add($key);
                 if (!$app->getConfig()->hasManyLieu()) {
                     $lieu = $app->mention->add('lieu');
@@ -42,7 +42,7 @@ class DRRecolte extends BaseDRRecolte {
                 }
             }
             foreach($this->getAppellations() as $key => $appellation) {
-                if (!$acheteurs->exist($key)) {
+                if (!$acheteurs->certification->genre->exist($key)) {
                     $this->certification->genre->remove($key);
                 }
             }

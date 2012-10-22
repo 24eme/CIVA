@@ -37,11 +37,11 @@
         public function doUpdateObject($values) {
             $appellation_key = $values['appellation'];
                 $config_appellation = $this->getObject()->getNoeudAppellations()->getConfig()->get($appellation_key);
-            
-            $this->getObject()->getCouchdbDocument()->acheteurs->add($appellation_key)->cave_particuliere = 1;
+
+            $this->getObject()->getCouchdbDocument()->acheteurs->certification->genre->add($appellation_key)->cave_particuliere = 1;
 
             if ($config_appellation->mention->exist('lieu')) {
-                $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->add('lieu');
+                $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->mention->add('lieu');
                 foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
                   $lieu->add($k);
                 }

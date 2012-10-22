@@ -32,14 +32,9 @@ EOF;
     	// initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
-		//$drs[] = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_JSON);
-
         $drs = array();
+        $drs[] = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_JSON);
 
-        $drs[] = sfCouchdbManager::getClient()->retrieveDocumentById('DR-6823700100-2011', sfCouchdbClient::HYDRATE_JSON);
-
-		$appellations = array();
 		foreach ($drs as $dr){
 			$dr = json_decode(json_encode($dr), true);
 			$dr['campagne'] = "2011";

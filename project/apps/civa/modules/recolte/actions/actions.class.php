@@ -348,7 +348,7 @@ class recolteActions extends EtapesActions {
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->onglets->getCurrentAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->get($this->onglets->getCurrentKeyAppellation());
+        $this->acheteurs = $this->declaration->get('acheteurs')->certification->genre->get($this->onglets->getCurrentKeyAppellation());
     }
 
     protected function initPrecDR(){
