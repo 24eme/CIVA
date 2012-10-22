@@ -78,7 +78,7 @@ DR:
         class: DRRecolte
         definition:
           fields:
-            'certification':
+            certification:
               #------ Certification ------
               type: collection
               class: DRRecolteCertification
@@ -90,7 +90,7 @@ DR:
                   volume_revendique: {type:float }
                   dplc: {type:float }
                   usages_industriels_saisi: {type:float }
-                  'genre':
+                  genre:
                   #------ Genre ------
                     type: collection
                     class: DRRecolteGenre
@@ -471,18 +471,34 @@ Configuration:
                   qualite_sgn: {required: false}
                   qualite_aoc: {required: false}
                   code_cepage: {required: false}
-            'certification':
+            '*':
               # ------- Certification ---------
               type: collection
               class: ConfigurationCertification
               definition:
                 fields:
-                  'genre':
+                  rendement: { type: float }
+                  libelle: { }
+                  douane:
+                    type: collection
+                    class: ConfigurationDouane
+                    definition:
+                      fields:
+                        '*': {  }
+                  '*':
                   # ------- Genre ---------
                     type: collection
                     class: ConfigurationGenre
                     definition:
                       fields:
+                        rendement: { type: float }
+                        libelle: { }
+                        douane:
+                          type: collection
+                          class: ConfigurationDouane
+                          definition:
+                            fields:
+                              '*': {  }
                         '*':
                         # ------- APPELLATION ---------
                           type: collection
@@ -621,12 +637,12 @@ Export:
         type: collection
         definition:
           fields:
-            'ids':
+            ids:
               type: array_collection
               definition:
                 fields:
                   '*': {  }
-            'views':
+            views:
               type: array_collection
               definition:
                 fields:
