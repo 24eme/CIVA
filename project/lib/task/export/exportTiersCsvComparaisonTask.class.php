@@ -31,8 +31,8 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $ids = array_merge(sfCouchdbManager::getClient('Recoltant')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
-                           sfCouchdbManager::getClient('MetteurEnMarche')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
-                           //sfCouchdbManager::getClient('Acheteur')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
+                           sfCouchdbManager::getClient('MetteurEnMarche')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
+                           sfCouchdbManager::getClient('Acheteur')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
 
         $merge = array();
 
