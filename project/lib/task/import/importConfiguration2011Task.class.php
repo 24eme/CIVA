@@ -385,9 +385,9 @@ EOF;
 
         if ($options['import'] == 'couchdb') {
             foreach ($docs as $data) {
-                $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
+                $doc = sfCouchdbManager::getClient("DR")->retrieveDocumentById($data->_id, sfCouchdbClient::HYDRATE_JSON);
                 if ($doc) {
-                    $doc->delete();
+                    sfCouchdbManager::getClient()->deleteDoc($doc);
                 }
                 if (isset($data->delete))
                     continue;
