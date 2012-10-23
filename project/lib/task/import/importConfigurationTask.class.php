@@ -301,14 +301,6 @@ EOF;
 
 	$docs[] = $json;
 
-	$json = new stdClass();
-	$json->_id = 'CURRENT';
-	$json->type = 'Current';
-	$json->campagne = $annee;
-	$json->dr_non_editable = 0;
-    $json->dr_non_ouverte = 1;
-	$docs[] = $json;
-
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
 	    $doc = sfCouchdbManager::getClient("DR")->retrieveDocumentById($data->_id, sfCouchdbClient::HYDRATE_JSON);
