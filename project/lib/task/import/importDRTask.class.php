@@ -157,7 +157,7 @@ EOF;
                 }
 
 		$doc->recolte->certification->genre->{'appellation_'.$this->convertappellation($appellation, $cepage)}->appellation = $this->convertappellation($appellation, $cepage);
-        $doc->recolte->certification->genre->{'appellation_'.$this->convertappellation($appellation, $cepage)}->mention->mention->{'lieu'.$csv[10]}->{"cepage_".$this->convertcepage($cepage, $cepage_bis)}->detail[] = $detail;
+        $doc->recolte->certification->genre->{'appellation_'.$this->convertappellation($appellation, $cepage)}->mention->{'lieu'.$csv[10]}->{"cepage_".$this->convertcepage($cepage, $cepage_bis)}->detail[] = $detail;
 
             }
 	    $nb++;
@@ -196,11 +196,11 @@ EOF;
 
         foreach ($list_documents as $doc) {
             //reconstruction des acheteurs
-              foreach ($doc->recolte as $nomappellation => $app) {
+              foreach ($doc->recolte->certification->genre as $nomappellation => $app) {
                 $acheteurs = array();
                 $coop = array();
                 $cave_particuliere = 0;
-                foreach($app as $nom => $lieu) {
+                foreach($app->mention as $nom => $lieu) {
                   if ($lieu instanceOf stdClass) {
                     foreach($lieu as $nom => $cep) {
                       foreach ($cep->detail as $detail) {
@@ -257,10 +257,12 @@ EOF;
 	  if ($this->recode_number($csv[93])) {
 	    $doc->recolte->certification->genre->appellation_ALSACEBLANC->mention->lieu->volume_revendique =  $this->recode_number($csv[93]); //93
 	    $doc->recolte->certification->genre->appellation_ALSACEBLANC->mention->lieu->dplc =  $this->recode_number($csv[94]); //94
+      $doc->recolte->certification->genre->appellation_ALSACEBLANC->mention->lieu->usages_industriels_calcule = $doc->recolte->certification->genre->appellation_ALSACEBLANC->mention->lieu->dplc;
 	  }
           if ($this->recode_number($csv[105])) {
 	    $doc->recolte->certification->genre->appellation_KLEVENER->mention->lieu->volume_revendique =  $this->recode_number($csv[105]); //105
 	    $doc->recolte->certification->genre->appellation_KLEVENER->mention->lieu->dplc =  $this->recode_number($csv[106]); //106
+      $doc->recolte->certification->genre->appellation_KLEVENER->mention->lieu->usages_industriels_calcule = $doc->recolte->certification->genre->appellation_KLEVENER->mention->lieu->dplc;
 	  }
 
 	  if ($this->recode_number($csv[97])) {
@@ -270,14 +272,17 @@ EOF;
 	  if ($this->recode_number($csv[101])) {
 	    $doc->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->volume_revendique =  $this->recode_number($csv[101]); //101
 	    $doc->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->dplc =  $this->recode_number($csv[102]); //102
+      $doc->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->usages_industriels_calcule = $doc->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->dplc;
 	  }
 	  if ($this->recode_number($csv[113])) {
 	    $doc->recolte->certification->genre->appellation_GRDCRU->volume_revendique =  $this->recode_number($csv[113]); //113
 	    $doc->recolte->certification->genre->appellation_GRDCRU->dplc =  $this->recode_number($csv[114]); //114
+      $doc->recolte->certification->genre->appellation_GRDCRU->usages_industriels_calcule = $doc->recolte->certification->genre->appellation_GRDCRU->dplc;
 	  }
 	  if ($this->recode_number($csv[109])) {
 	    $doc->recolte->certification->genre->appellation_CREMANT->mention->lieu->volume_revendique =  $this->recode_number($csv[109]); //109
 	    $doc->recolte->certification->genre->appellation_CREMANT->mention->lieu->dplc =  $this->recode_number($csv[110]); //110
+      $doc->recolte->certification->genre->appellation_CREMANT->mention->lieu->usages_industriels_calcule = $doc->recolte->certification->genre->appellation_CREMANT->mention->lieu->dplc;
 	  }
 	}
 
