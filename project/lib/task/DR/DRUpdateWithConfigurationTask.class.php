@@ -33,8 +33,9 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $drs = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        //$drs = array(sfCouchdbManager::getClient("DR")->retrieveDocumentById('DR-1623700100-2010', sfCouchdbClient::HYDRATE_JSON));
-		foreach ($drs as $dr){
+        //$drs = array(sfCouchdbManager::getClient("DR")->retrieveDocumentById('DR-7523700100-2011', sfCouchdbClient::HYDRATE_JSON));
+		
+        foreach ($drs as $dr){
             $dr_clone = clone $dr;
             if (isset($dr->recolte->certification)) {
 
@@ -72,7 +73,13 @@ EOF;
 			foreach ($dr->recolte as $key_app => $appellation){	
 				if(preg_match("/^appellation_/", $key_app) && $appellation instanceof stdClass){
 					$dr_clone->recolte->certification->genre->{$key_app} = clone $appellation;
-                    unset($dr_clone->recolte->certification->genre->{$key_app}->lieu);
+
+                    foreach($dr_clone->recolte->certification->genre->{$key_app} as $key_lieu => $lieu) {
+                        if(preg_match("/^lieu/", $key_lieu) && $lieu instanceof stdClass){
+                            unset($dr_clone->recolte->certification->genre->{$key_app}->{$key_lieu});
+                        }
+                    }
+                    
                     $dr_clone->recolte->certification->genre->{$key_app}->usages_industriels_calcule = null;
 
                     if(isset($appellation->dplc)) {
