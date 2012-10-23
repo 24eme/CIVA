@@ -1742,7 +1742,11 @@ color: #666666;
     margin: 0 7px 0 0;
 }
 
-#recolte_totale #appelations table thead th { font-size: 11px; }
+#recolte_totale #appelations table thead th {
+    font-size: 11px;
+    width: 94px;
+
+}
 #recolte_totale #appelations table thead th:first-child { width: auto; }
 
 /**
@@ -1751,7 +1755,7 @@ color: #666666;
 #recolte_totale #total_general
 {
     float: left;
-    width: 120px;
+    width: 112px;
 }
 
 #recolte_totale #total_general h2 { line-height: 28px; }

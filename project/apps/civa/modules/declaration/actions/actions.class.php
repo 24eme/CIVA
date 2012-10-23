@@ -22,6 +22,8 @@ class declarationActions extends EtapesActions {
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
                 $this->redirect('@mon_espace_civa');
+            } elseif ($dr_data['type_declaration'] == 'visualisation') {
+                $this->redirect('@visualisation?annee=' . $this->getUser()->getCampagne());
             } elseif ($dr_data['type_declaration'] == 'vierge') {
                 $doc = new DR();
                 $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne());
