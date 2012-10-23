@@ -370,6 +370,13 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
               $this->total_superficie = $this->getTotalSuperficie(true); */
             $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
+            if($this->dplc > 0) {
+                $this->usages_industriels_saisi = $this->dplc;
+            } elseif($this->usages_industriels_saisi > 0) {
+                $this->usages_industriels_calcule = $this->usages_industriels_saisi;
+            } else {
+                $this->usages_industriels_calcule = 0;
+            }
         }
         $this->add('acheteurs');
         $types = array('negoces', 'cooperatives', 'mouts');

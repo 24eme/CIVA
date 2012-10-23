@@ -34,9 +34,9 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return (!($nb_lieu < $nb_lieu_config));
     }
 
-    public function getTotalUsagesIndustriels($force_calcul = false){
-
-        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array('usages_industriels_calcule'));
+    public function getUsagesIndustrielsCalcule(){
+        
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , $force_calcul);
     }
 
     public function getVolumeRevendique($force_calcul = false){
@@ -50,9 +50,6 @@ class DRRecolteMention extends BaseDRRecolteMention {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
-            $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
-            $this->volume_revendique = $this->getVolumeRevendique(true);
-
         }
     }
 }

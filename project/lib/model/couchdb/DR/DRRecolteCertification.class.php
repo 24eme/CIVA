@@ -77,12 +77,6 @@ class DRRecolteCertification extends BaseDRRecolteCertification {
 
     protected function update($params = array()) {
         parent::update($params);
-        if ($this->getCouchdbDocument()->canUpdate()) {
-            $this->total_volume = $this->getTotalVolume(true);
-            $this->total_superficie = $this->getTotalSuperficie(true);
-            $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
-
-        }
     }
 
 }

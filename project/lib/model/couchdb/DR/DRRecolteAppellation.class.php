@@ -37,14 +37,9 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     }
 
-    public function getTotalUsagesIndustriels(){
-
-        $total = 0;
-        foreach( $this->mention->filter('^lieu') as $lieu)
-        {
-            $total += $lieu->usages_industriels_calcule;
-        }
-        return $total;
+    public function getUsagesIndustrielsCalcule(){
+        
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , $force_calcul);
     }
 
 
@@ -122,7 +117,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
-            $this->total_usages_industriels = $this->getTotalUsagesIndustriels(true);
         }
     }
 
