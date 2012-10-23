@@ -34,16 +34,20 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return (!($nb_lieu < $nb_lieu_config));
     }
 
-    public function getUsagesIndustrielsCalcule(){
-        
-        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , $force_calcul);
-    }
-
     public function getVolumeRevendique($force_calcul = false){
 
         return $this->getDataByFieldAndMethod("volume_revendique", array($this,"getSumNoeudFields"), $force_calcul);
     }
 
+    public function getDplc($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('dplc', array($this, 'getSumNoeudFields'), $force_calcul );
+    }
+
+    public function getUsagesIndustrielsCalcule(){
+        
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
+    }
 
     protected function update($params = array()) {
         parent::update($params);

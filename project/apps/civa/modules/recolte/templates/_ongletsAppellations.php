@@ -11,7 +11,7 @@
         </li>
         <?php endif; ?>
     <?php endforeach; ?>
-        <?php if (!$declaration->recolte->certification->genre->hasAllAppellation()): ?>
+        <?php if (!$declaration->recolte->getNoeudAppellations()->hasAllAppellation()): ?>
         <li class="ajouter ajouter_appelation"><a href="#">Ajouter une<br /> appellation</a></li>
         <?php endif; ?>
 </ul>

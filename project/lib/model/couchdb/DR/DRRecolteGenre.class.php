@@ -51,9 +51,14 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return parent::getDataByFieldAndMethod('volume_revendique', array($this, 'getSumNoeudFields'), $force_calcul);
     }
 
+    public function getUsagesIndustrielsCalcule(){
+        
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
+    }
+
     public function getDplc($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('dplc', array($this, 'getSumNoeudFields'), $force_calcul);
+        return parent::getDataByFieldAndMethod('dplc', array($this, 'getSumNoeudFields'), $force_calcul );
     }
 
     public function getTotalCaveParticuliere() {

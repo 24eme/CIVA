@@ -86,7 +86,7 @@ class acheteurActions extends EtapesActions {
         $this->appellations = array();
         $this->forms = array();
 
-        foreach ($this->getUser()->getDeclaration()->recolte->certification->genre->getAppellations() as $appellation) {
+        foreach ($this->getUser()->getDeclaration()->recolte->getAppellations() as $appellation) {
 
             if ($appellation->getConfig()->hasManyLieu()) {
                 $this->appellations[$appellation->getKey()] = $appellation;
@@ -140,8 +140,8 @@ class acheteurActions extends EtapesActions {
     public function executeExploitationLieuDelete(sfWebRequest $request) {
         $declaration = $this->getUser()->getDeclaration();
         $appellation_key = $request->getParameter('appellation');
-        $this->forward404Unless($declaration->recolte->certification->genre->exist('appellation_'.$appellation_key));
-        $appellation = $declaration->recolte->certification->genre->get('appellation_'.$appellation_key);
+        $this->forward404Unless($declaration->recolte->getNoeudAppellations()->exist('appellation_'.$appellation_key));
+        $appellation = $declaration->recolte->getNoeudAppellations()->get('appellation_'.$appellation_key);
         $this->forward404Unless($appellation->getConfig()->hasManyLieu());
 
         foreach($appellation->getMentions() as $mention){

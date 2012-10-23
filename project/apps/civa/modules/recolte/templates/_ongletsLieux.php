@@ -10,7 +10,7 @@
         <?php endif; ?>
     <?php endforeach; ?>
 
-    <?php if (!$declaration->recolte->certification->genre->get($appellation_key)->hasAllDistinctLieu()): ?>
+    <?php if (!$declaration->recolte->getNoeudAppellations()->get($appellation_key)->hasAllDistinctLieu()): ?>
     <li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
     <?php endif; ?>
 <?php endif; ?>

@@ -2,8 +2,8 @@
 
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
 
-php symfony cc
-bash bin/views
+php symfony cc > /dev/null
+bash bin/views > /dev/null
 
 bash bin/download_data
 
@@ -11,4 +11,8 @@ php symfony import:Configuration
 php symfony import:Configuration2011
 php symfony import:Configuration2012
 
-php symfony dr:update_with_configuration
+echo "Import des configurations"
+
+php symfony dr:update_with_configuration > /dev/null
+
+echo "Update des DRs"

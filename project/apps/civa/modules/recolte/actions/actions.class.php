@@ -15,7 +15,7 @@ class recolteActions extends EtapesActions {
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getUser()->getDeclaration();
         $this->help_popup_action = "help_popup_DR";
-        if (!$this->declaration->recolte->certification->genre->hasOneOrMoreAppellation()) {
+        if (!$this->declaration->recolte->getNoeudAppellations()->hasOneOrMoreAppellation()) {
             $this->redirectToNextEtapes();
         }
     }
@@ -51,7 +51,7 @@ class recolteActions extends EtapesActions {
 
         if( $this->onglets->getCurrentLieu()->dplc != 0)
         {
-           $appellation = $this->declaration->recolte->certification->genre->get($this->onglets->getCurrentAppellation()->getKey());
+           $appellation = $this->declaration->recolte->getNoeudAppellations()->get($this->onglets->getCurrentAppellation()->getKey());
            $lieu = $appellation->getLieux()->get($this->onglets->getCurrentLieu()->getKey());
            $lieu->set("usages_industriels_saisi", 0);
            $this->declaration->save();
@@ -167,9 +167,9 @@ class recolteActions extends EtapesActions {
         $this->initOnglets($request);
 
         if ($request->hasParameter('force_appellation')) {
-            $this->forward404Unless($this->declaration->recolte->certification->genre->getConfig()->exist($request->getParameter('force_appellation')));
+            $this->forward404Unless($this->declaration->recolte->getNoeudAppellations()->getConfig()->exist($request->getParameter('force_appellation')));
             $this->url_ajout_lieu = array_merge($this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->certification->genre->add($request->getParameter('force_appellation')));
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->getNoeudAppellations()->add($request->getParameter('force_appellation')));
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -235,9 +235,9 @@ class recolteActions extends EtapesActions {
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
-    	foreach ($dr->recolte->certification->genre->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
-    		if ($dr->recolte->certification->genre->exist($key_appellation)) {
-    			$appellation = $dr->recolte->certification->genre->get($key_appellation);
+    	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
+    		if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
+    			$appellation = $dr->recolte->getNoeudAppellations()->get($key_appellation);
     			foreach ($appellation->getDistinctLieux() as $lieu) {
     				if ($lieu->getConfig()->getRendementAppellation() == -1)
     				continue;
@@ -348,7 +348,7 @@ class recolteActions extends EtapesActions {
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->onglets->getCurrentAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->certification->genre->get($this->onglets->getCurrentKeyAppellation());
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->onglets->getCurrentKeyAppellation());
     }
 
     protected function initPrecDR(){

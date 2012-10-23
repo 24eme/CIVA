@@ -2,7 +2,7 @@
 
 class Configuration extends BaseConfiguration {
     public function getArrayAppellationsMout() {
-        $appellations = $this->getRecolte()->certification->genre;
+        $appellations = $this->getRecolte()->getNoeudAppellations();
         $appellations_array_mouts = array();
         foreach ($appellations->filter('^appellation') as $appellation_key => $appellation) {
             if ($appellation->getMout() == 1) {
@@ -13,7 +13,7 @@ class Configuration extends BaseConfiguration {
     }
 
     public function getArrayAppellations() {
-        $appellations = $this->getRecolte()->certification->genre;
+        $appellations = $this->getRecolte()->getNoeudAppellations();
         $appellations_array = array();
         foreach ($appellations->filter('^appellation') as $appellation_key => $appellation) {
             $appellations_array[$appellation_key] = $appellation;
@@ -57,7 +57,7 @@ class Configuration extends BaseConfiguration {
       $lieuid = 'lieu';
       $cepageid = null;
       $libelle = self::normalizeLibelle($appellation);
-      foreach ($this->getRecolte()->certification->genre->getAppellations() as $appellation_key => $appellation_obj) {
+      foreach ($this->getRecolte()->getNoeudAppellations()->getAppellations() as $appellation_key => $appellation_obj) {
 	if ($libelle == self::normalizeLibelle($appellation_obj->getLibelle())) {
 	  $appid=$appellation_key;
 	  break;

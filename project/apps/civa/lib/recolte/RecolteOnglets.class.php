@@ -32,11 +32,11 @@ class RecolteOnglets {
     }
 
     public function getItemsAppellation() {
-        return $this->_declaration->get('recolte')->certification->genre->filter('^appellation');
+        return $this->_declaration->get('recolte')->getAppellations();
     }
 
     public function getItemsAppellationConfig() {
-        return $this->_declaration->get('recolte')->certification->genre->getConfig()->filter('^appellation');
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->getConfig()->filter('^appellation');
     }
 
     public function getCouleur($appellation = null, $lieu = null, $couleur = null) {
@@ -57,7 +57,7 @@ class RecolteOnglets {
         }
         $lieu = $this->convertValueToKey($lieu, $this->_prefix_key_lieu);
 
-        return $this->_declaration->get('recolte')->certification->genre->get($appellation)->getLieux()->get($lieu);
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->getLieux()->get($lieu);
     }
 
     public function getItemsLieu($appellation = null) {
@@ -65,7 +65,7 @@ class RecolteOnglets {
             $appellation = $this->getCurrentKeyAppellation();
         }
         $appellation = $this->convertValueToKey($appellation, $this->_prefix_key_appellation);
-        return $this->_declaration->get('recolte')->certification->genre->get($appellation)->getLieux();
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->getLieux();
     }
 
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
@@ -113,7 +113,7 @@ class RecolteOnglets {
     }
 
     public function getCurrentAppellation() {
-        return $this->_declaration->recolte->certification->genre->get($this->_current_key_appellation);
+        return $this->_declaration->recolte->getNoeudAppellations()->get($this->_current_key_appellation);
     }
 
     public function getCurrentKeyLieu() {

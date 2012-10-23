@@ -68,9 +68,9 @@ class declarationComponents extends sfComponents {
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
         $cvi = array();
-        foreach ($dr->recolte->certification->genre->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
-          if ($dr->recolte->certification->genre->exist($appellation_key)) {
-              $appellation = $dr->recolte->certification->genre->get($appellation_key);
+        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
+              $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
                 continue;
               $this->appellations[] = $appellation->getAppellation();

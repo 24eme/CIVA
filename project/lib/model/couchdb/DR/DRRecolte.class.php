@@ -9,7 +9,7 @@ class DRRecolte extends BaseDRRecolte {
 
     public function getNoeudAppellations() {
 
-        return $this->certification->genre;
+        return $this->add('certification')->add('genre');
     }
 
     public function getAppellations() {
@@ -32,8 +32,8 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-            foreach($acheteurs->certification->genre as $key => $appellation) {
-                $app = $this->certification->genre->add($key);
+            foreach($acheteurs->getNoeudAppellations() as $key => $appellation) {
+                $app = $this->getNoeudAppellations()->add($key);
                 if (!$app->getConfig()->hasManyLieu()) {
                     $lieu = $app->mention->add('lieu');
                     foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
@@ -42,8 +42,8 @@ class DRRecolte extends BaseDRRecolte {
                 }
             }
             foreach($this->getAppellations() as $key => $appellation) {
-                if (!$acheteurs->certification->genre->exist($key)) {
-                    $this->certification->genre->remove($key);
+                if (!$acheteurs->getNoeudAppellations()->exist($key)) {
+                    $this->getNoeudAppellations()->remove($key);
                 }
             }
         }

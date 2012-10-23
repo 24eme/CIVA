@@ -27,6 +27,10 @@ class DRRecolteCertification extends BaseDRRecolteCertification {
         return parent::getDataByFieldAndMethod('volume_revendique', array($this, 'getSumNoeudFields'), $force_calcul );
     }
 
+    public function getUsagesIndustrielsCalcule(){
+        
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
+    }
 
     public function getDplc($force_calcul = false) {
 

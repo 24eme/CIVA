@@ -45,11 +45,11 @@ class ExportDRXml {
 
     protected function create($dr) {
         $xml = array();
-        foreach ($dr->recolte->certification->genre->getConfigAppellations() as $appellation_config) {
-            if (!$dr->recolte->certification->genre->exist($appellation_config->getKey())) {
+        foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
+            if (!$dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
                 continue;
             }
-            $appellation = $dr->recolte->certification->genre->get($appellation_config->getKey());
+            $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
             foreach ($appellation->getConfig()->getLieux() as $lieu_config) {
                 if (!$appellation->exist($lieu_config->getKey())) {
                     continue;
@@ -148,7 +148,7 @@ class ExportDRXml {
                                 $col['L1'] = $detail->getCodeDouane();
 
                                 // SI PAS D'AUTRE AOC
-                                if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->certification->genre->getAppellations()->count() > 1) {
+                                if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
                                     $col['L1'] = $detail->getCepage()->getCodeDouane('AOC');
                                 }
 
@@ -215,17 +215,17 @@ class ExportDRXml {
                                     $col['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
                                 } elseif(!$detail->volume || $detail->volume == 0) {
                                     if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
-                                        $dr->recolte->certification->genre->exist('appellation_ALSACEBLANC') &&
-                                        $dr->recolte->certification->genre->get('appellation_ALSACEBLANC')->lieu->couleur->exist('cepage_ED') &&
-                                        $dr->recolte->certification->genre->get('appellation_ALSACEBLANC')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
+                                        $dr->recolte->getNoeudAppellations()->exist('appellation_ALSACEBLANC') &&
+                                        $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->exist('cepage_ED') &&
+                                        $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
                                         $col['motifSurfZero'] = 'AE';
                                     } else {
                                         $col['motifSurfZero'] = 'PC';
                                     }
                                     if ($appellation->getKey() == 'appellation_LIEUDIT' &&
-                                        $dr->recolte->certification->genre->exist('appellation_LIEUDIT') &&
-                                        $dr->recolte->certification->genre->get('appellation_LIEUDIT')->lieu->couleur->exist('cepage_ED') &&
-                                        $dr->recolte->certification->genre->get('appellation_LIEUDIT')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
+                                        $dr->recolte->getNoeudAppellations()->exist('appellation_LIEUDIT') &&
+                                        $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->exist('cepage_ED') &&
+                                        $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
                                         $col['motifSurfZero'] = 'AE';
                                     } else {
                                         $col['motifSurfZero'] = 'PC';

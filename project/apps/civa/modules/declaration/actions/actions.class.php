@@ -124,7 +124,6 @@ class declarationActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
-          $dr->clean();
 	      $dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
 	      $dr->save();
 	      $this->getUser()->initCredentialsDeclaration();
@@ -204,15 +203,15 @@ class declarationActions extends EtapesActions {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-        $this->forward404Unless($dr);
+        $this->dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $this->forward404Unless($this->dr);
 
         try {
             if (!$dr->updated)
                 throw new Exception();
         } catch (Exception $e) {
-            $dr->update();
-            $dr->save();
+            $this->dr->update();
+            $this->dr->save();
         }
 
         $this->annee = $annee;

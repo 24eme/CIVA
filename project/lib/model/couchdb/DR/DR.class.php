@@ -180,6 +180,7 @@ class DR extends BaseDR {
      * @param Tiers $tiers
      */
     public function validate($tiers, $compte = null, $compteValidateurId = null){
+        $this->clean();
         $this->remove('etape');
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
@@ -257,6 +258,14 @@ class DR extends BaseDR {
             }
         }
 
+        if (count($this->recolte->certification->genre->getAppellations()) == 0) {
+            $this->recolte->remove('certification');
+        }
+
+        if (count($this->acheteurs->getNoeudAppellations()) == 0) {
+            $this->acheteurs->remove('certification');
+        }
+
         return $clean;
     }
 
@@ -275,7 +284,7 @@ class DR extends BaseDR {
 
     public function setCampagne($campagne) {
         $nextCampagne = sfCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
-        foreach ($this->recolte->certification->genre->getAppellations()/*getAppellations()*/ as $k => $a) {
+        foreach ($this->recolte->getAppellations() as $k => $a) {
             if (!$nextCampagne->get($a->getParent()->getHash())->exist($k)) {
                 $this->recolte->getNoeudAppellations()->remove($k);
                 continue;

@@ -5,7 +5,6 @@
         <li class="ui-tabs-selected"><a href="#recolte_totale">Déclaration de récolte de <?php echo $annee; ?></a></li>
     </ul>
 
-    <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
         <div id="validation_dr">
             <p class="intro_declaration"></p>
@@ -14,8 +13,13 @@
             <!-- fin #acheteurs_caves -->
         </div>
     </div>
-    <!-- fin #application_dr -->
-    <?php include_partial('global/boutons', array('display' => array('retour','previsualiser','email'))) ?>
+
+    <?php if($dr->isValideeTiers()): ?>
+        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser','email'))) ?>
+    <?php else: ?>
+        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser'))) ?>
+    <?php endif; ?>
+
 
 </form>
 <!-- fin #principal -->

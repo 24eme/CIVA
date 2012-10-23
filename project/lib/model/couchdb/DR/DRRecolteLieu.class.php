@@ -371,7 +371,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
             if($this->dplc > 0) {
-                $this->usages_industriels_saisi = $this->dplc;
+                $this->usages_industriels_calcule = $this->dplc;
             } elseif($this->usages_industriels_saisi > 0) {
                 $this->usages_industriels_calcule = $this->usages_industriels_saisi;
             } else {

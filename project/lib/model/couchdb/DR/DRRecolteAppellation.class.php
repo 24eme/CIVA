@@ -39,7 +39,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getUsagesIndustrielsCalcule(){
         
-        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , $force_calcul);
+        return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
 

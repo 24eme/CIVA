@@ -451,6 +451,7 @@ Configuration:
             '*': {  }
       recolte:
         type: collection
+        class: ConfigurationRecolte
         definition:
           fields:
             douane :
