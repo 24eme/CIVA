@@ -17,7 +17,7 @@ class DRUpdateWithConfigurationTask extends sfBaseTask
         ));
 
         $this->namespace = 'dr';
-        $this->name = 'update_witg_configuration';
+        $this->name = 'update_with_configuration';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
 	The [maintenance:DRVT|INFO] task does things.
