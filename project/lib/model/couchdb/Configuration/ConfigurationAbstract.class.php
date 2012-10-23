@@ -22,22 +22,21 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
 
       return $this->store('rendement', array($this, 'getInternalRendement'));
   }
-  
+
   protected function getInternalRendement() {
     if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
        return -1;
     }
-      if(get_class($this) == "ConfigurationCouleur" && !is_null($this->getRendementCouleur())){
 
-          return  $this->getRendementCouleur();
-      }
-
+    if(get_class($this) == "ConfigurationCouleur" && $this->getRendementCouleur() > 0){
+        return  $this->getRendementCouleur();
+    }
 
     $r = $this->_get('rendement');
     if ($r) {
       return $r;
     }
-    
+
     if ($this->getParent() instanceof ConfigurationAbstract) {
         return $this->getParent()->getRendement();
     } else {

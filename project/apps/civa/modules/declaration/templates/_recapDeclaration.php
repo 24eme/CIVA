@@ -21,25 +21,25 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Volume sur place (Hl)</td>
+                    <td>Volume sur place (hl)</td>
                     <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume_sur_place[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Volume Total (Hl)</td>
+                    <td>Volume Total (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Volume Revendiqué (Hl)</td>
+                    <td>Volume Revendiqué (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $revendique[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Usages industriels (Hl)</td>
+                    <td>Usages industriels (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $usages_industriels[$a]); ?></td>
                     <?php endif; ?>
@@ -52,10 +52,10 @@
         <h2 class="titre_section">Total général</h2>
         <ul class="contenu_section">
             <li><input type="text" value="<?php echoFloat( $total_superficie);?> ares" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> Hl" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_volume);?> Hl" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_revendique);?> Hl" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_usages_industriels);?> Hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_volume);?> hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_revendique);?> hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_usages_industriels);?> hl" readonly="readonly"></li>
         </ul>
     </div>
 	<div id="recap_autres">
@@ -69,12 +69,9 @@
 				<tr>
     <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat( $jeunes_vignes); ?>&nbsp;<small>ares</small></td>
 				</tr>
+				    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
-    <td class="premiere_colonne">Lies :</td><td><?php echoFloat( $lies); ?>&nbsp;Hl</td>
-				</tr>
-					<?php if (isset($vintable['superficie'])) : ?>
-				<tr>
-				   <td class="premiere_colonne">Vins sans IG : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> Hl</td>
+				   <td class="premiere_colonne">Vins sans IG : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> hl</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>

@@ -37,29 +37,38 @@ if (!function_exists('printColonne')) {
       return ;*/
     echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">'.$libelle.'</th>';
     foreach($colonnes as $c) {
-      if (array_key_exists($key, $c->getRawValue())) {
+        $arr_col = $c->getRawValue();
+
+        if(  $arr_col['cepage'] == 'Rebêches' && $key == 'superficie') continue;
+        if (array_key_exists($key, $c->getRawValue())) {
         $v = $c[$key];
+
 	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black;">';
 	if ($c['type'] == 'total')    echo '<b>';
 
-        if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'dplc', 'cave_particuliere'))) {
+        if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'usages_industriels', 'cave_particuliere'))) {
             $v = 0;
         }
 
-        if (is_numeric($v)) 
+        if (is_numeric($v)){
           $v = sprintf('%01.02f', $v);
-	if ($unite) {
-	  $v = preg_replace('/\./', ',', $v);
-	}
+        }
+
+    	if ($unite) {
+	      $v = preg_replace('/\./', ',', $v);
+	    }
+
         echo $v;
-	if ($c['type'] == 'total')    echo '</b>';
-	if ($unite)
-	  echo "&nbsp;<small>$unite</small>";
+
+        if ($c['type'] == 'total')    echo '</b>';
+	    if ($unite)
+	        echo "&nbsp;<small>$unite</small>";
 
         if ($key == 'volume' && isset($c['motif_non_recolte'])) {
-                echo '<br /><small><i>'.$c['motif_non_recolte'].'</i></small>';
+            echo '<br /><small><i>'.$c['motif_non_recolte'].'</i></small>';
         }
-	echo '</td>';
+
+        echo '</td>';
       }else
 	echo '<td style="width: 120px;border: 1px solid black;">&nbsp;</td>';
     }
@@ -88,7 +97,7 @@ foreach ($acheteurs as $type_key => $acheteurs_type) {
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
-echo printColonne('DPLC', $colonnes_cepage, 'dplc', 'hl');
+echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl');
 ?>
 </table>
 <div style="margin-top: 20px;">

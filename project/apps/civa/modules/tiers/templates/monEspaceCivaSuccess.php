@@ -42,20 +42,12 @@
             </div>
         </div>
         <?php endif; ?>
-        
-        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-        <div id="espace_migration">
-            <h2>Espace Migration</h2>
-            <div class="contenu clearfix">
-                <a  href="<?php echo url_for('@migration_compte')?>">Migration compte</a>
-            </div>
-        </div>
-        <?php endif; ?>
 
-	<?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+       	<?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
         <div id="espace_admin">
             <h2>Espace Admin</h2>
             <div class="contenu clearfix">
+                <a  href="<?php echo url_for('@migration_compte')?>">Migration compte</a>
 
             </div>
         </div>

@@ -62,7 +62,7 @@ class ExportDRPdf {
 
     protected function create($dr, $tiers) {
         $this->nb_pages = 0;
-        if (!$this->isCached()) {
+        //if (!$this->isCached()) {
           foreach ($dr->recolte->certification->genre->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->certification->genre->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->certification->genre->get($appellation_config->getKey());
@@ -98,7 +98,6 @@ class ExportDRPdf {
         			'total_volume' => $infos['total_volume'],
                     'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
-        			'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes']
       			);
       			$i += count($page);
@@ -118,7 +117,7 @@ class ExportDRPdf {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true)));
           }
-        }
+ //      }
     }
     
     private function getRecapitulatifInfos($dr)
@@ -160,7 +159,6 @@ class ExportDRPdf {
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
         $infos['total_revendique'] = array_sum(array_values($revendique));
-        $infos['lies'] = $dr->lies;
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
         return $infos;
     }
@@ -225,9 +223,9 @@ class ExportDRPdf {
   		  				$c['volume'] = $cepage->total_volume;
   		  				$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
   		  				$c['revendique'] = $cepage->volume_revendique;
-  		  				$c['dplc'] = $cepage->dplc;
-  		  				if (!$c['dplc'])
-  		    				$c['dplc'] = '0,00';
+  		  				$c['usages_industriels'] = $cepage->dplc;
+  		  				if (!$c['usages_industriels'])
+  		    				$c['usages_industriels'] = '0,00';
   		  				$negoces = $cepage->getVolumeAcheteurs('negoces');
   					  	foreach($negoces as $cvi => $total) {
   					    	$c['negoces_'.$cvi] = $total;
@@ -245,9 +243,9 @@ class ExportDRPdf {
   						}else{
   		  					$colonnes[$last]['type'] = 'total';
   		  					$colonnes[$last]['revendique'] = $cepage->volume_revendique;
-  		  					$colonnes[$last]['dplc'] = $cepage->dplc;
-  		  					if (!$colonnes[$last]['dplc'])
-  		    					$colonnes[$last]['dplc'] = '0,00';
+  		  					$colonnes[$last]['usages_industriels'] = $cepage->dplc;
+  		  					if (!$colonnes[$last]['usages_industriels'])
+  		    					$colonnes[$last]['usages_industriels'] = '0,00';
   						}
 	      		}
 	      		$nbCepageCouleur++;
@@ -265,9 +263,9 @@ class ExportDRPdf {
 			    $c['volume'] = $couleur->total_volume;
 			    $c['cave_particuliere'] = $couleur->getTotalCaveParticuliere();
 			    $c['revendique'] = $couleur->volume_revendique;
-			    $c['dplc'] = $couleur->dplc;
-			    if (!$c['dplc'])
-			      $c['dplc'] = '0,00';
+			    $c['usages_industriels'] = $couleur->dplc;
+			    if (!$c['usages_industriels'])
+			      $c['usages_industriels'] = '0,00';
 			    $negoces = $couleur->getVolumeAcheteurs('negoces');
 			    foreach($negoces as $cvi => $vente) {
 			      $c['negoces_'.$cvi] = $vente;
@@ -294,9 +292,9 @@ class ExportDRPdf {
 	    $c['volume'] = $lieu->total_volume;
 	    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
 	    $c['revendique'] = $lieu->volume_revendique;
-	    $c['dplc'] = $lieu->dplc;
-	    if (!$c['dplc'])
-	      $c['dplc'] = '0,00';
+        $c['usages_industriels'] = $lieu->usages_industriels_calcule;
+	    if (!$c['usages_industriels'])
+	      $c['usages_industriels'] = '0,00';
 	    $negoces = $lieu->getVolumeAcheteurs('negoces');
 	    foreach($negoces as $cvi => $vente) {
 	      $c['negoces_'.$cvi] = $vente;
@@ -321,7 +319,7 @@ class ExportDRPdf {
       		array_push($pages, $page);
       		$lasti = ++$i;
     	}
-    	$extra = array('lies' => $lieu->getCouchdbDocument()->lies, 'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
+    	$extra = array('jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;

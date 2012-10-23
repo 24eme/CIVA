@@ -33,8 +33,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getTotalCaveParticuliere() {
-
-         return parent::getDataByFieldAndMethod('cave_particuliere',  array($this, 'getSumNoeudFields'), true);
+        return $this->store('cave_particuliere', array($this, 'getSumDetailFields'), array('cave_particuliere'));
     }
 
     public function getTotalVolume($force_calcul = false) {
@@ -167,6 +166,18 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         } else {
             return $this->getSumNoeudFields('volume_revendique');
         }
+    }
+
+    protected function issetField($field) {
+        return ($this->_get($field) || $this->_get($field) === 0);
+    }
+
+    protected function getSumDetailFields($field) {
+      $sum = 0;
+      foreach ($this->detail as $detail) {
+	        $sum += $detail->get($field);
+      }
+      return $sum;
     }
 
     protected function update($params = array()) {

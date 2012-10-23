@@ -54,7 +54,7 @@ pre {display: inline;}
 			<?php endif; ?>
 		</tr>
         <tr>
-            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume sur place (Hl)</td>
+            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume sur place (hl)</td>
             <?php foreach ($appellations as $a): ?>
             <td style="width: 120px;"><?php echoFloat( $volume_sur_place[$a]); ?> <small>hl</small></td>
             <?php endforeach; ?>
@@ -63,7 +63,7 @@ pre {display: inline;}
             <?php endif; ?>
         </tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Total (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Total (hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;"><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
@@ -72,7 +72,7 @@ pre {display: inline;}
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Revendiqué (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Volume Revendiqué (hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;"><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
@@ -81,7 +81,7 @@ pre {display: inline;}
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Usages industriels (Hl)</td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">Usages industriels (hl)</td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;"><?php echoFloat( $usages_industriels[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
@@ -93,9 +93,8 @@ pre {display: inline;}
 </table>
 <?php if ($has_total): ?>
 <br />
-<span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">Jeunes vignes</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-    <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Lies</td><td style="border: 1px solid black;"><?php echoFloatFr($infos['lies']); ?>&nbsp;<small>hl</small></td></tr>
-<tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echoFloatFr($infos['jeunes_vignes']); ?>&nbsp;<small>ares</small></td></tr>
+    <tr><td style="border: 1px solid black;font-weight: bold; text-align: left; width: 120px;">&nbsp;Jeunes vignes</td><td style="border: 1px solid black;"><?php echoFloatFr($infos['jeunes_vignes']); ?>&nbsp;<small>ares</small></td></tr>
 </table>
 <?php endif; ?>
