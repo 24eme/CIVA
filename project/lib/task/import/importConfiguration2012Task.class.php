@@ -59,7 +59,7 @@ EOF;
         $rendement_couleur_rouge_communale = 60;
 
         $rendement_couleur_blanc_cremant = 80;
-        $rendement_couleur_rouge_cremant = 80;
+        $rendement_couleur_rose_cremant = 80;
 
         $annee = "2012";
 
@@ -318,7 +318,7 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_cremant;
 
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->libelle = "Rouge";
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->rendement_couleur = $rendement_couleur_rouge_cremant;
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->rendement_couleur = $rendement_couleur_rose_cremant;
 
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_PB->libelle = "Pinot Blanc";
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_PB->no_vtsgn = 1;
@@ -353,11 +353,11 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_RB->douane->qualite = 'B';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_RB->douane->code_cepage = '';
 
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->cepage_PN->libelle = "Pinot Noir Rosé";
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->cepage_PN->douane->couleur = 'S';
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->cepage_PN->douane->qualite = 'M ';
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->cepage_PN->douane->code_cepage = '';
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->cepage_PN->no_vtsgn = 1;
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->libelle = "Pinot Noir Rosé";
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->couleur = 'S';
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->qualite = 'M ';
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->code_cepage = '';
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->no_vtsgn = 1;
 
         $json->recolte->certification->genre->appellation_CREMANT->rendement_appellation = null;
         $json->recolte->certification->genre->appellation_CREMANT->mout = 1;
