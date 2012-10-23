@@ -7,7 +7,6 @@ class DRUpdateWithConfigurationTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'Campagne'),
         ));
 
         $this->addOptions(array(
@@ -32,47 +31,83 @@ EOF;
     	// initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        $drs = array();
-        $drs[] = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_JSON);
 
+        $drs = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        //$drs = array(sfCouchdbManager::getClient("DR")->retrieveDocumentById('DR-1623700100-2010', sfCouchdbClient::HYDRATE_JSON));
 		foreach ($drs as $dr){
-			$dr = json_decode(json_encode($dr), true);
-			$dr['campagne'] = "2011";
-			$dr['recolte']["certification"]['genre'] = array();
-			foreach ($dr['recolte']as $key_app => $appellation){	
-				if(preg_match("/^appellation_/", $key_app) && is_array($appellation)){
-					$dr["recolte"]["certification"]['genre'][$key_app] = $appellation;	
-					$lieux=array();
-					foreach ($dr["recolte"]["certification"]['genre'][$key_app] as $key_lieu => $lieu){
-						if(preg_match("/^lieu/", $key_lieu) && is_array($lieu)){
-							$dr["recolte"]["certification"]['genre'][$key_app]['mention'][$key_lieu] = $lieu;
-								unset($dr['recolte']["certification"]['genre'][$key_app][$key_lieu]);
+            $dr_clone = clone $dr;
+            if (isset($dr->recolte->certification)) {
+
+                continue;
+            }
+
+            if (count($dr->recolte) == 0) {
+                
+                continue;
+            }
+
+            $dr_clone->acheteurs = new stdClass();
+            $dr_clone->acheteurs->certification = new stdClass();
+            $dr_clone->acheteurs->certification->genre = new stdClass();
+            foreach($dr->acheteurs as $acheteur_appellation_key => $acheteur_appellation) {
+                $dr_clone->acheteurs->certification->genre->{$acheteur_appellation_key} = clone $acheteur_appellation;
+            }
+
+            $dr_clone->recolte = new stdClass();
+            $dr_clone->recolte->certification = new stdClass();
+			$dr_clone->recolte->certification->genre = new stdClass();
+            
+            $dr_clone->recolte->certification->total_volume = null;
+            $dr_clone->recolte->certification->total_superficie = null;
+            $dr_clone->recolte->certification->volume_revendique = null;
+            $dr_clone->recolte->certification->dplc = null;
+            $dr_clone->recolte->certification->usages_industriels_calcule = null;
+
+            $dr_clone->recolte->certification->genre->total_volume = null;
+            $dr_clone->recolte->certification->genre->total_superficie = null;
+            $dr_clone->recolte->certification->genre->volume_revendique = null;
+            $dr_clone->recolte->certification->genre->dplc = null;
+            $dr_clone->recolte->certification->genre->usages_industriels_calcule = null;
+
+			foreach ($dr->recolte as $key_app => $appellation){	
+				if(preg_match("/^appellation_/", $key_app) && $appellation instanceof stdClass){
+					$dr_clone->recolte->certification->genre->{$key_app} = clone $appellation;
+                    unset($dr_clone->recolte->certification->genre->{$key_app}->lieu);
+                    $dr_clone->recolte->certification->genre->{$key_app}->usages_industriels_calcule = null;
+
+                    if(isset($appellation->dplc)) {
+                        $dr_clone->recolte->certification->genre->{$key_app}->usages_industriels_calcule = $appellation->dplc;
+                    }
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention = new stdClass();
+
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention->total_volume = null;
+                    if(isset($appellation->total_volume)) {
+                        $dr_clone->recolte->certification->genre->{$key_app}->mention->total_volume = $appellation->total_volume;
+                    }
+
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention->total_superficie = null; 
+                    if(isset($appellation->total_superficie)) {
+                        $dr_clone->recolte->certification->genre->{$key_app}->mention->total_superficie = $appellation->total_superficie;
+                    }
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention->volume_revendique = null;
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention->dplc = null;
+                    $dr_clone->recolte->certification->genre->{$key_app}->mention->usages_industriels_calcule = null;
+
+					foreach ($appellation as $key_lieu => $lieu){
+						if(preg_match("/^lieu/", $key_lieu) && $lieu instanceof stdClass){
+							$dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu} = clone $lieu;
+                            $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels_calcule = 0;
+                            if (isset($lieu->dplc)) {
+                                $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels_calcule = $lieu->dplc;
+                            }
+                            $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels_saisi = 0;
 						}
 					}		
-				unset($dr['recolte'][$key_app]);
 				}	
-			}		
-		}
-		$o_dr= $this->getObjectFromArray($dr);
-        $doc = sfCouchdbManager::getClient()->createDocumentFromData($o_dr);
-    	$doc->save();    
-	}
-	
-	public function getObjectFromArray($tab)
-	{
-		$data = new stdClass();
-		if(is_array($tab) && !empty($tab))
-		{
-			foreach($tab as $key => $val)
-			{
-				if(is_array($val))
-					$data->$key = $this->getObjectFromArray($val);
-				else
-					$data->$key = $val ;
 			}
+            sfCouchdbManager::getClient()->storeDoc($dr_clone);
+            $this->log($dr_clone->_id);
 		}
-		return $data ;
-	}
-	
+	}	
 }
 
