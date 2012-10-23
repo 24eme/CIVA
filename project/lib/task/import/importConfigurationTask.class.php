@@ -306,6 +306,7 @@ EOF;
 	$json->type = 'Current';
 	$json->campagne = $annee;
 	$json->dr_non_editable = 0;
+    $json->dr_non_ouverte = 1;
 	$docs[] = $json;
 
 	if ($options['import'] == 'couchdb') {

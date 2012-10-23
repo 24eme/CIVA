@@ -16,3 +16,5 @@ echo "Import des configurations"
 php symfony dr:update_with_configuration > /dev/null
 
 echo "Update des DRs"
+
+php symfony cc > /dev/null
