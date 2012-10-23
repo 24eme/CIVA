@@ -142,7 +142,7 @@ class ExportDRPdf {
               $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $usages_industriels[$appellation->getAppellation()] = $appellation->getTotalUsagesIndustriels();
+              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCalcule();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
           }
         }
