@@ -172,7 +172,7 @@ class uploadActions extends EtapesActions {
     }
 
     protected function hasCVI($line) {
-        if (preg_match('/^[6-7]{1}[78]\d{8}$/', $line[CsvFile::CSV_ACHETEUR_CVI]) && preg_match('/^[6-7]{1}[78]\d{8}$/', $line[CsvFile::CSV_RECOLTANT_CVI]))
+        if (preg_match('/^[67][578]\d{8}$/', $line[CsvFile::CSV_ACHETEUR_CVI]) && preg_match('/^[67][578]\d{8}$/', $line[CsvFile::CSV_RECOLTANT_CVI]))
             return true;
         return false;
     }
