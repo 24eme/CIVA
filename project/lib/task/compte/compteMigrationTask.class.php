@@ -6,6 +6,9 @@ class compteMigrationTask extends sfBaseTask {
         $this->addArguments(array(
                 new sfCommandArgument('cvi', sfCommandArgument::REQUIRED, 'cvi'),
                 new sfCommandArgument('nouveau_cvi', sfCommandArgument::REQUIRED, 'Nouveau cvi'),
+                new sfCommandArgument('nom', sfCommandArgument::REQUIRED, 'Nom'),
+                new sfCommandArgument('commune', sfCommandArgument::REQUIRED, 'Commune'),
+
         ));
 
         $this->addOptions(array(
@@ -30,9 +33,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['cvi']);
-    
         if(!preg_match('/[0-9]{10}/', $arguments['nouveau_cvi'])) {
 
             throw new sfCommandException("Le cvi semble invalide");
@@ -43,10 +44,13 @@ EOF;
             throw new sfCommandException("Le nouveau compte existe déjà");
         }
 
-        $migration = new MigrationCompte($compte, $arguments['nouveau_cvi']);
-        $migration->process();
-
-        $this->log('Compte créé');
+        if(is_object($compte)){
+            $migration = new MigrationCompte($compte, $arguments['nouveau_cvi'], $arguments['nom'], $arguments['commune']);
+            $migration->process();
+            $this->log('Compte créé');
+        }else{
+            $this->log('Compte non present en base');
+        }
     }
 
 }

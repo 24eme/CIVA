@@ -83,7 +83,7 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getAllByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-       return $this->startkey('DR-'.$cvi.'-2011')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
+       return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
     }
 
     /*
@@ -103,7 +103,7 @@ class DRClient extends sfCouchdbClient {
     }
 
     public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-        
+
         return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute($hydrate);
     }
     
