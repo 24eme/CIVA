@@ -370,6 +370,10 @@ table.table_donnees tbody td span
     min-height: 17px; !height: 17px;
 }
 
+#recapitulatif_usages_industriels_saisi{
+    text-align: right;
+}
+
 /* Erreurs */
 ul.error_list
 {
