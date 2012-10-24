@@ -7,10 +7,14 @@
 
     <!-- #application_dr -->
     <div id="application_dr" class="clearfix">
+        
         <div id="validation_dr">
-            <p class="intro_declaration"></p>
+            <div class="intro_declaration">
+                <?php include_partial('declaration/importMessage', array('acheteurs' => $acheteurs)) ?>
+                <br />
+            </div>
             <!-- #acheteurs_caves -->
-                <?php include_component('declaration', 'recapDeclaration', array('visualisation_avant_import' => $visualisation_avant_import  )) ?>
+                <?php include_component('declaration', 'recapDeclaration', array('dr' => $dr)) ?>
             <!-- fin #acheteurs_caves -->
         </div>
     </div>

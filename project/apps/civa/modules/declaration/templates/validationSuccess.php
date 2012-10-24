@@ -37,7 +37,7 @@
         <?php } ?>
 
         <!-- #acheteurs_caves -->
-        <?php include_component('declaration', 'recapDeclaration') ?>
+        <?php include_component('declaration', 'recapDeclaration', array('dr' => $dr)) ?>
         <!-- fin #acheteurs_caves -->
         </div>
     </div>
