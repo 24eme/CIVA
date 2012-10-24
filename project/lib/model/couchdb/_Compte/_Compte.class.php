@@ -30,6 +30,12 @@ abstract class _Compte extends Base_Compte {
            $this->_set('statut', self::STATUS_INACTIF);
        }
     }
+
+    public function getStatus() {
+        $this->updateStatut();
+        
+        return $this->statut;
+    }
     
     /**
      *
