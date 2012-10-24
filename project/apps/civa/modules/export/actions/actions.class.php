@@ -30,9 +30,9 @@ class exportActions extends sfActions {
         return $this->renderText($xml->getContent());
     }
 
-    private function ajaxPdf() {
+    private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
-        return $this->renderText($this->generateUrl('print', array('annee'=>$this->annee)));
+        return $this->renderText($this->generateUrl('print', array('annee'=>$this->annee, 'from_csv' => $from_csv)));
     }
     /**
      * Executes index action
@@ -45,7 +45,13 @@ class exportActions extends sfActions {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
 
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        if ($request->getParameter("from_csv", null)) {
+            $import_from = array();
+            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
+        } else {
+            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        }
+       
         $this->setLayout(false);
 
         try {
@@ -65,7 +71,7 @@ class exportActions extends sfActions {
         $this->document->generatePDF();
 
         if ($request->getParameter('ajax')) {
-            return $this->ajaxPdf();
+            return $this->ajaxPdf($request->getParameter("from_csv", null));
         }
 
         $this->document->addHeaders($this->getResponse());

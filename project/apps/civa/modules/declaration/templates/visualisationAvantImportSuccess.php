@@ -15,9 +15,9 @@
         </div>
     </div>
     <!-- fin #application_dr -->
-    <?php include_partial('global/boutons', array('display' => array('retour'))) ?>
+    <?php include_partial('global/boutons', array('display' => array('retour', 'previsualiser'))) ?>
 
 </form>
 <!-- fin #principal -->
-<?php //§include_partial('generationDuPdf', array('annee' => $annee)) ?>
+<?php include_partial('generationDuPdf', array('annee' => $annee, 'from_csv' => true)) ?>
 <?php //include_partial('envoiMailDR', array('annee' => $annee)) ?>

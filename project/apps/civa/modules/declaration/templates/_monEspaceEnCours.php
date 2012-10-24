@@ -27,7 +27,7 @@
 
            <?php if ($has_import) : ?>
             <div class="ligne_form">
-                <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" checked="checked" />
+                <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" />
                 <label for="type_declaration_import">Compléter et valider les données fournies par vos acheteurs <small>(négociants ou caves coopératives)</small></label>
             </div>
             <?php endif; ?>

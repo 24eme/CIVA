@@ -207,7 +207,7 @@ class declarationActions extends EtapesActions {
         $this->forward404Unless($this->dr);
 
         try {
-            if (!$dr->updated)
+            if (!$this->dr->updated)
                 throw new Exception();
         } catch (Exception $e) {
             $this->dr->update();
