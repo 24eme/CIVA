@@ -19,7 +19,7 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
         }
 
         $this->setValidators(array(
-            'usages_industriels_saisi' => new sfValidatorString(array('required' => false)),
+            'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false)),
         ));
     }
 
