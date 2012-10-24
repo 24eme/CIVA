@@ -14,7 +14,7 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
 
         }else{
             $this->setWidgets(array(
-                'usages_industriels_saisi' => new sfWidgetFormInput(array()),
+                'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
             ));
         }
 
