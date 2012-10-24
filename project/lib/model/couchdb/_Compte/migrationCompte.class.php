@@ -30,6 +30,11 @@ class MigrationCompte {
 
     public function createNewCompte(){
         $this->_nouveau_compte = clone $this->_ancien_compte;
+
+        $this->_ancien_compte->set('statut', 'INACTIF');
+        $this->_ancien_compte->update();
+        $this->_ancien_compte->save();
+
         $this->_nouveau_compte->_id = self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi;
         $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
         $this->_nouveau_compte->update();
