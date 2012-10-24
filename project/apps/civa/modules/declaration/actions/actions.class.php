@@ -37,7 +37,7 @@ class declarationActions extends EtapesActions {
                 $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $import_from = array();
-                $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $this->tiers, $import_from);
+                $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $import_from);
                 $dr->save();
 
                 $msg = '<p>' . sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_pre_import') . '</p>';
