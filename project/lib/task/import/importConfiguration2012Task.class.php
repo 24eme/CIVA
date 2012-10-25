@@ -310,15 +310,13 @@ EOF;
 
         $json->recolte->certification->genre->appellation_CREMANT->appellation = "CREMANT";
         $json->recolte->certification->genre->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
+        $json->recolte->certification->genre->appellation_CREMANT->rendement_appellation = 80;
         $json->recolte->certification->genre->appellation_CREMANT->douane->qualite = 'MST';
 
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->douane->qualite = 'M0';
 
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->libelle = "Blanc";
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_cremant;
-
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->libelle = "Rouge";
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRouge->rendement_couleur = $rendement_couleur_rose_cremant;
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->rendement_couleur = null;
 
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_PB->libelle = "Pinot Blanc";
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_PB->no_vtsgn = 1;
@@ -359,7 +357,6 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->code_cepage = '';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->no_vtsgn = 1;
 
-        $json->recolte->certification->genre->appellation_CREMANT->rendement_appellation = null;
         $json->recolte->certification->genre->appellation_CREMANT->mout = 1;
         $json->recolte->certification->genre->appellation_CREMANT->douane->appellation_lieu = '001';
 
