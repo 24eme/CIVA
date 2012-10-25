@@ -2,6 +2,7 @@
 abstract class _Compte extends Base_Compte {
     const STATUS_NOUVEAU = 'NOUVEAU';
     const STATUS_INSCRIT = 'INSCRIT';
+    const STATUS_INACTIF = 'INACTIF';
     const STATUS_MOT_DE_PASSE_OUBLIE = 'MOT_DE_PASSE_OUBLIE';
     
     /**
@@ -26,24 +27,14 @@ abstract class _Compte extends Base_Compte {
        } elseif(substr($this->mot_de_passe,0,8) == '{OUBLIE}') {
            $this->_set('statut', self::STATUS_MOT_DE_PASSE_OUBLIE);
        } else {
-           $this->_set('statut', null);
+           $this->_set('statut', self::STATUS_INACTIF);
        }
     }
-    
-    /**
-     *
-     * @return string 
-     */
+
     public function getStatus() {
         $this->updateStatut();
-        return $this->_get('statut');
-    }
-    
-    /**
-     * 
-     */
-    public function setStatus() {
-        throw new sfException("Compte status is not editable");
+        
+        return $this->statut;
     }
     
     /**
@@ -98,7 +89,7 @@ abstract class _Compte extends Base_Compte {
      * 
      */
     public function updateLdap() {
-        if ($this->getStatus() == self::STATUS_INSCRIT) {
+        if ($this->statut == self::STATUS_INSCRIT) {
             $ldap = new Ldap();
             if($ldap->exist($this)) {
                 $ldap->update($this);

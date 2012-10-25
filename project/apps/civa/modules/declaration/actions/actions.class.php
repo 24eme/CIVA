@@ -36,19 +36,10 @@ class declarationActions extends EtapesActions {
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
                 $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
-                $import_from = array();
-                $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $import_from);
+                $acheteurs = array();
+                $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
                 $dr->save();
-
-                $msg = '<p>' . sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_pre_import') . '</p>';
-                $msg .= '<ul>';
-                foreach ($import_from as $i) {
-                    $msg .= '<li>' . $i->nom . '</li>';
-                }
-                $msg .= '</ul>';
-                $msg .= '<p>' . sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_post_import') . '</p>';
-
-                $this->getUser()->setFlash('flash_message', $msg);
+                $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
@@ -119,13 +110,13 @@ class declarationActions extends EtapesActions {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $this->dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
 
         if ($request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
-	      $dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
-	      $dr->save();
+	      $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+	      $this->dr->save();
 	      $this->getUser()->initCredentialsDeclaration();
 	      
 	      $mess = 'Bonjour ' . $tiers->nom . ',
@@ -155,7 +146,7 @@ class declarationActions extends EtapesActions {
         }
         $this->annee = $annee;
 
-	$check = $dr->check();
+	$check = $this->dr->check();
 	$this->validLogErreur = $this->updateUrlLog($check['erreur']);
 	$this->validLogVigilance = $this->updateUrlLog($check['vigilance']);
 
@@ -207,7 +198,7 @@ class declarationActions extends EtapesActions {
         $this->forward404Unless($this->dr);
 
         try {
-            if (!$dr->updated)
+            if (!$this->dr->updated)
                 throw new Exception();
         } catch (Exception $e) {
             $this->dr->update();
@@ -326,8 +317,9 @@ Le CIVA';
     }
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {
-
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+        $this->acheteurs = array();
+        $this->dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs);
         $this->visualisation_avant_import = true;
     }
 

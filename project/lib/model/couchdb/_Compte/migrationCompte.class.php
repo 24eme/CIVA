@@ -31,7 +31,7 @@ class MigrationCompte {
     public function createNewCompte(){
         $this->_nouveau_compte = clone $this->_ancien_compte;
 
-        $this->_ancien_compte->set('statut', 'INACTIF');
+        $this->_ancien_compte->mot_de_passe = null;
         $this->_ancien_compte->update();
         $this->_ancien_compte->save();
 
@@ -70,9 +70,7 @@ class MigrationCompte {
 
     public function createLienSymbolique(){
 
-        $this->_nouveau_compte->_id = self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi;
-        $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
-        $drs = sfCouchdbManager::getClient('DR')->getAllByCvi($this->_ancien_cvi);
+       $drs = sfCouchdbManager::getClient('DR')->getAllByCvi($this->_ancien_cvi);
        foreach($drs as $dr){
             $ls_dr = new LienSymbolique();
             $ls_dr->set('_id', self::PREFIX_KEY_DR . $this->_nouveau_cvi . '-' . $dr->campagne);

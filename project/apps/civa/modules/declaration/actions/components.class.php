@@ -45,19 +45,6 @@ class declarationComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeRecapDeclaration(sfWebRequest $request) {
-        
-        $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-        $key = 'DR-'.$tiers->cvi.'-'.$annee;
-
-        if(isset($this->visualisation_avant_import) && $this->visualisation_avant_import == true )
-        {
-            $import_from = array();
-            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $import_from);
-        }else{
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
-        }
-
         $this->appellations = array();
         $this->superficie = array();
         $this->volume = array();
@@ -68,9 +55,9 @@ class declarationComponents extends sfComponents {
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
         $cvi = array();
-        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
-          if ($dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
-              $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_key);
+        foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
+          if ($this->dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
+              $appellation = $this->dr->recolte->getNoeudAppellations()->get($appellation_key);
               if ($appellation->getConfig()->excludeTotal())
                 continue;
               $this->appellations[] = $appellation->getAppellation();
@@ -87,14 +74,14 @@ class declarationComponents extends sfComponents {
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
         $this->total_revendique = array_sum(array_values($this->revendique));
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
-        $this->lies = $dr->lies;
-        $this->jeunes_vignes = $dr->jeunes_vignes;
+        $this->lies = $this->dr->lies;
+        $this->jeunes_vignes = $this->dr->jeunes_vignes;
 	
         $this->vintable = array();
-        if ($dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
-          $this->vintable['superficie'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
-          $this->vintable['volume'] = $dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
+        if ($this->dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
+          $this->vintable['superficie'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
+          $this->vintable['volume'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
         }
-            $this->annee = $annee;
-        }
+    $this->annee = $this->dr->campagne;
+  }
 }

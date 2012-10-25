@@ -1,5 +1,9 @@
 <script>
-    ajax_url_to_print = "<?php echo url_for('@print?annee='.$annee); ?>?ajax=1";
+    <?php if (isset($from_csv)): ?>
+    ajax_url_to_print = "<?php echo url_for(array('sf_route' => 'print', 'annee' => $annee, 'ajax' => 1, 'from_csv' => 1)); ?>";
+    <?php else: ?>
+    ajax_url_to_print = "<?php echo url_for(array('sf_route' => 'print', 'annee' => $annee, 'ajax' => 1)); ?>";
+    <?php endif; ?>
 </script>
 <div style="display: none" id="popup_loader" title="Génération du PDF">
     <div class="popup-loading">
