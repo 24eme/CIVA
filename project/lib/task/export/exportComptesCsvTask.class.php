@@ -39,8 +39,10 @@ EOF;
             $comptes[$compte->value->_id] = $compte->value;
             if (substr($compte->value->mot_de_passe, 0, 6) == "{TEXT}") {
                 $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->value->mot_de_passe);
-            } else {
+            } elseif($compte->value->mot_de_passe) {
                 $mot_de_passe = "Compte déjà créé";
+            } else {
+                $mot_de_passe = "Compte désactivé";
             }
             $comptes[$compte->value->_id]->code_creation = $mot_de_passe;
         }
