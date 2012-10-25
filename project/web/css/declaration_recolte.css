@@ -2181,3 +2181,16 @@ a.msg_aide{
 td.csv_num {
     text-align: right;
 }
+
+#notice_evolutions{
+    background: none repeat scroll 0 0 #EDECEC;
+    border: 1px solid #C7C9C8;
+    margin: 10px;
+    padding: 34px;
+}
+
+#notice_evolutions a{
+    color: #C4D00A;
+    size: 14px;
+    text-align: right;
+}

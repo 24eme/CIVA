@@ -32,7 +32,18 @@ class tiersActions extends EtapesActions {
 
 	  if (!$not_uniq) {
 	    $this->getUser()->signInTiers(array_values($tiers));
-	    return $this->redirect("@mon_espace_civa");
+
+
+
+          $dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
+
+          if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) && is_null($dr) ){
+              return $this->redirect("@notice_evolutions");
+          }else{
+              return $this->redirect("@mon_espace_civa");
+          }
+
+
 	  }
         }
 
@@ -44,7 +55,7 @@ class tiersActions extends EtapesActions {
                 $t = $this->form->process();
 		        $tiers[$t->type] = $t;
                 $this->getUser()->signInTiers(array_values($tiers));
-                $this->redirect("@mon_espace_civa");
+
             }
         }
     }
@@ -57,10 +68,11 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         $this->formUploadCsv = new UploadCSVForm();
+
     }
 
     /**
-     *
+     *s
      * @param sfWebRequest $request
      */
     public function executeExploitationAdministratif(sfWebRequest $request) {
@@ -77,7 +89,7 @@ class tiersActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             if ($request->getParameter('gestionnaire')) {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
-                if ($this->form_gest->isValid()) {
+                if   ($this->form_gest->isValid()) {
                     $this->form_gest->save();
                 } else {
                     $this->form_gest_err = 1;
@@ -171,5 +183,17 @@ class tiersActions extends EtapesActions {
         $this->getUser()->signIn($login_current_user);
         $this->redirect('@mon_espace_civa');
     }
+
+
+
+
+    /**
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeNoticeEvolutions(sfWebRequest $request) {
+
+    }
+
 
 }
