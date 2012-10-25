@@ -10,4 +10,4 @@ curl -X GET "http://localhost:5984/civa/_design/DR/_view/TeledeclarantAuto" | cu
 
 join -t ";" -v 1 /tmp/recoltants-non-teledeclarant /tmp/teledeclarant-auto > /tmp/recoltants-non-teledeclarant-final
 
-cat /tmp/recoltants-non-teledeclarant-final | cut -d ";" -f 1,2,3,8,9,10,11,12 | sed -r "s/\|[0-9a-Z ']+//g" | sed 's/|"//g'
+cat /tmp/recoltants-non-teledeclarant-final | cut -d ";" -f 1,2,3,8,9,10,11,12 | sed -r "s/\|[0-9a-Z ']+//g" | sed -r 's/\|(")/\1/g'
