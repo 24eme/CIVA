@@ -6,6 +6,7 @@ web/civa_dev.php
 data/*.lck
 data/import
 data/upload
+data/export
 cache/[^.]*
 log/[^.]*
 web/images/liste_nomenclatures_douanieres.pdf
