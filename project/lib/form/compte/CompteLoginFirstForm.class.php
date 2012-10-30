@@ -8,7 +8,7 @@ class CompteLoginFirstForm extends BaseForm {
         ));
 
         $this->widgetSchema->setLabels(array(
-                'login'  => 'Numéro CVI : ',
+                'login'  => 'Identifiant : ',
                 'mdp'  => 'Code de création : '
         ));
 

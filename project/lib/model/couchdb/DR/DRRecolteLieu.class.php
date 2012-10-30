@@ -441,10 +441,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             $this->dplc = $this->getDplc(true);
             $this->usages_industriels_calcule = $this->getUsageIndustrielCalcule(true);
 
-            if($this->getDplc(true) > 0){
+            if($this->getDplc(true) > 0 || $this->getTotalCaveParticuliere() <= 0){
                 $this->set('usages_industriels_saisi',  0) ;
             }
-
         }
 
         $this->add('acheteurs');
