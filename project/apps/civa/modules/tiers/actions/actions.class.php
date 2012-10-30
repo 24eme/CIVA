@@ -21,44 +21,39 @@ class tiersActions extends EtapesActions {
         $this->compte = $this->getUser()->getCompte();
 	$not_uniq = 0;
 	$tiers = array();
-        if (count($this->compte->tiers) >= 1) {
-	  foreach ($this->compte->tiers as $t) {
-	    if (isset($tiers[$t->type])) {
-	      $not_uniq = 1;
-	      continue;
-	    }
-	    $tiers[$t->type] = sfCouchdbManager::getClient()->retrieveDocumentById($t->id);
-	  }
-
-	  if (!$not_uniq) {
-	    $this->getUser()->signInTiers(array_values($tiers));
-
-
-
-          $dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
-
-          if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) && is_null($dr) ){
-              return $this->redirect("@notice_evolutions");
-          }else{
-              return $this->redirect("@mon_espace_civa");
-          }
-
-
-	  }
+    if (count($this->compte->tiers) >= 1) {
+	    foreach ($this->compte->tiers as $t) {
+            if (isset($tiers[$t->type])) {
+              $not_uniq = 1;
+              continue;
+            }
+            $tiers[$t->type] = sfCouchdbManager::getClient()->retrieveDocumentById($t->id);
         }
 
-        $this->form = new TiersLoginForm($this->compte);
+	    if (!$not_uniq) {
+            $this->getUser()->signInTiers(array_values($tiers));
+            $dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
 
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $t = $this->form->process();
-		        $tiers[$t->type] = $t;
-                $this->getUser()->signInTiers(array_values($tiers));
-
+            if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) && is_null($dr) ){
+                return $this->redirect("@notice_evolutions");
+            }else{
+                return $this->redirect("@mon_espace_civa");
             }
+	    }
+    }
+
+    $this->form = new TiersLoginForm($this->compte);
+
+    if ($request->isMethod(sfWebRequest::POST)) {
+        $this->form->bind($request->getParameter($this->form->getName()));
+        if ($this->form->isValid()) {
+            $t = $this->form->process();
+            $tiers[$t->type] = $t;
+            $this->getUser()->signInTiers(array_values($tiers));
+
         }
     }
+ }
 
     /**
      *
@@ -185,8 +180,6 @@ class tiersActions extends EtapesActions {
     }
 
 
-
-
     /**
      *
      * @param sfRequest $request A request object
@@ -194,6 +187,5 @@ class tiersActions extends EtapesActions {
     public function executeNoticeEvolutions(sfWebRequest $request) {
 
     }
-
 
 }

@@ -5,23 +5,19 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
     public function configure() {
 
         $lieu = $this->getObject();
-    if($lieu->getTotalCaveParticuliere()){
-        if( $lieu->dplc != 0 )
-        {
-            // on met le widget en read only si le dplc est =! 0
-            $this->setWidgets(array('usages_industriels_saisi' => new sfWidgetFormInput()));
-            $this->widgetSchema['usages_industriels_saisi']->setAttributes(array('value'=> $lieu->dplc , 'readonly' => 'true', 'class'=> 'readonly'));
-
-        }else{
+        if($lieu->getTotalCaveParticuliere() && $lieu->dplc == 0 ){
             $this->setWidgets(array(
                 'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
             ));
-        }
 
-        $this->setValidators(array(
-            'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false)),
-        ));
-    }
+            $this->setValidators(array(
+                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false, 'max' => $this->getObject()->getVolumeRevendiqueWithoutUIS())),
+            ));
+
+            $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
+
+            $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
+        }
 
         //$is_unique_acheteur = $lieu->hasSellToUniqueAcheteur();
         foreach ($lieu->acheteurs as $type => $acheteurs_type) {
@@ -50,6 +46,8 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
 
         if( isset($values['usages_industriels_saisi']))
             $lieu ->set("usages_industriels_saisi", (float)$usages_indus);
+
+        $this->getObject()->getCouchdbDocument()->update();
     }
 }
 

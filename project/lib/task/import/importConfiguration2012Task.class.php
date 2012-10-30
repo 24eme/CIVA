@@ -351,6 +351,7 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_RB->douane->qualite = 'B';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurBlanc->cepage_RB->douane->code_cepage = '';
 
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->libelle = "Rosé";
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->libelle = "Pinot Noir Rosé";
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->couleur = 'S';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleurRose->cepage_PN->douane->qualite = 'M ';

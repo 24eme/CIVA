@@ -20,10 +20,8 @@
                                                                                               'recapitulatif' => true)); ?>
 
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
-						
-							<p class="intro"></p>
-							
-							<div id="total_appelation">
+					       <p class="intro"></p>
+				            <div id="total_appelation">
 								<h2 class="titre_section">
                                     <?php if($isGrandCru){ ?>
                                     Total Lieu-dit
@@ -35,7 +33,6 @@
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<tbody>
-
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
                                                     <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
@@ -44,20 +41,22 @@
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
                                                     <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
 												</tr>
-                                                  <?php if($appellationlieu->getConfig()->hasRendement()): ?>
-												<tr>
-													<td>Volume revendiqué <span class="unites">(hl)</span> :</td>
-												   <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
-												</tr>
-
-                                                <?php if( isset($form['usages_industriels_saisi'] )) :?>
-												<tr>
-													<td>Usages industriels <span class="unites">(hl)</span> :</td>
-                                                    <td class="valeur alt">
-                                                        <?php echo $form['usages_industriels_saisi'] ?> hl
-                                                    </td>
-												</tr>
-                                                <?php endif; ?>                                                                <?php endif; ?>
+                                                <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                    <tr>
+                                                        <td>Volume revendiqué <span class="unites">(hl)</span> :</td>
+                                                       <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Usages industriels <span class="unites">(hl)</span> :</td>
+                                                        <td class="valeur alt">
+                                                            <?php if(isset($form['usages_industriels_saisi'])) :?>
+                                                                <?php echo $form['usages_industriels_saisi']->render() ?> hl
+                                                            <?php else: ?>
+                                                                <input id="recapitulatif_usages_industriels_saisi" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->dplc); ?>" />
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                 <?php endif; ?>
 											</tbody>
 										</table>
 

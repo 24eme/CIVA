@@ -120,6 +120,4 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         }
     }
 
-
-
 }
