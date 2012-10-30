@@ -107,7 +107,7 @@ echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 
 <?php if ($enable_identification && count($acheteurs->getParent()->hasAcheteurs())) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont DPLC</th></tr>
+  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 100px;">dont Dépassement</th></tr>
   <?php foreach ($acheteurs as $type_key => $acheteurs_type) : ?>
     <?php foreach($acheteurs_type as $cvi => $a) : ?>
         <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td>
