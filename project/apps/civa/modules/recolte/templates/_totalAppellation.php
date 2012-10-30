@@ -75,12 +75,12 @@
    <?php endif; ?>
    <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
         <li>
-		    <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendiqueAppellation()); ?>" />
-		    <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat( $lieu->getVolumeRevendiqueAppellation()); ?>" />
+		    <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendiqueTotal()); ?>" />
+		    <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat( $lieu->getVolumeRevendiqueTotal  ()); ?>" />
         </li>
         <li>
-            <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($lieu->getUsageIndustrielCalculeTotal()); ?>"/>
-            <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($lieu->getUsageIndustrielCalculeTotal()) echo 'alerte'; ?>" value="Σ <?php echoFloat($lieu->getUsageIndustrielCalculeTotal()); ?>"/>
+            <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($lieu->getDplcTotal()); ?>"/>
+            <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($lieu->getDplcTotal()) echo 'alerte'; ?>" value="Σ <?php echoFloat($lieu->getDplcTotal()); ?>"/>
         </li>
    <?php endif; ?>
         </ul>

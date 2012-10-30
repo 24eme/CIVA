@@ -324,7 +324,7 @@ class DR extends BaseDR {
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
-            foreach ($appellation->getLieux() as $lieu) {
+              foreach ($appellation->getLieux() as $lieu) {
                 //check le total superficie
                 if ($lieu->getTotalSuperficie() == 0) {
                     array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
@@ -347,6 +347,10 @@ class DR extends BaseDR {
                     //Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
                     if (!$lieu->isValidRecapitulatifVente()) {
                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+                    }
+
+                    if($lieu->getTotalVolume() - $lieu->getUsagesIndustrielsSaisi() <= 0){
+                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_has_too_many_usages_industriels')));
                     }
 
                     //check les cepages
