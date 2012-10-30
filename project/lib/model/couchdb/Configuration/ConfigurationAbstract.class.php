@@ -28,10 +28,6 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
        return -1;
     }
 
-    if(get_class($this) == "ConfigurationCouleur" && $this->getRendementCouleur() > 0){
-        return  $this->getRendementCouleur();
-    }
-
     $r = $this->_get('rendement');
     if ($r) {
       return $r;
