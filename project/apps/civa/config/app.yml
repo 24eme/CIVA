@@ -26,7 +26,7 @@ all:
         url: "@validation"
       confirmation:
         url: "@confirmation"
-    orders: [mon_espace_civa,exploitation_administratif, exploitation_acheteurs, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
+    orders: [mon_espace_civa,exploitation_message,exploitation_administratif, exploitation_acheteurs, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
   css_class_field_error: "erreur"
 
 

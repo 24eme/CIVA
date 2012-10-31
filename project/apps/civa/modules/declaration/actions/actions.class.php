@@ -55,7 +55,6 @@ class declarationActions extends EtapesActions {
                 $doc->remove('etape');
                 $doc->update();
                 $doc->save();
-                $this->getUser()->setFlash('flash_message', sfCouchdbManager::getClient('Messages')->getMessage('msg_declaration_ecran_warning_precedente'));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
