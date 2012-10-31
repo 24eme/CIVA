@@ -2,6 +2,5 @@
 
    <?php echo sfCouchdbManager::getClient('Messages')->getMessage('notice_evolutions_2012'); ?>
 
-<b><a href="<?php echo url_for('mon_espace_civa') ?>">Retour à mon espace civa</a>
-</b>
+    <a href="<?php echo url_for('@mon_espace_civa') ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" /></img></a>
 </div>

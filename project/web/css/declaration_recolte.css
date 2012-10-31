@@ -2190,7 +2190,7 @@ td.csv_num {
 }
 
 #notice_evolutions a{
-    color: #C4D00A;
-    size: 14px;
+    color: #000000;
+    font-size: 15px;
     text-align: right;
 }
