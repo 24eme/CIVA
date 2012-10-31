@@ -1,6 +1,6 @@
 <?php
 
-class LienSymbolique extends BaseLienSymbolique {
+class LS extends BaseLS {
 
     public function getTypeDocumentReferant(){
 

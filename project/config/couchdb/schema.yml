@@ -659,7 +659,6 @@ Export:
                             fields:
                               '*' : {  }
 LS:
-  class: LienSymbolique
   definition:
     fields:
       _id: { }

@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseLienSymbolique extends sfCouchdbDocument {
+abstract class BaseLS extends sfCouchdbDocument {
 
     public function getDocumentDefinitionModel() {
         return 'LS';
