@@ -72,7 +72,7 @@ class MigrationCompte {
 
        $drs = sfCouchdbManager::getClient('DR')->getAllByCvi($this->_ancien_cvi);
        foreach($drs as $dr){
-            $ls_dr = new LienSymbolique();
+            $ls_dr = new LS();
             $ls_dr->set('_id', self::PREFIX_KEY_DR . $this->_nouveau_cvi . '-' . $dr->campagne);
             $ls_dr->setPointeur($dr->_id);
             $ls_dr->update();
