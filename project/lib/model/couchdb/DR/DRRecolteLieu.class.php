@@ -79,7 +79,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         $vol_renvendique = parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul);
 
         if ($vol_renvendique < $this->getTotalVolume()) {
-
             return $vol_renvendique;
         }
 

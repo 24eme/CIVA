@@ -219,15 +219,16 @@ class recolteActions extends EtapesActions {
             return $this->redirect($this->onglets->getNextUrl());
         }
 
+
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $redirect = false;
-                if( $this->form->getValue('usages_industriels_saisi') !=  $this->form->getObject()->getUsagesIndustrielsSaisi())
+                if( $this->form->getValue('usages_industriels_saisi') !=  $this->form->getObject()->getUsagesIndustrielsSaisi() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
                     $redirect = true;
 
                 $this->form->save();
-
                 if($redirect)
                     return $this->redirect($this->onglets->getUrlRecap());
                 else

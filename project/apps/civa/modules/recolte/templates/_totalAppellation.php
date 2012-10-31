@@ -74,9 +74,16 @@
              </li>
    <?php endif; ?>
    <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
+   <?php
+        if(!$lieu->getConfig()->hasRendementAppellation()){
+            $vol_revendique = $lieu->getVolumeRevendique();
+        }else{
+            $vol_revendique = $lieu->getVolumeRevendiqueTotal();
+        }
+   ?>
         <li>
-		    <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendiqueTotal()); ?>" />
-		    <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat( $lieu->getVolumeRevendiqueTotal  ()); ?>" />
+		    <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($vol_revendique); ?>" />
+		    <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat($vol_revendique)?> "/>
         </li>
         <li>
             <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($lieu->getDplcTotal()); ?>"/>

@@ -123,6 +123,12 @@
                 return false;
             }
 
+            if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p>');
+                openPopup($('#popup_msg_erreur'), 0);
+                return false;
+            }
+
 <?php endif; ?>
 
 <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable() || $onglets->getCurrentCepage()->getConfig()->hasDenomination() || $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>

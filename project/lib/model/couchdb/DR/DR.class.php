@@ -363,13 +363,22 @@ class DR extends BaseDR {
                             }
                             if ($couleur->exist($key)) {
                                 $cepage = $couleur->get($key);
-                                if ($cepage->getConfig()->hasMinQuantite()) {
-                                    $totalVolRatio = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
-                                    $totalVolRevendique = $cepage->getTotalVolume();
-                                    if ($totalVolRatio > $totalVolRevendique) {
-                                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+                                $totalVolRevendique = $cepage->getTotalVolume();
+
+                                    if ($cepage->getConfig()->hasMinQuantite()) {
+                                        $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+                                        if ($totalVolRatioMin > $totalVolRevendique) {
+                                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+                                                               }
                                     }
-                                }
+
+                                    if ($cepage->getConfig()->hasMaxQuantite()) {
+                                        $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
+                                        if ($totalVolRatioMax < $totalVolRevendique) {
+                                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
+                                        }
+                                    }
+
                                 if ($cepage->isNonSaisie()) {
                                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
                                 } else {
