@@ -16,4 +16,5 @@ class MessagesClient extends sfCouchdbClient {
       return "PAS DE MESSAGE TROUVÉ !!";
     }
   }
+    
 }
