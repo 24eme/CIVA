@@ -31,14 +31,14 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-		
+/*		
 	if($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
 	  if (sfCouchdbManager::getClient()->databaseExists()) {
 	    sfCouchdbManager::getClient()->deleteDatabase();
 	  }
 	  sfCouchdbManager::getClient()->createDatabase();
 	}
-
+*/
 	$docs = array();
 
 	$json = new stdClass();
@@ -53,8 +53,8 @@ EOF;
     	if (file_exists($fichier_messages)) {
 	        foreach (file($fichier_messages) as $numero => $ligne) {
 	        	$datas = explode(';', $ligne);
-	        	$field = $this->getCsvValueAfterTreatment($datas[0]);
-	        	$value = $this->getCsvValueAfterTreatment($datas[1]);
+	        	$field = $datas[0];
+	        	$value = $datas[1];
 
                 if (isset($field)) {
 	        		$this->logSection("ligne ".($numero + 1), "import message success", null);
