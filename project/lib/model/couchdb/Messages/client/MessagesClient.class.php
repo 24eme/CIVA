@@ -11,10 +11,10 @@ class MessagesClient extends sfCouchdbClient {
 
   public function getMessage($id) {
     try {
-      return htmlspecialchars_decode($this->retrieveMessages()->{$id});
+      return htmlentities(($this->retrieveMessages()->{$id});
     }catch(Exception $e) {
       return "PAS DE MESSAGE TROUVÉ !!";
     }
   }
-    
+
 }
