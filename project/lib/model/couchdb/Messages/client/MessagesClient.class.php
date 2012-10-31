@@ -18,3 +18,4 @@ class MessagesClient extends sfCouchdbClient {
   }
 
 }
+
