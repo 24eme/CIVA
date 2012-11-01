@@ -76,7 +76,7 @@
    <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
    <?php
         if($lieu->getConfig()->hasRendementAppellation()){
-            $vol_revendique = $lieu->getVolumeRevendique();
+            $vol_revendique = $lieu->getVolumeRevendiqueTotal();
         }else{
             $vol_revendique = $lieu->getVolumeRevendiqueTotalWithUIS();
         }
@@ -87,7 +87,7 @@
         </li>
         <?php
             if($lieu->getConfig()->hasRendementAppellation()){
-                $dplc = $lieu->getDplc();
+                $dplc = $lieu->getDplcTotal();
             }else{
                 $dplc = $lieu->getUsageIndustrielCalculeTotal();
             }
