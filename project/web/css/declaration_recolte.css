@@ -2343,3 +2343,7 @@ td.csv_num {
 #notice_evolutions p {
 	margin-top: 10px;
 }
+
+#notice_evolutions a.pdf {
+    background: url("../images/pictos/pi_pdf.png") no-repeat scroll 0 1px transparent;
+}
