@@ -349,6 +349,7 @@ class DR extends BaseDR {
                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
                     }
 
+                    // Verifie que le volume revendique n'est pas négatif, cad usage industriel saisi > vol revendique
                     if($lieu->getVolumeRevendique() < 0){
                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_has_too_many_usages_industriels')));
                     }
@@ -356,7 +357,7 @@ class DR extends BaseDR {
                     //check les cepages
                     foreach ($lieu->filter('couleur') as $couleur) {
                         foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
-                            if ($cepage_config->hasMinQuantite()) {
+                            if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
                                 if(!$couleur->exist($key)) {
                                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage_config->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                                 }
