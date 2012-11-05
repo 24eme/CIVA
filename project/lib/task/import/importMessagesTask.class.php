@@ -74,7 +74,7 @@ EOF;
 	    if ($doc) {
 	      $doc->delete();
 	    }
-            $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+            $doc = sfCouchdbManag er::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
 	  return;
