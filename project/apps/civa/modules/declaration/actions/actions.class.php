@@ -53,6 +53,7 @@ class declarationActions extends EtapesActions {
                 $doc->remove('validee');
                 $doc->remove('modifiee');
                 $doc->remove('etape');
+                $doc->remove('utilisateurs');
                 $doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
