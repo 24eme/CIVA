@@ -85,7 +85,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
-	  return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
+            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
         } else {
             return 0;
         }
