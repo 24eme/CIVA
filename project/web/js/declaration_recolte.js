@@ -38,9 +38,9 @@ $(document).ready( function()
     });
 
     if($('#appellation_volume_dplc').val() > 0){
-        ($('.rendement').addClass("alerte"));
+        ($('#col_recolte_totale .rendement').addClass("alerte"));
     }else{
-        ($('.rendement').removeClass("alerte"));
+        ($('#col_recolte_totale .rendement').removeClass("alerte"));
     }
 
     $('input.num').live('keypress',function(e)
@@ -990,15 +990,15 @@ var volumeOnChange = function(input) {
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
 
     if($('#cepage_volume_dplc').val() == 0){
-        ($('.rendement').removeClass("alerte"));
+        ($('#donnees_recolte_sepage .rendement').removeClass("alerte"));
     }else{
-        ($('.rendement').addClass("alerte"));
+        ($('#donnees_recolte_sepage .rendement').addClass("alerte"));
     }
 
     if($('#appellation_volume_dplc').val() > 0){
-        ($('.rendement').addClass("alerte"));
+        ($('#col_recolte_totale .rendement').addClass("alerte"));
     }else{
-        ($('.rendement').removeClass("alerte"));
+        ($('#col_recolte_totale .rendement').removeClass("alerte"));
     }
 
 

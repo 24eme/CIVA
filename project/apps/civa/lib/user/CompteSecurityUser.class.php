@@ -37,9 +37,12 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
     /**
      *
-     * @param string $cas_user 
+     * @param string $cas_user
      */
     public function signIn($cas_user) {
+
+        $cas_user =  preg_replace('/^[c]{1}([0-9]{10})$/', 'C\1', $cas_user);
+
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($cas_user);
         if (!$compte) {
             throw new sfException('compte does not exist');
