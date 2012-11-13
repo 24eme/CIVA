@@ -31,17 +31,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return (!($nb_lieu < $nb_lieu_config));
     }
 
-    public function getTotalCaveParticuliere() {
-
-        return parent::getDataByFieldAndMethod("total_cave_particuliere", array($this,"getSumNoeudWithMethod") , true, array('getTotalCaveParticuliere'));
-
-    }
 
     public function getUsagesIndustrielsCalcule(){
         
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
-
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;

@@ -37,6 +37,11 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod("total_volume", array($this,"getSumNoeudFields"), $force_calcul);
     }
 
+    public function getTotalCaveParticuliere() {
+
+        return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
+    }
+
     public function getDataByFieldAndMethod($field, $method, $force_calcul = false, $parameters = array()) {
         if (!$force_calcul && $this->issetField($field)) {
             return $this->_get($field);
@@ -51,6 +56,11 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
     protected function getSumNoeudFields($field) {
         $sum = 0;
         foreach ($this->getNoeuds() as $key => $noeud) {
+            if($noeud->getConfig()->excludeTotal()) {
+
+                continue;
+            }
+            
             $sum += $noeud->get($field);
         }
         return $sum;
@@ -59,6 +69,11 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
     protected function getSumNoeudWithMethod($method) {
         $sum = 0;
         foreach ($this->getNoeuds() as $noeud) {
+            if($noeud->getConfig()->excludeTotal()) {
+
+                continue;
+            }
+
             $sum += $noeud->$method();
         }
         return $sum;

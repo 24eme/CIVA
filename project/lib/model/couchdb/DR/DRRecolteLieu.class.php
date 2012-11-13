@@ -208,23 +208,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->usages_industriels_saisi;
     }
 
-    public function getTotalCaveParticuliere() {
-        $key = "total_cave_particuliere";
-        if (!isset($this->_storage[$key])) {
-            $sum = 0;
-            foreach ($this->getCouleurs() as $couleur) {
-                foreach ($couleur->getCepages() as $key => $cepage) {
-                    if ($cepage->getConfig()->excludeTotal()) {
-                        continue;
-                    }
-                    $sum += $cepage->getTotalCaveParticuliere();
-                }
-            }
-            $this->_storage[$key] = $sum;
-        }
-        return $this->_storage[$key];
-    }
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {

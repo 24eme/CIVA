@@ -37,12 +37,6 @@ class DRRecolteCertification extends BaseDRRecolteCertification {
         return parent::getDataByFieldAndMethod('dplc', array($this, 'getSumNoeudFields'), $force_calcul );
     }
 
-    public function getTotalCaveParticuliere() {
-
-        return parent::getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
-    }
-
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
