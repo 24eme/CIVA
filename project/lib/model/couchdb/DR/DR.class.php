@@ -368,6 +368,8 @@ class DR extends BaseDR {
 
                                     if ($cepage->getConfig()->hasMinQuantite()) {
                                         $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+                                        echo $lieu->getTotalVolumeForMinQuantite();
+                                        echo $totalVolRevendique;
                                         if ($totalVolRatioMin > $totalVolRevendique) {
                                             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
                                                                }

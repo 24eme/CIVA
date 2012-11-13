@@ -23,28 +23,28 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     public function getVolumeRevendique($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('volume_revendique',  array($this, 'getVolumeRevendiqueFinal'), $force_calcul );
+        return parent::getDataByFieldAndMethod('volume_revendique',  array($this, 'getVolumeRevendiqueFinal'), $force_calcul, array('volume_revendique', false));
     }
 
     public function getDplc($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('dplc',  array($this, 'getDplcFinal'), $force_calcul);
+        return parent::getDataByFieldAndMethod('dplc',  array($this, 'getDplcFinal'), $force_calcul, array('dplc', false));
 
     }
 
     public function getTotalCaveParticuliere() {
-        return $this->store('cave_particuliere', array($this, 'getSumDetailFields'), array('cave_particuliere'));
+        return parent::getDataByFieldAndMethod('cave_particuliere',  array($this, 'getSumNoeudFields'), true,  array('cave_particuliere', false));
     }
 
     public function getTotalVolume($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('total_volume',  array($this, 'getSumNoeudFields'), $force_calcul,  array('volume'));
+        return parent::getDataByFieldAndMethod('total_volume',  array($this, 'getSumNoeudFields'), $force_calcul,  array('volume', false));
 
     }
 
     public function getTotalSuperficie($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie'));
+        return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie', false));
 
     }
 
@@ -151,7 +151,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
               return 0;
             }
         } else {
-            return $this->getSumNoeudFields('volume_dplc');
+            return $this->getSumNoeudFields('volume_dplc', false);
         }
     }
 
@@ -164,20 +164,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
               return $this->total_volume;
             }
         } else {
-            return $this->getSumNoeudFields('volume_revendique');
+            return $this->getSumNoeudFields('volume_revendique', false);
         }
-    }
-
-    protected function issetField($field) {
-        return ($this->_get($field) || $this->_get($field) === 0);
-    }
-
-    protected function getSumDetailFields($field) {
-      $sum = 0;
-      foreach ($this->detail as $detail) {
-	        $sum += $detail->get($field);
-      }
-      return $sum;
     }
 
     protected function update($params = array()) {

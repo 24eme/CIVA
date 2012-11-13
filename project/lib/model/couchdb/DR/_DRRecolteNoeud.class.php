@@ -53,10 +53,10 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
         return $this->store($field, $method, array($field));
     }
 
-    protected function getSumNoeudFields($field) {
+    protected function getSumNoeudFields($field, $exclude = true) {
         $sum = 0;
         foreach ($this->getNoeuds() as $key => $noeud) {
-            if($noeud->getConfig()->excludeTotal()) {
+            if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
             }
@@ -66,10 +66,10 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
         return $sum;
     }
 
-    protected function getSumNoeudWithMethod($method) {
+    protected function getSumNoeudWithMethod($method, $exclude = true) {
         $sum = 0;
         foreach ($this->getNoeuds() as $noeud) {
-            if($noeud->getConfig()->excludeTotal()) {
+            if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
             }
