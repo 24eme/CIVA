@@ -7,18 +7,18 @@ pre {display: inline;}
 <span style="background-color: grey; color: white; font-weight: bold;">Exploitation</span><br/>
 <table style="border: 1px solid grey;"><tr><td>
 <table border="0">
-  <tr><td>N° CVI : <i><?php echo $tiers->cvi; ?></i></td><td>Nom : <i><?php echo $tiers->intitule.' '.$tiers->nom; ?></i></td></tr>
-  <tr><td>SIRET : <i><?php echo $tiers->siret; ?></i></td><td>Adresse : <i><?php echo $tiers->siege->adresse; ?></i></td></tr>
-  <tr><td>Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
-  <tr><td>Fax : <i><?php echo $tiers->fax; ?></i></td><td>&nbsp;</td></tr>
+  <tr><td>&nbsp;N° CVI : <i><?php echo $tiers->cvi; ?></i></td><td>Nom : <i><?php echo $tiers->intitule.' '.$tiers->nom; ?></i></td></tr>
+  <tr><td>&nbsp;SIRET : <i><?php echo $tiers->siret; ?></i></td><td>Adresse : <i><?php echo $tiers->siege->adresse; ?></i></td></tr>
+  <tr><td>&nbsp;Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
+  <tr><td>&nbsp;Fax : <i><?php echo $tiers->fax; ?></i></td><td>&nbsp;</td></tr>
 </table>
 </td></tr></table>
 
 <span style="background-color: grey; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
 <table style="border: 1px solid grey;"><tr><td>
 <table border="0" style="margin: 0px; padding: 0px;">
-  <tr><td>Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo $tiers->exploitant->getDateNaissanceFr(); ?></i></td></tr>
-  <tr><td>Adresse complete : <i><?php echo $tiers->exploitant->adresse.', '.$tiers->exploitant->code_postal.' '.$tiers->exploitant->commune; ?></i></td><td>Tel. <i><?php echo $tiers->exploitant->telephone; ?></i></td></tr>
+  <tr><td>&nbsp;Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo $tiers->exploitant->getDateNaissanceFr(); ?></i></td></tr>
+  <tr><td>&nbsp;Adresse complete : <i><?php echo $tiers->exploitant->adresse.', '.$tiers->exploitant->code_postal.' '.$tiers->exploitant->commune; ?></i></td><td>Tel. <i><?php echo $tiers->exploitant->telephone; ?></i></td></tr>
 </table>
 </td></tr></table>
   <div><span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle_appellation; ?></span></div>
@@ -35,7 +35,7 @@ if (!function_exists('printColonne')) {
     }
     /*if (!$cpt)
       return ;*/
-    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">'.$libelle.'</th>';
+    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">&nbsp;'.$libelle.'</th>';
     foreach($colonnes as $c) {
         $arr_col = $c->getRawValue();
 
@@ -97,17 +97,22 @@ foreach ($acheteurs as $type_key => $acheteurs_type) {
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
-echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl');
+
+if($has_no_usages_industriels) {
+  echo printColonne('DPLC', $colonnes_cepage, 'usages_industriels', 'hl');
+} else {
+  echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl');
+}
 ?>
 </table>
 <div style="margin-top: 20px;">
 <table>
 <tr>
-<td style="width: 830px">
+<td style="width: 820px">
 <?php if ($enable_identification && count($acheteurs->getParent()->hasAcheteurs())) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 180px;">Dont dépassement</th></tr>
+  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 120px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 180px;">Dont dépassement</th></tr>
   <?php foreach ($acheteurs as $type_key => $acheteurs_type) : ?>
     <?php foreach($acheteurs_type as $cvi => $a) : ?>
         <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td>
@@ -118,9 +123,9 @@ echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 
                     <small><i>(Acheteur de mouts)</i></small>
                 <?php endif; ?>
             </td>
-            <td style="border: 1px solid black;width: 100px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;</td>
+            <td style="border: 1px solid black;width: 120px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;<small>ares</small></td>
             <td  style="border: 1px solid black;width: 120px;"><?php echoFloatFr($a->volume); ?>&nbsp;<small>hl</small></td>
-            <td style="border: 1px solid black;width: 180px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;</td></tr>
+            <td style="border: 1px solid black;width: 180px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;<small>hl</small></td></tr>
     <?php endforeach; ?>
   <?php endforeach; ?>
 </table>

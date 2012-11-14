@@ -98,7 +98,8 @@ class ExportDRPdf {
         			'total_volume' => $infos['total_volume'],
                     'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
-        			'jeunes_vignes' => $infos['jeunes_vignes']
+              'lies' => $infos['lies'],
+        			'jeunes_vignes' => $infos['jeunes_vignes'],
       			);
       			$i += count($page);
       			$pages[] = $page;
@@ -110,12 +111,12 @@ class ExportDRPdf {
     				$has_total = true;
     			else 
     				$has_total = false;
-    			$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total)));
+    			$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
     			$currentPage++;
     		}
           	
           } else {
-          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true)));
+          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
  //      }
     }
@@ -160,6 +161,7 @@ class ExportDRPdf {
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
         $infos['total_revendique'] = array_sum(array_values($revendique));
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
+        $infos['lies'] = $dr->lies;
         return $infos;
     }
     
@@ -319,11 +321,11 @@ class ExportDRPdf {
       		array_push($pages, $page);
       		$lasti = ++$i;
     	}
-    	$extra = array('jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
+    	$extra = array('lies' => $lieu->getCouchdbDocument()->lies,  'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable)));
+	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
 	      $identification_enabled = 0;
 	    }
   	}
