@@ -39,7 +39,13 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Usages industriels (hl)</td>
+                    <td>
+                        <?php if($has_no_usages_industriels): ?>
+                            DPLC (hl)
+                        <?php else: ?>
+                            Usages industriels (hl)
+                        <?php endif; ?>
+                    </td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $usages_industriels[$a]); ?></td>
                     <?php endif; ?>
@@ -67,9 +73,14 @@
 			</thead>
 			<tbody>
 				<tr>
-    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat( $jeunes_vignes); ?>&nbsp;<small>ares</small></td>
+                    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat( $jeunes_vignes); ?>&nbsp;<small>ares</small></td>
 				</tr>
-				    <?php if (isset($vintable['superficie'])) : ?>
+                <?php if($has_no_usages_industriels): ?>
+                <tr>
+                    <td class="premiere_colonne">Lies : </td><td><?php echoFloat($lies); ?>&nbsp;<small>hl</small></td>
+                </tr>
+                <?php endif; ?>
+			    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
 				   <td class="premiere_colonne">Vins sans IG : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> hl</td>
 				</tr>

@@ -454,6 +454,7 @@ Configuration:
         class: ConfigurationRecolte
         definition:
           fields:
+            no_usages_industriels: { required: false}
             douane :
               type: collection
               class: ConfigurationDouane

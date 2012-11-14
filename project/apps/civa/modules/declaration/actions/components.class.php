@@ -54,6 +54,7 @@ class declarationComponents extends sfComponents {
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
+        $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($this->dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
