@@ -36,7 +36,7 @@ class tiersActions extends EtapesActions {
         /*return $this->redirect("@mon_espace_civa");*/
          
         $dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
-        if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) && is_null($dr) ){
+        if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->isInDelegateMode() && is_null($dr) ){
             return $this->redirect("@notice_evolutions");
         }else{
             return $this->redirect("@mon_espace_civa");

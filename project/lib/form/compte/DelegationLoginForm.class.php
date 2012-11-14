@@ -28,6 +28,8 @@ class DelegationLoginForm extends BaseForm {
         $this->setWidget("compte", new sfWidgetFormInputText());
         $this->setValidator("compte", new sfValidatorChoice(array("choices" => array_keys($this->getChoiceDelegation()),
                                                                  "required" => true)));
+
+        $this->getWidget("compte")->setLabel('CVI');
         
         $this->getValidator("compte")->setMessage("required", "Champs obligatoire");
         $this->getValidator("compte")->setMessage("invalid", "Ce compte n'existe pas ou vous n'avez pas les droits de délégation pour celui-ci");
