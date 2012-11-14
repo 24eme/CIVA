@@ -72,14 +72,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-                    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat( $jeunes_vignes); ?>&nbsp;<small>ares</small></td>
-				</tr>
                 <?php if($has_no_usages_industriels): ?>
                 <tr>
                     <td class="premiere_colonne">Lies : </td><td><?php echoFloat($lies); ?>&nbsp;<small>hl</small></td>
                 </tr>
                 <?php endif; ?>
+				<tr>
+                    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat( $jeunes_vignes); ?>&nbsp;<small>ares</small></td>
+				</tr>
 			    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
 				   <td class="premiere_colonne">Vins sans IG : </td><td><?php echoFloat( $vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat( $vintable['volume']); ?> hl</td>
