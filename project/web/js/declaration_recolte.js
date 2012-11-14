@@ -344,26 +344,21 @@ var formExploitationAdministratif = function()
         var btn_modifier = btn.find('a.modifier');
         var btn_annuler = btn.find('a.annuler');
 
-        //modification_infos.hide();
-
         btn_modifier.click(function()
         {
             presentation_infos.hide();
             modification_infos.show();
             btns_modifier.hide();
+            $('#btn_etape input[name=boutons[next]]').addClass('btn_inactif');
+            $('#btn_etape input[name=boutons[previous]]').addClass('btn_inactif');
             bloc.addClass('edition');
             bloc.find('form input[type!="hidden"], form select').first().focus();
             return false;
         });
 
-        btn_annuler.click(function()
-        {
-            presentation_infos.show();
-            modification_infos.hide();
-            btns_modifier.show();
-            bloc.removeClass('edition');
-            return false;
-        });
+        if(bloc.hasClass('edition')) {
+            btn_modifier.click();
+        }
     });
 };
 

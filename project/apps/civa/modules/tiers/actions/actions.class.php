@@ -125,7 +125,7 @@ class tiersActions extends EtapesActions {
             }
         }
     }
-
+    
     /**
      *
      * @param sfRequest $request A request object
