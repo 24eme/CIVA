@@ -93,16 +93,6 @@ class CompteTiers extends BaseCompteTiers {
 
     public function hasDelegation(){
 
-        if( $this->exist('delegation') && count($this->delegation) > 0)
-            return true;
-        else
-            return false;
-    }
-
-    public function getTiersDelegation(){
-        if( $this->exist('delegation') && count($this->delegation) > 0)
-         foreach ($this->delegation as $tiers) {
-            $this->_tiers[] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id);
-        }
+        return $this->exist('delegation') && count($this->delegation) > 0;
     }
 }

@@ -12,6 +12,8 @@ class tiersComponents extends sfComponents {
 
     public function executeDelegationForm()
     {
-        $this->form = new DelegationTiersLoginForm($this->getUser()->getCompte());
+        if (!$this->form) {
+            $this->form = new DelegationLoginForm($this->getUser()->getCompte());
+        }
     }
 }

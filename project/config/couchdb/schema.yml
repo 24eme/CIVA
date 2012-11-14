@@ -318,13 +318,7 @@ CompteTiers:
               type: collection
               definition:
                 fields:
-                  '*':
-                    type: collection
-                    definition:
-                      fields:
-                        id: {  }
-                        type: {  }
-                        nom: {  }
+                  '*': {  }
 
 CompteVirtuel:
   inheritance: _Compte

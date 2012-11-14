@@ -134,19 +134,19 @@ class tiersActions extends EtapesActions {
 
         $this->forward404Unless($this->getUser()->hasCredential('delegation'));
         $this->compte = $this->getUser()->getCompte();
-        $this->form = new DelegationTiersLoginForm($this->getUser()->getCompte());
+        $this->formDelegation = new DelegationLoginForm($this->getUser()->getCompte());
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
+            $this->formDelegation->bind($request->getParameter($this->formDelegation->getName()));
 
-            if ($this->form->isValid()) {
-                $this->getUser()->signInCompteUsed($this->form->process());
+            if ($this->formDelegation->isValid()) {
+                $this->getUser()->signInCompteUsed($this->formDelegation->process());
                 $this->redirect('@tiers');
             }
-
-            $this->executeMonEspaceCiva($request);
-            $this->setTemplate("monEspaceCiva");
         }
+
+        $this->executeMonEspaceCiva($request);
+        $this->setTemplate("monEspaceCiva");
     }
 
 

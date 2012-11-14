@@ -1,6 +1,6 @@
 <?php
 
-class DelegationTiersLoginForm extends BaseForm {
+class DelegationLoginForm extends BaseForm {
     protected $_compte = null;
     
     /**
@@ -25,11 +25,12 @@ class DelegationTiersLoginForm extends BaseForm {
     }
     
     public function configure() {
-        $this->setWidget("tiers", new sfWidgetFormChoice(array("choices" => $this->getChoiceDelegationTiers())));
-        $this->setValidator("tiers", new sfValidatorChoice(array("choices" => array_keys($this->getChoiceDelegationTiers()),
+        $this->setWidget("compte", new sfWidgetFormInputText());
+        $this->setValidator("compte", new sfValidatorChoice(array("choices" => array_keys($this->getChoiceDelegation()),
                                                                  "required" => true)));
         
-        $this->getValidator("tiers")->setMessage("required", "Champs obligatoire");
+        $this->getValidator("compte")->setMessage("required", "Champs obligatoire");
+        $this->getValidator("compte")->setMessage("invalid", "Ce compte n'existe pas ou vous n'avez pas les droits de délégation pour celui-ci");
         
         $this->widgetSchema->setNameFormat('delegation[%s]');
     }
@@ -40,17 +41,17 @@ class DelegationTiersLoginForm extends BaseForm {
      */
     public function process() {
         if ($this->isValid()) {
-            return sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$this->getValue('tiers'));
+            return sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$this->getValue('compte'));
         } else {
             throw new sfException("must be valid");
         }
     }
     
-    public function getChoiceDelegationTiers() {
+    public function getChoiceDelegation() {
         $choices = array();
-        foreach($this->_compte->getTiersDelegation() as $id => $item) {
+        foreach($this->_compte->delegation as $id => $nom) {
 
-            $choices[$item->id] = $item->nom . ' - ' . $item->type;
+            $choices[str_replace('COMPTE-', '', $id)] = $nom;
         }
         return $choices;
     }

@@ -43,7 +43,13 @@
         </div>
         <?php endif; ?>
 
-       	<?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+        <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
+            <div class="contenu clearfix">
+                <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
+            </div>
+        <?php endif;?>	
+
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
         <div id="espace_admin">
             <h2>Espace Admin</h2>
             <div class="contenu clearfix">
@@ -52,43 +58,6 @@
             </div>
         </div>
         <?php endif; ?>
-
-
-        <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
-            <div class="contenu clearfix">
-                <?php include_component('tiers', 'delegationForm') ?>
-            </div>
-        <?php endif;?>	
-        
-        <!-- #nouvelle_declaration -->
-        <?php /*<div id="nouvelle_declaration">
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-                 <?php include_component('declaration', 'monEspace') ?>
-                 <br />
-            <?php endif; ?>
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
-                 <?php include_partial('gamma/monEspace') ?>
-                 <br />
-            <?php endif; ?>
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
-                 <?php include_partial('acheteur/monEspace') ?>
-                 <br />
-            <?php endif; ?>
-        </div>
-         */ ?>
-        <!-- fin #nouvelle_declaration -->
-
-        <!-- #precedentes_declarations -->
-       <?php /* <div id="precedentes_declarations">
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-                <?php include_component('declaration', 'monEspaceColonne') ?>
-            <?php endif; ?>
-            <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
-                 <?php include_partial('gamma/monEspaceColonne') ?>
-            <?php endif; ?>
-        </div>
-        */ ?>
-        <!-- fin #precedentes_declarations -->
     </div>
     <!-- fin #application_dr -->
 

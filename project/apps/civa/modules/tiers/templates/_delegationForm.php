@@ -8,9 +8,9 @@
             <?php echo $form->renderHiddenFields(); ?>
             <?php echo $form->renderGlobalErrors(); ?>
             <div class="ligne_form ligne_form_label">
-                <?php echo $form['tiers']->renderError() ?>
-                <?php echo $form['tiers']->renderLabel() ?>
-                <?php echo $form['tiers']->render() ?>
+                <?php echo $form['compte']->renderError() ?>
+                <?php echo $form['compte']->renderLabel() ?>
+                <?php echo $form['compte']->render() ?>
             </div>
 
             <div class="ligne_form ligne_btn">
