@@ -81,13 +81,7 @@ pre {display: inline;}
 			<?php endif; ?>
 		</tr>
 		<tr>
-			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">
-                <?php if($has_no_usages_industriels): ?>
-                    &nbsp;DPLC
-                <?php else: ?>
-                    &nbsp;Usages industriels
-                <?php endif; ?>
-            </td>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;"><?php if($has_no_usages_industriels): ?>&nbsp;DPLC<?php else: ?>&nbsp;Usages industriels<?php endif; ?></td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;"><?php echoFloat( $usages_industriels[$a]); ?> <small>hl</small></td>
 			<?php endforeach; ?>
