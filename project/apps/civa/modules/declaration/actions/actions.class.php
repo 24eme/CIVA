@@ -112,7 +112,19 @@ class declarationActions extends EtapesActions {
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
 
-        if ($request->isMethod(sfWebRequest::POST)) {
+        $check = $this->dr->check();
+        $this->annee = $annee;
+
+        $this->validLogErreur = $this->updateUrlLog($check['erreur']);
+        $this->validLogVigilance = $this->updateUrlLog($check['vigilance']);
+
+        $this->error = count($check['erreur']);
+        $this->logVigilance = count($check['vigilance']);
+
+        $this->getUser()->setAttribute('log_erreur', $this->validLogErreur);
+        $this->getUser()->setAttribute('log_vigilance', $this->validLogVigilance);
+
+        if (!$this->error && $request->isMethod(sfWebRequest::POST)) {
 
             if ($this->askRedirectToNextEtapes()) {
 	      $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
@@ -144,17 +156,7 @@ class declarationActions extends EtapesActions {
 
             $this->redirectByBoutonsEtapes();
         }
-        $this->annee = $annee;
-
-	$check = $this->dr->check();
-	$this->validLogErreur = $this->updateUrlLog($check['erreur']);
-	$this->validLogVigilance = $this->updateUrlLog($check['vigilance']);
-
-        $this->error = count($check['erreur']);
-        $this->logVigilance = count($check['vigilance']);
-
-        $this->getUser()->setAttribute('log_erreur', $this->validLogErreur);
-        $this->getUser()->setAttribute('log_vigilance', $this->validLogVigilance);
+        
     }
 
     private function updateUrlLog($array) {

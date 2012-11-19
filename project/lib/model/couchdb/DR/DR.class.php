@@ -366,13 +366,16 @@ class DR extends BaseDR {
                                 $cepage = $couleur->get($key);
                                 $totalVolRevendique = $cepage->getTotalVolume();
 
+                                    if($cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
+                                        $couleur->remove($key);
+                                        continue;
+                                    }
+
                                     if ($cepage->getConfig()->hasMinQuantite()) {
                                         $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
-                                        echo $lieu->getTotalVolumeForMinQuantite();
-                                        echo $totalVolRevendique;
                                         if ($totalVolRatioMin > $totalVolRevendique) {
                                             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
-                                                               }
+                                        }
                                     }
 
                                     if ($cepage->getConfig()->hasMaxQuantite()) {
@@ -382,9 +385,9 @@ class DR extends BaseDR {
                                         }
                                     }
 
-                                if ($cepage->isNonSaisie()) {
-                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
-                                } else {
+                                    if ($cepage->isNonSaisie()) {
+                                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
+                                    } else {
                                     // vérifie le trop plein de DPLC
                                     if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0) {
                                         array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
