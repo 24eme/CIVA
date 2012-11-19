@@ -42,10 +42,14 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   }
 
   public function isSuperficieRequired() {
-    if ($this->exist('superficie_optionnelle'))
-      return (! $this->get('superficie_optionnelle'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+    if(!$this->hasSuperficie()) {
       return false;
+    }
+    
+    if ($this->exist('superficie_optionnelle')) {
+      return (! $this->get('superficie_optionnelle'));
+    }
+
     return true;
   }
 
