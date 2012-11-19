@@ -402,11 +402,7 @@ class DR extends BaseDR {
                                                 $detail_nom .= $detail->denomination . ' ';
                                             if ($detail->vtsgn != '')
                                                 $detail_nom .= $detail->vtsgn . ' ';
-                                            /*
-                       if (!$detail->superficie || $detail->superficie <= 0) {
-                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero_detail')));
-                       }
-                       */
+
                                             if ($cepage_config->isSuperficieRequired() && $detail->superficie == 0) {
                                                 array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . sfCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero_detail')));
                                             }
