@@ -216,7 +216,7 @@ class uploadActions extends EtapesActions {
             $lieu = $cepage->getParent()->getParent();
             if ($lieu->getKey() != 'lieu')
                 $this->has_lieudit = true;
-            if ($lieu->getParent()->exist('detail_lieu_editable') || preg_match('/_GRDCRU/', $prod['hash']))
+            if ($lieu->getParent()->getParent()->hasLieuEditable() || preg_match('/_GRDCRU/', $prod['hash']))
                 $this->may_have_denomlieu = true;
 
             if (preg_match('/_ED$/', $prod['hash'])) {
