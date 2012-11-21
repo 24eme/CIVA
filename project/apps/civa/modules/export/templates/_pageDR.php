@@ -26,7 +26,7 @@ pre {display: inline;}
 <?php 
 
 if (!function_exists('printColonne')) {
-  function printColonne($libelle, $colonnes, $key, $unite = '') {
+  function printColonne($libelle, $colonnes, $key, $unite = '', $display_zero = true) {
     $cpt = 0;
     foreach($colonnes as $c) {
       if (array_key_exists($key, $c->getRawValue())) {
@@ -50,19 +50,25 @@ if (!function_exists('printColonne')) {
             $v = 0;
         }
 
+        $afficher_volume = !(!$display_zero && $v == 0);
+
         if (is_numeric($v)){
           $v = sprintf('%01.02f', $v);
         }
 
-    	if ($unite) {
-	      $v = preg_replace('/\./', ',', $v);
-	    }
+      	if ($unite) {
+  	      $v = preg_replace('/\./', ',', $v);
+  	    }
 
-        echo $v;
+        if($afficher_volume) {
+          echo $v;
 
-        if ($c['type'] == 'total')    echo '</b>';
-	    if ($unite)
-	        echo "&nbsp;<small>$unite</small>";
+          if ($c['type'] == 'total')    echo '</b>';
+	        if ($unite)
+	         echo "&nbsp;<small>$unite</small>";
+        } else {
+          echo "&nbsp;";
+        }
 
         if ($key == 'volume' && isset($c['motif_non_recolte'])) {
             echo '<br /><small><i>'.$c['motif_non_recolte'].'</i></small>';
@@ -77,10 +83,13 @@ if (!function_exists('printColonne')) {
 }
 
 echo printColonne('Cépage', $colonnes_cepage, 'cepage');
-if ($hasLieuEditable)
-echo printColonne('Lieu', $colonnes_cepage, 'lieu');
+if ($hasLieuEditable) {
+  echo printColonne('Lieu', $colonnes_cepage, 'lieu');
+}
 echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');	
-echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
+if ($hasVTSGN) {
+  echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
+}
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 //echo printColonne('Motif de non recolte', $colonnes_cepage, 'motif_non_recolte');
@@ -101,7 +110,7 @@ echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
 if($has_no_usages_industriels) {
   echo printColonne('DPLC', $colonnes_cepage, 'usages_industriels', 'hl');
 } else {
-  echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl');
+  echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl', false);
 }
 ?>
 </table>

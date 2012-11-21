@@ -70,7 +70,7 @@ class ExportDRPdf {
                   if (!$appellation->getLieux()->exist($lieu->getKey()))
                     continue;
                   $lieu = $appellation->getLieux()->get($lieu->getKey());
-                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable());
+                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
                 }
             }
           }
@@ -165,7 +165,7 @@ class ExportDRPdf {
         return $infos;
     }
     
-	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable) {
+	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable, $hasVTSGN) {
       $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
     	$colonnes = array();
     	$afterTotal = array();
@@ -325,7 +325,7 @@ class ExportDRPdf {
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
+	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
 	      $identification_enabled = 0;
 	    }
   	}
