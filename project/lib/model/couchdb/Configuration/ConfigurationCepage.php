@@ -33,14 +33,6 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     return true;
   }
 
-  public function hasVtsgn() {
-    if ($this->exist('no_vtsgn'))
-      return (! $this->get('no_vtsgn'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
-      return false;
-    return true;
-  }
-
   public function isSuperficieRequired() {
     if(!$this->hasSuperficie()) {
       return false;

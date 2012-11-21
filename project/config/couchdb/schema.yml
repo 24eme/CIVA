@@ -504,6 +504,7 @@ Configuration:
                               no_total_cepage: {type: integer, required: false}
                               detail_lieu_editable: {type: integer, required: false}
                               exclude_total: {type: integer, required: false}
+                              no_vtsgn: {required: false}
                               douane :
                                 type: collection
                                 class: ConfigurationDouane

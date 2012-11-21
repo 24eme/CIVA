@@ -107,4 +107,15 @@ abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
     return true;
   }
 
+  public function hasVtsgn() {
+    if ($this->exist('no_vtsgn'))
+      return (! $this->get('no_vtsgn'));
+    if ($this->exist('min_quantite') && $this->get('min_quantite'))
+      return false;
+    if ($this->getParent() instanceof ConfigurationAbstract) {
+      return $this->getParent()->hasVtsgn();
+    }
+    return true;
+  }
+
 }
