@@ -76,9 +76,9 @@ class ExportDRPdf {
           }
 
       $infos = $this->getRecapitulatifInfos($dr);
+
       $infosPage = array();
 	  $nb_colonnes_by_page = 6;
-	  $infos = $this->getRecapitulatifInfos($dr);
           $nb_colonnes = count($infos['appellations']) - 1;
 	  if ($nb_colonnes == 5) 
 		$nb_colonnes_by_page = 5;
@@ -98,8 +98,10 @@ class ExportDRPdf {
         			'total_volume' => $infos['total_volume'],
                     'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
+              'total_volume_sur_place' => $infos['total_volume_sur_place'],
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
+
       			);
       			$i += count($page);
       			$pages[] = $page;

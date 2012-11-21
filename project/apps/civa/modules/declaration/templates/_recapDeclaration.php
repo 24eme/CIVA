@@ -9,7 +9,7 @@
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appellations" /></th>
    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) :?>
-                    <th><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+                    <th id="recap_th_<?php echo $a ?>"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -47,8 +47,14 @@
                         <?php endif; ?>
                     </td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
-                    <td><?php echoFloat( $usages_industriels[$a]); ?></td>
-                    <?php endif; ?>
+                    <td>
+                        <?php if($has_no_usages_industriels): ?>
+                            <?php echoFloat($usages_industriels[$a]); ?>
+                        <?php elseif($usages_industriels[$a] != 0): ?>
+                            <?php echoFloat($usages_industriels[$a]); ?>
+                        <?php endif; ?>
+                    </td>
+                    <?php endif;  ?>
                 </tr>
             </tbody>
         </table>
@@ -61,7 +67,15 @@
             <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_volume);?> hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_revendique);?> hl" readonly="readonly"></li>
-            <li><input type="text" value="<?php echoFloat( $total_usages_industriels);?> hl" readonly="readonly"></li>
+            <li>
+                <?php if($has_no_usages_industriels): ?>
+                    <input type="text" value="<?php echoFloat( $total_usages_industriels);?> hl" readonly="readonly">
+                <?php elseif($total_usages_industriels != 0): ?>
+                    <input type="text" value="<?php echoFloat( $total_usages_industriels);?> hl" readonly="readonly">
+                <?php else: ?>
+                    <input type="text" value="" readonly="readonly">
+                <?php endif; ?>
+            </li>
         </ul>
     </div>
 	<div id="recap_autres">

@@ -67,7 +67,8 @@ if (!function_exists('printColonne')) {
 	        if ($unite)
 	         echo "&nbsp;<small>$unite</small>";
         } else {
-          echo "&nbsp;";
+          echo "&nbsp;&nbsp;";
+          if ($c['type'] == 'total')    echo '</b>';
         }
 
         if ($key == 'volume' && isset($c['motif_non_recolte'])) {

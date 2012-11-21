@@ -14,7 +14,7 @@ if (   $onglets->getCurrentCepage()->getDplc() > 0
       <legend class="message_title">
          Information
       </legend>
-      <p>Vous pouvez replier jusqu'à <?php echo $onglets->getCurrentCepage()->getDplc() ?> hl en assemblage pour ce cêpage. </p>
+      <p>Vous pouvez replier jusqu'à <?php echo $onglets->getCurrentCepage()->getDplc() ?> hl en assemblage pour ce cepage.</p>
     </fieldset>
 
 <?php endif; ?>

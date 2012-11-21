@@ -1865,7 +1865,15 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #recolte_totale #appelations table thead th {
 	font-size: 11px;
+	width: 93px;
+}
+
+#recolte_totale #appelations table thead th#recap_th_COMMUNALE {
 	width: 94px;
+}
+
+#recolte_totale #appelations table thead th#recap_th_GRDCRU {
+	width: 100px;
 }
 
 #recolte_totale #appelations table thead th:first-child {
