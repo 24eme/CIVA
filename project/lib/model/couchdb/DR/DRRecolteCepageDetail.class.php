@@ -55,8 +55,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     protected function deleteAcheteurUnused($type) {
         $appellation_key = $this->getCepage()->getLieu()->getAppellation()->getKey();
-        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->exist($appellation_key)) {
-            $acheteurs = $this->getCouchdbDocument()->acheteurs->get($appellation_key)->get($type);
+        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->exist($appellation_key)) {
+            $acheteurs = $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->get($appellation_key)->get($type);
             $acheteurs_detail = $this->get($type);
             foreach ($acheteurs_detail as $key => $item) {
                 if (!in_array($item->cvi, $acheteurs->toArray())) {
