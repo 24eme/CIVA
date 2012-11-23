@@ -150,7 +150,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             return $dplc;
         }
 
-        return $this->usages_industriels_saisi;
+        return ($this->usages_industriels_saisi) ? $this->usages_industriels_saisi : 0;
     }
 
     public function getDplcTotal() {
