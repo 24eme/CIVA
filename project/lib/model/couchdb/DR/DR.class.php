@@ -366,7 +366,7 @@ class DR extends BaseDR {
                                 $cepage = $couleur->get($key);
                                 $totalVolRevendique = $cepage->getTotalVolume();
 
-                                    if($cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
+                                    if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
                                         $couleur->remove($key);
                                         continue;
                                     }
