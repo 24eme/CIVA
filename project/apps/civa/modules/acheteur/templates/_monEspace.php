@@ -8,7 +8,7 @@
                 <?php if ($export): ?>
                     <li><a target="_blank" href="https://<?php echo $sf_request->getHost().'/mise_a_disposition/'.$export->cle.'/declarations_de_recolte'; ?>">Télécharger les PDFs des déclarations de récolte</a></li>
                 <?php endif ?>
-               <!--<li><a href="<?php echo url_for('@export_dr_validee_csv') ?>">Télécharger la liste des utilisateurs ayant validé leur DR</a></li>-->
+               <li><a href="<?php echo url_for('@export_dr_validee_csv') ?>">Télécharger la liste des utilisateurs ayant validé leur DR</a></li>
             </ul>
         <?php else: ?>
             <p> Le téléchargement des données sera accessible à partir du moment où vous avez soumis vos propres données. </p>
