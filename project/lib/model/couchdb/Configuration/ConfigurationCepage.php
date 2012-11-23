@@ -12,7 +12,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   }
 
   public function hasLieuEditable() {
-        return $this->getParent()->getParent()->getParent()->hasLieuEditable();
+        return $this->getParent()->getParent()->getParent()->getParent()->hasLieuEditable();
   }
 
   public function hasDenomination() {
