@@ -62,7 +62,7 @@ EOF;
 
   protected function getMessageBody($compte) {
       
-      $lien = sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)));
+      $lien = str_replace("//", "/", sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe))));
       $this->log($lien);
       return "Bonjour " . $compte->nom . ",
           
