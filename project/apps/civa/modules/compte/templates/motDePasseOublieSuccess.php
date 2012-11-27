@@ -5,13 +5,13 @@
 <div class="clearfix" id="application_dr">
 
     <!-- #nouvelle_declaration -->
-    <div id="nouvelle_declaration">
+    <div id="nouvelle_declaration" class="mot_de_passe_oublie">
         <h3 class="titre_section">Mot de passe oublié</h3>
         <div class="contenu_section">
             <form action="<?php echo url_for('@compte_mot_de_passe_oublie') ?>" method="post" id="principal">
-                <p class="intro">Merci d'indiquer votre numéro CVI :</p>
+                <p class="intro">Merci d'indiquer votre identifiant :</p>
 
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form->renderHiddenFields(); ?>
                     <?php echo $form->renderGlobalErrors(); ?>
 

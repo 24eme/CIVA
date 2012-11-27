@@ -4,7 +4,7 @@ class CompteMotDePasseOublieForm extends BaseForm {
 
     public function setup() {
         $this->setWidgets(array(
-            'login' => new sfWidgetFormInputText(array('label' => 'CVI'))
+            'login' => new sfWidgetFormInputText(array('label' => 'Identifiant :'))
         ));
 
         $this->setValidators(array(

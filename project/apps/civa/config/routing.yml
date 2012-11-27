@@ -32,7 +32,7 @@ compte_modification:
   param: { module: compte, action: modification }
 
 compte_mot_de_passe_oublie_login:
-  url: /mot_de_passe_oublie/login/:login/:mdp
+  url: /mdpo/login/:login/:mdp
   param: { module: compte, action: motDePasseOublieLogin }
 
 compte_mot_de_passe_oublie:
