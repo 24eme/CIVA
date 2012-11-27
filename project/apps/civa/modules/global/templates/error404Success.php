@@ -1,5 +1,5 @@
 <div id="error_page">
-    <img src="../images/pictos/hopla_big.png" alt="Hop'La" />
+    <img src="/images/pictos/hopla_big.png" alt="Hop'La" />
     <h1>La page demandée est introuvable.</h1>
     <br />
     <p>Ce lien n’existe plus ou vous avez saisi une adresse incorrecte.</p>

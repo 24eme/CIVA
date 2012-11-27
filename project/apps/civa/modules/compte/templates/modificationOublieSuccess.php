@@ -19,7 +19,7 @@
                     <?php echo $form['mdp1']->renderLabel() ?>
                     <?php echo $form['mdp1']->render() ?>
                 </div>
-                <div class="ligne_form">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['mdp2']->renderError() ?>
                     <?php echo $form['mdp2']->renderLabel() ?>
                     <?php echo $form['mdp2']->render() ?>
