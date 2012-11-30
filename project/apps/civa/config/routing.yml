@@ -3,13 +3,13 @@
 
 
 # *********** COMPTE ***********
-test_plugin:
-  url:   /test-plugin
-  param: { module: compte, action: testPlugin }
-
 login:
   url:   /
   param: { module: compte, action: login }
+
+login_no_cas:
+  url:   /login_no_cas
+  param: { module: compte, action: loginNoCas }
 
 logout:
   url:   /logout

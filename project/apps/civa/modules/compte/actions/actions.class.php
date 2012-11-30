@@ -15,6 +15,11 @@ class compteActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeLogin(sfWebRequest $request) {
+        if(sfConfig::has('app_login_no_cas') && sfConfig::get('app_login_no_cas')) {
+
+            return $this->redirect('login_no_cas');
+        }
+
         if ($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential("compte")) {
             $this->redirect('@tiers');
         } elseif ($request->getParameter('ticket')) {
@@ -40,9 +45,29 @@ class compteActions extends sfActions {
 	    	$this->redirect($url);
         }
     }
-	public function executeTestPlugin(sfWebRequest $request) {
-		throw new Exception('Test plugin');
-	}
+
+    public function executeLoginNoCas(sfWebRequest $request) {
+        if (!(sfConfig::has('app_login_no_cas') && sfConfig::get('app_login_no_cas'))) {
+            
+            return $this->forward404Unless();
+        }
+
+        if($this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE)) {
+
+            return $this->redirect('@tiers');
+        }
+
+        $this->getUser()->signOut();
+
+        $this->form = new AdminCompteLoginForm(null, array('comptes_type' => array('CompteVirtuel'), false));
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->getUser()->signIn($this->form->process()->login);
+                $this->redirect('@tiers');
+            }
+        }
+    }
     
     /**
      *

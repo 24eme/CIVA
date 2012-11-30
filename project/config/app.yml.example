@@ -5,7 +5,8 @@
 all:
   base_url : http://declaration.vinsalsace.pro/
   tomcat_dir : /var/www/tomcat6/webapps/cas
-  #autologin: login 
+  #login_no_cas: false
+  #autologin: login
   cas:
     domain: login.dev.vinsalsace.pro
     port: 443
