@@ -66,7 +66,7 @@ class DRClient extends sfCouchdbClient {
     return $doc;
   }
 
-  protected function getRecodeNumber($value) {
+  protected function recodeNumber($value) {
 
     return str_replace(",", ".", $value)*1;
   }
