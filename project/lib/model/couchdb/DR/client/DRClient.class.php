@@ -31,7 +31,7 @@ class DRClient extends sfCouchdbClient {
           foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
         $linenum++;
         if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
-          $doc->jeunes_vignes = $line[CsvFile::CSV_SUPERFICIE]*1;
+          $doc->jeunes_vignes = $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
           continue;
         }
         $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION],
@@ -48,23 +48,29 @@ class DRClient extends sfCouchdbClient {
         if ($cepage->getLieu()->getKey() == 'lieu')
           $denomlieu = $line[CsvFile::CSV_LIEU];
         $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
-        $detail->superficie += $line[CsvFile::CSV_SUPERFICIE]*1;
-        $detail->volume += $line[CsvFile::CSV_VOLUME]*1;
-        if ($line[CsvFile::CSV_VOLUME]*1 == 0) {
+        $detail->superficie += $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
+        $detail->volume += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
+        if ($this->recodeNumber($line[CsvFile::CSV_VOLUME]) == 0) {
           $detail->denomination = 'repli';
           $detail->add('motif_non_recolte', 'AE');
         }else{
           $acheteur = $detail->add($acheteur_obj->getAcheteurDRType())->add();
           $acheteur->cvi = $acheteur_cvi;
-          $acheteur->quantite_vendue = $line[CsvFile::CSV_VOLUME]*1;
+          $acheteur->quantite_vendue = $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
         }
         if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
-          $detail->volume_dplc += $line[CsvFile::CSV_VOLUME_DPLC]*1;
-          }
+          $detail->volume_dplc += $this->recodeNumber($line[CsvFile::CSV_VOLUME_DPLC]);
+        }
     }
     $doc->update();
     return $doc;
   }
+
+  protected function getRecodeNumber($value) {
+
+    return str_replace(",", ".", $value)*1;
+  }
+
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
       return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
