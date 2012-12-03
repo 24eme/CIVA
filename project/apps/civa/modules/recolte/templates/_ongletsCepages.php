@@ -1,6 +1,6 @@
 <ul id="liste_sepages">
     <?php foreach ($onglets->getItemsCouleur() as $key_couleur => $couleur): ?>
-        <?php foreach ($couleur->getConfig()->getCepages() as $key => $cepage): ?>
+        <?php foreach ($couleur->getCepages() as $key => $cepage): ?>
             <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>
                 <li class="ui-tabs-selected">
                     <a href="<?php echo url_for($onglets->getUrl('recolte',null, null, $key_couleur, $key)->getRawValue()) ?>">
@@ -14,8 +14,8 @@
                 <li>
                     <a href="<?php echo url_for($onglets->getUrl('recolte', null, null, $key_couleur, $key)->getRawValue()) ?>">
                         <?php echo $cepage->libelle ?>
-                        <?php if ($couleur->exist($key) && $couleur->get($key)->detail->count() > 0): ?>
-                            &nbsp;<span>(<?php echo $couleur->get($key)->detail->count() ?>)</span>
+                        <?php if ($onglets->getCurrentLieu()->exist($key_couleur) && $onglets->getCurrentLieu()->get($key_couleur)->exist($key) && $onglets->getCurrentLieu()->get($key_couleur)->get($key)->detail->count() > 0): ?>
+                            &nbsp;<span>(<?php echo $onglets->getCurrentLieu()->get($key_couleur)->get($key)->detail->count() ?>)</span>
                         <?php endif; ?>
                     </a>
                 </li>

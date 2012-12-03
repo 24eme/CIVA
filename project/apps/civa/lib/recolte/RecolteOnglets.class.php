@@ -44,7 +44,8 @@ class RecolteOnglets {
             $couleur = $this->getCurrentKeyCouleur();
         }
         $couleur = $this->convertValueToKey($couleur, $this->_prefix_key_couleur);
-        return $this->getLieu($appellation, $lieu)->get($couleur);
+
+        return $this->getLieu($appellation, $lieu)->getConfig()->get($couleur);
     }
 
     public function getLieu($appellation = null, $lieu = null) {
@@ -69,11 +70,11 @@ class RecolteOnglets {
     }
 
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
-        return $this->getLieu($appellation, $lieu)->filter('^couleur');
+        return $this->getLieu($appellation, $lieu)->getConfig()->filter('^couleur');
     }
 
     public function getItemsCepage($appellation = null, $lieu = null, $couleur = null) {
-        return $this->getCouleur($appellation, $lieu, $couleur)->getConfig()->filter('^cepage');
+        return $this->getCouleur($appellation, $lieu, $couleur)->filter('^cepage');
     }
 
     public function getItemsCepageLieu($appellation = null, $lieu = null) {
@@ -415,7 +416,8 @@ class RecolteOnglets {
 
         if ($sf_route == 'recolte') {
             $cepage_key = $this->convertValueToKey($cepage, $this->_prefix_key_cepage);
-            if (!$this->getCouleur($appellation, $lieu, $couleur)->exist($cepage_key) || !$this->getCouleur($appellation, $lieu, $couleur)->get($cepage_key)->detail->count() > 0) {
+            $couleur_key = $this->getCouleur($appellation, $lieu, $couleur)->getKey();
+            if (!$this->getLieu($appellation, $lieu)->exist($couleur_key) || !$this->getLieu($appellation, $lieu)->get($couleur_key)->exist($cepage_key) || !$this->getLieu($appellation, $lieu)->get($couleur_key)->get($cepage_key)->detail->count() > 0) {
                 $sf_route = 'recolte_add';
             }
         }

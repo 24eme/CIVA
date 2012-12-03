@@ -406,6 +406,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $volume_revendique_final;
     }
 
+    public function canHaveUsagesIndustrielsSaisi() {
+
+        return $this->getDplc() == 0 && $this->getTotalCaveParticuliere() > 0;
+    }
+
     protected function update($params = array()) {
 
         if ($this->getCouchdbDocument()->canUpdate()) {
@@ -423,7 +428,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             $this->dplc = $this->getDplc(true);
             $this->usages_industriels_calcule = $this->getUsageIndustrielCalcule(true);
 
-            if($this->getDplc(true) > 0 || $this->getTotalCaveParticuliere() <= 0){
+            if(!$this->canHaveUsagesIndustrielsSaisi()){
                 $this->set('usages_industriels_saisi',  0) ;
             }
         }

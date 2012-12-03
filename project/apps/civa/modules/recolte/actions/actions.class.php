@@ -212,14 +212,10 @@ class recolteActions extends EtapesActions {
         $this->form = new RecapitulatifForm($this->appellationlieu);
 
         $forms = $this->form->getEmbeddedForms();
-
-        if (!count($forms) && $request->getParameter('redirect')
-           || count($forms) && $request->getParameter('redirect') && $this->onglets->getCurrentLieu()->getDplc() != 0) {
-
+        print_r($form['usages_industriels_saisi']);
+        if ($request->getParameter('redirect') && !$this->form->isSaisisable()) {
             return $this->redirect($this->onglets->getNextUrl());
         }
-
-
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));

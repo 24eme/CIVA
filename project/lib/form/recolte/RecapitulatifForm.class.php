@@ -2,10 +2,13 @@
 
 class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
 
+    protected $is_saisisable = false;
+
+
     public function configure() {
 
         $lieu = $this->getObject();
-        if($lieu->getTotalCaveParticuliere() && $lieu->dplc == 0 ){
+        if($lieu->canHaveUsagesIndustrielsSaisi()){
             $this->setWidgets(array(
                 'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
             ));
@@ -17,6 +20,8 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
             $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
 
             $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
+
+            $this->is_saisisable = true;
         }
 
         //$is_unique_acheteur = $lieu->hasSellToUniqueAcheteur();
@@ -32,11 +37,18 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
                 }*/
                 $af = new RecapitulatifAcheteurForm($acheteur);
                 $this->embedForm($type . '_cvi_' . $cvi, $af);
+                
+                $this->is_saisisable = true;
             }
         }
 
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
         $this->widgetSchema->setNameFormat('recapitulatif[%s]');
+    }
+
+    public function isSaisisable() {
+
+        return $this->is_saisisable;
     }
 
     public function doUpdateObject($values) {
