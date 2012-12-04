@@ -136,11 +136,11 @@ class declarationActions extends EtapesActions {
 	      
 	        $mess = 'Bonjour ' . $tiers->nom . ',
 
-    Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
-    Cordialement,
+Cordialement,
 
-    Le CIVA';
+Le CIVA';
 
                 //send email
 
