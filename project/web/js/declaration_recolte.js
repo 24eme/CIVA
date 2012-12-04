@@ -37,11 +37,11 @@ $(document).ready( function()
         initTablesDonnes();
     });
 
-    if($('#appellation_volume_dplc').val() > 0){
+    /*if($('#appellation_volume_dplc').val() > 0){
         ($('#col_recolte_totale .rendement').addClass("alerte"));
     }else{
         ($('#col_recolte_totale .rendement').removeClass("alerte"));
-    }
+    }*/
 
     $('input.num').live('keypress',function(e)
     {

@@ -69,8 +69,9 @@
 		    </li>
             <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getUsageIndustrielCalculeAppellation()); ?>"/>
                 <input type="text" id="appellation_volume_dplc" readonly="readonly"
-                       class="<?php if ($lieu->getUsageIndustrielCalculeAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
+                       class="<?php if ($lieu->getDplcAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
                        value="<?php echoFloat($lieu->getUsageIndustrielCalculeAppellation()); ?>" />
+                <input type="hidden" id="appellation_volume_usage_industriel_saisi" readonly="readonly" value="<?php echoFloat( $lieu->getUsageIndustrielSaisi()); ?>"/>  
              </li>
    <?php endif; ?>
    <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
