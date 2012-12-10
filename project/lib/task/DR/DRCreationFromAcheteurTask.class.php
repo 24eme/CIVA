@@ -74,22 +74,23 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 	$this->save_error = $options['save-error'];
 	$this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
+	
+	$campagne = $options['year'];
 	  
-	if ($options['cvi'] && $options['year']) {
-	  return $this->createOne($options['cvi'], $options['year']);
+	if ($options['cvi'] && $campagne) {
+	  return $this->createOne($options['cvi'], $campagne);
 	}
 
 	if (!$options['year']) {
 	  print "ERROR : options --year needed\n";
 	  return ;
 	}
-
-	$CVIs = sfCouchdbManager::getClient()
-	  ->getView("CSV", "recoltant");
+	
+	$CVIs = sfCouchdbManager::getClient()->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->getView("CSV", "recoltant");
 
 	foreach ($CVIs->rows as $o) {
-	  print $o->key[0]."\n";
-//	  $this->createOne($o->key[0], $options['year']);
+	  print $o->key[1]."\n";
+	  $this->createOne($o->key[1], $campagne);
 	}
     }
 
