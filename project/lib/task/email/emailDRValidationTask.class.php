@@ -43,15 +43,19 @@ EOF;
     if (isset($arguments['campagne']) && !empty($arguments['campagne'])) {
 	    $nb_item = 0;
 	    $nb_email_send = 0;
-	    $drs = sfCouchdbManager::getClient()->getView("DR", "non_validees");
+	    $drs = sfCouchdbManager::getClient()->startkey(array($arguments['campagne']))
+		    				->endkey(array($arguments['campagne'], array()))
+						->getView("DR", "non_validees");
 	    foreach ($drs->rows as $item) {
-	    	$this->logSection('cvi', $item->value->declarant->email);
+		$cvi = $item->key[1];
+
+	    	$this->logSection('cvi', $cvi);
 	    	
-	    	$compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$item->value->cvi);
+	    	$compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$cvi);
 	    	
             $nb_item++;
             if(!$compte->getEmail()) {
-                $this->logSection('no email', $item->value->cvi, null, 'ERROR');
+                $this->logSection('no email', $cvi, null, 'ERROR');
                 continue;
             }
             
@@ -71,9 +75,9 @@ EOF;
             
             if ($sended) {
                 $nb_email_send++;
-                $this->logSection('sended', $item->value->cvi . ' : ' . $compte->getEmail());
+                $this->logSection('sended', $cvi . ' : ' . $compte->getEmail());
             } else {
-                $this->logSection('send error', $item->value->cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
+                $this->logSection('send error', $cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
             }
             
             
@@ -85,10 +89,9 @@ EOF;
   protected function getMessageBody($compte, $campagne) {
       return "Bonjour ".$compte->getNom().",
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validé.
-Nous vous rappelons que vous devez impérativement la valider avant le 10 décembre minuit.
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$arguments['campagne']." sur le site VinsAlsace.pro et ne l’avez pas encore validé. 
 
-Si vous avez déposé une Déclaration de Récolte 'papier' veuillez SVP la supprimer sur le site.
+Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit. 
 
 Cordialement,
 
