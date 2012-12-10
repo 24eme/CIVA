@@ -109,8 +109,9 @@ EOF;
                  $compte->set('_id', 'COMPTE-' . $login);
                  $compte->login = $login;
                  $compte->mot_de_passe = $this->generatePass();;
-                 $compte->email = $this->combiner($tiers, 'email');
             }
+            
+            $compte->email = $this->combiner($tiers, 'email');
 
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 
