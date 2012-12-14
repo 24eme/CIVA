@@ -1,39 +1,65 @@
 <?php
 
-class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
-
-    public function getConfig() {
-        return $this->getCepage()->getConfig();
-    }
-
-    public function getCepageLibelle() {
-      return $this->getCepage()->getLibelle();
-    }
-
-    public function getCepage() {
-      return $this->getParent()->getParent();
-    }
+class DRRecolteCepage extends BaseDRRecolteCepage {
 
     public function getCouleur() {
-        return $this->getCepage()->getCouleur();
+
+      return $this->getParent();
     }
 
+    public function getLieu() {
 
-    public function getMention() {
-        return $this->getLieu()->getMention();
+      return $this->getCouleur()->getLieu();
     }
 
-    public function getCodeDouane() {
-        return $this->getCepage()->getCodeDouane($this->vtsgn);
+    public function getNoeuds() {
+
+        return $this->detail;
+    }
+
+    public function getCodeDouane($vtsgn = '') {
+      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
+    }
+
+    public function getVolumeRevendique($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('volume_revendique',  array($this, 'getVolumeRevendiqueFinal'), $force_calcul, array('volume_revendique', false));
+    }
+
+    public function getDplc($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('dplc',  array($this, 'getDplcFinal'), $force_calcul, array('dplc', false));
+
+    }
+
+    public function getTotalCaveParticuliere() {
+        return parent::getDataByFieldAndMethod('cave_particuliere',  array($this, 'getSumNoeudFields'), true,  array('cave_particuliere', false));
+    }
+
+    public function getTotalVolume($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('total_volume',  array($this, 'getSumNoeudFields'), $force_calcul,  array('volume', false));
+
+    }
+
+    public function getTotalSuperficie($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie', false));
+
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
             $this->_storage[$key] = array();
-            foreach ($this->filter($type) as $acheteurs) {
-                foreach($acheteurs as $acheteur) {
-                    $this->_storage[$key][$acheteur->cvi] = $acheteur->quantite_vendue;
+            foreach($this->detail as $object) {
+                $acheteurs = $object->getVolumeAcheteurs($type);
+                foreach($acheteurs as $cvi => $quantite_vendue) {
+                    if (!isset($this->_storage[$key][$cvi])) {
+                        $this->_storage[$key][$cvi] = 0;
+                    }
+		    if ($quantite_vendue)
+		      $this->_storage[$key][$cvi] += $quantite_vendue;
                 }
             }
         }
@@ -41,125 +67,114 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "total_volume_acheteurs_".$type;
+        $key = "total_volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
-              $sum = 0;
-              $acheteurs = $this->getVolumeAcheteurs($type);
-              foreach($acheteurs as $volume) {
+            $sum = 0;
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $volume) {
                 $sum += $volume;
-              }
-              $this->_storage[$key] = $sum;
+            }
+            $this->_storage[$key] = $sum;
         }
         return $this->_storage[$key];
     }
 
-    protected function deleteAcheteurUnused($type) {
-        $appellation_key = $this->getCepage()->getLieu()->getAppellation()->getKey();
-        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->exist($appellation_key)) {
-            $acheteurs = $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->get($appellation_key)->get($type);
-            $acheteurs_detail = $this->get($type);
-            foreach ($acheteurs_detail as $key => $item) {
-                if (!in_array($item->cvi, $acheteurs->toArray())) {
-                    $acheteurs_detail->remove($key);
-                }
-            }
-        }
-    }
-
     public function getVolumeMax() {
-        return round(($this->superficie / 100) * $this->getConfig()->getRendement(), 2);
+      return round(($this->total_superficie/100) * $this->getConfig()->getRendement(), 2);
     }
 
-    public function setVolume($v) {
-        return $this->_set('volume', round($v, 2));
-    }
-
-    private function getSumAcheteur($field) {
-        $sum = 0;
-        if ($this->exist($field)) {
-            foreach ($this->get($field) as $acheteur) {
-                $sum += $acheteur->quantite_vendue;
-            }
+    public function getRendementRecoltant() {
+        if ($this->getTotalSuperficie() > 0) {
+            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
+        } else {
+            return 0;
         }
-        return $sum;
     }
 
     public function removeVolumes() {
-        $this->setVolume(null);
-        $this->cave_particuliere = null;
-        $this->remove('cooperatives');
-        $this->remove('mouts');
-        $this->remove('negoces');
-    }
-
-    public function hasMotifNonRecolteLibelle() {
-        return $this->exist('motif_non_recolte');
+      $this->total_volume = null;
+      $this->volume_revendique = null;
+      $this->dplc = null;
+      foreach($this->getDetail() as $detail) {
+	$detail->removeVolumes();
+      }
     }
 
     public function isNonSaisie() {
-        return ($this->getMotifNonRecolteLibelle() == 'Déclaration en cours');
+      if (!$this->exist('detail') || !count($this->detail))
+	return false;
+      foreach($this->detail as $detail) {
+	if(!$detail->isNonSaisie())
+	  return false;
+      }
+      return true;
     }
 
-    public function getMotifNonRecolteLibelle() {
-        if ($this->volume)
-            return '';
-
-        if ($this->exist('motif_non_recolte') && $this->getConfig()->getCouchdbDocument()->motif_non_recolte->exist($this->motif_non_recolte)) {
-            return $this->getConfig()->getCouchdbDocument()->motif_non_recolte->get($this->motif_non_recolte);
-        } else {
-            return 'Déclaration en cours';
+    public function getArrayUniqueKey($out = array()) {
+        $resultat = array();
+        if ($this->exist('detail')) {
+            foreach($this->detail as $key => $item) {
+                if (!in_array($key, $out)) {
+                    $resultat[$key] = $item->getUniqueKey();
+                }
+            }
         }
-    }
-    
-    public static function getUKey( $lieu ="", $denom, $vtsgn) {
-
-         return 'lieu:'.strtolower($lieu).',denomination:'.strtolower($denom).',vtsgn:'.strtolower($vtsgn);
+        return $resultat;
     }
 
-    public function getUniqueKey() {
-        return self::getUKey($this->lieu, $this->denomination, $this->vtsgn);
+    public function getHashUniqueKey($out = array()) {
+      $resultat = array();
+      foreach ($this->getArrayUniqueKey($out) as $key => $item) {
+	     $resultat[$item] = $this->detail[$key];
+      }
+      return $resultat;
     }
 
-    public function getVtsgn() {
-        return str_replace(' ', '', $this->_get('vtsgn'));
+    public function retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $lieu = '') {
+      $uk = DRRecolteCepageDetail::getUKey($lieu, $denom, $vtsgn);
+      $hash = $this->getHashUniqueKey();
+      if (isset($hash[$uk]))
+    	return $hash[$uk];
+      $ret = $this->detail->add();
+      $ret->denomination = $denom;
+      $ret->vtsgn = $vtsgn;
+      $ret->lieu = $lieu;
+      return $ret;
     }
 
-
-    protected function update($params = array()) {
-        parent::update($params);
-        if (!$this->getCouchdbDocument()->canUpdate())
-            return;
-        $v = $this->cave_particuliere;
-        $v += $this->getSumAcheteur('negoces');
-        $v += $this->getSumAcheteur('cooperatives');
-        $v += $this->getSumAcheteur('mouts');
-
-        $this->volume = $v;
-        $this->volume_revendique = 0;
-        $this->volume_dplc = 0;
-
-        if ($this->getConfig()->hasRendement()) {
+    protected function getDplcFinal() {
+        if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
             $volume_max = $this->getVolumeMax();
-            if ($this->volume > $volume_max) {
-                $this->volume_revendique = $volume_max;
-                $this->volume_dplc = round($this->volume - $volume_max, 2);
+            if ($this->total_volume > $volume_max) {
+              return round($this->total_volume - $volume_max, 2);
             } else {
-                $this->volume_revendique = $this->volume;
+              return 0;
             }
         } else {
-            $this->volume_revendique = $this->volume;
-        }
-
-        if ($this->volume && $this->volume > 0) {
-            $this->remove('motif_non_recolte');
-        } else {
-            $this->add('motif_non_recolte');
-        }
-        if (in_array('from_acheteurs', $params)) {
-            $this->deleteAcheteurUnused('negoces');
-            $this->deleteAcheteurUnused('cooperatives');
-            $this->deleteAcheteurUnused('mouts');
+            return $this->getSumNoeudFields('volume_dplc', false);
         }
     }
 
+    protected function getVolumeRevendiqueFinal() {
+        if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
+            $volume_max = $this->getVolumeMax();
+            if ($this->total_volume > $volume_max) {
+              return $volume_max;
+            } else {
+              return $this->total_volume;
+            }
+        } else {
+            return $this->getSumNoeudFields('volume_revendique', false);
+        }
+    }
+
+    protected function update($params = array()) {
+      parent::update($params);
+      if ($this->getCouchdbDocument()->canUpdate()) {
+          $this->total_volume = $this->getTotalVolume(true);
+          $this->total_superficie = $this->getTotalSuperficie(true);
+          $this->volume_revendique = $this->getVolumeRevendique(true);
+          $this->dplc = $this->getDplc(true);
+      }
+    }
 }
