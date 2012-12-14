@@ -70,6 +70,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return round(($this->superficie / 100) * $this->getConfig()->getRendement(), 2);
     }
 
+    public function setVolume($v) {
+        return $this->_set('volume', round($v, 2));
+    }
+
     private function getSumAcheteur($field) {
         $sum = 0;
         if ($this->exist($field)) {
