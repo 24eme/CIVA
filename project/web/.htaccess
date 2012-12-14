@@ -1,5 +1,7 @@
 Options +FollowSymLinks +ExecCGI
 
+Redirect /mot_de_passe_oublie/login/ /mdpo/login/
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
