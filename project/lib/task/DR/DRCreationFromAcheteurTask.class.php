@@ -32,17 +32,31 @@ EOF;
 	$dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
 	  print "LOG: DR pour ".$cvi." existe\n";
-	  return false;
+//	  return false;
 	}
 
 	$import_from = array();
 	try{
-	  $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
+      if (!$dr)
+ 	    $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
 	  $check = $dr->check();
 	  if (count($check['erreur']) || count($check['vigilance'])) {
-	    print "ERROR: ".$dr->_id." a des erreurs ou des points de vigilance\n";
-	    if (count($check['vigilance']) && !$this->save_vigilance)
+        if (count($check['erreur']) > 0) {
+            $libelle_erreurs = array();
+            foreach($check['erreur'] as $err) {
+	            $libelle_erreurs[] = $err['log'];
+            }
+            print "ERROR: ".$dr->_id." a des erreurs : " .implode("|", $libelle_erreurs). " \n";
+        }
+
+        if (count($check['vigilance']) > 0) {
+            print "VIGILANCE: ".$dr->_id." a des points de vigilance\n";
+        }
+    
+        if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
+        else
+          $dr->validate($tiers);
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
 	    

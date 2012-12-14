@@ -53,10 +53,20 @@ class DRClient extends sfCouchdbClient {
         if ($this->recodeNumber($line[CsvFile::CSV_VOLUME]) == 0) {
           $detail->denomination = 'repli';
           $detail->add('motif_non_recolte', 'AE');
-        }else{
-          $acheteur = $detail->add($acheteur_obj->getAcheteurDRType())->add();
+        }
+        if($this->recodeNumber($line[CsvFile::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]) > 0)
+        {
+          $acheteurs = $detail->add($acheteur_obj->getAcheteurDRType());
+          $acheteur = null;
+          foreach ($acheteurs as $a) {
+            if ($a->cvi == $acheteur_cvi)
+                $acheteur = $a;
+                break;
+          }
+          if (!$acheteur)
+            $acheteur = $acheteurs->add();
           $acheteur->cvi = $acheteur_cvi;
-          $acheteur->quantite_vendue = $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
+          $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
         }
         if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
           $detail->volume_dplc += $this->recodeNumber($line[CsvFile::CSV_VOLUME_DPLC]);
