@@ -30,29 +30,29 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-	$date = $options['date'];
-	if(!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $date)) {
+	$strdate = $options['date'];
+	if(!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $strdate)) {
 	  throw new sfException("wrong date format");
-	  }
+	}
+	$date = strtotime($strdate);
 
-        $dr_ids = sfCouchdbManager::getClient()->group(true)
-	  ->group_level(2)
-	  ->startkey(array(true, true))
-	  ->endkey(array(true, true, array()))
-	  ->getView("STATS", "DR");
+        $drs = sfCouchdbManager::getClient()->reduce(false)->getView("STATS", "DR")->rows;
 
-        foreach ($dr_ids as $id) {
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+        foreach ($drs as $obj) {
 
-	    if (!$dr->isValidee())
-	      continue;
+	  if (!$obj->key[0])
+	    continue;
+	  $dr_id = $obj->id;
+	  $dr_date = $obj->key[2];
 
-	    if (!$dr->validee >= $date)
-	      continue;
+	  if (!strtotime($dr_date <= $date))
+	    continue;
+	  
+	  $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
 
-	    echo $dr->_id." changed\n";
-	    $dr->validee = $date;
-	    $dr->save();
+	  echo $dr->_id." changed ($dr_date)\n";
+	  $dr->validee = $date;
+	  $dr->save();
         }
     }
 
