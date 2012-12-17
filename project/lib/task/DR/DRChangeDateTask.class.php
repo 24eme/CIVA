@@ -45,10 +45,10 @@ EOF;
 	  $dr_id = $obj->id;
 	  $dr_date = $obj->key[2];
 
-	  if (!strtotime($dr_date <= $date))
+	  if (strtotime($dr_date) <= $date)
 	    continue;
 	  
-	  $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+	  $dr = sfCouchdbManager::getClient()->retrieveDocumentById($dr_id);
 
 	  echo $dr->_id." changed ($dr_date)\n";
 	  $dr->validee = $date;
