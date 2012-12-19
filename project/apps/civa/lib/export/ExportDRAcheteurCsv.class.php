@@ -371,7 +371,9 @@ class ExportDRAcheteurCsv extends ExportCsv {
 
         if ((!$user || $user == "CIVA") && strtotime($dr->validee) >= strtotime($this->_campagne.'-12-10') && strtotime($dr->modifiee) >= strtotime($this->_campagne.'-12-10')) {
             $user = 'Automatique';
-        } elseif(!$user) {
+        } 
+
+        if(!$user) {
             $user = 'Inconnu';
         }
 
