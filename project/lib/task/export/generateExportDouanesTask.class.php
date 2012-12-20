@@ -1,24 +1,22 @@
 <?php
 
-class exportCreateDouanesTask extends sfBaseTask
+class generateExportDouanesTask extends sfBaseTask
 {
   protected function configure()
   {
     // // add your own arguments here
-    // $this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+    $this->addArguments(array(
+       new sfCommandArgument('campagnes', sfCommandArgument::IS_ARRAY, 'Campagnes'),
+    ));
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-      // add your own options here
-      new sfCommandOption('delete', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', false),
     ));
 
-    $this->namespace        = 'export';
-    $this->name             = 'create-douanes';
+    $this->namespace        = 'generate';
+    $this->name             = 'export-douanes';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [exportCreateDouanes|INFO] task does things.
@@ -36,17 +34,11 @@ EOF;
 
     $departements = array("6768" => "Bas-Rhin et Haut-Rhin");
 
-    $annees = array("2011");
+    $annees = $arguments['campagnes'];
 
-    $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-6768', sfCouchdbClient::HYDRATE_JSON);
+    $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-DOUANES-6768');
 
     $cle = null;
-
-    if ($export && $options['delete']) {
-      $cle = $export->cle;
-      sfCouchdbManager::getClient()->deleteDoc($export);
-      $export = null;
-    }
 
     if (!$export) {
       $export = new Export();
@@ -54,21 +46,21 @@ EOF;
       $export->nom = $departements["6768"];
       $export->destinataire = 'Douanes';
       $export->identifiant = "6768";
+      $export->generateCle();
+    }
 
+    $export->drs->remove('views');
+    $export->drs->add('views');
+
+    foreach($annees as $annee) {
       $view = $export->drs->views->add();
       $view->id = 'DR';
       $view->nom = 'campagne_declaration_insee';
-      $view->startkey = array($annees[0], '67000', '0000000000');
-      $view->endkey = array($annees[0], '68999', '9999999999');
-
-      $export->cle = $cle;
-      if (!$export->cle) {
-        $export->generateCle();
-      }
-
-      $export->save();
-      $this->logSection($export->get('_id'), 'created');
+      $view->startkey = array($annee, '67000', '0000000000');
+      $view->endkey = array($annee, '68999', '9999999999');
     }
 
+    $export->save();
+    $this->logSection($export->get('_id'), $export->cle);
   }
 }

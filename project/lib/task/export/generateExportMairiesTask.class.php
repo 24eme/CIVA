@@ -1,24 +1,22 @@
 <?php
 
-class exportCreateMairiesTask extends sfBaseTask
+class generateExportMairiesTask extends sfBaseTask
 {
   protected function configure()
   {
     // // add your own arguments here
-    // $this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+    $this->addArguments(array(
+       new sfCommandArgument('campagnes', sfCommandArgument::IS_ARRAY, 'Campagnes'),
+    ));
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-      // add your own options here
-      new sfCommandOption('delete', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', false),
     ));
 
-    $this->namespace        = 'export';
-    $this->name             = 'create-mairies';
+    $this->namespace        = 'generate';
+    $this->name             = 'export-mairies';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [exportCreateMairies|INFO] task does things.
@@ -41,18 +39,12 @@ EOF;
         $communes[$csv[0]] = $csv[1];
     }
 
-    $annees = array("2010", "2011");
+    $annees = $arguments['campagnes'];
 
     foreach($communes as $code_postal => $nom) {
-        $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal , sfCouchdbClient::HYDRATE_JSON);
+        $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal);
 
         $cle = null;
-
-        if ($export && $options['delete']) {
-          $cle = $export->cle;
-          sfCouchdbManager::getClient()->deleteDoc($export);
-          $export = null;
-        }
 
         if (!$export) {
           $export = new Export();
@@ -60,23 +52,22 @@ EOF;
           $export->nom = $nom . ' (' . $code_postal . ')';
           $export->destinataire = 'Mairies';
           $export->identifiant = $code_postal;
-
-          foreach($annees as $annee) {
-            $view = $export->drs->views->add();
-            $view->id = 'DR';
-            $view->nom = 'campagne_declaration_insee';
-            $view->startkey = array($annee, $code_postal, '0000000000');
-            $view->endkey = array($annee, $code_postal, '9999999999');
-          }
-          
-          $export->cle = $cle;
-          if (!$export->cle) {
-            $export->generateCle();
-          }
-
-          $export->save();
-          $this->logSection($export->get('_id'), 'created');
+          $export->generateCle();
         }
+
+        $export->drs->remove('views');
+        $export->drs->add('views');
+
+        foreach($annees as $annee) {
+          $view = $export->drs->views->add();
+          $view->id = 'DR';
+          $view->nom = 'campagne_declaration_insee';
+          $view->startkey = array($annee, $code_postal, '0000000000');
+          $view->endkey = array($annee, $code_postal, '9999999999');
+        }
+        
+        $export->save();
+        $this->logSection($export->get('_id'), $export->cle);
     }
 
   }
