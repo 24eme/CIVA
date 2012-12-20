@@ -198,6 +198,10 @@ class DR extends BaseDR {
         }
     }
 
+    public function isHumanlyModifiee() {
+        return ($this->exist('modifiee') && $this->get('modifiee') && count($this->utilisateurs->validation) && $this->get('modifiee') != $this->get('validee'));
+    }
+
     /**
      *
      * @return string

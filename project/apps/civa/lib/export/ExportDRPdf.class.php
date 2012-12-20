@@ -42,8 +42,8 @@ class ExportDRPdf {
         $validee = 'Non Validée';
         if ($dr->exist('validee')) {
           $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
-          if ($dr->exist('modifiee') && $dr->modifiee != $dr->validee) {
-            $validee .= ' et modifiée le '.$dr->getDateModifieeFr();
+          if ($dr->isHumanlyModifiee()) {
+	    $validee .= ' et modifiée le '.$dr->getDateModifieeFr();
           }
         }
         
