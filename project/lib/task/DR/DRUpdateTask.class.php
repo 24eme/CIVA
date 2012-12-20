@@ -14,8 +14,8 @@ class DRUpdateTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-            new sfCommandOption('devalidation', null, sfCommandOption::PARAMETER_REQUIRED, 'Dévalidation', false)
-            new sfCommandOption('try', null, sfCommandOption::PARAMETER_REQUIRED, 'Just try not save', false)
+            new sfCommandOption('devalidation', null, sfCommandOption::PARAMETER_REQUIRED, 'Dévalidation', false),
+            new sfCommandOption('try', null, sfCommandOption::PARAMETER_REQUIRED, 'Just try not save', false),
         ));
 
         $this->namespace = 'dr';
