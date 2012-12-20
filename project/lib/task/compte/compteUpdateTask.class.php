@@ -114,7 +114,7 @@ EOF;
 
             $email = $this->combiner($tiers, 'email');
             if($email) {
-                if ($email != $compte->email) {
+                if ($email != $compte->email && $compte->email) {
                     $this->logSection("L'email a été modifié", $compte->_id);
                 }
                 $compte->email = $email;
