@@ -32,7 +32,7 @@ EOF;
 	$dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
 	  print "LOG: DR pour ".$cvi." existe\n";
-//	  return false;
+	  return false;
 	}
 
 	$import_from = array();
