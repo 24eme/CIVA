@@ -111,6 +111,16 @@ EOF;
                  $compte->mot_de_passe = $this->generatePass();;
                  $compte->email = $this->combiner($tiers, 'email');
             }
+
+            $email = $this->combiner($tiers, 'email');
+            if($email) {
+                if ($email != $compte->email) {
+                    $this->logSection("L'email a été modifié", $compte->_id);
+                }
+                $compte->email = $email;
+            } elseif(!$email && $compte->email) {
+                $this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
+            }
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 

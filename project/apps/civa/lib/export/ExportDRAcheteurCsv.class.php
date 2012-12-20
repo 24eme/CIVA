@@ -358,17 +358,23 @@ class ExportDRAcheteurCsv extends ExportCsv {
             foreach($dr->utilisateurs->validation as $compte => $date_fr) {
                 if (preg_match('/^COMPTE-[0-9]+$/', $compte)) {
                     $user = "Récoltant";
+                    break;
                 } elseif(preg_match('/^COMPTE-.*civa.*$/', $compte)) {
                     $user = "CIVA";
+                    break;
                 } elseif(!preg_match('/^COMPTE-/', $compte)) {
                     $user = $compte;
+                    break;
                 }
             }
         }
-        if (!$user && strtotime($dr->validee) > strtotime($this->_campagne.'-12-10')) {
+
+        if ((!$user || $user == "CIVA") && strtotime($dr->validee) >= strtotime($this->_campagne.'-12-10') && strtotime($dr->modifiee) >= strtotime($this->_campagne.'-12-10')) {
             $user = 'Automatique';
-        } elseif(!$user) {
-            $user = 'Récoltant';
+        } 
+
+        if(!$user) {
+            $user = 'Inconnu';
         }
 
         return $user;
