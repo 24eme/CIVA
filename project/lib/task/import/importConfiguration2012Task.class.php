@@ -386,7 +386,7 @@ EOF;
         $json->_id = 'CURRENT';
         $json->type = 'Current';
         $json->campagne = $annee;
-        $json->dr_non_editable = 0;
+        $json->dr_non_editable = 1;
         $json->dr_non_ouverte = 0;
         $docs[] = $json;
 
