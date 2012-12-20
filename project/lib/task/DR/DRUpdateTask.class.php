@@ -15,6 +15,7 @@ class DRUpdateTask extends sfBaseTask
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
             new sfCommandOption('devalidation', null, sfCommandOption::PARAMETER_REQUIRED, 'Dévalidation', false)
+            new sfCommandOption('try', null, sfCommandOption::PARAMETER_REQUIRED, 'Just try not save', false)
         ));
 
         $this->namespace = 'dr';
@@ -73,7 +74,9 @@ EOF;
             $this->logSection('updated', $dr->get('_id'));
         }
         
-        $dr->save();
+        if (!$options['try']) {
+            $dr->save();
+        }
         
     }
 
