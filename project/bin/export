@@ -2,4 +2,5 @@
 
 php symfony generate:export-mairies 2010 2011 2012
 php symfony generate:export-douanes 2010 2011 2012
+php symfony generate:export-inao 2011 2012
 php symfony generate:export-acheteurs 2012

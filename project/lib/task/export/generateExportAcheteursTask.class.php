@@ -41,8 +41,6 @@ EOF;
       $compte = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->compte[0], sfCouchdbClient::HYDRATE_JSON);
       $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-ACHETEURS-'. $acheteur->cvi);
 
-      $cle = null;
-
       if (!$export) {
         $export = new Export();
         $export->set('_id', 'EXPORT-ACHETEURS-' . $acheteur->cvi);
@@ -52,6 +50,9 @@ EOF;
         $export->identifiant = $acheteur->cvi;
         $export->generateCle();
       }
+
+      $export->drs->remove('ids');
+      $export->drs->add('ids');
 
       foreach($csv->recoltants as $cvi) {
         $export->drs->ids->add(null, 'DR-' . $cvi . '-' .$csv->campagne);
