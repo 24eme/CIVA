@@ -211,7 +211,7 @@ class ExportDR
                 }
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- find FAILED : %s\n", $id);
+                    echo sprintf("-- find FAILED : %s (%)\n", $id, $e->getMessage());
                 }
             }
         }
