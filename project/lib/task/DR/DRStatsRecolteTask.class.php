@@ -119,6 +119,6 @@ EOF;
             echo sprintf("%s;;%01.02f;%01.02f;%01.02f;%01.02f\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']);
         }
 
-        echo sprintf(";;;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
+        echo sprintf(";;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
     }
 }
