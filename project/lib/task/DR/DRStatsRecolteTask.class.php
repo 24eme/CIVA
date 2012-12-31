@@ -48,6 +48,11 @@ EOF;
 
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
 
+            if(!isset($dr->recolte->certification->genre)) {
+
+                continue;
+            }
+
             foreach($dr->recolte->certification->genre as $appellation_key => $appellation) {
                 if (!preg_match("/^appellation/", $appellation_key)) {
 
