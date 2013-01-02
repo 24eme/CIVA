@@ -116,9 +116,9 @@ EOF;
                 echo sprintf("%s;%s;%01.02f;%01.02f;;\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume']);
             }
 
-            echo sprintf("%s;;%01.02f;%01.02f;%01.02f;%01.02f\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']);
+            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']);
         }
 
-        echo sprintf(";;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
+        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
     }
 }
