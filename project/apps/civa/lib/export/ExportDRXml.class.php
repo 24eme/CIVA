@@ -1,4 +1,4 @@
-11<?php
+<?php
 
 class ExportDRXml {
 
@@ -202,9 +202,9 @@ class ExportDRXml {
                                 if ($this->destinataire == self::DEST_DOUANE) {
                                     if ($appellation->getKey() == 'appellation_GRDCRU') {
                                         if ($detail->cave_particuliere) {
-                                            $col['exploitant']['L5'] += $detail->cave_particuliere * $dr->getRatioLies();  //Volume total avec lies
-                                            $col['exploitant']['L9'] += $detail->cave_particuliere * $dr->getRatioLies();
-                                            $col['exploitant']['L10'] += $detail->cave_particuliere * $dr->getRatioLies();
+                                            $col['exploitant']['L5'] += $detail->cave_particuliere;
+                                            $col['exploitant']['L9'] += $detail->cave_particuliere;
+                                            $col['exploitant']['L10'] += $detail->cave_particuliere;
                                         }
                                     }
                                 }
@@ -300,9 +300,9 @@ class ExportDRXml {
 
                     if ($this->destinataire == self::DEST_DOUANE) {
                         if ($object->getTotalCaveParticuliere()) {
-                            $total['exploitant']['L5'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();  //Volume total avec lies
-                            $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();
-                            $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();
+                            $total['exploitant']['L5'] += $object->getTotalCaveParticuliere();  //Volume total avec lies
+                            $total['exploitant']['L9'] += $object->getTotalCaveParticuliere(); 
+                            $total['exploitant']['L10'] += $object->getTotalCaveParticuliere(); 
                         } 
                     }
                     uksort($total['exploitant'], 'exportDRXml::sortXML');

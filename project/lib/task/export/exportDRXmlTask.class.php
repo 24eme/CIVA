@@ -65,44 +65,23 @@ EOF;
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     
     foreach ($dr_ids as $id) {
-        if ($id !== 'DR-7523700100-'.$arguments['campagne'] /*&& in_array($id, $drs_id_file)*/) {
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            /*if ($arguments['campagne'] == "2010" && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+
+            if (!preg_match("/^DR-(67|68)/", $id)) {
+
                 continue;
-            }*/
-            /*try {
-                if (!$dr->updated)
-                    throw new Exception();
-            } catch (Exception $e) {
-                try {
-                    $dr->update();
-                    $dr->save();
-                } catch (Exception $exc) {
-                    $this->logSection("failed update", $dr->_id, null, "ERROR");
-                    continue;
-                }
-            }*/
+            }
 
-            //try {
-                if ($dr->isValideeTiers()) {
-                    if (count($dr->recolte->certification->genre->getAppellations()) > 0) {
-                        $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
-                        file_put_contents($filename, $xml->getContent(), FILE_APPEND);
-                        $this->logSection($dr->_id, 'xml generated');
-                        $nb_exported++;
-                        unset($xml);
-                    }
+            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            if ($dr->isValideeTiers()) {
+                if (count($dr->recolte->certification->genre->getAppellations()) > 0) {
+                    $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+                    file_put_contents($filename, $xml->getContent(), FILE_APPEND);
+                    $this->logSection($dr->_id, 'xml generated');
+                    $nb_exported++;
+                    unset($xml);
                 }
-            /*} catch (Exception $e) {
-                $this->logSection("failed xml", $dr->_id, null, "ERROR");
-                $this->logSection("erreur", $e->getMessage(), null, "ERROR");
-            }*/
+            }
             unset($dr);
-
-            /*if($nb_exported == 250) {
-                break;
-            }*/
-        }
     }
 
 
