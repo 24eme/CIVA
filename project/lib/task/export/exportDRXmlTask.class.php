@@ -50,16 +50,6 @@ EOF;
 
     $nb_exported = 0;
 
-    /*$drs_id_file = array();
-    foreach (file(sfConfig::get('sf_data_dir') . '/Fichier99DRrejetees.csv') as $a) {
-        $csv = explode(',', preg_replace('/"/', '', $a));
-        if (trim($csv[0])) {
-          $drs_id_file[] = 'DR-'.trim($csv[0]).'-'.$arguments['campagne'];
-        }
-    }
-    $this->logSection("dr impacter", count($drs_id_file));
-    */
-
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
     $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
@@ -72,14 +62,23 @@ EOF;
             }
 
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            if ($dr->isValideeTiers()) {
-                if (count($dr->recolte->certification->genre->getAppellations()) > 0) {
-                    $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
-                    file_put_contents($filename, $xml->getContent(), FILE_APPEND);
-                    $this->logSection($dr->_id, 'xml generated');
-                    $nb_exported++;
-                    unset($xml);
-                }
+            
+            if (!$dr->isValideeTiers()) {
+                
+                continue;
+            }
+
+            if (count($dr->recolte->getAppellations()) == 0) {
+
+                continue;
+            }
+
+            $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+            file_put_contents($filename, $xml->getContent(), FILE_APPEND);
+            $this->logSection($dr->_id, 'xml generated');
+            $nb_exported++;
+            unset($xml);
+                
             }
             unset($dr);
     }
