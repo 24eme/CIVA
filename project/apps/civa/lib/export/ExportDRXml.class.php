@@ -51,7 +51,7 @@ class ExportDRXml {
             }
             $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
             foreach ($appellation->getConfig()->getLieux() as $lieu_config) {
-                if (!$appellation->exist($lieu_config->getKey())) {
+                if (!$appellation->getLieux()->exist($lieu_config->getKey())) {
                     continue;
                 }
                 $lieu = $appellation->get($lieu_config->getKey());
