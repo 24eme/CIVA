@@ -54,7 +54,7 @@ class ExportDRXml {
                 if (!$appellation->getLieux()->exist($lieu_config->getKey())) {
                     continue;
                 }
-                $lieu = $appellation->get($lieu_config->getKey());
+                $lieu = $appellation->getLieux()->get($lieu_config->getKey());
                 foreach($lieu_config->getCouleurs() as $couleur_config) {
                     if (!$lieu->exist($couleur_config->getKey())) {
                         continue;
