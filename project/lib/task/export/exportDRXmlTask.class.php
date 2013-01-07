@@ -62,7 +62,7 @@ EOF;
             }
 
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            
+
             if (!$dr->isValideeTiers()) {
                 
                 continue;
@@ -78,8 +78,6 @@ EOF;
             $this->logSection($dr->_id, 'xml generated');
             $nb_exported++;
             unset($xml);
-                
-            }
             unset($dr);
     }
 
