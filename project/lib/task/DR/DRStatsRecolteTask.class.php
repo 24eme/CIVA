@@ -48,6 +48,11 @@ EOF;
 
             $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
 
+            if(!$dr->validee) {
+
+                continue;
+            }
+
             if(!isset($dr->recolte->certification->genre)) {
 
                 continue;
