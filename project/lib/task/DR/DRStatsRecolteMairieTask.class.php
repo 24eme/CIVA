@@ -48,6 +48,11 @@ EOF;
                 continue;
             }
 
+            if(!$dr->validee) {
+
+                continue;
+            }
+
             $insee = $dr->declaration_insee;
 
             if(!array_key_exists($insee, $stats)) {

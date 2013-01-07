@@ -50,7 +50,7 @@ EOF;
 	
 	$dr = sfCouchdbManager::getClient()->retrieveDocumentById($dr_id);
 	
-	echo $dr->_id." changed ($dr_date)\n";
+	echo $dr->_id." changed (previous date $dr_date)\n";
 	$dr->validee = $strdate;
 	$dr->save();
       }
