@@ -525,6 +525,12 @@ Configuration:
                                     libelle: {  }
                                     rendement: { type: float  }
                                     rendement_mention: { type: float  }
+                                    douane :
+                                      type: collection
+                                      class: ConfigurationDouane
+                                      definition:
+                                        fields:
+                                          '*': {  }
                                     '*':
                                     # ------------ LIEU --------------
                                       type: collection
