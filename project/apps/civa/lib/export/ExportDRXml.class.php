@@ -277,13 +277,13 @@ class ExportDRXml {
                                         if ($cepage->getKey() == 'cepage_PN') {
                                             $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
                                             unset($col_total_cremant_rose['mentionVal']);
-                                            if($col_total_cremant_rose['L5'] > 0) {
+                                            if($col_total_cremant_rose['exploitant']['L5'] > 0) {
                                                 unset($col_total_cremant_rose['motifSurfZero']);
                                             }
                                         } else {
                                             $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
                                             unset($col_total_cremant_blanc['mentionVal']);
-                                            if($col_total_cremant_blanc['L5'] > 0) {
+                                            if($col_total_cremant_blanc['exploitant']['L5'] > 0) {
                                                 unset($col_total_cremant_blanc['motifSurfZero']);
                                             }
                                         }
@@ -337,9 +337,6 @@ class ExportDRXml {
                 }
             }
         }
-
-                    
-        print_r($xml);
 
         $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
     }
