@@ -277,11 +277,15 @@ class ExportDRXml {
                                         if ($cepage->getKey() == 'cepage_PN') {
                                             $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
                                             unset($col_total_cremant_rose['mentionVal']);
-                                            unset($col_total_cremant_rose['motifSurfZero']);
+                                            if($col_total_cremant_rose['L5'] > 0) {
+                                                unset($col_total_cremant_rose['motifSurfZero']);
+                                            }
                                         } else {
                                             $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
                                             unset($col_total_cremant_blanc['mentionVal']);
-                                            unset($col_total_cremant_blanc['motifSurfZero']);
+                                            if($col_total_cremant_blanc['L5'] > 0) {
+                                                unset($col_total_cremant_blanc['motifSurfZero']);
+                                            }
                                         }
                                     } else {
                                         uksort($col_final['exploitant'], 'exportDRXml::sortXML');
@@ -329,10 +333,13 @@ class ExportDRXml {
                     if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
                         $xml[] = $total;
                     }
-                    
+
                 }
             }
         }
+
+                    
+        print_r($xml);
 
         $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
     }
