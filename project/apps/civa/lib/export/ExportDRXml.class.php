@@ -338,7 +338,7 @@ class ExportDRXml {
             }
         }
 
-        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
+        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml, 'destinataire' => $this->destinataire));
     }
 
     protected function sumColonnes($cols, $col) {
