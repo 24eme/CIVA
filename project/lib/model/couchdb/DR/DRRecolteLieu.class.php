@@ -76,9 +76,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getVolumeRevendique($force_calcul = false) {
 
-        $vol_renvendique = parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul);
+        $vol_renvendique = round(parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul), 2);
 
-        if ($vol_renvendique < $this->getTotalVolume()) {
+        if ($vol_renvendique < round($this->getTotalVolume(), 2)) {
             return $vol_renvendique;
         }
 
@@ -97,8 +97,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getVolumeRevendiqueTotalWithUIS() {
-        $volume_revendique = $this->getVolumeRevendiqueTotal();
-        if($volume_revendique < $this->getTotalVolume()) {
+        $volume_revendique = round($this->getVolumeRevendiqueTotal(), 2);
+        if($volume_revendique < round($this->getTotalVolume(), 2)) {
 
             return $volume_revendique;
         }

@@ -38,6 +38,8 @@ class declarationActions extends EtapesActions {
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $acheteurs = array();
                 $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
+                $dr->declaration_insee = $tiers->declaration_insee;
+                $dr->declaration_commune = $tiers->declaration_commune;
                 $dr->save();
                 $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
@@ -49,6 +51,8 @@ class declarationActions extends EtapesActions {
                 $doc = clone $old_doc;
                 $doc->_id = 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne();
                 $doc->campagne = $this->getUser()->getCampagne();
+                $doc->declaration_insee = $tiers->declaration_insee;
+                $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->removeVolumes();
                 $doc->remove('validee');
                 $doc->remove('modifiee');
