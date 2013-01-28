@@ -66,14 +66,14 @@ EOF;
                         continue;
                     }
 
+                    $total_superficie = 0;
+                    $total_volume = 0;
+
                     foreach($lieu as $couleur_key => $couleur) {
                         if (!preg_match("/^couleur/", $couleur_key)) {
 
                             continue;
                         }
-
-                        $total_superficie = 0;
-                        $total_volume = 0;
 
                         foreach($couleur as $cepage_key => $cepage) {
                             if (!preg_match("/^cepage/", $cepage_key)) {
@@ -86,9 +86,9 @@ EOF;
 
                             echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;%s;%s;%01.02f;%01.02f;;\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $couleur_key, $cepage_key, $cepage->total_superficie, $cepage->total_volume);
                         }
-
-                        echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels_calcule);
                     }
+
+                    echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels_calcule);
                 }
             }
         }
