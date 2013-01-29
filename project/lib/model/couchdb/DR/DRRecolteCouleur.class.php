@@ -37,7 +37,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
-    protected function getVolumeRevendiqueFinal() {
+    public function getVolumeRevendiqueFinal() {
         $volume_revendique_total = $this->getVolumeRevendiqueTotal();
         $volume_revendique_final = $volume_revendique_total;
         if ($this->getConfig()->hasRendementCouleur()) {

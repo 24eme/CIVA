@@ -394,7 +394,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $dplc_final;
     }
 
-    protected function getVolumeRevendiqueFinal() {
+    public function getVolumeRevendiqueFinal() {
         $volume_revendique_total = $this->getVolumeRevendiqueTotal();
         $volume_revendique_final = $volume_revendique_total;
         if ($this->getConfig()->hasRendementAppellation()) {
