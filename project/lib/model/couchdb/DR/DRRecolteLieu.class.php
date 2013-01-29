@@ -382,7 +382,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return (count($arr_lieux) > 1) ? true : false;
     }
 
-    protected function getDplcFinal() {
+    public function getDplcFinal() {
         $dplc_total = $this->getDplcTotal();
         $dplc_final = $dplc_total;
         if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
