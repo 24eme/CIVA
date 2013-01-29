@@ -55,6 +55,8 @@ class ExportDRXml {
                     continue;
                 }
                 $lieu = $appellation->getLieux()->get($lieu_config->getKey());
+                $usage_industriel_saisi = $lieu->getUsageIndustrielSaisi();
+
                 foreach($lieu_config->getCouleurs() as $couleur_config) {
                     if (!$lieu->exist($couleur_config->getKey())) {
                         continue;
@@ -72,6 +74,19 @@ class ExportDRXml {
                             $col_total_cremant_rose = null;
                         }
                     }
+
+                    if($this->destinataire == self::DEST_CIVA) {
+                        $volume_revendique = $object->getVolumeRevendique();
+                        $dplc = $object->getDplc();
+                    } elseif($this->destinataire == self::DEST_DOUANE) {
+                        $volume_revendique = $object->getVolumeRevendiqueRendement();
+                        $dplc = $object->getDplcRendement();
+                    }
+
+                    $volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
+                    $dplc = round($dplc + $usage_industriel_saisi, 2);
+
+                    $usage_industriel_saisi = 0;
 
                     //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
                     $acheteurs = array();
@@ -92,13 +107,13 @@ class ExportDRXml {
                     $total['exploitant']['L12'] = 0; //HS
                     $total['exploitant']['L13'] = 0; //HS
                     $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                    $l15 = $object->getVolumeRevendiqueRendement() - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+                    $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
                     if ($l15 < 0) {
                         $l15 = 0;
                     }
                     $total['exploitant']['L15'] = $l15; //Volume revendique
                     // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                    $total['exploitant']['L16'] = $object->getDplcRendement(); //DPLC
+                    $total['exploitant']['L16'] = $dplc; //DPLC
                     $total['exploitant']['L17'] = 0; //HS
                     $total['exploitant']['L18'] = 0; //HS
                     $total['exploitant']['L19'] = 0; //HS
