@@ -32,7 +32,7 @@ all:
       subject: "500 | Internal Server Error | Exception"
 
 test:
-  autologin: admin-civa
+#  autologin: login
 
 
 
