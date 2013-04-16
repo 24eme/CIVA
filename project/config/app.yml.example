@@ -31,6 +31,8 @@ all:
       to: ["email@email.email"]
       subject: "500 | Internal Server Error | Exception"
 
+test:
+  autologin: admin-civa
 
 
 
