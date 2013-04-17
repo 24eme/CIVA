@@ -1,3 +1,6 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@gitorious.org:alsacerecolte/alsacerecolte-gitorious-wiki.git
+[submodule "project/plugins/acCouchdbPlugin"]
+	path = project/plugins/acCouchdbPlugin
+	url = git@gitorious.org:accouchdbplugin/accouchdbplugin.git
