@@ -31,8 +31,8 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids_cvi = sfCouchdbManager::getClient('Tiers')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-        $ids_civaba = sfCouchdbManager::getClient('Tiers')->getAllCivaba(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_cvi = acCouchdbManager::getClient('Tiers')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_civaba = acCouchdbManager::getClient('Tiers')->getAllCivaba(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         $ids = array_merge($ids_cvi, $ids_civaba);
         
         $tiers_gamma = array();
@@ -40,7 +40,7 @@ EOF;
         $nb = 0;
         $nb_unknow = 0;
         foreach($ids as $id) {
-            $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
+            $tiers = acCouchdbManager::getClient('Tiers')->find($id);
             if ($tiers->hasNoAssices() && $tiers->cvi != "7523700100") {
                 $key = null;
                 if ($tiers->isInscrit() && $tiers->recoltant == 1) {

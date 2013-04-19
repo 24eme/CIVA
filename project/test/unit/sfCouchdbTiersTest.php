@@ -6,8 +6,8 @@ $t = new lime_test(6);
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
 
-if (!sfCouchdbManager::getClient()->databaseExists()) {
-        sfCouchdbManager::getClient()->createDatabase();
+if (!acCouchdbManager::getClient()->databaseExists()) {
+        acCouchdbManager::getClient()->createDatabase();
  }
 
 $rec = new Tiers();

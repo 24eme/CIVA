@@ -1,5 +1,5 @@
 <?php
-    class RecapitulatifAcheteurForm extends sfCouchdbFormDocumentJson  {
+    class RecapitulatifAcheteurForm extends BaseForm     {
 
         public function configure() {
 	  $this->setWidgets(array(

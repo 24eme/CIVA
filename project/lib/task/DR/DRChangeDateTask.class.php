@@ -36,7 +36,7 @@ EOF;
       }
       $date = strtotime($strdate);
       
-      $drs = sfCouchdbManager::getClient()->reduce(false)->getView("STATS", "DR")->rows;
+      $drs = acCouchdbManager::getClient()->reduce(false)->getView("STATS", "DR")->rows;
       
       foreach ($drs as $obj) {
 	
@@ -48,7 +48,7 @@ EOF;
 	if (strtotime($dr_date) <= $date)
 	  continue;
 	
-	$dr = sfCouchdbManager::getClient()->retrieveDocumentById($dr_id);
+	$dr = acCouchdbManager::getClient()->find($dr_id);
 	
 	echo $dr->_id." changed (previous date $dr_date)\n";
 	$dr->validee = $strdate;

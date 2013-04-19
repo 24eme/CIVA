@@ -1,6 +1,6 @@
 <?php
 
-abstract class ConfigurationAbstract extends sfCouchdbDocumentTree {
+abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
     abstract public function getNoeuds();
 

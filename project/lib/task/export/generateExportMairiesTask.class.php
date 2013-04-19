@@ -42,7 +42,7 @@ EOF;
     $annees = $arguments['campagnes'];
 
     foreach($communes as $code_postal => $nom) {
-        $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-MAIRIES-'. $code_postal);
+        $export = ExportClient::getInstance()->find('EXPORT-MAIRIES-'. $code_postal);
 
         $cle = null;
 

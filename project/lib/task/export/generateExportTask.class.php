@@ -52,7 +52,7 @@ EOF;
 
     $id = 'EXPORT-'.strtoupper($arguments['destinataire'])."-".strtoupper($arguments['identifiant']);
 
-    $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-'.strtoupper($arguments['destinataire'])."-".strtoupper($arguments['identifiant']));
+    $export = ExportClient::getInstance()->find('EXPORT-'.strtoupper($arguments['destinataire'])."-".strtoupper($arguments['identifiant']));
 
     if (!$export) {
       $export = new Export();

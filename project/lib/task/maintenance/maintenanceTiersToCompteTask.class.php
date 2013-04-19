@@ -31,21 +31,21 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids_tiers = sfCouchdbManager::getClient("Tiers")->getAllIds();
+        $ids_tiers = acCouchdbManager::getClient("Tiers")->getAllIds();
         $ids_compte_updated = array();
         $ids_compte_new = array();
 
         foreach ($ids_tiers as $id) {
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-            $compte = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-" . $tiers->cvi);
+            $tiers = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+            $compte = acCouchdbManager::getClient()->find("COMPTE-" . $tiers->cvi);
 
             if (!$compte) {
                 $compte = new CompteProxy();
                 $compte->set('_id', 'COMPTE-' . $tiers->cvi);
                 $compte->login = $tiers->cvi;
-                if ($rec = sfCouchdbManager::getClient()->retrieveDocumentById("REC-" . $tiers->cvi)) {
+                if ($rec = acCouchdbManager::getClient()->find("REC-" . $tiers->cvi)) {
                     $compte->compte_reference = $rec->compte;
-                } elseif ($met = sfCouchdbManager::getClient()->retrieveDocumentById("MET-" . $tiers->civaba)) {
+                } elseif ($met = acCouchdbManager::getClient()->find("MET-" . $tiers->civaba)) {
                     $compte->compte_reference = $met->compte;
                 } else {
                     $this->logSection("tiers introuvable", $id, null, "ERROR");
@@ -55,7 +55,7 @@ EOF;
             }
 
             if (isset($tiers->gamma)) {
-                $met = sfCouchdbManager::getClient()->retrieveDocumentById('MET-' . $tiers->civaba);
+                $met = acCouchdbManager::getClient()->find('MET-' . $tiers->civaba);
                 if ($met) {
                     $met->add('gamma', $tiers->gamma);
                     if ($met->isModified()) {
@@ -83,11 +83,11 @@ EOF;
             $ids_compte_updated[] = $compte->get('_id');
         }
 
-        $ids_compte = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_compte = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         $export = new ExportCsv();
         foreach ($ids_compte as $id_compte) {
             if (!in_array($id_compte, $ids_compte_updated)) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id_compte);
+                $compte = acCouchdbManager::getClient()->find($id_compte);
                 $export->add(array(
                     "id" => $compte->_id,
                     "login" => $compte->login,
@@ -105,17 +105,17 @@ EOF;
         echo "\n\n\n-------------------------------------------\n\n\n";
         
         $export = new ExportCsv();
-        $mets = sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $mets = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
         foreach ($mets as $met) {
 
             if ($met->cvi_acheteur) {
-                $tiers_civaba = sfCouchdbManager::getClient()->retrieveDocumentById("TIERS-C" . $met->civaba, sfCouchdbClient::HYDRATE_JSON);
-                $tiers_cvi = sfCouchdbManager::getClient()->retrieveDocumentById("TIERS-" . $met->cvi_acheteur, sfCouchdbClient::HYDRATE_JSON);
+                $tiers_civaba = acCouchdbManager::getClient()->find("TIERS-C" . $met->civaba, acCouchdbClient::HYDRATE_JSON);
+                $tiers_cvi = acCouchdbManager::getClient()->find("TIERS-" . $met->cvi_acheteur, acCouchdbClient::HYDRATE_JSON);
                 if ($tiers_civaba) {
                     
                 } elseif ($tiers_cvi && $tiers_cvi->civaba == $met->civaba) {
-                    $compte = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-C" . $met->civaba);
-                    $compte_acheteur = sfCouchdbManager::getClient()->retrieveDocumentById("COMPTE-" . $met->cvi_acheteur);
+                    $compte = acCouchdbManager::getClient()->find("COMPTE-C" . $met->civaba);
+                    $compte_acheteur = acCouchdbManager::getClient()->find("COMPTE-" . $met->cvi_acheteur);
                     if ($compte) {
                         /*$this->log($met->_id);
                         $this->logSection("metteur", $met->cvi_acheteur);

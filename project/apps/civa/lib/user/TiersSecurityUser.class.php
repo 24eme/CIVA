@@ -94,7 +94,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             $this->_tiers = array();
             if ($this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) {
                 foreach (explode(',', $this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) as $id) {
-                    $t = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+                    $t = acCouchdbManager::getClient()->find($id);
                     if (isset($this->_tiers[$t->type]))
                         throw new sfException('An user cannot have more than two tiers of the same type');
                     $this->_tiers[$t->type] = $t;

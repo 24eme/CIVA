@@ -37,7 +37,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
 
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($arguments['id']);
+        $dr = acCouchdbManager::getClient()->find($arguments['id']);
 
         if (!$dr) {
             throw new sfException(sprintf("DR %s introuvable", $arguments['id']));

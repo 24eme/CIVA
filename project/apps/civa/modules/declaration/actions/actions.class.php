@@ -37,7 +37,7 @@ class declarationActions extends EtapesActions {
                 $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $acheteurs = array();
-                $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
+                $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
                 $dr->declaration_insee = $tiers->declaration_insee;
                 $dr->declaration_commune = $tiers->declaration_commune;
                 $dr->save();
@@ -115,7 +115,7 @@ class declarationActions extends EtapesActions {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $this->dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $this->dr = acCouchdbManager::getClient()->find($key);
 
         $check = $this->dr->check();
         $this->annee = $annee;
@@ -203,7 +203,7 @@ Le CIVA';
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $this->dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $this->dr = acCouchdbManager::getClient()->find($key);
         $this->forward404Unless($this->dr);
 
         try {
@@ -328,7 +328,7 @@ Le CIVA';
     public function executeVisualisationAvantImport(sfWebRequest $request) {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
-        $this->dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs);
+        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs);
         $this->visualisation_avant_import = true;
     }
 

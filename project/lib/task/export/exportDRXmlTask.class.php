@@ -52,7 +52,7 @@ EOF;
 
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     
     foreach ($dr_ids as $id) {
 
@@ -61,7 +61,7 @@ EOF;
                 continue;
             }
 
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient("DR")->find($id);
 
             if (!$dr->isValideeTiers()) {
                 

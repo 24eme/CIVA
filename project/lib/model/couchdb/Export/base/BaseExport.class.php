@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseExport extends sfCouchdbDocument 
+abstract class BaseExport extends acCouchdbDocument 
 {
 
     public function getDocumentDefinitionModel() {

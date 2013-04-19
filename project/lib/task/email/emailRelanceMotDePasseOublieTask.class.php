@@ -38,7 +38,7 @@ EOF;
 
     $nb_item = 0;
     $nb_email_send = 0;
-    $comptes = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_JSON);
+    $comptes = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_JSON);
     foreach ($comptes as $compte) {
         if ($compte->statut == "MOT_DE_PASSE_OUBLIE") {
             $this->logSection($compte->_id, $compte->email);

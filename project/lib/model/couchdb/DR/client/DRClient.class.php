@@ -1,14 +1,14 @@
 <?php
 
-class DRClient extends sfCouchdbClient {
+class DRClient extends acCouchdbClient {
   
   public static function getInstance() {
 
-    return sfCouchdbManager::getClient('DR');
+    return acCouchdbManager::getClient('DR');
   }
 
   public function createFromCSVRecoltant($campagne, $tiers, &$import) {
-    $csvs = sfCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
+    $csvs = acCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
@@ -21,7 +21,7 @@ class DRClient extends sfCouchdbClient {
 
     foreach ($csvs as $csv) {
           $acheteur_cvi = $csv->cvi;
-          $acheteur_obj = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+          $acheteur_obj = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
 
           if (!$acheteur_obj)
         throw new sfException($acheteur_cvi.' acheteur inconnu');
@@ -81,11 +81,11 @@ class DRClient extends sfCouchdbClient {
     return str_replace(",", ".", $value)*1;
   }
 
-    public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-      return parent::retrieveDocumentById('DR-'.$cvi.'-'.$campagne, $hydrate);
+    public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+      return parent::find('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
 
-    public function getAllByCampagne($campagne, $hydrate = sfCouchdbClient::HYDRATE_ON_DEMAND) {
+    public function getAllByCampagne($campagne, $hydrate = acCouchdbClient::HYDRATE_ON_DEMAND) {
         $docs = $this->getAll($hydrate);
         $i = 0;
         $keys = array_keys($docs->getDocs());
@@ -98,7 +98,7 @@ class DRClient extends sfCouchdbClient {
         return $docs;
     }
 
-    public function getAllByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function getAllByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
        return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
     }
 
@@ -109,7 +109,7 @@ class DRClient extends sfCouchdbClient {
      * @return array 
      */
     public function getArchivesSince($cvi, $campagne) {
-        $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(sfCouchdbClient::HYDRATE_ON_DEMAND);
+        $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         $campagnes = array();
         foreach($docs->getIds() as $doc_id) {
             preg_match('/DR-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches);
@@ -118,17 +118,17 @@ class DRClient extends sfCouchdbClient {
         return $campagnes;
     }
 
-    public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
 
         return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute($hydrate);
     }
     
-    public function findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         
         return $this->startkey(array($campagne, $cvi_acheteur))->endkey(array($campagne, (string)($cvi_acheteur + 1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }
     
-    public function findAllByCampagneAcheteurs($campagne, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function findAllByCampagneAcheteurs($campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         
         return $this->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }

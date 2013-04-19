@@ -1,5 +1,5 @@
 <?php
-    class RecolteAjoutLieuForm extends sfCouchdbFormDocumentJson {
+    class RecolteAjoutLieuForm extends acCouchdbObjectForm {
 
         public function setup() {
 

@@ -43,7 +43,7 @@ EOF;
             }
         }
         
-        $mets = sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $mets = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
         $nb_find = 0;
         foreach($mets as $met) {
             if (array_key_exists($met->no_accises, $accises_cotisant)) {
@@ -51,7 +51,7 @@ EOF;
                     $this->logSection($met->civaba, "not inscrit in couchdb", null, "ERROR");
                 } else {
                     $nb_find++;
-                    $m = sfCouchdbManager::getClient()->retrieveDocumentById($met->_id);
+                    $m = acCouchdbManager::getClient()->find($met->_id);
                     $m->gamma->num_cotisant = $accises_cotisant[$met->no_accises];
                     $m->save();
                     $this->logSection($met->civaba, "updated num_cotisant");

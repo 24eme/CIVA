@@ -36,10 +36,10 @@ EOF;
 
     foreach($ids as $id) {
 
-      $csv = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-      $acheteur = AcheteurClient::getInstance()->retrieveByCvi($csv->cvi, sfCouchdbClient::HYDRATE_JSON);
-      $compte = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->compte[0], sfCouchdbClient::HYDRATE_JSON);
-      $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-ACHETEURS-'. $acheteur->cvi);
+      $csv = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+      $acheteur = AcheteurClient::getInstance()->retrieveByCvi($csv->cvi, acCouchdbClient::HYDRATE_JSON);
+      $compte = acCouchdbManager::getClient()->find($acheteur->compte[0], acCouchdbClient::HYDRATE_JSON);
+      $export = ExportClient::getInstance()->find('EXPORT-ACHETEURS-'. $acheteur->cvi);
 
       if (!$export) {
         $export = new Export();

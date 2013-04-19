@@ -7,7 +7,7 @@ class ProjectConfiguration extends sfProjectConfiguration
 {
   public function setup()
   {
-    $this->enablePlugins('sfCouchdbPlugin');
+    $this->enablePlugins('acCouchdbPlugin');
     $this->enablePlugins('acExceptionNotifierPlugin');
   }
 }

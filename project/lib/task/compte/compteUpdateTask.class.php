@@ -32,17 +32,17 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
 
-        $liaisons = sfCouchdbManager::getClient()->group_level(3)->getView("TIERS", "liaison");
+        $liaisons = acCouchdbManager::getClient()->group_level(3)->getView("TIERS", "liaison");
         $stocks = array();
         $acheteurs = array();
         foreach ($liaisons->rows as $liaison) {
             if (preg_match('/^ACHAT-/', $liaison->key[2])) {
-                $acheteurs[] = sfCouchdbManager::getClient()->retrieveDocumentById($liaison->key[2], sfCouchdbClient::HYDRATE_JSON);
+                $acheteurs[] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
 
                 continue;
             }
             
-            $stocks[$liaison->key[0]][$liaison->key[1]][] = sfCouchdbManager::getClient()->retrieveDocumentById($liaison->key[2], sfCouchdbClient::HYDRATE_JSON);
+            $stocks[$liaison->key[0]][$liaison->key[1]][] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
         }
 
         $comptes = array();
@@ -77,14 +77,14 @@ EOF;
         }
 
         // Suppression des comptes inexistants
-        $ids_compte = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_compte = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         foreach ($ids_compte as $id) {
-            $compte = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $compte = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
             
             if (array_key_exists($compte->login, $comptes) && $compte->type == "CompteProxy") {
                 $compte->type = "CompteTiers";
                 unset($compte->compte_reference);
-                $compte_object = sfCouchdbManager::getClient()->createDocumentFromData($compte);
+                $compte_object = acCouchdbManager::getClient()->createDocumentFromData($compte);
                 $compte_object->save();
                 $this->logSection("Compte proxy has been transformed", $compte->_id, null, "ERROR");
             }
@@ -94,7 +94,7 @@ EOF;
                     //Todo : si le compte n'existe en faire un compte proxy
 
                     //$this->logSection("compte deleted", $compte->_id, null, "ERROR");
-                    //sfCouchdbManager::getClient()->deleteDoc($compte);
+                    //acCouchdbManager::getClient()->deleteDoc($compte);
                 }
             }
         }
@@ -103,7 +103,7 @@ EOF;
 
         // Mise à jour ou création des comptes
         foreach ($comptes as $login => $tiers) {
-            $compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-' . $login, sfCouchdbClient::HYDRATE_DOCUMENT);
+            $compte = acCouchdbManager::getClient()->find('COMPTE-' . $login, acCouchdbClient::HYDRATE_DOCUMENT);
             if (!$compte) {
                  $compte = new CompteTiers();
                  $compte->set('_id', 'COMPTE-' . $login);
@@ -148,7 +148,7 @@ EOF;
         }
         
         foreach($tiers_compte as $id_tiers => $ids_compte) {
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id_tiers, sfCouchdbClient::HYDRATE_DOCUMENT);
+            $tiers = acCouchdbManager::getClient()->find($id_tiers, acCouchdbClient::HYDRATE_DOCUMENT);
             $tiers->remove("compte");
             $tiers->add("compte");
             foreach($ids_compte as $id_compte) {

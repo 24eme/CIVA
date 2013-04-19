@@ -30,11 +30,11 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids_tiers = array_merge(sfCouchdbManager::getClient("Recoltant")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
+        $ids_tiers = array_merge(acCouchdbManager::getClient("Recoltant")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(), acCouchdbManager::getClient("Acheteur")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
         foreach ($ids_tiers as $id_tiers) {
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id_tiers, sfCouchdbClient::HYDRATE_JSON);
+            $tiers = acCouchdbManager::getClient()->find($id_tiers, acCouchdbClient::HYDRATE_JSON);
             if (is_string($tiers->compte) || (isset($tiers->gamma) && is_string($tiers->gamma))) {
-                $t = sfCouchdbManager::getClient()->retrieveDocumentById($id_tiers, sfCouchdbClient::HYDRATE_DOCUMENT);
+                $t = acCouchdbManager::getClient()->find($id_tiers, acCouchdbClient::HYDRATE_DOCUMENT);
             }
 
             if (is_string($tiers->compte)) {

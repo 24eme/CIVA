@@ -1,6 +1,6 @@
 <?php
 
-class ConfigurationClient extends sfCouchdbClient {
+class ConfigurationClient extends acCouchdbClient {
   private static $configuration = array();
   private static $current = null;
 
@@ -11,7 +11,7 @@ class ConfigurationClient extends sfCouchdbClient {
       $campagne = self::$current->campagne;
     }
     if (!isset(self::$configuration[$campagne])) {
-      self::$configuration[$campagne] = CacheFunction::cache('model', array(sfCouchdbManager::getClient(), 'retrieveDocumentById'), array('CONFIGURATION-'.$campagne));
+      self::$configuration[$campagne] = CacheFunction::cache('model', array(acCouchdbManager::getClient(), 'find'), array('CONFIGURATION-'.$campagne));
     }
     if (self::$configuration[$campagne]->exist('virtual') && self::$configuration[$campagne]->virtual != $campagne) {
       self::$configuration[$campagne] = self::getConfiguration(self::$configuration[$campagne]->virtual);

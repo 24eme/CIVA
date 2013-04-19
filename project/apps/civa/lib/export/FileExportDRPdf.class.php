@@ -10,7 +10,7 @@ class FileExportDRPdf
     public function __construct($id_dr, $function_get_partial) {
         $this->_function_get_partial = $function_get_partial;
 
-        $this->_dr_json = sfCouchdbManager::getClient()->retrieveDocumentById($id_dr, sfCouchdbClient::HYDRATE_JSON);
+        $this->_dr_json = acCouchdbManager::getClient()->find($id_dr, acCouchdbClient::HYDRATE_JSON);
         if (!$this->_dr_json) {
 
             throw new sfException("dr not found : " . $id_dr);
@@ -37,7 +37,7 @@ class FileExportDRPdf
     }
 
     public function export() {
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($this->_dr_json->_id);
+        $dr = acCouchdbManager::getClient()->find($this->_dr_json->_id);
 
         if (!$dr) {
 

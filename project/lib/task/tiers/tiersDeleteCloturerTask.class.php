@@ -35,7 +35,7 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = sfCouchdbManager::getClient('Tiers')->getAllIds();
+    $ids = acCouchdbManager::getClient('Tiers')->getAllIds();
 
     $csv_values = array();
     $csv_values[] = array("N° TIERS", "ID", "N° CVI", "N° CIVABA");
@@ -43,9 +43,9 @@ EOF;
     $nb = 0;
     foreach($ids as $id) {
         if ($id != 'TIERS-7523700100') {
-            $tiers_json = sfCouchdbManager::getClient("Tiers")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $tiers_json = acCouchdbManager::getClient("Tiers")->find($id, acCouchdbClient::HYDRATE_JSON);
             if (!isset($tiers_json->import_db2_date)) {
-                $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
+                $tiers = acCouchdbManager::getClient('Tiers')->find($id);
                 $this->logSection('delete', $id);
                 $csv_values[] = array($tiers->num, $tiers->get('_id'), $tiers->cvi, $tiers->civaba);
                 $nb++;

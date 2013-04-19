@@ -1,13 +1,13 @@
 <?php
 
-class ExportClient extends sfCouchdbClient {
+class ExportClient extends acCouchdbClient {
     
     public static function getInstance() {
 
-        return sfCouchdbManager::getClient('Export');
+        return acCouchdbManager::getClient('Export');
     }
 
-    public function findAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function findAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->executeView("EXPORT", "tous", $hydrate);
     }
 

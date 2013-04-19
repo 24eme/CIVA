@@ -13,10 +13,10 @@ class declarationActions extends DataManipulationActions
     /* public function executeFindAll(sfWebRequest $request) {
          ini_set('memory_limit', '256M');
          set_time_limit('180');
-         $ids = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+         $ids = acCouchdbManager::getClient("DR")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
          $this->declarations = array();
          foreach($ids as $id) {
-             $this->declarations[$id] = $this->buildItemDeclarations(sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY));
+             $this->declarations[$id] = $this->buildItemDeclarations(acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_ARRAY));
          }
          return $this->renderData($this->buildDeclarationsData($this->declarations));
     }
@@ -24,10 +24,10 @@ class declarationActions extends DataManipulationActions
     public function executeFindAllByCampagne(sfWebRequest $request) {
         ini_set('memory_limit', '256M');
          $this->forward404Unless($campagne = $request->getParameter('campagne'));
-         $ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($campagne, sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+         $ids = acCouchdbManager::getClient("DR")->getAllByCampagne($campagne, acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
          $this->declarations = array();
          foreach($ids as $id) {
-             $this->declarations[$id] = $this->buildItemDeclarations(sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_ARRAY));
+             $this->declarations[$id] = $this->buildItemDeclarations(acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_ARRAY));
          }
          return $this->renderData($this->buildDeclarationsData($this->declarations));
     }*/

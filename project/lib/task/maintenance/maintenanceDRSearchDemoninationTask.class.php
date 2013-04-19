@@ -36,11 +36,11 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $expressions = array('ESTIMATION');
     $values = array();
     foreach ($dr_ids as $id) {
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient("DR")->find($id);
             if ($dr->isValideeTiers()) {
                 foreach($dr->recolte->getAppellations() as $appellation) {
                     foreach($appellation->getLieux() as $lieu) {

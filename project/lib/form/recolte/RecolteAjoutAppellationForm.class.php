@@ -1,5 +1,5 @@
 <?php
-    class RecolteAjoutAppellationForm extends sfCouchdbFormDocumentJson {
+    class RecolteAjoutAppellationForm extends acCouchdbObjectForm {
 
         protected $_appellation_choices = null;
         protected $_need_lieu = null;
@@ -24,6 +24,7 @@
 
         public function getAppellationChoices() {
             if (is_null($this->_appellation_choices)) {
+                $this->_appellation_choices = array();
                 foreach ($this->getObject()->getNoeudAppellations()->getConfig()->filter('^appellation') as $key => $item) {
                     if (!$this->getObject()->getNoeudAppellations()->exist($key)) {
                         $this->_appellation_choices[$key] = $item->getLibelle();

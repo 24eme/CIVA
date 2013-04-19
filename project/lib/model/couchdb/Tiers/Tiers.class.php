@@ -3,15 +3,15 @@ class Tiers extends BaseTiers {
     protected $is_tiers_fictif = false;
 
     public function getDeclaration($campagne) {
-        return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }
 
     public function getDeclarationArchivesCampagne($campagne) {
-        return sfCouchdbManager::getClient('DR')->getArchivesCampagnes($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->getArchivesCampagnes($this->cvi, $campagne);
     }
 
-    public function getDeclarations($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-        return sfCouchdbManager::getClient('DR')->getAllByCvi($this->cvi, $hydrate);
+    public function getDeclarations($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        return acCouchdbManager::getClient('DR')->getAllByCvi($this->cvi, $hydrate);
     }
 
     public function isDeclarant() {

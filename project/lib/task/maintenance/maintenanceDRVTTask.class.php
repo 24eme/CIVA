@@ -40,15 +40,15 @@ EOF;
         throw new sfCommandException('Campagne must be inforior to 2010');
     }
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     $nb_vt = 0;
 
     foreach ($dr_ids as $id) {
-            $dr_json = sfCouchdbManager::getClient()->getDoc($id);
+            $dr_json = acCouchdbManager::getClient()->getDoc($id);
             if (isset($dr_json->recolte->appellation_VINTABLE)) {
                 if ($options['delete']) {
-                    $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+                    $dr = acCouchdbManager::getClient("DR")->find($id);
                     $dr->delete();
                     $this->logSection("delete", $dr_json->_id);
                 }

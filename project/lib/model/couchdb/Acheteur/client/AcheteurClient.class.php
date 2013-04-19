@@ -1,15 +1,15 @@
 <?php
 
-class AcheteurClient extends sfCouchdbClient {
+class AcheteurClient extends acCouchdbClient {
 
     protected $_acheteurs = null;
 
     public static function getInstance() {
     
-        return sfCouchdbManager::getClient('Acheteur'); 
+        return acCouchdbManager::getClient('Acheteur'); 
     }
 
-    public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute($hydrate);
     }
 
@@ -66,8 +66,8 @@ class AcheteurClient extends sfCouchdbClient {
         return $acheteurs;
     }
 
-    public function retrieveByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-        return parent::retrieveDocumentById('ACHAT-' . $cvi, $hydrate);
+    public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        return parent::find('ACHAT-' . $cvi, $hydrate);
     }
 
     public static function sortByNom($a, $b) {

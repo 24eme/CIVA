@@ -76,7 +76,7 @@
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
 									<div class="bloc_gris">
-                                                                        <?php if($appellationlieu->hasAcheteurs() > 0): ?>
+                                        <?php if($appellationlieu->hasAcheteurs() > 0): ?>
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
 											<thead>
 												<tr>
@@ -102,13 +102,13 @@
                                                             <td class="cvi alt"><?php echo $cvi; ?></td>
                                                             <td class="commune"><?php echo $info->getCommune(); ?></td>
                                                             <?php if($appellationlieu->getConfig()->hasRendement()): ?>
-                                                                <td class="superficie alt <?php echo ($form[$type.'_cvi_'.$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
+                                                                <td class="superficie alt <?php echo ($form['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
                                                             <?php else: ?>
                                                                 <td class="superficie"></td>
                                                             <?php endif; ?>
                                                             <td><?php echoFloat( $info->getVolume()); ?> hl</td>
                                                             <?php if($appellationlieu->getConfig()->hasRendement()) : ?>
-                                                                <td class="dplc alt <?php echo ($form[$type.'_cvi_'.$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$type.'_cvi_'.$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
+                                                                <td class="dplc alt <?php echo ($form['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
                                                             <?php else: ?>
                                                                 <td class="dplc"></td>
                                                             <?php endif; ?>

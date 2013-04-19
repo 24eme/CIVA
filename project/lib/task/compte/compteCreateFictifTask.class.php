@@ -40,7 +40,7 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if ($compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$arguments['login'])) {
+    if ($compte = acCouchdbManager::getClient()->find('COMPTE-'.$arguments['login'])) {
         if ($options['suppression']) {
           $compte->delete();
         } else {

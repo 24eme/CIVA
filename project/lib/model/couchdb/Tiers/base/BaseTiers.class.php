@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseTiers extends sfCouchdbDocument {
+abstract class BaseTiers extends acCouchdbDocument {
     public function getDocumentDefinitionModel() {
         return 'Tiers';
     }

@@ -1,6 +1,6 @@
 <?php
 
-class LieuDitForm extends sfCouchdbFormDocumentJson {
+class LieuDitForm extends acCouchdbObjectForm {
 
     public function setup() {
         $lieu_choices = $this->getObject()->getLieuChoices();

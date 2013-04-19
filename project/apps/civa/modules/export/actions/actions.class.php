@@ -15,7 +15,7 @@ class exportActions extends sfActions {
         $tiers = $this->getUser()->getTiers();
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
-        $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+        $dr = acCouchdbManager::getClient()->find($key);
 
         try {
             if (!$dr->updated)
@@ -47,9 +47,9 @@ class exportActions extends sfActions {
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
+            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
         } else {
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($key);
+            $dr = acCouchdbManager::getClient()->find($key);
         }
        
         $this->setLayout(false);
@@ -82,7 +82,7 @@ class exportActions extends sfActions {
     public function executeCsvTiers(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = acCouchdbManager::getClient("Tiers")->getAll(acCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($tiers as $item) {
             if ($item->recoltant == 1 && $item->cvi != "7523700100") {
@@ -110,13 +110,13 @@ class exportActions extends sfActions {
     public function executeCsvTiersDREncours(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $recoltants = sfCouchdbManager::getClient("Recoltant")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $recoltants = acCouchdbManager::getClient("Recoltant")->getAll(acCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($recoltants as $item) {
             if ($item->cvi != "7523700100") {
-                $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
+                $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), acCouchdbClient::HYDRATE_JSON);
                 if ($dr && (!isset($dr->validee) || !$dr->validee)) {
-                    $compte = sfCouchdbManager::getClient()->retrieveDocumentById($item->compte[0], sfCouchdbClient::HYDRATE_JSON);
+                    $compte = acCouchdbManager::getClient()->find($item->compte[0], acCouchdbClient::HYDRATE_JSON);
                     $ligne = array();
                     $ligne[] = $item->cvi;
                     $ligne[] = $item->nom;
@@ -137,11 +137,11 @@ class exportActions extends sfActions {
     public function executeCsvTiersNonValideeCiva(sfWebRequest $request) {
         set_time_limit('240');
         ini_set('memory_limit', '512M');
-        $tiers = sfCouchdbManager::getClient("Tiers")->getAllCvi(sfCouchdbClient::HYDRATE_JSON);
+        $tiers = acCouchdbManager::getClient("Tiers")->getAllCvi(acCouchdbClient::HYDRATE_JSON);
         $values = array();
         foreach ($tiers as $item) {
             if ($item->cvi != "7523700100") {
-                $dr = sfCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), sfCouchdbClient::HYDRATE_JSON);
+                $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), acCouchdbClient::HYDRATE_JSON);
                 if ($dr && isset($dr->validee) && $dr->validee && (!isset($dr->modifiee) || !$dr->modifiee)) {
                     $ligne = array();
                     $ligne[] = $item->cvi;

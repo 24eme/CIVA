@@ -18,7 +18,7 @@ class compteActions extends DataManipulationActions
   */
   public function executeFindOne(sfWebRequest $request)
   {
-     $this->forward404Unless($compte_object = sfCouchdbManager::getClient("_Compte")->retrieveByLogin($request->getParameter('login')));
+     $this->forward404Unless($compte_object = acCouchdbManager::getClient("_Compte")->retrieveByLogin($request->getParameter('login')));
      $this->compte = $compte_object->toArray(2);
      $this->compte['nom'] = $compte_object->getNom();
      $this->compte['intitule'] = $compte_object->getIntitule();
@@ -33,14 +33,14 @@ class compteActions extends DataManipulationActions
   }
   
   public function executeFindAllDeclarations(sfWebRequest $request) {
-    $this->forward404Unless($compte = sfCouchdbManager::getClient("_Compte")->retrieveByLogin($request->getParameter('login'), sfCouchdbClient::HYDRATE_JSON));
+    $this->forward404Unless($compte = acCouchdbManager::getClient("_Compte")->retrieveByLogin($request->getParameter('login'), acCouchdbClient::HYDRATE_JSON));
     $cvi = null;
     foreach($compte->tiers as $tiers) {
         if ($tiers->type == 'Recoltant') {
             $cvi = str_replace("REC-", "", $tiers->id);
         }
     }
-    $this->declarations = sfCouchdbManager::getClient("DR")->getAllByCvi($cvi, sfCouchdbClient::HYDRATE_ARRAY);
+    $this->declarations = acCouchdbManager::getClient("DR")->getAllByCvi($cvi, acCouchdbClient::HYDRATE_ARRAY);
     return $this->renderData($this->buildDeclarationsData($this->declarations));
   }
   

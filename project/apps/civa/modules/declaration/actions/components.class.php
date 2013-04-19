@@ -27,7 +27,7 @@ class declarationComponents extends sfComponents {
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->declaration = $this->getUser()->getDeclaration();
         $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
-	    $this->has_import =  sfCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
+	    $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
         krsort($this->campagnes);
     }
     

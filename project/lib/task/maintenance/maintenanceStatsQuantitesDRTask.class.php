@@ -36,7 +36,7 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $values = array();
     $appellations = array();
     $nb_dr = 0;
@@ -48,7 +48,7 @@ EOF;
             if($id == 'DR-7523700100-'.$options['campagne']) {
                 continue;
             }
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient("DR")->find($id);
             try {
                 if (!$dr->updated)
                     throw new Exception();

@@ -1,6 +1,6 @@
 <?php
 
-class RecolteForm extends sfCouchdbFormDocumentJson {
+class RecolteForm extends acCouchdbObjectForm {
 
     const FORM_NAME_NEGOCES = 'negoces';
     const FORM_NAME_COOPERATIVES = 'cooperatives';

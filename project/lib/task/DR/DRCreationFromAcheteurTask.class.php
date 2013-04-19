@@ -24,12 +24,12 @@ EOF;
     }
 
     protected function createOne($cvi, $year) {
-	$tiers = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
+	$tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
 	if (!$tiers) {
 	  print "ERROR: ".$cvi." n'existe pas\n";
 	  return false;
 	}
-	$dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
+	$dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
 	  print "LOG: DR pour ".$cvi." existe\n";
 	  return false;
@@ -38,7 +38,7 @@ EOF;
 	$import_from = array();
 	try{
       if (!$dr)
- 	    $dr = sfCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
+ 	    $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
 	  $check = $dr->check();
 	  if (count($check['erreur']) || count($check['vigilance'])) {
         if (count($check['erreur']) > 0) {
@@ -61,7 +61,7 @@ EOF;
 		return false;
 	    
 	  }else{
-	    $tiers = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($dr->getCVI());
+	    $tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($dr->getCVI());
 	    if (!$tiers) {
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
@@ -100,7 +100,7 @@ EOF;
 	  return ;
 	}
 	
-	$CVIs = sfCouchdbManager::getClient()->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->getView("CSV", "recoltant");
+	$CVIs = acCouchdbManager::getClient()->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->getView("CSV", "recoltant");
 
 	foreach ($CVIs->rows as $o) {
 	  print $o->key[1]."\n";

@@ -39,7 +39,7 @@ EOF;
 
         $this->createFileDir();
         
-        $acheteurs = sfCouchdbManager::getClient("Acheteur")->getAll($arguments['campagne']);
+        $acheteurs = acCouchdbManager::getClient("Acheteur")->getAll($arguments['campagne']);
         foreach($acheteurs as $acheteur) {
             $export = new ExportDRAcheteurCsv($arguments['campagne'], $acheteur, $options['debug']);
             if ($export->hasDR() && !is_file($this->getFileDir().'/'.$this->campagne.'_DR_ACHETEUR_'.$acheteur->cvi.'_'.$export->getMd5().'.csv')) {

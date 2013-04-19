@@ -131,11 +131,11 @@ EOF;
 		$docs[] = $json;
 		if ($options['import'] == 'couchdb') {
 			foreach ($docs as $data) {
-				$doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
+				$doc = acCouchdbManager::getClient()->find($data->_id);
 				if ($doc) {
 					// $doc->delete();
 				}
-				$doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+				$doc = acCouchdbManager::getClient()->createDocumentFromData($data);
 				$doc->save();
 			}
 			return;

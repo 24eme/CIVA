@@ -37,7 +37,7 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $values = array();
     $values[] =  array('appellation', 'cepage', 'superficie', 'volume', 'volume_revendique', 'dplc');
     $nb_dr = 0;
@@ -50,7 +50,7 @@ EOF;
             if($id == 'DR-7523700100-'.$options['campagne']) {
                 continue;
             }
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient("DR")->find($id);
             if (!$options['import_db2'] && $dr->exist('import_db2') && $dr->import_db2 == 1) {
                 continue;
             }

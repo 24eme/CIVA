@@ -202,10 +202,10 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
         }
-        $this->clean();
+        $this->cleanNoeuds();
     }
     
-    protected function clean() {
+    protected function cleanNoeuds() {
         foreach($this->getCepages() as $cepage) {
             if (count($cepage->detail) == 0) {
                 $this->remove($cepage->getKey());

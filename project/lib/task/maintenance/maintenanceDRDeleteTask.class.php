@@ -40,16 +40,16 @@ EOF;
         exit;
     }
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     $nb_dr = 0;
 
     foreach ($dr_ids as $id) {
-        $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+        $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
         if ($options['campagne'] == '2010' && (!isset($dr->import_db2) || $dr->import_db2 != 1)) {
             continue;
         }
-            sfCouchdbManager::getClient()->deleteDoc($dr);
+            acCouchdbManager::getClient()->deleteDoc($dr);
             $this->logSection("delete", $id);
             $nb_dr++;
     }

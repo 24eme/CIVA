@@ -1,6 +1,6 @@
 <?php
 
-abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
+abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
 
     public function getConfig() {

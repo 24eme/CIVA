@@ -36,7 +36,7 @@ EOF;
 
     $annees = $arguments['campagnes'];
 
-    $export = ExportClient::getInstance()->retrieveDocumentById('EXPORT-INAO-6768');
+    $export = ExportClient::getInstance()->find('EXPORT-INAO-6768');
 
     $cle = null;
 

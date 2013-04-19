@@ -34,12 +34,12 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = ExportClient::getInstance()->findAll(sfCouchdbClient::HYDRATE_JSON)->getIds();
+    $ids = ExportClient::getInstance()->findAll(acCouchdbClient::HYDRATE_JSON)->getIds();
 
     $exports = array();
 
     foreach($ids as $id) {
-        $export = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+        $export = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
         if ($export->destinataire == "Mairies") {
           $exports[$export->identifiant] = $export;
         }

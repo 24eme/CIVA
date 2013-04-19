@@ -32,11 +32,11 @@ class uploadActions extends EtapesActions {
     }
     
     public function executeCsvList(sfWebRequest $request) {
-      $this->csv = sfCouchdbManager::getClient('CSV')->getCSVsAcheteurs();
+      $this->csv = acCouchdbManager::getClient('CSV')->getCSVsAcheteurs();
     }
 
     public function executeCsvDownload(sfWebRequest $request) {
-        $this->forward404Unless($this->csv = sfCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
+        $this->forward404Unless($this->csv = acCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
         $this->setResponseCsv($this->csv->getCsvFilename());
         return $this->renderText(file_get_contents($this->csv->getAttachmentUri($this->csv->getCsvFilename())));
     }
@@ -148,7 +148,7 @@ class uploadActions extends EtapesActions {
 
         if (!$nb_errors) {
             $cvi = $this->getUser()->getTiers()->cvi;
-            $csv = sfCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
+            $csv = acCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
             $csv->storeCSV($this->csv);
             $csv->save();
             $this->getUser()->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
@@ -379,7 +379,7 @@ class uploadActions extends EtapesActions {
     protected function errorOnCVIRecoltant($line) {
         if (!isset($this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]])) {
             try {
-                $rec = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
+                $rec = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
                 $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = !($rec);
             } catch (Exception $e) {
                 $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = true;

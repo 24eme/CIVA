@@ -41,10 +41,10 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         if ($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
-            if (sfCouchdbManager::getClient()->databaseExists()) {
-                sfCouchdbManager::getClient()->deleteDatabase();
+            if (acCouchdbManager::getClient()->databaseExists()) {
+                acCouchdbManager::getClient()->deleteDatabase();
             }
-            sfCouchdbManager::getClient()->createDatabase();
+            acCouchdbManager::getClient()->createDatabase();
         }
 
         foreach (file(sfConfig::get('sf_data_dir') . '/import/12/Ceprec12') as $a) {
@@ -392,13 +392,13 @@ EOF;
 
         if ($options['import'] == 'couchdb') {
             foreach ($docs as $data) {
-                $doc = sfCouchdbManager::getClient("DR")->retrieveDocumentById($data->_id, sfCouchdbClient::HYDRATE_JSON);
+                $doc = acCouchdbManager::getClient("DR")->find($data->_id, acCouchdbClient::HYDRATE_JSON);
                 if ($doc) {
-                    sfCouchdbManager::getClient()->deleteDoc($doc);
+                    acCouchdbManager::getClient()->deleteDoc($doc);
                 }
                 if (isset($data->delete))
                     continue;
-                $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+                $doc = acCouchdbManager::getClient()->createDocumentFromData($data);
                 $doc->save();
             }
             return;

@@ -33,13 +33,13 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['cvi']);
+        $compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['cvi']);
         if(!preg_match('/[0-9]{10}/', $arguments['nouveau_cvi'])) {
 
             throw new sfCommandException("Le cvi semble invalide");
         }
 
-        if (sfCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['nouveau_cvi'])) {
+        if (acCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['nouveau_cvi'])) {
 
             throw new sfCommandException("Le nouveau compte existe déjà");
         }

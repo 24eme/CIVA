@@ -30,7 +30,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $comptes_json = sfCouchdbManager::getClient()
+        $comptes_json = acCouchdbManager::getClient()
                                       ->getView("COMPTE", "tous")->rows;
 
         $comptes = array();
@@ -50,7 +50,7 @@ EOF;
         $tiers = array();
         $tiers_types = array("Recoltant", "MetteurEnMarche", "Acheteur");
         foreach ($tiers_types as $tiers_type) {
-            $tiers = array_merge($tiers, sfCouchdbManager::getClient($tiers_type)->getAll(sfCouchdbClient::HYDRATE_JSON)->getDocs());
+            $tiers = array_merge($tiers, acCouchdbManager::getClient($tiers_type)->getAll(acCouchdbClient::HYDRATE_JSON)->getDocs());
         }
 
         foreach ($tiers as $t) {

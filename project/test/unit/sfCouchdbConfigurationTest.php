@@ -6,11 +6,11 @@ $t = new lime_test(13);
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
 
-if (!sfCouchdbManager::getClient()->databaseExists()) {
-        sfCouchdbManager::getClient()->createDatabase();
+if (!acCouchdbManager::getClient()->databaseExists()) {
+        acCouchdbManager::getClient()->createDatabase();
  }
 
-$conf = sfCouchdbManager::getClient()->retrieveDocumentById('CONFIGURATION');
+$conf = acCouchdbManager::getClient()->find('CONFIGURATION');
 $t->ok($conf, 'document configuration exists');
 $t->is($conf->get('recolte/appellation_GRDCRU/libelle'), 'AOC Alsace Grand Cru', 'Libelle on Grand Cru');
 $t->is($conf->get('recolte/appellation_GRDCRU/rendement'), 61, "rendement Grand Cru");

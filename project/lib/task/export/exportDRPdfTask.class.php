@@ -30,10 +30,10 @@ EOF;
 
         sfContext::createInstance($this->configuration);
 
-        $ids = ExportClient::getInstance()->findAll(sfCouchdbClient::HYDRATE_JSON)->getIds();
+        $ids = ExportClient::getInstance()->findAll(acCouchdbClient::HYDRATE_JSON)->getIds();
 
         foreach($ids as $id) {
-            $export = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $export = acCouchdbManager::getClient()->find($id);
             $this->logSection($export->get('_id'), 'exporting ...');
             $export_dr = new ExportDR($export, array($this, 'getPartial'), true);
             if($options['clean']) {

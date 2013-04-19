@@ -37,11 +37,11 @@ EOF;
         exit;
     }
 
-    $compte_ids = sfCouchdbManager::getClient("_Compte")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $compte_ids = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     foreach ($compte_ids as $id) {
-        $compte_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-        sfCouchdbManager::getClient()->deleteDoc($compte_json);
+        $compte_json = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+        acCouchdbManager::getClient()->deleteDoc($compte_json);
         $this->logSection("delete", $id);
     }
   }

@@ -14,7 +14,7 @@ class RecolteOnglets {
     protected $_sf_route_previous_etape = null;
     protected $_sf_route_next_etape = null;
 
-    public function __construct(sfCouchdbJson $declaration, $sf_route_previous_etape = null, $sf_route_next_etape = null) {
+    public function __construct(acCouchdbJson $declaration, $sf_route_previous_etape = null, $sf_route_next_etape = null) {
         $this->_declaration = $declaration;
         $this->_prefix_key_appellation = 'appellation_';
         $this->_prefix_key_lieu = 'lieu';

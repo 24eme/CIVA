@@ -1,11 +1,11 @@
 <?php
 
-class MessagesClient extends sfCouchdbClient {
+class MessagesClient extends acCouchdbClient {
   public static $messages = null;
 
   public function retrieveMessages() {
     if (!self::$messages)
-      self::$messages = parent::retrieveDocumentById('MESSAGES');
+      self::$messages = parent::find('MESSAGES');
     return self::$messages;
   }
 

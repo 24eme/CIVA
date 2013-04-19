@@ -1,6 +1,6 @@
 <?php
 
-class TiersSiegeForm extends sfCouchdbFormDocumentJson {
+class TiersSiegeForm extends acCouchdbObjectForm {
 
     public function configure() {
         $this->setWidgets(array(

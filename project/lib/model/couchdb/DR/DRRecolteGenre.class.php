@@ -24,7 +24,7 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
 
     /**
      *
-     * @return sfCouchdbJson
+     * @return acCouchdbJson
      */
     public function getConfigAppellations() {
         return $this->getConfig()->filter('^appellation_');

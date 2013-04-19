@@ -35,10 +35,10 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = sfCouchdbManager::getClient('Tiers')->getAllIds();
+    $ids = acCouchdbManager::getClient('Tiers')->getAllIds();
     $nb = 0;
     foreach($ids as $id) {
-        $tiers = sfCouchdbManager::getClient('Tiers')->retrieveDocumentById($id);
+        $tiers = acCouchdbManager::getClient('Tiers')->find($id);
         $tiers->add('export_db2_revision', $tiers->get('_rev'));
         $tiers->save();
         $nb++;
