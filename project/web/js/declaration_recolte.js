@@ -43,42 +43,6 @@ $(document).ready( function()
         ($('#col_recolte_totale .rendement').removeClass("alerte"));
     }*/
 
-    $('input.num').live('keypress',function(e)
-    {
-        var val = $(this).val();
-
-        // Si touche entréé
-        if (e.which == 13) {
-            return e;
-        }
-
-        var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
-
-        var is_number = (e.which >= 48 && e.which <= 57);
-
-        if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && !is_number)
-            return false;
-        if(e.which == 46 && has_point_or_virgule)
-            return false;
-        if(e.which == 44 && has_point_or_virgule)
-            return false;
-        if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.currentTarget && e.currentTarget.selectionStart > val.length - 3)
-            return false;
-        return e;
-    });
-
-    $('input.num').live('change',function(e)
-    {
-        var val = $(this).val();
-        $(this).val(val.replace(',', '.'));
-
-        if(val.length > 12)
-            $(this).addClass('num_alerte');
-        else
-            $(this).removeClass('num_alerte');
-    });
-
-
     $('.gestion_recolte_donnees input').each(function(e)
     {
         var val = $(this).val();
@@ -539,7 +503,7 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
     var qualite_name = '';
 
     nom.autocomplete(
-    {
+	{
         minLength: 0,
         source: source_autocompletion,
         focus: function(event, ui)
