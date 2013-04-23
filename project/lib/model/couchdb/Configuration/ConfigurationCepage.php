@@ -7,6 +7,11 @@ class ConfigurationCepage extends BaseConfigurationCepage {
       return null;
   }
 
+  public function getProduits() {
+        
+    return array($this->getHash() => $this);
+  }
+
   public function hasRendement() {
       return ($this->getRendement()>0);
   }

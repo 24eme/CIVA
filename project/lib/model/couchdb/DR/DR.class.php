@@ -53,6 +53,16 @@ class DR extends BaseDR {
         $this->recolte->certification->genre->removeVolumes();
     }
 
+    public function getProduits() {
+
+        return $this->recolte->getProduits();
+    }
+
+    public function getProduitsDetails() {
+
+        return $this->recolte->getProduitsDetails();
+    }
+
     /**
      *
      * @return float

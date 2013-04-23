@@ -1,6 +1,17 @@
 <?php
 
 class Configuration extends BaseConfiguration {
+
+    public function getProduits() {
+
+        return $this->recolte->getProduits();
+    }
+
+    public function getProduitsDetails() {
+
+        return $this->recolte->getProduitsDetails();
+    }
+
     public function getArrayAppellationsMout() {
         $appellations = $this->getRecolte()->getNoeudAppellations();
         $appellations_array_mouts = array();

@@ -26,12 +26,24 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
       return $node->getChildrenNode();
     }
 
-/*
-    public function getTotalUsagesIndustriels($force_calcul = false){
+    public function getProduits() {
+        $produits = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits = array_merge($produits, $item->getProduits());
+        }
 
-        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array("usages_industriels_calcule"));
+        return $produits;
     }
-*/
+
+    public function getProduitsDetails() {
+        $produits = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits = array_merge($produits, $item->getProduitsDetails());
+        }
+
+        return $produits;
+    }
+
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);
