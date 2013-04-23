@@ -2,9 +2,9 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
-  public function getNoeuds() {
+  public function getChildrenNode() {
 
-      return $this->detail;
+      return null;
   }
 
   public function hasRendement() {

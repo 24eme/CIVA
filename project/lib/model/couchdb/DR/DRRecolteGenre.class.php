@@ -2,12 +2,12 @@
 
 class DRRecolteGenre extends BaseDRRecolteGenre {
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
         return $this->getAppellations();
     }
 
     public function getMentions() {
-       return $this->getNoeudsSuivant();
+       return $this->getChildrenNodeDeep();
     }
 
     public function getAppellations(){

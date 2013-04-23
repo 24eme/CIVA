@@ -8,19 +8,24 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
-    abstract public function getNoeuds();
+    abstract public function getChildrenNode();
 
-    public function getNoeudSuivant(){
-        if( $this->getConfig()->hasManyNoeuds())
-            throw new sfException("getNoeud ne peut être appelé d'un noeud qui contient plusieurs noeuds...");
+    public function getChildrenNodeDeep($level = 1) {
+      if($this->getConfig()->hasManyNoeuds()) {
+          
+          throw new sfException("getChildrenNodeDeep() peut uniquement être appelé d'un noeud qui contient un seul enfant...");
+      }
 
-        return $this->getNoeuds()->getFirst();
+      $node = $this->getChildrenNode()->getFirst();
+      
+      if($level > 1) {
+        
+        return $node->getChildrenNodeDeep($level - 1);
+      }
+
+      return $node->getChildrenNode();
     }
 
-    public function getNoeudsSuivant() {
-
-        return $this->getNoeudSuivant()->getNoeuds();
-    }
 /*
     public function getTotalUsagesIndustriels($force_calcul = false){
 
@@ -55,7 +60,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     protected function getSumNoeudFields($field, $exclude = true) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $key => $noeud) {
+        foreach ($this->getChildrenNode() as $key => $noeud) {
             if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
@@ -68,7 +73,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     protected function getSumNoeudWithMethod($method, $exclude = true) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $noeud) {
+        foreach ($this->getChildrenNode() as $noeud) {
             if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
@@ -92,7 +97,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     protected function getSumFields($field) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $k => $noeud) {
+        foreach ($this->getChildrenNode() as $k => $noeud) {
             $sum += $noeud->get($field);
         }
         return $sum;

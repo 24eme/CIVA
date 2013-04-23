@@ -2,19 +2,14 @@
 
 class DRRecolteCertification extends BaseDRRecolteCertification {
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getGenres();
     }
 
-    public function getNoeud() {
-        parent::getNoeud();
-        return $this->genre;
-    }
-
     public function getAppellations() {
 
-       return $this->getNoeudsSuivant();
+       return $this->getChildrenNodeDeep();
     }
 
     public function getGenres(){

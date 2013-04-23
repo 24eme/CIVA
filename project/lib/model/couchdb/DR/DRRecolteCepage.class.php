@@ -12,7 +12,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->getCouleur()->getLieu();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->detail;
     }
