@@ -1,5 +1,5 @@
 <?php
-class DR extends BaseDR {
+class DR extends BaseDR implements InterfaceProduitsDocument {
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
@@ -444,6 +444,26 @@ class DR extends BaseDR {
             return min($arr_date);
         }else
             return null;
+    }
+    
+
+    public function getProduits(){
+        $produits = array();          
+        foreach ($this->recolte->getAppellations() as $appelation) {
+            foreach ($appelation->getMentions() as $mention) {
+                //$libelles[] = $appelation->getMentions()->appellation;
+                foreach ($mention->getLieux() as $lieu) {
+                    foreach ($lieu->getCouleurs() as $couleur) {
+                        foreach ($couleur->getCepages() as $cepage) {
+                                $produits[] = $cepage;                            
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+        return $produits;
     }
 
 }
