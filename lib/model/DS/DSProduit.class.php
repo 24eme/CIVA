@@ -21,8 +21,5 @@ class DSProduit extends BaseDSProduit {
         return strstr($this->produit_hash, 'EFF')!==false;
     }
 
-    public function getConfig() {
 
-        return ConfigurationClient::getCurrent()->get($this->produit_hash);
-    }
 }

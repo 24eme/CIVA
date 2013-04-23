@@ -17,7 +17,7 @@ class DSHistoryView extends acCouchdbView
     }
 
     public function findByEtablissement($id_or_identifiant) {    
-        $identifiant = EtablissementClient::getInstance()->getIdentifiant($id_or_identifiant);    
+        $identifiant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($id_or_identifiant);
         return $this->client->startkey(array($identifiant))
                             ->endkey(array($identifiant, array()))
                             ->getView($this->design, $this->view)->rows;
@@ -25,7 +25,7 @@ class DSHistoryView extends acCouchdbView
 
     public function findByEtablissementAndPeriode($id_or_identifiant, $periode) 
     {
-        $identifiant = EtablissementClient::getInstance()->getIdentifiant($id_or_identifiant);
+        $identifiant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($id_or_identifiant);
         $campagne = $this->client->buildCampagne($periode);
         return $this->client->startkey(array($identifiant, $campagne, $periode))
                             ->endkey(array($identifiant, $campagne, $periode, array()))

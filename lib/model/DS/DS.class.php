@@ -4,33 +4,34 @@
  * Model for DS
  *
  */
-class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivageDocument {
+abstract class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivageDocument, InterfaceDSProduits {
 
     protected $declarant_document = null;
     protected $archivage_document = null;
 
-    public function  __construct() {
-        parent::__construct();   
+    public function __construct() {
+        parent::__construct();
         $this->initDocuments();
     }
-
-    public function __clone() {
-        parent::__clone();
-        $this->initDocuments();
-    }   
 
     protected function initDocuments() {
         $this->declarant_document = new DeclarantDocument($this);
         $this->archivage_document = new ArchivageDocument($this);
     }
+    
+    public function __clone() {
+        parent::__clone();
+        $this->initDocuments();
+    }
+
 
     public function constructId() {
-        if($this->statut == null) {
+        if ($this->statut == null) {
             $this->statut = DSClient::STATUT_A_SAISIR;
         }
         $this->set('_id', DSClient::getInstance()->buildId($this->identifiant, $this->periode));
     }
-    
+
     public function getCampagne() {
 
         return $this->_get('campagne');
@@ -49,68 +50,31 @@ class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivag
         return $this->_set('periode', $periode);
     }
 
-    public function getLastDRM() {
-        
-        return DRMClient::getInstance()->findLastByIdentifiantAndCampagne($this->identifiant, $this->campagne);
-    }
-
     public function getLastDS() {
-        
+
         return DSClient::getInstance()->findLastByIdentifiant($this->identifiant);
     }
 
-    public function updateProduits() {
-	if ($this->getEtablissement()->isViticulteur()) {
-	  $drm = $this->getLastDRM();
-	  if ($drm) {
-	    return $this->updateProduitsFromDRM($drm); 
-	  }
-	}
-	if ($this->getEtablissement()->isNegociant()) {
-	  return $this->updateProduitsFromVracs(); 
-	}
-        $ds = $this->getLastDS();
-        if ($ds) {
-           return $this->updateProduitsFromDS($ds); 
-        }	
-    }
+    public abstract function getLastDocument();
 
-    public function addProduit($hash) {
-        $config = ConfigurationClient::getCurrent()->get($hash);
-        $produit = $this->declarations->add($config->getHashForKey());
-        $produit->produit_hash = $config->getHash();
-        $produit->updateProduit();
+    public abstract function updateProduits();
 
-        return $produit;
-    }
-
-    protected function updateProduitsFromDRM($drm) {
-        $produits = $drm->getProduits();
-	    $this->drm_origine = $drm->_id;
-        foreach ($produits as $produit) {
-            $produitDs = $this->addProduit($produit->getHash());
-            $produitDs->stock_initial = $produit->total;
-        }
-    }
-
-    protected function updateProduitsFromVracs() {
-      $hproduits = VracSoussigneIdentifiantView::getInstance()->getProduitHashesFromCampagneAndAcheteur($this->campagne, $this->getEtablissement());
-      $hproduits = array_merge($hproduits, VracSoussigneIdentifiantView::getInstance()->getProduitHashesFromCampagneAndAcheteur(ConfigurationClient::getInstance()->getPreviousCampagne($this->campagne), $this->getEtablissement()));
-      foreach ($hproduits as $produit) {
-	$produitDs = $this->addProduit($produit);
-      }
-    }
+    public abstract function addProduit($hash);
+    
+    public abstract function getCoordonnees();
+    
+    public abstract function getConfig();
 
     protected function updateProduitsFromDS($ds) {
         foreach ($ds->declarations as $produit) {
             if (!$produit->isActif()) {
-                
+
                 continue;
             }
             $produitDs = $this->addProduit($produit->produit_hash);
         }
     }
-    
+
     public function isStatutValide() {
         return $this->statut === DSClient::STATUT_VALIDE;
     }
@@ -125,10 +89,10 @@ class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivag
 
     protected function preSave() {
         $this->archivage_document->preSave();
-	$this->updateProduits();
+        $this->updateProduits();
     }
 
-    /*** DECLARANT ***/
+    /*     * * DECLARANT ** */
 
     public function getEtablissementObject() {
         return $this->getEtablissement();
@@ -138,11 +102,11 @@ class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivag
         $this->declarant_document->storeDeclarant();
     }
 
-    /*** FIN DECLARANT ***/
+    /*     * * FIN DECLARANT ** */
 
-    /*** ARCHIVAGE ***/
+    /*     * * ARCHIVAGE ** */
 
-     public function getNumeroArchive() {
+    public function getNumeroArchive() {
 
         return $this->_get('numero_archive');
     }
@@ -152,40 +116,29 @@ class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivag
         return $this->isStatutValide();
     }
 
-    /*** FIN ARCHIVAGE ***/
-    
-    public function getDepartement() 
-    {
-        if($this->declarant->code_postal )  {
-          return substr($this->declarant->code_postal, 0, 2);
+    /*     * * FIN ARCHIVAGE ** */
+
+    public function getDepartement() {
+        if ($this->declarant->code_postal) {
+            return substr($this->declarant->code_postal, 0, 2);
         }
         return null;
     }
 
-    public function getEtablissement() 
-    {
-        return EtablissementClient::getInstance()->find($this->identifiant);
-    }
+    public abstract function getEtablissement();
     
-    public function getInterpro() 
-    {
-      	if ($this->getEtablissement()) {
-         	return $this->getEtablissement()->getInterproObject();
-     	}
+    public function getInterpro() {
+        if ($this->getEtablissement()) {
+            return $this->getEtablissement()->getInterproObject();
+        }
     }
-    
+
     public function getMaster() {
         return $this;
     }
 
-    public function isMaster(){
+    public function isMaster() {
         return true;
     }
-    
-    public function getCoordonneesIL(){
-        $configs = sfConfig::get('app_facture_emetteur');
-        if (!array_key_exists($this->declarant->region, $configs))
-            throw new sfException(sprintf('Config %s not found in app.yml', $this->declarant->region));
-        return $configs[$this->declarant->region];
-    }
+
 }

@@ -12,6 +12,10 @@ class DSClient extends acCouchdbClient {
     public function buildId($identifiant, $periode) {
         return sprintf('DS-%s-%s', $identifiant, $periode);
     }
+    
+    public function createIdentifiant($cvi, $periode) {
+       return $cvi;
+    }
 
     public function buildPeriode($date) {
         preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
@@ -50,17 +54,20 @@ class DSClient extends acCouchdbClient {
         return $v->format('Y-m-d');
     }
 
-    public function findOrCreateDsByEtbId($etablissementId, $date_stock) {
+    public function findOrCreateDsByCvi($cvi, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
-        $ds = $this->findByIdentifiantAndPeriode($etablissementId, $periode);
+        $ds = $this->findByIdentifiantAndPeriode($cvi.'01', $periode);
 	if($ds){
-	  $ds->updateProduits();
+	  //UPDATE
+            $ds->updateProduits();
 	  return $ds;
         }
-        $ds = new DS();
+        $ds = new DSCiva();
         $ds->date_emission = date('Y-m-d');
         $ds->date_stock = $this->createDateStock($date_stock);
-        $ds->identifiant = $etablissementId;
+        $ds->identifiant = $this->createIdentifiant($cvi,$periode);
+        
+        //$this->declaration->recolte->getNoeudAppellations()->getConfig();
         $ds->storeDeclarant();
         $ds->updateProduits();
         return $ds;
@@ -71,7 +78,8 @@ class DSClient extends acCouchdbClient {
     }
 
     public function getHistoryByOperateur($etablissement) {
-        return DSHistoryView::getInstance()->findByEtablissementDateSorted($etablissement->identifiant);
+        return 1;
+//        return DSHistoryView::getInstance()->findByEtablissementDateSorted($etablissement->identifiant);
     }
 
     public function findByIdentifiantAndPeriode($identifiant, $periode) {
