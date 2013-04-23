@@ -13,7 +13,7 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return false;
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getLieux();
     }

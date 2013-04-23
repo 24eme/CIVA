@@ -12,9 +12,23 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->getCouleur()->getLieu();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->detail;
+    }
+
+    public function getProduits() {
+      
+        return array($this->getHash() => $this);
+    }
+
+    public function getProduitsDetails() {
+      $details = array();
+      foreach($this->getChildrenNode() as $key => $item) {
+          $details[$item->getHash()] = $item;
+      }
+
+      return $details;
     }
 
     public function getCodeDouane($vtsgn = '') {

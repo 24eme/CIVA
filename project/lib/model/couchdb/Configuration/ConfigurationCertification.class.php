@@ -9,21 +9,17 @@ class ConfigurationCertification extends BaseConfigurationCertification {
 
     public function getAppellations() {
 
-        return $this->getNoeudsSuivant();
+        return $this->getChildrenNodeDeep();
     }
 
-    public function getNoeud() {
-        return $this->genre;
-    }
-
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getGenres();
     }
 
     public function hasManyGenre() {
 
-        return $this->getNoeudsSuivant()->hasManyNoeuds();
+        return $this->getChildrenNodeDeep()->hasManyNoeuds();
     }
 
 }

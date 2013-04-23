@@ -2,6 +2,7 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
+
    public function getLibelleFormat($labels = array(), $format = "%g% %a% %m% %l% %co% %ce%", $label_separator = ", ") {
         return $this->getHash();
     }
@@ -11,9 +12,13 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
     
     
-  public function getNoeuds() {
+  public function getChildrenNode() {
+      return null;
+  }
 
-      return $this->detail;
+  public function getProduits() {
+        
+    return array($this->getHash() => $this);
   }
 
   public function hasRendement() {

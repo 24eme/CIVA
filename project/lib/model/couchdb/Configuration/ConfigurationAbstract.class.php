@@ -2,120 +2,143 @@
 
 abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
-    abstract public function getNoeuds();
+    protected $produits = null;
 
-    public function getNoeudsSuivant() {
-        if( $this->hasManyNoeuds())
-            throw new sfException("getNoeudsSuivant() ne peut être appelé d'un noeud qui contient plusieurs noeuds...");
+    abstract public function getChildrenNode();
 
-        return $this->getNoeuds()->getFirst()->getNoeuds();
+    protected function loadAllData() {
+        parent::loadAllData();
+        $this->getProduits();
+    }
+
+    public function getParentNode() {
+      if ($this->getKey() == 'recolte') {
+ 
+        throw new sfException('Noeud racine atteint');
+      }
+
+      return $this->getParent();
+    }
+
+    public function getChildrenNodeDeep($level = 1) {
+      if($this->hasManyNoeuds()) {
+          
+          throw new sfException("getChildrenNodeDeep() peut uniquement être appelé d'un noeud qui contient un seul enfant...");
+      }
+
+      $node = $this->getChildrenNode()->getFirst();
+      
+      if($level > 1) {
+        
+        return $node->getChildrenNodeDeep($level - 1);
+      }
+
+      return $node->getChildrenNode();
     }
 
     public function hasManyNoeuds(){
-        if(count($this->getNoeuds()) > 1){
+        if(count($this->getChildrenNode()) > 1){
             return true;
         }
         return false;
     }
 
-  public function getRendement() {
-
-      return $this->store('rendement', array($this, 'getInternalRendement'));
-  }
-
-  protected function getInternalRendement() {
-    if ($this->getParent()->exist('rendement') && $this->getParent()->_get('rendement') == -1) {
-       return -1;
-    }
-
-    $r = $this->_get('rendement');
-    if ($r) {
-      return $r;
-    }
-
-    if ($this->getParent() instanceof ConfigurationAbstract) {
-        return $this->getParent()->getRendement();
-    } else {
-        return 0;
-    }
-  }
-  public function getRendementAppellation() {
-    $r = null;
-    if ($this->exist('rendement_appellation')) {
-        $r = $this->_get('rendement_appellation');
-    }
-    if ($r) {
-      return $r;
-    }
-
-    if ($this->getParent() instanceof ConfigurationAbstract) {
-        return $this->getParent()->getRendementAppellation();
-    } else {
-        return 0;
-    }
-  }
-  
-  public function hasRendementAppellation() {
-      $r = $this->getRendementAppellation();
-      return ($r && $r > 0);
-  }
-  
-  public function getRendementCouleur() {
-    $r = null;
-    if ($this->exist('rendement_couleur')) {
-        $r = $this->_get('rendement_couleur');
-    }
-    if ($r) {
-      return $r;
-    }
-
-    if ($this->getParent() instanceof ConfigurationAbstract) {
-        return $this->getParent()->getRendementCouleur();
-    } else {
-        return 0;
-    }
-  }
-  
-  public function hasRendementCouleur() {
-      $r = $this->getRendementCouleur();
-      return ($r && $r > 0);
-  }
-
-  public function hasMout() {
-      if ($this->exist('mout')) {
-          return ($this->mout == 1);
-      } elseif ($this->getParent() instanceof ConfigurationAbstract) {
-          return $this->getParent()->hasMout();
-      } else {
-          return false;
+    public function getProduits() {
+      if(is_null($this->produits)) {
+        $this->produits = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $this->produits = array_merge($this->produits, $item->getProduits());
+        }
       }
-  }
+
+      return $this->produits;
+    }
+
+    public function getRendement() {
+
+        return $this->store('rendement', array($this, 'getInternalRendement'));
+    }
+
+    protected function getInternalRendement() {
+        $key = 'rendement';
+        if ($this->exist($key) && $this->_get($key)) {
+
+            return $this->_get($key);
+        }
+
+        return $this->getParentNode()->getRendementAppellation();
+    }
+
+    public function getRendementAppellation() {
+        $key = 'rendement_appellation';
+        if ($this->exist($key) && $this->_get($key)) {
+
+            return $this->_get($key);
+        }
+
+        return $this->getParentNode()->getRendementAppellation();
+    }
   
-  public function excludeTotal() 
-  {
-    return ($this->exist('exclude_total') && $this->get('exclude_total'));
-  }
+    public function hasRendementAppellation() {
+        $r = $this->getRendementAppellation();
 
-  protected function hasTotalCepage() {
-    if ($this->exist('no_total_cepage')) {
-      return !($this->no_total_cepage == 1);
-    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
-      return false;
-    } elseif ($this->getParent() instanceof ConfigurationAbstract) {
-      return $this->getParent()->hasTotalCepage();
+        return ($r && $r > 0);
     }
-    return true;
-  }
+    
+    public function getRendementCouleur() {
+        $key = 'rendement_couleur';
+        if ($this->exist($key) && $this->_get($key)) {
 
-  public function hasVtsgn() {
-    if ($this->exist('no_vtsgn'))
-      return (! $this->get('no_vtsgn'));
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
-      return false;
-    if ($this->getParent() instanceof ConfigurationAbstract) {
-      return $this->getParent()->hasVtsgn();
+            return $this->_get($key);
+        }
+
+        return $this->getParentNode()->getRendementAppellation();
     }
-    return true;
-  }
+    
+    public function hasRendementCouleur() {
+        $r = $this->getRendementCouleur();
+        return ($r && $r > 0);
+    }
+
+    public function hasMout() {
+        if ($this->exist('mout')) {
+            
+            return ($this->mout == 1);
+        } 
+
+        return $this->getParentNode()->hasMout();
+    }
+    
+    public function excludeTotal() 
+    {
+        return ($this->exist('exclude_total') && $this->get('exclude_total'));
+    }
+
+    public function hasTotalCepage() {
+      if ($this->exist('no_total_cepage')) {
+        
+          return !($this->no_total_cepage == 1);
+      }
+
+      if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+          
+          return false;
+      } 
+
+      return $this->getParentNode()->hasTotalCepage();
+    }
+
+    public function hasVtsgn() {
+        if ($this->exist('no_vtsgn')) {
+            return (! $this->get('no_vtsgn'));
+        }
+
+
+        if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+            return false;
+        }
+
+        return $this->getParentNode()->hasVtsgn();
+    }
 
 }

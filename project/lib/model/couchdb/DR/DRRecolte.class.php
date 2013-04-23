@@ -2,7 +2,7 @@
 
 class DRRecolte extends BaseDRRecolte {
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCertifications();
     }
