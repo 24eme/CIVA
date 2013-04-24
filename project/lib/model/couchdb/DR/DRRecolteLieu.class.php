@@ -18,7 +18,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->getMention()->getAppellation();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCouleurs();
     }

@@ -7,7 +7,7 @@ class ConfigurationMention extends BaseConfigurationMention {
         return $this->hasManyNoeuds();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getLieux();
     }

@@ -6,7 +6,7 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $this->filter('^couleur');
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCouleurs();
     }

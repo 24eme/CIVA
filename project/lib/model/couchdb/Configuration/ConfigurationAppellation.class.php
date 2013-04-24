@@ -8,17 +8,17 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
 
     public function getLieux() {
 
-        return $this->getNoeudsSuivant();
+        return $this->getChildrenNodeDeep();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getMentions();
     }
 
     public function hasManyLieu() {
 
-        return $this->getNoeudsSuivant()->hasManyNoeuds();
+        return $this->getChildrenNodeDeep()->hasManyNoeuds();
     }
 
     public function hasLieuEditable() {

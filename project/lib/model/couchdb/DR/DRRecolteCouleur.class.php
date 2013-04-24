@@ -19,7 +19,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->getLieu()->getAppellation();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCepages();
     }
