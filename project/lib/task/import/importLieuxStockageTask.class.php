@@ -46,7 +46,11 @@ EOF;
     $i = 1;
     $cvi = null;
     $lines = array();
-    foreach(file($arguments['file']) as $line) {
+    $file = file($arguments['file']);
+    $file[] = "7523700100;GARAGE ACTUALYS;NULL;7523700100001;1 RUE GARNIER;75000 PARIS;Installation Mixte\n";
+    $file[] = "7523700100;CAVE ACTUALYS;NULL;7523700100002;1 RUE DES VIGNES;75000 PARIS;Installation Mixte\n";
+
+    foreach($file as $line) {
       $data = str_getcsv($line, ';');
       
       if($cvi && $cvi != $data[self::CSV_CVI]) {
