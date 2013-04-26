@@ -124,6 +124,11 @@
 	width: auto;
 }
 
+#onglets_majeurs.onglets_stock .sous_onglets.invisible
+{
+	display: none;
+}
+
 #onglets_majeurs.onglets_stock li a
 {
 	padding: 2px 9px 2px 5px;

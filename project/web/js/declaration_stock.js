@@ -11,7 +11,7 @@
 $(document).ready(function()
 {	
 	sommeColStock();
-	//navOngletsStock();
+	navOngletsStock();
 });
 
 /**
@@ -29,7 +29,13 @@ var sommeColStock = function()
 		var colonne = $(this).parents('.colonne');
 		var champsColonne = colonne.find('input');
 		var typeColonne = colonne.attr('id').substr(4);
-		var sommeColonne = 0;
+		var champSousTotal = blocSousTotal.find('#soustotal_' + typeColonne);
+		
+		var champTotalTexte = blocTotal.find('.total_' + typeColonne).filter(':text');
+		var champTotalCache = champTotalTexte.siblings(':hidden');
+		
+		var sommeSousTotal = 0;
+		var sommeTotal = parseFloat(champTotalCache.val());
 		
 		// On parcourt les champs de la colonne
 		champsColonne.each(function()
@@ -39,12 +45,15 @@ var sommeColStock = function()
 			
 			if(valeurChampCourant != '')
 			{
-				sommeColonne += parseFloat(valeurChampCourant);
+				sommeSousTotal += parseFloat(valeurChampCourant);
+				sommeTotal += parseFloat(valeurChampCourant);
 			}
 		});
 
-		blocSousTotal.find('#soustotal_' + typeColonne).val(sommeColonne);
-	});
+		champSousTotal.val(sommeSousTotal);
+		champTotalTexte.val(sommeTotal);
+	});	
+	
 };
 
 /**
@@ -52,20 +61,23 @@ var sommeColStock = function()
  *********************************************************/
 var navOngletsStock = function()
 {
-	var onglets = $('#onglets_majeurs li');
+	var onglets = $('#onglets_majeurs.onglets_stock > li');
+	var sousMenus = onglets.find('.sous_onglets');
 	
 	onglets.each(function()
 	{
 		var ongletCourant = $(this);
-		var sousMenu = ongletCourant.find('.sous_onglets');
+		var sousMenuCourant = ongletCourant.find('.sous_onglets');
 		
 		ongletCourant.hover(function()
 		{
 			onglets.removeClass('ui-tabs-selected');
+			sousMenus.addClass('invisible');
 			
 			if(!ongletCourant.hasClass('ui-tabs-selected'))
 			{
 				ongletCourant.addClass('ui-tabs-selected');
+				sousMenuCourant.removeClass('invisible');
 			}
 		});
 	});
