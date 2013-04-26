@@ -7,7 +7,7 @@
 			<a href="#"><span>Exploitation</span> <em>Etape 1</em></a>
 		</li>
 		<li>
-			<a href="#"><span>Lieux de stockage</span> <em>Etape 2</em></a>
+			<a href=""><span>Lieux de stockage</span> <em>Etape 2</em></a>
 		</li>
 		<li class="actif">
 			<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 1/3)</em></a>
@@ -58,13 +58,13 @@
 		<div id="gestion_stock" class="clearfix gestion_stock_donnees">
 
 			<div class="clearfix">
-                            <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'declarations' => $ds->declarations,'form' => $form));?>
+                            <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'produits' => $ds->getProduits(),'form' => $form));?>
                         </div>
 
                 </div>
 
                 <div id="sous_total">
-                        <h2>Total Brand</h2>
+                        <h2>Total Lieu</h2>
 
                         <input type="text" id="soustotal_hors_vt_sgn" class="num" readonly="readonly" />
                         <input type="text" id="soustotal_vt" class="num" readonly="readonly"  />
@@ -75,7 +75,7 @@
 		<!-- fin #gestion_stock -->
 
 		<div id="total">
-			<h2>Total AOC Alsace grand Cru</h2>
+			<h2>Total</h2>
 
 			<input type="text" id="total_hors_vt_sgn" class="num" readonly="readonly" />
 			<input type="text" id="total_vt" class="num" readonly="readonly" />

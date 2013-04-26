@@ -27,7 +27,7 @@ DS:
             commune: {  }
             code_postal: {   }
             region: {  }
-      declarations:
+      produits:
         type: collection
         definition:
           fields:
@@ -47,3 +47,89 @@ DS:
                   lieu: { required: false }
                   vt: { required: false }
                   sgn: { required: false }
+      recolte:
+        type: collection
+        class: DSRecolte
+        inheritance: _DSNoeud
+        definition:
+          fields:
+            '*':
+              #------ Certification ------
+              type: collection
+              class: DSCertification
+              inheritance: _DSNoeud
+              definition:
+                fields:
+                  total_volume: {type: float}
+                  total_superficie: {type: float}
+                  volume_revendique: {type:float }
+                  dplc: {type:float }
+                  usages_industriels_calcule: {type:float }
+                  '*':
+                    type: collection
+                    class: DSGenre
+                    inheritance: _DSNoeud
+                    definition:
+                      fields:
+                        total_stock: {type: float}
+                        '*':
+                          # ------ Appellation ------
+                          type: collection
+                          class: DSAppellation
+                          inheritance: _DSNoeud
+                          definition:
+                            fields:
+                              appellation: {}
+                              total_stock: {type: float}
+                              # ------- MENTION ----------
+                              'mention':
+                                type : collection
+                                class: DSMention
+                                inheritance: _DSNoeud
+                                definition:
+                                  fields:
+                                    total_stock: {type: float }
+                                    # ------- LIEU ----------
+                                    '*':
+                                      type: collection
+                                      class: DSLieu
+                                      inheritance: _DSNoeud
+                                      definition:
+                                        fields:
+                                          total_stock: {type: float}                                          
+                                          # ------ Couleur ------
+                                          '*':
+                                            type: collection
+                                            class: DSCouleur
+                                            inheritance: _DSNoeud
+                                            definition:
+                                              fields:
+                                                total_stock: {type:float}
+                                              # ------ Cépage ------
+                                                '*':
+                                                  type: collection
+                                                  class: DSCepage
+                                                  inheritance: _DSNoeud
+                                                  definition:
+                                                    fields:
+                                                      appellation: {  }
+                                                      cepage: {  }
+                                                      detail:                                                        
+                                                        type: array_collection
+                                                        definition:
+                                                          fields:
+                                                            '*':
+                                                              type: collection
+                                                              class: DSDetail
+                                                              inheritance: DSProduit
+                                                              definition:
+                                                                fields:
+                                                                  vtsgn: { }
+                                                                  appellation: {  }
+                                                                  cepage: {  }
+                                                                  volume: {type: float }
+                                                                  lieu: {  }
+                                                                  libelle: {  }
+                                                                  stock_declare: {type: float }
+                                                                  vci: {type: float }
+                                                                  reserve_qualitative: {type: float }

@@ -68,7 +68,6 @@ class DSClient extends acCouchdbClient {
         $ds->identifiant = $this->createIdentifiant($cvi,$periode);
         
         $ds->storeDeclarant();
-        $ds->updateProduits();
         return $ds;
     }
 
