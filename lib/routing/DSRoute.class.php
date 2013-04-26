@@ -23,7 +23,7 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
             throw new InvalidArgumentException(sprintf('The "%s" route has an invalid parameter "%s" value "%s".', $this->pattern, 'lieu_stockage', $parameters['lieu_stockage']));
         }
         
-        $this->ds = DSClient::getInstance()->findByIdentifiantAndPeriode($identifiant, $periode,$lieu_stockage);
+        $this->ds = DSClient::getInstance()->findByIdentifiantAndPeriode($identifiant, $periode, $lieu_stockage);
         if (!$this->ds) {
             throw new sfError404Exception(sprintf('No DS found with the id "%s" and the periode "%s".',  $parameters['identifiant'],$parameters['periode']));
         }
@@ -31,7 +31,7 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
     }
 
     protected function doConvertObjectToArray($object) {  
-        $parameters = array("identifiant" => $object->identifiant, "periode" => $object->periode);
+        $parameters = array("identifiant" => $object->identifiant, "periode" => $object->periode, 'lieu_stockage' => $object->lieu_stockage);
         return $parameters;
     }
 
@@ -45,6 +45,6 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
 
     public function getTiers() {
 
-        return $this->getDS()->getTiersObject();
+        return $this->getDS()->getEtablissement();
     }
 }
