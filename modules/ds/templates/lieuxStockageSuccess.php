@@ -48,10 +48,11 @@
 			</tr>
 		</thead>
 		<tbody>
+			<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): ?>
 			<tr>
 				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
+					<?php echo $lieu_stockage->numero ?> <br />
+					<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
 				</td>
 				<td class="paire"><input type="checkbox" /></td>
 				<td><input type="checkbox" /></td>
@@ -59,39 +60,7 @@
 				<td><input type="checkbox" /></td>
 				<td class="paire"><input type="checkbox" /></td>
 			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
+			<?php endforeach; ?>
 		</tbody>
 	</table>
 	

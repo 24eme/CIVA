@@ -20,6 +20,13 @@ class DSRouting {
                         array('model' => 'Tiers',
                             'type' => 'object')));
         
+
+        $r->prependRoute('ds_lieux_stockage', new TiersRoute('/ds/lieux-stockage/:cvi', array('module' => 'ds',
+                    'action' => 'lieuxStockage'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'Tiers',
+                            'type' => 'object')));
+
 //        $r->prependRoute('ds_generation', new sfRoute('/ds/generation', array('module' => 'ds', 
 //                                                                              'action' => 'generation')));   
 //        

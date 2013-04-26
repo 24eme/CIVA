@@ -51,6 +51,7 @@ class dsActions extends sfActions {
 	 }
        }
     }
+
 //    
 //    
 //     public function executeGenerationOperateur(sfWebRequest $request) { 
@@ -127,6 +128,7 @@ class dsActions extends sfActions {
   
   public function executeLieuxStockage(sfWebRequest $request)
   {
+      $this->tiers = $this->getRoute()->getTiers();
   }
   
   public function executeAutre(sfWebRequest $request)
