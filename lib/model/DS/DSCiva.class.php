@@ -37,42 +37,21 @@ class DSCiva extends DS {
         }
     }
 
-    public function addProduit($config, $produit = null) {   
-        $key = $config->getHashForKey();
-        $key .= ($produit->lieu!='')? '-'.KeyInflector::slugify($produit->lieu) : '';
-        $produitNode = $this->declarations->add($key);
-        $produitNode->produit_hash = $config->getHash();
-        if($produit->lieu!=''){
-            $produitNode->add('lieu', $produit->lieu);
-        }
+    public function addProduit($produit, $config = null) {   
         
-        $produitNode->add('vt', 0);
-        $produitNode->add('sgn', 0);
-        
-        $vtsgn = '';
-        if($produit->vtsgn){
-            if($produit->vtsgn == 'VT') {
-                $vtsgn = 'VT';
-            }
-            if($produit->vtsgn == 'SGN') {
-                $vtsgn = 'SGN';
-            }
-        }
-        $produitNode->stock_declare = 0;
-        $produitNode->updateProduit($config,$vtsgn);
-        return $produit;
+      $detail = $this->getOrAdd($produit->getHash())->addProduit($produit);
+     // $detail->produit_libelle = $detail->getLibelle($format = "%g% %a% %m% %l% %co% %ce% %la%");
+     
+      return $detail;
     }
 
     protected function updateProduitsFromDR($dr) {     
-        $produits = $dr->getProduitsDetails();
-        $this->drm_origine = $dr->_id;
-        foreach ($produits as $produit) {
-            $config = ConfigurationClient::getConfiguration()->get($produit->getCepage()->getHash());
-            if($produit){
-                $this->addProduit($config, $produit);    
-            }else
-            $this->addProduit($config);            
-        }
+        $produits = $dr->getProduits();
+        $this->drm_origine = $dr->_id;     
+        foreach ($produits as $produitCepage) {
+             $config = ConfigurationClient::getConfiguration()->get($produitCepage->getHash());
+             $this->addProduit($produitCepage,$config);              
+       }
     }
         
 
@@ -97,6 +76,11 @@ class DSCiva extends DS {
     
     public function getLieuStockage(){
         return '01';
+    }
+    
+    public function getProduits() {
+        
+        return $this->recolte->getProduitsDetails();
     }
     
 }

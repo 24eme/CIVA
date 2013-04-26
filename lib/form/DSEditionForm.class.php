@@ -8,7 +8,7 @@ class DSEditionForm extends acCouchdbForm {
 
         $this->ds = $ds;
         $defaults = array();
-        foreach ($this->ds->getDeclarations() as $key => $value) {
+        foreach ($this->ds->getProduits() as $key => $value) {
 	  $defaults['volumeStock_'.$key] = $value->stock_declare;
 	  $defaults['vci_'.$key] = $value->vci;
 	  $defaults['reserveQualitative_'.$key] = $value->reserve_qualitative;
@@ -21,7 +21,7 @@ class DSEditionForm extends acCouchdbForm {
     }
 
     public function configure() {
-        foreach ($this->ds->declarations as $key => $declaration) {
+        foreach ($this->ds->getProduits() as $key => $declaration) {
 	  $this->setWidget('volumeStock_' . $key, new sfWidgetFormInputFloat(array(), array('size' => '6')));
 	  $this->setValidator('volumeStock_' . $key, new sfValidatorNumber(array('required' => false)));
 	  $this->widgetSchema->setLabel('volumeStock_' . $key, 'Volume Stock');

@@ -45,7 +45,7 @@ class dsActions extends sfActions {
 	     $declarationDs->save();
 	   }catch(sfException $e) {
 	     $this->getUser()->setFlash('global_error', $e->getMessage());
-	     $this->redirect('ds_etablissement', $this->etablissement);
+	     $this->redirect('ds');
 	   }
            $this->redirect('ds_generation_operateur', array('identifiant' => $declarationDs->identifiant, 'periode' => $declarationDs->periode));
 	 }
@@ -68,7 +68,7 @@ class dsActions extends sfActions {
 //    
      public function executeStock(sfWebRequest $request) {        
          $this->ds = $this->getRoute()->getDS();
-	 $this->ds->updateProduits();
+	// $this->ds->updateProduits();
          $this->form = new DSEditionFormCiva($this->ds);
          if ($request->isMethod(sfWebRequest::POST)) {
              $this->form->bind($request->getParameter($this->form->getName()));
