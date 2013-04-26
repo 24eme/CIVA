@@ -6,7 +6,7 @@ class dsActions extends sfActions {
             $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);  
             $declarationDs = DSClient::getInstance()->findOrCreateDsByCvi($this->tiers->cvi,date('Y-m-d'));     
             $declarationDs->save();
-            $this->redirect('ds_lieux_stockage', $tiers);
+            $this->redirect('ds_lieux_stockage', $this->tiers);
             }
         } 
 
