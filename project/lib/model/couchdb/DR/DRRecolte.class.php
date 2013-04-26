@@ -20,7 +20,7 @@ class DRRecolte extends BaseDRRecolte {
 
     public function getCertifications() {
 
-        return $this->filter('^certification_');
+        return $this->filter('^certification');
     }
 
     /**

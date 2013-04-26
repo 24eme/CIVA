@@ -40,7 +40,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         foreach($this->getChildrenNode() as $key => $item) {
             $produits = array_merge($produits, $item->getProduitsDetails());
         }
-
         return $produits;
     }
 
