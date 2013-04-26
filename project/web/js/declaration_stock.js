@@ -5,14 +5,60 @@
  * Copyright: Actualys
  ******************************************/
 
+var appDS = $('#application_ds');
+var champsSommes = appDS.find('.ligne_total input.somme');
+
 /**
  * Initialisation
  ******************************************/
 $(document).ready(function()
 {	
-	sommeColStock();
-	navOngletsStock();
+	//navOngletsStock();
+	initDSSommesCol();
 });
+
+/**
+ * Calcul des sommes des colonnes de stocks
+ *********************************************************/
+var initDSSommesCol = function()
+{
+	// Parcours des champs
+	champsSommes.each(function()
+	{
+		var champSomme = $(this);
+		var col = $(champSomme.attr('data-somme-col'));
+		var valDefaut = champSomme.attr('data-somme-col');
+		var somme = calculSommeCol(col);
+		
+		// Si une valeur par défaut existe
+		if(valDefaut) valDefaut = parseFloat(valDefaut);
+		somme += valDefaut;
+		
+		champSomme.val(somme);
+	});
+	
+};
+
+
+var calculSommeCol = function(col)
+{
+	var champs = col.find('input[text]');
+	var somme = 0;
+	
+	champs.each(function()
+	{
+		var champ = $(this);
+		var val = champ.val();
+		
+		if(!val) val = 0;
+		val = parseFloat(val);
+		
+		somme += val;
+	});
+	
+	return somme;
+};
+
 
 /**
  * Calcul de la somme des champs des colonnes de stocks

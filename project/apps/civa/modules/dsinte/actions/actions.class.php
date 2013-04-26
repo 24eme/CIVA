@@ -8,7 +8,7 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class dsActions extends sfActions
+class dsinteActions extends sfActions
 {
  /**
   * Executes index action
@@ -18,20 +18,5 @@ class dsActions extends sfActions
   public function executeStock(sfWebRequest $request)
   {
   }
-  
-  public function executeLieuxStockage(sfWebRequest $request)
-  {
-  }
-  
-  public function executeAutre(sfWebRequest $request)
-  {
-  }
-  
-  public function executeRecapLieuStockage(sfWebRequest $request)
-  {
-  }
-  
-  public function executeRecap(sfWebRequest $request)
-  {
-  }
+
 }

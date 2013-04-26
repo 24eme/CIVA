@@ -7,13 +7,9 @@
  * Version : 1.0.0
  ******************************************/
 
-/**
- * Structure
- ******************************************/
-
-/**
- * Header
- ******************************************/
+/* =================================================== */
+/* STRUCTURE / ELEMENTS GENERIQUES */
+/* =================================================== */
 
 .header_ds
 {
@@ -27,7 +23,7 @@
 
 #application_ds 
 {
-	background: #f1f1f1;
+	background: #f7f6f6;
 	clear: both;
 	margin: 0 0 22px;
 	padding: 0 20px 30px;
@@ -38,56 +34,12 @@
 	text-decoration: none;
 }
 
-#adresse_stock
-{
-	clear: both;
-	color: #acb701;
-	font-size: 18px;
-	padding: 0 0 20px 23px;
-}
-
 #application_ds input[type="text"]
 {
 	padding: 0 5px;
 	width: 113px;
 }
 
-#application_ds #cont_gestion_stock
-{
-	width: 738px;
-}
-
-#application_ds #gestion_stock
-{
-	background: #f7f6f6;
-	border: 1px solid #C6C6C6;
-	border-top: 4px solid #ffbf4e;
-	margin: 0 0 35px;
-	padding: 55px 15px 15px 0;
-}
-
-#application_ds #liste_sepages
-{
-	float: left;
-	margin: 35px 40px 0 0;
-	width: 200px;
-}
-
-#application_ds #liste_sepages li
-{
-	margin: 3px 0;
-}
-
-#application_ds #liste_sepages a
-{
-	background: #E0DFDF;
-	color: #666;
-	display: block;
-	font-size: 14px;
-	height: 20px;
-	line-height: 20px;
-	padding: 0 0 0 5px;
-}
 
 /**
  * Onglets
@@ -170,7 +122,6 @@
 /**
  * Barre de progression
  ******************************************/
-
 .progression_ds
 {
 	float: right;
@@ -194,36 +145,86 @@
 .progression_ds .barre_progression
 {
 	background: #6f6f6f;
-	height: 3px;
 	width: 100%;
 }
 
 .progression_ds .barre_progression .progression
 {
 	background: #acb701;
-	height: 100%;
-	width: 40%;
+	height: 3px;
+}
+
+#adresse_stock
+{
+	clear: both;
+	color: #acb701;
+	font-size: 18px;
+	padding: 0 0 20px 23px;
+}
+
+
+
+/* =================================================== */
+/* GESTION DES STOCK */
+/* =================================================== */
+
+#application_ds #cont_gestion_stock
+{
+	width: 738px;
+}
+
+#application_ds #gestion_stock
+{
+	border: 1px solid #C6C6C6;
+	border-top: 4px solid #ffbf4e;
+	margin: 0 0 35px;
+	padding: 55px 15px 15px 0;
 }
 
 
 /**
- * Colonnes
+ * Liste cépages
  ******************************************/
-
-#application_ds .colonne:first-child
+#application_ds #liste_cepages
 {
-	margin: 0;
+	color: #666;
+	font-size: 14px;
+	float: left;
+	margin: 36px 40px 10px 0;
+	width: 200px;
 }
 
-#application_ds .colonne
+#application_ds #liste_cepages li
+{
+	background: #E0DFDF;
+	height: 20px;
+	line-height: 20px;
+	margin: 3px 0;
+	padding: 0 5px;
+}
+
+/**
+ * Colonnes
+ ******************************************/
+#application_ds #donnees_stock_cepage
+{
+	float: left;
+	margin: 0 0 10px;
+}
+
+#application_ds #donnees_stock_cepage .colonne
 {
 	background: #e0e1bd;
 	float: left;
-	margin: 0 0 0 30px;
 	width: 140px;
 }
 
-#application_ds .colonne h2
+#application_ds #donnees_stock_cepage .colonne + .colonne
+{
+	margin: 0 0 0 30px;
+}
+
+#application_ds #donnees_stock_cepage .colonne h2
 {
 	background: #acb701;
 	color: #FFF;
@@ -236,54 +237,66 @@
 	white-space: nowrap;
 }
 
-#application_ds .colonne .col_cont
+#application_ds #donnees_stock_cepage .colonne .col_cont
 {
 	padding: 18px 8px;
 }
 
-#application_ds .colonne input
+#application_ds #donnees_stock_cepage .colonne li
+{
+	height: 18px;
+	padding: 2px 0 0;
+	margin: 3px 0;
+}
+
+#application_ds #donnees_stock_cepage .colonne input
 {
 	background: #f0f0de;
 	border: 1px solid #C2C1BA;
 	font-size: 13px;
-	margin: 3px 0;
+	height: 16px;
 	padding: 0 5px;
 	text-align: right;
 }
+
+#application_ds #donnees_stock_cepage .colonne input:focus { background: #fff; }
 
 /**
  * Total / Sous-total
  ******************************************/
 
-#application_ds #total,
-#application_ds #sous_total
+#application_ds .ligne_total
 {
-	height: 35px;
-	line-height: 35px;
+	clear: both;
+	color: #3b3b3b;
+	padding: 10px 0;
+	overflow: hidden;
 }
 
-#application_ds #total input,
-#application_ds #sous_total input
+#application_ds .ligne_total h2,
+#application_ds .ligne_total ul,
+#application_ds .ligne_total ul li { float: left; }
+
+#application_ds .ligne_total h2
+{
+	font-size: 16px;
+	padding: 0 0 0 10px;
+	width: 230px;
+}
+
+#application_ds .ligne_total ul li
+{
+	padding: 0 8px;
+	width: 124px;
+}
+
+#application_ds .ligne_total ul li + li { margin: 0 0 0 30px }
+
+#application_ds .ligne_total input
 {
 	font-size: 15px;
+	width: 111px;
 }
-
-#application_ds #total input + input,
-#application_ds #sous_total input + input
-{
-	margin: 0 0 0 40px;
-}
-
-#application_ds #total h2,
-#application_ds #sous_total h2
-{
-	color: #3b3b3b;
-	float: left;
-	font-size: 16px;
-	padding: 0 0 0 8px;
-	width: 240px;
-}
-
 
 /**
  * Sous-total
@@ -292,8 +305,6 @@
 #application_ds #sous_total
 {
 	background: #fdbc4c;
-	margin: 10px 0 0;
-	width: 720px;
 }
 
 /**
@@ -303,12 +314,10 @@
 #application_ds #total
 {
 	background: #ffa913;
+	padding: 10px 1px;
 }
 
-#application_ds #gestion_stock #donnees_stock_sepage
-{
-	float: left;
-}
+
 
 /**
  * Boutons
