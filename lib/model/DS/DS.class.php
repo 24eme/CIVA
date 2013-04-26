@@ -64,6 +64,8 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
     public abstract function getCoordonnees();
     
     public abstract function getConfig();
+    
+    public abstract function getEtablissement();
 
     protected function updateProduitsFromDS($ds) {
         foreach ($ds->declarations as $produit) {
@@ -91,6 +93,7 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
         $this->archivage_document->preSave();
         $this->updateProduits();
     }
+
 
     /*     * * DECLARANT ** */
 
@@ -124,8 +127,6 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
         }
         return null;
     }
-
-    public abstract function getEtablissement();
     
     public function getInterpro() {
         if ($this->getEtablissement()) {

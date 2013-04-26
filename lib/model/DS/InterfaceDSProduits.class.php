@@ -15,6 +15,6 @@ interface InterfaceDSProduits {
     public function getLastDocument();
     public function updateProduits();
     public function addProduit($hash);
-    
+
 }
 

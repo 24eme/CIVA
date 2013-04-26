@@ -6,10 +6,10 @@
 
 class DSProduit extends BaseDSProduit {
 
-    public function updateProduit()
+    public function updateProduit($config,$vtsgn)
     {
-        $this->produit_libelle = $this->getConfig()->getLibelleFormat(array(), "%g% %a% %m% %l% %co% %ce%");
-        $this->code_produit = $this->getConfig()->getCodeProduit();
+        $this->produit_libelle = $config->getLibelleFormat(array(), "%g% %a% %m% %l% %co% %ce%");
+        $this->code_produit = $config->getCodeProduit($vtsgn);
     }
 
     public function isActif() {

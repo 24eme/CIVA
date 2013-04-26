@@ -37,21 +37,41 @@ class DSCiva extends DS {
         }
     }
 
-    public function addProduit($hash) {
-        $config = ConfigurationClient::getConfiguration()->get($hash);
-        $produit = $this->declarations->add($config->getHashForKey());
-        $produit->produit_hash = $config->getHash();
-        $produit->updateProduit();
-
+    public function addProduit($config, $produit = null) {   
+        $key = $config->getHashForKey();
+        $key .= ($produit->lieu!='')? '-'.KeyInflector::slugify($produit->lieu) : '';
+        $produitNode = $this->declarations->add($key);
+        $produitNode->produit_hash = $config->getHash();
+        if($produit->lieu!=''){
+            $produitNode->add('lieu', $produit->lieu);
+        }
+        
+        $produitNode->add('vt', 0);
+        $produitNode->add('sgn', 0);
+        
+        $vtsgn = '';
+        if($produit->vtsgn){
+            if($produit->vtsgn == 'VT') {
+                $vtsgn = 'VT';
+            }
+            if($produit->vtsgn == 'SGN') {
+                $vtsgn = 'SGN';
+            }
+        }
+        $produitNode->stock_declare = 0;
+        $produitNode->updateProduit($config,$vtsgn);
         return $produit;
     }
 
-    protected function updateProduitsFromDR($dr) {
+    protected function updateProduitsFromDR($dr) {     
         $produits = $dr->getProduitsDetails();
         $this->drm_origine = $dr->_id;
         foreach ($produits as $produit) {
-            $produitDs = $this->addProduit($produit->getHash());
-            //$produitDs->stock_initial = $produit->total;
+            $config = ConfigurationClient::getConfiguration()->get($produit->getCepage()->getHash());
+            if($produit){
+                $this->addProduit($config, $produit);    
+            }else
+            $this->addProduit($config);            
         }
     }
         
@@ -73,6 +93,10 @@ class DSCiva extends DS {
 
     public function getConfig() {
         return ConfigurationClient::getConfiguration()->get($this->produit_hash);
+    }
+    
+    public function getLieuStockage(){
+        return '01';
     }
     
 }

@@ -11,6 +11,7 @@
  * @property string $date_emission
  * @property string $date_echeance
  * @property string $date_stock
+ * @property string $drm_origine
  * @property string $campagne
  * @property string $periode
  * @property string $numero_archive
@@ -33,6 +34,8 @@
  * @method string setDateEcheance()
  * @method string getDateStock()
  * @method string setDateStock()
+ * @method string getDrmOrigine()
+ * @method string setDrmOrigine()
  * @method string getCampagne()
  * @method string setCampagne()
  * @method string getPeriode()
@@ -41,8 +44,8 @@
  * @method string setNumeroArchive()
  * @method string getStatut()
  * @method string setStatut()
- * @method string getCommentaires()
- * @method string setCommentaires()
+ * @method string getCommentaire()
+ * @method string setCommentaire()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
  * @method acCouchdbJson getDeclarations()

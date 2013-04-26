@@ -1,3 +1,4 @@
+<form id="" action="<?php echo url_for('ds_edition_operateur', array('identifiant' => $ds->identifiant, 'periode' => $ds->periode, 'lieu_stockage' => $ds->getLieuStockage())); ?>" method="post">
 <!-- .header_ds -->
 <div class="header_ds clearfix">
 	
@@ -29,12 +30,10 @@
 </div>
 <!-- fin .header_ds -->
 
-<p id="adresse_stock">7523700100111 15 rue des 3 épis 75230 Paris</p>
+
+<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 
 <ul id="onglets_majeurs" class="clearfix onglets_stock">
-	<li>
-		<a href="#" style="height: 26px;"><span>AOC</span> <br> Alsace blanc</a>
-	</li>
 	<li>
 		<a href="#" style="height: 26px;"><span>AOC</span> <br> Alsace Lieu-dit</a>
 	</li>
@@ -50,6 +49,7 @@
 <a href="#" class="recap_stock">Récapitulatif</a>
 
 <!-- #application_ds -->
+
 <div id="application_ds" class="clearfix">
 	
 	<div id="cont_gestion_stock">
@@ -58,83 +58,20 @@
 		<div id="gestion_stock" class="clearfix gestion_stock_donnees">
 
 			<div class="clearfix">
+                            <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'declarations' => $ds->declarations,'form' => $form));?>
+                        </div>
 
-				<ul id="liste_sepages">
-					<li><a href="#">Chasselas</a></li>
-					<li><a href="#">Sylvaner</a></li>
-					<li><a href="#">Pinot blanc</a></li>
-					<li><a href="#">Edel</a></li>
-					<li><a href="#">Riesling</a></li>
-					<li><a href="#">Pinot gris</a></li>
-					<li><a href="#">Muscat</a></li>
-					<li><a href="#">Gewurtz</a></li>
-				</ul>
+                </div>
 
-				<div id="donnees_stock_sepage" class="clearfix">
+                <div id="sous_total">
+                        <h2>Total Brand</h2>
 
-					<div id="col_hors_vt_sgn" class="colonne">
-						<form action="#" method="post">
-							<h2>Stocks hors VT et SGN (hl)</h2>
+                        <input type="text" id="soustotal_hors_vt_sgn" class="num" readonly="readonly" />
+                        <input type="text" id="soustotal_vt" class="num" readonly="readonly"  />
+                        <input type="text" id="soustotal_sgn" class="num" readonly="readonly" />
+                </div>
 
-							<div class="col_cont">
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-							</div>
-						</form>
-					</div>
-
-					<div id="col_vt" class="colonne">
-						<form action="#" method="post">
-							<h2>VT (hl)</h2>
-
-							<div class="col_cont">
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-							</div>
-						</form>
-					</div>
-
-					<div id="col_sgn" class="colonne">
-						<form action="#" method="post">
-							<h2>SGN (hl)</h2>
-
-							<div class="col_cont">
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-								<input type="text" class="num" />
-							</div>
-						</form>
-					</div>
-				</div>
-
-			</div>
-
-			<div id="sous_total">
-				<h2>Total Brand</h2>
-
-				<input type="text" id="soustotal_hors_vt_sgn" class="num" readonly="readonly" />
-				<input type="text" id="soustotal_vt" class="num" readonly="readonly"  />
-				<input type="text" id="soustotal_sgn" class="num" readonly="readonly" />
-			</div>
-
-		</div>
+        </div>
 		<!-- fin #gestion_stock -->
 
 		<div id="total">
@@ -169,11 +106,13 @@
 		</a>
 	</li>
 	<li class="suiv">
+            <button type="submit">VALIDER</button>
 		<a href="#">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>
 </ul>
 
+</form>
 
 

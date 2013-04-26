@@ -4,11 +4,15 @@
 
     <!-- #contenu_etape -->
     <section id="contenu_etape">
-        <?php include_component('ds', 'chooseEtablissement'); ?>
-        <?php include_partial('historiqueDsGeneration', array('generations' => $generations)); ?>
+        <form action="<?php echo url_for("ds", array('cvi' => '7523700100')); ?>" method="POST" >
+        
+            <button type="submit">VALIDER</button>
+        </form>
+        <?php //include_component('ds', 'chooseEtablissement'); ?>
+        <?php //include_partial('historiqueDsGeneration', array('generations' => $generations)); ?>
 
 
-        <?php include_partial('generation', array('generationForm' => $generationForm, 'type' => 'ds')); ?>
+        <?php //include_partial('generation', array('generationForm' => $generationForm, 'type' => 'ds')); ?>
     </section>
     <!-- fin #contenu_etape -->
 </section>

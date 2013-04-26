@@ -10,7 +10,7 @@ class DSClient extends acCouchdbClient {
     }
 
     public function buildId($identifiant, $periode) {
-        return sprintf('DS-%s-%s', $identifiant, $periode);
+        return sprintf('DS-%s-%s-%s', $identifiant, $periode,'01');
     }
     
     public function createIdentifiant($cvi, $periode) {
@@ -56,7 +56,7 @@ class DSClient extends acCouchdbClient {
 
     public function findOrCreateDsByCvi($cvi, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
-        $ds = $this->findByIdentifiantAndPeriode($cvi.'01', $periode);
+        $ds = $this->findByIdentifiantAndPeriode($cvi, $periode, '01');
 	if($ds){
 	  //UPDATE
             $ds->updateProduits();
@@ -67,7 +67,6 @@ class DSClient extends acCouchdbClient {
         $ds->date_stock = $this->createDateStock($date_stock);
         $ds->identifiant = $this->createIdentifiant($cvi,$periode);
         
-        //$this->declaration->recolte->getNoeudAppellations()->getConfig();
         $ds->storeDeclarant();
         $ds->updateProduits();
         return $ds;
@@ -82,9 +81,25 @@ class DSClient extends acCouchdbClient {
 //        return DSHistoryView::getInstance()->findByEtablissementDateSorted($etablissement->identifiant);
     }
 
-    public function findByIdentifiantAndPeriode($identifiant, $periode) {
-
-        return $this->find($this->buildId($identifiant, $periode));
+    public function findByIdentifiantAndPeriode($identifiant, $periode, $lieu_stockage) {
+        return $this->find($this->buildId($identifiant, $periode,$lieu_stockage));
+    }
+    
+    
+public function create($data) {
+        if (!isset($data->type)) {
+            
+            throw new acCouchdbException('Property "type" ($data->type)');
+        }
+        if (!class_exists($data->type)) {
+            
+            throw new acCouchdbException('Class "' . $data->type . '" not found');
+        }
+        
+        $doc = new DSCiva();
+        $doc->loadFromCouchdb($data);
+        
+        return $doc;
     }
 
     public function findLastByIdentifiant($identifiant, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {

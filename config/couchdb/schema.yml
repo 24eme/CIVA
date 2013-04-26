@@ -37,10 +37,13 @@ DS:
               definition:
                 fields:
                   code_produit: { }
-                  produit_libelle: {}
-                  produit_hash: {}
+                  produit_libelle: { }
+                  produit_hash: { }
                   stock_initial: { type: float }
                   stock_declare: { type: float }
                   vci: { type: float }
                   reserve_qualitative: { type: float }
                   stock_elaboration: { type: float, required: false }
+                  lieu: { required: false }
+                  vt: { required: false }
+                  sgn: { required: false }

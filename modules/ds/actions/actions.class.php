@@ -3,10 +3,10 @@ class dsActions extends sfActions {
     
   public function executeIndex(sfWebRequest $request) {
        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);            
+            $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);  
             $declarationDs = DSClient::getInstance()->findOrCreateDsByCvi($this->tiers->cvi,date('Y-m-d'));     
             $declarationDs->save();
-            //$this->redirect('ds_generation_operateur', array('identifiant' => $declarationDs->identifiant, 'periode' => $declarationDs->periode));
+            $this->redirect('ds_edition_operateur', array('identifiant' => $declarationDs->identifiant, 'periode' => $declarationDs->periode, 'lieu_stockage' => $declarationDs->getLieuStockage()));
             }
         } 
         
@@ -65,21 +65,22 @@ class dsActions extends sfActions {
 //      
 //    }
 //    
-//     public function executeEditionDS(sfWebRequest $request) {        
-//         $this->ds = $this->getRoute()->getDS();
-//	 $this->ds->updateProduits();
-//         $this->form = new DSEditionForm($this->ds);
-//         if ($request->isMethod(sfWebRequest::POST)) {
-//             $this->form->bind($request->getParameter($this->form->getName()));
-//            if ($this->form->isValid()) {
-//                $this->form->doUpdateObject();
-//                $this->ds->save();
+     public function executeStock(sfWebRequest $request) {        
+         $this->ds = $this->getRoute()->getDS();
+	 $this->ds->updateProduits();
+         $this->form = new DSEditionFormCiva($this->ds);
+         if ($request->isMethod(sfWebRequest::POST)) {
+             $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->doUpdateObject();
+                $this->ds->save();
+                
 //		if ($request->getParameter('addproduit'))
 //		  return $this->redirect('ds_edition_operateur_addProduit', $this->ds);
 //                return $this->redirect('ds_edition_operateur_validation_visualisation', $this->ds);
-//            }
-//       }
-//    } 
+            }
+       }
+    } 
 //    
 //    public function executeEditionDSAddProduit(sfWebRequest $request)
 //    {
@@ -122,10 +123,7 @@ class dsActions extends sfActions {
 //        return $this->redirect('ds_edition_operateur_validation_visualisation', $this->ds);
 //    }
     
-    
-      public function executeStock(sfWebRequest $request)
-  {
-  }
+   
   
   public function executeLieuxStockage(sfWebRequest $request)
   {

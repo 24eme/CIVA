@@ -14,12 +14,12 @@ class DSRouting {
         $r->prependRoute('ds', new sfRoute('/ds', array('module' => 'ds',
                     'action' => 'index')));
 
-        $r->prependRoute('ds_tiers', new EtablissementRoute('/ds/:cvi', array('module' => 'ds',
+        $r->prependRoute('ds_tiers', new TiersRoute('/ds/:cvi', array('module' => 'ds',
                     'action' => 'monEspace'),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'Tiers',
                             'type' => 'object')));
-//        
+        
 //        $r->prependRoute('ds_generation', new sfRoute('/ds/generation', array('module' => 'ds', 
 //                                                                              'action' => 'generation')));   
 //        
@@ -32,11 +32,12 @@ class DSRouting {
 //                        array('model' => 'DS',
 //                            'type' => 'object')));
 //        
-//        $r->prependRoute('ds_edition_operateur', new DSRoute('/ds/:identifiant/:periode/edition', array('module' => 'ds',
-//                    'action' => 'editionDS'),
-//                    array('sf_method' => array('get', 'post')),
-//                    array('model' => 'DS',
-//                        'type' => 'object') ));
+
+        $r->prependRoute('ds_edition_operateur', new DSRoute('/ds/:identifiant/:periode/:lieu_stockage/edition', array('module' => 'ds',
+                        'action' => 'stock'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'DS',
+                            'type' => 'object') ));
 //        
 //        
 //        $r->prependRoute('ds_edition_operateur_addProduit', new DSRoute('/ds/:identifiant/:periode/edition/addProduit', array('module' => 'ds',
