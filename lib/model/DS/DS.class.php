@@ -4,7 +4,7 @@
  * Model for DS
  *
  */
-abstract class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivageDocument, InterfaceDSProduits {
+class DS extends BaseDS implements InterfaceDeclarantDocument, InterfaceArchivageDocument, InterfaceDSProduits {
 
     protected $declarant_document = null;
     protected $archivage_document = null;
@@ -55,17 +55,17 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
         return DSClient::getInstance()->findLastByIdentifiant($this->identifiant);
     }
 
-    public abstract function getLastDocument();
+    public function getLastDocument(){}
 
-    public abstract function updateProduits();
+    public function updateProduits(){}
 
-    public abstract function addProduit($hash);
+    public function addProduit($hash){}
     
-    public abstract function getCoordonnees();
+    public function getCoordonnees(){}
     
-    public abstract function getConfig();
+    public function getConfig(){}
     
-    public abstract function getEtablissement();
+    public function getEtablissement(){}
 
     protected function updateProduitsFromDS($ds) {
         foreach ($ds->declarations as $produit) {
