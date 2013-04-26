@@ -347,6 +347,20 @@ _Tiers:
       fax: {  }
       email: {  }
       web: {  }
+      lieux_stockage:
+        type: collection
+        required: false
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  numero: {  }
+                  nom: {  }
+                  adresse: {  }
+                  commune: {  }
+                  code_postal: {  }
       exploitant:
         class: _TiersExploitant
         type: collection
