@@ -2,8 +2,18 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
-  public function getChildrenNode() {
 
+    public function getLibelleFormat($labels = array(), $format = "%g% %a% %m% %l% %co% %ce%", $label_separator = ", ") {
+        //return $this->getParent()->getParent()->getParent()->getParent()->getLibelle().' - '.$this->getLibelle();
+                return $this->getLibelle();
+    }
+
+    public function getCodeProduit($vtsgn = '') {
+        return $this->getDouane()->getFullAppCode($vtsgn).$this->getDouane()->getCodeCepage();
+    }
+    
+    
+  public function getChildrenNode() {
       return null;
   }
 

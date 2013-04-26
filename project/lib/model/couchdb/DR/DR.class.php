@@ -1,5 +1,6 @@
 <?php
-class DR extends BaseDR {
+class DR extends BaseDR implements InterfaceProduitsDocument {
+    
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
@@ -455,5 +456,7 @@ class DR extends BaseDR {
         }else
             return null;
     }
+    
+
 
 }

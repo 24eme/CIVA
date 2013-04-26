@@ -129,9 +129,11 @@
 			<div id="sous_total">
 				<h2>Total Brand</h2>
 
-				<input type="text" id="soustotal_hors_vt_sgn" class="num" readonly="readonly" />
-				<input type="text" id="soustotal_vt" class="num" readonly="readonly"  />
-				<input type="text" id="soustotal_sgn" class="num" readonly="readonly" />
+				<input type="text" id="soustotal_hors_vt_sgn" readonly="readonly" />
+				
+				<input type="text" id="soustotal_vt" readonly="readonly"  />
+				
+				<input type="text" id="soustotal_sgn" readonly="readonly" />
 			</div>
 
 		</div>
@@ -140,9 +142,14 @@
 		<div id="total">
 			<h2>Total AOC Alsace grand Cru</h2>
 
-			<input type="text" id="total_hors_vt_sgn" class="num" readonly="readonly" />
-			<input type="text" id="total_vt" class="num" readonly="readonly" />
-			<input type="text" id="total_sgn" class="num" readonly="readonly" />
+			<input type="text" class="total_hors_vt_sgn" readonly="readonly" />
+			<input type="hidden" class="total_hors_vt_sgn" value="0" />
+			
+			<input type="text" class="total_vt" readonly="readonly" />
+			<input type="hidden" class="total_vt" value="0" />
+			
+			<input type="text" class="total_sgn" readonly="readonly" />
+			<input type="hidden" class="total_sgn" value="0" />
 		</div>
 
 		<ul id="btn_appelation" class="btn_prev_suiv clearfix">

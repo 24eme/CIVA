@@ -23,6 +23,7 @@ test:
     web_debug:              false
     no_script_name:         false
     etag:                   false
+    csrf:                   false
 
 all:
   .settings:
@@ -39,6 +40,8 @@ all:
     error_404_action:       error404
     
     check_lock:             true
+
+    enabled_modules:        [ds]
 
   .actions:
     login_module:           compte
