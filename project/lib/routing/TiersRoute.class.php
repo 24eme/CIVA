@@ -11,7 +11,7 @@ class TiersRoute extends sfObjectRoute implements InterfaceTiersRoute {
 
     protected function doConvertObjectToArray($object = null) {
   
-        return array("cvi" => $object->getIdentifiant());
+        return array("cvi" => $object->getCvi());
     }
 
     public function getTiers() {
