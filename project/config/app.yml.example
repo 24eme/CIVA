@@ -31,6 +31,7 @@ all:
       to: ["email@email.email"]
       subject: "500 | Internal Server Error | Exception"
 
+  declarant_class: "Recoltant"
 test:
 #  autologin: login
 
