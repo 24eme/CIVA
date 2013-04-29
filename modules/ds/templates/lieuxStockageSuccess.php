@@ -9,7 +9,7 @@
 			<a href="#"><span>Lieux de stockage</span> <em>Etape 2</em></a>
 		</li>
 		<li>
-			<a href="#"><span>Stocks</span> <em>Etape 3</em></a>
+			<a href="<?php echo url_for("ds_edition_operateur", $ds) ?>"><span>Stocks</span> <em>Etape 3</em></a>
 		</li>
 		<li>
 			<a href="#"><span>Récapitulatif</span> <em>Etape 4</em></a>
@@ -39,59 +39,34 @@
 	<table id="lieux_stockage">
 		<thead>
 			<tr>
-				<th><span>Lieu de stockage</span></th>
-				<th>AOC <span>Alsace</span></th>
+				<th>Lieu de stockage</th>
+				<th>AOC <span>Alsace blanc</span></th>
+				<th>AOC <span>Alsace Lieu-dit</span></th>
+				<th>AOC <span>Alsace Communale</span></th>
 				<th>AOC <span>Grands Crus</span></th>
-				<th>AOC <span>Créma</span></th>
-				<th>AOC <span>Communales</span></th>
-				<th>AOC <span>Lieux-Dits</span></th>
+				<th>AOC <span>Alsace Pinot noir</span></th>
+				<th>AOC <span>Alsace PN rouge</span></th>
+				<th>AOC <span>Crémant d'Alsace</span></th>
+				<th><span>Vins sans IG</span></th>
 			</tr>
 		</thead>
 		<tbody>
+			<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): ?>
 			<tr>
 				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
+					<?php echo $lieu_stockage->numero ?> <br />
+					<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
 				</td>
 				<td class="paire"><input type="checkbox" /></td>
 				<td><input type="checkbox" /></td>
 				<td class="paire"><input type="checkbox" /></td>
 				<td><input type="checkbox" /></td>
 				<td class="paire"><input type="checkbox" /></td>
+				<td><input type="checkbox" /></td>
+				<td class="paire"><input type="checkbox" /></td>
+				<td><input type="checkbox" /></td>
 			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
-			<tr>
-				<td class="adresse_lieu">
-					7523700100111 <br />
-					15 rue des 3 épis 75230 Paris
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-			</tr>
+			<?php endforeach; ?>
 		</tbody>
 	</table>
 	
@@ -106,7 +81,7 @@
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="#">
+		<a href="<?php echo url_for("ds_edition_operateur", $ds) ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>

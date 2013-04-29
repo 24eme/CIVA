@@ -18,7 +18,8 @@
  * @property string $statut
  * @property string $commentaire
  * @property acCouchdbJson $declarant
- * @property acCouchdbJson $declarations
+ * @property acCouchdbJson $produits
+ * @property DSRecolte $recolte
 
  * @method string get_id()
  * @method string set_id()
@@ -48,8 +49,10 @@
  * @method string setCommentaire()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
- * @method acCouchdbJson getDeclarations()
- * @method acCouchdbJson setDeclarations()
+ * @method acCouchdbJson getProduits()
+ * @method acCouchdbJson setProduits()
+ * @method DSRecolte getRecolte()
+ * @method DSRecolte setRecolte()
  
  */
  

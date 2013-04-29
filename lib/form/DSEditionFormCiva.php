@@ -12,7 +12,7 @@ class DSEditionFormCiva extends DSEditionForm {
 
     public function configure() {
         parent::configure();
-        foreach ($this->ds->declarations as $key => $declaration) {
+        foreach ($this->ds->getProduits() as $key => $declaration) {
 	  $this->setWidget('vt_' . $key, new sfWidgetFormInputFloat(array(), array('size' => '6')));
 	  $this->setValidator('vt_' . $key, new sfValidatorNumber(array('required' => false)));
 	  $this->widgetSchema->setLabel('vt_' . $key, 'VT');
@@ -32,9 +32,7 @@ class DSEditionFormCiva extends DSEditionForm {
             if ($prodKey == 'commentaire') {
                 $this->getDocument()->commentaire = $volumeRev;
             } else {
-	      if (substr($prodKey, 0, strlen('vt_')) === 'vt_'){
-                  var_dump($prodKey);
-                  var_dump($volumeRev);  
+	      if (substr($prodKey, 0, strlen('vt_')) === 'vt_'){ 
 		$this->updateVT(substr($prodKey,strlen('vt_')), $volumeRev);
               }
 	      if (substr($prodKey, 0, strlen('sgn_')) === 'sgn_')
@@ -58,7 +56,7 @@ class DSEditionFormCiva extends DSEditionForm {
     
     public function setDefaults($defaults) {
         parent::setDefaults($defaults);
-        foreach ($this->ds->getDeclarations() as $key => $value) {
+        foreach ($this->ds->getProduits() as $key => $value) {
 	  if($value->exist('vt')) 
               $defaults['vt_'.$key] = $value->vt;
 	  if($value->exist('sgn')) 

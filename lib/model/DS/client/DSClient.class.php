@@ -57,10 +57,10 @@ class DSClient extends acCouchdbClient {
     public function findOrCreateDsByCvi($cvi, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $ds = $this->findByIdentifiantAndPeriode($cvi, $periode, '01');
-	if($ds){
-	  //UPDATE
-            $ds->updateProduits();
-	  return $ds;
+	   if($ds){
+            //$ds->updateProduits();
+	       
+           return $ds;
         }
         $ds = new DSCiva();
         $ds->date_emission = date('Y-m-d');
@@ -68,7 +68,6 @@ class DSClient extends acCouchdbClient {
         $ds->identifiant = $this->createIdentifiant($cvi,$periode);
         
         $ds->storeDeclarant();
-        $ds->updateProduits();
         return $ds;
     }
 
