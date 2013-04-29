@@ -30,25 +30,37 @@
 	</div>
 	<!-- fin .header_ds -->
 	
-	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
+	<h2 class="titre_page"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></h2>
 	
-	<ul id="onglets_majeurs" class="clearfix onglets_stock">
+	<!-- Enlever classe "avec_sous_onglets" quand il n'y a pas de sous-onglets -->
+	<ul id="onglets_majeurs" class="clearfix onglets_stock avec_sous_onglets">
 		<li>
-			<a href="#"><span>AOC</span> <br> Alsace blanc</a>
-		</li>
-		<li>
-			<a href="#"><span>AOC</span> <br> Alsace Lieu-dit</a>
+			<a href="#"><span>AOC</span><br> Alsace blanc</a>
 		</li>
 		<li class="ui-tabs-selected">
-			<a href="#"><span>AOC</span> <br> Alsace Grand Cru</a>
+			<a href="#"><span>AOC</span><br> Alsace Grand Cru</a>
 			<ul class="sous_onglets">
 				<li class="ui-tabs-selected premier"><a href="#">Brand</a></li>
+				<li class=""><a href="#">Sommerberg</a></li>
 				<li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
 			</ul>
 		</li>
+		<li>
+			<a href="#"><span>AOC</span><br> Crément d'Alsace</a>
+		</li>
+		<li>
+			<a href="#"><span>AOC</span><br> Communales</a>
+		</li>
+		<li>
+			<a href="#"><span>AOC</span><br> Alsace Lieu-dit</a>
+		</li>
+		<li>
+			<a href="#"><span>&nbsp;</span><br> Autres</a>
+		</li>
+		<li class="recap_stock">
+			<a href="#">Récapitulatif</a>
+		</li>
 	</ul>
-	
-	<a href="#" class="recap_stock">Récapitulatif</a>
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
@@ -56,7 +68,8 @@
 		<div id="cont_gestion_stock">
 			
 			<!-- #gestion_stock -->
-			<div id="gestion_stock" class="clearfix gestion_stock_donnees">
+			<!-- Enlever classe "avec_sous_onglets" quand il n'y a pas de sous-onglets -->
+			<div id="gestion_stock" class="clearfix avec_sous_onglets">
 				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'produits' => $ds->getProduits(),'form' => $form));?>
 
 			    <div id="sous_total" class="ligne_total">

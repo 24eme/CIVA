@@ -29,47 +29,52 @@
 </div>
 <!-- fin .header_ds -->
 
-<p id="adresse_stock">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</p>
+<h2 class="titre_page">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</h2>
 
-<a href="#" id="def_lieux_stockage">Définition des lieux de stockage</a>
+<ul id="onglets_majeurs" class="clearfix">
+	<li class="ui-tabs-selected">
+		<a href="#">Définition des lieux de stockage</a>
+	</li>
+</ul>
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
 	
-	<table id="lieux_stockage">
-		<thead>
-			<tr>
-				<th>Lieu de stockage</th>
-				<th>AOC <span>Alsace blanc</span></th>
-				<th>AOC <span>Alsace Lieu-dit</span></th>
-				<th>AOC <span>Alsace Communale</span></th>
-				<th>AOC <span>Grands Crus</span></th>
-				<th>AOC <span>Alsace Pinot noir</span></th>
-				<th>AOC <span>Alsace PN rouge</span></th>
-				<th>AOC <span>Crémant d'Alsace</span></th>
-				<th><span>Vins sans IG</span></th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): ?>
-			<tr>
-				<td class="adresse_lieu">
-					<?php echo $lieu_stockage->numero ?> <br />
-					<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
-				</td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-				<td class="paire"><input type="checkbox" /></td>
-				<td><input type="checkbox" /></td>
-			</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
-	
+	<div id="lieux_stockage">
+		<table class="table_donnees">
+			<thead>
+				<tr>
+					<th>Lieu de stockage</th>
+					<th><span>AOC</span> Alsace blanc</th>
+					<th><span>AOC</span> Alsace Lieu-dit</th>
+					<th><span>AOC</span> Alsace Communale</th>
+					<th><span>AOC</span> Grands Crus</th>
+					<th><span>AOC</span> Alsace Pinot noir</th>
+					<th><span>AOC</span> Alsace PN rouge</th>
+					<th><span>AOC</span> Crémant d'Alsace</th>
+					<th>Vins sans IG</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): ?>
+				<tr>
+					<td class="adresse_lieu">
+						<?php echo $lieu_stockage->numero ?> <br />
+						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
+					</td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" /></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
 </div>
 <!-- fin #application_ds -->
 
