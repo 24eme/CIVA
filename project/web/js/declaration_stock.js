@@ -27,22 +27,47 @@ var initDSSommesCol = function()
 	{
 		var champSomme = $(this);
 		var col = $(champSomme.attr('data-somme-col'));
-		var valDefaut = champSomme.attr('data-somme-col');
-		var somme = calculSommeCol(col);
+		var valDefaut = champSomme.attr('data-val-defaut');
+		var somme = col.calculSommeCol();
 		
 		// Si une valeur par défaut existe
-		if(valDefaut) valDefaut = parseFloat(valDefaut);
-		somme += valDefaut;
+		if(valDefaut)
+		{
+			valDefaut = parseFloat(valDefaut);
+			somme += valDefaut;
+		}
 		
 		champSomme.val(somme);
+		
+		// Initialisation de la somme automatique au blur
+		if(!col.hasClass('init_somme_ok')) col.initDSColChamps();
 	});
-	
 };
 
-
-var calculSommeCol = function(col)
+/**
+ * Calcul des sommes automatiquement
+ *********************************************************/
+$.fn.initDSColChamps = function()
 {
-	var champs = col.find('input[text]');
+	var col = $(this);
+	var champs = col.find('input.num');
+	var somme = 0;
+	
+	champs.blur(function()
+	{
+		col.majDSSommesCol();
+	});
+	
+	col.addClass('init_somme_ok');
+};
+
+/**
+ * Calcul de la somme d'une colonne
+ *********************************************************/
+$.fn.calculSommeCol = function()
+{
+	var col = $(this);
+	var champs = col.find('input.num');
 	var somme = 0;
 	
 	champs.each(function()
@@ -60,46 +85,32 @@ var calculSommeCol = function(col)
 };
 
 
+
 /**
- * Calcul de la somme des champs des colonnes de stocks
+ * Met à jour les sommes des colonnes de stocks
  *********************************************************/
-var sommeColStock = function()
+$.fn.majDSSommesCol = function()
 {
-	var champsColonne = $('#gestion_stock .colonne input');
-	var blocSousTotal = $('#sous_total');
-	var blocTotal = $('#total');
-
-	champsColonne.blur(function()
-	{
-		// On récupère la colonne du champ
-		var colonne = $(this).parents('.colonne');
-		var champsColonne = colonne.find('input');
-		var typeColonne = colonne.attr('id').substr(4);
-		var champSousTotal = blocSousTotal.find('#soustotal_' + typeColonne);
-		
-		var champTotalTexte = blocTotal.find('.total_' + typeColonne).filter(':text');
-		var champTotalCache = champTotalTexte.siblings(':hidden');
-		
-		var sommeSousTotal = 0;
-		var sommeTotal = parseFloat(champTotalCache.val());
-		
-		// On parcourt les champs de la colonne
-		champsColonne.each(function()
-		{
-			var champCourant = $(this);
-			var valeurChampCourant = $.trim(champCourant.val());
-			
-			if(valeurChampCourant != '')
-			{
-				sommeSousTotal += parseFloat(valeurChampCourant);
-				sommeTotal += parseFloat(valeurChampCourant);
-			}
-		});
-
-		champSousTotal.val(sommeSousTotal);
-		champTotalTexte.val(sommeTotal);
-	});	
+	var col = $(this);
+	var id = col.attr('id');
+	var champsSommesAssoc = champsSommes.filter('[data-somme-col=#'+id+']')
+	var somme = col.calculSommeCol();
 	
+	champsSommesAssoc.each(function()
+	{
+		var champSomme = $(this);
+		var valDefaut = champSomme.attr('data-val-defaut');
+		
+		// Si une valeur par défaut existe
+		if(valDefaut)
+		{
+			valDefaut = parseFloat(valDefaut);
+			somme += valDefaut;
+		}
+		
+		champSomme.val(somme);
+		champSomme.verifNettoyageChamp();
+	});
 };
 
 /**

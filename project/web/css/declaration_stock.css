@@ -44,7 +44,6 @@
 /**
  * Onglets
  ******************************************/
-
 #etape_declaration.etapes_ds
 {
 	background: none;
@@ -201,6 +200,13 @@
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
+}
+
+#application_ds #liste_cepages li em
+{
+	font-size: 11px;
+	font-style: normal;
+	margin: 0 0 0 5px;
 }
 
 /**
