@@ -139,8 +139,10 @@ $.fn.verifNettoyageChamp = function()
 		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
 		
 		// Comparaison nombre entier / flottant
-		if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
-		else val = parseInt(val);
+		/*if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
+		else val = parseInt(val);*/
+		
+		val = parseFloat(val).toFixed(2);
 	}
 	// Si rien n'a été saisi
 	//else val = 0;
