@@ -17,6 +17,11 @@ class Db2 {
         $this->_data = $data;
     }
 
+    public function getData() {
+
+        return $this->_data;
+    }
+
     public function get($column, $default = null) {
         if (!array_key_exists($column, $this->_data)) {
             print_r($this->_data);

@@ -45,6 +45,7 @@ EOF;
                 $mot_de_passe = "Compte désactivé";
             }
             $comptes[$compte->value->_id]->code_creation = $mot_de_passe;
+            $comptes[$compte->value->_id]->tiers_object = array();
         }
 
         $tiers = array();
@@ -78,8 +79,16 @@ EOF;
                     "adresse" => "Adresse",
                     "code postal" => "Code postal",
                     "commune" => "Commune",
+                    "telephone" => "Téléphone",
+                    "fax" => "Fax",
+                    "web" => "Site internet",
                     "exploitant_sexe" => "Sexe de l'exploitant",
-                    "exploitant_nom" => "Nom de l'exploitant"
+                    "exploitant_nom" => "Nom de l'exploitant",
+                    "exploitant_adresse" => "Adresse de l'exploitant",
+                    "exploitant_code_postal" => "Code postal de l'exploitant",
+                    "exploitant_commune" => "Commune de l'exploitant",
+                    "exploitant_telephone" => "Téléphone de l'exploitant"
+
                 ));
 
         $validation = array(
@@ -95,10 +104,17 @@ EOF;
             "civilite" => array("required" => false, "type" => "string"),
             "nom" => array("required" => true, "type" => "string"),
             "adresse" => array("required" => false, "type" => "string"),
-            "code postal" => array("required" => false, "type" => "string"),
+            "code_postal" => array("required" => false, "type" => "string"),
             "commune" => array("required" => false, "type" => "string"),
+            "telephone" => array("required" => false, "type" => "string"),
+            "fax" => array("required" => false, "type" => "string"),
+            "web" => array("required" => false, "type" => "string"),
             "exploitant_sexe" => array("required" => false, "type" => "string"),
-            "exploitant_nom" => array("required" => false, "type" => "string")
+            "exploitant_nom" => array("required" => false, "type" => "string"),
+            "exploitant_adresse" => array("required" => false, "type" => "string"),
+            "exploitant_code_postal" => array("required" => false, "type" => "string"),
+            "exploitant_commune" => array("required" => false, "type" => "string"),
+            "exploitant_telephone" => array("required" => false, "type" => "string")
         );
 
         $validation_proxy = $validation;
@@ -122,8 +138,15 @@ EOF;
                         "adresse" => null,
                         "code postal" => isset($compte->code_postal) ? $compte->code_postal : null,
                         "commune" => isset($compte->commune) ? $compte->commune : null,
-                        "sexe de l'exploitant" => null,
-                        "nom de l'exploitant" => null,
+                        "telephone" => null,
+                        "fax" => null,
+                        "web" => null,
+                        "exploitant_sexe" => null,
+                        "exploitant_nom" => null,
+                        "exploitant_adresse" => null,
+                        "exploitant_code_postal" => null,
+                        "exploitant_commune" => null,
+                        "exploitant_telephone" => null
                             ), $validation);
 
             } elseif($compte->type == "CompteTiers") {
@@ -138,8 +161,15 @@ EOF;
                 $addresses = array();
                 $code_postals = array();
                 $communes = array();
+                $telephones = array();
+                $faxs = array();
+                $webs = array();
                 $sexes_exploitant = array();
                 $noms_exploitant = array();
+                $addresses_exploitant = array();
+                $code_postals_exploitant = array();
+                $communes_exploitant = array();
+                $telephones_exploitant = array();
 
                 foreach($compte->tiers_object as $tiers) {
                     $types[] = $tiers->type;
@@ -153,11 +183,22 @@ EOF;
                     if (!$adresse->adresse && isset($tiers->exploitant)) {
                         $adresse = $tiers->exploitant;
                     }
+                    $telephone = isset($tiers->telephone) ? $tiers->telephone : null;
+                    if(!$telephone && isset($tiers->exploitant->telephone)) {
+                        $telephone = $tiers->exploitant->telephone;
+                    }
+                    $telephones[] = $telephone;
+                    $faxs[] = isset($tiers->fax) ? $tiers->fax : null;
+                    $webs[] = isset($tiers->web) ? $tiers->web : null;
                     $addresses[] = isset($adresse->adresse) ? $adresse->adresse : null;
                     $code_postals[] = isset($adresse->code_postal) ? $adresse->code_postal : null;
                     $communes[] = isset($adresse->commune) ? $adresse->commune : null;
                     $sexes_exploitant[] = isset($tiers->exploitant->sexe) ? $tiers->exploitant->sexe : null;
                     $noms_exploitant[] = isset($tiers->exploitant->nom) ? $tiers->exploitant->nom : null;
+                    $addresses_exploitant[] = isset($tiers->exploitant->adresse) ? $tiers->exploitant->adresse : null;
+                    $code_postals_exploitant[] = isset($tiers->exploitant->code_postal) ? $tiers->exploitant->code_postal : null;
+                    $communes_exploitant[] = isset($tiers->exploitant->commune) ? $tiers->exploitant->commune : null;
+                    $telephones_exploitant[] = isset($tiers->exploitant->telephone) ? $tiers->exploitant->telephone : null;
                 }
 
                 $csv->add(array(
@@ -175,9 +216,17 @@ EOF;
                         "adresse" => implode('|', $addresses),
                         "code postal" => implode('|', $code_postals),
                         "commune" => implode('|', $communes),
-                        "sexe de l'exploitant" => implode('|', $sexes_exploitant),
-                        "nom de l'exploitant" => implode('|', $noms_exploitant),
+                        "telephone" => implode('|', $telephones),
+                        "fax" => implode('|', $faxs),
+                        "web" =>implode('|', $webs),
+                        "exploitant_sexe" => implode('|', $sexes_exploitant),
+                        "exploitant_nom" => implode('|', $noms_exploitant),
+                        "exploitant_adresse" => implode('|', $addresses_exploitant),
+                        "exploitant_code_postal" => implode('|', $code_postals_exploitant),
+                        "exploitant_commune" => implode('|', $communes_exploitant),
+                        "exploitant_telephone" => implode('|', $telephones_exploitant),
                             ), $validation);
+
             } elseif($compte->type == "CompteProxy") {
                 $csv->add(array(
                         "type" => "Proxy:".$comptes[$compte->compte_reference]->login,
@@ -194,8 +243,15 @@ EOF;
                         "adresse" => null,
                         "code postal" => null,
                         "commune" => null,
-                        "sexe de l'exploitant" => null,
-                        "nom de l'exploitant" => null,
+                        "telephone" => null,
+                        "fax" => null,
+                        "web" => null,
+                        "exploitant_sexe" => null,
+                        "exploitant_nom" => null,
+                        "exploitant_adresse" => null,
+                        "exploitant_code_postal" => null,
+                        "exploitant_commune" => null,
+                        "exploitant_telephone" => null,
                             ), $validation_proxy);
             }
         }

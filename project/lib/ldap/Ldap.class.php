@@ -127,25 +127,28 @@ class Ldap {
      * @return array 
      */
     protected function info($compte) {
-      $info = array();
-      $info['uid']           = $compte->login;
-      $info['sn']            = $compte->getNom(); 
-      $info['cn']            = $compte->getNom(); 
-      $info['objectClass'][0]   = 'top';
-      $info['objectClass'][1]   = 'person';
-      $info['objectClass'][2]   = 'posixAccount';
-      $info['objectClass'][3]   = 'inetOrgPerson';
-      $info['userPassword']  = $compte->mot_de_passe;
-      $info['loginShell']    = '/bin/bash';
-      $info['uidNumber']     = '1000';
-      $info['gidNumber']     = $this->getGid($compte);
-      $info['homeDirectory'] = '/home/'.$compte->login;
-      $info['gecos']         = $compte->getGecos();
-      $info['mail']          = $compte->email;
-      $info['postalAddress'] = $compte->getAdresse();
-      $info['postalCode']    = $compte->getCodePostal();
-      $info['l']             = $compte->getCommune();
-      return $info;
+        $info = array();
+        $info['uid']           = $compte->login;
+        $info['sn']            = $compte->getNom(); 
+        $info['cn']            = $compte->getNom(); 
+        $info['objectClass'][0]   = 'top';
+        $info['objectClass'][1]   = 'person';
+        $info['objectClass'][2]   = 'posixAccount';
+        $info['objectClass'][3]   = 'inetOrgPerson';
+        $info['userPassword']  = $compte->mot_de_passe;
+        if(!$compte->isActif()) {
+            $info['userPassword'] = null;
+        }
+        $info['loginShell']    = '/bin/bash';
+        $info['uidNumber']     = '1000';
+        $info['gidNumber']     = $this->getGid($compte);
+        $info['homeDirectory'] = '/home/'.$compte->login;
+        $info['gecos']         = $compte->getGecos();
+        $info['mail']          = $compte->email;
+        $info['postalAddress'] = $compte->getAdresse();
+        $info['postalCode']    = $compte->getCodePostal();
+        $info['l']             = $compte->getCommune();
+        return $info;
     }
     
     /**

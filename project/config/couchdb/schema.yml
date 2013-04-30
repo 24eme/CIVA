@@ -335,6 +335,7 @@ _Tiers:
   type: abstract
   definition:
     fields:
+      statut: { }
       compte:
         type: array_collection
         definition:

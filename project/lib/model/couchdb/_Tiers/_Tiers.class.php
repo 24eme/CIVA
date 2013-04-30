@@ -1,6 +1,11 @@
 <?php
 abstract class _Tiers extends Base_Tiers {
     
+    public function isActif() {
+
+        return $this->statut != _TiersClient::STATUT_INACTIF;
+    }
+
     /**
      *
      * @param string $campagne
@@ -69,4 +74,5 @@ abstract class _Tiers extends Base_Tiers {
     public function setCommune($c) {
         return $this->get('siege')->set('commune', $c);
     }
+
 }
