@@ -39,16 +39,8 @@ EOF;
 
     $nb = 0;
     foreach($ids as $id) {
-        $compte = acCouchdbManager::getClient('_Compte')->find($id);
-        if ($compte->getStatus() == _Compte::STATUS_INSCRIT) {
-            $this->log($id);
-            $nb++;
-            $compte->updateLdap();
-        }
+        $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+        $compte->updateLdap();
     }
-
-    $this->logSection("done", $nb);
-
-    // add your code here
   }
 }
