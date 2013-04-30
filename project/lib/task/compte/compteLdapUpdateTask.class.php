@@ -37,14 +37,9 @@ EOF;
 
     $ids = sfCouchdbManager::getClient('_Compte')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
-    $nb = 0;
     foreach($ids as $id) {
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
         $compte->updateLdap();
     }
-
-    $this->logSection("done", $nb);
-
-    // add your code here
   }
 }
