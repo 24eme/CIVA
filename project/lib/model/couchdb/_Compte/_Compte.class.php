@@ -93,13 +93,24 @@ abstract class _Compte extends Base_Compte {
      * 
      */
     public function updateLdap() {
-        if ($this->statut == self::STATUS_INSCRIT) {
+        $ldap = new Ldap();
+
+        if (!$ldap->exist($this) && $this->statut != self::STATUS_INSCRIT) {
+
+            return;
+        }
+
+        if (!$ldap->exist($this)) {
             $ldap = new Ldap();
-            if($ldap->exist($this)) {
-                $ldap->update($this);
-            }else {
-                $ldap->add($this);
-            }
+            $ldap->add($this);
+
+            return;
+        }
+
+        if($ldap->exist($this)) {
+            $ldap->update($this);
+
+            return;
         }
     }
 

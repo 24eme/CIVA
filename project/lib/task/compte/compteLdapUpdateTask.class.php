@@ -40,11 +40,7 @@ EOF;
     $nb = 0;
     foreach($ids as $id) {
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
-        if ($compte->getStatus() == _Compte::STATUS_INSCRIT) {
-            $this->log($id);
-            $nb++;
-            $compte->updateLdap();
-        }
+        $compte->updateLdap();
     }
 
     $this->logSection("done", $nb);
