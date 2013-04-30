@@ -79,32 +79,11 @@ class exportActions extends sfActions {
         return $this->renderText($this->document->output());
     }
 
-    public function executeCsvTiers(sfWebRequest $request) {
-        set_time_limit('240');
-        ini_set('memory_limit', '512M');
-        $tiers = acCouchdbManager::getClient("Tiers")->getAll(acCouchdbClient::HYDRATE_JSON);
-        $values = array();
-        foreach ($tiers as $item) {
-            if ($item->recoltant == 1 && $item->cvi != "7523700100") {
-                $ligne = array();
-                $ligne[] = $item->cvi;
-                if (strpos('{TEXT}', $item->mot_de_passe) === false) {
-                    $ligne[] = str_replace('{TEXT}', '', $item->mot_de_passe);
-                } else {
-                    $ligne[] = "code activé";
-                }
-                $ligne[] = $item->nom;
-                $ligne[] = $item->siege->adresse;
-                $ligne[] = $item->siege->code_postal;
-                $ligne[] = $item->siege->commune;
-                $ligne[] = $item->no_accises;
 
-                $values[] = $ligne;
-            }
-        }
+    public function executeComptesCSV(sfWebRequest $request) {
 
-        $this->setResponseCsv('tiers.csv');
-        return $this->renderText(Tools::getCsvFromArray($values));
+        $this->setResponseCsv('comptes.csv');
+        return $this->renderText(file_get_contents(sfConfig::get('sf_data_dir').'/export/comptes/comptes.csv'));
     }
 
     public function executeCsvTiersDREncours(sfWebRequest $request) {
@@ -131,35 +110,6 @@ class exportActions extends sfActions {
         }
 
         $this->setResponseCsv('recoltant_declaration_en_cours.csv');
-        return $this->renderText(Tools::getCsvFromArray($values));
-    }
-
-    public function executeCsvTiersNonValideeCiva(sfWebRequest $request) {
-        set_time_limit('240');
-        ini_set('memory_limit', '512M');
-        $tiers = acCouchdbManager::getClient("Tiers")->getAllCvi(acCouchdbClient::HYDRATE_JSON);
-        $values = array();
-        foreach ($tiers as $item) {
-            if ($item->cvi != "7523700100") {
-                $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), acCouchdbClient::HYDRATE_JSON);
-                if ($dr && isset($dr->validee) && $dr->validee && (!isset($dr->modifiee) || !$dr->modifiee)) {
-                    $ligne = array();
-                    $ligne[] = $item->cvi;
-                    $ligne[] = $item->nom;
-                    $ligne[] = $item->declaration_commune;
-                    $ligne[] = $item->telephone;
-                    $ligne[] = $item->email;
-                    $inscrit = 'non_inscrit';
-                    if (substr($item->mot_de_passe, 0, 6) !== "{TEXT}") {
-                        $inscrit = 'inscrit';
-                    }
-                    $ligne[] = $inscrit;
-                    $ligne[] = $dr->etape;
-                    $values[] = $ligne;
-                }
-            }
-        }
-        $this->setResponseCsv('tiers.csv');
         return $this->renderText(Tools::getCsvFromArray($values));
     }
     
