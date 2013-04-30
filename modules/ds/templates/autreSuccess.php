@@ -9,8 +9,16 @@
 			<li class="passe">
 				<a href=""><span>Lieux de stockage</span> <em>Etape 2</em></a>
 			</li>
-			<li class="actif">
-				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 1/3)</em></a>
+			<li class="actif sous_menu">
+				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 3/6)</em></a>
+				<ul>
+					<li><a href="#">Lieu de stockage n°1</a></li>
+					<li><a href="#">Lieu de stockage n°2</a></li>
+					<li class="actif"><a href="#">Lieu de stockage n°3</a></li>
+					<li><a href="#">Lieu de stockage n°4</a></li>
+					<li><a href="#">Lieu de stockage n°5</a></li>
+					<li><a href="#">Lieu de stockage n°6</a></li>
+				</ul>
 			</li>
 			<li>
 				<a href="#"><span>Récapitulatif</span> <em>Etape 4</em></a>
@@ -60,7 +68,6 @@
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
-		
 		<div id="blocs_autres">
 			<div id="bloc_autres_sans_aoc" class="bloc_autres">
 				<h2 class="titre_section">Sans AOC</h2>
@@ -68,12 +75,12 @@
 					<ul class="bloc_vert">
 						<li>
 							<label>Vins de table - Vins sans IG</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 						
 						<li>
 							<label>Vins de table - Mousseux</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 					</ul>
 				</div>
@@ -85,22 +92,22 @@
 					<ul class="bloc_vert">
 						<li>
 							<label>Rébêches</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 						
 						<li>
 							<label>DPLC</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 						
 						<li>
 							<label>Lies en Stocks</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 						
 						<li>
 							<label>Moûts concentrés rectifiés</label>
-							<input type="text" />
+							<input type="text" class="num" />
 						</li>
 					</ul>
 				</div>

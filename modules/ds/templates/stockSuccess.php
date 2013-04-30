@@ -9,8 +9,16 @@
 			<li class="passe">
 				<a href="<?php echo url_for("ds_lieux_stockage", $tiers) ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
 			</li>
-			<li class="actif">
-				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 1/3)</em></a>
+			<li class="actif sous_menu">
+				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 3/6)</em></a>
+				<ul>
+					<li><a href="#">Lieu de stockage n°1</a></li>
+					<li><a href="#">Lieu de stockage n°2</a></li>
+					<li class="actif"><a href="#">Lieu de stockage n°3</a></li>
+					<li><a href="#">Lieu de stockage n°4</a></li>
+					<li><a href="#">Lieu de stockage n°5</a></li>
+					<li><a href="#">Lieu de stockage n°6</a></li>
+				</ul>
 			</li>
 			<li>
 				<a href="#"><span>Récapitulatif</span> <em>Etape 4</em></a>
@@ -73,7 +81,7 @@
 				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'produits' => $ds->getProduits(),'form' => $form));?>
 
 			    <div id="sous_total" class="ligne_total">
-			        <h2>Sous total</h2>
+			        <h3>Sous total</h3>
 			        
 			        <ul>
 			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
@@ -86,7 +94,7 @@
 
 
 			<div id="total" class="ligne_total">
-				<h2>Total</h2>
+				<h3>Total</h3>
 	
 				<ul>
 					<li><input type="text" readonly="readonly" data-val-defaut="312.57" value="312.57" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
