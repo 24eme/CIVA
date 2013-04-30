@@ -37,7 +37,6 @@ EOF;
 
     $ids = acCouchdbManager::getClient('_Compte')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
-    $nb = 0;
     foreach($ids as $id) {
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
         $compte->updateLdap();
