@@ -11,8 +11,8 @@ use_helper('Float');
 			<?php
 			   include_partial('dsInformations', array('ds' => $ds));
 			?>
-                        <h2>Contenu de la DS</h2>
-                        <?php include_partial('document_validation/validation', array('validation' => $validation)); ?>
+			<h2>Contenu de la DS</h2>
+			<?php include_partial('document_validation/validation', array('validation' => $validation)); ?>
 			<?php 
 			include_partial('dsRecapitulatif', array('ds' => $ds, 'declarations' => $ds->declarations, 'validation' => $validation));
 			?>

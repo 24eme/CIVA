@@ -3,10 +3,10 @@
 	<div class="header_ds clearfix">
 		
 		<ul id="etape_declaration" class="etapes_ds clearfix">
-			<li>
+			<li class="passe">
 				<a href="#"><span>Exploitation</span> <em>Etape 1</em></a>
 			</li>
-			<li>
+			<li class="passe">
 				<a href="<?php echo url_for("ds_lieux_stockage", $tiers) ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
 			</li>
 			<li class="actif">
@@ -98,6 +98,10 @@
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
 					<a href="#">
+						<!--
+							Pour le lieu de stockage précédent, utiliser :
+							<img src="/images/boutons/btn_lieu_stockage_prec.png" alt="Retourner au lieu de stockage précédent" />
+						-->
 						<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" />
 					</a>
 				</li>

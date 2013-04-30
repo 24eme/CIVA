@@ -2,7 +2,7 @@
 <div class="header_ds clearfix">
 	
 	<ul id="etape_declaration" class="etapes_ds clearfix">
-		<li>
+		<li class="passe">
 			<a href="#"><span>Exploitation</span> <em>Etape 1</em></a>
 		</li>
 		<li class="actif">
