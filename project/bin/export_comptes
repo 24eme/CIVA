@@ -1,0 +1,14 @@
+#!/bin/bash
+
+mkdir -p data/export/comptes > /dev/null
+
+php symfony export:comptes-csv > /tmp/comptes.csv
+
+head -n 1 /tmp/comptes.csv > /tmp/comptes.csv.header
+tail -n +2 /tmp/comptes.csv  > /tmp/comptes.csv.body
+
+sort -t ";" -k 2,2 /tmp/comptes.csv.body > /tmp/comptes.csv.body.sorted
+
+cat /tmp/comptes.csv.header /tmp/comptes.csv.body.sorted > /tmp/comptes.csv.sorted
+
+mv /tmp/comptes.csv.sorted data/export/comptes/comptes.csv

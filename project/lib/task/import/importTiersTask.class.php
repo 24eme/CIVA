@@ -72,7 +72,8 @@ EOF;
       if(!$tiers) {
           return null;
       }
-      
+
+      $tiers->statut = _TiersClient::STATUT_ACTIF;
       $tiers->civaba = $db2->get(Db2Tiers::COL_CIVABA);
       $tiers->intitule = $db2->get(Db2Tiers::COL_INTITULE);
       $tiers->nom = preg_replace('/ +/', ' ', $db2->get(Db2Tiers::COL_NOM_PRENOM));

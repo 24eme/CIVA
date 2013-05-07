@@ -11,22 +11,14 @@
 /* STRUCTURE / ELEMENTS GENERIQUES */
 /* =================================================== */
 
-.header_ds
-{
-	background: #F1F1F1;
-	border-bottom: 1px solid #CACACA;
-	border-top: 1px solid gainsboro;
-	padding: 4px 20px;
-	position: relative;
-	top: -30px;
-}
+
 
 #application_ds 
 {
 	background: #f7f6f6;
 	clear: both;
 	margin: 0 0 22px;
-	padding: 0 20px 30px;
+	padding: 30px 20px;
 }
 
 #application_ds a:hover
@@ -40,90 +32,35 @@
 	width: 113px;
 }
 
+.titre_page
+{
+	clear: both;
+	color: #acb701;
+	font-size: 18px;
+	margin: 0 0 20px 23px;
+}
+
 
 /**
- * Onglets
+ * Header DS
  ******************************************/
+.header_ds { margin: 0 0 40px; } 
+ 
+/* Etapes */
 #etape_declaration.etapes_ds
 {
-	background: none;
-	border: 0;
-	float: left;
-	margin: 0;
-	padding: 0;
+	border-top: 0;
+	margin: -30px 0 0;
 	top: 0;
 }
 
-#etape_declaration.etapes_ds li
-{
-	min-width: 133px;
-	width: auto;
-}
-
-#etape_declaration.etapes_ds li span
-{
-	display: block;
-	padding: 0 5px;
-}
-
-#onglets_majeurs.onglets_stock
-{
-	float: left;
-	font-size: 13px;
-	line-height: 1;
-	margin: 0 0 23px;
-	width: auto;
-}
-
-#onglets_majeurs.onglets_stock .sous_onglets.invisible
-{
-	display: none;
-}
-
-#onglets_majeurs.onglets_stock li a
-{
-	padding: 2px 9px 2px 5px;
-}
-
-#onglets_majeurs.onglets_stock li.ui-tabs-selected a
-{
-	background: #ffb52c;
-	color: #000;
-}
-
-#onglets_majeurs.onglets_stock li.ajouter a
-{
-	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
-	padding-left: 30px;
-}
-
-/* bouton récapitulatif */
-.recap_stock
-{
-	background: #bcbdbc;
-	color: #FFF;
-	display: inline-block;
-	float: right;
-	font-size: 15px;
-	font-weight: bold;
-	height: 26px;
-	line-height: 33px;
-	margin-right: 38px;
-	padding: 0 5px;
-	width: 115px;
-}
-
-.recap_stock:hover
-{
-	text-decoration: none;
-}
-
-/**
- * Barre de progression
- ******************************************/
+/* Barre de progression */
 .progression_ds
 {
 	float: right;
+	margin: -45px 0 0;
+	padding: 0 20px 0 0;
+	position: relative;
 	text-align: center;
 	width: 200px;
 }
@@ -153,13 +90,27 @@
 	height: 3px;
 }
 
-#adresse_stock
+
+/**
+ * Onglets majeurs
+ ******************************************/
+#onglets_majeurs.onglets_stock { line-height: 1; }
+#onglets_majeurs.onglets_stock.avec_sous_onglets { margin: 0 0 24px; }
+
+#onglets_majeurs.onglets_stock li a { padding: 2px 5px; }
+#onglets_majeurs.onglets_stock li.ui-tabs-selected > a { background: #ffb52c; }
+
+#onglets_majeurs.onglets_stock li.ajouter a
 {
-	clear: both;
-	color: #acb701;
-	font-size: 18px;
-	padding: 0 0 20px 23px;
+	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
+	color: #fff;
+	padding-left: 30px;
 }
+
+#onglets_majeurs.onglets_stock li.recap_stock { float: right; }
+
+#onglets_majeurs.onglets_stock li .sous_onglets { top: 33px; }
+
 
 
 
@@ -169,16 +120,26 @@
 
 #application_ds #cont_gestion_stock
 {
-	width: 738px;
+	display: inline-block;
+	/*width: 738px;*/
 }
+
+.ielt8 #application_ds #cont_gestion_stock { display: inline; zoom: 1; }
 
 #application_ds #gestion_stock
 {
+	padding: 55px 0 0 1px;	/* 1px pour simuler la bordure */
+	margin: -30px 0 35px;
+}
+
+
+#application_ds #gestion_stock.avec_sous_onglets
+{
 	border: 1px solid #C6C6C6;
 	border-top: 4px solid #ffbf4e;
-	margin: 0 0 35px;
 	padding: 55px 15px 15px 0;
 }
+
 
 
 /**
@@ -200,6 +161,11 @@
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
+	width: 190px;
+	
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
 }
 
 #application_ds #liste_cepages li em
@@ -270,7 +236,6 @@
 /**
  * Total / Sous-total
  ******************************************/
-
 #application_ds .ligne_total
 {
 	clear: both;
@@ -304,19 +269,10 @@
 	width: 111px;
 }
 
-/**
- * Sous-total
- ******************************************/
+/* Sous-total */
+#application_ds #sous_total { background: #fdbc4c; }
 
-#application_ds #sous_total
-{
-	background: #fdbc4c;
-}
-
-/**
- * Total
- ******************************************/
-
+/* Total */
 #application_ds #total
 {
 	background: #ffa913;
@@ -328,41 +284,14 @@
 /**
  * Boutons
  ******************************************/
+#application_ds #btn_appelation { padding: 30px 0 0; }
 
-#application_ds #btn_appelation
-{
-	padding: 30px 0 0;
-}
-
-#application_ds #btn_appelation li + li
-{
-	float: right;
-}
-
-#application_ds .btn_prev_suiv li
-{
-	float: left;
-}
-
-#def_lieux_stockage
-{
-	background: #ffa913;
-	display: inline-block;
-	font-size: 15px;
-	font-weight: bold;
-	margin: 0 0 0 23px;
-	padding: 5px;
-}
-
-#def_lieux_stockage:hover
-{
-	text-decoration: none;
-}
+#application_ds #btn_appelation li + li { float: right; }
+#application_ds .btn_prev_suiv li { float: left; }
 
 /**
  * Autres
  ******************************************/
-
 #application_ds .bloc_autres
 {
 	background: #edecec;
@@ -411,61 +340,15 @@
 /**
  * Définition des lieux de stockage
  ******************************************/
+#application_ds #lieux_stockage table thead th { font-size: 11px; }
 
-#application_ds #lieux_stockage
+#application_ds #lieux_stockage table thead th:first-child 
 {
-	margin: 50px 0 0;
-	width: 830px;
+	padding: 0 10px;
+	width: 135px;
 }
 
-#application_ds #lieux_stockage td
-{
-	background: #edecec;
-	border: 1px solid #c6c8c7;
-	padding: 10px;
-	text-align: center;
-}
-
-#application_ds #lieux_stockage td:first-child
-{
-	text-align: left;
-}
-
-#application_ds #lieux_stockage td.adresse_lieu
-{
-	font-size: 14px;
-	width: 390px;
-}
-
-#application_ds #lieux_stockage td.paire
-{
-	background: #ddd;
-}
-
-#application_ds #lieux_stockage th:first-child
-{
-	position: relative;
-}
-
-#application_ds #lieux_stockage th:first-child span
-{
-	background: #dcdfa9;
-	color: #848c03;
-	font-size: 18px;
-	font-weight: normal;
-	height: 100%;
-	padding: 0;
-	position: absolute;
-	top: 0;
-	width: 155px;
-}
-
-#application_ds #lieux_stockage th span
-{
-	display: block;
-	color: #b5bf22;
-	padding: 0 0 5px;
-}
+#application_ds #lieux_stockage table tbody td { text-align: center; }
 
 
 

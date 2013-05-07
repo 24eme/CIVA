@@ -238,25 +238,13 @@ xml:
   url: /xml/:annee
   param: {module: export, action: xml}
 
-csv_tiers:
-  url: /tiers/csv
-  param: {module: export, action: csvTiers}
+csv_comptes:
+  url: /comptes/csv
+  param: {module: export, action: comptesCSV}
 
 csv_tiers_dr_en_cours:
   url: /tiers/dr-en-cours/csv
   param: {module: export, action: csvTiersDREncours}
-
-csv_tiers_non_validee_civa:
-  url: /tiers/non-validee-civa/csv
-  param: {module: export, action: csvTiersNonValideeCiva}
-
-csv_tiers_modifications:
-  url: /tiers/modifications/csv
-  param: {module: export, action: csvTiersModifications}
-
-csv_tiers_modifications_email:
-  url: /tiers/modifications-email/csv
-  param: {module: export, action: csvTiersModificationsEmail}
 
 export_dr_acheteur_csv:
   url: /acheteur/import/dr/csv

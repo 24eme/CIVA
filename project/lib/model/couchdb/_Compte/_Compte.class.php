@@ -20,15 +20,19 @@ abstract class _Compte extends Base_Compte {
      * 
      */
     protected function updateStatut() {
-       if (substr($this->mot_de_passe,0,6) == '{SSHA}') {
+        if(!$this->isActif()) {
+            return;
+        }
+
+        if (substr($this->mot_de_passe,0,6) == '{SSHA}') {
            $this->_set('statut', self::STATUS_INSCRIT);
-       } elseif(substr($this->mot_de_passe,0,6) == '{TEXT}') {
+        } elseif(substr($this->mot_de_passe,0,6) == '{TEXT}') {
            $this->_set('statut', self::STATUS_NOUVEAU);
-       } elseif(substr($this->mot_de_passe,0,8) == '{OUBLIE}') {
+        } elseif(substr($this->mot_de_passe,0,8) == '{OUBLIE}') {
            $this->_set('statut', self::STATUS_MOT_DE_PASSE_OUBLIE);
-       } else {
+        } else {
            $this->_set('statut', self::STATUS_INACTIF);
-       }
+        }
     }
 
     public function getStatus() {
@@ -89,16 +93,36 @@ abstract class _Compte extends Base_Compte {
      * 
      */
     public function updateLdap() {
-        if ($this->statut == self::STATUS_INSCRIT) {
+        $ldap = new Ldap();
+
+        if($ldap->exist($this)) {
+            $ldap->update($this);
+
+            return;
+        }
+
+        if (!$ldap->exist($this) && $this->statut == self::STATUS_INSCRIT) {
             $ldap = new Ldap();
-            if($ldap->exist($this)) {
-                $ldap->update($this);
-            }else {
-                $ldap->add($this);
-            }
+            $ldap->add($this);
+
+            return;
         }
     }
 
+
+    public function isActif() {
+
+        return $this->statut != self::STATUS_INACTIF;
+    }
+
+    public function setInactif() {
+        $this->statut = self::STATUS_INACTIF;
+    }
+
+    public function setActif() {
+        $this->statut = self::STATUS_INSCRIT;
+        $this->updateStatut();
+    }
     
     /**
      * 

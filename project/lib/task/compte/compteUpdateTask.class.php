@@ -119,7 +119,7 @@ EOF;
                 }
                 $compte->email = $email;
             } elseif(!$email && $compte->email) {
-                $this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
+                //$this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
             }
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
@@ -127,18 +127,31 @@ EOF;
             $compte->remove("tiers");
             $compte->add("tiers");
 
+            $inactif = false;
+
             foreach ($tiers as $t) {
                 $tiers_compte[$t->_id][] = $compte->_id;
                 $obj = $compte->tiers->add($t->_id);
                 $obj->id = $t->_id;
                 $obj->type = $t->type;
                 $obj->nom = $t->nom;
+                $inactif = (isset($t->statut) && $t->statut == _TiersClient::STATUT_INACTIF);
+            }
+
+            if($inactif && $compte->isActif()) {
+                $compte->setInactif();
+                echo sprintf("Le compte %s;%s a été désactivé\n", $compte->_id, $compte->nom);
+            }
+
+            if(!$inactif && !$compte->isActif()) {
+                $compte->setActif();
+                echo sprintf("Le compte %s;%s a été activé\n", $compte->_id, $compte->nom);
             }
             
             if ($compte->isNew()) {
-                $this->logSection("new", $compte->get('_id'));
+                echo sprintf("Création du compte %s:%s\n", $compte->_id, $compte->nom);
             } elseif ($compte->isModified()) {
-                $this->logSection("modified", $compte->get('_id'));
+                echo sprintf("Modification du compte %s:%s\n", $compte->_id, $compte->nom);
             }
             $compte->save();
             
@@ -146,18 +159,29 @@ EOF;
                 $this->logSection("inscrit ne possédant pas d'email", $compte->get('_id'));
             }
         }
+
+        $tiers_open = array();
         
         foreach($tiers_compte as $id_tiers => $ids_compte) {
             $tiers = acCouchdbManager::getClient()->find($id_tiers, acCouchdbClient::HYDRATE_DOCUMENT);
             $tiers->remove("compte");
             $tiers->add("compte");
+
+            if(!isset($tiers_open[$tiers->_id])) {
+                $tiers->remove("compte");
+                $tiers->add("compte");
+            }
+
             foreach($ids_compte as $id_compte) {
                  $tiers->compte->add(null, $id_compte);
             }
+
             $tiers->save();
+
             if ($tiers->isModified()) {
                 $this->logSection("saved", $tiers->get('_id'));
             }
+            $tiers_open[$tiers->_id] = true;
         }
     }
 
