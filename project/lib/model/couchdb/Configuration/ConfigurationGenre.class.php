@@ -9,17 +9,17 @@ class ConfigurationGenre extends BaseConfigurationGenre {
 
     public function getMentions() {
 
-        return $this->getNoeudsSuivant();
+        return $this->getChildrenNodeDeep();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getAppellations();
     }
 
     public function hasManyAppellations() {
 
-        return $this->getNoeudsSuivant()->hasManyNoeuds();
+        return $this->getChildrenNodeDeep()->hasManyNoeuds();
     }
 
 

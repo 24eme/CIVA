@@ -26,7 +26,7 @@ class statistiquesActions extends sfActions {
         $this->etapeNoDr = 0;
         $this->nbInscritGamma = 0;
 
-        $metteur = sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $metteur = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
 
         foreach ($metteur as $item) {
             if (isset($item->gamma) && $item->gamma->statut == 'INSCRIT') {
@@ -34,55 +34,55 @@ class statistiquesActions extends sfActions {
             }
         }
         
-        $dr_validees = sfCouchdbManager::getClient()->group(true)
+        $dr_validees = acCouchdbManager::getClient()->group(true)
                                               ->group_level(2)
                                               ->startkey(array(true, true))
                                               ->endkey(array(true, true, array()))
                                               ->getView("STATS", "DR");
         
-        $dr_non_validees = sfCouchdbManager::getClient()->group(true)
+        $dr_non_validees = acCouchdbManager::getClient()->group(true)
                                               ->group_level(2)
                                               ->startkey(array(false, false))
                                               ->endkey(array(false, false, array()))
                                               ->getView("STATS", "DR");
         
-       $dr_non_validees_etapes_exploitation = sfCouchdbManager::getClient()->group(true)
+       $dr_non_validees_etapes_exploitation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(4)
                                               ->startkey(array(false, false, null, 'exploitation'))
                                               ->endkey(array(false, false, null, 'exploitation'))
                                               ->getView("STATS", "DR");
          
          
-        $dr_non_validees_etapes_recolte = sfCouchdbManager::getClient()->group(true)
+        $dr_non_validees_etapes_recolte = acCouchdbManager::getClient()->group(true)
                                               ->group_level(4)
                                               ->startkey(array(false, false, null, 'recolte'))
                                               ->endkey(array(false, false, null, 'recolte'))
                                               ->getView("STATS", "DR");
         
-        $dr_non_validees_etapes_validation = sfCouchdbManager::getClient()->group(true)
+        $dr_non_validees_etapes_validation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(4)
                                               ->startkey(array(false, false, null, 'validation'))
                                               ->endkey(array(false, false, null, 'validation'))
                                               ->getView("STATS", "DR");
         
-        $compte_inscrit = sfCouchdbManager::getClient()->group(true)
+        $compte_inscrit = acCouchdbManager::getClient()->group(true)
                                               ->group_level(1)
                                               ->startkey(array('INSCRIT'))
                                               ->endkey(array('INSCRIT'))
                                               ->getView("STATS", "COMPTE");
         
-        $compte_mot_de_passe_oublie = sfCouchdbManager::getClient()->group(true)
+        $compte_mot_de_passe_oublie = acCouchdbManager::getClient()->group(true)
                                               ->group_level(1)
                                               ->startkey(array('MOT_DE_PASSE_OUBLIE'))
                                               ->endkey(array('MOT_DE_PASSE_OUBLIE'))
                                               ->getView("STATS", "COMPTE");
         
-        $utilisateurs_edition = sfCouchdbManager::getClient()->group(true)
+        $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
                                               ->group_level(1)
                                               ->getView("STATS", "edition");
 
 
-	$this->nb_csv_acheteurs = sfCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
+	$this->nb_csv_acheteurs = acCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
 
         $this->etapeDrValidee = $dr_validees->rows[0]->value;
         $this->etapeDrNonValidee = $dr_non_validees->rows[0]->value;

@@ -37,11 +37,11 @@ EOF;
         exit;
     }
 
-    $tiers_ids = sfCouchdbManager::getClient("Tiers")->getAllIds();
+    $tiers_ids = acCouchdbManager::getClient("Tiers")->getAllIds();
 
     foreach ($tiers_ids as $id) {
-        $tiers_json = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-        sfCouchdbManager::getClient()->deleteDoc($tiers_json);
+        $tiers_json = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+        acCouchdbManager::getClient()->deleteDoc($tiers_json);
         $this->logSection("delete", $id);
     }
   }

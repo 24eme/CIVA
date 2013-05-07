@@ -12,6 +12,7 @@ $(document).ready( function()
 {
 	rolloverImg();
 	videInputFocus();
+	initNettoyageChamps();
 	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
 });
 
@@ -63,6 +64,94 @@ var videInputFocus = function()
 		$(this).blur( function() { if(this.value == '') this.value=this.defaultValue; });
 	});
 };
+
+/**
+ * Nettoie les champs
+ ******************************************/
+var initNettoyageChamps = function()
+{
+	var champs = $('input.num');
+	
+	champs.live('keypress',function(e)
+	{
+		var val = $(this).val();
+
+		// Si touche entréé
+		if (e.which == 13) {
+			return e;
+		}
+
+		var has_point_or_virgule = (val.indexOf('.') != -1 || val.indexOf(',') != -1);
+
+		var is_number = (e.which >= 48 && e.which <= 57);
+
+		if(e.which != 8 && e.which != 0 && e.which != 46 && e.which != 44 && !is_number)
+			return false;
+		if(e.which == 46 && has_point_or_virgule)
+			return false;
+		if(e.which == 44 && has_point_or_virgule)
+			return false;
+		if (val.match(/[\.\,][0-9][0-9]/) && is_number && e.currentTarget && e.currentTarget.selectionStart > val.length - 3)
+			return false;
+		return e;
+	});
+
+	champs.live('change',function(e)
+	{
+		var val = $(this).val();
+		$(this).val(val.replace(',', '.'));
+
+		if(val.length > 12)
+			$(this).addClass('num_alerte');
+		else
+			$(this).removeClass('num_alerte');
+	});
+	
+	champs.blur(function()
+	{
+		var champ = $(this);
+		champ.verifNettoyageChamp();
+	});
+};
+
+
+
+/**
+ * Vérifie la "propreté" du champ
+ * $(champ).verifNettoyageChamp();
+ ******************************************/
+$.fn.verifNettoyageChamp = function()
+{
+	var champ = $(this);
+	var val = champ.attr('value');
+	var float = champ.hasClass('num_float');
+	
+	// Si quelque chose a été saisi
+	if(val)
+	{
+		// Remplacement de toutes les virgules par des points
+		if(val.indexOf(',') != -1) val = val.replace(',', '.');
+		
+		// Si un point a été saisi sans chiffre
+		if(val.indexOf('.') != -1 && val.length == 1) val = ''; //val = '0';
+		
+		// Un nombre commençant par 0 peut être interprété comme étant en octal
+		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
+		
+		// Comparaison nombre entier / flottant
+		if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
+		else val = parseInt(val);
+	}
+	// Si rien n'a été saisi
+	//else val = 0;
+	else val = '';
+	
+	// Si ce n'est pas un nombre (ex : copier/coller d'un texte)
+	if(isNaN(val)) val = ''; //val = 0;
+
+	champ.attr('value', val);
+};
+
 
 /**
  * Colonnes de même hauteur

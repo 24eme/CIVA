@@ -33,12 +33,12 @@ class ExportUserDRValideeCsv extends ExportCsv {
         if ($acheteur_or_cvi instanceof Acheteur) {
             $this->_acheteur = $acheteur_or_cvi;
         } else {
-            $this->_acheteur = sfCouchdbManager::getClient("Acheteur")->retrieveByCvi($acheteur_or_cvi);
+            $this->_acheteur = acCouchdbManager::getClient("Acheteur")->retrieveByCvi($acheteur_or_cvi);
         }
         if (!$this->_acheteur) {
             throw new sfException("Acheteur not find");
         }
-        $drs = sfCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($this->_campagne, $this->_acheteur->cvi, sfCouchdbClient::HYDRATE_JSON);
+        $drs = acCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($this->_campagne, $this->_acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
 
         $this->_ids_dr = $drs->getIds();
     }
@@ -53,7 +53,7 @@ class ExportUserDRValideeCsv extends ExportCsv {
 
     public function export() {
         foreach ($this->_ids_dr as $id_dr) {
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id_dr);
+            $dr = acCouchdbManager::getClient()->find($id_dr);
             if(!is_null($dr->validee) )
             {
                 $this->dr = $dr;

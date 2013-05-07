@@ -41,10 +41,10 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         if ($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
-            if (sfCouchdbManager::getClient()->databaseExists()) {
-                sfCouchdbManager::getClient()->deleteDatabase();
+            if (acCouchdbManager::getClient()->databaseExists()) {
+                acCouchdbManager::getClient()->deleteDatabase();
             }
-            sfCouchdbManager::getClient()->createDatabase();
+            acCouchdbManager::getClient()->createDatabase();
         }
 
         foreach (file(sfConfig::get('sf_data_dir') . '/import/12/Ceprec12') as $a) {
@@ -165,7 +165,7 @@ EOF;
         $appellation->mention->lieuKLEV->libelle = "Klevener de Heiligenstein";
         $appellation->mention->lieuKLEV->couleurBlanc->douane->appellation_lieu = $cepcom['KLEV']['KL'];
         $appellation->mention->lieuKLEV->couleurBlanc->douane->couleur = 'B';
-        $appellation->mention->lieuKLEV->couleurBlanc->rendement_couleur = 75;
+        $appellation->mention->lieuKLEV->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->mention->lieuKLEV->couleurBlanc->libelle = "Blanc";
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->libelle = "Klevener";
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->douane->code_cepage = $cepage_douane[7]['KL'];
@@ -386,19 +386,19 @@ EOF;
         $json->_id = 'CURRENT';
         $json->type = 'Current';
         $json->campagne = $annee;
-        $json->dr_non_editable = 0;
+        $json->dr_non_editable = 1;
         $json->dr_non_ouverte = 0;
         $docs[] = $json;
 
         if ($options['import'] == 'couchdb') {
             foreach ($docs as $data) {
-                $doc = sfCouchdbManager::getClient("DR")->retrieveDocumentById($data->_id, sfCouchdbClient::HYDRATE_JSON);
+                $doc = acCouchdbManager::getClient("DR")->find($data->_id, acCouchdbClient::HYDRATE_JSON);
                 if ($doc) {
-                    sfCouchdbManager::getClient()->deleteDoc($doc);
+                    acCouchdbManager::getClient()->deleteDoc($doc);
                 }
                 if (isset($data->delete))
                     continue;
-                $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+                $doc = acCouchdbManager::getClient()->createDocumentFromData($data);
                 $doc->save();
             }
             return;

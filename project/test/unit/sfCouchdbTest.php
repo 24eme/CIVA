@@ -6,10 +6,10 @@ $t = new lime_test(47);
 $configuration = ProjectConfiguration::getApplicationConfiguration( 'civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
 
-if (!sfCouchdbManager::getClient()->databaseExists()) {
-        sfCouchdbManager::getClient()->createDatabase();
+if (!acCouchdbManager::getClient()->databaseExists()) {
+        acCouchdbManager::getClient()->createDatabase();
  }
-$doc = sfCouchdbManager::getClient()->retrieveDocumentById('TESTCOUCHDB');
+$doc = acCouchdbManager::getClient()->find('TESTCOUCHDB');
 if ($doc) 
   $doc->delete();
 
@@ -26,8 +26,8 @@ $t->is($doc->_id, 'TESTCOUCHDB', 'id is the good one');
 $t->ok($doc->_rev, 'should have now a rev number');
 /*** NEW TEST ****/
 /*** TEST 1 ****/
-$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve and verify the new doc');
-$dr = sfCouchdbManager::getClient()->retrieveDocumentById('TESTCOUCHDB');
+$t->is(acCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $doc->_rev, 'retrieve and verify the new doc');
+$dr = acCouchdbManager::getClient()->find('TESTCOUCHDB');
 $t->is(get_class($dr), 'DR', 'retrieve the doc as a DR object');
 $t->is($dr->_rev, $doc->_rev, 'verify the DR object has the correct rev number');
 
@@ -46,11 +46,11 @@ $doc->cvi = "TEST";
 $doc->campagne = "2009";
 $doc->save();
 
-$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->cvi, 'TEST', 'cvi number saved');
+$t->is(acCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->cvi, 'TEST', 'cvi number saved');
 /*** NEW TEST ****/
-$t->is(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->campagne, '2009', 'campagne saved');
+$t->is(acCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->campagne, '2009', 'campagne saved');
 /*** NEW TEST ****/
-$t->isnt(sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revision changed');
+$t->isnt(acCouchdbManager::getClient()->getDoc('TESTCOUCHDB')->_rev, $rev, 'revision changed');
 
 /*** NEW TEST ****/
 
@@ -192,7 +192,7 @@ $doc->removeVolumes();
 $doc->save();
 $t->is($doc->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume set to 0 after removeVolumes');
 
-$t->is(sfCouchdbManager::getClient()->retrieveDocumentById('TESTCOUCHDB')->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume set to 0 even after retrieve');
+$t->is(acCouchdbManager::getClient()->find('TESTCOUCHDB')->get('recolte/appellation_ALSACEBLANC/lieu/cepage_PG/detail/0/volume'), 0, 'volume set to 0 even after retrieve');
 
 /*** NEW TEST ****/
 
@@ -209,7 +209,7 @@ $t->ok($doc->delete(), 'delete the document');
 /*** NEW TEST ****/
 try
 {
-  sfCouchdbManager::getClient()->getDoc('TESTCOUCHDB');
+  acCouchdbManager::getClient()->getDoc('TESTCOUCHDB');
   $t->fail('cannot retrieve delete doc');
 }catch(Exception $e) 
 {

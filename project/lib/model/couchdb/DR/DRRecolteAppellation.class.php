@@ -2,7 +2,7 @@
 
 class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
         return $this->getMentions();
     }
 
@@ -11,7 +11,8 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getLieux() {
-        return $this->getNoeudsSuivant();
+        
+        return $this->getChildrenNodeDeep();
     }
 
     public function getVolumeRevendique($force_calcul = false) {

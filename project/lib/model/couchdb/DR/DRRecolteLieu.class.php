@@ -18,7 +18,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->getMention()->getAppellation();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCouleurs();
     }
@@ -76,9 +76,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getVolumeRevendique($force_calcul = false) {
 
-        $vol_renvendique = parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul);
+        $vol_renvendique = round(parent::getDataByFieldAndMethod('volume_revendique', array($this,'getVolumeRevendiqueFinal'), $force_calcul), 2);
 
-        if ($vol_renvendique < $this->getTotalVolume()) {
+        if ($vol_renvendique < round($this->getTotalVolume(), 2)) {
             return $vol_renvendique;
         }
 
@@ -97,8 +97,8 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getVolumeRevendiqueTotalWithUIS() {
-        $volume_revendique = $this->getVolumeRevendiqueTotal();
-        if($volume_revendique < $this->getTotalVolume()) {
+        $volume_revendique = round($this->getVolumeRevendiqueTotal(), 2);
+        if($volume_revendique < round($this->getTotalVolume(), 2)) {
 
             return $volume_revendique;
         }
@@ -382,7 +382,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return (count($arr_lieux) > 1) ? true : false;
     }
 
-    protected function getDplcFinal() {
+    public function getDplcFinal() {
         $dplc_total = $this->getDplcTotal();
         $dplc_final = $dplc_total;
         if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementAppellation()) {
@@ -394,7 +394,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $dplc_final;
     }
 
-    protected function getVolumeRevendiqueFinal() {
+    public function getVolumeRevendiqueFinal() {
         $volume_revendique_total = $this->getVolumeRevendiqueTotal();
         $volume_revendique_final = $volume_revendique_total;
         if ($this->getConfig()->hasRendementAppellation()) {

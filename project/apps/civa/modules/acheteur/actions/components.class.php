@@ -15,8 +15,8 @@ class acheteurComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspace(sfWebRequest $request) {
-        $this->csv = sfCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi);
-        $this->export = sfCouchdbManager::getClient()->retrieveDocumentById("EXPORT-ACHETEURS-".$this->getUser()->getTiers('Acheteur')->cvi);
+        $this->csv = acCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi);
+        $this->export = acCouchdbManager::getClient()->find("EXPORT-ACHETEURS-".$this->getUser()->getTiers('Acheteur')->cvi);
     }
 
 }

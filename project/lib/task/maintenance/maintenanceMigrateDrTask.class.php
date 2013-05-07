@@ -34,7 +34,7 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $c = sfCouchdbManager::getClient();
+    $c = acCouchdbManager::getClient();
 
     foreach ($c->getAllDocs()->rows as $id => $doc) {
       if (!preg_match('/^(DR-|CONFIGURATION)/', $doc->id)) {

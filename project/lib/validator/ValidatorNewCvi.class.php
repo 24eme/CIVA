@@ -16,7 +16,7 @@ class ValidatorNewCvi extends sfValidatorInteger
   protected function doClean($value)
   {
   	
-      if (sfCouchdbManager::getClient('_Compte')->retrieveDocumentById('COMPTE-'.$value))
+      if (acCouchdbManager::getClient('_Compte')->find('COMPTE-'.$value))
       {
       	  throw new sfValidatorError($this, 'cvi_exist', array('value' => $value));
       }

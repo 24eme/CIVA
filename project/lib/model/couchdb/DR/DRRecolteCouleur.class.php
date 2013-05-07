@@ -19,7 +19,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->getLieu()->getAppellation();
     }
 
-    public function getNoeuds() {
+    public function getChildrenNode() {
 
         return $this->getCepages();
     }
@@ -37,7 +37,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
     }
 
-    protected function getVolumeRevendiqueFinal() {
+    public function getVolumeRevendiqueFinal() {
         $volume_revendique_total = $this->getVolumeRevendiqueTotal();
         $volume_revendique_final = $volume_revendique_total;
         if ($this->getConfig()->hasRendementCouleur()) {
@@ -86,7 +86,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
     }
 
-    protected function getDplcFinal() {
+    public function getDplcFinal() {
         $dplc_total = $this->getDplcTotal();
         $dplc_final = $dplc_total;
         if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementCouleur()) {
@@ -202,10 +202,10 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
         }
-        $this->clean();
+        $this->cleanNoeuds();
     }
     
-    protected function clean() {
+    protected function cleanNoeuds() {
         foreach($this->getCepages() as $cepage) {
             if (count($cepage->detail) == 0) {
                 $this->remove($cepage->getKey());

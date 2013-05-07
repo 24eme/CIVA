@@ -1,5 +1,5 @@
 function(doc) {
     if ((doc.type == "CompteTiers" || doc.type == "CompteProxy")) {
-        emit([doc.statut], 1);
+        emit([doc.statut, doc.tiers], 1);
     }
 }

@@ -1,6 +1,6 @@
 function(doc) { 
     if (doc['type'] == 'Acheteur') { 
-        if (doc.cvi == '6702108000' || doc.cvi == '6734808000' || doc.cvi == '6831050010' || doc.cvi == '7523700888') {
+        if (doc.cvi == '6702108000' || doc.cvi == '6734808000' || doc.cvi == '6831050010' || doc.cvi == '6800580040' || doc.cvi == '7523700888') {
 
             return;
         }

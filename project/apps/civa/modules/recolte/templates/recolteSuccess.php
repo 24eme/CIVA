@@ -3,7 +3,7 @@
 
 
 <!-- #principal -->
-<p class="intro_declaration_recolte"><?php echo sfCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
+<p class="intro_declaration_recolte"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
 
 
 <?php if ($sf_user->hasFlash('msg_info')): ?>

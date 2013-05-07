@@ -30,7 +30,7 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   }
   private function getAcheteurFromCVI() {
     if (!$this->acheteur) {
-      $this->acheteur = sfCouchdbManager::getClient()->retrieveDocumentById('ACHAT-'.$this->getKey());
+      $this->acheteur = acCouchdbManager::getClient()->find('ACHAT-'.$this->getKey());
     }
     if (!$this->acheteur) {
         $this->acheteur = new Acheteur();

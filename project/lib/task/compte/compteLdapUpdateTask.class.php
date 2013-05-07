@@ -35,11 +35,11 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $ids = sfCouchdbManager::getClient('_Compte')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $ids = acCouchdbManager::getClient('_Compte')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     $nb = 0;
     foreach($ids as $id) {
-        $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+        $compte = acCouchdbManager::getClient('_Compte')->find($id);
         if ($compte->getStatus() == _Compte::STATUS_INSCRIT) {
             $this->log($id);
             $nb++;

@@ -212,7 +212,7 @@ class recolteActions extends EtapesActions {
         $this->form = new RecapitulatifForm($this->appellationlieu);
 
         $forms = $this->form->getEmbeddedForms();
-        print_r($form['usages_industriels_saisi']);
+
         if ($request->getParameter('redirect') && !$this->form->isSaisisable()) {
             return $this->redirect($this->onglets->getNextUrl());
         }

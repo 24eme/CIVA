@@ -27,7 +27,7 @@ class tiersActions extends EtapesActions {
               $not_uniq = 1;
               continue;
             }
-            $tiers[$t->type] = sfCouchdbManager::getClient()->retrieveDocumentById($t->id);
+            $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
         }
 
 	    if (!$not_uniq) {
@@ -35,7 +35,7 @@ class tiersActions extends EtapesActions {
 
         /*return $this->redirect("@mon_espace_civa");*/
          
-        $dr = sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
+        $dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
         if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->isInDelegateMode() && is_null($dr) ){
             return $this->redirect("@notice_evolutions");
         }else{

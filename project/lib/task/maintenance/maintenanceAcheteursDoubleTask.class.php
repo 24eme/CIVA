@@ -35,11 +35,11 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
     foreach ($dr_ids as $id) {
             $is_double = false;
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient()->find($id);
 
             foreach($dr->recolte->getAppellations() as $appellation) {
                 foreach($appellation->getLieux() as $lieu) {

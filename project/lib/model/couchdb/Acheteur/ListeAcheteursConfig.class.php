@@ -51,7 +51,7 @@ class ListAcheteursConfig {
 
     public static function getNegoces() {
         if (is_null(self::$_negoces)) {
-            self::$_negoces = sfCouchdbManager::getClient('Acheteur')->getNegoces();
+            self::$_negoces = acCouchdbManager::getClient('Acheteur')->getNegoces();
         } 
 
         return self::$_negoces;
@@ -64,7 +64,7 @@ class ListAcheteursConfig {
 
     public static function getCooperatives() {
         if (is_null(self::$_cooperatives)) {
-            self::$_cooperatives = sfCouchdbManager::getClient('Acheteur')->getCooperatives();
+            self::$_cooperatives = acCouchdbManager::getClient('Acheteur')->getCooperatives();
         } 
 
         return self::$_cooperatives;
@@ -76,7 +76,7 @@ class ListAcheteursConfig {
 
     public static function getMouts() {
         if (is_null(self::$_mouts)) {
-            self::$_mouts = sfCouchdbManager::getClient('Acheteur')->getMouts();
+            self::$_mouts = acCouchdbManager::getClient('Acheteur')->getMouts();
         } 
 
         return self::$_mouts;

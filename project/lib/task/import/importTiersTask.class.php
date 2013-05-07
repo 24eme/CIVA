@@ -113,7 +113,7 @@ EOF;
    * return Recoltant
    */
   private function loadRecoltant($db2) {
-      $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($db2->get(Db2Tiers::COL_CVI));
+      $recoltant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($db2->get(Db2Tiers::COL_CVI));
       
       if(!$recoltant) {
           $recoltant = new Recoltant();
@@ -134,7 +134,7 @@ EOF;
    * return MetteurEnMarche
    */
   private function loadMetteurEnMarche($db2) {
-      $metteur = sfCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($db2->get(Db2Tiers::COL_CIVABA));
+      $metteur = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($db2->get(Db2Tiers::COL_CIVABA));
       
       if(!$metteur) {
           $metteur = new MetteurEnMarche();

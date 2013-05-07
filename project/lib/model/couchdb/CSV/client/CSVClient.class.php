@@ -1,10 +1,10 @@
 <?php
 
-class CSVClient extends sfCouchdbClient {
+class CSVClient extends acCouchdbClient {
 
   public static function getInstance() {
     
-    return sfCouchdbManager::getClient('CSV'); 
+    return acCouchdbManager::getClient('CSV'); 
   }
 
   private function getCSVsFromRecoltantArray($campagne, $cvi) {
@@ -25,7 +25,7 @@ class CSVClient extends sfCouchdbClient {
     return $ids;
   }
 
-  public function findAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+  public function findAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
       return $this->executeView('CSV', 'acheteur', $hydrate);
   }
 
@@ -40,11 +40,11 @@ class CSVClient extends sfCouchdbClient {
   public function getCSVsFromRecoltant($campagne, $cvi) {
     $docs = array();
     foreach($this->getCSVsFromRecoltantArray($campagne, $cvi) as $id) {
-      $docs[] = parent::retrieveDocumentById($id);
+      $docs[] = parent::find($id);
     }
     return $docs;
   }
-  public function retrieveByCviAndCampagneOrCreateIt($cvi, $campagne = null, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+  public function retrieveByCviAndCampagneOrCreateIt($cvi, $campagne = null, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
     $csv = $this->retrieveByCviAndCampagne($cvi, $campagne, $hydrate);
     if (!$csv) {
       if (!$campagne) 
@@ -57,10 +57,10 @@ class CSVClient extends sfCouchdbClient {
     }
     return $csv;
   }
-  public function retrieveByCviAndCampagne($cvi, $campagne = null, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+  public function retrieveByCviAndCampagne($cvi, $campagne = null, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
     if (!$campagne) 
       $campagne = CurrentClient::getCurrent()->campagne;
-    return parent::retrieveDocumentById('CSV-'.$cvi.'-'.$campagne, $hydrate);
+    return parent::find('CSV-'.$cvi.'-'.$campagne, $hydrate);
   }
   
 }

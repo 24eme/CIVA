@@ -179,7 +179,7 @@ class compteActions extends sfActions {
     }
 
     public function executeMotDePasseOublieLogin(sfWebRequest $request) {
-        $this->forward404Unless($compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($request->getParameter('login', null)));
+        $this->forward404Unless($compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($request->getParameter('login', null)));
         $this->forward404Unless($compte->mot_de_passe == '{OUBLIE}' . $request->getParameter('mdp', null));
         $this->getUser()->signInFirst($compte);
         $this->redirect('@compte_modification_oublie');
@@ -191,7 +191,7 @@ class compteActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $compte = $this->form->save();
-                $lien = str_replace("//", "/", sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe))));
+                $lien = "http://".str_replace("//", "/", str_replace('http://', '', sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)))));
                 try {
                     $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : " . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {

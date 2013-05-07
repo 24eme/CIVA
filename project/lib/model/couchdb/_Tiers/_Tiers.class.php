@@ -7,7 +7,7 @@ abstract class _Tiers extends Base_Tiers {
      * @return array 
      */
     public function getDeclarationsArchivesSince($campagne) {
-        return sfCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne);
     }
     
     /**
@@ -16,7 +16,7 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getDeclaration($campagne) {
-        return sfCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }
     
     /**
@@ -46,7 +46,7 @@ abstract class _Tiers extends Base_Tiers {
     /**
      *
      * @param string $a
-     * @return sfCouchdbJsonField 
+     * @return acCouchdbJsonField 
      */
     public function setAdresse($a) {
         return $this->get('siege')->set('adresse', $a);
@@ -55,7 +55,7 @@ abstract class _Tiers extends Base_Tiers {
     /**
      *
      * @param string $c
-     * @return sfCouchdbJsonField 
+     * @return acCouchdbJsonField 
      */
     public function setCodePostal($c) {
         return $this->get('siege')->set('code_postal', $c);
@@ -64,7 +64,7 @@ abstract class _Tiers extends Base_Tiers {
     /**
      *
      * @param string $c
-     * @return sfCouchdbJsonField 
+     * @return acCouchdbJsonField 
      */
     public function setCommune($c) {
         return $this->get('siege')->set('commune', $c);

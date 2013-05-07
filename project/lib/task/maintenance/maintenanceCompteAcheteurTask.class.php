@@ -31,14 +31,14 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids_acheteur = sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $ids_acheteur = acCouchdbManager::getClient("Acheteur")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         $nb = 0;
         foreach($ids_acheteur as $id_acheteur) {
              
             $cvi = str_replace('ACHAT-', '', $id_acheteur);
-            if($tiers = sfCouchdbManager::getClient()->retrieveDocumentById('TIERS-'.$cvi, sfCouchdbClient::HYDRATE_JSON)) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$cvi);
-                if ($met = sfCouchdbManager::getClient()->retrieveDocumentById('MET-'.$tiers->civaba, sfCouchdbClient::HYDRATE_JSON)) {
+            if($tiers = acCouchdbManager::getClient()->find('TIERS-'.$cvi, acCouchdbClient::HYDRATE_JSON)) {
+                $compte = acCouchdbManager::getClient()->find('COMPTE-'.$cvi);
+                if ($met = acCouchdbManager::getClient()->find('MET-'.$tiers->civaba, acCouchdbClient::HYDRATE_JSON)) {
                     if (!$compte->tiers->exist($met->_id)) {
                         $met_compte = $compte->tiers->add($met->_id);
                         $met_compte->id = $met->_id;

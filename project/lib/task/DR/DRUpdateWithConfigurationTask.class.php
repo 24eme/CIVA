@@ -32,8 +32,8 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $drs = sfCouchdbManager::getClient("DR")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        //$drs = array(sfCouchdbManager::getClient("DR")->retrieveDocumentById('DR-7523700100-2011', sfCouchdbClient::HYDRATE_JSON));
+        $drs = acCouchdbManager::getClient("DR")->getAll(acCouchdbClient::HYDRATE_JSON);
+        //$drs = array(acCouchdbManager::getClient("DR")->find('DR-7523700100-2011', acCouchdbClient::HYDRATE_JSON));
 		
         foreach ($drs as $dr){
             $dr_clone = clone $dr;
@@ -112,7 +112,7 @@ EOF;
 					}		
 				}	
 			}
-            sfCouchdbManager::getClient()->storeDoc($dr_clone);
+            acCouchdbManager::getClient()->storeDoc($dr_clone);
             $this->log($dr_clone->_id);
 		}
 	}	

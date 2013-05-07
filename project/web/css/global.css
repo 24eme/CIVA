@@ -94,18 +94,24 @@ input[type=radio]
 .f_left { display: inline; float: left; }
 .f_right { display: inline; float: right; }
 
-.clearfix { display: inline-block; }
-html[xmlns] .clearfix { display: block; } 
-* html .clearfix { height: 1%; }
 
+.clearfix
+{
+	zoom: 1;
+	min-height: 1px;
+}
+
+.clearfix:before,
 .clearfix:after
 {
-    clear: both;
-    content: ".";
-    display: block;
-    height: 0;
-    visibility: hidden;
+	content: "\0020";
+	display: block;
+	font-size: 0;
+	height: 0;
+	visibility: hidden; 
 }
+
+.clearfix:after { clear: both; }
 
 .ligne_form
 {

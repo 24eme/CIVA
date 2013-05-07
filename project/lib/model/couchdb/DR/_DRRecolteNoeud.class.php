@@ -1,6 +1,6 @@
 <?php
 
-abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
+abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
 
     public function getConfig() {
@@ -8,25 +8,41 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
-    abstract public function getNoeuds();
+    abstract public function getChildrenNode();
 
-    public function getNoeudSuivant(){
-        if( $this->getConfig()->hasManyNoeuds())
-            throw new sfException("getNoeud ne peut être appelé d'un noeud qui contient plusieurs noeuds...");
+    public function getChildrenNodeDeep($level = 1) {
+      if($this->getConfig()->hasManyNoeuds()) {
+          
+          throw new sfException("getChildrenNodeDeep() peut uniquement être appelé d'un noeud qui contient un seul enfant...");
+      }
 
-        return $this->getNoeuds()->getFirst();
+      $node = $this->getChildrenNode()->getFirst();
+      
+      if($level > 1) {
+        
+        return $node->getChildrenNodeDeep($level - 1);
+      }
+
+      return $node->getChildrenNode();
     }
 
-    public function getNoeudsSuivant() {
+    public function getProduits() {
+        $produits = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits = array_merge($produits, $item->getProduits());
+        }
 
-        return $this->getNoeudSuivant()->getNoeuds();
+        return $produits;
     }
-/*
-    public function getTotalUsagesIndustriels($force_calcul = false){
 
-        return $this->getDataByFieldAndMethod("total_usages_industriels", array($this,"getSumNoeudFields"), $force_calcul, array("usages_industriels_calcule"));
+    public function getProduitsDetails() {
+        $produits = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits = array_merge($produits, $item->getProduitsDetails());
+        }
+        return $produits;
     }
-*/
+
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);
@@ -55,7 +71,7 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
 
     protected function getSumNoeudFields($field, $exclude = true) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $key => $noeud) {
+        foreach ($this->getChildrenNode() as $key => $noeud) {
             if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
@@ -68,7 +84,7 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
 
     protected function getSumNoeudWithMethod($method, $exclude = true) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $noeud) {
+        foreach ($this->getChildrenNode() as $noeud) {
             if($exclude && $noeud->getConfig()->excludeTotal()) {
 
                 continue;
@@ -92,7 +108,7 @@ abstract class _DRRecolteNoeud extends sfCouchdbDocumentTree {
 
     protected function getSumFields($field) {
         $sum = 0;
-        foreach ($this->getNoeuds() as $k => $noeud) {
+        foreach ($this->getChildrenNode() as $k => $noeud) {
             $sum += $noeud->get($field);
         }
         return $sum;

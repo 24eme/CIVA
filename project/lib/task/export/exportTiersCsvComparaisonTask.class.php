@@ -30,9 +30,9 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids = array_merge(sfCouchdbManager::getClient('Recoltant')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
-                           sfCouchdbManager::getClient('MetteurEnMarche')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
-                           sfCouchdbManager::getClient('Acheteur')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
+        $ids = array_merge(acCouchdbManager::getClient('Recoltant')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
+                           acCouchdbManager::getClient('MetteurEnMarche')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
+                           acCouchdbManager::getClient('Acheteur')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
 
         $merge = array();
 
@@ -75,12 +75,12 @@ EOF;
         $csv = new ExportCsv(array_keys($modele));
 
         foreach($ids as $id) {
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $tiers = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
             $line = $this->makeLine($this->jsonToSimpleArray($tiers), $modele);
             $line_old = $this->makeLine($this->jsonToSimpleArray($this->getOldDoc($id)), $modele);
 
             if (isset($tiers->compte[0])) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->compte[0]);
+                $compte = acCouchdbManager::getClient()->find($tiers->compte[0]);
                 $compte_old = $this->getOldDoc($tiers->compte[0]);
                 $line['email'] = $compte->email;
                 $line_old['email'] = $compte_old->email;
@@ -101,12 +101,12 @@ EOF;
 
     protected function getOldDoc($id) {
         $doc = null;
-        $data_revs = sfCouchdbManager::getClient()->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+        $data_revs = acCouchdbManager::getClient()->revs_info(true)->find($id, acCouchdbClient::HYDRATE_JSON);
         $revs = $data_revs->_revs_info;
         $i = count($revs)-1;
         while(!$doc && $i >= 0) {
             $rev = $revs[$i]->rev;
-            $doc = sfCouchdbManager::getClient()->rev($rev)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $doc = acCouchdbManager::getClient()->rev($rev)->find($id, acCouchdbClient::HYDRATE_JSON);
             $i--;
         }
         if(!$doc) {

@@ -38,7 +38,7 @@ EOF;
 	        foreach (file($arguments['file']) as $numero => $ligne) {
 	        	$datas = explode(';', $ligne);
 	        	$value = $datas[0];
-	    		$dr = sfCouchdbManager::getClient('DR')->retrieveDocumentById($value);
+	    		$dr = acCouchdbManager::getClient('DR')->find($value);
 	    		if ($dr) {
 	    			$dr->delete();
 	    			$this->logSection('Doublons', '->'.$value);

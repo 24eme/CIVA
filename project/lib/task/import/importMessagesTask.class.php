@@ -33,10 +33,10 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 /*		
 	if($options['removedb'] == 'yes' && $options['import'] == 'couchdb') {
-	  if (sfCouchdbManager::getClient()->databaseExists()) {
-	    sfCouchdbManager::getClient()->deleteDatabase();
+	  if (acCouchdbManager::getClient()->databaseExists()) {
+	    acCouchdbManager::getClient()->deleteDatabase();
 	  }
-	  sfCouchdbManager::getClient()->createDatabase();
+	  acCouchdbManager::getClient()->createDatabase();
 	}
 */
 	$docs = array();
@@ -70,11 +70,11 @@ EOF;
 
 	if ($options['import'] == 'couchdb') {
 	  foreach ($docs as $data) {
-	    $doc = sfCouchdbManager::getClient()->retrieveDocumentById($data->_id);
+	    $doc = acCouchdbManager::getClient()->find($data->_id);
 	    if ($doc) {
 	      $doc->delete();
 	    }
-            $doc = sfCouchdbManager::getClient()->createDocumentFromData($data);
+            $doc = acCouchdbManager::getClient()->createDocumentFromData($data);
 	    $doc->save();
 	  }
 	  return;

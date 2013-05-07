@@ -31,8 +31,8 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $mets = sfCouchdbManager::getClient("MetteurEnMarche")->getAll(sfCouchdbClient::HYDRATE_JSON);
-        $acheteurs = sfCouchdbManager::getClient("Acheteur")->getAll(sfCouchdbClient::HYDRATE_JSON);
+        $mets = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
+        $acheteurs = acCouchdbManager::getClient("Acheteur")->getAll(acCouchdbClient::HYDRATE_JSON);
 
         $cvi_acheteur_no_stock = array();
 
@@ -43,7 +43,7 @@ EOF;
         }
 
         foreach ($acheteurs as $acheteur) {
-            $acheteur_object = sfCouchdbManager::getClient()->retrieveDocumentById($acheteur->_id);
+            $acheteur_object = acCouchdbManager::getClient()->find($acheteur->_id);
             if ($acheteur_object) {
                 if (array_key_exists($acheteur->cvi, $cvi_acheteur_no_stock)) {
                     $met = $cvi_acheteur_no_stock[$acheteur->cvi];

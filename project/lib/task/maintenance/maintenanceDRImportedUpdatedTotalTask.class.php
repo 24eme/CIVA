@@ -35,13 +35,13 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($options['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     $nb_updated = 0;
     $values = array();
     foreach ($dr_ids as $id) {
-           $dr_json = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+           $dr_json = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
             if (isset($dr_json->validee) && $dr_json->validee && isset($dr_json->import_db2) && $dr_json->import_db2 == 1 && (!isset($dr_json->modifiee) || $dr_json->validee != $dr_json->modifiee)) {
-                $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
+                $dr = acCouchdbManager::getClient("DR")->find($id);
                 /*if ($dr->clean()) {
                     $dr->save();
                     $this->logSection('dr updated', $id);

@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseConfigurationRecolte extends sfCouchdbDocumentTree {
+abstract class BaseConfigurationRecolte extends ConfigurationAbstract {
     public function configureTree() {
        $this->_root_class_name = 'Configuration';
        $this->_tree_class_name = 'ConfigurationRecolte';

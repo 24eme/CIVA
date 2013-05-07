@@ -11,7 +11,7 @@ class MigrationCompte {
     protected $_ancien_compte = null;
     protected $_nouveau_compte = null;
 
-    public function __construct(sfCouchdbJson $compte, $nouveau_cvi, $nom = null, $commune = null) {
+    public function __construct(acCouchdbJson $compte, $nouveau_cvi, $nom = null, $commune = null) {
         $this->_ancien_compte = $compte;
         $this->_ancien_cvi = str_replace(self::PREFIX_KEY_COMPTE, '', $compte->_id);
         $this->_nouveau_cvi = $nouveau_cvi;
@@ -24,8 +24,8 @@ class MigrationCompte {
         $this->createCompteTiers();
         $this->createLienSymbolique();
 
-        return ((is_object(sfCouchdbManager::getClient('_Compte')->retrieveDocumentById(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi))
-            &&   is_object(sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->_nouveau_cvi)))) ? true : false;
+        return ((is_object(acCouchdbManager::getClient('_Compte')->find(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi))
+            &&   is_object(acCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->_nouveau_cvi)))) ? true : false;
     }
 
     public function createNewCompte(){
@@ -50,7 +50,7 @@ class MigrationCompte {
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
 
-        $recoltant = sfCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->_ancien_cvi);
+        $recoltant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->_ancien_cvi);
         $this->new_rec = clone $recoltant;
     }
 
@@ -70,7 +70,7 @@ class MigrationCompte {
 
     public function createLienSymbolique(){
 
-       $drs = sfCouchdbManager::getClient('DR')->getAllByCvi($this->_ancien_cvi);
+       $drs = acCouchdbManager::getClient('DR')->getAllByCvi($this->_ancien_cvi);
        foreach($drs as $dr){
             $ls_dr = new LS();
             $ls_dr->set('_id', self::PREFIX_KEY_DR . $this->_nouveau_cvi . '-' . $dr->campagne);

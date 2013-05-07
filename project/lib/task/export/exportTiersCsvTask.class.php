@@ -29,9 +29,9 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $ids = array_merge(sfCouchdbManager::getClient('Recoltant')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
-                           sfCouchdbManager::getClient('MetteurEnMarche')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
-                           sfCouchdbManager::getClient('Acheteur')->getAll(sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
+        $ids = array_merge(acCouchdbManager::getClient('Recoltant')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
+                           acCouchdbManager::getClient('MetteurEnMarche')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds(),
+                           acCouchdbManager::getClient('Acheteur')->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds());
 
         $modele = array(
             "_id" => null,
@@ -72,10 +72,10 @@ EOF;
         $csv = new ExportCsv(array_keys($modele));
 
         foreach($ids as $id) {
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
+            $tiers = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
             $line = $this->makeLine($this->jsonToSimpleArray($tiers), $modele);
             if (isset($tiers->compte[0])) {
-                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->compte[0]);
+                $compte = acCouchdbManager::getClient()->find($tiers->compte[0]);
                 $line['email'] = $compte->email;
             }
             $csv->add($line);

@@ -1,12 +1,15 @@
 <?php
 
-class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
+class RecapitulatifForm extends acCouchdbObjectForm {
 
     protected $is_saisisable = false;
 
+    public function __construct(acCouchdbJson $object, $options = array(), $CSRFSecret = null) {
+        parent::__construct($object, $options, $CSRFSecret);
+        $this->getDocable()->remove();
+    }
 
     public function configure() {
-
         $lieu = $this->getObject();
         if($lieu->canHaveUsagesIndustrielsSaisi()){
             $this->setWidgets(array(
@@ -22,28 +25,28 @@ class  RecapitulatifForm extends sfCouchdbFormDocumentJson {
             $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
 
             $this->is_saisisable = true;
+
         }
 
-        //$is_unique_acheteur = $lieu->hasSellToUniqueAcheteur();
+        
+        $form_acheteurs = new BaseForm();
         foreach ($lieu->acheteurs as $type => $acheteurs_type) {
+            $form_type = new BaseForm();
             foreach ($acheteurs_type as $cvi => $acheteur) {
-                /*if (is_null($acheteur->superficie) && is_null($acheteur->dontdplc)) {
-                    if ($is_unique_acheteur) {
-                        $acheteur->superficie = $lieu->getTotalSuperficie();
-                    }
-                    if ($is_unique_acheteur) {
-                        $acheteur->dontdplc = $lieu->getDplc();
-                    }
-                }*/
-                $af = new RecapitulatifAcheteurForm($acheteur);
-                $this->embedForm($type . '_cvi_' . $cvi, $af);
+                $form_type->embedForm($cvi, new RecapitulatifAcheteurForm());
                 
                 $this->is_saisisable = true;
             }
+            $form_acheteurs->embedForm($type, $form_type);
         }
+        $this->embedForm('acheteurs', $form_acheteurs);
 
+        
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
         $this->widgetSchema->setNameFormat('recapitulatif[%s]');
+
+        $this->disableLocalCSRFProtection();
+        $this->disabledRevisionVerification();
     }
 
     public function isSaisisable() {

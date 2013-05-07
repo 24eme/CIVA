@@ -43,7 +43,7 @@ EOF;
     if (isset($arguments['campagne']) && !empty($arguments['campagne'])) {
 	    $nb_item = 0;
 	    $nb_email_send = 0;
-	    $drs = sfCouchdbManager::getClient()->startkey(array($arguments['campagne']))
+	    $drs = acCouchdbManager::getClient()->startkey(array($arguments['campagne']))
 		    				->endkey(array($arguments['campagne'], array()))
 						->getView("DR", "non_validees");
 	    foreach ($drs->rows as $item) {
@@ -51,7 +51,7 @@ EOF;
 
 	    	$this->logSection('cvi', $cvi);
 	    	
-	    	$compte = sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$cvi);
+	    	$compte = acCouchdbManager::getClient()->find('COMPTE-'.$cvi);
 	    	
             $nb_item++;
             if(!$compte->getEmail()) {

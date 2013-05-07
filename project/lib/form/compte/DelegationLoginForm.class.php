@@ -43,7 +43,7 @@ class DelegationLoginForm extends BaseForm {
      */
     public function process() {
         if ($this->isValid()) {
-            return sfCouchdbManager::getClient()->retrieveDocumentById('COMPTE-'.$this->getValue('compte'));
+            return acCouchdbManager::getClient()->find('COMPTE-'.$this->getValue('compte'));
         } else {
             throw new sfException("must be valid");
         }

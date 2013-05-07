@@ -27,7 +27,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-      	$doc = sfCouchdbManager::getClient()->retrieveDocumentById("CURRENT");
+      	$doc = acCouchdbManager::getClient()->find("CURRENT");
 		
       	
       	if($doc){
@@ -41,7 +41,7 @@ EOF;
 		$json->dr_non_ouverte = "0";
 		$json->type = "Current";
       	
-		$doc = sfCouchdbManager::getClient()->createDocumentFromData($json);
+		$doc = acCouchdbManager::getClient()->createDocumentFromData($json);
         $doc->save();
        
 

@@ -1,3 +1,3 @@
 <?php
-echo preg_replace('/\'/', '&#39;', sfCouchdbManager::getClient('Messages')->getMessage($id));
+echo preg_replace('/\'/', '&#39;', acCouchdbManager::getClient('Messages')->getMessage($id));
 

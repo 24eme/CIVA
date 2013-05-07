@@ -43,7 +43,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
         $cas_user =  preg_replace('/^[c]{1}([0-9]{10})$/', 'C\1', $cas_user);
 
-        $compte = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($cas_user);
+        $compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($cas_user);
         if (!$compte) {
             throw new sfException('compte does not exist');
         }
@@ -118,7 +118,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     protected function signInCompte($compte, $namespace) {
 
         if ($compte->type == 'CompteProxy') {
-            return $this->signInCompte(sfCouchdbManager::getClient()->retrieveDocumentById($compte->compte_reference), $namespace);
+            return $this->signInCompte(acCouchdbManager::getClient()->find($compte->compte_reference), $namespace);
         }
 
         $this->signOutCompte($namespace);
@@ -148,7 +148,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->requireCompte();
         
         if (!array_key_exists($namespace, $this->_compte)) {
-            $this->_compte[$namespace] = sfCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
+            $this->_compte[$namespace] = acCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
             if (!$this->_compte[$namespace]) {
                 $this->signOut();
                 throw new sfException("The compte does not exist");

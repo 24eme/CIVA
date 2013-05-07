@@ -31,10 +31,10 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $docs = sfCouchdbManager::getClient('Tiers')->getAll();
+        $docs = acCouchdbManager::getClient('Tiers')->getAll();
 
         foreach($docs as $id => $anyone) {
-            $rec = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $rec = acCouchdbManager::getClient()->find($id);
             $cpt++;
                         echo $id."\t";
             
@@ -46,7 +46,7 @@ EOF;
             }catch(Exception $e) {
                 sleep(5);
                 echo $rand;
-                $rec = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+                $rec = acCouchdbManager::getClient()->find($id);
                 $rec->mot_de_passe = $this->generatePass();
                 $rec->save();
                 echo "Extra DONE\n";

@@ -1,4 +1,4 @@
-11<?php
+<?php
 
 class ExportDRXml {
 
@@ -51,10 +51,12 @@ class ExportDRXml {
             }
             $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
             foreach ($appellation->getConfig()->getLieux() as $lieu_config) {
-                if (!$appellation->exist($lieu_config->getKey())) {
+                if (!$appellation->getLieux()->exist($lieu_config->getKey())) {
                     continue;
                 }
-                $lieu = $appellation->get($lieu_config->getKey());
+                $lieu = $appellation->getLieux()->get($lieu_config->getKey());
+                $usage_industriel_saisi = $lieu->getUsageIndustrielSaisi();
+
                 foreach($lieu_config->getCouleurs() as $couleur_config) {
                     if (!$lieu->exist($couleur_config->getKey())) {
                         continue;
@@ -73,6 +75,19 @@ class ExportDRXml {
                         }
                     }
 
+                    if($this->destinataire == self::DEST_CIVA) {
+                        $volume_revendique = $object->getVolumeRevendiqueFinal();
+                        $dplc = $object->getDplcFinal();
+                    } elseif($this->destinataire == self::DEST_DOUANE) {
+                        $volume_revendique = $object->getVolumeRevendiqueRendement();
+                        $dplc = $object->getDplcRendement();
+                    }
+
+                    $volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
+                    $dplc = round($dplc + $usage_industriel_saisi, 2);
+
+                    $usage_industriel_saisi = 0;
+
                     //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
                     $acheteurs = array();
                     $total = array();
@@ -82,6 +97,7 @@ class ExportDRXml {
                     $total['L4'] = $object->getTotalSuperficie();
                     $total['exploitant'] = array();
                     $total['exploitant']['L5'] = $object->getTotalVolume();
+
                     $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
                     $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
                     $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
@@ -91,13 +107,13 @@ class ExportDRXml {
                     $total['exploitant']['L12'] = 0; //HS
                     $total['exploitant']['L13'] = 0; //HS
                     $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                    $l15 = $object->getVolumeRevendiqueRendement() - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+                    $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
                     if ($l15 < 0) {
                         $l15 = 0;
                     }
                     $total['exploitant']['L15'] = $l15; //Volume revendique
                     // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                    $total['exploitant']['L16'] = $object->getDplcRendement(); //DPLC
+                    $total['exploitant']['L16'] = $dplc; //DPLC
                     $total['exploitant']['L17'] = 0; //HS
                     $total['exploitant']['L18'] = 0; //HS
                     $total['exploitant']['L19'] = 0; //HS
@@ -199,16 +215,6 @@ class ExportDRXml {
                                     $col['exploitant']['L15'] = $l15;
                                 }
 
-                                if ($this->destinataire == self::DEST_DOUANE) {
-                                    if ($appellation->getKey() == 'appellation_GRDCRU') {
-                                        if ($detail->cave_particuliere) {
-                                            $col['exploitant']['L5'] += $detail->cave_particuliere * $dr->getRatioLies();  //Volume total avec lies
-                                            $col['exploitant']['L9'] += $detail->cave_particuliere * $dr->getRatioLies();
-                                            $col['exploitant']['L10'] += $detail->cave_particuliere * $dr->getRatioLies();
-                                        }
-                                    }
-                                }
-
                                 uksort($col['exploitant'], 'exportDRXml::sortXML');
 
                                 if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
@@ -277,11 +283,15 @@ class ExportDRXml {
                                         if ($cepage->getKey() == 'cepage_PN') {
                                             $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
                                             unset($col_total_cremant_rose['mentionVal']);
-                                            unset($col_total_cremant_rose['motifSurfZero']);
+                                            if($col_total_cremant_rose['exploitant']['L5'] > 0) {
+                                                unset($col_total_cremant_rose['motifSurfZero']);
+                                            }
                                         } else {
                                             $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
                                             unset($col_total_cremant_blanc['mentionVal']);
-                                            unset($col_total_cremant_blanc['motifSurfZero']);
+                                            if($col_total_cremant_blanc['exploitant']['L5'] > 0) {
+                                                unset($col_total_cremant_blanc['motifSurfZero']);
+                                            }
                                         }
                                     } else {
                                         uksort($col_final['exploitant'], 'exportDRXml::sortXML');
@@ -298,13 +308,6 @@ class ExportDRXml {
                         }
                     }
 
-                    if ($this->destinataire == self::DEST_DOUANE) {
-                        if ($object->getTotalCaveParticuliere()) {
-                            $total['exploitant']['L5'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();  //Volume total avec lies
-                            $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();
-                            $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() * $dr->getRatioLies();
-                        } 
-                    }
                     uksort($total['exploitant'], 'exportDRXml::sortXML');
 
                     if ($colass) {
@@ -329,12 +332,12 @@ class ExportDRXml {
                     if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
                         $xml[] = $total;
                     }
-                    
+
                 }
             }
         }
 
-        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml));
+        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml, 'destinataire' => $this->destinataire));
     }
 
     protected function sumColonnes($cols, $col) {

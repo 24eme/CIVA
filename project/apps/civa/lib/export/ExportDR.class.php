@@ -211,7 +211,7 @@ class ExportDR
                 }
             } catch (Exception $e) {
                 if ($this->_debug) {
-                    echo sprintf("-- find FAILED : %s\n", $id);
+                    echo sprintf("-- find FAILED : %s (%)\n", $id, $e->getMessage());
                 }
             }
         }
@@ -287,7 +287,7 @@ class ExportDR
                     $ids, 
                     DRClient::getInstance()->startkey($view->startkey->toArray())
                                            ->endkey($view->endkey->toArray())
-                                           ->executeView($view->id, $view->nom, sfCouchdbClient::HYDRATE_JSON)->getIds()
+                                           ->executeView($view->id, $view->nom, acCouchdbClient::HYDRATE_JSON)->getIds()
                    );
         }
 

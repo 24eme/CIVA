@@ -50,59 +50,35 @@ EOF;
 
     $nb_exported = 0;
 
-    /*$drs_id_file = array();
-    foreach (file(sfConfig::get('sf_data_dir') . '/Fichier99DRrejetees.csv') as $a) {
-        $csv = explode(',', preg_replace('/"/', '', $a));
-        if (trim($csv[0])) {
-          $drs_id_file[] = 'DR-'.trim($csv[0]).'-'.$arguments['campagne'];
-        }
-    }
-    $this->logSection("dr impacter", count($drs_id_file));
-    */
-
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
 
-    $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     
     foreach ($dr_ids as $id) {
-        if ($id !== 'DR-7523700100-'.$arguments['campagne'] /*&& in_array($id, $drs_id_file)*/) {
-            $dr = sfCouchdbManager::getClient("DR")->retrieveDocumentById($id);
-            /*if ($arguments['campagne'] == "2010" && $dr->exist('import_db2') && $dr->import_db2 == 1) {
+
+            if (!preg_match("/^DR-(67|68)/", $id)) {
+
                 continue;
-            }*/
-            /*try {
-                if (!$dr->updated)
-                    throw new Exception();
-            } catch (Exception $e) {
-                try {
-                    $dr->update();
-                    $dr->save();
-                } catch (Exception $exc) {
-                    $this->logSection("failed update", $dr->_id, null, "ERROR");
-                    continue;
-                }
-            }*/
+            }
 
-            //try {
-                if ($dr->isValideeTiers()) {
-                    if (count($dr->recolte->certification->genre->getAppellations()) > 0) {
-                        $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
-                        file_put_contents($filename, $xml->getContent(), FILE_APPEND);
-                        $this->logSection($dr->_id, 'xml generated');
-                        $nb_exported++;
-                        unset($xml);
-                    }
-                }
-            /*} catch (Exception $e) {
-                $this->logSection("failed xml", $dr->_id, null, "ERROR");
-                $this->logSection("erreur", $e->getMessage(), null, "ERROR");
-            }*/
+            $dr = acCouchdbManager::getClient("DR")->find($id);
+
+            if (!$dr->isValideeTiers()) {
+                
+                continue;
+            }
+
+            if (count($dr->recolte->getAppellations()) == 0) {
+
+                continue;
+            }
+
+            $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+            file_put_contents($filename, $xml->getContent(), FILE_APPEND);
+            $this->logSection($dr->_id, 'xml generated');
+            $nb_exported++;
+            unset($xml);
             unset($dr);
-
-            /*if($nb_exported == 250) {
-                break;
-            }*/
-        }
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-class RecolteMotifNonRecolteForm extends sfCouchdbFormDocumentJson {
+class RecolteMotifNonRecolteForm extends acCouchdbObjectForm {
     public function configure() {
         
         $tab = $this->getMotifNonRecolteChoices();

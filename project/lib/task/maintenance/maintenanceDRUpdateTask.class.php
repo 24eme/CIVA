@@ -32,10 +32,10 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $dr_ids = sfCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], sfCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
         foreach ($dr_ids as $id) {
-            $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            $dr = acCouchdbManager::getClient()->find($id);
             $this->logSection('try', $dr->get('_id'));
             //if ($dr->exist('modifiee')) {
                 //$modifiee = $dr->get('modifiee');
@@ -56,7 +56,7 @@ EOF;
                 }
                 $dr->save();
             }*/
-            /* $dr = sfCouchdbManager::getClient()->retrieveDocumentById($id);
+            /* $dr = acCouchdbManager::getClient()->find($id);
 
               foreach($dr->recolte->getAppellations() as $appellation) {
               foreach($appellation->getLieux() as $lieu) {

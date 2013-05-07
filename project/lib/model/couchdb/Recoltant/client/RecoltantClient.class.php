@@ -1,6 +1,6 @@
 <?php
 
-class RecoltantClient extends sfCouchdbClient {
+class RecoltantClient extends acCouchdbClient {
     
     /**
      *
@@ -8,16 +8,16 @@ class RecoltantClient extends sfCouchdbClient {
      * @param type $hydrate
      * @return Recoltant 
      */
-    public function retrieveByCvi($cvi, $hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
-        return parent::retrieveDocumentById('REC-'.$cvi, $hydrate);
+    public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        return parent::find('REC-'.$cvi, $hydrate);
     }
     
     /**
      *
      * @param integer $hydrate
-     * @return sfCouchdbDocumentCollection 
+     * @return acCouchdbDocumentCollection 
      */
-    public function getAll($hydrate = sfCouchdbClient::HYDRATE_DOCUMENT) {
+    public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey('REC-0000000000')->endkey('REC-99999999999')->execute($hydrate);
     }
 }

@@ -43,7 +43,7 @@ EOF;
                 continue;
             }
             
-            $acheteur = sfCouchdbManager::getClient('Acheteur')->retrieveByCvi($db2->get(Db2Achat::COL_CVI));
+            $acheteur = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($db2->get(Db2Achat::COL_CVI));
             
             if (!$acheteur) {
                 $acheteur = new Acheteur();

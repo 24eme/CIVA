@@ -1,5 +1,5 @@
 <?php
 
-class _TiersClient extends sfCouchdbClient {
+class _TiersClient extends acCouchdbClient {
     
 }
