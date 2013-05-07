@@ -68,6 +68,7 @@ EOF;
                     "type" => "Type",
                     "login" => "Login",
                     "statut" => "Statut",
+                    "date_import" => "Date dernier import",
                     "mot_de_passe" => "Code de création",
                     "email" => "Email",
                     "cvi" => "Numéro CVI",
@@ -95,6 +96,7 @@ EOF;
             "type" => array("required" => true, "type" => "string"),
             "login" => array("required" => true, "type" => "string"),
             "statut" => array("required" => true, "type" => "string"),
+            "date_import" => array("required" => true, "type" => "string"),
             "mot_de_passe" => array("required" => true, "type" => "string"),
             "email" => array("required" => false, "type" => "string"),
             "cvi" => array("required" => false, "type" => "string"),
@@ -127,6 +129,7 @@ EOF;
                         "type" => "Virtuel",
                         "login" => $compte->login,
                         "statut" => $compte->statut,
+                        "date_import" => null,
                         "mot_de_passe" => $compte->code_creation,
                         "email" => $compte->email,
                         "cvi" => null,
@@ -151,6 +154,7 @@ EOF;
 
             } elseif($compte->type == "CompteTiers") {
 
+                $date_imports = array();
                 $types = array();
                 $cvis = array();
                 $civabas = array();
@@ -172,6 +176,7 @@ EOF;
                 $telephones_exploitant = array();
 
                 foreach($compte->tiers_object as $tiers) {
+                    $date_imports[] = $tiers->db2->import_date;
                     $types[] = $tiers->type;
                     $cvis[] = isset($tiers->cvi) ? $tiers->cvi : null;
                     $civabas[] = isset($tiers->civaba) ? $tiers->civaba : null;
@@ -205,6 +210,7 @@ EOF;
                         "type" => implode('|', $types),
                         "login" => $compte->login,
                         "statut" => $compte->statut,
+                        "date_import" => max($date_imports),
                         "mot_de_passe" => $compte->code_creation,
                         "email" => $compte->email,
                         "cvi" => implode('|', $cvis),
@@ -232,6 +238,7 @@ EOF;
                         "type" => "Proxy:".$comptes[$compte->compte_reference]->login,
                         "login" => $compte->login,
                         "statut" => $compte->statut,
+                        "date_import" => null,
                         "mot_de_passe" => $compte->code_creation,
                         "email" => $compte->email,
                         "cvi" => null,
