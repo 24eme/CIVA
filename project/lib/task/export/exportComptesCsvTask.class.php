@@ -96,7 +96,7 @@ EOF;
             "type" => array("required" => true, "type" => "string"),
             "login" => array("required" => true, "type" => "string"),
             "statut" => array("required" => true, "type" => "string"),
-            "date_import" => array("required" => true, "type" => "string"),
+            "date_import" => array("required" => false, "type" => "string"),
             "mot_de_passe" => array("required" => true, "type" => "string"),
             "email" => array("required" => false, "type" => "string"),
             "cvi" => array("required" => false, "type" => "string"),
