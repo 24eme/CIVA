@@ -1,8 +1,8 @@
 <?php
 
 abstract class _DSNoeud extends acCouchdbDocumentTree {
+    
     public function getConfig() {
-
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
@@ -35,9 +35,50 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
     public function getProduitsDetails() {
         $produits = array();
-        foreach($this->getChildrenNode() as $key => $item) {
-            $produits = array_merge($produits, $item->getProduitsDetails());
+        if($this->getChildrenNode()){
+            foreach($this->getChildrenNode() as $item) {
+                $produits = array_merge($produits, $item->getProduitsDetails());
+            }
         }
         return $produits;
+    }
+    
+    public function getAppellations() {        
+        $appellations = array();
+        if($this->getChildrenNode()){
+            foreach($this->getChildrenNode() as $item) {
+                $appellations = array_merge($appellations, $item->getAppellations());
+            }
+        }
+        return $appellations;
+    }
+    
+     public function getProduitsWithVolume() {
+        $produits_with_volume = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits_with_volume = array_merge($produits_with_volume, $item->getProduitsWithVolume());
+        }
+
+        return $produits_with_volume;
+    }
+    
+    public function updateVolumes($vtsgn,$old_volume,$volume) {
+        switch ($vtsgn) {
+            case DSCivaClient::VOLUME_VT:
+                $this->total_vt += $volume - $old_volume;
+            break;
+
+            case DSCivaClient::VOLUME_SGN:
+                $this->total_sgn += $volume - $old_volume;
+            break;
+
+            case DSCivaClient::VOLUME_NORMAL:
+                $this->total_normal += $volume - $old_volume;
+            break;
+
+            default:
+                break;
+        }
+        $this->total_stock += $volume - $old_volume;
     }
 }

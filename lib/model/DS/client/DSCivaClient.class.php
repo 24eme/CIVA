@@ -1,32 +1,28 @@
 <?php
 
-class DSClient extends acCouchdbClient {
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of class DSCivaClient
+ * @author mathurin
+ */
+class DSCivaClient extends DSClient {
 
     const STATUT_VALIDE = 'VALIDE';
     const STATUT_A_SAISIR = 'A_SAISIR';
+    
+    const VOLUME_NORMAL = 'normal';
+    const VOLUME_VT = 'VT';
+    const VOLUME_SGN = 'SGN';
 
-    public static function getInstance() {
-        return acCouchdbManager::getClient("DSCiva");
-    }
 
     public function buildId($identifiant, $periode, $lieu_stockage) {
         return sprintf('DS-%s-%s-%s', $identifiant, $periode, $lieu_stockage);
     }
     
-    public function createIdentifiant($cvi, $periode) {
-       return $cvi;
-    }
-
-    public function buildPeriode($date) {
-        preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
-        
-        return sprintf('%d%02d', $matches[1], $matches[2]);
-    }
-
-    public function buildDate($periode) {
-
-        return sprintf('%4d-%02d-%02d', $this->getAnnee($periode), $this->getMois($periode), date("t", $this->getMois($periode)));
-    }
 
     public function buildCampagne($periode) {
 
@@ -54,20 +50,50 @@ class DSClient extends acCouchdbClient {
         return $v->format('Y-m-d');
     }
 
-    public function findOrCreateDsByCvi($cvi, $date_stock) {
+    public function findOrCreateDssByTiers($tiers, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
-        $ds = $this->findByIdentifiantAndPeriode($cvi, $periode, '001');
-	if($ds){
-	   return $ds;
-        }
-        $ds = new DSCiva();
-        $ds->date_emission = date('Y-m-d');
-        $ds->date_stock = $this->createDateStock($date_stock);
-        $ds->identifiant = $this->createIdentifiant($cvi,$periode);
-        $ds->storeDeclarant();
-        $ds->updateProduits();
-        return $ds;
+        $cpt = 1;
+        $dss = array();
+        foreach ($tiers->lieux_stockage as $lieux_stockage) {
+            
+            $num_lieu = sprintf("%03d",$cpt);
+            $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
+            if($ds) continue;
+            
+            $ds = new DSCiva();
+            $ds->date_emission = date('Y-m-d');
+            $ds->date_stock = $this->createDateStock($date_stock);
+            $ds->identifiant = $tiers->cvi;
+            $ds->storeDeclarant();
+            $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
+            $ds->updateProduits();
+            $dss[] = $ds;
+            $cpt++;
+        }	
+        return $dss;
     }
+    
+    public function findDssByCvi($tiers, $date_stock) {
+        $periode = $this->buildPeriode($this->createDateStock($date_stock));
+        $cpt = 1;
+        $dss = array();
+        foreach ($tiers->lieux_stockage as $lieux_stockage) {
+            
+            $num_lieu = sprintf("%03d",$cpt);
+            $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
+            if(!$ds) throw new sfException(sprintf('La Ds du recoltant de cvi %s pour la periode %s et le lieu de stockage %s n\'existe pas',
+                                           $tiers->cvi, $periode, $lieux_stockage->nom));
+            $dss[] = $ds;
+            $cpt++;
+        }	
+        return $dss;
+    }
+    
+    public function getDSPrincipale($tiers, $date_stock){
+        $dss = $this->findDssByCvi($tiers, $date_stock);
+        return $dss[0];
+    }
+
 
     public function createOrFind($etablissementId, $date_stock) {
       throw sfException('createOrFind deprecated use findOrCreateDsByEtbId instead');
@@ -78,7 +104,8 @@ class DSClient extends acCouchdbClient {
 //        return DSHistoryView::getInstance()->findByEtablissementDateSorted($etablissement->identifiant);
     }
 
-    public function findByIdentifiantAndPeriode($identifiant, $periode, $lieu_stockage) {
+    public function findByIdentifiantPeriodeAndLieuStockage($identifiant, $date, $lieu_stockage) {
+        $periode = $this->buildPeriode($this->createDateStock($date));
         return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
     }
     
@@ -99,23 +126,6 @@ class DSClient extends acCouchdbClient {
         return $doc;
     }
 
-    public function findLastByIdentifiant($identifiant, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-		$result = DSHistoryView::getInstance()->findByEtablissement($identifiant);
-		$tabDs = array();
-        foreach($result as $id => $ds) {
-        	$tabDs[$ds->key[DSHistoryView::KEY_PERIODE]] = $ds->id;
-        }
-        krsort($tabDs);
-		if (count($tabDs) > 0) {
-			reset($tabDs);
-			return $this->find(current($tabDs), $hydrate);
-		}
-        return null;
-    }
-    
-    public function getMaster($id) {
-        return $this->find($id);
-    }
     
     public function getLibelleFromId($id) {
        if (!preg_match('/^DS-[0-9]+-([0-9]{4})([0-9]{2})/', $id, $matches)) {

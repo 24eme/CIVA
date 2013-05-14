@@ -70,7 +70,6 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
     protected function updateProduitsFromDS($ds) {
         foreach ($ds->declarations as $produit) {
             if (!$produit->isActif()) {
-
                 continue;
             }
             $produitDs = $this->addProduit($produit->produit_hash);
@@ -91,7 +90,7 @@ abstract class DS extends BaseDS implements InterfaceDeclarantDocument, Interfac
 
     protected function preSave() {
         $this->archivage_document->preSave();
-        $this->updateProduits();
+      //  $this->updateProduits();
     }
 
 

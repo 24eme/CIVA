@@ -47,9 +47,9 @@ DS:
                   lieu: { required: false }
                   vt: { required: false }
                   sgn: { required: false }
-      recolte:
+      declaration:
         type: collection
-        class: DSRecolte
+        class: DSDeclaration
         inheritance: _DSNoeud
         definition:
           fields:
@@ -60,11 +60,10 @@ DS:
               inheritance: _DSNoeud
               definition:
                 fields:
-                  total_volume: {type: float}
-                  total_superficie: {type: float}
-                  volume_revendique: {type:float }
-                  dplc: {type:float }
-                  usages_industriels_calcule: {type:float }
+                  total_stock: {type: float}
+                  total_vt: {type:float}
+                  total_sgn: {type:float}
+                  total_normal: {type:float}
                   '*':
                     type: collection
                     class: DSGenre
@@ -72,6 +71,9 @@ DS:
                     definition:
                       fields:
                         total_stock: {type: float}
+                        total_vt: {type:float}
+                        total_sgn: {type:float}
+                        total_normal: {type:float}                            
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -81,6 +83,9 @@ DS:
                             fields:
                               appellation: {}
                               total_stock: {type: float}
+                              total_vt: {type:float}
+                              total_sgn: {type:float}
+                              total_normal: {type:float}                              
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -89,6 +94,9 @@ DS:
                                 definition:
                                   fields:
                                     total_stock: {type: float }
+                                    total_vt: {type:float}
+                                    total_sgn: {type:float}
+                                    total_normal: {type:float}                                    
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection
@@ -96,7 +104,10 @@ DS:
                                       inheritance: _DSNoeud
                                       definition:
                                         fields:
-                                          total_stock: {type: float}                                          
+                                          total_stock: {type: float}
+                                          total_vt: {type:float}
+                                          total_sgn: {type:float}
+                                          total_normal: {type:float}                                          
                                           # ------ Couleur ------
                                           '*':
                                             type: collection
@@ -105,6 +116,9 @@ DS:
                                             definition:
                                               fields:
                                                 total_stock: {type:float}
+                                                total_vt: {type:float}
+                                                total_sgn: {type:float}
+                                                total_normal: {type:float}
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -113,7 +127,9 @@ DS:
                                                   definition:
                                                     fields:
                                                       appellation: {  }
-                                                      cepage: {  }
+                                                      cepage: {}
+                                                      no_vtsgn: {}
+                                                      lieu: { required: false }
                                                       detail:                                                        
                                                         type: array_collection
                                                         definition:
@@ -127,9 +143,11 @@ DS:
                                                                   vtsgn: { }
                                                                   appellation: {  }
                                                                   cepage: {  }
-                                                                  volume: {type: float }
+                                                                  volume_vt: {type:float}
+                                                                  volume_sgn: {type:float}
+                                                                  volume_normal: {type:float}
                                                                   lieu: {  }
                                                                   libelle: {  }
                                                                   stock_declare: {type: float }
-                                                                  vci: {type: float }
-                                                                  reserve_qualitative: {type: float }
+                                                                  vci: {type: float, required: false}
+                                                                  reserve_qualitative: {type: float, required: false}

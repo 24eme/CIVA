@@ -6,12 +6,18 @@
 
  * @property string $appellation
  * @property string $cepage
+ * @property string $no_vtsgn
+ * @property string $lieu
  * @property acCouchdbJson $detail
 
  * @method string getAppellation()
  * @method string setAppellation()
  * @method string getCepage()
  * @method string setCepage()
+ * @method string getNoVtsgn()
+ * @method string setNoVtsgn()
+ * @method string getLieu()
+ * @method string setLieu()
  * @method acCouchdbJson getDetail()
  * @method acCouchdbJson setDetail()
  

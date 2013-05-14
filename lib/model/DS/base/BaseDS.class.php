@@ -19,7 +19,7 @@
  * @property string $commentaire
  * @property acCouchdbJson $declarant
  * @property acCouchdbJson $produits
- * @property DSRecolte $recolte
+ * @property DSDeclaration $declaration
 
  * @method string get_id()
  * @method string set_id()
@@ -51,8 +51,8 @@
  * @method acCouchdbJson setDeclarant()
  * @method acCouchdbJson getProduits()
  * @method acCouchdbJson setProduits()
- * @method DSRecolte getRecolte()
- * @method DSRecolte setRecolte()
+ * @method DSDeclaration getDeclaration()
+ * @method DSDeclaration setDeclaration()
  
  */
  

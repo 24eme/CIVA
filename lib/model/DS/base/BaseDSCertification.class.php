@@ -4,22 +4,19 @@
  * 
  * Base model for DSCertification
 
- * @property float $total_volume
- * @property float $total_superficie
- * @property float $volume_revendique
- * @property float $dplc
- * @property float $usages_industriels_calcule
+ * @property float $total_stock
+ * @property float $total_vt
+ * @property float $total_sgn
+ * @property float $total_normal
 
- * @method float getTotalVolume()
- * @method float setTotalVolume()
- * @method float getTotalSuperficie()
- * @method float setTotalSuperficie()
- * @method float getVolumeRevendique()
- * @method float setVolumeRevendique()
- * @method float getDplc()
- * @method float setDplc()
- * @method float getUsagesIndustrielsCalcule()
- * @method float setUsagesIndustrielsCalcule()
+ * @method float getTotalStock()
+ * @method float setTotalStock()
+ * @method float getTotalVt()
+ * @method float setTotalVt()
+ * @method float getTotalSgn()
+ * @method float setTotalSgn()
+ * @method float getTotalNormal()
+ * @method float setTotalNormal()
  
  */
 

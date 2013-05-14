@@ -19,6 +19,7 @@ class DSCertification extends BaseDSCertification {
     public function getGenres(){
 
         return $this->filter('^genre');
-    }
+    }   
+
     
 }

@@ -21,4 +21,9 @@ class DSCouleur extends BaseDSCouleur {
         return $this->filter('^cepage');
     }
     
+    public function updateVolumes($vtsgn,$old_volume,$volume) {
+        parent::updateVolumes($vtsgn, $old_volume, $volume);
+        $this->getLieu()->updateVolumes($vtsgn,$old_volume,$volume);
+    }
+    
 }
