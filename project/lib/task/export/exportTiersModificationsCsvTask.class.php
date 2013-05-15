@@ -31,7 +31,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $changes = acCouchdbManager::getClient()->since($arguments['numero_sequence'])->getChanges()->results;
+        $changes = sfCouchdbManager::getClient()->since($arguments['numero_sequence'])->getChanges()->results;
 
         $modele = array(
             "_id" => null,
@@ -80,16 +80,16 @@ EOF;
                 continue;
             }
 
-            $tiers = acCouchdbManager::getClient()->find($change->id, acCouchdbClient::HYDRATE_JSON);
+            $tiers = sfCouchdbManager::getClient()->find($change->id, sfCouchdbClient::HYDRATE_JSON);
             if($tiers->statut == _TiersClient::STATUT_INACTIF) {
                 
                 continue;
             }
 
-            $tiers_object = new acCouchdbJsonNative($tiers);
+            $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
 
-            $tiers_object_old = new acCouchdbJsonNative($this->getOldDoc($tiers));
+            $tiers_object_old = new sfCouchdbJsonNative($this->getOldDoc($tiers));
             $tiers_array_old = $tiers_object_old->toFlatArray();
 
             if($tiers_object->equal($tiers_object_old)) {
@@ -114,23 +114,29 @@ EOF;
         $id = $tiers->_id;
 
         if(isset($tiers->db2->import_revision)) {
-            $doc = acCouchdbManager::getClient()->rev($tiers->import_revision)->find($id, acCouchdbClient::HYDRATE_JSON); 
+            $doc = sfCouchdbManager::getClient()->rev($tiers->import_revision)->find($id, sfCouchdbClient::HYDRATE_JSON); 
 
             if($doc) {
                 return $doc;
             }
         }
 
-        $data_revs = acCouchdbManager::getClient()->revs_info(true)->find($id, acCouchdbClient::HYDRATE_JSON);
+        $data_revs = sfCouchdbManager::getClient()->revs_info(true)->find($id, sfCouchdbClient::HYDRATE_JSON);
         $revs = $data_revs->_revs_info;
         $i = count($revs)-1;
         while(!$doc && $i >= 0) {
             $rev = $revs[$i]->rev;
-            $doc = acCouchdbManager::getClient()->rev($rev)->find($id, acCouchdbClient::HYDRATE_JSON);
+            $doc = sfCouchdbManager::getClient()->rev($rev)->find($id, sfCouchdbClient::HYDRATE_JSON);
             $i--;
+            if(count($revs) - $i > 3) {
+
+                break;
+            }
         }
+
         if(!$doc) {
-            throw new sfException("Doc non trouvé, c'est pas normal");
+        
+            return $tiers;
         }
 
         return $doc;
@@ -148,4 +154,64 @@ EOF;
 
 }
 
+class sfCouchdbJsonNative
+{
+    
+    protected $_stdclass = null;
+    protected $_array = null;
+    protected $_flat_array = null;
 
+    public function __construct(stdClass $stdclass)
+    {
+        $this->_stdclass = $stdclass;
+    }
+
+    public function toStdClass() {
+        return $this->_stdclass;
+    }
+
+    public function toArray() {
+        if (is_null($this->_array)) {
+            $this->_array = $this->stdClassToArray($this->_stdclass);
+        }
+
+        return $this->_array;
+    }
+
+    public function toFlatArray() {
+        if (is_null($this->_flat_array)) {
+            $this->_flat_array = $this->flattenArray($this->toArray());
+        }
+
+        return $this->_flat_array;
+    }
+
+    public function diff(sfCouchdbJsonNative $object) {
+
+        return array_diff_assoc($this->toFlatArray(), $object->toFlatArray());
+    }
+
+    public function equal(sfCouchdbJsonNative $object) {
+
+        return count($this->diff($object)) == 0 && count($object->diff($this)) == 0;
+    }
+
+    protected function stdClassToArray($stdclass) {
+
+        return json_decode(json_encode($stdclass), true);
+    }
+
+    protected function flattenArray($array, $prefix = null, $decorator = "/")  {
+        $flat_array = array();
+
+        foreach($array as $key => $value) {
+            if(is_array($value))  {
+                $flat_array = array_merge($flat_array, $this->flattenArray($value, $prefix.$decorator.$key));
+            } else {
+                $flat_array[$prefix.$decorator.$key] = $value;
+            }
+        }
+
+        return $flat_array;
+    }
+}
