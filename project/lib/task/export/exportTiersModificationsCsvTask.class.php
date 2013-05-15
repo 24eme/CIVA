@@ -80,7 +80,7 @@ EOF;
                 continue;
             }
 
-            $tiers = sfCouchdbManager::getClient()->find($change->id, sfCouchdbClient::HYDRATE_JSON);
+            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);
             if($tiers->statut == _TiersClient::STATUT_INACTIF) {
                 
                 continue;
@@ -114,19 +114,19 @@ EOF;
         $id = $tiers->_id;
 
         if(isset($tiers->db2->import_revision)) {
-            $doc = sfCouchdbManager::getClient()->rev($tiers->import_revision)->find($id, sfCouchdbClient::HYDRATE_JSON); 
+            $doc = sfCouchdbManager::getClient()->rev($tiers->import_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON); 
 
             if($doc) {
                 return $doc;
             }
         }
 
-        $data_revs = sfCouchdbManager::getClient()->revs_info(true)->find($id, sfCouchdbClient::HYDRATE_JSON);
+        $data_revs = sfCouchdbManager::getClient()->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
         $revs = $data_revs->_revs_info;
         $i = count($revs)-1;
         while(!$doc && $i >= 0) {
             $rev = $revs[$i]->rev;
-            $doc = sfCouchdbManager::getClient()->rev($rev)->find($id, sfCouchdbClient::HYDRATE_JSON);
+            $doc = sfCouchdbManager::getClient()->rev($rev)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             $i--;
             if(count($revs) - $i > 3) {
 
