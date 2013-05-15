@@ -100,20 +100,16 @@ EOF;
                 continue;
             }
 
-            $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);
-
-            
-            if($tiers->statut == _TiersClient::STATUT_INACTIF) {
-                
-                continue;
-            }
-
-            if(!array_key_exists($tiers->_id, $tiers_modifies)) {
-               $tiers_modifies[$change->id] = $tiers;
+            if(!array_key_exists($change->id, $tiers_modifies)) {
+               $tiers_modifies[$change->id] = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);;
             }
         }
 
         foreach($tiers_modifies as $tiers) {
+            if($tiers->statut == _TiersClient::STATUT_INACTIF) {
+                
+                continue;
+            }
 
             $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
