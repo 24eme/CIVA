@@ -81,6 +81,11 @@ EOF;
             if(preg_match(sprintf("/^COMPTE-/", implode("|", $types)), $change->id)) {
                 $compte = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);
 
+                if(!isset($compte->tiers)) {
+
+                    continue;
+                }
+
                 foreach($compte->tiers as $tiers) {
                     if(!array_key_exists($tiers->id, $tiers_modifies)) {
                         $tiers_modifies[$tiers->id] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id, sfCouchdbClient::HYDRATE_JSON);
@@ -110,8 +115,6 @@ EOF;
 
         foreach($tiers_modifies as $tiers) {
 
-            echo $tiers->_id."\n";
-
             $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
 
@@ -127,7 +130,6 @@ EOF;
 
             $nb_diff = 0;
             foreach($diffs as $key => $diff) {
-                echo $key."\n";
                 if(!in_array(substr($key, 1), array_keys($modele))) {
 
                     continue;
