@@ -74,17 +74,43 @@ EOF;
 
         $csv = new ExportCsv(array_keys($modele));
 
+        $tiers_modifies = array();
+
         foreach($changes as $change) {
+
+            if(preg_match(sprintf("/^COMPTE-/", implode("|", $types)), $change->id)) {
+                $compte = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);
+
+                foreach($compte->tiers as $tiers) {
+                    if(!array_key_exists($tiers->id, $tiers_modifies)) {
+                        $tiers_modifies[$tiers->id] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id, sfCouchdbClient::HYDRATE_JSON);
+                    }
+
+                    $tiers_modifies[$tiers->id]->email = $compte->email;
+                }
+            }
+
             if(!preg_match(sprintf("/^(%s)-/", implode("|", $types)), $change->id)) {
                 
                 continue;
             }
 
             $tiers = sfCouchdbManager::getClient()->retrieveDocumentById($change->id, sfCouchdbClient::HYDRATE_JSON);
+
+            
             if($tiers->statut == _TiersClient::STATUT_INACTIF) {
                 
                 continue;
             }
+
+            if(!array_key_exists($tiers->_id, $tiers_modifies)) {
+               $tiers_modifies[$change->id] = $tiers;
+            }
+        }
+
+        foreach($tiers_modifies as $tiers) {
+
+            echo $tiers->_id."\n";
 
             $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
@@ -101,9 +127,15 @@ EOF;
 
             $nb_diff = 0;
             foreach($diffs as $key => $diff) {
-                if(in_array($key, array('/db2/num', 'db2/no_stock'))) {
+                echo $key."\n";
+                if(!in_array(substr($key, 1), array_keys($modele))) {
+
+                    continue;
+                }
+
+                if(in_array($key, array('/db2/num', '/db2/no_stock'))) {
                     
-                    break;
+                    continue;
                 }
 
                 $tiers_array[$key] = sprintf("*%s (%s)", $tiers_array[$key], isset($tiers_array_old[$key]) ? $tiers_array_old[$key] : null);
@@ -137,10 +169,10 @@ EOF;
             $rev = $revs[$i]->rev;
             $doc = sfCouchdbManager::getClient()->rev($rev)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
             $i--;
-            if(count($revs) - $i > 3) {
+            /*if(count($revs) - $i > 3) {
 
                 break;
-            }
+            }*/
         }
 
         if(!$doc) {
