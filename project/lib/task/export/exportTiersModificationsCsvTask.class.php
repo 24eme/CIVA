@@ -106,7 +106,7 @@ EOF;
         }
 
         foreach($tiers_modifies as $tiers) {
-            if($tiers->statut == _TiersClient::STATUT_INACTIF) {
+            if(isset($tiers->statut) && $tiers->statut == _TiersClient::STATUT_INACTIF) {
                 
                 continue;
             }
@@ -162,15 +162,11 @@ EOF;
 
         $data_revs = sfCouchdbManager::getClient()->revs_info(true)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
         $revs = $data_revs->_revs_info;
-        $i = count($revs)-1;
+        $i = count($revs) - 1;
         while(!$doc && $i >= 0) {
             $rev = $revs[$i]->rev;
             $doc = sfCouchdbManager::getClient()->rev($rev)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
-            $i--;
-            /*if(count($revs) - $i > 3) {
-
-                break;
-            }*/
+            break;
         }
 
         if(!$doc) {
