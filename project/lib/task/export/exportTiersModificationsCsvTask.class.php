@@ -99,11 +99,20 @@ EOF;
 
             $diffs = $tiers_object->diff($tiers_object_old);
 
+            $nb_diff = 0;
             foreach($diffs as $key => $diff) {
+                if(in_array($key, array('/db2/num', 'db2/no_stock'))) {
+                    
+                    break;
+                }
+
                 $tiers_array[$key] = sprintf("*%s (%s)", $tiers_array[$key], isset($tiers_array_old[$key]) ? $tiers_array_old[$key] : null);
+                $nb_diff++;
             }
 
-            $csv->add($this->makeLine($tiers_array, $modele));
+            if($nb_diff > 0) {
+                $csv->add($this->makeLine($tiers_array, $modele));
+            }
         }
 
         echo $csv->output();
