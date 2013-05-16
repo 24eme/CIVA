@@ -33,7 +33,7 @@ class MigrationCompte {
 
         $this->_nouveau_compte->date_creation = date('Y-m-d');
 
-        $this->_ancien_compte->mot_de_passe = null;
+        $this->_ancien_compte->setInactif();
         $this->_ancien_compte->update();
         $this->_ancien_compte->save();
 
