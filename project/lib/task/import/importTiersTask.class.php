@@ -46,7 +46,12 @@ EOF;
             } elseif($tiers->isModified()) {
                $this->logSection("modified", $tiers->get('_id'));  
             }
-            $tiers->save(); 
+            if($tiers->save()) {
+              $this->logSection('flag revision', $tiers->get('_id'));
+              $tiers->db2->add('import_revision', $tiers->_rev);
+              $tiers->db2->import_date = date("Y-m-d");
+              $tiers->save();
+            }
         } else {
             $nb_not_use++;
         }
@@ -100,13 +105,8 @@ EOF;
       $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
-      $tiers->db2->add('import_revision', $tiers->_rev);
       $tiers->db2->remove('export_revision');
-      
-      if($tiers->isNew()) {
-        $tiers->db2->import_date = date("Y-m-d");
-      }
-      
+
       return $tiers;
   }
   
