@@ -106,11 +106,13 @@ EOF;
             $compte = acCouchdbManager::getClient()->find('COMPTE-' . $login, acCouchdbClient::HYDRATE_DOCUMENT);
             if (!$compte) {
                  $compte = new CompteTiers();
-                 $compte->login = $login;
+                 $compte->login = $login."";
                  $compte->constructId();
                  $compte->mot_de_passe = $this->generatePass();;
                  $compte->email = $this->combiner($tiers, 'email');
             }
+
+            $compte->login = $compte->login."";
 
             $email = $this->combiner($tiers, 'email');
             if($email) {
