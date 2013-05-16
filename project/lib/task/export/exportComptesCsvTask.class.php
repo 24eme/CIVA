@@ -210,7 +210,7 @@ EOF;
                         "type" => implode('|', $types),
                         "login" => $compte->login,
                         "statut" => $compte->statut,
-                        "date_import" => max($date_imports),
+                        "date_import" => $compte->date_import,
                         "mot_de_passe" => $compte->code_creation,
                         "email" => $compte->email,
                         "cvi" => implode('|', $cvis),
