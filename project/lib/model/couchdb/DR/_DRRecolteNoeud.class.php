@@ -43,6 +43,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $produits;
     }
 
+    public function getProduitsWithVolume() {
+        $produits_with_volume = array();
+        foreach($this->getChildrenNode() as $key => $item) {
+            $produits_with_volume = array_merge($produits_with_volume, $item->getProduitsWithVolume());
+        }
+        return $produits_with_volume;
+    }
+    
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);

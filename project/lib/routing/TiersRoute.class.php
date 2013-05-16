@@ -4,13 +4,12 @@ class TiersRoute extends sfObjectRoute implements InterfaceTiersRoute {
 
     protected $tiers = null;
     
-    protected function getObjectForParameters($parameters = null) {
+    protected function getObjectForParameters($parameters) {
     $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($parameters['cvi']);
       return $this->tiers;
     }
 
-    protected function doConvertObjectToArray($object = null) {
-  
+    protected function doConvertObjectToArray($object) {  
         return array("cvi" => $object->getCvi());
     }
 

@@ -41,7 +41,7 @@ all:
     
     check_lock:             true
 
-    enabled_modules:        [ds]
+#    enabled_modules:        [ds]
 
   .actions:
     login_module:           compte

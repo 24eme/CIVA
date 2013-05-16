@@ -55,8 +55,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument {
     }
 
     public function getProduits() {
-
         return $this->recolte->getProduits();
+    }
+    
+    public function getProduitsWithVolume() {
+        return $this->recolte->getProduitsWithVolume();
     }
 
     public function getProduitsDetails() {
