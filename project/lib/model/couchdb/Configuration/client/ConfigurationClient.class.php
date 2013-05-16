@@ -4,13 +4,12 @@ class ConfigurationClient extends acCouchdbClient {
   private static $configuration = array();
   private static $current = null;
   
-      const CAMPAGNE_DATE_DEBUT = '%s-08-01';
+    const CAMPAGNE_DATE_DEBUT = '%s-08-01';
     const CAMPAGNE_DATE_FIN = '%s-07-31';
 
-  	public static function getInstance() {
-
-	  	return acCouchdbManager::getClient("CONFIGURATION");
-	}
+    public static function getInstance() {
+          return acCouchdbManager::getClient("CONFIGURATION");
+    }
   
   public static function getConfiguration($campagne = '') {
     if (!$campagne) {
