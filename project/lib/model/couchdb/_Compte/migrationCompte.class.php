@@ -51,6 +51,8 @@ class MigrationCompte {
         $this->_nouveau_compte->save();
 
         $recoltant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->_ancien_cvi);
+        $recoltant->statut = _TiersClient::STATUT_INACTIF;
+        $recoltant->save();
         $this->new_rec = clone $recoltant;
     }
 

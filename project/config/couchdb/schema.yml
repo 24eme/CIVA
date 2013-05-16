@@ -335,6 +335,7 @@ _Tiers:
   type: abstract
   definition:
     fields:
+      statut: { }
       compte:
         type: array_collection
         definition:
@@ -391,7 +392,8 @@ _Tiers:
             num: { }
             no_stock: { }
             import_date: {  }
-            export_revision: {  }
+            export_revision: { required: false }
+            import_revision: {  }
 
 Recoltant:
   inheritance: _Tiers
