@@ -112,8 +112,6 @@ EOF;
                  $compte->email = $this->combiner($tiers, 'email');
             }
 
-            $compte->login = $compte->login."";
-
             $email = $this->combiner($tiers, 'email');
             if($email) {
                 if ($email != $compte->email && $compte->email) {
