@@ -3,33 +3,28 @@
 class DSEditionFormCiva extends acCouchdbForm {
 
     protected $ds = null;
-    protected $appellation = null;
+    protected $appellation_lieu = null;
 
-    protected $produitsByAppellation = null;
-
-    public function __construct(acCouchdbJson $ds, $appellation, $defaults = array(), $options = array(), $CSRFSecret = null) {
+    public function __construct(acCouchdbJson $ds, $appellation_lieu, $defaults = array(), $options = array(), $CSRFSecret = null) {
 
        $this->ds = $ds;
-       $this->appellation = $appellation;
-       $this->produitsByAppellation = $this->ds->getProduitsByAppellation($appellation);
-       foreach ($this->produitsByAppellation as $key => $cepage) {     
-           
-            $form_key = str_replace('/','_',$key);
+       $this->appellation_lieu = $appellation_lieu;
+       foreach ($this->getProduitsDetails() as $hash => $detail) {     
+            $form_key = $detail->getHashForKey();
             
-            if(!$cepage->no_vtsgn){
-                $defaults[DSCivaClient::VOLUME_VT.$form_key] = $cepage->getVT();
-                $defaults[DSCivaClient::VOLUME_SGN.$form_key] = $cepage->getSGN();
+            if(!$detail->getCepage()->no_vtsgn){
+                $defaults[DSCivaClient::VOLUME_VT.$form_key] = $detail->volume_vt;
+                $defaults[DSCivaClient::VOLUME_SGN.$form_key] = $detail->volume_sgn;
             }  
-            $defaults[DSCivaClient::VOLUME_NORMAL.$form_key] = $cepage->getVolume();     
+            $defaults[DSCivaClient::VOLUME_NORMAL.$form_key] = $detail->volume_normal;     
         }
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
 
     public function configure() {
-      //  parent::configure();
-        foreach ($this->produitsByAppellation as $key => $cepage) {
-          $key = str_replace('/','_',$key);          
-          if(!$cepage->no_vtsgn){
+        foreach ($this->getProduitsDetails() as $hash => $detail) {
+          $key = $detail->getHashForKey();         
+          if(!$detail->getCepage()->no_vtsgn){
             $this->setWidget(DSCivaClient::VOLUME_VT . $key, new sfWidgetFormInputFloat(array(), array('size' => '6')));
             $this->setValidator(DSCivaClient::VOLUME_VT . $key, new sfValidatorNumber(array('required' => false)));
             $this->widgetSchema->setLabel(DSCivaClient::VOLUME_VT . $key, DSCivaClient::VOLUME_VT);
@@ -60,39 +55,21 @@ class DSEditionFormCiva extends acCouchdbForm {
             }
     }
     
-    public function getProduitsByAppellation() {       
-        return $this->produitsByAppellation;
-    }
-
-
-    private function hashTokey(){
-        
+    public function getProduitsDetails() {
+        $matches = array();
+        if(preg_match('/^([A-Z]+)-([A-Za-z0-9]+)$/', $this->appellation_lieu,$matches)){
+            return $this->ds->declaration->getAppellations()->get('appellation_'.$matches[1])->mention->get('lieu'.$matches[2])->getProduitsDetails();
+        }
+        return $this->ds->declaration->getAppellations()->get('appellation_'.$this->appellation_lieu)->getProduitsDetails();
     }
     
     private function keyTohash($key) {
-        if($this->appellation != "LIEUDIT"){
-            $appellation_hash =  str_replace($this->appellation,'appellation_'.$this->appellation, str_replace('_','/',$key));
-            return str_replace('cepage/','cepage_',$appellation_hash);
-        }
-        else{
-            $appellation_hash = str_replace($this->appellation,'appellation_'.$this->appellation, $key);
-            $matches = array();
-            preg_match('/^([A-Za-z\-_]+)_(cepage_[A-Z]{2})_([A-Za-z0-9\-]+)/',$appellation_hash, $matches);
-            $appellation_hash = $matches[1].'_'.$matches[2];
-            $appellation_hash = str_replace($this->appellation,'appellation_'.$this->appellation, str_replace('_','/',$appellation_hash));
-            return array('cepage' => str_replace('cepage/','cepage_',$appellation_hash), 'lieu' => $matches[3]);
-        }
+        return str_replace('-','/',$key);
         
     }
     
 
     public function updateVol($kind, $prodKey, $volume) {
-        if(is_array($prodKey)){
-            if ($this->getDocument()->get($prodKey['cepage'])) {
-            $this->getDocument()->get($prodKey['cepage'])->updateVolume($kind,$volume,$prodKey['lieu']);
-            return;
-            }
-        }
         if ($this->getDocument()->get($prodKey)) {
             $this->getDocument()->get($prodKey)->updateVolume($kind,$volume);
         }

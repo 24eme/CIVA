@@ -89,6 +89,23 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
     
+    public function getNextDS($ds) {
+        if(!$ds)
+            throw new sfException("La DS passée en argument de getNextLieuStockage ne peut pas être null");
+        $matches = array();
+        if(preg_match('/^DS-([0-9]{10})-([0-9]{6})-([0-9]{3})$/', $ds->_id,$matches)){
+            if(!isset($matches[3]))
+                throw new sfException("La DS $ds->_id possède un identifiant non conforme");
+            
+            $lieu_stockage = $matches[3];
+            $next_lieu = $lieu_stockage+1;
+            $next_id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$next_lieu);
+            return $this->find($next_id);
+        }
+        throw new sfException("La DS $ds->_id possède un identifiant non conforme");
+    }
+
+
     public function getDSPrincipale($tiers, $date_stock){
         $dss = $this->findDssByCvi($tiers, $date_stock);
         return $dss[0];

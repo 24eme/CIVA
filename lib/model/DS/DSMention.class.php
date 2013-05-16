@@ -21,6 +21,11 @@ class DSMention extends BaseDSMention {
         return $this->filter('^lieu');
     }
     
+    public function getAppellationLibelle() {
+        
+        return $this->getAppellation()->appellation;
+    }
+    
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         parent::updateVolumes($vtsgn, $old_volume, $volume);
         $this->getAppellation()->updateVolumes($vtsgn,$old_volume,$volume);

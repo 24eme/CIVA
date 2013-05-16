@@ -3,7 +3,7 @@
 abstract class _DSNoeud extends acCouchdbDocumentTree {
     
     public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(preg_replace('/^\/declaration\//', '/recolte/', $this->getHash()));
     }
 
     abstract public function getChildrenNode();

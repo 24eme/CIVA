@@ -18,9 +18,8 @@ class DSAppellation extends BaseDSAppellation {
         return $this->filter('^mention');
     }
 
-    public function getLieux() {
-        
-        return $this->getChildrenNodeDeep();
+    public function getLieux() {  
+        return $this->mention->getLieux();
     }
     
     public function getAppellations() {
@@ -35,6 +34,10 @@ class DSAppellation extends BaseDSAppellation {
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         parent::updateVolumes($vtsgn, $old_volume, $volume);
         $this->getGenre()->updateVolumes($vtsgn,$old_volume,$volume);
+    }
+    
+    public function hasManyLieux() {
+        return (bool) count($this->getLieux()->getLieux()) > 1;
     }
     
 
