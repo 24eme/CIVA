@@ -1,36 +1,11 @@
 <!-- .header_ds -->
+<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST">
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();
     $dss[0]->getFirstAppellationLieu();
 ?>  
-<div class="header_ds clearfix">
-	
-	<ul id="etape_declaration" class="etapes_ds clearfix">
-		<li>
-			<a href="#"><span>Exploitation</span> <em>Etape 1</em></a>
-		</li>
-		<li class="actif">
-			<a href="#"><span>Lieux de stockage</span> <em>Etape 2</em></a>
-		</li>
-		<li>
-			<a href="<?php echo count($dss)? url_for("ds_edition_operateur", array('id' => $dss[0]->_id,'appellation_lieu' => $dss[0]->getFirstAppellationLieu())) : '#' ?>"><span>Stocks</span> <em>Etape 3</em></a>
-		</li>
-		<li>
-			<a href="#"><span>Validation</span> <em>Etape 5</em></a>
-		</li>	
-	</ul>
-
-	<div class="progression_ds">
-		<p>Vous avez saisi <span>20%</span> de votre DS</p>
-
-		<div class="barre_progression">
-			<div class="progression"></div>
-		</div>
-	</div>
-</div>
-<!-- fin .header_ds -->
 
 <p id="adresse_stock">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</p>
 
@@ -92,8 +67,7 @@
 		</a>
 	</li>
 	<li class="suiv">
-            <button type="submit">Valider</button>
-            <img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante"/>
+            <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante"/>
 	</li>
 </ul>
 </form>

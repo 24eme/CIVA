@@ -17,15 +17,16 @@ class dsActions extends sfActions {
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSLieuxDeStockageForm($this->tiers);   
         $this->dss = DSCivaClient::getInstance()->findDssByCvi($this->tiers, date('Y-m-d')); 
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
+        
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if($this->form->isValid()) {
                $this->dss = $this->form->doUpdateDss($this->dss);
-                foreach ($this->dss as $ds) {
-                    $ds->save();
+                foreach ($this->dss as $current_ds) {
+                    $current_ds->save();
                 }
-                $ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
-                $this->redirect('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu()));
+                $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id,'appellation_lieu' => $this->ds->getFirstAppellationLieu()));
             }
         }
     }
@@ -70,7 +71,7 @@ class dsActions extends sfActions {
                 }
                 else
                 {
-                    $this->redirect('ds_recapitulatif_lieu_stockage', array('id' => $this->ds->_id,'lieu_stockage' => $this->ds->getLieuStockage()));   
+                    $this->redirect('ds_recapitulatif_lieu_stockage', array('id' => $this->ds->_id));   
                 }
             }
         }
@@ -92,19 +93,15 @@ class dsActions extends sfActions {
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
-     //   $this->form = new DSRecapLieuStockageForm();
-        if ($request->isMethod(sfWebRequest::POST)) {
-          //  $this->form->bind($request->getParameter($this->form->getName()));
-//            if ($this->form->isValid()) {
-//                $this->form->doUpdateObject();
-                $this->ds->save();
-                $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
-                if($nextDs){
-                    $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellationLieu()));
-                }
-                else{
-                    $this->redirect('ds_autre', $this->tiers); 
-                }
+        $suivant = isset($request['suivant']) && $request['suivant'];
+        if($suivant){
+            $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
+            if($nextDs){
+                $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellationLieu()));
+            }
+            else{
+                $this->redirect('ds_autre', $this->tiers); 
+            }
         }
     }
     
@@ -112,6 +109,24 @@ class dsActions extends sfActions {
     
     public function executeAutre(sfWebRequest $request)
     {
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
+        $this->form = new DSEditionCivaAutreForm($this->ds);
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                $this->redirect('ds_validation', $this->tiers); 
+            }
+        }
+    }
+    
+    public function executeValidation(sfWebRequest $request)
+    {
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->ds_client = DSCivaClient::getInstance();
+        $this->ds_principale = $this->ds_client->getDSPrincipale($this->tiers, date('Y-m-d'));
+        
     }
     
     public function executeRecapLieuStockage(sfWebRequest $request)
