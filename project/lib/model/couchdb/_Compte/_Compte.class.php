@@ -5,6 +5,12 @@ abstract class _Compte extends Base_Compte {
     const STATUS_INACTIF = 'INACTIF';
     const STATUS_MOT_DE_PASSE_OUBLIE = 'MOT_DE_PASSE_OUBLIE';
     
+    public function constructId() {
+        parent::constructId();
+        $this->set('_id', 'COMPTE-' . $this->login);
+        $this->date_creation = date("Y-m-d");
+    }
+
     /**
      *
      * @param string $mot_de_passe 

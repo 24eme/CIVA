@@ -31,7 +31,9 @@ class MigrationCompte {
     public function createNewCompte(){
         $this->_nouveau_compte = clone $this->_ancien_compte;
 
-        $this->_ancien_compte->mot_de_passe = null;
+        $this->_nouveau_compte->date_creation = date('Y-m-d');
+
+        $this->_ancien_compte->setInactif();
         $this->_ancien_compte->update();
         $this->_ancien_compte->save();
 

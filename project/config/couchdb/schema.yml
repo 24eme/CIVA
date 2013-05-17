@@ -276,6 +276,7 @@ _Compte:
       mot_de_passe: {  }
       email: {  }
       statut: {  }
+      date_creation: {  }
       droits:
         type: array_collection
         definition:
