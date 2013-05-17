@@ -17,6 +17,10 @@
  * @property string $numero_archive
  * @property string $statut
  * @property string $commentaire
+ * @property float $rebeches
+ * @property float $dplc
+ * @property float $lies
+ * @property float $mouts
  * @property acCouchdbJson $declarant
  * @property acCouchdbJson $produits
  * @property DSDeclaration $declaration
@@ -47,6 +51,14 @@
  * @method string setStatut()
  * @method string getCommentaire()
  * @method string setCommentaire()
+ * @method float getRebeches()
+ * @method float setRebeches()
+ * @method float getDplc()
+ * @method float setDplc()
+ * @method float getLies()
+ * @method float setLies()
+ * @method float getMouts()
+ * @method float setMouts()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
  * @method acCouchdbJson getProduits()

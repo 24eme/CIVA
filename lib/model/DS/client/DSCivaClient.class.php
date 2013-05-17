@@ -67,6 +67,7 @@ class DSCivaClient extends DSClient {
             $ds->storeDeclarant();
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             $ds->updateProduits();
+            $ds->updateAutre();
             $dss[] = $ds;
             $cpt++;
         }	
@@ -101,6 +102,28 @@ class DSCivaClient extends DSClient {
             $next_lieu = $lieu_stockage+1;
             $next_id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$next_lieu);
             return $this->find($next_id);
+        }
+        throw new sfException("La DS $ds->_id possède un identifiant non conforme");
+    }
+    
+    public function findDssByDS($ds) {
+        if(!$ds)
+            throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
+        $matches = array();
+        
+        if(preg_match('/^DS-([0-9]{10})-([0-9]{6})-([0-9]{3})$/', $ds->_id,$matches)){
+            if(!isset($matches[3]))
+                throw new sfException("La DS $ds->_id possède un identifiant non conforme");            
+            $lieu_stockage = 1;
+            $id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$lieu_stockage);
+            
+            $dss = array();
+            while($current_ds = $this->find($id)){
+              $dss[$id] = $current_ds;
+              $id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$lieu_stockage++);
+            }
+            
+            return $dss;
         }
         throw new sfException("La DS $ds->_id possède un identifiant non conforme");
     }
@@ -157,4 +180,81 @@ class DSCivaClient extends DSClient {
         $df = format_date($date,'MMMM yyyy','fr_FR');
         return elision($origineLibelle,$df);
     }
+    
+    public function getTotauxByAppellationsRecap($ds) {
+        $dss = $this->findDssByDS($ds);
+        $totauxByAppellationsRecap = array();
+        foreach ($dss as $ds_key => $ds) {
+            foreach ($ds->getAppellationsArray() as $app_key => $appellation){
+                switch ($app_key) {
+                    case 'VINDETABLE':
+                    break;
+                
+                    case 'GRDCRU':
+                    case 'CREMANT': 
+                    case 'ALSACEBLANC': 
+                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,$app_key,$appellation,$appellation->appellation);
+                    break;
+                    default :
+                        $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$app_key,$appellation);
+                    break;
+                }
+                
+            }
+        }
+    return $totauxByAppellationsRecap;
+    }
+    
+    public function getTotauxAgregeByCouleur($totauxByAppellationsRecap,$app_key,$appellation) {
+        if(preg_match('/^PINOTNOIR/', $app_key)){
+            return $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEROUGEROSE',$appellation,'Rouge ou Rosé');
+        }
+        foreach ($appellation->getLieux() as $lieu) {
+            foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
+                if(preg_match('/Blanc$/', $couleur_key)){
+                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEBLANC',$couleur,'AOC Alsace Blanc');
+                }
+                else
+                {
+                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEROUGEROSE',$couleur,'Rouge ou Rosé');
+                }
+            }
+        }
+        return $totauxByAppellationsRecap;
+    }
+    
+    public function getTotauxWithNode($totauxByAppellationsRecap,$key,$node,$nom) {
+        if(!array_key_exists($key, $totauxByAppellationsRecap)){
+            $totauxByAppellationsRecap[$key] = new stdClass();
+            $totauxByAppellationsRecap[$key]->nom = 'TOTAL '.$nom;
+            $totauxByAppellationsRecap[$key]->volume_total = 0;
+            $totauxByAppellationsRecap[$key]->volume_normal = 0;
+            $totauxByAppellationsRecap[$key]->volume_vt = 0;
+            $totauxByAppellationsRecap[$key]->volume_sgn = 0;
+        }
+        $totauxByAppellationsRecap[$key]->volume_total += ($node->total_stock)? $node->total_stock : 0;
+        $totauxByAppellationsRecap[$key]->volume_normal += ($node->total_normal)? $node->total_normal : 0;
+        $totauxByAppellationsRecap[$key]->volume_vt += ($node->total_vt)? $node->total_vt : 0;
+        $totauxByAppellationsRecap[$key]->volume_sgn += ($node->total_sgn)? $node->total_sgn : 0;
+        return $totauxByAppellationsRecap;
+    }  
+
+    public function getTotalAOC($ds) {
+        $dss = $this->findDssByDS($ds);
+        $totalAOC = 0;
+        foreach ($dss as $ds_key => $ds) {
+            $totalAOC += $ds->getTotalAOC();
+        }
+        return $totalAOC;
+    }
+    
+    public function getTotalSansIG($ds) {
+        $dss = $this->findDssByDS($ds);
+        $totalSansIG = 0;
+        foreach ($dss as $ds_key => $ds) {
+            $totalSansIG += $ds->getTotalVinSansIg();
+        }
+        return $totalSansIG;
+    }
+    
 }

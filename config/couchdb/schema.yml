@@ -15,6 +15,10 @@ DS:
       numero_archive: {  }
       statut: {}
       commentaire: {}
+      rebeches: {type: float}
+      dplc: {type: float}
+      lies: {type: float}
+      mouts: {type: float}
       declarant:
         type: collection
         definition:
@@ -27,26 +31,26 @@ DS:
             commune: {  }
             code_postal: {   }
             region: {  }
-      produits:
-        type: collection
-        definition:
-          fields:
-            '*':
-              class: DSProduit
-              type: collection
-              definition:
-                fields:
-                  code_produit: { }
-                  produit_libelle: { }
-                  produit_hash: { }
-                  stock_initial: { type: float }
-                  stock_declare: { type: float }
-                  vci: { type: float }
-                  reserve_qualitative: { type: float }
-                  stock_elaboration: { type: float, required: false }
-                  lieu: { required: false }
-                  vt: { required: false }
-                  sgn: { required: false }
+#      produits:
+#        type: collection
+#        definition:
+#          fields:
+#            '*':
+#              class: DSProduit
+#              type: collection
+#              definition:
+#                fields:
+#                  code_produit: { }
+#                  produit_libelle: { }
+#                  produit_hash: { }
+#                  stock_initial: { type: float }
+#                  stock_declare: { type: float }
+#                  vci: { type: float }
+#                  reserve_qualitative: { type: float }
+#                  stock_elaboration: { type: float, required: false }
+#                  lieu: { required: false }
+#                  vt: { required: false }
+#                  sgn: { required: false }
       declaration:
         type: collection
         class: DSDeclaration

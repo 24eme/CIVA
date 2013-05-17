@@ -10,7 +10,8 @@
  * @author mathurin
  */
 class DSCiva extends DS {
-
+    
+    
     public function constructId() {
         if ($this->statut == null) {
             $this->statut = DSClient::STATUT_A_SAISIR;
@@ -238,6 +239,33 @@ class DSCiva extends DS {
                     $total += ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
         }
         return $total;
+    }
+    
+    public function getTotalVinSansIg() {
+        foreach ($this->getAppellations() as $hash => $appellation) {
+            if(preg_match('/^appellation_VINTABLE/', $hash))
+                    return ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
+        }
+        return 0;
+    }
+    
+    
+    public function isDsPrincipale() {
+        return $this->getLieuStockage() == '001';
+    }
+
+
+    public function updateAutre($rebeches = 0,$dplc = 0,$lies = 0,$mouts = 0){
+        if($this->isDsPrincipale()){
+            $this->rebeches = $rebeches;
+            $this->dplc = $dplc;
+            $this->lies = $lies;
+            $this->mouts = $mouts;
+        }
+    }
+    
+    public function getUsagesIndustriels() {
+        return $this->lies + $this->dplc;
     }
     
 }

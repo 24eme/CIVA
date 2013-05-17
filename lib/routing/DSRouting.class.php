@@ -43,7 +43,7 @@ class DSRouting {
         
         
         
-        $r->prependRoute('ds_recapitulatif_lieu_stockage', new DSRoute('/ds/:id/recapitulatif-lieu-stockage/:lieu_stockage', array('module' => 'ds',
+        $r->prependRoute('ds_recapitulatif_lieu_stockage', new DSRoute('/ds/:id/recapitulatif-lieu-stockage', array('module' => 'ds',
                         'action' => 'recapitulatifLieuStockage'),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'DS',
@@ -54,6 +54,13 @@ class DSRouting {
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'Tiers',
                             'type' => 'object') ));
+        
+        $r->prependRoute('ds_validation', new TiersRoute('/ds/:cvi/validation', array('module' => 'ds',
+                'action' => 'validation'),
+                array('sf_method' => array('get', 'post')),
+                array('model' => 'Tiers',
+                    'type' => 'object') ));
+        
         
         
         
