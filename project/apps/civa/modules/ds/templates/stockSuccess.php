@@ -65,8 +65,8 @@
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
                                     <a href="<?php echo url_for('ds_edition_retour_etape', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu, 'retour' => true)); ?>">
-						<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" />
-					</a>
+                                        <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
+                                    </a>
 				</li>
 				<li>
 					<a href="#">
@@ -84,12 +84,12 @@
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
 		<a href="<?php echo url_for("ds_lieux_stockage", $tiers) ?>">
-			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
+			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
 		</a>
 	</li>
 	<li class="suiv">
 		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>">
-			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
+			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" class="btnAjax" />
 		</a>
 	</li>
 </ul>
