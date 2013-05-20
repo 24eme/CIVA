@@ -1,11 +1,16 @@
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
+<?php 
+
+include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); 
+$appellations = $ds->getAppellationsArray();
+$appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
+$current_lieu = null;
+?>
 <form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
     <div id="ajax_error"></div>
 	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 	
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
-            <?php foreach ($ds->getAppellationsArray() as $app_key => $app): 
-                ?>
+            <?php foreach ($appellations as $app_key => $app):  ?>
             <li class="<?php echo ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu))? 'ui-tabs-selected' : '' ; ?>">
                     <?php $app_libelle = $app->appellation; ?>
                     <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
@@ -21,6 +26,7 @@
               <ul class="sous_onglets">
                   <?php foreach ($ds->getLieuxFromAppellation($appellation_k) as $lieu_key => $lieu) :  
                       $lieu_k = preg_replace('/^lieu/','', $lieu_key);
+                      if(preg_replace('/^[A-Z]*-/', '', $appellation_lieu) == $lieu_k) $current_lieu = $lieu;
                   ?>
                   <li class="<?php echo (preg_replace('/^[A-Z]*-/', '', $appellation_lieu) == $lieu_k)? 'ui-tabs-selected' : ''; ?>">
                       <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_k.'-'.$lieu_k)); ?>"><?php echo $lieu->getLieuLibelle(); ?></a></li>
@@ -37,8 +43,9 @@
 			
 			<!-- #gestion_stock -->
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>
-
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>                            
+                            <?php if($ds->hasManyLieux($appellation_k)): 
+                                ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h2>Sous total</h2>
 			        
@@ -48,23 +55,23 @@
 			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_sgn" /></li>
 			        </ul>
 			    </div>
+                            <?php endif; ?>
 			</div>
 			<!-- fin #gestion_stock -->
 
 
 			<div id="total" class="ligne_total">
-				<h2>Total</h2>
-	
+				<h2>Total <?php echo $appellation->appellation; ?></h2>
 				<ul>
-					<li><input type="text" readonly="readonly" data-val-defaut="0.00" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
-					<li><input type="text" readonly="readonly" data-val-defaut="0.00" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
-					<li><input type="text" readonly="readonly" data-val-defaut="0.00" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_normal',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_vt',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_sgn',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
 				</ul>
 			</div>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
-                                    <a href="<?php echo url_for('ds_edition_retour_etape', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu, 'retour' => true)); ?>">
+                                    <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>">
                                         <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
                                     </a>
 				</li>

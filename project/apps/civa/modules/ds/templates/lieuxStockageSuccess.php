@@ -67,7 +67,7 @@
 		</a>
 	</li>
 	<li class="suiv">
-            <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante"/>
+            <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" class="btnAjax"/>
 	</li>
 </ul>
 </form>

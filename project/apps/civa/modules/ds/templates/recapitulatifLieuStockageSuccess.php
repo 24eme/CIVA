@@ -61,29 +61,16 @@
 			</div>
 		</div>
 		
-		<ul id="btn_appelation" class="btn_prev_suiv clearfix">
-			<li>
-				<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
-					<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" />
-				</a>
-			</li>
-			<li>
-				<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
-                                    <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer au lieu de stockage suivant" />
-				</a>
-			</li>
-		</ul>
-		
 	</div>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="#">
+		<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="#">
+		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>
