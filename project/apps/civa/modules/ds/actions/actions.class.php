@@ -65,6 +65,10 @@ class dsActions extends sfActions {
             if ($this->form->isValid()) {
                 $this->form->doUpdateObject();
                 $this->ds->save();
+                if($request->isXmlHttpRequest())
+                {            
+                    return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
+                }                
                 $next = $this->ds->getNextAppellationLieu($this->appellation_lieu);
                 if($next){
                     $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id,'appellation_lieu' => $next));

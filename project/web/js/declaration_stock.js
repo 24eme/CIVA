@@ -16,7 +16,7 @@ $(document).ready(function()
 	//navOngletsStock();
 	initDSSommesCol();
         var ajaxForm = $('form.ajaxForm');
-      //  ajaxForm.ajaxPostForm();
+        ajaxForm.ajaxPostForm();
 });
 
 /**
@@ -118,18 +118,35 @@ $.fn.majDSSommesCol = function()
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-        var inputs = $('#'+form_id+' :input');
-        console.log("Mathurin est dieu");
-        
-    $(inputs).each(function(){
-            $(this).change(function(){
-                $.post($(form).attr('action'), $(form).serializeArray(), function (data) {
-                    console.log("Mathurin est dieu");
-                });
-                return false;
-        }); 
-    });
+        var inputs = $('#'+form_id+'.ajaxForm :input');        
+        $(inputs).each(function(){
+                $(this).change(function(){
+                    formPost(form);
+                    return false;
+            }); 
+        });
+            
+        $('#'+form_id+'.ajaxForm .btnAjax').each(function(){
+                $(this).click(function(){
+                    formPost(form);
+            }); 
+        });
     
+}
+
+var formPost = function(form)
+{
+        $.ajax({
+            url: $(form).attr('action'),
+            type: "POST",
+            data: $(form).serializeArray(),
+            dataType: "json",
+            async : false,
+            success: function(msg){},  
+        error: function(textStatus){  
+            alert( "Request failed: " + textStatus );
+        }
+    });
 }
 
 /**
