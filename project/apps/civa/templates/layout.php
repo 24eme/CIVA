@@ -28,5 +28,6 @@
     <?php include_partial('global/init') ?>
     <?php include_javascripts() ?>
     <?php include_partial('global/ieCssJavascript') ?>
+    <?php include_partial('global/ajaxNotification') ?> 
   </body>
 </html>

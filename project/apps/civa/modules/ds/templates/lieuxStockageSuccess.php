@@ -1,6 +1,6 @@
 <!-- .header_ds -->
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
-<form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST">
+<form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST" class="ajaxForm">
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();

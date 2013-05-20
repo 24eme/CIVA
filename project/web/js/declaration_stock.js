@@ -15,6 +15,8 @@ $(document).ready(function()
 {	
 	//navOngletsStock();
 	initDSSommesCol();
+        var ajaxForm = $('form.ajaxForm');
+      //  ajaxForm.ajaxPostForm();
 });
 
 /**
@@ -113,6 +115,23 @@ $.fn.majDSSommesCol = function()
 	});
 };
 
+$.fn.ajaxPostForm = function(){
+        var form = $(this);
+        var form_id = $(this).attr('id');
+        var inputs = $('#'+form_id+' :input');
+        console.log("Mathurin est dieu");
+        
+    $(inputs).each(function(){
+            $(this).change(function(){
+                $.post($(form).attr('action'), $(form).serializeArray(), function (data) {
+                    console.log("Mathurin est dieu");
+                });
+                return false;
+        }); 
+    });
+    
+}
+
 /**
  * Gère la navigation des onglets
  *********************************************************/
@@ -139,5 +158,3 @@ var navOngletsStock = function()
 		});
 	});
 };
-
-

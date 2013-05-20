@@ -1,4 +1,5 @@
 <!-- #principal -->
+<?php //include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 1)); ?>
 <section id="principal" class="ds">
     <!-- #contenu_etape -->
     <section id="contenu_etape">
