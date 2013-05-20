@@ -150,7 +150,7 @@ class DSCivaClient extends DSClient {
     }
     
     
-    public function create($data) {
+    public function create($data, $force_return_ls = false) {
         if (!isset($data->type)) {
             
             throw new acCouchdbException('Property "type" ($data->type)');
