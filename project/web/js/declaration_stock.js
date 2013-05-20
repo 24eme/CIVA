@@ -144,7 +144,7 @@ var formPost = function(form)
             async : false,
             success: function(msg){},  
         error: function(textStatus){  
-            alert( "Request failed: " + textStatus );
+            $( "#ajax_error").html(textStatus);
         }
     });
 }

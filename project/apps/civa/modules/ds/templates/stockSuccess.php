@@ -1,6 +1,6 @@
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
 <form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
-	
+    <div id="ajax_error"></div>
 	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 	
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
