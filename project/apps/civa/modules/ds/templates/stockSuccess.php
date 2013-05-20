@@ -1,31 +1,5 @@
-<form id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
-	<!-- .header_ds -->
-	<div class="header_ds clearfix">
-		
-		<ul id="etape_declaration" class="etapes_ds clearfix">
-			<li>
-				<a href="<?php echo url_for('ds');?>"><span>Exploitation</span> <em>Etape 1</em></a>
-			</li>
-			<li>
-				<a href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
-			</li>
-			<li class="actif">
-				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 1/3)</em></a>
-			</li>
-			<li>
-				<a href="#"><span>Validation</span> <em>Etape 5</em></a>
-			</li>
-		</ul>
-	
-		<div class="progression_ds">
-			<p>Vous avez saisi <span>40%</span> de votre DS</p>
-	
-			<div class="barre_progression">
-				<div class="progression" style="width: 40%;"></div>
-			</div>
-		</div>
-	</div>
-	<!-- fin .header_ds -->
+<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
+<form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
 	
 	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 	
@@ -114,7 +88,7 @@
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'lieu_stockage' => $ds->getLieuStockage())); ?>">
+		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>

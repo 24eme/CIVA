@@ -1,36 +1,4 @@
-<form id="" action="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'lieu_stockage' => $ds->getLieuStockage())); ?>" method="post">
-	<!-- .header_ds -->
-	<div class="header_ds clearfix">
-		
-		<ul id="etape_declaration" class="etapes_ds clearfix">
-			<li class="passe">
-				<a href="#"><span>Exploitation</span> <em>Etape 1</em></a>
-			</li>
-			<li class="passe">
-				<a href=""><span>Lieux de stockage</span> <em>Etape 2</em></a>
-			</li>
-			<li class="actif sous_menu">
-				<a href="#"><span>Stocks</span> <em>Etape 3 (lieu 3/6)</em></a>
-				<ul>
-				<li><a href="#">Lieu de stockage n° <?php echo $ds->getLieuStockage();?></a></li>
-				</ul>
-			</li>
-			<li>
-				<a href="#"><span>Récapitulatif</span> <em>Etape 4</em></a>
-			</li>
-			<li>
-				<a href="#"><span>Validation</span> <em>Etape 5</em></a>
-			</li>
-		</ul>
-	
-		<div class="progression_ds">
-			<p>Vous avez saisi <span>60%</span> de votre DS</p>
-	
-			<div class="barre_progression">
-				<div class="progression" style="width: 60%;"></div>
-			</div>
-		</div>
-	</div>
+<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
 	<!-- fin .header_ds -->
 	
 	<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
@@ -79,43 +47,17 @@
 						<ul class="bloc_vert">
 							<li>
 								<label>Vins de table - Vins sans IG</label>
-								<input type="text" readonly="readonly" value="25" />
+								<input type="text" readonly="readonly" value="<?php echo $ds->getTotalVinSansIg(); ?>" />
 							</li>
 							
 							<li>
 								<label>Vins de table - Mousseux</label>
-								<input type="text" readonly="readonly" value="25" />
+								<input type="text" readonly="readonly" value="?" />
 							</li>
 						</ul>
 					</div>
-				</div>
-				
-				<div id="bloc_autres_autres" class="bloc_autres">
-					<h2 class="titre_section">Autres</h2>
-					<div class="contenu_section">
-						<ul class="bloc_vert">
-							<li>
-								<label>Rébêches</label>
-								<input type="text" readonly="readonly" value="25" />
-							</li>
-							
-							<li>
-								<label>DPLC</label>
-								<input type="text" readonly="readonly" value="25" />
-							</li>
-							
-							<li>
-								<label>Lies en Stocks</label>
-								<input type="text" readonly="readonly" value="25" />
-							</li>
-							
-							<li>
-								<label>Moûts concentrés rectifiés</label>
-								<input type="text" readonly="readonly" value="25" />
-							</li>
-						</ul>
-					</div>
-				</div>
+				</div>			
+
 			</div>
 		</div>
 		
@@ -126,15 +68,13 @@
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
                                     <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer au lieu de stockage suivant" />
 				</a>
 			</li>
 		</ul>
 		
 	</div>
-	<!-- fin #application_ds -->
-</form>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
