@@ -6,7 +6,7 @@ $appellations = $ds->getAppellationsArray();
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
             <?php foreach ($appellations as $app_key => $app):  ?>
             <li>
-                <?php $app_libelle = $app->appellation; ?>
+                <?php $app_libelle = $app->libelle; ?>
                 <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
                     <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
                     </span> 
@@ -43,7 +43,7 @@ $appellations = $ds->getAppellationsArray();
                                         <?php foreach ($ds->getAppellations() as $appellation) : ?>
                                         
 						<tr>
-							<td><?php echo $appellation->getAppellation(); ?></td>
+							<td><?php echo $appellation->getLibelle(); ?></td>
 							<td><?php echo $appellation->getTotalStock(); ?></td>
 							<td><?php echo $appellation->getTotalNormal(); ?></td>
 							<td><?php echo $appellation->getTotalVt(); ?></td>
