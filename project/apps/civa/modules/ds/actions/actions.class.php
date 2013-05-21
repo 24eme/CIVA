@@ -141,13 +141,4 @@ class dsActions extends sfActions {
         
     }
     
-    public function executeRecapLieuStockage(sfWebRequest $request)
-    {
-    }
-    
-    public function executeRecap(sfWebRequest $request)
-    {
-        
-    }
-    
 }
