@@ -1,7 +1,5 @@
 <?php
 $produits = $form->getProduitsDetails();
-echo $form->renderHiddenFields();
-echo $form->renderGlobalErrors();
 ?>    
     <ul id="liste_cepages">
         <?php 

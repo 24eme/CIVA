@@ -5,7 +5,11 @@ $current_lieu = null;
 $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($ds->isDsPrincipale());
 ?>
 <form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
-    <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
+    <?php 
+        echo $form->renderHiddenFields();
+        echo $form->renderGlobalErrors();
+        include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
+    ?>
     <div id="ajax_error"></div>
 	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 	
@@ -46,7 +50,7 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 			
 			<!-- #gestion_stock -->
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>                            
+                            <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>                            
                             <?php if($ds->hasManyLieux($appellation_k)): 
                                 ?>
 			    <div id="sous_total" class="ligne_total">
