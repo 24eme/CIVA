@@ -165,10 +165,13 @@ class DSCiva extends DS {
         foreach ($config_appellations as $config_appellation_key) {  
             foreach ($appellations as $key => $appellation) {
                 if(preg_match('/^appellation_/', $key) && ($key == $config_appellation_key)){
+                    $k = preg_replace('/^appellation_/', '', $key);
                     foreach ($appellation->getLieux() as $lieu_key => $lieu) {
                         $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
-                        $k = preg_replace('/^appellation_/', '', $key);
                         $k.= ($lieu_k!='')? '-'.$lieu_k : '';
+                        $appellationsSorted[$k] = $lieu;
+                    }
+                    if(!count($appellation->getLieux())){
                         $appellationsSorted[$k] = $lieu;
                     }
                 }
@@ -270,6 +273,9 @@ class DSCiva extends DS {
     public function getTotalMousseuxSansIg() {
         foreach ($this->getAppellations() as $hash => $appellation) {
             if(preg_match('/^appellation_VINTABLE/', $hash)){
+                if(!$appellation->exist('mention')) return 0;
+                if(!$appellation->mention->exist('lieu')) return 0;
+                if(!$appellation->mention->lieu->exist('lieu')) return 0;
                 foreach ($appellation->mention->lieu->couleur->getCepages() as $hash_c => $cepage){
                     if($hash_c == 'cepage_MS')
                         return ($cepage->detail[0]->volume_normal)? $cepage->detail[0]->volume_normal : 0;
