@@ -3,6 +3,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 $appellations = $ds->getAppellationsArray();
 $appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
 $current_lieu = null;
+$firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($ds->isDsPrincipale());
 ?>
 <form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
     <div id="ajax_error"></div>
@@ -73,11 +74,15 @@ $current_lieu = null;
 			</div>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
+                            
 				<li>
+                                <?php if(!$firstAppellation): ?>
                                     <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>">
                                         <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
                                     </a>
+                                <?php endif; ?>
 				</li>
+                                
 				<li>
 					<a href="#">
                                             <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
@@ -97,7 +102,7 @@ $current_lieu = null;
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
 		</a>
 	</li>
-	<li class="suiv">
+        <li class="suiv">
 		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" class="btnAjax" />
 		</a>
