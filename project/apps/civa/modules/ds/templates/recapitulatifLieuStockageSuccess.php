@@ -8,9 +8,9 @@ $appellations = $ds->getAppellationsArray();
             <li>
                 <?php $app_libelle = $app->libelle; ?>
                 <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
-                    <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
+                    <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
                     </span> 
-                    <br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?>
+                    <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
                 </a>
             </li>
             <?php 
