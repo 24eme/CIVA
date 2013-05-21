@@ -15,7 +15,7 @@ $(document).ready(function()
 {	
 	//navOngletsStock();
 	initDSSommesCol();
-        var ajaxForm = $('form.ajaxForm');
+        var ajaxForm = $('form');
         ajaxForm.ajaxPostForm();
 });
 
@@ -126,7 +126,7 @@ $.fn.ajaxPostForm = function(){
             }); 
         });
             
-        $('#'+form_id+'.ajaxForm .btnAjax').each(function(){
+        $('#'+form_id+' .ajax').each(function(){
                 $(this).click(function(){
                     formPost(form);
             }); 
@@ -143,8 +143,10 @@ var formPost = function(form)
             dataType: "json",
             async : false,
             success: function(msg){},  
-        error: function(textStatus){  
-            $( "#ajax_error").html(textStatus);
+            error: function(textStatus){  
+                $( "#ajax_error").html(textStatus);
+//                console.log(textStatus);
+//                alert(textStatus);
         }
     });
 }

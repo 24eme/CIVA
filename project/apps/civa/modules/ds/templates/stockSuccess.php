@@ -1,11 +1,11 @@
 <?php 
-include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); 
 $appellations = $ds->getAppellationsArray();
 $appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
 $current_lieu = null;
 $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($ds->isDsPrincipale());
 ?>
 <form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
+    <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
     <div id="ajax_error"></div>
 	<p id="adresse_stock"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></p>
 	
@@ -77,16 +77,14 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
                             
 				<li>
                                 <?php if(!$firstAppellation): ?>
-                                    <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getPreviousAppellationLieu($appellation_lieu))); ?>">
-                                        <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
+                                    <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getPreviousAppellationLieu($appellation_lieu))); ?>">
+                                        <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
                                     </a>
                                 <?php endif; ?>
 				</li>
                                 
 				<li>
-					<a href="#">
                                             <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
-					</a>
 				</li>
 			</ul>
 		</div>
@@ -94,17 +92,17 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 	</div>
 	<!-- fin #application_ds -->
 
-</form>
-
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
-	<li class="prec">
+	<li class="prec ajax">
 		<a href="<?php echo url_for("ds_lieux_stockage", $tiers) ?>">
-			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
+			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente"  />
 		</a>
 	</li>
-        <li class="suiv">
+        <li class="suiv ajax">
 		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>">
-			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" class="btnAjax" />
+			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante"  />
 		</a>
 	</li>
 </ul>
+</form>
+
