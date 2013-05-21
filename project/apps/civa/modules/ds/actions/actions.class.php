@@ -95,7 +95,7 @@ class dsActions extends sfActions {
     public function getDSNoeud($appellation_lieu) {
         $matches = array();
         if(preg_match('/^([A-Z]+)-([A-Za-z0-9]+)$/', $appellation_lieu,$matches)){
-            return $this->ds->declaration->getAppellations()->get('appellation_'.$matches[1])->mention->get('lieu'.$matches[2])->getProduitsDetails();
+            return $this->ds->declaration->getAppellations()->get('appellation_'.$matches[1])->mention->get('lieu'.$matches[2]);
         }
         return $this->ds->declaration->getAppellations()->get('appellation_'.$appellation_lieu);
     }
