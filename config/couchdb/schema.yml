@@ -85,7 +85,7 @@ DS:
                           inheritance: _DSNoeud
                           definition:
                             fields:
-                              appellation: {}
+                              libelle: {}
                               total_stock: {type: float}
                               total_vt: {type:float}
                               total_sgn: {type:float}
@@ -97,6 +97,7 @@ DS:
                                 inheritance: _DSNoeud
                                 definition:
                                   fields:
+                                    libelle: {}
                                     total_stock: {type: float }
                                     total_vt: {type:float}
                                     total_sgn: {type:float}
@@ -108,6 +109,7 @@ DS:
                                       inheritance: _DSNoeud
                                       definition:
                                         fields:
+                                          libelle: {}
                                           total_stock: {type: float}
                                           total_vt: {type:float}
                                           total_sgn: {type:float}
@@ -119,6 +121,7 @@ DS:
                                             inheritance: _DSNoeud
                                             definition:
                                               fields:
+                                                libelle: {}
                                                 total_stock: {type:float}
                                                 total_vt: {type:float}
                                                 total_sgn: {type:float}
@@ -130,10 +133,8 @@ DS:
                                                   inheritance: _DSNoeud
                                                   definition:
                                                     fields:
-                                                      appellation: {  }
-                                                      cepage: {}
+                                                      libelle: {}
                                                       no_vtsgn: {}
-                                                      lieu: { required: false }
                                                       detail:                                                        
                                                         type: array_collection
                                                         definition:
@@ -145,13 +146,10 @@ DS:
                                                               definition:
                                                                 fields:
                                                                   vtsgn: { }
-                                                                  appellation: {  }
-                                                                  cepage: {  }
                                                                   volume_vt: {type:float}
                                                                   volume_sgn: {type:float}
                                                                   volume_normal: {type:float}
                                                                   lieu: {  }
-                                                                  libelle: {  }
                                                                   stock_declare: {type: float }
                                                                   vci: {type: float, required: false}
                                                                   reserve_qualitative: {type: float, required: false}

@@ -27,7 +27,11 @@ class DSRouting {
                         array('model' => 'Tiers',
                             'type' => 'object')));        
 
-    
+        $r->prependRoute('ds_ajout_produit', new DSRoute('/ds/:id/ajout-produit/:appellation_lieu', array('module' => 'ds',
+                        'action' => 'ajoutProduit'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'DS',
+                            'type' => 'object') ));
 
         $r->prependRoute('ds_edition_operateur', new DSRoute('/ds/:id/edition/:appellation_lieu', array('module' => 'ds',
                         'action' => 'stock'),

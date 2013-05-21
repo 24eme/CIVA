@@ -11,6 +11,11 @@ class DSLieu extends BaseDSLieu {
         return $this->getParent();
     }
 
+    public function getAppellation() {
+
+        return $this->getMention()->getParent();
+    }
+
     public function getChildrenNode() {
 
         return $this->getCouleurs();

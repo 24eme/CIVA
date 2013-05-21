@@ -8,12 +8,22 @@ class DSCepage extends BaseDSCepage {
     
     public function getCouleur() {
 
-      return $this->getParent();
+        return $this->getParent();
     }
 
     public function getLieu() {
 
-      return $this->getCouleur()->getLieu();
+        return $this->getCouleur()->getLieu();
+    }
+
+    public function getMention() {
+
+        return $this->getCouleur()->getLieu();
+    }
+
+    public function getAppellation() {
+
+        return $this->getLieu()->getAppellation();
     }
 
     public function getChildrenNode() {
@@ -26,6 +36,11 @@ class DSCepage extends BaseDSCepage {
         return array($this->getHash() => $this);
     }
 
+    public function hasVtsgn() {
+
+        return (bool) $this->no_vtsgn;
+    }
+
     public function getProduitsDetails() {
       $details = array();
       foreach($this->getChildrenNode() as $key => $item) {
@@ -34,7 +49,7 @@ class DSCepage extends BaseDSCepage {
       return $details;
     }
     
-    public function addProduit($produitCepage, $lieu_dit = '', $vt=null, $sgn=null){
+    /*public function addProduitFromDR($produitCepage, $lieu_dit = ''){
         $prod  = ConfigurationClient::getConfiguration()->get($produitCepage->getHash());
         $this->no_vtsgn = (int) ($prod->exist('no_vtsgn') && ($prod->no_vtsgn == '1'));
         $this->cepage = $produitCepage->getLibelle();
@@ -43,34 +58,45 @@ class DSCepage extends BaseDSCepage {
         $this->addDetails($produitCepage);        
     }
     
-    public function addDetails($produitCepage) {
+    public function addDetailsFromDR($produitCepage) {
         foreach ($produitCepage->getProduitsDetails() as $detail) {
             $this->addDetail($detail,$produitCepage,$this->no_vtsgn);
         }              
-    }
-        
-    public function addDetail($detail,$produitCepage,$no_vtsgn = null) {
-        $detail->lieu = ($detail->lieu)? $detail->lieu : '';
-        if($node = $this->getDetailNode($detail->lieu)) return $node;
-        $detailDS = $this->detail->add();
-        $detailDS->volume_normal = 0;
-        if(!$no_vtsgn){
-            $detailDS->volume_vt = 0;
-            $detailDS->volume_sgn = 0;
+    }*/
+
+    public function addDetail($lieu_dit = null) {
+        if($detail = $this->getDetailNode($lieu_dit)) {
+
+            return $detail;
         }
-        $detailDS->lieu = $detail->lieu;
-        $detailDS->cepage = $produitCepage->getLibelle();
-        $detailDS->appellation = $produitCepage->getParent()->getParent()->getParent()->getParent()->getLibelle();
+
+        $detail = $this->detail->add();
+        $detail->volume_normal = 0;
+        if($this->hasVtsgn()){
+            $detail->volume_vt = 0;
+            $detail->volume_sgn = 0;
+        }
+
+        $detail->lieu = $lieu_dit;
+        return $detail;
     }
+
 
     public function hasLieu($lieu) {
         return !is_null($this->getDetailLieu($lieu));
     }
     
-    public function getDetailNode($lieu) {
+    public function getDetailNode($lieu = null) {
         foreach ($this->detail as $d) {
-            if($d->exist('lieu') && $d->lieu == $lieu)                
+            if(is_null($lieu)) {
+
                 return $d;
+            }
+
+            if($d->exist('lieu') && $d->lieu == $lieu) {                
+             
+                return $d;
+            }
         }
         return null;
     }

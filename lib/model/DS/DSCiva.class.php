@@ -38,25 +38,44 @@ class DSCiva extends DS {
         }
     }
 
-    public function addAppellation($appellation_hash, $config = null) {   
+    public function addAppellation($appellation_hash) {   
       $produit_hash = preg_replace('/^\/recolte/','declaration',$appellation_hash);
       $appellationNode = $this->getOrAdd($produit_hash);
+      $config = $appellationNode->getConfig();
+      $appellationNode->libelle = $config->getLibelle();
      
       return $appellationNode;
     }
+
+    public function addDetailsFromDRProduit($dr_produit) {
+        foreach ($dr_produit->getProduitsDetails() as $detail) {
+            $this->addDetail($dr_produit->getHash(), $detail->lieu);
+        }
+    }
     
-    public function addProduit($produit, $config = null) {   
-      $produit_hash = preg_replace('/^\/recolte/','declaration',$produit->getHash());
-      $detail = $this->getOrAdd($produit_hash)->addProduit($produit);     
-      return $detail;
+    public function addProduit($hash) {
+        $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $produit = $this->getOrAdd($hash);
+        $config = $produit->getConfig();
+        $produit->libelle = $config->getLibelle();
+        $produit->getCouleur()->libelle = $produit->getConfig()->getCouleur()->libelle;
+        $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
+        $produit->getMention()->libelle = $produit->getConfig()->getMention()->libelle;
+        $produit->getAppellation()->libelle = $produit->getConfig()->getAppellation()->libelle;
+        $produit->no_vtsgn = (int) $config->hasVtsgn();
+        return $produit;
+    }
+
+    public function addDetail($hash, $lieudit = null) {
+        
+        return $this->addProduit($hash)->addDetail($lieudit);
     }
 
     protected function updateProduitsFromDR($dr) {     
         $produits = $dr->getProduitsWithVolume();
         $this->drm_origine = $dr->_id;     
-        foreach ($produits as $produitCepage) {
-             $config = ConfigurationClient::getConfiguration()->get($produitCepage->getHash());
-             $this->addProduit($produitCepage,$config);              
+        foreach ($produits as $produit) {
+            $this->addDetailsFromDRProduit($produit);              
        }
     }
         
