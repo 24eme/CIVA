@@ -118,7 +118,7 @@ $.fn.majDSSommesCol = function()
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-        var inputs = $('#'+form_id+'.ajaxForm :input');        
+        var inputs = $('#'+form_id+'.ajaxForm :input'); 
         $(inputs).each(function(){
                 $(this).change(function(){
                     formPost(form);
