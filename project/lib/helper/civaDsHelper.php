@@ -30,7 +30,7 @@ function positionEditionDS($dss,$ds){
 
 function getDefaultTotal($type,$appellation,$current_lieu){
     
-    if(!$current_lieu) return $appellation->{$type};
+    if(!$current_lieu) return 0;//$appellation->{$type};
     return $appellation->{$type} - $current_lieu->{$type};
     
 }

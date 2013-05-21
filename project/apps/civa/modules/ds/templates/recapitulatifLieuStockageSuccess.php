@@ -79,7 +79,7 @@ $appellations = $ds->getAppellationsArray();
 						</tr>        
 						<tr>
 							<td>Vins de table mousseux</td>
-							<td>?</td>
+							<td><?php echo $ds->getTotalMousseuxSansIg(); ?></td>
 						</tr>
 					</tbody>
 				</table>

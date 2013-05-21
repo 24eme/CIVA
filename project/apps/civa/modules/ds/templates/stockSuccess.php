@@ -78,7 +78,7 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 			<!-- #gestion_stock -->
 
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if(isset($has_lieux) && $has_lieux) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>                         
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'appellation_lieu' => $appellation_lieu));?>                         
                 <?php if($ds->hasManyLieux($appellation_k)):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
@@ -103,7 +103,6 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 				</ul>
 			</div>
 
-            <a href="<?php echo url_for('ds_ajout_produit', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu)) ?>">Ajouter un produit</a>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
