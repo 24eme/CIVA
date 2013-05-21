@@ -8,7 +8,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
 		
-		<div id="recap_total_ds">
+		<div id="recap_total_ds" class="page_recap">
 			<div id="recap_appellations">
 				<table class="table_donnees">
 					<thead>
@@ -21,15 +21,15 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 						</tr>
 					</thead>
 					<tbody>
-                                            <?php foreach ($appelations_agregee as $apellation_agregee_key => $apellation_agregee) : ?>
+                        <?php foreach ($appelations_agregee as $apellation_agregee_key => $apellation_agregee) : ?>
 						<tr>
-							<td> <?php echo $apellation_agregee->nom; ?></td>
+							<td><?php echo $apellation_agregee->nom; ?></td>
 							<td><?php echo $apellation_agregee->volume_total; ?></td>
 							<td><?php echo $apellation_agregee->volume_normal; ?></td>
 							<td><?php echo $apellation_agregee->volume_vt; ?></td>
 							<td><?php echo $apellation_agregee->volume_sgn; ?></td>
 						</tr>
-                                            <?php endforeach; ?>
+                        <?php endforeach; ?>
 					</tbody>
 				</table>
 				
@@ -38,28 +38,31 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<input type="text" readonly="readonly" value="<?php echo $ds_client->getTotalAOC($ds_principale); ?>" />
 				</div>				                           
 			</div>
+			
+			<div id="recap_vins_sans_ig">
+			<table class="table_donnees">
+				<thead>
+					<tr>
+						<th class="appellation">Vins sans IG</th>
+						<th class="total">Total</th>
+					</tr>
+				</thead>
+				<tbody>        
+					<tr>
+						<td>TOTAL Sans IG</td>
+						<td><?php echo $ds_client->getTotalSansIG($ds_principale); ?></td>
+					</tr>        
+					<tr>
+						<td>TOTAL Mousseux</td>
+						<td><?php echo '?'; ?></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-                    
+		
+		
+			<div id="recap_autres">				
 				<table class="table_donnees">
-					<thead>
-						<tr>
-							<th class="appellation">Vin sans IG</th>
-							<th class="total">Volume</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>TOTAL Sans IG</td>
-							<td><?php echo $ds_client->getTotalSansIG($ds_principale); ?></td>
-						</tr>
-						<tr>
-							<td>TOTAL Mousseux</td>
-							<td><?php echo '?'; ?></td>
-						</tr>
-                                       	</tbody>
-				</table>  
-                            
-                                <table class="table_donnees">
 					<thead>
 						<tr>
 							<th class="appellation">Autres</th>
@@ -75,8 +78,12 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 							<td>TOTAL Usages industiels</td>
 							<td><?php echo $ds_principale->getUsagesIndustriels(); ?></td>
 						</tr>
-                                       	</tbody>
+					</tbody>
 				</table>     
+			</div>
+		
+		</div>
+		
 		
 	</div>
 	<!-- fin #application_ds -->
