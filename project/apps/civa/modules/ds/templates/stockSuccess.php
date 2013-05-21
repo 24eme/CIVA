@@ -12,11 +12,10 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
             <?php foreach ($appellations as $app_key => $app):  ?>
             <li <?php echo ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu))? 'class="ui-tabs-selected"' : '' ; ?> >
-                    <?php $app_libelle = $app->appellation; ?>
-                    <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
-                        <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
+                     <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
+                        <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
                         </span> 
-                        <br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?></a>
+                        <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?></a>
 		</li>
                 <?php 
                 endforeach;
@@ -65,13 +64,15 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 
 
 			<div id="total" class="ligne_total">
-				<h2>Total <?php echo $appellation->appellation; ?></h2>
+				<h2>Total <?php echo $appellation->libelle; ?></h2>
 				<ul>
 					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_normal',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
 					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_vt',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
 					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_sgn',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
 				</ul>
 			</div>
+
+            <a href="<?php echo url_for('ds_ajout_produit', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu)) ?>">Ajouter un produit</a>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
                             

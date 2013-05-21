@@ -2,6 +2,16 @@
 
 class ConfigurationLieu extends BaseConfigurationLieu {
 
+    public function getMention() {
+
+        return $this->getParentNode();
+    }
+
+    public function getAppellation() {
+
+        return $this->getMention()->getParentNode();
+    }
+
     public function getCouleurs() {
         return $this->filter('^couleur');
     }

@@ -2,6 +2,25 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
+    public function getAppellation() {
+
+      return $this->getLieu()->getAppellation();
+    }
+
+    public function getLieu() {
+
+        return $this->getCouleur()->getLieu();
+    }
+
+    public function getMention() {
+
+        return $this->getLieu()->getMention();
+    }
+
+    public function getCouleur() {
+
+        return $this->getParentNode();
+    }
 
     public function getLibelleFormat($labels = array(), $format = "%g% %a% %m% %l% %co% %ce%", $label_separator = ", ") {
         //return $this->getParent()->getParent()->getParent()->getParent()->getLibelle().' - '.$this->getLibelle();

@@ -58,7 +58,6 @@ class dsActions extends sfActions {
         }
     }
 
- 
     public function executeStock(sfWebRequest $request) {        
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
@@ -83,6 +82,37 @@ class dsActions extends sfActions {
                 }
             }
         }
+    }
+
+    public function getDSNoeud($appellation_lieu) {
+        $matches = array();
+        if(preg_match('/^([A-Z]+)-([A-Za-z0-9]+)$/', $appellation_lieu,$matches)){
+            return $this->ds->declaration->getAppellations()->get('appellation_'.$matches[1])->mention->get('lieu'.$matches[2])->getProduitsDetails();
+        }
+        return $this->ds->declaration->getAppellations()->get('appellation_'.$appellation_lieu);
+    }
+
+    public function executeAjoutProduit(sfWebRequest $request) {
+        $this->ds = $this->getRoute()->getDS();
+        $this->config_noeud = $this->getDSNoeud($request['appellation_lieu'])->getConfig();
+        $this->form = new DSEditionAddProduitFormCiva($this->ds, $this->config_noeud);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+        
+        if(!$this->form->isValid()) {
+            
+            return sfView::SUCCESS;
+        }
+
+        $this->ds->addDetail($this->form->getValue('hashref'), $this->form->getValue('lieudit'));
+        $this->ds->save();
+
+        return $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id, 'appellation_lieu' => $request['appellation_lieu']));
     }
     
     public function executeStockRetour(sfWebRequest $request) {        
