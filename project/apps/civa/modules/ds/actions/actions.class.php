@@ -94,9 +94,14 @@ class dsActions extends sfActions {
 
     public function executeAjoutProduit(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
-        $this->config_noeud = $this->getDSNoeud($request['appellation_lieu'])->getConfig();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->appellation_lieu = $request['appellation_lieu'];
+        $this->config_noeud = $this->getDSNoeud($this->appellation_lieu)->getConfig();
         $this->form = new DSEditionAddProduitFormCiva($this->ds, $this->config_noeud);
-
+        $this->appellations = $this->ds->getAppellationsArray();
+        $this->appellation = $this->appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $this->appellation_lieu)];
+        
+        
         if (!$request->isMethod(sfWebRequest::POST)) {
 
             return sfView::SUCCESS;
@@ -115,18 +120,7 @@ class dsActions extends sfActions {
         return $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id, 'appellation_lieu' => $request['appellation_lieu']));
     }
     
-    public function executeStockRetour(sfWebRequest $request) {        
-        $this->ds = $this->getRoute()->getDS();
-        $this->tiers = $this->getRoute()->getTiers();
-        $this->appellation = $request['appellation_lieu'];
-        $this->previous_appellationLieu = $this->ds->getPreviousAppellationLieu($this->appellation);
-        if($this->previous_appellationLieu){
-            $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id,'appellation_lieu' => $this->previous_appellationLieu));
-        }
-        else{
-           $this->redirect('ds_lieux_stockage', $this->tiers); 
-        }
-    } 
+
     
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();

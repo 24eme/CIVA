@@ -51,30 +51,8 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 		
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
-		<div id="aucun_produit">
-			<p>Il n'y a pas de produit défini pour cette appellation</p>
-		
-			<div class="form_ligne">
-				<label for="selectionner_cepage">Sélectionner un cépage :</label>
-				<select id="selectionner_cepage">
-					<option value="1">Chasselas</option>
-					<option value="2">Sylvaner</option>
-					<option value="3">Auxerrois</option>
-				</select>
-			</div>
-			
-			<div class="form_ligne">
-				<label for="selectionner_lieu_dit">Sélectionner un lieu-dit :</label>
-				<input type="text" id="selectionner_lieu_dit" />
-			</div>
-			
-			<div class="form_btn">
-				<input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
-			</div>
-		</div>
-			
-			
-		<div id="cont_gestion_stock">
+
+            <div id="cont_gestion_stock">
 			
 			<!-- #gestion_stock -->
 
