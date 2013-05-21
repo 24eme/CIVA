@@ -62,7 +62,7 @@ class DSCiva extends DS {
         $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
         $produit->getMention()->libelle = $produit->getConfig()->getMention()->libelle;
         $produit->getAppellation()->libelle = $produit->getConfig()->getAppellation()->libelle;
-        $produit->no_vtsgn = (int) $config->hasVtsgn();
+        $produit->no_vtsgn = (int) !$config->hasVtsgn();
         return $produit;
     }
 
@@ -157,25 +157,25 @@ class DSCiva extends DS {
     
     public function getAppellationsLieuArray() {
         $appellationsSorted = array();
-        $appellations = $this->getAppellations()->toArray();        
+        $appellations = $this->getAppellations()->toArray();    
         if(!count($appellations))
             throw new sfException(sprintf("La DS %s ne possède aucune appellation.",$this->_id));
         
         $config_appellations = $this->getConfigAppellationsArray();
-        foreach ($config_appellations as $config_appellation_key) {            
+        foreach ($config_appellations as $config_appellation_key) {  
             foreach ($appellations as $key => $appellation) {
                 if(preg_match('/^appellation_/', $key) && ($key == $config_appellation_key)){
-                    
                     foreach ($appellation->getLieux() as $lieu_key => $lieu) {
                         $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
                         $k = preg_replace('/^appellation_/', '', $key);
                         $k.= ($lieu_k!='')? '-'.$lieu_k : '';
+                        echo get_class($lieu);
                         $appellationsSorted[$k] = $lieu;
                     }
                 }
             }
         }
-        
+
         return $appellationsSorted;
     }
 
