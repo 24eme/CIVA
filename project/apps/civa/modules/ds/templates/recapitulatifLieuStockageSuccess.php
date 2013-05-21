@@ -2,6 +2,9 @@
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
 $appellations = $ds->getAppellationsArray();
 ?>
+
+<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
+
 	<!-- fin .header_ds -->
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
             <?php foreach ($appellations as $app_key => $app):  ?>
@@ -21,13 +24,13 @@ $appellations = $ds->getAppellationsArray();
                         <br>Récapitulatif</a>
                 </li>                
         </ul>
-	<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
+	
 
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
 		
-		<div id="recap_lieu_stockage">
+		<div id="recap_lieu_stockage" class="page_recap">
 			<div id="recap_appellations">
 				<table class="table_donnees">
 					<thead>
@@ -39,8 +42,8 @@ $appellations = $ds->getAppellationsArray();
 							<th>SGN</th>
 						</tr>
 					</thead>
-                                        <tbody>
-                                        <?php foreach ($ds->getAppellations() as $appellation) : ?>
+					<tbody>
+					<?php foreach ($ds->getAppellations() as $appellation) : ?>
                                         
 						<tr>
 							<td><?php echo $appellation->getLibelle(); ?></td>
@@ -50,7 +53,7 @@ $appellations = $ds->getAppellationsArray();
 							<td><?php echo $appellation->getTotalSgn(); ?></td>
 						</tr>
                                             
-                                        <?php endforeach; ?>
+                        <?php endforeach; ?>
 					</tbody>
 				</table>
 				
@@ -59,34 +62,36 @@ $appellations = $ds->getAppellationsArray();
 					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalAOC(); ?>" />
 				</div>
 			</div>
-                    <br>
-			<div id="blocs_autres">
-                                <table class="table_donnees">
+
+			
+			<div id="recap_vins_sans_ig">
+				<table class="table_donnees">
 					<thead>
 						<tr>
-							<th class="appellation">Vin sans IG</th>
+							<th class="appellation">Vins sans IG</th>
 							<th class="total">Total</th>
 						</tr>
 					</thead>
-                                        <tbody>
+					<tbody>        
 						<tr>
-							<td>Vin de table sans IG</td>
+							<td>Vins de table sans IG</td>
 							<td><?php echo $ds->getTotalVinSansIg(); ?></td>
-						</tr>  
-                                                <tr>
-							<td>Vin de table Mousseux</td>
-							<td><?php echo "?"; ?></td>
-						</tr>  
+						</tr>        
+						<tr>
+							<td>Vins de table mousseux</td>
+							<td>?</td>
+						</tr>
 					</tbody>
 				</table>
-                                <div id="total" class="ligne_total">
-					<h3>Total</h3>
-					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalVinSansIg(); ?>" />
+				
+				<div id="total" class="ligne_total">
+					<h3>Total AOC</h3>
+					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalAOC(); ?>" />
 				</div>
-                            	
+
 			</div>
+			
 		</div>
-		
 	</div>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
@@ -101,8 +106,3 @@ $appellations = $ds->getAppellationsArray();
 		</a>
 	</li>
 </ul>
-
-
-
-
-
