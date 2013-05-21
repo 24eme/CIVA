@@ -169,7 +169,6 @@ class DSCiva extends DS {
                         $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
                         $k = preg_replace('/^appellation_/', '', $key);
                         $k.= ($lieu_k!='')? '-'.$lieu_k : '';
-                        echo get_class($lieu);
                         $appellationsSorted[$k] = $lieu;
                     }
                 }
@@ -263,7 +262,19 @@ class DSCiva extends DS {
     public function getTotalVinSansIg() {
         foreach ($this->getAppellations() as $hash => $appellation) {
             if(preg_match('/^appellation_VINTABLE/', $hash))
-                    return ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
+                    return ($appellation->getTotalStock())? ($appellation->getTotalStock() - $this->getTotalMousseuxSansIg()) : 0;
+        }
+        return 0;
+    }
+    
+    public function getTotalMousseuxSansIg() {
+        foreach ($this->getAppellations() as $hash => $appellation) {
+            if(preg_match('/^appellation_VINTABLE/', $hash)){
+                foreach ($appellation->mention->lieu->couleur->getCepages() as $hash_c => $cepage){
+                    if($hash_c == 'cepage_MS')
+                        return ($cepage->detail[0]->volume_normal)? $cepage->detail[0]->volume_normal : 0;
+                }
+            }
         }
         return 0;
     }
