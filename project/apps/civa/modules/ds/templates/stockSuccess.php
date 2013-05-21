@@ -19,8 +19,9 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 		<?php $selected = ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)); ?>
 		
 		<li class="<?php echo $selected? 'ui-tabs-selected' : '' ; ?>">
-			<?php $app_libelle = $app->libelle; ?>
-			<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>">
+			<?php $app_libelle = $app->libelle; 
+                              $appellation_lieu_link = ($ds->getAppellationLieuKey($app_key))? $ds->getAppellationLieuKey($app_key) : $app_key ; ?>
+			<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu_link)); ?>">
 				<span><?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?></span> 
 				<br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?>
 			</a>
