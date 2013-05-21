@@ -44,7 +44,7 @@
 		<table class="table_donnees">
 			<thead>
 				<tr>
-					<th>Lieu de stockage</th>
+					<th>Lieux de stockage</th>
 					<th><span>AOC</span> Alsace blanc</th>
 					<th><span>AOC</span> Alsace Lieu-dit</th>
 					<th><span>AOC</span> Alsace Communale</th>

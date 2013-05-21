@@ -38,15 +38,9 @@ class DSRouting {
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'DS',
                             'type' => 'object') ));
+      
         
-       $r->prependRoute('ds_edition_retour_etape', new DSRoute('/ds/:id/edition-retour/:appellation_lieu', array('module' => 'ds',
-                        'action' => 'stockRetour'),
-                        array('sf_method' => array('get', 'post')),
-                        array('model' => 'DS',
-                            'type' => 'object') ));
-        
-        
-        
+       
         $r->prependRoute('ds_recapitulatif_lieu_stockage', new DSRoute('/ds/:id/recapitulatif-lieu-stockage', array('module' => 'ds',
                         'action' => 'recapitulatifLieuStockage'),
                         array('sf_method' => array('get', 'post')),
