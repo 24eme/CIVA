@@ -1,6 +1,12 @@
 <?php
 
 class ConfigurationCouleur extends BaseConfigurationCouleur {
+
+    public function getLieu() {
+
+        return $this->getParentNode();
+    }
+
     public function getCepages() {
       return $this->filter('^cepage');
     }

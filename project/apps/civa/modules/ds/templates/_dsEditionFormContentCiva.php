@@ -8,7 +8,7 @@ echo $form->renderGlobalErrors();
         foreach ($produits as $key => $detail) :
             ?>
     	<li>
-    		<?php echo $detail->getCepage()->cepage ?>&nbsp;<small style="font-size:10px"><?php echo $detail->lieu; ?></small> 
+    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo $detail->lieu; ?></small> 
     	</li>
         <?php endforeach; ?>
     </ul>

@@ -7,11 +7,10 @@
             <?php foreach ($ds->getAppellationsArray() as $app_key => $app): 
                 ?>
             <li class="<?php echo ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu))? 'ui-tabs-selected' : '' ; ?>">
-                    <?php $app_libelle = $app->appellation; ?>
                     <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
-                        <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
+                        <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
                         </span> 
-                        <br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?></a>
+                        <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?></a>
 		</li>
                 <?php 
                 endforeach;
@@ -61,6 +60,8 @@
 					<li><input type="text" readonly="readonly" data-val-defaut="0.00" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
 				</ul>
 			</div>
+
+            <a href="<?php echo url_for('ds_ajout_produit', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu)) ?>">Ajouter un produit</a>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
