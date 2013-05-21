@@ -168,16 +168,16 @@ class DSCiva extends DS {
                     $k = preg_replace('/^appellation_/', '', $key);
                     foreach ($appellation->getLieux() as $lieu_key => $lieu) {
                         $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
-                        $k.= ($lieu_k!='')? '-'.$lieu_k : '';
-                        $appellationsSorted[$k] = $lieu;
+                        $lieu_k = ($lieu_k)? '-'.$lieu_k : '';
+                        $appellationsSorted[$k.$lieu_k] = $lieu;
                     }
                     if(!count($appellation->getLieux())){
-                        $appellationsSorted[$k] = $lieu;
+                        $appellationsSorted[$k] = $appellation;
                     }
                 }
             }
         }
-
+        
         return $appellationsSorted;
     }
 
