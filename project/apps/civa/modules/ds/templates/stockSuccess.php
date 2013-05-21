@@ -77,7 +77,7 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
                             
 				<li>
                                 <?php if(!$firstAppellation): ?>
-                                    <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>">
+                                    <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getPreviousAppellationLieu($appellation_lieu))); ?>">
                                         <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" class="btnAjax" />
                                     </a>
                                 <?php endif; ?>
