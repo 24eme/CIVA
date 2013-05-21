@@ -1,6 +1,4 @@
 <?php 
-$appellations = $ds->getAppellationsArray();
-$appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
 $current_lieu = null;
 $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($ds->isDsPrincipale());
 ?>

@@ -62,7 +62,15 @@ class dsActions extends sfActions {
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->appellation_lieu = $request['appellation_lieu'];
+        $this->appellations = $this->ds->getAppellationsArray();
+        $this->appellation = $this->appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $this->appellation_lieu)];
+        
+        if(!count($this->appellation->getLieux())){
+            $this->redirect('ds_ajout_produit', array('id' => $this->ds->_id, 'appellation_lieu' => $this->appellation_lieu));
+        }
+        
         $this->form = new DSEditionFormCiva($this->ds,$this->appellation_lieu);
+        
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
