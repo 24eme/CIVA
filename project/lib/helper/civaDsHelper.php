@@ -28,3 +28,9 @@ function positionEditionDS($dss,$ds){
     return $posDs;
 }
 
+function getDefaultTotal($type,$appellation,$current_lieu){
+    
+    if(!$current_lieu) return $appellation->{$type};
+    return $appellation->{$type} - $current_lieu->{$type};
+    
+}

@@ -1,6 +1,26 @@
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
+<?php 
+include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
+$appellations = $ds->getAppellationsArray();
+?>
 	<!-- fin .header_ds -->
-	
+	<ul id="onglets_majeurs" class="clearfix onglets_stock">
+            <?php foreach ($appellations as $app_key => $app):  ?>
+            <li>
+                <?php $app_libelle = $app->appellation; ?>
+                <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
+                    <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
+                    </span> 
+                    <br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?>
+                </a>
+            </li>
+            <?php 
+            endforeach;
+            ?>
+                <li class="ui-tabs-selected">
+                        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
+                        <br>Récapitulatif</a>
+                </li>                
+        </ul>
 	<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
 
 	
@@ -39,51 +59,44 @@
 					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalAOC(); ?>" />
 				</div>
 			</div>
-			
+                    <br>
 			<div id="blocs_autres">
-				<div id="bloc_autres_sans_aoc" class="bloc_autres">
-					<h2 class="titre_section">Sans AOC</h2>
-					<div class="contenu_section">
-						<ul class="bloc_vert">
-							<li>
-								<label>Vins de table - Vins sans IG</label>
-								<input type="text" readonly="readonly" value="<?php echo $ds->getTotalVinSansIg(); ?>" />
-							</li>
-							
-							<li>
-								<label>Vins de table - Mousseux</label>
-								<input type="text" readonly="readonly" value="?" />
-							</li>
-						</ul>
-					</div>
-				</div>			
-
+                                <table class="table_donnees">
+					<thead>
+						<tr>
+							<th class="appellation">Vin sans IG</th>
+							<th class="total">Total</th>
+						</tr>
+					</thead>
+                                        <tbody>
+						<tr>
+							<td>Vin de table sans IG</td>
+							<td><?php echo $ds->getTotalVinSansIg(); ?></td>
+						</tr>  
+                                                <tr>
+							<td>Vin de table Mousseux</td>
+							<td><?php echo "?"; ?></td>
+						</tr>  
+					</tbody>
+				</table>
+                                <div id="total" class="ligne_total">
+					<h3>Total</h3>
+					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalVinSansIg(); ?>" />
+				</div>
+                            	
 			</div>
 		</div>
-		
-		<ul id="btn_appelation" class="btn_prev_suiv clearfix">
-			<li>
-				<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
-					<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente" />
-				</a>
-			</li>
-			<li>
-				<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
-                                    <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer au lieu de stockage suivant" />
-				</a>
-			</li>
-		</ul>
 		
 	</div>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="#">
+		<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="#">
+		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>

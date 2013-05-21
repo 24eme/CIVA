@@ -1,6 +1,6 @@
 <!-- .header_ds -->
+<form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
-<form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST" class="ajaxForm">
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();
@@ -9,7 +9,7 @@
 
 <p id="adresse_stock">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</p>
 
-<a href="#" id="def_lieux_stockage">Définition des lieux de stockage</a>
+<a href="#" id="def_lieux_stockage" class="ajax">Définition des lieux de stockage</a>
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
@@ -62,9 +62,9 @@
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="<?php echo url_for("ds") ?>">
+            <a href="<?php echo url_for("ds") ?>" class="ajax">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
-		</a>
+	    </a>
 	</li>
 	<li class="suiv">
             <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante"/>

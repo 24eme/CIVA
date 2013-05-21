@@ -8,13 +8,13 @@ $progression = progressionEdition($dss,$ds,$etape);
 <div class="header_ds clearfix">
         <ul id="etape_declaration" class="etapes_ds clearfix">
                 <li <?php echo ($etape==1)? 'class="actif"' : '' ?> >
-                        <a href="<?php echo url_for('ds');?>"><span>Exploitation</span> <em>Etape 1</em></a>
+                        <a class="ajax" href="<?php echo url_for('ds');?>"><span>Exploitation</span> <em>Etape 1</em></a>
                 </li>
                 <li <?php echo ($etape==2)? 'class="actif"' : '' ?> >
-                        <a href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
+                        <a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
                 </li>
                 <li class="<?php echo ($etape==3)? 'actif' : '' ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
-                        <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu()));?>"><span>Stocks</span> <em>Etape 3 <?php echo getEtape3Label($many_lieux,$dss,$ds);?></em></a>
+                        <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu()));?>"><span>Stocks</span> <em>Etape 3 <?php echo getEtape3Label($many_lieux,$dss,$ds);?></em></a>
                         <?php if(($etape==3) && ($many_lieux)) : ?>
                                 <ul>
                                 <?php 
@@ -30,10 +30,10 @@ $progression = progressionEdition($dss,$ds,$etape);
                         <?php endif; ?>
                 </li>
                 <li <?php echo ($etape==4)? 'class="actif"' : '' ?> >
-                        <a href="<?php echo url_for('ds_autre', $tiers);?>"><span>Autre</span> <em>Etape 4</em></a>
+                        <a class="ajax" href="<?php echo url_for('ds_autre', $tiers);?>"><span>Autre</span> <em>Etape 4</em></a>
                 </li>
                 <li <?php echo ($etape==5)? 'class="actif"' : '' ?> >
-                        <a href="<?php echo url_for('ds_validation', $tiers);?>"><span>Validation</span> <em>Etape 5</em></a>
+                        <a class="ajax" href="<?php echo url_for('ds_validation', $tiers);?>"><span>Validation</span> <em>Etape 5</em></a>
                 </li>
         </ul>
 

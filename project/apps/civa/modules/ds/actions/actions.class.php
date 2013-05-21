@@ -26,6 +26,10 @@ class dsActions extends sfActions {
                 foreach ($this->dss as $current_ds) {
                     $current_ds->save();
                 }
+                if($request->isXmlHttpRequest())
+                {            
+                    return $this->renderText(json_encode(array("success" => true)));                  
+                }   
                 $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id,'appellation_lieu' => $this->ds->getFirstAppellationLieu()));
             }
         }
@@ -150,6 +154,10 @@ class dsActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
+                if($request->isXmlHttpRequest())
+                {            
+                    return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
+                } 
                 $this->redirect('ds_validation', $this->tiers); 
             }
         }

@@ -1,10 +1,8 @@
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4)); ?>
-
-
-<p id="adresse_stock">7523700100111 15 rue des 3 épis 75230 Paris</p>
-
 <!-- #application_ds -->
-<form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" method="post" class="ajaxForm" >
+<form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" >
+<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4)); ?>
+<p id="adresse_stock">7523700100111 15 rue des 3 épis 75230 Paris</p>
+<div id="ajax_error"></div>
 <?php
 echo $form->renderHiddenFields();
 echo $form->renderGlobalErrors();
@@ -47,14 +45,12 @@ echo $form->renderGlobalErrors();
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="#">
+		<a class="ajax"  href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="#">
-                    <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
-		</a>
+                <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 	</li>
 </ul>
 </form>

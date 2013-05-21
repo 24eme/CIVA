@@ -63,7 +63,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<thead>
 						<tr>
 							<th class="appellation">Autres</th>
-							<th class="total">Volume</th>
+							<th class="total">Total</th>
 						</tr>
 					</thead>
 					<tbody>

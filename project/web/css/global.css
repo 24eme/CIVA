@@ -335,3 +335,33 @@ ul.statistiques ul li{
 ul.statistiques li{
     margin-bottom: 5px;
 }
+
+#ajax_notifications {
+  position:fixed;
+  width:100%;
+  top:0;
+  z-index:100000;
+}
+#ajax_form_progress_notification, #ajax_form_error_notification {
+  display:none;
+  margin:2px auto;
+  color:#ffffff;
+  padding:5px;
+  text-align:center;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+}
+#ajax_form_progress_notification {
+  background:#114c8d;
+  z-index:1200;
+  width:160px;
+}
+#ajax_form_error_notification {
+  z-index:1201;
+  background:#900000;
+  width:450px;
+}
