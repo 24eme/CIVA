@@ -1,16 +1,17 @@
 <!-- #application_ds -->
 <form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" >
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4)); ?>
+<?php
+echo $form->renderHiddenFields();
+echo $form->renderGlobalErrors();
+include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4));
+?>
 
 <h2 class="titre_page">7523700100111 15 rue des 3 épis 75230 Paris</h2>
 
 <!-- #application_ds -->
 <div id="ajax_error"></div>
 
-<?php
-echo $form->renderHiddenFields();
-echo $form->renderGlobalErrors();
-?>
+
 	<div id="application_ds" class="clearfix">
 		
 		<div class="bloc_autres">
@@ -30,10 +31,10 @@ echo $form->renderGlobalErrors();
 	
 					<div class="col_cont">
 						<ul>
-							<li><?php echo $form['rebeches']->render() ?></li>
-							<li><?php echo $form['dplc']->render() ?></li>
-							<li><?php echo $form['lies']->render() ?></li>
-							<li><?php echo $form['mouts']->render() ?></li>
+							<li><?php echo $form['rebeches']->render(array('class' => 'num')) ?></li>
+							<li><?php echo $form['dplc']->render(array('class' => 'num')) ?></li>
+							<li><?php echo $form['lies']->render(array('class' => 'num')) ?></li>
+							<li><?php echo $form['mouts']->render(array('class' => 'num')) ?></li>
 						</ul>
 					</div>
 				</div>
