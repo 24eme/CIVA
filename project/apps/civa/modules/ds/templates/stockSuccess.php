@@ -1,5 +1,4 @@
 <?php 
-
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); 
 $appellations = $ds->getAppellationsArray();
 $appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
@@ -11,7 +10,7 @@ $current_lieu = null;
 	
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
             <?php foreach ($appellations as $app_key => $app):  ?>
-            <li class="<?php echo ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu))? 'ui-tabs-selected' : '' ; ?>">
+            <li <?php echo ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu))? 'class="ui-tabs-selected"' : '' ; ?> >
                     <?php $app_libelle = $app->appellation; ?>
                     <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
                         <?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?>
@@ -21,6 +20,10 @@ $current_lieu = null;
                 <?php 
                 endforeach;
                 ?>
+                <li>
+                        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
+                        <br>Récapitulatif</a>
+		</li>
               <?php $appellation_k = preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu);
                 if($ds->hasManyLieux($appellation_k))  : ?>
               <ul class="sous_onglets">

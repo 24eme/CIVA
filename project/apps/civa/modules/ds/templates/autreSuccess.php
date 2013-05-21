@@ -4,7 +4,7 @@
 <p id="adresse_stock">7523700100111 15 rue des 3 épis 75230 Paris</p>
 
 <!-- #application_ds -->
-<form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" method="post" class="ajaxForm" >
+<form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" method="post" class="" >
 <?php
 echo $form->renderHiddenFields();
 echo $form->renderGlobalErrors();
