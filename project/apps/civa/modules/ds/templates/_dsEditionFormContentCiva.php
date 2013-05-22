@@ -11,7 +11,7 @@ $produits = $form->getProduitsDetails();
         <?php endforeach; ?>
 		
 		<li class="ajout">
-			<a href="<?php echo url_for('ds_ajout_produit', $noeud) ?>">
+			<a href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>

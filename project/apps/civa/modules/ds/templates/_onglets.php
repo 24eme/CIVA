@@ -21,7 +21,7 @@
     </li>
     <?php endforeach; ?>
     <li>
-        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", $noeud->getDocument()); ?>" style="height: 30px;">
+        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", $appellation->getDocument()); ?>" style="height: 30px;">
         <br>Récapitulatif</a>
     </li>
 </ul>
