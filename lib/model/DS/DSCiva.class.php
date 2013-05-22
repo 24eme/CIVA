@@ -206,7 +206,6 @@ class DSCiva extends DS {
                 }
             }
         }
-        exit;
         return 0;
     }
     

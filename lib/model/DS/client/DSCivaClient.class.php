@@ -185,8 +185,8 @@ class DSCivaClient extends DSClient {
         $dss = $this->findDssByDS($ds);
         $totauxByAppellationsRecap = array();
         foreach ($dss as $ds_key => $ds) {
-            foreach ($ds->getAppellationsArray() as $app_key => $appellation){
-                switch ($app_key) {
+            foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation){
+                switch (preg_replace('/^appellation_/', '', $app_key)) {
                     case 'VINDETABLE':
                     break;
                 
@@ -265,6 +265,16 @@ class DSCivaClient extends DSClient {
             $totalMousseuxSansIG += $ds->getTotalMousseuxSansIg();
         }
         return $totalMousseuxSansIG;
+    }
+    
+    public function getPreviousDS($ds) {
+        $dss = $this->findDssByDS($ds);
+        while($current_ds = array_pop($dss)){
+            if(($current_ds->_id == $ds->_id) && count($dss)){
+                return array_pop($dss);
+            }
+        }
+        return null;
     }
     
 }
