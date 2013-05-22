@@ -87,7 +87,7 @@ class dsActions extends sfActions {
         $this->appellations = $this->ds->declaration->getAppellationsSorted();
         $this->appellation = $this->lieu->getAppellation();
         $this->current_lieu = null;
-        $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash()) && ($this->ds->isDsPrincipale());
+        $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash());// && ($this->ds->isDsPrincipale());
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
@@ -170,7 +170,7 @@ class dsActions extends sfActions {
         if($suivant){
             $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
             if($nextDs){
-                $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellationLieu()));
+                $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellation()));
             }
             else{
                 $this->redirect('ds_autre', $this->tiers); 
