@@ -1,21 +1,21 @@
 <ul id="onglets_majeurs" class="clearfix onglets_stock">
-    <?php foreach ($noeud->getDocument()->declaration->getAppellationsSorted() as $app_key => $app):  ?>
+    <?php foreach ($appellation->getDocument()->declaration->getAppellationsSorted() as $app_key => $app):  ?>
     
-    <?php $selected = ($app->getHash() == $noeud->getAppellation()->getHash()); ?>
+    <?php $selected = ($app->getHash() == $appellation->getHash()); ?>
     <li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">
         <a href="<?php echo url_for('ds_edition_operateur', $app->getRawValue()); ?>">
             <span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span> 
             <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
         </a>
         
-        <?php if($selected && $noeud->getAppellation()->getConfig()->hasManyLieu()): ?>
-        <?php $has_lieux = true; ?>
+        <?php if($selected && $appellation->getConfig()->hasManyLieu()): ?>
             <ul class="sous_onglets">
-              <?php foreach ($noeud->getAppellation()->getLieux() as $lieu_key => $lieu): ?>
-              <li class="<?php echo ($noeud->getHash() == $lieu->getHash())? 'ui-tabs-selected' : ''; ?>">
-                  <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>"><?php echo $lieu->getConfig()->getLibelle(); ?></a></li>
-              <?php endforeach; ?>
-                <li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
+                <?php foreach ($appellation->getLieux() as $l): ?>
+                <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">
+                    <a href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getConfig()->getLibelle(); ?></a>
+                </li>
+                <?php endforeach; ?>
+                <li class="ajouter ajouter_lieu"><a href="<?php echo url_for('ds_ajout_lieu', $appellation) ?>">Ajouter un lieu dit</a></li>
             </ul>
         <?php endif; ?>
     </li>

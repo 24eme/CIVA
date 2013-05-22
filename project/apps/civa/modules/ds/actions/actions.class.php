@@ -68,18 +68,24 @@ class dsActions extends sfActions {
 
         if($this->getRoute()->getNoeud() instanceof DSAppellation) {
             if(count($this->getRoute()->getNoeud()->getLieux()) < 1 && $this->getRoute()->getNoeud()->getConfig()->hasManyLieu()) {
-                throw new sfException("Add lieu Not yet implemented");
+                
+                return $this->redirect('ds_ajout_lieu', $this->getRoute()->getNoeud());
             }
 
             return $this->redirect('ds_edition_operateur', $this->getRoute()->getNoeud()->getLieux()->getFirst());
         }
 
-        $this->noeud = $this->getRoute()->getNoeud();
+        $this->lieu = $this->getRoute()->getNoeud();
 
-        $this->form = new DSEditionFormCiva($this->ds, $this->noeud);
+        if(count($this->lieu->getProduitsDetails()) < 1) {
+
+            return $this->redirect('ds_ajout_produit', $this->lieu);
+        }
+
+        $this->form = new DSEditionFormCiva($this->ds, $this->lieu);
 
         $this->appellations = $this->ds->declaration->getAppellationsSorted();
-        $this->appellation = $this->noeud->getAppellation();
+        $this->appellation = $this->lieu->getAppellation();
         $this->current_lieu = null;
         $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash()) && ($this->ds->isDsPrincipale());
 
@@ -105,13 +111,39 @@ class dsActions extends sfActions {
         }
     }
 
+    public function executeAjoutLieu(sfWebRequest $request) {
+        $this->ds = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->appellation = $this->getRoute()->getNoeud();
+
+        $this->config_appellation = $this->appellation->getConfig();
+        $this->form = new DSEditionAddLieuFormCiva($this->ds, $this->config_appellation);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+        
+        if(!$this->form->isValid()) {
+            
+            return sfView::SUCCESS;
+        }
+
+        $lieu = $this->ds->addLieu($this->form->getValue('hashref'));
+        $this->ds->save();
+
+        return $this->redirect('ds_edition_operateur', $lieu);
+    }
+
     public function executeAjoutProduit(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
-        $this->noeud = $this->getRoute()->getNoeud();
-        $this->appellation = $this->noeud->getAppellation();
-        $this->config_appellation = $this->appellation->getConfig();
-        $this->form = new DSEditionAddProduitFormCiva($this->ds, $this->config_appellation);
+        $this->lieu = $this->getRoute()->getNoeud();
+        $this->config_lieu = $this->lieu->getConfig();
+        $this->appellation = $this->lieu->getAppellation();
+        $this->form = new DSEditionAddProduitFormCiva($this->ds, $this->config_lieu);
 
         if (!$request->isMethod(sfWebRequest::POST)) {
 
@@ -128,7 +160,7 @@ class dsActions extends sfActions {
         $this->ds->addDetail($this->form->getValue('hashref'), $this->form->getValue('lieudit'));
         $this->ds->save();
 
-        return $this->redirect('ds_edition_operateur', $this->appellation);
+        return $this->redirect('ds_edition_operateur', $this->lieu);
     }
     
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {

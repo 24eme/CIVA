@@ -1,4 +1,4 @@
-<form class="ajaxForm" id="form_stock" action="<?php echo url_for('ds_edition_operateur', $noeud); ?>" method="post">
+<form class="ajaxForm" id="form_stock" action="<?php echo url_for('ds_edition_operateur', $lieu); ?>" method="post">
 	<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
     <?php 
         echo $form->renderHiddenFields();
@@ -7,7 +7,7 @@
     <div id="ajax_error"></div>
 	<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 
-	<?php include_partial('ds/onglets', array('noeud' => $noeud)) ?>
+	<?php include_partial('ds/onglets', array('appellation' => $appellation, 'lieu' => $lieu)) ?>
 		
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
@@ -16,8 +16,8 @@
 			
 			<!-- #gestion_stock -->
 
-			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if(isset($has_lieux) && $has_lieux) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'noeud' => $noeud));?>
+			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
