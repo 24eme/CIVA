@@ -1,8 +1,9 @@
 <?php
 
-function getEtape3Label($many_lieux,$dss,$ds) 
+function getEtape3Label($etape,$many_lieux,$dss,$ds) 
 {
     if(!$many_lieux) return "";
+    if($etape != 3) return  '('.count($dss).' lieux)';
    $posDs = positionEditionDS($dss,$ds);
   return  '(lieu '.$posDs. '/'.count($dss).')';
 

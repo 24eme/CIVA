@@ -40,7 +40,8 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<input type="text" readonly="readonly" value="<?php echoFloat($ds_client->getTotalAOC($ds_principale)); ?>" />
 				</div>				                           
 			</div>
-			
+                    
+                        <?php if($ds_client->hasVinSansIg($ds_principale)): ?>		
 			<div id="recap_vins_sans_ig">
 			<table class="table_donnees">
 				<thead>
@@ -60,8 +61,8 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					</tr>
 				</tbody>
 			</table>
-		</div>
-		
+                        </div>
+                        <?php endif; ?>
 		
 			<div id="recap_autres">				
 				<table class="table_donnees">
