@@ -239,13 +239,19 @@ class DSCivaClient extends DSClient {
         $totauxByAppellationsRecap[$key]->volume_sgn += ($node->total_sgn)? $node->total_sgn : 0;
         return $totauxByAppellationsRecap;
     }  
+    
+    public function hasVinSansIg($ds) {
+        $dss = $this->findDssByDS($ds);
+        foreach ($dss as $current_ds) {
+            if($current_ds->declaration->getAppellations()->exist('appellation_VINTABLE')) return true;
+        }
+        return false;
+    }
 
     public function getTotalAOC($ds) {
         $dss = $this->findDssByDS($ds);
         $totalAOC = 0;
-        foreach ($dss as $ds_key => $ds) {
-            $totalAOC += $ds->getTotalAOC();
-        }
+        
         return $totalAOC;
     }
     
@@ -276,5 +282,4 @@ class DSCivaClient extends DSClient {
         }
         return null;
     }
-    
 }
