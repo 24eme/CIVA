@@ -9,12 +9,13 @@ $produits = $form->getProduitsDetails();
     		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo $detail->lieu; ?></small> 
     	</li>
         <?php endforeach; ?>
-		
+	<?php if((count($produits) < count($lieu->getConfig()->getProduits())) || $lieu->getConfig()->hasLieuEditable()): ?>	
 		<li class="ajout">
 			<a href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>
+        <?php endif; ?>	
     </ul>
     <div id="donnees_stock_cepage">
             <div id="col_hors_vt_sgn" class="colonne">

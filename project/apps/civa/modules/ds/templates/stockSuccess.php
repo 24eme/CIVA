@@ -20,8 +20,10 @@ use_helper('ds');
 			
 			<!-- #gestion_stock -->
 
-			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
+            <div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
+                    
+                <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
+                
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
