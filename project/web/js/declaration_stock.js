@@ -39,7 +39,7 @@ var initDSSommesCol = function()
 			somme += valDefaut;
 		}
 		
-		champSomme.val(somme);
+		champSomme.val(somme.toFixed(2));
 		
 		// Initialisation de la somme automatique au blur
 		if(!col.hasClass('init_somme_ok')) col.initDSColChamps();
@@ -149,8 +149,6 @@ var formPost = function(form)
             success: function(msg){},  
             error: function(textStatus){  
                 $( "#ajax_error").html(textStatus);
-//                console.log(textStatus);
-//                alert(textStatus);
         }
     });
 }
