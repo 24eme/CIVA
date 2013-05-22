@@ -120,36 +120,6 @@ class DSCiva extends DS {
     public function getProduits() {
         return $this->declaration->getProduitsDetails();
     }
-    
-    public function getAppellationsLieuKeysArray(){
-        return array_keys($this->getAppellationsLieuArray());
-    }
-    
-    public function getAppellationsLieuArray() {
-
-        return array();
-
-        $appellationsSorted = array();
-        $appellations = $this->getAppellations()->toArray();    
-        if(!count($appellations))
-            throw new sfException(sprintf("La DS %s ne possède aucune appellation.",$this->_id));
-        
-        $config_appellations = $this->getConfigAppellationsArray();
-        foreach ($config_appellations as $config_appellation_key) {  
-            foreach ($appellations as $key => $appellation) {
-                if(preg_match('/^appellation_/', $key) && ($key == $config_appellation_key)){
-                    foreach ($appellation->getLieux() as $lieu_key => $lieu) {
-                        $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
-                        $k = preg_replace('/^appellation_/', '', $key);
-                        $k.= ($lieu_k!='')? '-'.$lieu_k : '';
-                        $appellationsSorted[$k] = $lieu;
-                    }
-                }
-            }
-        }
-
-        return $appellationsSorted;
-    }
 
     public function getFirstAppellation() {
         $appellations = $this->declaration->getAppellationsSorted();
@@ -219,7 +189,22 @@ class DSCiva extends DS {
     public function getTotalVinSansIg() {
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
             if(preg_match('/^appellation_VINTABLE/', $hash))
-                    return ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
+                    return ($appellation->getTotalStock())? ($appellation->getTotalStock() - $this->getTotalMousseuxSansIg()) : 0;
+        }
+        return 0;
+    }
+    
+    public function getTotalMousseuxSansIg() {
+        foreach ($this->getAppellations() as $hash => $appellation) {
+            if(preg_match('/^appellation_VINTABLE/', $hash)){
+                if(!$appellation->exist('mention')) return 0;
+                if(!$appellation->mention->exist('lieu')) return 0;
+                if(!$appellation->mention->lieu->exist('lieu')) return 0;
+                foreach ($appellation->mention->lieu->couleur->getCepages() as $hash_c => $cepage){
+                    if($hash_c == 'cepage_MS')
+                        return ($cepage->detail[0]->volume_normal)? $cepage->detail[0]->volume_normal : 0;
+                }
+            }
         }
         return 0;
     }
