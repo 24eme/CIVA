@@ -86,8 +86,8 @@ $appellations = $ds->getAppellationsArray();
 				</table>
 				
 				<div id="total" class="ligne_total">
-					<h3>Total AOC</h3>
-					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalAOC()); ?>" />
+					<h3>Total</h3>
+					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalVinSansIg() + $ds->getTotalMousseuxSansIg()); ?>" />
 				</div>
 
 			</div>
