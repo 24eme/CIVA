@@ -44,6 +44,10 @@ class DSCiva extends DS {
         $config = $noeud->getConfig();
         $noeud->libelle = $config->getLibelle();
 
+        if($noeud instanceof DSCepage && !$config->getParent()->hasManyNoeuds() && !$config->hasLieuEditable()) {
+            $this->addDetail($hash);
+        }
+
         if(!$config->hasManyNoeuds() && count($config->getChildrenNode()) > 0) {
             $this->addNoeud($config->getChildrenNode()->getFirst()->getHash());
         }
