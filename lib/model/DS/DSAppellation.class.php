@@ -24,7 +24,12 @@ class DSAppellation extends BaseDSAppellation {
         
         return $this->mention->getLieux();
     }
-    
+
+    public function getLieuxSorted() {  
+        
+        return $this->mention->getLieuxSorted();
+    }
+
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         parent::updateVolumes($vtsgn, $old_volume, $volume);
         $this->getGenre()->updateVolumes($vtsgn,$old_volume,$volume);

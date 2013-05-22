@@ -131,30 +131,49 @@ class DSCiva extends DS {
         return current($appellations);
     }
     
-    public function getNextAppellation($appellation){
-        $appellations = $this->declaration->getAppellationsSorted();
-        $next = false;           
-        foreach ($appellations as $hash => $app) {
-            if($appellation->getHash() == $app->getHash()){
+    public function getNextLieu($lieu){
+        $appellation = $lieu->getAppellation();
+        $appellations = $appellation->getParent()->getAppellationsSorted();
+        $lieux = $lieu->getParent()->getLieuxSorted();
+        $next = false;
+        foreach ($lieux as $hash => $l) {
+            if($l->getHash() == $lieu->getHash()){
                 $next = true;
                 continue;
             }
             if($next) {
-                return $app;
+                return $l;
+            }
+        }
+        $next = false;
+        foreach($appellations as $hash => $a) {
+            if($a->getHash() == $appellation->getHash()){
+                $next = true;
+                continue;
+            }
+            if($next) {
+                return $a;
             }
         }
         return null;
     }
     
-     public function getPreviousAppellation($appellation){
-        $appellations = $this->declaration->getAppellationsSorted();
+     public function getPreviousLieu($lieu){
+        $appellation = $lieu->getAppellation();
+        $appellations = $appellation->getParent()->getAppellationsSorted();
+        $lieux = $lieu->getParent()->getLieuxSorted();
+        while($previous = array_pop($lieux)) {
+            if($previous->getHash() == $lieu->getHash() && count($lieux) > 0){
+                return array_pop($lieux);
+            }                
+        }
         while($previous = array_pop($appellations)) {
-                if($previous->getHash() == $appellation->getHash()){
-                    return array_pop($appellations);
-                }                
-            }
+            if($previous->getHash() == $appellation->getHash() && count($appellations) > 0){
+                return array_pop($appellations);
+            }                
+        }
+
         return null;
-        
     }
 
     public function hasManyLieux($appellation_key) {

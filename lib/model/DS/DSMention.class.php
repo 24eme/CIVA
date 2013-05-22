@@ -20,6 +20,21 @@ class DSMention extends BaseDSMention {
 
         return $this->filter('^lieu');
     }
+
+    public function getLieuxSorted() {
+        $lieux = $this->getLieux();
+        $lieux_config = $this->getConfig()->getLieux();
+        $lieux_sorted = array();
+
+        foreach($lieux_config as $hash => $lieu_config) {
+            $hash = preg_replace('/^\/recolte/','declaration',$hash);
+            if($this->exist($lieu_config->getKey())) {
+                $lieux_sorted[$hash] = $this->get($lieu_config->getKey());
+            }
+        }
+
+        return $lieux_sorted;
+    }
     
     public function getAppellationLibelle() {
         
