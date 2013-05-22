@@ -61,7 +61,7 @@
 	padding: 4px 0;
 }
 
-#etape_declaration.etapes_ds li.sous_menu:hover
+#etape_declaration.etapes_ds li.sous_menu
 {
 	background: #efefef;
 	border-left: 1px solid #cacaca;
@@ -76,7 +76,7 @@
 	z-index: 10;
 }
 
-#etape_declaration.etapes_ds li.sous_menu:hover > a
+#etape_declaration.etapes_ds li.sous_menu > a
 {
 	background-position: 110px 13px;
 	border-bottom: 1px solid #efefef;
@@ -99,7 +99,7 @@
 	overflow: hidden;
 }
 
-#etape_declaration.etapes_ds li.sous_menu:hover ul { display: block; }
+#etape_declaration.etapes_ds li.sous_menu ul { display: block; }
 
 #etape_declaration.etapes_ds li.sous_menu ul li
 {
