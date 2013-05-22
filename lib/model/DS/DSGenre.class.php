@@ -6,22 +6,34 @@
 
 class DSGenre extends BaseDSGenre {
     
-    
     public function getCertification() {
+        
         return $this->getParent();
     }
 
-
     public function getChildrenNode() {
+        
         return $this->getAppellations();
     }
 
-    public function getMentions() {
-       return $this->filter('^mention');
+    public function getAppellations() {
+
+        return $this->filter('^appellation');
     }
 
-    public function getAppellations(){
-        return $this->filter('^appellation');
+    public function getAppellationsSorted() {
+        $appellations = $this->getAppellations();
+        $appellations_config = $this->getConfig()->getAppellations();
+        $appellations_sorted = array();
+
+        foreach($appellations_config as $hash => $appellation_config) {
+            $hash = preg_replace('/^\/recolte/','declaration',$hash);
+            if($this->exist($appellation_config->getKey())) {
+                $appellations_sorted[$hash] = $this->get($appellation_config->getKey());
+            }
+        }
+
+        return $appellations_sorted;
     }
     
     public function getAppellation($a = null){

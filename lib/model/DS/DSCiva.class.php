@@ -38,13 +38,25 @@ class DSCiva extends DS {
         }
     }
 
-    public function addAppellation($appellation_hash) {   
-      $produit_hash = preg_replace('/^\/recolte/','declaration',$appellation_hash);
-      $appellationNode = $this->getOrAdd($produit_hash);
-      $config = $appellationNode->getConfig();
-      $appellationNode->libelle = $config->getLibelle();
-     
-      return $appellationNode;
+    public function addNoeud($hash) {
+        $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $noeud = $this->getOrAdd($hash);
+        $config = $noeud->getConfig();
+        $noeud->libelle = $config->getLibelle();
+
+        if(!$config->hasManyNoeuds() && count($config->getChildrenNode()) > 0) {
+            $this->addNoeud($config->getChildrenNode()->getFirst()->getHash());
+        }
+    }
+
+    public function addAppellation($hash) {   
+
+        return $this->addNoeud($hash);
+    }
+
+    public function addLieu($hash) {
+
+        return $this->addNoeud($hash);
     }
 
     public function addDetailsFromDRProduit($dr_produit) {
@@ -109,53 +121,14 @@ class DSCiva extends DS {
         return $this->declaration->getProduitsDetails();
     }
     
-    public function getProduitsByAppellation($appellation) {
-        $cepage = array();
-        $appellation = $this->declaration->getAppellation($appellation);
-        foreach ($appellation->getMentions() as $mention) {
-            foreach ($mention->getLieux() as $lieu) {
-                foreach ($lieu->getCouleurs() as $couleur) {
-                    foreach ($couleur->getCepages() as $c) {
-                            $cepage[$c->getHash()] = $c;
-                    }
-
-                }
-            }
-        }
-        return $cepage;
-    }
-    
-    public function getConfigAppellationsArray(){
-        return array_keys($this->getConfigurationCampagne()->getArrayAppellations());
-    }
-    
-    public function getAppellationsKeysArray(){
-        return array_keys($this->getAppellationsArray());
-    }
-    
-    public function getAppellationsArray() {
-        $appellationsSorted = array();
-        $appellations = $this->getAppellations()->toArray();        
-        if(!count($appellations))
-            throw new sfException(sprintf("La DS %s ne possède aucune appellation.",$this->_id));
-        
-        $config_appellations = $this->getConfigAppellationsArray();
-        foreach ($config_appellations as $config_appellation_key) {            
-            foreach ($appellations as $key => $appellation) {
-                if(preg_match('/^appellation_/', $key) && ($key == $config_appellation_key)){
-                    $appellationsSorted[preg_replace('/^appellation_/','', $key)] = $appellation;
-                }
-            }
-        }
-        
-        return $appellationsSorted;
-    }
-    
     public function getAppellationsLieuKeysArray(){
         return array_keys($this->getAppellationsLieuArray());
     }
     
     public function getAppellationsLieuArray() {
+
+        return array();
+
         $appellationsSorted = array();
         $appellations = $this->getAppellations()->toArray();    
         if(!count($appellations))
@@ -169,7 +142,6 @@ class DSCiva extends DS {
                         $lieu_k = preg_replace('/^lieu/', '', $lieu_key);
                         $k = preg_replace('/^appellation_/', '', $key);
                         $k.= ($lieu_k!='')? '-'.$lieu_k : '';
-                        echo get_class($lieu);
                         $appellationsSorted[$k] = $lieu;
                     }
                 }
@@ -179,49 +151,38 @@ class DSCiva extends DS {
         return $appellationsSorted;
     }
 
-
-    public function getFirstAppellationLieu() {
-        $appellations = $this->getAppellationsLieuKeysArray();
+    public function getFirstAppellation() {
+        $appellations = $this->declaration->getAppellationsSorted();
         if(!count($appellations))
             throw new sfException(sprintf("La DS %s ne possède aucune appellation.",$this->_id));
-        return $appellations[0];
+        
+        return current($appellations);
     }
     
-
-
-    public function getNextAppellationLieu($appellation_lieu){
-        $appellations = $this->getAppellationsLieuKeysArray();
+    public function getNextAppellation($appellation){
+        $appellations = $this->declaration->getAppellationsSorted();
         $next = false;           
-        foreach ($appellations as $app) {
-            if($app == $appellation_lieu){
+        foreach ($appellations as $hash => $app) {
+            if($appellation->getHash() == $app->getHash()){
                 $next = true;
                 continue;
             }
-            if($next) return $app;
+            if($next) {
+                return $app;
+            }
         }
         return null;
-        
     }
     
-     public function getPreviousAppellationLieu($appellation){
-        $appellations = $this->getAppellationsLieuKeysArray();
+     public function getPreviousAppellation($appellation){
+        $appellations = $this->declaration->getAppellationsSorted();
         while($previous = array_pop($appellations)) {
-                if($previous == $appellation){
+                if($previous->getHash() == $appellation->getHash()){
                     return array_pop($appellations);
                 }                
             }
         return null;
         
-    }
-    
-    public function getAppellationLieuKey($appellation) {
-        $appellations = $this->getAppellationsLieuKeysArray();
-        foreach ($appellations as $app) {
-            if(preg_replace('/-[A-Za-z0-9]*$/', '', $app) == $appellation){
-                return $app;
-            }           
-        }
-        return null;
     }
 
     public function hasManyLieux($appellation_key) {
@@ -237,11 +198,6 @@ class DSCiva extends DS {
         }
         return null;
     }
-
-
-    public function getAppellations() {
-        return $this->declaration->getAppellations();
-    }
     
     public function getConfigurationCampagne() {
         return acCouchdbManager::getClient('Configuration')->retrieveConfiguration(substr($this->campagne,0,4));
@@ -253,7 +209,7 @@ class DSCiva extends DS {
     
     public function getTotalAOC() {
         $total = 0;
-        foreach ($this->getAppellations() as $hash => $appellation) {
+        foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
             if(!preg_match('/^appellation_VINTABLE/', $hash))
                     $total += ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
         }
@@ -261,7 +217,7 @@ class DSCiva extends DS {
     }
     
     public function getTotalVinSansIg() {
-        foreach ($this->getAppellations() as $hash => $appellation) {
+        foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
             if(preg_match('/^appellation_VINTABLE/', $hash))
                     return ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
         }

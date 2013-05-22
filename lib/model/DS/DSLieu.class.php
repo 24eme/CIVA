@@ -36,8 +36,4 @@ class DSLieu extends BaseDSLieu {
         $this->getMention()->updateVolumes($vtsgn,$old_volume,$volume);
     }
     
-    public function getLieuLibelle() {
-        return $this->getConfig()->getLibelle();
-    }
-    
 }

@@ -3,7 +3,8 @@
 abstract class _DSNoeud extends acCouchdbDocumentTree {
     
     public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(preg_replace('/^\/declaration\//', '/recolte/', $this->getHash()));
+        
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(preg_replace('/^\/declaration/', '/recolte', $this->getHash()));
     }
 
     abstract public function getChildrenNode();
@@ -42,15 +43,12 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         }
         return $produits;
     }
-    
-    public function getAppellations() {        
-        $appellations = array();
-        if($this->getChildrenNode()){
-            foreach($this->getChildrenNode() as $item) {
-                $appellations = array_merge($appellations, $item->getAppellations());
-            }
+
+    public function hasManyNoeuds(){
+        if(count($this->getChildrenNode()) > 1){
+            return true;
         }
-        return $appellations;
+        return false;
     }
     
      public function getProduitsWithVolume() {

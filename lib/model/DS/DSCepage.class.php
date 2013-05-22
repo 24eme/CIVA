@@ -49,21 +49,6 @@ class DSCepage extends BaseDSCepage {
       return $details;
     }
     
-    /*public function addProduitFromDR($produitCepage, $lieu_dit = ''){
-        $prod  = ConfigurationClient::getConfiguration()->get($produitCepage->getHash());
-        $this->no_vtsgn = (int) ($prod->exist('no_vtsgn') && ($prod->no_vtsgn == '1'));
-        $this->cepage = $produitCepage->getLibelle();
-        $this->appellation = $produitCepage->getParent()->getParent()->getParent()->getParent()->getLibelle();
-        $this->getCouleur()->getLieu()->getMention()->getAppellation()->appellation = $this->appellation;
-        $this->addDetails($produitCepage);        
-    }
-    
-    public function addDetailsFromDR($produitCepage) {
-        foreach ($produitCepage->getProduitsDetails() as $detail) {
-            $this->addDetail($detail,$produitCepage,$this->no_vtsgn);
-        }              
-    }*/
-
     public function addDetail($lieu_dit = null) {
         if($detail = $this->getDetailNode($lieu_dit)) {
 

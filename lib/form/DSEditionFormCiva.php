@@ -3,12 +3,13 @@
 class DSEditionFormCiva extends acCouchdbForm {
 
     protected $ds = null;
-    protected $appellation_lieu = null;
+    protected $noeud = null;
 
-    public function __construct(acCouchdbJson $ds, $appellation_lieu, $defaults = array(), $options = array(), $CSRFSecret = null) {
+    public function __construct(acCouchdbJson $ds, DSLieu $noeud, $defaults = array(), $options = array(), $CSRFSecret = null) {
 
        $this->ds = $ds;
-       $this->appellation_lieu = $appellation_lieu;
+       $this->noeud = $noeud;
+
        foreach ($this->getProduitsDetails() as $hash => $detail) {     
             $form_key = $detail->getHashForKey();
             
@@ -57,10 +58,8 @@ class DSEditionFormCiva extends acCouchdbForm {
     
     public function getProduitsDetails() {
         $matches = array();
-        if(preg_match('/^([A-Z]+)-([A-Za-z0-9]+)$/', $this->appellation_lieu,$matches)){
-            return $this->ds->declaration->getAppellations()->get('appellation_'.$matches[1])->mention->get('lieu'.$matches[2])->getProduitsDetails();
-        }
-        return $this->ds->declaration->getAppellations()->get('appellation_'.$this->appellation_lieu)->getProduitsDetails();
+
+        return $this->noeud->getProduitsDetails();
     }
     
     private function keyTohash($key) {

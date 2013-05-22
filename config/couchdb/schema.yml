@@ -77,7 +77,7 @@ DS:
                         total_stock: {type: float}
                         total_vt: {type:float}
                         total_sgn: {type:float}
-                        total_normal: {type:float}                            
+                        total_normal: {type:float}
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -85,11 +85,11 @@ DS:
                           inheritance: _DSNoeud
                           definition:
                             fields:
-                              libelle: {}
+                              libelle: {  }
                               total_stock: {type: float}
                               total_vt: {type:float}
                               total_sgn: {type:float}
-                              total_normal: {type:float}                              
+                              total_normal: {type:float}
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -97,11 +97,11 @@ DS:
                                 inheritance: _DSNoeud
                                 definition:
                                   fields:
-                                    libelle: {}
+                                    libelle: {  }
                                     total_stock: {type: float }
                                     total_vt: {type:float}
                                     total_sgn: {type:float}
-                                    total_normal: {type:float}                                    
+                                    total_normal: {type:float}
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection
@@ -109,11 +109,11 @@ DS:
                                       inheritance: _DSNoeud
                                       definition:
                                         fields:
-                                          libelle: {}
+                                          libelle: { }
                                           total_stock: {type: float}
                                           total_vt: {type:float}
                                           total_sgn: {type:float}
-                                          total_normal: {type:float}                                          
+                                          total_normal: {type:float}
                                           # ------ Couleur ------
                                           '*':
                                             type: collection
@@ -121,7 +121,7 @@ DS:
                                             inheritance: _DSNoeud
                                             definition:
                                               fields:
-                                                libelle: {}
+                                                libelle: {  }
                                                 total_stock: {type:float}
                                                 total_vt: {type:float}
                                                 total_sgn: {type:float}
@@ -133,8 +133,8 @@ DS:
                                                   inheritance: _DSNoeud
                                                   definition:
                                                     fields:
-                                                      libelle: {}
-                                                      no_vtsgn: {}
+                                                      libelle: {  }
+                                                      no_vtsgn: {  }
                                                       detail:                                                        
                                                         type: array_collection
                                                         definition:

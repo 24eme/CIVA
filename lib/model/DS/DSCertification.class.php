@@ -11,11 +11,6 @@ class DSCertification extends BaseDSCertification {
         return $this->getGenres();
     }
 
-    public function getAppellations() {
-
-       return $this->getChildrenNodeDeep();
-    }
-
     public function getGenres(){
 
         return $this->filter('^genre');

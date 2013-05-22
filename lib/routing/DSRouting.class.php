@@ -27,19 +27,17 @@ class DSRouting {
                         array('model' => 'Tiers',
                             'type' => 'object')));        
 
-        $r->prependRoute('ds_ajout_produit', new DSRoute('/ds/:id/ajout-produit/:appellation_lieu', array('module' => 'ds',
+        $r->prependRoute('ds_ajout_produit', new DSNoeudRouteCiva('/ds/:id/ajout-produit/:hash', array('module' => 'ds',
                         'action' => 'ajoutProduit'),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'DS',
                             'type' => 'object') ));
 
-        $r->prependRoute('ds_edition_operateur', new DSRoute('/ds/:id/edition/:appellation_lieu', array('module' => 'ds',
-                        'action' => 'stock'),
+        $r->prependRoute('ds_edition_operateur', new DSNoeudRouteCiva('/ds/:id/edition/:hash', array('module' => 'ds',
+                        'action' => 'stock', 'hash' => null),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'DS',
-                            'type' => 'object') ));
-      
-        
+                            'type' => 'object')));
        
         $r->prependRoute('ds_recapitulatif_lieu_stockage', new DSRoute('/ds/:id/recapitulatif-lieu-stockage', array('module' => 'ds',
                         'action' => 'recapitulatifLieuStockage'),
