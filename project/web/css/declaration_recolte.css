@@ -97,11 +97,12 @@ input.readonly {
 
 /* Etapes de la déclaration */
 ul#etape_declaration {
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	background: #f1f1f1;
 	border-bottom: 1px solid #cacaca;
 	border-top: 1px solid #dcdcdc;
 	color: #a8a8a8;
-	font-size: 18px;
+	font-size: 16px;
 	margin: 0 0 -15px;
 	padding: 4px 20px;
 	position: relative;
