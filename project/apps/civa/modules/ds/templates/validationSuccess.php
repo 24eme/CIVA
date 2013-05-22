@@ -1,4 +1,6 @@
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 5)); 
+<?php 
+use_helper('Float');
+include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 5)); 
 $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 ?>
 
@@ -24,10 +26,10 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
                         <?php foreach ($appelations_agregee as $apellation_agregee_key => $apellation_agregee) : ?>
 						<tr>
 							<td><?php echo $apellation_agregee->nom; ?></td>
-							<td><?php echo $apellation_agregee->volume_total; ?></td>
-							<td><?php echo $apellation_agregee->volume_normal; ?></td>
-							<td><?php echo $apellation_agregee->volume_vt; ?></td>
-							<td><?php echo $apellation_agregee->volume_sgn; ?></td>
+                                                        <td><?php echoFloat($apellation_agregee->volume_total); ?></td>
+							<td><?php echoFloat($apellation_agregee->volume_normal); ?></td>
+							<td><?php echoFloat($apellation_agregee->volume_vt); ?></td>
+							<td><?php echoFloat($apellation_agregee->volume_sgn); ?></td>
 						</tr>
                         <?php endforeach; ?>
 					</tbody>
@@ -35,7 +37,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				
 				<div id="total" class="ligne_total">
 					<h3>Total AOC</h3>
-					<input type="text" readonly="readonly" value="<?php echo $ds_client->getTotalAOC($ds_principale); ?>" />
+					<input type="text" readonly="readonly" value="<?php echoFloat($ds_client->getTotalAOC($ds_principale)); ?>" />
 				</div>				                           
 			</div>
 			
@@ -50,11 +52,11 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				<tbody>        
 					<tr>
 						<td>TOTAL Sans IG</td>
-						<td><?php echo $ds_client->getTotalSansIG($ds_principale); ?></td>
+						<td><?php echoFloat($ds_client->getTotalSansIG($ds_principale)); ?></td>
 					</tr>        
 					<tr>
 						<td>TOTAL Mousseux</td>
-						<td><?php echo '?'; ?></td>
+						<td><?php echoFloat($ds_client->getTotalSansIGMousseux($ds_principale)); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -72,11 +74,11 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<tbody>
 						<tr>
 							<td>TOTAL Rebêches</td>
-							<td><?php echo $ds_principale->getRebeches(); ?></td>
+							<td><?php echoFloat($ds_principale->getRebeches()); ?></td>
 						</tr>
 						<tr>
 							<td>TOTAL Usages industiels</td>
-							<td><?php echo $ds_principale->getUsagesIndustriels(); ?></td>
+							<td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
 						</tr>
 					</tbody>
 				</table>     
