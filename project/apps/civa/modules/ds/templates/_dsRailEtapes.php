@@ -15,14 +15,14 @@ $progression = progressionEdition($dss,$ds,$etape);
 					<a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
 			</li>
 			<li class="<?php echo ($etape==3)? 'actif' : '' ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
-					<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu()));?>"><span>Stocks</span> <em>Etape 3 <?php echo getEtape3Label($many_lieux,$dss,$ds);?></em></a>
+					<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id));?>"><span>Stocks</span> <em>Etape 3 <?php echo getEtape3Label($many_lieux,$dss,$ds);?></em></a>
 					<?php if(($etape==3) && ($many_lieux)) : ?>
 							<ul>
 							<?php 
 							$num = 1;
 							foreach ($dss as $current_ds) : ?>
 								<li class="<?php echo ($current_ds->_id == $ds->_id)? 'actif' : '' ?>">
-									<a href="<?php echo url_for('ds_edition_operateur', array('id' =>$current_ds->_id, 'appellation_lieu' =>$current_ds->getFirstAppellationLieu())); ?>">Lieu de stockage n°<?php echo $num; ?></a>
+									<a href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
 								</li>
 							<?php 
 							$num++;

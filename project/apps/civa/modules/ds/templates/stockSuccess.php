@@ -1,10 +1,4 @@
-<?php 
-$appellations = $ds->getAppellationsArray();
-$appellation = $appellations[preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)];
-$current_lieu = null;
-$firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($ds->isDsPrincipale());
-?>
-<form class="ajaxForm" id="form_<?php echo $ds->_id."_".$appellation_lieu; ?>" action="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_lieu)); ?>" method="post">
+<form class="ajaxForm" id="form" action="<?php echo url_for('ds_edition_operateur', $noeud); ?>" method="post">
 
 	<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
     <div id="ajax_error"></div>
@@ -13,26 +7,19 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
 		<?php foreach ($appellations as $app_key => $app):  ?>
 		
-		<?php $selected = ($app_key==preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu)); ?>
-		
-		<li class="<?php echo $selected? 'ui-tabs-selected' : '' ; ?>">
-			<?php $app_libelle = $app->libelle; ?>
-			<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>">
-				<span><?php echo (preg_match('/^AOC/', $app_libelle))? 'AOC ' : ''; ?></span> 
-				<br><?php echo (preg_match('/^AOC/', $app_libelle))? substr($app_libelle, 4) : $app_libelle; ?>
+		<?php $selected = ($app->getHash() == $appellation->getHash()); ?>
+		<li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">
+			<a href="<?php echo url_for('ds_edition_operateur', $app->getRawValue()); ?>">
+				<span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span> 
+				<br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
 			</a>
 			
-			<?php $appellation_k = preg_replace('/-[A-Za-z0-9]*$/', '', $appellation_lieu);?>
-			
-			<?php if($selected && $ds->hasManyLieux($appellation_k)): ?>
+			<?php if($selected && $appellation->getConfig()->hasManyLieu()): ?>
 			<?php $has_lieux = true; ?>
 				<ul class="sous_onglets">
-				  <?php foreach ($ds->getLieuxFromAppellation($appellation_k) as $lieu_key => $lieu) :  
-					  $lieu_k = preg_replace('/^lieu/','', $lieu_key);
-					  if(preg_replace('/^[A-Z]*-/', '', $appellation_lieu) == $lieu_k) $current_lieu = $lieu;
-				  ?>
-				  <li class="<?php echo (preg_replace('/^[A-Z]*-/', '', $appellation_lieu) == $lieu_k)? 'ui-tabs-selected' : ''; ?>">
-					  <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $appellation_k.'-'.$lieu_k)); ?>"><?php echo $lieu->getLieuLibelle(); ?></a></li>
+				  <?php foreach ($appellation->getLieux() as $lieu_key => $lieu): ?>
+				  <li class="<?php echo ($noeud->getHash() == $lieu->getHash())? 'ui-tabs-selected' : ''; ?>">
+					  <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>"><?php echo $lieu->getConfig()->getLibelle(); ?></a></li>
 				  <?php endforeach; ?>
 					<li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
 				</ul>
@@ -74,8 +61,8 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 			
 			<!-- #gestion_stock -->
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if(isset($has_lieux) && $has_lieux) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>                         
-                <?php if($ds->hasManyLieux($appellation_k)):  ?>
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form));?>
+                <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
 			        
@@ -99,12 +86,12 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
 				</ul>
 			</div>
 
-            <a href="<?php echo url_for('ds_ajout_produit', array('id' => $ds->_id, 'appellation_lieu' => $appellation_lieu)) ?>">Ajouter un produit</a>
+            <a href="<?php echo url_for('ds_ajout_produit', $appellation) ?>">Ajouter un produit</a>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
-					<?php if(!$firstAppellation): ?>
-						<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getPreviousAppellationLieu($appellation_lieu))); ?>">
+					<?php if(!$isFirstAppellation): ?>
+						<a class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousAppellation($appellation)); ?>">
 							<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
 						</a>
 					<?php endif; ?>

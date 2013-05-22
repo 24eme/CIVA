@@ -4,7 +4,7 @@
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();
-    $dss[0]->getFirstAppellationLieu();
+    $dss[0]->getFirstAppellation()->getKey();
 ?>  
 
 <h2 class="titre_page">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</h2>

@@ -1,16 +1,14 @@
 <?php 
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
-$appellations = $ds->getAppellationsArray();
 ?>
 
 <h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
 
 	<!-- fin .header_ds -->
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
-            <?php foreach ($appellations as $app_key => $app):  ?>
+            <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
             <li>
-                <?php $app_libelle = $app->libelle; ?>
-                <a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getAppellationLieuKey($app_key))); ?>"><span>
+                <a href="<?php echo url_for('ds_edition_operateur', $app); ?>"><span>
                     <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
                     </span> 
                     <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
@@ -43,7 +41,7 @@ $appellations = $ds->getAppellationsArray();
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($ds->getAppellations() as $appellation) : ?>
+					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation) : ?>
                                         
 						<tr>
 							<td><?php echo $appellation->getLibelle(); ?></td>
@@ -96,7 +94,7 @@ $appellations = $ds->getAppellationsArray();
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
+		<a href="<?php echo url_for('ds_edition_operateur', $ds); ?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
