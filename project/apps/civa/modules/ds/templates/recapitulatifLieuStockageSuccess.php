@@ -62,7 +62,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 				</div>
 			</div>
 
-			
+			<?php if($ds->declaration->getAppellations()->exist('appellation_VINTABLE')): ?>
 			<div id="recap_vins_sans_ig">
 				<table class="table_donnees">
 					<thead>
@@ -89,7 +89,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 				</div>
 
 			</div>
-			
+			<?php endif; ?>
 		</div>
 	</div>
 
