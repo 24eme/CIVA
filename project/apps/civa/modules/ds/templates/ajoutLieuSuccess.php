@@ -12,7 +12,9 @@
     <!-- #application_ds -->
     <div id="application_ds" class="clearfix">
         <div id="aucun_produit">
-            <p>Il n'y a pas de produit défini pour cette appellation</p>        
+            <?php if(count($appellation->getLieuxSorted()) < 1): ?>
+            <p>Il n'y a pas de lieu défini pour cette appellation</p>
+            <?php endif; ?>        
             <div class="form_ligne">
                                 <?php echo $form['hashref']->renderLabel(); ?>
                                 <?php echo $form['hashref']->render(); ?>

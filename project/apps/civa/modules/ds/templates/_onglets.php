@@ -10,7 +10,7 @@
         
         <?php if($selected && $appellation->getConfig()->hasManyLieu()): ?>
             <ul class="sous_onglets">
-                <?php foreach ($appellation->getLieux() as $l): ?>
+                <?php foreach ($appellation->getLieuxSorted() as $l): ?>
                 <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">
                     <a href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getConfig()->getLibelle(); ?></a>
                 </li>
