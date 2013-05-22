@@ -9,7 +9,7 @@ $firstAppellation = ($ds->getFirstAppellationLieu() == $appellation_lieu) && ($d
         include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
     ?>
     <div id="ajax_error"></div>
-	<h2 class="titre_page"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></h2>
+	<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 	
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
 		<?php foreach ($appellations as $app_key => $app):  ?>

@@ -34,3 +34,8 @@ function getDefaultTotal($type,$appellation,$current_lieu){
     return $appellation->{$type} - $current_lieu->{$type};
     
 }
+
+function getTitleLieuStockageStock($ds){
+    $lieu_num = $ds->getLieuStockage();
+    return 'Lieu de stockage n°'.intval($lieu_num).' : '.$ds->declarant->cvi.$lieu_num.' - '.$ds->getEtablissement()->getNom().', '.$ds->getEtablissement()->getAdresse();
+}

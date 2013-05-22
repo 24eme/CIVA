@@ -6,14 +6,11 @@ echo $form->renderGlobalErrors();
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4));
 ?>
 
-<h2 class="titre_page">7523700100111 15 rue des 3 épis 75230 Paris</h2>
+<h2 class="titre_page">Autres stocks : saisissez ici vos rebêche, dépassements de rendement, lies et moûts.</h2>
 
 <!-- #application_ds -->
 <div id="ajax_error"></div>
-
-
 	<div id="application_ds" class="clearfix">
-		
 		<div class="bloc_autres">
 				
 		<!-- #gestion_stock -->
