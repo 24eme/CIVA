@@ -78,7 +78,7 @@ class DSCepage extends BaseDSCepage {
                 return $d;
             }
 
-            if($d->exist('lieu') && $d->lieu == $lieu) {                
+            if($d->exist('lieu') && trim(strtolower($d->lieu) == trim(strtolower($lieu)))) {                
              
                 return $d;
             }
