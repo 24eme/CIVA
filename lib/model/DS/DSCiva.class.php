@@ -47,6 +47,8 @@ class DSCiva extends DS {
         if(!$config->hasManyNoeuds() && count($config->getChildrenNode()) > 0) {
             $this->addNoeud($config->getChildrenNode()->getFirst()->getHash());
         }
+
+        return $noeud;
     }
 
     public function addAppellation($hash) {   

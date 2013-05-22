@@ -25,7 +25,13 @@ class DSRouting {
                     'action' => 'monEspace'),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'Tiers',
-                            'type' => 'object')));        
+                            'type' => 'object')));
+
+        $r->prependRoute('ds_ajout_lieu', new DSNoeudRouteCiva('/ds/:id/ajout-lieu/:hash', array('module' => 'ds',
+                        'action' => 'ajoutLieu'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'DS',
+                            'type' => 'object') ));      
 
         $r->prependRoute('ds_ajout_produit', new DSNoeudRouteCiva('/ds/:id/ajout-produit/:hash', array('module' => 'ds',
                         'action' => 'ajoutProduit'),

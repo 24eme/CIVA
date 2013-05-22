@@ -19,7 +19,7 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
     {
         $this->setWidget('hashref', new sfWidgetFormChoice(array('choices' => $this->getChoices())));
         $this->widgetSchema->setLabel('hashref', 'Séléctionnez un produit :');
-        $this->setValidator('hashref', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getProduits())),array('required' => "Aucun produit n'a été saisi !")));
+        $this->setValidator('hashref', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getChoices())),array('required' => "Aucun produit n'a été saisi !")));
 
         if($this->_config_noeud->hasLieuEditable()) {
             $this->setWidget('lieudit', new sfWidgetFormInput());
@@ -35,7 +35,8 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
         if (is_null($this->_choices_produits)) {
             $this->_choices_produits = array("" => "");
             foreach($this->getProduits() as $hash => $cepage) {
-                if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist(preg_replace('/^\/recolte/','declaration',$hash))) {
+                $hash = preg_replace('/^\/recolte/','declaration',$hash);
+                if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist(preg_replace('/^\/recolte/','declaration',$hash)) && count($this->_ds->get($hash)->detail) > 0) {
 
                     continue;
                 }
