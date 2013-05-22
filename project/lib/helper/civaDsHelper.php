@@ -30,7 +30,12 @@ function positionEditionDS($dss,$ds){
 
 function getDefaultTotal($type,$appellation,$current_lieu){
     
-    if(!$current_lieu) return $appellation->{$type};
+    if(!$current_lieu) return 0;//$appellation->{$type};
     return $appellation->{$type} - $current_lieu->{$type};
     
+}
+
+function getTitleLieuStockageStock($ds){
+    $lieu_num = $ds->getLieuStockage();
+    return 'Lieu de stockage n°'.intval($lieu_num).' : '.$ds->declarant->cvi.$lieu_num.' - '.$ds->getEtablissement()->getNom().', '.$ds->getEtablissement()->getAdresse();
 }

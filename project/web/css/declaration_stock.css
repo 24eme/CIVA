@@ -11,8 +11,6 @@
 /* STRUCTURE / ELEMENTS GENERIQUES */
 /* =================================================== */
 
-
-
 #application_ds 
 {
 	background: #f7f6f6;
@@ -28,6 +26,9 @@
 
 #application_ds input[type="text"]
 {
+	background: #fff;
+	border: 1px solid #C2C1BA;
+	font-size: 13px;
 	padding: 0 5px;
 	width: 113px;
 }
@@ -52,7 +53,62 @@
 	border-top: 0;
 	margin: -30px 0 0;
 	top: 0;
+	padding: 0 20px;
 }
+
+#etape_declaration.etapes_ds li
+{
+	padding: 4px 0;
+}
+
+#etape_declaration.etapes_ds li.sous_menu:hover
+{
+	background: #efefef;
+	border-left: 1px solid #cacaca;
+	border-right: 1px solid #cacaca;
+	padding: 0;
+	margin: 0 0 0 -1px;
+}
+
+#etape_declaration.etapes_ds li.sous_menu > a
+{
+	background: url(../images/puces/fleche_sous_menu.png) 110px 10px no-repeat;
+	z-index: 10;
+}
+
+#etape_declaration.etapes_ds li.sous_menu:hover > a
+{
+	background-position: 110px 13px;
+	border-bottom: 1px solid #efefef;
+	position: relative;
+	top: 1px;
+	padding: 3px 0 4px;
+}
+
+#etape_declaration.etapes_ds li.sous_menu ul
+{
+	background: #efefef;
+	border: solid #cacaca;
+	border-width: 1px 0;
+	display: none;
+	font-size: 12px;
+	position: absolute;
+	top: 49px;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+}
+
+#etape_declaration.etapes_ds li.sous_menu:hover ul { display: block; }
+
+#etape_declaration.etapes_ds li.sous_menu ul li
+{
+	float: left;
+	margin: 5px 0 5px 20px;
+}
+
+#etape_declaration.etapes_ds li.sous_menu ul li.actif { font-weight: bold; }
+#etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
 
 /* Barre de progression */
 .progression_ds
@@ -140,6 +196,19 @@
 	padding: 55px 15px 15px 0;
 }
 
+/**
+ * Définition des lieux de stockage
+ ******************************************/
+#application_ds #lieux_stockage table thead th { font-size: 11px; }
+
+#application_ds #lieux_stockage table thead th:first-child 
+{
+	padding: 0 10px;
+	width: 135px;
+}
+
+#application_ds #lieux_stockage table tbody td { text-align: center; }
+
 
 
 /**
@@ -174,6 +243,50 @@
 	font-style: normal;
 	margin: 0 0 0 5px;
 }
+
+#application_ds #liste_cepages li.ajout
+{
+	background: 0;
+	height: auto;
+	padding: 10px 0 0;
+}
+
+/**
+ * Ajout de cépage
+ ******************************************/
+#application_ds #aucun_produit
+{
+	border: 1px solid #c6c6c6;
+	font-size: 14px;
+	padding: 10px;
+	width: 320px;
+}
+
+#application_ds #aucun_produit p
+{
+	color: #acb701;
+	font-weight: bold;
+	margin: 0 0 15px;
+}
+
+#application_ds #aucun_produit .form_ligne
+{
+	margin: 0 0 10px;
+}
+
+#application_ds #aucun_produit .form_ligne * { vertical-align: middle; }
+
+#application_ds #aucun_produit .form_ligne label
+{
+	display: inline-block;
+	margin: 0 10px 0 0;
+	width: 140px;
+}
+
+#application_ds #aucun_produit .form_ligne select { font-size: 14px; width: 160px; }
+#application_ds #aucun_produit .form_ligne input { width: 150px; }
+
+#application_ds #aucun_produit .form_btn { text-align: right; }
 
 /**
  * Colonnes
@@ -224,10 +337,7 @@
 #application_ds #donnees_stock_cepage .colonne input
 {
 	background: #f0f0de;
-	border: 1px solid #C2C1BA;
-	font-size: 13px;
 	height: 16px;
-	padding: 0 5px;
 	text-align: right;
 }
 
@@ -244,11 +354,11 @@
 	overflow: hidden;
 }
 
-#application_ds .ligne_total h2,
+#application_ds .ligne_total h3,
 #application_ds .ligne_total ul,
 #application_ds .ligne_total ul li { float: left; }
 
-#application_ds .ligne_total h2
+#application_ds .ligne_total h3
 {
 	font-size: 16px;
 	padding: 0 0 0 10px;
@@ -292,63 +402,77 @@
 /**
  * Autres
  ******************************************/
-#application_ds .bloc_autres
-{
-	background: #edecec;
-	border: 1px solid #c6c8c7;
-	float: left;
-	margin: 50px 0 0;
-	padding: 15px;
-	position: relative;
-}
-
-#application_ds .bloc_autres + .bloc_autres
-{
-	margin-left: 30px;
-}
-
-#application_ds .bloc_autres h2
-{
-	background: #dcdfa9;
-	color: #848c03;
-	font-size: 18px;
-	font-weight: normal;
-	left: 0;
-	padding: 5px 0 5px 20px;
-	position: absolute;
-	top: -32px;
-	width: 85px;
-}
-
-#application_ds .bloc_autres form
-{
-	background: #e0e1bd;
-	padding: 10px;
-}
-
-#application_ds .bloc_autres .ligne_form
-{
-	margin: 15px 0;
-}
-
-#application_ds .bloc_autres label
+#application_ds #blocs_autres .bloc_autres
 {
 	display: inline-block;
-	width: 195px;
+	vertical-align: top;
+	width: 390px;
 }
+
+#application_ds #blocs_autres .bloc_autres + .bloc_autres { margin: 0 0 0 25px; }
+
+.ielt8 #application_ds #blocs_autres .bloc_autres
+{
+	display: inline;
+	zoom: 1;
+}
+
+#application_ds #blocs_autres .bloc_autres ul { font-size: 13px; }
+
+#application_ds #blocs_autres .bloc_autres ul li { margin: 5px 0; }
+
+#application_ds #blocs_autres .bloc_autres ul li label
+{
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 10px 0 0;
+	width: 190px;
+}
+
+#application_ds #blocs_autres .bloc_autres ul li input { background: #f0f0de; text-align: right; }
+#application_ds #blocs_autres .bloc_autres ul li input:focus { background: #fff; }
+
+
+
 
 /**
- * Définition des lieux de stockage
+ * Récapitulatif
  ******************************************/
-#application_ds #lieux_stockage table thead th { font-size: 11px; }
-
-#application_ds #lieux_stockage table thead th:first-child 
+#application_ds .page_recap
 {
-	padding: 0 10px;
-	width: 135px;
+	width: 540px;
+	margin: 0 0 40px;
 }
 
-#application_ds #lieux_stockage table tbody td { text-align: center; }
+#application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
+#application_ds #recap_appellations { margin: 0 0 45px; }
+#application_ds #recap_autres { margin: 20px 0 0; }
 
+/* Tableau */
+#application_ds #recap_vins_sans_ig table,
+#application_ds #recap_autres table { width: 237px;  }
 
+#application_ds .page_recap table thead th
+{
+	background: #dcdfa9;
+	border-right: 1px solid #fff;
+	color: #848c03;
+	font-size: 16px;
+	font-weight: normal;
+	padding: 3px 5px;
+	vertical-align: middle;
+}
+
+#application_ds .page_recap table thead th.total { width: 60px; }
+
+/* Total */
+#application_ds .page_recap .ligne_total
+{
+	display: inline-block;
+	margin: 15px 0 0;
+	padding-right: 5px;
+}
+#application_ds .page_recap .ligne_total h3 { width: 155px; }
+#application_ds .page_recap .ligne_total input { width: 60px; }
+#application_ds .page_recap .ligne_total + table { margin-top: 40px; }

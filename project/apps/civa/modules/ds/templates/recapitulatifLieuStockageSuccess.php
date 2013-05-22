@@ -1,4 +1,5 @@
 <?php 
+use_helper('Float');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
 ?>
 
@@ -45,10 +46,10 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
                                         
 						<tr>
 							<td><?php echo $appellation->getLibelle(); ?></td>
-							<td><?php echo $appellation->getTotalStock(); ?></td>
-							<td><?php echo $appellation->getTotalNormal(); ?></td>
-							<td><?php echo $appellation->getTotalVt(); ?></td>
-							<td><?php echo $appellation->getTotalSgn(); ?></td>
+							<td><?php echoFloat($appellation->getTotalStock()); ?></td>
+							<td><?php echoFloat($appellation->getTotalNormal()); ?></td>
+							<td><?php echoFloat($appellation->getTotalVt()); ?></td>
+							<td><?php echoFloat($appellation->getTotalSgn()); ?></td>
 						</tr>
                                             
                         <?php endforeach; ?>
@@ -57,7 +58,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 				
 				<div id="total" class="ligne_total">
 					<h3>Total AOC</h3>
-					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalAOC(); ?>" />
+					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalAOC()); ?>" />
 				</div>
 			</div>
 
@@ -73,18 +74,18 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<tbody>        
 						<tr>
 							<td>Vins de table sans IG</td>
-							<td><?php echo $ds->getTotalVinSansIg(); ?></td>
+							<td><?php echoFloat($ds->getTotalVinSansIg()); ?></td>
 						</tr>        
 						<tr>
 							<td>Vins de table mousseux</td>
-							<td>?</td>
+							<td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
 						</tr>
 					</tbody>
 				</table>
 				
 				<div id="total" class="ligne_total">
-					<h3>Total AOC</h3>
-					<input type="text" readonly="readonly" value="<?php echo $ds->getTotalAOC(); ?>" />
+					<h3>Total</h3>
+					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalVinSansIg() + $ds->getTotalMousseuxSansIg()); ?>" />
 				</div>
 
 			</div>

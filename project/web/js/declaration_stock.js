@@ -136,6 +136,10 @@ $.fn.ajaxPostForm = function(){
 
 var formPost = function(form)
 {
+        appDS.find('input.num').each(function(){
+            $(this).verifNettoyageChamp();
+        });
+        
         $.ajax({
             url: $(form).attr('action'),
             type: "POST",

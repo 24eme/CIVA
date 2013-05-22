@@ -144,8 +144,6 @@ class dsActions extends sfActions {
         }
     }
     
-
-    
     public function executeAutre(sfWebRequest $request)
     {
         $this->tiers = $this->getRoute()->getTiers();

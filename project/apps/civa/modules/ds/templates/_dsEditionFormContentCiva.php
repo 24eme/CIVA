@@ -1,7 +1,5 @@
 <?php
 $produits = $form->getProduitsDetails();
-echo $form->renderHiddenFields();
-echo $form->renderGlobalErrors();
 ?>    
     <ul id="liste_cepages">
         <?php 
@@ -13,7 +11,7 @@ echo $form->renderGlobalErrors();
         <?php endforeach; ?>
 		
 		<li class="ajout">
-			<a href="#">
+			<a href="<?php echo url_for('ds_ajout_produit', $appellation) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>

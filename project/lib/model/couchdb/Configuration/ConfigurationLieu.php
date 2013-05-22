@@ -61,5 +61,9 @@ class ConfigurationLieu extends BaseConfigurationLieu {
     public function hasManyCouleur() {
         return (!$this->exist('couleur') || $this->filter('^couleur.+')->count() > 0);
     }
+    
+    public function hasLieuEditable(){
+        return $this->getAppellation()->hasLieuEditable();
+    }
 
 }
