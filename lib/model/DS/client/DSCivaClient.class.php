@@ -192,11 +192,12 @@ class DSCivaClient extends DSClient {
                 
                     case 'GRDCRU':
                     case 'CREMANT': 
-                    case 'ALSACEBLANC': 
+                  //  case 'ALSACEBLANC': 
                         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,$app_key,$appellation,$appellation->getLibelle());
                     break;
                     default :
-                        $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$app_key,$appellation);
+                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACE',$appellation,'AOC Alsace');
+                        //$this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$app_key,$appellation);
                     break;
                 }
                 
