@@ -2,7 +2,7 @@
 use_helper('Float');
 use_helper('ds');
 ?>
-<form class="ajaxForm" id="form_stock" action="<?php echo url_for('ds_edition_operateur', $lieu); ?>" method="post">
+<form class="ajaxForm" id="form_stock" action="<?php echo url_for('ds_edition_operateur', $lieu); ?>" method="post" tabindex="0">
 	<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
     <?php 
         echo $form->renderHiddenFields();
@@ -20,10 +20,10 @@ use_helper('ds');
 			
 			<!-- #gestion_stock -->
 
-            <div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
-                    
-                <?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
-                
+
+			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
+                <?php $tabindex = count($form->getProduitsDetails())*3 + 1 ?>
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
@@ -51,14 +51,14 @@ use_helper('ds');
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
                     <?php if(!$isFirstAppellation): ?>
-                        <a class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousLieu($lieu->getRawValue())); ?>">
+                        <a tabindex="<?php echo $tabindex + 1 ?>" class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousLieu($lieu->getRawValue())); ?>">
                                 <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
                         </a>
                     <?php endif; ?>
 				</li>
                                 
 				<li>
-                       <input type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
+                       <input tabindex="<?php echo $tabindex ?>" type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
 				</li>
 			</ul>
 		</div>
@@ -68,7 +68,7 @@ use_helper('ds');
 
 	<ul id="btn_etape" class="btn_prev_suiv clearfix">
 		<li class="prec ajax">
-			<a href="<?php echo (!$ds->isDsPrincipale())?
+			<a  href="<?php echo (!$ds->isDsPrincipale())?
                                                 url_for('ds_recapitulatif_lieu_stockage', DSCivaClient::getInstance()->getPreviousDS($ds))
                                               : url_for('ds_lieux_stockage', array('cvi' => $ds->getIdentifiant()));?>">
 				<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente"  />

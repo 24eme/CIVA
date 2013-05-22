@@ -23,13 +23,15 @@ $produits = $form->getProduitsDetails();
 
 				<div class="col_cont">
 					<ul>
+                        <?php $tabindex = 1; ?>
 						<?php foreach ($produits as $key => $detail) : 
 							$key = $detail->getHashForKey();
 							?>
 						<li>
-							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num')); ?>
+							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex)); ?>
 							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->renderError(); ?>
 						</li>
+                        <?php $tabindex = $tabindex+3; ?>
 						<?php endforeach; ?>
 					</ul>
 				</div>
@@ -39,17 +41,19 @@ $produits = $form->getProduitsDetails();
 
 				<div class="col_cont">
 					<ul>
+                        <?php $tabindex = 2; ?>
 						<?php foreach ($produits as $key => $detail) :
 							$key = $detail->getHashForKey();
 							?>
 						<li>
 							<?php
 							if(!$detail->getCepage()->no_vtsgn){
-								echo $form[DSCivaClient::VOLUME_VT.$key]->render(array('class' => 'num'));
+								echo $form[DSCivaClient::VOLUME_VT.$key]->render(array('class' => 'num', 'tabindex' => $tabindex));
 								echo $form[DSCivaClient::VOLUME_VT.$key]->renderError(); 
 							}
 							?>
 						</li>
+                        <?php $tabindex = $tabindex+3; ?>
 						<?php endforeach; ?>
 					</ul>
 				</div>
@@ -60,17 +64,19 @@ $produits = $form->getProduitsDetails();
 
                 <div class="col_cont">
                     <ul>
+                        <?php $tabindex = 3; ?>
                         <?php foreach ($produits as $key => $detail) : 
                              $key = $detail->getHashForKey();
                             ?>
                         <li>
                             <?php
                             if(!$detail->getCepage()->no_vtsgn){
-                                echo $form[DSCivaClient::VOLUME_SGN.$key]->render(array('class' => 'num'));
+                                echo $form[DSCivaClient::VOLUME_SGN.$key]->render(array('class' => 'num', 'tabindex' => $tabindex));
                                 echo $form[DSCivaClient::VOLUME_SGN.$key]->renderError(); 
                             }
                             ?>
                         </li>
+                        <?php $tabindex = $tabindex+3; ?>
                         <?php endforeach; ?>
                     </ul>
                 </div>
