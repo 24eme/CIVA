@@ -107,7 +107,9 @@ class dsActions extends sfActions {
 
     public function executeAjoutProduit(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
-        $this->appellation = $this->getRoute()->getNoeud()->getAppellation();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->noeud = $this->getRoute()->getNoeud();
+        $this->appellation = $this->noeud->getAppellation();
         $this->config_appellation = $this->appellation->getConfig();
         $this->form = new DSEditionAddProduitFormCiva($this->ds, $this->config_appellation);
 

@@ -6,34 +6,8 @@
     ?>
     <div id="ajax_error"></div>
 	<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
-	
-	<ul id="onglets_majeurs" class="clearfix onglets_stock">
-		<?php foreach ($appellations as $app_key => $app):  ?>
-		
-		<?php $selected = ($app->getHash() == $appellation->getHash()); ?>
-		<li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">
-			<a href="<?php echo url_for('ds_edition_operateur', $app->getRawValue()); ?>">
-				<span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span> 
-				<br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
-			</a>
-			
-			<?php if($selected && $appellation->getConfig()->hasManyLieu()): ?>
-			<?php $has_lieux = true; ?>
-				<ul class="sous_onglets">
-				  <?php foreach ($appellation->getLieux() as $lieu_key => $lieu): ?>
-				  <li class="<?php echo ($noeud->getHash() == $lieu->getHash())? 'ui-tabs-selected' : ''; ?>">
-					  <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>"><?php echo $lieu->getConfig()->getLibelle(); ?></a></li>
-				  <?php endforeach; ?>
-					<li class="ajouter ajouter_lieu"><a href="#">Ajouter un lieu dit</a></li>
-				</ul>
-			<?php endif; ?>
-		</li>
-		<?php endforeach; ?>
-		<li>
-			<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
-			<br>Récapitulatif</a>
-		</li>
-	</ul>
+
+	<?php include_partial('ds/onglets', array('noeud' => $noeud)) ?>
 		
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
@@ -43,7 +17,7 @@
 			<!-- #gestion_stock -->
 
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if(isset($has_lieux) && $has_lieux) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'appellation' => $appellation));?>
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'noeud' => $noeud));?>
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total</h3>
