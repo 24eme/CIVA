@@ -14,7 +14,7 @@ $progression = progressionEdition($dss,$ds,$etape);
 					<a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>"><span>Lieux de stockage</span> <em>Etape 2</em></a>
 			</li>
 			<li class="<?php echo ($etape==3)? 'actif' : '' ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
-                            <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id));?>"><span>Stocks</span><em>Etape 3</em><?php echo getEtape3Label($etape,$many_lieux,$dss,$ds);?></a>
+                            <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id));?>"><span>Stocks</span> <em>Etape 3<span class="lieu" ><?php echo getEtape3Label($etape,$many_lieux,$dss,$ds);?></span></em></a>
                             <?php if(($etape==3) && ($many_lieux)) : ?>
                                 <ul>
                                 <?php 

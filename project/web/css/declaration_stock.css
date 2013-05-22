@@ -110,6 +110,19 @@
 #etape_declaration.etapes_ds li.sous_menu ul li.actif { font-weight: bold; }
 #etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
 
+ul#etape_declaration li.actif a em span.lieu 
+{
+    color: black;
+    display: inline-block;
+    margin: 0 0 0 4px;
+/*    
+    font-size: 12px;
+    font-style: italic;
+    font-weight: bold;
+    margin: 2px 0 0;
+    padding: 6px 0 0;*/
+}
+
 /* Barre de progression */
 .progression_ds
 {
