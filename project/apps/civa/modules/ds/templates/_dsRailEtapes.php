@@ -1,5 +1,5 @@
 <?php
-use_helper('civaDs');
+use_helper('ds');
 $dss = DSCivaClient::getInstance()->findDssByDS($ds);
 $many_lieux = (count($dss) > 1);
 $progression = progressionEdition($dss,$ds,$etape);

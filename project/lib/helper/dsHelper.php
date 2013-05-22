@@ -29,10 +29,8 @@ function positionEditionDS($dss,$ds){
 }
 
 function getDefaultTotal($type,$appellation,$current_lieu){
-    
-    if(!$current_lieu) return 0;//$appellation->{$type};
-    return $appellation->{$type} - $current_lieu->{$type};
-    
+    if(($current_lieu) || ($current_lieu->exist($type))) return $appellation->{$type} - $current_lieu->{$type};
+    return 0;   
 }
 
 function getTitleLieuStockageStock($ds){

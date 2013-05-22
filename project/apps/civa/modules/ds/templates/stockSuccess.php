@@ -1,3 +1,7 @@
+<?php
+use_helper('Float');
+use_helper('ds');
+?>
 <form class="ajaxForm" id="form_stock" action="<?php echo url_for('ds_edition_operateur', $lieu); ?>" method="post">
 	<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3)); ?>
     <?php 
@@ -36,19 +40,19 @@
 			<div id="total" class="ligne_total">
 				<h3>Total <?php echo $appellation->libelle; ?></h3>
 				<ul>
-					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_normal',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
-					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_vt',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
-					<li><input type="text" readonly="readonly" data-val-defaut="<?php echo getDefaultTotal('total_sgn',$appellation, $current_lieu); ?>" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_normal',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_vt',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
+					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_sgn',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
 				</ul>
 			</div>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
-					<?php if(!$isFirstAppellation): ?>
-						<a class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousAppellation($appellation)); ?>">
-							<img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
-						</a>
-					<?php endif; ?>
+                                    <?php if(!$isFirstAppellation): ?>
+                                        <a class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousAppellation($appellation)); ?>">
+                                                <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
+                                        </a>
+                                    <?php endif; ?>
 				</li>
                                 
 				<li>
