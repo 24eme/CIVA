@@ -257,4 +257,13 @@ class DSCivaClient extends DSClient {
         return $totalSansIG;
     }
     
+    public function getTotalSansIGMousseux($ds) {
+        $dss = $this->findDssByDS($ds);
+        $totalMousseuxSansIG = 0;
+        foreach ($dss as $ds_key => $ds) {
+            $totalMousseuxSansIG += $ds->getTotalMousseuxSansIg();
+        }
+        return $totalMousseuxSansIG;
+    }
+    
 }
