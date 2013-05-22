@@ -47,7 +47,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 	
 	<ul id="btn_etape" class="btn_prev_suiv clearfix">
 		<li class="prec">
-			<a href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id,'appellation_lieu' => $ds->getFirstAppellationLieu())); ?>">
+			<a href="<?php echo url_for('ds_edition_operateur', $ds); ?>">
 				<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 			</a>
 		</li>

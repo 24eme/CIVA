@@ -62,7 +62,9 @@
 
 	<ul id="btn_etape" class="btn_prev_suiv clearfix">
 		<li class="prec ajax">
-			<a href="<?php echo url_for("ds_lieux_stockage", $tiers) ?>">
+			<a href="<?php echo (!$ds->isDsPrincipale())?
+                                                url_for('ds_recapitulatif_lieu_stockage', DSCivaClient::getInstance()->getPreviousDS($ds))
+                                              : url_for('ds_lieux_stockage', array('cvi' => $ds->getIdentifiant()));?>">
 				<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente"  />
 			</a>
 		</li>

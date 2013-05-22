@@ -78,7 +78,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						</tr>        
 						<tr>
 							<td>Vins de table mousseux</td>
-							<td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
+                                                        <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
 						</tr>
 					</tbody>
 				</table>
