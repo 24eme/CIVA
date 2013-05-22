@@ -87,8 +87,8 @@ class dsActions extends sfActions {
         $this->appellations = $this->ds->declaration->getAppellationsSorted();
         $this->appellation = $this->lieu->getAppellation();
         $this->current_lieu = null;
-        $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash());// && ($this->ds->isDsPrincipale());
-
+        $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash());
+        
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
@@ -99,7 +99,7 @@ class dsActions extends sfActions {
                     return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
                 }
                             
-                $next = $this->ds->getNextAppellation($this->appellation);
+                $next = $this->ds->getNextLieu($this->lieu);
                 if($next){
                     $this->redirect('ds_edition_operateur', $next);
                 }
