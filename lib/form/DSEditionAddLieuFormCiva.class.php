@@ -18,7 +18,7 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
     public function configure() 
     {
         $this->setWidget('hashref', new sfWidgetFormChoice(array('choices' => $this->getChoices())));
-        $this->widgetSchema->setLabel('hashref', 'Séléctionnez un lieu :');
+        $this->widgetSchema->setLabel('hashref', 'Séléctionnez un lieu-dit :');
         $this->setValidator('hashref', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getChoices())),array('required' => "Aucun lieu n'a été choisi !")));
 
         $this->widgetSchema->setNameFormat('ds_add_lieu[%s]');
