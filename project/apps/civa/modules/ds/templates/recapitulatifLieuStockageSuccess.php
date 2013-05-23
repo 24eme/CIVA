@@ -36,7 +36,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						<tr>
 							<th class="appellation">Appellations</th>
 							<th class="total">Total</th>
-							<th>Stocks hors VT / SGN</th>
+							<th>hors VT/SGN</th>
 							<th>VT</th>
 							<th>SGN</th>
 						</tr>
@@ -45,7 +45,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation) : ?>
                                         
 						<tr>
-							<td><?php echo $appellation->getLibelle(); ?></td>
+							<td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
 							<td><?php echoFloat($appellation->getTotalStock()); ?></td>
 							<td><?php echoFloat($appellation->getTotalNormal()); ?></td>
 							<td><?php echoFloat($appellation->getTotalVt()); ?></td>
@@ -73,12 +73,12 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					</thead>
 					<tbody>        
 						<tr>
-							<td>Vins de table sans IG</td>
+							<td class="appellation">Vins de table sans IG</td>
 							<td><?php echoFloat($ds->getTotalVinSansIg()); ?></td>
 						</tr>        
 						<tr>
-							<td>Vins de table mousseux</td>
-                                                        <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
+							<td class="appellation">Vins de table mousseux</td>
+                            <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
 						</tr>
 					</tbody>
 				</table>

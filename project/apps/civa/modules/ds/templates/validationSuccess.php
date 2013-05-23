@@ -17,7 +17,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 						<tr>
 							<th class="appellation">Appellations</th>
 							<th class="total">Total</th>
-							<th>Stocks hors VT / SGN</th>
+							<th>Hors VT/SGN</th>
 							<th>VT</th>
 							<th>SGN</th>
 						</tr>
@@ -25,7 +25,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<tbody>
                         <?php foreach ($appelations_agregee as $apellation_agregee_key => $apellation_agregee) : ?>
 						<tr>
-							<td><?php echo $apellation_agregee->nom; ?></td>
+							<td class="appellation"><?php echo $apellation_agregee->nom; ?></td>
                                                         <td><?php echoFloat($apellation_agregee->volume_total); ?></td>
 							<td><?php echoFloat($apellation_agregee->volume_normal); ?></td>
 							<td><?php echoFloat($apellation_agregee->volume_vt); ?></td>
@@ -41,7 +41,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				</div>				                           
 			</div>
                     
-                    	<div id="recap_autres">				
+        	<div id="recap_autres">				
 				<table class="table_donnees">
 					<thead>
 						<tr>
@@ -51,11 +51,11 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					</thead>
 					<tbody>
 						<tr>
-							<td>Rebêches</td>
+							<td class="appellation">Rebêches</td>
 							<td><?php echoFloat($ds_principale->getRebeches()); ?></td>
 						</tr>
 						<tr>
-							<td>Usages industiels</td>
+							<td class="appellation">Usages industiels</td>
 							<td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
 						</tr>
 					</tbody>
@@ -74,11 +74,11 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				</thead>
 				<tbody>        
 					<tr>
-						<td>Vins Sans IG</td>
+						<td class="appellation">Vins Sans IG</td>
 						<td><?php echoFloat($ds_client->getTotalSansIG($ds_principale)); ?></td>
 					</tr>        
 					<tr>
-						<td>Mousseux</td>
+						<td class="appellation">Mousseux</td>
 						<td><?php echoFloat($ds_client->getTotalSansIGMousseux($ds_principale)); ?></td>
 					</tr>
 				</tbody>
