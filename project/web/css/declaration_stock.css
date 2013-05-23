@@ -422,6 +422,16 @@ ul#etape_declaration li.actif a em span.lieu
 	width: 390px;
 }
 
+.titre_page span.titre_autre
+{
+    margin: 0 0 0 150px;
+}
+
+.bloc_autres div.colonne h2
+{
+    text-align: center;
+}
+
 #application_ds #blocs_autres .bloc_autres + .bloc_autres { margin: 0 0 0 25px; }
 
 .ielt8 #application_ds #blocs_autres .bloc_autres
@@ -460,7 +470,7 @@ ul#etape_declaration li.actif a em span.lieu
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
 #application_ds #recap_appellations { margin: 0 0 45px; }
-#application_ds #recap_autres { margin: 20px 0 0; }
+#application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
 
 /* Tableau */
 #application_ds #recap_vins_sans_ig table,

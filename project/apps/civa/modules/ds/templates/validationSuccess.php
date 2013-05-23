@@ -41,6 +41,28 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				</div>				                           
 			</div>
                     
+                    	<div id="recap_autres">				
+				<table class="table_donnees">
+					<thead>
+						<tr>
+							<th class="appellation">Autres</th>
+							<th class="total">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Rebêches</td>
+							<td><?php echoFloat($ds_principale->getRebeches()); ?></td>
+						</tr>
+						<tr>
+							<td>Usages industiels</td>
+							<td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
+						</tr>
+					</tbody>
+				</table>     
+			</div>
+
+                    
                         <?php if($ds_client->hasVinSansIg($ds_principale)): ?>		
 			<div id="recap_vins_sans_ig">
 			<table class="table_donnees">
@@ -52,11 +74,11 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				</thead>
 				<tbody>        
 					<tr>
-						<td>TOTAL Sans IG</td>
+						<td>Vins Sans IG</td>
 						<td><?php echoFloat($ds_client->getTotalSansIG($ds_principale)); ?></td>
 					</tr>        
 					<tr>
-						<td>TOTAL Mousseux</td>
+						<td>Mousseux</td>
 						<td><?php echoFloat($ds_client->getTotalSansIGMousseux($ds_principale)); ?></td>
 					</tr>
 				</tbody>
@@ -64,27 +86,8 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
                         </div>
                         <?php endif; ?>
 		
-			<div id="recap_autres">				
-				<table class="table_donnees">
-					<thead>
-						<tr>
-							<th class="appellation">Autres</th>
-							<th class="total">Total</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>TOTAL Rebêches</td>
-							<td><?php echoFloat($ds_principale->getRebeches()); ?></td>
-						</tr>
-						<tr>
-							<td>TOTAL Usages industiels</td>
-							<td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
-						</tr>
-					</tbody>
-				</table>     
-			</div>
-		
+			
+
 		</div>
 		
 		

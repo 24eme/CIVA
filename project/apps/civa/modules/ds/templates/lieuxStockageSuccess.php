@@ -22,7 +22,7 @@
 		<table class="table_donnees">
 			<thead>
 				<tr>
-					<th>Lieus de stockage</th>
+					<th>Lieux de stockage</th>
 					<?php 
 					$configurations = ConfigurationClient::getConfiguration()->getArrayAppellations();
 					foreach ($configurations as $conf):
