@@ -13,7 +13,9 @@
     <div id="application_ds" class="clearfix">
         <div id="aucun_produit">
             <?php if(count($appellation->getLieuxSorted()) < 1): ?>
-            <p>Il n'y a pas de lieu défini pour cette appellation</p>
+            <p>Aucun lieu-dit défini pour cette appellation</p>
+            <?php else: ?>
+            <p>Ajouter un lieu-dit</p>
             <?php endif; ?>        
             <div class="form_ligne">
                                 <?php echo $form['hashref']->renderLabel(); ?>
@@ -28,7 +30,10 @@
             </div>
             <?php endif; ?>
             <div class="form_btn">
-                    <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
+                <?php if(count($appellation->getLieuxSorted()) > 0): ?>
+                    <a href="<?php echo url_for('ds_edition_operateur', $appellation) ?>">Annuler</a>
+                <?php endif; ?>    
+                <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
             </div>
 
         </div>          
