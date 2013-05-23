@@ -30,7 +30,7 @@ $progression = progressionEdition($dss,$ds,$etape);
                             <?php endif; ?>
 			</li>
 			<li <?php echo ($etape==4)? 'class="actif"' : '' ?> >
-					<a class="ajax" href="<?php echo url_for('ds_autre', $tiers);?>"><span>Autre</span> <em>Etape 4</em></a>
+					<a class="ajax" href="<?php echo url_for('ds_autre', $tiers);?>"><span>Autres Produits</span> <em>Etape 4</em></a>
 			</li>
 			<li <?php echo ($etape==5)? 'class="actif"' : '' ?> >
 					<a class="ajax" href="<?php echo url_for('ds_validation', $tiers);?>"><span>Validation</span> <em>Etape 5</em></a>
