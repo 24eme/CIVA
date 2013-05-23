@@ -26,7 +26,7 @@ use_helper('ds');
                 <?php $tabindex = count($form->getProduitsDetails())*3 + 1 ?>
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
-			        <h3>Sous total</h3>
+			        <h3>Sous total lieu-dit</h3>
 			        
 			        <ul>
 			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>

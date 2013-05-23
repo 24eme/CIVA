@@ -122,7 +122,6 @@ $.fn.ajaxPostForm = function(){
         $(inputs).each(function(){
                 $(this).change(function(){
                     formPost(form);
-                    return false;
             }); 
         });
             
@@ -145,7 +144,7 @@ var formPost = function(form)
             type: "POST",
             data: $(form).serializeArray(),
             dataType: "json",
-            async : false,
+            async : true,
             success: function(msg){},  
             error: function(textStatus){  
                 $( "#ajax_error").html(textStatus);
