@@ -10,7 +10,7 @@ class DSEditionCivaAutreForm extends acCouchdbObjectForm {
         
         $this->setWidget('dplc', new sfWidgetFormInputFloat(array(), array('size' => '6')));
         $this->setValidator('dplc', new sfValidatorNumber(array('required' => true)));
-        $this->widgetSchema->setLabel('dplc', 'Dépassement');
+        $this->widgetSchema->setLabel('dplc', 'Dépassement de rendement');
         
         $this->setWidget('lies', new sfWidgetFormInputFloat(array(), array('size' => '6')));
         $this->setValidator('lies', new sfValidatorNumber(array('required' => true)));
