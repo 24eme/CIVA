@@ -240,14 +240,6 @@ class DSCivaClient extends DSClient {
         return $totauxByAppellationsRecap;
     }  
     
-    public function hasVinSansIg($ds) {
-        $dss = $this->findDssByDS($ds);
-        foreach ($dss as $current_ds) {
-            if($current_ds->declaration->getAppellations()->exist('appellation_VINTABLE')) return true;
-        }
-        return false;
-    }
-
     public function getTotalAOC($ds) {
         $dss = $this->findDssByDS($ds);
         $totalAOC = 0;
