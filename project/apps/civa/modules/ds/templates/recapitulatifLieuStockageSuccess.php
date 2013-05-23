@@ -1,9 +1,10 @@
 <?php 
 use_helper('Float');
+use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
 ?>
 
-<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
+<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 
 	<!-- fin .header_ds -->
 	<ul id="onglets_majeurs" class="clearfix onglets_stock">
