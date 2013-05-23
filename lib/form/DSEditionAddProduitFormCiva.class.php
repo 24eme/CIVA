@@ -18,7 +18,7 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
     public function configure() 
     {
         $this->setWidget('hashref', new sfWidgetFormChoice(array('choices' => $this->getChoices())));
-        $this->widgetSchema->setLabel('hashref', 'Séléctionnez un produit :');
+        $this->widgetSchema->setLabel('hashref', 'Séléctionnez un cépage :');
         $this->setValidator('hashref', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getChoices())),array('required' => "Aucun produit n'a été saisi !")));
 
         if($this->_config_noeud->hasLieuEditable()) {
