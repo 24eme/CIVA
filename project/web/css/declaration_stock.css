@@ -272,7 +272,7 @@ ul#etape_declaration li.actif a em span.lieu
 	border: 1px solid #c6c6c6;
 	font-size: 14px;
 	padding: 10px;
-	width: 320px;
+	width: 340px;
 }
 
 #application_ds #aucun_produit p
@@ -293,7 +293,7 @@ ul#etape_declaration li.actif a em span.lieu
 {
 	display: inline-block;
 	margin: 0 10px 0 0;
-	width: 140px;
+	width: 164px;
 }
 
 #application_ds #aucun_produit .form_ligne select { font-size: 14px; width: 160px; }

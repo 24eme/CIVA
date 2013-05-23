@@ -13,23 +13,29 @@
 	<div id="application_ds" class="clearfix">
 		<div id="aucun_produit">
             <?php if(count($lieu->getProduitsDetails()) < 1): ?>
-            <p>Il n'y a pas de produit défini pour cette appellation</p>
+                <p>Aucun produit défini pour cette appellation</p>
+            <?php else :?>
+                <p>Ajouter un produit</p>
             <?php endif; ?>   
 			
 			<div class="form_ligne">
-                                <?php echo $form['hashref']->renderLabel(); ?>
-                                <?php echo $form['hashref']->render(); ?>
-                                <?php echo $form['hashref']->renderError(); ?>
+                <?php echo $form['hashref']->renderLabel(); ?>
+                <?php echo $form['hashref']->render(); ?>
+                <?php echo $form['hashref']->renderError(); ?>
 			</div>
-                        <?php if($form->hasLieuEditable()): ?>
+
+            <?php if($form->hasLieuEditable()): ?>
 			<div class="form_ligne">
 				<?php echo $form['lieudit']->renderLabel(); ?>
-                                <?php echo $form['lieudit']->render(); ?>
-                                <?php echo $form['lieudit']->renderError(); ?>
+                <?php echo $form['lieudit']->render(); ?>
+                <?php echo $form['lieudit']->renderError(); ?>
 			</div>
 			<?php endif; ?>
 			<div class="form_btn">
-                    <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
+                <?php if(count($lieu->getProduitsDetails()) > 0): ?>
+                    <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>">Annuler</a>
+                <?php endif; ?>
+                <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
 			</div>
 
 		</div>			
