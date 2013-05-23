@@ -60,10 +60,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 						</tr>
 					</tbody>
 				</table>     
-			</div>
-
-                    
-                        <?php if($ds_client->hasVinSansIg($ds_principale)): ?>		
+			</div>	
 			<div id="recap_vins_sans_ig">
 			<table class="table_donnees">
 				<thead>
@@ -84,7 +81,6 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				</tbody>
 			</table>
                         </div>
-                        <?php endif; ?>
 		
 			
 
