@@ -28,7 +28,11 @@ $produits = $form->getProduitsDetails();
 							$key = $detail->getHashForKey();
 							?>
 						<li>
-							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex)); ?>
+                            <?php if($tabindex == 1): ?>
+							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex, 'autofocus' => 'autofocus')); ?>
+                            <?php else: ?>
+                                <?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex)); ?>
+                            <?php endif; ?>
 							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->renderError(); ?>
 						</li>
                         <?php $tabindex = $tabindex+3; ?>

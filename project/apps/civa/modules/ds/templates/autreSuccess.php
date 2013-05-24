@@ -6,7 +6,7 @@ echo $form->renderGlobalErrors();
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4));
 ?>
 
-<h2 class="titre_page">Autres Produits : saisissez ici vos rebêche, dépassements de rendement, lies et moûts.<br><span class="titre_autre">(tous lieux de stockage confondus)<span></h2>
+<h2 class="titre_page">Autres produits : saisissez ici vos rebêche, dépassements de rendement, lies et moûts <br /><small>(tous lieux de stockage confondus)</small></h2>
 <!-- #application_ds --></h2>
 <div id="ajax_error"></div>
 	<div id="application_ds" class="clearfix">

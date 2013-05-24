@@ -1,4 +1,4 @@
-<ul id="onglets_majeurs" class="clearfix onglets_stock onglets_recolte">
+<ul id="onglets_majeurs" class="clearfix onglets_stock">
     <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
     <?php $selected = (isset($appellation) && $app->getHash() == $appellation->getHash()); ?>
     <li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">

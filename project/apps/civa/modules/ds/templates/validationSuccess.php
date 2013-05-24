@@ -5,7 +5,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 ?>
 
 	
-	<h2 class="titre_page">Récapitulatif de votre déclaration de Stocks</h2>
+	<h2 class="titre_page">Récapitulatif de votre déclaration de Stocks <small>(tous lieux de stockage confondus)</small></h2>
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">

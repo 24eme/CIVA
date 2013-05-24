@@ -41,6 +41,11 @@
 	margin: 0 0 20px 23px;
 }
 
+.titre_page small
+{
+	font-size: 14px;
+}
+
 
 /**
  * Header DS
