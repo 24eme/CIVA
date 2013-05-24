@@ -7,14 +7,8 @@
     $dss[0]->getFirstAppellation()->getKey();
 ?>  
 
-<h2 class="titre_page">Déclarations de Stocks de Vins d'Alsace au 31 juillet 2013</h2>
+<h2 class="titre_page">Définissez ici le détail de vos lieux de stockage</h2>
 
-
-<ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected">
-		<a href="#">Définition des lieux de stockage</a>
-	</li>
-</ul>
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
 	
