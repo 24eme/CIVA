@@ -7,7 +7,7 @@
     <div id="ajax_error"></div>
 	<h2 class="titre_page"><?php echo $ds->declarant->cvi.' - '.$ds->getEtablissement()->getNom().' - '.$ds->getEtablissement()->getAdresse(); ?></h2>
 	
-	<?php include_partial('ds/onglets', array('appellation' => $appellation, 'lieu' => $lieu)) ?>
+	<?php include_partial('ds/onglets', array('ds' => $ds, 'appellation' => $appellation, 'lieu' => $lieu)) ?>
 		
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">

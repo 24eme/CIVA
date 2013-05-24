@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 <div class="col_recolte col_validee">
     <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
 

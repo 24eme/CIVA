@@ -4,28 +4,10 @@ use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
 ?>
 
+
 <h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 
-	<!-- fin .header_ds -->
-	<ul id="onglets_majeurs" class="clearfix onglets_stock">
-            <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
-            <li>
-                <a href="<?php echo url_for('ds_edition_operateur', $app); ?>"><span>
-                    <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
-                    </span> 
-                    <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
-                </a>
-            </li>
-            <?php 
-            endforeach;
-            ?>
-                <li class="ui-tabs-selected">
-                        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
-                        <br>Récapitulatif</a>
-                </li>                
-        </ul>
-	
-
+	<?php include_partial('ds/onglets', array('ds' => $ds, 'recap' => true)) ?>
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
@@ -37,12 +19,13 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						<tr>
 							<th class="appellation">Appellations</th>
 							<th class="total">Total</th>
-							<th>Stocks hors VT / SGN</th>
+							<th>hors VT/SGN</th>
 							<th>VT</th>
 							<th>SGN</th>
 						</tr>
 					</thead>
 					<tbody>
+
 					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
                                                  if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
                                                     <tr>
@@ -51,8 +34,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
                                                             <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
                                                             <td><?php echoFloat($appellation->getTotalVt()); ?></td>
                                                             <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
-                                                    </tr>
-                                            
+                                                    </tr>                                            
                                                 <?php endif;
                                                 endforeach; ?>
 					</tbody>
@@ -75,12 +57,12 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					</thead>
 					<tbody>        
 						<tr>
-							<td>Vins de table sans IG</td>
+							<td class="appellation">Vins de table sans IG</td>
 							<td><?php echoFloat($ds->getTotalVinSansIg()); ?></td>
 						</tr>        
 						<tr>
-							<td>Vins de table mousseux</td>
-                                                        <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
+							<td class="appellation">Vins de table mousseux</td>
+                            <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
 						</tr>
 					</tbody>
 				</table>
