@@ -4,9 +4,11 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 ?>
 
 <h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
+	
+	<?php include_partial('ds/onglets', array('ds' => $ds, 'recap' => true)) ?>
 
 	<!-- fin .header_ds -->
-	<ul id="onglets_majeurs" class="clearfix onglets_stock">
+	<!--<ul id="onglets_majeurs" class="clearfix onglets_stock">
             <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
             <li>
                 <a href="<?php echo url_for('ds_edition_operateur', $app); ?>"><span>
@@ -22,7 +24,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
                         <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
                         <br>Récapitulatif</a>
                 </li>                
-        </ul>
+        </ul>-->
 	
 
 	
