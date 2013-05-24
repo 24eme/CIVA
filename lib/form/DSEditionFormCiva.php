@@ -57,14 +57,14 @@ class DSEditionFormCiva extends acCouchdbForm {
     }
     
     public function getProduitsDetails() {
-        $matches = array();
 
-        return $this->noeud->getProduitsDetails();
+
+        return $this->noeud->getProduitsDetailsSorted();
     }
     
     private function keyTohash($key) {
+
         return str_replace('-','/',$key);
-        
     }
     
 

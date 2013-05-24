@@ -26,10 +26,4 @@ class DSDeclaration extends BaseDSDeclaration {
         return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
     }
     
-    public function getAppellation($a) {
-
-        return $this->getChildrenNode(2)->getAppellations()->getAppellation($a);
-    }
-    
-    
 }

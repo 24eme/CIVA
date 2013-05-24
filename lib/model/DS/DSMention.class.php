@@ -22,18 +22,8 @@ class DSMention extends BaseDSMention {
     }
 
     public function getLieuxSorted() {
-        $lieux = $this->getLieux();
-        $lieux_config = $this->getConfig()->getLieux();
-        $lieux_sorted = array();
-
-        foreach($lieux_config as $hash => $lieu_config) {
-            $hash = preg_replace('/^\/recolte/','declaration',$hash);
-            if($this->exist($lieu_config->getKey())) {
-                $lieux_sorted[$hash] = $this->get($lieu_config->getKey());
-            }
-        }
-
-        return $lieux_sorted;
+        
+        return $this->getChildrenNodeSorted();
     }
     
     public function getAppellationLibelle() {

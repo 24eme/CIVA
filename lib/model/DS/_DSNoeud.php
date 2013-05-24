@@ -9,6 +9,21 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
     abstract public function getChildrenNode();
 
+    public function getChildrenNodeSorted() {
+        $items = $this->getChildrenNode();
+        $items_config = $this->getConfig()->getChildrenNode();
+        $items_sorted = array();
+
+        foreach($items_config as $hash => $item_config) {
+            $hash = preg_replace('/^\/recolte/','declaration',$hash);
+            if($this->exist($item_config->getKey())) {
+                $items_sorted[$hash] = $this->get($item_config->getKey());
+            }
+        }
+
+        return $items_sorted;
+    }
+
     public function getChildrenNodeDeep($level = 1) {
       if($this->getConfig()->hasManyNoeuds()) {
           
@@ -36,11 +51,19 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
     public function getProduitsDetails() {
         $produits = array();
-        if($this->getChildrenNode()){
-            foreach($this->getChildrenNode() as $item) {
-                $produits = array_merge($produits, $item->getProduitsDetails());
-            }
+        foreach($this->getChildrenNode() as $item) {
+            $produits = array_merge($produits, $item->getProduitsDetails());
         }
+
+        return $produits;
+    }
+
+    public function getProduitsDetailsSorted() {
+        $produits = array();
+        foreach($this->getChildrenNodeSorted() as $item) {
+            $produits = array_merge($produits, $item->getProduitsDetailsSorted());
+        }
+
         return $produits;
     }
 

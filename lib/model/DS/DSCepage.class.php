@@ -31,6 +31,11 @@ class DSCepage extends BaseDSCepage {
         return $this->detail;
     }
 
+    public function getChildrenNodeSorted() {
+
+        return $this->getChildrenNode();
+    }
+
     public function getProduits() {
       
         return array($this->getHash() => $this);
@@ -47,6 +52,11 @@ class DSCepage extends BaseDSCepage {
           $details[$item->getHash()] = $item;
       } 
       return $details;
+    }
+
+    public function getProduitsDetailsSorted() {
+      
+      return $this->getProduitsDetails();
     }
     
     public function addDetail($lieu_dit = null) {
