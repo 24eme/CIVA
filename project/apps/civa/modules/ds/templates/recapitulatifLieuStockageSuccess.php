@@ -43,17 +43,18 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation) : ?>
-                                        
-						<tr>
-							<td><?php echo $appellation->getLibelle(); ?></td>
-							<td><?php echoFloat($appellation->getTotalStock()); ?></td>
-							<td><?php echoFloat($appellation->getTotalNormal()); ?></td>
-							<td><?php echoFloat($appellation->getTotalVt()); ?></td>
-							<td><?php echoFloat($appellation->getTotalSgn()); ?></td>
-						</tr>
+					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
+                                                 if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
+                                                    <tr>
+                                                            <td><?php echo $appellation->getLibelle(); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalStock()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalVt()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
+                                                    </tr>
                                             
-                        <?php endforeach; ?>
+                                                <?php endif;
+                                                endforeach; ?>
 					</tbody>
 				</table>
 				
