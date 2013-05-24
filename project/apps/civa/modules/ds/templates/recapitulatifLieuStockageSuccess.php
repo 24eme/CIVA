@@ -1,32 +1,13 @@
 <?php 
 use_helper('Float');
+use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
 ?>
 
-<h2 class="titre_page"><?php echo $tiers->getCvi();?> : Récapitulatif</h2>
-	
+
+<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
+
 	<?php include_partial('ds/onglets', array('ds' => $ds, 'recap' => true)) ?>
-
-	<!-- fin .header_ds -->
-	<!--<ul id="onglets_majeurs" class="clearfix onglets_stock">
-            <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
-            <li>
-                <a href="<?php echo url_for('ds_edition_operateur', $app); ?>"><span>
-                    <?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?>
-                    </span> 
-                    <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
-                </a>
-            </li>
-            <?php 
-            endforeach;
-            ?>
-                <li class="ui-tabs-selected">
-                        <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id)); ?>" style="height: 30px;">
-                        <br>Récapitulatif</a>
-                </li>                
-        </ul>-->
-	
-
 	
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
@@ -44,17 +25,18 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation) : ?>
-                                        
-						<tr>
-							<td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
-							<td><?php echoFloat($appellation->getTotalStock()); ?></td>
-							<td><?php echoFloat($appellation->getTotalNormal()); ?></td>
-							<td><?php echoFloat($appellation->getTotalVt()); ?></td>
-							<td><?php echoFloat($appellation->getTotalSgn()); ?></td>
-						</tr>
-                                            
-                        <?php endforeach; ?>
+
+					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
+                                                 if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
+                                                    <tr>
+                                                            <td><?php echo $appellation->getLibelle(); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalStock()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalVt()); ?></td>
+                                                            <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
+                                                    </tr>                                            
+                                                <?php endif;
+                                                endforeach; ?>
 					</tbody>
 				</table>
 				
