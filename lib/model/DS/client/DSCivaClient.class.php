@@ -243,7 +243,9 @@ class DSCivaClient extends DSClient {
     public function getTotalAOC($ds) {
         $dss = $this->findDssByDS($ds);
         $totalAOC = 0;
-        
+        foreach ($dss as $ds_key => $ds) {
+            $totalAOC += $ds->getTotalAOC();
+        }
         return $totalAOC;
     }
     
