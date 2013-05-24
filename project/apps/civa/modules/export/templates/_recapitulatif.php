@@ -1,5 +1,5 @@
 <?php 
-	use_helper('civa');
+	use_helper('Float');
 	$appellations = $infos['appellations'];
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];

@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 <div id="col_couleur_totale" class="col_recolte col_total col_calcule <?php echo ($onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "col_double" : "" ?>">
     <h2>Total 
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>

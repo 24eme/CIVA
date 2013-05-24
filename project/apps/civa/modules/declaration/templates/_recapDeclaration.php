@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 
 <div id="recolte_totale" class="clearfix">
 
