@@ -185,19 +185,19 @@ class DSCivaClient extends DSClient {
         $dss = $this->findDssByDS($ds);
         $totauxByAppellationsRecap = array();
         foreach ($dss as $ds_key => $ds) {
-            foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation){
-                switch (preg_replace('/^appellation_/', '', $app_key)) {
+            foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation){                
+                switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
                     case 'VINDETABLE':
                     break;
                 
                     case 'GRDCRU':
                     case 'CREMANT': 
-                  //  case 'ALSACEBLANC': 
-                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,$app_key,$appellation,$appellation->getLibelle());
+                    case 'ALSACEBLANC': 
+                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,$appellation_key,$appellation,$appellation->getLibelle());
                     break;
                     default :
-                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACE',$appellation,'AOC Alsace');
-                        //$this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$app_key,$appellation);
+                      //  $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACE',$appellation,'AOC Alsace');
+                        $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$appellation_key,$appellation);
                     break;
                 }
                 
