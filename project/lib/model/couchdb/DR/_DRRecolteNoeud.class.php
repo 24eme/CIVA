@@ -45,7 +45,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getProduitsWithVolume() {
         $produits_with_volume = array();
-        foreach($this->getChildrenNode() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {            
             $produits_with_volume = array_merge($produits_with_volume, $item->getProduitsWithVolume());
         }
         return $produits_with_volume;

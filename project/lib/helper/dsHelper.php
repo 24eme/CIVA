@@ -11,12 +11,11 @@ function getEtape3Label($etape,$many_lieux,$dss,$ds)
 
 function progressionEdition($dss,$ds,$etape) 
 {
-    $posDs = positionEditionDS($dss,$ds);
-    $nb_etapes = 4 + count($dss);
-    $e = 0;
-    if($etape < 3) $e = $etape/$nb_etapes;
-    if($etape > 3) $e = ($etape-1+count($dss))/$nb_etapes;
-    $e = ($etape-1+$posDs)/$nb_etapes;
+    $nb_etapes = 5 + count($dss);
+//    $e = 0;
+//    if($etape < 3) $e = $etape/$nb_etapes;
+//    if($etape > 3) $e = ($etape-1+count($dss))/$nb_etapes;
+    $e = $etape/$nb_etapes;
     return (int) ($e * 100);
 }
 
@@ -37,4 +36,12 @@ function getDefaultTotal($type,$appellation,$current_lieu){
 function getTitleLieuStockageStock($ds){
     $lieu_num = $ds->getLieuStockage();
     return 'Lieu de stockage n°'.intval($lieu_num).' : '.$ds->declarant->cvi.$lieu_num.' - '.$ds->getEtablissement()->getNom().', '.$ds->getEtablissement()->getAdresse();
+}
+
+function isEtapePasse($etape,$dss,$ds){
+    if($etape < 3 && $etape < $ds->num_etape)
+        return true;
+    if($etape >= 3 && ((count($dss) + $etape -1) < $ds->num_etape))
+        return true;
+    return false;
 }
