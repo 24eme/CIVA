@@ -4,15 +4,15 @@
  * 
  * Base model for DSAppellation
 
- * @property string $appellation
+ * @property string $libelle
  * @property float $total_stock
  * @property float $total_vt
  * @property float $total_sgn
  * @property float $total_normal
  * @property DSMention $mention
 
- * @method string getAppellation()
- * @method string setAppellation()
+ * @method string getLibelle()
+ * @method string setLibelle()
  * @method float getTotalStock()
  * @method float setTotalStock()
  * @method float getTotalVt()

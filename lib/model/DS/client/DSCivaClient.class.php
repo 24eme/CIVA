@@ -68,6 +68,9 @@ class DSCivaClient extends DSClient {
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             $ds->updateProduits();
             $ds->updateAutre();
+            if($ds->isDsPrincipale())
+                $ds->add('num_etape',1);
+           
             $dss[] = $ds;
             $cpt++;
         }	
@@ -132,6 +135,13 @@ class DSCivaClient extends DSClient {
     public function getDSPrincipale($tiers, $date_stock){
         $dss = $this->findDssByCvi($tiers, $date_stock);
         return $dss[0];
+    }
+    
+    public function getDSPrincipaleByDs($ds) {
+        foreach ($this->findDssByDS($ds) as $ds) {
+            if($ds->isDsPrincipale()) return $ds;
+        }
+        return null;
     }
 
 
@@ -275,5 +285,9 @@ class DSCivaClient extends DSClient {
             }
         }
         return null;
+    }
+    
+    public function getNbDS($ds){
+        return count($this->findDssByDS($ds));
     }
 }

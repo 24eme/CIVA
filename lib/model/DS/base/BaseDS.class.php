@@ -21,8 +21,8 @@
  * @property float $dplc
  * @property float $lies
  * @property float $mouts
+ * @property string $num_etape
  * @property acCouchdbJson $declarant
- * @property acCouchdbJson $produits
  * @property DSDeclaration $declaration
 
  * @method string get_id()
@@ -59,10 +59,10 @@
  * @method float setLies()
  * @method float getMouts()
  * @method float setMouts()
+ * @method string getNumEtape()
+ * @method string setNumEtape()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
- * @method acCouchdbJson getProduits()
- * @method acCouchdbJson setProduits()
  * @method DSDeclaration getDeclaration()
  * @method DSDeclaration setDeclaration()
  
