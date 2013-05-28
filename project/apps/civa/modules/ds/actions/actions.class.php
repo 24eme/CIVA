@@ -3,14 +3,55 @@ class dsActions extends sfActions {
     
     public function executeIndex(sfWebRequest $request) {
        if ($request->isMethod(sfWebRequest::POST)) {
-           $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);           
-           $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,date('Y-m-d'));
+           $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);     
+           $date = date('Y-m-d');
+           $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
            foreach ($dss as $ds) {
                $ds->save();
            }
-           $this->redirect('ds_exploitation', $this->tiers);
+           $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
+           $this->redirect('ds_etape_redirect', $this->ds);
         }
     } 
+    
+    public function executeRedirectEtape(sfWebRequest $request) {
+         $this->ds = $this->getRoute()->getDS();
+         $this->tiers = $this->getRoute()->getTiers();
+         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
+         if((!$this->ds) || (!$this->ds->exist('num_etape')))
+             throw new sfException("La DS n'existe pas ou ne possède pas de numéro d'étape");         
+         switch ($this->ds->num_etape) {
+             case 1:
+                 $this->redirect('ds_exploitation', $this->tiers);
+             break;
+             case 2:
+                 $this->redirect("ds_lieux_stockage", $this->tiers);
+             break;
+             default :
+                 $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
+             break;
+         }
+    }
+
+    private function redirectEtapeAfterStock($ds,$dss,$tiers){
+        $etape = $ds->num_etape;
+        if((3 <= $etape) && ($etape < (3+count($dss)))){
+            $pos = $etape - 3;
+            $dss_id = array_keys($dss);
+            $ds_id = $dss_id[$pos];
+            $this->redirect('ds_edition_operateur', array('id' => $ds_id));
+        }
+        if(3 + count($dss) - 1 < $etape){
+            $etape_without_dss = $etape - count($dss) + 1;
+            if($etape_without_dss == 4){
+                $this->redirect('ds_autre', $tiers); 
+            }
+            if($etape_without_dss == 5){
+                $this->redirect('ds_validation', $tiers); 
+            }
+        }
+    }
+
 
     public function executeExploitation(sfWebRequest $request)
     {
@@ -53,12 +94,7 @@ class dsActions extends sfActions {
                 $this->ds->declarant->telephone = $this->tiers->exploitant->telephone;
                 $this->ds->declarant->email = $this->tiers->email;
                 $this->ds->save();
-                $boutons = $this->getRequestParameter('boutons', null);
-            	if ($boutons && in_array('previous', array_keys($boutons))) {
-		            $this->redirect('ds_exploitation', $this->tiers);
-		    	} else {
-                	$this->redirectByBoutonsEtapes();
-		    	}
+                $this->redirect('ds_exploitation', $this->tiers);
             }
         }
         
@@ -66,7 +102,7 @@ class dsActions extends sfActions {
         if($suivant){
             $this->ds->updateEtape(2);
             $this->ds->save();
-            $this->redirect("ds_lieux_stockage",$this->tiers);
+            $this->redirect("ds_lieux_stockage", $this->tiers);
         }
     }
     
