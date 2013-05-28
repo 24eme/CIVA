@@ -62,6 +62,12 @@ class DSRouting {
                 array('sf_method' => array('get', 'post')),
                 array('model' => 'Tiers',
                     'type' => 'object') ));
+
+        $r->prependRoute('ds_export_pdf', new DSRoute('/ds/:id/pdf', array('module' => 'ds_export',
+                'action' => 'PDF'),
+                array('sf_method' => array('get')),
+                array('model' => 'DS',
+                    'type' => 'object') ));
         
         
         
