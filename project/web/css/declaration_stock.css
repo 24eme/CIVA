@@ -474,9 +474,7 @@ ul#etape_declaration li.actif a em span.lieu
 #application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
 
 /* Tableau */
-#application_ds .page_recap table {
-	width: auto;
-}
+#application_ds .page_recap table { width: auto; }
 
 #application_ds .page_recap table thead th
 {
@@ -491,8 +489,7 @@ ul#etape_declaration li.actif a em span.lieu
 	text-align: center;
 }
 
-#application_ds .page_recap table thead th.appellation { width: 190px; text-align: left; }
-
+#application_ds .page_recap table thead th.appellation,
 #application_ds .page_recap table tbody td.appellation { width: 190px; text-align: left; }
 
 #application_ds .page_recap table tbody td { text-align: right; }
