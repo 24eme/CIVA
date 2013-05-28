@@ -32,6 +32,9 @@ DS:
             commune: {  }
             code_postal: {   }
             region: {  }
+            telephone: {  }
+            fax: {  }
+            email: {  }
 #      produits:
 #        type: collection
 #        definition:
