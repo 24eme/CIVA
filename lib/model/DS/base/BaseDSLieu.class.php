@@ -4,11 +4,14 @@
  * 
  * Base model for DSLieu
 
+ * @property string $libelle
  * @property float $total_stock
  * @property float $total_vt
  * @property float $total_sgn
  * @property float $total_normal
 
+ * @method string getLibelle()
+ * @method string setLibelle()
  * @method float getTotalStock()
  * @method float setTotalStock()
  * @method float getTotalVt()

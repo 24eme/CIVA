@@ -84,8 +84,7 @@ class DSCiva extends DS {
         return $produit;
     }
 
-    public function addDetail($hash, $lieudit = null) {
-        
+    public function addDetail($hash, $lieudit = null) {        
         return $this->addProduit($hash)->addDetail($lieudit);
     }
 
@@ -251,6 +250,33 @@ class DSCiva extends DS {
     
     public function getUsagesIndustriels() {
         return $this->lies + $this->dplc;
+    }
+    
+    public function updateEtape($etape_rail) {
+         $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
+         if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
+                $this->add('num_etape', $etape_rail);
+                $this->save();
+                return $ds;
+         }
+         if(!$this->isDsPrincipale() && $etape_rail == 3){
+                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+                if($ds->num_etape < $etape_rail + $this->getLieuStockage() - 1){
+                    $ds->add('num_etape', $etape_rail + $this->getLieuStockage() - 1);
+                    $ds->save();
+                }
+                return $ds;
+         }
+         if($etape_rail > 3){
+                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+                if($ds->num_etape < $etape_rail + $nb_lieux - 1){
+                    $ds->add('num_etape', $etape_rail + $nb_lieux - 1);
+                    $ds->save();
+                }
+                return $ds;
+         }
+                
+         
     }
     
 }

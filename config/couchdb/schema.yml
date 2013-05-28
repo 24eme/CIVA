@@ -19,6 +19,7 @@ DS:
       dplc: {type: float}
       lies: {type: float}
       mouts: {type: float}
+      num_etape: {required: false}
       declarant:
         type: collection
         definition:
@@ -31,6 +32,9 @@ DS:
             commune: {  }
             code_postal: {   }
             region: {  }
+            telephone: {  }
+            fax: {  }
+            email: {  }
 #      produits:
 #        type: collection
 #        definition:
@@ -142,7 +146,6 @@ DS:
                                                             '*':
                                                               type: collection
                                                               class: DSDetail
-                                                              inheritance: DSProduit
                                                               definition:
                                                                 fields:
                                                                   vtsgn: { }
