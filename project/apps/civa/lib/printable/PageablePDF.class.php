@@ -9,7 +9,7 @@ class PageablePDF extends PageableOutput {
 
     protected function init() {
         // create new PDF document
-        $this->pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $this->pdf = new TCPDF($this->orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $this->pdf->SetCreator('CIVA');
@@ -34,7 +34,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         //set auto page breaks
-        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER + 5);
 
         //set image scale factor
         $this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -55,7 +55,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf_file = $this->file_dir.$this->filename;
 
         // set font
-        $this->pdf->SetFont('dejavusans', '', 10);
+        $this->pdf->SetFont('dejavusans', '', $this->font_size);
     }
 
     public function isCached() {
