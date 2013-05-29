@@ -1,0 +1,24 @@
+#!/bin/bash
+
+bash bin/delete_from_view.sh "http://localhost:5984/civa/_all_docs?startkey_docid=DS-0000000000-000000-000&endkey_docid=DS-9999999999-999999-999"
+
+SRCDIR=data/import/12;
+TMPCIVA=/tmp/civa
+mkdir $TMPCIVA 2> /dev/null
+TMPCIVADS=$TMPCIVA/import_ds
+mkdir $TMPCIVADS 2> /dev/null
+
+echo "Transformation des fichiers d'imports"
+cp $SRCDIR/STOENT12 $TMPCIVADS/STOENT12
+cp $SRCDIR/STOLIG12 $TMPCIVADS/STOLIG12
+
+cd $TMPCIVADS
+
+sed -r 's/^([0-9]{4}),([0-9]{7}),/\2,\1,/' STOENT12 | sort -t ',' -k 1,1 | tr -d '\r' > STOENT12.tmp
+sort -t ',' -k 1,1 STOLIG12 | tr -d '\r' > STOLIG12.tmp
+
+join -t ',' -a 1 -1 1 -2 1 STOENT12.tmp STOLIG12.tmp > STOALL12
+
+cd -
+echo "Début de l'import" 
+php symfony import:DS $TMPCIVADS/STOALL12

@@ -32,6 +32,11 @@ abstract class importAbstractTask extends sfBaseTask
 
             return new DateTime(sprintf('%d-%d-%d', $matches[3], $matches[2], $matches[1]));
         }
+        
+        if (preg_match('/^([1-3]?[0-9]+)([0-9]{2})([0-9]{4})$/', $date, $matches)) {
+
+            return new DateTime(sprintf('%d-%d-%d', $matches[3], $matches[2], $matches[1]));
+        }
 
         throw new sfException(sprintf("La date '%s' est invalide", $date));
     }
@@ -80,7 +85,7 @@ abstract class importAbstractTask extends sfBaseTask
         }
     }
 
-    public function logLigne($type, $message, $line, $num_ligne = null) {
-        $this->log(sprintf("%s;%s (ligne %s) : %s", $type, $message, $num_ligne, implode($line, ";")));
+    public function logLigne($type, $message, $line, $num_ligne = null, $separator = ";") {
+        $this->log(sprintf("%s;%s (ligne %s) : %s", $type, $message, $num_ligne, implode($line, $separator)));
     }
 }
