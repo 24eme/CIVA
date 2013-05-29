@@ -148,6 +148,11 @@ EOF;
                 $ds->updateAutre($rebeche,$dplc,0,$mouts);
             }
             
+            //  Etape
+            if($this->convertOuiNon($ds_csv_datas[self::CSV_DS_TRAITEE]))
+                $ds->updateEtape(6);
+            else
+                $ds->updateEtape(5);
             // Produits
 
             if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
@@ -155,8 +160,17 @@ EOF;
                 echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
                 continue;
             } else {
+                $en_erreur = false;
                 foreach ($ds_csv as $ds_csv_ligne) {
                     $ds = $this->importProduitInDS($ds, str_getcsv($ds_csv_ligne, ','));
+                    if(is_null($ds))
+                    {
+                        $en_erreur = true;
+                        break;
+                    }
+                }
+                if($en_erreur){
+                    continue;
                 }
                 $this->checkVolumesDS($ds, $ds_csv_datas);
                 $ds->save();
@@ -191,11 +205,18 @@ EOF;
 
             $detail = $ds->addVolumesWithHash($hash, $productRow[self::CSV_PRODUIT_LIEUDIT], $vol_normal, $vol_vt, $vol_sgn);
 
-            if (is_string($detail) && $detail == "NO_CEPAGE")
+            if (is_string($detail) && $detail == "NO_CEPAGE"){
                 echo $this->error_term . " le cepage $hash de la DS $id_ds_import n'a pas été trouvé \n";
-
-            if (is_string($detail) && $detail == "NO_VTSGN_AND_VTORSGN")
+                return null;
+            }
+            if (is_string($detail) && $detail == "NO_VTSGN_AND_VTORSGN"){
                 echo $this->error_term . " le cepage $hash de la DS $id_ds_import est notifié comme no_vtsgn(1) et présente du volume vt ou sgn non nulle \n";
+                return null;
+            }
+        }
+        else
+        {
+            return null;
         }
         return $ds;
     }
@@ -233,13 +254,13 @@ EOF;
                 }
                 $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                 return $conf->recolte->certification->genre->appellation_ALSACEBLANC->mention->lieu->couleur->$cepage_node->getHash();
-                break;
+                
             case 2:
                 $id = $productRow[self::CSV_DS_ID];
                 $cepage_node = ($productRow[self::CSV_PRODUIT_COULEUR] == "BL") ? 'cepage_PB' : 'cepage_PN';
                 echo $this->warning_term . "Gestion automatique du cépage du crémant placé en $cepage_node pour la ds $id\n";
                 return $conf->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->$cepage_node->getHash(); //$cepage_node->getHash();
-                break;
+                
             case 3:
                 $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                 $lieu_node = 'lieu' . $productRow[self::CSV_PRODUIT_LIEUDIT];
@@ -248,25 +269,25 @@ EOF;
                     return null;
                 }
                 return $conf->recolte->certification->genre->appellation_GRDCRU->mention->$lieu_node->couleur->$cepage_node->getHash();
-                break;
+                
             case 7:
                 echo " **** Integration d'une DS contenant des communale *** \n";
                 $lieu_node = 'lieu' . $productRow[self::CSV_PRODUIT_LIEUDIT];
                 $couleur_node = 'couleur' . $this->getCouleur($productRow[self::CSV_PRODUIT_COULEUR]);
                 $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                 return $conf->recolte->certification->genre->appellation_COMMUNALE->mention->$lieu_node->$couleur_node->$cepage_node->getHash();
-                break;
+                
             case 8:
                 echo " **** Integration d'une DS contenant des Lieux dit *** \n";
                 $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                 $couleur_node = 'couleur' . $this->getCouleur($productRow[self::CSV_PRODUIT_COULEUR]);
                 return $conf->recolte->certification->genre->appellation_LIEUDIT->mention->lieu->couleur->$cepage_node->getHash();
-                break;
+                
 
             default:
                 $appellation_num = $productRow[self::CSV_PRODUIT_APPELLATION];
                 $this->logLigne($this->error_term, "Le numéro d'appellation $appellation_num n'a pas été trouvé.", $productRow, $productRow[self::CSV_DS_ID], ',');
-                break;
+                return null;
         }
     }
 
