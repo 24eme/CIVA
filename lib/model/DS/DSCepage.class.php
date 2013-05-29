@@ -110,4 +110,21 @@ class DSCepage extends BaseDSCepage {
          return '';
     }
     
+    public function addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn) {
+        $detail = $this->addDetail($lieu);
+        if($vol_normal > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_NORMAL,$vol_normal);        
+        if($vol_vt > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_VT,$vol_vt);
+        if($vol_sgn > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_SGN,$vol_sgn);
+        return $detail;
+    }
+    
+    public function checkNoVTSGNImport($vol_vt,$vol_sgn) {
+        if($this->no_vtsgn && (($vol_vt > 0) || ($vol_sgn > 0)))
+            return false;
+        return true;
+    }
+    
 }
