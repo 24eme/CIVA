@@ -54,6 +54,7 @@ class DSCivaClient extends DSClient {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
         $dss = array();
+        
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
             
             $num_lieu = sprintf("%03d",$cpt);
@@ -93,6 +94,16 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
     
+    public function getNextLieuStockageByCviAndDate($cvi, $date_stock) {
+        $periode = $this->buildPeriode($this->createDateStock($date_stock));
+        $cpt = 2;
+        while($ds = $this->findByIdentifiantAndPeriode($cvi, $periode, sprintf("%03d",$cpt))){
+            $cpt++;
+        }
+        return sprintf("%03d",$cpt);
+    }
+
+
     public function getNextDS($ds) {
         if(!$ds)
             throw new sfException("La DS passée en argument de getNextLieuStockage ne peut pas être null");
