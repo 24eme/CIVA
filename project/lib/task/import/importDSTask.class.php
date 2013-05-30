@@ -150,9 +150,9 @@ EOF;
             
             //  Etape
             if($this->convertOuiNon($ds_csv_datas[self::CSV_DS_TRAITEE]))
-                $ds->updateEtape(6);
+                $ds->add('num_etape', 6);
             else
-                $ds->updateEtape(5);
+                $ds->add('num_etape', 5);
             // Produits
 
             if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {

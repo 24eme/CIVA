@@ -93,7 +93,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-            <a href="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi));?>">
+            <a href="<?php echo url_for('ds_autre', $ds);?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>

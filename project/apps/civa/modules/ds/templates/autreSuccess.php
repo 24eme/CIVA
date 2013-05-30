@@ -1,5 +1,5 @@
 <!-- #application_ds -->
-<form action="<?php echo url_for('ds_autre', array('cvi' => $tiers->cvi)); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" >
+<form action="<?php echo url_for('ds_autre', $ds); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" >
 <?php
 echo $form->renderHiddenFields();
 echo $form->renderGlobalErrors();
