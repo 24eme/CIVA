@@ -1,3 +1,6 @@
+<?php use_helper('Float') ?>
+<?php use_helper('dsExport') ?>
+
 <span style="background-color: grey; color: white; font-weight: bold;">Exploitation</span><br/>
 <table style="border: 1px solid grey;"><tr><td>
 <table border="0">
@@ -16,95 +19,12 @@
 </table>
 </td></tr></table>
 <span style="background-color: grey; color: white; font-weight: bold;">Lieu de stockage</span><table style="text-align:left; width: 300px;" border="0" cellspacing=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;☒ Principal&nbsp;&nbsp;☐ Secondaire</td></tr></table>
-
-<?php $blanc_cepages = array("Chasselas", "Sylvaner", "Pinot Blanc", "Assemblages", "Riesling", "Pinot Gris", "Muscat d'Alsace", "Gewurztraminer", "Klevener de heiligenstein", "Pinot Noir Rosé", "Pinot Noir Rouge"); ?>
-
 <small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">AOC Alsace blanc</span><br />
-<table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
-<tr>
-  <th style="text-align: left; font-weight: bold; width: 306px; border: 1px solid black;">&nbsp;Cépages</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">hors VT et SGN</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">VT</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">SGN</th>
-</tr>
-<?php foreach($blanc_cepages as $cepage): ?>
-<tr>
-  <td style="text-align: left; border: 1px solid black;">&nbsp;<?php echo $cepage ?></td>
-  <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-</tr>
+<?php foreach($recap as $libelle => $tableau): ?>
+  <span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle ?></span><br />
+  <?php include_partial('ds_export/tableau', array('tableau' => $tableau)) ?>
 <?php endforeach; ?>
-<tr>
-  <td style="text-align: left; border: 1px solid black; font-weight: bold;">&nbsp;Total</td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-</tr>
-</table>
 
-<?php $grd_cru = array("Riesling" => array("Brand", "Eichberg", "Sporen"), "Pinot Gris" => array("Frankstein", "Brand", "Eichberg"), "Muscat d'Alsace" => array("Kessler", "Sporen"), "Gewurztraminer" => array("Brand", "Eichberg", "Sporen"), "Muscat Ottonel" => array("Brand", "Eichberg")); ?>
-
-<small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">AOC Alsace Grands Crus</span><br />
-<table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
-<tr>
-  <th style="font-weight: bold; text-align: left; width: 156px; border: 1px solid black;">&nbsp;Lieu-dit</th>
-  <th style="font-weight: bold; text-align: left;  width: 150px; border: 1px solid black;">&nbsp;Cépages</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">hors VT et SGN</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">VT</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">SGN</th>
-</tr>
-<?php foreach($grd_cru as $cepage => $lieux): ?>
-    <?php foreach($lieux as $key => $lieu): ?>
-        <tr>
-          <td style="text-align: left; border: 1px solid black;">&nbsp;<?php echo $lieu ?></td>
-          <?php if($key == 0): ?>
-          <td style="text-align: left; border: 1px solid black;" rowspan="<?php echo count($lieux) ?>">&nbsp;<?php echo $cepage ?></td>
-          <?php endif; ?>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-        </tr>
-    <?php endforeach; ?>
-<?php endforeach; ?>
-<tr>
-  <td style="text-align: left; border: 1px solid black; font-weight: bold;" colspan="2">&nbsp;Total</td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-</tr>
-</table>
-
-<?php $cremant = array("Blanc", "Rosé"); ?>
-
-<small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">Crémant d'Alsace</span><br />
-<table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
-<tr>
-  <th style="font-weight: bold; text-align: left; width: 306px; border: 1px solid black;">&nbsp;Couleur</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">hors VT et SGN</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">VT</th>
-  <th style="font-weight: bold; width: 110px; border: 1px solid black;">SGN</th>
-</tr>
-<?php foreach($cremant as $couleur): ?>
-        <tr>
-          <td style="border: 1px solid black; text-align: left;">&nbsp;<?php echo $couleur ?></td>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-          <td style="border: 1px solid black;">45,00&nbsp;<small>hl</small></td>
-        </tr>
-<?php endforeach; ?>
-<tr>
-  <td style="border: 1px solid black; text-align: left; font-weight: bold;">&nbsp;Total</td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-  <td style="border: 1px solid black;"><b>45,00</b>&nbsp;<small>hl</small></td>
-</tr>
-</table>
-
-<small><br /></small>
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <tr>
