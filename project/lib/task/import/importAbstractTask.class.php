@@ -88,4 +88,28 @@ abstract class importAbstractTask extends sfBaseTask
     public function logLigne($type, $message, $line, $num_ligne = null, $separator = ";") {
         $this->log(sprintf("%s;%s (ligne %s) : %s", $type, $message, $num_ligne, implode($line, $separator)));
     }
+    
+    protected function getCouleur($couleur_key) {
+        switch ($couleur_key) {
+            case 'BL':
+                return 'Blanc';
+            case 'RS':
+                return 'Rose';
+            case 'RG':
+                return 'Rouge';
+            default:
+                throw new sfException("La couleur $couleur_key n'est pas connue dans la configuration.");
+        }
+        return null;
+    }
+    
+    public function green($string) {
+        return "\033[32m".$string."\033[0m";
+    }
+        
+    public function yellow($string) {
+        return "\033[33m".$string."\033[0m";
+    }
+    
+    
 }
