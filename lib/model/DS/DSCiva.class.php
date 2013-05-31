@@ -277,13 +277,13 @@ class DSCiva extends DS {
          }  
     }
     
-    public function addVolumesWithHash($hash,$lieu,$vol_normal,$vol_vt,$vol_sgn) {
+    public function addVolumesWithHash($hash,$lieu,$vol_normal,$vol_vt,$vol_sgn,$sum = false) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
-        $cepage = $this->get($hash);
+        $cepage = $this->getOrAdd($hash);
         if(!$cepage) return "NO_CEPAGE";
         if($lieu == "") $lieu = null;
         if(!$cepage->checkNoVTSGNImport($vol_vt,$vol_sgn)) return "NO_VTSGN_AND_VTORSGN";
-        $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn);
+        $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum);
         return $detail;
     }
     
