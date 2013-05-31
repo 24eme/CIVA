@@ -14,10 +14,10 @@ class DSEditionFormCiva extends acCouchdbForm {
             $form_key = $detail->getHashForKey();
             
             if(!$detail->getCepage()->no_vtsgn){
-                $defaults[DSCivaClient::VOLUME_VT.$form_key] = sprintf("%01.02f", round($detail->volume_vt, 2));
-                $defaults[DSCivaClient::VOLUME_SGN.$form_key] = sprintf("%01.02f", round($detail->volume_sgn));
+                $defaults[DSCivaClient::VOLUME_VT.$form_key] = (!is_null($detail->volume_vt)) ? sprintf("%01.02f", round($detail->volume_vt, 2)) : null;
+                $defaults[DSCivaClient::VOLUME_SGN.$form_key] = (!is_null($detail->volume_sgn)) ? sprintf("%01.02f", round($detail->volume_sgn, 2)) : null;
             }  
-            $defaults[DSCivaClient::VOLUME_NORMAL.$form_key] = sprintf("%01.02f", round($detail->volume_normal));     
+            $defaults[DSCivaClient::VOLUME_NORMAL.$form_key] = (!is_null($detail->volume_normal)) ? sprintf("%01.02f", round($detail->volume_normal, 2)) : null;   
         }
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }

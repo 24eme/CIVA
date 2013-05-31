@@ -65,11 +65,6 @@ class DSCepage extends BaseDSCepage {
             return $detail;
         }
         $detail = $this->detail->add();
-        //$detail->volume_normal = 0;
-        if($this->hasVtsgn()){
-            //$detail->volume_vt = 0;
-            //$detail->volume_sgn = 0;
-        }
 
         $detail->lieu = $lieu_dit;
         return $detail;
