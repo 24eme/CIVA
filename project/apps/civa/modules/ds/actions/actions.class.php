@@ -111,7 +111,7 @@ class dsActions extends sfActions {
         $this->ds = $this->getRoute()->getDS();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         $this->tiers = $this->getRoute()->getTiers();
-        $this->form = new DSLieuxDeStockageForm($this->tiers);   
+        $this->form = new DSLieuxDeStockageForm($this->ds);   
         
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
