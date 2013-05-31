@@ -66,8 +66,8 @@ class ExportDSPdf {
 
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true);
 
-        $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"], false, true);
-        $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"], false, true);
+        $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
+        $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
 
         $this->document->addPage($this->getPartial('ds_export/douane', array('recap' => $recap)));
     }
@@ -150,7 +150,7 @@ class ExportDSPdf {
     }
 
     protected function preBuildRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-        $produits = $ds->declaration->getConfig()->getNoeudAppellations()->get('appellation_'.$appellation_key)->getProduits();
+        $produits = $ds->declaration->getConfig()->getNoeudAppellations()->get('appellation_'.$appellation_key)->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS);
         foreach($produits as $produit) {
             $key = $this->addProduit($recap, $produit, $lieu, $couleur);
         }
@@ -176,7 +176,7 @@ class ExportDSPdf {
         }
 
         $i = 0;
-        foreach($ds->declaration->getConfig()->getProduits() as $cepage) {
+        foreach($ds->declaration->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS) as $cepage) {
             if(isset($this->order["cepage:".$cepage->getKey()])) {
 
                 continue;

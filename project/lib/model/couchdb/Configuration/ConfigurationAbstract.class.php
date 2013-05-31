@@ -3,8 +3,29 @@
 abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
     protected $produits = null;
+    protected $produits_filter = array(self::TYPE_DECLARATION_DR => null, self::TYPE_DECLARATION_DS => null);
+
+    const TYPE_DECLARATION_DR = 'DR';
+    const TYPE_DECLARATION_DS = 'DS';
 
     abstract public function getChildrenNode();
+
+    public function getChildrenFilter($type_declaration = null) {
+      $children = array();
+      foreach($this->getChildrenNode() as $item) {
+        if($type_declaration == self::TYPE_DECLARATION_DR && !$item->isForDR()) {
+          continue;
+        }
+
+        if($type_declaration == self::TYPE_DECLARATION_DS && !$item->isForDS()) {
+          continue;
+        }
+
+        $children[$item->getKey()] = $item;
+      }
+
+      return $children;
+    }
 
     protected function loadAllData() {
         parent::loadAllData();
@@ -52,6 +73,22 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
       }
 
       return $this->produits;
+    }
+
+    public function getProduitsFilter($type_declaration = null) {
+      if(!$type_declaration) {
+
+        return $this->getProduits();
+      }
+      
+      if(is_null($this->produits[$type_declaration])) {
+        $this->produits[$type_declaration] = array();
+        foreach($this->getChildrenFilter($type_declaration) as $key => $item) {
+            $this->produits[$type_declaration] = array_merge($this->produits[$type_declaration], $item->getProduitsFilter($type_declaration));
+        }
+      }
+
+      return $this->produits[$type_declaration];
     }
 
     public function getRendement() {
@@ -139,6 +176,16 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
         }
 
         return $this->getParentNode()->hasVtsgn();
+    }
+
+    public function isForDR() {
+      
+        return !$this->exist('no_dr') || !$this->get('no_dr');
+    }
+
+    public function isForDS() {
+
+        return !$this->exist('no_ds') || !$this->get('no_ds');
     }
 
 }

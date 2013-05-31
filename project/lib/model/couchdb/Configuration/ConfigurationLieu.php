@@ -33,6 +33,15 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return count($this->getCouleurs());
     }
 
+    public function getCepagesFilter($type_declaration = null) {
+        $cepages = array();
+        foreach($this->getChildrenFilter($type_declaration) as $couleur) {
+            $cepages = array_merge($cepages, $couleur->getChildrenFilter($type_declaration));
+        }
+
+        return $cepages;
+    }
+
     public function getCepages() {
         $cepage = array();
         foreach ($this->getCouleurs() as $couleur) {

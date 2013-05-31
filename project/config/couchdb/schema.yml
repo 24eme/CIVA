@@ -533,6 +533,8 @@ Configuration:
                                     qualite: {required: false}
                                     qualite_aoc: {required: false}
                                     code_cepage: {required: false}
+                                    no_dr: { type: integer, required: false }
+                                    no_ds: { type: integer, required: false }
                               # ------- MENTION ----------
                               '*':
                                 type : collection
@@ -568,6 +570,8 @@ Configuration:
                                                 appellation_lieu: {required: false}
                                                 qualite: {required: false}
                                                 code_cepage: {required: false}
+                                                no_dr: { type: integer, required: false }
+                                                no_ds: { type: integer, required: false }
                                           # ------------ COULEUR --------------
                                           '*' :
                                             type: collection
@@ -587,6 +591,8 @@ Configuration:
                                                       appellation_lieu: {required: false}
                                                       qualite: {required: false}
                                                       code_cepage: {required: false}
+                                                      no_dr: { type: integer, required: false }
+                                                      no_ds: { type: integer, required: false }
                                                 '*':
                                                 # ------------ CEPAGE -------------
                                                   type: collection
@@ -614,6 +620,8 @@ Configuration:
                                                       no_cooperative : { type: integer, required: false }
                                                       no_mout : { type: integer, required: false }
                                                       no_motif_non_recolte : { type: integer, required: false }
+                                                      no_dr: { type: integer, required: false }
+                                                      no_ds: { type: integer, required: false }
 
 CSV:
   definition:
