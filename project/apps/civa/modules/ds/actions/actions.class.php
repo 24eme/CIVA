@@ -15,17 +15,17 @@ class dsActions extends sfActions {
     } 
     
     public function executeRedirectEtape(sfWebRequest $request) {
-         $this->ds = $this->getRoute()->getDS();
+         $this->ds = $this->getRoute()->getDS();         
          $this->tiers = $this->getRoute()->getTiers();
          $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
          if((!$this->ds) || (!$this->ds->exist('num_etape')))
              throw new sfException("La DS n'existe pas ou ne possède pas de numéro d'étape");         
          switch ($this->ds->num_etape) {
              case 1:
-                 $this->redirect('ds_exploitation', $this->tiers);
+                 $this->redirect('ds_exploitation', $this->ds);
              break;
              case 2:
-                 $this->redirect("ds_lieux_stockage", $this->tiers);
+                 $this->redirect("ds_lieux_stockage", $this->ds);
              break;
              default :
                  $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
@@ -44,10 +44,10 @@ class dsActions extends sfActions {
         if(3 + count($dss) - 1 < $etape){
             $etape_without_dss = $etape - count($dss) + 1;
             if($etape_without_dss == 4){
-                $this->redirect('ds_autre', $tiers); 
+                $this->redirect('ds_autre', $ds); 
             }
             if($etape_without_dss == 5){
-                $this->redirect('ds_validation', $tiers); 
+                $this->redirect('ds_validation', $ds); 
             }
         }
     }
@@ -55,9 +55,9 @@ class dsActions extends sfActions {
 
     public function executeExploitation(sfWebRequest $request)
     {
+        $this->ds = $this->getRoute()->getDS(); 
         $this->tiers = $this->getRoute()->getTiers();        
-        $this->dss = DSCivaClient::getInstance()->findDssByCvi($this->tiers, date('Y-m-d')); 
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
+        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
         $this->form_gest_err = 0;
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
@@ -94,7 +94,7 @@ class dsActions extends sfActions {
                 $this->ds->declarant->telephone = $this->tiers->exploitant->telephone;
                 $this->ds->declarant->email = $this->tiers->email;
                 $this->ds->save();
-                $this->redirect('ds_exploitation', $this->tiers);
+                $this->redirect('ds_exploitation', $this->ds);
             }
         }
         
@@ -102,16 +102,16 @@ class dsActions extends sfActions {
         if($suivant){
             $this->ds->updateEtape(2);
             $this->ds->save();
-            $this->redirect("ds_lieux_stockage", $this->tiers);
+            $this->redirect("ds_lieux_stockage", $this->ds);
         }
     }
     
     public function executeLieuxStockage(sfWebRequest $request)
     {
+        $this->ds = $this->getRoute()->getDS();
+        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         $this->tiers = $this->getRoute()->getTiers();
-        $this->form = new DSLieuxDeStockageForm($this->tiers);   
-        $this->dss = DSCivaClient::getInstance()->findDssByCvi($this->tiers, date('Y-m-d')); 
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
+        $this->form = new DSLieuxDeStockageForm($this->ds);   
         
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
@@ -261,6 +261,7 @@ class dsActions extends sfActions {
     
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
+        $this->ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->ds);
         $this->tiers = $this->getRoute()->getTiers();
         $suivant = isset($request['suivant']) && $request['suivant'];
         if($suivant){
@@ -271,15 +272,15 @@ class dsActions extends sfActions {
             }
             else{
                 $this->ds->updateEtape(4);
-                $this->redirect('ds_autre', $this->tiers); 
+                $this->redirect('ds_autre', $this->ds_principale); 
             }
         }
     }
     
     public function executeAutre(sfWebRequest $request)
     {
+        $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers, date('Y-m-d'));
         $this->form = new DSEditionCivaAutreForm($this->ds);
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
@@ -290,17 +291,16 @@ class dsActions extends sfActions {
                 {            
                     return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
                 } 
-                $this->redirect('ds_validation', $this->tiers); 
+                $this->redirect('ds_validation', $this->ds); 
             }
         }
     }
     
     public function executeValidation(sfWebRequest $request)
     {
+        $this->ds_principale = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->ds_client = DSCivaClient::getInstance();
-        $this->ds_principale = $this->ds_client->getDSPrincipale($this->tiers, date('Y-m-d'));
-        
     }
     
 }

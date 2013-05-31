@@ -58,7 +58,7 @@ use_helper('ds');
 				</li>
                                 
 				<li>
-                       <input tabindex="<?php echo $tabindex ?>" type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
+                                    <input tabindex="<?php echo $tabindex ?>" type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
 				</li>
 			</ul>
 		</div>
@@ -70,7 +70,7 @@ use_helper('ds');
 		<li class="prec ajax">
 			<a  href="<?php echo (!$ds->isDsPrincipale())?
                                                 url_for('ds_recapitulatif_lieu_stockage', DSCivaClient::getInstance()->getPreviousDS($ds))
-                                              : url_for('ds_lieux_stockage', array('cvi' => $ds->getIdentifiant()));?>">
+                                              : url_for('ds_lieux_stockage', array('id' => $ds->_id));?>">
 				<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente"  />
 			</a>
 		</li>

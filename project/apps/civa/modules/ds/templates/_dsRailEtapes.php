@@ -14,7 +14,7 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
                         ?>
 			<li class="<?php echo ($etape==1)? 'actif ' : ''; echo ($passe && $etape!=1)? 'passe' : ''; ?>" >
                             <?php if($to_linked) : ?>
-					<a class="ajax" href="<?php echo  url_for('ds_exploitation',$tiers); ?>">
+					<a class="ajax" href="<?php echo  url_for('ds_exploitation',$ds_principale); ?>">
                             <?php endif; ?>
                                             <span>Exploitation</span> <em>Etape 1</em>
                             <?php if($to_linked) echo "</a>"; ?>       
@@ -25,7 +25,7 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
                         ?>
 			<li class="<?php echo ($etape==2)? 'actif ' : ''; echo ($passe && $etape!=2)? 'passe' : ''; ?>" >
                             <?php if($to_linked) : ?> 
-					<a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $tiers); ?>">
+					<a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $ds_principale); ?>">
                             <?php endif; ?>               
                                             <span>Lieux de stockage</span> <em>Etape 2</em>
                             <?php if($to_linked) echo "</a>"; ?>
@@ -60,7 +60,7 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
                         ?>                        
 			<li class="<?php echo ($etape==4)? 'actif ' : ''; echo ($passe && $etape!=4)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
-                            <a class="ajax" href="<?php echo url_for('ds_autre', $tiers);?>">
+                            <a class="ajax" href="<?php echo url_for('ds_autre', $ds_principale);?>">
                         <?php endif; ?>         
                                 <span>Autres Produits</span> <em>Etape 4</em>
                         <?php if($to_linked) echo "</a>"; ?>
@@ -71,7 +71,7 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
                         ?>   
 			<li class="<?php echo ($etape==5)? 'actif ' : ''; echo ($passe && $etape!=5)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
-                            <a class="ajax" href="<?php echo url_for('ds_validation', $tiers);?>">
+                            <a class="ajax" href="<?php echo url_for('ds_validation', $ds_principale);?>">
                        <?php endif; ?>  
                                 <span>Validation</span> <em>Etape 5</em>
                          <?php if($to_linked) echo "</a>"; ?>

@@ -1,10 +1,9 @@
 <!-- .header_ds -->
-<form action="<?php echo url_for( 'ds_lieux_stockage', $tiers); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>">
+<form action="<?php echo url_for( 'ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();
-    $dss[0]->getFirstAppellation()->getKey();
 ?>  
 
 <h2 class="titre_page">Définissez ici le détail de vos lieux de stockage</h2>

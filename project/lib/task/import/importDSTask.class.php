@@ -97,8 +97,8 @@ EOF;
             if (!array_key_exists($id_ds, $dss))
                 $dss[$id_ds] = array();
             if (count($datas) > 25) {
-                $ordre_affichage = $datas[self::CSV_PRODUIT_ORDRE_AFFICHAGE];
-                $dss[$id_ds][$ordre_affichage] = $line;
+               // $ordre_affichage = $datas[self::CSV_PRODUIT_ORDRE_AFFICHAGE];
+                $dss[$id_ds][] = $line;
             } else {
                 $dss[$id_ds][] = $line;
             }
@@ -150,14 +150,14 @@ EOF;
             
             //  Etape
             if($this->convertOuiNon($ds_csv_datas[self::CSV_DS_TRAITEE]))
-                $ds->updateEtape(6);
+                $ds->add('num_etape', 6);
             else
-                $ds->updateEtape(5);
+                $ds->add('num_etape', 5);
             // Produits
 
             if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
-                $ds->save();
-                echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
+                   //  $ds->save();
+                   // echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
                 continue;
             } else {
                 $en_erreur = false;
@@ -191,19 +191,15 @@ EOF;
 
     protected function importProduitInDS($ds, $productRow) {
         $hash = $this->constructHash($productRow);
-        if ($hash == 'LIES') {            
-            $ds = $this->addLies($ds, $productRow);
-            return $ds;
-        }
         if ($hash) {
-            $ds->addProduit($hash);
+            $detail = $ds->addDetail($hash);
             $id_ds_import = $productRow[self::CSV_DS_ID];
 
             $vol_normal = $this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_STOCK]);
             $vol_vt = $this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_VT]);
             $vol_sgn = $this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_SGN]);
 
-            $detail = $ds->addVolumesWithHash($hash, $productRow[self::CSV_PRODUIT_LIEUDIT], $vol_normal, $vol_vt, $vol_sgn);
+            $detail = $ds->addVolumesWithHash($hash, $productRow[self::CSV_PRODUIT_LIEUDIT], $vol_normal, $vol_vt, $vol_sgn,true);
 
             if (is_string($detail) && $detail == "NO_CEPAGE"){
                 echo $this->error_term . " le cepage $hash de la DS $id_ds_import n'a pas été trouvé \n";
@@ -221,11 +217,6 @@ EOF;
         return $ds;
     }
 
-    protected function addLies($ds, $productRow) {
-        echo $this->warning_term."intégration des ".$this->yellow("LIES")." dans la DS ".$this->yellow($productRow[self::CSV_DS_ID])." avec le champ ".$this->yellow("PRODUIT_VOLUME_STOCK = ".$productRow[self::CSV_PRODUIT_VOLUME_STOCK])."\n";
-        $ds->updateAutre(0,0,$this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_STOCK]),0);
-        return $ds;
-    }
 
     protected function constructHash($productRow) {
         $conf = $this->getConf();
@@ -234,9 +225,6 @@ EOF;
                 if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'VT') {
                     $couleur_node = 'cepage_' . $productRow[self::CSV_PRODUIT_COULEUR];
                     return $conf->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->$couleur_node->getHash();
-                }
-                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'LA') {
-                    return 'LIES';
                 }
                 if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN') {
                     $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
@@ -248,7 +236,7 @@ EOF;
                 }
                 if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'KL') {
                     $id = $productRow[self::CSV_DS_ID];
-                    echo $this->warning_term . "Gestion de l'exception lié au cepage KL (COMMUNALE) dans la DS $id \n";
+                   // echo $this->warning_term . "Gestion de l'exception lié au cepage KL (COMMUNALE) dans la DS $id \n";
                     $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                     return $conf->recolte->certification->genre->appellation_COMMUNALE->mention->lieuKLEV->couleurBlanc->$cepage_node->getHash();
                 }
@@ -257,8 +245,8 @@ EOF;
                 
             case 2:
                 $id = $productRow[self::CSV_DS_ID];
-                $cepage_node = ($productRow[self::CSV_PRODUIT_COULEUR] == "BL") ? 'cepage_PB' : 'cepage_PN';
-                echo $this->warning_term . "Gestion automatique du cépage du crémant placé en $cepage_node pour la ds $id\n";
+                $cepage_node = 'cepage_'.$productRow[self::CSV_PRODUIT_CEPAGE];
+               // echo $this->warning_term . "Gestion automatique du cépage du crémant placé en $cepage_node pour la ds $id\n";
                 return $conf->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->$cepage_node->getHash(); //$cepage_node->getHash();
                 
             case 3:
@@ -292,21 +280,23 @@ EOF;
     }
 
     protected function checkVolumesDS($ds, $productRow) {
-        if (round($ds->declaration->certification->total_normal,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_STOCK]))
-            echo " #" . $this->green(" vol_normal: " . $productRow[self::CSV_DS_VOLUME_TOTAL_STOCK]) . " ";
+        if (round($ds->declaration->certification->total_normal,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_STOCK])){
+           // echo " #" . $this->green(" vol_normal: " . $productRow[self::CSV_DS_VOLUME_TOTAL_STOCK]) . " ";
+        }
         else
-            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_normal . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_STOCK]);
+            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_normal . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_STOCK])."\n";
 
-        if (round($ds->declaration->certification->total_sgn,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_SGN]))
-            echo " #" . $this->green(" vol_sgn: " . $productRow[self::CSV_DS_VOLUME_TOTAL_SGN]) . " ";
+        if (round($ds->declaration->certification->total_sgn,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_SGN])){
+           // echo " #" . $this->green(" vol_sgn: " . $productRow[self::CSV_DS_VOLUME_TOTAL_SGN]) . " ";
+        }
         else
-            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_sgn . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_SGN]);
+            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_sgn . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_SGN])."\n";
 
-        if (round($ds->declaration->certification->total_vt,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_VT]))
-            echo " #" . $this->green(" vol_vt: " . $productRow[self::CSV_DS_VOLUME_TOTAL_VT]) . " ";
+        if (round($ds->declaration->certification->total_vt,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_VT])){
+           // echo " #" . $this->green(" vol_vt: " . $productRow[self::CSV_DS_VOLUME_TOTAL_VT]) . " ";
+        }
         else
-            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_vt . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_VT]);
-        echo "\n";
+            echo " #" . $this->yellow(" " . $ds->declaration->certification->total_vt . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_VT])."\n";
     }
 
 }
