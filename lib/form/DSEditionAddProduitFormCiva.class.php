@@ -49,7 +49,7 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
 
     public function getProduits() 
     {
-        return $this->_config_noeud->getProduits();
+        return $this->_config_noeud->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS);
     }
     
     public function hasLieuEditable(){

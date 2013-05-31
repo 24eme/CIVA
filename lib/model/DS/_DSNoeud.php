@@ -82,6 +82,14 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $produits_with_volume;
     }
+
+    public function getLibelle() {
+        if(is_null($this->_get('libelle'))) {
+            $this->_set('libelle', $this->getConfig()->getLibelle());
+        }
+
+        return $this->_get('libelle');
+    }
     
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         switch ($vtsgn) {

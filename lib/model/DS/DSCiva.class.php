@@ -73,6 +73,12 @@ class DSCiva extends DS {
     
     public function addProduit($hash) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $hash_config = preg_replace('/^declaration/','recolte', $hash);
+        if(!$this->getConfig()->get($hash_config)->isForDS()) {
+            $this->addNoeud($this->getConfig()->get($hash_config)->getParent()->getHash());
+            return null;
+        }
+        
         $produit = $this->getOrAdd($hash);
         $config = $produit->getConfig();
         $produit->libelle = $config->getLibelle();
@@ -84,8 +90,15 @@ class DSCiva extends DS {
         return $produit;
     }
 
-    public function addDetail($hash, $lieudit = null) {        
-        return $this->addProduit($hash)->addDetail($lieudit);
+    public function addDetail($hash, $lieudit = null) {
+        $produit = $this->addProduit($hash);
+
+        if(!$produit) {
+
+            return;
+        }
+
+        return $produit->addDetail($lieudit);
     }
 
     protected function updateProduitsFromDR($dr) {     
@@ -119,7 +132,7 @@ class DSCiva extends DS {
     }
 
     public function getConfig() {
-        return ConfigurationClient::getConfiguration()->get($this->produit_hash);
+        return ConfigurationClient::getConfiguration();
     }    
         
     public function getProduits() {
