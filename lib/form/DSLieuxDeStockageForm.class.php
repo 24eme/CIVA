@@ -5,21 +5,20 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
     protected $lieux_stockage = null;
     protected $tiers = null;
 
-    public function __construct(acCouchdbJson $tiers, $defaults = array(), $options = array(), $CSRFSecret = null) {
-        $this->tiers = $tiers;
+    public function __construct(acCouchdbJson $ds, $defaults = array(), $options = array(), $CSRFSecret = null) {
+        $this->tiers = $ds->getEtablissement();
         $this->lieux_stockage = $this->tiers->lieux_stockage;
         $this->appelations = $this->getAppelations();
         $defaults = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
             $id_lieu = str_replace($this->tiers->cvi,'', $lieu_s);
             foreach ($this->getAppelations() as $key => $value) {
-              $ds = DSCivaClient::getInstance()->findByIdentifiantPeriodeAndLieuStockage($this->tiers->cvi, date('Y-m-d'), $id_lieu);
               if($ds->exist($key)){
                   $defaults['lieuxStockage_'.$id_lieu][] = $key;
               }
             }
         }
-        parent::__construct($tiers, $defaults, $options, $CSRFSecret);
+        parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
 
     public function configure() {
