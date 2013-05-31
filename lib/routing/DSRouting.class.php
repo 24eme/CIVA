@@ -21,16 +21,16 @@ class DSRouting {
                         array('model' => 'DS',
                             'type' => 'object') ));
 
-        $r->prependRoute('ds_exploitation', new TiersRoute('/ds/:cvi/exploitation', array('module' => 'ds',
+        $r->prependRoute('ds_exploitation', new DSRoute('/ds/:id/exploitation', array('module' => 'ds',
                     'action' => 'exploitation'),
                         array('sf_method' => array('get', 'post')),
-                        array('model' => 'Tiers',
+                        array('model' => 'DS',
                             'type' => 'object')));
         
-        $r->prependRoute('ds_lieux_stockage', new TiersRoute('/ds/:cvi/lieux-stockage', array('module' => 'ds',
+        $r->prependRoute('ds_lieux_stockage', new DSRoute('/ds/:id/lieux-stockage', array('module' => 'ds',
                     'action' => 'lieuxStockage'),
                         array('sf_method' => array('get', 'post')),
-                        array('model' => 'Tiers',
+                        array('model' => 'DS',
                             'type' => 'object')));
         
         
@@ -64,16 +64,16 @@ class DSRouting {
                         array('model' => 'DS',
                             'type' => 'object') ));
         
-        $r->prependRoute('ds_autre', new TiersRoute('/ds/:cvi/autre', array('module' => 'ds',
+        $r->prependRoute('ds_autre', new DSRoute('/ds/:id/autre', array('module' => 'ds',
                         'action' => 'autre'),
                         array('sf_method' => array('get', 'post')),
-                        array('model' => 'Tiers',
+                        array('model' => 'DS',
                             'type' => 'object') ));
         
-        $r->prependRoute('ds_validation', new TiersRoute('/ds/:cvi/validation', array('module' => 'ds',
+        $r->prependRoute('ds_validation', new DSRoute('/ds/:id/validation', array('module' => 'ds',
                 'action' => 'validation'),
                 array('sf_method' => array('get', 'post')),
-                array('model' => 'Tiers',
+                array('model' => 'DS',
                     'type' => 'object') ));
 
         $r->prependRoute('ds_export_pdf', new DSRoute('/ds/:id/pdf', array('module' => 'ds_export',

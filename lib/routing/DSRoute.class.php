@@ -29,7 +29,6 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
         if (!$this->ds) {
             $this->getObject();
         }
-
         return $this->ds;
     }
 

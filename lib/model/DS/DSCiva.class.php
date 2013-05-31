@@ -254,10 +254,10 @@ class DSCiva extends DS {
 
     public function updateAutre($rebeches = 0,$dplc = 0,$lies = 0,$mouts = 0){
         if($this->isDsPrincipale()){
-            $this->rebeches = $rebeches;
-            $this->dplc = $dplc;
-            $this->lies = $lies;
-            $this->mouts = $mouts;
+            $this->rebeches += $rebeches;
+            $this->dplc += $dplc;
+            $this->lies += $lies;
+            $this->mouts += $mouts;
         }
     }
     
@@ -287,9 +287,17 @@ class DSCiva extends DS {
                     $ds->save();
                 }
                 return $ds;
-         }
-                
-         
+         }  
+    }
+    
+    public function addVolumesWithHash($hash,$lieu,$vol_normal,$vol_vt,$vol_sgn,$sum = false) {
+        $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $cepage = $this->getOrAdd($hash);
+        if(!$cepage) return "NO_CEPAGE";
+        if($lieu == "") $lieu = null;
+        if(!$cepage->checkNoVTSGNImport($vol_vt,$vol_sgn)) return "NO_VTSGN_AND_VTORSGN";
+        $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum);
+        return $detail;
     }
     
 }

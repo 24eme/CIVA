@@ -65,10 +65,10 @@ class DSCepage extends BaseDSCepage {
             return $detail;
         }
         $detail = $this->detail->add();
-        $detail->volume_normal = 0;
+        //$detail->volume_normal = 0;
         if($this->hasVtsgn()){
-            $detail->volume_vt = 0;
-            $detail->volume_sgn = 0;
+            //$detail->volume_vt = 0;
+            //$detail->volume_sgn = 0;
         }
 
         $detail->lieu = $lieu_dit;
@@ -81,7 +81,7 @@ class DSCepage extends BaseDSCepage {
     }
     
     public function getDetailNode($lieu = null) {
-        foreach ($this->detail as $d) {
+        foreach ($this->getProduitsDetails() as $d) {
             if(is_null($lieu)) {
 
                 return $d;
@@ -108,6 +108,23 @@ class DSCepage extends BaseDSCepage {
              if($detail->exist('lieu') && $detail->lieu != '') return $detail->lieu;
          }
          return '';
+    }
+    
+    public function addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum=false) {
+        $detail = $this->addDetail($lieu);
+        if($vol_normal > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_NORMAL,$vol_normal, $sum);        
+        if($vol_vt > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_VT,$vol_vt, $sum);
+        if($vol_sgn > 0.0)
+            $detail->updateVolume(DSCivaClient::VOLUME_SGN,$vol_sgn, $sum);
+        return $detail;
+    }
+    
+    public function checkNoVTSGNImport($vol_vt,$vol_sgn) {
+        if($this->no_vtsgn && (($vol_vt > 0) || ($vol_sgn > 0)))
+            return false;
+        return true;
     }
     
 }
