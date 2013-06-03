@@ -49,7 +49,31 @@ class DSCivaClient extends DSClient {
 	}
         return $v->format('Y-m-d');
     }
+    
+    public function retrieveDsPrincipalesByCampagneAndCvi($cvi,$campagne) {
+        $dss_principales = array();
+        $docs = $this->startkey('DS-'.$cvi.'-'.$campagne.'-000')->endkey('DS-'.$cvi.'-9999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
+        foreach($docs->getIds() as $doc_id) {
+            if(preg_match('/DS-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches)){
+                $campagne_t = preg_replace('/^([0-9]{4})([0-9]{2})$/', "$1", $matches['campagne']);
+                if(!array_key_exists($campagne_t, $dss_principales))
+                    $dss_principales[$campagne_t] = $this->getDSPrincipaleByDs($this->find($doc_id,  acCouchdbClient::HYDRATE_JSON));
+            }
+        }
+        return $dss_principales;
+    }
 
+
+    public function retrieveByCampagneAndCvi($cvi,$campagne) {
+        for($month=1;$month<13;$month++){
+            if($ds = $this->find('DS-'.$cvi.'-'.$campagne.sprintf("%02d",$month).'-001')){
+                return $ds;
+            }
+        }
+        return null;
+    }
+    
+    
     public function findOrCreateDssByTiers($tiers, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;

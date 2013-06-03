@@ -11,8 +11,8 @@ class DSRouting {
     static public function listenToRoutingLoadConfigurationEvent(sfEvent $event) {
 
         $r = $event->getSubject();
-        $r->prependRoute('ds', new sfRoute('/ds', array('module' => 'ds',
-                    'action' => 'index')));
+        $r->prependRoute('ds_init', new sfRoute('/ds', array('module' => 'ds',
+                    'action' => 'init')));
         
         
         $r->prependRoute('ds_etape_redirect', new DSRoute('/ds/:id/ds-etape-redirect', array('module' => 'ds',
@@ -72,6 +72,12 @@ class DSRouting {
         
         $r->prependRoute('ds_validation', new DSRoute('/ds/:id/validation', array('module' => 'ds',
                 'action' => 'validation'),
+                array('sf_method' => array('get', 'post')),
+                array('model' => 'DS',
+                    'type' => 'object') ));
+        
+        $r->prependRoute('ds_visualisation', new DSRoute('/ds/:id/visualisation', array('module' => 'ds',
+                'action' => 'visualisation'),
                 array('sf_method' => array('get', 'post')),
                 array('model' => 'DS',
                     'type' => 'object') ));
