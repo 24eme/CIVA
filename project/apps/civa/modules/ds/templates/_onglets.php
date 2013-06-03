@@ -11,7 +11,7 @@
             <ul class="sous_onglets">
                 <?php foreach ($appellation->getLieuxSorted() as $l): ?>
                 <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">
-                    <a href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getConfig()->getLibelle(); ?></a>
+                    <a href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getLibelle(); ?></a>
                 </li>
                 <?php endforeach; ?>
                 <li class="ajouter ajouter_lieu"><a href="<?php echo url_for('ds_ajout_lieu', $appellation) ?>">Ajouter un lieu dit</a></li>

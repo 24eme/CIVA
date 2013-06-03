@@ -23,8 +23,8 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     public function getLibelleFormat($labels = array(), $format = "%g% %a% %m% %l% %co% %ce%", $label_separator = ", ") {
-        //return $this->getParent()->getParent()->getParent()->getParent()->getLibelle().' - '.$this->getLibelle();
-                return $this->getLibelle();
+
+        return $this->getLibelle();
     }
 
     public function getCodeProduit($vtsgn = '') {
@@ -39,6 +39,11 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   public function getProduits() {
         
     return array($this->getHash() => $this);
+  }
+
+  public function getProduitsFilter($type_declaration = null) {
+
+    return $this->getProduits();
   }
 
   public function hasRendement() {

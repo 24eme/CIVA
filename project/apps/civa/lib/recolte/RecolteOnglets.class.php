@@ -70,7 +70,7 @@ class RecolteOnglets {
     }
 
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
-        return $this->getLieu($appellation, $lieu)->getConfig()->filter('^couleur');
+        return $this->getLieu($appellation, $lieu)->getConfig()->getCouleurs();
     }
 
     public function getItemsCepage($appellation = null, $lieu = null, $couleur = null) {
@@ -78,7 +78,7 @@ class RecolteOnglets {
     }
 
     public function getItemsCepageLieu($appellation = null, $lieu = null) {
-        return $this->getLieu($appellation, $lieu)->getConfig()->getCepages();
+        return $this->getLieu($appellation, $lieu)->getConfig()->getCepagesFilter(ConfigurationAbstract::TYPE_DECLARATION_DR);
     }
 
     public function setCurrentAppellation($value = null) {
@@ -277,14 +277,6 @@ class RecolteOnglets {
         return ($this->getPreviousCepage() !== false);
     }
 
-    /*public function previousCepage() {
-        $key = $this->getPreviousCepage();
-        if ($key) {
-            $this->setCurrentCepage($key);
-        }
-        return $key;
-    }*/
-
     public function getNextCepage() {
         return $this->next('getItemsCepageLieu', 'getItemsCepageLieu', 'getCurrentKeyCepage');
     }
@@ -292,16 +284,6 @@ class RecolteOnglets {
     public function hasNextCepage() {
         return ($this->getNextCepage() !== false);
     }
-
-    /*public function nextCepage() {
-        $key = $this->getNextCepage();
-        if ($key && !$this->getCurrentCouleur()->exist($key)) {
-            $this->nextCouleur();
-        } elseif($key) {
-            $this->setCurrentCepage($key);
-        }
-        return $key;
-    }*/
 
     protected function previous($method_items_config, $method_items, $method_get_key) {
         $prev_key = false;
@@ -442,9 +424,11 @@ class RecolteOnglets {
     }
 
     public function getPreviousUrlCepage() {
+        $keys = array_keys($this->getCurrentCouleur()->getConfig()->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR));
+        $first_key = current($keys);
         if (!$this->hasPreviousCepage()) {
             return false;
-        } elseif($this->getCurrentCouleur()->getConfig()->filter('^cepage')->getFirstKey() == $this->getCurrentKeyCepage() && $this->hasPreviousCouleur()) {
+        } elseif($first_key == $this->getCurrentKeyCepage() && $this->hasPreviousCouleur()) {
             return $this->getUrl('recolte', null, null, $this->getPreviousCouleur(), $this->getPreviousCepage());
         } else {
             return $this->getUrl('recolte', null, null, null, $this->getPreviousCepage());
@@ -452,9 +436,11 @@ class RecolteOnglets {
     }
 
     public function getNextUrlCepage() {
+        $keys = $this->getCurrentCouleur()->getConfig()->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR);
+        $last_key = end($keys);
         if (!$this->hasNextCepage()) {
             return false;
-        } elseif($this->getCurrentCouleur()->getConfig()->filter('^cepage')->getLastKey() == $this->getCurrentKeyCepage() && $this->hasNextCouleur()) {
+        } elseif($last_key == $this->getCurrentKeyCepage() && $this->hasNextCouleur()) {
             return $this->getUrl('recolte', null, null, $this->getNextCouleur(), $this->getNextCepage());
         } else {
             return $this->getUrl('recolte', null, null, null, $this->getNextCepage());
@@ -503,7 +489,8 @@ class RecolteOnglets {
             $value = $this->$first_method();
         }
         $value = $this->convertValueToKey($value, $prefix);
-        if ($this->$method()->exist($value)) {
+        $items = $this->$method();
+        if (isset($items[$value])) {
             return $value;
         } else {
             return false;

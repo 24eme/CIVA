@@ -163,6 +163,7 @@ class dsActions extends sfActions {
         }
 
         if($this->getRoute()->getNoeud() instanceof DSAppellation) {
+
             if(count($this->getRoute()->getNoeud()->getLieux()) < 1 && $this->getRoute()->getNoeud()->getConfig()->hasManyLieu()) {
                 
                 return $this->redirect('ds_ajout_lieu', $this->getRoute()->getNoeud());

@@ -9,7 +9,7 @@ $produits = $form->getProduitsDetails();
     		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo $detail->lieu; ?></small> 
     	</li>
         <?php endforeach; ?>
-	<?php if((count($produits) < count($lieu->getConfig()->getProduits())) || $lieu->getConfig()->hasLieuEditable()): ?>	
+	<?php if((count($produits) < count($lieu->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS))) || $lieu->getConfig()->hasLieuEditable()): ?>	
 		<li class="ajout">
 			<a href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
