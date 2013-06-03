@@ -26,6 +26,15 @@ abstract class _Tiers extends Base_Tiers {
     
     /**
      *
+     * @param string $campagne
+     * @return DR 
+     */
+    public function getDs($campagne) {
+        return acCouchdbManager::getClient('DSCiva')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+    }
+    
+    /**
+     *
      * @return string 
      */
     public function getAdresse() {

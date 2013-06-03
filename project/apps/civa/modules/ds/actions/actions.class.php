@@ -1,7 +1,8 @@
 <?php
 class dsActions extends sfActions {
     
-    public function executeIndex(sfWebRequest $request) {
+    public function executeInit(sfWebRequest $request) {
+  //      var_dump($request->getParameterHolder()); exit;
        if ($request->isMethod(sfWebRequest::POST)) {
            $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);     
            $date = date('Y-m-d');
