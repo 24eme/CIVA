@@ -215,10 +215,15 @@ class DSCiva extends DS {
     }
     
     public function getTotalAOC() {
+        
+        return $this->getTotalAOCByType('total_stock');
+    }
+
+    public function getTotalAOCByType($type) {
         $total = 0;
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
             if(!preg_match('/^appellation_VINTABLE/', $hash))
-                    $total += ($appellation->getTotalStock())? $appellation->getTotalStock() : 0;
+                    $total += ($appellation->get($type))? $appellation->get($type) : 0;
         }
         return $total;
     }
