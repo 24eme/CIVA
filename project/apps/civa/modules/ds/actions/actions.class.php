@@ -2,17 +2,57 @@
 class dsActions extends sfActions {
     
     public function executeInit(sfWebRequest $request) {
-  //      var_dump($request->getParameterHolder()); exit;
-       if ($request->isMethod(sfWebRequest::POST)) {
-           $this->tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($request['cvi']);     
-           $date = date('Y-m-d');
-           $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
-           foreach ($dss as $ds) {
-               $ds->save();
-           }
-           $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
-           $this->redirect('ds_etape_redirect', $this->ds);
+       
+       $this->forward404Unless($request->isMethod(sfWebRequest::POST));
+       $this->getUser()->initCredentialsDeclaration();
+       $this->tiers = $this->getUser()->getTiers('Recoltant');
+       $ds_data = $this->getRequestParameter('ds', null);
+        if ($ds_data) {
+            if ($ds_data['type_declaration'] == 'brouillon') {
+                $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
+                //$this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($ds_data['type_declaration'] == 'supprimer') {
+                $this->getUser()->removeDs();
+                $this->redirect('mon_espace_civa');
+            } elseif ($ds_data['type_declaration'] == 'visualisation') {
+                $this->redirect('ds_visualisation', $this->getUser()->getDs());
+            } elseif ($ds_data['type_declaration'] == 'vierge') {
+                $date = date('Y-m-d');
+                $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
+                foreach ($dss as $ds) {
+                    $ds->save();
+                }
+                $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
+                $this->redirect('ds_etape_redirect', $this->ds);
+            } elseif ($ds_data['type_declaration'] == 'visualisation_avant_import') {
+                $this->redirect('ds_visualisation_avant_import');
+            } elseif ($ds_data['type_declaration'] == 'import') {
+//                $acheteurs = array();
+//                $ds = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $this->tiers, $acheteurs);
+//                $ds->declaration_insee = $this->tiers->declaration_insee;
+//                $ds->declaration_commune = $this->tiers->declaration_commune;
+//                $dr->save();
+//                $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
+//                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            } elseif ($ds_data['type_declaration'] == 'precedente') {
+                $old_doc = $this->tiers->getDeclaration($ds_data['liste_precedentes_declarations']);
+                if (!$old_doc) {
+                    throw new Exception("Bug: " . $ds_data['liste_precedentes_declarations'] . " not found :()");
+                }
+//                $doc = clone $old_doc;
+//                $doc->_id = 'DS-' . $this->tiers->cvi . '-' . $this->getUser()->getCampagne(). '';
+//                $doc->campagne = $this->getUser()->getCampagne();
+//                $doc->declaration_insee = $this->tiers->declaration_insee;
+//                $doc->declaration_commune = $this->tiers->declaration_commune;
+//                $doc->removeVolumes();
+//                $doc->remove('validee');
+//                $doc->remove('modifiee');
+//                $doc->remove('etape');
+//                $doc->save();
+                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+            }
         }
+        $this->redirect('mon_espace_civa');
     } 
     
     public function executeRedirectEtape(sfWebRequest $request) {
@@ -304,4 +344,10 @@ class dsActions extends sfActions {
         $this->ds_client = DSCivaClient::getInstance();
     }
     
+    public function executeVisualisation(sfWebRequest $request)
+    {
+        $this->ds_principale = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->ds_client = DSCivaClient::getInstance();
+    }
 }

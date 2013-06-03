@@ -60,7 +60,7 @@
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-            <a href="<?php echo url_for("ds") ?>" class="ajax">
+            <a href="<?php echo url_for("ds_exploitation", $ds) ?>" class="ajax">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 	    </a>
 	</li>

@@ -18,7 +18,7 @@ class dsComponents extends sfComponents {
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->ds = $this->getUser()->getDs();
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDsArchivesSince(($this->getUser()->getCampagne()-1));
 	    $this->has_import =  false;//acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
         krsort($this->campagnes);
     }
@@ -28,8 +28,9 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
-        krsort($this->campagnes);
+        $this->dsBycampagnes = $this->getUser()->getTiers('Recoltant')->getDsArchivesSince(($this->getUser()->getCampagne()-1));
+   //     var_dump($this->dsBycampagnes); exit;
+        krsort($this->dsBycampagnes);
     }
 
     /**

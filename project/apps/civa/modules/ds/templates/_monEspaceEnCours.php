@@ -1,10 +1,9 @@
-<form id="form_ds" action="<?php echo url_for('ds_init',$ds) ?>" method="post">
+<form id="form_ds" action="<?php echo url_for('ds_init', $ds) ?>" method="post">
     <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_ds" title="Message aide"></a></h3>
     <div class="contenu_section">
         <p class="intro">Vous souhaitez :</p>
         <?php 
         if (!$ds->isNew()): ?>
-
             <div class="ligne_form">
                 <input type="radio" id="type_declaration_visualisation" name="ds[type_declaration]" value="visualisation"  />
                 <label for="type_declaration_visualisation">Visualiser ma déclaration en cours</label>

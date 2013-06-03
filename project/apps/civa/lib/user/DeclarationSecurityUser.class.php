@@ -194,6 +194,17 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         return $this->_ds;
     }
+    
+    public function removeDs()
+    {
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs());
+        foreach ($dss as $ds) {
+            $ds->delete();
+        }
+        $this->signOutDeclaration();
+        $this->initCredentialsDeclaration();
+    }
+    
 
     /**
      *
