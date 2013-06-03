@@ -17,6 +17,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         self::CREDENTIAL_ETAPE_RECOLTE,
         self::CREDENTIAL_ETAPE_VALIDATION);
     protected $_declaration = null;
+    protected $_ds = null;
 
     /**
      *
@@ -49,6 +50,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function signOutDeclaration()
     {
         $this->_declaration = null;
+        $this->_ds = null;
         $this->clearCredentialsDeclaration();
     }
 
@@ -163,6 +165,46 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("you must be logged in with a tiers");
         }
     }
+    
+    
+    /**
+     * DS
+     */
+    public function isDsEditable()
+    {
+        if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
+            return true;
+        }
+         
+        return true;//(CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
+    }
+    
+    public function getDs()
+    {
+        $this->requireDeclaration();
+        $this->requireTiers();
+        if (is_null($this->_ds)) {
+            $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
+            if (!$this->_ds) {
+                $ds = new DSCiva();
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . $this->getCampagne().date('m').'-001');
+                return $ds;
+            }
+        }
+
+        return $this->_ds;
+    }
+    
+    public function removeDs()
+    {
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs());
+        foreach ($dss as $ds) {
+            $ds->delete();
+        }
+        $this->signOutDeclaration();
+        $this->initCredentialsDeclaration();
+    }
+    
 
     /**
      *

@@ -14,6 +14,16 @@ abstract class _Tiers extends Base_Tiers {
     public function getDeclarationsArchivesSince($campagne) {
         return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne);
     }
+
+        /**
+     *
+     * @param string $campagne
+     * @return array 
+     */
+    public function getDsArchivesSince($campagne) {
+        return acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByCampagneAndCvi($this->cvi, $campagne);
+    }
+        
     
     /**
      *
@@ -22,6 +32,15 @@ abstract class _Tiers extends Base_Tiers {
      */
     public function getDeclaration($campagne) {
         return acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+    }
+    
+    /**
+     *
+     * @param string $campagne
+     * @return DR 
+     */
+    public function getDs($campagne) {
+        return acCouchdbManager::getClient('DSCiva')->retrieveByCampagneAndCvi($this->cvi, $campagne);
     }
     
     /**

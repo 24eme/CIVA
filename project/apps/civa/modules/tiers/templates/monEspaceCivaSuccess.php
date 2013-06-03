@@ -12,17 +12,16 @@
             <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
 
-            
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
         <div id="espace_alsace_recolte">
-            <h2>Alsace récolte</h2>
+            <h2>Alsace stock</h2>
             <div class="contenu clearfix">  
-                 <?php include_component('declaration', 'monEspace') ?>
-                 <?php include_component('declaration', 'monEspaceColonne') ?>
+                 <?php include_component('ds', 'monEspace') ?>
+                 <?php include_component('ds', 'monEspaceColonne') ?>
             </div>
         </div>
         <?php endif; ?>
-        
+            
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
@@ -30,8 +29,7 @@
                  <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
         </div>
-        <?php endif; ?>
-             
+        <?php endif; ?>             
 
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
         <div id="espace_gamma">
@@ -39,6 +37,16 @@
             <div class="contenu clearfix">
                  <?php include_partial('gamma/monEspace') ?>
                  <?php include_partial('gamma/monEspaceColonne') ?>
+            </div>
+        </div>
+        <?php endif; ?>
+            
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
+        <div id="espace_alsace_recolte">
+            <h2>Alsace récolte</h2>
+            <div class="contenu clearfix">  
+                 <?php include_component('declaration', 'monEspace') ?>
+                 <?php include_component('declaration', 'monEspaceColonne') ?>
             </div>
         </div>
         <?php endif; ?>
