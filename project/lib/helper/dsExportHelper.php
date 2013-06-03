@@ -2,7 +2,17 @@
 
 function echoVolume($volume, $bold = false) {
     if(!is_null($volume)) {
-        echo sprintFloatFr($volume)."&nbsp;<small>hl</small>";
+        if($bold) {
+            echo "<b>";
+        }
+
+        echo sprintFloatFr($volume);
+
+        if($bold) {
+            echo "</b>";
+        }
+
+        echo "&nbsp;<small>hl</small>";
     } else {
         echo "&nbsp;";
     }
