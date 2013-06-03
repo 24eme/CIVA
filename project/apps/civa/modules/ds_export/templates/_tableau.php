@@ -15,16 +15,16 @@
       <td style="text-align: left; border: 1px solid black;" rowspan="<?php echo $colonne["rowspan"] ?>">&nbsp;<?php echo $colonne['libelle'] ?></td>
     <?php endif; ?>
     <?php endforeach; ?>
-    <td style="text-align: left; border: 1px solid black;"><?php echoVolume($produit["normal"]) ?></td>
-    <td style="text-align: left; border: 1px solid black;"><?php echoVolume($produit["vt"]) ?></td>
-    <td style="text-align: left; border: 1px solid black;"><?php echoVolume($produit["sgn"]) ?></td>
+    <td style="border: 1px solid black; <?php if(is_null($produit["normal"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["normal"]) ?></td>
+    <td style="border: 1px solid black;<?php if(is_null($produit["vt"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["vt"]) ?></td>
+    <td style="border: 1px solid black; <?php if(is_null($produit["sgn"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["sgn"]) ?></td>
   </tr>
 <?php endforeach; ?>
 <tr>
   <td style="text-align: left; border: 1px solid black; font-weight: bold;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp;Total</td>
-  <td style="text-align: left; border: 1px solid black;"><?php echoVolume($tableau["total"]["normal"]) ?></td>
-  <td style="text-align: left; border: 1px solid black;"><?php echoVolume($tableau["total"]["vt"]) ?></td>
-  <td style="text-align: left; border: 1px solid black;"><?php echoVolume($tableau["total"]["sgn"]) ?></td>
+  <td style="border: 1px solid black;"><?php echoVolume($tableau["total"]["normal"], true) ?></td>
+  <td style="border: 1px solid black;"><?php echoVolume($tableau["total"]["vt"], true) ?></td>
+  <td style="border: 1px solid black;"><?php echoVolume($tableau["total"]["sgn"], true) ?></td>
 </tr>
 </table>
 <small><br /></small>

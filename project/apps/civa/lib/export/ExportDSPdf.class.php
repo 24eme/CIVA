@@ -69,7 +69,7 @@ class ExportDSPdf {
         $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
         $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
 
-        $this->document->addPage($this->getPartial('ds_export/douane', array('recap' => $recap)));
+        $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 'recap' => $recap)));
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
@@ -90,13 +90,20 @@ class ExportDSPdf {
         foreach($details as $detail) {
             $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), $lieu, $couleur);
 
-            $recap["produits"][$key]["normal"] += $detail->volume_normal;
-            $recap["produits"][$key]["vt"] += $detail->volume_vt;
-            $recap["produits"][$key]["sgn"] += $detail->volume_sgn;
+            if (!is_null($detail->volume_normal)) {
+                $recap["produits"][$key]["normal"] += $detail->volume_normal;
+                $recap["total"]["normal"] += $detail->volume_normal;
+            }
 
-            $recap["total"]["normal"] += $detail->volume_normal;
-            $recap["total"]["vt"] += $detail->volume_vt;
-            $recap["total"]["sgn"] += $detail->volume_sgn;
+            if (!is_null($detail->volume_vt)) {
+                $recap["produits"][$key]["vt"] += $detail->volume_vt;
+                $recap["total"]["vt"] += $detail->volume_vt;
+            }
+
+            if(!is_null($detail->volume_sgn)) {
+                $recap["produits"][$key]["sgn"] += $detail->volume_sgn;
+                $recap["total"]["sgn"] += $detail->volume_sgn;
+            }
         }
 
         ksort($recap['produits']);
