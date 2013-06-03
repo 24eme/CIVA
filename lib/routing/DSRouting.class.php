@@ -11,8 +11,8 @@ class DSRouting {
     static public function listenToRoutingLoadConfigurationEvent(sfEvent $event) {
 
         $r = $event->getSubject();
-        $r->prependRoute('ds', new sfRoute('/ds', array('module' => 'ds',
-                    'action' => 'index')));
+        $r->prependRoute('ds_init', new sfRoute('/ds', array('module' => 'ds',
+                    'action' => 'init')));
         
         
         $r->prependRoute('ds_etape_redirect', new DSRoute('/ds/:id/ds-etape-redirect', array('module' => 'ds',

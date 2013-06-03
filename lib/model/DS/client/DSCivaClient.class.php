@@ -49,6 +49,13 @@ class DSCivaClient extends DSClient {
 	}
         return $v->format('Y-m-d');
     }
+    
+    public function retrieveByCampagneAndCvi($cvi,$campagne) {
+        for($month=1;$month<13;$month++){
+            if($ds = $this->find('DS-'.$cvi.'-'.$campagne.sprintf("%02d",$month).'-001')) return $ds;
+        }
+        return null;
+    }
 
     public function findOrCreateDssByTiers($tiers, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
