@@ -102,6 +102,17 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
     
+    public function createDsByDsPrincipaleAndLieu($ds,$lieu_num) {
+        $new_ds = new DSCiva();
+        $new_ds->date_emission = $ds->date_emission;
+        $new_ds->date_stock = $ds->date_stock;
+        $new_ds->identifiant = $ds->identifiant;
+        $new_ds->storeDeclarant();
+        $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
+        return $new_ds;
+    }
+
+
     public function findDssByCvi($tiers, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
@@ -166,6 +177,9 @@ class DSCivaClient extends DSClient {
         throw new sfException("La DS $ds->_id possède un identifiant non conforme");
     }
 
+    public function findDSByLieuStockageAndCampagne($lieu_num, $campagne){
+        return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
+    }
 
     public function getDSPrincipale($tiers, $date_stock){
         $dss = $this->findDssByCvi($tiers, $date_stock);
@@ -187,11 +201,6 @@ class DSCivaClient extends DSClient {
     public function getHistoryByOperateur($etablissement) {
         return 1;
 //        return DSHistoryView::getInstance()->findByEtablissementDateSorted($etablissement->identifiant);
-    }
-
-    public function findByIdentifiantPeriodeAndLieuStockage($identifiant, $date, $lieu_stockage) {
-        $periode = $this->buildPeriode($this->createDateStock($date));
-        return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
     }
     
     

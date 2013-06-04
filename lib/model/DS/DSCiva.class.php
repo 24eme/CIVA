@@ -56,7 +56,6 @@ class DSCiva extends DS {
     }
 
     public function addAppellation($hash) {   
-
         return $this->addNoeud($hash);
     }
 
@@ -298,6 +297,12 @@ class DSCiva extends DS {
         if(!$cepage->checkNoVTSGNImport($vol_vt,$vol_sgn)) return "NO_VTSGN_AND_VTORSGN";
         $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum);
         return $detail;
+    }
+    
+    public function hasNoAppellation() {      
+        if(!$this->exist('declaration')) return 0;
+        if(!$this->declaration->exist('certification')) return 0;
+        return  (count($this->declaration->getAppellationsSorted()) == 0);
     }
     
 }
