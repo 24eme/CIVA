@@ -56,9 +56,15 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                             $current_ds->addAppellation($key);
                         }
                         if( ($value && !in_array($key, $value)) && ($current_ds->exist($key))){
+                            if($current_ds->get($key)->hasVolume()){
+                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie"); 
+                            }
                             $current_ds->remove($key);
                         }
                         if(!$value && $current_ds->exist($key)){
+                            if($current_ds->get($key)->hasVolume()){
+                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie"); 
+                            }
                             $current_ds->remove($key);
                         }
                     }

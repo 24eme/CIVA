@@ -39,4 +39,8 @@ class DSAppellation extends BaseDSAppellation {
 
         return $this->getChildrenNodeDeep()->hasManyNoeuds();
     }
+    
+    public function hasVolume() {
+        return ($this->total_stock && $this->total_stock > 0);
+    }
 }

@@ -11,7 +11,6 @@
  */
 class DSCiva extends DS {
     
-    
     public function  __construct() {
         parent::__construct();         
         $this->archivage_document = new ArchivageDocument($this);
