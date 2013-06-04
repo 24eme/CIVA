@@ -1,4 +1,7 @@
 <!-- .header_ds -->
+<?php
+$dss = $dss->getRawValue();
+?>
 <form action="<?php echo url_for( 'ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <?php
@@ -30,7 +33,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): ?>
+				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): 
+                                                $ds_id = preg_replace("/[0-9]{3}$/", str_replace($tiers->cvi, '', $numero), $ds->_id);
+                                    ?>
 				<tr>
 					<td class="adresse_lieu">
 						<?php echo $lieu_stockage->numero ?> <br />
@@ -41,11 +46,13 @@
 						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
 							$paire = ($cpt%2==0)? 'paire' : '';
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
+                                                        $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
+                                                        $readonly = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume())? 'readonly="readonly"' : '';
 						?>
 					
 					<td class="<?php echo $paire ?>">
 					
-					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> >
+					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> <?php echo $readonly; ?> >
 					</td>
 				   <?php $cpt++;
 				   endforeach; ?>				
