@@ -40,7 +40,7 @@
 					 $name = 'lieuxStockage_'.str_replace($tiers->cvi, '', $numero);
 						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
 							$paire = ($cpt%2==0)? 'paire' : '';
-							$checked = (in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
+							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
 						?>
 					
 					<td class="<?php echo $paire ?>">

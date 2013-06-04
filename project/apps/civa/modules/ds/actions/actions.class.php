@@ -130,10 +130,17 @@ class dsActions extends sfActions {
             if($this->form->isValid()) {
                $this->dss = $this->form->doUpdateDss($this->dss);
                 foreach ($this->dss as $current_ds) {
-                    $current_ds->save();
+                    if($current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
+                        throw new sfException("La DS principale $current_ds->_id doit obligatoirement posséder au moins une appellation.");
+                    }
+                    if(!$current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
+                        DSCivaClient::getInstance()->delete($current_ds);
+                    }else{
+                        $current_ds->save();
+                    }
                 }   
                 if($request->isXmlHttpRequest())
-                {            
+                {         
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
                 $this->ds->updateEtape(3);
