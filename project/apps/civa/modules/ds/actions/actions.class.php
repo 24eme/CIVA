@@ -2,7 +2,6 @@
 class dsActions extends sfActions {
     
     public function executeInit(sfWebRequest $request) {
-       
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
        $this->getUser()->initCredentialsDeclaration();
        $this->tiers = $this->getUser()->getTiers('Recoltant');
@@ -16,43 +15,15 @@ class dsActions extends sfActions {
                 $this->redirect('mon_espace_civa');
             } elseif ($ds_data['type_declaration'] == 'visualisation') {
                 $this->redirect('ds_visualisation', $this->getUser()->getDs());
-            } elseif ($ds_data['type_declaration'] == 'vierge') {
-                $date = date('Y-m-d');
-                $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
-                foreach ($dss as $ds) {
-                    $ds->save();
-                }
-                $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
-                $this->redirect('ds_etape_redirect', $this->ds);
-            } elseif ($ds_data['type_declaration'] == 'visualisation_avant_import') {
-                $this->redirect('ds_visualisation_avant_import');
-            } elseif ($ds_data['type_declaration'] == 'import') {
-//                $acheteurs = array();
-//                $ds = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $this->tiers, $acheteurs);
-//                $ds->declaration_insee = $this->tiers->declaration_insee;
-//                $ds->declaration_commune = $this->tiers->declaration_commune;
-//                $dr->save();
-//                $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
-//                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
-            } elseif ($ds_data['type_declaration'] == 'precedente') {
-                $old_doc = $this->tiers->getDeclaration($ds_data['liste_precedentes_declarations']);
-                if (!$old_doc) {
-                    throw new Exception("Bug: " . $ds_data['liste_precedentes_declarations'] . " not found :()");
-                }
-//                $doc = clone $old_doc;
-//                $doc->_id = 'DS-' . $this->tiers->cvi . '-' . $this->getUser()->getCampagne(). '';
-//                $doc->campagne = $this->getUser()->getCampagne();
-//                $doc->declaration_insee = $this->tiers->declaration_insee;
-//                $doc->declaration_commune = $this->tiers->declaration_commune;
-//                $doc->removeVolumes();
-//                $doc->remove('validee');
-//                $doc->remove('modifiee');
-//                $doc->remove('etape');
-//                $doc->save();
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
-            }
+            }    
         }
-        $this->redirect('mon_espace_civa');
+        $date = date('Y-m-d');
+        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
+        foreach ($dss as $ds) {
+            $ds->save();
+        }
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
+        $this->redirect('ds_etape_redirect', $this->ds);
     } 
     
     public function executeRedirectEtape(sfWebRequest $request) {
