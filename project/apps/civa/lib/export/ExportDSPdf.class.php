@@ -55,21 +55,48 @@ class ExportDSPdf {
     protected function create($ds) {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
-        $recap = array("AOC Alsace Blanc" => array("colonnes" => array("cepage" => "Cepages"), "produits" => array()),
-                       "AOC Alsace Grand Cru" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), "produits" => array()),
-                       "Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), "produits" => array()));
+
+        $recap = array("AOC Alsace Blanc" => array("colonnes" => array("cepage" => "Cepages"),
+                                                   "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                   "produits" => array(), 
+                                                   "limit" => -1,
+                                                   "nb_ligne" => -1),
+                       "AOC Alsace Grand Cru" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), 
+                                                       "produits" => array(), 
+                                                       "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                       "limit" => 13,
+                                                       "nb_ligne" => 13),
+                       "Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
+                                                   "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                   "produits" => array(), 
+                                                   "limit" => -1,
+                                                   "nb_ligne" => -1));
+
+        foreach($alsace_blanc as $appellation_key) {
+            $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
+        }
+        $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
+        $page = $recap;
 
         foreach($alsace_blanc as $appellation_key) {
             $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
         }
-
+       
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true);
-
-        $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
         $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
 
-        $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 'recap' => $recap)));
+        $paginate = $this->paginate($recap, 29, $page);
+
+        $this->rowspanPaginate($paginate);
+        $this->autoFill($paginate, $page);
+
+        foreach($paginate["pages"] as $num_page => $page) {
+            $is_last = ($num_page == count($paginate["pages"]) - 1);
+            $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 
+                                                                                 'recap' => $page, 
+                                                                                 'total' => $is_last)));
+        }
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
@@ -92,40 +119,24 @@ class ExportDSPdf {
 
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
-                $recap["total"]["normal"] += $detail->volume_normal;
+                
             }
 
             if (!is_null($detail->volume_vt)) {
                 $recap["produits"][$key]["vt"] += $detail->volume_vt;
-                $recap["total"]["vt"] += $detail->volume_vt;
+                
             }
 
             if(!is_null($detail->volume_sgn)) {
                 $recap["produits"][$key]["sgn"] += $detail->volume_sgn;
-                $recap["total"]["sgn"] += $detail->volume_sgn;
             }
+
+            $recap["total"]["normal"] += $detail->volume_normal;
+            $recap["total"]["vt"] += $detail->volume_vt;
+            $recap["total"]["sgn"] += $detail->volume_sgn;
         }
 
         ksort($recap['produits']);
-
-        $prev_hash = null;
-        $prev_cepage = null;
-        foreach($recap['produits'] as $hash => $produit) {
-            if (!preg_match("/cepage:([a-zA-Z0-9_]+)\//", $hash, $matches)) {
-                continue;
-            }
-
-            $cepage = $matches[1];
-           
-            if($cepage == $prev_cepage) {
-                $recap['produits'][$prev_hash]['colonnes']['cepage']['rowspan'] += 1;
-                $recap['produits'][$hash]['colonnes']['cepage']['rowspan'] = 0;
-                continue;
-            }
-
-            $prev_hash = $hash;
-            $prev_cepage = $cepage;
-        }
     }
 
     protected function addProduit(&$recap, $produit_config, $lieu = false, $couleur = false) {
@@ -154,6 +165,11 @@ class ExportDSPdf {
         $recap["produits"][$key] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null);
 
         return $key;
+    }
+
+    protected function addProduitLigneVide(&$recap, $colonnes) {
+
+        $recap["produits"]['999vide'.uniqid()] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null);
     }
 
     protected function preBuildRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
@@ -195,6 +211,96 @@ class ExportDSPdf {
         $this->order['couleur:blanc'] = 1;
         $this->order['couleur:rose'] = 2;
         $this->order['couleur:rouge'] = 3;
+    }
+
+
+    protected function paginate($recap, $limit, $page) {
+        $paginate = array("pages" => array(), "total" => array());
+
+        foreach($recap as $libelle => $tableau) {
+            $paginate["total"][$libelle] = $tableau["total"];
+        }
+
+        $i = 0;
+        $num_page = 0;
+        foreach($recap as $libelle => $tableau) {
+            $num_page = floor($i / $limit);
+            if(!isset($paginate["pages"][$num_page])) {
+                $paginate["pages"][$num_page] = $page;
+            }
+            $j = 0;
+            foreach($tableau["produits"] as $hash => $produit) {
+                $num_page = floor($i / $limit);
+                if($tableau["limit"] > 0) {
+                    $num_page = $num_page + floor($j / $tableau["limit"]);
+                }
+                if(!isset($paginate["pages"][$num_page])) {
+                    $paginate["pages"][$num_page] = $page;
+                }
+
+                $paginate["pages"][$num_page][$libelle]["produits"][$hash] = $produit;
+
+                if($num_page == floor($i / $limit)) {
+                    $i++;
+                }
+                $j++;
+            }
+
+            $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+        }
+
+        return $paginate;
+    }
+
+    protected function autoFill(&$paginate, $config) {
+        foreach($paginate["pages"] as $num_page => $page) {
+            foreach($page as $libelle => $tableau) {
+                $config_nb_ligne = $config[$libelle]['nb_ligne'];
+                $nb_ligne = count($tableau['produits']);
+                if(!($config_nb_ligne > 0 && $nb_ligne < $config_nb_ligne)) {
+
+                    continue;
+                }
+
+                for($i = $nb_ligne; $i <= $config_nb_ligne; $i++) {
+                    $colonnes = array();
+                    foreach($config[$libelle]['colonnes'] as $key => $colonne) {
+                        $colonnes[$key] = array("libelle" => null, "rowspan" => 1);
+                    }
+                    $this->addProduitLigneVide($paginate["pages"][$num_page][$libelle], $colonnes);
+                }
+            }
+        }
+    }
+
+    protected function rowspanPaginate(&$paginate) {
+        foreach($paginate["pages"] as $num_page => $page) {
+            foreach($page as $libelle => $tableau) {
+                $this->rowspan($paginate["pages"][$num_page][$libelle]);
+            }
+        }
+    }
+
+    protected function rowspan(&$recap) {
+        $prev_hash = null;
+        $prev_cepage = null;
+        
+        foreach($recap['produits'] as $hash => $produit) {
+            if (!preg_match("/cepage:([a-zA-Z0-9_]+)\//", $hash, $matches)) {
+                continue;
+            }
+
+            $cepage = $matches[1];
+           
+            if($cepage == $prev_cepage) {
+                $recap['produits'][$prev_hash]['colonnes']['cepage']['rowspan'] += 1;
+                $recap['produits'][$hash]['colonnes']['cepage']['rowspan'] = 0;
+                continue;
+            }
+
+            $prev_hash = $hash;
+            $prev_cepage = $cepage;
+        }
     }
 
     protected function getCouleurKey($cepage) {
