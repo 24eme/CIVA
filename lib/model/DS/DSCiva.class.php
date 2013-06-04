@@ -12,6 +12,11 @@
 class DSCiva extends DS {
     
     
+    public function  __construct() {
+        parent::__construct();         
+        $this->archivage_document = new ArchivageDocument($this);
+    }
+    
     public function constructId() {
         if ($this->statut == null) {
             $this->statut = DSClient::STATUT_A_SAISIR;
@@ -68,6 +73,10 @@ class DSCiva extends DS {
         foreach ($dr_produit->getProduitsDetails() as $detail) {
             $this->addDetail($dr_produit->getHash(), $detail->lieu);
         }
+    }
+    
+     protected function preSave() {
+        $this->archivage_document->preSave();
     }
     
     public function addProduit($hash) {
