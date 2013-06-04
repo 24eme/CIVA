@@ -1,3 +1,7 @@
+<?php use_helper('Float') ?>
+<?php use_helper('dsExport') ?>
+<?php use_helper('Text') ?>
+
 <?php $tableau = $tableau->getRawValue() ?>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <tr>
@@ -12,7 +16,7 @@
   <tr>
     <?php foreach($produit['colonnes'] as $colonne): ?>
     <?php if($colonne["rowspan"] > 0): ?>
-      <td style="text-align: left; border: 1px solid black; <?php if(is_null($colonne['libelle'])): ?>background-color: #bbb;<?php endif; ?>" rowspan="<?php echo $colonne["rowspan"] ?>">&nbsp;<?php echo $colonne['libelle'] ?></td>
+      <td style="text-align: left; border: 1px solid black; <?php if(is_null($colonne['libelle'])): ?>background-color: #bbb;<?php endif; ?>" rowspan="<?php echo $colonne["rowspan"] ?>">&nbsp;<?php echo truncate_text($colonne['libelle'], 30, "...", false) ?></td>
     <?php endif; ?>
     <?php endforeach; ?>
     <td style="border: 1px solid black; <?php if(is_null($produit["normal"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["normal"]) ?></td>

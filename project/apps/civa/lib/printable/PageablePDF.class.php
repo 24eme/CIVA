@@ -34,7 +34,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         //set auto page breaks
-        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER);
+        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER + 5);
 
         //set image scale factor
         $this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);

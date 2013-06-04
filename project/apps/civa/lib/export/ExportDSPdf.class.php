@@ -16,6 +16,7 @@ class ExportDSPdf {
 
         $this->init($ds, $filename);
         $this->create($ds);
+        $this->createAnnexe($ds);
     }
 
     public function isCached() {
@@ -87,7 +88,6 @@ class ExportDSPdf {
         $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
 
         $paginate = $this->paginate($recap, 29, $page);
-
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
 
@@ -96,6 +96,44 @@ class ExportDSPdf {
             $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 
                                                                                  'recap' => $page, 
                                                                                  'total' => $is_last)));
+        }
+    }
+
+    protected function createAnnexe($ds) {
+        $this->buildOrder($ds);
+        $appellations = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
+        $recap = array();
+        foreach($appellations as $appellation_key) {
+            if(!$ds->declaration->getAppellations()->exist("appellation_".$appellation_key)) {
+
+                continue;
+            }
+
+            $appellation = $ds->declaration->getAppellations()->get("appellation_".$appellation_key);
+
+            $colonnes = array("cepage" => "Cepages");
+            $lieu = false;
+            if($appellation->getConfig()->hasManyLieu() || $appellation->getConfig()->hasLieuEditable()) {
+                $colonnes = array("lieu" => "Lieu-dit", "cepage" => "Cepages");
+                $lieu = true;
+            }
+
+            $recap[$appellation->getLibelle()] = array("colonnes" => $colonnes, 
+                                                   "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                   "produits" => array(), 
+                                                   "limit" => -1,
+                                                   "nb_ligne" => -1);
+
+            $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
+        }
+
+        $paginate = $this->paginate($recap, 33);
+        $this->rowspanPaginate($paginate);
+
+        foreach($paginate["pages"] as $num_page => $page) {
+            $is_last = ($num_page == count($paginate["pages"]) - 1);
+            $this->document->addPage($this->getPartial('ds_export/annexe', array('ds' => $ds, 
+                                                                                 'recap' => $page)));
         }
     }
 
@@ -115,7 +153,7 @@ class ExportDSPdf {
         $details = $appellation->getProduitsDetails();
 
         foreach($details as $detail) {
-            $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), $lieu, $couleur);
+            $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
 
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
@@ -145,8 +183,13 @@ class ExportDSPdf {
         $key_couleur = "couleur:".$this->getCouleurKey($produit_config->getKey());
 
         if($lieu) {
-            $key = sprintf("%s%s/%s%s", $this->getOrder($key_cepage), $key_cepage, $this->getOrder($key_lieu), $key_lieu);
-            $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $produit_config->getLieu()->getLibelle()), 
+            $key = sprintf("%s%s/%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $this->getOrder($key_lieu), $key_lieu, $lieu);
+            $libelle = $produit_config->getLieu()->getLibelle();
+            if($produit_config->getAppellation()->hasLieuEditable()) {
+                $key = sprintf("%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $lieu);
+                $libelle = $lieu;
+            }
+            $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $libelle), 
                               "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
         } elseif ($couleur) {
             $key = sprintf("%s%s", $this->getOrder($key_couleur), $key_couleur);
@@ -214,20 +257,13 @@ class ExportDSPdf {
     }
 
 
-    protected function paginate($recap, $limit, $page) {
+    protected function paginate($recap, $limit, $page = null) {
         $paginate = array("pages" => array(), "total" => array());
-
-        foreach($recap as $libelle => $tableau) {
-            $paginate["total"][$libelle] = $tableau["total"];
-        }
 
         $i = 0;
         $num_page = 0;
         foreach($recap as $libelle => $tableau) {
             $num_page = floor($i / $limit);
-            if(!isset($paginate["pages"][$num_page])) {
-                $paginate["pages"][$num_page] = $page;
-            }
             $j = 0;
             foreach($tableau["produits"] as $hash => $produit) {
                 $num_page = floor($i / $limit);
@@ -235,7 +271,16 @@ class ExportDSPdf {
                     $num_page = $num_page + floor($j / $tableau["limit"]);
                 }
                 if(!isset($paginate["pages"][$num_page])) {
-                    $paginate["pages"][$num_page] = $page;
+                    if($page) {
+                        $paginate["pages"][$num_page] = $page;
+                    } else {
+                        $paginate["pages"][$num_page] = array();
+                    }
+                }
+
+                if(!isset($paginate["pages"][$num_page][$libelle])) {
+                    $paginate["pages"][$num_page][$libelle] = $tableau;
+                    $paginate["pages"][$num_page][$libelle]["produits"] = array();
                 }
 
                 $paginate["pages"][$num_page][$libelle]["produits"][$hash] = $produit;
@@ -316,7 +361,10 @@ class ExportDSPdf {
     }
 
     protected function getOrder($key) {
+        if(!isset($this->order[$key])) {
 
+            return "999";
+        }
         return sprintf("%03d", $this->order[$key]);
     }
 
