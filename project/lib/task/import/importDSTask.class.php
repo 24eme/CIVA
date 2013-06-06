@@ -129,7 +129,7 @@ EOF;
             $periode = $ds_client->buildPeriode($date);
             $ds->date_emission = $date;
             $ds->date_stock = $date;
-
+            $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID],2);
             $ds->identifiant = $ds_csv_datas[self::CSV_DS_CVI];
             try {
                 $ds->storeDeclarant();
