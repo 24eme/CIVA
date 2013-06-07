@@ -53,7 +53,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   public function hasLieuEditable() {
         return $this->getParent()->getParent()->getParent()->getParent()->hasLieuEditable();
   }
-
+  
   public function hasDenomination() {
     if ($this->exist('no_denomination')) {
       return !($this->no_denomination == 1);
