@@ -29,7 +29,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
                                                  if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
                                                     <tr>
-                                                            <td><?php echo $appellation->getLibelle(); ?></td>
+                                                            <td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
                                                             <td><?php echoFloat($appellation->getTotalStock()); ?></td>
                                                             <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
                                                             <td><?php echoFloat($appellation->getTotalVt()); ?></td>

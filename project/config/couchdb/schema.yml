@@ -518,6 +518,7 @@ Configuration:
                               rendement : { type: float }
                               rendement_appellation: { type: float }
                               mout: {type: integer}
+                              auto_ds: {type: integer, required: false}
                               no_total_cepage: {type: integer, required: false}
                               detail_lieu_editable: {type: integer, required: false}
                               exclude_total: {type: integer, required: false}

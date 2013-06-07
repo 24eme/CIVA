@@ -34,7 +34,7 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
     public function hasManyMention(){
         return ($this->filter('^mention')->count() > 1);
     }
-
+    
 
 /*
     public function getMention() {

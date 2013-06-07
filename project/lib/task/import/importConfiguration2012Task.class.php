@@ -311,6 +311,7 @@ EOF;
         $json->recolte->certification->genre->appellation_PINOTNOIRROUGE->douane->code_cepage = '1';
 
         $json->recolte->certification->genre->appellation_CREMANT->appellation = "CREMANT";
+        $json->recolte->certification->genre->appellation_CREMANT->auto_ds = 1;
         $json->recolte->certification->genre->appellation_CREMANT->libelle = "AOC Crémant d'Alsace";
         $json->recolte->certification->genre->appellation_CREMANT->rendement_appellation = 80;
         $json->recolte->certification->genre->appellation_CREMANT->douane->qualite = 'MST';
@@ -367,6 +368,7 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RS->no_dr = 1;
 
         $json->recolte->certification->genre->appellation_VINTABLE->appellation = "VINTABLE";
+        $json->recolte->certification->genre->appellation_VINTABLE->auto_ds = 1;
         $json->recolte->certification->genre->appellation_VINTABLE->exclude_total = 1;
         $json->recolte->certification->genre->appellation_VINTABLE->no_total_cepage = 1;
         $json->recolte->certification->genre->appellation_VINTABLE->libelle = "Vins sans IG";

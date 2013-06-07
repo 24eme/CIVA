@@ -19,8 +19,10 @@
         <?php endif; ?>
     </li>
     <?php endforeach; ?>
+	<li class="ajouter ajouter_appelation"><a href="#">Ajouter une<br> appellation</a></li>
     <li class="recap_stock <?php echo isset($recap) ? 'ui-tabs-selected' : '' ; ?>">
         <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", $ds); ?>" style="height: 30px;">
         <br>Récapitulatif</a>
     </li>
 </ul>
+

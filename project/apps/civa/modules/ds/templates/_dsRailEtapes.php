@@ -6,7 +6,7 @@ $many_lieux = (count($dss) > 1);
 $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
 ?>
 <!-- .header_ds -->
-<div class="header_ds clearfix">
+<div class="header_ds clearfix <?php if(($etape==3) && ($many_lieux)) echo "sous_menu"; ?>">
     <ul id="etape_declaration" class="etapes_ds clearfix">
                         <?php 
                         $passe = isEtapePasse(1, $dss, $ds_principale); 

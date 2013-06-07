@@ -51,6 +51,7 @@
  * Header DS
  ******************************************/
 .header_ds { margin: 0 0 40px; } 
+.header_ds.sous_menu { margin: 0 0 70px; } 
  
 /* Etapes */
 #etape_declaration.etapes_ds
@@ -77,7 +78,7 @@
 
 #etape_declaration.etapes_ds li.sous_menu > a
 {
-	background: url(../images/puces/fleche_sous_menu.png) 110px 10px no-repeat;
+	/*background: url(../images/puces/fleche_sous_menu.png) 110px 10px no-repeat;*/
 	z-index: 10;
 }
 
@@ -109,10 +110,17 @@
 #etape_declaration.etapes_ds li.sous_menu ul li
 {
 	float: left;
-	margin: 5px 0 5px 20px;
+	margin: 0 0 0 20px;
+	padding: 8px 5px;
+	width: auto;
 }
 
-#etape_declaration.etapes_ds li.sous_menu ul li.actif { font-weight: bold; }
+#etape_declaration.etapes_ds li.sous_menu ul li.actif
+{
+	background: #999;
+	font-weight: bold;
+}
+#etape_declaration.etapes_ds li.sous_menu ul li.actif a { color: #fff; }
 #etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
 
 ul#etape_declaration li.actif a em span.lieu 
@@ -203,11 +211,11 @@ ul#etape_declaration li.actif a em span.lieu
 	margin: -30px 0 35px;
 }
 
-
 #application_ds #gestion_stock.avec_sous_onglets
 {
 	border: 1px solid #C6C6C6;
 	border-top: 4px solid #ffbf4e;
+	margin-top: -8px;
 	padding: 55px 15px 15px 0;
 }
 
@@ -465,12 +473,12 @@ ul#etape_declaration li.actif a em span.lieu
  ******************************************/
 #application_ds .page_recap
 {
-	margin: 0 0 40px;
+	/*margin: 0 0 40px;*/
 }
 
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
-#application_ds #recap_appellations { margin: 0 0 45px; }
+#application_ds #recap_autres { margin: 45px 0 0; }
 #application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
 
 /* Tableau */

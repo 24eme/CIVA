@@ -187,5 +187,13 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
         return !$this->exist('no_ds') || !$this->get('no_ds');
     }
+    
+    public function isAutoDs() {
+        if ($this->exist('auto_ds')) {
+            return $this->get('auto_ds');
+        }
+        
+        return $this->getParentNode()->isAutoDs();
+    }
 
 }
