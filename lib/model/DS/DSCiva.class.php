@@ -51,6 +51,12 @@ class DSCiva extends DS {
         if($noeud instanceof DSCepage && !$config->getParent()->hasManyNoeuds() && !$config->hasLieuEditable()) {
             $this->addDetail($hash);
         }
+        
+        if($config->isAutoDs()) {
+            foreach($config->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS) as $item) {
+                $this->addDetail($item->getHash());
+            }
+        }
 
         if(!$config->hasManyNoeuds() && count($config->getChildrenNode()) > 0) {
             $this->addNoeud($config->getChildrenNode()->getFirst()->getHash());
@@ -99,12 +105,9 @@ class DSCiva extends DS {
 
     public function addDetail($hash, $lieudit = null) {
         $produit = $this->addProduit($hash);
-
         if(!$produit) {
-
             return;
         }
-
         return $produit->addDetail($lieudit);
     }
 
