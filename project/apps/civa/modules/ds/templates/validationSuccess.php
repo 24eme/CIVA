@@ -15,7 +15,9 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 		</a>
 	</li>
 	<li class="previsualiser">
+            <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
 		<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser">
+            </a>
 		<a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
     </li>
 </ul>
