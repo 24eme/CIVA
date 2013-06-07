@@ -22,7 +22,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetHeaderData("civa.jpg", PDF_HEADER_LOGO_WIDTH, $this->title, $this->subtitle);
 
         // set header and footer fonts
-        $this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',  $this->font_size));
         $this->pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
         // set default monospaced font

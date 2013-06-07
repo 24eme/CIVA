@@ -35,7 +35,7 @@ function getDefaultTotal($type,$appellation,$current_lieu){
 
 function getTitleLieuStockageStock($ds){
     $lieu_num = $ds->getLieuStockage();
-    return 'Lieu de stockage n°'.intval($lieu_num).' : '.$ds->declarant->cvi.$lieu_num.' - '.$ds->getEtablissement()->getNom().', '.$ds->getEtablissement()->getAdresse();
+    return 'Lieu de stockage : '.$ds->declarant->cvi.$lieu_num.' - '.$ds->getEtablissement()->getNom().', '.$ds->getEtablissement()->getAdresse(). ", ".$ds->getEtablissement()->getCodePostal()." ".$ds->getEtablissement()->getCommune();
 }
 
 function isEtapePasse($etape,$dss,$ds){

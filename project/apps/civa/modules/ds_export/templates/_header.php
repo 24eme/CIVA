@@ -1,19 +1,4 @@
-<span style="background-color: grey; color: white; font-weight: bold;">Exploitation</span><br/>
-<table style="border: 1px solid grey;"><tr><td>
-<table border="0">
-  <tr><td>&nbsp;N° CVI : <i>7523700100</i></td><td>Nom : <i>GAEC ACTUALYS JEAN</i></td></tr>
-  <tr><td>&nbsp;SIRET : <i>34093842600019</i></td><td>Adresse : <i>15 RUE DES TROIS EPIS</i></td></tr>
-  <tr><td>&nbsp;Tel. : <i></i></td><td>Commune : <i>75230 PARIS</i></td></tr>
-  <tr><td>&nbsp;Fax : <i></i></td><td>&nbsp;</td></tr>
-</table>
-</td></tr></table>
-
-<span style="background-color: grey; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
-<table style="border: 1px solid grey; margin: 0;"><tr><td>
-<table border="0">
-  <tr><td>&nbsp;Nom et prénom : <i>ACTUALYS JEAN</i></td><td>Né(e) le <i>30/11/1933</i></td></tr>
-  <tr><td>&nbsp;Adresse complete : <i>15 RUE DES TROIS EPIS, 75230 PARIS</i></td><td>Tel. <i></i></td></tr>
-</table>
-</td></tr></table>
-<span style="background-color: grey; color: white; font-weight: bold;">Lieu de stockage</span><table style="text-align:left; width: 300px;" border="0" cellspacing=0 cellpadding=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;☒ Principal&nbsp;&nbsp;☐ Secondaire</td></tr></table>
-<small><br /></small>
+<?php use_helper('ds') ?>
+<?php $ds->declarant->nom ?>
+Commune de déclaration : <?php echo $ds->declarant->nom ?>
+<?php echo getTitleLieuStockageStock($ds) ?>

@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
-<?php include_partial("ds_export/header") ?>
+<?php include_partial("ds_export/exploitation") ?>
 
 <?php foreach($recap as $libelle => $tableau): ?>
   <span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle ?></span><br />
@@ -27,11 +27,11 @@
 </table>
 
 <?php $autres = array("Moûts concentrés rectifiés" => $ds->mouts, 
-                      "Vins de table - Vins sans IG" => $ds->getTotalVinSansIg(), 
-                      "Vins de table mousseux" => $ds->getTotalMousseuxSansIg(), 
+                      "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(), 
+                      "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(), 
                       "Rebêches" => $ds->rebeches, 
-                      "Dépassement de PLC" => $ds->dplc, 
-                      "Lie en stocks" => $ds->lies); ?>
+                      "Dépassements de rendement" => $ds->dplc, 
+                      "Lies en stocks" => $ds->lies); ?>
 
 <small><br /></small>
 <span style="background-color: black; color: white; font-weight: bold;">Autres Produits</span><br />

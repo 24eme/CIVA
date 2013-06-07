@@ -40,8 +40,12 @@ class ExportDSPdf {
     }
 
     protected function init($ds, $filename = null) {
-        $title = 'Déclaration de stock '.$ds->campagne;
-        $header = $ds->declarant->nom."\nCommune de déclaration : ".$ds->declarant->commune."\n"."Lieu de stockage : Principal";
+        $validee = 'Non Validée';
+        $validee = 'Déclaration validée le 13/01/2013';
+        $validee .= ' et modifiée le 13/01/2013';
+        sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
+        $title = 'Déclaration de stock au 31 Juillet 2013';
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s\n%s", $ds->declarant->nom, $ds->declarant->commune, getTitleLieuStockageStock($ds), $validee);
         if (!$filename) {
             $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
         }
@@ -55,19 +59,19 @@ class ExportDSPdf {
 
     protected function create($ds) {
         $this->buildOrder($ds);
-        $alsace_blanc = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
+        $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE",  "LIEUDIT");
 
         $recap = array("AOC Alsace Blanc" => array("colonnes" => array("cepage" => "Cepages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                    "produits" => array(), 
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
-                       "AOC Alsace Grand Cru" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), 
+                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), 
                                                        "produits" => array(), 
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                        "limit" => 13,
                                                        "nb_ligne" => 13),
-                       "Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
+                       "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                    "produits" => array(), 
                                                    "limit" => -1,
@@ -76,7 +80,7 @@ class ExportDSPdf {
         foreach($alsace_blanc as $appellation_key) {
             $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
         }
-        $this->preBuildRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
+        $this->preBuildRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
         $page = $recap;
 
         foreach($alsace_blanc as $appellation_key) {
@@ -84,8 +88,8 @@ class ExportDSPdf {
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
         }
        
-        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true);
-        $this->getRecap($ds, "CREMANT", $recap["Crémant d'Alsace"]);
+        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
+        $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
         $paginate = $this->paginate($recap, 29, $page);
         $this->rowspanPaginate($paginate);
