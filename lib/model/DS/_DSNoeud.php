@@ -118,4 +118,20 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         }
         $this->total_stock += $volume - $old_volume;
     }
+
+    public function updateTotalVolumes() {
+        $this->total_normal = 0;
+        $this->total_vt = 0;
+        $this->total_sgn = 0;
+        foreach($this->getChildrenNode() as $item) {
+            $this->total_normal += $item->total_normal;
+            $this->total_vt += $item->total_vt;
+            $this->total_sgn += $item->total_sgn;
+        }
+    }
+
+    public function update($params = array()) {
+        parent::update();
+        $this->updateTotalVolumes();
+    }
 }
