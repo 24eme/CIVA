@@ -188,20 +188,20 @@ class ExportDSPdf {
 
         if($lieu) {
             $key = sprintf("%s%s/%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $this->getOrder($key_lieu), $key_lieu, $lieu);
-            $libelle = $produit_config->getLieu()->getLibelle();
+            $libelle = $produit_config->getLieu()->getLibelleLong();
             if($produit_config->getAppellation()->hasLieuEditable()) {
                 $key = sprintf("%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $lieu);
                 $libelle = $lieu;
             }
             $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $libelle), 
-                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
+                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
         } elseif ($couleur) {
             $key = sprintf("%s%s", $this->getOrder($key_couleur), $key_couleur);
             $colonnes = array("couleur" => array("rowspan" => 1, "libelle" => $key_couleur));
         }
         else {
             $key = sprintf("%s%s", $this->getOrder($key_cepage), $key_cepage);
-            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
+            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
         }
 
         if(isset($recap["produits"][$key])) {

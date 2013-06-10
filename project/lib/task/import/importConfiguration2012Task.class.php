@@ -168,6 +168,7 @@ EOF;
         $appellation->mention->lieuKLEV->couleurBlanc->rendement_couleur = $rendement_couleur_blanc_communale;
         $appellation->mention->lieuKLEV->couleurBlanc->libelle = "Blanc";
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->libelle = "Klevener";
+        $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->libelle_long = "Klevener de Heiligenstein";
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->douane->code_cepage = $cepage_douane[7]['KL'];
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->douane->qualite = 'S ';
         $appellation->mention->lieuKLEV->couleurBlanc->cepage_KL->no_vtsgn = 1;
@@ -250,6 +251,9 @@ EOF;
                 if (preg_match('/^L/', $g[2]))
                     continue;
                 $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->libelle = $this->convertCepage2Libelle($g[2]);
+                if($this->convertCepage2LibelleLong($g[2])) {
+                    $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->libelle_long = $this->convertCepage2LibelleLong($g[2]);
+                }
                 $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->douane->code_cepage = $cepage_douane[3][$g[2]];
                 $grdcru_from_file->{'lieu' . $g[1]}->couleur->{'cepage_' . $g[2]}->douane->qualite = 'S ';
                 if ($g[2] == 'MO') {
@@ -273,6 +277,9 @@ EOF;
                 $cepage = 'cepage_'.$cepage_key;
                 if (isset($lieu->couleur->{$cepage})) {
                     $grdcru->mention->{$lieu_key}->couleur->{$cepage}->libelle = $lieu->couleur->{$cepage}->libelle;
+                    if(isset($lieu->couleur->{$cepage}->libelle_long)) {
+                        $grdcru->mention->{$lieu_key}->couleur->{$cepage}->libelle_long = $lieu->couleur->{$cepage}->libelle_long;
+                    }
                     $grdcru->mention->{$lieu_key}->couleur->{$cepage}->douane->code_cepage = $lieu->couleur->{$cepage}->douane->code_cepage;
                     $grdcru->mention->{$lieu_key}->couleur->{$cepage}->douane->qualite =  $lieu->couleur->{$cepage}->douane->qualite;
                     if (isset($grdcru->mention->{$lieu_key}->couleur->{$cepage}->rendement)) {
@@ -463,6 +470,18 @@ EOF;
         }
     }
 
+    private function convertCepage2LibelleLong($c)
+    {
+        switch ($c) {
+            case 'GW':
+
+                return 'Gewurztraminer';
+            default:
+                
+                return null;
+        }
+    }
+
     public function getCepage($code, $code_depage = null, $qualite = null, $rendement = null)
     {
 
@@ -516,14 +535,17 @@ EOF;
         $cepages->cepage_MO->douane->code_cepage = $code_depage;
 
         $cepages->cepage_GW->libelle = "Gewurzt.";
+        $cepages->cepage_GW->libelle_long = "Gewurztraminer";
         $cepages->cepage_GW->rendement = 80;
         $cepages->cepage_GW->douane->code_cepage = $code_depage;
 
-        $cepages->cepage_PN->libelle = "Pinot noir";
+        $cepages->cepage_PN->libelle = "Pinot Noir";
+        $cepages->cepage_PN->libelle_long = "Pinot Noir Rosé";
         $cepages->cepage_PN->no_vtsgn = 1;
         $cepages->cepage_PN->douane->code_cepage = $code_depage;
 
-        $cepages->cepage_PR->libelle = "Pinot noir";
+        $cepages->cepage_PR->libelle = "Pinot Noir";
+        $cepages->cepage_PR->libelle_long = "Pinot Noir Rouge";
         $cepages->cepage_PR->no_vtsgn = 1;
         $cepages->cepage_PR->douane->code_cepage = $code_depage;
 

@@ -487,6 +487,7 @@ Configuration:
                 fields:
                   rendement: { type: float }
                   libelle: { }
+                  libelle_long: { required: false }
                   douane:
                     type: collection
                     class: ConfigurationDouane
@@ -501,6 +502,7 @@ Configuration:
                       fields:
                         rendement: { type: float }
                         libelle: { }
+                        libelle_long: { required: false }
                         douane:
                           type: collection
                           class: ConfigurationDouane
@@ -515,6 +517,7 @@ Configuration:
                             fields:
                               appellation: { }
                               libelle: {  }
+                              libelle_long: { required: false }
                               rendement : { type: float }
                               rendement_appellation: { type: float }
                               mout: {type: integer}
@@ -543,6 +546,7 @@ Configuration:
                                 definition:
                                   fields:
                                     libelle: {  }
+                                    libelle_long: { required: false }
                                     rendement: { type: float  }
                                     rendement_mention: { type: float  }
                                     douane :
@@ -561,6 +565,7 @@ Configuration:
                                           rendement_mention: { type: float  }
                                           rendement_appellation: { type: float }
                                           libelle: { }
+                                          libelle_long: { required: false }
                                           douane :
                                             type: collection
                                             class: ConfigurationDouane
@@ -582,6 +587,7 @@ Configuration:
                                                 rendement_couleur: { type: float }
                                                 rendement: { type: float }
                                                 libelle: { }
+                                                libelle_long: { required: false }
                                                 douane :
                                                   type: collection
                                                   class: ConfigurationDouane
@@ -612,6 +618,7 @@ Configuration:
                                                             qualite: {required: false}
                                                             code_cepage: {required: false}
                                                       libelle: {  }
+                                                      libelle_long: { required: false }
                                                       rendement: { type: float }
                                                       min_quantite: {type: float, required: false}
                                                       max_quantite: {type: float, required: false}
