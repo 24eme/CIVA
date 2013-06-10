@@ -90,6 +90,7 @@ DS:
                           definition:
                             fields:
                               libelle: {  }
+                              libelle_long: { required: false }
                               total_stock: {type: float}
                               total_vt: {type:float}
                               total_sgn: {type:float}
@@ -102,6 +103,7 @@ DS:
                                 definition:
                                   fields:
                                     libelle: {  }
+                                    libelle_long: { required: false }
                                     total_stock: {type: float }
                                     total_vt: {type:float}
                                     total_sgn: {type:float}
@@ -114,6 +116,7 @@ DS:
                                       definition:
                                         fields:
                                           libelle: { }
+                                          libelle_long: { required: false }
                                           total_stock: {type: float}
                                           total_vt: {type:float}
                                           total_sgn: {type:float}
@@ -126,6 +129,7 @@ DS:
                                             definition:
                                               fields:
                                                 libelle: {  }
+                                                libelle_long: { required: false }
                                                 total_stock: {type:float}
                                                 total_vt: {type:float}
                                                 total_sgn: {type:float}
@@ -138,6 +142,7 @@ DS:
                                                   definition:
                                                     fields:
                                                       libelle: {  }
+                                                      libelle_long: { required: false }
                                                       no_vtsgn: {  }
                                                       detail:                                                        
                                                         type: array_collection
