@@ -19,6 +19,7 @@ class ds_exportActions extends sfActions
   {
     set_time_limit(180);
     $ds = $this->getRoute()->getDS();
+    $ds->update();
 
     $this->setLayout(false);
 
