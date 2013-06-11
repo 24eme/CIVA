@@ -512,3 +512,23 @@ ul#etape_declaration li.actif a em span.lieu
 #application_ds .page_recap .ligne_total h3 { width: 188px; }
 #application_ds .page_recap .ligne_total input { width: 90px; margin-right: 5px;}
 #application_ds .page_recap .ligne_total + table { margin-top: 40px; }
+
+#points_bloquants .error, #points_bloquants .warning, #points_vigilance .error, #points_vigilance .warning {
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  margin:10px 0;
+  padding:3px;
+}
+#points_bloquants p, #points_vigilance p { font-weight:bold; }
+#points_bloquants .error {
+  background:#f1b2b3;
+  color:#8a0c0c;
+}
+#points_vigilance .warning {
+  background:#ffd58c;
+  color:#a03b09;
+}

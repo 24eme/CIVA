@@ -361,8 +361,14 @@ class dsActions extends sfActions {
     public function executeValidation(sfWebRequest $request)
     {
         $this->ds_principale = $this->getRoute()->getDS();
-        $this->tiers = $this->getRoute()->getTiers();
+        $this->tiers = $this->getRoute()->getTiers();        
         $this->ds_client = DSCivaClient::getInstance();
+        $this->validation = new DSValidationCiva($this->ds_principale);        
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->ds_principale->validate();
+            $this->ds_principale->save();
+            $this->redirect('ds_visualisation', $this->ds_principale);
+        }
     }
     
     public function executeVisualisation(sfWebRequest $request)

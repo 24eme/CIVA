@@ -1,5 +1,6 @@
 <?php 
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 5)); 
+include_partial('document_validation/validation', array('validation' => $validation));
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
 ?> 
 
