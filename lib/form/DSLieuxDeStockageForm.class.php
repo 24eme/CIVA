@@ -34,6 +34,10 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
               $this->setWidget('lieuxStockage_'.$id_lieu, new sfWidgetFormChoice(array('choices' => $this->getAppelations(),'expanded' => true, 'multiple' => true)));
               $this->setValidator('lieuxStockage_'.$id_lieu, new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getAppelations()), 'multiple' => true)));
         }
+        $this->setWidget('neant', new sfWidgetFormChoice(array('choices' => $this->getNeant(),'expanded' => true, 'multiple' => true)));
+        $this->setValidator('neant', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getNeant()), 'multiple' => true)));
+      
+        $this->widgetSchema->setLabel('neant', 'DS à néant');
         $this->widgetSchema->setNameFormat('ds_lieu[%s]');
     }
 
@@ -71,6 +75,22 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
             }   
         }
+        $is_neant = $values['neant'] && $values['neant'][0] == 1;
+        foreach ($dss as $ds) {
+            if($is_neant){
+                if(!$ds->hasNoAppellation()){
+                    throw new sfException("La DS $ds->_id possède des appellations, il n'est pas possible de rendre cette DS à néant.");
+                }
+                if($ds->isDsPrincipale()){
+                   $ds->add('ds_neant',1);
+                }
+            }
+            else{
+                if($ds->isDsPrincipale()){
+                    $ds->add('ds_neant',0);
+                }
+            }
+        }
         return $dss;
     }
     
@@ -81,6 +101,10 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
             $result[preg_replace('/^\/recolte/','declaration',$conf->getHash())] = $conf->getLibelle();
         }
         return $result;
+    }
+    
+    public function getNeant() {
+        return array(1 => 1);
     }
 
 }

@@ -22,6 +22,7 @@
  * @property float $lies
  * @property float $mouts
  * @property string $num_etape
+ * @property string $ds_neant
  * @property acCouchdbJson $declarant
  * @property DSDeclaration $declaration
 
@@ -61,6 +62,8 @@
  * @method float setMouts()
  * @method string getNumEtape()
  * @method string setNumEtape()
+ * @method string getDsNeant()
+ * @method string setDsNeant()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
  * @method DSDeclaration getDeclaration()

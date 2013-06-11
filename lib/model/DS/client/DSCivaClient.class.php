@@ -122,7 +122,7 @@ class DSCivaClient extends DSClient {
             $num_lieu = sprintf("%03d",$cpt);
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
             if(!$ds) throw new sfException(sprintf('La Ds du recoltant de cvi %s pour la periode %s et le lieu de stockage %s n\'existe pas',
-                                           $tiers->cvi, $periode, $lieux_stockage->nom));
+                                           $tiers->cvi, $periode, $num_lieu));
             $dss[] = $ds;
             $cpt++;
         }	
