@@ -27,6 +27,15 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
       return $children;
     }
 
+    public function getLibelleLong() {
+      if($this->exist('libelle_long') && $this->_get('libelle_long')) {
+
+        return $this->_get('libelle_long');
+      }
+
+      return $this->getLibelle();
+    }
+
     protected function loadAllData() {
         parent::loadAllData();
         $this->getProduits();

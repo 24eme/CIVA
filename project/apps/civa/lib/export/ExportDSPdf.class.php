@@ -41,11 +41,11 @@ class ExportDSPdf {
 
     protected function init($ds, $filename = null) {
         $validee = 'Non Validée';
-        $validee = 'Déclaration validée le 13/01/2013';
-        $validee .= ' et modifiée le 13/01/2013';
+        $validee = 'Déclaration validée le 31/07/2013';
+        $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de stock au 31 Juillet 2013';
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s\n%s", $ds->declarant->nom, $ds->declarant->commune, getTitleLieuStockageStock($ds), $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, getTitleLieuStockageStock($ds), $validee);
         if (!$filename) {
             $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
         }
@@ -59,7 +59,7 @@ class ExportDSPdf {
 
     protected function create($ds) {
         $this->buildOrder($ds);
-        $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE",  "LIEUDIT");
+        $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
         $recap = array("AOC Alsace Blanc" => array("colonnes" => array("cepage" => "Cepages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
@@ -67,24 +67,25 @@ class ExportDSPdf {
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
                        "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), 
-                                                       "produits" => array(), 
-                                                       "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                       "limit" => 13,
-                                                       "nb_ligne" => 13),
+                                                        "produits" => array(), 
+                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                        "limit" => 13,
+                                                        "nb_ligne" => 13),
                        "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
-                                                   "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                   "produits" => array(), 
-                                                   "limit" => -1,
-                                                   "nb_ligne" => -1));
+                                                       "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                       "produits" => array(), 
+                                                       "no_header" => true,
+                                                       "limit" => -1,
+                                                       "nb_ligne" => -1));
 
         foreach($alsace_blanc as $appellation_key) {
             $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
         }
+
         $this->preBuildRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
         $page = $recap;
 
         foreach($alsace_blanc as $appellation_key) {
-            $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
         }
        
@@ -131,7 +132,7 @@ class ExportDSPdf {
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 33);
+        $paginate = $this->paginate($recap, 31);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -188,20 +189,20 @@ class ExportDSPdf {
 
         if($lieu) {
             $key = sprintf("%s%s/%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $this->getOrder($key_lieu), $key_lieu, $lieu);
-            $libelle = $produit_config->getLieu()->getLibelle();
+            $libelle = $produit_config->getLieu()->getLibelleLong();
             if($produit_config->getAppellation()->hasLieuEditable()) {
                 $key = sprintf("%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $lieu);
                 $libelle = $lieu;
             }
             $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $libelle), 
-                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
+                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
         } elseif ($couleur) {
             $key = sprintf("%s%s", $this->getOrder($key_couleur), $key_couleur);
             $colonnes = array("couleur" => array("rowspan" => 1, "libelle" => $key_couleur));
         }
         else {
             $key = sprintf("%s%s", $this->getOrder($key_cepage), $key_cepage);
-            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
+            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
         }
 
         if(isset($recap["produits"][$key])) {
@@ -224,6 +225,8 @@ class ExportDSPdf {
         foreach($produits as $produit) {
             $key = $this->addProduit($recap, $produit, $lieu, $couleur);
         }
+
+        ksort($recap['produits']);
     }
 
     protected function buildOrder($ds) {
@@ -251,9 +254,18 @@ class ExportDSPdf {
 
                 continue;
             }
+
+            if(in_array($cepage->getKey(), array('cepage_PN', 'cepage_PR'))) {
+            
+                continue;
+            }
+
             $this->order["cepage:".$cepage->getKey()] = $i;
             $i++; 
         }
+
+        $this->order["cepage:cepage_PN"] = $i;
+        $this->order["cepage:cepage_PR"] = $i + 1;
 
         $this->order['couleur:blanc'] = 1;
         $this->order['couleur:rose'] = 2;
