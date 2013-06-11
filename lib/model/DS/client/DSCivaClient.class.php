@@ -113,7 +113,7 @@ class DSCivaClient extends DSClient {
     }
 
 
-    public function findDssByCvi($tiers, $date_stock) {
+    public function findDssByCvi($tiers, $date_stock, $force_to_get_all_dss = true) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
         $dss = array();
@@ -121,8 +121,14 @@ class DSCivaClient extends DSClient {
             
             $num_lieu = sprintf("%03d",$cpt);
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
-            if(!$ds) throw new sfException(sprintf('La Ds du recoltant de cvi %s pour la periode %s et le lieu de stockage %s n\'existe pas',
-                                           $tiers->cvi, $periode, $num_lieu));
+            if(!$ds){
+                if($force_to_get_all_dss)
+                    throw new sfException(sprintf('La Ds du recoltant de cvi %s pour la periode %s et le lieu de stockage %s n\'existe pas',
+                                               $tiers->cvi, $periode, $num_lieu));
+                else{
+                    continue;
+                }
+            }
             $dss[] = $ds;
             $cpt++;
         }	
@@ -182,7 +188,7 @@ class DSCivaClient extends DSClient {
     }
 
     public function getDSPrincipale($tiers, $date_stock){
-        $dss = $this->findDssByCvi($tiers, $date_stock);
+        $dss = $this->findDssByCvi($tiers, $date_stock,false);
         return $dss[0];
     }
     

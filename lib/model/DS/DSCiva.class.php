@@ -286,7 +286,7 @@ class DSCiva extends DS {
          if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
                 $this->add('num_etape', $etape_rail);
                 $this->save();
-                return $ds;
+                return $this;
          }
          if(!$this->isDsPrincipale() && $etape_rail == 3){
                 $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
