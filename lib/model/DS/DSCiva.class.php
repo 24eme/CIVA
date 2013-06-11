@@ -328,6 +328,5 @@ class DSCiva extends DS {
         }
         return $this->exist('ds_neant') && $this->ds_neant;
     }
-    
 }
 
