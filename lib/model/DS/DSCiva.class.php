@@ -296,7 +296,7 @@ class DSCiva extends DS {
          if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
                 $this->add('num_etape', $etape_rail);
                 $this->save();
-                return $ds;
+                return $this;
          }
          if(!$this->isDsPrincipale() && $etape_rail == 3){
                 $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
@@ -327,10 +327,16 @@ class DSCiva extends DS {
     }
     
     public function hasNoAppellation() {      
-        if(!$this->exist('declaration')) return 0;
-        if(!$this->declaration->exist('certification')) return 0;
-        return  (count($this->declaration->getAppellationsSorted()) == 0);
+        if(!$this->exist('declaration')) return true;
+        if(!$this->declaration->exist('certification')) return true;
+        return (count($this->declaration->getAppellationsSorted()) == 0);
     }
     
+    public function isDsNeant() {
+        if(!$this->isDsPrincipale()){
+            throw new sfException("La DS a néant est obligatoirement la ds principale.");
+        }
+        return $this->exist('ds_neant') && $this->ds_neant;
+    }
 }
 
