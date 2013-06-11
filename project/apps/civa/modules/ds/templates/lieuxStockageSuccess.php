@@ -13,6 +13,13 @@ $dss = $dss->getRawValue();
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
+    <?php 
+    echo $form['neant']->renderLabel();
+    ?>
+    <input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>"
+           id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>"
+               <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "disabled='disabled'" : ''; ?> >
+					
 	
 	<div id="lieux_stockage">
 		<table class="table_donnees">
@@ -47,12 +54,12 @@ $dss = $dss->getRawValue();
 							$paire = ($cpt%2==0)? 'paire' : '';
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
                                                         $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
-                                                        $readonly = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume())? 'readonly="readonly"' : '';
+                                                        $disabled = ($ds->isDsNeant() || ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume()))? 'disabled="disabled"' : '';
 						?>
 					
 					<td class="<?php echo $paire ?>">
 					
-					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> <?php echo $readonly; ?> >
+					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> <?php echo $disabled; ?> >
 					</td>
 				   <?php $cpt++;
 				   endforeach; ?>				

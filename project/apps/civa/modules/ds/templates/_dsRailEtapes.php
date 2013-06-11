@@ -4,6 +4,8 @@ $dss = DSCivaClient::getInstance()->findDssByDS($ds);
 $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
 $many_lieux = (count($dss) > 1);
 $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
+$ds_noAppellation = $ds_principale->hasNoAppellation();
+$ds_neant = $ds_principale->isDsNeant();
 ?>
 <!-- .header_ds -->
 <div class="header_ds clearfix <?php if(($etape==3) && ($many_lieux)) echo "sous_menu"; ?>">
@@ -32,9 +34,9 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
 			</li>
                         <?php 
                         $passe = isEtapePasse(3, $dss, $ds_principale);
-                        $to_linked = $passe || ($etape>=3); 
+                        $to_linked = (!$ds_noAppellation && !$ds_neant) && ($passe || ($etape>=3)); 
                         ?>
-			<li class="<?php echo ($etape==3)? 'actif ' : ''; echo ($passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
+			<li class="<?php echo ((!$ds_noAppellation && !$ds_neant) && $etape==3)? 'actif ' : ''; echo ((!$ds_noAppellation && !$ds_neant) && $passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
                             <?php if($to_linked) : ?> 
                                 <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id));?>">
                             <?php endif; ?> 
@@ -56,9 +58,9 @@ $progression = progressionEdition($dss,$ds,$ds_principale->num_etape);
 			</li>
                         <?php 
                         $passe = isEtapePasse(4, $dss, $ds_principale); 
-                        $to_linked = $passe || ($etape>=4); 
+                        $to_linked = (!$ds_neant) && ($passe || ($etape>=4)); 
                         ?>                        
-			<li class="<?php echo ($etape==4)? 'actif ' : ''; echo ($passe && $etape!=4)? 'passe' : ''; ?>" >
+			<li class="<?php echo ((!$ds_neant) && $etape==4)? 'actif ' : ''; echo ((!$ds_neant) && $passe && $etape!=4)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
                             <a class="ajax" href="<?php echo url_for('ds_autre', $ds_principale);?>">
                         <?php endif; ?>         

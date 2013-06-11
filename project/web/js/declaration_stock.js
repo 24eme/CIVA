@@ -15,9 +15,51 @@ $(document).ready(function()
 {	
 	//navOngletsStock();
 	initDSSommesCol();
+        initLieuxStockage();
         var ajaxForm = $('form');
         ajaxForm.ajaxPostForm();
 });
+
+
+var initLieuxStockage = function()
+{
+    var checkboxes = $(".table_donnees input");
+    checkboxes.each(function(){
+        $(this).click(function(){
+            majLieuNeant();
+            });
+    });
+    $("#ds_lieu_neant").change(function(){
+        majCheckboxesAppellation();
+    });
+}
+
+var majCheckboxesAppellation = function(){
+    if($("#ds_lieu_neant").is(":checked")){
+        $(".table_donnees input").each(function(){
+            $(this).attr("disabled","disabled");
+        });
+    }else{
+       $(".table_donnees input").each(function(){
+            $(this).removeAttr("disabled");
+        }); 
+    }
+}
+
+var majLieuNeant = function(){
+    var one_checked = false;
+    $(".table_donnees input").each(function(){
+        if($(this).is(":checked")){
+            one_checked = true;
+        }
+    });
+    if(one_checked)
+        $("#ds_lieu_neant").attr("disabled","disabled");
+    else
+        $("#ds_lieu_neant").removeAttr("disabled");
+            
+}
+
 
 /**
  * Calcul des sommes des colonnes de stocks
