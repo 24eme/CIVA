@@ -124,29 +124,66 @@ class dsActions extends sfActions {
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSLieuxDeStockageForm($this->ds);   
-        
+        $ds_neant = false;
+        $ds_no_stock = false;
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if($this->form->isValid()) {
                $this->dss = $this->form->doUpdateDss($this->dss);
+               $this->dss_to_save = array();
                 foreach ($this->dss as $current_ds) {
                     if($current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
-                        throw new sfException("La DS principale $current_ds->_id doit obligatoirement posséder au moins une appellation.");
+                        if($this->hasOneAppellationInDSS($this->dss)){
+                            throw new sfException("Il n'est pas possible d'enregistrer un DS principale sans appellation");
+                        }
+                        if($current_ds->isDsNeant()){
+                            $ds_neant = true;                            
+                        }else{
+                            $ds_no_stock = true;
+                        }
                     }
                     if(!$current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
-                        DSCivaClient::getInstance()->delete($current_ds);
+                        if(DSCivaClient::getInstance()->find($current_ds->_id)){  
+                            DSCivaClient::getInstance()->delete($current_ds);
+                        }
                     }else{
-                        $current_ds->save();
+                        $this->dss_to_save[$current_ds->_id] = $current_ds;
+                        }
                     }
-                }   
+                    $ds_principale = null;
+                    foreach ($this->dss_to_save as $ds_to_save) {
+                        if($ds_to_save->isDsPrincipale()){
+                            $ds_to_save->updateEtape(3); 
+                            $ds_principale = $ds_to_save;
+                            if($ds_neant){
+                                $ds_to_save->updateEtape(5);
+                            }
+                            if($ds_no_stock){
+                                $ds_to_save->updateEtape(4);
+                            }
+                        }
+                        $ds_to_save->save();
+                    }
+                if($ds_neant){
+                    $this->redirect('ds_validation', $ds_principale); 
+                }
+                if($ds_no_stock){
+                    $this->redirect('ds_autre', $ds_principale); 
+                }
                 if($request->isXmlHttpRequest())
                 {         
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
-                $this->ds->updateEtape(3);
                 $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id));
             }
         }
+    }
+    
+    private function hasOneAppellationInDSS($dss){
+        foreach ($dss as $ds) {
+            if(!$ds->hasNoAppellation()) return true;
+        }
+        return false;
     }
     
     public function executeMonEspace(sfWebRequest $request) {    
@@ -175,6 +212,9 @@ class dsActions extends sfActions {
     public function executeStock(sfWebRequest $request) {    
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
+        if($this->ds->hasNoAppellation()){
+            $this->redirect("ds_lieux_stockage", $this->ds);
+        }
         if(!$this->getRoute()->getNoeud()) {
 
             return $this->redirect('ds_edition_operateur', $this->ds->getFirstAppellation());
@@ -299,6 +339,9 @@ class dsActions extends sfActions {
     public function executeAutre(sfWebRequest $request)
     {
         $this->ds = $this->getRoute()->getDS();
+        if($this->ds->isDsNeant()){
+            $this->redirect("ds_lieux_stockage", $this->ds);
+        }
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSEditionCivaAutreForm($this->ds);
         if ($request->isMethod(sfWebRequest::POST)) {

@@ -5,7 +5,7 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="#">
+		<a href="<?php echo url_for('ds_autre',$ds_principale); ?>">
 			<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
