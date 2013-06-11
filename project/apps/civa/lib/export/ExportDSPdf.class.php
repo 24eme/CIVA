@@ -8,6 +8,8 @@ class ExportDSPdf {
     protected $file_dir;
     protected $no_cache;
     protected $cvi;
+    protected $autres;
+    protected $agrega_total;
 
     public function __construct($ds, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
@@ -54,23 +56,29 @@ class ExportDSPdf {
             $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
         }
 
+        $config = array('PDF_MARGIN_TOP' => 21,
+                        'PDF_FONT_SIZE_MAIN' => 8,
+                        'PDF_HEADER_LOGO_WIDTH' => 20);
+
         if ($this->type == 'html') {
-          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', 8);
+          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }else {
-          $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', 8);
+          $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }
     }
 
     protected function create() {
         $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+        $i = 1;        
         foreach($dss as $ds) {
             $ds->storeStockage();
-            $this->createMainByDS($ds);
+            $this->createMainByDS($ds, $ds->isDSPrincipale(), !$ds->isDSPrincipale() && count($dss) == $i);
             $this->createAnnexeByDS($ds);
+            $i++;
         }
     }
 
-    protected function createMainByDS($ds) {
+    protected function createMainByDS($ds, $autres = true, $agrega_total = false) {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
@@ -109,11 +117,21 @@ class ExportDSPdf {
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
 
+        if($agrega_total) {
+            $agrega_total = $this->getAgregaTotal();
+        }
+
+        if($autres) {
+            $autres = $this->getAutres();
+        }
+
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 
-                                                                                 'recap' => $page, 
-                                                                                 'total' => $is_last)));
+                                                                                 'recap' => $page,
+                                                                                 'autres' => $autres,
+                                                                                 'agrega_total' => $agrega_total,
+                                                                                 'is_last_page' => $is_last)));
         }
     }
 
@@ -154,6 +172,27 @@ class ExportDSPdf {
             $this->document->addPage($this->getPartial('ds_export/annexe', array('ds' => $ds, 
                                                                                  'recap' => $page)));
         }
+    }
+
+    protected function getAutres() {
+        if(is_null($this->autres)) {
+            $this->autres = array("Moûts concentrés rectifiés" => $this->ds->mouts, 
+                      "Vins sans IG (Vins de table)" => $this->ds->getTotalVinSansIg(), 
+                      "Vins sans IG mousseux" => $this->ds->getTotalMousseuxSansIg(), 
+                      "Rebêches" => $this->ds->rebeches, 
+                      "Dépassements de rendement" => $this->ds->dplc, 
+                      "Lies en stocks" => $this->ds->lies);
+        }
+
+        return $this->autres;
+    }
+
+    protected function getAgregaTotal() {
+        if(is_null($this->agrega_total)) {
+            $this->agrega_total = DSCivaClient::getInstance()->getTotauxByAppellationsRecap($this->ds);
+        }
+
+        return $this->agrega_total;
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
