@@ -90,6 +90,14 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $this->_get('libelle');
     }
+
+    public function getLibelleLong() {
+        if(is_null($this->_get('libelle_long'))) {
+            $this->_set('libelle_long', $this->getConfig()->getLibelleLong());
+        }
+
+        return $this->_get('libelle_long');
+    }
     
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         switch ($vtsgn) {
@@ -109,5 +117,21 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
                 break;
         }
         $this->total_stock += $volume - $old_volume;
+    }
+
+    public function updateTotalVolumes() {
+        $this->total_normal = 0;
+        $this->total_vt = 0;
+        $this->total_sgn = 0;
+        foreach($this->getChildrenNode() as $item) {
+            $this->total_normal += $item->total_normal;
+            $this->total_vt += $item->total_vt;
+            $this->total_sgn += $item->total_sgn;
+        }
+    }
+
+    public function update($params = array()) {
+        parent::update();
+        $this->updateTotalVolumes();
     }
 }

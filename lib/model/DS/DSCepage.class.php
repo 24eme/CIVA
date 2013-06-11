@@ -115,6 +115,17 @@ class DSCepage extends BaseDSCepage {
             $detail->updateVolume(DSCivaClient::VOLUME_SGN,$vol_sgn, $sum);
         return $detail;
     }
+
+    public function updateTotalVolumes() {
+        $this->total_normal = 0;
+        $this->total_vt = 0;
+        $this->total_sgn = 0;
+        foreach($this->getChildrenNode() as $item) {
+            $this->total_normal += $item->volume_normal;
+            $this->total_vt += $item->volume_vt;
+            $this->total_sgn += $item->volume_sgn;
+        }
+    }
     
     public function checkNoVTSGNImport($vol_vt,$vol_sgn) {
         if($this->no_vtsgn && (($vol_vt > 0) || ($vol_sgn > 0)))

@@ -62,6 +62,10 @@ DS:
         inheritance: _DSNoeud
         definition:
           fields:
+            total_stock: {type: float}
+            total_vt: {type:float}
+            total_sgn: {type:float}
+            total_normal: {type:float}
             '*':
               #------ Certification ------
               type: collection
@@ -91,6 +95,7 @@ DS:
                           definition:
                             fields:
                               libelle: {  }
+                              libelle_long: { required: false }
                               total_stock: {type: float}
                               total_vt: {type:float}
                               total_sgn: {type:float}
@@ -103,6 +108,7 @@ DS:
                                 definition:
                                   fields:
                                     libelle: {  }
+                                    libelle_long: { required: false }
                                     total_stock: {type: float }
                                     total_vt: {type:float}
                                     total_sgn: {type:float}
@@ -115,6 +121,7 @@ DS:
                                       definition:
                                         fields:
                                           libelle: { }
+                                          libelle_long: { required: false }
                                           total_stock: {type: float}
                                           total_vt: {type:float}
                                           total_sgn: {type:float}
@@ -127,6 +134,7 @@ DS:
                                             definition:
                                               fields:
                                                 libelle: {  }
+                                                libelle_long: { required: false }
                                                 total_stock: {type:float}
                                                 total_vt: {type:float}
                                                 total_sgn: {type:float}
@@ -139,7 +147,12 @@ DS:
                                                   definition:
                                                     fields:
                                                       libelle: {  }
+                                                      libelle_long: { required: false }
                                                       no_vtsgn: {  }
+                                                      total_stock: {type:float}
+                                                      total_vt: {type:float}
+                                                      total_sgn: {type:float}
+                                                      total_normal: {type:float}
                                                       detail:                                                        
                                                         type: array_collection
                                                         definition:
