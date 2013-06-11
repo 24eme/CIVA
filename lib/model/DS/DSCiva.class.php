@@ -22,6 +22,17 @@ class DSCiva extends DS {
         }
         $this->set('_id', DSClient::getInstance()->buildId($this->identifiant, $this->periode,'001'));
     }
+
+
+    public function storeStockage() {
+        $tiers = $this->getEtablissement();
+        $num_lieu = $this->identifiant.$this->getLieuStockage();
+        if(!$tiers->lieux_stockage->exist($num_lieu)) {
+            throw new sfException(sprintf("Le lieu de stockage %s n'existe pas", $num_lieu));
+        }
+
+        $this->set('stockage', $tiers->lieux_stockage->get($num_lieu));
+    }
     
     public function getLastDocument() {
         return $this->getLastDR();
@@ -261,7 +272,6 @@ class DSCiva extends DS {
         }
         return 0;
     }
-    
     
     public function isDsPrincipale() {
         return $this->getLieuStockage() == '001';
