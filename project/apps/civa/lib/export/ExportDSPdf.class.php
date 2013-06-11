@@ -7,6 +7,7 @@ class ExportDSPdf {
     protected $partial_name;
     protected $file_dir;
     protected $no_cache;
+    protected $cvi;
 
     public function __construct($ds, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
@@ -14,9 +15,9 @@ class ExportDSPdf {
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
 
+        $this->ds = $ds;
+
         $this->init($ds, $filename);
-        $this->create($ds);
-        $this->createAnnexe($ds);
     }
 
     public function isCached() {
@@ -28,6 +29,9 @@ class ExportDSPdf {
     }
 
     public function generatePDF() {
+        if(!$this->isCached()) {
+            $this->create();
+        }
         return $this->document->generatePDF($this->no_cache);
     }
 
@@ -45,7 +49,7 @@ class ExportDSPdf {
         $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de stock au 31 Juillet 2013';
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, getTitleLieuStockageStock($ds), $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, $validee);
         if (!$filename) {
             $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
         }
@@ -57,7 +61,16 @@ class ExportDSPdf {
         }
     }
 
-    protected function create($ds) {
+    protected function create() {
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+        foreach($dss as $ds) {
+            $ds->storeStockage();
+            $this->createMainByDS($ds);
+            $this->createAnnexeByDS($ds);
+        }
+    }
+
+    protected function createMainByDS($ds) {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
@@ -104,7 +117,7 @@ class ExportDSPdf {
         }
     }
 
-    protected function createAnnexe($ds) {
+    protected function createAnnexeByDS($ds) {
         $this->buildOrder($ds);
         $appellations = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
         $recap = array();
@@ -133,6 +146,7 @@ class ExportDSPdf {
         }
 
         $paginate = $this->paginate($recap, 31);
+
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -307,7 +321,9 @@ class ExportDSPdf {
                 $j++;
             }
 
-            $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+            if(count($paginate["pages"]) > 0) {
+                $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+            }
         }
 
         return $paginate;
@@ -345,7 +361,7 @@ class ExportDSPdf {
     protected function rowspan(&$recap) {
         $prev_hash = null;
         $prev_cepage = null;
-        
+
         foreach($recap['produits'] as $hash => $produit) {
             if (!preg_match("/cepage:([a-zA-Z0-9_]+)\//", $hash, $matches)) {
                 continue;

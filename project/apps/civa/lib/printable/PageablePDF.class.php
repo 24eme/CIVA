@@ -99,5 +99,6 @@ class PageablePDF extends PageableOutput {
         }
         return file_get_contents($this->pdf_file);
     }
+
 }
 
