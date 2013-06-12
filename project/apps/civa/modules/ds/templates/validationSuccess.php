@@ -11,7 +11,7 @@ foreach ($validation_dss as $id_ds => $validation_ds):
 include_partial('document_validation/validation', array('validation' => $validation_ds));
 endforeach;
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
-?> 
+?>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
@@ -31,13 +31,7 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 		<a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
     </li>
 </ul>
-
-<div style="display: none" id="popup_loader" title="Génération du PDF">
-    <div class="popup-loading">
-    <p>La génération de votre PDF est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
-    </div>
-</div>
-
+<?php include_partial('ds/generationDuPdf', array('ds' => $ds_principale)) ?>
 <div id="popup_confirme_validation" class="popup_ajout" title="Validation de votre DR">
     <form method="post" action="">
         <p>

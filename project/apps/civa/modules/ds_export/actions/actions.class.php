@@ -24,9 +24,8 @@ class ds_exportActions extends sfActions
 
       $this->setLayout(false);
 
-      $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
-
       $this->document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }

@@ -11,6 +11,7 @@ class ExportDSPdf {
     protected $autres;
     protected $agrega_total;
     protected $ds_principale;
+    protected $dss;
 
     public function __construct($ds_principale, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         if(!$ds_principale->isDSPrincipale()) {
@@ -23,6 +24,7 @@ class ExportDSPdf {
         $this->no_cache = $no_cache;
 
         $this->ds_principale = $ds_principale;
+        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
 
         $this->init($filename);
     }
@@ -58,7 +60,12 @@ class ExportDSPdf {
         $title = 'Déclaration de stock au 31 Juillet 2013';
         $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
-            $filename = $this->ds_principale->campagne.'_DS_'.$this->ds_principale->declarant->cvi.'_'.$this->ds_principale->_rev.'.pdf';
+            $rev = null;
+            foreach($this->dss as $ds) {
+                $rev .= $ds->_rev;
+            }
+            $rev = md5($rev);
+            $filename = $this->ds_principale->periode.'_DS_'.$this->ds_principale->declarant->cvi.'_'.$rev.'.pdf';
         }
 
         $config = array('PDF_MARGIN_TOP' => 21,
@@ -73,14 +80,11 @@ class ExportDSPdf {
     }
 
     protected function create() {
-        $dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
-        $i = 1;        
-        foreach($dss as $ds) {
+        foreach($this->dss as $ds) {
             $ds->storeStockage();
             $ds->update();
             $this->createMainByDS($ds);
             $this->createAnnexeByDS($ds);
-            $i++;
         }
 
         $this->createRecap();

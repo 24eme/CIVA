@@ -15,9 +15,12 @@ $(document).ready(function()
 {	
 	//navOngletsStock();
 	initDSSommesCol();
-        initLieuxStockage();
-        var ajaxForm = $('form');
+    initLieuxStockage();
+    var ajaxForm = $('form.ajaxForm');
+    if(ajaxForm.length > 0) {
         ajaxForm.ajaxPostForm();
+    }
+    initValidDSPopup();
 });
 
 
@@ -160,7 +163,7 @@ $.fn.majDSSommesCol = function()
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-        var inputs = $('#'+form_id+'.ajaxForm :input'); 
+        var inputs = $('#'+form_id+'.ajaxForm :input');
         $(inputs).each(function(){
                 $(this).change(function(){
                     formPost(form);
@@ -220,3 +223,25 @@ var navOngletsStock = function()
 		});
 	});
 };
+
+/**
+ * Initalise la popup previsualisation de DS
+ ******************************************/
+var initValidDSPopup = function()
+{
+    $('#previsualiser').click(function() {
+        openPopup($("#popup_loader"));
+        $.ajax({
+            url: ajax_url_to_print,
+            success: function(data) {
+                $('.popup-loading').empty();
+                $('.popup-loading').css('background', 'none');
+                $('.popup-loading').css('padding-top', '10px');
+                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds">Télécharger la DS</a></p>');
+                openPopup($("#popup_loader"));
+
+            }
+        });
+        return false;
+    });
+}
