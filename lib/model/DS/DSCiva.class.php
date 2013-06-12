@@ -328,5 +328,12 @@ class DSCiva extends DS {
         }
         return $this->exist('ds_neant') && $this->ds_neant;
     }
+    
+    public function isAutresNul() {
+        return (( ($this->dplc == 0) || is_null($this->dplc))
+               && (($this->rebeches == 0) || is_null($this->rebeches) )
+               && (($this->mouts == 0) || is_null($this->mouts))
+               && (($this->lies == 0) || is_null($this->lies))) ;
+    }
 }
 
