@@ -7,6 +7,9 @@ class ExportDSPdf {
     protected $partial_name;
     protected $file_dir;
     protected $no_cache;
+    protected $cvi;
+    protected $autres;
+    protected $agrega_total;
 
     public function __construct($ds, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
@@ -14,9 +17,9 @@ class ExportDSPdf {
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
 
+        $this->ds = $ds;
+
         $this->init($ds, $filename);
-        $this->create($ds);
-        $this->createAnnexe($ds);
     }
 
     public function isCached() {
@@ -28,6 +31,9 @@ class ExportDSPdf {
     }
 
     public function generatePDF() {
+        if(!$this->isCached()) {
+            $this->create();
+        }
         return $this->document->generatePDF($this->no_cache);
     }
 
@@ -45,19 +51,34 @@ class ExportDSPdf {
         $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de stock au 31 Juillet 2013';
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, getTitleLieuStockageStock($ds), $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, $validee);
         if (!$filename) {
             $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
         }
 
+        $config = array('PDF_MARGIN_TOP' => 21,
+                        'PDF_FONT_SIZE_MAIN' => 8,
+                        'PDF_HEADER_LOGO_WIDTH' => 20);
+
         if ($this->type == 'html') {
-          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', 8);
+          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }else {
-          $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', 8);
+          $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }
     }
 
-    protected function create($ds) {
+    protected function create() {
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+        $i = 1;        
+        foreach($dss as $ds) {
+            $ds->storeStockage();
+            $this->createMainByDS($ds, $ds->isDSPrincipale(), !$ds->isDSPrincipale() && count($dss) == $i);
+            $this->createAnnexeByDS($ds);
+            $i++;
+        }
+    }
+
+    protected function createMainByDS($ds, $autres = true, $agrega_total = false) {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
@@ -96,15 +117,25 @@ class ExportDSPdf {
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
 
+        if($agrega_total) {
+            $agrega_total = $this->getAgregaTotal();
+        }
+
+        if($autres) {
+            $autres = $this->getAutres();
+        }
+
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 
-                                                                                 'recap' => $page, 
-                                                                                 'total' => $is_last)));
+                                                                                 'recap' => $page,
+                                                                                 'autres' => $autres,
+                                                                                 'agrega_total' => $agrega_total,
+                                                                                 'is_last_page' => $is_last)));
         }
     }
 
-    protected function createAnnexe($ds) {
+    protected function createAnnexeByDS($ds) {
         $this->buildOrder($ds);
         $appellations = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
         $recap = array();
@@ -133,6 +164,7 @@ class ExportDSPdf {
         }
 
         $paginate = $this->paginate($recap, 31);
+
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -140,6 +172,27 @@ class ExportDSPdf {
             $this->document->addPage($this->getPartial('ds_export/annexe', array('ds' => $ds, 
                                                                                  'recap' => $page)));
         }
+    }
+
+    protected function getAutres() {
+        if(is_null($this->autres)) {
+            $this->autres = array("Moûts concentrés rectifiés" => $this->ds->mouts, 
+                      "Vins sans IG (Vins de table)" => $this->ds->getTotalVinSansIg(), 
+                      "Vins sans IG mousseux" => $this->ds->getTotalMousseuxSansIg(), 
+                      "Rebêches" => $this->ds->rebeches, 
+                      "Dépassements de rendement" => $this->ds->dplc, 
+                      "Lies en stocks" => $this->ds->lies);
+        }
+
+        return $this->autres;
+    }
+
+    protected function getAgregaTotal() {
+        if(is_null($this->agrega_total)) {
+            $this->agrega_total = DSCivaClient::getInstance()->getTotauxByAppellationsRecap($this->ds);
+        }
+
+        return $this->agrega_total;
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
@@ -307,7 +360,9 @@ class ExportDSPdf {
                 $j++;
             }
 
-            $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+            if(count($paginate["pages"]) > 0) {
+                $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+            }
         }
 
         return $paginate;
@@ -345,7 +400,7 @@ class ExportDSPdf {
     protected function rowspan(&$recap) {
         $prev_hash = null;
         $prev_cepage = null;
-        
+
         foreach($recap['produits'] as $hash => $produit) {
             if (!preg_match("/cepage:([a-zA-Z0-9_]+)\//", $hash, $matches)) {
                 continue;

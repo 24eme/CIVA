@@ -8,16 +8,16 @@ class PageableOutput {
   protected $filename;
   protected $file_dir;
   protected $orientation;
-  protected $font_size;
+  protected $config;
 
-  public function __construct($title, $subtitle, $filename = '', $file_dir = null, $link = ' de ', $orientation = 'L', $font_size = 10) {
+  public function __construct($title, $subtitle, $filename = '', $file_dir = null, $link = ' de ', $orientation = 'L', $config = array()) {
     $this->title = $title;
     $this->link = $link;
     $this->subtitle = $subtitle;
     $this->filename = $filename;
     $this->file_dir = $file_dir;
     $this->orientation = $orientation;
-    $this->font_size = $font_size;
+    $this->config = $config;
     $this->init();
   }
 

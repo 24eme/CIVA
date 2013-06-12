@@ -15,28 +15,35 @@ class ds_exportActions extends sfActions
   *
   * @param sfRequest $request A request object
   */
-  public function executePDF(sfWebRequest $request)
-  {
-    set_time_limit(180);
-    $ds = $this->getRoute()->getDS();
-    $ds->update();
+    public function executePDF(sfWebRequest $request)
+    {
+      set_time_limit(180);
+      $this->ds = $this->getRoute()->getDS();
+      $this->ds->update();
+      $this->ds->storeStockage();
 
-    $this->setLayout(false);
+      $this->setLayout(false);
 
-    $this->document = new ExportDSPdf($ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
 
-    if($request->getParameter('force')) {
+      $this->document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      if($request->getParameter('force')) {
         $this->document->removeCache();
+      }
+      $this->document->generatePDF();
+
+      if ($request->isXmlHttpRequest()) {
+          
+          return $this->ajaxPdf();
+      }
+
+      $this->document->addHeaders($this->getResponse());
+
+      return $this->renderText($this->document->output());
     }
 
-    $this->document->generatePDF();
-
-    /*if ($request->getParameter('ajax')) {
-        return $this->ajaxPdf($request->getParameter("from_csv", null));
-    }*/
-
-    $this->document->addHeaders($this->getResponse());
-
-    return $this->renderText($this->document->output());
-  }
+    private function ajaxPdf() {
+        sfConfig::set('sf_web_debug', false);
+        return $this->renderText($this->generateUrl('ds_export_pdf', $this->ds));
+    }
 }
