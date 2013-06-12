@@ -10,16 +10,21 @@ class ExportDSPdf {
     protected $cvi;
     protected $autres;
     protected $agrega_total;
+    protected $ds_principale;
 
-    public function __construct($ds, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($ds_principale, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+        if(!$ds_principale->isDSPrincipale()) {
+            throw new sfException("Ce n'est pas la DS principale");
+        }
+
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
 
-        $this->ds = $ds;
+        $this->ds_principale = $ds_principale;
 
-        $this->init($ds, $filename);
+        $this->init($filename);
     }
 
     public function isCached() {
@@ -45,15 +50,15 @@ class ExportDSPdf {
         return $this->document->output();
     }
 
-    protected function init($ds, $filename = null) {
+    protected function init($filename = null) {
         $validee = 'Non Validée';
         $validee = 'Déclaration validée le 31/07/2013';
         $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de stock au 31 Juillet 2013';
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$ds->declarant->nom, $ds->declarant->commune, $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
-            $filename = $ds->campagne.'_DS_'.$ds->declarant->cvi.'_'.$ds->_rev.'.pdf';
+            $filename = $this->ds_principale->campagne.'_DS_'.$this->ds_principale->declarant->cvi.'_'.$this->ds_principale->_rev.'.pdf';
         }
 
         $config = array('PDF_MARGIN_TOP' => 21,
@@ -68,17 +73,20 @@ class ExportDSPdf {
     }
 
     protected function create() {
-        $dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
         $i = 1;        
         foreach($dss as $ds) {
             $ds->storeStockage();
-            $this->createMainByDS($ds, $ds->isDSPrincipale(), !$ds->isDSPrincipale() && count($dss) == $i);
+            $ds->update();
+            $this->createMainByDS($ds);
             $this->createAnnexeByDS($ds);
             $i++;
         }
+
+        $this->createRecap();
     }
 
-    protected function createMainByDS($ds, $autres = true, $agrega_total = false) {
+    protected function createMainByDS($ds) {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
@@ -114,23 +122,15 @@ class ExportDSPdf {
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
         $paginate = $this->paginate($recap, 29, $page);
+
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
 
-        if($agrega_total) {
-            $agrega_total = $this->getAgregaTotal();
-        }
-
-        if($autres) {
-            $autres = $this->getAutres();
-        }
-
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
-            $this->document->addPage($this->getPartial('ds_export/douane', array('ds' => $ds, 
+            $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds, 
                                                                                  'recap' => $page,
-                                                                                 'autres' => $autres,
-                                                                                 'agrega_total' => $agrega_total,
+                                                                                 'autres' => $this->getAutres(),
                                                                                  'is_last_page' => $is_last)));
         }
     }
@@ -163,8 +163,7 @@ class ExportDSPdf {
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 31);
-
+        $paginate = $this->paginate($recap, 32);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -174,36 +173,63 @@ class ExportDSPdf {
         }
     }
 
+    protected function createRecap() {
+        
+        $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale, 
+                                                                            'recap_total' => $this->getRecapTotal(),
+                                                                            'recap_autres' => $this->getRecapAutres(),
+                                                                            'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
+    }
+
     protected function getAutres() {
         if(is_null($this->autres)) {
-            $this->autres = array("Moûts concentrés rectifiés" => $this->ds->mouts, 
-                      "Vins sans IG (Vins de table)" => $this->ds->getTotalVinSansIg(), 
-                      "Vins sans IG mousseux" => $this->ds->getTotalMousseuxSansIg(), 
-                      "Rebêches" => $this->ds->rebeches, 
-                      "Dépassements de rendement" => $this->ds->dplc, 
-                      "Lies en stocks" => $this->ds->lies);
+            $this->autres = array("Moûts concentrés rectifiés" => $this->ds_principale->mouts, 
+                      "Vins sans IG (Vins de table)" => $this->ds_principale->getTotalVinSansIg(), 
+                      "Vins sans IG mousseux" => $this->ds_principale->getTotalMousseuxSansIg(), 
+                      "Rebêches" => $this->ds_principale->rebeches, 
+                      "Dépassements de rendement" => $this->ds_principale->dplc, 
+                      "Lies en stocks" => $this->ds_principale->lies);
         }
 
         return $this->autres;
     }
 
-    protected function getAgregaTotal() {
+    protected function getRecapTotal() {
         if(is_null($this->agrega_total)) {
-            $this->agrega_total = DSCivaClient::getInstance()->getTotauxByAppellationsRecap($this->ds);
+            $this->agrega_total = DSCivaClient::getInstance()->getTotauxByAppellationsRecap($this->ds_principale);
         }
 
         return $this->agrega_total;
     }
 
+    protected function getRecapAutres() {
+
+        return array("Rebêches" => $this->ds_principale->rebeches, 
+                     "Usages industiels" => $this->ds_principale->getUsagesIndustriels());
+    }
+
+    protected function getRecapVinsSansIG() {
+
+        return array("Vins Sans IG" => DSCivaClient::getInstance()->getTotalSansIG($this->ds_principale), 
+                     "Mousseux" => DSCivaClient::getInstance()->getTotalSansIGMousseux($this->ds_principale));
+    }
+
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-
-        if(!isset($recap['total'])) {
-            $recap['total'] = array("normal" => 0, "vt" => 0, "sgn" => 0);
-        }
-
         if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
 
             return; 
+        }
+
+        if(is_null($recap["total"]["normal"])) {
+            $recap["total"]["normal"] = 0;
+        }
+
+        if(is_null($recap["total"]["vt"])) {
+            $recap["total"]["vt"] = 0;
+        }
+
+        if(is_null($recap["total"]["sgn"])) {
+            $recap["total"]["sgn"] = 0;
         }
 
         $appellation = $ds->declaration->getAppellations()->get('appellation_'.$appellation_key);
@@ -360,7 +386,7 @@ class ExportDSPdf {
                 $j++;
             }
 
-            if(count($paginate["pages"]) > 0) {
+            if(isset($paginate["pages"][$num_page][$libelle])) {
                 $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
             }
         }
