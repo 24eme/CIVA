@@ -36,6 +36,15 @@ DS:
             telephone: {  }
             fax: {  }
             email: {  }
+      stockage:
+        type: collection
+        definition:
+          fields:
+            numero: {  }
+            nom: {  }
+            adresse: {  }
+            commune: {  }
+            code_postal: {  }
 #      produits:
 #        type: collection
 #        definition:
