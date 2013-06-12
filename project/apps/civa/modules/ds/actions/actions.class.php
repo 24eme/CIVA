@@ -43,6 +43,9 @@ class dsActions extends sfActions {
                  $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
              break;
          }
+         $id = $this->ds->_id;
+         $etape = $this->ds->num_etape;
+         throw new sfException("Etape de DS $id non reconnu ($etape)");
     }
 
     private function redirectEtapeAfterStock($ds,$dss,$tiers){
@@ -363,7 +366,11 @@ class dsActions extends sfActions {
         $this->ds_principale = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();        
         $this->ds_client = DSCivaClient::getInstance();
-        $this->validation = new DSValidationCiva($this->ds_principale);        
+        $this->dss = $this->ds_client->findDssByDS($this->ds_principale);
+        $this->validation_dss = array();
+        foreach ($this->dss as $id_ds => $ds) {
+            $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
+        }       
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->ds_principale->validate();
             $this->ds_principale->save();

@@ -1,6 +1,15 @@
 <?php 
+use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 5)); 
-include_partial('document_validation/validation', array('validation' => $validation));
+
+foreach ($validation_dss as $id_ds => $validation_ds):
+    if($validation_ds->isPoints()):
+    ?>
+    <h2><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
+    <?php
+    endif;
+include_partial('document_validation/validation', array('validation' => $validation_ds));
+endforeach;
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
 ?> 
 
