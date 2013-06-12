@@ -90,8 +90,8 @@ class DSCivaClient extends DSClient {
             $ds->date_stock = $this->createDateStock($date_stock);
             $ds->identifiant = $tiers->cvi;
             $ds->storeDeclarant();
-            $ds->storeStockage();
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
+            $ds->storeStockage();
             $ds->updateProduits();
             $ds->updateAutre();
             if($ds->isDsPrincipale())

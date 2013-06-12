@@ -12,18 +12,17 @@
 class DSValidationCiva  extends DSValidation
 {
   public function configure() {
-    $this->addControle('vigilance', 'stock_null', 'Il reste des stocks non saisis');
+      
+    $this->addControle('vigilance', 'stock_null_appellation', acCouchdbManager::getClient('Messages')->getMessage('stock_null_appellation'));
+    $this->addControle('vigilance', 'stock_zero_appellation', acCouchdbManager::getClient('Messages')->getMessage('stock_zero_appellation'));
     
-    $this->addControle('vigilance', 'stock_null_appellation', "Les stocks de cette appellation n'ont pas été saisis");
-    $this->addControle('vigilance', 'stock_zero_appellation', "Les stocks de cette appellation sont saisis à nul");
+    $this->addControle('vigilance', 'stock_null_lieu', acCouchdbManager::getClient('Messages')->getMessage('stock_null_lieu'));
+    $this->addControle('vigilance', 'stock_zero_lieu', acCouchdbManager::getClient('Messages')->getMessage('stock_zero_lieu'));
     
-    $this->addControle('vigilance', 'stock_null_lieu', "Les stocks de ce lieu n'ont pas été saisis");
-    $this->addControle('vigilance', 'stock_zero_lieu', "Les stocks de ce lieu sont saisis à nul");    
+    $this->addControle('vigilance', 'stock_null_cepage', acCouchdbManager::getClient('Messages')->getMessage('stock_null_cepage'));
+    $this->addControle('vigilance', 'stock_zero_cepage', acCouchdbManager::getClient('Messages')->getMessage('stock_zero_cepage'));
     
-    $this->addControle('vigilance', 'stock_null_cepage', "Les stocks de ce cepage n'ont pas été saisis");
-    $this->addControle('vigilance', 'stock_zero_cepage', "Les stocks de ce cepage sont saisis à nul");
-    
-    $this->addControle('erreur', 'autres_nul', "Les moûts, rebêches, dépassements et lies n'ont pas été saisis et il s'agit d'une DS qui n'est pas à néant");    
+    $this->addControle('erreur', 'autres_nul', acCouchdbManager::getClient('Messages')->getMessage('autres_nul'));
     
   }
 
