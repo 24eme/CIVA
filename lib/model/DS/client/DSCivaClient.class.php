@@ -109,8 +109,8 @@ class DSCivaClient extends DSClient {
         $new_ds->date_stock = $ds->date_stock;
         $new_ds->identifiant = $ds->identifiant;
         $new_ds->storeDeclarant();
-        $new_ds->storeStockage();
         $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
+        $new_ds->storeStockage();
         return $new_ds;
     }
 
@@ -341,5 +341,19 @@ class DSCivaClient extends DSClient {
     
     public function getNbDS($ds){
         return count($this->findDssByDS($ds));
+    }
+    
+    public function validate($ds){
+        if(!$ds->isDsPrincipale()){
+            throw new sfException("Aucun clean n'est possible à partir d'une DS qui n'est pas la Ds Principale (ici : $ds->id)");
+        }
+        
+        $dss = $this->findDssByDs($ds);
+        foreach ($dss as $ds) {
+            $ds->validate();
+            $ds->declaration->cleanAllNodes();  
+            $ds->save();
+        }
+        return $dss;
     }
 }

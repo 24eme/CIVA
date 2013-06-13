@@ -21,6 +21,8 @@ DS:
       mouts: {type: float}
       num_etape: {required: false}
       ds_neant: {required: false}
+      validee: {required: false}
+      modifiee: {required: false}
       declarant:
         type: collection
         definition:

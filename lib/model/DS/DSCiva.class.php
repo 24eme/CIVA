@@ -345,5 +345,20 @@ class DSCiva extends DS {
                && (($this->mouts == 0) || is_null($this->mouts))
                && (($this->lies == 0) || is_null($this->lies))) ;
     }
+    
+    public function validate() {
+        if(!$this->isDsPrincipale()){
+            return $this;
+        }        
+        $date = date("Y-m-d H:i:s");
+        $this->add('validee', $date);
+        $this->add('modifiee', $date);
+        $this->updateEtape(6);
+        return $this;
+    }
+    
+    public function isValidee(){
+        return $this->exist('validee') && $this->exist('modifiee') && $this->get('validee') && ($this->get('modifiee') == $this->get('validee'));
+    }
 }
 
