@@ -295,24 +295,21 @@ class DSCiva extends DS {
          $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
          if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
                 $this->add('num_etape', $etape_rail);
-                $this->save();
                 return $this;
          }
          if(!$this->isDsPrincipale() && $etape_rail == 3){
                 $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
                 if($ds->num_etape < $etape_rail + $this->getLieuStockage() - 1){
                     $ds->add('num_etape', $etape_rail + $this->getLieuStockage() - 1);
-                    $ds->save();
                 }
                 return $ds;
          }
          if($etape_rail > 3){
-                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
-                if($ds->num_etape < $etape_rail + $nb_lieux - 1){
-                    $ds->add('num_etape', $etape_rail + $nb_lieux - 1);
-                    $ds->save();
+//                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+                if($this->num_etape < $etape_rail + $nb_lieux - 1){
+                    $this->add('num_etape', $etape_rail + $nb_lieux - 1);
                 }
-                return $ds;
+                return $this;
          }  
     }
     
