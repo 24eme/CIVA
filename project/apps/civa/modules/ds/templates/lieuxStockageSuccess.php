@@ -19,8 +19,6 @@ $dss = $dss->getRawValue();
     <input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>"
            id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>"
                <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "disabled='disabled'" : ''; ?> >
-					
-	
 	<div id="lieux_stockage">
 		<table class="table_donnees">
 			<thead>
@@ -41,15 +39,19 @@ $dss = $dss->getRawValue();
 			</thead>
 			<tbody>
 				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): 
-                                                $ds_id = preg_replace("/[0-9]{3}$/", str_replace($tiers->cvi, '', $numero), $ds->_id);
+                                                $num_lieu = str_replace($tiers->cvi, '', $numero);
+                                                $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
                                     ?>
 				<tr>
 					<td class="adresse_lieu">
+                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "<strong>" : ""; ?>
+                                                
 						<?php echo $lieu_stockage->numero ?> <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
-					</td>
+					<?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
+                                        </td>
 					<?php  $cpt = 0;
-					 $name = 'lieuxStockage_'.str_replace($tiers->cvi, '', $numero);
+					 $name = 'lieuxStockage_'.$num_lieu;
 						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
 							$paire = ($cpt%2==0)? 'paire' : '';
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';

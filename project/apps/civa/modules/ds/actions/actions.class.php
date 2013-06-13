@@ -64,6 +64,9 @@ class dsActions extends sfActions {
             if($etape_without_dss == 5){
                 $this->redirect('ds_validation', $ds); 
             }
+            if($etape_without_dss == 6){
+                $this->redirect('ds_visualisation', $ds); 
+            }
         }
     }
 
@@ -372,8 +375,7 @@ class dsActions extends sfActions {
             $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
         }       
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->ds_principale->validate();
-            $this->ds_principale->save();
+            DSCivaClient::getInstance()->validate($this->ds_principale);
             $this->redirect('ds_visualisation', $this->ds_principale);
         }
     }

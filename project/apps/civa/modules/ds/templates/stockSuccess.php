@@ -50,11 +50,11 @@ use_helper('ds');
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
 				<li>
-                    <?php if(!$isFirstAppellation): ?>
-                        <a tabindex="<?php echo $tabindex + 1 ?>" class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousLieu($lieu->getRawValue())); ?>">
-                                <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
-                        </a>
-                    <?php endif; ?>
+                                <?php if(!$isFirstAppellation): ?>
+                                    <a tabindex="<?php echo $tabindex + 1 ?>" class="ajax" href="<?php echo url_for('ds_edition_operateur', $ds->getPreviousLieu($lieu->getRawValue())); ?>">
+                                            <img src="/images/boutons/btn_appelation_prec.png" alt="Retourner à l'étape précédente"/>
+                                    </a>
+                                <?php endif; ?>
 				</li>
                                 
 				<li>
