@@ -332,11 +332,13 @@ class dsActions extends sfActions {
         if($suivant){
             $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
             if($nextDs){
-                $nextDs->updateEtape(3);
+                $ds_principale = $nextDs->updateEtape(3);
+                $ds_principale->save();
                 $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellation()));
             }
             else{
-                $this->ds->updateEtape(4);
+                $this->ds_principale->updateEtape(4);
+                $this->ds_principale->save();
                 $this->redirect('ds_autre', $this->ds_principale); 
             }
         }
