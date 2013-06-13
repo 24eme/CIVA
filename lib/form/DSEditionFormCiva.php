@@ -4,12 +4,13 @@ class DSEditionFormCiva extends acCouchdbForm {
 
     protected $ds = null;
     protected $noeud = null;
+    protected $no_vtsgn = null;
 
     public function __construct(acCouchdbJson $ds, DSLieu $noeud, $defaults = array(), $options = array(), $CSRFSecret = null) {
 
        $this->ds = $ds;
        $this->noeud = $noeud;
-
+       $this->no_vtsgn = true;
        foreach ($this->getProduitsDetails() as $hash => $detail) {     
             $form_key = $detail->getHashForKey();
             
@@ -33,6 +34,7 @@ class DSEditionFormCiva extends acCouchdbForm {
             $this->setWidget(DSCivaClient::VOLUME_SGN . $key, new sfWidgetFormInput(array(), array('size' => '6')));
             $this->setValidator(DSCivaClient::VOLUME_SGN . $key, new sfValidatorNumber(array('required' => false)));
             $this->widgetSchema->setLabel(DSCivaClient::VOLUME_SGN . $key, DSCivaClient::VOLUME_SGN);
+            $this->no_vtsgn = false;
           }
           $this->setWidget(DSCivaClient::VOLUME_NORMAL . $key, new sfWidgetFormInput(array(), array('size' => '6')));
 	  $this->setValidator(DSCivaClient::VOLUME_NORMAL . $key, new sfValidatorNumber(array('required' => false)));
@@ -72,6 +74,10 @@ class DSEditionFormCiva extends acCouchdbForm {
         if ($this->getDocument()->get($prodKey)) {
             $this->getDocument()->get($prodKey)->updateVolume($kind,$volume);
         }
+    }
+    
+    public function hasVTSGN() {
+        return !$this->no_vtsgn;
     }
      
 }
