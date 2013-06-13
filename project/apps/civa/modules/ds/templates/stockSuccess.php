@@ -30,8 +30,10 @@ use_helper('ds');
 			        
 			        <ul>
 			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
-			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_vt" /></li>
-			            <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_sgn" /></li>
+                                    <?php if($form->hasVTSGN()): ?>
+                                        <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_vt" /></li>
+                                        <li><input type="text" readonly="readonly" class="somme" data-somme-col="#col_sgn" /></li>
+                                    <?php endif; ?>
 			        </ul>
 			    </div>
                <?php endif; ?>
@@ -43,9 +45,11 @@ use_helper('ds');
 				<h3>Total <?php echo $appellation->libelle; ?></h3>
 				<ul>
 					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_normal',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_hors_vt_sgn" /></li>
-					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_vt',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
+					<?php if($form->hasVTSGN()): ?>
+                                        <li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_vt',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_vt" /></li>
 					<li><input type="text" readonly="readonly" data-val-defaut="<?php echoFloat(getDefaultTotal('total_sgn',$appellation, $lieu)); ?>" value="0.00" class="somme" data-somme-col="#col_sgn" /></li>
-				</ul>
+                                        <?php endif; ?>
+                                </ul>
 			</div>
 	
 			<ul id="btn_appelation" class="btn_prev_suiv clearfix">
