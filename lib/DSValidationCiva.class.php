@@ -37,26 +37,30 @@ class DSValidationCiva  extends DSValidation
       {
             foreach($this->document->declaration->getAppellations() as $hash => $appellation) {
                     $appellation_vigilence = false;
-                    
-                    if(is_null($appellation->total_stock)){
-                        $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => $hash))); 
+                    if(!$appellation->total_stock){
+                        $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash)))); 
                         $appellation_vigilence = true;
                     }
                     if(!$appellation_vigilence){
-                        $lieu_vigilence = false;
                         foreach($appellation->getLieux() as $hash_lieu => $lieu) {
+                            $lieu_vigilence = false;
                             if($hash_lieu!='lieu'){
-                                if(is_null($lieu->total_stock)){
-                                    $this->addPoint('vigilance', 'stock_null_lieu',' '.$lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => $hash_lieu))); 
+                                if(!$lieu->total_stock){
+                                    $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash).'-'.strtoupper(preg_replace("/^lieu/", '', $hash_lieu))))); 
                                     $lieu_vigilence = true;
+                                    }
                                 }
                                 if(!$lieu_vigilence){
                                     $cepage_vigilence = false;
+                                    
                                     foreach ($lieu->getCouleurs() as $hash_couleur => $couleur) {
-                                        foreach ($couleur->getCepages() as $hash_cepage => $cepage){
-                                            if(is_null($cepage->total_stock)){
-                                                $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => $hash_lieu))); 
-                                                $cepage_vigilence = true;
+                                        foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
+                                            foreach ($cepage->getProduitsDetails() as $detail) {
+                                                
+                                             if((!$detail->volume_normal) && (!$detail->volume_vt) && (!$detail->volume_sgn)){
+                                                    $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash)))); 
+                                                    $cepage_vigilence = true;
+                                                }
                                             }
                                         }
                                     }
@@ -65,7 +69,6 @@ class DSValidationCiva  extends DSValidation
                         }
                     }
                 }
-           }
      }
      
      public function isPoints(){

@@ -52,7 +52,7 @@ class DSEditionFormCiva extends acCouchdbForm {
 	      if (substr($prodKey, 0, strlen(DSCivaClient::VOLUME_VT)) === DSCivaClient::VOLUME_VT){ 
 		$this->updateVol(DSCivaClient::VOLUME_VT,$this->keyTohash(substr($prodKey,strlen(DSCivaClient::VOLUME_VT))), $volumeRev);
               }
-	      if (substr($prodKey, 0, strlen('sgn')) === DSCivaClient::VOLUME_SGN){
+	      if (substr($prodKey, 0, strlen(DSCivaClient::VOLUME_SGN)) === DSCivaClient::VOLUME_SGN){
 		$this->updateVol(DSCivaClient::VOLUME_SGN,$this->keyTohash(substr($prodKey,strlen(DSCivaClient::VOLUME_SGN))), $volumeRev);
               }
             }
