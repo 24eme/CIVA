@@ -9,6 +9,7 @@ class exportTiersModificationsCsv extends sfBaseTask {
         ));
 
         $this->addOptions(array(
+            new sfCommandOption('flag_revision', sfCommandOption::PARAMETER_REQUIRED, 'Flag la révision dans le document couchdb', false),
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
@@ -141,6 +142,11 @@ EOF;
             }
 
             if($nb_diff > 0) {
+                if($options['flag_revision']) {
+                    $tiers_object = acCouchdbClient::getInstance()->find($tiers->_id);
+                    $tiers_object->db2->import_revision = $tiers_object->_rev;
+                    $tiers_object->save();
+                }
                 $csv->add($this->makeLine($tiers_array, $modele));
             }
         }
@@ -153,7 +159,7 @@ EOF;
         $id = $tiers->_id;
 
         if(isset($tiers->db2->import_revision)) {
-            $doc = sfCouchdbManager::getClient()->rev($tiers->import_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON); 
+            $doc = sfCouchdbManager::getClient()->rev($tiers->db2->import_revision)->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON); 
 
             if($doc) {
                 return $doc;
