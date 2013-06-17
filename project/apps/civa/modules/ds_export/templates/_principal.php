@@ -21,19 +21,26 @@
   <th style="width: 110px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">SGN</th>
 </tr>
 <tr>
-  <?php foreach($totals as $volume): ?>
-  <td style="border: 1px solid black; <?php if(!$is_last_page): ?>background-color: #bbb;<?php endif; ?>"><?php $is_last_page ? echoVolume($volume, true) : echoVolume(null, true) ?></td>
-  <?php endforeach ?>
+  <?php if(!$is_last_page): ?>
+    <td style="border: 1px solid black; background-color: #bbb;">&nbsp;<small><i>(Page suivante)</i></small></td>
+    <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+    <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+    <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+  <?php else: ?>
+    <?php foreach($totals as $volume): ?>
+    <td style="border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+    <?php endforeach; ?>
+  <?php endif; ?>
 </tr>
 </table>
 
 <small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">Autres Produits</span><br />
+<span style="background-color: black; color: white; font-weight: bold;">Autres Produits</span><?php if(!$is_last_page): ?><span><small><i>&nbsp;&nbsp;(Page suivante)</i></small></span><?php endif; ?><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <?php foreach($autres as $libelle => $volume): ?>
 <tr>
   <td style="text-align: left; width: 306px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo $libelle ?></td>
-  <td style="width: 110px; border: 1px solid black;<?php if(!$is_last_page || !$ds->isDSPrincipale()): ?>background-color: #bbb;<?php endif; ?>"><?php ($is_last_page && $ds->isDSPrincipale()) ? echoVolume($volume, true) : echoVolume(null, true) ?></td>
+  <td style="width: 110px; border: 1px solid black;<?php if(!$is_last_page || is_null($volume)): ?>background-color: #bbb;<?php endif; ?>"><?php ($is_last_page) ? echoVolume($volume, true) : echoVolume(null, true) ?></td>
 </tr>
 <?php endforeach; ?>
 </table>

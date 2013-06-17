@@ -1,11 +1,13 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
 <?php include_partial("ds_export/exploitation", array('ds' => $ds, 'tiers' => $ds->getEtablissement())) ?>
+<h2 style="text-align: center;">ANNEXE : Récapitulatif DRM <small><br />(tous lieux de stockage confondus)</small></h2>
+
+
 <small><br /></small>
-<span style="background-color: black; color: white;"><b>Récapitulatif</b> (tous lieux de stockage confondus)</span><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <tr>
-  <th style="width: 198px; font-weight: bold; border: 1px solid black;">Appellations</th>
+  <th style="width: 198px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">Appellations</th>
   <th style="width: 110px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">Total</th>
   <th style="width: 110px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">hors VT et SGN</th>
   <th style="width: 110px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">VT</th>
@@ -23,7 +25,6 @@
 </table>
 
 <small><br /></small>
-<span style="background-color: black; color: white;"><b>Autres</b> (tous lieux de stockage confondus)</span><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <?php foreach($recap_autres as $libelle => $volume): ?>
 <tr>
@@ -34,7 +35,6 @@
 </table>
 
 <small><br /></small>
-<span style="background-color: black; color: white;"><b>Vins Sans IG</b> (tous lieux de stockage confondus)</span><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <?php foreach($recap_vins_sans_ig as $libelle => $volume): ?>
 <tr>

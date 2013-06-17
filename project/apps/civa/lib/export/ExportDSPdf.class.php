@@ -8,7 +8,7 @@ class ExportDSPdf {
     protected $file_dir;
     protected $no_cache;
     protected $cvi;
-    protected $autres;
+    protected $autres = array();
     protected $agrega_total;
     protected $ds_principale;
     protected $dss;
@@ -57,7 +57,7 @@ class ExportDSPdf {
         $validee = 'Déclaration validée le 31/07/2013';
         $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
-        $title = 'Déclaration de stock au 31 Juillet 2013';
+        $title = 'Déclaration de stocks au 31 Juillet 2013';
         $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
             $rev = null;
@@ -94,32 +94,35 @@ class ExportDSPdf {
         $this->buildOrder($ds);
         $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
 
-        $recap = array("AOC Alsace Blanc" => array("colonnes" => array("cepage" => "Cepages"),
+        $recap = array("AOC Alsace" => array("colonnes" => array("cepage" => "Cépages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                   "produits" => array(), 
+                                                   "produits" => array(),
+                                                   "nb_produits" => 0,
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
-                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cepages"), 
-                                                        "produits" => array(), 
+                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
+                                                        "produits" => array(),
+                                                        "nb_produits" => 0,
                                                         "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                         "limit" => 13,
                                                         "nb_ligne" => 13),
                        "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                       "produits" => array(), 
+                                                       "produits" => array(),
+                                                       "nb_produits" => 0,
                                                        "no_header" => true,
                                                        "limit" => -1,
                                                        "nb_ligne" => -1));
 
         foreach($alsace_blanc as $appellation_key) {
-            $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
+            $this->preBuildRecap($ds, $appellation_key, $recap["AOC Alsace"]);
         }
 
         $this->preBuildRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
         $page = $recap;
 
         foreach($alsace_blanc as $appellation_key) {
-            $this->getRecap($ds, $appellation_key, $recap["AOC Alsace Blanc"]);
+            $this->getRecap($ds, $appellation_key, $recap["AOC Alsace"]);
         }
        
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
@@ -134,7 +137,7 @@ class ExportDSPdf {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds, 
                                                                                  'recap' => $page,
-                                                                                 'autres' => $this->getAutres(),
+                                                                                 'autres' => $this->getAutres($ds),
                                                                                  'is_last_page' => $is_last)));
         }
     }
@@ -151,23 +154,23 @@ class ExportDSPdf {
 
             $appellation = $ds->declaration->getAppellations()->get("appellation_".$appellation_key);
 
-            $colonnes = array("cepage" => "Cepages");
+            $colonnes = array("cepage" => "Cépages");
             $lieu = false;
             if($appellation->getConfig()->hasManyLieu() || $appellation->getConfig()->hasLieuEditable()) {
-                $colonnes = array("lieu" => "Lieu-dit", "cepage" => "Cepages");
+                $colonnes = array("lieu" => "Lieu-dit", "cepage" => "Cépages");
                 $lieu = true;
             }
 
             $recap[$appellation->getLibelle()] = array("colonnes" => $colonnes, 
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                   "produits" => array(), 
+                                                   "produits" => array(),
                                                    "limit" => -1,
                                                    "nb_ligne" => -1);
 
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 32);
+        $paginate = $this->paginate($recap, 31);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -185,17 +188,17 @@ class ExportDSPdf {
                                                                             'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
     }
 
-    protected function getAutres() {
-        if(is_null($this->autres)) {
-            $this->autres = array("Moûts concentrés rectifiés" => $this->ds_principale->mouts, 
-                      "Vins sans IG (Vins de table)" => $this->ds_principale->getTotalVinSansIg(), 
-                      "Vins sans IG mousseux" => $this->ds_principale->getTotalMousseuxSansIg(), 
-                      "Rebêches" => $this->ds_principale->rebeches, 
-                      "Dépassements de rendement" => $this->ds_principale->dplc, 
-                      "Lies en stocks" => $this->ds_principale->lies);
+    protected function getAutres($ds) {
+        if(!array_key_exists($ds->_id, $this->autres)) {
+            $this->autres[$ds->_id] = array("Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null, 
+                      "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(), 
+                      "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(), 
+                      "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null, 
+                      "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null, 
+                      "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null);
         }
 
-        return $this->autres;
+        return $this->autres[$ds->_id];
     }
 
     protected function getRecapTotal() {
@@ -379,9 +382,11 @@ class ExportDSPdf {
 
                 if(!isset($paginate["pages"][$num_page][$libelle])) {
                     $paginate["pages"][$num_page][$libelle] = $tableau;
+                    $paginate["pages"][$num_page][$libelle]["nb_produits"] = 0;
                     $paginate["pages"][$num_page][$libelle]["produits"] = array();
                 }
 
+                $paginate["pages"][$num_page][$libelle]["nb_produits"] += 1;
                 $paginate["pages"][$num_page][$libelle]["produits"][$hash] = $produit;
 
                 if($num_page == floor($i / $limit)) {
