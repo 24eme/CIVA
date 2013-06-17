@@ -64,6 +64,9 @@ class dsActions extends sfActions {
             if($etape_without_dss == 5){
                 $this->redirect('ds_validation', $ds); 
             }
+            if($etape_without_dss == 6){
+                $this->redirect('ds_visualisation', $ds); 
+            }
         }
     }
 
@@ -329,11 +332,13 @@ class dsActions extends sfActions {
         if($suivant){
             $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
             if($nextDs){
-                $nextDs->updateEtape(3);
+                $ds_principale = $nextDs->updateEtape(3);
+                $ds_principale->save();
                 $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellation()));
             }
             else{
-                $this->ds->updateEtape(4);
+                $this->ds_principale->updateEtape(4);
+                $this->ds_principale->save();
                 $this->redirect('ds_autre', $this->ds_principale); 
             }
         }
@@ -372,8 +377,7 @@ class dsActions extends sfActions {
             $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
         }       
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->ds_principale->validate();
-            $this->ds_principale->save();
+            DSCivaClient::getInstance()->validate($this->ds_principale);
             $this->redirect('ds_visualisation', $this->ds_principale);
         }
     }

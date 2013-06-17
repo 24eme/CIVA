@@ -40,6 +40,7 @@ $produits = $form->getProduitsDetails();
 					</ul>
 				</div>
             </div>
+<?php        if($form->hasVTSGN()): ?>
             <div id="col_vt" class="colonne">
 				<h2>VT (hl)</h2>
 
@@ -85,5 +86,6 @@ $produits = $form->getProduitsDetails();
                     </ul>
                 </div>
             </div>
+<?php endif; ?>
     </div>
 

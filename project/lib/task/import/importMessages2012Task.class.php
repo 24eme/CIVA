@@ -129,6 +129,15 @@ EOF;
 		$json->err_log_lieu_has_too_many_usages_industriels  = "Vous avez déclaré trop de volume dans les usages industriels par rapport à votre volume sur place";
 		$json->help_popup_DR_recap_appellation_usage_industriel  = "A définir";
 
+                $json->stock_null_appellation  = "Les stocks de cette appellation n'ont pas été saisis";
+		$json->stock_zero_appellation  = "Les stocks de cette appellation sont saisis à nul";
+		$json->stock_null_lieu  = "Les stocks de ce lieu n'ont pas été saisis";
+		$json->stock_zero_lieu  = "Les stocks de ce lieu sont saisis à nul";    
+		$json->stock_null_cepage  = "Les stocks de ce cepage n'ont pas été saisis";
+		$json->stock_zero_cepage  = "Les stocks de ce cepage sont saisis à nul";
+		$json->autres_nul  = "Les moûts, rebêches, dépassements et lies n'ont pas été saisis et il s'agit d'une DS qui n'est pas à néant";    
+		
+                
 		$docs[] = $json;
 		if ($options['import'] == 'couchdb') {
 			foreach ($docs as $data) {
