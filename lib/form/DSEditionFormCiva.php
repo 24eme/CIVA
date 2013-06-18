@@ -10,7 +10,7 @@ class DSEditionFormCiva extends acCouchdbForm {
 
        $this->ds = $ds;
        $this->noeud = $noeud;
-       $this->no_vtsgn = true;
+       $this->no_vtsgn = !$noeud->getConfig()->hasVTSGN();
        foreach ($this->getProduitsDetails() as $hash => $detail) {     
             $form_key = $detail->getHashForKey();
             
@@ -34,7 +34,6 @@ class DSEditionFormCiva extends acCouchdbForm {
             $this->setWidget(DSCivaClient::VOLUME_SGN . $key, new sfWidgetFormInput(array(), array('size' => '6')));
             $this->setValidator(DSCivaClient::VOLUME_SGN . $key, new sfValidatorNumber(array('required' => false)));
             $this->widgetSchema->setLabel(DSCivaClient::VOLUME_SGN . $key, DSCivaClient::VOLUME_SGN);
-            $this->no_vtsgn = false;
           }
           $this->setWidget(DSCivaClient::VOLUME_NORMAL . $key, new sfWidgetFormInput(array(), array('size' => '6')));
 	  $this->setValidator(DSCivaClient::VOLUME_NORMAL . $key, new sfValidatorNumber(array('required' => false)));
