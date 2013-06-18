@@ -40,11 +40,11 @@ var initLieuxStockage = function()
 var majCheckboxesAppellation = function(){
     if($("#ds_lieu_neant").is(":checked")){
         $(".table_donnees input").each(function(){
-            $(this).attr("disabled","disabled");
+            $(this).attr("readonly","readonly");
         });
     }else{
        $(".table_donnees input").each(function(){
-            $(this).removeAttr("disabled");
+            $(this).removeAttr("readonly");
         }); 
     }
 }
@@ -57,9 +57,9 @@ var majLieuNeant = function(){
         }
     });
     if(one_checked)
-        $("#ds_lieu_neant").attr("disabled","disabled");
+        $("#ds_lieu_neant").attr("readonly","readonly");
     else
-        $("#ds_lieu_neant").removeAttr("disabled");
+        $("#ds_lieu_neant").removeAttr("readonly");
             
 }
 

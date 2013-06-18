@@ -18,7 +18,7 @@ $dss = $dss->getRawValue();
     ?>
     <input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>"
            id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>"
-               <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "disabled='disabled'" : ''; ?> >
+               <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> >
 	<div id="lieux_stockage">
 		<table class="table_donnees">
 			<thead>
@@ -56,7 +56,7 @@ $dss = $dss->getRawValue();
 							$paire = ($cpt%2==0)? 'paire' : '';
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
                                                         $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
-                                                        $disabled = ($ds->isDsNeant() || ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume()))? 'disabled="disabled"' : '';
+                                                        $disabled = ($ds->isDsNeant() || ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume()))? 'readonly="readonly"' : '';
 						?>
 					
 					<td class="<?php echo $paire ?>">
