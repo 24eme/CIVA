@@ -44,7 +44,13 @@ class DSRouting {
                         'action' => 'ajoutLieu'),
                         array('sf_method' => array('get', 'post')),
                         array('model' => 'DS',
-                            'type' => 'object') ));      
+                            'type' => 'object') ));
+
+        $r->prependRoute('ds_ajout_appellation', new DSRoute('/ds/:id/ajout-appellation', array('module' => 'ds',
+                'action' => 'ajoutAppellation'),
+                array('sf_method' => array('get', 'post')),
+                array('model' => 'DS',
+                    'type' => 'object') ));            
 
         $r->prependRoute('ds_ajout_produit', new DSNoeudRouteCiva('/ds/:id/ajout-produit/:hash', array('module' => 'ds',
                         'action' => 'ajoutProduit'),

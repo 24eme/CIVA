@@ -30,7 +30,7 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
             $this->_choices = array("" => "");
             foreach($this->getLieux() as $key => $lieu) {
                 $hash = $lieu->getHash();
-                if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
+                if($this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
 
                     continue;
                 }
