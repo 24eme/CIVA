@@ -344,6 +344,7 @@ class DSCiva extends DS {
     }
     
     public function validate() {
+        $this->declaration->cleanAllNodes();
         if(!$this->isDsPrincipale()){
             return $this;
         }        

@@ -131,6 +131,19 @@ class DSCepage extends BaseDSCepage {
         if($this->no_vtsgn && (($vol_vt > 0) || ($vol_sgn > 0)))
             return false;
         return true;
+    }  
+
+    public function cleanAllNodes() {
+        if(!preg_match('/appellation_VINTABLE/', $this->getHash())){
+        $details = $this->getProduitsDetails();
+        foreach ($details as $detail) {
+            if($detail->isVide()){
+                $detail->delete();
+            }
+            if(!count($this->detail)){
+                $this->removeNodesForClean();
+            }
+        }        
+    }    
     }
-    
 }

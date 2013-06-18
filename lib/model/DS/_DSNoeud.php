@@ -135,11 +135,17 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         $this->updateTotalVolumes();
     }
     
-    public function cleanAllNodes() {
+    public function cleanAllNodes() {        
         foreach($this->getChildrenNode() as $hash => $item) {
-            if(is_null($item->total_normal) && is_null($item->total_vt) && is_null($item->total_sgn)){
-                $this->remove($hash);
-            }
+            $item->cleanAllNodes();            
         }
     }
+    
+    public function removeNodesForClean() {        
+        if(is_null($this->getParent()->total_normal) && is_null($this->getParent()->total_vt) && is_null($this->getParent()->total_sgn)){
+            $this->delete();
+            $this->getParent()->removeNodesForClean();            
+        }
+    }   
+    
 }

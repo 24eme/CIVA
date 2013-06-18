@@ -77,4 +77,16 @@ class DSValidationCiva  extends DSValidation
          }
          return false;
      }
+     
+     public function isAnyPointBloquant() {
+         foreach ($this->points as $type_point) {
+             if(array_key_exists('erreur',$type_point) &&  count($type_point['erreur'])>0) return true;
+         }
+         return false;
+     }
+     
+     public function validate(){
+            $this->declaration->cleanAllNodes(); 
+         
+     }
 }

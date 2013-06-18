@@ -349,10 +349,10 @@ class DSCivaClient extends DSClient {
         }
         
         $dss = $this->findDssByDs($ds);
-        foreach ($dss as $ds) {
-            $ds->validate();
-            $ds->declaration->cleanAllNodes();  
-            $ds->save();
+        foreach ($dss as $current_ds) {
+            $current_ds->update();
+            $current_ds->validate();
+            $current_ds->save();
         }
         return $dss;
     }
