@@ -312,6 +312,9 @@ class DSCiva extends DS {
                 if($this->num_etape < $etape_rail + $nb_lieux - 1){
                     $this->add('num_etape', $etape_rail + $nb_lieux - 1);
                 }
+                if($this->isValidee()){
+                    $this->add('num_etape', $etape_rail + $nb_lieux - 1);
+                }
                 return $this;
          }  
     }

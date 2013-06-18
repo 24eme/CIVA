@@ -65,7 +65,12 @@ class DSCivaClient extends DSClient {
 
 
     public function retrieveByCampagneAndCvi($cvi,$campagne) {
-        for($month=1;$month<13;$month++){
+        for($month=8;$month>0;$month--){
+            if($ds = $this->find('DS-'.$cvi.'-'.($campagne+1).sprintf("%02d",$month).'-001')){
+                return $ds;
+            }
+        }
+        for($month=8;$month<13;$month++){
             if($ds = $this->find('DS-'.$cvi.'-'.$campagne.sprintf("%02d",$month).'-001')){
                 return $ds;
             }
