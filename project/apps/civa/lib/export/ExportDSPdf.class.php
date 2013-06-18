@@ -162,15 +162,16 @@ class ExportDSPdf {
             }
 
             $recap[$appellation->getLibelle()] = array("colonnes" => $colonnes, 
-                                                   "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                   "produits" => array(),
-                                                   "limit" => -1,
-                                                   "nb_ligne" => -1);
+                                                       "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                                       "produits" => array(),
+                                                       "limit" => -1,
+                                                       "no_header" => !$appellation->getConfig()->hasVtsgn(),
+                                                       "nb_ligne" => -1);
 
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 31);
+        $paginate = $this->paginate($recap, 36);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
