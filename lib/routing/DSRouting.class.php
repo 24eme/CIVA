@@ -88,11 +88,24 @@ class DSRouting {
                 array('model' => 'DS',
                     'type' => 'object') ));
 
+        $r->prependRoute('ds_invalider_civa', new DSRoute('/ds/:id/invalider-civa', array('module' => 'ds',
+                'action' => 'invaliderCiva'),
+                array('sf_method' => array('get')),
+                array('model' => 'DS',
+                    'type' => 'object') ));
+
+        $r->prependRoute('ds_invalider_recoltant', new DSRoute('/ds/:id/invalider-recoltant', array('module' => 'ds',
+                'action' => 'invaliderRecoltant'),
+                array('sf_method' => array('get')),
+                array('model' => 'DS',
+                    'type' => 'object') ));
+        
         $r->prependRoute('ds_export_pdf', new DSRoute('/ds/:id/pdf', array('module' => 'ds_export',
                 'action' => 'PDF'),
                 array('sf_method' => array('get')),
                 array('model' => 'DS',
                     'type' => 'object') ));
+        
         
         
         
