@@ -4,7 +4,7 @@
 
 <?php $tableau = $tableau->getRawValue() ?>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
-<?php if(!isset($tableau['no_header'])): ?>
+<?php if(!array_key_exists('no_header', $tableau) || !$tableau['no_header']): ?>
   <tr>
     <?php foreach($tableau['colonnes'] as $libelle): ?>
     <th style="text-align: left; font-weight: bold; width: <?php echo round(306/count($tableau['colonnes'])) ?>px; border: 1px solid black;">&nbsp;<?php echo $libelle ?></th>
@@ -27,8 +27,7 @@
   </tr>
 <?php endforeach; ?>
 <tr>
-  <td style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">
-    <b>&nbsp;Total</b> <?php if($tableau['nb_produits'] > 0 && is_null($tableau["total"]["normal"])): ?><small><i>&nbsp;&nbsp;(Page suivante)</i></small><?php endif; ?>
+  <td style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp;<b>Total</b><?php if($tableau['nb_produits'] > 0 && is_null($tableau["total"]["normal"])): ?><small><i>&nbsp;&nbsp;(Page suivante)</i></small><?php endif; ?>
   </td>
   <td style="border: 1px solid black; <?php if(is_null($tableau["total"]["normal"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($tableau["total"]["normal"], true) ?></td>
   <td style="border: 1px solid black; <?php if(is_null($tableau["total"]["vt"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($tableau["total"]["vt"], true) ?></td>

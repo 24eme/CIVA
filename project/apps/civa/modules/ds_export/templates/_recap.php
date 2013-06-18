@@ -1,10 +1,8 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
-<?php include_partial("ds_export/exploitation", array('ds' => $ds, 'tiers' => $ds->getEtablissement())) ?>
-<h2 style="text-align: center;">ANNEXE : Récapitulatif DRM <small><br />(tous lieux de stockage confondus)</small></h2>
-
-
-<small><br /></small>
+<br /><br />
+<span style="text-align: center; font-size: 12pt; font-weight:bold;">ANNEXE : Récapitulatif DRM<small><br />(tous lieux de stockage confondus)</small></span>
+<br /><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <tr>
   <th style="width: 198px; font-weight: bold; border: 1px solid black; background-color: black; color: white;">Appellations</th>
