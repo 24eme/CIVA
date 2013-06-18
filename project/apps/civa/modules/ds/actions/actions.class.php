@@ -272,6 +272,29 @@ class dsActions extends sfActions {
         }
     }
 
+    public function executeAjoutAppellation(sfWebRequest $request) {
+        $this->ds = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->form = new DSEditionAddAppellationFormCiva($this->ds);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+        
+        if(!$this->form->isValid()) {
+            
+            return sfView::SUCCESS;
+        }
+
+        $lieu = $this->ds->addAppellation($this->form->getValue('hashref'));
+        $this->ds->save();
+
+        return $this->redirect('ds_edition_operateur', $lieu);
+    }
+
     public function executeAjoutLieu(sfWebRequest $request) {
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();

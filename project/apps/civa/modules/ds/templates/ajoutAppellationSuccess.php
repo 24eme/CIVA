@@ -9,23 +9,19 @@
 
     <h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
     
-    <?php include_partial('ds/onglets', array('ds' => $ds, 'appellation' => $appellation)) ?>
+    <?php include_partial('ds/onglets', array('ds' => $ds)) ?>
 
     <!-- #application_ds -->
     <div id="application_ds" class="clearfix">
         <div id="aucun_produit">
-            <?php if(count($appellation->getLieuxSorted()) < 1): ?>
-            <p>Aucun lieu-dit défini pour cette appellation</p>
-            <?php else: ?>
-            <p>Ajouter un lieu-dit</p>
-            <?php endif; ?>        
+            <p>Ajouter une appellation</p>
             <div class="form_ligne">
-                <?php echo $form['hashref']->renderLabel(); ?>
-                <?php echo $form['hashref']->render(); ?>
-                <?php echo $form['hashref']->renderError(); ?>
+                                <?php echo $form['hashref']->renderLabel(); ?>
+                                <?php echo $form['hashref']->render(); ?>
+                                <?php echo $form['hashref']->renderError(); ?>
             </div>
             <div class="form_btn">
-                <?php if(count($appellation->getLieuxSorted()) > 0): ?>
+                <?php if(count($ds->declaration->getAppellationsSorted()) > 0): ?>
                     <a href="<?php echo url_for('ds_edition_operateur', $appellation) ?>">Annuler</a>
                 <?php endif; ?>    
                 <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
