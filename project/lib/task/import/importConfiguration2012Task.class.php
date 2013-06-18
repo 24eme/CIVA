@@ -282,10 +282,10 @@ EOF;
                     }
                     $grdcru->mention->{$lieu_key}->couleur->{$cepage}->douane->code_cepage = $lieu->couleur->{$cepage}->douane->code_cepage;
                     $grdcru->mention->{$lieu_key}->couleur->{$cepage}->douane->qualite =  $lieu->couleur->{$cepage}->douane->qualite;
-                    if (isset($grdcru->mention->{$lieu_key}->couleur->{$cepage}->rendement)) {
+                    if (isset($lieu->couleur->{$cepage}->rendement)) {
                         $grdcru->mention->{$lieu_key}->couleur->{$cepage}->rendement = $lieu->couleur->{$cepage}->rendement;
                     }
-                    if (isset($grdcru->mention->{$lieu_key}->couleur->{$cepage}->no_vtsgn)) {
+                    if (isset($lieu->couleur->{$cepage}->no_vtsgn)) {
                         $grdcru->mention->{$lieu_key}->couleur->{$cepage}->no_vtsgn = $lieu->couleur->{$cepage}->no_vtsgn;
                     }
                     unset($lieu->couleur->{$cepage});
