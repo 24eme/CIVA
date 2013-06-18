@@ -377,6 +377,10 @@ class dsActions extends sfActions {
             $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
         }       
         if ($request->isMethod(sfWebRequest::POST)) {
+            foreach ($this->dss as $id_ds => $ds) {
+                if($this->validation_dss[$id_ds]->isAnyPointBloquant())
+                    throw new sfException("Il existe un point bloquant non résolue, il n'est pas possible de valider la DS $id_ds");
+            }
             DSCivaClient::getInstance()->validate($this->ds_principale);
             $this->redirect('ds_visualisation', $this->ds_principale);
         }
