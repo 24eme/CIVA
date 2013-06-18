@@ -26,8 +26,4 @@ class DSDeclaration extends BaseDSDeclaration {
         return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
     }
     
-    public function removeNodesForClean() {
-        //DO nothing
-    }
-    
 }
