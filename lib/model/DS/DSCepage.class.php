@@ -120,11 +120,14 @@ class DSCepage extends BaseDSCepage {
         $this->total_normal = 0;
         $this->total_vt = 0;
         $this->total_sgn = 0;
+        $this->total_stock = 0;
         foreach($this->getChildrenNode() as $item) {
             $this->total_normal += $item->volume_normal;
             $this->total_vt += $item->volume_vt;
             $this->total_sgn += $item->volume_sgn;
         }
+
+        $this->total_stock = $this->total_normal + $this->total_vt + $this->total_sgn;
     }
     
     public function checkNoVTSGNImport($vol_vt,$vol_sgn) {

@@ -243,9 +243,12 @@ class DSCiva extends DS {
     public function getTotalAOCByType($type) {
         $total = 0;
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(!preg_match('/^appellation_VINTABLE/', $hash)) {
-                    $total += ($appellation->get($type))? $appellation->get($type) : 0;
+            if(preg_match('/^appellation_VINTABLE/', $hash)) {
+                
+                continue;        
             }
+
+            $total += ($appellation->get($type)) ? $appellation->get($type) : 0;
         }
         return $total;
     }
