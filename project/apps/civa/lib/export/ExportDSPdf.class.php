@@ -57,7 +57,7 @@ class ExportDSPdf {
         $validee = 'Déclaration validée le 31/07/2013';
         $validee .= ' et modifiée le 03/08/2013';
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
-        $title = 'Déclaration de stocks au 31 Juillet 2013';
+        $title = 'Déclaration de Stocks au 31 Juillet 2013';
         $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
             $rev = null;
