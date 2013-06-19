@@ -70,8 +70,16 @@ var videInputFocus = function()
  * Bloque le clic et le clavier sur les checkbox en readonly
  ******************************************/
 var bloqueCheckboxReadOnly = function()
-{	
-	$('input:checkbox[readonly]').on('click keydown', function()
+{
+	
+	var checkboxReadOnly = $('input[type="checkbox"][readonly]');
+	
+	checkboxReadOnly.click(function()
+	{
+		return false;
+	});
+	
+	checkboxReadOnly.keydown(function()
 	{
 		return false;
 	});
