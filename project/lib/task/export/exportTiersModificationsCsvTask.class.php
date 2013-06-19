@@ -87,12 +87,29 @@ EOF;
                     continue;
                 }
 
+                $metteur_en_marche = false;
+
                 foreach($compte->tiers as $tiers) {
+                    if($tiers->type != 'MetteurEnMarche') {
+
+                        continue;
+                    }
                     if(!array_key_exists($tiers->id, $tiers_modifies)) {
                         $tiers_modifies[$tiers->id] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id, sfCouchdbClient::HYDRATE_JSON);
                     }
 
+                    $metteur_en_marche = true;
                     $tiers_modifies[$tiers->id]->email = $compte->email;
+                }
+
+                if(!$metteur_en_marche) {
+                    foreach($compte->tiers as $tiers) {
+                        if(!array_key_exists($tiers->id, $tiers_modifies)) {
+                            $tiers_modifies[$tiers->id] = sfCouchdbManager::getClient()->retrieveDocumentById($tiers->id, sfCouchdbClient::HYDRATE_JSON);
+                        }
+
+                        $tiers_modifies[$tiers->id]->email = $compte->email; 
+                    }
                 }
             }
 
@@ -177,7 +194,7 @@ EOF;
 
         if(!$doc) {
         
-            return $tiers;
+            return sfCouchdbManager::getClient()->retrieveDocumentById($id, sfCouchdbClient::HYDRATE_JSON);
         }
 
         return $doc;

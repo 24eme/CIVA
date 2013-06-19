@@ -39,6 +39,7 @@ class MigrationCompte {
 
         $this->_nouveau_compte->_id = self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi;
         $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
+        $this->_nouveau_compte->setActif();
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
 
@@ -61,6 +62,9 @@ class MigrationCompte {
     public function createCompteTiers(){
         $this->new_rec->_id = self::PREFIX_KEY_REC . $this->_nouveau_cvi;
         $this->new_rec->compte = array(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi);
+        $this->new_rec->cvi = $this->_nouveau_cvi;
+
+        $this->new_rec = _TiersClient::STATUT_ACTIF;
 
         if(!is_null($this->nom))
             $this->new_rec->nom = $this->nom;

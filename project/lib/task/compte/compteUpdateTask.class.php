@@ -109,10 +109,10 @@ EOF;
                  $compte->login = $login."";
                  $compte->constructId();
                  $compte->mot_de_passe = $this->generatePass();;
-                 $compte->email = $this->combiner($tiers, 'email');
+                 $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             }
 
-            $email = $this->combiner($tiers, 'email');
+            $email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             if($email) {
                 if ($email != $compte->email && $compte->email) {
                     $this->logSection("L'email a été modifié", $compte->_id);
@@ -159,7 +159,7 @@ EOF;
                 echo sprintf("Modification du compte %s:%s\n", $compte->_id, $compte->nom);
             }
 
-            if(!$compte->date_creation) {
+            if(!$compte->date_creation && $tiers_date_creation) {
                $compte->date_creation = $tiers_date_creation;
                $this->logSection('date_creation', $compte->_id.":".$compte->date_creation);
             }
@@ -209,10 +209,10 @@ EOF;
         return $login;
     }
 
-    private function combiner($tiers_json, $field) {
+    private function combiner($tiers_json, $field, $priorite_type = 'Recoltant') {
         $value = null;
         foreach ($tiers_json as $tiers) {
-            if ($tiers->type == 'Recoltant' && $tiers->$field) {
+            if ($tiers->type == $priorite_type && $tiers->$field) {
                 return $tiers->$field;
             } elseif (is_null($value) && $tiers->$field) {
                 $value = $tiers->$field;
