@@ -9,10 +9,14 @@ $dss = $dss->getRawValue();
     echo $form->renderGlobalErrors();
 ?>  
 
-<h2 class="titre_page">Définissez ici le détail de vos lieux de stockage</h2>
+<ul id="onglets_majeurs" class="clearfix">
+	<li class="ui-tabs-selected"><a href="#lieux_stockage">Lieux de stockage</a></li>
+</ul>
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
+	
+	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
 	
 	<div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>

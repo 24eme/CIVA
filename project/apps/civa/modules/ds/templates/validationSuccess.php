@@ -14,6 +14,7 @@ endforeach;
     
 <form method="POST" action="<?php echo url_for("ds_validation", $ds_principale)?>" >
 
+	
 <?php
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
 ?>

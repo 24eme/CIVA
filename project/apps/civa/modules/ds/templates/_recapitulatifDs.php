@@ -2,9 +2,14 @@
 use_helper('Float');
 $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 ?>
-<h2 class="titre_page">Récapitulatif de votre déclaration de Stocks <small>(tous lieux de stockage confondus)</small></h2>
+	<ul id="onglets_majeurs" class="clearfix">
+		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif</a></li>
+	</ul>
+
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
+		
+		<p class="intro_declaration">Récapitulatif de votre déclaration de Stocks <small>(tous lieux de stockage confondus)</small></p>
             
 		<div id="recap_total_ds" class="page_recap">
 			<div id="recap_appellations">
