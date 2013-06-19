@@ -34,7 +34,7 @@
 			<?php endif; ?>
 			<div class="form_btn">
                 <?php if(count($lieu->getProduitsDetails()) > 0): ?>
-                    <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>">Annuler</a>
+                    <a href="<?php echo url_for('ds_edition_operateur', $lieu) ?>"><img src="/images/boutons/btn_annuler.png" alt="Annuler" /></a>
                 <?php endif; ?>
                 <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
 			</div>

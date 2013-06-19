@@ -22,7 +22,7 @@
             </div>
             <div class="form_btn">
                 <?php if(count($ds->declaration->getAppellationsSorted()) > 0): ?>
-                    <a href="<?php echo url_for('ds_edition_operateur', $appellation) ?>">Annuler</a>
+                    <a href="<?php echo url_for('ds_edition_operateur', $appellation) ?>"><img src="/images/boutons/btn_annuler.png" alt="Annuler" /></a>
                 <?php endif; ?>    
                 <input type="image" src="/images/boutons/btn_valider.png" alt="Valider" />
             </div>
