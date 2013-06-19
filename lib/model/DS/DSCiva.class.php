@@ -350,8 +350,7 @@ class DSCiva extends DS {
                && (($this->lies == 0) || is_null($this->lies))) ;
     }
     
-    public function validate() {
-        $this->declaration->cleanAllNodes();
+    public function validate() {        
         if(!$this->isDsPrincipale()){
             return $this;
         }        

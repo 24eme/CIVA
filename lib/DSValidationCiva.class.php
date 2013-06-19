@@ -23,7 +23,7 @@ class DSValidationCiva  extends DSValidation
     $this->addControle('vigilance', 'stock_zero_cepage', acCouchdbManager::getClient('Messages')->getMessage('stock_zero_cepage'));
     
     $this->addControle('erreur', 'autres_nul', acCouchdbManager::getClient('Messages')->getMessage('autres_nul'));
-    
+    $this->addControle('erreur', 'ds_autres_nul_principale', acCouchdbManager::getClient('Messages')->getMessage('ds_autres_nul_principale'));
   }
 
   public function controle()

@@ -17,12 +17,12 @@ class DSDeclaration extends BaseDSDeclaration {
     }
     
     public function getAppellations() {
-
+        if(!$this->exist('certification')) return array();
         return $this->getChildrenNodeDeep(2)->getAppellations();
     }
 
     public function getAppellationsSorted() {
-
+        if(!$this->exist('certification')) return array();
         return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
     }
     

@@ -350,14 +350,31 @@ class DSCivaClient extends DSClient {
     
     public function validate($ds){
         if(!$ds->isDsPrincipale()){
-            throw new sfException("Aucun clean n'est possible à partir d'une DS qui n'est pas la Ds Principale (ici : $ds->id)");
+            throw new sfException("Aucun clean n'est possible à partir d'une DS qui n'est pas la Ds Principale (ici : $ds->_id)");
         }
         
         $dss = $this->findDssByDs($ds);
         foreach ($dss as $current_ds) {
-            $current_ds->validate();
-            $current_ds->update();
-            $current_ds->save();
+            $current_ds->declaration->cleanAllNodes();
+            $deleted = false;
+            if($current_ds->hasNoAppellation()){
+                if($current_ds->isDsPrincipale() && $current_ds->isAutresNul() && !$current_ds->isDsNeant()){
+                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) est vide et autres n'est pas rempli, alors que ce n'est pas une DS à néant.");
+                }
+            }else{
+                if($ds->hasNoAppellation()){
+                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) est vide alors qu'une DS secondaire ne l'est pas");
+                }
+            }
+            if($current_ds->hasNoAppellation() && !$current_ds->isDsPrincipale()){
+                $this->delete($current_ds);
+                $deleted = true;
+            }
+            if(!$deleted){
+                $current_ds->validate();
+                $current_ds->update();
+                $current_ds->save();
+            }
         }
         return $dss;
     }
