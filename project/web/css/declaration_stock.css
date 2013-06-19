@@ -222,6 +222,12 @@ ul#etape_declaration li.actif a em span.lieu
 /**
  * Définition des lieux de stockage
  ******************************************/
+#application_ds .ds_neant
+{
+	margin: 0 0 5px;
+	text-align: right;
+}
+
 #application_ds #lieux_stockage table thead th { font-size: 11px; }
 
 #application_ds #lieux_stockage table thead th:first-child 

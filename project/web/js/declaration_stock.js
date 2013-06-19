@@ -35,7 +35,7 @@ var initLieuxStockage = function()
     $("#ds_lieu_neant").change(function(){
         majCheckboxesAppellation();
     });
-}
+};
 
 var majCheckboxesAppellation = function(){
     if($("#ds_lieu_neant").is(":checked")){
@@ -47,7 +47,7 @@ var majCheckboxesAppellation = function(){
             $(this).removeAttr("readonly");
         }); 
     }
-}
+};
 
 var majLieuNeant = function(){
     var one_checked = false;
@@ -61,7 +61,7 @@ var majLieuNeant = function(){
     else
         $("#ds_lieu_neant").removeAttr("readonly");
             
-}
+};
 
 
 /**
@@ -176,7 +176,7 @@ $.fn.ajaxPostForm = function(){
             }); 
         });
     
-}
+};
 
 var formPost = function(form)
 {
@@ -195,7 +195,7 @@ var formPost = function(form)
                 $( "#ajax_error").html(textStatus);
         }
     });
-}
+};
 
 /**
  * Gère la navigation des onglets
@@ -244,4 +244,4 @@ var initValidDSPopup = function()
         });
         return false;
     });
-}
+};

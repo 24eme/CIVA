@@ -13,12 +13,12 @@ $dss = $dss->getRawValue();
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
-    <?php 
-    echo $form['neant']->renderLabel();
-    ?>
-    <input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>"
-           id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>"
-               <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> >
+	
+	<div class="ds_neant">
+		<?php echo $form['neant']->renderLabel(); ?>
+		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> />
+	</div>
+	
 	<div id="lieux_stockage">
 		<table class="table_donnees">
 			<thead>
