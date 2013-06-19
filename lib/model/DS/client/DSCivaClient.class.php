@@ -254,17 +254,17 @@ class DSCivaClient extends DSClient {
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation){                
                 switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
-                    case 'VINTABLE':
-                    break;
-                
                     case 'GRDCRU':
                     case 'CREMANT': 
-                    case 'ALSACEBLANC': 
                         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,$appellation_key,$appellation,$appellation->getLibelle());
-                    break;
-                    default :
+                        break;
+                    case 'ALSACEBLANC':
+                    case 'COMMUNALE':
+                    case 'LIEUDIT':
+                    case 'PINOTNOIRROUGE':
+                    case 'PINOTNOIR':
                         $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap,$appellation_key,$appellation);
-                    break;
+                        break;
                 }
                 
             }
@@ -278,12 +278,12 @@ class DSCivaClient extends DSClient {
         }
         foreach ($appellation->getLieux() as $lieu) {
             foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
-                if(preg_match('/Blanc$/', $couleur_key)){
-                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEBLANC',$couleur,'AOC Alsace Blanc');
+                if(preg_match('/Rouge$/', $couleur_key)){
+                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEROUGEROSE',$couleur,'Rouge ou Rosé');
                 }
                 else
                 {
-                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEROUGEROSE',$couleur,'Rouge ou Rosé');
+                    $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap,'ALSACEBLANC',$couleur,'AOC Alsace Blanc');
                 }
             }
         }
