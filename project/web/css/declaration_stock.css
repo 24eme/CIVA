@@ -538,3 +538,7 @@ ul#etape_declaration li.actif a em span.lieu
   background:#ffd58c;
   color:#a03b09;
 }
+
+#application_ds #btn-email {
+	background: url(../images/boutons/btn-recevoir-ma-ds-par-email.png);
+}
