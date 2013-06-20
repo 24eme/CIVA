@@ -19,7 +19,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 			<h2><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
 		<?php 
 			endif;
-			include_partial('document_validation/validation', array('validation' => $validation_ds));
+			include_partial('global/validation', array('validation' => $validation_ds));
 			endforeach; 
                     endif;
 		?>

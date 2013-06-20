@@ -1,4 +1,4 @@
-<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 6, 'force_no_link' => true, 'force_passe' => true));  ?>
+<?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 100, 'force_no_link' => true, 'force_passe' => true));  ?>
 
 <!-- #principal -->
     <ul id="onglets_majeurs" class="clearfix">

@@ -81,8 +81,10 @@ class ExportDSPdf {
 
     protected function create() {
         foreach($this->dss as $ds) {
-            $ds->storeStockage();
-            $ds->update();
+            if(!$ds->isValidee()) {
+                $ds->update();
+                $ds->declaration->cleanAllNodes();
+            }
             $this->createMainByDS($ds);
             $this->createAnnexeByDS($ds);
         }
