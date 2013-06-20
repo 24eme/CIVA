@@ -483,6 +483,11 @@ ul#etape_declaration li.actif a em span.lieu
 	/*margin: 0 0 40px;*/
 }
 
+#application_ds .lieu_stockage
+{
+	font-size: 14px;
+}
+
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
 #application_ds #recap_autres { margin: 45px 0 0; }

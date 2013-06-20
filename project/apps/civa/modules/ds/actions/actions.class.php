@@ -420,17 +420,17 @@ class dsActions extends sfActions {
     
     public function executeInvaliderCiva(sfWebRequest $request) {
         $this->ds_principale = $this->getRoute()->getDS();
-        $this->ds_principale->updateEtape(5);
-        $this->ds_principale->modifiee = null;
-        $this->ds_principale->save();
+
+        DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
+
         $this->redirect('mon_espace_civa');
     }
     
     public function executeInvaliderRecoltant(sfWebRequest $request) {
         $this->ds_principale = $this->getRoute()->getDS();
-        $this->ds_principale->updateEtape(5);
-        $this->ds_principale->validee = null;
-        $this->ds_principale->save();
+
+        DSCivaClient::getInstance()->devalidate($this->ds_principale);
+        
         $this->redirect('mon_espace_civa');
     }
 
