@@ -28,13 +28,7 @@ class DSValidationCiva  extends DSValidation
 
   public function controle()
   {
-      if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
-          if($this->document->isAutresNul()){
-              $this->addPoint('erreur', 'autres_nul',' revenir à autres', $this->generateUrl('ds_autre', $this->document));               
-          }
-      }
-      else
-      {
+      var_dump($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation());
             foreach($this->document->declaration->getAppellations() as $hash => $appellation) {
                     $appellation_vigilence = false;
                     if(!$appellation->total_stock){
@@ -68,7 +62,13 @@ class DSValidationCiva  extends DSValidation
                             }
                         }
                     }
-                }
+                    
+      $this->document->declaration->cleanAllNodes();           
+      if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
+          if($this->document->isAutresNul()){
+              $this->addPoint('erreur', 'autres_nul',' revenir à lieux de stockage', $this->generateUrl('ds_lieux_stockage', $this->document));               
+          }
+      }
      }
      
      public function isPoints(){
