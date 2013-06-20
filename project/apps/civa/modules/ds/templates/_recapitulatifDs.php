@@ -16,7 +16,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 			foreach ($validation_dss as $id_ds => $validation_ds):
 				if($validation_ds->isPoints()):
 		?>
-			<h2><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
+			<h2 class="lieu_stockage"><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
 		<?php 
 			endif;
 			include_partial('global/validation', array('validation' => $validation_ds));
