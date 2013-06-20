@@ -377,4 +377,18 @@ class DSCivaClient extends DSClient {
         }
         return $dss;
     }
+
+    public function devalidate($ds, $juste_civa = false){
+        if(!$ds->isDsPrincipale()){
+            throw new sfException("La devalidation n'est possible qu'a partir d'une ds principale");
+        }
+        
+        $dss = $this->findDssByDs($ds);
+        foreach ($dss as $current_ds) {
+            $current_ds->devalidate($juste_civa);
+            $current_ds->save();
+        }
+
+        return $dss;
+    }
 }

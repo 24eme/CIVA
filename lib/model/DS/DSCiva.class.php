@@ -349,20 +349,60 @@ class DSCiva extends DS {
                && (($this->mouts == 0) || is_null($this->mouts))
                && (($this->lies == 0) || is_null($this->lies))) ;
     }
+
+    public function devalidate($juste_civa = false) {
+
+        if($this->isDsPrincipale()){
+             $this->updateEtape(5);
+        }
+
+        if(!$juste_civa) {
+            $this->validee = null;
+        }
+
+        $this->modifiee = null;
+
+        return $this;
+    }
     
-    public function validate() {        
-        if(!$this->isDsPrincipale()){
-            return $this;
-        }        
-        $date = date("Y-m-d H:i:s");
+    public function validate() {
+        if($this->isDsPrincipale()){
+            $this->updateEtape(6);
+        }
+
+        $date = date("Y-m-d");
         $this->add('validee', $date);
         $this->add('modifiee', $date);
-        $this->updateEtape(6);
+        
         return $this;
     }
     
     public function isValidee(){
-        return $this->exist('validee') && $this->exist('modifiee') && $this->get('validee') && ($this->get('modifiee') == $this->get('validee'));
+
+        return $this->isValideeCiva();
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isValideeCiva() {
+        if ($this->exist('modifiee')) {
+            return $this->modifiee;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isValideeTiers() {
+        if ($this->exist('validee')) {
+            return $this->validee;
+        }
+        return false;
+    }
+
 }
 
