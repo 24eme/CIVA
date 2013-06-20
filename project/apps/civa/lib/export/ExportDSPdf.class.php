@@ -82,6 +82,7 @@ class ExportDSPdf {
     protected function create() {
         foreach($this->dss as $ds) {
             if(!$ds->isValidee()) {
+                $ds->storeInfos();
                 $ds->update();
                 $ds->declaration->cleanAllNodes();
             }
