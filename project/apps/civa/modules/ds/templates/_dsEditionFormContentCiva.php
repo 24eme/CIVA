@@ -19,7 +19,13 @@ $produits = $form->getProduitsDetails();
     </ul>
     <div id="donnees_stock_cepage">
             <div id="col_hors_vt_sgn" class="colonne">
-				<h2>hors VT et SGN (hl)</h2>
+				<h2>
+                    <?php if($form->hasVTSGN()): ?>
+                    hors VT et SGN (hl)
+                    <?php else: ?>
+                    Volume (hl)
+                    <?php endif; ?>
+                </h2>
 
 				<div class="col_cont">
 					<ul>

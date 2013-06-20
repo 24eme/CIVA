@@ -349,6 +349,7 @@ ul#etape_declaration li.actif a em span.lieu
 	padding: 0 5px;
 	overflow: hidden;
 	white-space: nowrap;
+	text-align: center;
 }
 
 #application_ds #donnees_stock_cepage .colonne .col_cont
