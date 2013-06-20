@@ -176,7 +176,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             return true;
         }
          
-        return true;//(CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
+        return (CurrentClient::getCurrent()->ds_non_editable == 0 && CurrentClient::getCurrent()->ds_non_ouverte == 0);
     }
     
     public function getDs()

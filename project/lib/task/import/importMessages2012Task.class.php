@@ -111,7 +111,7 @@ EOF;
 		$json->intro_mon_espace_civa_ds_validee  = "Vous avez déjà validé votre DS. Vous ne pouvez plus la modifier. Vous pouvez uniquement la visualiser et l'imprimer. En cas de problème contactez au CIVA  Dominique WOLFF ou Béatrice FISCHER";
 		$json->intro_mon_espace_civa_ds_non_disponible  = "Le service est momentanément indisponible. Essayez de vous reconnecter ultérieurement.";
 		$json->intro_mon_espace_civa_ds_non_editable  = "La date limite pour la souscription des DS est dépassée (X octobre). Pour toute question, veuillez contacter directement le CIVA.";
-		$json->intro_mon_espace_civa_ds_non_ouverte  = "Le Téléservice pour la déclaration de stock 2012 sera ouvert à partir du 1er aout.\n";
+		$json->intro_mon_espace_civa_ds_non_ouverte  = "Le Téléservice pour la déclaration de stock 2013 sera ouvert à partir du 1er aout.\n";
 		
                 $json->intro_gamma  = "Vous avez accès ici à l'application AlsaceGamm@.";
 		$json->intro_doc_aide  = "En cas de besoin n'hésitez pas à consulter la notice d'aide complete au format pdf.";
