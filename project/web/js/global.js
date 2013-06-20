@@ -14,7 +14,6 @@ $(document).ready( function()
 	videInputFocus();
 	initNettoyageChamps();
 	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
-	bloqueCheckboxReadOnly();
 });
 
 /**
@@ -63,25 +62,6 @@ var videInputFocus = function()
 	{
 		$(this).focus( function() { if(this.value == this.defaultValue) this.value=''; });	
 		$(this).blur( function() { if(this.value == '') this.value=this.defaultValue; });
-	});
-};
-
-/**
- * Bloque le clic et le clavier sur les checkbox en readonly
- ******************************************/
-var bloqueCheckboxReadOnly = function()
-{
-	
-	var checkboxReadOnly = $('input[type="checkbox"][readonly]');
-	
-	checkboxReadOnly.click(function()
-	{
-		return false;
-	});
-	
-	checkboxReadOnly.keydown(function()
-	{
-		return false;
 	});
 };
 
