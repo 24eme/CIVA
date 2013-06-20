@@ -12,6 +12,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 		<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
 		
 		<?php
+                        if(isset($validation_dss)) :
 			foreach ($validation_dss as $id_ds => $validation_ds):
 				if($validation_ds->isPoints()):
 		?>
@@ -20,6 +21,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 			endif;
 			include_partial('document_validation/validation', array('validation' => $validation_ds));
 			endforeach; 
+                    endif;
 		?>
             
 		<div id="recap_total_ds" class="page_recap">
