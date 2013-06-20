@@ -18,10 +18,10 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<thead>
 						<tr>
 							<th class="appellation">Appellations</th>
-							<th class="total">Total</th>
-							<th>hors VT/SGN</th>
-							<th>VT</th>
-							<th>SGN</th>
+							<th class="total">Total <span class="unites">(hl)</span></th>
+							<th>hors VT/SGN <span class="unites">(hl)</span></th>
+							<th>VT <span class="unites">(hl)</span></th>
+							<th>SGN <span class="unites">(hl)</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -52,7 +52,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<thead>
 						<tr>
 							<th class="appellation">Vins sans IG</th>
-							<th class="total">Total</th>
+							<th class="total">Total <span class="unites">(hl)</span></th>
 						</tr>
 					</thead>
 					<tbody>        

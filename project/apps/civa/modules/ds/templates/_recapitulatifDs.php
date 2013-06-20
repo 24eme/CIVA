@@ -30,10 +30,10 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<thead>
 						<tr>
 							<th class="appellation">Appellations</th>
-							<th class="total">Total</th>
-							<th>Hors VT/SGN</th>
-							<th>VT</th>
-							<th>SGN</th>
+							<th class="total">Total <span class="unites">(hl)</span></th>
+							<th>Hors VT/SGN <span class="unites">(hl)</span></th>
+							<th>VT <span class="unites">(hl)</span></th>
+							<th>SGN <span class="unites">(hl)</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -60,7 +60,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 					<thead>
 						<tr>
 							<th class="appellation">Autres</th>
-							<th class="total">Total</th>
+							<th class="total">Total <span class="unites">(hl)</span></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -80,7 +80,7 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 				<thead>
 					<tr>
 						<th class="appellation">Vins sans IG</th>
-						<th class="total">Total</th>
+						<th class="total">Total <span class="unites">(hl)</span></th>
 					</tr>
 				</thead>
 				<tbody>        
