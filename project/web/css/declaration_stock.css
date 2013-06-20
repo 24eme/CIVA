@@ -249,7 +249,7 @@ ul#etape_declaration li.actif a em span.lieu
 	font-size: 14px;
 	float: left;
 	margin: 36px 40px 10px 0;
-	width: 200px;
+	width: 210px;
 }
 
 #application_ds #liste_cepages li
@@ -259,7 +259,7 @@ ul#etape_declaration li.actif a em span.lieu
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
-	width: 190px;
+	width: 200px;
 	
 	overflow: hidden;
 	-o-text-overflow: ellipsis;
