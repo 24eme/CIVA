@@ -13,7 +13,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 <!-- #application_ds --></h2>
 <div id="ajax_error"></div>
 	<div id="application_ds" class="clearfix">
-		<p class="intro_declaration">Saisissez ici vos rebêche, dépassements de rendement, lies et moûts <small>(tous lieux de stockage confondus)</small></p>
+		<p class="intro_declaration">Saisissez ici vos rebêches, dépassements de rendements, lies et moûts <small>(tous lieux de stockage confondus)</small></p>
 	
 		<div class="bloc_autres">
 			<!-- #gestion_stock -->
