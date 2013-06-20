@@ -392,7 +392,7 @@ ul#etape_declaration li.actif a em span.lieu
 {
 	font-size: 14px;
 	padding: 0 0 0 10px;
-	width: 230px;
+	width: 240px;
 }
 
 #application_ds .ligne_total ul li
@@ -529,7 +529,7 @@ ul#etape_declaration li.actif a em span.lieu
 	padding-right: 5px;
 }
 #application_ds .page_recap .ligne_total h3 { width: 188px; }
-#application_ds .page_recap .ligne_total input { width: 110px; margin-right: 5px;}
+#application_ds .page_recap .ligne_total input { width: 110px; margin-right: 5px; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; }
 #application_ds .page_recap .ligne_total + table { margin-top: 40px; }
 
 #points_bloquants .error, #points_bloquants .warning, #points_vigilance .error, #points_vigilance .warning {
