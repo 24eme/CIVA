@@ -33,6 +33,11 @@ class DSCiva extends DS {
 
         $this->set('stockage', $tiers->lieux_stockage->get($num_lieu));
     }
+
+    public function storeInfos() {
+        $this->storeStockage();
+        $this->storeDeclarant();
+    }
     
     public function getLastDocument() {
         return $this->getLastDR();
@@ -370,10 +375,12 @@ class DSCiva extends DS {
             $this->updateEtape(6);
         }
 
+        $this->storeInfos();
+
         $date = date("Y-m-d");
         $this->add('validee', $date);
         $this->add('modifiee', $date);
-        
+
         return $this;
     }
     

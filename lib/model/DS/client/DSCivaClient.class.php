@@ -94,9 +94,8 @@ class DSCivaClient extends DSClient {
             $ds->date_emission = date('Y-m-d');
             $ds->date_stock = $this->createDateStock($date_stock);
             $ds->identifiant = $tiers->cvi;
-            $ds->storeDeclarant();
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
-            $ds->storeStockage();
+            $ds->storeInfos();
             $ds->updateProduits();
             $ds->updateAutre();
             if($ds->isDsPrincipale())
@@ -113,9 +112,8 @@ class DSCivaClient extends DSClient {
         $new_ds->date_emission = $ds->date_emission;
         $new_ds->date_stock = $ds->date_stock;
         $new_ds->identifiant = $ds->identifiant;
-        $new_ds->storeDeclarant();
         $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
-        $new_ds->storeStockage();
+        $ds->storeInfos();
         return $new_ds;
     }
 
@@ -345,6 +343,20 @@ class DSCivaClient extends DSClient {
     
     public function getNbDS($ds){
         return count($this->findDssByDS($ds));
+    }
+
+    public function storeInfos($ds) {
+        if(!$ds->isDsPrincipale()){
+            throw new sfException("Cette méthode n'est autorisé uniqument partir d'une ds principale");
+        }
+        
+        $dss = $this->findDssByDs($ds);
+        foreach ($dss as $current_ds) {
+            $current_ds->storeInfos();
+            $current_ds->save();
+        }
+
+        return $dss;
     }
     
     public function validate($ds){
