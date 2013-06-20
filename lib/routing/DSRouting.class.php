@@ -81,6 +81,12 @@ class DSRouting {
                 array('sf_method' => array('get', 'post')),
                 array('model' => 'DS',
                     'type' => 'object') ));
+
+         $r->prependRoute('ds_confirmation', new DSRoute('/ds/:id/confirmation', array('module' => 'ds',
+                        'action' => 'confirmation'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'DS',
+                            'type' => 'object') ));
         
         $r->prependRoute('ds_visualisation', new DSRoute('/ds/:id/visualisation', array('module' => 'ds',
                 'action' => 'visualisation'),
