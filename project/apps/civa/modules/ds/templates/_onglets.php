@@ -24,7 +24,7 @@
     <?php endif; ?>
     <li class="recap_stock <?php echo isset($recap) ? 'ui-tabs-selected' : '' ; ?>">
         <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", $ds); ?>" style="height: 30px;">
-        <br>Récapitulatif</a>
+        Récapitulatif du<br />lieu de stockage</a>
     </li>
 </ul>
 
