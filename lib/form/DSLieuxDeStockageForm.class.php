@@ -25,6 +25,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
             }
         }
+        
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
 
@@ -36,7 +37,10 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         }
         $this->setWidget('neant', new sfWidgetFormChoice(array('choices' => $this->getNeant(),'expanded' => true, 'multiple' => true)));
         $this->setValidator('neant', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getNeant()), 'multiple' => true)));
-      
+        $this->getValidatorSchema()->setPostValidator(new ValidatorLieuxStockageDS($this->lieux_stockage));
+
+        
+        
         $this->widgetSchema->setLabel('neant', 'DS à néant');
         $this->widgetSchema->setNameFormat('ds_lieu[%s]');
     }
@@ -105,6 +109,10 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
     
     public function getNeant() {
         return array(1 => 1);
+    }
+    
+    public function postValidator(){
+        
     }
 
 }
