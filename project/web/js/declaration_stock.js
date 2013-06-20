@@ -11,13 +11,17 @@ var champsSommes = appDS.find('.ligne_total input.somme');
 /**
  * Initialisation
  ******************************************/
+
+var valide_form = false;
+
 $(document).ready(function()
 {	
-	//navOngletsStock();
-	initDSSommesCol();
+    //navOngletsStock();
+    initDSSommesCol();
     initLieuxStockage();
     var ajaxForm = $('form.ajaxForm');
     if(ajaxForm.length > 0) {
+        ajaxForm.postButtonForm();
         ajaxForm.ajaxPostForm();
     }
     initValidDSPopup();
@@ -164,13 +168,23 @@ $.fn.majDSSommesCol = function()
 	});
 };
 
+$.fn.postButtonForm = function(){
+        var form_id = $(this).attr('id');
+        $('#'+form_id+' #valide_form').click(function(){
+            if(valide_form){
+                setTimeout(function() {$('#valide_form').click()} , 500);
+                return false;
+            }
+        });
+}
+
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
         var inputs = $('#'+form_id+'.ajaxForm :input');
         $(inputs).each(function(){
-                $(this).change(function(){
-                    formPost(form);
+            $(this).change(function(){
+                formPost(form);
             }); 
         });
             
@@ -188,6 +202,8 @@ var formPost = function(form)
             $(this).verifNettoyageChamp();
         });
         
+        valide_form = true;
+        
         $.ajax({
             url: $(form).attr('action'),
             type: "POST",
@@ -197,9 +213,15 @@ var formPost = function(form)
             success: function(msg){},  
             error: function(textStatus){  
                 $( "#ajax_error").html(textStatus);
+                valide_form = false;
         }
     });
 };
+
+$.fn.RevisionajaxSuccessCallBack = function() {
+    valide_form = false;
+}
+
 
 /**
  * Gère la navigation des onglets
