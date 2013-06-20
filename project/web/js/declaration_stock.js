@@ -21,6 +21,9 @@ $(document).ready(function()
         ajaxForm.ajaxPostForm();
     }
     initValidDSPopup();
+	
+	// Scroll sur la liste des lieux de stockage
+	$.scrollTo('#liste_lieux_stockage', 800);
 });
 
 
