@@ -3,13 +3,13 @@ use_helper('Float');
 $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 ?>
 	<ul id="onglets_majeurs" class="clearfix">
-		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif</a></li>
+		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM</a></li>
 	</ul>
 
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
 		
-		<p class="intro_declaration">Récapitulatif de votre déclaration de Stocks <small>(tous lieux de stockage confondus)</small></p>
+		<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
 		
 		<?php
 			foreach ($validation_dss as $id_ds => $validation_ds):

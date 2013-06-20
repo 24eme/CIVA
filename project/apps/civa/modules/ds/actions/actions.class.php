@@ -405,8 +405,17 @@ class dsActions extends sfActions {
                     throw new sfException("Il existe un point bloquant non résolue, il n'est pas possible de valider la DS $id_ds");
             }
             DSCivaClient::getInstance()->validate($this->ds_principale);
-            $this->redirect('ds_visualisation', $this->ds_principale);
+            $this->redirect('ds_confirmation', $this->ds_principale);
         }
+    }
+
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeConfirmation(sfWebRequest $request) {
+        $this->ds_principale = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();        
     }
     
     public function executeInvaliderCiva(sfWebRequest $request) {
