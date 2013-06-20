@@ -440,6 +440,9 @@ Current:
       campagne: {}
       dr_non_editable: {}
       dr_non_ouverte: {}
+      ds_non_editable: {required: false}
+      ds_non_ouverte: {required: false}
+      declaration_courante: {required: false}
 
 Configuration:
   definition:
