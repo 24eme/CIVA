@@ -398,7 +398,7 @@ class dsActions extends sfActions {
         $this->validation_dss = array();
         foreach ($this->dss as $id_ds => $ds) {
             $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
-        }       
+        }     
         if ($request->isMethod(sfWebRequest::POST)) {
             foreach ($this->dss as $id_ds => $ds) {
                 if($this->validation_dss[$id_ds]->isAnyPointBloquant())
