@@ -465,15 +465,13 @@ ul.error_list li {
 .message {
 	background: #fffcef;
 	border: 1px solid #f90;
-	margin: 0 0 15px;
+	margin: 15px 0;
 	padding: 10px 15px;
 }
 
 .message_erreur {
 	background: #FDD;
 	border: 1px solid #FF3300;
-	margin: 0 0 15px;
-	padding: 10px 15px;
 }
 
 .message ul.messages_log li {

@@ -10,6 +10,17 @@ $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 	<div id="application_ds" class="clearfix">
 		
 		<p class="intro_declaration">Récapitulatif de votre déclaration de Stocks <small>(tous lieux de stockage confondus)</small></p>
+		
+		<?php
+			foreach ($validation_dss as $id_ds => $validation_ds):
+				if($validation_ds->isPoints()):
+		?>
+			<h2><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
+		<?php 
+			endif;
+			include_partial('document_validation/validation', array('validation' => $validation_ds));
+			endforeach; 
+		?>
             
 		<div id="recap_total_ds" class="page_recap">
 			<div id="recap_appellations">

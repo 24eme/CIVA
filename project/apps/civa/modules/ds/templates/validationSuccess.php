@@ -1,23 +1,12 @@
-<?php 
+<?php
 use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 'etape' => 5)); 
-
-foreach ($validation_dss as $id_ds => $validation_ds):
-    if($validation_ds->isPoints()):
-    ?>
-    <h2><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
-    <?php
-    endif;
-include_partial('document_validation/validation', array('validation' => $validation_ds));
-endforeach;
 ?>
     
 <form method="POST" action="<?php echo url_for("ds_validation", $ds_principale)?>" >
 
 	
-<?php
-include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
-?>
+<?php include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client, 'validation_dss' => $validation_dss)); ?>
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
 		<a href="<?php echo url_for('ds_autre',$ds_principale); ?>">
