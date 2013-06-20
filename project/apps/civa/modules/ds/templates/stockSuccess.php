@@ -62,7 +62,7 @@ use_helper('ds');
 				</li>
                                 
 				<li>
-                                    <input tabindex="<?php echo $tabindex ?>" type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" />
+                                    <input tabindex="<?php echo $tabindex ?>" type="image" src="/images/boutons/btn_appelation_suiv.png" alt="Valider et passer à l'appellation suivante" id="valide_form" />
 				</li>
 			</ul>
 		</div>
