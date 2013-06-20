@@ -362,10 +362,9 @@ class DSCiva extends DS {
         }
 
         if(!$juste_civa) {
-            $this->validee = null;
+            $this->add('validee',null);
         }
-
-        $this->modifiee = null;
+        $this->add('modifiee',null);
 
         return $this;
     }
