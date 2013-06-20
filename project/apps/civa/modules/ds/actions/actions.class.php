@@ -83,7 +83,7 @@ class dsActions extends sfActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             if ($request->getParameter('gestionnaire')) {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
-                if   ($this->form_gest->isValid()) {
+                if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
                 } else {
                     $this->form_gest_err = 1;
@@ -108,10 +108,7 @@ class dsActions extends sfActions {
                 }
             }
             if (!$this->form_gest_err && !$this->form_expl_err) {
-                $this->ds->declarant->nom = $this->tiers->exploitant->nom;
-                $this->ds->declarant->telephone = $this->tiers->exploitant->telephone;
-                $this->ds->declarant->email = $this->tiers->email;
-                $this->ds->save();
+                DSClient::getInstance()->storeInfos($this->ds);
                 $this->redirect('ds_exploitation', $this->ds);
             }
         }
@@ -199,17 +196,17 @@ class dsActions extends sfActions {
         $this->generationOperateurForm = new DSGenerationOperateurForm();
         
         if ($request->isMethod(sfWebRequest::POST)) {
-	          $this->generationOperateurForm->bind($request->getParameter($this->generationOperateurForm->getName()));
-	          if ($this->generationOperateurForm->isValid()) {
+              $this->generationOperateurForm->bind($request->getParameter($this->generationOperateurForm->getName()));
+              if ($this->generationOperateurForm->isValid()) {
                 $values = $this->generationOperateurForm->getValues();
                 $date = $values["date_declaration"];
-          	    try {
-          	        $ds = DSClient::getInstance()->findOrCreateDsByEtbId($this->etablissement->identifiant, $date);     
-          	        $ds->save();
-          	    }catch(sfException $e) {
-          	        $this->getUser()->setFlash('global_error', $e->getMessage());
-          	        $this->redirect('ds');
-          	    }                
+                try {
+                    $ds = DSClient::getInstance()->findOrCreateDsByEtbId($this->etablissement->identifiant, $date);     
+                    $ds->save();
+                }catch(sfException $e) {
+                    $this->getUser()->setFlash('global_error', $e->getMessage());
+                    $this->redirect('ds');
+                }                
                 return $this->redirect('ds_generation_operateur', $ds);
               }
         }

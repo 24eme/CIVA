@@ -249,7 +249,7 @@ ul#etape_declaration li.actif a em span.lieu
 	font-size: 14px;
 	float: left;
 	margin: 36px 40px 10px 0;
-	width: 200px;
+	width: 210px;
 }
 
 #application_ds #liste_cepages li
@@ -259,7 +259,7 @@ ul#etape_declaration li.actif a em span.lieu
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
-	width: 190px;
+	width: 200px;
 	
 	overflow: hidden;
 	-o-text-overflow: ellipsis;
@@ -505,8 +505,15 @@ ul#etape_declaration li.actif a em span.lieu
 	font-weight: normal;
 	padding: 3px 5px;
 	vertical-align: middle;
-	width: 90px;
+	width: 110px;
 	text-align: center;
+}
+
+#application_ds .page_recap table thead th span.unites {
+	font-size: 12px;
+	font-weight: normal;
+	color: #848c03;
+	display: inline;
 }
 
 #application_ds .page_recap table thead th.appellation,
@@ -522,7 +529,7 @@ ul#etape_declaration li.actif a em span.lieu
 	padding-right: 5px;
 }
 #application_ds .page_recap .ligne_total h3 { width: 188px; }
-#application_ds .page_recap .ligne_total input { width: 90px; margin-right: 5px;}
+#application_ds .page_recap .ligne_total input { width: 110px; margin-right: 5px;}
 #application_ds .page_recap .ligne_total + table { margin-top: 40px; }
 
 #points_bloquants .error, #points_bloquants .warning, #points_vigilance .error, #points_vigilance .warning {
