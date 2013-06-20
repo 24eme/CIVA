@@ -461,31 +461,6 @@ ul.error_list li {
 	margin: 3px 0;
 }
 
-/* Messages logs */
-.message {
-	background: #fffcef;
-	border: 1px solid #f90;
-	margin: 15px 0;
-	padding: 10px 15px;
-}
-
-.message_erreur {
-	background: #FDD;
-	border: 1px solid #FF3300;
-}
-
-.message ul.messages_log li {
-	background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
-	margin: 5px 0;
-	padding: 0 0 0 15px;
-}
-
-.message_title {
-	padding: 0 10px;
-	font-weight: bold;
-	font-size: 14px;
-}
-
 .erreur select {
 	border: 1px solid #FF3300 !important;
 }
@@ -505,34 +480,6 @@ input.btn_inactif {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
-}
-
-/* Popup d'aide */
-a.msg_aide {
-	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
-	display: inline-block;
-	height: 17px;
-	outline: 0;
-	vertical-align: middle;
-	width: 17px;
-	opacity: 0.5;
-}
-
-a.msg_aide:hover {
-	opacity: 1;
-}
-
-#popup_msg_aide {
-	display: none;
-}
-
-#popup_msg_aide p {
-	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
-		transparent;
-	color: #656565;
-	font-size: 15px;
-	padding: 0 10px 10px 25px;
-	text-align: justify;
 }
 
 /**

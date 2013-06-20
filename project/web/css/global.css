@@ -122,6 +122,32 @@ input[type=radio]
     overflow: hidden;
 }
 
+/* Messages logs */
+
+.message {
+	background: #fffcef;
+	border: 1px solid #f90;
+	margin: 15px 0;
+	padding: 10px 15px;
+}
+
+.message_erreur {
+	background: #FDD;
+	border: 1px solid #FF3300;
+}
+
+.message ul.messages_log li {
+	background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
+	margin: 5px 0;
+	padding: 0 0 0 15px;
+}
+
+.message_title {
+	padding: 0 10px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
 p.flash_message
 {
     background: #fffcef;
@@ -131,6 +157,7 @@ p.flash_message
     font-size: 13px !important;
 }
 
+/* Popup d'erreur */
 #popup_msg_erreur{
     background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 10px 50% ;
     display:none;
@@ -142,6 +169,34 @@ p.flash_message
 #popup_msg_erreur .close_btn{
     margin-top:10px;
     text-align:right;
+}
+
+/* Popup d'aide */
+a.msg_aide {
+	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 17px;
+	outline: 0;
+	vertical-align: middle;
+	width: 17px;
+	opacity: 0.5;
+}
+
+a.msg_aide:hover {
+	opacity: 1;
+}
+
+#popup_msg_aide {
+	display: none;
+}
+
+#popup_msg_aide p {
+	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+		transparent;
+	color: #656565;
+	font-size: 15px;
+	padding: 0 10px 10px 25px;
+	text-align: justify;
 }
 
 
