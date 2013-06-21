@@ -112,7 +112,8 @@ EOF;
 		$json->intro_mon_espace_civa_ds_non_disponible  = "Le service est momentanément indisponible. Essayez de vous reconnecter ultérieurement.";
 		$json->intro_mon_espace_civa_ds_non_editable  = "La date limite pour la souscription des DS est dépassée (X octobre). Pour toute question, veuillez contacter directement le CIVA.";
 		$json->intro_mon_espace_civa_ds_non_ouverte  = "Le Téléservice pour la déclaration de stock 2013 sera ouvert à partir du 1er aout.\n";
-		
+		$json->intro_mon_espace_civa_no_lieux_de_stockage  = "Aucune DS ne peut être saisie car vous ne possèdez pas de lieux de stockage. Veuillez vous adresser au CIVA auprès de Dominique WOLFF ou Béatrice FISCHER afin d'enregistrer vos lieux de stockage.";
+                
                 $json->intro_gamma  = "Vous avez accès ici à l'application AlsaceGamm@.";
 		$json->intro_doc_aide  = "En cas de besoin n'hésitez pas à consulter la notice d'aide complete au format pdf.";
 		$json->intro_exploitation_administratif  = "Données administratives, n'hésitez pas à les modifier en cas de changement.";
