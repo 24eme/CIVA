@@ -138,6 +138,7 @@ class ExportDSPdf {
 
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
+
             $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds, 
                                                                                  'recap' => $page,
                                                                                  'autres' => $this->getAutres($ds),
@@ -226,11 +227,6 @@ class ExportDSPdf {
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
-
-            return; 
-        }
-
         if(is_null($recap["total"]["normal"])) {
             $recap["total"]["normal"] = 0;
         }
@@ -241,6 +237,12 @@ class ExportDSPdf {
 
         if(is_null($recap["total"]["sgn"])) {
             $recap["total"]["sgn"] = 0;
+        }
+
+        
+        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
+
+            return; 
         }
 
         $appellation = $ds->declaration->getAppellations()->get('appellation_'.$appellation_key);
