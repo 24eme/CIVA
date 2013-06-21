@@ -13,7 +13,7 @@
 </tr>
 <?php foreach($recap_total as $item): ?>
 <tr>
-  <td style="text-align: left; width: 198px; border: 1px solid black; ">&nbsp;<?php echo str_replace("TOTAL ", "", $item->nom) ?></td>
+  <td style="text-align: left; width: 198px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo str_replace("TOTAL ", "", $item->nom) ?></td>
   <td style="width: 110px; border: 1px solid black;"><?php echoVolume($item->volume_total, true) ?></td>
   <td style="width: 110px; border: 1px solid black;"><?php echoVolume($item->volume_normal, true) ?></td>
   <td style="width: 110px; border: 1px solid black;"><?php echoVolume($item->volume_vt, true) ?></td>
@@ -23,6 +23,13 @@
 </table>
 
 <small><br /></small>
+<table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
+<tr>
+  <td style="text-align: left; width: 198px; border: 1px solid black; font-weight: bold; background-color: black; color: white;">&nbsp;Total Général AOC</td>
+  <td style="width: 110px; border: 1px solid black;"><?php echoVolume(DSCivaClient::getInstance()->getTotalAOC($ds), true) ?></td>
+</tr>
+</table>
+<br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
 <?php foreach($recap_autres as $libelle => $volume): ?>
 <tr>
