@@ -396,15 +396,15 @@ EOF;
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_RG->no_ds = 1;
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_RG->douane->couleur = "R";
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_RG->douane->code_cepage = "";
-        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->libelle = "Mousseux";
-        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->no_dr = 1;
-        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->douane->couleur = "M";
-        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->douane->code_cepage = "";
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_VINTABLE->libelle = "Sans IG";
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_VINTABLE->no_dr = 1;
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_VINTABLE->douane->couleur = "VDT";
         $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_VINTABLE->douane->code_cepage = "";
-        
+        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->libelle = "Mousseux";
+        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->no_dr = 1;
+        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->douane->couleur = "M";
+        $json->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_MS->douane->code_cepage = "";
+
         $json->recolte->certification->genre->appellation_VINTABLE->rendement = -1;
         $json->recolte->certification->genre->appellation_VINTABLE->rendement_appellation = -1;
 
