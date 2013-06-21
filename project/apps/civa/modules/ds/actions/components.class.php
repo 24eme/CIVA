@@ -42,6 +42,12 @@ class dsComponents extends sfComponents {
         krsort($this->dsBycampagnes);
     }
     
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeMonEspaceNoLieuxStockage(sfWebRequest $request) {
+    }
     
     
 }

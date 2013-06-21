@@ -195,6 +195,14 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         return $this->_ds;
     }
     
+    public function hasLieuxStockage() {
+        $this->requireDeclaration();
+        $this->requireTiers();
+        if(!$this->getDeclarant()->exist('lieux_stockage')) return false;
+        return (int) count($this->getDeclarant()->lieux_stockage);
+    }
+
+
     public function removeDs()
     {
         $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs());
