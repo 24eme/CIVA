@@ -26,6 +26,9 @@ class DSCiva extends DS {
 
     public function storeStockage() {
         $tiers = $this->getEtablissement();
+        if(!$tiers){
+            throw new sfException(sprintf("L'etablissement de cvi %s n'existe pas", $this->identifiant));
+        }
         $num_lieu = $this->identifiant.$this->getLieuStockage();
         if(!$tiers->lieux_stockage->exist($num_lieu)) {
             throw new sfException(sprintf("Le lieu de stockage %s n'existe pas", $num_lieu));
@@ -110,6 +113,7 @@ class DSCiva extends DS {
         }
         
         $produit = $this->getOrAdd($hash);
+        
         $config = $produit->getConfig();
         $produit->libelle = $config->getLibelle();
         $produit->getCouleur()->libelle = $produit->getConfig()->getCouleur()->libelle;
@@ -413,6 +417,10 @@ class DSCiva extends DS {
             return $this->validee;
         }
         return false;
+    }
+    
+    public function getAnnee() {
+        return preg_replace('/^([0-9]{4})([0-9]{2})$/', '$1', $this->periode);
     }
 
 }

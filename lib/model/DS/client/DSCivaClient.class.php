@@ -78,6 +78,12 @@ class DSCivaClient extends DSClient {
         return null;
     }
     
+   public function buildPeriode($date) {
+        preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
+        
+        return sprintf('%d%02d', $matches[1], '07');
+    }
+    
     
     public function findOrCreateDssByTiers($tiers, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
