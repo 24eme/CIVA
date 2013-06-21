@@ -34,6 +34,12 @@ class DSCiva extends DS {
         $this->set('stockage', $tiers->lieux_stockage->get($num_lieu));
     }
 
+    public function storeDeclarant() {
+        parent::storeDeclarant();
+
+        $this->declarant->set('exploitant', $this->getEtablissement()->exploitant);
+    }
+
     public function storeInfos() {
         $this->storeStockage();
         $this->storeDeclarant();
