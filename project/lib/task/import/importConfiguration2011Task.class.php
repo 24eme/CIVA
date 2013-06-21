@@ -117,7 +117,7 @@ EOF;
         $json->recolte->certification->genre->appellation_LIEUDIT->mention->lieu->couleurRouge->rendement_couleur = $rendement_couleur_rouge_lieux_dits;
         $json->recolte->certification->genre->appellation_LIEUDIT->mention->lieu->couleurRouge->libelle = "Rouge";
         $json->recolte->certification->genre->appellation_LIEUDIT->mention->lieu->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[8]['PR']);
-
+      
         $cepcom = array();
         foreach (file(sfConfig::get('sf_data_dir') . '/import/11/Cepcom11') as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
@@ -351,6 +351,11 @@ EOF;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->douane->appellation_lieu = '999';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->douane->qualite = 'B';
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->douane->code_cepage = '';
+        
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_BL->libelle = "Blanc";
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_BL->no_dr = 1;
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RS->libelle = "Rosé";
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RS->no_dr = 1;
 
         $json->recolte->certification->genre->appellation_CREMANT->rendement_appellation = 80;
         $json->recolte->certification->genre->appellation_CREMANT->mout = 1;

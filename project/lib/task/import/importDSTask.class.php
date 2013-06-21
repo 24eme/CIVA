@@ -131,6 +131,7 @@ EOF;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID],2);
             $ds->identifiant = $ds_csv_datas[self::CSV_DS_CVI];
+            $num_lieu = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P") ? '001' : $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             try {
                 $ds->storeInfos();
@@ -138,7 +139,6 @@ EOF;
                 echo $this->error_term . " pour la DS $id_ds : " . $e->getMessage() . "\n";
                 continue;
             }
-            $num_lieu = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P") ? '001' : $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
 
 
             //    Autres

@@ -1,9 +1,10 @@
 <?php 
 use_helper('Float');
 $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
+$annee = $ds_principale->getAnnee();
 ?>
 	<ul id="onglets_majeurs" class="clearfix">
-		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM</a></li>
+		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM (Déclaration de Stocks <?php echo $annee; ?>)</a></li>
 	</ul>
 
 	<!-- #application_ds -->

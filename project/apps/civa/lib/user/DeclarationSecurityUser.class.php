@@ -187,7 +187,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
             if (!$this->_ds) {
                 $ds = new DSCiva();
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Ym').'-001');
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-001');
                 return $ds;
             }
         }
