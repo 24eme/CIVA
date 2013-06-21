@@ -717,7 +717,7 @@ var etatChampsTableAcht = function(type)
 var initValidationDr = function(type)
 {
     initValidDRPopup();
-    initConfirmeValidation();
+    initConfirmeValidationDr();
 }
 
 
@@ -756,7 +756,7 @@ var initSendDRPopup = function()
 }
 /* Confirmation de la validation */
 
-var initConfirmeValidation = function()
+var initConfirmeValidationDr = function()
 {
     $('#valideDR').click(function() {
         openPopup($("#popup_confirme_validation"));

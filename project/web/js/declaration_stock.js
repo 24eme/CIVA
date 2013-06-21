@@ -26,7 +26,7 @@ $(document).ready(function()
     }
     initValidDSPopup();
 	
-    initConfirmeValidation();
+    initConfirmeValidationDs();
 	// Scroll sur la liste des lieux de stockage
 	$.scrollTo('#liste_lieux_stockage', 800);
 });
@@ -274,14 +274,14 @@ var initValidDSPopup = function()
 
 /* Confirmation de la validation */
 
-var initConfirmeValidation = function()
+var initConfirmeValidationDs = function()
 {
     $('#valideDS').click(function() {
-        openPopup($("#popup_confirme_validation"));
+        openPopup($("#popup_confirme_validationDS"));
         return false;
     });
     $('#valideDS_OK').click(function() {
-        $("#popup_confirme_validation").dialog('close');
+        $("#popup_confirme_validationDS").dialog('close');
         $("#principal").submit();
         return false;
     });
