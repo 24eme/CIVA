@@ -23,7 +23,11 @@
  * @property float $mouts
  * @property string $num_etape
  * @property string $ds_neant
+ * @property string $validee
+ * @property string $modifiee
  * @property acCouchdbJson $declarant
+ * @property acCouchdbJson $exploitant
+ * @property acCouchdbJson $stockage
  * @property DSDeclaration $declaration
 
  * @method string get_id()
@@ -64,8 +68,16 @@
  * @method string setNumEtape()
  * @method string getDsNeant()
  * @method string setDsNeant()
+ * @method string getValidee()
+ * @method string setValidee()
+ * @method string getModifiee()
+ * @method string setModifiee()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
+ * @method acCouchdbJson getExploitant()
+ * @method acCouchdbJson setExploitant()
+ * @method acCouchdbJson getStockage()
+ * @method acCouchdbJson setStockage()
  * @method DSDeclaration getDeclaration()
  * @method DSDeclaration setDeclaration()
  

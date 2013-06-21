@@ -38,6 +38,18 @@ DS:
             telephone: {  }
             fax: {  }
             email: {  }
+      exploitant:
+        type: collection
+        required: false
+        definition:
+          fields:
+            sexe: {  }
+            nom: {  }
+            adresse: {  }
+            code_postal: {  }
+            commune: {  }
+            date_naissance: {  }
+            telephone: {  }
       stockage:
         type: collection
         definition:

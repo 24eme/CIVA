@@ -5,6 +5,7 @@
  * Base model for DSAppellation
 
  * @property string $libelle
+ * @property string $libelle_long
  * @property float $total_stock
  * @property float $total_vt
  * @property float $total_sgn
@@ -13,6 +14,8 @@
 
  * @method string getLibelle()
  * @method string setLibelle()
+ * @method string getLibelleLong()
+ * @method string setLibelleLong()
  * @method float getTotalStock()
  * @method float setTotalStock()
  * @method float getTotalVt()
