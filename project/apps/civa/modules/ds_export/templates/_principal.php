@@ -1,7 +1,7 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
-<?php include_partial("ds_export/exploitation", array('ds' => $ds, 'tiers' => $ds->getEtablissement())) ?>
-<?php include_partial("ds_export/stockage", array('ds' => $ds, 'tiers' => $ds->getEtablissement())) ?>
+<?php include_partial("ds_export/exploitation", array('ds' => $ds)) ?>
+<?php include_partial("ds_export/stockage", array('ds' => $ds)) ?>
 <small><br /></small>
 <?php foreach($recap as $libelle => $tableau): ?>
   <span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle ?></span><br />
@@ -28,7 +28,11 @@
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
   <?php else: ?>
     <?php foreach($totals as $volume): ?>
-    <td style="border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+    <?php if(!$is_last_page): ?>
+      <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+    <?php else: ?>
+      <td style="border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+    <?php endif; ?>
     <?php endforeach; ?>
   <?php endif; ?>
 </tr>
