@@ -54,7 +54,7 @@ class ExportDSPdf {
 
     protected function init($filename = null) {
         if($this->ds_principale->isValideeTiers()) {
-            $date_validee = new DateTime($this->ds_principale->valideee);
+            $date_validee = new DateTime($this->ds_principale->validee);
             $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
         }
 
