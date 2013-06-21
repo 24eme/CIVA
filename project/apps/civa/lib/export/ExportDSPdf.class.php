@@ -53,11 +53,22 @@ class ExportDSPdf {
     }
 
     protected function init($filename = null) {
-        $validee = 'Non Validée';
-        $validee = 'Déclaration validée le 31/07/2013';
-        $validee .= ' et modifiée le 03/08/2013';
+        if($this->ds_principale->isValideeTiers()) {
+            $date_validee = new DateTime($this->ds_principale->valideee);
+            $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
+        }
+
+        if($this->ds_principale->isValideeCiva()) {
+            $date_modifiee = new DateTime($this->ds_principale->modifiee);
+            $validee .= ' et modifiée le '.$date_modifiee->format('d/m/Y');
+        }
+
+        if(!$this->ds_principale->isValideeTiers()) {
+            $validee = 'Non Validée';
+        }
+      
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
-        $title = 'Déclaration de Stocks au 31 Juillet 2013';
+        $title = 'Déclaration de Stocks au 31 Juillet '.($this->ds_principale->getCampagne() + 1);
         $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
             $rev = null;
@@ -239,7 +250,7 @@ class ExportDSPdf {
             $recap["total"]["sgn"] = 0;
         }
 
-        
+
         if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
 
             return; 
