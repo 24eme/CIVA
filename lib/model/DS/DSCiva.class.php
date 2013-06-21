@@ -355,6 +355,11 @@ class DSCiva extends DS {
                && (($this->lies == 0) || is_null($this->lies))) ;
     }
 
+    private function restoreNodes(){
+        $this->declaration->restoreNodes();
+    }
+
+
     public function devalidate($juste_civa = false) {
 
         if($this->isDsPrincipale()){
@@ -365,7 +370,7 @@ class DSCiva extends DS {
             $this->validee = null;
         }
         $this->modifiee = null;
-
+        $this->restoreNodes();
         return $this;
     }
     

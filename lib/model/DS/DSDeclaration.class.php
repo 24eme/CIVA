@@ -26,4 +26,12 @@ class DSDeclaration extends BaseDSDeclaration {
         return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
     }
     
+    public function restoreNodes(){
+        foreach ($this->getAppellations() as $appellation) {
+            if($appellation->isAutoCepages()){
+                $appellation->getDocument()->addNoeud($appellation->getHash());
+            }
+        }
+    }
+    
 }

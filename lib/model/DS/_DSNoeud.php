@@ -144,16 +144,6 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
                 $this->remove($item->getKey());
             }
         }
-    }
-    
-//    public function removeNodesForClean() {        
-//        if(is_null($this->getParent()->total_normal) && is_null($this->getParent()->total_vt) && is_null($this->getParent()->total_sgn)){
-//            if(!$this->getParent()->removeNodesForClean()){
-//            $this->delete();
-//            return true;            
-//            }
-//        return false;
-//        }
-//    }
+    }    
     
 }

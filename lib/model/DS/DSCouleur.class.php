@@ -26,4 +26,5 @@ class DSCouleur extends BaseDSCouleur {
         $this->getLieu()->updateVolumes($vtsgn,$old_volume,$volume);
     }
     
+    
 }

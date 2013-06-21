@@ -43,4 +43,8 @@ class DSAppellation extends BaseDSAppellation {
     public function hasVolume() {
         return ($this->total_stock && $this->total_stock > 0);
     }
+    
+    public function isAutoCepages(){
+        return $this->getConfig()->exist('auto_ds') && ($this->getConfig()->auto_ds == 1);
+    }
 }

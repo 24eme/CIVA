@@ -137,13 +137,11 @@ class DSCepage extends BaseDSCepage {
     }  
 
     public function cleanAllNodes() {
-     //   if(!preg_match('/appellation_VINTABLE/', $this->getHash())){
         $details = $this->getProduitsDetails();
         foreach ($details as $detail) {
             if($detail->isVide()){
                 $detail->delete();
             }
-        }        
-   // }    
+        }    
     }
 }
