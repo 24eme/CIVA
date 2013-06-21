@@ -60,7 +60,7 @@ $dss = $dss->getRawValue();
 							$paire = ($cpt%2==0)? 'paire' : '';
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
                                                         $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
-                                                        $disabled = ($ds->isDsNeant() || ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume()));
+                                                        $disabled = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume());
 						?>
 					
 					<td class="<?php echo $paire ?>">
@@ -68,7 +68,7 @@ $dss = $dss->getRawValue();
 					<input type="hidden" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>">
 					<input type="checkbox" name="checkbox_disabled[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>_disabled" value="<?php echo $key; ?>" <?php echo $checked; ?> <?php echo ($disabled) ? 'disabled="disabled"' : '' ?> />
 					<?php else: ?>
-					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> />
+					<input type="checkbox" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> <?php echo ($ds->isDsNeant()) ? 'disabled="disabled"' : '' ?> />
 					</td>
 					<?php endif; ?>
 				   <?php $cpt++;
