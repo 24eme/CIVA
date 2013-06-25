@@ -136,7 +136,14 @@ EOF;
             try {
                 $ds->storeInfos();
             } catch (sfException $e) {
-                echo $this->error_term . " pour la DS $id_ds : " . $e->getMessage() . "\n";
+                if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
+                    echo "--------> La DS " . $this->green($ds->_id) . " n'est pas sauvée, c'est une " . $this->green("DS a néant") . "\n";
+                }
+                else
+                {
+                    echo $this->error_term . " pour la DS $id_ds : " . $e->getMessage() . "\n";
+                    //echo $this->error_term . " pour la DS $id_ds (qui n'est pas néant) => $ds->identifiant n'a pas de lieux de stockage \n";
+                }
                 continue;
             }
 
@@ -150,8 +157,10 @@ EOF;
             }
             
             //  Etape
-            if($this->convertOuiNon($ds_csv_datas[self::CSV_DS_TRAITEE]))
+            if($this->convertOuiNon($ds_csv_datas[self::CSV_DS_TRAITEE])){
                 $ds->add('num_etape', 6);
+                $ds->validate($ds->date_emission);
+            }
             else
                 $ds->add('num_etape', 5);
             // Produits
