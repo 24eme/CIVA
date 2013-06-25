@@ -384,14 +384,14 @@ class DSCiva extends DS {
         return $this;
     }
     
-    public function validate() {
+    public function validate($date = null) {
         if($this->isDsPrincipale()){
             $this->updateEtape(6);
         }
 
         $this->storeInfos();
 
-        $date = date("Y-m-d");
+        $date = (!$date)? date("Y-m-d") : $date;
         $this->add('validee', $date);
         $this->add('modifiee', $date);
 
