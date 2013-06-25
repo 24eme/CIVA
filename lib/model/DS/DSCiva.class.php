@@ -310,8 +310,11 @@ class DSCiva extends DS {
         return $this->lies + $this->dplc;
     }
     
-    public function updateEtape($etape_rail) {
+    public function updateEtape($etape_rail, $courant_stock = null) {
          $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
+         if($courant_stock){
+                   $this->add('courant_stock', $courant_stock);
+         }
          if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
                 $this->add('num_etape', $etape_rail);
                 return $this;
@@ -320,7 +323,7 @@ class DSCiva extends DS {
                 $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
                 if($ds->num_etape < $etape_rail + $this->getLieuStockage() - 1){
                     $ds->add('num_etape', $etape_rail + $this->getLieuStockage() - 1);
-                }
+                }                
                 return $ds;
          }
          if($etape_rail > 3){

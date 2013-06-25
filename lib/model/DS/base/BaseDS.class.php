@@ -25,8 +25,8 @@
  * @property string $ds_neant
  * @property string $validee
  * @property string $modifiee
+ * @property string $courant_stock
  * @property acCouchdbJson $declarant
- * @property acCouchdbJson $exploitant
  * @property acCouchdbJson $stockage
  * @property DSDeclaration $declaration
 
@@ -72,10 +72,10 @@
  * @method string setValidee()
  * @method string getModifiee()
  * @method string setModifiee()
+ * @method string getCourantStock()
+ * @method string setCourantStock()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
- * @method acCouchdbJson getExploitant()
- * @method acCouchdbJson setExploitant()
  * @method acCouchdbJson getStockage()
  * @method acCouchdbJson setStockage()
  * @method DSDeclaration getDeclaration()

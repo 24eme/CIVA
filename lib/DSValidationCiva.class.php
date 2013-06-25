@@ -28,7 +28,6 @@ class DSValidationCiva  extends DSValidation
 
   public function controle()
   {
-      var_dump($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation());
             foreach($this->document->declaration->getAppellations() as $hash => $appellation) {
                     $appellation_vigilence = false;
                     if(!$appellation->total_stock){

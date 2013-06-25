@@ -23,6 +23,7 @@ DS:
       ds_neant: {required: false}
       validee: {required: false}
       modifiee: {required: false}
+      courant_stock: {required: false}
       declarant:
         type: collection
         definition:
