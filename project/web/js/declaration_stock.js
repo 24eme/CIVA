@@ -172,7 +172,9 @@ $.fn.postButtonForm = function(){
         var form_id = $(this).attr('id');
         $('#'+form_id+' #valide_form').click(function(){
             if(valide_form){
-                setTimeout(function() {$('#valide_form').click()} , 500);
+                setTimeout(function() { $('#valide_form').click();
+                                        valide_form = false;
+                                      } , 500);
                 return false;
             }
         });
