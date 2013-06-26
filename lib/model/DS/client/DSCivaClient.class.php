@@ -85,7 +85,7 @@ class DSCivaClient extends DSClient {
     }
     
     
-    public function findOrCreateDssByTiers($tiers, $date_stock) {
+    public function findOrCreateDssByTiers($tiers, $date_stock,$ds_neant = false) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
         $dss = array();
@@ -102,8 +102,15 @@ class DSCivaClient extends DSClient {
             $ds->identifiant = $tiers->cvi;
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             $ds->storeInfos();
-            $ds->updateProduits();
+            if(!$ds_neant){
+                $ds->updateProduits();
+            }else{
+               $ds->add('ds_neant',1);
+            }
             $ds->updateAutre();
+            if(!$ds->isDsPrincipale() && $ds_neant){
+                continue;
+            }
             if($ds->isDsPrincipale())
                 $ds->add('num_etape',1);
            
@@ -112,6 +119,8 @@ class DSCivaClient extends DSClient {
         }	
         return $dss;
     }
+    
+    
     
     public function createDsByDsPrincipaleAndLieu($ds,$lieu_num) {
         $new_ds = new DSCiva();
