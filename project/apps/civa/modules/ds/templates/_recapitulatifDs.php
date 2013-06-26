@@ -5,6 +5,7 @@ $annee = $ds_principale->getAnnee();
 ?>
 	<ul id="onglets_majeurs" class="clearfix">
 		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM (Déclaration de Stocks <?php echo $annee; ?>)</a></li>
+                        <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
 	</ul>
 
 	<!-- #application_ds -->

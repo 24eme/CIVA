@@ -10,8 +10,10 @@ $dss = $dss->getRawValue();
 ?>  
 
 <ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected"><a href="#lieux_stockage">Lieux de stockage</a></li>
+	<li class="ui-tabs-selected"><a href="#">Lieux de stockage</a></li>
+        <a href="" class="msg_aide" rel="help_popup_ds_lieux_stockage" title="Message aide"></a>
 </ul>
+    
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">

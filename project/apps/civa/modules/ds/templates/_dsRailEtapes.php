@@ -81,7 +81,7 @@ $ds_neant = $ds_principale->isDsNeant();
 	</ul>
 		
 	<div class="progression_ds">
-			<p>Vous avez saisi <span><?php echo $progression.'%';?></span> de votre DS</p>
+			<p>Vous avez saisi <span><?php echo $progression.'%';?></span> de votre DS <a href="" class="msg_aide" rel="help_popup_mon_espace_ds_general" title="Message aide"></a></p>
 			<div class="barre_progression">
 					<div class="progression" style="<?php echo "width: ".$progression."%;";?>"></div>
 			</div>
