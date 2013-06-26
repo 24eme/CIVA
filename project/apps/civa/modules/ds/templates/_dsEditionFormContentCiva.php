@@ -34,7 +34,7 @@ $produits = $form->getProduitsDetails();
 							$key = $detail->getHashForKey();
 							?>
 						<li>
-                            <?php if($tabindex == 1): ?>
+                            <?php if(($produit_key && $key == $produit_key) || (!$produit_key && $tabindex == 1)): ?>
 							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex, 'autofocus' => 'autofocus')); ?>
                             <?php else: ?>
                                 <?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex)); ?>

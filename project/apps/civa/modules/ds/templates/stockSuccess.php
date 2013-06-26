@@ -22,7 +22,7 @@ use_helper('ds');
 
 
 			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($appellation->getConfig()->hasManyLieu()) echo 'avec_sous_onglets'; ?>">
-				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu));?>
+				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu, 'produit_key' => $produit_key));?>
                 <?php $tabindex = count($form->getProduitsDetails())*3 + 1 ?>
                 <?php if($appellation->getConfig()->hasManyLieu()):  ?>
 			    <div id="sous_total" class="ligne_total">
