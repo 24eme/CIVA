@@ -61,7 +61,7 @@ $ds_neant = $ds_principale->isDsNeant();
                         $passe = isset($force_passe) || isEtapePasse(4, $dss, $ds_principale); 
                         $to_linked = !isset($force_no_link) && (((!$ds_neant) && ($passe || ($etape>=4)))); 
                         ?>                        
-			<li class="<?php echo ((!$ds_neant) && $etape==4)? 'actif ' : ''; echo ((!$ds_neant) && $passe && $etape!=4)? 'passe' : ''; ?>" >
+			<li class="<?php echo ($etape==4)? 'actif ' : ''; echo ($passe && $etape!=4)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
                             <a class="ajax" href="<?php echo url_for('ds_autre', $ds_principale);?>">
                         <?php endif; ?>         

@@ -21,7 +21,8 @@
         <?php else: ?>
             <p class="intro">Démarrer une déclaration de stock</p>
             <div class="ligne_form ligne_btn">
-            <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Valider" />
+                <input type="image" name="boutons[ds_neant]" id="mon_espace_civa_ds_neant" class="btn" src="/images/boutons/btn_demarrer_ds_neant.png" alt="Démarrer DStock néant" />
+                <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
