@@ -19,7 +19,8 @@
         <?php endif; ?>
     </li>
     <?php endforeach; ?>
-    <?php if(count($ds->declaration->getAppellations()) < count($ds->declaration->getConfig()->getNoeudAppellations()->getAppellations())): ?>
+    
+    <?php if(count($ds->declaration->getAppellationsSorted()) < count($ds->declaration->getConfig()->getNoeudAppellations()->getChildrenNodeArray())): ?>
 	<li class="ajouter ajouter_appelation"><a href="<?php echo url_for('ds_ajout_appellation', $ds) ?>">Ajouter une<br> appellation</a></li>
     <?php endif; ?>
     <li class="recap_stock <?php echo isset($recap) ? 'ui-tabs-selected' : '' ; ?>">

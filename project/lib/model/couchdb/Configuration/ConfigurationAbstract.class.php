@@ -10,6 +10,15 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
     abstract public function getChildrenNode();
 
+    public function getChildrenNodeArray() {
+        $items = array();
+        foreach($this->getChildrenNode() as $item) {
+            $items[$item->getKey()] = $item;
+        }
+
+        return $items;
+    }
+
     public function getChildrenFilter($type_declaration = null) {
       $children = array();
       foreach($this->getChildrenNode() as $item) {
