@@ -6,13 +6,14 @@
                 <a href="#">Années précédentes</a>
                 <?php if (count($dsBycampagnes) > 0): ?>
                     <ul class="declarations">
-                        <?php foreach ($dsBycampagnes as $campagne => $ds): 
-                            if($campagne < $sf_user->getCampagne()):
-                            ?>
-                            <li><?php echo link_to($ds->getAnnee(), 'ds_visualisation',$ds); ?></li>
-                            <?php
-                            endif;
-                        endforeach; ?>
+                        <?php  foreach($dsBycampagnes as $campagne => $ds): 
+                                    if($campagne <= $sf_user->getCampagne()):
+                                        $annee_ds = $ds->getAnnee();
+                         ?>
+                            <li><?php echo link_to($annee_ds, 'ds_visualisation', $ds); ?></li>
+                        <?php
+                                endif;
+                            endforeach; ?>
                     </ul>
                 <?php endif; ?>
             </li>

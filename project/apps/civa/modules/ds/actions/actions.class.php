@@ -5,7 +5,7 @@ class dsActions extends sfActions {
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
        $this->getUser()->initCredentialsDeclaration();
        $this->tiers = $this->getUser()->getTiers('Recoltant');
-       $ds_data = $this->getRequestParameter('ds', null);
+       $ds_data = $this->getRequestParameter('ds', null);       
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
                 $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
@@ -17,12 +17,18 @@ class dsActions extends sfActions {
                 $this->redirect('ds_visualisation', $this->getUser()->getDs());
             }    
         }
+        $this->ds = null;        
+        if((count($request["boutons"]) < 1) || !isset($request["boutons"])){
+            throw new sfException("Il semble que l'initialisation des ds n'est pas été effectuée depuis un bouton de validation.");
+        }
+        $ds_type_arr = $request["ds"]["type_declaration"];
+        $ds_neant = ($ds_type_arr == 'ds_neant');
         $date = date('Y-m-d');
-        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers,$date);
+        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
             $ds->save();
         }
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);        
         $this->redirect('ds_etape_redirect', $this->ds);
     } 
     
@@ -135,7 +141,6 @@ class dsActions extends sfActions {
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSLieuxDeStockageForm($this->ds);   
         $ds_neant = false;
-        $ds_no_stock = false;
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if($this->form->isValid()) {
@@ -148,8 +153,6 @@ class dsActions extends sfActions {
                         }
                         if($current_ds->isDsNeant()){
                             $ds_neant = true;                            
-                        }else{
-                            $ds_no_stock = true;
                         }
                     }
                     if(!$current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
@@ -166,18 +169,12 @@ class dsActions extends sfActions {
                             $ds_to_save->updateEtape(3); 
                             $ds_principale = $ds_to_save;
                             if($ds_neant){
-                                $ds_to_save->updateEtape(5);
-                            }
-                            if($ds_no_stock){
                                 $ds_to_save->updateEtape(4);
                             }
                         }
                         $ds_to_save->save();
                     }
                 if($ds_neant){
-                    $this->redirect('ds_validation', $ds_principale); 
-                }
-                if($ds_no_stock){
                     $this->redirect('ds_autre', $ds_principale); 
                 }
                 if($request->isXmlHttpRequest())
@@ -380,9 +377,6 @@ class dsActions extends sfActions {
     public function executeAutre(sfWebRequest $request)
     {
         $this->ds = $this->getRoute()->getDS();
-        if($this->ds->isDsNeant()){
-            $this->redirect("ds_lieux_stockage", $this->ds);
-        }
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSEditionCivaAutreForm($this->ds);
         if ($request->isMethod(sfWebRequest::POST)) {

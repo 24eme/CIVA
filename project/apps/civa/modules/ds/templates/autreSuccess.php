@@ -1,8 +1,9 @@
 <!-- #application_ds -->
-<form action="<?php echo url_for('ds_autre', $ds); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" >
+<form action="<?php echo url_for('ds_autre', $ds); ?>" id="form_autre_<?php echo $ds->_id; ?>" method="post" class="ajaxForm" >
 <?php
 echo $form->renderHiddenFields();
 echo $form->renderGlobalErrors();
+$ds_client = DSCivaClient::getInstance();
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 4));
 ?>
 
@@ -24,6 +25,8 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<li><?php echo $form['rebeches']->renderLabel() ?></li>
 					<li><?php echo $form['dplc']->renderLabel() ?></li>
 					<li><?php echo $form['lies']->renderLabel() ?></li>
+                                        <li><label for="ds_vinssansig">Vins Sans IG</label></li>
+                                        <li><label for="ds_vinssansig_mousseux">Vins Sans IG - Mousseux</label></li>
 				</ul>
 				
 				<div id="donnees_stock_cepage">
@@ -36,6 +39,8 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 								<li><?php echo $form['rebeches']->render(array('class' => 'num')) ?></li>
 								<li><?php echo $form['dplc']->render(array('class' => 'num')) ?></li>
 								<li><?php echo $form['lies']->render(array('class' => 'num')) ?></li>
+                                                                <li><input type="text" id="ds_vinssansig" autocomplete="off" disabled="disabled" class="num num_light num_float" value="<?php echoFloat($ds_client->getTotalSansIG($ds)); ?>" name="ds[vinssansig]" size="6"></li>
+                                                                <li><input type="text" id="ds_vinssansig_mousseux" autocomplete="off" disabled="disabled" class="num num_light num_float" value="<?php echoFloat($ds_client->getTotalSansIGMousseux($ds)); ?>" name="ds[vinssansig_mousseux]" size="6"></li>
 							</ul>
 						</div>
 					</div>
