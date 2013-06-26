@@ -2,7 +2,7 @@
     <form method="post" action="">
         <p>
             Une fois votre déclaration validée, vous ne pourrez plus la modifier. <br /><br />
-            Confirmer vous la validation de votre déclaration de stock ? <br />
+            Confirmez vous la validation de votre déclaration de stock ? <br />
         </p>
         <div id="btns">
 
