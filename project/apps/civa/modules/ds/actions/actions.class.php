@@ -54,7 +54,14 @@ class dsActions extends sfActions {
             $pos = $etape - 3;
             $dss_id = array_keys($dss);
             $ds_id = $dss_id[$pos];
-            $this->redirect('ds_edition_operateur', array('id' => $ds_id));
+            $courante_ds = $dss[$ds_id];
+            $courant_stock = ($courante_ds->exist('courant_stock'))? $courante_ds->courant_stock : null;
+            if($courant_stock){
+                $this->redirect('ds_edition_operateur', array('id' => $ds_id, 'hash' => $courant_stock));
+            }
+            else{
+                $this->redirect('ds_edition_operateur', array('id' => $ds_id));
+            }
         }
         if(3 + count($dss) - 1 < $etape){
             $etape_without_dss = $etape - count($dss) + 1;
@@ -251,6 +258,7 @@ class dsActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->doUpdateObject();
+                $this->ds->updateEtape(3);
                 $this->ds->save();
                 if($request->isXmlHttpRequest())
                 {            
@@ -258,6 +266,9 @@ class dsActions extends sfActions {
                 }
                             
                 $next = $this->ds->getNextLieu($this->lieu);
+                $next_hash = (!$next)? $this->convertNodeForUrl($this->lieu) : $this->convertNodeForUrl($next);
+                $this->ds->updateEtape(3,$next_hash);
+                $this->ds->save();
                 if($next){
                     $this->redirect('ds_edition_operateur', $next);
                 }
@@ -439,5 +450,21 @@ class dsActions extends sfActions {
         $this->ds_client = DSCivaClient::getInstance();
     }
     
+    protected function convertNodeForUrl($node) {
+        if($node instanceof sfOutputEscaperIteratorDecorator) {
+            $node = $node->getRawValue();
+        }
+
+        $hash = null;
+
+        if($node instanceof DSAppellation) {
+            $hash = str_replace("appellation_" , "", $node->getKey());
+        }
+
+        if($node instanceof DSLieu) {
+            $hash = preg_replace('/-$/', '', sprintf("%s-%s", str_replace("appellation_" , "", $node->getAppellation()->getKey()), str_replace("lieu" , "", $node->getKey())));
+        }
+        return $hash;
+    }  
     
 }
