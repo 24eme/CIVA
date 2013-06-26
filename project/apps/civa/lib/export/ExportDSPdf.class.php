@@ -162,7 +162,7 @@ class ExportDSPdf {
         $appellations = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
         $recap = array();
         foreach($appellations as $appellation_key) {
-            if(!$ds->declaration->getAppellations()->exist("appellation_".$appellation_key)) {
+            if(!$ds->declaration->getAppellations() || !$ds->declaration->getAppellations()->exist("appellation_".$appellation_key)) {
 
                 continue;
             }
@@ -251,7 +251,7 @@ class ExportDSPdf {
         }
 
 
-        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
+        if(!$ds->declaration->getAppellations() || !$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
 
             return; 
         }
