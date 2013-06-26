@@ -253,8 +253,10 @@ class ExportDSPdf {
         }
 
 
-        if((!$ds->declaration->getAppellations()) || (!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key))) {
-
+        if(!$ds->declaration->getAppellations()){
+            return; 
+        }
+        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
             return; 
         }
 
