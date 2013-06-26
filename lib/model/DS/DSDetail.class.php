@@ -55,8 +55,15 @@ class DSDetail extends BaseDSDetail {
         $this->getCepage()->getCouleur()->updateVolumes($vtsgn, $old_volume, $volume);
     }
 
+    public function isSaisi() {
+        
+       return !is_null($this->volume_normal) || !is_null($this->volume_vt) || !is_null($this->volume_sgn);
+    }
+
+
     public function isVide() {
-       return is_null($this->volume_normal) && is_null($this->volume_vt) && is_null($this->volume_sgn);
+
+       return !$this->volume_normal && !$this->volume_vt && !$this->volume_sgn;
     }
 
 }

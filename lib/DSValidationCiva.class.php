@@ -22,8 +22,7 @@ class DSValidationCiva  extends DSValidation
     $this->addControle('vigilance', 'stock_null_cepage', acCouchdbManager::getClient('Messages')->getMessage('stock_null_cepage'));
     $this->addControle('vigilance', 'stock_zero_cepage', acCouchdbManager::getClient('Messages')->getMessage('stock_zero_cepage'));
     
-    $this->addControle('erreur', 'autres_nul', acCouchdbManager::getClient('Messages')->getMessage('autres_nul'));
-    $this->addControle('erreur', 'ds_autres_nul_principale', acCouchdbManager::getClient('Messages')->getMessage('ds_autres_nul_principale'));
+    $this->addControle('vigilance', 'stock_aucun_produit', acCouchdbManager::getClient('Messages')->getMessage('stock_aucun_produit'));
   }
 
   public function controle()
@@ -49,8 +48,7 @@ class DSValidationCiva  extends DSValidation
                                     foreach ($lieu->getCouleurs() as $hash_couleur => $couleur) {
                                         foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
                                             foreach ($cepage->getProduitsDetails() as $detail) {
-                                                
-                                             if((!$detail->volume_normal) && (!$detail->volume_vt) && (!$detail->volume_sgn)){
+                                             if(!$detail->isSaisi()){
                                                     $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash)))); 
                                                     $cepage_vigilence = true;
                                                 }
@@ -64,9 +62,7 @@ class DSValidationCiva  extends DSValidation
                     
       $this->document->declaration->cleanAllNodes();           
       if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
-          if($this->document->isAutresNul()){
-              $this->addPoint('erreur', 'autres_nul',' revenir à lieux de stockage', $this->generateUrl('ds_lieux_stockage', $this->document));               
-          }
+          $this->addPoint('vigilance', 'stock_aucun_produit', null, $this->generateUrl('ds_lieux_stockage', $this->document));               
       }
      }
      
