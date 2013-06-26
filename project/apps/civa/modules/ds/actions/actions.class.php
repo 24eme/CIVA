@@ -21,8 +21,8 @@ class dsActions extends sfActions {
         if((count($request["boutons"]) < 1) || !isset($request["boutons"])){
             throw new sfException("Il semble que l'initialisation des ds n'est pas été effectuée depuis un bouton de validation.");
         }
-        $bouton_arr = array_keys($request["boutons"]);
-        $ds_neant = ($bouton_arr[0] == 'ds_neant');
+        $ds_type_arr = $request["ds"]["type_declaration"];
+        $ds_neant = ($ds_type_arr == 'ds_neant');
         $date = date('Y-m-d');
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
