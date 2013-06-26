@@ -27,10 +27,10 @@ class DSValidationCiva  extends DSValidation
 
   public function controle()
   {
-            foreach($this->document->declaration->getAppellations() as $hash => $appellation) {
+            foreach($this->document->declaration->getAppellationsSorted() as $key => $appellation) {
                     $appellation_vigilence = false;
                     if(!$appellation->total_stock){
-                        $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash)))); 
+                        $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $appellation))); 
                         $appellation_vigilence = true;
                     }
                     if(!$appellation_vigilence){
@@ -38,7 +38,7 @@ class DSValidationCiva  extends DSValidation
                             $lieu_vigilence = false;
                             if($hash_lieu!='lieu'){
                                 if(!$lieu->total_stock){
-                                    $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash).'-'.strtoupper(preg_replace("/^lieu/", '', $hash_lieu))))); 
+                                    $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu))); 
                                     $lieu_vigilence = true;
                                     }
                                 }
@@ -49,7 +49,7 @@ class DSValidationCiva  extends DSValidation
                                         foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
                                             foreach ($cepage->getProduitsDetails() as $detail) {
                                              if(!$detail->isSaisi()){
-                                                    $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('id' => $this->document->_id, 'hash' => preg_replace("/^appellation_/", '', $hash)))); 
+                                                    $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu, 'produit' => $detail->getHashForKey()))); 
                                                     $cepage_vigilence = true;
                                                 }
                                             }
