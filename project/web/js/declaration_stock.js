@@ -183,7 +183,7 @@ $.fn.postButtonForm = function(){
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-        var inputs = $('#'+form_id+'.ajaxForm :input[type="text"]');
+        var inputs = $('#'+form_id+'.ajaxForm :input[type="text"].stock');
         $(inputs).each(function(){
             $(this).change(function(){
                 formPost(form);

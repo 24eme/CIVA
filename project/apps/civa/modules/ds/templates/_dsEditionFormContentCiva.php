@@ -35,9 +35,9 @@ $produits = $form->getProduitsDetails();
 							?>
 						<li>
                             <?php if($tabindex == 1): ?>
-							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex, 'autofocus' => 'autofocus')); ?>
+							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex, 'autofocus' => 'autofocus')); ?>
                             <?php else: ?>
-                                <?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num', 'tabindex' => $tabindex)); ?>
+                                <?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex)); ?>
                             <?php endif; ?>
 							<?php echo $form[DSCivaClient::VOLUME_NORMAL.$key]->renderError(); ?>
 						</li>
@@ -59,7 +59,7 @@ $produits = $form->getProduitsDetails();
 						<li>
 							<?php
 							if(!$detail->getCepage()->no_vtsgn){
-								echo $form[DSCivaClient::VOLUME_VT.$key]->render(array('class' => 'num', 'tabindex' => $tabindex));
+								echo $form[DSCivaClient::VOLUME_VT.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex));
 								echo $form[DSCivaClient::VOLUME_VT.$key]->renderError(); 
 							}
 							?>
@@ -82,7 +82,7 @@ $produits = $form->getProduitsDetails();
                         <li>
                             <?php
                             if(!$detail->getCepage()->no_vtsgn){
-                                echo $form[DSCivaClient::VOLUME_SGN.$key]->render(array('class' => 'num', 'tabindex' => $tabindex));
+                                echo $form[DSCivaClient::VOLUME_SGN.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex));
                                 echo $form[DSCivaClient::VOLUME_SGN.$key]->renderError(); 
                             }
                             ?>
