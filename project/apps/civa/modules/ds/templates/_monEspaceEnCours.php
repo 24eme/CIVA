@@ -13,7 +13,7 @@
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_declaration_suppr" name="ds[type_declaration]" value="supprimer" />
-                <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
+                <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $ds->getAnnee(); ?> en cours</label>
             </div>
         <div class="ligne_form ligne_btn">
            <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
@@ -24,6 +24,6 @@
             <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Valider" />
             </div>
         <?php endif; ?>
-        <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_dr'); ?></p>
+        <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
     </div>
 </form>

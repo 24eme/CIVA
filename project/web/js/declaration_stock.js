@@ -257,7 +257,7 @@ var navOngletsStock = function()
  ******************************************/
 var initValidDSPopup = function()
 {
-    $('#previsualiser').click(function() {
+    $('#previsualiserDS').click(function() {
         openPopup($("#popup_loader"));
         $.ajax({
             url: ajax_url_to_print,

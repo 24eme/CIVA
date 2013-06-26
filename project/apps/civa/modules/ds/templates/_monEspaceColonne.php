@@ -1,5 +1,5 @@
 <div id="precedentes_declarations">
-    <h3 class="titre_section">Visualiser mes DS <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_visualiser" title="Message aide"></a></h3>
+    <h3 class="titre_section">Visualiser mes DStocks<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_visualiser_ds" title="Message aide"></a></h3>
     <div class="contenu_section">
         <ul class="bloc_vert">
             <li>
@@ -7,9 +7,12 @@
                 <?php if (count($dsBycampagnes) > 0): ?>
                     <ul class="declarations">
                         <?php foreach ($dsBycampagnes as $campagne => $ds): 
+                            if($campagne < $sf_user->getCampagne()):
                             ?>
-                            <li><?php echo link_to($campagne, 'ds_visualisation',$ds); ?></li>
-                        <?php endforeach; ?>
+                            <li><?php echo link_to($ds->getAnnee(), 'ds_visualisation',$ds); ?></li>
+                            <?php
+                            endif;
+                        endforeach; ?>
                     </ul>
                 <?php endif; ?>
             </li>

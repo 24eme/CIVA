@@ -162,9 +162,11 @@ class ExportDSPdf {
         $appellations = array("ALSACEBLANC", "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
         $recap = array();
         foreach($appellations as $appellation_key) {
-            if(!$ds->declaration->getAppellations()->exist("appellation_".$appellation_key)) {
-
+            if(!$ds->declaration->getAppellations()){
                 continue;
+            }
+            if(!$ds->declaration->getAppellations()->exist("appellation_".$appellation_key)) {
+               continue;
             }
 
             $appellation = $ds->declaration->getAppellations()->get("appellation_".$appellation_key);
@@ -251,15 +253,17 @@ class ExportDSPdf {
         }
 
 
+        if(!$ds->declaration->getAppellations()){
+            return; 
+        }
         if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
-
             return; 
         }
 
         $appellation = $ds->declaration->getAppellations()->get('appellation_'.$appellation_key);
 
         $details = $appellation->getProduitsDetails();
-
+        
         foreach($details as $detail) {
             $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
 
