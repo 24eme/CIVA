@@ -28,7 +28,7 @@ $(document).ready(function()
 	
     initConfirmeValidationDs();
 	// Scroll sur la liste des lieux de stockage
-	$.scrollTo('#liste_lieux_stockage', 800);
+	$.scrollTo('a[name=liste_lieux_stockage]', 800);
 });
 
 

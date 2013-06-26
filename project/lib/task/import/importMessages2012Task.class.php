@@ -141,7 +141,7 @@ EOF;
 		$json->stock_zero_lieu  = "Les stocks de ce lieu sont saisis à nul";    
 		$json->stock_null_cepage  = "Les stocks de ce cepage n'ont pas été saisis";
 		$json->stock_zero_cepage  = "Les stocks de ce cepage sont saisis à nul";
-		$json->autres_nul  = "Les moûts, rebêches, dépassements et lies n'ont pas été saisis et il s'agit d'une DS qui n'est pas à néant";    
+		$json->stock_aucun_produit  = "La DS n'a aucun produit et n'a pas été signalé comme une DS à néant";    
 		
                 
 		$docs[] = $json;
