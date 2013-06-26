@@ -128,7 +128,7 @@ class DSCivaClient extends DSClient {
         $new_ds->date_stock = $ds->date_stock;
         $new_ds->identifiant = $ds->identifiant;
         $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
-        $ds->storeInfos();
+        $new_ds->storeInfos();
         return $new_ds;
     }
 
