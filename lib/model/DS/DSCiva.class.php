@@ -30,8 +30,11 @@ class DSCiva extends DS {
             throw new sfException(sprintf("L'etablissement de cvi %s n'existe pas", $this->identifiant));
         }
         $num_lieu = $this->identifiant.$this->getLieuStockage();
+        if(!$tiers->exist('lieux_stockage')) {
+            throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
+        }
         if(!$tiers->lieux_stockage->exist($num_lieu)) {
-            throw new sfException(sprintf("Le lieu de stockage %s n'existe pas", $num_lieu));
+            throw new sfException(sprintf("Le lieu de stockage %s n'existe pas dans l'etablissement de cvi %s ", $num_lieu, $this->identifiant));
         }
 
         $this->set('stockage', $tiers->lieux_stockage->get($num_lieu));
