@@ -136,14 +136,14 @@ EOF;
             try {
                 $ds->storeInfos();
             } catch (sfException $e) {
-                if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
-                    echo "--------> La DS " . $this->green($ds->_id) . " n'est pas sauvée, c'est une " . $this->green("DS a néant") . "\n";
-                }
-                else
-                {
+//                if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
+//                    echo "--------> La DS " . $this->green($ds->_id) . " n'est pas sauvée, c'est une " . $this->green("DS a néant") . "\n";
+//                }
+//                else
+//                {
                     echo $this->error_term . " pour la DS $id_ds : " . $e->getMessage() . "\n";
                     //echo $this->error_term . " pour la DS $id_ds (qui n'est pas néant) => $ds->identifiant n'a pas de lieux de stockage \n";
-                }
+//                }
                 continue;
             }
 
@@ -166,8 +166,8 @@ EOF;
             // Produits
 
             if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
-                   //  $ds->save();
-                   // echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
+                    $ds->save();
+                    echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
                 continue;
             } else {
                 $en_erreur = false;

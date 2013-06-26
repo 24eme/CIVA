@@ -5,7 +5,7 @@
         <li class="ui-tabs-selected"><a href="#">Déclaration envoyée</a></li>
     </ul>
 
-    <!-- #application_dr -->
+    <!-- #application_ds -->
     <div id="application_ds" class="clearfix">
         <div id="confirmation_fin_declaration">
             <h2 class="titre_section">Confirmation</h2>
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <!-- fin #application_dr -->
+    <!-- fin #application_ds -->
 
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
     <li class="prec">
@@ -28,13 +28,13 @@
     </li>
     <li class="previsualiser">
             <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
-        <input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiser">
+        <input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserDS">
             </a>
         <a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
     </li>
     </ul>
 <!-- fin #principal -->
 
-<?php //include_partial('ds/envoiMailDR') ?>
+<?php //include_partial('ds/envoiMailDS') ?>
 
 <?php include_partial('ds/generationDuPdf', array('ds' => $ds_principale)); ?>
