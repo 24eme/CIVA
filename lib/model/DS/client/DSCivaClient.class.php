@@ -385,7 +385,7 @@ class DSCivaClient extends DSClient {
             $deleted = false;
             if($current_ds->hasNoAppellation()){
                 if($current_ds->isDsPrincipale() && !$current_ds->isDsNeant()){
-                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) n'a pas d'appellation alors que ce n'est pas une DS à néant.");
+                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) n'a pas d'appellation alors que ce n'est pas une DS Néant.");
                 }
             }else{
                 if($ds->hasNoAppellation()){

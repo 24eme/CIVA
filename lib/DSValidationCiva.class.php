@@ -66,7 +66,7 @@ class DSValidationCiva  extends DSValidation
       }
      }
      
-     public function isPoints(){
+     public function hasPoints(){
          foreach ($this->points as $type_point) {
              if(count($type_point)>0) return true;
          }
