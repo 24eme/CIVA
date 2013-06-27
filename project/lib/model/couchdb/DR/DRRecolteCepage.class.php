@@ -21,22 +21,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       
         return array($this->getHash() => $this);
     }
-    
-    public function getProduitsWithVolume() {
-      $details = array();
-      
-      if($this->exist('volume') && $this->volume > 0){
-          return array($this->getHash() => $this);
-      }
-      
-      foreach($this->getChildrenNode() as $key => $item) {          
-            if($item->exist('volume') && $item->volume > 0){
-                return array($this->getHash() => $this);
-            }
-      }
-
-      return $details;
-    }
 
     public function getProduitsDetails() {
       $details = array();
