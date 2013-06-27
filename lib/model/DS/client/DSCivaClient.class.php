@@ -264,6 +264,12 @@ class DSCivaClient extends DSClient {
     public function getTotauxByAppellationsRecap($ds) {
         $dss = $this->findDssByDS($ds);
         $totauxByAppellationsRecap = array();
+
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', null, "Rouge ou Rosé");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
+
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation){                
                 switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
@@ -312,6 +318,12 @@ class DSCivaClient extends DSClient {
             $totauxByAppellationsRecap[$key]->volume_vt = 0;
             $totauxByAppellationsRecap[$key]->volume_sgn = 0;
         }
+
+        if(!$node) {
+
+            return $totauxByAppellationsRecap;
+        }
+
         $totauxByAppellationsRecap[$key]->volume_total += ($node->total_stock)? $node->total_stock : 0;
         $totauxByAppellationsRecap[$key]->volume_normal += ($node->total_normal)? $node->total_normal : 0;
         $totauxByAppellationsRecap[$key]->volume_vt += ($node->total_vt)? $node->total_vt : 0;
