@@ -1907,11 +1907,11 @@ div#migration_compte .contenu_section#infos_traitement {
 /**
  * Confirmation fin de la déclaration
  ******************************************/
-#confirmation_fin_declaration {
+#confirmation_fin_stock {
 	width: 536px;
 }
 
-#confirmation_fin_declaration p.important {
+#confirmation_fin_stock p.important {
 	color: #acb701;
 	font-size: 16px;
 	margin: 0 0 5px;

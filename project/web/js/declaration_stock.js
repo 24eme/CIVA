@@ -28,9 +28,35 @@ $(document).ready(function()
 	
     initConfirmeValidationDs();
 	// Scroll sur la liste des lieux de stockage
+    if ($('#validation_ds').length > 0) {
+        $('#validation_ds').ready( function() {
+            initValidationDs();
+            initSendDSPopup();
+        });
+    }
+
+    if ($('#confirmation_fin_stock').length > 0) {
+        $('#confirmation_fin_stock').ready( function() {
+            initValidationDs();
+            initSendDSPopup();
+        });
+    }
+    
+    if($('a[name=liste_lieux_stockage]').length > 0){
 	$.scrollTo('a[name=liste_lieux_stockage]', 800);
+    }
 });
 
+
+/**
+ * Initialise les fonctions de la validation
+ * de récolte
+ ******************************************/
+var initValidationDs = function(type)
+{
+    initValidDSPopup();
+    initConfirmeValidationDs();
+}
 
 var initLieuxStockage = function()
 {
@@ -285,6 +311,14 @@ var initConfirmeValidationDs = function()
     $('#valideDS_OK').click(function() {
         $("#popup_confirme_validationDS").dialog('close');
         $("#principal").submit();
+        return false;
+    });
+}
+
+var initSendDSPopup = function()
+{
+    $('#btn-email').click(function() {
+        openPopup($("#popup_confirme_mail"));
         return false;
     });
 }

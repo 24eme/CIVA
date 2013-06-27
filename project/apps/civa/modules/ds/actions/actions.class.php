@@ -446,6 +446,62 @@ class dsActions extends sfActions {
         $this->ds_client = DSCivaClient::getInstance();
     }
     
+    
+    public function executeSendEmail(sfWebRequest $request){
+        
+        $this->ds = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+
+        $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $document->generatePDF();
+
+        $pdfContent = $document->output();
+
+        // si l'on vient de la page de visualisation
+        if($request->getParameter('message', null) != "custom")
+        {
+            $mess = 'Bonjour ' . $this->tiers->nom . ',
+Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . '.
+
+Cordialement,
+
+Le CIVA';
+
+        }else{
+
+        $mess = 'Bonjour ' . $this->tiers->nom . ',
+
+Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
+
+Cordialement,
+
+Le CIVA';
+
+        }
+
+        //send email
+        $message = Swift_Message::newInstance()
+                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                ->setTo($this->getUser()->getCompte()->email)
+                ->setSubject('CIVA - Votre déclaration de Stocks')
+                ->setBody($mess);
+
+
+        $file_name = $this->ds->_id . '.pdf';
+
+        $attachment = new Swift_Attachment($pdfContent, $file_name, 'application/pdf');
+        $message->attach($attachment);
+        
+        try {
+            $this->getMailer()->send($message);
+        } catch (Exception $e) {
+
+            $this->emailSend = false;
+        }
+        
+        $this->emailSend = true;
+    }
+    
     protected function convertNodeForUrl($node) {
         if($node instanceof sfOutputEscaperIteratorDecorator) {
             $node = $node->getRawValue();

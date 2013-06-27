@@ -6,7 +6,7 @@
 <?php
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
 ?>
-<?php include_partial('generationDuPdf', array('ds_principale' => $ds_principale)) ?>
+<?php include_partial('generationDuPdf', array('ds' => $ds_principale)) ?>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
@@ -15,11 +15,11 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 		</a>
 	</li>
         <?php if($ds_principale->isValidee()): ?>
-	<li class="suiv">
-            <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
-		<input type="image" src="/images/boutons/btn-recevoir-ma-ds-par-email.png" alt="Recevoir ma ds par email" name="boutons[recevoir]" id="recevoir">
-            </a>
-	</li>
+        <div id="validation_ds">
+            <li class="suiv">
+                <div id="div-btn-email"><a href="" id="btn-email"></a></div>
+            </li>
+        </div>
         <?php endif; ?>
 	<li class="previsualiser">
             <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
@@ -27,3 +27,4 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
             </a>            
     </li>
 </ul>
+<?php include_partial('ds/envoiMailDS', array('ds' => $ds_principale,'message' => null)); ?>

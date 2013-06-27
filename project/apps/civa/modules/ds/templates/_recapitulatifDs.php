@@ -4,7 +4,6 @@ $appellations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale)
 $has_points = false;
 if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_ds) { if($validation_ds->hasPoints()) { $has_points = true; break; } }}
 ?>
-
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
 		<?php if(isset($validation_dss)) : ?>
@@ -19,7 +18,6 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
         	</div>
         	<?php endif; ?>
         <?php endif; ?>
-
 		<div id="recap_total_ds" class="page_recap">
 			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
 			<div id="recap_appellations">
