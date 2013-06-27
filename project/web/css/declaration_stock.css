@@ -179,14 +179,16 @@ ul#etape_declaration li.actif a em span.lieu
 #onglets_majeurs.onglets_stock { line-height: 1; font-size: 13px; }
 #onglets_majeurs.onglets_stock.avec_sous_onglets { margin: 0 0 24px; }
 
-#onglets_majeurs.onglets_stock li a { padding: 2px 9px 2px 5px; }
+#onglets_majeurs.onglets_stock li a { padding: 2px 6px 2px 4px; }
+#onglets_majeurs.onglets_stock.concis li { margin-right: 2px; }
+#onglets_majeurs.onglets_stock.concis li a { padding: 2px 3px 2px 2px; }
 #onglets_majeurs.onglets_stock li.ui-tabs-selected > a { background: #ffb52c; }
 
 #onglets_majeurs.onglets_stock li.ajouter a
 {
 	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
 	color: #fff;
-	padding-left: 30px;
+	padding-left: 22px;
 }
 
 #onglets_majeurs.onglets_stock li.recap_stock { float: right; }

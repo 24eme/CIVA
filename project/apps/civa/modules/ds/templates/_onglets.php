@@ -1,4 +1,6 @@
-<ul id="onglets_majeurs" class="clearfix onglets_stock">
+<?php $is_appellations_completes = count($ds->declaration->getAppellationsSorted()) >= count($ds->declaration->getConfig()->getNoeudAppellations()->getChildrenNodeArray()) ?>
+
+<ul id="onglets_majeurs" class="clearfix onglets_stock <?php echo ($is_appellations_completes) ? "concis" : null ?>">
     <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
     <?php $selected = (isset($appellation) && $app->getHash() == $appellation->getHash()); ?>
     <li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">
@@ -20,12 +22,12 @@
     </li>
     <?php endforeach; ?>
     
-    <?php if(count($ds->declaration->getAppellationsSorted()) < count($ds->declaration->getConfig()->getNoeudAppellations()->getChildrenNodeArray())): ?>
-	<li class="ajouter ajouter_appelation"><a href="<?php echo url_for('ds_ajout_appellation', $ds) ?>">Ajouter une<br> appellation</a></li>
+    <?php if(!$is_appellations_completes): ?>
+	<li class="ajouter ajouter_appelation"><a title="Ajouter une appellation" href="<?php echo url_for('ds_ajout_appellation', $ds) ?>">&nbsp;</a></li>
     <?php endif; ?>
     <li class="recap_stock <?php echo isset($recap) ? 'ui-tabs-selected' : '' ; ?>">
         <a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", $ds); ?>" style="height: 30px;">
-        Récapitulatif du<br />lieu de stockage
+        Récapitulatif<br />lieu stockage
         </a>
     </li>
 </ul>
