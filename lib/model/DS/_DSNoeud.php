@@ -73,15 +73,6 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         }
         return false;
     }
-    
-     public function getProduitsWithVolume() {
-        $produits_with_volume = array();
-        foreach($this->getChildrenNode() as $key => $item) {
-            $produits_with_volume = array_merge($produits_with_volume, $item->getProduitsWithVolume());
-        }
-
-        return $produits_with_volume;
-    }
 
     public function getLibelle() {
         if(is_null($this->_get('libelle'))) {

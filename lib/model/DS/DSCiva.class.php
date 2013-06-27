@@ -103,9 +103,13 @@ class DSCiva extends DS {
         return $this->addNoeud($hash);
     }
 
-    public function addDetailsFromDRProduit($dr_produit) {
-        foreach ($dr_produit->getProduitsDetails() as $detail) {
-            $this->addDetail($dr_produit->getHash(), $detail->lieu);
+    public function addDetailsFromDR($dr) {
+        foreach ($dr->getProduitsDetails() as $detail) {
+            if(!$detail->cave_particuliere) {
+
+                continue;
+            }
+            $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
         }
     }
     
@@ -142,11 +146,8 @@ class DSCiva extends DS {
     }
 
     protected function updateProduitsFromDR($dr) {     
-        $produits = $dr->getProduitsWithVolume();
         $this->drm_origine = $dr->_id;     
-        foreach ($produits as $produit) {
-            $this->addDetailsFromDRProduit($produit);              
-       }
+        $this->addDetailsFromDR($dr);              
     }
         
     
