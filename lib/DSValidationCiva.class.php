@@ -27,42 +27,43 @@ class DSValidationCiva  extends DSValidation
 
   public function controle()
   {
-            foreach($this->document->declaration->getAppellationsSorted() as $key => $appellation) {
-                    $appellation_vigilence = false;
-                    if(!$appellation->total_stock){
-                        $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $appellation))); 
-                        $appellation_vigilence = true;
-                    }
-                    if(!$appellation_vigilence){
-                        foreach($appellation->getLieux() as $hash_lieu => $lieu) {
-                            $lieu_vigilence = false;
-                            if($hash_lieu!='lieu'){
-                                if(!$lieu->total_stock){
-                                    $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu))); 
-                                    $lieu_vigilence = true;
-                                    }
-                                }
-                                if(!$lieu_vigilence){
-                                    $cepage_vigilence = false;
-                                    
-                                    foreach ($lieu->getCouleurs() as $hash_couleur => $couleur) {
-                                        foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
-                                            foreach ($cepage->getProduitsDetails() as $detail) {
-                                             if(!$detail->isSaisi()){
-                                                    $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu, 'produit' => $detail->getHashForKey()))); 
-                                                    $cepage_vigilence = true;
-                                                }
-                                            }
-                                        }
+        foreach($this->document->declaration->getAppellationsSorted() as $key => $appellation) {
+            $appellation_vigilence = false;
+            if(!$appellation->total_stock){
+                $this->addPoint('vigilance', 'stock_null_appellation',' '.$appellation->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $appellation))); 
+                $appellation_vigilence = true;
+            }
+            if(!$appellation_vigilence){
+                foreach($appellation->getLieux() as $hash_lieu => $lieu) {
+                    $lieu_vigilence = false;
+                    if($hash_lieu!='lieu'){
+                        if(!$lieu->total_stock){
+                            $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu))); 
+                            $lieu_vigilence = true;
+                        }
+                    }   
+                    if(!$lieu_vigilence){
+                        $cepage_vigilence = false;
+                        
+                        foreach ($lieu->getCouleurs() as $hash_couleur => $couleur) {
+                            foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
+                                foreach ($cepage->getProduitsDetails() as $detail) {
+                                 if(!$detail->isSaisi()){
+                                        $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu, 'produit' => $detail->getHashForKey()))); 
+                                        $cepage_vigilence = true;
                                     }
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
                     
-      $this->document->declaration->cleanAllNodes();           
-      if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
+        $this->document->declaration->cleanAllNodes();           
+        if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
           $this->addPoint('vigilance', 'stock_aucun_produit', null, $this->generateUrl('ds_lieux_stockage', $this->document));               
+
       }
      }
      
