@@ -12,7 +12,7 @@ $ds_neant = $ds_principale->isDsNeant();
     <ul id="etape_declaration" class="etapes_ds clearfix">
                         <?php 
                         $passe = isset($force_passe) || isEtapePasse(1, $dss, $ds_principale); 
-                        $to_linked = !isset($force_no_link) && ($passe || ($etape>=0));
+                        $to_linked = !isset($force_no_link) && ($passe || ($ds_principale->num_etape >=0));
                         ?>
 			<li class="<?php echo ($etape==1)? 'actif ' : ''; echo ($passe && $etape!=1)? 'passe' : ''; ?>" >
                             <?php if($to_linked) : ?>
@@ -34,7 +34,7 @@ $ds_neant = $ds_principale->isDsNeant();
 			</li>
                         <?php 
                         $passe = isset($force_passe) || isEtapePasse(3, $dss, $ds_principale);
-                        $to_linked = !isset($force_no_link) && ((!$ds_noAppellation && !$ds_neant) && ($passe || ($etape>=2))); 
+                        $to_linked = !isset($force_no_link) && ((!$ds_noAppellation && !$ds_neant) && ($passe || ($ds_principale->num_etape>=2))); 
                         ?>
 			<li class="<?php echo ((!$ds_noAppellation && !$ds_neant) && $etape==3)? 'actif ' : ''; echo ((!$ds_noAppellation && !$ds_neant) && $passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
                             <?php if($to_linked) : ?> 
@@ -59,7 +59,7 @@ $ds_neant = $ds_principale->isDsNeant();
 			</li>
                         <?php 
                         $passe = isset($force_passe) || isEtapePasse(4, $dss, $ds_principale); 
-                        $to_linked = !isset($force_no_link) && (((!$ds_neant) && ($passe || ($etape>=3)))); 
+                        $to_linked = !isset($force_no_link) && (((!$ds_neant) && ($passe || ($ds_principale->num_etape>=3)))); 
                         ?>                        
 			<li class="<?php echo ($etape==4)? 'actif ' : ''; echo ($passe && $etape!=4)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
@@ -70,7 +70,7 @@ $ds_neant = $ds_principale->isDsNeant();
 			</li>
                         <?php 
                         $passe = isset($force_passe) || isEtapePasse(5, $dss, $ds_principale);
-                        $to_linked = !isset($force_no_link) && ($passe || ($etape>=4)); 
+                        $to_linked = !isset($force_no_link) && ($passe || ($ds_principale->num_etape>=4)); 
                         ?>   
 			<li class="<?php echo ($etape==5)? 'actif ' : ''; echo ($passe && $etape!=5)? 'passe' : ''; ?>" >
                         <?php if($to_linked) : ?> 
