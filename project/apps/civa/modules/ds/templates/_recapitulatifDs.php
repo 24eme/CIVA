@@ -1,32 +1,27 @@
 <?php 
 use_helper('Float');
-$appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
-$annee = $ds_principale->getAnnee();
+$appellations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
+$has_points = false;
+if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_ds) { if($validation_ds->hasPoints()) { $has_points = true; break; } }}
 ?>
-	<ul id="onglets_majeurs" class="clearfix">
-		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM (Déclaration de Stocks <?php echo $annee; ?>)</a></li>
-                        <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
-	</ul>
 
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
-		
-		<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
-		
-		<?php
-                        if(isset($validation_dss)) :
-			foreach ($validation_dss as $id_ds => $validation_ds):
-				if($validation_ds->isPoints()):
-		?>
-			<h2 class="lieu_stockage"><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
-		<?php 
-			endif;
-			include_partial('global/validation', array('validation' => $validation_ds));
-			endforeach; 
-                    endif;
-		?>
-            
+		<?php if(isset($validation_dss)) : ?>
+			<?php if ($has_points): ?>
+			<div id="validation_points_container">
+			<?php foreach ($validation_dss as $id_ds => $validation_ds): ?>
+				<?php if($validation_ds->hasPoints()): ?>
+				<h2 class="lieu_stockage"><?php echo getTitleLieuStockageStock($ds_client->find($id_ds)); ?></h2>
+				<?php endif; ?>
+				<?php include_partial('global/validation', array('validation' => $validation_ds)); ?>
+			<?php endforeach; ?>
+        	</div>
+        	<?php endif; ?>
+        <?php endif; ?>
+
 		<div id="recap_total_ds" class="page_recap">
+			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
 			<div id="recap_appellations">
 				<table class="table_donnees">
 					<thead>
@@ -39,13 +34,13 @@ $annee = $ds_principale->getAnnee();
 						</tr>
 					</thead>
 					<tbody>
-                        <?php foreach ($appelations_agregee as $apellation_agregee_key => $apellation_agregee) : ?>
+                        <?php foreach ($appellations_agregee as $appellations_agregee_key => $appellations_agregee) : ?>
 						<tr>
-							<td class="appellation"><?php echo $apellation_agregee->nom; ?></td>
-                                                        <td><?php echoFloat($apellation_agregee->volume_total); ?></td>
-							<td><?php echoFloat($apellation_agregee->volume_normal); ?></td>
-							<td><?php echoFloat($apellation_agregee->volume_vt); ?></td>
-							<td><?php echoFloat($apellation_agregee->volume_sgn); ?></td>
+							<td class="appellation"><?php echo $appellations_agregee->nom; ?></td>
+                                                        <td><?php echoFloat($appellations_agregee->volume_total); ?></td>
+							<td><?php echoFloat($appellations_agregee->volume_normal); ?></td>
+							<td><?php echoFloat($appellations_agregee->volume_vt); ?></td>
+							<td><?php echoFloat($appellations_agregee->volume_sgn); ?></td>
 						</tr>
                         <?php endforeach; ?>
 					</tbody>
