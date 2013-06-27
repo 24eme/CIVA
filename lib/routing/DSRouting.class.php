@@ -112,8 +112,11 @@ class DSRouting {
                 array('model' => 'DS',
                     'type' => 'object') ));
         
-        
-        
+        $r->prependRoute('ds_send_email_pdf', new DSRoute('/ds/:id/envoi-email', array('module' => 'ds',
+                'action' => 'sendEmail'),
+                array('sf_method' => array('get')),
+                array('model' => 'DS',
+                    'type' => 'object') ));       
         
         
     }
