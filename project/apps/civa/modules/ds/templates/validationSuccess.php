@@ -6,8 +6,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 
 <form method="POST" action="<?php echo url_for("ds_validation", $ds_principale)?>" id="principal" >
 
 <ul id="onglets_majeurs" class="clearfix">
-    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif des stocks</a></li>
-    <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
+    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif Déclaration de Stocks <?php echo $ds_principale->getAnnee();?></a></li>
 </ul>
 
 <?php include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client, 'validation_dss' => $validation_dss)); ?>
