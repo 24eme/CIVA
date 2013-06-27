@@ -22,7 +22,7 @@ $dss = $dss->getRawValue();
 	
 	<div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
-		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "disabled='disabled'" : ''; ?> />
+		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> />
 	</div>
 	
 	<div id="lieux_stockage">
@@ -95,6 +95,7 @@ $dss = $dss->getRawValue();
 	</li>
 </ul>
 </form>
+<?php include_partial('popupLieuxStockageNeant', array('ds' => $ds)); ?>
 
 
 
