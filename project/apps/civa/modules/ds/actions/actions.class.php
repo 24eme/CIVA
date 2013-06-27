@@ -244,6 +244,8 @@ class dsActions extends sfActions {
             return $this->redirect('ds_ajout_produit', $this->lieu);
         }
 
+        $this->produit_key = $request->getParameter('produit', null);
+
         $this->form = new DSEditionFormCiva($this->ds, $this->lieu);
 
         $this->appellations = $this->ds->declaration->getAppellationsSorted();
@@ -346,10 +348,10 @@ class dsActions extends sfActions {
             return sfView::SUCCESS;
         }
 
-        $this->ds->addDetail($this->form->getValue('hashref'), $this->form->getValue('lieudit'));
+        $detail = $this->ds->addDetail($this->form->getValue('hashref'), $this->form->getValue('lieudit'));
         $this->ds->save();
 
-        return $this->redirect('ds_edition_operateur', $this->lieu);
+        return $this->redirect('ds_edition_operateur', array('sf_subject' => $this->lieu, 'produit' => $detail->getHashForKey()));
     }
     
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {
