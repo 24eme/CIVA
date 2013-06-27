@@ -1,3 +1,8 @@
+<ul id="onglets_majeurs" class="clearfix">
+    <li class="ui-tabs-selected"><a href="#recap_total_ds">Déclaration de Stocks <?php echo $ds_principale->getAnnee(); ?></a></li>
+                    <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
+</ul>
+
 <?php
 include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
 ?>

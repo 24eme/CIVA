@@ -490,9 +490,13 @@ ul#etape_declaration li.actif a em span.lieu
 	font-size: 14px;
 }
 
+#application_ds #validation_points_container {
+	margin-bottom: 35px;
+}
+
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
-#application_ds #recap_autres { margin: 45px 0 0; }
+#application_ds #recap_autres { margin: 20px 0 0; }
 #application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
 
 /* Tableau */
