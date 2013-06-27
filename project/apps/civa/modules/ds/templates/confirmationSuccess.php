@@ -7,7 +7,7 @@
 
     <!-- #application_ds -->
     <div id="application_ds" class="clearfix">
-        <div id="confirmation_fin_declaration">
+        <div id="confirmation_fin_stock">
             <h2 class="titre_section">Confirmation</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
@@ -35,6 +35,6 @@
     </ul>
 <!-- fin #principal -->
 
-<?php //include_partial('ds/envoiMailDS') ?>
+<?php include_partial('ds/envoiMailDS', array('ds' => $ds_principale, 'message' => 'custom')); ?>
 
 <?php include_partial('ds/generationDuPdf', array('ds' => $ds_principale)); ?>

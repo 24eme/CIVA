@@ -3,16 +3,16 @@ use_helper('Float');
 $appelations_agregee = $ds_client->getTotauxByAppellationsRecap($ds_principale);
 $annee = $ds_principale->getAnnee();
 ?>
-	<ul id="onglets_majeurs" class="clearfix">
-		<li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM (Déclaration de Stocks <?php echo $annee; ?>)</a></li>
-                        <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
-	</ul>
+            <ul id="onglets_majeurs" class="clearfix">
+                    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif DRM (Déclaration de Stocks <?php echo $annee; ?>)</a></li>
+                            <a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a>
+            </ul>
 
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
 		
-		<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
-		
+                <p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small></p>
+                
 		<?php
                         if(isset($validation_dss)) :
 			foreach ($validation_dss as $id_ds => $validation_ds):
