@@ -63,6 +63,26 @@ class DSValidationCiva  extends DSValidation
         $this->document->declaration->cleanAllNodes();           
         if($this->document->isDsPrincipale() && !$this->document->isDsNeant() && $this->document->hasNoAppellation()){    
           $this->addPoint('vigilance', 'stock_aucun_produit', null, $this->generateUrl('ds_lieux_stockage', $this->document));               
-        }
-    }
+
+      }
+     }
+     
+     public function hasPoints(){
+         foreach ($this->points as $type_point) {
+             if(count($type_point)>0) return true;
+         }
+         return false;
+     }
+     
+     public function isAnyPointBloquant() {
+         foreach ($this->points as $type_point) {
+             if(array_key_exists('erreur',$type_point) &&  count($type_point['erreur'])>0) return true;
+         }
+         return false;
+     }
+     
+     public function validate(){
+            $this->declaration->cleanAllNodes(); 
+         
+     }
 }

@@ -41,7 +41,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
 
         
         
-        $this->widgetSchema->setLabel('neant', 'DS à néant');
+        $this->widgetSchema->setLabel('neant', 'DS Néant');
         $this->widgetSchema->setNameFormat('ds_lieu[%s]');
     }
 
@@ -83,7 +83,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         foreach ($dss as $ds) {
             if($is_neant){
                 if(!$ds->hasNoAppellation()){
-                    throw new sfException("La DS $ds->_id possède des appellations, il n'est pas possible de rendre cette DS à néant.");
+                    throw new sfException("La DS $ds->_id possède des appellations, il n'est pas possible de rendre cette DS Néant.");
                 }
                 if($ds->isDsPrincipale()){
                    $ds->add('ds_neant',1);

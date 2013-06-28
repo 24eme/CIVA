@@ -394,7 +394,6 @@ class DSCivaClient extends DSClient {
         $dss = $this->findDssByDs($ds);
         foreach ($dss as $current_ds) {
             $current_ds->declaration->cleanAllNodes();
-            $deleted = false;
 
             if($current_ds->hasNoAppellation() && !$current_ds->isDsPrincipale()){
                 $num_etape = $ds->getNumEtapeAbsolu();
