@@ -395,17 +395,12 @@ class DSCivaClient extends DSClient {
         foreach ($dss as $current_ds) {
             $current_ds->declaration->cleanAllNodes();
             $deleted = false;
-            if($current_ds->hasNoAppellation()){
-                if($current_ds->isDsPrincipale() && !$current_ds->isDsNeant()){
-                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) n'a pas d'appellation alors que ce n'est pas une DS à néant.");
-                }
-            }else{
-                if($ds->hasNoAppellation()){
-                    throw new sfException("Aucun clean n'est possible la DS $ds->_id (principale) est vide alors qu'une DS secondaire ne l'est pas");
-                }
-            }
+
             if($current_ds->hasNoAppellation() && !$current_ds->isDsPrincipale()){
+                $num_etape = $ds->getNumEtapeAbsolu();
                 $this->delete($current_ds);
+                $ds->updateEtape($num_etape);
+                $ds->save();
                 $deleted = true;
             }
             if(!$deleted){

@@ -313,6 +313,12 @@ class DSCiva extends DS {
     public function getUsagesIndustriels() {
         return $this->lies + $this->dplc;
     }
+
+    public function getNumEtapeAbsolu() {
+        $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
+
+        return $this->num_etape - $nb_lieux + 1;
+    }
     
     public function updateEtape($etape_rail, $courant_stock = null) {
          $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
