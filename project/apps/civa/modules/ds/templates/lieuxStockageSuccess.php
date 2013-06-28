@@ -1,6 +1,7 @@
 <!-- .header_ds -->
 <?php
 $dss = $dss->getRawValue();
+$hasVolume = false;
 ?>
 <form action="<?php echo url_for( 'ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
@@ -22,8 +23,9 @@ $dss = $dss->getRawValue();
 	
 	<div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
-		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "disabled='disabled'" : ''; ?> />
-	</div>
+		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> />
+                <a href="" class="msg_aide" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
+        </div>
 	
 	<div id="lieux_stockage">
 		<table class="table_donnees">
@@ -63,6 +65,9 @@ $dss = $dss->getRawValue();
 							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
                                                         $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
                                                         $disabled = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume());
+                                                        if($disabled){
+                                                            $hasVolume =true;  
+                                                        }
 						?>
 					
 					<td class="<?php echo $paire ?>">
@@ -95,6 +100,7 @@ $dss = $dss->getRawValue();
 	</li>
 </ul>
 </form>
+<?php include_partial('popupLieuxStockageNeant', array('hasVolume' => $hasVolume)); ?>
 
 
 

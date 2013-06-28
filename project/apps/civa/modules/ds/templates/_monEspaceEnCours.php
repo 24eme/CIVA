@@ -19,14 +19,14 @@
            <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
         </div>
         <?php else: ?>
-            <p class="intro">Démarrer une déclaration de stock</p>
+            <p class="intro">Démarrer une déclaration de stocks</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_normal" name="ds[type_declaration]" value="ds_normal" checked="checked" />
-                <label for="type_declaration_suppr">Déclaration de Stock normale</label>
+                <label for="type_declaration_suppr">Déclaration de Stocks</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_neant" name="ds[type_declaration]" value="ds_neant" />
-                <label for="type_declaration_suppr">Déclaration de Stock à néant</label>
+                <label for="type_declaration_suppr">Déclaration de Stocks Néant</label>
             </div>
             <div class="ligne_form ligne_btn">
                 <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />

@@ -19,6 +19,7 @@ $(document).ready(function()
     //navOngletsStock();
     initDSSommesCol();
     initLieuxStockage();
+    initLieuxStockageNeant();
     var ajaxForm = $('form.ajaxForm');
     if(ajaxForm.length > 0) {
         ajaxForm.postButtonForm();
@@ -90,10 +91,12 @@ var majLieuNeant = function(){
             one_checked = true;
         }
     });
-    if(one_checked)
-        $("#ds_lieu_neant").attr("disabled","disabled");
+    if(one_checked){
+        $("#ds_lieu_neant").attr("readonly",true);
+        initLieuxStockageNeant();
+    }
     else
-        $("#ds_lieu_neant").removeAttr("disabled");
+        $("#ds_lieu_neant").removeAttr("readonly");
             
 };
 
@@ -320,5 +323,18 @@ var initSendDSPopup = function()
     $('#btn-email').click(function() {
         openPopup($("#popup_confirme_mail"));
         return false;
+    });
+}
+
+
+var initLieuxStockageNeant = function()
+{
+    $('#ds_lieu_neant').click(function() {
+        var lien = $(this);
+        
+        if(lien.attr('readonly')){
+            openPopup($("#popup_ds_neant"));
+            return false;
+        } 
     });
 }
