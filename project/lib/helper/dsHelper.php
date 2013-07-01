@@ -33,8 +33,17 @@ function getDefaultTotal($type,$appellation,$current_lieu){
     return 0;   
 }
 
+function formatNumeroStockage($numero) {
+    if(preg_match("/^([0-9]{10})([0-9]{3})$/", $numero, $matches)) {
+        $numero = sprintf("%s %s", $matches[1], $matches[2]);
+    }
+
+    return $numero;
+}
+
 function getTitleLieuStockageStock($ds){
-    return 'Lieu de stockage : '.$ds->stockage->numero.' - '.$ds->stockage->nom.', '.$ds->stockage->adresse. ", ".$ds->stockage->code_postal." ".$ds->stockage->commune;
+
+    return sprintf("Lieux de stockage : %s - %s, %s, %s %s", formatNumeroStockage($ds->stockage->numero), $ds->stockage->nom, $ds->stockage->adresse, $ds->stockage->code_postal, $ds->stockage->commune);
 }
 
 function isEtapePasse($etape,$dss,$ds){
