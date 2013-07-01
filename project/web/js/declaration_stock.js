@@ -294,7 +294,7 @@ var initValidDSPopup = function()
                 $('.popup-loading').empty();
                 $('.popup-loading').css('background', 'none');
                 $('.popup-loading').css('padding-top', '10px');
-                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds">Télécharger la DS</a></p>');
+                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds" title="Télécharger la DS"></a></p>');
                 openPopup($("#popup_loader"));
 
             }
