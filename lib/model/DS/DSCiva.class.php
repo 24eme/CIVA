@@ -357,6 +357,18 @@ class DSCiva extends DS {
         $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum);
         return $detail;
     }
+
+    public function hasAOC() {
+        foreach($this->declaration->getAppellationsSorted() as $appellation) {
+            if(preg_match('/^appellation_VINTABLE$/',$appellation->getKey())) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
     
     public function hasNoAppellation() {      
         if(!$this->exist('declaration')) return true;

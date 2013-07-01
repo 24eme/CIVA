@@ -313,10 +313,10 @@ class DSCivaClient extends DSClient {
         if(!array_key_exists($key, $totauxByAppellationsRecap)){
             $totauxByAppellationsRecap[$key] = new stdClass();
             $totauxByAppellationsRecap[$key]->nom = 'TOTAL '.$nom;
-            $totauxByAppellationsRecap[$key]->volume_total = 0;
-            $totauxByAppellationsRecap[$key]->volume_normal = 0;
-            $totauxByAppellationsRecap[$key]->volume_vt = 0;
-            $totauxByAppellationsRecap[$key]->volume_sgn = 0;
+            $totauxByAppellationsRecap[$key]->volume_total = null;
+            $totauxByAppellationsRecap[$key]->volume_normal = null;
+            $totauxByAppellationsRecap[$key]->volume_vt = null;
+            $totauxByAppellationsRecap[$key]->volume_sgn = null;
         }
 
         if(!$node) {
