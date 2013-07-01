@@ -28,7 +28,7 @@ $(document).ready(function()
     initValidDSPopup();
 	
     initConfirmeValidationDs();
-	// Scroll sur la liste des lieux de stockage
+
     if ($('#validation_ds').length > 0) {
         $('#validation_ds').ready( function() {
             initValidationDs();
@@ -42,10 +42,8 @@ $(document).ready(function()
             initSendDSPopup();
         });
     }
-    
-    if($('a[name=liste_lieux_stockage]').length > 0){
-	$.scrollTo('a[name=liste_lieux_stockage]', 800);
-    }
+	
+	scrollLieuxStockage();
 });
 
 
@@ -279,6 +277,20 @@ var navOngletsStock = function()
 			}
 		});
 	});
+};
+
+	// Scroll automatique sur les lieux de stockage s'ils existent
+var scrollLieuxStockage = function()
+{
+	var listeLieuxStockage = $('#liste_lieux_stockage');
+	
+	if(listeLieuxStockage.length > 0)
+	{
+		$.scrollTo(listeLieuxStockage, 800);
+	}else
+	{
+		$.scrollTo('#etape_declaration', 800);
+	}
 };
 
 /**
