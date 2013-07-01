@@ -4,16 +4,16 @@
         <?php if (!$ds->isNew()): ?>
             <p class="intro">Vous souhaitez :</p>
             <div class="ligne_form">
-                <input type="radio" id="type_declaration_visualisation" name="ds[type_declaration]" value="visualisation"  />
-                <label for="type_declaration_visualisation">Visualiser ma déclaration en cours</label>
+                <input type="radio" id="type_ds_visualisation" name="ds[type_declaration]" value="visualisation"  />
+                <label for="type_ds_visualisation">Visualiser ma déclaration en cours</label>
             </div>
             <div class="ligne_form">
-                <input type="radio" id="type_declaration_brouillon" name="ds[type_declaration]" value="brouillon" checked="checked" />
-                <label for="type_declaration_brouillon">Continuer ma déclaration</label>
+                <input type="radio" id="type_ds_brouillon" name="ds[type_declaration]" value="brouillon" checked="checked" />
+                <label for="type_ds_brouillon">Continuer ma déclaration</label>
             </div>
             <div class="ligne_form">
-                <input type="radio" id="type_declaration_suppr" name="ds[type_declaration]" value="supprimer" />
-                <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $ds->getAnnee(); ?> en cours</label>
+                <input type="radio" id="type_ds_suppr" name="ds[type_declaration]" value="supprimer" />
+                <label for="type_ds_suppr">Supprimer ma déclaration <?php echo $ds->getAnnee(); ?> en cours</label>
             </div>
         <div class="ligne_form ligne_btn">
            <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
@@ -22,11 +22,11 @@
             <p class="intro">Démarrer une déclaration de stocks</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_normal" name="ds[type_declaration]" value="ds_normal" checked="checked" />
-                <label for="type_declaration_suppr">Déclaration de Stocks</label>
+                <label for="type_ds_normal">Déclaration de Stocks</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_neant" name="ds[type_declaration]" value="ds_neant" />
-                <label for="type_declaration_suppr">Déclaration de Stocks Néant</label>
+                <label for="type_ds_neant">Déclaration de Stocks Néant</label>
             </div>
             <div class="ligne_form ligne_btn">
                 <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />

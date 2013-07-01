@@ -35,10 +35,10 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 		
 						<div class="col_cont">
 							<ul>
-								<li><?php echo $form['mouts']->render(array('class' => 'num')) ?></li>
-								<li><?php echo $form['rebeches']->render(array('class' => 'num')) ?></li>
-								<li><?php echo $form['dplc']->render(array('class' => 'num')) ?></li>
-								<li><?php echo $form['lies']->render(array('class' => 'num')) ?></li>
+								<li><?php echo $form['mouts']->render(array('class' => 'num','tabindex' => 1)) ?></li>
+								<li><?php echo $form['rebeches']->render(array('class' => 'num','tabindex' => 2)) ?></li>
+								<li><?php echo $form['dplc']->render(array('class' => 'num','tabindex' => 3)) ?></li>
+								<li><?php echo $form['lies']->render(array('class' => 'num','tabindex' => 4)) ?></li>
                                                                 <li><input type="text" id="ds_vinssansig" autocomplete="off" disabled="disabled" class="num num_light num_float" value="<?php echoFloat($ds_client->getTotalSansIG($ds)); ?>" name="ds[vinssansig]" size="6"></li>
                                                                 <li><input type="text" id="ds_vinssansig_mousseux" autocomplete="off" disabled="disabled" class="num num_light num_float" value="<?php echoFloat($ds_client->getTotalSansIGMousseux($ds)); ?>" name="ds[vinssansig_mousseux]" size="6"></li>
 							</ul>
@@ -59,7 +59,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 			</a>
 		</li>
 		<li class="suiv">
-			<input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
+                    <input type="image" src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" tabindex="5" />
 		</li>
 	</ul>
 	
