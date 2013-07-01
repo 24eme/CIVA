@@ -290,7 +290,7 @@ var scrollLieuxStockage = function()
 		$.scrollTo(listeLieuxStockage, 800);
 	}else
 	{
-		$.scrollTo('#etape_declaration', 800);
+		$.scrollTo('#onglets_majeurs', 800);
 	}
 };
 
