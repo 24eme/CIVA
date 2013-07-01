@@ -225,6 +225,8 @@ var initMsgAide = function()
                 });
                 $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
                 $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').focus();
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').focus();
             }
             );
 
@@ -1301,13 +1303,15 @@ var openPopup = function(popup, fn_open_if) {
         }
 
     });
+    if($('.ui-dialog-buttonpane').find('button').length > 0 ){
+        $('.ui-dialog-buttonpane button:last').focus();
+    };
 
 
     if (!fn_open_if || fn_open_if()) {
         popup.dialog('open');
         return false;
     }
-
     return true;
 };
 
