@@ -1,9 +1,9 @@
-<!-- .header_ds -->
-<?php
+<?php use_helper('ds'); ?>
+<?php 
 $dss = $dss->getRawValue();
 $hasVolume = false;
 ?>
-<form action="<?php echo url_for( 'ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
+<form action="<?php echo url_for('ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <?php
     echo $form->renderHiddenFields();
@@ -54,7 +54,7 @@ $hasVolume = false;
 					<td class="adresse_lieu">
                                                 <?php echo ($num_lieu == $ds->getLieuStockage())? "<strong>" : ""; ?>
                                                 
-						<?php echo $lieu_stockage->numero ?> <br />
+						<?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
 					<?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
                                         </td>
@@ -86,8 +86,6 @@ $hasVolume = false;
 		</table>
 	</div>	
 </div>
-<!-- fin #application_ds -->
-
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
