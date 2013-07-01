@@ -70,14 +70,26 @@ EOF;
   }
 
   public function importLieuxStockage($cvi, $lines) {
-    $tiers =  acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
+    $tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
 
     if(!$tiers) {
-      $this->logLignes("ERROR", sprintf("Récoltant '%s' introuvable", $cvi), $lines);
+      $tiers = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($cvi);
+      if($tiers && $tiers->qualite != Acheteur::ACHETEUR_COOPERATIVE) {
+        $tiers = null;
+      }
+
+      if($tiers) {
+        $this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
+      }
+    }
+
+    if(!$tiers) {
+      $this->logLignes("ERROR", sprintf("Récoltant ou cave coop '%s' introuvable", $cvi), $lines);
 
       return;
     }
-
+    $tiers->remove('lieux_stockage');
+    $tiers->add('lieux_stockage');
     foreach($lines as $i => $line) {
       try{
         $this->importLieuStockage($tiers, $line);

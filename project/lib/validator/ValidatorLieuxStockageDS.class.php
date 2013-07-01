@@ -11,7 +11,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         
     }
     protected function configure($options = array(), $messages = array()) {
-        $this->addMessage('required_appellations', "Aucune appellation n'a été séléctionné, et la DS n'est pas à néant");
+        $this->addMessage('required_appellation', "Aucune appellation n'a été séléctionné, et la DS n'est pas à néant");
         $this->addMessage('invalid_lieux_stockage', "Il n'est pas possible de sauvegarder un lieu de stockage secondaire avec des appellations alors que le principal n'en possède pas.");
     }
 
@@ -33,7 +33,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         }
 
         if($empty && !$values['neant']) {
-            $errorSchema->addError(new sfValidatorError($this, 'required_appellations'));  
+            $errorSchema->addError(new sfValidatorError($this, 'required_appellation'));  
         }
 
         if(is_null($values_by_lieux['001'])){

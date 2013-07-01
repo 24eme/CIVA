@@ -94,4 +94,22 @@ abstract class _Tiers extends Base_Tiers {
         return $this->get('siege')->set('commune', $c);
     }
 
+    public function getRaisonSociale() {
+        return $this->getNom();
+    }
+
+    public function isDeclarantStock() {
+
+        return false;
+    }
+
+    public function getRegion() {
+        return null;
+    }
+
+
+    public function getNoAccises() {
+        return null;
+    }
+
 }

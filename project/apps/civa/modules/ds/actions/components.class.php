@@ -19,7 +19,7 @@ class dsComponents extends sfComponents {
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->ds = $this->getUser()->getDs();
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getDeclarant()->getDsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
     }
     
@@ -29,7 +29,7 @@ class dsComponents extends sfComponents {
      */
     public function executeMonEspaceValidee(sfWebRequest $request) {
         $this->ds = $this->getUser()->getDs();
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = $this->getUser()->getDeclarant()->getDsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->campagnes);
     }
     
@@ -38,7 +38,7 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->dsBycampagnes = $this->getUser()->getTiers('Recoltant')->getDsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->dsBycampagnes = $this->getUser()->getDeclarant()->getDsArchivesSince(($this->getUser()->getCampagne()-1));
         krsort($this->dsBycampagnes);
     }
     
