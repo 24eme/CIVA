@@ -154,7 +154,7 @@ EOF;
 			foreach ($docs as $data) {
 				$doc = acCouchdbManager::getClient()->find($data->_id);
 				if ($doc) {
-					// $doc->delete();
+					$doc->delete();
 				}
 				$doc = acCouchdbManager::getClient()->createDocumentFromData($data);
 				$doc->save();

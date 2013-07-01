@@ -1,0 +1,6 @@
+#!/bin/bash
+
+php symfony import:Configuration2012
+php symfony import:Messages2012
+
+bash bin/import_lieux_stockage
