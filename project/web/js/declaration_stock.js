@@ -66,20 +66,23 @@ var initLieuxStockage = function()
             });
     });
     $("#ds_lieu_neant").change(function(){
+        if($(this).attr("readonly")){
+            return false;
+        }
         majCheckboxesAppellation();
     });
 };
 
-var majCheckboxesAppellation = function(){
-    if($("#ds_lieu_neant").is(":checked")){
+var majCheckboxesAppellation = function(){    
+        if($("#ds_lieu_neant").is(":checked")){
+            $(".table_donnees input").each(function(){
+                $(this).attr("disabled","disabled");
+            });
+        }else{
         $(".table_donnees input").each(function(){
-            $(this).attr("disabled","disabled");
-        });
-    }else{
-       $(".table_donnees input").each(function(){
-            $(this).removeAttr("disabled");
-        }); 
-    }
+                $(this).removeAttr("disabled");
+            }); 
+        }
 };
 
 var majLieuNeant = function(){
