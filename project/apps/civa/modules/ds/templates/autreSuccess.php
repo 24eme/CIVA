@@ -35,7 +35,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 		
 						<div class="col_cont">
 							<ul>
-								<li><?php echo $form['mouts']->render(array('class' => 'num','tabindex' => 1)) ?></li>
+								<li><?php echo $form['mouts']->render(array('class' => 'num','tabindex' => 1, 'autofocus' => 'autofocus')) ?></li>
 								<li><?php echo $form['rebeches']->render(array('class' => 'num','tabindex' => 2)) ?></li>
 								<li><?php echo $form['dplc']->render(array('class' => 'num','tabindex' => 3)) ?></li>
 								<li><?php echo $form['lies']->render(array('class' => 'num','tabindex' => 4)) ?></li>
