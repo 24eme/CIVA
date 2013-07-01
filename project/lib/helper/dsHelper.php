@@ -35,7 +35,7 @@ function getDefaultTotal($type,$appellation,$current_lieu){
 
 function formatNumeroStockage($numero) {
     if(preg_match("/^([0-9]{10})([0-9]{3})$/", $numero, $matches)) {
-        $numero = sprintf("%s %s", $matches[1], $matches[2]);
+        $numero = sprintf("%s&nbsp;%s", $matches[1], $matches[2]);
     }
 
     return $numero;
