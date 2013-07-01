@@ -152,6 +152,7 @@ class dsActions extends sfActions {
             if($this->form->isValid()) {
                $this->dss = $this->form->doUpdateDss($this->dss);
                $this->dss_to_save = array();
+               $deleted = false;
                 foreach ($this->dss as $current_ds) {
                     if($current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
                         if($this->hasOneAppellationInDSS($this->dss)){
@@ -164,6 +165,7 @@ class dsActions extends sfActions {
                     if(!$current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
                         if(DSCivaClient::getInstance()->find($current_ds->_id)){  
                             DSCivaClient::getInstance()->delete($current_ds);
+                            $deleted = true;
                         }
                     }else{
                         $this->dss_to_save[$current_ds->_id] = $current_ds;
@@ -172,10 +174,10 @@ class dsActions extends sfActions {
                     $ds_principale = null;
                     foreach ($this->dss_to_save as $ds_to_save) {
                         if($ds_to_save->isDsPrincipale()){
-                            $ds_to_save->updateEtape(3); 
+                            $ds_to_save->updateEtape(3,null,$deleted); 
                             $ds_principale = $ds_to_save;
                             if($ds_neant){
-                                $ds_to_save->updateEtape(4);
+                                $ds_to_save->updateEtape(4,null,$deleted);
                             }
                         }
                         $ds_to_save->save();
