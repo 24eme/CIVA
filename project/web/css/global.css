@@ -142,6 +142,8 @@ input[type=radio]
 	padding: 0 0 0 15px;
 }
 
+.message ul.messages_log li a { text-decoration: underline; }
+
 .message_title {
 	padding: 0 10px;
 	font-weight: bold;
