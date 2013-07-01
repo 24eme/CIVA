@@ -422,6 +422,7 @@ EOF;
         $json->dr_non_ouverte = 1;
         $json->ds_non_editable = 1;
         $json->ds_non_ouverte = 0;
+        $json->declaration_courante = 'DS';
         $docs[] = $json;
 
         if ($options['import'] == 'couchdb') {
