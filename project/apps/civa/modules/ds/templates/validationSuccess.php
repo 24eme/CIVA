@@ -18,7 +18,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 
 		</a>
 	</li>
 	<li class="suiv">
-            <input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" id="valideDS" />
+            <input tabindex="1" type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" id="valideDS" />
 	</li>
 	<li class="previsualiser">
             <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">

@@ -27,13 +27,17 @@
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
   <?php else: ?>
-    <?php foreach($totals as $volume): ?>
-    <?php if(!$is_last_page): ?>
-      <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+    <?php if($ds->hasAOC() && $is_last_page): ?>
+      <?php foreach($totals as $volume): ?>
+      <?php if(!$is_last_page): ?>
+        <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
+      <?php else: ?>
+        <td style="border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+      <?php endif; ?>
+      <?php endforeach; ?>
     <?php else: ?>
-      <td style="border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+      <td style="border: 1px solid black; background-color: #bbb;" colspan="4"><i>Néant</i></td>
     <?php endif; ?>
-    <?php endforeach; ?>
   <?php endif; ?>
 </tr>
 </table>

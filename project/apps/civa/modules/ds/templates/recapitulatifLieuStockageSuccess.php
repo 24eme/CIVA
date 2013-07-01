@@ -25,18 +25,23 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 						</tr>
 					</thead>
 					<tbody>
-
-					<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
-                                                 if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
-                                                    <tr>
-                                                            <td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
-                                                            <td><?php echoFloat($appellation->getTotalStock()); ?></td>
-                                                            <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
-                                                            <td><?php echoFloat($appellation->getTotalVt()); ?></td>
-                                                            <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
-                                                    </tr>                                            
-                                                <?php endif;
-                                                endforeach; ?>
+					<?php if($ds->hasAOC()): ?>
+						<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
+		                    if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
+		                        <tr>
+		                                <td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
+		                                <td><?php echoFloat($appellation->getTotalStock()); ?></td>
+		                                <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
+		                                <td><?php echoFloat($appellation->getTotalVt()); ?></td>
+		                                <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
+		                        </tr>                                            
+		                    <?php endif; ?>
+		                <?php endforeach; ?>
+	            	<?php else: ?>
+	            		<tr>
+                            <td colspan="5" class="neant">Néant</td>
+                    	</tr>
+	            	<?php endif; ?>
 					</tbody>
 				</table>
 				
@@ -84,7 +89,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 		</a>
 	</li>
 	<li class="suiv">
-		<a href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
+		<a tabindex="1" href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>

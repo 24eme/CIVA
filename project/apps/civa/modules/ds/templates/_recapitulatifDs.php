@@ -35,10 +35,14 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
                         <?php foreach ($appellations_agregee as $appellations_agregee_key => $appellations_agregee) : ?>
 						<tr>
 							<td class="appellation"><?php echo $appellations_agregee->nom; ?></td>
-                                                        <td><?php echoFloat($appellations_agregee->volume_total); ?></td>
+							<?php if(!is_null($appellations_agregee->volume_total)): ?>
+                            <td><?php echoFloat($appellations_agregee->volume_total); ?></td>
 							<td><?php echoFloat($appellations_agregee->volume_normal); ?></td>
 							<td><?php echoFloat($appellations_agregee->volume_vt); ?></td>
 							<td><?php echoFloat($appellations_agregee->volume_sgn); ?></td>
+							<?php else: ?>
+								<td colspan="4" class="neant neant_alt">Néant</td>
+							<?php endif; ?>
 						</tr>
                         <?php endforeach; ?>
 					</tbody>
