@@ -16,7 +16,7 @@ $ds_neant = $ds_principale->isDsNeant();
                         ?>
 			<li class="<?php echo ($etape==1)? 'actif ' : ''; echo ($passe && $etape!=1)? 'passe' : ''; ?>" >
                             <?php if($to_linked) : ?>
-					<a class="ajax" href="<?php echo  url_for('ds_exploitation',$ds_principale); ?>">
+                                    <a class="ajax" href="<?php echo  url_for('ds_exploitation',$ds_principale); ?>">
                             <?php endif; ?>
                                             <span>Exploitation</span> <em>Etape 1</em>
                             <?php if($to_linked) echo "</a>"; ?>       
@@ -27,7 +27,7 @@ $ds_neant = $ds_principale->isDsNeant();
                         ?>
 			<li class="<?php echo ($etape==2)? 'actif ' : ''; echo ($passe && $etape!=2)? 'passe' : ''; ?>" >
                             <?php if($to_linked) : ?> 
-					<a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $ds_principale); ?>">
+                                    <a class="ajax" href="<?php echo url_for("ds_lieux_stockage", $ds_principale); ?>">
                             <?php endif; ?>               
                                             <span>Lieux de stockage</span> <em>Etape 2</em>
                             <?php if($to_linked) echo "</a>"; ?>
@@ -42,18 +42,17 @@ $ds_neant = $ds_principale->isDsNeant();
                             <?php endif; ?> 
                                 <span>Stocks</span> <em>Etape 3<span class="lieu" ><?php echo getEtape3Label($etape,$many_lieux,$dss,$ds);?></span></em>
                             <?php if($to_linked) echo "</a>"; ?>
-                            <a name="liste_lieux_stockage"></a>
                             <?php if(($etape==3) && ($many_lieux)) : ?>
-                                <ul>
-                                <?php 
-                                $num = 1;
-                                foreach ($dss as $current_ds) : ?>
-                                    <li class="<?php echo ($current_ds->_id == $ds->_id)? 'actif' : '' ?>">
-                                            <a href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
-                                    </li>
-                                <?php 
-                                $num++;
-                                endforeach; ?>
+                                <ul id="liste_lieux_stockage">
+									<?php 
+									$num = 1;
+									foreach ($dss as $current_ds) : ?>
+										<li class="<?php echo ($current_ds->_id == $ds->_id)? 'actif' : '' ?>">
+											<a href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
+										</li>
+									<?php 
+									$num++;
+									endforeach; ?>
                                 </ul>
                             <?php endif; ?>
 			</li>
