@@ -43,7 +43,17 @@ class DSCiva extends DS {
     public function storeDeclarant() {
         parent::storeDeclarant();
 
-        $this->declarant->set('exploitant', $this->getEtablissement()->exploitant);
+        if($this->getEtablissement()->exist('exploitant')) {
+            $this->declarant->set('exploitant', $this->getEtablissement()->exploitant);
+        } else {
+            $this->declarant->exploitant->sexe = null;
+            $this->declarant->exploitant->nom = $this->declarant->nom;
+            $this->declarant->exploitant->adresse = $this->declarant->adresse;
+            $this->declarant->exploitant->code_postal = $this->declarant->code_postal;
+            $this->declarant->exploitant->commune = $this->declarant->commune;
+            $this->declarant->exploitant->date_naissance = null;
+            $this->declarant->exploitant->telephone = $this->declarant->telephone;
+        }
     }
 
     public function storeInfos() {
@@ -68,6 +78,11 @@ class DSCiva extends DS {
         if ($ds) {
             return $this->updateProduitsFromDS($ds);
         }
+    }
+
+    public function getLastDS() {
+
+        return null;
     }
 
     public function addNoeud($hash) {
@@ -169,7 +184,7 @@ class DSCiva extends DS {
     }
 
    public function getEtablissement() {
-        return acCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->identifiant);
+        return acCouchdbManager::getClient('_Tiers')->retrieveByCvi($this->identifiant);
     }
 
     public function getConfig() {
