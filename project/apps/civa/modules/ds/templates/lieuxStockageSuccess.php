@@ -3,7 +3,7 @@
 $dss = $dss->getRawValue();
 $hasVolume = false;
 ?>
-<form action="<?php echo url_for( 'ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
+<form action="<?php echo url_for('ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <?php
     echo $form->renderHiddenFields();
