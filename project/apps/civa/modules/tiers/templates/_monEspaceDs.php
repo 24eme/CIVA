@@ -1,8 +1,4 @@
-<?php if ($sf_user->hasFlash('confirmation')) : ?>
-    <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
-<?php endif; ?>
-
-<?php if ($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
+<?php if ($sf_user->getTiers()->isDeclarantStock()): ?>
     <div id="espace_alsace_recolte">
         <h2>Alsace Stocks</h2>
         <div class="contenu clearfix">  

@@ -3,8 +3,8 @@ class dsActions extends sfActions {
     
     public function executeInit(sfWebRequest $request) {
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
-       $this->getUser()->initCredentialsDeclaration();
-       $this->tiers = $this->getUser()->getTiers('Recoltant');
+
+       $this->tiers = $this->getUser()->getDeclarant();
        $ds_data = $this->getRequestParameter('ds', null);       
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
@@ -88,9 +88,15 @@ class dsActions extends sfActions {
     {
         $this->ds = $this->getRoute()->getDS(); 
         $this->tiers = $this->getRoute()->getTiers();        
-        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
-        $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
+        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+
+        $this->form_gest = null;
         $this->form_gest_err = 0;
+        if($this->getUser()->getTiers()->exist('exploitant')) {
+            $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
+            $this->form_gest_err = 0;
+        }
+
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
         $this->form_expl_err = 0;
         if ($request->isMethod(sfWebRequest::POST)) {

@@ -6,13 +6,13 @@
     <h2 class="titre_principal">Mon espace déclaratif</h2>
 <?php endif; ?>
 <div id="application_dr" class="clearfix">
-    <?php 
-    if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
-        include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
-    else:
-        include_partial('monEspaceDs',array('sf_user' => $sf_user));
-    endif;
-    ?>
+        <?php 
+        if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
+            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
+        else:
+            include_partial('monEspaceDs',array('sf_user' => $sf_user));
+        endif;
+        ?>
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
