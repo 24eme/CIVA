@@ -52,6 +52,8 @@
  ******************************************/
 .header_ds { margin: 0 0 15px; } 
 .header_ds.sous_menu { margin: 0 0 70px; } 
+
+.header_ds.sous_menu #liste_lieux_stockage { padding: 0 0 0 268px; }
  
 /* Etapes */
 #etape_declaration.etapes_ds
@@ -117,10 +119,9 @@
 
 #etape_declaration.etapes_ds li.sous_menu ul li.actif
 {
-	background: #999;
+	background: #FFB52C;
 	font-weight: bold;
 }
-#etape_declaration.etapes_ds li.sous_menu ul li.actif a { color: #fff; }
 #etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
 
 ul#etape_declaration li.actif a em span.lieu 
