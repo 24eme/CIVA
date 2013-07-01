@@ -581,7 +581,24 @@ ul#etape_declaration li.actif a em span.lieu
 	background: url("../images/boutons/btn_telecharger_votre_ds.png") no-repeat scroll 0 0 transparent;
 	display: block;
 	height: 19px;
-	margin-left: 115px; !
+	margin-left: 115px;
 	margin-left: 0px;
 	width: 130px;
 }
+
+/**
+ * Popup de validation de DS / confirmation d'envoi de mail
+ ******************************************/
+
+#popup_confirme_validationDS #btns,
+#popup_confirme_mail #btns { margin: 15px 0 0; }
+
+#popup_confirme_validationDS #btns input,
+#popup_confirme_mail #btns input
+{
+	float: left;
+	margin: 0;
+}
+
+#popup_confirme_validationDS #btns .close_popup,
+#popup_confirme_mail #btns .close_popup { float: right; }

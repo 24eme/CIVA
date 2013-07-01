@@ -20,12 +20,11 @@
 <div id="popup_confirme_mail" class="popup_ajout" title="Confirmation d'envoi de mail de votre DStocks">
     <form method="post" action="">
         <p>
-            Confirmez vous l'envoi par mail de votre déclaration de Stocks ? <br />
+            Confirmez vous l'envoi par mail de votre déclaration de Stocks ?
         </p>
-        <div id="btns">
-            <br />
+        <div id="btns" class="clearfix">
             <input onclick="sendMail()" type="image" src="/images/boutons/btn_valider.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" class="valideDR_OK" />
-            <a class="close_popup" href=""  onclick="$('#popup_confirmation').dialog('close');" ><img alt="Annuler" src="/images/boutons/btn_annuler.png"></a>
+            <a class="close_popup" href="" onclick="$('#popup_confirmation').dialog('close');"><img alt="Annuler" src="/images/boutons/btn_annuler.png" /></a>
         </div>
     </form>
 </div>
