@@ -316,16 +316,21 @@ class DSCiva extends DS {
 
     public function getNumEtapeAbsolu() {
         $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
-
         return $this->num_etape - $nb_lieux + 1;
     }
     
-    public function updateEtape($etape_rail, $courant_stock = null) {
+    public function updateEtape($etape_rail, $courant_stock = null, $deleted = false) {
+        
          $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
          if($courant_stock){
                    $this->add('courant_stock', $courant_stock);
+         }      
+         if($deleted){
+             $this->add('num_etape', ($this->getNumEtapeAbsolu() - 1));
+             return $this;
          }
          if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
+             
                 $this->add('num_etape', $etape_rail);
                 return $this;
          }
