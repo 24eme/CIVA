@@ -419,7 +419,7 @@ public function getConfigurationCampagne() {
     public function devalidate($juste_civa = false) {
 
         if($this->isDsPrincipale()){
-             $this->updateEtape(5);
+             $this->num_etape = 1;
         }
 
         if(!$juste_civa) {
