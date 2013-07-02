@@ -58,7 +58,7 @@ class ExportDSPdf {
             $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
         }
 
-        if($this->ds_principale->isValideeCiva()) {
+        if($this->ds_principale->isValideeEtModifiee()) {
             $date_modifiee = new DateTime($this->ds_principale->modifiee);
             $validee .= ' et modifiée le '.$date_modifiee->format('d/m/Y');
         }
