@@ -202,7 +202,7 @@ EOF;
     protected function importProduitInDS($ds, $productRow) {
         $hash = $this->constructHash($productRow);
         if ($hash) {
-            $detail = $ds->addDetail($hash);
+            $detail = $ds->addNoeud($hash);
             $id_ds_import = $productRow[self::CSV_DS_ID];
 
             $vol_normal = $this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_STOCK]);
