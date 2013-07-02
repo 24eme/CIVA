@@ -24,4 +24,9 @@ class Acheteur extends BaseAcheteur {
 
         return $this->qualite == self::ACHETEUR_COOPERATIVE;
     }
+
+    public function getIdentifiant() {
+
+        return $this->cvi;
+    }
 }

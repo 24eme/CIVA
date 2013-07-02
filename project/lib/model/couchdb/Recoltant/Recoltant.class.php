@@ -8,4 +8,9 @@ class Recoltant extends BaseRecoltant {
 
         return true;
     }
+
+    public function getIdentifiant() {
+
+        return $this->cvi;
+    }
 }

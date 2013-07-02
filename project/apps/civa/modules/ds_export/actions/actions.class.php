@@ -17,6 +17,11 @@ class ds_exportActions extends sfActions
   */
     public function executePDF(sfWebRequest $request)
     {
+      if(!DSSecurity::getInstance($this->getUser(), $this->getRoute()->getDS())->isAuthorized(array(DSSecurity::CONSULTATION))) {
+
+         throw new sfSecurityException("Vous n'avez pas accès à cette DS");
+      }
+
       set_time_limit(180);
       $this->ds = $this->getRoute()->getDS();
       $this->ds->update();
