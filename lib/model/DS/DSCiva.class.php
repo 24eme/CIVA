@@ -265,10 +265,9 @@ class DSCiva extends DS {
     }
     
 public function getConfigurationCampagne() {
-        return acCouchdbManager::getClient('Configuration')->retrieveConfiguration(substr($this->campagne,0,4));
         $campagne = substr($this->campagne,0,4);
         $conf_2012 = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-        if(substr($this->campagne,0,4) <= '2012'){
+        if($campagne <= '2012'){
             return $conf_2012;
         }        
         $conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
