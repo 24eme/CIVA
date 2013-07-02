@@ -108,6 +108,8 @@ class DSCiva extends DS {
         return $noeud;
     }
 
+    
+    
     public function addAppellation($hash) {   
         
         return $this->addNoeud($hash);
@@ -262,9 +264,17 @@ class DSCiva extends DS {
         return null;
     }
     
-    public function getConfigurationCampagne() {
+public function getConfigurationCampagne() {
         return acCouchdbManager::getClient('Configuration')->retrieveConfiguration(substr($this->campagne,0,4));
-    }
+        $campagne = substr($this->campagne,0,4);
+        $conf_2012 = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+        if(substr($this->campagne,0,4) <= '2012'){
+            return $conf_2012;
+        }        
+        $conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
+        return ($conf)? $conf : $conf_2012;
+     }
+
     
     public function getCepage($hash) {
         return $this->get($hash);
