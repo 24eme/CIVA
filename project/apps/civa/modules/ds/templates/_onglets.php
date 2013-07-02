@@ -16,7 +16,7 @@
                     <a class="ajax" href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getLibelle(); ?></a>
                 </li>
                 <?php endforeach; ?>
-                <li class="ajouter ajouter_lieu"><a class="ajax" href="<?php echo url_for('ds_ajout_lieu', $appellation) ?>">&nbsp;Ajouter un lieu dit</a></li>
+                <li class="ajouter ajouter_lieu"><a class="ajax" href="<?php echo url_for('ds_ajout_lieu', $appellation) ?>">&nbsp;Ajouter un lieu-dit</a></li>
             </ul>
         <?php endif; ?>
     </li>
