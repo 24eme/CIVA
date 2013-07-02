@@ -36,7 +36,9 @@ class DSValidationCiva  extends DSValidation
             if(!$appellation_vigilence){
                 foreach($appellation->getLieux() as $hash_lieu => $lieu) {
                     $lieu_vigilence = false;
+                    $lieu_libelle = '';
                     if($hash_lieu!='lieu'){
+                        $lieu_libelle = ' '.$lieu->getLibelle();
                         if(!$lieu->total_stock){
                             $this->addPoint('vigilance', 'stock_null_lieu',' '.$appellation->getLibelle().' '. $lieu->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu))); 
                             $lieu_vigilence = true;
@@ -49,7 +51,7 @@ class DSValidationCiva  extends DSValidation
                             foreach ($couleur->getCepages() as $hash_cepage => $cepage) {
                                 foreach ($cepage->getProduitsDetails() as $detail) {
                                  if(!$detail->isSaisi()){
-                                        $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu, 'produit' => $detail->getHashForKey()))); 
+                                        $this->addPoint('vigilance', 'stock_null_cepage',' '.$cepage->getAppellation()->getLibelle().$lieu_libelle.' '.$cepage->getLibelle(), $this->generateUrl('ds_edition_operateur', array('sf_subject' => $lieu, 'produit' => $detail->getHashForKey()))); 
                                         $cepage_vigilence = true;
                                     }
                                 }
