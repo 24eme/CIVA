@@ -190,6 +190,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
             if (!$this->_ds) {
                 $ds = new DSCiva();
+                $ds->identifiant = $this->getDeclarant()->cvi;
                 $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-001');
                 return $ds;
             }
@@ -197,7 +198,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         return $this->_ds;
     }
-    
+
     public function hasLieuxStockage() {
         $this->requireTiers();
         if(!$this->getDeclarant()->exist('lieux_stockage')) return false;

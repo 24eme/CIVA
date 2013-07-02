@@ -1,20 +1,23 @@
 <?php
 class dsActions extends sfActions {
-    
+
     public function executeInit(sfWebRequest $request) {
+
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
 
+       $this->secureDS(array(DSSecurity::CONSULTATION, 
+                             DSSecurity::EDITION), $this->getUser()->getDs());
+
        $this->tiers = $this->getUser()->getDeclarant();
-       $ds_data = $this->getRequestParameter('ds', null);       
+       $ds_data = $this->getRequestParameter('ds', null);
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
-                $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
-                //$this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                return $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
             } elseif ($ds_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDs();
-                $this->redirect('mon_espace_civa');
+                return  $this->redirect('mon_espace_civa');
             } elseif ($ds_data['type_declaration'] == 'visualisation') {
-                $this->redirect('ds_visualisation', $this->getUser()->getDs());
+                return $this->redirect('ds_visualisation', $this->getUser()->getDs());
             }    
         }
         $this->ds = null;        
@@ -33,60 +36,36 @@ class dsActions extends sfActions {
     } 
     
     public function executeRedirectEtape(sfWebRequest $request) {
-         $this->ds = $this->getRoute()->getDS();         
-         $this->tiers = $this->getRoute()->getTiers();
-         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
-         if((!$this->ds) || (!$this->ds->exist('num_etape')))
-             throw new sfException("La DS n'existe pas ou ne possède pas de numéro d'étape");         
-         switch ($this->ds->num_etape) {
-             case 1:
-                 $this->redirect('ds_exploitation', $this->ds);
-             break;
-             case 2:
-                 $this->redirect("ds_lieux_stockage", $this->ds);
-             break;
-             default :
-                 $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
-             break;
-         }
-         $id = $this->ds->_id;
-         $etape = $this->ds->num_etape;
-         throw new sfException("Etape de DS $id non reconnu ($etape)");
-    }
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
 
-    private function redirectEtapeAfterStock($ds,$dss,$tiers){
-        $etape = $ds->num_etape;
-        if((3 <= $etape) && ($etape < (3+count($dss)))){
-            $pos = $etape - 3;
-            $dss_id = array_keys($dss);
-            $ds_id = $dss_id[$pos];
-            $courante_ds = $dss[$ds_id];
-            $courant_stock = ($courante_ds->exist('courant_stock'))? $courante_ds->courant_stock : null;
-            if($courant_stock){
-                $this->redirect('ds_edition_operateur', array('id' => $ds_id, 'hash' => $courant_stock));
-            }
-            else{
-                $this->redirect('ds_edition_operateur', array('id' => $ds_id));
-            }
+        $this->ds = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+        $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
+        if((!$this->ds) || (!$this->ds->exist('num_etape')))
+         throw new sfException("La DS n'existe pas ou ne possède pas de numéro d'étape");         
+        switch ($this->ds->num_etape) {
+         case 1:
+             $this->redirect('ds_exploitation', $this->ds);
+         break;
+         case 2:
+             $this->redirect("ds_lieux_stockage", $this->ds);
+         break;
+         default :
+             $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
+         break;
         }
-        if(3 + count($dss) - 1 < $etape){
-            $etape_without_dss = $etape - count($dss) + 1;
-            if($etape_without_dss == 4){
-                $this->redirect('ds_autre', $ds); 
-            }
-            if($etape_without_dss == 5){
-                $this->redirect('ds_validation', $ds); 
-            }
-            if($etape_without_dss == 6){
-                $this->redirect('ds_visualisation', $ds); 
-            }
-        }
+        $id = $this->ds->_id;
+        $etape = $this->ds->num_etape;
+        throw new sfException("Etape de DS $id non reconnu ($etape)");
     }
-
 
     public function executeExploitation(sfWebRequest $request)
     {
-        $this->ds = $this->getRoute()->getDS(); 
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
+        $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();        
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
 
@@ -142,6 +121,9 @@ class dsActions extends sfActions {
     
     public function executeLieuxStockage(sfWebRequest $request)
     {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         $this->tiers = $this->getRoute()->getTiers();
@@ -194,13 +176,6 @@ class dsActions extends sfActions {
         }
     }
     
-    private function hasOneAppellationInDSS($dss){
-        foreach ($dss as $ds) {
-            if(!$ds->hasNoAppellation()) return true;
-        }
-        return false;
-    }
-    
     public function executeMonEspace(sfWebRequest $request) {    
          
         $this->tiers = $this->getRoute()->getTiers();        
@@ -224,7 +199,10 @@ class dsActions extends sfActions {
         }
     }
 
-    public function executeStock(sfWebRequest $request) {    
+    public function executeStock(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         if($this->ds->hasNoAppellation()){
@@ -288,6 +266,9 @@ class dsActions extends sfActions {
     }
 
     public function executeAjoutAppellation(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSEditionAddAppellationFormCiva($this->ds);
@@ -311,6 +292,9 @@ class dsActions extends sfActions {
     }
 
     public function executeAjoutLieu(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->appellation = $this->getRoute()->getNoeud();
@@ -337,6 +321,9 @@ class dsActions extends sfActions {
     }
 
     public function executeAjoutProduit(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->lieu = $this->getRoute()->getNoeud();
@@ -363,6 +350,9 @@ class dsActions extends sfActions {
     }
     
     public function executeRecapitulatifLieuStockage(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->ds);
         $this->tiers = $this->getRoute()->getTiers();
@@ -384,6 +374,9 @@ class dsActions extends sfActions {
     
     public function executeAutre(sfWebRequest $request)
     {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->form = new DSEditionCivaAutreForm($this->ds);
@@ -403,6 +396,9 @@ class dsActions extends sfActions {
     
     public function executeValidation(sfWebRequest $request)
     {
+        $this->secureDS(array(DSSecurity::CONSULTATION, 
+                              DSSecurity::EDITION));
+
         $this->ds_principale = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();        
         $this->ds_client = DSCivaClient::getInstance();
@@ -426,11 +422,18 @@ class dsActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeConfirmation(sfWebRequest $request) {
+        $this->secureDS(array(DSSecurity::CONSULTATION));
+
         $this->ds_principale = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();        
     }
     
     public function executeInvaliderCiva(sfWebRequest $request) {
+        if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+            
+            return $this->forwardSecure();
+        }
+
         $this->ds_principale = $this->getRoute()->getDS();
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
@@ -439,6 +442,10 @@ class dsActions extends sfActions {
     }
     
     public function executeInvaliderRecoltant(sfWebRequest $request) {
+        if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+            return $this->forwardSecure();
+        }
+
         $this->ds_principale = $this->getRoute()->getDS();
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale);
@@ -449,15 +456,20 @@ class dsActions extends sfActions {
 
     public function executeVisualisation(sfWebRequest $request)
     {
+        $this->secureDS(array(DSSecurity::CONSULTATION));
+
         $this->ds_principale = $this->getRoute()->getDS();
+
         $this->tiers = $this->getRoute()->getTiers();
         $this->ds_client = DSCivaClient::getInstance();
     }
     
     
     public function executeSendEmail(sfWebRequest $request){
-        
+        $this->secureDS(array(DSSecurity::CONSULTATION));
+
         $this->ds = $this->getRoute()->getDS();
+
         $this->tiers = $this->getRoute()->getTiers();
 
         $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
@@ -510,6 +522,36 @@ Le CIVA';
         $this->emailSend = true;
     }
     
+
+    protected function redirectEtapeAfterStock($ds,$dss,$tiers){
+        $etape = $ds->num_etape;
+        if((3 <= $etape) && ($etape < (3+count($dss)))){
+            $pos = $etape - 3;
+            $dss_id = array_keys($dss);
+            $ds_id = $dss_id[$pos];
+            $courante_ds = $dss[$ds_id];
+            $courant_stock = ($courante_ds->exist('courant_stock'))? $courante_ds->courant_stock : null;
+            if($courant_stock){
+                $this->redirect('ds_edition_operateur', array('id' => $ds_id, 'hash' => $courant_stock));
+            }
+            else{
+                $this->redirect('ds_edition_operateur', array('id' => $ds_id));
+            }
+        }
+        if(3 + count($dss) - 1 < $etape){
+            $etape_without_dss = $etape - count($dss) + 1;
+            if($etape_without_dss == 4){
+                $this->redirect('ds_autre', $ds); 
+            }
+            if($etape_without_dss == 5){
+                $this->redirect('ds_validation', $ds); 
+            }
+            if($etape_without_dss == 6){
+                $this->redirect('ds_visualisation', $ds); 
+            }
+        }
+    }
+
     protected function convertNodeForUrl($node) {
         if($node instanceof sfOutputEscaperIteratorDecorator) {
             $node = $node->getRawValue();
@@ -525,6 +567,31 @@ Le CIVA';
             $hash = preg_replace('/-$/', '', sprintf("%s-%s", str_replace("appellation_" , "", $node->getAppellation()->getKey()), str_replace("lieu" , "", $node->getKey())));
         }
         return $hash;
-    }  
+    }
+
+    protected function hasOneAppellationInDSS($dss){
+        foreach ($dss as $ds) {
+            if(!$ds->hasNoAppellation()) return true;
+        }
+        return false;
+    }
+
+    protected function secureDS($droits, $ds = null) {
+        if(is_null($ds)) {
+            $ds = $this->getRoute()->getDS();
+        }
+
+        if(!DSSecurity::getInstance($this->getUser(), $ds)->isAuthorized($droits)) {
+            
+            return $this->forwardSecure();
+        }
+    }
+
+    protected function forwardSecure()
+    {    
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    } 
     
 }

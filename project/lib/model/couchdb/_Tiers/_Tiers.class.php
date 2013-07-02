@@ -112,4 +112,5 @@ abstract class _Tiers extends Base_Tiers {
         return null;
     }
 
+    abstract public function getIdentifiant();
 }
