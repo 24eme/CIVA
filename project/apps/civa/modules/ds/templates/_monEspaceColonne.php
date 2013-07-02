@@ -6,7 +6,8 @@
                 <a href="#">Années précédentes</a>
                 <?php if (count($dsBycampagnes) > 0): ?>
                     <ul class="declarations">
-                        <?php  foreach($dsBycampagnes as $campagne => $ds): 
+                        <?php  	
+				foreach($dsBycampagnes as $campagne => $ds): 
                                     if($campagne <= $sf_user->getCampagne()):
                                         $annee_ds = $ds->getAnnee();
                          ?>
@@ -15,7 +16,9 @@
                                 endif;
                             endforeach; ?>
                     </ul>
-                <?php endif; ?>
+                <?php else :
+			echo "<p style='margin-top: 3px;'><i>Pas d'historique disponible</i></p>";
+		endif; ?>
             </li>
         </ul>
     </div>

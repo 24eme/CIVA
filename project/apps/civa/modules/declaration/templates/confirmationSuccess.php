@@ -14,7 +14,7 @@
             <h2 class="titre_section">Confirmation</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre déclaration de récoltes a bien été envoyée au CIVA.</p>
+                    <p class="important">Votre déclaration de récoltes a bien été enregistrée au CIVA.</p>
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
                 </div>
                 <div id="div-btn-email"><a href="" id="btn-email"></a></div>
