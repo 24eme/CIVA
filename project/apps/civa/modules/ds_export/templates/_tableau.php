@@ -3,15 +3,15 @@
 <?php use_helper('Text') ?>
 
 <?php $tableau = $tableau->getRawValue() ?>
-<table border="1" cellspacing=0 cellpadding=0 style="text-align: center; border: 1px solid black;">
+<table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <?php if(!array_key_exists('no_header', $tableau) || !$tableau['no_header']): ?>
   <tr>
     <?php foreach($tableau['colonnes'] as $libelle): ?>
     <th style="text-align: left; font-weight: bold; width: <?php echo round(306/count($tableau['colonnes'])) ?>px; border: 1px solid black;">&nbsp;<?php echo $libelle ?></th>
     <?php endforeach; ?>
-    <th style="font-weight: bold; width: 110px; border: 1px solid black;">hors VT et SGN</th>
-    <th style="font-weight: bold; width: 110px; border: 1px solid black;">VT</th>
-    <th style="font-weight: bold; width: 110px; border: 1px solid black;">SGN</th>
+    <th style="font-weight: bold; width: 110px; text-align: center;  border: 1px solid black;">hors VT et SGN</th>
+    <th style="font-weight: bold; width: 110px; text-align: center;  border: 1px solid black;">VT</th>
+    <th style="font-weight: bold; width: 110px; text-align: center;  border: 1px solid black;">SGN</th>
   </tr>
 <?php endif; ?>
 <?php foreach($tableau['produits'] as $produit): ?>

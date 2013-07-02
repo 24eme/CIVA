@@ -12,7 +12,7 @@ function echoVolume($volume, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>hl</small>";
+        echo "&nbsp;<small>hl</small>&nbsp;&nbsp;&nbsp;";
     } else {
         echo "&nbsp;";
     }
