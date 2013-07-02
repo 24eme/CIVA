@@ -9,6 +9,6 @@
 <fieldset class="message">
     <legend class="message_title">Points de vigilance <a href="#" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
      <?php include_partial('global/validationType', array('points' => $validation->getPoints('vigilance'), 'css_class' => 'warning')) ?>
-     A défault de saisie ces produits seront supprimés automatiquement à la validation.
+    <strong>A défaut de saisie ces produits seront supprimés automatiquement à la validation.</strong>
 </fieldset>
 <?php endif; ?>
