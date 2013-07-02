@@ -450,6 +450,10 @@ class DSCiva extends DS {
         }
         return false;
     }
+    
+    public function isValideeEtModifiee() {
+        return $this->isValideeCiva() && $this->isValideeTiers() && ($this->validee != $this->modifiee);
+    }
 
     /**
      *
