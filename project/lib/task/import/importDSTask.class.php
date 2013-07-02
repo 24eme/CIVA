@@ -190,7 +190,7 @@ EOF;
     }
 
     public function setConf() {
-        $this->conf = ConfigurationClient::getConfiguration();
+        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
     }
 
     public function getConf() {
