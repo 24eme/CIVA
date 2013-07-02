@@ -11,7 +11,7 @@ $produits = $form->getProduitsDetails();
         <?php endforeach; ?>
 	<?php if((count($produits) < count($lieu->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS))) || $lieu->getConfig()->hasLieuEditable()): ?>	
 		<li class="ajout">
-			<a href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
+			<a class="ajax" href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>

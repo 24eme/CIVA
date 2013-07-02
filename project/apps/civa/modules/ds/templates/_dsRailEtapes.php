@@ -48,7 +48,7 @@ $ds_neant = $ds_principale->isDsNeant();
 									$num = 1;
 									foreach ($dss as $current_ds) : ?>
 										<li class="<?php echo ($current_ds->_id == $ds->_id)? 'actif' : '' ?>">
-											<a href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
+											<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
 										</li>
 									<?php 
 									$num++;
