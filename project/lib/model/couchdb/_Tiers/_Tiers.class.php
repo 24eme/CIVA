@@ -107,9 +107,28 @@ abstract class _Tiers extends Base_Tiers {
         return null;
     }
 
-
     public function getNoAccises() {
         return null;
+    }
+
+    public function getCompteObject() {
+        if(count($this->compte) < 1) {
+
+            return null;
+        }
+
+        return acCouchdbManager::getClient("_Compte")->find($this->compte[0]);
+    }
+
+    public function getCompteEmail() {
+        $compte = $this->getCompteObject();
+
+        if(!$compte) {
+
+            return null;
+        }
+
+        return $compte->email;
     }
 
     abstract public function getIdentifiant();

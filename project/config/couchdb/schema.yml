@@ -254,20 +254,6 @@ DR:
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
 
-Acheteur:
-  inheritance: _Tiers
-  definition:
-    fields:
-      _id: {  }
-      _rev: {  }
-      cvi: {  }
-      civaba: {  }
-      type: {  }
-      qualite: {  }
-      nom: {  }
-      commune: {  }
-      achnum: { required: false }
-
 _Compte:
   type: abstract
   definition:
@@ -366,7 +352,6 @@ _Tiers:
       exploitant:
         class: _TiersExploitant
         type: collection
-        required: false
         definition:
           fields:
             sexe: {  }
@@ -431,6 +416,22 @@ MetteurEnMarche:
         definition:
           fields:
             maison_mere: {  }
+
+
+Acheteur:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      cvi: {  }
+      civaba: {  }
+      type: {  }
+      qualite: {  }
+      nom: {  }
+      commune: {  }
+      achnum: { required: false }
+
 Current:
   definition:
     fields:

@@ -69,7 +69,7 @@ class ExportDSPdf {
       
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de Stocks au 31 Juillet '.($this->ds_principale->getCampagne() + 1);
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s", $this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
             $rev = null;
             foreach($this->dss as $ds) {
