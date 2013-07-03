@@ -29,14 +29,14 @@
   <?php else: ?>
     <?php if($ds->hasAOC() && $is_last_page): ?>
       <?php foreach($totals as $key => $volume): ?>
-      <?php if(!$is_last_page): ?>
-      <td style="border: 1px solid black; background-color: #bbb; <?php if($key == "total_stock"): ?>text-align:center;<?php endif; ?>">&nbsp;</td>
-      <?php else: ?>
-        <td style="border: 1px solid black; <?php if($key == "total_stock"): ?>text-align:center;<?php endif; ?>"><?php echoVolume($volume, true) ?></td>
-      <?php endif; ?>
+        <?php if(!$is_last_page): ?>
+        <td style="border: 1px solid black; background-color: #bbb; <?php if($key == "total_stock"): ?>text-align:center;<?php endif; ?>">&nbsp;</td>
+        <?php else: ?>
+          <td style="border: 1px solid black; <?php if($key == "total_stock"): ?>text-align:center;<?php endif; ?>"><?php echoVolume($volume, true) ?></td>
+        <?php endif; ?>
       <?php endforeach; ?>
     <?php else: ?>
-      <td style="border: 1px solid black; background-color: #bbb;" colspan="4"><i>Néant</i></td>
+      <td style="border: 1px solid black; text-align: center; font-weight: bold;" colspan="4"><i>Néant</i></td>
     <?php endif; ?>
   <?php endif; ?>
 </tr>

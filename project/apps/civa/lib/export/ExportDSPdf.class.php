@@ -111,19 +111,16 @@ class ExportDSPdf {
         $recap = array("AOC Alsace" => array("colonnes" => array("cepage" => "Cépages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                    "produits" => array(),
-                                                   "nb_produits" => 0,
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
                        "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                         "produits" => array(),
-                                                        "nb_produits" => 0,
                                                         "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                         "limit" => 13,
                                                         "nb_ligne" => 13),
                        "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                        "produits" => array(),
-                                                       "nb_produits" => 0,
                                                        "no_header" => true,
                                                        "limit" => -1,
                                                        "nb_ligne" => -1));
@@ -149,7 +146,6 @@ class ExportDSPdf {
 
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
-
             $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds, 
                                                                                  'recap' => $page,
                                                                                  'autres' => $this->getAutres($ds),
@@ -240,18 +236,6 @@ class ExportDSPdf {
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-        if(is_null($recap["total"]["normal"])) {
-            $recap["total"]["normal"] = 0;
-        }
-
-        if(is_null($recap["total"]["vt"])) {
-            $recap["total"]["vt"] = 0;
-        }
-
-        if(is_null($recap["total"]["sgn"])) {
-            $recap["total"]["sgn"] = 0;
-        }
-
 
         if(!$ds->declaration->getAppellations()){
             return; 
@@ -269,21 +253,19 @@ class ExportDSPdf {
 
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
+                $recap["total"]["normal"] += $detail->volume_normal;
                 
             }
 
             if (!is_null($detail->volume_vt)) {
                 $recap["produits"][$key]["vt"] += $detail->volume_vt;
-                
+                $recap["total"]["vt"] += $detail->volume_vt;
             }
 
             if(!is_null($detail->volume_sgn)) {
                 $recap["produits"][$key]["sgn"] += $detail->volume_sgn;
+                $recap["total"]["sgn"] += $detail->volume_sgn;
             }
-
-            $recap["total"]["normal"] += $detail->volume_normal;
-            $recap["total"]["vt"] += $detail->volume_vt;
-            $recap["total"]["sgn"] += $detail->volume_sgn;
         }
 
         ksort($recap['produits']);
@@ -317,7 +299,7 @@ class ExportDSPdf {
             return $key;
         }
 
-        $recap["produits"][$key] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null);
+        $recap["produits"][$key] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null, "vide" => true);
 
         return $key;
     }
@@ -403,11 +385,9 @@ class ExportDSPdf {
 
                 if(!isset($paginate["pages"][$num_page][$libelle])) {
                     $paginate["pages"][$num_page][$libelle] = $tableau;
-                    $paginate["pages"][$num_page][$libelle]["nb_produits"] = 0;
                     $paginate["pages"][$num_page][$libelle]["produits"] = array();
                 }
 
-                $paginate["pages"][$num_page][$libelle]["nb_produits"] += 1;
                 $paginate["pages"][$num_page][$libelle]["produits"][$hash] = $produit;
 
                 if($num_page == floor($i / $limit)) {
@@ -418,6 +398,28 @@ class ExportDSPdf {
 
             if(isset($paginate["pages"][$num_page][$libelle])) {
                 $paginate["pages"][$num_page][$libelle]["total"] = $tableau["total"];
+            }
+        }
+
+        foreach($recap as $libelle => $tableau) {
+            $total_suivante = false;
+
+            for($np = count($paginate["pages"]) - 1; $np >= 0; $np--) {
+                if(!isset($paginate["pages"][$np][$libelle])) {
+                    continue;
+                }
+
+                $paginate["pages"][$np][$libelle]['total_suivante'] = $total_suivante;
+
+                if($np == 0) {
+                    break;
+                }
+
+                if(is_null($paginate["pages"][$np][$libelle]['total']['normal']) && is_null($paginate["pages"][$np][$libelle]['total']['vt']) && is_null($paginate["pages"][$np][$libelle]['total']['sgn'])) {
+                    unset($paginate["pages"][$np][$libelle]['total']);
+                } else {
+                    $total_suivante = true;
+                }
             }
         }
 
