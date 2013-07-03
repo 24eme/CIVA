@@ -12,7 +12,7 @@ var champsSommes = appDS.find('.ligne_total input.somme');
  * Initialisation
  ******************************************/
 
-var valide_form = false;
+var ajax_post_url = null;
 
 $(document).ready(function()
 {	
@@ -22,7 +22,6 @@ $(document).ready(function()
     initLieuxStockageNeant();
     var ajaxForm = $('form.ajaxForm');
     if(ajaxForm.length > 0) {
-        ajaxForm.postButtonForm();
         ajaxForm.ajaxPostForm();
     }
     initValidDSPopup();
@@ -198,32 +197,15 @@ $.fn.majDSSommesCol = function()
 	});
 };
 
-$.fn.postButtonForm = function(){
-        var form_id = $(this).attr('id');
-        $('#'+form_id+' #valide_form').click(function(){
-            if(valide_form){
-                setTimeout(function() { $('#valide_form').click();
-                                        valide_form = false;
-                                      } , 500);
-                return false;
-            }
-        });
-}
-
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-//        var inputs = $('#'+form_id+'.ajaxForm :input[type="text"].stock');
-//        $(inputs).each(function(){
-//            $(this).change(function(){
-//                formPost(form);
-//            }); 
-//        });
             
         $('#'+form_id+' .ajax').each(function(){
-                $(this).click(function(){
+                $(this).click(function(e){
+                    ajax_post_url = $(this).attr('href');
                     formPost(form);
-                    
+                    e.preventDefault()
             }); 
         });
     
@@ -235,26 +217,20 @@ var formPost = function(form)
             $(this).verifNettoyageChamp();
         });
         
-        valide_form = true;
-        
         $.ajax({
             url: $(form).attr('action'),
             type: "POST",
             data: $(form).serializeArray(),
             dataType: "json",
             async : true,
-            success: function(msg){},  
+            success: function(msg){if(ajax_post_url) {
+                document.location.href=ajax_post_url;
+            }},  
             error: function(textStatus){  
                 $( "#ajax_error").html(textStatus);
-                valide_form = false;
         }
     });
 };
-
-$.fn.RevisionajaxSuccessCallBack = function() {
-    valide_form = false;
-}
-
 
 /**
  * Gère la navigation des onglets
