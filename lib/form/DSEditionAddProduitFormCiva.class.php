@@ -23,8 +23,9 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
 
         if($this->_config_noeud->hasLieuEditable()) {
             $this->setWidget('lieudit', new sfWidgetFormInput());
-            $this->widgetSchema->setLabel('lieudit', 'Saissisez un lieu-dit :');
-            $this->setValidator('lieudit', new sfValidatorString());
+            $this->widgetSchema->setLabel('lieudit', 'Saisissez un lieu-dit :');
+            $this->setValidator('lieudit', new sfValidatorString(array('required' => true)));
+            $this->validatorSchema['lieudit']->setMessage('required', 'La saisie du lieu-dit est obligatoire.'); 
         }
 
         $this->widgetSchema->setNameFormat('ds_add_produit[%s]');
