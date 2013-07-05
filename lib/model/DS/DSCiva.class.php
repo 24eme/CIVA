@@ -43,17 +43,19 @@ class DSCiva extends DS {
     public function storeDeclarant() {
         parent::storeDeclarant();
 
-        if($this->getEtablissement()->exist('exploitant')) {
-            $this->declarant->set('exploitant', $this->getEtablissement()->exploitant);
-        } else {
-            $this->declarant->exploitant->sexe = null;
-            $this->declarant->exploitant->nom = $this->declarant->nom;
-            $this->declarant->exploitant->adresse = $this->declarant->adresse;
-            $this->declarant->exploitant->code_postal = $this->declarant->code_postal;
-            $this->declarant->exploitant->commune = $this->declarant->commune;
-            $this->declarant->exploitant->date_naissance = null;
-            $this->declarant->exploitant->telephone = $this->declarant->telephone;
+        $tiers = $this->getEtablissement();
+
+        if(!$this->declarant->email) {
+            $this->declarant->email = $tiers->getCompteEmail();
         }
+
+        $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
+        $this->declarant->exploitant->nom = $tiers->exploitant->nom;
+        $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
+        $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
+        $this->declarant->exploitant->commune = $tiers->exploitant->commune;
+        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
+        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
     }
 
     public function storeInfos() {
