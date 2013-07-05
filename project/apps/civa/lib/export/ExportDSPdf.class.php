@@ -69,7 +69,7 @@ class ExportDSPdf {
       
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de Stocks au 31 Juillet '.($this->ds_principale->getCampagne() + 1);
-        $header = sprintf("%s\nCommune de déclaration : %s\n%s", 'GAEC '.$this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
+        $header = sprintf("%s\nCommune de déclaration : %s\n%s", $this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
             $rev = null;
             foreach($this->dss as $ds) {
@@ -116,8 +116,8 @@ class ExportDSPdf {
                        "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                         "produits" => array(),
                                                         "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                        "limit" => 13,
-                                                        "nb_ligne" => 13),
+                                                        "limit" => 14,
+                                                        "nb_ligne" => 14),
                        "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                        "produits" => array(),
@@ -139,7 +139,7 @@ class ExportDSPdf {
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
-        $paginate = $this->paginate($recap, 29, $page);
+        $paginate = $this->paginate($recap, 30, $page);
 
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
@@ -184,7 +184,7 @@ class ExportDSPdf {
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 36);
+        $paginate = $this->paginate($recap, 38);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {

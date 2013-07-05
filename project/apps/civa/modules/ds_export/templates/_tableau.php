@@ -18,7 +18,7 @@
   <tr>
     <?php foreach($produit['colonnes'] as $colonne): ?>
     <?php if($colonne["rowspan"] > 0): ?>
-      <td style="text-align: left; border: 1px solid black; width: <?php echo round(306/count($tableau['colonnes'])) ?>px; <?php if(is_null($colonne['libelle'])): ?>background-color: #bbb;<?php endif; ?>" rowspan="<?php echo $colonne["rowspan"] ?>">&nbsp;<?php echo truncate_text($colonne['libelle'], round(56 / count($tableau['colonnes'])), "...", false) ?></td>
+      <td style="text-align: left; border: 1px solid black; width: <?php echo round(306/count($tableau['colonnes'])) ?>px; <?php if(is_null($colonne['libelle'])): ?>background-color: #bbb;<?php endif; ?>" rowspan="<?php echo $colonne["rowspan"] ?>">&nbsp;<?php echo truncate_text($colonne['libelle'], round(50 / count($tableau['colonnes'])), "...", false) ?></td>
     <?php endif; ?>
     <?php endforeach; ?>
     <td style="border: 1px solid black; width: 110px; <?php if(is_null($produit["normal"])): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["normal"]) ?></td>
