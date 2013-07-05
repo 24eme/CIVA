@@ -20,7 +20,8 @@ class DSCiva extends DS {
         if ($this->statut == null) {
             $this->statut = DSClient::STATUT_A_SAISIR;
         }
-        $this->set('_id', DSClient::getInstance()->buildId($this->identifiant, $this->periode,'001'));
+
+        $this->set('_id', DSClient::getInstance()->buildId($this->identifiant, $this->periode, $this->getEtablissement()->getLieuStockagePrincipale()->getNumeroIncremental()));
     }
 
 
@@ -323,7 +324,8 @@ public function getConfigurationCampagne() {
     }
     
     public function isDsPrincipale() {
-        return $this->getLieuStockage() == '001';
+        
+        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
     }
 
 

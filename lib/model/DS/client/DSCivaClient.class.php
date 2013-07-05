@@ -65,13 +65,14 @@ class DSCivaClient extends DSClient {
 
 
     public function retrieveByCampagneAndCvi($cvi,$campagne) {
+        $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
         for($month=8;$month>0;$month--){
-            if($ds = $this->find('DS-'.$cvi.'-'.($campagne+1).sprintf("%02d",$month).'-001')){
+            if($ds = $this->find('DS-'.$cvi.'-'.($campagne+1).sprintf("%02d",$month).'-'.$tiers->getLieuStockagePrincipal()->getNumeroIncremental())){
                 return $ds;
             }
         }
         for($month=8;$month<13;$month++){
-            if($ds = $this->find('DS-'.$cvi.'-'.$campagne.sprintf("%02d",$month).'-001')){
+            if($ds = $this->find('DS-'.$cvi.'-'.$campagne.sprintf("%02d",$month).'-'.$tiers->getLieuStockagePrincipal()->getNumeroIncremental())){
                 return $ds;
             }
         }
@@ -92,7 +93,7 @@ class DSCivaClient extends DSClient {
         
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
             
-            $num_lieu = sprintf("%03d",$cpt);
+            $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
             if($ds) continue;
             
@@ -118,9 +119,7 @@ class DSCivaClient extends DSClient {
             $cpt++;
         }	
         return $dss;
-    }
-    
-    
+    } 
     
     public function createDsByDsPrincipaleAndLieu($ds,$lieu_num) {
         $new_ds = new DSCiva();
@@ -132,75 +131,63 @@ class DSCivaClient extends DSClient {
         return $new_ds;
     }
 
-
-    public function findDssByCvi($tiers, $date_stock, $force_to_get_all_dss = true) {
-        $periode = $this->buildPeriode($this->createDateStock($date_stock));
-        $cpt = 1;
+    public function findDssByCviAndPeriode($cvi, $periode) {
+        $base_id = sprintf('DS-%s-%s', $cvi, $periode);
+        $ids = $this->startkey($base_id.'-001')->endkey($base_id.'-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds();
         $dss = array();
-        foreach ($tiers->lieux_stockage as $lieux_stockage) {
-            
-            $num_lieu = sprintf("%03d",$cpt);
-            $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
-            if(!$ds){
-                if($force_to_get_all_dss)
-                    throw new sfException(sprintf('La Ds du recoltant de cvi %s pour la periode %s et le lieu de stockage %s n\'existe pas',
-                                               $tiers->cvi, $periode, $num_lieu));
-                else{
-                    continue;
-                }
-            }
-            $dss[] = $ds;
-            $cpt++;
-        }	
+        foreach($ids as $id) {
+            $dss[$id] = $this->find($id);
+        }
         return $dss;
+    }
+
+    public function findDssByCvi($tiers, $date_stock) {
+        $periode = $this->buildPeriode($this->createDateStock($date_stock));
+
+        return $this->findDssByCviAndPeriode($tiers->cvi, $periode);
     }
     
     public function getNextLieuStockageByCviAndDate($cvi, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
-        $cpt = 2;
-        while($ds = $this->findByIdentifiantAndPeriode($cvi, $periode, sprintf("%03d",$cpt))){
-            $cpt++;
+        $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
+        if(!$tiers) {
+
+            throw new sfException(sprintf("Tiers not found %s", $cvi));
         }
-        return sprintf("%03d",$cpt);
+        foreach($tiers->lieux_stockage as $lieu_stockage) {
+            $ds = $this->findByIdentifiantAndPeriode($cvi, $periode, $lieu_stockage->getNumeroIncremental());
+            if(!$ds) {
+
+                return $lieu_stockage->getNumeroIncremental(); 
+            }
+        }
+
+        throw new sfException(sprintf("Plus aucun lieu de stockage n'existe pour le tiers %s après le numéro de lieu de stockage %s", $cvi, $lieu_stockage->getNumeroIncremental()));
     }
 
 
     public function getNextDS($ds) {
-        if(!$ds)
+        if(!$ds) {
             throw new sfException("La DS passée en argument de getNextLieuStockage ne peut pas être null");
-        $matches = array();
-        if(preg_match('/^DS-([0-9]{10})-([0-9]{6})-([0-9]{3})$/', $ds->_id,$matches)){
-            if(!isset($matches[3]))
-                throw new sfException("La DS $ds->_id possède un identifiant non conforme");
-            
-            $lieu_stockage = $matches[3];
-            $next_lieu = $lieu_stockage+1;
-            $next_id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$next_lieu);
-            return $this->find($next_id);
         }
-        throw new sfException("La DS $ds->_id possède un identifiant non conforme");
+
+        $dss = $this->findDssByDS($ds);
+
+        foreach($dss as $d) {
+            if($d->_id == $ds->_id) {
+               break;
+            }
+        }
+
+        return current($dss);
     }
     
     public function findDssByDS($ds) {
         if(!$ds)
             throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
         $matches = array();
-        
-        if(preg_match('/^DS-([0-9]{10})-([0-9]{6})-([0-9]{3})$/', $ds->_id,$matches)){
-            if(!isset($matches[3]))
-                throw new sfException("La DS $ds->_id possède un identifiant non conforme");            
-            $lieu_stockage = 1;
-            $id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$lieu_stockage);
-            
-            $dss = array();
-            while($current_ds = $this->find($id)){
-              $dss[$id] = $current_ds;
-              $id = 'DS-'.$matches[1].'-'.$matches[2].'-'.sprintf("%03d",$lieu_stockage++);
-            }
-            
-            return $dss;
-        }
-        throw new sfException("La DS $ds->_id possède un identifiant non conforme");
+
+        return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode);
     }
 
     public function findDSByLieuStockageAndCampagne($lieu_num, $campagne){
@@ -208,13 +195,20 @@ class DSCivaClient extends DSClient {
     }
 
     public function getDSPrincipale($tiers, $date_stock){
-        $dss = $this->findDssByCvi($tiers, $date_stock,false);
-        return $dss[0];
+        $dss = $this->findDssByCvi($tiers, $date_stock);
+        foreach ($dss as $ds) {
+
+            return $ds;
+        }
+
+        return $ds;
     }
     
     public function getDSPrincipaleByDs($ds) {
         foreach ($this->findDssByDS($ds) as $ds) {
-            if($ds->isDsPrincipale()) return $ds;
+            if($ds->isDsPrincipale()) {
+                return $ds;
+            }
         }
         return null;
     }
