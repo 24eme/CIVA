@@ -22,7 +22,7 @@ class Acheteur extends BaseAcheteur {
 
     public function isDeclarantStock() {
 
-        return $this->qualite == self::ACHETEUR_COOPERATIVE;
+        return in_array($this->qualite, array(self::ACHETEUR_COOPERATIVE, self::ACHETEUR_NEGOCAVE));
     }
 
     public function getIdentifiant() {
