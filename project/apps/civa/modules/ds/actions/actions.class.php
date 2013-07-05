@@ -44,19 +44,28 @@ class dsActions extends sfActions {
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
         if((!$this->ds) || (!$this->ds->exist('num_etape')))
          throw new sfException("La DS n'existe pas ou ne possède pas de numéro d'étape");         
-        switch ($this->ds->num_etape) {
+        $etape = $this->ds->num_etape;
+        switch ($etape) {
          case 1:
              $this->redirect('ds_exploitation', $this->ds);
          break;
          case 2:
              $this->redirect("ds_lieux_stockage", $this->ds);
          break;
-         default :
-             $this->redirectEtapeAfterStock($this->ds,$this->dss,$this->tiers);
+         case 3:
+             $this->redirectEtapeAfterStock($this->ds);
          break;
+         case 4:
+             $this->redirect("ds_autres", $this->ds);
+         break;
+         case 5:
+             $this->redirect("ds_validation", $this->ds);
+         break;
+         case 6:
+             $this->redirect("ds_visualisation", $this->ds);
+         break;     
         }
         $id = $this->ds->_id;
-        $etape = $this->ds->num_etape;
         throw new sfException("Etape de DS $id non reconnu ($etape)");
     }
 
@@ -134,7 +143,6 @@ class dsActions extends sfActions {
             if($this->form->isValid()) {
                $this->dss = $this->form->doUpdateDss($this->dss);
                $this->dss_to_save = array();
-               $deleted = false;
                 foreach ($this->dss as $current_ds) {
                     if($current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
                         if($this->hasOneAppellationInDSS($this->dss)){
@@ -147,7 +155,6 @@ class dsActions extends sfActions {
                     if(!$current_ds->isDsPrincipale() && $current_ds->hasNoAppellation()){
                         if(DSCivaClient::getInstance()->find($current_ds->_id)){  
                             DSCivaClient::getInstance()->delete($current_ds);
-                            $deleted = true;
                         }
                     }else{
                         $this->dss_to_save[$current_ds->_id] = $current_ds;
@@ -156,10 +163,10 @@ class dsActions extends sfActions {
                     $ds_principale = null;
                     foreach ($this->dss_to_save as $ds_to_save) {
                         if($ds_to_save->isDsPrincipale()){
-                            $ds_to_save->updateEtape(3,null,$deleted); 
+                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
                             $ds_principale = $ds_to_save;
                             if($ds_neant){
-                                $ds_to_save->updateEtape(4,null,$deleted);
+                                $ds_to_save->updateEtape(4);
                             }
                         }
                         $ds_to_save->save();
@@ -214,7 +221,7 @@ class dsActions extends sfActions {
         }
 
         if($this->getRoute()->getNoeud() instanceof DSAppellation) {
-
+            
             if(count($this->getRoute()->getNoeud()->getLieux()) < 1 && $this->getRoute()->getNoeud()->getConfig()->hasManyLieu()) {
                 
                 return $this->redirect('ds_ajout_lieu', $this->getRoute()->getNoeud());
@@ -251,8 +258,8 @@ class dsActions extends sfActions {
                 }
                             
                 $next = $this->ds->getNextLieu($this->lieu);
-                $next_hash = (!$next)? $this->convertNodeForUrl($this->lieu) : $this->convertNodeForUrl($next);
-                $this->ds->updateEtape(3,$next_hash);
+                $next_hash = (!$next)? $this->lieu->getHash() : $next->getHash();//$this->convertNodeForUrl($this->lieu) : $this->convertNodeForUrl($next);
+                $this->ds->updateEtape(3,$this->ds, $next_hash);
                 $this->ds->save();
                 if($next){
                     $this->redirect('ds_edition_operateur', $next);
@@ -360,8 +367,8 @@ class dsActions extends sfActions {
         if($suivant){
             $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
             if($nextDs){
-                $ds_principale = $nextDs->updateEtape(3);
-                $ds_principale->save();
+                $this->ds_principale->updateEtape(3, $nextDs); 
+                $this->ds_principale->save();
                 $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellation()));
             }
             else{
@@ -523,33 +530,21 @@ Le CIVA';
     }
     
 
-    protected function redirectEtapeAfterStock($ds,$dss,$tiers){
-        $etape = $ds->num_etape;
-        if((3 <= $etape) && ($etape < (3+count($dss)))){
-            $pos = $etape - 3;
-            $dss_id = array_keys($dss);
-            $ds_id = $dss_id[$pos];
-            $courante_ds = $dss[$ds_id];
-            $courant_stock = ($courante_ds->exist('courant_stock'))? $courante_ds->courant_stock : null;
+    protected function redirectEtapeAfterStock($ds){
+            $courant_stock = ($ds->exist('courant_stock'))? $ds->courant_stock : null;
             if($courant_stock){
-                $this->redirect('ds_edition_operateur', array('id' => $ds_id, 'hash' => $courant_stock));
+                $courant_id = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$1', $courant_stock);
+                $hash_lieu = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$2', $courant_stock);
+                $node = DSCivaClient::getInstance()->find($courant_id)->get($hash_lieu);
+                if(!$node){
+                    $this->redirect('ds_lieux_stockage', array('id' => $courant_id));
+                }else{
+                    $this->redirect('ds_edition_operateur', array('id' => $courant_id, 'hash' => $this->convertNodeForUrl($node)));
+                }
             }
             else{
-                $this->redirect('ds_edition_operateur', array('id' => $ds_id));
+                $this->redirect('ds_edition_operateur', array('id' => $ds->_id));
             }
-        }
-        if(3 + count($dss) - 1 < $etape){
-            $etape_without_dss = $etape - count($dss) + 1;
-            if($etape_without_dss == 4){
-                $this->redirect('ds_autre', $ds); 
-            }
-            if($etape_without_dss == 5){
-                $this->redirect('ds_validation', $ds); 
-            }
-            if($etape_without_dss == 6){
-                $this->redirect('ds_visualisation', $ds); 
-            }
-        }
     }
 
     protected function convertNodeForUrl($node) {

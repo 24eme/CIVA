@@ -1,7 +1,7 @@
 <?php 
 use_helper('Float');
 use_helper('ds');
-include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3));
+include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3, 'recap' => 1));
 ?>
 
 
