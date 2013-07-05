@@ -191,7 +191,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             if (!$this->_ds) {
                 $ds = new DSCiva();
                 $ds->identifiant = $this->getDeclarant()->cvi;
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-001');
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
                 return $ds;
             }
         }

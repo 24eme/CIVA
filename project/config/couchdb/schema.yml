@@ -341,6 +341,7 @@ _Tiers:
         definition:
           fields:
             '*':
+              class: _TiersLieuStockage
               type: collection
               definition:
                 fields:

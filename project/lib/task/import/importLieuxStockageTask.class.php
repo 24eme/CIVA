@@ -74,7 +74,7 @@ EOF;
 
     if(!$tiers) {
       $tiers = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($cvi);
-      if($tiers && $tiers->qualite != Acheteur::ACHETEUR_COOPERATIVE) {
+      if($tiers && !$tiers->isDeclarantStock()) {
         $tiers = null;
       }
 

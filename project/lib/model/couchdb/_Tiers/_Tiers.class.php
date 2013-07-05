@@ -131,5 +131,14 @@ abstract class _Tiers extends Base_Tiers {
         return $compte->email;
     }
 
+    public function getLieuStockagePrincipal() {
+        foreach($this->lieux_stockage as $lieu_stockage) {
+
+            return $lieu_stockage;
+        }
+
+        return null;
+    }
+
     abstract public function getIdentifiant();
 }
