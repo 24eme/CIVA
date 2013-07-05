@@ -343,38 +343,56 @@ public function getConfigurationCampagne() {
         return $this->num_etape - $nb_lieux + 1;
     }
     
-    public function updateEtape($etape_rail, $courant_stock = null, $deleted = false) {
-        
-         $nb_lieux = DSCivaClient::getInstance()->getNbDS($this);
-         if($courant_stock){
-                   $this->add('courant_stock', $courant_stock);
-         }      
-         if($deleted){
-             $this->add('num_etape', ($this->getNumEtapeAbsolu() - 1));
+    public function updateEtape($etape_rail, $current_ds = null, $new_hash = "") {
+         $courant_stock = $this->getMajCourantStock($current_ds,$new_hash); 
+         
+       
+         if($this->isDsPrincipale()){
+            if($courant_stock){
+                    $this->add('courant_stock', $courant_stock);
+            }      
+             if($etape_rail > $this->num_etape){             
+                $this->add('num_etape', $etape_rail);                
+             }
              return $this;
-         }
-         if($this->isDsPrincipale() && ($etape_rail > $this->num_etape)){
-             
-                $this->add('num_etape', $etape_rail);
-                return $this;
-         }
-         if(!$this->isDsPrincipale() && $etape_rail == 3){
-                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
-                if($ds->num_etape < $etape_rail + $this->getLieuStockage() - 1){
-                    $ds->add('num_etape', $etape_rail + $this->getLieuStockage() - 1);
-                }                
-                return $ds;
-         }
-         if($etape_rail > 3){
-//                $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
-                if($this->num_etape < $etape_rail + $nb_lieux - 1){
-                    $this->add('num_etape', $etape_rail + $nb_lieux - 1);
-                }
-                if($this->isValidee()){
-                    $this->add('num_etape', $etape_rail + $nb_lieux - 1);
-                }
-                return $this;
-         }  
+         }else{
+            $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+            if($courant_stock){
+                    $ds_principale->add('courant_stock', $courant_stock);
+                    $ds_principale->save();
+                    return $ds_principale;
+            }  
+         } 
+    }
+    
+    private function getMajCourantStock($current_ds = null, $new_hash = ""){
+       if(!$current_ds) return null;
+       $courant_stock = $current_ds->_id."-".$new_hash;
+       
+       $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+       if(!$ds_principale->exist('courant_stock')) return $courant_stock;
+       
+       $old_courant_stock = $ds_principale->get('courant_stock');
+       $old_lieu_stockage = preg_replace('/^DS-[0-9]{10}-[0-9]{6}-([0-9]{3})[A-Za-z0-9\_\-\/]*/', '$1', $old_courant_stock);
+       
+       $old_hash_lieu = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})[-]?(\/[A-Za-z0-9\_\-\/]*)$/', '$2', $old_courant_stock);
+       
+       $old_hash_lieu_exist = preg_match('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-(\/[A-Za-z0-9\_\-\/]+)$/',$old_courant_stock);
+       
+       if($old_lieu_stockage > $current_ds->getLieuStockage()) return null;
+       
+       if($new_hash=="") return $current_ds->_id;
+       
+       $steps = $current_ds->getLieuxHashSteps();
+       if(!in_array($new_hash,$steps)) return null;
+       if(!$old_hash_lieu_exist){ 
+           return $courant_stock;
+       }
+       
+       $pos_old_hash = array_search($old_hash_lieu, $steps);
+       $pos_new_hash = array_search($new_hash, $steps);
+       if($pos_old_hash > $pos_new_hash) return null;
+       return $courant_stock;
     }
     
     public function addVolumesWithHash($hash,$lieu,$vol_normal,$vol_vt,$vol_sgn,$sum = false) {
@@ -477,6 +495,24 @@ public function getConfigurationCampagne() {
     
     public function getAnnee() {
         return preg_replace('/^([0-9]{4})([0-9]{2})$/', '$1', $this->periode);
+    }
+    
+    public function nbLieuxEtape() {
+        return count($this->getLieuxHashSteps());
+        
+    }
+    
+    public function getLieuxHashSteps() {
+        $hash_array = array();
+        foreach ($this->declaration->getAppellationsSorted() as $appellation) {
+            if(!$appellation->hasManyLieu()) $hash_array[] = $appellation->getHash();
+            else{
+                foreach ($appellation->getLieuxSorted() as $lieu) {
+                    $hash_array[] = $lieu->getHash();                    
+                }
+            }
+        }
+        return $hash_array;
     }
 
 }
