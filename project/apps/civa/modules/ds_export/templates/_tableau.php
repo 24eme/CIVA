@@ -27,7 +27,7 @@
   </tr>
 <?php endforeach; ?>
 <tr>
-  <td style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp;<b>Total</b><?php if($tableau['total_suivante']): ?><small><i>&nbsp;&nbsp;(Page suivante)</i></small><?php endif; ?>
+  <td style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp;<b>Total</b><?php if($tableau['total_suivante']): ?>&nbsp;&nbsp;<small>(page suivante)</small>&nbsp;<?php endif; ?>
   </td>
  
   <?php if(!isset($tableau['total']) || $tableau['total_suivante']): ?>
