@@ -4,7 +4,7 @@ class dsActions extends sfActions {
     public function executeInit(sfWebRequest $request) {
 
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
-
+       
        $this->secureDS(array(DSSecurity::CONSULTATION, 
                              DSSecurity::EDITION), $this->getUser()->getDs());
 
@@ -88,6 +88,12 @@ class dsActions extends sfActions {
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
         $this->form_expl_err = 0;
         if ($request->isMethod(sfWebRequest::POST)) {
+            if($request->isXmlHttpRequest())
+            {  
+                $this->ds->updateEtape(2);
+                $this->ds->save();
+                return $this->renderText(json_encode(array("success" => true)));                  
+            }
             if ($request->getParameter('gestionnaire')) {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
