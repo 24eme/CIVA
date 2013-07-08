@@ -54,5 +54,10 @@ class Db2Tiers extends Db2 {
                 ($this->get(self::COL_RECOLTANT) == "N" || !$this->get(self::COL_RECOLTANT)));
                    
     }
+
+    function isAcheteur() {
+
+        return $this->isMetteurEnMarche() && $this->get(self::COL_CVI);
+    }
     
 }
