@@ -584,16 +584,19 @@ ul#etape_declaration li.actif a em span.lieu
   color:#a03b09;
 }
 
-#validation_ds #btn-email {
+#confirmation_fin_stock #btn-email,
+#validation_ds #btn-email 
+{
 	background: url(../images/boutons/btn-recevoir-ma-ds-par-email.png);
 }
+
+.previsualiser a:hover { text-decoration: none; }
 
 .telecharger-ds {
 	background: url("../images/boutons/btn_telecharger_votre_ds.png") no-repeat scroll 0 0 transparent;
 	display: block;
 	height: 19px;
 	margin-left: 115px;
-	margin-left: 0px;
 	width: 130px;
 }
 
@@ -602,7 +605,8 @@ ul#etape_declaration li.actif a em span.lieu
  ******************************************/
 
 #popup_confirme_validationDS #btns,
-#popup_confirme_mail #btns { margin: 15px 0 0; }
-
-#popup_confirme_validationDS #btns,
-#popup_confirme_mail #btns { text-align: center; }
+#popup_confirme_mail #btns 
+{ 
+	margin: 15px 0 0;
+	text-align: center;
+}
