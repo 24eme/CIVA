@@ -148,7 +148,7 @@ class DSCivaClient extends DSClient {
         return $this->findDssByCviAndPeriode($tiers->cvi, $periode);
     }
     
-    public function getNextLieuStockageByCviAndDate($cvi, $date_stock) {
+    public function getNextLieuStockageSecondaireByCviAndDate($cvi, $date_stock) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
         if(!$tiers) {
@@ -156,6 +156,9 @@ class DSCivaClient extends DSClient {
             throw new sfException(sprintf("Tiers not found %s", $cvi));
         }
         foreach($tiers->lieux_stockage as $lieu_stockage) {
+            if($lieu_stockage->isPrincipale()) {
+                continue;
+            }
             $ds = $this->findByIdentifiantAndPeriode($cvi, $periode, $lieu_stockage->getNumeroIncremental());
             if(!$ds) {
 
