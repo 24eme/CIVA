@@ -131,7 +131,8 @@ EOF;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID],2);
             $ds->identifiant = $ds_csv_datas[self::CSV_DS_CVI];
-            $num_lieu = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P") ? '001' : $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
+            $tiers = $ds->getEtablissement();
+            $num_lieu = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P") ? $tiers->getLieuStockagePrincipal()->getNumeroIncremental() : $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             try {
                 $ds->storeInfos();
@@ -190,7 +191,7 @@ EOF;
     }
 
     public function setConf() {
-        $this->conf = ConfigurationClient::getConfiguration();
+        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
     }
 
     public function getConf() {
@@ -202,7 +203,7 @@ EOF;
     protected function importProduitInDS($ds, $productRow) {
         $hash = $this->constructHash($productRow);
         if ($hash) {
-            $detail = $ds->addDetail($hash);
+            $detail = $ds->addNoeud($hash);
             $id_ds_import = $productRow[self::CSV_DS_ID];
 
             $vol_normal = $this->convertToFloat($productRow[self::CSV_PRODUIT_VOLUME_STOCK]);

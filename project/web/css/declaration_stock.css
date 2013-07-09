@@ -47,6 +47,11 @@
 }
 
 
+#application_ds #exploitation_administratif input[type="text"] {
+	padding: 0;
+}
+
+
 /**
  * Header DS
  ******************************************/

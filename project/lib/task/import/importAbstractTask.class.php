@@ -79,10 +79,12 @@ abstract class importAbstractTask extends sfBaseTask
     }
 
     public function logLignes($type, $message, $lines, $num_ligne = null) {
-        $this->log(sprintf("%s;%s (de la ligne %s à %s) :", $type, $message, $num_ligne-count($lines), $num_ligne));
+        echo sprintf("%s;%s (de la ligne %s à %s) :", $type, $message, $num_ligne-count($lines), $num_ligne);
         foreach($lines as $i => $line) {
-          $this->log(sprintf(" - %s : %s", $i, implode($line, ";")));
+          echo sprintf(" - %s : %s", $i, implode($line, ";"));
         }
+
+        echo "\n";
     }
 
     public function logLigne($type, $message, $line, $num_ligne = null, $separator = ";") {

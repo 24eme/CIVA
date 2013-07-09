@@ -181,22 +181,25 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     
     public function getDs()
     {
-        $this->requireDeclaration();
+        if(!$this->getDeclarant()->isDeclarantStock()) {
+            throw new sfException("Vous n'avez pas les droits pour créez une DS");
+        }
+
         $this->requireTiers();
         if (is_null($this->_ds)) {
             $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
             if (!$this->_ds) {
                 $ds = new DSCiva();
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-001');
+                $ds->identifiant = $this->getDeclarant()->cvi;
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
                 return $ds;
             }
         }
 
         return $this->_ds;
     }
-    
+
     public function hasLieuxStockage() {
-        $this->requireDeclaration();
         $this->requireTiers();
         if(!$this->getDeclarant()->exist('lieux_stockage')) return false;
         return (int) count($this->getDeclarant()->lieux_stockage);
@@ -210,7 +213,6 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             $ds->delete();
         }
         $this->signOutDeclaration();
-        $this->initCredentialsDeclaration();
     }
     
 

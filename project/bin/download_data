@@ -4,7 +4,7 @@
 
 if ! test "$1"; then
     echo "Téléchargement des données";
-    . bin/download_redmine_file https://clients.actualys.com/attachments/download/5730/ALSACERECOLTE_DATA.tar.gz /tmp/ALSACERECOLTE_DATA.tar.gz
+    . bin/download_redmine_file https://clients.actualys.com/attachments/download/5949/ALSACERECOLTE_DATA.tar.gz /tmp/ALSACERECOLTE_DATA.tar.gz
 fi
 
 SYMFODIR=$(pwd);

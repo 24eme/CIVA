@@ -11,13 +11,14 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         
     }
     protected function configure($options = array(), $messages = array()) {
-        $this->addMessage('required_appellations', "Aucune appellation n'a été séléctionné, et la DS n'est pas à néant");
+        $this->addMessage('required_appellation', "Aucune appellation n'a été séléctionné, et la DS n'est pas à néant");
         $this->addMessage('invalid_lieux_stockage', "Il n'est pas possible de sauvegarder un lieu de stockage secondaire avec des appellations alors que le principal n'en possède pas.");
     }
 
     protected function doClean($values) {
         $errorSchema = new sfValidatorErrorSchema($this);
         $values_by_lieux = array();
+
         foreach ($this->lieux_stockage as $lieu_s => $value) {
             $id_lieu = preg_replace('/^[0-9]{10}/','', $lieu_s);   
             $id_lieu_field = 'lieuxStockage_'.$id_lieu;
@@ -33,12 +34,14 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         }
 
         if($empty && !$values['neant']) {
-            $errorSchema->addError(new sfValidatorError($this, 'required_appellations'));  
+            $errorSchema->addError(new sfValidatorError($this, 'required_appellation'));  
         }
 
-        if(is_null($values_by_lieux['001'])){
+        $num_principale = $this->lieux_stockage->getDocument()->getLieuStockagePrincipal()->getNumeroIncremental();
+
+        if(is_null($values_by_lieux[$this->lieux_stockage->getDocument()->getLieuStockagePrincipal()->getNumeroIncremental()])){
             foreach ($values_by_lieux as $key_lieu => $fields) {
-                if($key_lieu == '001') continue;
+                if($key_lieu == $num_principale) continue;
                 if(!is_null($fields)){
                     $errorSchema->addError(new sfValidatorError($this, 'invalid_lieux_stockage'));
                 }

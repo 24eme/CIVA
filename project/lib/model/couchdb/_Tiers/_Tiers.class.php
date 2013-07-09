@@ -94,4 +94,51 @@ abstract class _Tiers extends Base_Tiers {
         return $this->get('siege')->set('commune', $c);
     }
 
+    public function getRaisonSociale() {
+        return $this->getNom();
+    }
+
+    public function isDeclarantStock() {
+
+        return false;
+    }
+
+    public function getRegion() {
+        return null;
+    }
+
+    public function getNoAccises() {
+        return null;
+    }
+
+    public function getCompteObject() {
+        if(count($this->compte) < 1) {
+
+            return null;
+        }
+
+        return acCouchdbManager::getClient("_Compte")->find($this->compte[0]);
+    }
+
+    public function getCompteEmail() {
+        $compte = $this->getCompteObject();
+
+        if(!$compte) {
+
+            return null;
+        }
+
+        return $compte->email;
+    }
+
+    public function getLieuStockagePrincipal() {
+        foreach($this->lieux_stockage as $lieu_stockage) {
+
+            return $lieu_stockage;
+        }
+
+        return null;
+    }
+
+    abstract public function getIdentifiant();
 }

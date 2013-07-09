@@ -1,17 +1,16 @@
-<?php
-$produits = $form->getProduitsDetails();
-?>    
+<?php use_helper('Text') ?>    
+<?php $produits = $form->getProduitsDetails(); ?>
     <ul id="liste_cepages">
         <?php 
         foreach ($produits as $key => $detail) :
             ?>
     	<li>
-    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo $detail->lieu; ?></small> 
+    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small> 
     	</li>
         <?php endforeach; ?>
 	<?php if((count($produits) < count($lieu->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS))) || $lieu->getConfig()->hasLieuEditable()): ?>	
 		<li class="ajout">
-			<a href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
+			<a class="ajax" href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>
