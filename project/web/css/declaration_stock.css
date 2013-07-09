@@ -51,7 +51,7 @@
  * Header DS
  ******************************************/
 .header_ds { margin: 0 0 15px; } 
-.header_ds.sous_menu { margin: 0 0 70px; } 
+.header_ds.sous_menu { margin: 0 0 47px; } 
 
 .header_ds.sous_menu #liste_lieux_stockage { padding: 0 0 0 268px; }
  
@@ -515,10 +515,11 @@ ul#etape_declaration li.actif a em span.lieu
 /* Tableau */
 #application_ds .page_recap table { width: auto; }
 
+#application_ds .page_recap table thead { border: 1px solid #C6C8C7; }
+
 #application_ds .page_recap table thead th
 {
 	background: #dcdfa9;
-	border-right: 1px solid #fff;
 	color: #848c03;
 	font-size: 14px;
 	font-weight: normal;
@@ -526,6 +527,11 @@ ul#etape_declaration li.actif a em span.lieu
 	vertical-align: middle;
 	width: 110px;
 	text-align: center;
+}
+
+#application_ds .page_recap table thead th + th
+{
+	border-left: 1px solid #fff;
 }
 
 #application_ds .page_recap table thead th span.unites {
@@ -573,7 +579,7 @@ ul#etape_declaration li.actif a em span.lieu
   color:#a03b09;
 }
 
-#application_ds #btn-email {
+#validation_ds #btn-email {
 	background: url(../images/boutons/btn-recevoir-ma-ds-par-email.png);
 }
 
@@ -593,12 +599,5 @@ ul#etape_declaration li.actif a em span.lieu
 #popup_confirme_validationDS #btns,
 #popup_confirme_mail #btns { margin: 15px 0 0; }
 
-#popup_confirme_validationDS #btns input,
-#popup_confirme_mail #btns input
-{
-	float: left;
-	margin: 0;
-}
-
-#popup_confirme_validationDS #btns .close_popup,
-#popup_confirme_mail #btns .close_popup { float: right; }
+#popup_confirme_validationDS #btns,
+#popup_confirme_mail #btns { text-align: center; }
