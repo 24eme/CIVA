@@ -213,7 +213,9 @@ EOF;
                     continue;
                 }
                 $this->checkVolumesDS($ds, $ds_csv_datas);
-                try{
+                try{                    
+                $ds->declaration->cleanAllNodes();
+                $ds->update();
                 $ds->save();
                 echo "La DS " . $this->green($ds->_id) . " a été sauvée sans encombre.\n";
                 }  catch (Exception $e){
@@ -270,13 +272,14 @@ EOF;
                     $couleur_node = 'cepage_' . $productRow[self::CSV_PRODUIT_COULEUR];
                     return $conf->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->$couleur_node->getHash();
                 }
-                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN') {
+                
+                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RG') {
                     $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                     return $conf->recolte->certification->genre->appellation_PINOTNOIR->mention->lieu->couleur->$cepage_node->getHash();
                 }
-                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PR') {
+                if (($productRow[self::CSV_PRODUIT_CEPAGE] == 'PR') || ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RS')) {
                     $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
-                    return $conf->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->couleur->$cepage_node->getHash();
+                    return $conf->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->couleur->cepage_PR->getHash();
                 }
                 if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'KL') {
                     $id = $productRow[self::CSV_DS_ID];

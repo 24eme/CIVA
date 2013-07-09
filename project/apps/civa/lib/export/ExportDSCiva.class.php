@@ -39,9 +39,6 @@ class ExportDSCiva {
         $ligne_string = ""; 
         foreach ($this->ds_liste as $cpt => $ds) {
             $ligne_string.= $this->makeLignes($ds);
-            if($cpt<(count($this->ds_liste)-1))
-                $ligne_string.= "\n";
-            break;
         }
         return $ligne_string;
     }
@@ -158,9 +155,87 @@ class ExportDSCiva {
     }
     
     protected function makeLignes($ds) {
+        $cpt = 1;
         $row = "";
-        $id_csv = substr($this->campagne, 2).$ds->numero_archive;
-        $row.= $id_csv;
+        foreach ($ds->declaration->getProduits() as $app_produit => $produit) {
+            $id_csv = substr($this->campagne, 2).$ds->numero_archive;
+            
+            $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
+            $cepage_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z]+)cepage_([A-Z]{2})/', '$4', $app_produit);
+            switch ($appellation_key) {
+                case 'PINOTNOIR':
+                    $row.= $id_csv.",";
+                    $row.= "1,\"".$cepage_key."\",\"RG\",\"\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+            
+                case 'PINOTNOIRROUGE':
+                    $row.= $id_csv.",";
+                    $row.= "1,\"PN\",\"RS\",\"\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+            
+                case 'ALSACEBLANC':
+                    $row.= $id_csv.",";
+                    $row.= "1,\"".$cepage_key."\",\"BL\",\"\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+
+                case 'CREMANT':
+                    $row.= $id_csv.",";
+                    $row.= "2,\"".$cepage_key."\",\"".$cepage_key."\",\"\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+
+                case 'GRDCRU':
+                    $lieu = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)([\/a-zA-Z]+)\/lieu([A-Za-z0-9]{2})\/([\/a-zA-Z_-]+)/', '$4', $app_produit);
+
+                    $row.= $id_csv.",";
+                    $row.= "3,\"".$cepage_key."\",\"BL\",\"".$lieu."\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+
+                case 'COMMUNALE': 
+                    $row.= $id_csv.",";
+                    $lieu = preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu([A-Z]{4})([\/a-zA-Z_-]+)/', '$4', $app_produit);
+                    $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu([A-Z]{4})\/couleur([A-Za-z]+)\/([\/a-zA-Z_-]+)/', '$5', $app_produit)); 
+                    
+                    if($lieu == 'KLEV'){
+                        $row.= "1,\"KL\",\"BL\",\"\",".$cpt.",";
+                    }else{
+                        $row.= "2,\"".$cepage_key."\",\"".$couleur."\",\"".$lieu."\",".$cpt.",";                        
+                    }
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                    
+                break;
+
+                case 'LIEUDIT':
+                    $row.= $id_csv.",";
+                    $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu_([A-Z]{4})\/couleur([A-Za-z]+)\//', '$5', $app_produit));
+                    $row.= "2,\"".$cepage_key."\",\"".$couleur."\",\"\",".$cpt.",";
+                    $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
+                    $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
+                    $row.="\n";
+                break;
+
+                default:
+                    break;
+            }
+            $cpt++;
+            
+        }
         return $row;
     }
 
@@ -193,4 +268,19 @@ class ExportDSCiva {
         }
         return '';
     }
+
+    protected function getCouleurForExport($couleur) {
+        switch ($couleur) {
+            case 'Blanc':
+                return 'BL';
+            case 'Rose':
+                return 'RS';
+            case 'Rouge':
+                return 'RG';
+            default:
+                throw new sfException("La couleur $couleur n'est pas connue dans la configuration.");
+        }
+        return null;
+    }
+    
 }
