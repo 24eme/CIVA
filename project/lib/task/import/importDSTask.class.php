@@ -132,8 +132,31 @@ EOF;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID],2);
             $ds->identifiant = $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
-            $num_lieu = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P") ? $tiers->getLieuStockagePrincipal()->getNumeroIncremental() : $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
-            $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
+            if(is_null($tiers)){
+                echo $this->error_term . " Le tiers de CVI $ds->identifiant n'a pas été trouvé \n";
+                continue;
+            }else{
+                $num_lieu = null;
+                if($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P"){
+                    if(!$tiers->exist('lieux_stockage')){
+                        echo $this->error_term . " Absence de lieu de stockage pour $tiers->cvi \n";
+                        continue;
+                    }
+                    $lieu_principal = $tiers->getLieuStockagePrincipal();
+                    if(!$lieu_principal){
+                        echo $this->error_term . " Absence de lieu Principal pour $tiers->cvi \n";
+                        continue;
+                    }
+                    $num_lieu = $lieu_principal->getNumeroIncremental();    
+                }else{
+                    $num_lieu = $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
+                }
+                if(!$num_lieu){
+                    echo $this->error_term . " Le lieu de stockage n'a pas pu être déterminé pour $tiers->cvi \n";
+                      continue;
+                }
+            $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);                
+            }
             try {
                 $ds->storeInfos();
             } catch (sfException $e) {
@@ -148,7 +171,9 @@ EOF;
                 continue;
             }
 
-
+            // Gestion des VinSansIg
+            $this->importVinSansIg($ds_csv_datas,$ds);            
+            
             //    Autres
             if($ds->isDsPrincipale()){
                 $rebeche = $this->convertToFloat($ds_csv_datas[self::CSV_DS_VOLUME_REBECHES]);
@@ -167,9 +192,13 @@ EOF;
             // Produits
 
             if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
+                try{
                     $ds->save();
                     echo "La DS " . $this->green($ds->_id) . " a été sauvée et est une " . $this->green("DS a néant") . "\n";
-                continue;
+                    continue;
+                    }catch (Exception $e){
+                        echo $this->error_term . " Exception au save : $ds->_id : " . $e->getMessage() . "\n";
+                    }
             } else {
                 $en_erreur = false;
                 foreach ($ds_csv as $ds_csv_ligne) {
@@ -184,8 +213,12 @@ EOF;
                     continue;
                 }
                 $this->checkVolumesDS($ds, $ds_csv_datas);
+                try{
                 $ds->save();
                 echo "La DS " . $this->green($ds->_id) . " a été sauvée sans encombre.\n";
+                }  catch (Exception $e){
+                    echo $this->error_term . " Exception au save : $ds->_id : " . $e->getMessage() . "\n";
+                }
             }
         }
     }
@@ -308,6 +341,16 @@ EOF;
         }
         else
             echo " #" . $this->yellow(" " . $ds->declaration->certification->total_vt . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_VT])."\n";
+    }
+    
+    
+    protected function importVinSansIg($ligne_ds,$ds){
+        $vinSansIgVolume = $this->convertToFloat($ligne_ds[self::CSV_DS_VOLUME_VINTABLE]);
+        if($vinSansIgVolume > 0){
+            $hash_vinSansIg = $this->getConf()->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->cepage_VINTABLE->getHash();
+            $detail = $ds->addNoeud($hash_vinSansIg);
+            $detail = $ds->addVolumesWithHash($hash_vinSansIg, null, $vinSansIgVolume, 0, 0,true);
+        }
     }
 
 }
