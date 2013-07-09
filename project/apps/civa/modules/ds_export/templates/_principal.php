@@ -22,7 +22,7 @@
 </tr>
 <tr>
   <?php if(!$is_last_page): ?>
-    <td style="border: 1px solid black; background-color: #bbb; text-align: center;">&nbsp;<small><i>(Page suivante)</i></small></td>
+    <td style="border: 1px solid black; background-color: #bbb; text-align: center;">&nbsp;<small>(Page suivante)</small>&nbsp;</td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>

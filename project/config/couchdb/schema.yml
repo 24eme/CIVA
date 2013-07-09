@@ -390,9 +390,9 @@ Recoltant:
       _rev: {  }
       type: {  }
       cvi: {  }
+      siret: {  }
       declaration_insee: {  }
       declaration_commune: {  }
-      siret: {  }
       cave_cooperative: {  }
 
 MetteurEnMarche:
@@ -404,6 +404,8 @@ MetteurEnMarche:
       type: {  }
       cvi_acheteur: {  }
       no_accises: {  }
+      declaration_insee: { required: false }
+      declaration_commune: { required: false }
       gamma:
         required: false
         type: collection
@@ -426,11 +428,13 @@ Acheteur:
       _id: {  }
       _rev: {  }
       cvi: {  }
-      civaba: {  }
       type: {  }
       qualite: {  }
       nom: {  }
       commune: {  }
+      siret: {  }
+      declaration_insee: {  }
+      declaration_commune: {  }
       achnum: { required: false }
 
 Current:

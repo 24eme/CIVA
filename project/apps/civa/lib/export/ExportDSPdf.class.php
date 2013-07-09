@@ -1,6 +1,9 @@
 <?php
 
 class ExportDSPdf {
+
+    const NB_LIGNES_PAR_PAGES = 50;
+
     protected $type;
     protected $document;
     protected $nb_pages;
@@ -79,9 +82,7 @@ class ExportDSPdf {
             $filename = $this->ds_principale->periode.'_DS_'.$this->ds_principale->declarant->cvi.'_'.$rev.'.pdf';
         }
 
-        $config = array('PDF_MARGIN_TOP' => 21,
-                        'PDF_FONT_SIZE_MAIN' => 8,
-                        'PDF_HEADER_LOGO_WIDTH' => 20);
+        $config = array('PDF_FONT_SIZE_MAIN' => 9);
 
         if ($this->type == 'html') {
           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
@@ -139,7 +140,7 @@ class ExportDSPdf {
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
-        $paginate = $this->paginate($recap, 30, $page);
+        $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES, $page);
 
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $page);
@@ -184,7 +185,7 @@ class ExportDSPdf {
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
 
-        $paginate = $this->paginate($recap, 38);
+        $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
@@ -381,10 +382,13 @@ class ExportDSPdf {
                     } else {
                         $paginate["pages"][$num_page] = array();
                     }
+
+                    $i = $i + 3 * count($paginate["pages"][$num_page]);
                 }
 
                 if(!isset($paginate["pages"][$num_page][$libelle])) {
                     $paginate["pages"][$num_page][$libelle] = $tableau;
+                    $i = $i + 3;
                     $paginate["pages"][$num_page][$libelle]["produits"] = array();
                 }
 
@@ -436,7 +440,7 @@ class ExportDSPdf {
                     continue;
                 }
 
-                for($i = $nb_ligne; $i <= $config_nb_ligne; $i++) {
+                for($i = $nb_ligne; $i < $config_nb_ligne; $i++) {
                     $colonnes = array();
                     foreach($config[$libelle]['colonnes'] as $key => $colonne) {
                         $colonnes[$key] = array("libelle" => null, "rowspan" => 1);
