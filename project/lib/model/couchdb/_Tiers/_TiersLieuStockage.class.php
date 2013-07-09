@@ -10,4 +10,9 @@ class _TiersLieuStockage extends Base_TiersLieuStockage {
         return $matches[2];
     }
 
+    public function isPrincipale() {
+
+        return $this->getDocument()->getLieuStockagePrincipal()->getNumeroIncremental() == $this->getNumeroIncremental();
+    }
+
 }
