@@ -41,6 +41,8 @@ $(document).ready(function()
             initSendDSPopup();
         });
     }
+
+	initStocks();
 	
 	scrollLieuxStockage();
 });
@@ -70,6 +72,15 @@ var initLieuxStockage = function()
         }
         majCheckboxesAppellation();
     });
+};
+
+// Donne le focus sur le premier select
+var initStocks = function()
+{
+	if(appDS.find('#ds_add_produit_hashref').length > 0)
+	{
+		appDS.find('#ds_add_produit_hashref').focus();
+	}
 };
 
 var majCheckboxesAppellation = function(){    
