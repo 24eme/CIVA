@@ -144,4 +144,8 @@ class DSCepage extends BaseDSCepage {
             }
         }    
     }
+    
+     public function getCodeDouane($vtsgn = '') {
+      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
+    }
 }
