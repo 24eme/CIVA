@@ -149,7 +149,7 @@ EOF;
                     }
                     $num_lieu = $lieu_principal->getNumeroIncremental();    
                 }else{
-                    $num_lieu = $ds_client->getNextLieuStockageByCviAndDate($ds->identifiant, $date);
+                    $num_lieu = $ds_client->getNextLieuStockageSecondaireByCviAndDate($ds->identifiant, $date);
                 }
                 if(!$num_lieu){
                     echo $this->error_term . " Le lieu de stockage n'a pas pu être déterminé pour $tiers->cvi \n";
