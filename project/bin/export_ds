@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+    then
+	echo Usage: $0 campagne_export nom_du_dossier 1>&2
+        exit 1
+fi
+
+mkdir -p data/export/ds > /dev/null
+EXPORTDIR=data/export/ds
+
+FOLDER=$EXPORTDIR/$2_$(date +%Y%m%d%H%M%S)
+
+mkdir -p $FOLDER > /dev/null
+
+php symfony export:ds-civa $1 $FOLDER
+
+sort -t ',' -k 1,1 $FOLDER/*STOLIG* > $FOLDER/STOLIG_sorted
+sort -t ',' -k 1,1 $FOLDER/*STOENT* > $FOLDER/STOENT_sorted

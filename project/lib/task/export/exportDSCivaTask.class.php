@@ -17,6 +17,7 @@ class exportDSCivaTask extends sfBaseTask
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
+            new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
         ));
 
         $this->addOptions(array(
@@ -41,9 +42,14 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
-        $exportManager = new ExportDSCiva($arguments['campagne']);
-       // $entete = $exportManager->exportEntete();
+        $campagne = $arguments['campagne'];
+        $exportManager = new ExportDSCiva($campagne);
+        $entete = $exportManager->exportEntete();
         $lignes = $exportManager->exportLigne(); 
-        echo $lignes;
+        
+        $folderPath = $arguments['folderPath'];
+        file_put_contents($folderPath.'/STOENT'.substr($campagne, 2), $entete);        
+        file_put_contents($folderPath.'/STOLIG'.substr($campagne, 2), $lignes);
+        echo "EXPORT fini\n";
     }
 }
