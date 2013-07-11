@@ -17,6 +17,7 @@ var ajax_post_url = null;
 $(document).ready(function()
 {	
     //navOngletsStock();
+    choixPrecDS();
     initDSSommesCol();
     initLieuxStockage();
     initLieuxStockageNeant();
@@ -278,10 +279,21 @@ var scrollLieuxStockage = function()
 	if(listeLieuxStockage.length > 0)
 	{
 		$.scrollTo(listeLieuxStockage, 800);
-	}else
-	{
+	} else if($('#onglets_majeurs').length > 0) {
 		$.scrollTo('#onglets_majeurs', 800);
 	}
+};
+
+var choixPrecDS = function()
+{   
+    $('#form_ds #mon_espace_civa_valider').click(function() {
+        console.log('nop');
+        if($('#type_ds_suppr:checked').length > 0) {
+            return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
+        }
+    });
+
+
 };
 
 /**
