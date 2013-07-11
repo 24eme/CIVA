@@ -190,7 +190,6 @@ class DSCivaClient extends DSClient {
         if(!$ds)
             throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
         $matches = array();
-
         return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode);
     }
 
@@ -209,9 +208,9 @@ class DSCivaClient extends DSClient {
     }
     
     public function getDSPrincipaleByDs($ds) {
-        foreach ($this->findDssByDS($ds) as $ds) {
-            if($ds->isDsPrincipale()) {
-                return $ds;
+        foreach ($this->findDssByDS($ds) as $current_ds) {
+            if($current_ds->isDsPrincipale()) {
+                return $current_ds;
             }
         }
         return null;
