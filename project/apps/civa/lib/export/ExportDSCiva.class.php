@@ -17,11 +17,14 @@ class ExportDSCiva {
             throw new sfException("La campagne doit être une année ($campagne)");
         }
         $this->campagne = $campagne;
-        $this->client_ds = acCouchdbManager::getClient("DSCiva");
+        $this->client_ds = DSCivaClient::getInstance();
         $this->ds_ids = $this->client_ds->getAllIdsByCampagne($this->campagne);
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
-            $this->ds_liste[] = $this->client_ds->find($ds_id);
+            $ds = $this->client_ds->find($ds_id);
+            if(preg_match('/^(67|68)/', $ds->identifiant) && $this->client_ds->getDSPrincipaleByDs($ds)->isValidee()){
+                $this->ds_liste[] = $this->client_ds->find($ds_id);
+            }
         }
     }
     
@@ -62,18 +65,44 @@ class ExportDSCiva {
             $ligne = "";
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             if($appellation_key!="VINTABLE"){
-                $code_douane = $produit->getCodeDouane();
-                $volume = $produit->total_stock;
-                $ligne .= "\t\t<ligne>\n";                    
-                $ligne .= "\t\t\t<codeInstallation>".$lieu_stockage."</codeInstallation>\n"; 
-                $ligne .= "\t\t\t<codeProduit>".$code_douane."</codeProduit>\n"; 
-                $ligne .= "\t\t\t<volume>".$this->convertToFloat($volume,false)."</volume>\n";
-                $ligne .= "\t\t</ligne>\n";
+                if($produit->hasVtsgn()){
+                    $code_douane = $produit->getCodeDouane();
+                    $volume = $produit->total_stock;
+                    $volume = $this->convertToFloat($volume,false);
+                    $ligne .= $this->makeXMLDSLigne($lieu_stockage,$code_douane,$volume);                
+                }  else {
+                    $volume_vt = $produit->total_vt;
+                    if($volume_vt > 0){
+                        $code_douane = $produit->getCodeDouane('VT');
+                        $volume_vt = $this->convertToFloat($volume_vt,false);
+                        $ligne .= $this->makeXMLDSLigne($lieu_stockage,$code_douane,$volume_vt);
+                    }
+                    $volume_sgn = $produit->total_sgn;
+                    if($volume_sgn > 0){
+                        $code_douane = $produit->getCodeDouane('SGN');
+                        $volume_sgn = $this->convertToFloat($volume_sgn,false);
+                        $ligne .= $this->makeXMLDSLigne($lieu_stockage,$code_douane,$volume_sgn);
+                    }
+                    $volume_normal = $produit->total_normal;
+                    $code_douane = $produit->getCodeDouane();
+                    $volume_normal = $this->convertToFloat($volume_normal,false);
+                    $ligne .= $this->makeXMLDSLigne($lieu_stockage,$code_douane,$volume_normal);
+                }
             }
             $lignes.=$ligne;
         }
         return $lignes;
     }
+
+    protected function makeXMLDSLigne($lieu_stockage,$code_douane,$volume) {
+        $ligne = "\t\t<ligne>\n";                    
+        $ligne .= "\t\t\t<codeInstallation>".$lieu_stockage."</codeInstallation>\n"; 
+        $ligne .= "\t\t\t<codeProduit>".$code_douane."</codeProduit>\n"; 
+        $ligne .= "\t\t\t<volume>".$volume."</volume>\n";
+        $ligne .= "\t\t</ligne>\n";
+        return $ligne;
+    }
+
 
 
     public function exportEntete() {
