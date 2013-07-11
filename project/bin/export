@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-php symfony generate:export-mairies 2010 2011 2012
-php symfony generate:export-douanes 2010 2011 2012
-php symfony generate:export-inao 2011 2012
-php symfony generate:export-acheteurs 2012
+php symfony generate:export-mairies --trace 2010,2011,2012 2012,2013
+php symfony generate:export-douanes --trace  2010,2011,2012 2012,2013
+php symfony generate:export-inao --trace 2010,2011,2012 2012,2013

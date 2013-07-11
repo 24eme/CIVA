@@ -673,7 +673,7 @@ Export:
       compte: {  }
       cle: {  }
       nom: {  }
-      drs:
+      '*':
         type: collection
         definition:
           fields:
