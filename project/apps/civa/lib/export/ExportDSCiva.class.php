@@ -25,6 +25,57 @@ class ExportDSCiva {
         }
     }
     
+     public function exportXml() {
+        $export_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n"; 
+        $export_xml.="<listeDecStock>\n";
+        $tab_cvi = array();
+        $current_cvi = 0;
+        foreach ($this->ds_liste as $cpt => $ds) {            
+            if(in_array($ds->declarant->cvi, $tab_cvi) && $ds->declarant->cvi == $current_cvi){
+                        $export_xml.= $this->makeXMLDS($ds);
+            }else{
+                if(($ds->declarant->cvi != $current_cvi) && $current_cvi!=0){
+                    $export_xml.="\t</decStock>\n";
+                }
+                $current_cvi = $ds->declarant->cvi;
+                $export_xml.="\t<decStock numCvi=\"".$current_cvi."\">\n";
+                $export_xml.= $this->makeXMLDS($ds);
+                $tab_cvi[] = $current_cvi;
+            }
+                
+        }
+        $export_xml.="\t</decStock>\n";
+        $export_xml.="</listeDecStock>\n";
+        return $export_xml;
+    }
+    
+    protected function makeXMLDS($ds) {
+        $lignes ="";
+        if($ds->isDsPrincipale()){
+            $lignes.="\t\t<volLie>".$this->convertToFloat($ds->lies,false)."</volLie>\n";
+            $lignes.="\t\t<volDplc>".$this->convertToFloat($ds->dplc,false)."</volDplc>\n";            
+            $lignes.="\t\t<volVinNc>".$this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds),false)."</volVinNc>\n";
+        }
+
+        $lieu_stockage = $ds->identifiant.$ds->getLieuStockage();
+        foreach ($ds->declaration->getProduits() as $app_produit => $produit) {
+            $ligne = "";
+            $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
+            if($appellation_key!="VINTABLE"){
+                $code_douane = $produit->getCodeDouane();
+                $volume = $produit->total_stock;
+                $ligne .= "\t\t<ligne>\n";                    
+                $ligne .= "\t\t\t<codeInstallation>".$lieu_stockage."</codeInstallation>\n"; 
+                $ligne .= "\t\t\t<codeProduit>".$code_douane."</codeProduit>\n"; 
+                $ligne .= "\t\t\t<volume>".$this->convertToFloat($volume,false)."</volume>\n";
+                $ligne .= "\t\t</ligne>\n";
+            }
+            $lignes.=$ligne;
+        }
+        return $lignes;
+    }
+
+
     public function exportEntete() {
         $entete_string = ""; 
         foreach ($this->ds_liste as $cpt => $ds) {
@@ -47,7 +98,13 @@ class ExportDSCiva {
         $id_csv = substr($this->campagne, 2).$ds->numero_archive;
         $neant = ($ds->isDsPrincipale() && $ds->isDsNeant())? "\"N\"" : "\"P\"";
         $etb = $ds->getEtablissement();
-        $lieu_stockage = "";//($ds->declarant->exist("adresse"))? $ds->declarant->adresse : ""; 
+        $lieu_stockage = "";
+        if($ds->declarant->exist("exploitant") && $ds->declarant->exploitant->exist("adresse")){
+            $lieu_stockage = $ds->declarant->exploitant->adresse;
+        }elseif ($ds->declarant->exist("adresse")) {
+            $lieu_stockage = $ds->declarant->adresse;
+        }
+        
         $principale = ($ds->isDsPrincipale())? "\"P\"" : "\"S\"";
         $num_db2 = ($etb->exist('db2') && $etb->db2->exist('num'))? $etb->db2->num : '';
         $cvi = "\"".$ds->identifiant."\"";
@@ -240,10 +297,11 @@ class ExportDSCiva {
     }
 
 
-    protected function convertToFloat($vol) {
-       if(!$vol) return ".00"; 
+    protected function convertToFloat($vol, $withTrunc = true) {
+       if(!$vol)
+           return ($withTrunc)? ".00" : "0.00"; 
        $result = sprintf("%01.02f", round(str_replace(",", ".", $vol) * 1, 2));
-       if($vol<1) return substr($result,1);
+       if($withTrunc && $vol<1) return substr($result,1);
        return $result;
     }
     
