@@ -46,6 +46,9 @@ class DSCiva extends DS {
 
         $tiers = $this->getEtablissement();
 
+        $this->declaration_commune = $tiers->declaration_commune;
+        $this->declaration_insee = $tiers->declaration_insee;
+
         if(!$this->declarant->email) {
             $this->declarant->email = $tiers->getCompteEmail();
         }

@@ -65,7 +65,7 @@ class DSCivaClient extends DSClient {
     }
 
 
-    public function retrieveByCampagneAndCvi($cvi,$campagne) {
+    public function findByCviAndCampagne($cvi, $campagne) {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
         for($month=8;$month>0;$month--){
             if($ds = $this->find('DS-'.$cvi.'-'.($campagne+1).sprintf("%02d",$month).'-'.$tiers->getLieuStockagePrincipal()->getNumeroIncremental())){
@@ -78,6 +78,11 @@ class DSCivaClient extends DSClient {
             }
         }
         return null;
+    }
+
+    public function retrieveByCampagneAndCvi($cvi,$campagne) {
+        
+        return $this->findByCviAndCampagne($cvi, $campagne);
     }
     
    public function buildPeriode($date) {
@@ -132,20 +137,20 @@ class DSCivaClient extends DSClient {
         return $new_ds;
     }
 
-    public function findDssByCviAndPeriode($cvi, $periode) {
+    public function findDssByCviAndPeriode($cvi, $periode, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         $base_id = sprintf('DS-%s-%s', $cvi, $periode);
         $ids = $this->startkey($base_id.'-001')->endkey($base_id.'-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds();
         $dss = array();
         foreach($ids as $id) {
-            $dss[$id] = $this->find($id);
+            $dss[$id] = $this->find($id, $hydrate);
         }
         return $dss;
     }
 
-    public function findDssByCvi($tiers, $date_stock) {
+    public function findDssByCvi($tiers, $date_stock, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
 
-        return $this->findDssByCviAndPeriode($tiers->cvi, $periode);
+        return $this->findDssByCviAndPeriode($tiers->cvi, $periode, $hydrate);
     }
     
     public function getNextLieuStockageSecondaireByCviAndDate($cvi, $date_stock) {
@@ -186,12 +191,12 @@ class DSCivaClient extends DSClient {
         return current($dss);
     }
     
-    public function findDssByDS($ds) {
+    public function findDssByDS($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         if(!$ds)
             throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
         $matches = array();
 
-        return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode);
+        return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode, $hydrate);
     }
 
     public function findDSByLieuStockageAndCampagne($lieu_num, $campagne){
@@ -208,15 +213,14 @@ class DSCivaClient extends DSClient {
         return $ds;
     }
     
-    public function getDSPrincipaleByDs($ds) {
-        foreach ($this->findDssByDS($ds) as $ds) {
-            if($ds->isDsPrincipale()) {
-                return $ds;
-            }
+    public function getDSPrincipaleByDs($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        foreach ($this->findDssByDS($ds, $hydrate) as $ds) {
+            
+            return $ds;
         }
+
         return null;
     }
-
 
     public function createOrFind($etablissementId, $date_stock) {
       throw sfException('createOrFind deprecated use findOrCreateDsByEtbId instead');
