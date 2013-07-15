@@ -1,10 +1,10 @@
 <?php
 
-class ExportDRPdf {
+class ExportDRPdf extends ExportDocument {
     protected $type;
     protected $document;
     protected $nb_pages;
-    protected $partial_name;
+    protected $partial_function;
     protected $file_dir;
     protected $no_cache;
 
@@ -18,24 +18,8 @@ class ExportDRPdf {
         $this->create($dr, $tiers);
     }
 
-    public function isCached() {
-        return (!$this->no_cache && $this->document->isCached());
-    }
-
-    public function removeCache() {
-        return $this->document->removeCache();
-    }
-
     public function generatePDF() {
         return $this->document->generatePDF($this->no_cache);
-    }
-
-    public function addHeaders($response) {
-        $this->document->addHeaders($response);
-    }
-
-    public function output() {
-        return $this->document->output();
     }
 
     protected function init($dr, $tiers, $filename = null) {
@@ -61,8 +45,7 @@ class ExportDRPdf {
     }
 
     protected function create($dr, $tiers) {
-        $this->nb_pages = 0;
-        //if (!$this->isCached()) {
+        
           foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
@@ -120,7 +103,6 @@ class ExportDRPdf {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
- //      }
     }
     
     private function getRecapitulatifInfos($dr)
@@ -332,8 +314,8 @@ class ExportDRPdf {
 	    }
   	}
 
-  protected function getPartial($templateName, $vars = null) {
+    protected function getPartial($templateName, $vars = null) {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
-  }
+    }
 
 }

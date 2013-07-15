@@ -36,18 +36,13 @@ EOF;
             $export = acCouchdbManager::getClient()->find($id);
             $this->logSection($export->get('_id'), 'exporting ...');
             $export_ds = new ExportDS($export, array($this, 'getPartial'), true);
+            $export_ds->export();
             if($options['clean']) {
-                $export_ds->export();
                 $export_ds->clean();
-                $export_ds->publication();
-                $export_ds->zip();
-                $export_ds->createHashMd5File();
-            } else {
-                $export_ds->export();
-                $export_ds->publication();
-                $export_ds->zip();
-                $export_ds->createHashMd5File();
             }
+            $export_ds->publication();
+            $export_ds->zip();
+            $export_ds->createHashMd5File();
            
         }
     }

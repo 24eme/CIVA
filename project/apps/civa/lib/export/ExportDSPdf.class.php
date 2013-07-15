@@ -1,13 +1,13 @@
 <?php
 
-class ExportDSPdf {
+class ExportDSPdf extends ExportDocument {
 
     const NB_LIGNES_PAR_PAGES = 50;
 
     protected $type;
     protected $document;
     protected $nb_pages;
-    protected $partial_name;
+    protected $partial_function;
     protected $file_dir;
     protected $no_cache;
     protected $cvi;
@@ -32,14 +32,6 @@ class ExportDSPdf {
         $this->init($filename);
     }
 
-    public function isCached() {
-        return (!$this->no_cache && $this->document->isCached());
-    }
-
-    public function removeCache() {
-        return $this->document->removeCache();
-    }
-
     public function generatePDF() {
         if(!$this->isCached()) {
             $this->create();
@@ -47,12 +39,11 @@ class ExportDSPdf {
         return $this->document->generatePDF($this->no_cache);
     }
 
-    public function addHeaders($response) {
-        $this->document->addHeaders($response);
-    }
-
-    public function output() {
-        return $this->document->output();
+    public function generatePDF() {
+        if(!$this->isCached()) {
+            $this->create();
+        }
+        return $this->document->generatePDF($this->no_cache);
     }
 
     protected function init($filename = null) {
@@ -501,9 +492,8 @@ class ExportDSPdf {
         return sprintf("%03d", $this->order[$key]);
     }
 
-
     protected function getPartial($templateName, $vars = null) {
-          return call_user_func_array($this->partial_function, array($templateName, $vars));
+      return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
 }

@@ -55,7 +55,7 @@ EOF;
     $export->add('drs');
 
     foreach($annees_dr as $annee) {
-      $view = $export->dss->views->add();
+      $view = $export->drs->views->add();
       $view->id = 'DR';
       $view->nom = 'campagne_declaration_insee';
       $view->startkey = array($annee);
