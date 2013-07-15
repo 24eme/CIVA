@@ -38,14 +38,7 @@ class ExportDSPdf extends ExportDocument {
         }
         return $this->document->generatePDF($this->no_cache);
     }
-
-    public function generatePDF() {
-        if(!$this->isCached()) {
-            $this->create();
-        }
-        return $this->document->generatePDF($this->no_cache);
-    }
-
+    
     protected function init($filename = null) {
         if($this->ds_principale->isValideeTiers()) {
             $date_validee = new DateTime($this->ds_principale->validee);
