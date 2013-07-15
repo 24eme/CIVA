@@ -8,7 +8,6 @@ use_helper('ds');
         echo $form->renderHiddenFields();
         echo $form->renderGlobalErrors();
     ?>
-    <div id="ajax_error"></div>
 	<h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 
 	<?php include_partial('ds/onglets', array('ds' => $ds, 'appellation' => $appellation, 'lieu' => $lieu)) ?>

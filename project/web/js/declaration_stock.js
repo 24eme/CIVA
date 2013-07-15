@@ -239,8 +239,8 @@ var formPost = function(form)
                 document.location.href=ajax_post_url;
             }},  
             error: function(textStatus){  
-                $( "#ajax_error").html(textStatus);
-        }
+                form.submit();
+            }
     });
 };
 
