@@ -116,8 +116,10 @@ class DSRouting {
                 'action' => 'sendEmail'),
                 array('sf_method' => array('get')),
                 array('model' => 'DS',
-                    'type' => 'object') ));       
+                    'type' => 'object') )); 
         
+        $r->prependRoute('telecharger_la_notice_ds', new sfRoute('/ds/telecharger-la-notice-ds', array('module' => 'ds',
+                'action' => 'downloadNotice')));      
         
     }
-}
+}  
