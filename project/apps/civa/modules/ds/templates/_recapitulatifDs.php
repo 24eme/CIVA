@@ -19,7 +19,7 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
         	<?php endif; ?>
         <?php endif; ?>
 		<div id="recap_total_ds" class="page_recap">
-			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small><a href="" class="msg_aide" rel="help_popup_ds_validation" title="Message aide"></a></p>
+			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small><a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a></p>
 			<div id="recap_appellations">
 				<table class="table_donnees">
 					<thead>
@@ -78,7 +78,7 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
 			<table class="table_donnees">
 				<thead>
 					<tr>
-                                            <th class="appellation">Vins sans IG&nbsp;<a title="Message aide" rel="help_popup_validation_vins_sans_ig" class="msg_aide" href=""></a></th>
+                                            <th class="appellation">Vins sans IG&nbsp;<a title="Message aide" rel="help_popup_validation_vins_sans_ig" class="msg_aide_ds" href=""></a></th>
 						<th class="total">Total <span class="unites">(hl)</span></th>
 					</tr>
 				</thead>

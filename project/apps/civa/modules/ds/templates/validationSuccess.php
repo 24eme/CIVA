@@ -24,7 +24,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds_principale, 
             <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
 		<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserDS">
             </a>
-		<a href="" class="msg_aide" rel="telecharger_pdf" title="Message aide"></a>
+		<a href="" class="msg_aide_ds" rel="telecharger_pdf" title="Message aide"></a>
     </li>
 </ul>
 <?php include_partial('ds/generationDuPdf', array('ds' => $ds_principale)); ?>

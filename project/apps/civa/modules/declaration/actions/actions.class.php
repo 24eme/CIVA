@@ -68,7 +68,7 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeDownloadNotice() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "images/aide.pdf", "aide.pdf");
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_recolte.pdf", "aide recolte.pdf");
     }
 
     protected function renderPdf($path, $filename) {

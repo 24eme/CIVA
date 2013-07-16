@@ -12,7 +12,7 @@ $hasVolume = false;
 
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected"><a href="#">Lieux de stockage</a></li>
-        <a href="" class="msg_aide" rel="help_popup_ds_lieux_stockage" title="Message aide"></a>
+        <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage" title="Message aide"></a>
 </ul>
     
 
@@ -24,7 +24,7 @@ $hasVolume = false;
 	<div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation())? "readonly='readonly'" : ''; ?> />
-                <a href="" class="msg_aide" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
+                <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
         </div>
 	
 	<div id="lieux_stockage">
