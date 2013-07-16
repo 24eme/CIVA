@@ -38,7 +38,7 @@ class ExportDSPdf extends ExportDocument {
         }
         return $this->document->generatePDF($this->no_cache);
     }
-    
+
     protected function init($filename = null) {
         if($this->ds_principale->isValideeTiers()) {
             $date_validee = new DateTime($this->ds_principale->validee);
@@ -58,12 +58,7 @@ class ExportDSPdf extends ExportDocument {
         $title = 'Déclaration de Stocks au 31 Juillet '.($this->ds_principale->getCampagne() + 1);
         $header = sprintf("%s\nCommune de déclaration : %s\n%s", $this->ds_principale->declarant->nom, $this->ds_principale->declarant->commune, $validee);
         if (!$filename) {
-            $rev = null;
-            foreach($this->dss as $ds) {
-                $rev .= $ds->_rev;
-            }
-            $rev = md5($rev);
-            $filename = $this->ds_principale->periode.'_DS_'.$this->ds_principale->declarant->cvi.'_'.$rev.'.pdf';
+            $filename = $this->getFileName(true, true);
         }
 
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
@@ -73,6 +68,32 @@ class ExportDSPdf extends ExportDocument {
         }else {
           $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }
+    }
+
+    public function getFileName($with_name = true, $with_rev = false) {
+
+      return self::buildFileName($this->ds_principale, $with_name, $with_rev);
+    }
+
+    public static function buildFileName($ds_principale, $with_name = true, $with_rev = false) {
+        $filename = sprintf("DS_%s_%s", $ds_principale->declarant->cvi, $ds_principale->periode);
+        
+        if($with_name) {
+            $declarant_nom = strtoupper(KeyInflector::slugify($ds_principale->declarant->nom));
+            $filename .= '_'.$declarant_nom;
+        }
+
+        if($with_rev) {
+            $dss = DSCivaClient::getInstance()->findDssByDS($ds_principale, acCouchdbClient::HYDRATE_JSON);
+            $rev = null;
+            foreach($dss as $ds) {
+                $rev .= $ds->_rev;
+            }
+            $rev = md5($rev);
+            $filename .= '_'.$rev;
+        }
+
+        return $filename.'.pdf';
     }
 
     protected function create() {

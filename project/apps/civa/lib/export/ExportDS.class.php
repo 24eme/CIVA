@@ -20,7 +20,12 @@ class ExportDS extends ExportMiseAdispo
 
     protected function getFileName($file_export) {
 
-        return 'DS-'.$file_export->getDocument()->identifiant.'-'.$file_export->getDocument()->periode.'.pdf';
+        return ExportDSPdf::buildFileName($file_export->getDocument(), true, false);
+    }
+
+    protected function getFileNameForMatch($file_export) {
+
+        return "^".str_replace(".pdf", "", ExportDSPdf::buildFileName($file_export->getDocument(), false, false));
     }
 
 }

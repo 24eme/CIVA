@@ -7,12 +7,15 @@ class ExportDRPdf extends ExportDocument {
     protected $partial_function;
     protected $file_dir;
     protected $no_cache;
+    protected $filename;
+    protected $dr;
 
     public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
+        $this->dr = $dr;
 
         $this->init($dr, $tiers, $filename);
         $this->create($dr, $tiers);
@@ -34,7 +37,7 @@ class ExportDRPdf extends ExportDocument {
         $title = 'Déclaration de récolte '.$dr->campagne;
         $header = $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
-            $filename = $dr->campagne.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf';
+            $filename = $this->getFileName(true, true);
         }
 
         if ($this->type == 'html') {
@@ -42,6 +45,26 @@ class ExportDRPdf extends ExportDocument {
         }else {
           $this->document = new PageablePDF($title, $header, $filename, $this->file_dir);
         }
+    }
+
+    public function getFileName($with_name = true, $with_rev = false) {
+
+      return self::buildFileName($this->dr, $with_name, $with_rev);
+    }
+
+    public static function buildFileName($dr, $with_name = true, $with_rev = false) {
+      $filename = sprintf("DR_%s_%s", $dr->cvi, $dr->campagne);
+        
+      if($with_name) {
+          $declarant_nom = strtoupper(KeyInflector::slugify($dr->declarant->nom));
+          $filename .= '_'.$declarant_nom;
+      }
+
+      if($with_rev) {
+            $filename .= '_'.$dr->_rev;
+      }
+
+      return $filename.'.pdf';
     }
 
     protected function create($dr, $tiers) {

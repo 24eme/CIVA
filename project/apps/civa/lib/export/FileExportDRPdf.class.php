@@ -33,12 +33,7 @@ class FileExportDRPdf extends FileExportMiseADispo
     protected function getFileName() {
         $doc = $this->getDocument();
 
-        return sprintf("%s_%s_DR_%s_%s.pdf", $doc->campagne, $doc->declaration_insee, $doc->cvi, $this->getMD5File());
-    }
-
-    protected function getMD5File() {
-       
-        return $this->getDocument()->_rev;
+        return sprintf("%s_%s_DR_%s_%s.pdf", $doc->campagne, $doc->declaration_insee, $doc->cvi, $doc->_rev);
     }
 
     protected function findDocument($id) {

@@ -6,6 +6,7 @@ abstract class FileExportMiseADispo
     protected $_filename = null;
     protected $_document = null;
     protected $_function_get_partial = null;
+    protected $_export = null;
 
     public function __construct($_id, $function_get_partial) {
         $this->_function_get_partial = $function_get_partial;
@@ -54,8 +55,6 @@ abstract class FileExportMiseADispo
     abstract protected function getFileDir();
 
     abstract protected function getFileName();
-
-    abstract protected function getMD5File();
 
     abstract protected function findDocument($id);
 

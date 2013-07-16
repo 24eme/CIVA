@@ -272,9 +272,7 @@ Le CIVA';
                 ->setBody($mess);
 
 
-        $file_name = $dr->_id . '.pdf';
-
-        $attachment = new Swift_Attachment($pdfContent, $file_name, 'application/pdf');
+        $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
         $message->attach($attachment);
         
         try {

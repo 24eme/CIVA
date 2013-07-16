@@ -18,7 +18,7 @@ function echoVolume($volume, $bold = false) {
     }
 }
 
-function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_lastspace = false)
+function truncate_text($text, $length = 30, $truncate_string = '<small>…</small>', $truncate_lastspace = false)
 {
   if ($text == '')
   {

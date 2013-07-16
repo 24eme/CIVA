@@ -19,20 +19,8 @@ class FileExportDSPdf extends FileExportMiseADispo
     }
 
     protected function getFileName() {
-        $doc = $this->getDocument();
 
-        return sprintf("%s_%s_DS_%s_%s.pdf", $doc->periode, $doc->declaration_insee, $doc->declarant->cvi, $this->getMD5File());
-    }
-
-    protected function getMD5File() {
-        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDocument(), acCouchdbClient::HYDRATE_JSON);
-
-        $rev = null;
-        foreach($dss as $ds) {
-            $rev .= $ds->_rev;
-        }
-
-        return md5($rev);
+        return ExportDSPdf::buildFileName($this->getDocument(), false, true);
     }
 
     protected function findDocument($id) {

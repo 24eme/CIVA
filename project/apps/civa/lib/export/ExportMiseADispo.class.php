@@ -78,7 +78,7 @@ abstract class ExportMiseADispo
 
     public function publicationById($id) {
         if (!array_key_exists($id, $this->_file_export_document_pdfs)) {
-            throw new sfException("This dr not existing in this export : ".$id);
+            throw new sfException("This document not existing in this export : ".$id);
         }
 
         $file_export_document = $this->_file_export_document_pdfs[$id];
@@ -87,17 +87,18 @@ abstract class ExportMiseADispo
         if ($this->getHashMd5($campagne) && $this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
             return;
         }
-
-        $path = $this->_file_dir.'/'.$file_export_document->getAnnee().'/'.$this->getFileName($file_export_document);
+        
+        $path_campagne = $this->_file_dir.'/'.$file_export_document->getAnnee();
+        $path = $path_campagne.'/'.$this->getFileName($file_export_document);
         $this->mkdirUnlessFolder($this->_file_dir.'/'.$file_export_document->getAnnee());
-
-        if (is_file($path)) {
-            echo sprintf("remove existing pdf %s\n", $path);
-            unlink($path);
+        $files = sfFinder::type("file")->name('/'.$this->getFileNameForMatch($file_export_document)."/")->in($path_campagne);
+        foreach($files as $file) {
+           echo sprintf("remove existing pdf %s\n", $file);
+           unlink($file); 
         }
 
-        if (!($file_export_document->getDocument()->validee && $file_export_document->getDocument()->modifiee)) {
-            throw new sfException("This ds in not valid or has been imported from db2 : ".$id);
+        if (!($file_export_document->getDocument()->validee && $file_export_document->getDocument()->modifiee) || ($file_export_document->getDocument()->exist('import_db2') && $file_export_document->getDocument()->import_db2)) {
+            throw new sfException("This document in not valid or has been imported from db2 : ".$id);
         }
 
         link($file_export_document->getPath(), $path);
