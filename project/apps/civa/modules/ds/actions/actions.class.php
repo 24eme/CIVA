@@ -185,6 +185,8 @@ class dsActions extends sfActions {
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
                 $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id));
+            } else {
+                $this->error = true;
             }
         }
     }
