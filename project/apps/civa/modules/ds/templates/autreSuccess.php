@@ -9,7 +9,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected"><a href="#exploitation_administratif">Autres Produits</a></li>
-        <a href="" class="msg_aide" rel="help_popup_ds_autres" title="Message aide"></a>
+        <a href="" class="msg_aide_ds" rel="help_popup_ds_autres" title="Message aide"></a>
 </ul>
 
 <!-- #application_ds --></h2>

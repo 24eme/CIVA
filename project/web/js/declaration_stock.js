@@ -17,6 +17,7 @@ var ajax_post_url = null;
 $(document).ready(function()
 {	
     //navOngletsStock();
+    initMsgAideDS();
     choixPrecDS();
     initDSSommesCol();
     initLieuxStockage();
@@ -353,3 +354,57 @@ var initLieuxStockageNeant = function()
         } 
     });
 }
+
+/**
+ * Messages d'aide
+ ******************************************/
+var initMsgAideDS = function()
+{
+    var liens = $('a.msg_aide_ds');
+    var popup = $('#popup_msg_aide_ds');
+
+    liens.live('click', function()
+    {
+        var id_msg_aide = $(this).attr('rel');
+        var title_msg_aide = $(this).attr('title');
+	var url_doc = $(this).attr('doc');
+        $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
+
+        
+                       
+        $.getJSON(
+            url_ajax_msg_aide_ds,
+            {
+                id: id_msg_aide,
+                url_doc: url_doc,
+                title: title_msg_aide
+            },
+            function(json)
+            {
+                var titre = json.titre;
+                var message = json.message;
+                var url = json.url_doc;
+                popup.html('<p></p>');
+                popup.find('p').html(message);
+                popup.dialog("option" , "title" , titre);
+                popup.dialog("option" , "buttons" , {
+                    telecharger: function() {
+                        document.location.href = url
+                        },
+                    fermer: function() {
+                        $(this).dialog( "close" );
+                    }
+                });
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').focus();
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').focus();
+            }
+            );
+
+        openPopup(popup);
+
+        return false;
+    });
+};
+

@@ -201,7 +201,7 @@ ul#etape_declaration li.actif a em span.lieu
 
 #onglets_majeurs.onglets_stock li .sous_onglets { top: 33px; }
 
-#onglets_majeurs .msg_aide { margin-top: 2px; }
+#onglets_majeurs .msg_aide_ds { margin-top: 2px; }
 
 /* =================================================== */
 /* GESTION DES STOCK */

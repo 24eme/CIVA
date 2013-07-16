@@ -201,6 +201,33 @@ a.msg_aide:hover {
 	text-align: justify;
 }
 
+a.msg_aide_ds {
+	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 17px;
+	outline: 0;
+	vertical-align: middle;
+	width: 17px;
+	opacity: 0.5;
+}
+
+
+a.msg_aide_ds:hover {
+	opacity: 1;
+}
+
+#popup_msg_aide_ds {
+	display: none;
+}
+
+#popup_msg_aide_ds p {
+	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+		transparent;
+	color: #656565;
+	font-size: 15px;
+	padding: 0 10px 10px 25px;
+	text-align: justify;
+}
 
 /**
  * Structure générique

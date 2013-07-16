@@ -593,4 +593,27 @@ Le CIVA';
         throw new sfStopException();
     } 
     
+    public function executeMessageAjax(sfWebRequest $request) {
+        $this->forward404Unless($request->isXmlHttpRequest());
+        return $this->renderText(json_encode(array('titre' => $request->getParameter('title', null),
+						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('telecharger_la_notice_ds')),
+                'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
+
+    }
+    
+    public function executeDownloadNotice() {
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock.pdf", "aide stock.pdf");
+    }
+    
+    protected function renderPdf($path, $filename) {
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path));
+    }
+    
 }
