@@ -203,6 +203,19 @@ ul#etape_declaration li.actif a em span.lieu
 
 #onglets_majeurs .msg_aide_ds { margin-top: 2px; }
 
+ul.btn_prev_suiv li.previsualiser a.msg_aide_ds {
+	margin: -27px 0 0 5px;
+}
+
+.titre_tab a.msg_aide_ds {
+	float: right;
+	margin: 5px 5px 0 0;
+}
+
+a.msg_aide_ds {
+	margin: -2px 0 0 5px;
+}
+
 /* =================================================== */
 /* GESTION DES STOCK */
 /* =================================================== */
