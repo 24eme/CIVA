@@ -10,10 +10,6 @@ prod:
   mailer:
     param:
       delivery_strategy: realtime
-      transport:
-        class: Swift_SmtpTransport
-        param:
-          host: localhost
 
 test:
   storage:
@@ -29,14 +25,11 @@ test:
   mailer:
     param:
       delivery_strategy: none
-      transport:
-        class:  Swift_MailTransport
+
 dev:
   mailer:
     param:
-      delivery_strategy: realtime
-      transport:
-        class:  Swift_MailTransport
+      delivery_strategy: none
 
 all:
   mailer:
