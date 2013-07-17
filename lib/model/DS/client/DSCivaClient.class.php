@@ -385,7 +385,7 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
     
-    public function validate($ds){
+    public function validate($ds,$compteValidateurId){
         if(!$ds->isDsPrincipale()){
             throw new sfException("Aucun clean n'est possible à partir d'une DS qui n'est pas la Ds Principale (ici : $ds->_id)");
         }
@@ -404,7 +404,7 @@ class DSCivaClient extends DSClient {
                 $deleted = true;
             }
             if(!$deleted){
-                $current_ds->validate();
+                $current_ds->validate(date("Y-m-d"),$compteValidateurId);
                 $current_ds->update();
                 $current_ds->save();
             }

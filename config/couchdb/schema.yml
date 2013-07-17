@@ -62,6 +62,20 @@ DS:
             adresse: {  }
             commune: {  }
             code_postal: {  }
+      utilisateurs:
+        type: collection
+        definition:
+          fields:
+            edition:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }
+            validation:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }     
 #      produits:
 #        type: collection
 #        definition:

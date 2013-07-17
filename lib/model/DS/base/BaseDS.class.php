@@ -26,8 +26,11 @@
  * @property string $validee
  * @property string $modifiee
  * @property string $courant_stock
+ * @property string $declaration_commune
+ * @property string $declaration_insee
  * @property acCouchdbJson $declarant
  * @property acCouchdbJson $stockage
+ * @property acCouchdbJson $utilisateurs
  * @property DSDeclaration $declaration
 
  * @method string get_id()
@@ -74,10 +77,16 @@
  * @method string setModifiee()
  * @method string getCourantStock()
  * @method string setCourantStock()
+ * @method string getDeclarationCommune()
+ * @method string setDeclarationCommune()
+ * @method string getDeclarationInsee()
+ * @method string setDeclarationInsee()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
  * @method acCouchdbJson getStockage()
  * @method acCouchdbJson setStockage()
+ * @method acCouchdbJson getUtilisateurs()
+ * @method acCouchdbJson setUtilisateurs()
  * @method DSDeclaration getDeclaration()
  * @method DSDeclaration setDeclaration()
  

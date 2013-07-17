@@ -9,11 +9,14 @@
  * Description of class DSCiva
  * @author mathurin
  */
-class DSCiva extends DS {
+class DSCiva extends DS implements IUtilisateursDocument {
+    
+    protected $utilisateurs_document = null; 
     
     public function  __construct() {
         parent::__construct();         
         $this->archivage_document = new ArchivageDocument($this);
+        $this->utilisateurs_document = new UtilisateursDocument($this);
     }
     
     public function constructId() {
@@ -140,6 +143,15 @@ class DSCiva extends DS {
         $this->archivage_document->preSave();
     }
     
+    public function save($compteEditeurId = null) {
+        
+        if($compteEditeurId){
+            $this->addEdition($compteEditeurId, date('Y-m-d'));
+        }
+        parent::save();
+    }
+
+
     public function addProduit($hash) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash_config = preg_replace('/^declaration/','recolte', $hash);
@@ -455,7 +467,7 @@ public function getConfigurationCampagne() {
         return $this;
     }
     
-    public function validate($date = null) {
+    public function validate($date = null, $compteValidateurId = null) {
         if($this->isDsPrincipale()){
             $this->updateEtape(6);
         }
@@ -465,7 +477,9 @@ public function getConfigurationCampagne() {
         $date = (!$date)? date("Y-m-d") : $date;
         $this->add('validee', $date);
         $this->add('modifiee', $date);
-
+        if ($compteValidateurId) {
+            $this->addValidation($compteValidateurId, date('Y-m-d'));
+        }
         return $this;
     }
     
@@ -520,6 +534,22 @@ public function getConfigurationCampagne() {
             }
         }
         return $hash_array;
+    }
+
+    public function addEdition($id_user, $date) {
+        return $this->utilisateurs_document->addEdition($id_user, $date);
+    }
+
+    public function addValidation($id_user, $date) {
+        return $this->utilisateurs_document->addValidation($id_user, $date);
+    }
+
+    public function getLastEdition() {
+        return $this->utilisateurs_document->getLastEdition();
+    }
+
+    public function getLastValidation() {
+        return $this->utilisateurs_document->getLastValidation();        
     }
 
 }
