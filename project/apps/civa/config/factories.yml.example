@@ -10,6 +10,14 @@ prod:
   mailer:
     param:
       delivery_strategy: realtime
+      #Config pour envoyer les mails à une unique adresse
+      #delivery_strategy: single_address
+      #delivery_address: [email1@email.com,email2@email.com] 
+
+dev:
+  mailer:
+    param:
+      delivery_strategy: none
 
 test:
   storage:
@@ -26,16 +34,12 @@ test:
     param:
       delivery_strategy: none
 
-dev:
-  mailer:
-    param:
-      delivery_strategy: none
-
 all:
   mailer:
     param:
       transport:
         class:  Swift_MailTransport
+
   routing:
     class: sfPatternRouting
     param:
