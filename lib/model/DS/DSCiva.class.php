@@ -464,6 +464,7 @@ public function getConfigurationCampagne() {
         }
         $this->modifiee = null;
         $this->restoreNodes();
+        $this->restoreNodes();
         return $this;
     }
     
@@ -542,6 +543,10 @@ public function getConfigurationCampagne() {
 
     public function addValidation($id_user, $date) {
         return $this->utilisateurs_document->addValidation($id_user, $date);
+    }
+    
+    public function removeValidation() {
+        return $this->utilisateurs_document->removeValidation();
     }
 
     public function getLastEdition() {
