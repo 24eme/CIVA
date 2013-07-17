@@ -169,11 +169,12 @@ class dsActions extends sfActions {
                     $ds_principale = null;
                     foreach ($this->dss_to_save as $ds_to_save) {
                         if($ds_to_save->isDsPrincipale()){
-                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
-                            $ds_principale = $ds_to_save;
                             if($ds_neant){
                                 $ds_to_save->updateEtape(4);
+                            }else{
+                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
                             }
+                            $ds_principale = $ds_to_save;
                         }
                         $ds_to_save->save();
                     }
