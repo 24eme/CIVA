@@ -29,7 +29,7 @@ class dsActions extends sfActions {
         $date = date('Y-m-d');
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
-            $ds->save();
+            $ds->save($this->getUserId());
         }
         $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);        
         $this->redirect('ds_etape_redirect', $this->ds);
@@ -91,7 +91,7 @@ class dsActions extends sfActions {
             if($request->isXmlHttpRequest())
             {  
                 $this->ds->updateEtape(2);
-                $this->ds->save();
+                $this->ds->save($this->getUserId());
                 return $this->renderText(json_encode(array("success" => true)));                  
             }
             if ($request->getParameter('gestionnaire')) {
@@ -129,7 +129,7 @@ class dsActions extends sfActions {
         $suivant = isset($request['suivant']) && $request['suivant'];
         if($suivant){
             $this->ds->updateEtape(2);
-            $this->ds->save();
+            $this->ds->save($this->getUserId());
             $this->redirect("ds_lieux_stockage", $this->ds);
         }
     }
@@ -169,13 +169,14 @@ class dsActions extends sfActions {
                     $ds_principale = null;
                     foreach ($this->dss_to_save as $ds_to_save) {
                         if($ds_to_save->isDsPrincipale()){
-                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
-                            $ds_principale = $ds_to_save;
                             if($ds_neant){
                                 $ds_to_save->updateEtape(4);
+                            }else{
+                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
                             }
+                            $ds_principale = $ds_to_save;
                         }
-                        $ds_to_save->save();
+                        $ds_to_save->save($this->getUserId());
                     }
                 if($ds_neant){
                     $this->redirect('ds_autre', $ds_principale); 
@@ -204,7 +205,7 @@ class dsActions extends sfActions {
                 $date = $values["date_declaration"];
                 try {
                     $ds = DSClient::getInstance()->findOrCreateDsByEtbId($this->etablissement->identifiant, $date);     
-                    $ds->save();
+                    $ds->save($this->getUserId());
                 }catch(sfException $e) {
                     $this->getUser()->setFlash('global_error', $e->getMessage());
                     $this->redirect('ds');
@@ -259,7 +260,7 @@ class dsActions extends sfActions {
             if ($this->form->isValid()) {
                 $this->form->doUpdateObject();
                 $this->ds->updateEtape(3);
-                $this->ds->save();
+                $this->ds->save($this->getUserId());
                 if($request->isXmlHttpRequest())
                 {            
                     return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
@@ -268,7 +269,7 @@ class dsActions extends sfActions {
                 $next = $this->ds->getNextLieu($this->lieu);
                 $next_hash = (!$next)? $this->lieu->getHash() : $next->getHash();//$this->convertNodeForUrl($this->lieu) : $this->convertNodeForUrl($next);
                 $this->ds->updateEtape(3,$this->ds, $next_hash);
-                $this->ds->save();
+                $this->ds->save($this->getUserId());
                 if($next){
                     $this->redirect('ds_edition_operateur', $next);
                 }
@@ -301,7 +302,7 @@ class dsActions extends sfActions {
         }
 
         $lieu = $this->ds->addAppellation($this->form->getValue('hashref'));
-        $this->ds->save();
+        $this->ds->save($this->getUserId());
 
         return $this->redirect('ds_edition_operateur', $lieu);
     }
@@ -330,7 +331,7 @@ class dsActions extends sfActions {
         }
 
         $lieu = $this->ds->addLieu($this->form->getValue('hashref'));
-        $this->ds->save();
+        $this->ds->save($this->getUserId());
 
         return $this->redirect('ds_edition_operateur', $lieu);
     }
@@ -359,7 +360,7 @@ class dsActions extends sfActions {
         }
 
         $detail = $this->ds->addDetail($this->form->getValue('hashref'), $this->form->getValue('lieudit'));
-        $this->ds->save();
+        $this->ds->save($this->getUserId());
 
         return $this->redirect('ds_edition_operateur', array('sf_subject' => $this->lieu, 'produit' => $detail->getHashForKey()));
     }
@@ -376,12 +377,12 @@ class dsActions extends sfActions {
             $nextDs = DSCivaClient::getInstance()->getNextDS($this->ds);
             if($nextDs){
                 $this->ds_principale->updateEtape(3, $nextDs); 
-                $this->ds_principale->save();
+                $this->ds_principale->save($this->getUserId());
                 $this->redirect('ds_edition_operateur', array('id' => $nextDs->_id,'appellation_lieu' => $nextDs->getFirstAppellation()));
             }
             else{
                 $this->ds_principale->updateEtape(4);
-                $this->ds_principale->save();
+                $this->ds_principale->save($this->getUserId());
                 $this->redirect('ds_autre', $this->ds_principale); 
             }
         }
@@ -399,7 +400,7 @@ class dsActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->ds->updateEtape(5);
-                $this->form->save();
+                $this->form->save($this->getUserId());
                 if($request->isXmlHttpRequest())
                 {            
                     return $this->renderText(json_encode(array("success" => true, "document" => array("id" => $this->ds->get('_id'),"revision" => $this->ds->get('_rev')))));                  
@@ -427,7 +428,7 @@ class dsActions extends sfActions {
                 if(!$this->validation_dss[$id_ds]->isValide())
                     throw new sfException("Il existe un point bloquant non résolue, il n'est pas possible de valider la DS $id_ds");
             }
-            DSCivaClient::getInstance()->validate($this->ds_principale);
+            DSCivaClient::getInstance()->validate($this->ds_principale,$this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
             $this->redirect('ds_confirmation', $this->ds_principale);
         }
     }
@@ -616,6 +617,10 @@ Le CIVA';
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
         return $this->renderText(file_get_contents($path));
+    }
+    
+    private function getUserId() {
+        return $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
     }
     
 }

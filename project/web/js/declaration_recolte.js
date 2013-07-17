@@ -317,6 +317,9 @@ var formExploitationAdministratif = function()
             btns_modifier.hide();
             $('#btn_etape input[name=boutons[next]]').addClass('btn_inactif');
             $('#btn_etape input[name=boutons[previous]]').addClass('btn_inactif');
+            $('#btn_suivant').addClass('btn_inactif');
+            $('#btn_precedent').addClass('btn_inactif');            
+            
             bloc.addClass('edition');
             bloc.find('form input[type!="hidden"], form select').first().focus();
             return false;
