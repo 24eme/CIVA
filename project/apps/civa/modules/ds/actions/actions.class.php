@@ -432,7 +432,7 @@ class dsActions extends sfActions {
                 
                 $mess = 'Bonjour ' . $tiers->nom . ',
 
-Vous venez de valider votre déclaration de stock pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+Vous venez de valider votre déclaration de Stocks pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
 Cordialement,
 
@@ -442,7 +442,7 @@ Le CIVA';
 
                 $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
                                                        $this->getUser()->getCompte()->email,
-                                                       'CIVA - Validation de votre déclaration de stock', $mess);
+                                                       'CIVA - Validation de votre déclaration de Stocks', $mess);
                 
                 if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
                     try {
