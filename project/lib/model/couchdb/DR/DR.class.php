@@ -1,5 +1,5 @@
 <?php
-class DR extends BaseDR implements InterfaceProduitsDocument {
+class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
     
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_RECOLTE = 'recolte';
@@ -8,6 +8,15 @@ class DR extends BaseDR implements InterfaceProduitsDocument {
     public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
     public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION), self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE));
 
+    
+    protected $utilisateurs_document = null; 
+    protected $declarant_document = null;
+    
+    public function  __construct() {
+        parent::__construct();         
+        $this->utilisateurs_document = new UtilisateursDocument($this);
+        $this->declarant_document = new DeclarantDocument($this);
+    }
     /**
      *
      * @param string $etape
@@ -204,12 +213,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument {
         }
         $this->declarant->telephone =  $tiers->get('telephone');
         if ($compteValidateurId) {
-            $this->utilisateurs->validation->add($compteValidateurId, date('d/m/Y'));
+            $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));
         }
     }
 
     public function isHumanlyModifiee() {
-        return ($this->exist('modifiee') && $this->get('modifiee') && count($this->utilisateurs->validation) && $this->get('modifiee') != $this->get('validee'));
+        return ($this->exist('modifiee') && $this->get('modifiee') && count($this->utilisateurs_document->getLastEdition()) && $this->get('modifiee') != $this->get('validee'));
     }
 
     /**
@@ -443,17 +452,56 @@ class DR extends BaseDR implements InterfaceProduitsDocument {
 
     public function getPremiereModificationDr() {
 
-        $arr_date = array();
-        if ($this->exist('utilisateurs') && $this->utilisateurs->exist('edition')) {
-            foreach($this->utilisateurs->edition as $date) {
-                $arr_date[]= $date;
-            }
+        return $this->utilisateurs_document->getPremiereModification();
+    }
+
+    public function addEdition($id_user, $date) {
+        return $this->utilisateurs_document->addEdition($id_user, $date);
+    }
+
+    public function addValidation($id_user, $date) {
+        return $this->utilisateurs_document->addValidation($id_user, $date);
+    }
+
+    public function getLastEdition() {
+        return $this->utilisateurs_document->getLastEdition();
+    }
+
+    public function getLastValidation() {
+        return $this->utilisateurs_document->getLastValidation();
+    }
+
+    public function removeValidation() {
+       return $this->utilisateurs_document->removeValidation();
+    }
+
+    public function getEtablissementObject() {
+        return $this->getRecoltantObject();
+    }
+
+    public function getEtablissement() {
+        return acCouchdbManager::getClient('_Tiers')->retrieveByCvi($this->cvi);
+    }
+    
+    public function storeDeclarant() {
+
+        $tiers = $this->getEtablissement();
+        $this->declaration_commune = $tiers->declaration_commune;
+        $this->declaration_insee = $tiers->declaration_insee;
+        $this->declarant->cvi = $tiers->cvi;
+        $this->declarant->intitule = $tiers->intitule;
+        
+        if(!$this->declarant->email) {
+            $this->declarant->email = $tiers->getCompteEmail();
         }
-        if(count($arr_date) > 0)
-        {
-            return min($arr_date);
-        }else
-            return null;
+
+        $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
+        $this->declarant->exploitant->nom = $tiers->exploitant->nom;
+        $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
+        $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
+        $this->declarant->exploitant->commune = $tiers->exploitant->commune;
+        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
+        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone; 
     }
     
 

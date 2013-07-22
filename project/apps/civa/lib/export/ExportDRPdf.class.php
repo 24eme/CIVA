@@ -35,7 +35,7 @@ class ExportDRPdf extends ExportDocument {
         }
         
         $title = 'Déclaration de récolte '.$dr->campagne;
-        $header = $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
+        $header = $dr->declarant->intitule.' '.$dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
