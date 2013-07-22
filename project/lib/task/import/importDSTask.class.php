@@ -327,7 +327,12 @@ EOF;
     }
 
     protected function checkVolumesDS($ds, $productRow) {
-        if (round($ds->declaration->certification->total_normal,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_STOCK])){
+        $vinTable = 0;
+        if($ds->declaration->hasVinTable()){
+            $vinTable = $ds->declaration->getVinTable()->total_stock;
+        }
+        $vol_normal = $ds->declaration->certification->total_normal - $vinTable;
+        if (round($vol_normal,2) == $this->convertToFloat($productRow[self::CSV_DS_VOLUME_TOTAL_STOCK])){
            // echo " #" . $this->green(" vol_normal: " . $productRow[self::CSV_DS_VOLUME_TOTAL_STOCK]) . " ";
         }
         else
@@ -344,6 +349,10 @@ EOF;
         }
         else
             echo " #" . $this->yellow(" " . $ds->declaration->certification->total_vt . "!=" . $productRow[self::CSV_DS_VOLUME_TOTAL_VT])."\n";
+        
+        if($vinTable){
+            echo " # DS possèdant du " . $this->green(" Vin De Table vol: " . $vinTable ). " \n";
+        }
     }
     
     
