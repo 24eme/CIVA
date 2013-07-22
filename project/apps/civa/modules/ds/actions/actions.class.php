@@ -427,9 +427,32 @@ class dsActions extends sfActions {
             foreach ($this->dss as $id_ds => $ds) {
                 if(!$this->validation_dss[$id_ds]->isValide())
                     throw new sfException("Il existe un point bloquant non résolue, il n'est pas possible de valider la DS $id_ds");
-            }
-            DSCivaClient::getInstance()->validate($this->ds_principale,$this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
-            $this->redirect('ds_confirmation', $this->ds_principale);
+                }   
+                DSCivaClient::getInstance()->validate($this->ds_principale,$this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+                
+                $mess = 'Bonjour ' . $tiers->nom . ',
+
+Vous venez de valider votre déclaration de stock pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+
+Cordialement,
+
+Le CIVA';
+
+                //send email
+
+                $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
+                                                       $this->getUser()->getCompte()->email,
+                                                       'CIVA - Validation de votre déclaration de stock', $mess);
+                
+                if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
+                    try {
+                        $this->getMailer()->send($message);
+                    } catch (Exception $e) {
+                        $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé, veuillez contacter CIVA');
+                    }
+                }
+
+                $this->redirect('ds_confirmation', $this->ds_principale);
         }
     }
 
