@@ -28,7 +28,26 @@ class ExportDSCiva {
         }
     }
     
-     public function exportXml() {
+    public function getDSListe(){
+        return $this->ds_liste;
+    }
+    
+    public function getDSIdListe(){
+        return $this->ds_ids;
+    }
+    
+    public function getDSNonValideesListe(){
+        $result = array();
+        foreach ($this->ds_ids as $ds_id) {
+            $ds = $this->client_ds->find($ds_id);
+            if(preg_match('/^(67|68)/', $ds->identifiant) && $ds->isDsPrincipale() && !$ds->isValidee()){
+                $result[] = $this->client_ds->find($ds_id);
+            }
+        }
+        return $result;
+    }
+
+    public function exportXml() {
         $export_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n"; 
         $export_xml.="<listeDecStock>\n";
         $tab_cvi = array();
