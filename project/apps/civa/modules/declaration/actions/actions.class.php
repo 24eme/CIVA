@@ -31,6 +31,8 @@ class declarationActions extends EtapesActions {
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
+                $doc->identifiant = $tiers->cvi;
+                $doc->storeDeclarant();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
@@ -59,6 +61,7 @@ class declarationActions extends EtapesActions {
                 $doc->remove('etape');
                 $doc->remove('utilisateurs');
                 $doc->remove('import_db2');
+                $doc->storeDeclarant();
                 $doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));

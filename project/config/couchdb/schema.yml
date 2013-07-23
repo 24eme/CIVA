@@ -5,6 +5,7 @@ DR:
       _rev: {}
       type: {}
       campagne: {  }
+      identifiant: {  }
       updated: { required: false }
       validee: { required: false }
       modifiee: { required: false }
@@ -28,9 +29,30 @@ DR:
         class: DRDeclarant
         definition:
           fields:
-            nom: {}
-            email: {}
-            telephone: {}
+            nom: {  }
+            intitule: {  }
+            raison_sociale: {  }
+            cvi: {  }
+            no_accises: {   }
+            adresse: {  }
+            commune: {  }
+            code_postal: {   }
+            region: {  }
+            telephone: {  }
+            fax: {  }
+            email: {  }
+            siret: {  }
+            exploitant:
+              type: collection
+              definition:
+                fields:
+                  sexe: {  }
+                  nom: {  }
+                  adresse: {  }
+                  code_postal: {  }
+                  commune: {  }
+                  date_naissance: {  }
+                  telephone: {  }
       acheteurs:
         type: collection
         class: DRAcheteurs
