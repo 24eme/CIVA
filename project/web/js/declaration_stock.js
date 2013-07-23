@@ -44,7 +44,11 @@ $(document).ready(function()
         });
     }
 
+    initExploitation();
+
 	initStocks();
+
+    initRecapStocks();
 	
 	scrollLieuxStockage();
 });
@@ -76,6 +80,17 @@ var initLieuxStockage = function()
     });
 };
 
+var initExploitation = function()
+{
+    if($('#exploitation_administratif').length > 0)
+    {
+        
+        return;
+    }
+
+    $('#btn_etape li.suiv a').focus();
+};
+
 // Donne le focus sur le premier select
 var initStocks = function()
 {
@@ -83,6 +98,17 @@ var initStocks = function()
 	{
 		appDS.find('#ds_add_produit_hashref').focus();
 	}
+};
+
+var initRecapStocks = function()
+{
+    if($('#recap_lieu_stockage').length > 0)
+    {
+        
+        return;
+    }
+
+    $('#btn_etape li.suiv a').focus();
 };
 
 var majCheckboxesAppellation = function(){    

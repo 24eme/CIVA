@@ -89,7 +89,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 		</a>
 	</li>
 	<li class="suiv">
-		<a tabindex="1" href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
+		<a autofocus="autofocus" tabindex="1" href="<?php echo url_for("ds_recapitulatif_lieu_stockage", array('id' => $ds->_id, 'suivant' => true)); ?>">
 			<img src="/images/boutons/btn_passer_etape_suiv.png" alt="Continuer à l'étape suivante" />
 		</a>
 	</li>
