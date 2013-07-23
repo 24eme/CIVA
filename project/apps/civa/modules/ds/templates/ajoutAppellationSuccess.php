@@ -16,7 +16,7 @@
             <p>Ajouter une appellation</p>
             <div class="form_ligne">
                                 <?php echo $form['hashref']->renderLabel(); ?>
-                                <?php echo $form['hashref']->render(); ?>
+                                <?php echo $form['hashref']->render(array('autofocus' => "autofocus")); ?>
                                 <?php echo $form['hashref']->renderError(); ?>
             </div>
             <div class="form_btn">
