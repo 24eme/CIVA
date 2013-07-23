@@ -121,7 +121,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
             return $this->_get($key);
         }
 
-        return $this->getParentNode()->getRendementAppellation();
+        return $this->getParentNode()->getRendement();
     }
 
     public function getRendementAppellation() {
@@ -147,7 +147,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
             return $this->_get($key);
         }
 
-        return $this->getParentNode()->getRendementAppellation();
+        return $this->getParentNode()->getRendementCouleur();
     }
     
     public function hasRendementCouleur() {

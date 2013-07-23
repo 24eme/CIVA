@@ -135,7 +135,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
   public function hasTotalCepage() {
     if (!$this->getRendement()) {
-	return false;
+	    return false;
     }
 
     return parent::hasTotalCepage();
