@@ -57,10 +57,9 @@ class RecapitulatifForm extends acCouchdbObjectForm {
     public function doUpdateObject($values) {
         parent::doUpdateObject($values);
         $lieu = $this->getObject();
-        $usages_indus = $values['usages_industriels_saisi'];
 
         if( isset($values['usages_industriels_saisi']))
-            $lieu ->set("usages_industriels_saisi", (float)$usages_indus);
+            $lieu ->set("usages_industriels_saisi", (float) $values['usages_industriels_saisi']);
 
         $this->getObject()->getCouchdbDocument()->update();
     }
