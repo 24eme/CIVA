@@ -23,4 +23,4 @@ bash bin/import_lieux_stockage
 
 echo "Import de la DS"
 
-bash bin/import_ds
+bash bin/import_ds 1
