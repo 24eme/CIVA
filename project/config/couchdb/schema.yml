@@ -359,7 +359,6 @@ _Tiers:
       web: {  }
       lieux_stockage:
         type: collection
-        required: false
         definition:
           fields:
             '*':
