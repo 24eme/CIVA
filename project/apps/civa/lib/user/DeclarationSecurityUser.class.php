@@ -201,7 +201,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function hasLieuxStockage() {
         $this->requireTiers();
-        if(!$this->getDeclarant()->exist('lieux_stockage')) return false;
+        if(!$this->getDeclarant()->exist('lieux_stockage') || count($this->getDeclarant()->lieux_stockage) == 0) return false;
         return (int) count($this->getDeclarant()->lieux_stockage);
     }
 
