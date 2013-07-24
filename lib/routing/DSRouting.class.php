@@ -119,7 +119,11 @@ class DSRouting {
                     'type' => 'object') )); 
         
         $r->prependRoute('telecharger_la_notice_ds', new sfRoute('/ds/telecharger-la-notice-ds', array('module' => 'ds',
-                'action' => 'downloadNotice')));      
+                'action' => 'downloadNotice'))); 
+        
+        $r->prependRoute('telecharger_la_dai', new sfRoute('/ds/telecharger-la-dai', array('module' => 'ds',
+                'action' => 'downloadDai'))); 
+        
         
     }
 }  
