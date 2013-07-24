@@ -102,6 +102,9 @@ class ExportDSPdf extends ExportDocument {
                 $ds->storeInfos();
                 $ds->update();
                 $ds->declaration->cleanAllNodes();
+                if($ds->isSupprimable()) {
+                    continue;
+                }
             }
             $this->createMainByDS($ds);
             $this->createAnnexeByDS($ds);
