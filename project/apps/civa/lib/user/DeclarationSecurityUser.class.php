@@ -185,6 +185,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
+        if (!$this->hasLieuxStockage()) {                                                                                                                                                
+            return null;
+        }
+
         $this->requireTiers();
         if (is_null($this->_ds)) {
             $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
