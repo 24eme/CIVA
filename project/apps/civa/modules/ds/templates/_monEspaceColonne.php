@@ -25,5 +25,8 @@
 	        <li><a href="<?php echo url_for('telecharger_la_notice_ds') ?>" class="pdf"> Télécharger la notice</a></li>
 	    </ul>
 	    <p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
+            <ul>
+	        <li><a href="<?php echo url_for('telecharger_la_dai') ?>" class="pdf"> Télécharger la DAI</a></li>
+	    </ul>
 	</div>
 </div>

@@ -631,6 +631,10 @@ Le CIVA';
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock.pdf", "aide stock.pdf");
     }
     
+    public function executeDownloadDai() {
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/dai.pdf", "declaration annuelle inventaire.pdf");
+    }
+    
     protected function renderPdf($path, $filename) {
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
