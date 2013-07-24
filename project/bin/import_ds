@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if test "$2"; then
+bash bin/download_data
+
+if test "$1"; then
 	bash bin/delete_from_view.sh "http://localhost:5984/civa/_all_docs?startkey_docid=DS-0000000000-000000-000&endkey_docid=DS-9999999999-999999-999"
 fi
 
