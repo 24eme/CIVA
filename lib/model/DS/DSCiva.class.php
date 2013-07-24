@@ -343,6 +343,10 @@ public function getConfigurationCampagne() {
         return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
     }
 
+    public function isSupprimable() {
+
+        return !$this->isDsPrincipale() && $this->hasNoAppellation();
+    }
 
     public function updateAutre($rebeches = 0,$dplc = 0,$lies = 0,$mouts = 0){
         if($this->isDsPrincipale()){
