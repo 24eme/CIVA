@@ -560,6 +560,11 @@ public function getConfigurationCampagne() {
     public function getLastValidation() {
         return $this->utilisateurs_document->getLastValidation();        
     }
+    
+    public function isArchivageCanBeSet() {
+
+        return $this->isValidee();
+    }
 
 }
 
