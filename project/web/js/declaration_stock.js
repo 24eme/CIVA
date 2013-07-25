@@ -82,7 +82,7 @@ var initLieuxStockage = function()
 
 var initExploitation = function()
 {
-    if($('#exploitation_administratif').length > 0)
+    if($('#exploitation_administratif').length == 0)
     {
         
         return;
@@ -102,7 +102,7 @@ var initStocks = function()
 
 var initRecapStocks = function()
 {
-    if($('#recap_lieu_stockage').length > 0)
+    if($('#recap_lieu_stockage').length == 0)
     {
         
         return;
