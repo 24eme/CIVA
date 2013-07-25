@@ -430,7 +430,7 @@ class dsActions extends sfActions {
                 }   
                 DSCivaClient::getInstance()->validate($this->ds_principale,$this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
                 
-                $mess = 'Bonjour ' . $tiers->nom . ',
+                $mess = 'Bonjour ' . $this->tiers->nom . ',
 
 Vous venez de valider votre déclaration de Stocks pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
@@ -451,7 +451,6 @@ Le CIVA';
                         $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé, veuillez contacter CIVA');
                     }
                 }
-
                 $this->redirect('ds_confirmation', $this->ds_principale);
         }
     }
