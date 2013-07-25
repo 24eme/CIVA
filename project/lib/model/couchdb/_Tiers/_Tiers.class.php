@@ -108,6 +108,11 @@ abstract class _Tiers extends Base_Tiers {
     }
 
     public function getNoAccises() {
+        if($this->exist('no_accises')) {
+
+            return $this->_get('no_accises');
+        }
+        
         return null;
     }
 
