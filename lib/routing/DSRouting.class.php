@@ -124,6 +124,12 @@ class DSRouting {
         $r->prependRoute('telecharger_la_dai', new sfRoute('/ds/telecharger-la-dai', array('module' => 'ds',
                 'action' => 'downloadDai'))); 
         
-        
+        $r->prependRoute('ds_feed_back', new sfRoute('/ds/retour-experience', array('module' => 'ds',
+                'action' => 'feedBack'),
+                array('sf_method' => array('get'))));
+
+        $r->prependRoute('ds_feed_back_confirmation', new sfRoute('/ds/retour-experience-confirmation', array('module' => 'ds',
+                'action' => 'feedBackConfirmation'),
+                array('sf_method' => array('get'))));
     }
 }  
