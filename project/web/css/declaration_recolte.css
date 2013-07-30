@@ -1915,6 +1915,7 @@ div#migration_compte .contenu_section#infos_traitement {
  ******************************************/
 #confirmation_fin_stock {
 	width: 536px;
+	float: left;
 }
 
 #confirmation_fin_stock p.important {
@@ -1945,13 +1946,14 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #feed_back {
 	width: 536px;
+	float: left;
 }
 
 #feed_back .bloc_form { 
 	margin-top: 10px;
 }
 
-#feed_back p.important {
+#feed_back p.important, #confirmation_feed_back p.important{
 	color: #acb701;
 	font-size: 16px;
 	margin: 0 0 5px;
@@ -1969,6 +1971,16 @@ div#migration_compte .contenu_section#infos_traitement {
 	text-align: right;
 }
 
+#confirmation_feed_back {
+	width: 402px;
+	float: left;
+	margin-left: 20px;
+}
+
+#confirmation_feed_back .ligne_btn {
+	margin-top: 14px;
+	text-align: right;
+}
 
 /**
  * Popup de confirmation d'envoi de mail
