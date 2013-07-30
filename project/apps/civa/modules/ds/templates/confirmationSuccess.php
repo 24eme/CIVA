@@ -17,6 +17,20 @@
                 <div id="div-btn-email"><a href="" id="btn-email"></a></div>
             </div>
         </div>
+        <div id="confirmation_feed_back">
+            <h2 class="titre_section">Votre avis</h2>
+            <div class="contenu_section">
+                <div class="bloc_vert">
+                    <p class="important">Votre retour d'expérience nous intérésse</p>
+                    <p>Laisser nous votre commentaires à propos de la saisie de la déclaration de Stocks</p>
+                </div>
+                <div class="ligne_form ligne_btn">
+                    <a href="<?php echo url_for('ds_feed_back'); ?>">
+                        <img src="" alt="Donnez votre avis" />
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- fin #application_ds -->
 
