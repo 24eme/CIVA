@@ -21,11 +21,7 @@
             <h2 class="titre_section">Votre avis</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-<<<<<<< HEAD
-                    <p class="important">Votre retour d'expérience nous intérèsse</p>
-=======
                     <p class="important">Votre retour d'expérience nous intéresse</p>
->>>>>>> master
                     <p>Laisser nous votre commentaires à propos de la saisie de la déclaration de Stocks</p>
                 </div>
                 <div class="ligne_form ligne_btn">
