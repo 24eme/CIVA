@@ -26,7 +26,7 @@
                 </div>
                 <div class="ligne_form ligne_btn">
                     <a href="<?php echo url_for('ds_feed_back'); ?>">
-                        <img src="" alt="Donnez votre avis" />
+                        <img src="/images/boutons/btn_donnez_votre_avis.png" alt="Donnez votre avis" />
                     </a>
                 </div>
             </div>
