@@ -1915,6 +1915,7 @@ div#migration_compte .contenu_section#infos_traitement {
  ******************************************/
 #confirmation_fin_stock {
 	width: 536px;
+	float: left;
 }
 
 #confirmation_fin_stock p.important {
@@ -1937,6 +1938,48 @@ div#migration_compte .contenu_section#infos_traitement {
 	float: right;
 	width: 155px;
 	height: 19px;
+}
+
+/**
+ * Feedback
+ ******************************************/
+
+#feed_back {
+	width: 536px;
+	float: left;
+}
+
+#feed_back .bloc_form { 
+	margin-top: 10px;
+}
+
+#feed_back p.important, #confirmation_feed_back p.important{
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
+#feed_back textarea {
+	border: 1px solid #c2c1ba;
+	font-size: 12px;
+	width: 482px;
+	height: 200px;
+}
+
+#feed_back .bloc_form .ligne_btn {
+	padding-top: 10px;
+	text-align: right;
+}
+
+#confirmation_feed_back {
+	width: 402px;
+	float: left;
+	margin-left: 20px;
+}
+
+#confirmation_feed_back .ligne_btn {
+	margin-top: 14px;
+	text-align: right;
 }
 
 /**
