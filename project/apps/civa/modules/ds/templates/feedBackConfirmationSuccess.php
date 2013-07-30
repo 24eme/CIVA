@@ -5,7 +5,7 @@
             <h2 class="titre_section">Votre avis</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre avis a bien été envoyer au CIVA</p>
+                    <p class="important">Votre avis a bien été envoyé au CIVA</p>
                     <p>Merci d'avoir pris le temps de nous avoir fait part de votre commentaire.</p>  
                 </div>
             </div>
