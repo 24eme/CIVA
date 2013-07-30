@@ -5,7 +5,7 @@
             <h2 class="titre_section">Votre avis</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre retour d'expérience nous intérésse</p>
+                    <p class="important">Votre retour d'expérience nous intéresse</p>
                     <p>N'hésitez pas à indiquer ci-dessous tout commentaire que vous souhaiteriez nous faire parvenir à propos de la saisie de la déclaration de Stocks :</p>
                     <div class="bloc_form">
                         <form action="" method="post">
