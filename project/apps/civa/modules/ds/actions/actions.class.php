@@ -648,5 +648,58 @@ Le CIVA';
     private function getUserId() {
         return $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
     }
-    
+
+    public function executeFeedBack(sfWebRequest $request) {
+
+        $this->form = new FeedBackForm();
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $message = $this->form->getValue('message');
+
+        /*$mess = 'Bonjour ' . $this->tiers->nom . ',
+
+Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
+
+Cordialement,
+
+Le CIVA';*/
+
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getUser()->getDeclarant()->cvi;
+
+        $to = sfConfig::get('app_email_feed_back');
+        $this->emailSend = true;
+        $mail = Swift_Message::newInstance()
+                ->setFrom($this->getUser()->getCompte()->email)
+                ->setTo($to)
+                ->setSubject("CIVA - Retour d'expérience sur la Déclaration de Stocks")
+                ->setBody($message);
+
+        try {
+            if(is_array($to) && count($to) < 1) {
+                throw new sfException("emails not configure in app.yml email->feed_back");
+            }
+
+            $this->getMailer()->send($mail);
+        } catch (Exception $e) {
+
+            $this->emailSend = false;
+        }
+
+        return $this->redirect('ds_feed_back_confirmation');
+    }
+
+    public function executeFeedBackConfirmation(sfWebRequest $request) {
+
+    }
 }
