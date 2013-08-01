@@ -116,16 +116,19 @@ class statistiquesActions extends sfActions {
         }
 
         $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(1)
-                                              ->getView("STATS", "edition");
+                                              ->group_level(2)
+                                              ->startkey(array($campagne))
+                                              ->endkey(array($campagne, array()))
+                                              ->getView("STATS", "edition_dr");
 
-        $this->utilisateurs_edition = array(); $cpt = 0;
+        $this->utilisateurs_edition_dr = array(); 
+        $cpt = 0;
         foreach ($utilisateurs_edition->rows as $u) {
-                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[0])) {
-                          $this->utilisateurs_edition[$u->key[0]] = $u->value;
+                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
+                          $this->utilisateurs_edition_dr[$u->key[1]] = $u->value;
                       }
         }
-        arsort($this->utilisateurs_edition);
+        arsort($this->utilisateurs_edition_dr);
     }
 
 
@@ -167,5 +170,20 @@ class statistiquesActions extends sfActions {
         if (isset($ds_non_validees->rows) && count($ds_non_validees->rows) > 0) {
           $this->etapeDsNonValidee = $ds_non_validees->rows[0]->value;
         }
+
+        $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(2)
+                                              ->startkey(array($campagne))
+                                              ->endkey(array($campagne, array()))
+                                              ->getView("STATS", "edition_ds");
+
+        $this->utilisateurs_edition_ds = array(); 
+        $cpt = 0;
+        foreach ($utilisateurs_edition->rows as $u) {
+                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
+                          $this->utilisateurs_edition_ds[$u->key[1]] = $u->value;
+                      }
+        }
+        arsort($this->utilisateurs_edition_ds);
     }
 }

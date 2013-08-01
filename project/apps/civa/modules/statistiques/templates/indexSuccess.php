@@ -28,7 +28,7 @@
 		            <li><strong>Utililisateurs éditeurs :</strong>
                     <ul>
                         <?php 
-                        foreach ($utilisateurs_edition as $u => $nb) {
+                        foreach ($utilisateurs_edition_dr as $u => $nb) {
                         	$u = str_replace('COMPTE-', '', $u);
                         	echo "<li>$u : $nb</li>";
                         }
@@ -49,6 +49,16 @@
                             <?php endforeach; ?>
                         </ul>
                     </li>
+                    <li><strong>Utililisateurs éditeurs :</strong>
+                    <ul>
+                        <?php 
+                        foreach ($utilisateurs_edition_ds as $u => $nb) {
+                            $u = str_replace('COMPTE-', '', $u);
+                            echo "<li>$u : $nb</li>";
+                        }
+                        ?>
+                        </li>
+                    </ul>
                 </ul>
             </div>
             <br />
