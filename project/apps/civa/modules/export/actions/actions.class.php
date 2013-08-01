@@ -91,6 +91,7 @@ class exportActions extends sfActions {
         ini_set('memory_limit', '512M');
         $recoltants = acCouchdbManager::getClient("Recoltant")->getAll(acCouchdbClient::HYDRATE_JSON);
         $values = array();
+        $values[] = array("cvi", "nom", "commune de déclaration", "téléphone", "e-mail", "étape");
         foreach ($recoltants as $item) {
             if ($item->cvi != "7523700100") {
                 $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), acCouchdbClient::HYDRATE_JSON);
@@ -102,14 +103,13 @@ class exportActions extends sfActions {
                     $ligne[] = $item->declaration_commune;
                     $ligne[] = $item->telephone;
                     $ligne[] = $compte->email;
-                    $ligne[] = $compte->statut;
-                    $ligne[] = $dr->etape;
+                    $ligne[] = isset($dr->etape) ? $dr->etape : null;
                     $values[] = $ligne;
                 }
             }
         }
 
-        $this->setResponseCsv('recoltant_declaration_en_cours.csv');
+        $this->setResponseCsv('declaration_recolte_en_cours.csv');
         return $this->renderText(Tools::getCsvFromArray($values));
     }
     
