@@ -18,6 +18,20 @@ class DSCivaClient extends DSClient {
     const VOLUME_VT = 'VT';
     const VOLUME_SGN = 'SGN';
 
+    const ETAPE_EXPLOITATION = 1;
+    const ETAPE_LIEUX_STOCKAGE = 2;
+    const ETAPE_STOCKS = 3;
+    const ETAPE_AUTRES = 4;
+    const ETAPE_VALIDATION = 5;
+    const ETAPE_VISUALISATION = 6;
+
+    public static $etapes = array(
+                                self::ETAPE_EXPLOITATION => "Exploitation", 
+                                self::ETAPE_LIEUX_STOCKAGE => "Lieux de stockage", 
+                                self::ETAPE_STOCKS => "Stocks", 
+                                self::ETAPE_AUTRES => "Autres Produits", 
+                                self::ETAPE_VALIDATION => "Validation", 
+                                 );
 
     public function buildId($identifiant, $periode, $lieu_stockage) {
         return sprintf('DS-%s-%s-%s', $identifiant, $periode, $lieu_stockage);
