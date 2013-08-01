@@ -147,6 +147,17 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
 
+     public function removeAllDssByCvi($tiers, $date_stock) {
+        $periode = $this->buildPeriode($this->createDateStock($date_stock));
+        $dss = $this->findDssByCviAndPeriode($tiers->cvi, $periode);
+	$dssIds = array();
+	foreach($dss as $ds) {
+	    $dssIds[] = $ds->_id;
+            $this->delete($ds);
+        }
+	return $dssIds;
+    }
+    
     public function findDssByCvi($tiers, $date_stock, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
 
