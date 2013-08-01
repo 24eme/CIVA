@@ -9,6 +9,7 @@ class ExportDRPdf extends ExportDocument {
     protected $no_cache;
     protected $filename;
     protected $dr;
+    protected $tiers;
 
     public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
@@ -16,12 +17,15 @@ class ExportDRPdf extends ExportDocument {
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
         $this->dr = $dr;
+        $this->tiers = $tiers;
 
         $this->init($dr, $tiers, $filename);
-        $this->create($dr, $tiers);
     }
 
     public function generatePDF() {
+        if($this->no_cache || !$this->isCached()) {
+          $this->create($this->dr, $this->tiers);
+        }
         return $this->document->generatePDF($this->no_cache);
     }
 

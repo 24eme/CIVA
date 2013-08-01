@@ -33,7 +33,7 @@ class ExportDSPdf extends ExportDocument {
     }
 
     public function generatePDF() {
-        if(!$this->isCached()) {
+        if($this->no_cache || !$this->isCached()) {
             $this->create();
         }
         return $this->document->generatePDF($this->no_cache);
