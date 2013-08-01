@@ -96,6 +96,10 @@ class exportActions extends sfActions {
             if ($item->cvi != "7523700100") {
                 $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($item->cvi, $this->getUser()->getCampagne(), acCouchdbClient::HYDRATE_JSON);
                 if ($dr && (!isset($dr->validee) || !$dr->validee)) {
+                    if($dr->type == "LS") {
+
+                        continue;
+                    }
                     $compte = acCouchdbManager::getClient()->find($item->compte[0], acCouchdbClient::HYDRATE_JSON);
                     $ligne = array();
                     $ligne[] = $item->cvi;
