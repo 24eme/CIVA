@@ -117,7 +117,8 @@ EOF;
     protected function importDSS($dss) {
 
         $ds_client = DSCivaClient::getInstance();
-
+        $tiersListIDs = array();
+                
         foreach ($dss as $id_ds => $ds_csv) {
             $ds = new DSCiva();
             if (!count($ds_csv))
@@ -132,6 +133,19 @@ EOF;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID],2);
             $ds->identifiant = $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
+
+            if(!in_array($tiers->_id,$tiersListIDs)){
+                $removeDss = DSCivaClient::getInstance()->removeAllDssByCvi($tiers, $date);
+                if($removeDss){
+                    echo " Les DS suivantes ont été suprimées : ";
+                    foreach($removeDss as $removeDsID){
+                            echo $this->green($removeDsID)." ";
+                    }
+                    echo " \n";
+                }
+                $tiersListIDs[] = $tiers->cvi;
+            }           
+            
             if(is_null($tiers)){
                 echo $this->error_term . " Le tiers de CVI $ds->identifiant n'a pas été trouvé \n";
                 continue;
@@ -155,19 +169,12 @@ EOF;
                     echo $this->error_term . " Le lieu de stockage n'a pas pu être déterminé pour $tiers->cvi \n";
                       continue;
                 }
-            $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);                
+            $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
             }
             try {
                 $ds->storeInfos();
             } catch (sfException $e) {
-//                if (count($ds_csv) == 1 && count($ds_csv_datas) < 25) {
-//                    echo "--------> La DS " . $this->green($ds->_id) . " n'est pas sauvée, c'est une " . $this->green("DS a néant") . "\n";
-//                }
-//                else
-//                {
                     echo $this->error_term . " pour la DS $id_ds : " . $e->getMessage() . "\n";
-                    //echo $this->error_term . " pour la DS $id_ds (qui n'est pas néant) => $ds->identifiant n'a pas de lieux de stockage \n";
-//                }
                 continue;
             }
 
@@ -273,14 +280,23 @@ EOF;
                     return $conf->recolte->certification->genre->appellation_VINTABLE->mention->lieu->couleur->$couleur_node->getHash();
                 }
                 
-                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RG') {
-                    $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
-                    return $conf->recolte->certification->genre->appellation_PINOTNOIR->mention->lieu->couleur->$cepage_node->getHash();
-                }
-                if (($productRow[self::CSV_PRODUIT_CEPAGE] == 'PR') || ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RS')) {
+                if (($productRow[self::CSV_PRODUIT_CEPAGE] == 'PR') || ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RG')) {
                     $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                     return $conf->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->couleur->cepage_PR->getHash();
                 }
+                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RS') {
+                    $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
+                    return $conf->recolte->certification->genre->appellation_PINOTNOIR->mention->lieu->couleur->$cepage_node->getHash();
+                }
+                
+//                if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RG') {
+//                   $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];      
+//                   return $conf->recolte->certification->genre->appellation_PINOTNOIR->mention->lieu->couleur->$cepage_node->getHash();
+//                }            
+//                if (($productRow[self::CSV_PRODUIT_CEPAGE] == 'PR') || ($productRow[self::CSV_PRODUIT_CEPAGE] == 'PN' && $productRow[self::CSV_PRODUIT_COULEUR] == 'RS')) {
+//                    $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
+//                    return $conf->recolte->certification->genre->appellation_PINOTNOIRROUGE->mention->lieu->couleur->cepage_PR->getHash();
+//                }
                 if ($productRow[self::CSV_PRODUIT_CEPAGE] == 'KL') {
                     $id = $productRow[self::CSV_DS_ID];
                    // echo $this->warning_term . "Gestion de l'exception lié au cepage KL (COMMUNALE) dans la DS $id \n";
