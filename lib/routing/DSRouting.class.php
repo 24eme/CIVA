@@ -111,6 +111,10 @@ class DSRouting {
                 array('sf_method' => array('get')),
                 array('model' => 'DS',
                     'type' => 'object') ));
+
+        $r->prependRoute('ds_export_csv_en_cours', new sfRoute('/ds/csv/en_cours', array('module' => 'ds_export',
+                'action' => 'csvEnCours'),
+                array('sf_method' => array('get'))));
         
         $r->prependRoute('ds_send_email_pdf', new DSRoute('/ds/:id/envoi-email', array('module' => 'ds',
                 'action' => 'sendEmail'),
