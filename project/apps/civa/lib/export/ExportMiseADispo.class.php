@@ -77,6 +77,11 @@ abstract class ExportMiseADispo
     }
 
     public function publicationById($id) {
+
+        if(!preg_match("/^[A-Z]+-(67|68)/", $id)) {
+            throw new sfException("This document is a test document : ".$id);
+        }
+
         if (!array_key_exists($id, $this->_file_export_document_pdfs)) {
             throw new sfException("This document not existing in this export : ".$id);
         }

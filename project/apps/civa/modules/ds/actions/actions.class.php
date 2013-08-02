@@ -56,7 +56,7 @@ class dsActions extends sfActions {
              $this->redirectEtapeAfterStock($this->ds);
          break;
          case 4:
-             $this->redirect("ds_autres", $this->ds);
+             $this->redirect("ds_autre", $this->ds);
          break;
          case 5:
              $this->redirect("ds_validation", $this->ds);

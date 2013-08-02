@@ -64,7 +64,7 @@ class MigrationCompte {
         $this->new_rec->compte = array(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi);
         $this->new_rec->cvi = $this->_nouveau_cvi;
 
-        $this->new_rec = _TiersClient::STATUT_ACTIF;
+        $this->new_rec->statut = _TiersClient::STATUT_ACTIF;
 
         if(!is_null($this->nom))
             $this->new_rec->nom = $this->nom;

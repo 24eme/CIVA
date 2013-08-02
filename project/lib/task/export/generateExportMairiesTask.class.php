@@ -53,7 +53,7 @@ EOF;
           $export->set('_id', 'EXPORT-MAIRIES-' . $code_postal);
           $export->nom = $nom . ' (' . $code_postal . ')';
           $export->destinataire = 'Mairies';
-          $export->identifiant = $code_postal;
+          $export->identifiant = (string)$code_postal;
           $export->generateCle();
         }
 
@@ -64,8 +64,8 @@ EOF;
           $view = $export->drs->views->add();
           $view->id = 'DR';
           $view->nom = 'campagne_declaration_insee';
-          $view->startkey = array($annee, $code_postal);
-          $view->endkey = array($annee, $code_postal, '[]');
+          $view->startkey = array($annee, (string)$code_postal);
+          $view->endkey = array($annee, (string)$code_postal, '[]');
         }
 
         $export->remove('dss');
