@@ -314,7 +314,6 @@ var scrollLieuxStockage = function()
 var choixPrecDS = function()
 {   
     $('#form_ds #mon_espace_civa_valider').click(function() {
-        console.log('nop');
         if($('#type_ds_suppr:checked').length > 0) {
             return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
         }
