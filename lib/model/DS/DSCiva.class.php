@@ -488,6 +488,14 @@ public function getConfigurationCampagne() {
         return $this;
     }
     
+    public function hasMouts() {
+        if(!$this->isDsPrincipale()) return false;
+        if($this->exist('mouts') && $this->mouts > 0){
+            return true;
+        }
+        return false;
+    }
+    
     public function isValidee(){
 
         return $this->isValideeCiva();
@@ -565,6 +573,6 @@ public function getConfigurationCampagne() {
 
         return $this->isValidee();
     }
-
+    
 }
 
