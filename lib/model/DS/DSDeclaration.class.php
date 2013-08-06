@@ -83,7 +83,7 @@ class DSDeclaration extends BaseDSDeclaration {
         return in_array('appellation_LIEUDIT',array_keys($this->getAppellationsSorted()));
     }
     
-    public function geLieuDit() {
+    public function getLieuDit() {
         $appellationsSorted = $this->getAppellationsSorted();
         return $appellationsSorted['appellation_LIEUDIT'];
     }
