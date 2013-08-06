@@ -561,19 +561,29 @@ Le CIVA';
 
     protected function redirectEtapeAfterStock($ds){
             $courant_stock = ($ds->exist('courant_stock'))? $ds->courant_stock : null;
-            if($courant_stock){
-                $courant_id = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$1', $courant_stock);
-                $hash_lieu = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$2', $courant_stock);
-                $node = DSCivaClient::getInstance()->find($courant_id)->get($hash_lieu);
-                if(!$node){
-                    $this->redirect('ds_lieux_stockage', array('id' => $courant_id));
-                }else{
-                    $this->redirect('ds_edition_operateur', array('id' => $courant_id, 'hash' => $this->convertNodeForUrl($node)));
-                }
+            if(!$courant_stock){
+                return $this->redirect('ds_edition_operateur', $ds);
             }
-            else{
-                $this->redirect('ds_edition_operateur', array('id' => $ds->_id));
+
+            $courant_id = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$1', $courant_stock);
+            $ds_courante = DSCivaClient::getInstance()->find($courant_id);
+
+            if(!$ds_courante) {
+                return $this->redirect('ds_edition_operateur', $ds);
             }
+
+            $hash_lieu = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$2', $courant_stock);
+            $node = null;
+            if($hash_lieu) {
+                $node = DSCivaClient::getInstance()->find($courant_id)->exist($hash_lieu);
+            }
+
+            if(!$node){
+                $this->redirect('ds_edition_operateur', $ds_courante);
+            }
+                
+            $this->redirect('ds_edition_operateur', array('sf_subject' => $ds_courante, 'hash' => $this->convertNodeForUrl($node)));
+            
     }
 
     protected function convertNodeForUrl($node) {
