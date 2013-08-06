@@ -15,5 +15,5 @@ mkdir -p $FOLDER > /dev/null
 
 php symfony export:ds-civa $1 $FOLDER
 
-sort -t ',' -k 1,1 $FOLDER/*STOLIG* > $FOLDER/STOLIG_sorted
-sort -t ',' -k 1,1 $FOLDER/*STOENT* > $FOLDER/STOENT_sorted
+#sort -t ',' -k 1,1 $FOLDER/*STOLIG* > $FOLDER/STOLIG_sorted
+#sort -t ',' -k 1,1 $FOLDER/*STOENT* > $FOLDER/STOENT_sorted
