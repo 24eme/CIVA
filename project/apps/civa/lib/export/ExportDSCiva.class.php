@@ -22,7 +22,7 @@ class ExportDSCiva {
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);
-            if(preg_match('/^(67|68)/', $ds->identifiant) && $this->client_ds->getDSPrincipaleByDs($ds)->isValidee()){
+            if(preg_match('/^(75|67|68)/', $ds->identifiant) && $this->client_ds->getDSPrincipaleByDs($ds)->isValidee()){
                 $this->ds_liste[] = $this->client_ds->find($ds_id);
             }
         }
@@ -48,8 +48,8 @@ class ExportDSCiva {
     }
 
     public function exportXml() {
-        $export_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n"; 
-        $export_xml.="<listeDecStock>\n";
+        $export_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"."\r\n\r\n"; 
+        $export_xml.="<listeDecStock>\r\n";
         $tab_cvi = array();
         $current_cvi = 0;
         foreach ($this->ds_liste as $cpt => $ds) {            
@@ -57,26 +57,26 @@ class ExportDSCiva {
                         $export_xml.= $this->makeXMLDS($ds);
             }else{
                 if(($ds->declarant->cvi != $current_cvi) && $current_cvi!=0){
-                    $export_xml.="\t</decStock>\n";
+                    $export_xml.="\t</decStock>\r\n";
                 }
                 $current_cvi = $ds->declarant->cvi;
-                $export_xml.="\t<decStock numCvi=\"".$current_cvi."\">\n";
+                $export_xml.="\t<decStock numCvi=\"".$current_cvi."\">\r\n";
                 $export_xml.= $this->makeXMLDS($ds);
                 $tab_cvi[] = $current_cvi;
             }
                 
         }
-        $export_xml.="\t</decStock>\n";
-        $export_xml.="</listeDecStock>\n";
+        $export_xml.="\t</decStock>\r\n";
+        $export_xml.="</listeDecStock>\r\n";
         return $export_xml;
     }
     
     protected function makeXMLDS($ds) {
         $lignes ="";
         if($ds->isDsPrincipale()){
-            $lignes.="\t\t<volLie>".$this->convertToFloat($ds->lies,false)."</volLie>\n";
-            $lignes.="\t\t<volDplc>".$this->convertToFloat($ds->dplc,false)."</volDplc>\n";            
-            $lignes.="\t\t<volVinNc>".$this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds),false)."</volVinNc>\n";
+            $lignes.="\t\t<volLie>".$this->convertToFloat($ds->lies,false)."</volLie>\r\n";
+            $lignes.="\t\t<volDplc>".$this->convertToFloat($ds->dplc,false)."</volDplc>\r\n";            
+            $lignes.="\t\t<volVinNc>".$this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds),false)."</volVinNc>\r\n";
         }
 
         $lieu_stockage = $ds->identifiant.$ds->getLieuStockage();
@@ -115,11 +115,11 @@ class ExportDSCiva {
     }
 
     protected function makeXMLDSLigne($lieu_stockage,$code_douane,$volume) {
-        $ligne = "\t\t<ligne>\n";                    
-        $ligne .= "\t\t\t<codeInstallation>".$lieu_stockage."</codeInstallation>\n"; 
-        $ligne .= "\t\t\t<codeProduit>".$code_douane."</codeProduit>\n"; 
-        $ligne .= "\t\t\t<volume>".$volume."</volume>\n";
-        $ligne .= "\t\t</ligne>\n";
+        $ligne = "\t\t<ligne>\r\n";                    
+        $ligne .= "\t\t\t<codeInstallation>".$lieu_stockage."</codeInstallation>\r\n"; 
+        $ligne .= "\t\t\t<codeProduit>".$code_douane."</codeProduit>\r\n"; 
+        $ligne .= "\t\t\t<volume>".$volume."</volume>\r\n";
+        $ligne .= "\t\t</ligne>\r\n";
         return $ligne;
     }
 
@@ -136,7 +136,7 @@ class ExportDSCiva {
         foreach ($this->ds_liste as $cpt => $ds) {
             $entete_string.= $this->makeEnteteLigne($ds);
             if($cpt<(count($this->ds_liste)-1))
-                $entete_string.= "\n";
+                $entete_string.= "\r\n";
         }
         return $entete_string;
     }
@@ -280,7 +280,7 @@ class ExportDSCiva {
                     $row.= "1,\"".$cepage_key."\",\"RG\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
             
                 case 'PINOTNOIRROUGE':
@@ -288,7 +288,7 @@ class ExportDSCiva {
                     $row.= "1,\"PN\",\"RS\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
             
                 case 'ALSACEBLANC':
@@ -296,7 +296,7 @@ class ExportDSCiva {
                     $row.= "1,\"".$cepage_key."\",\"BL\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
 
                 case 'CREMANT':
@@ -304,7 +304,7 @@ class ExportDSCiva {
                     $row.= "2,\"".$cepage_key."\",\"".$cepage_key."\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
 
                 case 'GRDCRU':
@@ -314,7 +314,7 @@ class ExportDSCiva {
                     $row.= "3,\"".$cepage_key."\",\"BL\",\"".$lieu."\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
 
                 case 'COMMUNALE': 
@@ -329,7 +329,7 @@ class ExportDSCiva {
                     }
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                     
                 break;
 
@@ -339,7 +339,7 @@ class ExportDSCiva {
                     $row.= "2,\"".$cepage_key."\",\"".$couleur."\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
-                    $row.="\n";
+                    $row.="\r\n";
                 break;
 
                 default:

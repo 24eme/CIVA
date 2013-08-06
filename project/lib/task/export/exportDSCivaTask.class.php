@@ -48,8 +48,19 @@ EOF;
         $lignes = $exportManager->exportLigne(); 
         
         $folderPath = $arguments['folderPath'];
-        file_put_contents($folderPath.'/STOENT'.substr($campagne, 2), $entete);        
-        file_put_contents($folderPath.'/STOLIG'.substr($campagne, 2), $lignes);
+        $path_ent = $folderPath.'/STOENT'.substr($campagne, 2);
+        $path_lig = $folderPath.'/STOLIG'.substr($campagne, 2);
+        
+        $ent = fopen($path_ent, 'w');
+        fwrite($ent, "\xef\xbb\xbf");
+        fclose($ent);
+        
+        $lig = fopen($path_lig, 'w');
+        fwrite($lig, "\xef\xbb\xbf");
+        fclose($lig);
+        
+        file_put_contents($path_ent, $entete);        
+        file_put_contents($path_lig, $lignes);
         echo "EXPORT fini\n";
     }
 }
