@@ -335,7 +335,7 @@ class ExportDSCiva {
 
                 case 'LIEUDIT':
                     $row.= $id_csv.",";
-                    $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu_([A-Z]{4})\/couleur([A-Za-z]+)\//', '$5', $app_produit));
+                    $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu\/couleur([A-Za-z]+)\/([\/a-zA-Z_-]+)/', '$4', $app_produit));
                     $row.= "2,\"".$cepage_key."\",\"".$couleur."\",\"\",".$cpt.",";
                     $row.= $this->convertToFloat($produit->total_normal).",".$this->convertToFloat($produit->total_vt).",";
                     $row.= $this->convertToFloat($produit->total_sgn).",".$this->convertToFloat($produit->total_stock);
