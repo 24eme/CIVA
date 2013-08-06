@@ -110,6 +110,7 @@ class ExportDSCiva {
             }
             $lignes.=$ligne;
         }
+        $lignes.= $this->addXMLDSMouts($ds);
         return $lignes;
     }
 
@@ -122,7 +123,13 @@ class ExportDSCiva {
         return $ligne;
     }
 
-
+    protected function addXMLDSMouts($ds) {
+        if(!$ds->hasMouts()){
+            return '';
+        }
+        $lieu_stockage = $ds->identifiant.$ds->getLieuStockage();
+        return $this->makeXMLDSLigne($lieu_stockage,"MC",$ds->getMouts());
+    }
 
     public function exportEntete() {
         $entete_string = ""; 
