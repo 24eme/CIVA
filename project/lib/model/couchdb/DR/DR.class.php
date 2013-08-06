@@ -199,6 +199,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      * @param Tiers $tiers
      */
     public function validate($tiers, $compte = null, $compteValidateurId = null){
+        $this->update();
         $this->cleanNoeuds();
         $this->remove('etape');
         $this->add('modifiee', date('Y-m-d'));

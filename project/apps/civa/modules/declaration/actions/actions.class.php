@@ -119,6 +119,7 @@ class declarationActions extends EtapesActions {
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = acCouchdbManager::getClient()->find($key);
+        $this->dr->update();
 
         $check = $this->dr->check();
         $this->annee = $annee;
