@@ -91,7 +91,7 @@ class ExportDSCiva {
         $ligne = "\t\t<ligne>\r\n";
         $ligne .= "\t\t\t<codeInstallation>" . $lieu_stockage . "</codeInstallation>\r\n";
         $ligne .= "\t\t\t<codeProduit>" . $code_douane . "</codeProduit>\r\n";
-        $ligne .= "\t\t\t<volume>" . $volume . "</volume>\r\n";
+        $ligne .= "\t\t\t<volume>" . $this->convertToFloat($volume,false) . "</volume>\r\n";
         $ligne .= "\t\t</ligne>\r\n";
         return $ligne;
     }
