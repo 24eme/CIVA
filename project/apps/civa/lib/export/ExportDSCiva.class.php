@@ -434,7 +434,7 @@ class ExportDSCiva {
             if($cepage_code == "PR"){
                 $hash = "/recolte/certification/genre/appellation_PINOTNOIRROUGE/mention/lieu/couleur/cepage_".$cepage_code;
                 $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                return $config->getDouane()->getFullAppCode($vtsgn).$config->getDouane()->getCodeCepage(); 
+                return $config->getDouane()->getFullAppCode($vtsgn); 
             }
             $hash = "/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_".$cepage_code;
             $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
