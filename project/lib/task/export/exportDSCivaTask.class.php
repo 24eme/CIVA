@@ -18,12 +18,13 @@ class exportDSCivaTask extends sfBaseTask
         $this->addArguments(array(
             new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
+            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date'),
         ));
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default')
         ));
 
         $this->namespace = 'export';
@@ -43,13 +44,14 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         $campagne = $arguments['campagne'];
+        $date = $arguments['date'];
         $exportManager = new ExportDSCiva($campagne);
         $entete = $exportManager->exportEntete();
         $lignes = $exportManager->exportLigne(); 
         
         $folderPath = $arguments['folderPath'];
-        $path_ent = $folderPath.'/STOENT'.substr($campagne, 2);
-        $path_lig = $folderPath.'/STOLIG'.substr($campagne, 2);
+        $path_ent = $folderPath.'/STOENT'.substr($campagne, 2).'_'.$date;
+        $path_lig = $folderPath.'/STOLIG'.substr($campagne, 2).'_'.$date;
         
         $ent = fopen($path_ent, 'w');
         fwrite($ent, "\xef\xbb\xbf");

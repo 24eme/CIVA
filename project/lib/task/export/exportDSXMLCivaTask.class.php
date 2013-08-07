@@ -18,6 +18,7 @@ class exportDSXMLCivaTask extends sfBaseTask
         $this->addArguments(array(
             new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
+            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date')
         ));
 
         $this->addOptions(array(
@@ -43,11 +44,12 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         $campagne = $arguments['campagne'];
+        $date = $arguments['date'];
         $exportXmlManager = new ExportDSCiva($campagne);
         $xml = $exportXmlManager->exportXml();
         
         $folderPath = $arguments['folderPath'];
-        file_put_contents($folderPath.'/dsXML'.substr($campagne, 2).".xml", $xml);        
+        file_put_contents($folderPath.'/dsXML'.substr($campagne, 2).'_'.$date.".xml", $xml);        
         echo "EXPORT Xml fini\n";
     }
 }

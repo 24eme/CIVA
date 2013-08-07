@@ -9,8 +9,10 @@ fi
 mkdir -p data/export/ds_xml > /dev/null
 EXPORTDIR=data/export/ds_xml
 
-FOLDER=$EXPORTDIR/$2_$(date +%Y%m%d%H%M%S)
+FOLDER=$EXPORTDIR/$2
 
 mkdir -p $FOLDER > /dev/null
 
-php symfony export:ds-xml-civa $1 $FOLDER
+DATE=$(date +%Y%m%d%H%M%S)
+
+php symfony export:ds-xml-civa $1 $FOLDER $DATE
