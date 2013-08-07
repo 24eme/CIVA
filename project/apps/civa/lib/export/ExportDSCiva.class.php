@@ -173,7 +173,7 @@ class ExportDSCiva {
         $etb = $ds->getEtablissement();
         $lieu_stockage = "";
         if ($ds->stockage->exist("adresse")) {
-            $lieu_stockage = str_replace(',','',$ds->declarant->adresse);
+            $lieu_stockage = str_replace(',','',$ds->stockage->adresse);
         } elseif ($ds->declarant->exist("adresse")) {
             $lieu_stockage = str_replace(',','',$ds->declarant->adresse);
         }
