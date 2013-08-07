@@ -53,15 +53,20 @@
             <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
             </p>
-            <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
-            <?php if ($detail->getConfig()->hasRendement()): ?>
+            <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
+            <?php /*if ($detail->getConfig()->hasRendement()):*/ ?>
                 <ul class="vol_revendique_dplc">
                     <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
                     <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
-                    <li><input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
-                    <li><input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
+                    <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                    <li><input id="detail_volume_revendique"  type="text" class="revendique num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" /></li>
+                    <?php if(isset($form['usages_industriels_saisi'])): ?>
+                        <li><?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi volume')) ?></li>
+                    <?php else: ?>
+                        <li><input id="detail_usages_industriels_saisi"  type="text" class="revendique num total readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi) ?>" /></li>
+                    <?php endif; ?>
                 </ul>
-            <?php endif; ?>
+            <?php /*endif;*/ ?>
         </div>
 
         <div class="col_btn">

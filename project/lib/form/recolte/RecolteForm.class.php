@@ -25,6 +25,11 @@ class RecolteForm extends acCouchdbObjectForm {
             'superficie' => new sfValidatorNumber(array('required' => false)),
             'cave_particuliere' => new sfValidatorNumber(array('required' => false)),
         ));
+
+        if($this->getObject()->canHaveUsagesIndustrielsSaisi()) {
+            $this->setWidget('usages_industriels_saisi', new sfWidgetFormInputFloat());
+            $this->setValidator('usages_industriels_saisi', new sfValidatorNumber(array('required' => false)));
+        }
         
         if ($this->getOption('lieu_required', false)) {
             $this->getValidator('lieu')->setOption('required', true);

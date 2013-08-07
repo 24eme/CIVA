@@ -2,6 +2,9 @@
 
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
+    const USAGES_INDUSTRIELS_NOEUD_LIEU = 'lieu';
+    const USAGES_INDUSTRIELS_NOEUD_DETAIL = 'detail';
+
     public function getLibelleWithAppellation() {
         if ($this->getLibelle())
             return $this->getParent()->getParent()->getLibelle() . ' - ' . $this->getLibelle();
@@ -406,9 +409,18 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $volume_revendique_final;
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    /*public function canHaveUsagesIndustrielsSaisi() {
 
         return $this->getDplc() == 0 && $this->getTotalCaveParticuliere() > 0;
+    }*/
+
+    public function canHaveUsagesIndustrielsSaisi() {
+        if(!$this->usages_industriels_noeud) {
+
+            return true;
+        }
+
+        return $this->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_LIEU;
     }
 
     protected function update($params = array()) {

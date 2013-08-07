@@ -30,23 +30,13 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getVolumeRevendique($force_calcul = false) {
-        $field = 'volume_revendique';
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
-        }
-        return $this->store($field, array($this, 'getVolumeRevendiqueFinal'));
+
+        return parent::getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueFinal'), $force_calcul);
     }
 
     public function getVolumeRevendiqueFinal() {
-        $volume_revendique_total = $this->getVolumeRevendiqueTotal();
-        $volume_revendique_final = $volume_revendique_total;
-        if ($this->getConfig()->hasRendementCouleur()) {
-            $volume_revendique_couleur = $this->getVolumeRevendiqueCouleur();
-            if ($volume_revendique_total > $volume_revendique_couleur) {
-                $volume_revendique_final = $volume_revendique_couleur;
-            }
-        }
-        return $volume_revendique_final;
+
+        return $this->getTotalVolume() - $this->getUsagesIndustriels();
     }
 
     public function getVolumeRevendiqueTotal() {
@@ -126,6 +116,25 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->_storage[$key];
     }
 
+    public function getUsagesIndustriels($force_calcul = false) {
+
+        return parent::getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsFinal'), $force_calcul);
+    }
+
+    protected function getUsagesIndustrielsFinal() {
+        if($this->haveUsagesIndustrielsSaisi()) {
+
+          return $this->getSumNoeudFields('usages_industriels', false);
+        }
+
+        return $this->getDplc();
+    }
+
+    public function haveUsagesIndustrielsSaisi() {
+
+        return $this->getLieu()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
+    }
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
@@ -199,8 +208,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
-            $this->volume_revendique = $this->getVolumeRevendique(true);
             $this->dplc = $this->getDplc(true);
+            $this->usages_industriels = $this->getUsagesIndustriels(true);
+            $this->volume_revendique = $this->getVolumeRevendique(true);
         }
         $this->cleanNoeuds();
     }

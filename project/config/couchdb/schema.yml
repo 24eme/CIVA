@@ -155,8 +155,9 @@ DR:
                                           total_superficie: {type:float}
                                           volume_revendique: {type: float}
                                           dplc: {type: float}
-                                          usages_industriels_calcule: {type:float }
-                                          usages_industriels_saisi: {type:float }
+                                          usages_industriels_calcule: { type:float }
+                                          usages_industriels_saisi: { type:float }
+                                          usages_industriels_noeud: { }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -213,6 +214,7 @@ DR:
                                                 total_superficie: {type:float}
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
+                                                usages_industriels: {type:float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -223,6 +225,7 @@ DR:
                                                       total_superficie: {type:float }
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
+                                                      usages_industriels: {type:float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
@@ -275,6 +278,8 @@ DR:
                                                                   cave_particuliere: { type: float }
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
+                                                                  usages_industriels: { type: float }
+                                                                  usages_industriels_saisi: { type: float }
 
 _Compte:
   type: abstract

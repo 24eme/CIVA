@@ -18,9 +18,12 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->getCepage()->getCouleur();
     }
 
+    public function getLieuNode() {
+        return $this->getCouleur()->getLieu();
+    }
 
     public function getMention() {
-        return $this->getLieu()->getMention();
+        return $this->getLieuNode()->getMention();
     }
 
     public function getCodeDouane() {
@@ -141,14 +144,17 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         if ($this->getConfig()->hasRendement()) {
             $volume_max = $this->getVolumeMax();
             if ($this->volume > $volume_max) {
-                $this->volume_revendique = $volume_max;
                 $this->volume_dplc = round($this->volume - $volume_max, 2);
-            } else {
-                $this->volume_revendique = $this->volume;
             }
-        } else {
-            $this->volume_revendique = $this->volume;
         }
+
+        if($this->usages_industriels_saisi) {
+
+            $this->getLieuNode()->usages_industriels_noeud = DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
+        }
+
+        $this->usages_industriels = $this->getUsagesIndustriels(true);
+        $this->volume_revendique = $this->volume - $this->usages_industriels;
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');
@@ -160,6 +166,35 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             $this->deleteAcheteurUnused('cooperatives');
             $this->deleteAcheteurUnused('mouts');
         }
+    }
+
+    public function canHaveUsagesIndustrielsSaisi() {
+        if(!$this->getLieuNode()->usages_industriels_noeud) {
+
+            return true;
+        }
+
+        return $this->getLieuNode()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
+    }
+
+    public function haveUsagesIndustrielsSaisi() {
+
+        return $this->getCouleur()->haveUsagesIndustrielsSaisi();
+    }
+
+    public function getUsagesIndustriels($force = false) {
+        if(!$force) {
+
+            return $this->_get('usages_industriels');
+        }
+
+        if(!$this->haveUsagesIndustrielsSaisi()) {
+
+            return $this->volume_dplc;
+        }
+
+
+        return $this->usages_industriels_saisi;
     }
 
 }

@@ -60,14 +60,18 @@
             <?php if ($couleur->getConfig()->hasRendement()): ?>
                     <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($couleur->getVolumeMaxCouleur()); ?>"/>
                     <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getConfig()->getRendementCouleur()); ?>"/>
-
                     <li>
-                        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
-                        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+                        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
+                        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
                     </li>
-                    <li><input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                    <li>
+                        <input type="hidden" id="appellation_volume_usages_industriels_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+                        <input type="text" id="appellation_volume_usages_industriels" readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+
+                        <!--<input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
                         <input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/></li>
+            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>-->                   
+                    </li>
 <?php endif; ?>
 
         </ul>
