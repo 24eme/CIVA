@@ -40,6 +40,11 @@ class DSCepage extends BaseDSCepage {
       
         return array($this->getHash() => $this);
     }
+    
+    public function getProduitsSorted() {
+      
+        return array($this->getHash() => $this);
+    }
 
     public function hasVtsgn() {
 
@@ -146,6 +151,6 @@ class DSCepage extends BaseDSCepage {
     }
     
      public function getCodeDouane($vtsgn = '') {
-      return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
-    }
-}
+            return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();     
+            }
+     }
