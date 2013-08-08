@@ -58,6 +58,19 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $produits;
     }
+    
+    public function getProduitsSortedWithFilter($matches) {
+        $produits = $this->getProduitsSorted();
+        $result = array();
+        foreach($produits as $hash => $produit) {
+            foreach($matches as $match) {
+                if(preg_match('/'.$match.'/',$hash)){
+                    $result[$hash] = $produit;
+                }
+            }
+        }
+        return $result;
+    }
 
     public function getProduitsDetails() {
         $produits = array();
