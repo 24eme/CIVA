@@ -48,15 +48,6 @@ class recolteActions extends EtapesActions {
         $this->initAcheteurs();
         $this->initPrecDR();
 
-
-        if( $this->onglets->getCurrentLieu()->dplc != 0)
-        {
-           $appellation = $this->declaration->recolte->getNoeudAppellations()->get($this->onglets->getCurrentAppellation()->getKey());
-           $lieu = $appellation->getLieux()->get($this->onglets->getCurrentLieu()->getKey());
-           $lieu->set("usages_industriels_saisi", 0);
-           $this->declaration->save();
-        }
-
         $this->detail_action_mode = 'update';
         $this->is_detail_edit = true;
 

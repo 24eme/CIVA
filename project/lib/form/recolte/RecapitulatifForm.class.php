@@ -17,15 +17,13 @@ class RecapitulatifForm extends acCouchdbObjectForm {
             ));
 
             $this->setValidators(array(
-                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false, 'max' => $this->getObject()->getVolumeRevendiqueWithoutUIS())),
+                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false)),
             ));
 
             $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
-
             $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
 
             $this->is_saisisable = true;
-
         }
 
         
@@ -56,10 +54,6 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function doUpdateObject($values) {
         parent::doUpdateObject($values);
-        $lieu = $this->getObject();
-
-        if( isset($values['usages_industriels_saisi']))
-            $lieu ->set("usages_industriels_saisi", (float) $values['usages_industriels_saisi']);
 
         $this->getObject()->getCouchdbDocument()->update();
     }

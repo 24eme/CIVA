@@ -36,7 +36,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
     public function getVolumeRevendiqueFinal() {
 
-        return $this->getTotalVolume() - $this->getUsagesIndustriels();
+        return round($this->getTotalVolume() - $this->getUsagesIndustriels(), 2);
     }
 
     public function getVolumeRevendiqueTotal() {

@@ -188,7 +188,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function haveUsagesIndustrielsSaisi() {
-
+        
         return $this->getCouleur()->haveUsagesIndustrielsSaisi();
     }
 

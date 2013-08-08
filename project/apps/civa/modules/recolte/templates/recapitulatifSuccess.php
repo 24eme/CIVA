@@ -52,7 +52,7 @@
                                                             <?php if(isset($form['usages_industriels_saisi'])) :?>
                                                                 <?php echo $form['usages_industriels_saisi']->render() ?> hl
                                                             <?php else: ?>
-                                                                <input id="recapitulatif_usages_industriels_saisi" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->dplc); ?>" />
+                                                                <input id="recapitulatif_usages_industriels_saisi" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
                                                             <?php endif; ?>
                                                         </td>
                                                     </tr>

@@ -57,7 +57,16 @@
    <?php if ($cepage->getConfig()->hasRendement()): ?>
     <li class="rendement <?php if ($cepage->getDplc() > 0): echo 'alerte'; endif;?>">Rdt : <strong><span id="cepage_current_rendement"><?php echo round($cepage->getRendementRecoltant(),0); ?></span> hl/ha</strong><span  class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_cepage" title="Message aide"></a></span></li>
    <?php endif; ?>
-   <?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
+   <?php if($cepage->haveUsagesIndustrielsSaisi()): ?>
+        <li>
+        <input type="text" id="cepage_volume_revendique" readonly="readonly" value="S <?php echoFloat($cepage->getVolumeRevendique()); ?>" />
+        <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
+        </li>
+        <li>
+        <input type="text" id="cepage_volume_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="S <?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+        <input type="hidden" id="cepage_volume_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+        </li>
+   <?php elseif ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
 	   <li>
 	      <input type="text" id="cepage_volume_revendique" readonly="readonly" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
 	      <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
