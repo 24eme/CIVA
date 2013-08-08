@@ -343,7 +343,7 @@ class ExportDSCiva {
                     if ($lieu == 'KLEV') {
                         $row.= "1,\"KL\",\"BL\",\"\"," . $cpt . ",";
                     } else {
-                        $row.= "2,\"" . $cepage_key . "\",\"" . $couleur . "\",\"" . $lieu . "\"," . $cpt . ",";
+                        $row.= "1,\"" . $cepage_key . "\",\"\",\"\"," . $cpt . ",";
                     }
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
@@ -353,7 +353,7 @@ class ExportDSCiva {
                 case 'LIEUDIT':
                     $row.= $id_csv . ",";
                     $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu\/couleur([A-Za-z]+)\/([\/a-zA-Z_-]+)/', '$4', $app_produit));
-                    $row.= "2,\"" . $cepage_key . "\",\"" . $couleur . "\",\"\"," . $cpt . ",";
+                    $row.= "1,\"" . $cepage_key . "\",\"\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
