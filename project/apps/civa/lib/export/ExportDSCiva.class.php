@@ -79,7 +79,7 @@ class ExportDSCiva {
         }
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted(), true);
+        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted(), true);        
         foreach ($produitsAgreges as $code_douane => $obj) {
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
         }
@@ -173,7 +173,7 @@ class ExportDSCiva {
         $etb = $ds->getEtablissement();
         $lieu_stockage = "";
         if ($ds->stockage->exist("adresse")) {
-            $lieu_stockage = str_replace(',','',$ds->declarant->adresse);
+            $lieu_stockage = str_replace(',','',$ds->stockage->adresse);
         } elseif ($ds->declarant->exist("adresse")) {
             $lieu_stockage = str_replace(',','',$ds->declarant->adresse);
         }
@@ -287,16 +287,21 @@ class ExportDSCiva {
     protected function makeLignes($ds) {
         $cpt = 1;
         $row = "";
-        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted());
+        $produitsAgreges = $this->getProduitsAgregesForDS($ds);
+        
         foreach ($produitsAgreges as $code_douane => $obj) {
             $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
-
             $app_produit = $obj->hash;
-            $produit = $obj->produit;
-
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             $cepage_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z]+)cepage_([A-Z]{2})/', '$4', $app_produit);
-            
+            if ($cepage_key == 'ED') {
+                $row.= $id_csv . ",";
+                $row.= "1,\"" . $cepage_key . "\",\"BL\",\"\"," . $cpt . ",";
+                $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+                $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+                $row.="\r\n";
+                continue;
+            }
             switch ($appellation_key) {
                 case 'PINOTNOIR':
                     $row.= $id_csv . ",";
@@ -311,7 +316,7 @@ class ExportDSCiva {
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
-                    break;
+                    break;                
                 case 'CREMANT':
                     $row.= $id_csv . ",";
                     $row.= "2,\"" . $cepage_key . "\",\"" . $cepage_key . "\",\"\"," . $cpt . ",";
@@ -343,7 +348,7 @@ class ExportDSCiva {
                     if ($lieu == 'KLEV') {
                         $row.= "1,\"KL\",\"BL\",\"\"," . $cpt . ",";
                     } else {
-                        $row.= "2,\"" . $cepage_key . "\",\"" . $couleur . "\",\"" . $lieu . "\"," . $cpt . ",";
+                        $row.= "1,\"" . $cepage_key . "\",\"".$couleur."\",\"\"," . $cpt . ",";
                     }
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
@@ -353,7 +358,7 @@ class ExportDSCiva {
                 case 'LIEUDIT':
                     $row.= $id_csv . ",";
                     $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu\/couleur([A-Za-z]+)\/([\/a-zA-Z_-]+)/', '$4', $app_produit));
-                    $row.= "2,\"" . $cepage_key . "\",\"" . $couleur . "\",\"\"," . $cpt . ",";
+                    $row.= "1,\"" . $cepage_key . "\",\"".$couleur."\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
@@ -465,6 +470,20 @@ class ExportDSCiva {
         $obj->volume_vt += $vol_vt;        
         $obj->volume_sgn += $vol_sgn;
         
+    }
+    
+    protected function getProduitsAgregesForDS($ds) {
+         $appelations_1 = array("\/appellation_ALSACEBLANC\/",
+                                "\/appellation_COMMUNALE\/",
+                                "\/appellation_LIEUDIT\/",
+                                "\/appellation_PINOTNOIR\/",
+                                "\/appellation_PINOTNOIRROUGE\/");
+        $appelations_2 = array("\/appellation_GRDCRU\/",
+                                "\/appellation_CREMANT\/");
+        
+        $produits = array_merge($ds->declaration->getProduitsSortedWithFilter($appelations_1),
+                                $ds->declaration->getProduitsSortedWithFilter($appelations_2));        
+        return $this->createProduitsAgregat($produits);
     }
 
 }
