@@ -74,7 +74,8 @@
                 <li><input type="text" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
                 <li>
                     <input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" />
-                    <input type="text" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
+                    <input type="text" class="num usages_industriels_saisi readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
+                    <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
                 </li>
             </ul>
 <?php /*endif;*/ ?>
