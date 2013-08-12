@@ -6,7 +6,7 @@ class RecolteForm extends acCouchdbObjectForm {
     const FORM_NAME_COOPERATIVES = 'cooperatives';
     const FORM_NAME_MOUTS = 'mouts';
     const FORM_SUFFIX_NEW = '_new';
-    const FORM_NAME = 'recolte[%s]';
+    const FORM_NAME = 'detail[%s]';
 
     public function configure() {
 

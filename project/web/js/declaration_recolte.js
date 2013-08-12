@@ -818,7 +818,7 @@ var initGestionRecolteDonnees = function()
 
         etatBtnRecolteCanBeInactif(false);
 
-        if ($(this).hasClass('volume')) {
+        if ($(this).hasClass('volume') || $(this).hasClass('usages_industriels_saisi')) {
             volumeOnChange(this);
         }
         if ($(this).attr('id') == 'recolte_superficie') {
@@ -861,7 +861,7 @@ var updateElementRows = function (inputObj, totalObj) {
         var element = parseFloat($(this).val());
         total += element;
         if (element && parseFloat(totalObj.val()) != total) {
-            totalObj.val(truncTotal(total));
+            totalObj.val(parseFloat(truncTotal(total)));
         }
     });
 };
@@ -899,6 +899,13 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
     res += '';
     $(elementCssId+'_volume_dplc').val(truncTotal(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1')));
+
+    if($(elementCssId+'_usages_industriels_saisi').val() > 0) {
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_usages_industriels_saisi').val())
+        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val());
+    } else {
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val())
+    }
 };
 
 var addClassAlerteIfNeeded = function (inputObj)
@@ -914,8 +921,8 @@ var volumeOnChange = function(input) {
     }
 
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
-    //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
-
+    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
+    
     if (!autoTotal)
         return ;
     $('ul.acheteurs li').each(function () {
@@ -929,7 +936,9 @@ var volumeOnChange = function(input) {
 
     updateElementRows($('input.total'), $('#cepage_total_volume'));
 
-    updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
+    //updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
+
+    updateElementRows($('input.usages_industriels_saisi'), $('#cepage_usages_industriels_saisi'));
 
     //    updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
     if ($('#cepage_rendement').val() == -1) {

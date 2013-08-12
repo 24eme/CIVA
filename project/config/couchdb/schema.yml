@@ -226,6 +226,7 @@ DR:
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
                                                       usages_industriels: {type:float }
+                                                      usages_industriels_saisi: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:

@@ -66,6 +66,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie', false));
     }
 
+    public function getUsagesIndustrielsSaisis($force_calcul = false) {
+        
+        return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudFields'), $force_calcul,  array('usages_industriels_saisi', false));
+    }
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
