@@ -79,9 +79,26 @@ class ExportDSCiva {
         }
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted(), true);        
+        $hasRebeches = $ds->hasRebeches();
+        $passedCremant = false;
+        $rebecheAdded = false;
+        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted(), true);      
+        
         foreach ($produitsAgreges as $code_douane => $obj) {
+            if($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)){
+                $lignes .= $this->addXMLDSRebeches($ds);
+                $passedCremant = false;
+                $rebecheAdded = true;
+            }
+            
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
+            
+            if($hasRebeches && !$passedCremant && preg_match('/appellation_CREMANT/', $obj->hash)){
+                $passedCremant = true;
+            }
+        }
+        if($hasRebeches && !$rebecheAdded){
+            $lignes .= $this->addXMLDSRebeches($ds);
         }
         $lignes .= $this->addXMLDSMouts($ds);
         return $lignes;
@@ -149,6 +166,15 @@ class ExportDSCiva {
         return $this->makeXMLDSLigne($lieu_stockage, "MC", $ds->getMouts());
     }
 
+    
+    protected function addXMLDSRebeches($ds) {
+       if (!$ds->hasRebeches()) {
+            return '';
+        }
+        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
+        return $this->makeXMLDSLigne($lieu_stockage, "4B999B", $ds->getRebeches()); 
+    }
+    
     public function exportEntete() {
         $entete_string = "";
         foreach ($this->ds_liste as $cpt => $ds) {
