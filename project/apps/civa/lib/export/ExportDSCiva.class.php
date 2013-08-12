@@ -82,7 +82,7 @@ class ExportDSCiva {
         $hasRebeches = $ds->hasRebeches();
         $passedCremant = false;
         $rebecheAdded = false;
-        $produitsAgreges = $this->createProduitsAgregat($ds->declaration->getProduitsSorted(), true);      
+        $produitsAgreges = $this->getProduitsAgregesForDS($ds,true);
         
         foreach ($produitsAgreges as $code_douane => $obj) {
             if($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)){
@@ -498,7 +498,7 @@ class ExportDSCiva {
         
     }
     
-    protected function getProduitsAgregesForDS($ds) {
+    protected function getProduitsAgregesForDS($ds, $vtsgn = false) {
          $appelations_1 = array("\/appellation_ALSACEBLANC\/",
                                 "\/appellation_COMMUNALE\/",
                                 "\/appellation_LIEUDIT\/",
@@ -509,7 +509,7 @@ class ExportDSCiva {
         
         $produits = array_merge($ds->declaration->getProduitsSortedWithFilter($appelations_1),
                                 $ds->declaration->getProduitsSortedWithFilter($appelations_2));        
-        return $this->createProduitsAgregat($produits);
+        return $this->createProduitsAgregat($produits, $vtsgn);
     }
 
 }
