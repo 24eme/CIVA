@@ -489,11 +489,20 @@ public function getConfigurationCampagne() {
     }
     
     public function hasMouts() {
-        if(!$this->isDsPrincipale()) return false;
+        if (!$this->isDsPrincipale()) {
+            return false;
+        }
         if($this->exist('mouts') && $this->mouts > 0){
             return true;
         }
         return false;
+    }
+
+    public function hasRebeches() {
+        if (!$this->declaration->hasCremant()) {
+            return false;
+        }   
+        return ($this->exist('rebeches') && $this->rebeches > 0);
     }
     
     public function isValidee(){
