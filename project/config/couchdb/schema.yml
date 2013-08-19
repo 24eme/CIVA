@@ -215,6 +215,7 @@ DR:
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
                                                 usages_industriels: {type:float }
+                                                usages_industriels_saisi: { type: float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection

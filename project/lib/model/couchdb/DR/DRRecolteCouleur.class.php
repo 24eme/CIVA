@@ -130,6 +130,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->getDplc();
     }
 
+    public function getUsagesIndustrielsSaisi($force_calcul = false) {
+        
+        return parent::getDataByFieldAndMethod('usages_industriels_saisi_total',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisiTotal', false));
+    }
+
     public function haveUsagesIndustrielsSaisi() {
 
         return $this->getLieu()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;

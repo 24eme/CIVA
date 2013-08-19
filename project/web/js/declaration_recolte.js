@@ -821,10 +821,10 @@ var initGestionRecolteDonnees = function()
         if ($(this).hasClass('volume') || $(this).hasClass('usages_industriels_saisi')) {
             volumeOnChange(this);
         }
-        if ($(this).attr('id') == 'recolte_superficie') {
+        if ($(this).attr('id') == 'detail_superficie') {
             superficieOnChange(this)
         }
-        if ($(this).attr('id') == 'recolte_denomination') {
+        if ($(this).attr('id') == 'detail_denomination') {
             $(this).val(jQuery.trim($(this).val()));
         }
     });
@@ -884,7 +884,7 @@ var superficieOnChange = function(input) {
 
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
-    $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
+    $('#detail_max_volume').val(parseFloat($('#detail_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
     $('#appellation_max_volume').val(parseFloat($('#appellation_total_superficie').val())/100 * parseFloat($('#appellation_rendement').val()));
     if ($('#cepage_rendement').val() != -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_superficie').val())/100 * parseFloat($('#cepage_rendement').val()));

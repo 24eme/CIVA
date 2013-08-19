@@ -219,6 +219,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->getSumNoeudFields('usages_industriels', false);
     }
 
+    public function getUsagesIndustrielsSaisiTotal($force_calcul = false) {
+        
+        return parent::getDataByFieldAndMethod('usages_industriels_saisi_total',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', false));
+    }
+
     public function getUsageIndustrielCalculeAppellation($force_calcul = false) {
         $dplc = $this->getDplcAppellation();
         if($dplc > 0) {
