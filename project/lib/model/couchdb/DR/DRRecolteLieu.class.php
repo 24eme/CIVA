@@ -140,16 +140,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
     }
 
-    /*public function getUsageIndustrielCalcule($force_calcul = false) {
-        $dplc = $this->getDplc($force_calcul);
-        if($dplc > 0) {
-
-            return $dplc;
-        }
-
-        return ($this->usages_industriels_saisi) ? $this->usages_industriels_saisi : 0;
-    }*/
-
     public function getDplcTotal() {
 
         return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));

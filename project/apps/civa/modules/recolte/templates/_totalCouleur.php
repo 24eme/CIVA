@@ -65,12 +65,15 @@
                         <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
                     </li>
                     <li>
-                        <input type="hidden" id="appellation_volume_usages_industriels_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
-                        <input type="text" id="appellation_volume_usages_industriels" readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
-
-                        <!--<input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
-                        <input type="text" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>-->                   
+                        <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+                        <input type="text" id="appellation_usages_industriels" class="<?php if ($couleur->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+                        <input type="hidden" id="appellation_usages_industriels_saisi" readonly="readonly" value="0" />
+                        <input type="hidden" id="appellation_usages_industriels_saisi_orig" value="0" />
+                        <input type="hidden" id="appellation_usages_industriels_saisi_total" readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustrielsSaisi()); ?>"/>
+                        <input type="hidden" id="appellation_usages_industriels_saisi_total_orig" readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustrielsSaisi()); ?>"/> 
+                        <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                        <input type="hidden" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
+            echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>                  
                     </li>
 <?php endif; ?>
 

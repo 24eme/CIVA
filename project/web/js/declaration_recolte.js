@@ -900,9 +900,14 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     res += '';
     $(elementCssId+'_volume_dplc').val(truncTotal(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1')));
 
+    console.log($(elementCssId+'_usages_industriels_saisi_total').val());
+
     if($(elementCssId+'_usages_industriels_saisi').val() > 0) {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_usages_industriels_saisi').val())
-        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val());
+        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val()); 
+    } else if($(elementCssId+'_usages_industriels_saisi_total').length > 0 && $(elementCssId+'_usages_industriels_saisi_total').val() > 0) {
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_usages_industriels_saisi_total').val());
+        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val()); 
     } else {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val())
     }
@@ -950,14 +955,16 @@ var volumeOnChange = function(input) {
     updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
     updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
     updateAppellationTotal('#cepage_volume_revendique', '#appellation_total_revendique_sum');
-
+    updateAppellationTotal('#cepage_usages_industriels_saisi', '#appellation_usages_industriels_saisi_total');
     updateAppellationTotal('#cepage_volume_dplc', '#appellation_total_dplc_sum');
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'));
     addClassAlerteIfNeeded($('#appellation_volume_dplc'));
+    addClassAlerteIfNeeded($('#appellation_usages_industriels'));
     addClassAlerteIfNeeded($('#cepage_volume_dplc'));
+    addClassAlerteIfNeeded($('#cepage_usages_industriels'));
 
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
