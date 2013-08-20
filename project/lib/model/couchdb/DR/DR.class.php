@@ -359,6 +359,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
                 } else {
 
+                    if($lieu->getDplc() > $lieu->getUsagesIndustriels()) {
+                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_usages_industriels_too_small')));
+                    }
+
                     //Verifie que le recapitulatif des ventes est rempli
                     if (!$lieu->hasCompleteRecapitulatifVente()) {
                         array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
