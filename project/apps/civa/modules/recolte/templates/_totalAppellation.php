@@ -64,21 +64,21 @@
 		    </li>
         <li>
             <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getUsageIndustrielCalculeAppellation()); ?>"/>
-            <input type="text" id="appellation_volume_dplc" readonly="readonly"
+            <input type="hidden" id="appellation_volume_dplc" readonly="readonly"
                    class="<?php if ($lieu->getDplcAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
                    value="<?php echoFloat($lieu->getDplc()); ?>" />
             <input type="text" id="appellation_volume_usage_industriel" readonly="readonly" value="<?php echoFloat( $lieu->getUsagesIndustriels()); ?>"/>
             <input type="hidden" id="appellation_volume_usage_industriel_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/> 
-            <input type="text" id="appellation_volume_usage_industriel_saisi_total" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisiTotal()); ?>"/>
+            <input type="hidden" id="appellation_volume_usage_industriel_saisi_total" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisiTotal()); ?>"/>
             <input type="hidden" id="appellation_volume_usage_industriel_saisi_total_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisiTotal()); ?>"/> 
-            <input type="text" id="appellation_volume_usage_industriel_saisi" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/>
+            <input type="hidden" id="appellation_volume_usage_industriel_saisi" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/>
             <input type="hidden" id="appellation_volume_usage_industriel_saisi_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/> 
          </li>
       <?php endif; ?>
       <?php if ($lieu->getConfig()->hasRendementCepage()) : ?>
         <li>
 		        <input type="hidden" id="appellation_total_revendique_sum_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendiqueTotal()); ?>" />
-		        <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat($lieu->getVolumeRevendiqueTotal())?> "/>
+		        <input type="text" id="appellation_total_revendique_sum" readonly="readonly" value="Σ <?php echoFloat($lieu->getVolumeRevendiqueTotal())?>"/>
         </li>
         <li>
             <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($lieu->getUsagesIndustrielsTotal()); ?>"/>

@@ -39,11 +39,6 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return round($this->getTotalVolume() - $this->getUsagesIndustriels(), 2);
     }
 
-    public function getVolumeRevendiqueTotal() {
-
-        return parent::getDataByFieldAndMethod('volume_revendique_total', array($this, 'getSumNoeudFields'), true, array('volume_revendique'));
-    }
-
     public function getVolumeMaxCouleur() {
         return round(($this->getTotalSuperficie() / 100) * $this->getConfig()->getRendementCouleur(), 2);
     }
@@ -132,7 +127,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
     public function getUsagesIndustrielsSaisi($force_calcul = false) {
         
-        return parent::getDataByFieldAndMethod('usages_industriels_saisi_total',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisiTotal', false));
+        return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', false));
     }
 
     public function haveUsagesIndustrielsSaisi() {

@@ -157,6 +157,7 @@ DR:
                                           dplc: {type: float}
                                           usages_industriels_calcule: { type:float }
                                           usages_industriels_saisi: { type:float }
+                                          usages_industriels_saisi_total: { type:float }
                                           usages_industriels_noeud: { }
                                           acheteurs:
                                              type: collection

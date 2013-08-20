@@ -47,6 +47,10 @@
                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
                                                     </tr>
                                                     <tr>
+                                                        <td>Usages industriels min <span class="unites">(hl)</span> :</td>
+                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()) ;?> hl</td>
+                                                    </tr>
+                                                    <tr>
                                                         <td>Usages industriels <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                         <td class="valeur alt">
                                                             <?php if(isset($form['usages_industriels_saisi'])) :?>
