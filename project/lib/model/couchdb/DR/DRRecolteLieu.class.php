@@ -2,9 +2,6 @@
 
 class DRRecolteLieu extends BaseDRRecolteLieu {
 
-    const USAGES_INDUSTRIELS_NOEUD_LIEU = 'lieu';
-    const USAGES_INDUSTRIELS_NOEUD_DETAIL = 'detail';
-
     public function getLibelleWithAppellation() {
         if ($this->getLibelle())
             return $this->getParent()->getParent()->getLibelle() . ' - ' . $this->getLibelle();
@@ -126,16 +123,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->_storage[$key];
     }
 
-    public function getVolumeRevendiqueAppellationWithUIS() {
-        $volume_revendique = $this->getVolumeRevendiqueAppellation();
-        if($volume_revendique < $this->getTotalVolume()) {
-
-            return $volume_revendique;
-        }
-
-        return $volume_revendique - $this->usages_industriels_saisi;
-    }
-
     public function getDplc($force_calcul = false) {
         return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
     }
@@ -145,20 +132,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
     }
 
-    public function getUsageIndustrielCalculeTotal($force_calcul = false) {
-        $dplc = $this->getDplcTotal();
-        if($dplc > 0) {
+    public function getUsagesIndustrielsSaisi($force_calcul = false) {
+        if($this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_DETAIL) {
 
-            return $dplc;
+            return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', $force_calcul));
         }
 
-        return $this->usages_industriels_saisi;
-    }
-
-    public function getUsageIndustrielSaisi() {
-        if($this->getTotalCaveParticuliere() == 0) {
-            return 0;
-        }
         return $this->_get('usages_industriels_saisi');
     }
 
@@ -191,12 +170,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getUsagesIndustrielsFinal() {
-        if($this->usages_industriels_noeud == self::USAGES_INDUSTRIELS_NOEUD_DETAIL) {
+        if($this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_DETAIL) {
 
             return $this->getUsagesIndustrielsTotal();
         }
 
-        if($this->usages_industriels_noeud == self::USAGES_INDUSTRIELS_NOEUD_LIEU) {
+        if($this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_LIEU) {
 
             return $this->usages_industriels_saisi;
         }
@@ -417,7 +396,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function haveUsagesIndustrielsSaisi() {
 
-        return !is_null($this->usages_industriels_noeud);
+        return !is_null($this->getUsagesIndustrielsNoeud());
     }
 
     public function haveUsagesIndustrielsSaisiInDetails() {
@@ -431,12 +410,12 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function canHaveUsagesIndustrielsSaisi() {
-        if(!$this->usages_industriels_noeud) {
+        if(!$this->getUsagesIndustrielsNoeud()) {
 
             return true;
         }
 
-        return $this->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_LIEU;
+        return $this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_LIEU;
     }
 
     protected function update($params = array()) {
@@ -450,16 +429,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
-            /* $this->total_volume = $this->getTotalVolume(true);
-              $this->total_superficie = $this->getTotalSuperficie(true); */
-            if($this->usages_industriels_noeud != DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_LIEU && !is_null($this->usages_industriels_saisi)) {
-                $this->usages_industriels_noeud = DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_LIEU;
-            } elseif($this->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_LIEU) {
-                $this->usages_industriels_noeud = null;
-            }
-
             $this->dplc = $this->getDplc(true);
             $this->usages_industriels_calcule = $this->getUsagesIndustriels(true);
+            $this->usages_industriels_saisi = $this->getUsagesIndustrielsSaisi(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
         }
 

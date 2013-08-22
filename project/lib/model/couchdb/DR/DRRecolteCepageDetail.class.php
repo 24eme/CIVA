@@ -148,12 +148,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             }
         }
 
-        if($this->getLieuNode()->usages_industriels_noeud != DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL && !is_null($this->usages_industriels_saisi)) {
-            $this->getLieuNode()->usages_industriels_noeud = DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
-        } elseif($this->getLieuNode()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL && !$this->getLieuNode()->haveUsagesIndustrielsSaisiInDetails()) {
-            $this->getLieuNode()->usages_industriels_noeud = null;
-        }
-
         $this->usages_industriels = $this->getUsagesIndustriels(true);
         $this->volume_revendique = $this->volume - $this->usages_industriels;
 
@@ -170,17 +164,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function canHaveUsagesIndustrielsSaisi() {
-        if(!$this->getLieuNode()->usages_industriels_noeud) {
 
-            return true;
-        }
-
-        return $this->getLieuNode()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
-    }
-
-    public function haveUsagesIndustrielsSaisi() {
-
-        return $this->getCepage()->haveUsagesIndustrielsSaisi();
+        return $this->getCepage()->canHaveUsagesIndustrielsSaisi();
     }
 
     public function getUsagesIndustriels($force = false) {
@@ -189,7 +174,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             return $this->_get('usages_industriels');
         }
 
-        if(!$this->haveUsagesIndustrielsSaisi()) {
+        if(!$this->canHaveUsagesIndustrielsSaisi()) {
 
             return $this->volume_dplc;
         }

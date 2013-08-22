@@ -2,6 +2,8 @@
 
 abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
+    const USAGES_INDUSTRIELS_NOEUD_LIEU = 'lieu';
+    const USAGES_INDUSTRIELS_NOEUD_DETAIL = 'detail';
 
     public function getConfig() {
 
@@ -116,6 +118,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     protected function issetField($field) {
         return ($this->_get($field) || $this->_get($field) === 0);
+    }
+
+    public function getUsagesIndustrielsNoeud() {
+
+        return $this->getDocument()->recolte->_get('usages_industriels_noeud');
     }
 
 }

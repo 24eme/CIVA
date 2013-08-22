@@ -64,10 +64,13 @@
         <li>
           <input type="hidden" id="cepage_volume_dplc" readonly="readonly" class="<?php if ($cepage->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getDplc()); ?>" />
           <input type="hidden" id="cepage_volume_dplc_orig" class="<?php if ($cepage->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getDplc()); ?>" />
-          <input type="text" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-          <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-          <input type="hidden" id="cepage_usages_industriels_saisi" readonly="readonly" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
-          <input type="hidden" id="cepage_usages_industriels_saisi_orig" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
+          <?php if (!$cepage->canHaveUsagesIndustrielsSaisi()) : ?>
+            <input type="text" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+            <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+          <?php else: ?>
+            <input type="text" id="cepage_usages_industriels_saisi" readonly="readonly" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
+            <input type="hidden" id="cepage_usages_industriels_saisi_orig" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
+          <?php endif; ?>
         </li>
         </ul>
     </div>

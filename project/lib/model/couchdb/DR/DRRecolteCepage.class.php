@@ -184,7 +184,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     protected function getUsagesIndustrielsFinal() {
-        if($this->haveUsagesIndustrielsSaisi()) {
+        if($this->canHaveUsagesIndustrielsSaisi()) {
 
           return $this->getSumNoeudFields('usages_industriels', false);
         }
@@ -192,9 +192,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->getDplc();
     }
 
-    public function haveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesIndustrielsSaisi() {
         
-        return $this->getCouleur()->haveUsagesIndustrielsSaisi();
+        return $this->getCouleur()->canHaveUsagesIndustrielsSaisi();
     }
 
     protected function update($params = array()) {

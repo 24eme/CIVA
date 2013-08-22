@@ -117,7 +117,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     protected function getUsagesIndustrielsFinal() {
-        if($this->haveUsagesIndustrielsSaisi()) {
+        if($this->canHaveUsagesIndustrielsSaisi()) {
 
           return $this->getSumNoeudFields('usages_industriels', false);
         }
@@ -130,9 +130,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', false));
     }
 
-    public function haveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesIndustrielsSaisi() {
 
-        return $this->getLieu()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
+        return $this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_DETAIL;
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
