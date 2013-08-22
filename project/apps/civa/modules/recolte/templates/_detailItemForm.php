@@ -60,12 +60,11 @@
                     <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
                     <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
                     <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                    <li>
-                        <input id="detail_volume_revendique"  type="text" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" /></li>
-                    <?php if(isset($form['usages_industriels_saisi'])): ?>
+                    <?php if (isset($form['usages_industriels_saisi'])) : ?>
+                        <li>
+                            <input id="detail_volume_revendique"  type="text" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" />
+                        </li>
                         <li><?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi')) ?></li>
-                    <?php else: ?>
-                        <li><input id="detail_usages_industriels_saisi"  type="text" class="usages_industriels_saisi num readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi) ?>" /></li>
                     <?php endif; ?>
                 </ul>
             <?php /*endif;*/ ?>

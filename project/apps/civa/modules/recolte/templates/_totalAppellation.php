@@ -59,15 +59,15 @@
 		    <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxAppellation()); ?>"/>
 		    <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getConfig()->getRendementAppellation()); ?>"/>
         <li>
-		        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat( $lieu->getVolumeRevendique()); ?>" />
-		        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat( $lieu->getVolumeRevendique()); ?>" />
+		        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
+		        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
 		    </li>
         <li>
             <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getUsageIndustrielCalculeAppellation()); ?>"/>
             <input type="hidden" id="appellation_volume_dplc" readonly="readonly"
                    class="<?php if ($lieu->getDplcAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
                    value="<?php echoFloat($lieu->getDplc()); ?>" />
-            <input type="hidden" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat( $lieu->getUsagesIndustriels()); ?>"/>
+            <input type="hidden" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
             <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/> 
             <input type="text" class="<?php if ($lieu->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" id="appellation_usages_industriels_saisi" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/>
             <input type="hidden" id="appellation_usages_industriels_saisi_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/> 

@@ -903,6 +903,8 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if($(elementCssId+'_usages_industriels_saisi').val() > 0) {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_usages_industriels_saisi').val())
         $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val()); 
+    } else {
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val())
     }
 };
 

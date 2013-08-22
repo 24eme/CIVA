@@ -69,16 +69,18 @@
         <?php endif; ?>
         </p>
 
-<?php /*if ($detail->getConfig()->hasRendement()):*/ ?>
+        <?php if ($detail->getConfig()->hasRendement()): ?>
             <ul class="vol_revendique_dplc">
                 <li><input type="text" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
                 <li>
                     <input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" />
-                    <input type="text" class="num usages_industriels_saisi readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
                     <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
+                    <?php if($detail->canHaveUsagesIndustrielsSaisi()): ?>
+                    <input type="text" class="num usages_industriels_saisi readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
+                    <?php endif; ?>
                 </li>
             </ul>
-<?php /*endif;*/ ?>
+        <?php endif; ?>
     </div>
 
     <div class="col_btn">
