@@ -67,11 +67,7 @@
           <?php if (!$cepage->canHaveUsagesIndustrielsSaisi()) : ?>
             <input type="text" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
             <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-            <input type="hidden" id="cepage_usages_industriels_saisi" readonly="readonly" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
-            <input type="hidden" id="cepage_usages_industriels_saisi_orig" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
           <?php else: ?>
-            <input type="hidden" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-            <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
             <input type="text" id="cepage_usages_industriels_saisi" readonly="readonly" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
             <input type="hidden" id="cepage_usages_industriels_saisi_orig" class="<?php if ($cepage->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustrielsSaisi()); ?>" />
           <?php endif; ?>

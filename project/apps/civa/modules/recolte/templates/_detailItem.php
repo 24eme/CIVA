@@ -71,12 +71,15 @@
 
         <?php if ($detail->getConfig()->hasRendement()): ?>
             <ul class="vol_revendique_dplc">
-                <li><input type="text" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
+                <li>
+                    <input type="<?php echo (!$detail->canHaveUsagesIndustrielsSaisi()) ? 'hidden' : 'text' ?>" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
+                    </li>
                 <li>
                     <input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" />
-                    <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
-                    <?php if($detail->canHaveUsagesIndustrielsSaisi()): ?>
-                    <input type="text" class="num usages_industriels_saisi readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
+                    <?php if(!$detail->canHaveUsagesIndustrielsSaisi()): ?>
+                        <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
+                    <?php else: ?>
+                        <input type="text" class="num usages_industriels_saisi readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
                     <?php endif; ?>
                 </li>
             </ul>

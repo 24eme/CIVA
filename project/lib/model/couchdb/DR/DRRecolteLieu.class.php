@@ -383,6 +383,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getVolumeRevendiqueFinal() {
         $volume_revendique_usages_industriels = round($this->getTotalVolume() - $this->getUsagesIndustriels(), 2);
+
+        if (!$this->getConfig()->hasRendementAppellation()) {
+            return $volume_revendique_usages_industriels;
+        }
+
         $volume_revendique_appellation = $this->getVolumeRevendiqueWithoutUI();
 
         if($volume_revendique_usages_industriels > $volume_revendique_appellation) {

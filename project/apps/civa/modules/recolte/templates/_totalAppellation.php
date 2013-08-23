@@ -51,25 +51,23 @@
    <input id="appellation_total_volume_orig" type="hidden" value="<?php echoFloat( $lieu->getTotalVolume()); ?>" />
    <input id="appellation_total_volume" type="text" readonly="readonly" value="<?php echoFloat( $lieu->getTotalVolume()); ?>" />
    </p>
-        <ul class="vol_revendique_dplc">
-   <?php if ($lieu->getConfig()->hasRendement()): ?>
-         <li class="rendement <?php if ($lieu->getDplcTotal()) echo 'alerte'; ?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($lieu->getRendementRecoltant(),0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
-   <?php endif; ?>
+    <ul class="vol_revendique_dplc">
+      <?php if ($lieu->getConfig()->hasRendement()): ?>
+         <li class="rendement <?php if ($lieu->getDplcTotal()) echo 'rouge'; ?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($lieu->getRendementRecoltant(),0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
+      <?php endif; ?>
       <?php if ($lieu->getConfig()->hasRendementAppellation()) : ?>
 		    <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxAppellation()); ?>"/>
 		    <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getConfig()->getRendementAppellation()); ?>"/>
         <li>
 		        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
-		        <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
+		        <input class="<?php if ($lieu->getDplc() > 0) echo 'rouge'; ?>" type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
 		    </li>
         <li>
             <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getUsageIndustrielCalculeAppellation()); ?>"/>
             <input type="hidden" id="appellation_volume_dplc" readonly="readonly"
                    class="<?php if ($lieu->getDplcAppellation()  &&  $lieu->dplc =! 0  ) echo 'alerte'; ?>"
                    value="<?php echoFloat($lieu->getDplc()); ?>" />
-            <input type="hidden" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
-            <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/> 
-            <input type="text" class="<?php if ($lieu->getUsagesIndustrielsSaisi()) echo 'alerte'; ?>" id="appellation_usages_industriels_saisi" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/>
+            <input type="text" class="<?php if ($lieu->getDplc() > 0) echo 'rouge'; ?> <?php if ($lieu->getUsagesIndustrielsSaisi() < $lieu->getDplc()) echo 'alerte'; ?>" id="appellation_usages_industriels_saisi" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/>
             <input type="hidden" id="appellation_usages_industriels_saisi_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustrielsSaisi()); ?>"/> 
          </li>
       <?php endif; ?>
@@ -80,9 +78,9 @@
         </li>
         <li>
             <input type="hidden" id="appellation_total_dplc_sum_orig" value="<?php echoFloat($lieu->getUsagesIndustrielsTotal()); ?>"/>
-            <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($lieu->getUsagesIndustrielsTotal()) echo 'alerte'; ?>" value="Σ <?php echoFloat($lieu->getUsagesIndustrielsTotal()); ?>"/>
+            <input type="text" id="appellation_total_dplc_sum" readonly="readonly" class="<?php if ($lieu->getUsagesIndustrielsTotal()) echo 'rouge'; ?>" value="Σ <?php echoFloat($lieu->getUsagesIndustrielsTotal()); ?>"/>
         </li>
       <?php endif; ?>
-        </ul>
+      </ul>
     </div>
 </div>

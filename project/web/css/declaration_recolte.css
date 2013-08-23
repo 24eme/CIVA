@@ -1705,7 +1705,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	padding: 0;
 }
 
-#gestion_recolte .col_total .vol_revendique_dplc .alerte {
+#gestion_recolte .col_total .vol_revendique_dplc .rouge, #gestion_recolte .col_total .vol_revendique_dplc .alerte {
 	color: #bc0d0d;
 }
 

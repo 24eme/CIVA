@@ -58,14 +58,18 @@
                 <ul class="vol_revendique_dplc">
                     <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
                     <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
-                    <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                    <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                    <?php if (isset($form['usages_industriels_saisi'])) : ?>
-                        <li>
-                            <input id="detail_volume_revendique"  type="text" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" />
-                        </li>
-                        <li><?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi')) ?></li>
-                    <?php endif; ?>
+                    <li>
+                        
+                        <input id="detail_volume_revendique" type="<?php echo (!isset($form['usages_industriels_saisi'])) ? 'hidden' : 'text' ?>" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
+                    </li>
+                    <li>
+                        <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <?php if (isset($form['usages_industriels_saisi'])) : ?>
+                            <?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi')) ?>
+                        <?php else: ?>
+                            <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <?php endif; ?>
+                    </li>
                 </ul>
             <?php /*endif;*/ ?>
         </div>

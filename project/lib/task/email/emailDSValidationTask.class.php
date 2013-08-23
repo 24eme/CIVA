@@ -88,9 +88,9 @@ EOF;
   protected function getMessageBody($nom, $campagne) {
       return "Bonjour ".$nom.",
 
-Vous avez commencé à saisir en ligne votre Déclaration de Stock ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
+Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
 
-Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit. 
+Nous vous rappelons que vous devez impérativement la valider avant le 31 août minuit. 
 
 Cordialement,
 
