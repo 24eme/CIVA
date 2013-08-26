@@ -212,7 +212,7 @@ class recolteActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $redirect = false;
-                if( $this->form->getValue('usages_industriels_saisi') !=  $this->form->getObject()->getUsagesIndustrielsSaisi() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
+                if( $this->form->getValue('usages_industriels') !=  $this->form->getObject()->getUsagesIndustriels() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
                     $redirect = true;
 
                 $this->form->save();

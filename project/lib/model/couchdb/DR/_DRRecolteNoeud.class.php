@@ -2,9 +2,6 @@
 
 abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
-    const USAGES_INDUSTRIELS_NOEUD_LIEU = 'lieu';
-    const USAGES_INDUSTRIELS_NOEUD_DETAIL = 'detail';
-
     public function getConfig() {
 
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
@@ -120,9 +117,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return ($this->_get($field) || $this->_get($field) === 0);
     }
 
-    public function getUsagesIndustrielsNoeud() {
+    public function isUsagesIndustrielsSaisiCepage() {
 
-        return $this->getDocument()->recolte->_get('usages_industriels_noeud');
+        return $this->getDocument()->exist('usages_industriels_cepage') && $this->getDocument()->get('usages_industriels_cepage');
     }
 
 }

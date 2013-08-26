@@ -117,15 +117,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
     }
 
-    public function getUsagesIndustrielsSaisi($force_calcul = false) {
-        if($this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_DETAIL) {
-
-            return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', $force_calcul));
-        }
-
-        return $this->_get('usages_industriels_saisi') ? $this->_get('usages_industriels_saisi') : 0;
-    }
-
     public function getDplcRendement() {
 
         return $this->getDplcAppellation();
@@ -151,36 +142,21 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getUsagesIndustriels($force_calcul = false) {
 
-        return parent::getDataByFieldAndMethod('usages_industriels_calcule', array($this, 'getUsagesIndustrielsFinal'), $force_calcul);
-    }
-
-    public function getUsagesIndustrielsFinal() {
-        if($this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_DETAIL) {
-
-            return $this->getUsagesIndustrielsTotal();
-        }
-
-        return $this->usages_industriels_saisi;
+        return parent::getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsFinal'), $force_calcul);
     }
 
     public function getUsagesIndustrielsTotal() {
 
-        return $this->getSumNoeudFields('usages_industriels', false);
+        return parent::getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
     }
 
-    public function getUsagesIndustrielsSaisiTotal($force_calcul = false) {
-        
-        return parent::getDataByFieldAndMethod('usages_industriels_saisi_total',  array($this, 'getSumNoeudWithMethod'), $force_calcul,  array('getUsagesIndustrielsSaisi', false));
-    }
+    public function getUsagesIndustrielsFinal() {
+        if(!$this->canHaveUsagesIndustrielsSaisi()) {
 
-    public function getUsageIndustrielCalculeAppellation($force_calcul = false) {
-        $dplc = $this->getDplcAppellation();
-        if($dplc > 0) {
-
-            return $dplc;
+            return $this->getUsagesIndustrielsTotal();
         }
 
-        return $this->usages_industriels_saisi;
+        return $this->_get('usages_industriels') ? $this->_get('usages_industriels') : 0;
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -398,28 +374,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $volume_revendique_usages_industriels;
     }
 
-    public function haveUsagesIndustrielsSaisi() {
-
-        return !is_null($this->getUsagesIndustrielsNoeud());
-    }
-
-    public function haveUsagesIndustrielsSaisiInDetails() {
-        foreach($this->getProduitsDetails() as $detail) {
-            if(!is_null($detail->usages_industriels_saisi)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function canHaveUsagesIndustrielsSaisi() {
-        if(!$this->getUsagesIndustrielsNoeud()) {
-
-            return true;
-        }
-
-        return $this->getUsagesIndustrielsNoeud() == self::USAGES_INDUSTRIELS_NOEUD_LIEU;
+        
+        return !$this->isUsagesIndustrielsSaisiCepage();
     }
 
     protected function update($params = array()) {
@@ -434,8 +391,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->dplc = $this->getDplc(true);
-            $this->usages_industriels_saisi = $this->getUsagesIndustrielsSaisi(true);
-            $this->usages_industriels_calcule = $this->getUsagesIndustriels(true);
+            $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
         }
 

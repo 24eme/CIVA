@@ -53,10 +53,10 @@
                                                     <tr>
                                                         <td>Usages industriels <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                         <td class="valeur alt">
-                                                            <?php if(isset($form['usages_industriels_saisi'])) :?>
-                                                                <?php echo $form['usages_industriels_saisi']->render() ?> hl
+                                                            <?php if(isset($form['usages_industriels'])) :?>
+                                                                <?php echo $form['usages_industriels']->render() ?> hl
                                                             <?php else: ?>
-                                                                <input id="recapitulatif_usages_industriels_saisi" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
+                                                                <input id="recapitulatif_usages_industriels" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
                                                             <?php endif; ?>
                                                         </td>
                                                     </tr>
@@ -64,8 +64,8 @@
 											</tbody>
 										</table>
 
-                                    <?php if( isset($form['usages_industriels_saisi'])
-                                           && !$form['usages_industriels_saisi']->getWidget()->getAttribute('readonly')) :?>
+                                    <?php if( isset($form['usages_industriels'])
+                                           && !$form['usages_industriels']->getWidget()->getAttribute('readonly')) :?>
                                         <div class="btn">
                                             <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
                                         </div>

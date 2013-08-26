@@ -180,6 +180,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
 
 
-        return $this->usages_industriels_saisi;
+        return $this->usages_industriels;
     }
 }

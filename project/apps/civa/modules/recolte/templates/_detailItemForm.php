@@ -60,14 +60,14 @@
                     <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
                     <li>
                         
-                        <input id="detail_volume_revendique" type="<?php echo (!isset($form['usages_industriels_saisi'])) ? 'hidden' : 'text' ?>" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
+                        <input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
                     </li>
                     <li>
                         <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                        <?php if (isset($form['usages_industriels_saisi'])) : ?>
-                            <?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi')) ?>
+                        <?php if (isset($form['usages_industriels'])) : ?>
+                            <?php echo $form['usages_industriels']->render(array('class' => 'num usages_industriels')) ?>
                         <?php else: ?>
-                            <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                            <input mode="auto" id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
                         <?php endif; ?>
                     </li>
                 </ul>

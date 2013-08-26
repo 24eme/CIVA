@@ -94,6 +94,7 @@ DR:
       jeunes_vignes: {type: float}
       declaration_commune: {}
       declaration_insee: {}
+      usages_industriels_cepage: {type: float, required: false}
       etape: {type: string, required: false}
       recolte:
         type: collection
@@ -157,8 +158,7 @@ DR:
                                           volume_revendique: {type: float}
                                           dplc: {type: float}
                                           usages_industriels_calcule: { type:float }
-                                          usages_industriels_saisi: { type:float }
-                                          usages_industriels_saisi_total: { type:float }
+                                          usages_industriels: { type:float }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -216,7 +216,6 @@ DR:
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
                                                 usages_industriels: {type:float }
-                                                usages_industriels_saisi: { type: float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -228,7 +227,6 @@ DR:
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
                                                       usages_industriels: {type:float }
-                                                      usages_industriels_saisi: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
@@ -282,7 +280,6 @@ DR:
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
                                                                   usages_industriels: { type: float }
-                                                                  usages_industriels_saisi: { type: float }
 
 _Compte:
   type: abstract

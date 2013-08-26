@@ -27,8 +27,8 @@ class RecolteForm extends acCouchdbObjectForm {
         ));
 
         if($this->getObject()->canHaveUsagesIndustrielsSaisi()) {
-            $this->setWidget('usages_industriels_saisi', new sfWidgetFormInputFloat());
-            $this->setValidator('usages_industriels_saisi', new sfValidatorNumber(array('required' => false)));
+            $this->setWidget('usages_industriels', new sfWidgetFormInputFloat());
+            $this->setValidator('usages_industriels', new sfValidatorNumber(array('required' => false)));
         }
         
         if ($this->getOption('lieu_required', false)) {

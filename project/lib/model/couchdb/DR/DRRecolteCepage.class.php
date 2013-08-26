@@ -66,11 +66,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie', false));
     }
 
-    public function getUsagesIndustrielsSaisi($force_calcul = false) {
-        
-        return parent::getDataByFieldAndMethod('usages_industriels_saisi',  array($this, 'getSumNoeudFields'), $force_calcul,  array('usages_industriels_saisi', false));
-    }
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
@@ -183,10 +178,15 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->getTotalVolume() - $this->getUsagesIndustriels();
     }
 
+    public function getUsagesIndustrielsTotal() {
+
+        return parent::getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
+    }
+
     protected function getUsagesIndustrielsFinal() {
         if($this->canHaveUsagesIndustrielsSaisi()) {
 
-          return $this->getSumNoeudFields('usages_industriels', false);
+          return $this->getUsagesIndustrielsTotal();
         }
 
         return $this->getDplc();

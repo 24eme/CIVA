@@ -13,15 +13,15 @@ class RecapitulatifForm extends acCouchdbObjectForm {
         $lieu = $this->getObject();
         if($lieu->canHaveUsagesIndustrielsSaisi()){
             $this->setWidgets(array(
-                'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
+                'usages_industriels' => new sfWidgetFormInputFloat(array()),
             ));
 
             $this->setValidators(array(
-                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false)),
+                'usages_industriels' => new sfValidatorNumber(array('required' => false)),
             ));
 
-            $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
-            $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
+            $this->getWidget('usages_industriels')->setLabel('Usages industriels');
+            $this->getValidator('usages_industriels')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
 
             $this->is_saisisable = true;
         }

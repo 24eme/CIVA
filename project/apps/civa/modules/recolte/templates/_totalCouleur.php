@@ -65,8 +65,8 @@
                         <input type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
                     </li>
                     <li>
-                        <input type="<?php echo ($couleur->canHaveUsagesIndustrielsSaisi()) ? "text" : "hidden"?>" id="appellation_usages_industriels_saisi" readonly="readonly" value="0" />
-                        <input type="hidden" id="appellation_usages_industriels_saisi_orig" value="0" />
+                        <input type="<?php echo ($couleur->canHaveUsagesIndustrielsSaisi()) ? "text" : "hidden"?>" id="appellation_usages_industriels" readonly="readonly" value="0" />
+                        <input type="hidden" id="appellation_usages_industriels_orig" value="0" />
                         <input type="<?php echo ($couleur->canHaveUsagesIndustrielsSaisi()) ? "hidden" : "text"?>" id="appellation_volume_dplc" readonly="readonly" class="<?php if ($couleur->getDplcCouleur()) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>                  
                         <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
                     </li>
