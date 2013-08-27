@@ -64,15 +64,8 @@
         <li>
           <input type="hidden" id="cepage_volume_dplc" readonly="readonly" />
           <input type="hidden" id="cepage_volume_dplc_orig" value="<?php echoFloat($cepage->getDplc()); ?>" />
-          <?php if (!$cepage->canHaveUsagesIndustrielsSaisi()) : ?>
-            <input type="text" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-            <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-          <?php else: ?>
-            <input type="text" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getDplc() > $cepage->getUsagesIndustriels()) echo 'alerte'; ?> <?php if ($cepage->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-            <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
-          <?php endif; ?>
-
-        </li>
+          <input type="<?php echo (!$cepage->canHaveUsagesIndustrielsSaisi()) ? 'hidden' : 'text' ?>" id="cepage_usages_industriels" readonly="readonly" class="<?php if ($cepage->getDplc() > $cepage->getUsagesIndustriels()) echo 'alerte'; ?> <?php if ($cepage->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+          <input type="hidden" id="cepage_usages_industriels_orig" class="<?php if ($cepage->getUsagesIndustriels()) echo 'alerte'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
         </ul>
     </div>
 </div>
