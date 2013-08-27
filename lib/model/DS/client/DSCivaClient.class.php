@@ -72,7 +72,7 @@ class DSCivaClient extends DSClient {
             if(preg_match('/DS-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches)){
                 $campagne_t = preg_replace('/^([0-9]{4})([0-9]{2})$/', "$1", $matches['campagne']);
                 if(!array_key_exists($campagne_t, $dss_principales))
-                    $dss_principales[$campagne_t] = $this->getDSPrincipaleByDs($this->find($doc_id,  acCouchdbClient::HYDRATE_JSON));
+                    $dss_principales[$campagne_t] = $this->getDSPrincipaleByDs($this->find($doc_id,  acCouchdbClient::HYDRATE_DOCUMENT));
             }
         }
         return $dss_principales;
@@ -263,9 +263,14 @@ class DSCivaClient extends DSClient {
             
             throw new acCouchdbException('Class "' . $data->type . '" not found');
         }
+
+        if($data->type == "LS" && $force_return_ls == false )
+          return $this->find($data->pointeur);
         
         $doc = new DSCiva();
         $doc->loadFromCouchdb($data);
+
+
         
         return $doc;
     }
