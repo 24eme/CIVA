@@ -675,6 +675,19 @@ CSV:
       type: {}
       campagne: {}
       cvi: {}
+      _attachments:
+        type: collection
+        definition:
+          fields: 
+            '*':
+              type: collection
+              definition:
+                fields:
+                  content_type: { }
+                  revpos: { }
+                  length: { }
+                  stub: { }
+                  digest: { }
       recoltants : 
         type: array_collection
         definition:
