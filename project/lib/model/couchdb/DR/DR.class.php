@@ -369,7 +369,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     }
 
                     //Verifie que le recapitulatif des ventes à du dplc si le total dplc du lieu est > 0
-                    if ($lieu->getConfig()->hasRendement() && $lieu->hasAcheteurs() && $lieu->hasCompleteRecapitulatifVente() && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
+                    if ($lieu->getConfig()->existRendement() && $lieu->hasAcheteurs() && $lieu->hasCompleteRecapitulatifVente() && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
                         array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
                     }
 
@@ -418,7 +418,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
                                     } else {
                                     // vérifie le trop plein de DPLC
-                                    if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0) {
+                                    if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendementCepage() && round($cepage->getDplc(), 2) > 0) {
                                         array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                                     }
                                     foreach ($cepage->filter('detail') as $details) {

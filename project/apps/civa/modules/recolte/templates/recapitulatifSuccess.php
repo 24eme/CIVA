@@ -41,7 +41,7 @@
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
                                                     <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
 												</tr>
-                                                <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                                     <tr>
                                                         <td>Volume revendiqué <span class="unites">(hl)</span> :</td>
                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
@@ -105,13 +105,13 @@
                                                             </td>
                                                             <td class="cvi alt"><?php echo $cvi; ?></td>
                                                             <td class="commune"><?php echo $info->getCommune(); ?></td>
-                                                            <?php if($appellationlieu->getConfig()->hasRendement()): ?>
+                                                            <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                                                 <td class="superficie alt <?php echo ($form['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
                                                             <?php else: ?>
                                                                 <td class="superficie"></td>
                                                             <?php endif; ?>
                                                             <td><?php echoFloat( $info->getVolume()); ?> hl</td>
-                                                            <?php if($appellationlieu->getConfig()->hasRendement()) : ?>
+                                                            <?php if($appellationlieu->getConfig()->existRendement()) : ?>
                                                                 <td class="dplc alt <?php echo ($form['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
                                                             <?php else: ?>
                                                                 <td class="dplc"></td>
@@ -155,7 +155,7 @@
                         <script type="text/javascript">
                             function valider_can_submit()
                             {
-                                <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->getConfig()->hasRendement()): ?>
+                                <?php if($appellationlieu->acheteurs->count() > 0 && $appellationlieu->getConfig()->existRendement()): ?>
                                 var total_superficie = <?php echoFloat( $appellationlieu->getTotalSuperficie()); ?>;
                                 var total_dontdplc = <?php echoFloat( $appellationlieu->getDplc()); ?>;
                                 var sum_superficie = 0;

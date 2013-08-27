@@ -54,12 +54,11 @@
                 <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
             </p>
             <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
-            <?php /*if ($detail->getConfig()->hasRendement()):*/ ?>
+            <?php /*if ($detail->getConfig()->hasRendementCepage()):*/ ?>
                 <ul class="vol_revendique_dplc">
                     <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
+                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
                     <li>
-                        
                         <input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
                     </li>
                     <li>

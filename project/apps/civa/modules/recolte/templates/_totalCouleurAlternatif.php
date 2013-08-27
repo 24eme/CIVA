@@ -56,11 +56,11 @@
                 </span>
             </li>
             <li>
-                <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+                <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueRendement()); ?>" />
             </li>
             <li>
-                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-    echo 'rouge'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcRendement())
+    echo 'rouge'; ?>" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
             </li>
 
 

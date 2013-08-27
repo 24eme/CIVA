@@ -124,8 +124,6 @@ class RecolteForm extends acCouchdbObjectForm {
             $this->updateAcheteurs(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $values, $this->getObject()->mouts, $this->getAcheteursMouts());
         }
 
-        //exit;
-
         $this->getObject()->getCouchdbDocument()->update();
     }
 

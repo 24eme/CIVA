@@ -76,8 +76,8 @@ class ExportDRXml {
                     }
 
                     if($this->destinataire == self::DEST_CIVA) {
-                        $volume_revendique = $object->getVolumeRevendiqueFinal();
-                        $dplc = $object->getDplcFinal();
+                        $volume_revendique = $object->findVolumeRevendique();
+                        $dplc = $object->findDplc();
                     } elseif($this->destinataire == self::DEST_DOUANE) {
                         $volume_revendique = $object->getVolumeRevendiqueRendement();
                         $dplc = $object->getDplcRendement();

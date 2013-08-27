@@ -69,7 +69,7 @@
         <?php endif; ?>
         </p>
 
-        <?php if ($detail->getConfig()->hasRendement()): ?>
+        <?php if ($detail->getConfig()->hasRendementNoeud()): ?>
             <ul class="vol_revendique_dplc">
                 <li>
                     <input type="hidden" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />

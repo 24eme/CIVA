@@ -41,6 +41,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         return $produits;
     }
+
+    public function getRendementRecoltant() {
+        if ($this->getTotalSuperficie() > 0) {
+            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100), 0);
+        } else {
+            return 0;
+        }
+    }
     
     public function getTotalSuperficie($force_calcul = false) {
 
@@ -57,15 +65,101 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
     }
 
-    public function getDataByFieldAndMethod($field, $method, $force_calcul = false, $parameters = array()) {
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
+    public function getDplc($force_calcul = false) {
+        if(!$this->getConfig()->hasRendementNoeud()) {
+
+            return $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
+        }
+        
+        return $this->getDataByFieldAndMethod('dplc', array($this, 'findDplc'), $force_calcul);
+    }
+
+    public function getDplcTotal() {
+
+        return $this->getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
+    }
+
+    public function findDplc() {
+        $dplc_total = $this->getDplcTotal();
+        $dplc = $dplc_total;
+        if ($this->getConfig()->hasRendementNoeud()) {
+            $dplc_rendement = $this->getDplcRendement();
+            if ($dplc_total < $dplc_rendement) {
+                $dplc = $dplc_rendement;
+            }
+        }
+        return $dplc;
+    }
+
+    public function getDplcRendement() {
+        $key = "dplc_rendement";
+        if (!isset($this->_storage[$key])) {
+            $volume_dplc = 0;
+            if ($this->getConfig()->hasRendementNoeud()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxRendement();
+                if ($volume > $volume_max) {
+                    $volume_dplc = $volume - $volume_max;
+                } else {
+                    $volume_dplc = 0;
+                }
+            }
+            $this->_storage[$key] = round($volume_dplc, 2);
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getVolumeMaxRendement() {
+            
+        return round(($this->getTotalSuperficie() / 100) * $this->getConfig()->getRendementNoeud(), 2);
+    }
+
+    public function getVolumeRevendique($force_calcul = false) {
+        if(!$this->getConfig()->hasRendementNoeud()) {
+
+            return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueTotal'), $force_calcul);
+        }
+        
+        return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'findVolumeRevendique'), $force_calcul);
+    }
+
+    public function getVolumeRevendiqueTotal($force_calcul = false) {
+
+        return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getSumNoeudFields'), $force_calcul);
+    }
+
+    public function findVolumeRevendique() {
+
+        return round(max($this->getVolumeRevendiqueWithDplc(), $this->getVolumeRevendiqueWithUI()), 2);
+    }
+
+    public function getVolumeRevendiqueWithDplc() {
+        
+        return $this->getTotalVolume() - $this->getDplc();
+    }
+
+    public function getVolumeRevendiqueWithUI() {
+        
+        return $this->getTotalVolume() - $this->getUsagesIndustriels();
+    }
+
+    public function getUsagesIndustriels($force_calcul = false) {
+        if(!$this->canHaveUsagesIndustrielsSaisi()) {
+
+            return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);
         }
 
-        if(!empty($parameters))
-            return $this->store($field, $method, $parameters);
+        return $this->_get('usages_industriels') ? $this->_get('usages_industriels') : 0;
+    }
 
-        return $this->store($field, $method, array($field));
+    public function getUsagesIndustrielsTotal() {
+
+        return $this->getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
+    }
+
+    public function canHaveUsagesIndustrielsSaisi() {
+
+        return false;
     }
 
     protected function getSumNoeudFields($field, $exclude = true) {
@@ -81,26 +175,17 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $sum;
     }
 
-    protected function getSumNoeudWithMethod($method, $exclude = true) {
-        $sum = 0;
-        foreach ($this->getChildrenNode() as $noeud) {
-            if($exclude && $noeud->getConfig()->excludeTotal()) {
+    public function isUsagesIndustrielsSaisiCepage() {
 
-                continue;
-            }
-
-            $sum += $noeud->$method();
-        }
-        return $sum;
+        return $this->getDocument()->exist('usages_industriels_cepage') && $this->getDocument()->get('usages_industriels_cepage');
     }
-
 
     public function getLibelle() {
 
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
+        return $this->store('libelle', array($this, 'findLibelle'));
     }
 
-    public function getInternalLibelle() {
+    protected function findLibelle() {
 
         return $this->getConfig()->getLibelle();
     }
@@ -117,9 +202,28 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return ($this->_get($field) || $this->_get($field) === 0);
     }
 
-    public function isUsagesIndustrielsSaisiCepage() {
+    protected function getDataByFieldAndMethod($field, $method, $force_calcul = false, $parameters = array()) {
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
 
-        return $this->getDocument()->exist('usages_industriels_cepage') && $this->getDocument()->get('usages_industriels_cepage');
+        if(!empty($parameters))
+            return $this->store($field, $method, $parameters);
+
+        return $this->store($field, $method, array($field));
+    }
+
+    protected function getSumNoeudWithMethod($method, $exclude = true) {
+        $sum = 0;
+        foreach ($this->getChildrenNode() as $noeud) {
+            if($exclude && $noeud->getConfig()->excludeTotal()) {
+
+                continue;
+            }
+
+            $sum += $noeud->$method();
+        }
+        return $sum;
     }
 
 }

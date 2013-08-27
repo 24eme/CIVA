@@ -50,29 +50,18 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $cepage;
     }
 
-    public function hasRendementCepage() {
-        foreach ($this->getCepages() as $cepage) {
-            if ($cepage->hasRendement())
-                return true;
-        }
-        return false;
-    }
-    
-    public function hasRendementCouleur() {
-        return $this->hasManyCouleur();
-    }
-
-    public function hasRendement() {
-
-        return ($this->hasRendementCepage() ||  $this->hasRendementCouleur() || $this->hasRendementAppellation() );
-    }
-
     public function hasManyCouleur() {
         return (!$this->exist('couleur') || $this->filter('^couleur.+')->count() > 0);
     }
     
     public function hasLieuEditable(){
+
         return $this->getAppellation()->hasLieuEditable();
+    }
+
+    public function getRendementNoeud() {
+
+        return $this->getRendementAppellation();
     }
 
 }

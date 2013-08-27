@@ -46,10 +46,6 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     return $this->getProduits();
   }
 
-  public function hasRendement() {
-      return ($this->getRendement()>0);
-  }
-
   public function hasLieuEditable() {
         return $this->getParent()->getParent()->getParent()->getParent()->hasLieuEditable();
   }
@@ -134,11 +130,16 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   }
 
   public function hasTotalCepage() {
-    if (!$this->getRendement()) {
+    if (!$this->hasRendementCepage()) {
 	    return false;
     }
 
     return parent::hasTotalCepage();
+  }
+
+  public function getRendementNoeud() {
+
+    return $this->getRendementCepage();
   }
   
 }

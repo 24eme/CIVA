@@ -109,51 +109,111 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
       return $this->produits[$type_declaration];
     }
 
+    /**** RENDEMENT POUR LA DR ****/
+
     public function getRendement() {
 
-        return $this->store('rendement', array($this, 'getInternalRendement'));
+      return $this->getRendementCepage();
     }
 
-    protected function getInternalRendement() {
-        $key = 'rendement';
-        if ($this->exist($key) && $this->_get($key)) {
+    public function getRendementNoeud() {
 
-            return $this->_get($key);
-        }
-
-        return $this->getParentNode()->getRendement();
+        return -1;
     }
 
     public function getRendementAppellation() {
-        $key = 'rendement_appellation';
-        if ($this->exist($key) && $this->_get($key)) {
-
-            return $this->_get($key);
-        }
-
-        return $this->getParentNode()->getRendementAppellation();
+        
+        return $this->getRendementByKey('rendement_appellation');
     }
-  
-    public function hasRendementAppellation() {
-        $r = $this->getRendementAppellation();
 
-        return ($r && $r > 0);
-    }
-    
     public function getRendementCouleur() {
-        $key = 'rendement_couleur';
+        
+        return $this->getRendementByKey('rendement_couleur');
+    }
+
+    public function getRendementCepage() {
+        
+        return $this->getRendementByKey('rendement');
+    }
+
+    public function hasRendementAppellation() {
+        
+        return $this->hasRendementByKey('rendement_appellation');
+    }
+
+    public function hasRendementCouleur() {
+        
+        return $this->hasRendementByKey('rendement_couleur');
+    }
+
+    public function hasRendementCepage() {
+        
+        return $this->hasRendementByKey('rendement');
+    }
+
+    public function existRendementAppellation() {
+        
+        return $this->existRendementByKey('rendement_appellation');
+    }
+
+    public function existRendementCouleur() {
+        
+        return $this->existRendementByKey('rendement_couleur');
+    }
+
+    public function existRendementCepage() {
+        
+        return $this->existRendementByKey('rendement');
+    }
+
+    public function existRendement() {
+
+        return $this->existRendementCepage() || $this->existRendementCouleur() || $this->existRendementAppellation();
+    }
+
+    public function hasRendementNoeud() {
+        $r = $this->getRendementNoeud();
+
+        return ($r && $r > 0);
+    }
+
+    protected function getRendementByKey($key) {
+      
+        return $this->findRendementByKey($key);
+    }
+
+    protected function findRendementByKey($key) {
         if ($this->exist($key) && $this->_get($key)) {
 
             return $this->_get($key);
         }
 
-        return $this->getParentNode()->getRendementCouleur();
+        return $this->getParentNode()->get($key);
     }
-    
-    public function hasRendementCouleur() {
-        $r = $this->getRendementCouleur();
+
+    protected function hasRendementByKey($key) {
+        $r = $this->getRendementByKey($key);
+
         return ($r && $r > 0);
     }
+
+    protected function existRendementByKey($key) {
+      if($this->hasRendementByKey($key)) {
+
+        return true;
+      }
+
+      foreach($this->getChildrenNode() as $noeud) {
+        if($noeud->existRendementByKey($key)) {
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    /**** FIN DU RENDEMENT POUR LA DR ****/
 
     public function hasMout() {
         if ($this->exist('mout')) {
