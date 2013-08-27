@@ -37,12 +37,6 @@ $(document).ready( function()
         initTablesDonnes();
     });
 
-    /*if($('#appellation_volume_dplc').val() > 0){
-        ($('#col_recolte_totale .rendement').addClass("alerte"));
-    }else{
-        ($('#col_recolte_totale .rendement').removeClass("alerte"));
-    }*/
-
     $('.gestion_recolte_donnees input').each(function(e)
     {
         var val = $(this).val();
@@ -896,6 +890,11 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_revendique').val(truncTotal($(elementCssId+'_max_volume').val()));
     else
         $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()));
+
+    if($(elementCssId+'_total_revendique_sum').length > 0 && $(elementCssId+'_total_revendique_sum').val() < $(elementCssId+'_volume_revendique').val()) {
+        $(elementCssId+'_volume_revendique').val($(elementCssId+'_total_revendique_sum').val());
+    }
+
     res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
     res += '';
     $(elementCssId+'_volume_dplc').val(truncTotal(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1')));
@@ -909,9 +908,12 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     }
 };
 
-var addClassAlerteIfNeeded = function (inputObj, condition, css_class = 'alerte')
+var addClassAlerteIfNeeded = function (inputObj, condition, css_class)
 {   
-
+    if(!css_class) {
+        css_class = 'alerte';
+    }
+    
     inputObj.removeClass(css_class);
     if (condition) {
         inputObj.addClass(css_class);
@@ -962,29 +964,17 @@ var volumeOnChange = function(input) {
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 
-    addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0);
     addClassAlerteIfNeeded($('#appellation_volume_revendique'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > parseFloat($('#appellation_usages_industriels').val()), 'alerte');
     addClassAlerteIfNeeded($('#cepage_volume_revendique'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_usages_industriels'), parseFloat($('#cepage_volume_dplc').val()) > parseFloat($('#cepage_usages_industriels').val()));
+    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
 
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
-
-    if($('#cepage_volume_dplc').val() == 0){
-        ($('#donnees_recolte_sepage .rendement').removeClass("alerte"));
-    }else{
-        ($('#donnees_recolte_sepage .rendement').addClass("alerte"));
-    }
-
-    if($('#appellation_volume_dplc').val() > 0){
-        ($('#col_recolte_totale .rendement').addClass("alerte"));
-    }else{
-        ($('#col_recolte_totale .rendement').removeClass("alerte"));
-    }
-
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
@@ -995,8 +985,8 @@ var volumeOnChange = function(input) {
     if (parseFloat($('#cepage_total_superficie').val()) > 0) {
         val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
     }
-    $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 
+    $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 };
 
 var truncTotal = function (val) {
