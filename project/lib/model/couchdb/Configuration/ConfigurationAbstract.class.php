@@ -122,8 +122,11 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
     }
 
     public function getRendementAppellation() {
+        if($this->hasRendementAppellation()) {
+          return $this->getRendementByKey('rendement_appellation');
+        }
         
-        return $this->getRendementByKey('rendement_appellation');
+        return $this->getRendementCepage(); 
     }
 
     public function getRendementCouleur() {
@@ -197,7 +200,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
         return ($r && $r > 0);
     }
 
-    protected function existRendementByKey($key) {
+    public function existRendementByKey($key) {
       if($this->hasRendementByKey($key)) {
 
         return true;

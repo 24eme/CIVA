@@ -35,32 +35,45 @@
 											<tbody>
 												<tr>
 													<td>Superficie <span class="unites">(ares)</span> :</td>
-                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?> ares</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalSuperficie()); ?></td>
 												</tr>
 												<tr>
 													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
-                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?> hl</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getTotalVolume()) ;?></td>
 												</tr>
                                                 <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                                     <tr>
                                                         <td>Volume revendiqué <span class="unites">(hl)</span> :</td>
-                                                       <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?> hl</td>
+                                                       <td class="valeur alt"><?php echoFloat($appellationlieu->getVolumeRevendique()); ?></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>Usages industriels min <span class="unites">(hl)</span> :</td>
-                                                        <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()) ;?> hl</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Usages industriels <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
-                                                        <td class="valeur alt">
-                                                            <?php if(isset($form['usages_industriels'])) :?>
-                                                                <?php echo $form['usages_industriels']->render() ?> hl
-                                                            <?php else: ?>
-                                                                <input id="recapitulatif_usages_industriels" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
-                                                            <?php endif; ?>
-                                                        </td>
-                                                    </tr>
-                                                 <?php endif; ?>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <?php if($appellationlieu->getConfig()->existRendement()): ?>
+                                <h2 class="titre_section" style="margin-top: 15px;">
+                                    Usages industriels
+                                </h2>
+                                <?php if(!$appellationlieu->getConfig()->existRendementCouleur()): ?>
+                                <div class="contenu_section">
+                                    <div class="bloc_gris">
+                                        <table cellspacing="0" cellpadding="0" class="table_donnees">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Usages industriels min <span class="unites">(hl)</span> :</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()) ;?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Usages industriels <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                    <td class="valeur alt saisi">
+                                                        <?php if(isset($form['usages_industriels'])) :?>
+                                                            <?php echo $form['usages_industriels']->render(array('class' => 'num')) ?>
+                                                        <?php else: ?>
+                                                            <input id="recapitulatif_usages_industriels" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
 											</tbody>
 										</table>
 
@@ -71,11 +84,54 @@
                                         </div>
                                     <?php endif; ?>
 
-									</div>
-								</div>
-							</div>
-                                                       
-                                                        
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+
+                                <?php if($appellationlieu->getConfig()->existRendementCouleur()): ?>
+                                <div class="contenu_section">
+                                    <div class="bloc_gris">
+                                        <table cellspacing="0" cellpadding="0" class="table_donnees">
+                                            <thead>
+                                                <tr>
+                                                    <th style="">Couleur</th>
+                                                    <th>Usages industriels min</th>
+                                                    <th>Usages industriels</th>               
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $saisi = false ?>
+                                                <?php foreach($form as $key => $item): ?>
+                                                <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
+                                                <tr>
+                                                    <td style="width: 113px"><?php echo $appellationlieu->get($key)->getLibelle() ?></td>
+                                                    <td style="width: 113px" class="valeur"><?php echoFloat($appellationlieu->get($key)->getDplc()) ?> hl</td>
+                                                    <td class="valeur" style="width: 113px">
+                                                        <?php if($appellationlieu->get($key)->canHaveUsagesIndustrielsSaisi()): ?>
+                                                            <?php $saisi = true ?>
+                                                            <?php echo $item['usages_industriels']->render(array('class' => 'num', 'style' => 'width: 100%; text-align: right')) ?>
+                                                        <?php else: ?>
+                                                            <input style="width: 100%; text-align: right" id="recapitulatif_usages_industriels" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getUsagesIndustriels()); ?>" />
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                                <tr>
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="valeur"><?php echoFloat($appellationlieu->getDplc()) ?> hl</td>
+                                                    <td class="valeur"><?php echoFloat($appellationlieu->getUsagesIndustriels()) ?> hl</td>
+                                            </tbody>
+                                        </table>
+                                        <?php if($saisi): ?>
+                                        <div class="btn">
+                                            <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
+                                        </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php endif; ?>
+                            </div>                  
 							<div id="recap_ventes">
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">

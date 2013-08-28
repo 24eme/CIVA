@@ -2,7 +2,7 @@
     class RecapitulatifAcheteurForm extends BaseForm     {
 
         public function configure() {
-	  $this->setWidgets(array(
+	       $this->setWidgets(array(
 				  'superficie' => new sfWidgetFormInputFloat(),
 				  'dontdplc' => new sfWidgetFormInputFloat(),
 				  )

@@ -66,7 +66,7 @@ class declarationComponents extends sfComponents {
               $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCalcule();
+              $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
           }
         }

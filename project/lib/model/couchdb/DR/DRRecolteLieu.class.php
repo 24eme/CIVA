@@ -263,7 +263,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function canHaveUsagesIndustrielsSaisi() {
         
-        return !$this->isUsagesIndustrielsSaisiCepage();
+        return !$this->isUsagesIndustrielsSaisiCepage() && !$this->getConfig()->existRendementCouleur();
     }
 
     protected function update($params = array()) {

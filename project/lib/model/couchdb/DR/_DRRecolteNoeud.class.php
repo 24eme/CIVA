@@ -130,7 +130,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function findVolumeRevendique() {
 
-        return round(max($this->getVolumeRevendiqueWithDplc(), $this->getVolumeRevendiqueWithUI()), 2);
+        return round(min($this->getVolumeRevendiqueWithDplc(), $this->getVolumeRevendiqueWithUI()), 2);
     }
 
     public function getVolumeRevendiqueWithDplc() {

@@ -50,7 +50,7 @@
             </div>
         <?php endif; ?>
 
-            <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
             <div class="mouts">
                 <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
@@ -58,7 +58,7 @@
                 ?>
                 <!--<a href="#" class="ajout_mout">Ajouter un acheteur de mouts</a>-->
             </div>
-<?php endif; ?>
+        <?php endif; ?>
 
         <p class="vol_place"><input type="text" class="num cave readonly" disabled="disabled" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
         <p class="vol_total_recolte">
@@ -69,7 +69,7 @@
         <?php endif; ?>
         </p>
 
-        <?php if ($detail->getConfig()->hasRendementNoeud()): ?>
+        <?php if ($detail->getConfig()->existRendement()): ?>
             <ul class="vol_revendique_dplc">
                 <li>
                     <input type="hidden" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />

@@ -120,7 +120,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     public function canHaveUsagesIndustrielsSaisi() {
         
-        return $this->getCouleur()->canHaveUsagesIndustrielsSaisi();
+        return !$this->isUsagesIndustrielsSaisiCepage();
     }
 
     protected function update($params = array()) {

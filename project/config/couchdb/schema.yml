@@ -113,6 +113,7 @@ DR:
                   volume_revendique: {type:float }
                   dplc: {type:float }
                   usages_industriels_calcule: {type:float }
+                  usages_industriels: { type:float }
                   '*':
                   #------ Genre ------
                     type: collection
@@ -124,6 +125,7 @@ DR:
                         volume_revendique: {type:float }
                         dplc: {type:float }
                         usages_industriels_calcule: {type:float }
+                        usages_industriels: { type:float }
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -136,6 +138,7 @@ DR:
                               volume_revendique: {type:float }
                               dplc: {type:float }
                               usages_industriels_calcule: {type:float }
+                              usages_industriels: { type:float }
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -147,6 +150,7 @@ DR:
                                     volume_revendique: {type:float }
                                     dplc: {type:float }
                                     usages_industriels_calcule: {type:float }
+                                    usages_industriels: { type:float }
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection

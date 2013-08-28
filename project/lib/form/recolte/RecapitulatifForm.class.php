@@ -11,7 +11,7 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function configure() {
         $lieu = $this->getObject();
-        if($lieu->canHaveUsagesIndustrielsSaisi()){
+        if($lieu->canHaveUsagesIndustrielsSaisi() && $lieu->getConfig()->existRendement() && !$lieu->getConfig()->existRendementCouleur()){
             $this->setWidgets(array(
                 'usages_industriels' => new sfWidgetFormInputFloat(array()),
             ));
@@ -26,6 +26,12 @@ class RecapitulatifForm extends acCouchdbObjectForm {
             $this->is_saisisable = true;
         }
 
+        if($this->getObject()->getConfig()->existRendementCouleur()) {
+            foreach($this->getObject()->getCouleurs() as $couleur) {
+                $this->embedForm($couleur->getKey(), new RecapitulatifCouleurUsagesIndustrielsForm());            
+            }
+            $this->is_saisisable = true;
+        }
         
         $form_acheteurs = new BaseForm();
         foreach ($lieu->acheteurs as $type => $acheteurs_type) {

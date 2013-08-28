@@ -191,7 +191,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function canHaveUsagesIndustrielsSaisi() {
 
-        return $this->getCepage()->canHaveUsagesIndustrielsSaisi();
+        return $this->getCepage()->isUsagesIndustrielsSaisiCepage();
     }
 
     public function getUsagesIndustriels($force = false) {
