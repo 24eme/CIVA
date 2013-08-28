@@ -65,7 +65,7 @@
             <li>
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplc()); ?>"/>
                 <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($lieu->getDplc()); ?>" />
-                <input type="text" title="Volume revendiqué minimum : <?php echoFloat($lieu->getDplc()) ?>" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?> <?php if ($lieu->getUsagesIndustriels() < $lieu->getDplc()) echo 'alerte'; ?>" <?php if($lieu->isUsagesIndustrielsSaisiCepage()) echo "mode='sum'" ?> id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
+                <input type="text" class="jstitle" title="Volume revendiqué minimum : <?php echoFloat($lieu->getDplc()) ?>" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?> <?php if ($lieu->getUsagesIndustriels() < $lieu->getDplc()) echo 'alerte'; ?>" <?php if($lieu->isUsagesIndustrielsSaisiCepage()) echo "mode='sum'" ?> id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
                 <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/> 
             </li>
           <?php endif; ?>
