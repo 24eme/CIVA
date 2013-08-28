@@ -101,7 +101,6 @@ DR:
         class: DRRecolte
         definition:
           fields:
-            usages_industriels_noeud: { }
             '*':
               #------ Certification ------
               type: collection
@@ -112,7 +111,7 @@ DR:
                   total_superficie: {type: float}
                   volume_revendique: {type:float }
                   dplc: {type:float }
-                  usages_industriels_calcule: {type:float }
+                  usages_industriels_calcule: { type:float, required: false }
                   usages_industriels: { type:float }
                   '*':
                   #------ Genre ------
@@ -124,7 +123,7 @@ DR:
                         total_superficie: {type: float}
                         volume_revendique: {type:float }
                         dplc: {type:float }
-                        usages_industriels_calcule: {type:float }
+                        usages_industriels_calcule: { type:float, required: false }
                         usages_industriels: { type:float }
                         '*':
                           # ------ Appellation ------
@@ -137,7 +136,7 @@ DR:
                               total_superficie: {type: float}
                               volume_revendique: {type:float }
                               dplc: {type:float }
-                              usages_industriels_calcule: {type:float }
+                              usages_industriels_calcule: { type:float, required: false }
                               usages_industriels: { type:float }
                               # ------- MENTION ----------
                               'mention':
@@ -149,7 +148,7 @@ DR:
                                     total_superficie: {type:float }
                                     volume_revendique: {type:float }
                                     dplc: {type:float }
-                                    usages_industriels_calcule: {type:float }
+                                    usages_industriels_calcule: { type:float, required: false }
                                     usages_industriels: { type:float }
                                     # ------- LIEU ----------
                                     '*':
@@ -161,8 +160,9 @@ DR:
                                           total_superficie: {type:float}
                                           volume_revendique: {type: float}
                                           dplc: {type: float}
-                                          usages_industriels_calcule: { type:float }
-                                          usages_industriels: { type:float }
+                                          usages_industriels_calcule: { type:float, required: false }
+                                          usages_industriels: { type: float }
+                                          usages_industriels_saisi : { type: float, required: false }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -219,7 +219,7 @@ DR:
                                                 total_superficie: {type:float}
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
-                                                usages_industriels: {type:float }
+                                                usages_industriels: { ype:float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -230,7 +230,7 @@ DR:
                                                       total_superficie: {type:float }
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
-                                                      usages_industriels: {type:float }
+                                                      usages_industriels: { type:float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
