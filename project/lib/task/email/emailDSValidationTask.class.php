@@ -74,20 +74,18 @@ EOF;
                 $sended = $this->getMailer()->send($message);
                 
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
-            } catch (Exception $exc) {
+            } catch (Exception $exc) {     
+                $this->logSection('send error', $cvi . ' : ' . $ds->declarant->get('email'), null, 'ERROR');  
+                $this->logSection('send error', $cvi . ' : ' . $exc->getMessage());    
                 $sended = false;
             }
             
             if ($sended) {
                 $nb_email_send++;
                 $this->logSection('sended', $cvi . ' : ' . $ds->declarant->get('email'));
-            } else {
-                $this->logSection('send error', $cvi . ' : ' . $ds->declarant->get('email'), null, 'ERROR');
-            }
-            
-            
-	    }
-	    $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
+            }           
+        }
+        $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
     }
   }
 
