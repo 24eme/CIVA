@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 <div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage() || $onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>display:none;<?php endif; ?>">
     <h2>Total <br /> <?php echo $cepage->libelle ?> </h2>
 

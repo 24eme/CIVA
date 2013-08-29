@@ -123,7 +123,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
     
     public function getDeclarant() {
-        return $this->getTiers('Recoltant');
+        return $this->getTiers();
     }
 
     /**

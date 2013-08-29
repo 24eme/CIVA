@@ -11,11 +11,134 @@ var champsSommes = appDS.find('.ligne_total input.somme');
 /**
  * Initialisation
  ******************************************/
+
+var ajax_post_url = null;
+
 $(document).ready(function()
 {	
-	//navOngletsStock();
-	initDSSommesCol();
+    //navOngletsStock();
+    initMsgAideDS();
+    choixPrecDS();
+    initDSSommesCol();
+    initLieuxStockage();
+    initLieuxStockageNeant();
+    var ajaxForm = $('form.ajaxForm');
+    if(ajaxForm.length > 0) {
+        ajaxForm.ajaxPostForm();
+    }
+    initValidDSPopup();
+	
+    initConfirmeValidationDs();
+
+    if ($('#validation_ds').length > 0) {
+        $('#validation_ds').ready( function() {
+            initValidationDs();
+            initSendDSPopup();
+        });
+    }
+
+    if ($('#confirmation_fin_stock').length > 0) {
+        $('#confirmation_fin_stock').ready( function() {
+            initValidationDs();
+            initSendDSPopup();
+        });
+    }
+
+    initExploitation();
+
+	initStocks();
+
+    initRecapStocks();
+	
+	scrollLieuxStockage();
 });
+
+
+/**
+ * Initialise les fonctions de la validation
+ * de récolte
+ ******************************************/
+var initValidationDs = function(type)
+{
+    initValidDSPopup();
+    initConfirmeValidationDs();
+}
+
+var initLieuxStockage = function()
+{
+    var checkboxes = $(".table_donnees input");
+    checkboxes.each(function(){
+        $(this).click(function(){
+            majLieuNeant();
+            });
+    });
+    $("#ds_lieu_neant").change(function(){
+        if($(this).attr("readonly")){
+            return false;
+        }
+        majCheckboxesAppellation();
+    });
+};
+
+var initExploitation = function()
+{
+    if($('#exploitation_administratif').length == 0)
+    {
+        
+        return;
+    }
+
+    $('#btn_etape li.suiv a').focus();
+};
+
+// Donne le focus sur le premier select
+var initStocks = function()
+{
+	if(appDS.find('#ds_add_produit_hashref').length > 0)
+	{
+		appDS.find('#ds_add_produit_hashref').focus();
+	}
+};
+
+var initRecapStocks = function()
+{
+    if($('#recap_lieu_stockage').length == 0)
+    {
+        
+        return;
+    }
+
+    $('#btn_etape li.suiv a').focus();
+};
+
+var majCheckboxesAppellation = function(){    
+        if($("#ds_lieu_neant").is(":checked")){
+            $(".table_donnees input").each(function(){
+                $(this).attr("disabled","disabled");
+            });
+        }else{
+        $(".table_donnees input").each(function(){
+                $(this).removeAttr("disabled");
+            }); 
+        }
+};
+
+var majLieuNeant = function(){
+    var one_checked = false;
+    $(".table_donnees input").each(function(){
+        if($(this).is(":checked")){
+            one_checked = true;
+        }
+    });
+    if(one_checked){
+        $("#ds_lieu_neant").attr("readonly",true);
+        initLieuxStockageNeant();
+    }
+    else
+        $("#ds_lieu_neant").removeAttr("readonly");
+            
+};
+
 
 /**
  * Calcul des sommes des colonnes de stocks
@@ -37,7 +160,7 @@ var initDSSommesCol = function()
 			somme += valDefaut;
 		}
 		
-		champSomme.val(somme);
+		champSomme.val(somme.toFixed(2));
 		
 		// Initialisation de la somme automatique au blur
 		if(!col.hasClass('init_somme_ok')) col.initDSColChamps();
@@ -113,6 +236,41 @@ $.fn.majDSSommesCol = function()
 	});
 };
 
+$.fn.ajaxPostForm = function(){
+        var form = $(this);
+        var form_id = $(this).attr('id');
+            
+        $('#'+form_id+' .ajax').each(function(){
+                $(this).click(function(e){
+                    ajax_post_url = $(this).attr('href');
+                    formPost(form);
+                    e.preventDefault()
+            }); 
+        });
+    
+};
+
+var formPost = function(form)
+{
+        appDS.find('input.num').each(function(){
+            $(this).verifNettoyageChamp();
+        });
+        
+        $.ajax({
+            url: $(form).attr('action'),
+            type: "POST",
+            data: $(form).serializeArray(),
+            dataType: "json",
+            async : true,
+            success: function(msg){if(ajax_post_url) {
+                document.location.href=ajax_post_url;
+            }},  
+            error: function(textStatus){  
+                form.submit();
+            }
+    });
+};
+
 /**
  * Gère la navigation des onglets
  *********************************************************/
@@ -140,4 +298,138 @@ var navOngletsStock = function()
 	});
 };
 
+	// Scroll automatique sur les lieux de stockage s'ils existent
+var scrollLieuxStockage = function()
+{
+	var listeLieuxStockage = $('#liste_lieux_stockage');
+	
+	if(listeLieuxStockage.length > 0)
+	{
+		$.scrollTo(listeLieuxStockage, 800);
+	} else if($('#onglets_majeurs').length > 0) {
+		$.scrollTo('#onglets_majeurs', 800);
+	}
+};
+
+var choixPrecDS = function()
+{   
+    $('#form_ds #mon_espace_civa_valider').click(function() {
+        if($('#type_ds_suppr:checked').length > 0) {
+            return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
+        }
+    });
+
+
+};
+
+/**
+ * Initalise la popup previsualisation de DS
+ ******************************************/
+var initValidDSPopup = function()
+{
+    $('#previsualiserDS').click(function() {
+        openPopup($("#popup_loader"));
+        $.ajax({
+            url: ajax_url_to_print,
+            success: function(data) {
+                $('.popup-loading').empty();
+                $('.popup-loading').css('background', 'none');
+                $('.popup-loading').css('padding-top', '10px');
+                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds" title="Télécharger la DS"></a></p>');
+                openPopup($("#popup_loader"));
+
+            }
+        });
+        return false;
+    });
+};
+
+/* Confirmation de la validation */
+
+var initConfirmeValidationDs = function()
+{
+    $('#valideDS').click(function() {
+        openPopup($("#popup_confirme_validationDS"));
+        return false;
+    });
+    $('#valideDS_OK').click(function() {
+        $("#popup_confirme_validationDS").dialog('close');
+        $("#principal").submit();
+        return false;
+    });
+}
+
+var initSendDSPopup = function()
+{
+    $('#btn-email').click(function() {
+        openPopup($("#popup_confirme_mail"));
+        return false;
+    });
+}
+
+
+var initLieuxStockageNeant = function()
+{
+    $('#ds_lieu_neant').click(function() {
+        var lien = $(this);
+        
+        if(lien.attr('readonly')){
+            openPopup($("#popup_ds_neant"));
+            return false;
+        } 
+    });
+}
+
+/**
+ * Messages d'aide
+ ******************************************/
+var initMsgAideDS = function()
+{
+    var liens = $('a.msg_aide_ds');
+    var popup = $('#popup_msg_aide_ds');
+
+    liens.live('click', function()
+    {
+        var id_msg_aide = $(this).attr('rel');
+        var title_msg_aide = $(this).attr('title');
+	var url_doc = $(this).attr('doc');
+        $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
+
+        
+                       
+        $.getJSON(
+            url_ajax_msg_aide_ds,
+            {
+                id: id_msg_aide,
+                url_doc: url_doc,
+                title: title_msg_aide
+            },
+            function(json)
+            {
+                var titre = json.titre;
+                var message = json.message;
+                var url = json.url_doc;
+                popup.html('<p></p>');
+                popup.find('p').html(message);
+                popup.dialog("option" , "title" , titre);
+                popup.dialog("option" , "buttons" , {
+                    telecharger: function() {
+                        document.location.href = url
+                        },
+                    fermer: function() {
+                        $(this).dialog( "close" );
+                    }
+                });
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').focus();
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').focus();
+            }
+            );
+
+        openPopup(popup);
+
+        return false;
+    });
+};
 

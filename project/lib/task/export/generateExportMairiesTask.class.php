@@ -4,9 +4,10 @@ class generateExportMairiesTask extends sfBaseTask
 {
   protected function configure()
   {
-    // // add your own arguments here
+  
     $this->addArguments(array(
-       new sfCommandArgument('campagnes', sfCommandArgument::IS_ARRAY, 'Campagnes'),
+       new sfCommandArgument('campagnes_dr', sfCommandArgument::REQUIRED, 'Campagnes pour la DR séparé par des "," (exemple 2010,2011,2012)'),
+       new sfCommandArgument('campagnes_ds', sfCommandArgument::REQUIRED, 'Campagnes pour la DS séparé par des "," (exemple 2010,2011,2012)'),
     ));
 
     $this->addOptions(array(
@@ -39,7 +40,8 @@ EOF;
         $communes[$csv[0]] = $csv[1];
     }
 
-    $annees = $arguments['campagnes'];
+    $annees_dr = explode(",", $arguments['campagnes_dr']);
+    $annees_ds = explode(",", $arguments['campagnes_ds']);
 
     foreach($communes as $code_postal => $nom) {
         $export = ExportClient::getInstance()->find('EXPORT-MAIRIES-'. $code_postal);
@@ -51,19 +53,30 @@ EOF;
           $export->set('_id', 'EXPORT-MAIRIES-' . $code_postal);
           $export->nom = $nom . ' (' . $code_postal . ')';
           $export->destinataire = 'Mairies';
-          $export->identifiant = $code_postal;
+          $export->identifiant = (string)$code_postal;
           $export->generateCle();
         }
 
-        $export->drs->remove('views');
-        $export->drs->add('views');
+        $export->remove('drs');
+        $export->add('drs');
 
-        foreach($annees as $annee) {
+        foreach($annees_dr as $annee) {
           $view = $export->drs->views->add();
           $view->id = 'DR';
           $view->nom = 'campagne_declaration_insee';
-          $view->startkey = array($annee, $code_postal, '0000000000');
-          $view->endkey = array($annee, $code_postal, '9999999999');
+          $view->startkey = array($annee, (string)$code_postal);
+          $view->endkey = array($annee, (string)$code_postal, '[]');
+        }
+
+        $export->remove('dss');
+        $export->add('dss');
+
+        foreach($annees_ds as $annee) {
+          $view = $export->dss->views->add();
+          $view->id = 'DS';
+          $view->nom = 'campagne_declaration_insee';
+          $view->startkey = array($annee,(string) $code_postal);
+          $view->endkey = array($annee,(string) $code_postal, '[]');
         }
         
         $export->save();

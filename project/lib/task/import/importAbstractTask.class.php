@@ -32,6 +32,11 @@ abstract class importAbstractTask extends sfBaseTask
 
             return new DateTime(sprintf('%d-%d-%d', $matches[3], $matches[2], $matches[1]));
         }
+        
+        if (preg_match('/^([1-3]?[0-9]+)([0-9]{2})([0-9]{4})$/', $date, $matches)) {
+
+            return new DateTime(sprintf('%d-%d-%d', $matches[3], $matches[2], $matches[1]));
+        }
 
         throw new sfException(sprintf("La date '%s' est invalide", $date));
     }
@@ -74,13 +79,39 @@ abstract class importAbstractTask extends sfBaseTask
     }
 
     public function logLignes($type, $message, $lines, $num_ligne = null) {
-        $this->log(sprintf("%s;%s (de la ligne %s à %s) :", $type, $message, $num_ligne-count($lines), $num_ligne));
+        echo sprintf("%s;%s (de la ligne %s à %s) :", $type, $message, $num_ligne-count($lines), $num_ligne);
         foreach($lines as $i => $line) {
-          $this->log(sprintf(" - %s : %s", $i, implode($line, ";")));
+          echo sprintf(" - %s : %s", $i, implode($line, ";"));
         }
+
+        echo "\n";
     }
 
-    public function logLigne($type, $message, $line, $num_ligne = null) {
-        $this->log(sprintf("%s;%s (ligne %s) : %s", $type, $message, $num_ligne, implode($line, ";")));
+    public function logLigne($type, $message, $line, $num_ligne = null, $separator = ";") {
+        $this->log(sprintf("%s;%s (ligne %s) : %s", $type, $message, $num_ligne, implode($line, $separator)));
     }
+    
+    protected function getCouleur($couleur_key) {
+        switch ($couleur_key) {
+            case 'BL':
+                return 'Blanc';
+            case 'RS':
+                return 'Rose';
+            case 'RG':
+                return 'Rouge';
+            default:
+                throw new sfException("La couleur $couleur_key n'est pas connue dans la configuration.");
+        }
+        return null;
+    }
+    
+    public function green($string) {
+        return "\033[32m".$string."\033[0m";
+    }
+        
+    public function yellow($string) {
+        return "\033[33m".$string."\033[0m";
+    }
+    
+    
 }

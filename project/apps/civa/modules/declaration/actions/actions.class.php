@@ -31,6 +31,8 @@ class declarationActions extends EtapesActions {
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
+                $doc->identifiant = $tiers->cvi;
+                $doc->storeDeclarant();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
@@ -59,6 +61,7 @@ class declarationActions extends EtapesActions {
                 $doc->remove('etape');
                 $doc->remove('utilisateurs');
                 $doc->remove('import_db2');
+                $doc->storeDeclarant();
                 $doc->update();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
@@ -68,7 +71,7 @@ class declarationActions extends EtapesActions {
     }
 
     public function executeDownloadNotice() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "images/aide.pdf", "aide.pdf");
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_recolte.pdf", "aide recolte.pdf");
     }
 
     protected function renderPdf($path, $filename) {
@@ -116,6 +119,7 @@ class declarationActions extends EtapesActions {
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = acCouchdbManager::getClient()->find($key);
+        $this->dr->update();
 
         $check = $this->dr->check();
         $this->annee = $annee;
@@ -272,9 +276,7 @@ Le CIVA';
                 ->setBody($mess);
 
 
-        $file_name = $dr->_id . '.pdf';
-
-        $attachment = new Swift_Attachment($pdfContent, $file_name, 'application/pdf');
+        $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
         $message->attach($attachment);
         
         try {

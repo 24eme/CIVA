@@ -3,8 +3,47 @@
 abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
     protected $produits = null;
+    protected $produits_filter = array(self::TYPE_DECLARATION_DR => null, self::TYPE_DECLARATION_DS => null);
+
+    const TYPE_DECLARATION_DR = 'DR';
+    const TYPE_DECLARATION_DS = 'DS';
 
     abstract public function getChildrenNode();
+
+    public function getChildrenNodeArray() {
+        $items = array();
+        foreach($this->getChildrenNode() as $item) {
+            $items[$item->getKey()] = $item;
+        }
+
+        return $items;
+    }
+
+    public function getChildrenFilter($type_declaration = null) {
+      $children = array();
+      foreach($this->getChildrenNode() as $item) {
+        if($type_declaration == self::TYPE_DECLARATION_DR && !$item->isForDR()) {
+          continue;
+        }
+
+        if($type_declaration == self::TYPE_DECLARATION_DS && !$item->isForDS()) {
+          continue;
+        }
+
+        $children[$item->getKey()] = $item;
+      }
+
+      return $children;
+    }
+
+    public function getLibelleLong() {
+      if($this->exist('libelle_long') && $this->_get('libelle_long')) {
+
+        return $this->_get('libelle_long');
+      }
+
+      return $this->getLibelle();
+    }
 
     protected function loadAllData() {
         parent::loadAllData();
@@ -54,6 +93,22 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
       return $this->produits;
     }
 
+    public function getProduitsFilter($type_declaration = null) {
+      if(!$type_declaration) {
+
+        return $this->getProduits();
+      }
+      
+      if(is_null($this->produits[$type_declaration])) {
+        $this->produits[$type_declaration] = array();
+        foreach($this->getChildrenFilter($type_declaration) as $key => $item) {
+            $this->produits[$type_declaration] = array_merge($this->produits[$type_declaration], $item->getProduitsFilter($type_declaration));
+        }
+      }
+
+      return $this->produits[$type_declaration];
+    }
+
     public function getRendement() {
 
         return $this->store('rendement', array($this, 'getInternalRendement'));
@@ -66,7 +121,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
             return $this->_get($key);
         }
 
-        return $this->getParentNode()->getRendementAppellation();
+        return $this->getParentNode()->getRendement();
     }
 
     public function getRendementAppellation() {
@@ -92,7 +147,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
             return $this->_get($key);
         }
 
-        return $this->getParentNode()->getRendementAppellation();
+        return $this->getParentNode()->getRendementCouleur();
     }
     
     public function hasRendementCouleur() {
@@ -139,6 +194,24 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
         }
 
         return $this->getParentNode()->hasVtsgn();
+    }
+
+    public function isForDR() {
+      
+        return !$this->exist('no_dr') || !$this->get('no_dr');
+    }
+
+    public function isForDS() {
+
+        return !$this->exist('no_ds') || !$this->get('no_ds');
+    }
+    
+    public function isAutoDs() {
+        if ($this->exist('auto_ds')) {
+            return $this->get('auto_ds');
+        }
+        
+        return $this->getParentNode()->isAutoDs();
     }
 
 }

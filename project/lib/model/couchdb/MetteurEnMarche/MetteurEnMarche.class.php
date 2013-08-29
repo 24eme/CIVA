@@ -8,4 +8,9 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
 
         return acCouchdbManager::getClient('Acheteur')->retrieveByCvi($this->cvi_acheteur);
     }
+
+    public function getIdentifiant() {
+
+        return $this->civaba;
+    }
 }

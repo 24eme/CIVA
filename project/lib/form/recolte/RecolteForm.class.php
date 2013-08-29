@@ -51,6 +51,14 @@ class RecolteForm extends acCouchdbObjectForm {
 
     }
 
+    protected function updateDefaultsFromObject() {
+        $defaults = $this->getDefaults();
+
+        parent::updateDefaultsFromObject();
+
+        $this->setDefaults($defaults + $this->getDefaults());
+    }
+
     public function bind(array $taintedValues = null, array $taintedFiles = null) {
         $this->configureAcheteursFromBind(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $taintedValues);
         $this->configureAcheteursFromBind(self::FORM_NAME_COOPERATIVES . self::FORM_SUFFIX_NEW, $taintedValues);
@@ -157,6 +165,10 @@ class RecolteForm extends acCouchdbObjectForm {
 
     protected function getChoicesVvtsgn() {
         return array('' => '', 'VT' => 'VT', 'SGN' => 'SGN');
+    }
+
+    public function updateObjectEmbeddedForms($values, $forms = null) {
+        
     }
 
 }

@@ -106,13 +106,13 @@ EOF;
             $compte = acCouchdbManager::getClient()->find('COMPTE-' . $login, acCouchdbClient::HYDRATE_DOCUMENT);
             if (!$compte) {
                  $compte = new CompteTiers();
-                 $compte->set('_id', 'COMPTE-' . $login);
-                 $compte->login = $login;
+                 $compte->login = $login."";
+                 $compte->constructId();
                  $compte->mot_de_passe = $this->generatePass();;
-                 $compte->email = $this->combiner($tiers, 'email');
+                 $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             }
 
-            $email = $this->combiner($tiers, 'email');
+            /*$email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             if($email) {
                 if ($email != $compte->email && $compte->email) {
                     $this->logSection("L'email a été modifié", $compte->_id);
@@ -120,7 +120,7 @@ EOF;
                 $compte->email = $email;
             } elseif(!$email && $compte->email) {
                 //$this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
-            }
+            }*/
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 
@@ -129,6 +129,8 @@ EOF;
 
             $inactif = false;
 
+            $tiers_date_creation = null;
+
             foreach ($tiers as $t) {
                 $tiers_compte[$t->_id][] = $compte->_id;
                 $obj = $compte->tiers->add($t->_id);
@@ -136,6 +138,9 @@ EOF;
                 $obj->type = $t->type;
                 $obj->nom = $t->nom;
                 $inactif = (isset($t->statut) && $t->statut == _TiersClient::STATUT_INACTIF);
+                if(!$tiers_date_creation) {
+                    $tiers_date_creation = $t->db2->import_date;
+                }
             }
 
             if($inactif && $compte->isActif()) {
@@ -153,6 +158,12 @@ EOF;
             } elseif ($compte->isModified()) {
                 echo sprintf("Modification du compte %s:%s\n", $compte->_id, $compte->nom);
             }
+
+            if(!$compte->date_creation && $tiers_date_creation) {
+               $compte->date_creation = $tiers_date_creation;
+               $this->logSection('date_creation', $compte->_id.":".$compte->date_creation);
+            }
+
             $compte->save();
             
             if ($compte->getStatut() == "INSCRIT" && !$compte->email) {
@@ -198,10 +209,10 @@ EOF;
         return $login;
     }
 
-    private function combiner($tiers_json, $field) {
+    private function combiner($tiers_json, $field, $priorite_type = 'Recoltant') {
         $value = null;
         foreach ($tiers_json as $tiers) {
-            if ($tiers->type == 'Recoltant' && $tiers->$field) {
+            if ($tiers->type == $priorite_type && $tiers->$field) {
                 return $tiers->$field;
             } elseif (is_null($value) && $tiers->$field) {
                 $value = $tiers->$field;

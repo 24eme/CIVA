@@ -31,12 +31,15 @@ class MigrationCompte {
     public function createNewCompte(){
         $this->_nouveau_compte = clone $this->_ancien_compte;
 
-        $this->_ancien_compte->mot_de_passe = null;
+        $this->_nouveau_compte->date_creation = date('Y-m-d');
+
+        $this->_ancien_compte->setInactif();
         $this->_ancien_compte->update();
         $this->_ancien_compte->save();
 
         $this->_nouveau_compte->_id = self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi;
         $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
+        $this->_nouveau_compte->setActif();
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
 
@@ -59,6 +62,9 @@ class MigrationCompte {
     public function createCompteTiers(){
         $this->new_rec->_id = self::PREFIX_KEY_REC . $this->_nouveau_cvi;
         $this->new_rec->compte = array(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi);
+        $this->new_rec->cvi = $this->_nouveau_cvi;
+
+        $this->new_rec->statut = _TiersClient::STATUT_ACTIF;
 
         if(!is_null($this->nom))
             $this->new_rec->nom = $this->nom;

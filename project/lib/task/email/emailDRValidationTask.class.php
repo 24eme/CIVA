@@ -89,7 +89,7 @@ EOF;
   protected function getMessageBody($compte, $campagne) {
       return "Bonjour ".$compte->getNom().",
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validé. 
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
 
 Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit. 
 

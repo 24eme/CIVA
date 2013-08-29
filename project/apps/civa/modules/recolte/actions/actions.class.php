@@ -362,6 +362,7 @@ class recolteActions extends EtapesActions {
     }
 
     protected function getFormDetailsOptions() {
+
         return array(
                 'lieu_required' => $this->onglets->getCurrentAppellation()->getConfig()->hasLieuEditable(),
                 'superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),

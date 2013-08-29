@@ -263,6 +263,10 @@ message:
   url: /message
   param: {module: global, action: messageAjax}
 
+message_ds:
+  url: /message-ds
+  param: {module: ds, action: messageAjax}
+
 mentions_legales:
   url: /mentions-legales
   param: {module: contenu, action: mentionsLegales}

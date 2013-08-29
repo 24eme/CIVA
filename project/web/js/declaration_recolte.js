@@ -225,6 +225,8 @@ var initMsgAide = function()
                 });
                 $('.ui-dialog-buttonpane').find('button:contains("telecharger")').addClass('telecharger-btn');
                 $('.ui-dialog-buttonpane').find('button:contains("fermer")').addClass('fermer-btn');
+                $('.ui-dialog-buttonpane').find('button:contains("fermer")').focus();
+                $('.ui-dialog-buttonpane').find('button:contains("telecharger")').focus();
             }
             );
 
@@ -315,6 +317,9 @@ var formExploitationAdministratif = function()
             btns_modifier.hide();
             $('#btn_etape input[name=boutons[next]]').addClass('btn_inactif');
             $('#btn_etape input[name=boutons[previous]]').addClass('btn_inactif');
+            $('#btn_suivant').addClass('btn_inactif');
+            $('#btn_precedent').addClass('btn_inactif');            
+            
             bloc.addClass('edition');
             bloc.find('form input[type!="hidden"], form select').first().focus();
             return false;
@@ -717,7 +722,7 @@ var etatChampsTableAcht = function(type)
 var initValidationDr = function(type)
 {
     initValidDRPopup();
-    initConfirmeValidation();
+    initConfirmeValidationDr();
 }
 
 
@@ -756,7 +761,7 @@ var initSendDRPopup = function()
 }
 /* Confirmation de la validation */
 
-var initConfirmeValidation = function()
+var initConfirmeValidationDr = function()
 {
     $('#valideDR').click(function() {
         openPopup($("#popup_confirme_validation"));
@@ -1301,13 +1306,15 @@ var openPopup = function(popup, fn_open_if) {
         }
 
     });
+    if($('.ui-dialog-buttonpane').find('button').length > 0 ){
+        $('.ui-dialog-buttonpane button:last').focus();
+    };
 
 
     if (!fn_open_if || fn_open_if()) {
         popup.dialog('open');
         return false;
     }
-
     return true;
 };
 

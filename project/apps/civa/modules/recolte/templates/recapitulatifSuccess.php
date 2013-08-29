@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 <?php include_partial('global/etapes', array('etape' => 2)) ?>
 <?php include_partial('global/actions', array('etape' => 2, 'help_popup_action'=>$help_popup_action)) ?>
 

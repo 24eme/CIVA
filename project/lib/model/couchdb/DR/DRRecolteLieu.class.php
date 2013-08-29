@@ -448,10 +448,16 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
                     $acheteur->dontdplc = null;
                 }
             }
+            $acheteurs_to_remove = array();
             foreach ($this->acheteurs->get($type) as $cvi => $item) {
                 if (!array_key_exists($cvi, $acheteurs)) {
-                    $this->acheteurs->get($type)->remove($cvi);
+                    $acheteurs_to_remove[] = $type."/".$cvi;
+                    //$this->acheteurs->get($type)->remove($cvi);
                 }
+            }
+
+            foreach($acheteurs_to_remove as $hash) {
+                $this->acheteurs->remove($hash);
             }
         }
         $this->acheteurs->update();

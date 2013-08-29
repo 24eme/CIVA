@@ -39,16 +39,13 @@ EOF;
     foreach (file($arguments['file']) as $a) {
         //$db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a))));
         $db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
-        $tiers = $this->loadTiers($db2_tiers);
-        if ($tiers) {
-            if($tiers->isNew()) {
-               $this->logSection("new", $tiers->get('_id')); 
-            } elseif($tiers->isModified()) {
-               $this->logSection("modified", $tiers->get('_id'));  
-            }
-            $tiers->save(); 
-        } else {
-            $nb_not_use++;
+        $tiers = $this->loadAndSaveTiers($db2_tiers);
+        if (!$tiers) {
+          $nb_not_use++;
+        }
+
+        if($db2_tiers->isAcheteur()) {
+          $tiers = $this->loadAndSaveTiers($db2_tiers, true);
         }
     }
     
@@ -56,16 +53,43 @@ EOF;
 
     // add your code here
   }
+
+  protected function loadAndSaveTiers($db2, $acheteur = false) {
+    $tiers = $this->loadTiers($db2, $acheteur);
+    if(!$tiers) {
+
+      return null;
+    }
+
+    if($tiers->isNew()) {
+       $this->logSection("new", $tiers->get('_id')); 
+    } elseif($tiers->isModified()) {
+       $this->logSection("modified", $tiers->get('_id'));  
+    }
+    if($tiers->save()) {
+      $this->logSection('flag revision', $tiers->get('_id'));
+      $tiers->db2->add('import_revision', $tiers->_rev);
+      $tiers->db2->import_date = date("Y-m-d");
+      $tiers->save();
+    }
+
+    return $tiers;
+  }
   
   /**
    * @param Db2Tiers $db2 
    * return _Tiers
    */
-  private function loadTiers($db2) {
+  private function loadTiers($db2, $acheteur = false) {
       $tiers = null;
-      if ($db2->isRecoltant()) {
+
+      if($acheteur && $db2->isAcheteur()) {
+        $tiers = $this->loadAcheteur($db2);
+      }
+
+      if (!$acheteur && $db2->isRecoltant()) {
           $tiers = $this->loadRecoltant($db2);
-      } elseif($db2->isMetteurEnMarche()) {
+      } elseif(!$acheteur && $db2->isMetteurEnMarche()) {
           $tiers = $this->loadMetteurEnMarche($db2);
       }
       
@@ -100,12 +124,8 @@ EOF;
       $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
-      $tiers->db2->export_revision = null;
-      
-      if($tiers->isModified()) {
-        $tiers->db2->import_date = date("Y-m-d");
-      }
-      
+      $tiers->db2->remove('export_revision');
+
       return $tiers;
   }
   
@@ -122,11 +142,12 @@ EOF;
       }
       
       $recoltant->cvi = $db2->get(Db2Tiers::COL_CVI);
-      $recoltant->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
-      $recoltant->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
       $recoltant->siret = $db2->get(Db2Tiers::COL_SIRET);
       $recoltant->cave_cooperative = $this->getCaveParticuliere($db2->get(Db2Tiers::COL_TYPE_DECLARATION));
-      
+      $recoltant->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
+      $recoltant->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
+
+
       return $recoltant;
   }
   
@@ -146,8 +167,24 @@ EOF;
       $metteur->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
       $metteur->siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
       $metteur->db2->maison_mere = $db2->get(Db2Tiers::COL_MAISON_MERE);
-      
+
       return $metteur;
+  }
+
+  private function loadAcheteur($db2) {
+      $achat = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($db2->get(Db2Tiers::COL_CVI));
+
+      if(!$achat) {
+
+          return null;
+      }
+      
+      $achat->cvi = $db2->get(Db2Tiers::COL_CVI);
+      $achat->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
+      $achat->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
+      $achat->siret = $db2->get(Db2Tiers::COL_SIRET);
+      
+      return $achat;
   }
   
   private function getCommune($insee) {

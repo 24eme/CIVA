@@ -11,8 +11,6 @@
 /* STRUCTURE / ELEMENTS GENERIQUES */
 /* =================================================== */
 
-
-
 #application_ds 
 {
 	background: #f7f6f6;
@@ -28,6 +26,9 @@
 
 #application_ds input[type="text"]
 {
+	background: #fff;
+	border: 1px solid #C2C1BA;
+	font-size: 13px;
 	padding: 0 5px;
 	width: 113px;
 }
@@ -40,11 +41,24 @@
 	margin: 0 0 20px 23px;
 }
 
+.titre_page small
+{
+	font-size: 14px;
+}
+
+
+#application_ds #exploitation_administratif input[type="text"] {
+	padding: 0;
+}
+
 
 /**
  * Header DS
  ******************************************/
-.header_ds { margin: 0 0 40px; } 
+.header_ds { margin: 0 0 15px; } 
+.header_ds.sous_menu { margin: 0 0 47px; } 
+
+.header_ds.sous_menu #liste_lieux_stockage { padding: 0 0 0 268px; }
  
 /* Etapes */
 #etape_declaration.etapes_ds
@@ -52,6 +66,80 @@
 	border-top: 0;
 	margin: -30px 0 0;
 	top: 0;
+	padding: 0 20px;
+}
+
+#etape_declaration.etapes_ds li
+{
+	padding: 4px 0;
+}
+
+#etape_declaration.etapes_ds li.sous_menu
+{
+	background: #efefef;
+	border-left: 1px solid #cacaca;
+	border-right: 1px solid #cacaca;
+	padding: 0;
+	margin: 0 0 0 -1px;
+}
+
+#etape_declaration.etapes_ds li.sous_menu > a
+{
+	/*background: url(../images/puces/fleche_sous_menu.png) 110px 10px no-repeat;*/
+	z-index: 10;
+}
+
+#etape_declaration.etapes_ds li.sous_menu > a
+{
+	background-position: 110px 13px;
+	border-bottom: 1px solid #efefef;
+	position: relative;
+	top: 1px;
+	padding: 3px 0 4px;
+}
+
+#etape_declaration.etapes_ds li.sous_menu ul
+{
+	background: #efefef;
+	border: solid #cacaca;
+	border-width: 1px 0;
+	display: none;
+	font-size: 12px;
+	position: absolute;
+	top: 49px;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+}
+
+#etape_declaration.etapes_ds li.sous_menu ul { display: block; }
+
+#etape_declaration.etapes_ds li.sous_menu ul li
+{
+	float: left;
+	margin: 0 0 0 20px;
+	padding: 8px 5px;
+	width: auto;
+}
+
+#etape_declaration.etapes_ds li.sous_menu ul li.actif
+{
+	background: #FFB52C;
+	font-weight: bold;
+}
+#etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
+
+ul#etape_declaration li.actif a em span.lieu 
+{
+    color: black;
+    display: inline-block;
+    margin: 0 0 0 4px;
+/*    
+    font-size: 12px;
+    font-style: italic;
+    font-weight: bold;
+    margin: 2px 0 0;
+    padding: 6px 0 0;*/
 }
 
 /* Barre de progression */
@@ -62,7 +150,7 @@
 	padding: 0 20px 0 0;
 	position: relative;
 	text-align: center;
-	width: 200px;
+	width: 225px;
 }
 
 .progression_ds p
@@ -94,25 +182,39 @@
 /**
  * Onglets majeurs
  ******************************************/
-#onglets_majeurs.onglets_stock { line-height: 1; }
+#onglets_majeurs.onglets_stock { line-height: 1; font-size: 13px; }
 #onglets_majeurs.onglets_stock.avec_sous_onglets { margin: 0 0 24px; }
 
-#onglets_majeurs.onglets_stock li a { padding: 2px 5px; }
+#onglets_majeurs.onglets_stock li a { padding: 2px 6px 2px 4px; }
+#onglets_majeurs.onglets_stock.concis li { margin-right: 2px; }
+#onglets_majeurs.onglets_stock.concis li a { padding: 2px 3px 2px 2px; }
 #onglets_majeurs.onglets_stock li.ui-tabs-selected > a { background: #ffb52c; }
 
 #onglets_majeurs.onglets_stock li.ajouter a
 {
 	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
 	color: #fff;
-	padding-left: 30px;
+	padding-left: 22px;
 }
 
 #onglets_majeurs.onglets_stock li.recap_stock { float: right; }
 
 #onglets_majeurs.onglets_stock li .sous_onglets { top: 33px; }
 
+#onglets_majeurs .msg_aide_ds { margin-top: 2px; }
 
+ul.btn_prev_suiv li.previsualiser a.msg_aide_ds {
+	margin: -27px 0 0 5px;
+}
 
+.titre_tab a.msg_aide_ds {
+	float: right;
+	margin: 5px 5px 0 0;
+}
+
+a.msg_aide_ds {
+	margin: -2px 0 0 5px;
+}
 
 /* =================================================== */
 /* GESTION DES STOCK */
@@ -132,13 +234,42 @@
 	margin: -30px 0 35px;
 }
 
-
 #application_ds #gestion_stock.avec_sous_onglets
 {
 	border: 1px solid #C6C6C6;
 	border-top: 4px solid #ffbf4e;
+	margin-top: -8px;
 	padding: 55px 15px 15px 0;
 }
+
+/**
+ * Définition des lieux de stockage
+ ******************************************/
+#application_ds .ds_neant
+{
+	margin: 0 0 5px;
+	text-align: right;
+}
+
+#application_ds .ds_neant *
+{
+	vertical-align: middle;
+}
+
+#application_ds .ds_neant input
+{
+	margin: 0 0 0 5px;
+}
+
+#application_ds #lieux_stockage table thead th { font-size: 11px; }
+
+#application_ds #lieux_stockage table thead th:first-child 
+{
+	padding: 0 10px;
+	width: 135px;
+}
+
+#application_ds #lieux_stockage table tbody td { text-align: center; }
 
 
 
@@ -151,7 +282,7 @@
 	font-size: 14px;
 	float: left;
 	margin: 36px 40px 10px 0;
-	width: 200px;
+	width: 210px;
 }
 
 #application_ds #liste_cepages li
@@ -161,7 +292,7 @@
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
-	width: 190px;
+	width: 200px;
 	
 	overflow: hidden;
 	-o-text-overflow: ellipsis;
@@ -174,6 +305,50 @@
 	font-style: normal;
 	margin: 0 0 0 5px;
 }
+
+#application_ds #liste_cepages li.ajout
+{
+	background: 0;
+	height: auto;
+	padding: 10px 0 0;
+}
+
+/**
+ * Ajout de cépage
+ ******************************************/
+#application_ds #aucun_produit
+{
+	border: 1px solid #c6c6c6;
+	font-size: 14px;
+	padding: 10px;
+	width: 340px;
+}
+
+#application_ds #aucun_produit p
+{
+	color: #acb701;
+	font-weight: bold;
+	margin: 0 0 15px;
+}
+
+#application_ds #aucun_produit .form_ligne
+{
+	margin: 0 0 10px;
+}
+
+#application_ds #aucun_produit .form_ligne * { vertical-align: middle; }
+
+#application_ds #aucun_produit .form_ligne label
+{
+	display: inline-block;
+	margin: 0 10px 0 0;
+	width: 164px;
+}
+
+#application_ds #aucun_produit .form_ligne select { font-size: 14px; width: 160px; }
+#application_ds #aucun_produit .form_ligne input { width: 150px; }
+
+#application_ds #aucun_produit .form_btn { text-align: right; }
 
 /**
  * Colonnes
@@ -207,6 +382,7 @@
 	padding: 0 5px;
 	overflow: hidden;
 	white-space: nowrap;
+	text-align: center;
 }
 
 #application_ds #donnees_stock_cepage .colonne .col_cont
@@ -224,10 +400,7 @@
 #application_ds #donnees_stock_cepage .colonne input
 {
 	background: #f0f0de;
-	border: 1px solid #C2C1BA;
-	font-size: 13px;
 	height: 16px;
-	padding: 0 5px;
 	text-align: right;
 }
 
@@ -244,15 +417,15 @@
 	overflow: hidden;
 }
 
-#application_ds .ligne_total h2,
+#application_ds .ligne_total h3,
 #application_ds .ligne_total ul,
 #application_ds .ligne_total ul li { float: left; }
 
-#application_ds .ligne_total h2
+#application_ds .ligne_total h3
 {
-	font-size: 16px;
+	font-size: 14px;
 	padding: 0 0 0 10px;
-	width: 230px;
+	width: 240px;
 }
 
 #application_ds .ligne_total ul li
@@ -265,8 +438,8 @@
 
 #application_ds .ligne_total input
 {
-	font-size: 15px;
 	width: 111px;
+	text-align: right;
 }
 
 /* Sous-total */
@@ -276,7 +449,7 @@
 #application_ds #total
 {
 	background: #ffa913;
-	padding: 10px 1px;
+	padding: 8px 1px;
 }
 
 
@@ -292,63 +465,161 @@
 /**
  * Autres
  ******************************************/
-#application_ds .bloc_autres
+#application_ds #blocs_autres .bloc_autres
 {
-	background: #edecec;
-	border: 1px solid #c6c8c7;
-	float: left;
-	margin: 50px 0 0;
-	padding: 15px;
-	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	width: 390px;
 }
 
-#application_ds .bloc_autres + .bloc_autres
+.titre_page span.titre_autre
 {
-	margin-left: 30px;
+    margin: 0 0 0 150px;
 }
 
-#application_ds .bloc_autres h2
+.bloc_autres div.colonne h2
+{
+    text-align: center;
+}
+
+#application_ds #blocs_autres .bloc_autres + .bloc_autres { margin: 0 0 0 25px; }
+
+.ielt8 #application_ds #blocs_autres .bloc_autres
+{
+	display: inline;
+	zoom: 1;
+}
+
+#application_ds #blocs_autres .bloc_autres ul { font-size: 13px; }
+
+#application_ds #blocs_autres .bloc_autres ul li { margin: 5px 0; }
+
+#application_ds #blocs_autres .bloc_autres ul li label
+{
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 10px 0 0;
+	width: 190px;
+}
+
+#application_ds #blocs_autres .bloc_autres ul li input { background: #f0f0de; text-align: right; }
+#application_ds #blocs_autres .bloc_autres ul li input:focus { background: #fff; }
+
+
+
+
+/**
+ * Récapitulatif
+ ******************************************/
+#application_ds .page_recap
+{
+	/*margin: 0 0 40px;*/
+}
+
+#application_ds .lieu_stockage
+{
+	font-size: 14px;
+}
+
+#application_ds #validation_points_container {
+	margin-bottom: 35px;
+}
+
+#application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
+
+#application_ds #recap_autres { margin: 20px 0 0; }
+#application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
+
+/* Tableau */
+#application_ds .page_recap table { width: auto; }
+
+#application_ds .page_recap table thead { border: 1px solid #C6C8C7; }
+
+#application_ds .page_recap table thead th
 {
 	background: #dcdfa9;
 	color: #848c03;
-	font-size: 18px;
+	font-size: 14px;
 	font-weight: normal;
-	left: 0;
-	padding: 5px 0 5px 20px;
-	position: absolute;
-	top: -32px;
-	width: 85px;
+	padding: 3px 5px;
+	vertical-align: middle;
+	width: 110px;
+	text-align: center;
 }
 
-#application_ds .bloc_autres form
+#application_ds .page_recap table thead th + th
 {
-	background: #e0e1bd;
-	padding: 10px;
+	border-left: 1px solid #fff;
 }
 
-#application_ds .bloc_autres .ligne_form
-{
-	margin: 15px 0;
+#application_ds .page_recap table thead th span.unites {
+	font-size: 12px;
+	font-weight: normal;
+	color: #848c03;
+	display: inline;
 }
 
-#application_ds .bloc_autres label
+#application_ds .page_recap table thead th.appellation,
+#application_ds .page_recap table tbody td.appellation { width: 190px; text-align: left; }
+
+#application_ds .page_recap table tbody td.neant { text-align: center; font-style: italic; background-color: #dddddd }
+
+#application_ds .page_recap table tbody td { text-align: right; }
+
+/* Total */
+#application_ds .page_recap .ligne_total
 {
 	display: inline-block;
-	width: 195px;
+	margin: 14px 0 0;
+	padding-right: 5px;
+}
+#application_ds .page_recap .ligne_total h3 { width: 188px; }
+#application_ds .page_recap .ligne_total input { width: 110px; margin-right: 5px; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; }
+#application_ds .page_recap .ligne_total + table { margin-top: 40px; }
+
+#points_bloquants .error, #points_bloquants .warning, #points_vigilance .error, #points_vigilance .warning {
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  margin:10px 0;
+  padding:3px;
+}
+#points_bloquants p, #points_vigilance p { font-weight:bold; }
+#points_bloquants .error {
+  background:#f1b2b3;
+  color:#8a0c0c;
+}
+#points_vigilance .warning {
+  background:#ffd58c;
+  color:#a03b09;
+}
+
+#confirmation_fin_stock #btn-email,
+#validation_ds #btn-email 
+{
+	background: url(../images/boutons/btn-recevoir-ma-ds-par-email.png);
+}
+
+.previsualiser a:hover { text-decoration: none; }
+
+.telecharger-ds {
+	background: url("../images/boutons/btn_telecharger_votre_ds.png") no-repeat scroll 0 0 transparent;
+	display: block;
+	height: 19px;
+	margin-left: 115px;
+	width: 130px;
 }
 
 /**
- * Définition des lieux de stockage
+ * Popup de validation de DS / confirmation d'envoi de mail
  ******************************************/
-#application_ds #lieux_stockage table thead th { font-size: 11px; }
 
-#application_ds #lieux_stockage table thead th:first-child 
-{
-	padding: 0 10px;
-	width: 135px;
+#popup_confirme_validationDS #btns,
+#popup_confirme_mail #btns 
+{ 
+	margin: 15px 0 0;
+	text-align: center;
 }
-
-#application_ds #lieux_stockage table tbody td { text-align: center; }
-
-
-

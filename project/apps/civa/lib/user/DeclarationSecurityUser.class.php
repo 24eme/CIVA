@@ -17,6 +17,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         self::CREDENTIAL_ETAPE_RECOLTE,
         self::CREDENTIAL_ETAPE_VALIDATION);
     protected $_declaration = null;
+    protected $_ds = null;
 
     /**
      *
@@ -49,6 +50,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function signOutDeclaration()
     {
         $this->_declaration = null;
+        $this->_ds = null;
         $this->clearCredentialsDeclaration();
     }
 
@@ -163,6 +165,60 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("you must be logged in with a tiers");
         }
     }
+    
+    
+    /**
+     * DS
+     */
+    public function isDsEditable()
+    {
+        if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
+            return true;
+        }
+         
+        return (CurrentClient::getCurrent()->ds_non_editable == 0 && CurrentClient::getCurrent()->ds_non_ouverte == 0);
+    }
+    
+    public function getDs()
+    {
+        if(!$this->getDeclarant()->isDeclarantStock()) {
+            throw new sfException("Vous n'avez pas les droits pour créez une DS");
+        }
+
+        if (!$this->hasLieuxStockage()) {                                                                                                                                                
+            return null;
+        }
+
+        $this->requireTiers();
+        if (is_null($this->_ds)) {
+            $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
+            if (!$this->_ds) {
+                $ds = new DSCiva();
+                $ds->identifiant = $this->getDeclarant()->cvi;
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                return $ds;
+            }
+        }
+
+        return $this->_ds;
+    }
+
+    public function hasLieuxStockage() {
+        $this->requireTiers();
+        if(!$this->getDeclarant()->exist('lieux_stockage') || count($this->getDeclarant()->lieux_stockage) == 0) return false;
+        return (int) count($this->getDeclarant()->lieux_stockage);
+    }
+
+
+    public function removeDs()
+    {
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs());
+        foreach ($dss as $ds) {
+            $ds->delete();
+        }
+        $this->signOutDeclaration();
+    }
+    
 
     /**
      *

@@ -5,24 +5,14 @@
 <?php else: ?>
     <h2 class="titre_principal">Mon espace déclaratif</h2>
 <?php endif; ?>
-
-    <!-- #application_dr -->
-    <div id="application_dr" class="clearfix">
-        <?php if($sf_user->hasFlash('confirmation')) : ?>
-            <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
-        <?php endif; ?>
-
-            
-        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION)): ?>
-        <div id="espace_alsace_recolte">
-            <h2>Alsace récolte</h2>
-            <div class="contenu clearfix">  
-                 <?php include_component('declaration', 'monEspace') ?>
-                 <?php include_component('declaration', 'monEspaceColonne') ?>
-            </div>
-        </div>
-        <?php endif; ?>
-        
+<div id="application_dr" class="clearfix">
+        <?php 
+        if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
+            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
+        else:
+            include_partial('monEspaceDs',array('sf_user' => $sf_user));
+        endif;
+        ?>
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
@@ -30,8 +20,7 @@
                  <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
         </div>
-        <?php endif; ?>
-             
+        <?php endif; ?>             
 
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
         <div id="espace_gamma">
@@ -42,22 +31,13 @@
             </div>
         </div>
         <?php endif; ?>
-
-        <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
-            <div class="contenu clearfix">
-                <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
-            </div>
-        <?php endif;?>	
-
-        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
-        <div id="espace_admin">
-            <h2>Espace Admin</h2>
-            <div class="contenu clearfix">
-                <a  href="<?php echo url_for('@migration_compte')?>">Migration compte</a>
-
-            </div>
-        </div>
-        <?php endif; ?>
+            
+        <?php 
+        if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
+            include_partial('monEspaceDs',array('sf_user' => $sf_user));
+        else:
+            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
+        endif;
+        ?>      
     </div>
-    <!-- fin #application_dr -->
 

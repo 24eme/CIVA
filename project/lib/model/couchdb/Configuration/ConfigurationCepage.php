@@ -2,10 +2,29 @@
 
 class ConfigurationCepage extends BaseConfigurationCepage {
 
+    public function getAppellation() {
+
+      return $this->getLieu()->getAppellation();
+    }
+
+    public function getLieu() {
+
+        return $this->getCouleur()->getLieu();
+    }
+
+    public function getMention() {
+
+        return $this->getLieu()->getMention();
+    }
+
+    public function getCouleur() {
+
+        return $this->getParentNode();
+    }
 
     public function getLibelleFormat($labels = array(), $format = "%g% %a% %m% %l% %co% %ce%", $label_separator = ", ") {
-        //return $this->getParent()->getParent()->getParent()->getParent()->getLibelle().' - '.$this->getLibelle();
-                return $this->getLibelle();
+
+        return $this->getLibelle();
     }
 
     public function getCodeProduit($vtsgn = '') {
@@ -22,6 +41,11 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     return array($this->getHash() => $this);
   }
 
+  public function getProduitsFilter($type_declaration = null) {
+
+    return $this->getProduits();
+  }
+
   public function hasRendement() {
       return ($this->getRendement()>0);
   }
@@ -29,7 +53,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   public function hasLieuEditable() {
         return $this->getParent()->getParent()->getParent()->getParent()->hasLieuEditable();
   }
-
+  
   public function hasDenomination() {
     if ($this->exist('no_denomination')) {
       return !($this->no_denomination == 1);
@@ -111,7 +135,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
   public function hasTotalCepage() {
     if (!$this->getRendement()) {
-	return false;
+	    return false;
     }
 
     return parent::hasTotalCepage();

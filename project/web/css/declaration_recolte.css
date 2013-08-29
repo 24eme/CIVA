@@ -97,11 +97,12 @@ input.readonly {
 
 /* Etapes de la déclaration */
 ul#etape_declaration {
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	background: #f1f1f1;
 	border-bottom: 1px solid #cacaca;
 	border-top: 1px solid #dcdcdc;
 	color: #a8a8a8;
-	font-size: 18px;
+	font-size: 16px;
 	margin: 0 0 -15px;
 	padding: 4px 20px;
 	position: relative;
@@ -460,33 +461,6 @@ ul.error_list li {
 	margin: 3px 0;
 }
 
-/* Messages logs */
-.message {
-	background: #fffcef;
-	border: 1px solid #f90;
-	margin: 0 0 15px;
-	padding: 10px 15px;
-}
-
-.message_erreur {
-	background: #FDD;
-	border: 1px solid #FF3300;
-	margin: 0 0 15px;
-	padding: 10px 15px;
-}
-
-.message ul.messages_log li {
-	background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
-	margin: 5px 0;
-	padding: 0 0 0 15px;
-}
-
-.message_title {
-	padding: 0 10px;
-	font-weight: bold;
-	font-size: 14px;
-}
-
 .erreur select {
 	border: 1px solid #FF3300 !important;
 }
@@ -502,38 +476,16 @@ a.btn_inactif img {
 	filter: Alpha(Opacity = 30);
 }
 
-input.btn_inactif {
+a.btn_inactif input {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
 }
 
-/* Popup d'aide */
-a.msg_aide {
-	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
-	display: inline-block;
-	height: 17px;
-	outline: 0;
-	vertical-align: middle;
-	width: 17px;
-	opacity: 0.5;
-}
-
-a.msg_aide:hover {
-	opacity: 1;
-}
-
-#popup_msg_aide {
-	display: none;
-}
-
-#popup_msg_aide p {
-	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
-		transparent;
-	color: #656565;
-	font-size: 15px;
-	padding: 0 10px 10px 25px;
-	text-align: justify;
+input.btn_inactif {
+	cursor: default;
+	opacity: 0.3;
+	filter: Alpha(Opacity = 30);
 }
 
 /**
@@ -1961,11 +1913,12 @@ div#migration_compte .contenu_section#infos_traitement {
 /**
  * Confirmation fin de la déclaration
  ******************************************/
-#confirmation_fin_declaration {
+#confirmation_fin_stock {
 	width: 536px;
+	float: left;
 }
 
-#confirmation_fin_declaration p.important {
+#confirmation_fin_stock p.important {
 	color: #acb701;
 	font-size: 16px;
 	margin: 0 0 5px;
@@ -1985,6 +1938,48 @@ div#migration_compte .contenu_section#infos_traitement {
 	float: right;
 	width: 155px;
 	height: 19px;
+}
+
+/**
+ * Feedback
+ ******************************************/
+
+#feed_back {
+	width: 536px;
+	float: left;
+}
+
+#feed_back .bloc_form { 
+	margin-top: 10px;
+}
+
+#feed_back p.important, #confirmation_feed_back p.important{
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
+#feed_back textarea {
+	border: 1px solid #c2c1ba;
+	font-size: 12px;
+	width: 482px;
+	height: 200px;
+}
+
+#feed_back .bloc_form .ligne_btn {
+	padding-top: 10px;
+	text-align: right;
+}
+
+#confirmation_feed_back {
+	width: 402px;
+	float: left;
+	margin-left: 20px;
+}
+
+#confirmation_feed_back .ligne_btn {
+	margin-top: 14px;
+	text-align: right;
 }
 
 /**

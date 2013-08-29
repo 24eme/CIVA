@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if ! test "$1"; then
+    bash bin/download_data
+fi
+
+php symfony import:Configuration2011
+php symfony import:Configuration2012
+php symfony import:Messages2012
+
+php symfony cc
+
+echo "Mise à jour des Tiers"
+
+php symfony import:Tiers data/import/Tiers/Tiers-20130724
+php symfony import:Tiers data/import/Tiers/Tiers-DS-manquant
+php symfony tiers:desactivation data/import/Tiers/Tiers-DS-manquant
+php symfony compte:update
+
+echo "Import lieux de stockage"
+
+bash bin/import_lieux_stockage
+
+echo "Import de la DS"
+
+bash bin/import_ds 1

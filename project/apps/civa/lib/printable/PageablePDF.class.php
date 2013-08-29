@@ -8,8 +8,12 @@ class PageablePDF extends PageableOutput {
     protected $pdf_file;
 
     protected function init() {
+        $header_logo_width = (isset($this->config['PDF_HEADER_LOGO_WIDTH'])) ? $this->config['PDF_HEADER_LOGO_WIDTH'] : PDF_HEADER_LOGO_WIDTH;
+        $pdf_font_size_main = (isset($this->config['PDF_FONT_SIZE_MAIN'])) ? $this->config['PDF_FONT_SIZE_MAIN'] : PDF_FONT_SIZE_MAIN;
+        $margin_top = (isset($this->config['PDF_MARGIN_TOP'])) ? $this->config['PDF_MARGIN_TOP'] : PDF_MARGIN_TOP;
+
         // create new PDF document
-        $this->pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $this->pdf = new TCPDF($this->orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $this->pdf->SetCreator('CIVA');
@@ -18,23 +22,25 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetSubject('PDF CIVA');
         $this->pdf->SetKeywords('Declaration, DR, récolte, vins d\'alsace');
 
-        // set default header data
-        $this->pdf->SetHeaderData("civa.jpg", PDF_HEADER_LOGO_WIDTH, $this->title, $this->subtitle);
+        // set default header dat
+       
+        $this->pdf->SetHeaderData("civa.jpg", $header_logo_width, $this->title, $this->subtitle);
 
         // set header and footer fonts
-        $this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',  $pdf_font_size_main));
         $this->pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
         // set default monospaced font
         $this->pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         //set margins
-        $this->pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+       
+        $this->pdf->SetMargins(PDF_MARGIN_LEFT, $margin_top, PDF_MARGIN_RIGHT);
         $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         //set auto page breaks
-        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $this->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_FOOTER - 5);
 
         //set image scale factor
         $this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -55,7 +61,8 @@ class PageablePDF extends PageableOutput {
         $this->pdf_file = $this->file_dir.$this->filename;
 
         // set font
-        $this->pdf->SetFont('dejavusans', '', 10);
+
+        $this->pdf->SetFont('dejavusans', '', $pdf_font_size_main);
     }
 
     public function isCached() {
@@ -99,5 +106,6 @@ class PageablePDF extends PageableOutput {
         }
         return file_get_contents($this->pdf_file);
     }
+
 }
 

@@ -30,8 +30,9 @@ all:
       from_name: "acExceptionNotifierPlugin"
       to: ["email@email.email"]
       subject: "500 | Internal Server Error | Exception"
-
-  declarant_class: "Recoltant"
+  email:
+    feed_back: ["email@email.email"]
+  declarant_class: "_Tiers"
 test:
 #  autologin: login
 

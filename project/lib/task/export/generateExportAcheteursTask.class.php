@@ -54,9 +54,9 @@ EOF;
       $export->drs->remove('ids');
       $export->drs->add('ids');
 
-      foreach($csv->recoltants as $cvi) {
+      /*foreach($csv->recoltants as $cvi) {
         $export->drs->ids->add(null, 'DR-' . $cvi . '-' .$csv->campagne);
-      }
+      }*/
 
       $export->save();
       $this->logSection($export->get('_id'), $export->cle);

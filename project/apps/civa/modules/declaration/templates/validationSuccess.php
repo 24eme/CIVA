@@ -1,5 +1,5 @@
 <?php include_partial('global/etapes', array('etape' => 3)) ?>
-<?php include_partial('global/actions', array('etape' => 3, 'help_popup_action'=>$help_popup_action)) ?>
+<?php include_partial('global/actions', array('etape' => 3, 'help_popup_action'=> $help_popup_action)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post" class="ui-tabs">
@@ -15,7 +15,7 @@
 
         <?php if($error && !empty($validLogErreur)){ ?>
             <fieldset class="message message_erreur">
-                <legend class="message_title">Points bloquants <a href="" class="msg_aide" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
+                <legend class="message_title">Points bloquants <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
                 <ul class="messages_log">
                 <?php foreach($validLogErreur as $key=>$log) { ?>
                 
@@ -27,7 +27,7 @@
         <?php } ?>
         <?php if($logVigilance){ ?>
             <fieldset class="message">
-                <legend class="message_title">Points de vigilance <a href="" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
+                <legend class="message_title">Points de vigilance <a href="" class="msg_aide_ds" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
                 <ul class="messages_log">
                     <?php foreach($validLogVigilance as $key=>$log) { ?>
                     <li><a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_vigilance', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a></li>
@@ -54,4 +54,4 @@
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
 
-<?php include_partial('popupConfirmeValidation') ?>
+<?php include_partial('declaration/popupConfirmeValidation') ?>

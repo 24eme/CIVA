@@ -41,8 +41,8 @@ EOF;
 
             if (!$compte) {
                 $compte = new CompteProxy();
-                $compte->set('_id', 'COMPTE-' . $tiers->cvi);
                 $compte->login = $tiers->cvi;
+                $compte->constructId();
                 if ($rec = acCouchdbManager::getClient()->find("REC-" . $tiers->cvi)) {
                     $compte->compte_reference = $rec->compte;
                 } elseif ($met = acCouchdbManager::getClient()->find("MET-" . $tiers->civaba)) {

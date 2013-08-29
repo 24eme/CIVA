@@ -42,7 +42,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         return $produits;
     }
-
+    
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);

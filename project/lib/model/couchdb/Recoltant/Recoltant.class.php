@@ -3,16 +3,14 @@ class Recoltant extends BaseRecoltant {
     public function __toString() {
         return $this->getNom() . " - Récoltant";
     }
-    
-    public function getRaisonSociale() {
-        return $this->getNom();
+
+    public function isDeclarantStock() {
+
+        return true;
     }
-    
-    public function getNoAccises() {
-        return 1;
-    }
-    
-    public function getRegion() {
-        return '';
+
+    public function getIdentifiant() {
+
+        return $this->cvi;
     }
 }

@@ -51,4 +51,8 @@ class ConfigurationRecolte extends BaseConfigurationRecolte {
 
         return true;
     }
+    
+   public function isAutoDs() {
+        return false;
+    }
 }

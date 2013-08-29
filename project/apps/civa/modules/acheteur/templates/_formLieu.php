@@ -23,7 +23,8 @@
         <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
         <div class="ligne_form <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-            <label for="champ_ajout_lieu_dit"><?php echo $form['lieu']->renderLabel(acCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_label_'.strtolower($appellation->getConfig()->getAppellation()))); ?></label>
+            <label for="champ_ajout_lieu_dit"><?php 
+            echo $form['lieu']->renderLabel(acCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_label_'.strtolower($appellation->getConfig()->getAppellation()))); ?></label>
             <?php echo $form['lieu']->render(); ?>
         </div>
         <div class="ligne_form_btn">

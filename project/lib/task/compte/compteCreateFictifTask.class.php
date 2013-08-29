@@ -49,8 +49,8 @@ EOF;
     }
     
     $compte = new CompteVirtuel();
-    $compte->set('_id', 'COMPTE-'.$arguments['login']);
     $compte->login = $arguments['login'];
+    $compte->constructId();
     if (substr($arguments['pass'], 0, 6) == "{SSHA}") {
       $compte->mot_de_passe = $arguments['pass'];
     } else {

@@ -1,6 +1,6 @@
 <ul id="liste_sepages">
     <?php foreach ($onglets->getItemsCouleur() as $key_couleur => $couleur): ?>
-        <?php foreach ($couleur->getCepages() as $key => $cepage): ?>
+        <?php foreach ($couleur->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR) as $key => $cepage): ?>
             <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>
                 <li class="ui-tabs-selected">
                     <a href="<?php echo url_for($onglets->getUrl('recolte',null, null, $key_couleur, $key)->getRawValue()) ?>">

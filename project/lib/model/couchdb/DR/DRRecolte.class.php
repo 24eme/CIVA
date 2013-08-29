@@ -41,11 +41,16 @@ class DRRecolte extends BaseDRRecolte {
                     }
                 }
             }
-            foreach($this->getAppellations() as $key => $appellation) {
+            $list_to_remove = array();
+            foreach($this->getAppellations() as $key => $appellation) {                
                 if (!$acheteurs->getNoeudAppellations()->exist($key)) {
-                    $this->getNoeudAppellations()->remove($key);
+                    $list_to_remove[] = $this->getNoeudAppellations()->get($key)->getHash();
                 }
             }
+            foreach ($list_to_remove as $hash_to_remove) {
+               $this->getDocument()->remove($hash_to_remove);
+            }
+                    
         }
     }
 

@@ -1,4 +1,4 @@
-<?php use_helper('civa') ?>
+<?php use_helper('Float') ?>
 <div id="col_recolte_totale" class="col_recolte col_total">
     <h2>Total
         <?php if($onglets->getCurrentAppellation()->getConfig()->hasManyLieu()): ?>

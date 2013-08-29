@@ -5,6 +5,7 @@ DR:
       _rev: {}
       type: {}
       campagne: {  }
+      identifiant: {  }
       updated: { required: false }
       validee: { required: false }
       modifiee: { required: false }
@@ -28,9 +29,30 @@ DR:
         class: DRDeclarant
         definition:
           fields:
-            nom: {}
-            email: {}
-            telephone: {}
+            nom: {  }
+            intitule: {  }
+            raison_sociale: {  }
+            cvi: {  }
+            no_accises: {   }
+            adresse: {  }
+            commune: {  }
+            code_postal: {   }
+            region: {  }
+            telephone: {  }
+            fax: {  }
+            email: {  }
+            siret: {  }
+            exploitant:
+              type: collection
+              definition:
+                fields:
+                  sexe: {  }
+                  nom: {  }
+                  adresse: {  }
+                  code_postal: {  }
+                  commune: {  }
+                  date_naissance: {  }
+                  telephone: {  }
       acheteurs:
         type: collection
         class: DRAcheteurs
@@ -254,20 +276,6 @@ DR:
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
 
-Acheteur:
-  inheritance: _Tiers
-  definition:
-    fields:
-      _id: {  }
-      _rev: {  }
-      cvi: {  }
-      civaba: {  }
-      type: {  }
-      qualite: {  }
-      nom: {  }
-      commune: {  }
-      achnum: { required: false }
-
 _Compte:
   type: abstract
   definition:
@@ -276,6 +284,7 @@ _Compte:
       mot_de_passe: {  }
       email: {  }
       statut: {  }
+      date_creation: {  }
       droits:
         type: array_collection
         definition:
@@ -354,6 +363,7 @@ _Tiers:
         definition:
           fields:
             '*':
+              class: _TiersLieuStockage
               type: collection
               definition:
                 fields:
@@ -365,7 +375,6 @@ _Tiers:
       exploitant:
         class: _TiersExploitant
         type: collection
-        required: false
         definition:
           fields:
             sexe: {  }
@@ -392,7 +401,8 @@ _Tiers:
             num: { }
             no_stock: { }
             import_date: {  }
-            export_revision: {  }
+            export_revision: { required: false }
+            import_revision: {  }
 
 Recoltant:
   inheritance: _Tiers
@@ -402,9 +412,9 @@ Recoltant:
       _rev: {  }
       type: {  }
       cvi: {  }
+      siret: {  }
       declaration_insee: {  }
       declaration_commune: {  }
-      siret: {  }
       cave_cooperative: {  }
 
 MetteurEnMarche:
@@ -416,6 +426,8 @@ MetteurEnMarche:
       type: {  }
       cvi_acheteur: {  }
       no_accises: {  }
+      declaration_insee: { required: false }
+      declaration_commune: { required: false }
       gamma:
         required: false
         type: collection
@@ -429,6 +441,24 @@ MetteurEnMarche:
         definition:
           fields:
             maison_mere: {  }
+
+
+Acheteur:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      cvi: {  }
+      type: {  }
+      qualite: {  }
+      nom: {  }
+      commune: {  }
+      siret: {  }
+      declaration_insee: {  }
+      declaration_commune: {  }
+      achnum: { required: false }
+
 Current:
   definition:
     fields:
@@ -438,6 +468,9 @@ Current:
       campagne: {}
       dr_non_editable: {}
       dr_non_ouverte: {}
+      ds_non_editable: {required: false}
+      ds_non_ouverte: {required: false}
+      declaration_courante: {required: false}
 
 Configuration:
   definition:
@@ -485,6 +518,7 @@ Configuration:
                 fields:
                   rendement: { type: float }
                   libelle: { }
+                  libelle_long: { required: false }
                   douane:
                     type: collection
                     class: ConfigurationDouane
@@ -499,6 +533,7 @@ Configuration:
                       fields:
                         rendement: { type: float }
                         libelle: { }
+                        libelle_long: { required: false }
                         douane:
                           type: collection
                           class: ConfigurationDouane
@@ -513,9 +548,11 @@ Configuration:
                             fields:
                               appellation: { }
                               libelle: {  }
+                              libelle_long: { required: false }
                               rendement : { type: float }
                               rendement_appellation: { type: float }
                               mout: {type: integer}
+                              auto_ds: {type: integer, required: false}
                               no_total_cepage: {type: integer, required: false}
                               detail_lieu_editable: {type: integer, required: false}
                               exclude_total: {type: integer, required: false}
@@ -531,6 +568,8 @@ Configuration:
                                     qualite: {required: false}
                                     qualite_aoc: {required: false}
                                     code_cepage: {required: false}
+                                    no_dr: { type: integer, required: false }
+                                    no_ds: { type: integer, required: false }
                               # ------- MENTION ----------
                               '*':
                                 type : collection
@@ -538,6 +577,7 @@ Configuration:
                                 definition:
                                   fields:
                                     libelle: {  }
+                                    libelle_long: { required: false }
                                     rendement: { type: float  }
                                     rendement_mention: { type: float  }
                                     douane :
@@ -556,6 +596,7 @@ Configuration:
                                           rendement_mention: { type: float  }
                                           rendement_appellation: { type: float }
                                           libelle: { }
+                                          libelle_long: { required: false }
                                           douane :
                                             type: collection
                                             class: ConfigurationDouane
@@ -566,6 +607,8 @@ Configuration:
                                                 appellation_lieu: {required: false}
                                                 qualite: {required: false}
                                                 code_cepage: {required: false}
+                                                no_dr: { type: integer, required: false }
+                                                no_ds: { type: integer, required: false }
                                           # ------------ COULEUR --------------
                                           '*' :
                                             type: collection
@@ -575,6 +618,7 @@ Configuration:
                                                 rendement_couleur: { type: float }
                                                 rendement: { type: float }
                                                 libelle: { }
+                                                libelle_long: { required: false }
                                                 douane :
                                                   type: collection
                                                   class: ConfigurationDouane
@@ -585,6 +629,8 @@ Configuration:
                                                       appellation_lieu: {required: false}
                                                       qualite: {required: false}
                                                       code_cepage: {required: false}
+                                                      no_dr: { type: integer, required: false }
+                                                      no_ds: { type: integer, required: false }
                                                 '*':
                                                 # ------------ CEPAGE -------------
                                                   type: collection
@@ -603,6 +649,7 @@ Configuration:
                                                             qualite: {required: false}
                                                             code_cepage: {required: false}
                                                       libelle: {  }
+                                                      libelle_long: { required: false }
                                                       rendement: { type: float }
                                                       min_quantite: {type: float, required: false}
                                                       max_quantite: {type: float, required: false}
@@ -612,6 +659,8 @@ Configuration:
                                                       no_cooperative : { type: integer, required: false }
                                                       no_mout : { type: integer, required: false }
                                                       no_motif_non_recolte : { type: integer, required: false }
+                                                      no_dr: { type: integer, required: false }
+                                                      no_ds: { type: integer, required: false }
 
 CSV:
   definition:
@@ -646,7 +695,7 @@ Export:
       compte: {  }
       cle: {  }
       nom: {  }
-      drs:
+      '*':
         type: collection
         definition:
           fields:

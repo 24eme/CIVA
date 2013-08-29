@@ -1,41 +1,32 @@
 <?php
 
-class ExportDRPdf {
+class ExportDRPdf extends ExportDocument {
     protected $type;
     protected $document;
     protected $nb_pages;
-    protected $partial_name;
+    protected $partial_function;
     protected $file_dir;
     protected $no_cache;
+    protected $filename;
+    protected $dr;
+    protected $tiers;
 
     public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
+        $this->dr = $dr;
+        $this->tiers = $tiers;
 
         $this->init($dr, $tiers, $filename);
-        $this->create($dr, $tiers);
-    }
-
-    public function isCached() {
-        return (!$this->no_cache && $this->document->isCached());
-    }
-
-    public function removeCache() {
-        return $this->document->removeCache();
     }
 
     public function generatePDF() {
+        if($this->no_cache || !$this->isCached()) {
+          $this->create($this->dr, $this->tiers);
+        }
         return $this->document->generatePDF($this->no_cache);
-    }
-
-    public function addHeaders($response) {
-        $this->document->addHeaders($response);
-    }
-
-    public function output() {
-        return $this->document->output();
     }
 
     protected function init($dr, $tiers, $filename = null) {
@@ -48,9 +39,9 @@ class ExportDRPdf {
         }
         
         $title = 'Déclaration de récolte '.$dr->campagne;
-        $header = $tiers->intitule.' '.$tiers->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
+        $header = $dr->declarant->intitule.' '.$dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
-            $filename = $dr->campagne.'_DR_'.$tiers->cvi.'_'.$dr->_rev.'.pdf';
+            $filename = $this->getFileName(true, true);
         }
 
         if ($this->type == 'html') {
@@ -60,9 +51,28 @@ class ExportDRPdf {
         }
     }
 
+    public function getFileName($with_name = true, $with_rev = false) {
+
+      return self::buildFileName($this->dr, $with_name, $with_rev);
+    }
+
+    public static function buildFileName($dr, $with_name = true, $with_rev = false) {
+      $filename = sprintf("DR_%s_%s", $dr->cvi, $dr->campagne);
+        
+      if($with_name) {
+          $declarant_nom = strtoupper(KeyInflector::slugify($dr->declarant->nom));
+          $filename .= '_'.$declarant_nom;
+      }
+
+      if($with_rev) {
+            $filename .= '_'.$dr->_rev;
+      }
+
+      return $filename.'.pdf';
+    }
+
     protected function create($dr, $tiers) {
-        $this->nb_pages = 0;
-        //if (!$this->isCached()) {
+        
           foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
@@ -120,7 +130,6 @@ class ExportDRPdf {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
- //      }
     }
     
     private function getRecapitulatifInfos($dr)
@@ -332,8 +341,8 @@ class ExportDRPdf {
 	    }
   	}
 
-  protected function getPartial($templateName, $vars = null) {
+    protected function getPartial($templateName, $vars = null) {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
-  }
+    }
 
 }

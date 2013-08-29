@@ -18,6 +18,8 @@ class DRClient extends acCouchdbClient {
     $doc->campagne = $campagne;
     $doc->declaration_insee = $tiers->declaration_insee;
     $doc->declaration_commune = $tiers->declaration_commune;
+    $doc->identifiant = $tiers->cvi;
+    $doc->storeDeclarant();
 
     foreach ($csvs as $csv) {
           $acheteur_cvi = $csv->cvi;

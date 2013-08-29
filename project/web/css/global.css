@@ -1,4 +1,7 @@
 @charset "utf-8";
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans:400,700);
+
+
 /**
  * Fichier : global.css
  * Description : styles génériques du site
@@ -119,6 +122,34 @@ input[type=radio]
     overflow: hidden;
 }
 
+/* Messages logs */
+
+.message {
+	background: #fffcef;
+	border: 1px solid #f90;
+	margin: 15px 0;
+	padding: 10px 15px;
+}
+
+.message_erreur {
+	background: #FDD;
+	border: 1px solid #FF3300;
+}
+
+.message ul.messages_log li {
+	background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
+	margin: 5px 0;
+	padding: 0 0 0 15px;
+}
+
+.message ul.messages_log li a { text-decoration: underline; }
+
+.message_title {
+	padding: 0 10px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
 p.flash_message
 {
     background: #fffcef;
@@ -128,6 +159,7 @@ p.flash_message
     font-size: 13px !important;
 }
 
+/* Popup d'erreur */
 #popup_msg_erreur{
     background:url("../images/pictos/pi_alert_error.png") no-repeat scroll 10px 50% ;
     display:none;
@@ -141,6 +173,61 @@ p.flash_message
     text-align:right;
 }
 
+/* Popup d'aide */
+a.msg_aide {
+	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 17px;
+	outline: 0;
+	vertical-align: middle;
+	width: 17px;
+	opacity: 0.5;
+}
+
+a.msg_aide:hover {
+	opacity: 1;
+}
+
+#popup_msg_aide {
+	display: none;
+}
+
+#popup_msg_aide p {
+	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+		transparent;
+	color: #656565;
+	font-size: 15px;
+	padding: 0 10px 10px 25px;
+	text-align: justify;
+}
+
+a.msg_aide_ds {
+	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+	display: inline-block;
+	height: 17px;
+	outline: 0;
+	vertical-align: middle;
+	width: 17px;
+	opacity: 0.5;
+}
+
+
+a.msg_aide_ds:hover {
+	opacity: 1;
+}
+
+#popup_msg_aide_ds {
+	display: none;
+}
+
+#popup_msg_aide_ds p {
+	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+		transparent;
+	color: #656565;
+	font-size: 15px;
+	padding: 0 10px 10px 25px;
+	text-align: justify;
+}
 
 /**
  * Structure générique
@@ -334,4 +421,34 @@ ul.statistiques ul li{
 
 ul.statistiques li{
     margin-bottom: 5px;
+}
+
+#ajax_notifications {
+  position:fixed;
+  width:100%;
+  top:0;
+  z-index:100000;
+}
+#ajax_form_progress_notification, #ajax_form_error_notification {
+  display:none;
+  margin:2px auto;
+  color:#ffffff;
+  padding:5px;
+  text-align:center;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+}
+#ajax_form_progress_notification {
+  background:#114c8d;
+  z-index:1200;
+  width:160px;
+}
+#ajax_form_error_notification {
+  z-index:1201;
+  background:#900000;
+  width:450px;
 }

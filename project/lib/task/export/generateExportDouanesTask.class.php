@@ -6,7 +6,8 @@ class generateExportDouanesTask extends sfBaseTask
   {
     // // add your own arguments here
     $this->addArguments(array(
-       new sfCommandArgument('campagnes', sfCommandArgument::IS_ARRAY, 'Campagnes'),
+       new sfCommandArgument('campagnes_dr', sfCommandArgument::REQUIRED, 'Campagnes pour la DR séparé par des "," (exemple 2010,2011,2012)'),
+       new sfCommandArgument('campagnes_ds', sfCommandArgument::REQUIRED, 'Campagnes pour la DS séparé par des "," (exemple 2010,2011,2012)'),
     ));
 
     $this->addOptions(array(
@@ -28,13 +29,14 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    // initialize the database connection
+
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $departements = array("6768" => "Bas-Rhin et Haut-Rhin");
 
-    $annees = $arguments['campagnes'];
+    $annees_dr = explode(",", $arguments['campagnes_dr']);
+    $annees_ds = explode(",", $arguments['campagnes_ds']);
 
     $export = ExportClient::getInstance()->find('EXPORT-DOUANES-6768');
 
@@ -49,15 +51,26 @@ EOF;
       $export->generateCle();
     }
 
-    $export->drs->remove('views');
-    $export->drs->add('views');
+    $export->remove('drs');
+    $export->add('drs');
 
-    foreach($annees as $annee) {
+    foreach($annees_dr as $annee) {
       $view = $export->drs->views->add();
       $view->id = 'DR';
       $view->nom = 'campagne_declaration_insee';
-      $view->startkey = array($annee, '67000', '0000000000');
-      $view->endkey = array($annee, '68999', '9999999999');
+      $view->startkey = array($annee);
+      $view->endkey = array($annee, '[]');
+    }
+
+    $export->remove('dss');
+    $export->add('dss');
+
+    foreach($annees_ds as $annee) {
+      $view = $export->dss->views->add();
+      $view->id = 'DS';
+      $view->nom = 'campagne_declaration_insee';
+      $view->startkey = array($annee);
+      $view->endkey = array($annee, '[]');
     }
 
     $export->save();

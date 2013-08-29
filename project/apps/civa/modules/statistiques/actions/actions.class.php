@@ -16,14 +16,14 @@ class statistiquesActions extends sfActions {
      */
     public function executeIndex(sfWebRequest $request) {
         ini_set('memory_limit', '512M');
+        $this->processStatsCompte();
+        $this->processStatsDR();
+        $this->processStatsDS();
+    }
 
+
+    protected function processStatsCompte() {
         $this->nbInscrit = 0;
-        $this->etapeDrValidee=0;
-        $this->etapeValidation = 0;
-        $this->etapeRecolte = 0;
-        $this->etapeExploitation = 0;
-        $this->etapeDrNonValidee = 0;
-        $this->etapeNoDr = 0;
         $this->nbInscritGamma = 0;
 
         $metteur = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
@@ -33,37 +33,6 @@ class statistiquesActions extends sfActions {
                 $this->nbInscritGamma++;
             }
         }
-        
-        $dr_validees = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(2)
-                                              ->startkey(array(true, true))
-                                              ->endkey(array(true, true, array()))
-                                              ->getView("STATS", "DR");
-        
-        $dr_non_validees = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(2)
-                                              ->startkey(array(false, false))
-                                              ->endkey(array(false, false, array()))
-                                              ->getView("STATS", "DR");
-        
-       $dr_non_validees_etapes_exploitation = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(4)
-                                              ->startkey(array(false, false, null, 'exploitation'))
-                                              ->endkey(array(false, false, null, 'exploitation'))
-                                              ->getView("STATS", "DR");
-         
-         
-        $dr_non_validees_etapes_recolte = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(4)
-                                              ->startkey(array(false, false, null, 'recolte'))
-                                              ->endkey(array(false, false, null, 'recolte'))
-                                              ->getView("STATS", "DR");
-        
-        $dr_non_validees_etapes_validation = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(4)
-                                              ->startkey(array(false, false, null, 'validation'))
-                                              ->endkey(array(false, false, null, 'validation'))
-                                              ->getView("STATS", "DR");
         
         $compte_inscrit = acCouchdbManager::getClient()->group(true)
                                               ->group_level(1)
@@ -77,12 +46,61 @@ class statistiquesActions extends sfActions {
                                               ->endkey(array('MOT_DE_PASSE_OUBLIE'))
                                               ->getView("STATS", "COMPTE");
         
-        $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(1)
-                                              ->getView("STATS", "edition");
+      
 
+  
+        
+        if(isset($compte_inscrit->rows) && count($compte_inscrit->rows) > 0) {
+            $this->nbInscrit = $compte_inscrit->rows[0]->value;
+        }
+        
+        if(isset($compte_mot_de_passe_oublie->rows) && count($compte_mot_de_passe_oublie->rows) > 0) {
+            $this->nbInscrit += $compte_mot_de_passe_oublie->rows[0]->value;
+            $this->nbOublie = $compte_mot_de_passe_oublie->rows[0]->value;
+        }
+    }
 
-	$this->nb_csv_acheteurs = acCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
+    protected function processStatsDR() {
+        $campagne = "2012";
+        $this->etapeDrValidee=0;
+        $this->etapeValidation = 0;
+        $this->etapeRecolte = 0;
+        $this->etapeExploitation = 0;
+        $this->etapeDrNonValidee = 0;
+        $this->etapeNoDr = 0;
+
+        $dr_validees = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(3)
+                                              ->startkey(array($campagne, true, true))
+                                              ->endkey(array($campagne, true, true, array()))
+                                              ->getView("STATS", "DR");
+        
+        $dr_non_validees = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(3)
+                                              ->startkey(array($campagne, false, false))
+                                              ->endkey(array($campagne, false, false, array()))
+                                              ->getView("STATS", "DR");
+        
+        $dr_non_validees_etapes_exploitation = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(5)
+                                              ->startkey(array($campagne, false, false, null, 'exploitation'))
+                                              ->endkey(array($campagne, false, false, null, 'exploitation'))
+                                              ->getView("STATS", "DR");
+         
+         
+        $dr_non_validees_etapes_recolte = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(5)
+                                              ->startkey(array($campagne, false, false, null, 'recolte'))
+                                              ->endkey(array($campagne, false, false, null, 'recolte'))
+                                              ->getView("STATS", "DR");
+        
+        $dr_non_validees_etapes_validation = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(5)
+                                              ->startkey(array($campagne, false, false, null, 'validation'))
+                                              ->endkey(array($campagne, false, false, null, 'validation'))
+                                              ->getView("STATS", "DR");
+
+        $this->nb_csv_acheteurs = acCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
 
         $this->etapeDrValidee = $dr_validees->rows[0]->value;
         $this->etapeDrNonValidee = $dr_non_validees->rows[0]->value;
@@ -96,21 +114,76 @@ class statistiquesActions extends sfActions {
         if (isset($dr_non_validees_etapes_validation->rows) && count($dr_non_validees_etapes_validation->rows) > 0) {
             $this->etapeValidation = $dr_non_validees_etapes_validation->rows[0]->value;
         }
-        
-        if(isset($compte_inscrit->rows) && count($compte_inscrit->rows) > 0) {
-            $this->nbInscrit = $compte_inscrit->rows[0]->value;
+
+        $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(2)
+                                              ->startkey(array($campagne))
+                                              ->endkey(array($campagne, array()))
+                                              ->getView("STATS", "edition_dr");
+
+        $this->utilisateurs_edition_dr = array(); 
+        $cpt = 0;
+        foreach ($utilisateurs_edition->rows as $u) {
+                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
+                          $this->utilisateurs_edition_dr[$u->key[1]] = $u->value;
+                      }
         }
+        arsort($this->utilisateurs_edition_dr);
+    }
+
+
+    protected function processStatsDS() {
+        $campagne = "2012-2013";
+        $this->etapeDsValidee = 0;
+        $this->etapeDsNonValidee = 0;
+        $this->etapeDsNonValideeEtapes = array();
+
+        $ds_validees = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(3)
+                                              ->startkey(array($campagne, true, true))
+                                              ->endkey(array($campagne, true, true, array()))
+                                              ->getView("STATS", "DS");
         
-        if(isset($compte_mot_de_passe_oublie->rows) && count($compte_mot_de_passe_oublie->rows) > 0) {
-            $this->nbInscrit += $compte_mot_de_passe_oublie->rows[0]->value;
-            $this->nbOublie = $compte_mot_de_passe_oublie->rows[0]->value;
+        $ds_non_validees = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(3)
+                                              ->startkey(array($campagne, false, false))
+                                              ->endkey(array($campagne, false, false, array()))
+                                              ->getView("STATS", "DS");
+
+        foreach(DSCivaClient::$etapes as $num => $libelle) {
+            $ds_non_validees_etape = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(5)
+                                              ->startkey(array($campagne, false, false, null, $num))
+                                              ->endkey(array($campagne, false, false, null, $num))
+                                              ->getView("STATS", "DS");
+
+            $this->etapeDsNonValideeEtapes[$libelle] = 0;                              
+            if (isset($ds_non_validees_etape->rows) && count($ds_non_validees_etape->rows) > 0) {
+                $this->etapeDsNonValideeEtapes[$libelle] = $ds_non_validees_etape->rows[0]->value;
+            }
         }
-	$this->utilisateurs_edition = array(); $cpt = 0;
-	foreach ($utilisateurs_edition->rows as $u) {
-                if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[0])) {
-                    $this->utilisateurs_edition[$u->key[0]] = $u->value;
-                }
-	}
-	arsort($this->utilisateurs_edition);
+
+        if (isset($ds_validees->rows) && count($ds_validees->rows) > 0) {
+          $this->etapeDsValidee = $ds_validees->rows[0]->value;
+        }
+
+        if (isset($ds_non_validees->rows) && count($ds_non_validees->rows) > 0) {
+          $this->etapeDsNonValidee = $ds_non_validees->rows[0]->value;
+        }
+
+        $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(2)
+                                              ->startkey(array($campagne))
+                                              ->endkey(array($campagne, array()))
+                                              ->getView("STATS", "edition_ds");
+
+        $this->utilisateurs_edition_ds = array(); 
+        $cpt = 0;
+        foreach ($utilisateurs_edition->rows as $u) {
+                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
+                          $this->utilisateurs_edition_ds[$u->key[1]] = $u->value;
+                      }
+        }
+        arsort($this->utilisateurs_edition_ds);
     }
 }
