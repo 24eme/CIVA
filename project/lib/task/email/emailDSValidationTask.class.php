@@ -21,6 +21,8 @@ class emailDSValidationTask extends sfBaseTask {
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('dsid', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', ''),
+
     ));
 
     $this->namespace        = 'email';
@@ -48,7 +50,11 @@ EOF;
 	    $nb_email_send = 0;  
             $campagne = $arguments['campagne'];
             $exportManager = new ExportDSCiva($campagne);
-	    $dss = $exportManager->getDSNonValideesListe();
+            if ($options['dsid']) {
+                $dss = array(DSCivaClient::getInstance()->find($options['dsid']));
+            }else{
+                $dss = $exportManager->getDSNonValideesListe();
+            }
 	    foreach ($dss as $ds) {
 		$cvi = $ds->declarant->get('cvi');
 
