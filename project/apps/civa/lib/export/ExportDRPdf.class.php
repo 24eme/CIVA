@@ -106,7 +106,7 @@ class ExportDRPdf extends ExportDocument {
       				'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
       				'total_superficie' => $infos['total_superficie'],
         			'total_volume' => $infos['total_volume'],
-                    'total_usages_industriels' => $infos['total_usages_industriels'],
+              'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
               'lies' => $infos['lies'],
@@ -154,7 +154,7 @@ class ExportDRPdf extends ExportDocument {
               $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCalcule();
+              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
           }
         }
@@ -201,6 +201,9 @@ class ExportDRPdf extends ExportDocument {
   					$c['vtsgn'] = $detail->vtsgn;
   					$c['superficie'] = $detail->superficie;
   					$c['volume'] = $detail->volume;
+            if($detail->canHaveUsagesIndustrielsSaisi()) {
+              $c['usages_industriels'] = $detail->usages_industriels;
+            }
   					if ($hasLieuEditable)
   						$c['lieu'] = $detail->lieu;
   	        		if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
@@ -236,7 +239,7 @@ class ExportDRPdf extends ExportDocument {
   		  				$c['volume'] = $cepage->total_volume;
   		  				$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
   		  				$c['revendique'] = $cepage->volume_revendique;
-  		  				$c['usages_industriels'] = $cepage->dplc;
+  		  				$c['usages_industriels'] = $cepage->usages_industriels;
   		  				if (!$c['usages_industriels'])
   		    				$c['usages_industriels'] = '0,00';
   		  				$negoces = $cepage->getVolumeAcheteurs('negoces');
@@ -256,7 +259,7 @@ class ExportDRPdf extends ExportDocument {
   						}else{
   		  					$colonnes[$last]['type'] = 'total';
   		  					$colonnes[$last]['revendique'] = $cepage->volume_revendique;
-  		  					$colonnes[$last]['usages_industriels'] = $cepage->dplc;
+  		  					$colonnes[$last]['usages_industriels'] = $cepage->usages_industriels;
   		  					if (!$colonnes[$last]['usages_industriels'])
   		    					$colonnes[$last]['usages_industriels'] = '0,00';
   						}
@@ -276,7 +279,7 @@ class ExportDRPdf extends ExportDocument {
 			    $c['volume'] = $couleur->total_volume;
 			    $c['cave_particuliere'] = $couleur->getTotalCaveParticuliere();
 			    $c['revendique'] = $couleur->volume_revendique;
-			    $c['usages_industriels'] = $couleur->dplc;
+			    $c['usages_industriels'] = $couleur->usages_industriels;
 			    if (!$c['usages_industriels'])
 			      $c['usages_industriels'] = '0,00';
 			    $negoces = $couleur->getVolumeAcheteurs('negoces');
@@ -305,7 +308,7 @@ class ExportDRPdf extends ExportDocument {
 	    $c['volume'] = $lieu->total_volume;
 	    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
 	    $c['revendique'] = $lieu->volume_revendique;
-        $c['usages_industriels'] = $lieu->usages_industriels_calcule;
+        $c['usages_industriels'] = $lieu->usages_industriels;
 	    if (!$c['usages_industriels'])
 	      $c['usages_industriels'] = '0,00';
 	    $negoces = $lieu->getVolumeAcheteurs('negoces');

@@ -1705,7 +1705,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	padding: 0;
 }
 
-#gestion_recolte .col_total .vol_revendique_dplc .alerte {
+#gestion_recolte .col_total .vol_revendique_dplc .rouge, #gestion_recolte .col_total .vol_revendique_dplc .alerte {
 	color: #bc0d0d;
 }
 
@@ -1734,7 +1734,7 @@ div#migration_compte .contenu_section#infos_traitement {
 /* Total appelation */
 #gestion_recolte #total_appelation {
 	margin: 0 0 15px;
-	width: 350px;
+	width: 390px;
 }
 
 #gestion_recolte #total_appelation table tbody td {
@@ -1745,8 +1745,13 @@ div#migration_compte .contenu_section#infos_traitement {
 #gestion_recolte #total_appelation table tbody td.valeur {
 	color: #9fac01;
 	font-weight: bold;
-	text-align: center;
-	width: 140px;
+	text-align: right;
+	width: 100px;
+	padding-right: 6px;
+}
+
+#gestion_recolte #total_appelation table tbody td.saisi {
+	padding-right: 3px;
 }
 
 /* Récapitulatif des ventes */
@@ -1777,18 +1782,20 @@ div#migration_compte .contenu_section#infos_traitement {
 	text-align: right;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels_saisi {
-	width: 96px;
+#gestion_recolte #recapitulatif_usages_industriels {
+	width: 90px;
+	text-align:right;
+	padding-right:2px;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels_saisi.readonly {
+#gestion_recolte #recapitulatif_usages_industriels.readonly {
 	color: #9FAC01;
 	font-weight: bold;
 	text-align: center;
 }
 
 #gestion_recolte .btn {
-	margin: 7px 0 0 241px;
+	margin: 7px 0 0 281px;
 }
 
 /**

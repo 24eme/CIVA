@@ -11,21 +11,27 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function configure() {
         $lieu = $this->getObject();
-        if($lieu->canHaveUsagesIndustrielsSaisi()){
+        if($lieu->canHaveUsagesIndustrielsSaisi() && $lieu->getConfig()->existRendement() && !$lieu->getConfig()->existRendementCouleur()){
             $this->setWidgets(array(
-                'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
+                'usages_industriels' => new sfWidgetFormInputFloat(array()),
             ));
 
             $this->setValidators(array(
-                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false)),
+                'usages_industriels' => new sfValidatorNumber(array('required' => false)),
             ));
 
-            $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
-            $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
+            $this->getWidget('usages_industriels')->setLabel('Usages industriels');
+            $this->getValidator('usages_industriels')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
 
             $this->is_saisisable = true;
         }
 
+        if($this->getObject()->getConfig()->existRendementCouleur()) {
+            foreach($this->getObject()->getCouleurs() as $couleur) {
+                $this->embedForm($couleur->getKey(), new RecapitulatifCouleurUsagesIndustrielsForm());            
+            }
+            $this->is_saisisable = true;
+        }
         
         $form_acheteurs = new BaseForm();
         foreach ($lieu->acheteurs as $type => $acheteurs_type) {

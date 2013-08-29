@@ -212,7 +212,7 @@ class recolteActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $redirect = false;
-                if( $this->form->getValue('usages_industriels_saisi') !=  $this->form->getObject()->getUsagesIndustrielsSaisi() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
+                if( $this->form->getValue('usages_industriels') !=  $this->form->getObject()->getUsagesIndustriels() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
                     $redirect = true;
 
                 $this->form->save();
@@ -235,7 +235,7 @@ class recolteActions extends EtapesActions {
     		if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
     			$appellation = $dr->recolte->getNoeudAppellations()->get($key_appellation);
     			foreach ($appellation->getDistinctLieux() as $lieu) {
-    				if ($lieu->getConfig()->getRendementAppellation() == -1)
+    				if ($lieu->getConfig()->getRendementNoeud() == -1)
     				continue;
     				if ($lieu->getConfig()->hasRendementCouleur()) {
     					//$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
@@ -245,8 +245,8 @@ class recolteActions extends EtapesActions {
     					}
     				} else {
     					
-	    				if ($lieu->getConfig()->getRendementAppellation()) {
-	    					$rd = $lieu->getConfig()->getRendementAppellation();
+	    				if ($lieu->getConfig()->getRendementNoeud()) {
+	    					$rd = $lieu->getConfig()->getRendementNoeud();
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
 						foreach($lieu->getCouleurs() as $couleur) {
@@ -255,8 +255,8 @@ class recolteActions extends EtapesActions {
 	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
 	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
 	    					}
-	    					if($cepage_config->getRendement()) {
-	    						$rd = $cepage_config->getRendement();
+	    					if($cepage_config->getRendementCepage()) {
+	    						$rd = $cepage_config->getRendementCepage();
 	    						if($appellation->getConfig()->hasManyLieu()) {
 	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
 	    						}else {
@@ -282,6 +282,8 @@ class recolteActions extends EtapesActions {
             if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
+
+            
             $this->redirect($this->onglets->getUrl('recolte'));
         }
     }

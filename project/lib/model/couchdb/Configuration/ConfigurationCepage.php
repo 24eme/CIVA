@@ -31,6 +31,10 @@ class ConfigurationCepage extends BaseConfigurationCepage {
         return $this->getDouane()->getFullAppCode($vtsgn).$this->getDouane()->getCodeCepage();
     }
     
+    public function existRendementByKey($key) {
+        
+        return $this->hasRendementByKey($key);
+    }
     
   public function getChildrenNode() {
       return null;
@@ -44,10 +48,6 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   public function getProduitsFilter($type_declaration = null) {
 
     return $this->getProduits();
-  }
-
-  public function hasRendement() {
-      return ($this->getRendement()>0);
   }
 
   public function hasLieuEditable() {
@@ -134,11 +134,16 @@ class ConfigurationCepage extends BaseConfigurationCepage {
   }
 
   public function hasTotalCepage() {
-    if (!$this->getRendement()) {
+    if (!$this->hasRendementCepage()) {
 	    return false;
     }
 
     return parent::hasTotalCepage();
+  }
+
+  public function getRendementNoeud() {
+
+    return $this->getRendementCepage();
   }
   
 }

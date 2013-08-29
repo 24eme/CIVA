@@ -54,19 +54,23 @@
                 <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
             </p>
             <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
-            <?php /*if ($detail->getConfig()->hasRendement()):*/ ?>
+            <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
                     <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
-                    <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                    <li><input id="detail_volume_revendique"  type="text" class="revendique num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" /></li>
-                    <?php if(isset($form['usages_industriels_saisi'])): ?>
-                        <li><?php echo $form['usages_industriels_saisi']->render(array('class' => 'num usages_industriels_saisi volume')) ?></li>
-                    <?php else: ?>
-                        <li><input id="detail_usages_industriels_saisi"  type="text" class="revendique num total readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi) ?>" /></li>
-                    <?php endif; ?>
+                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
+                    <li>
+                        <input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
+                    </li>
+                    <li>
+                        <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <?php if (isset($form['usages_industriels'])) : ?>
+                            <?php echo $form['usages_industriels']->render(array('class' => 'num usages_industriels')) ?>
+                        <?php else: ?>
+                            <input mode="auto" id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <?php endif; ?>
+                    </li>
                 </ul>
-            <?php /*endif;*/ ?>
+            <?php endif; ?>
         </div>
 
         <div class="col_btn">
@@ -81,7 +85,7 @@
     {
         
 <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()) : ?>
-            if (!document.getElementById('recolte_lieu').value) {
+            if (!document.getElementById('detail_lieu').value) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_lieu')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
@@ -89,7 +93,7 @@
 <?php endif; ?>
 
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie() && $onglets->getCurrentCepage()->getConfig()->isSuperficieRequired()) : ?>
-            if (!document.getElementById('recolte_superficie').value || !(document.getElementById('recolte_superficie').value > 0)) {
+            if (!document.getElementById('detail_superficie').value || !(document.getElementById('detail_superficie').value > 0)) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_superficie')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
@@ -112,7 +116,7 @@
                     }
                 }
             });
-            if (parseFloat($('#recolte_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0) {
+            if (parseFloat($('#detail_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0) {
                 rebeche_ratio_respected = false;
             }
 

@@ -29,110 +29,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->filter('^cepage');
     }
 
-    public function getVolumeRevendique($force_calcul = false) {
+    public function canHaveUsagesIndustrielsSaisi() {
 
-        return parent::getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueFinal'), $force_calcul);
-    }
-
-    public function getVolumeRevendiqueFinal() {
-
-        return round($this->getTotalVolume() - $this->getUsagesIndustriels(), 2);
-    }
-
-    public function getVolumeRevendiqueTotal() {
-
-        return parent::getDataByFieldAndMethod('volume_revendique_total', array($this, 'getSumNoeudFields'), true, array('volume_revendique'));
-    }
-
-    public function getVolumeMaxCouleur() {
-        return round(($this->getTotalSuperficie() / 100) * $this->getConfig()->getRendementCouleur(), 2);
-    }
-
-    public function getVolumeRevendiqueCouleur() {
-        $key = "volume_revendique_couleur";
-        if (!isset($this->_storage[$key])) {
-            $volume_revendique = 0;
-            if ($this->getConfig()->hasRendementCouleur()) {
-                $volume = $this->getTotalVolume();
-                $volume_max = $this->getVolumeMaxCouleur();
-                if ($volume > $volume_max) {
-                    $volume_revendique = $volume_max;
-                } else {
-                    $volume_revendique = $volume;
-                }
-            }
-            $this->_storage[$key] = $volume_revendique;
-        }
-        return $this->_storage[$key];
-    }
-
-    public function getVolumeRevendiqueRendement() {
-        
-        return $this->getVolumeRevendiqueCouleur();
-    }
-
-    public function getDplc($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('dplc', array($this, 'getDplcFinal'), $force_calcul);
-    }
-
-    public function getDplcFinal() {
-        $dplc_total = $this->getDplcTotal();
-        $dplc_final = $dplc_total;
-        if ($this->getConfig()->hasRendement() && $this->getConfig()->hasRendementCouleur()) {
-            $dplc_couleur = $this->getDplcCouleur();
-            if ($dplc_total < $dplc_couleur) {
-                $dplc_final = $dplc_couleur;
-            }
-        }
-        return $dplc_final;
-    }
-
-    public function getDplcTotal() {
-
-        return parent::getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'), true, array('dplc'));
-    }
-
-    public function getDplcRendement() {
-
-        return $this->getDplcCouleur();
-    }
-
-    public function getDplcCouleur() {
-        $key = "dplc_couleur";
-        if (!isset($this->_storage[$key])) {
-            $volume_dplc = 0;
-            if ($this->getConfig()->hasRendementCouleur()) {
-                $volume = $this->getTotalVolume();
-                $volume_max = $this->getVolumeMaxCouleur();
-                if ($volume > $volume_max) {
-                    $volume_dplc = $volume - $volume_max;
-                } else {
-                    $volume_dplc = 0;
-                }
-            }
-            $this->_storage[$key] = round($volume_dplc, 2);
-        }
-        return $this->_storage[$key];
-    }
-
-    public function getUsagesIndustriels($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsFinal'), $force_calcul);
-    }
-
-    protected function getUsagesIndustrielsFinal() {
-        if($this->haveUsagesIndustrielsSaisi()) {
-
-          return $this->getSumNoeudFields('usages_industriels', false);
-        }
-
-        return $this->getDplc();
-    }
-
-    public function haveUsagesIndustrielsSaisi() {
-
-        return $this->getLieu()->usages_industriels_noeud == DRRecolteLieu::USAGES_INDUSTRIELS_NOEUD_DETAIL;
+        return !$this->isUsagesIndustrielsSaisiCepage();
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -175,14 +74,6 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->_storage[$key] = $sum;
         }
         return $this->_storage[$key];
-    }
-
-    public function getRendementRecoltant() {
-        if ($this->getTotalSuperficie() > 0) {
-            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100), 0);
-        } else {
-            return 0;
-        }
     }
 
     public function getAutreCouleur() {

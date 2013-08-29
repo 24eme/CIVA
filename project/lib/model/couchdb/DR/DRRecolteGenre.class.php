@@ -56,11 +56,6 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
-    public function getDplc($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('dplc', array($this, 'getSumNoeudFields'), $force_calcul );
-    }
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {

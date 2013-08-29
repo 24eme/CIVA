@@ -16,7 +16,8 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
         return $this->getCepages();
     }
 
-    public function hasRendement() {
-      return ($this->hasRendementCouleur());
+    public function getRendementNoeud() {
+
+        return $this->getRendementCouleur();
     }
 }

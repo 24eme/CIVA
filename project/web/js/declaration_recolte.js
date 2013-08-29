@@ -37,12 +37,6 @@ $(document).ready( function()
         initTablesDonnes();
     });
 
-    /*if($('#appellation_volume_dplc').val() > 0){
-        ($('#col_recolte_totale .rendement').addClass("alerte"));
-    }else{
-        ($('#col_recolte_totale .rendement').removeClass("alerte"));
-    }*/
-
     $('.gestion_recolte_donnees input').each(function(e)
     {
         var val = $(this).val();
@@ -818,13 +812,13 @@ var initGestionRecolteDonnees = function()
 
         etatBtnRecolteCanBeInactif(false);
 
-        if ($(this).hasClass('volume')) {
+        if ($(this).hasClass('volume') || $(this).hasClass('usages_industriels')) {
             volumeOnChange(this);
         }
-        if ($(this).attr('id') == 'recolte_superficie') {
+        if ($(this).attr('id') == 'detail_superficie') {
             superficieOnChange(this)
         }
-        if ($(this).attr('id') == 'recolte_denomination') {
+        if ($(this).attr('id') == 'detail_denomination') {
             $(this).val(jQuery.trim($(this).val()));
         }
     });
@@ -861,7 +855,7 @@ var updateElementRows = function (inputObj, totalObj) {
         var element = parseFloat($(this).val());
         total += element;
         if (element && parseFloat(totalObj.val()) != total) {
-            totalObj.val(truncTotal(total));
+            totalObj.val(parseFloat(truncTotal(total)));
         }
     });
 };
@@ -884,7 +878,7 @@ var superficieOnChange = function(input) {
 
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
-    $('#detail_max_volume').val(parseFloat($('#recolte_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
+    $('#detail_max_volume').val(parseFloat($('#detail_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
     $('#appellation_max_volume').val(parseFloat($('#appellation_total_superficie').val())/100 * parseFloat($('#appellation_rendement').val()));
     if ($('#cepage_rendement').val() != -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_superficie').val())/100 * parseFloat($('#cepage_rendement').val()));
@@ -896,16 +890,34 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_revendique').val(truncTotal($(elementCssId+'_max_volume').val()));
     else
         $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()));
+
     res = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_volume_revendique').val());
     res += '';
     $(elementCssId+'_volume_dplc').val(truncTotal(res.replace(/(\.[0-9][0-9])[0-9]*/, '$1')));
+
+    if($(elementCssId+'_total_dplc_sum').length > 0 && $(elementCssId+'_total_dplc_sum').val() < $(elementCssId+'_dplc').val()) {
+        $(elementCssId+'_dplc').val($(elementCssId+'_total_dplc_sum').val());
+    }
+
+    if($(elementCssId+'_usages_industriels').attr('mode') == 'auto') {
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val()); 
+    }
+
+    if($(elementCssId+'_usages_industriels').val() > $(elementCssId+'_volume_dplc').val()) {
+        $(elementCssId+'_volume_revendique').val(truncTotal($(totalRecolteCssId).val()) - $(elementCssId+'_usages_industriels').val()); 
+    }
 };
 
-var addClassAlerteIfNeeded = function (inputObj)
-{
-    inputObj.removeClass('alerte');
-    if (parseFloat(inputObj.val()) > 0)
-        inputObj.addClass('alerte');
+var addClassAlerteIfNeeded = function (inputObj, condition, css_class)
+{   
+    if(!css_class) {
+        css_class = 'alerte';
+    }
+    
+    inputObj.removeClass(css_class);
+    if (condition) {
+        inputObj.addClass(css_class);
+    }
 };
 
 var volumeOnChange = function(input) {
@@ -914,57 +926,53 @@ var volumeOnChange = function(input) {
     }
 
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
-    //    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
-
-    if (!autoTotal)
+    updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
+    
+    if (!autoTotal) {
         return ;
+    }
+
     $('ul.acheteurs li').each(function () {
         var css_class = $(this).attr('class');
         updateElementRows($('#col_scroller input.'+css_class), $('#col_cepage_total input.'+css_class));
-        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_couleur_totale input.'+css_class, '#col_recolte_totale input.'+css_class);
+        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_couleur_totale input.'+css_class);
+        updateAppellationTotal('#col_cepage_total input.'+css_class, '#col_recolte_totale input.'+css_class);
     });
-
 
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
 
     updateElementRows($('input.total'), $('#cepage_total_volume'));
 
-    updateElementRows($('input.revendique'), $('#cepage_total_revendique'));
+    updateElementRows($('input.usages_industriels'), $('#cepage_usages_industriels'));
 
-    //    updateElementRows($('input.dplc'), $('#cepage_total_dplc'));
     if ($('#cepage_rendement').val() == -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_volume').val()));
     }
     updateRevendiqueDPLC('#cepage_total_volume', '#cepage');
 
-
     updateAppellationTotal('#cepage_total_cave', '#appellation_total_cave');
     updateAppellationTotal('#cepage_total_volume', '#appellation_total_volume');
     updateAppellationTotal('#cepage_volume_revendique', '#appellation_total_revendique_sum');
+
+    if($('#appellation_usages_industriels').attr('mode') == 'sum') {
+        updateAppellationTotal('#cepage_usages_industriels', '#appellation_usages_industriels');
+    }
 
     updateAppellationTotal('#cepage_volume_dplc', '#appellation_total_dplc_sum');
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 
-    addClassAlerteIfNeeded($('#appellation_total_dplc_sum'));
-    addClassAlerteIfNeeded($('#appellation_volume_dplc'));
-    addClassAlerteIfNeeded($('#cepage_volume_dplc'));
+    addClassAlerteIfNeeded($('#appellation_volume_revendique'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > parseFloat($('#appellation_usages_industriels').val()), 'alerte');
+    addClassAlerteIfNeeded($('#cepage_volume_revendique'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#cepage_usages_industriels'), parseFloat($('#cepage_volume_dplc').val()) > parseFloat($('#cepage_usages_industriels').val()));
+    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
 
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
-
-    if($('#cepage_volume_dplc').val() == 0){
-        ($('#donnees_recolte_sepage .rendement').removeClass("alerte"));
-    }else{
-        ($('#donnees_recolte_sepage .rendement').addClass("alerte"));
-    }
-
-    if($('#appellation_volume_dplc').val() > 0){
-        ($('#col_recolte_totale .rendement').addClass("alerte"));
-    }else{
-        ($('#col_recolte_totale .rendement').removeClass("alerte"));
-    }
-
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
@@ -977,6 +985,7 @@ var volumeOnChange = function(input) {
     }
     $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 
+    $('.num').each(function() { $(this).verifNettoyageChamp()});
 };
 
 var truncTotal = function (val) {

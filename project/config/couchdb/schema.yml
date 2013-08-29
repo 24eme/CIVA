@@ -94,6 +94,7 @@ DR:
       jeunes_vignes: {type: float}
       declaration_commune: {}
       declaration_insee: {}
+      usages_industriels_cepage: {type: float, required: false}
       etape: {type: string, required: false}
       recolte:
         type: collection
@@ -110,7 +111,8 @@ DR:
                   total_superficie: {type: float}
                   volume_revendique: {type:float }
                   dplc: {type:float }
-                  usages_industriels_calcule: {type:float }
+                  usages_industriels_calcule: { type:float, required: false }
+                  usages_industriels: { type:float }
                   '*':
                   #------ Genre ------
                     type: collection
@@ -121,7 +123,8 @@ DR:
                         total_superficie: {type: float}
                         volume_revendique: {type:float }
                         dplc: {type:float }
-                        usages_industriels_calcule: {type:float }
+                        usages_industriels_calcule: { type:float, required: false }
+                        usages_industriels: { type:float }
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -133,7 +136,8 @@ DR:
                               total_superficie: {type: float}
                               volume_revendique: {type:float }
                               dplc: {type:float }
-                              usages_industriels_calcule: {type:float }
+                              usages_industriels_calcule: { type:float, required: false }
+                              usages_industriels: { type:float }
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -144,7 +148,8 @@ DR:
                                     total_superficie: {type:float }
                                     volume_revendique: {type:float }
                                     dplc: {type:float }
-                                    usages_industriels_calcule: {type:float }
+                                    usages_industriels_calcule: { type:float, required: false }
+                                    usages_industriels: { type:float }
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection
@@ -155,9 +160,9 @@ DR:
                                           total_superficie: {type:float}
                                           volume_revendique: {type: float}
                                           dplc: {type: float}
-                                          usages_industriels_calcule: { type:float }
-                                          usages_industriels_saisi: { type:float }
-                                          usages_industriels_noeud: { }
+                                          usages_industriels_calcule: { type:float, required: false }
+                                          usages_industriels: { type: float }
+                                          usages_industriels_saisi : { type: float, required: false }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -214,7 +219,7 @@ DR:
                                                 total_superficie: {type:float}
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
-                                                usages_industriels: {type:float }
+                                                usages_industriels: { ype:float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -225,7 +230,7 @@ DR:
                                                       total_superficie: {type:float }
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
-                                                      usages_industriels: {type:float }
+                                                      usages_industriels: { type:float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
@@ -279,7 +284,6 @@ DR:
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
                                                                   usages_industriels: { type: float }
-                                                                  usages_industriels_saisi: { type: float }
 
 _Compte:
   type: abstract
@@ -675,6 +679,19 @@ CSV:
       type: {}
       campagne: {}
       cvi: {}
+      _attachments:
+        type: collection
+        definition:
+          fields: 
+            '*':
+              type: collection
+              definition:
+                fields:
+                  content_type: { }
+                  revpos: { }
+                  length: { }
+                  stub: { }
+                  digest: { }
       recoltants : 
         type: array_collection
         definition:

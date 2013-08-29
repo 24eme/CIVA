@@ -36,36 +36,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
-    public function getVolumeRevendique($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('volume_revendique',  array($this, 'getVolumeRevendiqueFinal'), $force_calcul, array('volume_revendique', false));
-    }
-
-    public function getUsagesIndustriels($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('usages_industriels',  array($this, 'getUsagesIndustrielsFinal'), $force_calcul, array('usages_industriels', false));
-    }
-
-    public function getDplc($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('dplc',  array($this, 'getDplcFinal'), $force_calcul, array('dplc', false));
-    }
-
-    public function getTotalCaveParticuliere() {
-        
-        return parent::getDataByFieldAndMethod('cave_particuliere',  array($this, 'getSumNoeudFields'), true,  array('cave_particuliere', false));
-    }
-
-    public function getTotalVolume($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('total_volume',  array($this, 'getSumNoeudFields'), $force_calcul,  array('volume', false));
-    }
-
-    public function getTotalSuperficie($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('total_superficie',  array($this, 'getSumNoeudFields'), $force_calcul,  array('superficie', false));
-    }
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
@@ -95,18 +65,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
             $this->_storage[$key] = $sum;
         }
         return $this->_storage[$key];
-    }
-
-    public function getVolumeMax() {
-      return round(($this->total_superficie/100) * $this->getConfig()->getRendement(), 2);
-    }
-
-    public function getRendementRecoltant() {
-        if ($this->getTotalSuperficie() > 0) {
-            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100),0);
-        } else {
-            return 0;
-        }
     }
 
     public function removeVolumes() {
@@ -160,36 +118,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $ret;
     }
 
-    protected function getDplcFinal() {
-        if ($this->getConfig()->hasRendement() && $this->getCouchdbDocument()->canUpdate()) {
-            $volume_max = $this->getVolumeMax();
-            if ($this->total_volume > $volume_max) {
-              return round($this->total_volume - $volume_max, 2);
-            } else {
-              return 0;
-            }
-        } else {
-            return $this->getSumNoeudFields('volume_dplc', false);
-        }
-    }
-
-    protected function getVolumeRevendiqueFinal() {
-
-        return $this->getTotalVolume() - $this->getUsagesIndustriels();
-    }
-
-    protected function getUsagesIndustrielsFinal() {
-        if($this->haveUsagesIndustrielsSaisi()) {
-
-          return $this->getSumNoeudFields('usages_industriels', false);
-        }
-
-        return $this->getDplc();
-    }
-
-    public function haveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesIndustrielsSaisi() {
         
-        return $this->getCouleur()->haveUsagesIndustrielsSaisi();
+        return !$this->isUsagesIndustrielsSaisiCepage();
     }
 
     protected function update($params = array()) {

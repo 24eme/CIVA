@@ -48,20 +48,18 @@
             <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement <?php if ($couleur->getDplcTotal())
-            echo 'alerte'; ?>">
+            <li class="rendement <?php if ($couleur->getDplc())
+            echo 'rouge'; ?>">
                 Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong>
                 <span class="picto_rdt_aide_col_total">
                     <a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a>
                 </span>
             </li>
             <li>
-
-                <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-    echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                <input title="Usages industriels minimum : <?php echoFloat($couleur->getDplc()) ?>" type="text"readonly="readonly" class="jstitle <?php if ($couleur->getDplc() > 0) echo 'rouge'; ?> <?php if ($couleur->getUsagesIndustriels() < $couleur->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
 
 

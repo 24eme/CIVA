@@ -50,7 +50,7 @@
             </div>
         <?php endif; ?>
 
-            <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
             <div class="mouts">
                 <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
@@ -58,7 +58,7 @@
                 ?>
                 <!--<a href="#" class="ajout_mout">Ajouter un acheteur de mouts</a>-->
             </div>
-<?php endif; ?>
+        <?php endif; ?>
 
         <p class="vol_place"><input type="text" class="num cave readonly" disabled="disabled" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
         <p class="vol_total_recolte">
@@ -69,15 +69,17 @@
         <?php endif; ?>
         </p>
 
-<?php /*if ($detail->getConfig()->hasRendement()):*/ ?>
+        <?php if ($detail->getConfig()->existRendement()): ?>
             <ul class="vol_revendique_dplc">
-                <li><input type="text" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" /></li>
+                <li>
+                    <input type="hidden" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
+                    </li>
                 <li>
                     <input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" />
-                    <input type="text" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels_saisi); ?>" />
+                    <input type="<?php echo (!$detail->canHaveUsagesIndustrielsSaisi()) ? 'hidden' : 'text' ?>" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
                 </li>
             </ul>
-<?php /*endif;*/ ?>
+        <?php endif; ?>
     </div>
 
     <div class="col_btn">
