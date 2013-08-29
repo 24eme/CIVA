@@ -60,7 +60,7 @@ EOF;
             
                 try {
             	$message = $this->getMailer()->compose()
-                      ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
+                      ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($ds->declarant->get('email'))
                      // ->setTo('mpetit@actualys.com')
                       ->setSubject('RAPPEL DS '.$arguments['campagne'])
@@ -86,14 +86,26 @@ EOF;
   }
 
   protected function getMessageBody($nom, $campagne) {
-      return "Bonjour ".$nom.",
+      return "Bonjour,
 
 Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
 
 Nous vous rappelons que vous devez impérativement la valider avant le 31 août minuit. 
 
-Cordialement,
+Pour terminer la saisie, cliquez sur le lien suivant :
+http://declaration.vinsalsace.pro/
 
-Le CIVA";
+Si vous avez déposé en mairie une déclaration papier, merci de m'en informer par retour de mail.
+
+Bien cordialement,
+
+Dominique Wolff
+--
+Responsable Informatique
+Tél: 03.89.20.16.20
+Fax: 03.89.20.16.30
+dominique@civa.fr
+http://www.vinsalsace.com
+";
   }
 }
