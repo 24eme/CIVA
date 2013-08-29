@@ -50,7 +50,7 @@ EOF;
             $exportManager = new ExportDSCiva($campagne);
 	    $dss = $exportManager->getDSNonValideesListe();
 	    foreach ($dss as $ds) {
-		$cvi = $ds->declarant->get('email');
+		$cvi = $ds->declarant->get('cvi');
 
                 $nb_item++;
                 if(!$ds->declarant->exist('email')) {
