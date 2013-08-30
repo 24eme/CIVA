@@ -3,84 +3,45 @@ Vrac:
     fields:
       _id: {  }
       _rev: {  }
-      type: {  }
-      interpro: {  }
-      has_transaction: {  }
-      has_cotisation_cvo: {  }
-      numero_contrat: {  }
-      etape: {  }
-      vous_etes: {  }
-      vendeur_type: {  }  
-      vendeur_identifiant: {  }      
-      vendeur:        
+      acheteur_identifiant: {  }  
+      acheteur:
         type: collection
+        class: VracAcheteur
+        inheritance: _VracTiers
         definition:
-          fields:            
-            nom: {  }
+          fields:
             raison_sociale: {  }
             siret: {  }
             cvi: {  }
-            num_accise: {   }
-            num_tva_intracomm: {    }
+            num_accise: {  }
             adresse: {  }
             code_postal: {  }
             commune: {  }
-            pays: {  }
             telephone: {  }
-            fax: {  }
-            email: {   }
+            email: {  }
             famille: {  }
-            sous_famille: {   }
-      vendeur_tva: {  }
-      adresse_stockage:
+      vendeur_identifiant: {  }
+      vendeur:
         type: collection
+        class: VracVendeur
+        inheritance: _VracTiers
         definition:
           fields:
-            libelle: {  }
-            adresse: {  }
-            code_postal: {  }
-            commune: {  }
-            pays: {  }
-      acheteur_type: {  }  
-      acheteur_identifiant: {  }      
-      acheteur:        
-        type: collection
-        definition:
-          fields:            
-            nom: {  }
             raison_sociale: {  }
             siret: {  }
             cvi: {  }
-            num_accise: {   }
-            num_tva_intracomm: {    }
+            num_accise: {  }
             adresse: {  }
             code_postal: {  }
             commune: {  }
-            pays: {  }
             telephone: {  }
-            fax: {  }
-            email: {   }
+            email: {  }
             famille: {  }
-            sous_famille: {   }
-      acheteur_tva: {  }
-      adresse_livraison:
-        type: collection
-        definition:
-          fields:
-            libelle: {  }
-            adresse: {  }
-            code_postal: {  }
-            commune: {  }
-            pays: {  }
-      mandataire_exist: {  }
-      mandatant: 
-        type: array_collection
-        definition:
-          fields:
-            '*': {  }
-      mandataire_identifiant: {  }     
+      mandataire_identifiant: {  }
       mandataire:
         type: collection
+        class: VracMandataire
+        inheritance: _VracTiers
         definition:
           fields:
             nom: {  }
@@ -90,152 +51,96 @@ Vrac:
             adresse: {  }
             code_postal: {  }
             commune: {  }
-            pays: {  }
             telephone: {  }
-            fax: {  }
             email: {  }
             famille: {  }
-            sous_famille: {   }
-      premiere_mise_en_marche: {  }
-      cas_particulier: {  }
-      cas_particulier_libelle: {  }
-      original: {  }
-      type_transaction: {  }
-      type_transaction_libelle: {  }
-      produit: {  }
-      produit_libelle: {  }
-      produit_detail:
+      declaration:
         type: collection
-        definition:
-          fields:
-            appellation:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-            genre:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-            certification:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-            lieu:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-            couleur:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-            cepage:
-              type: collection
-              definition:
-                fields:
-                  code: {  }
-                  libelle: {  }
-      millesime: {  }
-      contient_domaine: {  }
-      domaine: {  }
-      labels: {  }
-      labels_libelle: {  }
-      mentions:
-        type: array_collection
-        definition:
-          fields:
-            '*': {  }
-      mentions_libelle: {  }
-      volume_propose: {  }
-      annexe: {  }
-      prix_unitaire: {  }
-      type_prix: {  }
-      determination_prix: {  }
-      date_debut_retiraison: {  }
-      date_limite_retiraison: {  }
-      commentaires_conditions: {  }
-      part_cvo: {  }
-      prix_total: {  }
-      prix_total_net: {  }
-      conditions_paiement: {  }
-      conditions_paiement_libelle: {  }
-      type_echeancier_paiement: {  }
-      vin_livre: {  }
-      date_debut_retiraison: {  }
-      contrat_pluriannuel: {  }
-      reference_contrat_pluriannuel: {  }
-      delai_paiement: {  }
-      echeancier_paiement: {  }
-      paiements:
-        type: array_collection
+        class: VracDeclaration
+        inheritance: _VracNoeud
         definition:
           fields:
             '*':
+              #------ Certification ------
               type: collection
+              class: VracCertification
+              inheritance: _VracNoeud
               definition:
                 fields:
-                  date: {  }
-                  volume: {  }
-                  montant: {  }
-      clause_reserve_retiraison: {  }
-      export: {  }
-      lots:
-        type: array_collection
-        definition:
-          fields:
-            '*':
-              type: collection
-              definition:
-                fields:
-                  numero: {  }
-                  assemblage: {  }
-                  cuves:
-                    type: array_collection
+                  '*':
+                    type: collection
+                    class: VracGenre
+                    inheritance: _VracNoeud
                     definition:
                       fields:
                         '*':
+                          # ------ Appellation ------
                           type: collection
+                          class: VracAppellation
+                          inheritance: _VracNoeud
                           definition:
                             fields:
-                              numero: {  }
-                              volume: {  }
-                              date: {  }
-                  millesimes:
-                    type: array_collection
-                    definition:
-                      fields:
-                        '*':
-                          type: collection
-                          definition:
-                            fields:
-                              annee: {  }
-                              pourcentage: {  }
-                  degre: {  }
-                  presence_allergenes: {  }
-                  allergenes: {  }
-                  metayage: {  }
-                  bailleur: {  }
-                  montant: {  }
-      type_contrat: {  }
-      prix_variable: {  }
-      part_variable: {  }
-      cvo_nature: {  }
-      cvo_repartition: {  }
-      date_stats: {  }
-      date_signature: {  }
-      date_relance: {  }
-      volume_enleve: {  }
+                              libelle: {  }
+                              libelle_long: { required: false }
+                              # ------- MENTION ----------
+                              'mention':
+                                type : collection
+                                class: VracMention
+                                inheritance: _VracNoeud
+                                definition:
+                                  fields:
+                                    libelle: {  }
+                                    libelle_long: { required: false }
+                                    # ------- LIEU ----------
+                                    '*':
+                                      type: collection
+                                      class: VracLieu
+                                      inheritance: _VracNoeud
+                                      definition:
+                                        fields:
+                                          libelle: { }
+                                          libelle_long: { required: false }
+                                          # ------ Couleur ------
+                                          '*':
+                                            type: collection
+                                            class: VracCouleur
+                                            inheritance: _VracNoeud
+                                            definition:
+                                              fields:
+                                                libelle: {  }
+                                                libelle_long: { required: false }
+                                              # ------ Cépage ------
+                                                '*':
+                                                  type: collection
+                                                  class: VracCepage
+                                                  inheritance: _VracNoeud
+                                                  definition:
+                                                    fields:
+                                                      libelle: {  }
+                                                      libelle_long: { required: false }
+                                                      no_vtsgn: {  }
+                                                      detail:                                                        
+                                                        type: array_collection
+                                                        definition:
+                                                          fields:
+                                                            '*':
+                                                              type: collection
+                                                              class: VracDetail
+                                                              definition:
+                                                                fields:
+                                                                  vtsgn: { }
+                                                                  millesime: { }
+                                                                  prix_unitaire: { type: float }
+                                                                  denomination: { }
+                                                                  solde: {  }
+                                                                  retiraisons:
+                                                                    type: collection
+                                                                    definition:
+                                                                      fields:
+                                                                        '*': { type: float }
       valide:
         type: collection
+        class: VracValide
         definition:
           fields:
             date_saisie: {  }
@@ -243,11 +148,10 @@ Vrac:
             date_validation_acheteur: {  }
             date_validation_mandataire: {  }
             date_validation: {  }
-            identifiant: {  }
             statut: { }
-      nature_document: {  }
-      date_signature_vendeur: {  }
-      date_signature_acheteur: {  }
-      date_signature_mandataire: {  }
-      commentaires: {  }
-      mode_de_saisie: {  }
+      campagne: {  }
+      numero_archive: {  }
+      prix_total: { type: float }
+      volume_total: { type: float }
+      etape: {  }
+      type: {  }
