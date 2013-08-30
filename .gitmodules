@@ -13,3 +13,6 @@
 [submodule "project/plugins/acVinDocumentPlugin"]
 	path = project/plugins/acVinDocumentPlugin
 	url = git@gitorious.org:acvin/acvindocumentplugin.git
+[submodule "project/plugins/acVinMultiVracPlugin"]
+	path = project/plugins/acVinMultiVracPlugin
+	url = git@gitorious.org:acvin/acvinmultivracplugin.git
