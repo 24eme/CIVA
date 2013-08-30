@@ -69,7 +69,7 @@ EOF;
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($ds->declarant->get('email'))
                      // ->setTo('mpetit@actualys.com')
-                      ->setSubject('RAPPEL DS '.$arguments['campagne'])
+                      ->setSubject('DEUXIEME RAPPEL DS '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($ds->declarant->get('nom'), $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);              
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
