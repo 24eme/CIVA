@@ -334,6 +334,89 @@ td.premiere_colonne {
 	width: 202px;
 }
 
+table.table_listing thead th {
+    color: #acb701;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    padding: 3px;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+table.table_listing tbody td.actions, table.table_listing tbody th.actions {
+    width: 70px;
+}
+
+table.table_listing thead th:first-child {
+    vertical-align: middle;
+    padding: 0;
+    width: 150px;
+}
+
+table.table_listing thead th span {
+    color: #000;
+    display: block;
+    font-weight: bold;
+}
+
+table.table_listing tbody td {
+    background: #edecec;
+    border-bottom: 1px dashed #c6c8c7;
+    color: #666;
+    font-size: 12px;
+    line-height: 17px;
+    padding: 3px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+table.table_listing tbody td.alt, table.table_listing tbody tr.alt td {
+    background: #ddd;
+}
+
+table.table_listing tbody tr:first-child td,table.table_listing tbody tr.premier td
+    {
+    border-top: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td:first-child {
+    border-left: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td:last-child {
+    border-right: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody tr:last-child td {
+    border-bottom: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td input[type=text] {
+    background: #f6f6f6;
+    border: 1px solid #c2c1ba;
+    color: #7a7a7a;
+    font-size: 12px;
+}
+
+table.table_listing tbody td.alt input {
+    background: #efeeee;
+}
+
+table.table_listing tbody td a.supprimer {
+    position: absolute;
+    right: -20px;
+}
+
+table.table_listing tbody td label {
+    display: block;
+}
+
+table.table_listing tbody td span {
+    min-height: 17px; !
+    height: 17px;
+}
+
 table.table_donnees thead th {
 	color: #acb701;
 	font-size: 14px;
@@ -488,6 +571,50 @@ input.btn_inactif {
 	filter: Alpha(Opacity = 30);
 }
 
+/**
+ * Alsace récolte / Espace contrats
+ ******************************************/
+#espace_alsace_contrats {
+    margin: 0 0 20px;
+}
+
+#espace_alsace_contrats h2 {
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_alsace_contrats .contenu {
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+#espace_alsace_contrats .listing {
+	float: left;
+    margin: 0 20px 0 0;
+}
+#espace_alsace_contrats #liste_contrats {
+	width: 672px;
+}
+#espace_alsace_contrats #documents_aide {
+    width: 234px;
+}
+
+#espace_alsace_contrats #liste_contrats .lien_tout {
+    text-align:right;
+    font-size: 13px;
+    padding: 5px 1px;
+}
+#espace_alsace_contrats #liste_contrats .lien_tout a {
+    color: #666666;
+    text-decoration: underline;
+}
+#espace_alsace_contrats #liste_contrats .lien_tout a:hover {
+    color: #000000;
+}
 /**
  * Alsace récolte / Espace acheteurs
  ******************************************/
