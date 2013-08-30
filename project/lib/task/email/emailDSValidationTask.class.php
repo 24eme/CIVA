@@ -19,8 +19,10 @@ class emailDSValidationTask extends sfBaseTask {
 
     $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('dsid', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', ''),
+
     ));
 
     $this->namespace        = 'email';
@@ -48,7 +50,11 @@ EOF;
 	    $nb_email_send = 0;  
             $campagne = $arguments['campagne'];
             $exportManager = new ExportDSCiva($campagne);
-	    $dss = $exportManager->getDSNonValideesListe();
+            if ($options['dsid']) {
+                $dss = array(DSCivaClient::getInstance()->find($options['dsid']));
+            }else{
+                $dss = $exportManager->getDSNonValideesListe();
+            }
 	    foreach ($dss as $ds) {
 		$cvi = $ds->declarant->get('cvi');
 
@@ -65,23 +71,21 @@ EOF;
                      // ->setTo('mpetit@actualys.com')
                       ->setSubject('RAPPEL DS '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($ds->declarant->get('nom'), $arguments['campagne']));
-                $sended = $this->getMailer()->send($message);
-                
+                $sended = $this->getMailer()->send($message);              
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
-            } catch (Exception $exc) {
+            } catch (Exception $exc) {     
+                $this->logSection('send error', $cvi . ' : ' . $exc->getMessage());    
                 $sended = false;
             }
             
             if ($sended) {
                 $nb_email_send++;
                 $this->logSection('sended', $cvi . ' : ' . $ds->declarant->get('email'));
-            } else {
+            }else {
                 $this->logSection('send error', $cvi . ' : ' . $ds->declarant->get('email'), null, 'ERROR');
             }
-            
-            
-	    }
-	    $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
+        }
+        $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
     }
   }
 
