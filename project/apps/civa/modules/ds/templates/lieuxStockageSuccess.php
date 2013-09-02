@@ -23,8 +23,8 @@ $hasVolume = false;
             <div class="ds_neant">
 	<?php if($ds->isDateDepotMairie()):  ?>
                     <?php echo $form['date_depot_mairie']->renderLabel(); ?>
-                    <input type="text" name="<?php echo $form['date_depot_mairie']->renderName().'[]'; ?>" value="<?php echo $ds->getDateDepotMairieFr(); ?>" id="<?php echo $form['date_depot_mairie']->renderId(); ?>" class="datepicker" />
-        &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php echo $form['date_depot_mairie']->render(array('class' => "datepicker")); ?>
+                   &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <?php endif; ?>
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
