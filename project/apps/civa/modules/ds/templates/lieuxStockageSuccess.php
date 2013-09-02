@@ -22,6 +22,7 @@ $hasVolume = false;
 	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
             <div class="ds_neant">
 	<?php if($ds->isDateDepotMairie()):  ?>
+                <?php echo $form['date_depot_mairie']->renderError(); ?>
                     <?php echo $form['date_depot_mairie']->renderLabel(); ?>
                 <?php echo $form['date_depot_mairie']->render(array('class' => "datepicker")); ?>
                    &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
