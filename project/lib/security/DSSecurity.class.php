@@ -24,14 +24,29 @@ class DSSecurity {
             $droits = array($droits);
         }
 
+        if(in_array(self::EDITION , $droits) && $this->ds->isValideeCiva()) {
+
+            return false;
+        }
+
         if($this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
             
-            if(in_array(self::EDITION , $droits) && $this->ds->isValideeCiva()) {
+            return true;
+        }
 
-                return false;
-            }
+        if(in_array(self::EDITION , $droits) && $this->ds->isValideeTiers()) {
+
+            return false;
+        }
+
+        if($this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
+        }
+
+        if(in_array(self::EDITION , $droits) && !CurrentClient::getCurrent()->isDSEditable()) {
+
+            return false;
         }
 
         if(!$this->myUser->getDeclarant()->isDeclarantStock()) {
@@ -42,16 +57,6 @@ class DSSecurity {
         if($this->myUser->getDeclarant()->getIdentifiant() != $this->ds->identifiant) {
 
             return false;
-        }
-
-        if(in_array(self::EDITION , $droits) && !CurrentClient::getCurrent()->isDSEditable()) {
-
-            //return false;
-        }
-
-        if(in_array(self::EDITION , $droits) && $this->ds->isValideeTiers()) {
-
-            //return false;
         }
 
         return true;

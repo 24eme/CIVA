@@ -160,7 +160,7 @@ EOF;
 
             if($nb_diff > 0) {
                 if($options['flag_revision']) {
-                    $tiers_object = acCouchdbClient::getInstance()->find($tiers->_id);
+                    $tiers_object = acCouchdbManager::getClient()->find($tiers->_id);
                     $tiers_object->db2->import_revision = $tiers_object->_rev;
                     $tiers_object->save();
                 }
