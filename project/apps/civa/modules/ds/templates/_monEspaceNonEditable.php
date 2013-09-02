@@ -8,6 +8,6 @@
         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
             <a href="<?php echo url_for('ds_invalider_civa',$ds) ?>" onclick="return confirm('Si vous éditez cette DS, pensez à la revalider.')"><img src="/images/boutons/btn_editer_ds.png" alt="" class="btn" id="rendreEditable"  /></a>
             <a href="<?php echo url_for('ds_invalider_recoltant',$ds) ?>" onclick="return confirm('Etes-vous sûr de vouloir dévalider cette DS ?')"><img src="/images/boutons/btn_devalider_ds.png" alt="" class="btn" id=""  /></a>
-        <?php endif; ?>
+       <?php endif; ?>
     </div>
 </div>

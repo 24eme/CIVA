@@ -113,6 +113,7 @@ DR:
                   dplc: {type:float }
                   usages_industriels_calcule: { type:float, required: false }
                   usages_industriels: { type:float }
+                  lies: { type: float }
                   '*':
                   #------ Genre ------
                     type: collection
@@ -125,6 +126,7 @@ DR:
                         dplc: {type:float }
                         usages_industriels_calcule: { type:float, required: false }
                         usages_industriels: { type:float }
+                        lies: { type: float }
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -138,6 +140,7 @@ DR:
                               dplc: {type:float }
                               usages_industriels_calcule: { type:float, required: false }
                               usages_industriels: { type:float }
+                              lies: { type: float }
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -150,6 +153,7 @@ DR:
                                     dplc: {type:float }
                                     usages_industriels_calcule: { type:float, required: false }
                                     usages_industriels: { type:float }
+                                    lies: { type: float }
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection
@@ -162,6 +166,7 @@ DR:
                                           dplc: {type: float}
                                           usages_industriels_calcule: { type:float, required: false }
                                           usages_industriels: { type: float }
+                                          lies: { type: float }
                                           usages_industriels_saisi : { type: float, required: false }
                                           acheteurs:
                                              type: collection
@@ -220,6 +225,7 @@ DR:
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
                                                 usages_industriels: { ype:float }
+                                                lies: { type: float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -231,6 +237,7 @@ DR:
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
                                                       usages_industriels: { type:float }
+                                                      lies: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
@@ -284,6 +291,7 @@ DR:
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
                                                                   usages_industriels: { type: float }
+                                                                  lies: { type: float }
 
 _Compte:
   type: abstract

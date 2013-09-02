@@ -63,10 +63,8 @@
                     </li>
                     <li>
                         <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                        <?php if (isset($form['usages_industriels'])) : ?>
-                            <?php echo $form['usages_industriels']->render(array('class' => 'num usages_industriels')) ?>
-                        <?php else: ?>
-                            <input mode="auto" id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <?php if (isset($form['lies'])) : ?>
+                            <?php echo $form['lies']->render(array('class' => 'num lies')) ?>
                         <?php endif; ?>
                     </li>
                 </ul>
