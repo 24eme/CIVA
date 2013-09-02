@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]
+    then
+	echo Usage: $0 type_declaration ouverture_ou_fermeture 1>&2
+        exit 1
+fi
+
+mkdir -p data/maintenance > /dev/null
+DIR=data/maintenance
+DATE=$(date +%Y%m%d%H%M%S)
+
+php symfony maintenance:ouverture-fermeture-declaration $1 $2 > $DIR"/ouverture-fermeture-declaration_"$DATE".log"
+php symfony cc

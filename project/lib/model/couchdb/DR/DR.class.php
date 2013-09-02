@@ -17,6 +17,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->utilisateurs_document = new UtilisateursDocument($this);
         $this->declarant_document = new DeclarantDocument($this);
     }
+    
+    public function setDeclarantForUpdate() {
+        $this->identifiant = $this->cvi;
+        $this->declarant_document = new DeclarantDocument($this);
+    }
+    
     /**
      *
      * @param string $etape
@@ -489,24 +495,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
     
     public function storeDeclarant() {
-
-        $tiers = $this->getEtablissement();
-        $this->declaration_commune = $tiers->declaration_commune;
-        $this->declaration_insee = $tiers->declaration_insee;
-        $this->declarant->cvi = $tiers->cvi;
-        $this->declarant->intitule = $tiers->intitule;
-        
-        if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getCompteEmail();
-        }
-
-        $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
-        $this->declarant->exploitant->nom = $tiers->exploitant->nom;
-        $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
-        $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
-        $this->declarant->exploitant->commune = $tiers->exploitant->commune;
-        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
-        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone; 
+        $this->declarant_document->storeDeclarant();
     }
     
 
