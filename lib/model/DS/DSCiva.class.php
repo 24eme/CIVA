@@ -485,6 +485,9 @@ public function getConfigurationCampagne() {
         if ($compteValidateurId) {
             $this->addValidation($compteValidateurId, date('Y-m-d'));
         }
+        if($this->isDateDepotMairie()){
+            $this->add('validee', $this->date_depot_mairie);
+        }
         return $this;
     }
     
@@ -583,5 +586,12 @@ public function getConfigurationCampagne() {
         return $this->isValidee();
     }
     
+    public function isDateDepotMairie(){
+      return $this->exist('date_depot_mairie') && !is_null($this->date_depot_mairie);
+    }
+    
+    public function getDateDepotMairieFr() {
+       return Date::francizeDate($this->date_depot_mairie);
+    }
 }
 

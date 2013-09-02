@@ -28,6 +28,7 @@
  * @property string $courant_stock
  * @property string $declaration_commune
  * @property string $declaration_insee
+ * @property string $date_depot_mairie
  * @property acCouchdbJson $declarant
  * @property acCouchdbJson $stockage
  * @property acCouchdbJson $utilisateurs
@@ -81,6 +82,8 @@
  * @method string setDeclarationCommune()
  * @method string getDeclarationInsee()
  * @method string setDeclarationInsee()
+ * @method string getDateDepotMairie()
+ * @method string setDateDepotMairie()
  * @method acCouchdbJson getDeclarant()
  * @method acCouchdbJson setDeclarant()
  * @method acCouchdbJson getStockage()

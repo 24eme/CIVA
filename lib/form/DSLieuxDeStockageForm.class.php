@@ -35,6 +35,12 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
               $this->setWidget('lieuxStockage_'.$id_lieu, new sfWidgetFormChoice(array('choices' => $this->getAppelations(),'expanded' => true, 'multiple' => true)));
               $this->setValidator('lieuxStockage_'.$id_lieu, new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getAppelations()), 'multiple' => true)));
         }
+        if($this->ds->isDateDepotMairie()){
+            $this->setWidget('date_depot_mairie', new sfWidgetFormInput());
+            $this->widgetSchema->setLabel('date_depot_mairie', 'Date de dépot en mairie :');
+            $this->setValidator('date_depot_mairie', new sfValidatorString(array('required' => true)));
+        }
+        
         $this->setWidget('neant', new sfWidgetFormChoice(array('choices' => $this->getNeant(),'expanded' => true, 'multiple' => true)));
         $this->setValidator('neant', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getNeant()), 'multiple' => true)));
         $this->getValidatorSchema()->setPostValidator(new ValidatorLieuxStockageDS($this->lieux_stockage));
@@ -94,6 +100,11 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                     $ds->add('ds_neant',0);
                 }
             }
+            if($ds->isDsPrincipale() && $this->ds->isDateDepotMairie()){
+       //         var_dump($values['date_depot_mairie']); exit;
+                $ds->add('date_depot_mairie',Date::getIsoDateFromFrenchDate($values['date_depot_mairie']));
+            }
+            
         }
         return $dss;
     }

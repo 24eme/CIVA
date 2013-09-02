@@ -106,7 +106,7 @@ class DSCivaClient extends DSClient {
     }
     
     
-    public function findOrCreateDssByTiers($tiers, $date_stock,$ds_neant = false) {
+    public function findOrCreateDssByTiers($tiers, $date_stock, $ds_neant = false) {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
         $dss = array();

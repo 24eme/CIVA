@@ -26,6 +26,7 @@ DS:
       courant_stock: {required: false}
       declaration_commune: { }
       declaration_insee: { }
+      date_depot_mairie: {required: false}
       declarant:
         type: collection
         definition:
