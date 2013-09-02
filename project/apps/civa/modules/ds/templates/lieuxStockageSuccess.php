@@ -20,8 +20,12 @@ $hasVolume = false;
 <div id="application_ds" class="clearfix">
 	
 	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
-	
-	<div class="ds_neant">
+            <div class="ds_neant">
+	<?php if($ds->isDateDepotMairie()):  ?>
+                    <?php echo $form['date_depot_mairie']->renderLabel(); ?>
+                    <input type="text" name="<?php echo $form['date_depot_mairie']->renderName().'[]'; ?>" value="<?php echo $ds->getDateDepotMairieFr(); ?>" id="<?php echo $form['date_depot_mairie']->renderId(); ?>" class="datepicker" />
+        &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <?php endif; ?>
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
