@@ -19,7 +19,12 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
         	<?php endif; ?>
         <?php endif; ?>
 		<div id="recap_total_ds" class="page_recap">
-			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small><a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a></p>
+			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small>
+                            <a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a>
+                            <?php if($ds_principale->isDateDepotMairie()) : ?>
+                            <span style="float: right;">Date de dépot en mairie : <?php echo $ds_principale->getDateDepotMairieFr(); ?> </span>
+                            <?php endif; ?>
+                        </p>
 			<div id="recap_appellations">
 				<table class="table_donnees">
 					<thead>
