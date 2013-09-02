@@ -42,7 +42,11 @@ class ExportDSPdf extends ExportDocument {
     protected function init($filename = null) {
         if($this->ds_principale->isValideeTiers()) {
             $date_validee = new DateTime($this->ds_principale->validee);
-            $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
+            if($this->ds_principale->isDateDepotMairie()){
+                $validee = 'Déposée en mairie le '.$date_validee->format('d/m/Y');
+            }else{
+                $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
+            }
         }
 
         if($this->ds_principale->isValideeEtModifiee()) {
