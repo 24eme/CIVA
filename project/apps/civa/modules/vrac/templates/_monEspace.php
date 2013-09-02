@@ -6,7 +6,7 @@
  			<div class="contenu_section">
  				<?php include_partial('vrac/listing', array('vracs' => $vracs)) ?>
  				<p class="lien_tout"><a href="#">Tout voir</a></p>
- 				<p class="lien_nouveau"><a href="#">Créer un nouveau contrat</a></p>
+ 				<p class="lien_nouveau"><a href="<?php echo url_for('@vrac_nouveau') ?>">Créer un nouveau contrat</a></p>
  			</div>
  		</div>
  		<div id="documents_aide">

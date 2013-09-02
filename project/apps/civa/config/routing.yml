@@ -1,6 +1,21 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
+# *********** VRAC ***********
+
+
+
+vrac_nouveau:
+  url: /vrac/nouveau
+  param: { module: vrac, action: nouveau }
+vrac_etape_conditions:
+  url: /vrac/:numero_contrat/conditions
+  param: { module: vrac, action: etapeConditions }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+
 
 # *********** COMPTE ***********
 login:

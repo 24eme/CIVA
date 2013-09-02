@@ -3,6 +3,39 @@
 
 # default values
 all:
+  configuration:
+    vrac:
+      produits_statiques:
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_GW/:
+          position: 1
+          supprimable: 0
+        declaration/certification/genre/appellation_PINOTNOIR/mention/lieu/couleur/cepage_PN/:
+          position: 2
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:
+          position: 3
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI/:
+          position: 4
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_PB/:
+          position: 5
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_PG/:
+          position: 6
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_ED/:
+          position: 7
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_MU/:
+          position: 8
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_BL/:
+          position: 9
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
+          position: 10
+          supprimable: 0
   etapes:
     items:
       mon_espace_civa:
