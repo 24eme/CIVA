@@ -25,6 +25,9 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
             }
         }
+        if($ds->isDsPrincipale() && $this->ds->isDateDepotMairie()){
+            $defaults['date_depot_mairie'] = $this->ds->getDateDepotMairieFr();
+        }
         
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
@@ -101,7 +104,6 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
             }
             if($ds->isDsPrincipale() && $this->ds->isDateDepotMairie()){
-       //         var_dump($values['date_depot_mairie']); exit;
                 $ds->add('date_depot_mairie',Date::getIsoDateFromFrenchDate($values['date_depot_mairie']));
             }
             
