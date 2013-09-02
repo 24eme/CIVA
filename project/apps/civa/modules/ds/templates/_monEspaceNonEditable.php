@@ -2,7 +2,7 @@
 <div class="contenu_section">
     <p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds_non_editable'); ?></p>
     <div class="ligne_form ligne_btn">
-        <?php if($sf_user->getDeclaration()->isValideeCiva()): ?>
+        <?php if($ds->isValideeTiers()): ?>
             <?php echo link_to('<img src="/images/boutons/btn_visualiser.png" alt="" class="btn" />', 'ds_visualisation',$ds); ?>
         <?php endif; ?>
         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
