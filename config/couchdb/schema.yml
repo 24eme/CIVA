@@ -132,12 +132,14 @@ Vrac:
                                                                   millesime: { }
                                                                   prix_unitaire: { type: float }
                                                                   denomination: { }
-                                                                  solde: {  }
+                                                                  solde: { type: integer }
                                                                   retiraisons:
                                                                     type: collection
                                                                     definition:
                                                                       fields:
                                                                         '*': { type: float }
+                                                                  position: { type: integer }
+                                                                  supprimable: { type: integer }
       valide:
         type: collection
         class: VracValide
@@ -150,6 +152,7 @@ Vrac:
             date_validation: {  }
             statut: { }
       campagne: {  }
+      numero_contrat: {  }
       numero_archive: {  }
       prix_total: { type: float }
       volume_total: { type: float }

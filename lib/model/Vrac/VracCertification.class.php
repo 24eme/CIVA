@@ -4,6 +4,17 @@
  *
  */
 
-class VracCertification extends BaseVracCertification {
+class VracCertification extends BaseVracCertification 
+{
+    
+    public function getChildrenNode() 
+    {
+        return $this->getGenres();
+    }
+
+    public function getGenres()
+    {
+        return $this->filter('^genre');
+    } 
 
 }

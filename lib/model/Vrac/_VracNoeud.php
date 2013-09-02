@@ -4,7 +4,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     
     public function getConfig() {
         
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(preg_replace('/^\/declaration/', '/recolte', $this->getHash()));
+        return $this->getCouchdbDocument()->getConfiguration()->get(preg_replace('/^\/declaration/', '/recolte', $this->getHash()));
     }
 
     abstract public function getChildrenNode();
