@@ -487,6 +487,7 @@ public function getConfigurationCampagne() {
         }
         if($this->isDateDepotMairie()){
             $this->add('validee', $this->date_depot_mairie);
+            $this->add('modifiee', $this->date_depot_mairie);
         }
         return $this;
     }
