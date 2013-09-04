@@ -71,9 +71,9 @@ use_helper('ds');
 
 	<ul id="btn_etape" class="btn_prev_suiv clearfix">
 		<li class="prec">
-			<a class="ajax" href="<?php echo (!$ds->isDsPrincipale())?
+			<a class="ajax" href="<?php echo (!$ds->isFirstDs())?
                                                 url_for('ds_recapitulatif_lieu_stockage', DSCivaClient::getInstance()->getPreviousDS($ds))
-                                              : url_for('ds_lieux_stockage', array('id' => $ds->_id));?>">
+                                              : url_for('ds_lieux_stockage', array('id' => DSCivaClient::getInstance()->getDSPrincipaleByDs($ds)->_id));?>">
 				<img src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente"  />
 			</a>
 		</li>
