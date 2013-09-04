@@ -28,8 +28,11 @@ annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
 annuaire_ajouter:
-  url: /annuaire/ajouter
-  param: { module: annuaire, action: ajouter }
+  url: /annuaire/ajouter/:id
+  param: { module: annuaire, action: ajouter, id: null }
+annuaire_supprimer:
+  url: /annuaire/supprimer/:type/:id
+  param: { module: annuaire, action: supprimer }
 
 
 # *********** COMPTE ***********
