@@ -49,6 +49,7 @@ $hasVolume = false;
 					<?php
 					endforeach;
 					?>
+                                        <th><span>DS Principale</span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -85,7 +86,10 @@ $hasVolume = false;
 					</td>
 					<?php endif; ?>
 				   <?php $cpt++;
-				   endforeach; ?>				
+				   endforeach; ?>
+                                        <td class="<?php echo $paire ?>">
+                                         <input type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
+					</td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
