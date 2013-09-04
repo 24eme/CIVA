@@ -331,7 +331,7 @@ class ExportDSCiva {
             switch ($appellation_key) {
                 case 'PINOTNOIR':
                     $row.= $id_csv . ",";
-                    $row.= "1,\"" . $cepage_key . "\",\"RS\",\"\"," . $cpt . ",";
+                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
