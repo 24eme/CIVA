@@ -5,6 +5,11 @@ class _TiersClient extends acCouchdbClient {
     const STATUT_ACTIF = 'ACTIF';
     const STATUT_INACTIF = 'INACTIF';
 
+    public static function getInstance() {
+    
+        return acCouchdbManager::getClient('_Tiers'); 
+    }
+
     public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         
         $tiers = parent::find('REC-'.$cvi, $hydrate);
