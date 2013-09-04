@@ -30,7 +30,7 @@ class dsActions extends sfActions {
         $date = date('Y-m-d');
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
-            if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)){
+            if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
                 $ds->add('date_depot_mairie',date('Y').'-08-31');
             }
