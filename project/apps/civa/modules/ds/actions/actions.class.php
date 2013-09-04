@@ -12,7 +12,8 @@ class dsActions extends sfActions {
        $ds_data = $this->getRequestParameter('ds', null);
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
-                return $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
+                $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->getUser()->getDs());
+                return $this->redirect('ds_etape_redirect', $ds_principale);
             } elseif ($ds_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDs();
                 return  $this->redirect('mon_espace_civa');
@@ -176,7 +177,7 @@ class dsActions extends sfActions {
                             if($ds_neant){
                                 $ds_to_save->updateEtape(4);
                             }else{
-                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
+                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash(),$ds_to_save); 
                             }
                             $ds_principale = $ds_to_save;
                         }
