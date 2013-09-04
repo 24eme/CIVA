@@ -17,6 +17,7 @@
  * @property string $numero_archive
  * @property string $statut
  * @property string $commentaire
+ * @property string $ds_principale
  * @property float $rebeches
  * @property float $dplc
  * @property float $lies
@@ -60,6 +61,8 @@
  * @method string setStatut()
  * @method string getCommentaire()
  * @method string setCommentaire()
+ * @method string getDsPrincipale()
+ * @method string setDsPrincipale()
  * @method float getRebeches()
  * @method float setRebeches()
  * @method float getDplc()

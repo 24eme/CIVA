@@ -338,8 +338,14 @@ public function getConfigurationCampagne() {
         return 0;
     }
     
-    public function isDsPrincipale() {
-        
+    public function isDsPrincipale() {      
+        if($this->exist('ds_principale')){
+            return $this->ds_principale;            
+        }
+        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
+    }
+    
+    public function isFirstDs(){
         return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
     }
 
@@ -366,8 +372,8 @@ public function getConfigurationCampagne() {
         return $this->num_etape - $nb_lieux + 1;
     }
     
-    public function updateEtape($etape_rail, $current_ds = null, $new_hash = "") {
-         $courant_stock = $this->getMajCourantStock($current_ds,$new_hash); 
+    public function updateEtape($etape_rail, $current_ds = null, $new_hash = "",$ds_p = null) {
+         $courant_stock = $this->getMajCourantStock($current_ds,$new_hash,$ds_p); 
          
        
          if($this->isDsPrincipale()){
@@ -388,11 +394,11 @@ public function getConfigurationCampagne() {
          } 
     }
     
-    private function getMajCourantStock($current_ds = null, $new_hash = ""){
+    private function getMajCourantStock($current_ds = null, $new_hash = "", $ds_p = null){
        if(!$current_ds) return null;
        $courant_stock = $current_ds->_id."-".$new_hash;
        
-       $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this);
+       $ds_principale = (!$ds_p)? DSCivaClient::getInstance()->getDSPrincipaleByDs($this) : $ds_p;
        if(!$ds_principale->exist('courant_stock')) return $courant_stock;
        
        $old_courant_stock = $ds_principale->get('courant_stock');

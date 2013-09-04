@@ -46,6 +46,12 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         
         $this->setWidget('neant', new sfWidgetFormChoice(array('choices' => $this->getNeant(),'expanded' => true, 'multiple' => true)));
         $this->setValidator('neant', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getNeant()), 'multiple' => true)));
+        
+        $this->setWidget('ds_principale', new sfWidgetFormChoice(array('choices' => $this->getLieuxStockage(),'expanded' => false, 'multiple' => true)));
+        $this->setValidator('ds_principale', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getLieuxStockage()), 'multiple' => true)));
+        
+        
+        
         $this->getValidatorSchema()->setPostValidator(new ValidatorLieuxStockageDS($this->lieux_stockage,$this->ds));
 
         
@@ -54,8 +60,20 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         $this->widgetSchema->setNameFormat('ds_lieu[%s]');
     }
 
+
+    
+    
+    
     public function doUpdateDss($dss) {
-        $values = $this->getValues();
+        
+        $values = $this->getValues();   
+        if(count($values['ds_principale']) != 1){
+            throw new sfException("La ds principale doit être basée sur un des lieux de stockage proposés");
+        }
+        $num = $values['ds_principale'][0];
+        
+        $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
+        
         foreach ($this->lieux_stockage as $lieu_id => $lieu) {
             $lieu_num = preg_replace('/^([0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
             $ds_id = preg_replace("/[0-9]{3}$/", $lieu_num, $this->ds->_id);
@@ -120,12 +138,21 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         return $result;
     }
     
+    public function getLieuxStockage() {
+        $lieux_stockages = array();
+        foreach ($this->lieux_stockage as $lieu_s => $value) {
+            $stockage_num = str_replace($this->tiers->cvi,'', $lieu_s);
+            $lieux_stockages[$stockage_num] = $stockage_num; 
+         }
+         return $lieux_stockages;
+    }
+    
     public function getNeant() {
         return array(1 => 1);
     }
     
     public function postValidator(){
-        
+
     }
 
 }

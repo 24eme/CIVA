@@ -15,6 +15,7 @@ DS:
       numero_archive: {  }
       statut: {}
       commentaire: {}
+      ds_principale: {required: false}
       rebeches: {type: float}
       dplc: {type: float}
       lies: {type: float}

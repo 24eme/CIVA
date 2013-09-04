@@ -110,7 +110,7 @@ class DSCivaClient extends DSClient {
         $periode = $this->buildPeriode($this->createDateStock($date_stock));
         $cpt = 1;
         $dss = array();
-        
+        $ds_principale_exist = false;
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
             
             $num_lieu = $lieux_stockage->getNumeroIncremental();
@@ -122,6 +122,12 @@ class DSCivaClient extends DSClient {
             $ds->date_stock = $this->createDateStock($date_stock);
             $ds->identifiant = $tiers->cvi;
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
+            if(!$ds_principale_exist){
+                $ds->add('ds_principale',1);
+                $ds_principale_exist = true;
+            }else{
+                $ds->add('ds_principale',0);
+            }
             $ds->storeInfos();
             if(!$ds_neant){
                 $ds->updateProduits();
@@ -219,7 +225,6 @@ class DSCivaClient extends DSClient {
     public function findDssByDS($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         if(!$ds)
             throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
-        $matches = array();
         return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode, $hydrate);
     }
 
@@ -230,7 +235,7 @@ class DSCivaClient extends DSClient {
     public function getDSPrincipale($tiers, $date_stock){
         $dss = $this->findDssByCvi($tiers, $date_stock);
         foreach ($dss as $ds) {
-
+            if($ds->isDsPrincipale())
             return $ds;
         }
 
@@ -238,8 +243,12 @@ class DSCivaClient extends DSClient {
     }
     
     public function getDSPrincipaleByDs($ds) {
-        foreach ($this->findDssByDS($ds) as $current_ds) {
+        $dss = $this->findDssByDS($ds);        
+        foreach ($dss as $current_ds) {
+            $current_ds->_id;
+            if($current_ds->isDsPrincipale()){
                 return $current_ds;
+            }
         }
         return null;
     }
@@ -465,5 +474,49 @@ class DSCivaClient extends DSClient {
             }
         }
         return $result_ids;
+    }
+    
+    public function changeDSPrincipale($dss,$last_ds_principale,$num_new_principale) {
+        if($last_ds_principale->getLieuStockage() == $num_new_principale){
+            return $dss;
+        }
+        $num_etape = $last_ds_principale->get('num_etape');
+        $rebeches = $last_ds_principale->get('rebeches');
+        $dplc = $last_ds_principale->get('dplc');
+        $lies = $last_ds_principale->get('lies');
+        $mouts = $last_ds_principale->get('mouts');
+        $date_depot_mairie = ($last_ds_principale->exist('date_depot_mairie'))? $last_ds_principale->get('date_depot_mairie') : null;
+        
+        $new_dss = array();
+        
+        foreach ($dss as $key => $current_ds) {
+            if($current_ds->getLieuStockage() == $num_new_principale){
+                $current_ds->add('ds_principale',1);
+                $current_ds->add('num_etape',$num_etape);                
+                $current_ds->add('rebeches',$rebeches);
+                $current_ds->add('dplc',$dplc);
+                $current_ds->add('lies',$lies);
+                $current_ds->add('mouts',$mouts);
+                if($date_depot_mairie){
+                    $current_ds->add('date_depot_mairie',$date_depot_mairie);                
+                }
+                $current_ds->add('courant_stock',$current_ds->getFirstAppellation()->getHash());
+                $new_dss[$key] = $current_ds;
+                
+            }else{
+                $current_ds->add('ds_principale',0);
+                $current_ds->remove('num_etape'); 
+                if($date_depot_mairie){      
+                    $current_ds->remove('date_depot_mairie');    
+                }   
+                $current_ds->remove('courant_stock');       
+                $current_ds->add('rebeches',null);
+                $current_ds->add('dplc',null);
+                $current_ds->add('lies',null);
+                $current_ds->add('mouts',null);
+                $new_dss[$key] = $current_ds;
+            }
+        }
+        return $new_dss;
     }
 }
