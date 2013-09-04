@@ -16,7 +16,7 @@ class Vrac extends BaseVrac
 	
 	protected $_config;
     
-    public function init($config, $numeroContrat, $date, $campagne)
+    public function initVrac($config, $numeroContrat, $date, $campagne)
     {
     	
         $this->_config = $config;

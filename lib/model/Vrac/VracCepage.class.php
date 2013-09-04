@@ -41,6 +41,11 @@ class VracCepage extends BaseVracCepage
     {
         return array($this->getHash() => $this);
     }
+    
+    public function getProduitsSorted() {
+      
+        return array($this->getHash() => $this);
+    }
 
     public function hasVtsgn() 
     {

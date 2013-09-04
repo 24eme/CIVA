@@ -133,6 +133,8 @@ Vrac:
                                                                   prix_unitaire: { type: float }
                                                                   denomination: { }
                                                                   solde: { type: integer }
+                                                                  volume_propose: { type: float }
+                                                                  volume_enleve: { type: float }
                                                                   retiraisons:
                                                                     type: collection
                                                                     definition:

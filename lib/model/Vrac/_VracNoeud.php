@@ -8,6 +8,11 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     }
 
     abstract public function getChildrenNode();
+    
+    /*public function test()
+    {
+    	echo "Tu prends tes cliques, tu niques ta mère!";exit;
+    }*/
 
     public function getChildrenNodeSorted() {
         $items = $this->getChildrenNode();

@@ -44,7 +44,7 @@ class VracClient extends acCouchdbClient {
 	        $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
 	        $numeroContrat = $this->getNumeroContratSuivant($date);
 	        $vrac = new Vrac();
-	        $vrac->init($config, $numeroContrat, $date, $campagne);
+	        $vrac->initVrac($config, $numeroContrat, $date, $campagne);
 	        return $vrac;
     	}
     	throw new sfException('Aucune configuration vrac définie dans l\'app!');

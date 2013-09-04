@@ -27,5 +27,16 @@ class VracDeclaration extends BaseVracDeclaration {
         if(!$this->exist('certification')) return array();
         return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
     }
+    
+    public function getProduitsDetailsSorted()
+    {
+    	$produits = $this->getProduitsDetails();
+    	$result = array();
+    	foreach ($produits as $hash => $values) {
+    		$result[$values->position] = array($hash => $values);
+    	}
+    	ksort($result);
+    	return $result;
+    }
 
 }
