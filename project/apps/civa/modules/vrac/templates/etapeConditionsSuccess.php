@@ -1,11 +1,22 @@
-<!-- #principal -->
-
-<section id="principal" class="vrac">
-    <!-- #contenu_etape -->
-    <section id="contenu_etape">
-		WESH
-    </section>
-    <!-- fin #contenu_etape -->
-</section>
-<!-- fin #principal -->
+<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape_conditions', $vrac) ?>">
+	<?php echo $form->renderHiddenFields() ?>
+	<?php echo $form->renderGlobalErrors() ?>
+	<p>Saisissez ici les volumes estimés et les prix pour chaque produit.</p><br />
+	<div class="clearfix">
+		<?php include_partial('vrac/produitsListing', array('vrac' => $vrac, 'form' => $form)); ?>
+	</div>
+	<p><a href="#">Ajouter un produit</a>
+	<ul class="btn_prev_suiv clearfix" id="btn_etape">
+	    <li class="prec">
+            <a id="btn_precedent" href="<?php echo url_for('@mon_espace_civa') ?>">
+                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retourner_etape_prec.png">
+            </a>
+	    </li>
+	    <li class="suiv">
+	    	<button type="submit" name="valider" style="cursor: pointer;">
+	    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />
+	    	</button>
+	    </li>
+	</ul>
+</form>
 

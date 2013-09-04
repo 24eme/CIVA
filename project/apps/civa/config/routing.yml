@@ -2,9 +2,6 @@
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
 # *********** VRAC ***********
-
-
-
 vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
@@ -15,6 +12,17 @@ vrac_etape_conditions:
   options:
     model:    Vrac
     type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_etape_validation:
+  url: /vrac/:numero_contrat/validation
+  param: { module: vrac, action: etapeValidation }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 
 
 # *********** COMPTE ***********
