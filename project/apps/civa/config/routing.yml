@@ -23,6 +23,13 @@ vrac_etape_validation:
     type:     object
   requirements:
     sf_method: [get, post]
+# *********** ANNUAIRE *********
+annuaire:
+  url: /annuaire
+  param: { module: annuaire, action: index }
+annuaire_ajouter:
+  url: /annuaire/ajouter
+  param: { module: annuaire, action: ajouter }
 
 
 # *********** COMPTE ***********

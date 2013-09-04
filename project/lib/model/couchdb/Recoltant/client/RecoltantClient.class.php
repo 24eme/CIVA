@@ -1,6 +1,11 @@
 <?php
 
 class RecoltantClient extends acCouchdbClient {
+
+    public static function getInstance() {
+    
+        return acCouchdbManager::getClient('Recoltant'); 
+    }
     
     /**
      *
