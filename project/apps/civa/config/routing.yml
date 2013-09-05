@@ -5,6 +5,15 @@
 vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
+vrac_supprimer:
+  url: /vrac/:numero_contrat/supprimer
+  param: { module: vrac, action: supprimer }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_etape_soussignes:
   url: /vrac/:numero_contrat/soussignes
   param: { module: vrac, action: etapeSoussignes }

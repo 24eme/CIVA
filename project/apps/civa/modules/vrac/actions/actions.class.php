@@ -15,10 +15,19 @@ class vracActions extends sfActions {
 		return $this->redirect('vrac_etape_soussignes', array('sf_subject' => $vrac));
     }
     
+	public function executeSupprimer(sfWebRequest $request) 
+	{
+		$this->vrac = $this->getRoute()->getVrac();
+		$this->vrac->delete();
+		return $this->redirect('mon_espace_civa');
+    }
+    
     public function executeEtapeSoussignes(sfWebRequest $request) 
     {
     	$this->vrac = $this->getRoute()->getVrac();
     	$this->etapes = VracEtapes::getInstance();
+    	$annuaire = $this->getAnnuaire();
+    	$this->form = new VracSoussignesForm($this->vrac, $annuaire);
     	if ($nextEtape = $this->getEtapeSuivante($this->vrac, $this->etapes)) {
     		$this->vrac->etape = $nextEtape;
     	}
@@ -61,5 +70,11 @@ class vracActions extends sfActions {
     		$next = $nextEtape;
     	}
     	return $next;
+    }
+    
+    protected function getAnnuaire()
+    {
+    	$compte = $this->getUser()->getCompte();
+		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
     }
 }
