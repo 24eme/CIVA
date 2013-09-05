@@ -41,11 +41,12 @@ $hasVolume = false;
 					<?php 
 					$configurations = ConfigurationClient::getConfiguration()->getArrayAppellations();
 					foreach ($configurations as $conf):
-					?>
-					
-					<th><?php $l = $conf->getLibelle();
-						echo (($aoc = substr($l,0,3))=='AOC')? $aoc : ''; ?>
-						<span><?php echo (substr($l,0,3)=='AOC')? substr($l,4) : $l; ?></span></th>
+					?>					
+					<th><?php 
+                                                $l = $conf->getLibelle();
+						echo (($aoc = substr($l,0,3))=='AOC')? $aoc : '';
+                                             ?>
+                                        <span><?php echo (substr($l,0,3)=='AOC')? substr($l,4) : $l; ?></span></th>
 					<?php
 					endforeach;
 					?>

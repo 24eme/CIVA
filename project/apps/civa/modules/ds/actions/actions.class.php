@@ -191,7 +191,7 @@ class dsActions extends sfActions {
                 {         
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
-                $this->redirect('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getDSPrincipaleByDs($this->ds)->_id));
+                $this->redirect('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getFirstDSByDs($this->ds)->_id));
             } else {
                 $this->error = true;
             }
