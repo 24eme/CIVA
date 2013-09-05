@@ -201,7 +201,7 @@ class ExportDRPdf extends ExportDocument {
   					$c['vtsgn'] = $detail->vtsgn;
   					$c['superficie'] = $detail->superficie;
   					$c['volume'] = $detail->volume;
-            if($detail->canHaveUsagesIndustrielsSaisi()) {
+            if($detail->canHaveUsagesLiesSaisi()) {
               $c['usages_industriels'] = $detail->usages_industriels;
             }
   					if ($hasLieuEditable)

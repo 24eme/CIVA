@@ -65,4 +65,12 @@
             <li>Usages industriels <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
         </ul>
     <?php endif; ?>
+    <ul>
+        <?php if ($onglets->getCurrentLieu()->getConfig()->existRendement()):?>
+        <li>Dépassement</li>
+        <?php endif; ?>
+        <?php if ($onglets->getCurrentLieu()->getConfig()->existRendementCepage()):?>
+        <li>Dépassement Cépage</li>
+        <?php endif; ?>
+    </ul>
 </div>

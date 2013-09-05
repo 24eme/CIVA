@@ -65,9 +65,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
     }
     
-    public function getLies() {
+    public function getLies($force_calcul = false) {
+        if(!$this->canHaveUsagesLiesSaisi()) {
 
-        return $this->getDataByFieldAndMethod('lies', array($this, 'getSumNoeudWithMethod'), true, array('getLies') );
+            return $this->getDataByFieldAndMethod('lies', array($this, 'getSumNoeudWithMethod'), $force_calcul, array('getLies') );
+        }
+
+        return $this->_get('lies') ? $this->_get('lies') : 0;
     }
 
     public function getDplc($force_calcul = false) {
@@ -149,12 +153,17 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getUsagesIndustriels($force_calcul = false) {
-        if(!$this->canHaveUsagesIndustrielsSaisi()) {
-
+        if(!$this->getConfig()->hasRendementNoeud()) {
+            
             return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);
         }
 
-        return $this->_get('usages_industriels') ? $this->_get('usages_industriels') : 0;
+        if(!$this->canHaveUsagesLiesSaisi()) {
+
+            return $this->getDplc();
+        }
+
+        return $this->getDplc() > 0 ? $this->getDplc() : $this->getLies();
     }
 
     public function getUsagesIndustrielsTotal() {
@@ -162,7 +171,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
 
         return false;
     }
@@ -180,9 +189,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $sum;
     }
 
-    public function isUsagesIndustrielsSaisiCepage() {
+    public function isLiesSaisisCepage() {
 
-        return $this->getDocument()->exist('usages_industriels_cepage') && $this->getDocument()->get('usages_industriels_cepage');
+        return $this->getDocument()->exist('lies_saisis_cepage') && $this->getDocument()->get('lies_saisis_cepage');
     }
 
     public function getLibelle() {

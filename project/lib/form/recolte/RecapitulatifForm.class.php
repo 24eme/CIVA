@@ -11,17 +11,16 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function configure() {
         $lieu = $this->getObject();
-        if($lieu->canHaveUsagesIndustrielsSaisi() && $lieu->getConfig()->existRendement() && !$lieu->getConfig()->existRendementCouleur()){
+        if($lieu->canHaveUsagesLiesSaisi() && $lieu->getConfig()->existRendement() && !$lieu->getConfig()->existRendementCouleur()){
             $this->setWidgets(array(
-                'usages_industriels' => new sfWidgetFormInputFloat(array()),
+                'lies' => new sfWidgetFormInputFloat(array()),
             ));
 
             $this->setValidators(array(
-                'usages_industriels' => new sfValidatorNumber(array('required' => false)),
+                'lies' => new sfValidatorNumber(array('required' => false)),
             ));
 
-            $this->getWidget('usages_industriels')->setLabel('Usages industriels');
-            $this->getValidator('usages_industriels')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
+            $this->getWidget('lies')->setLabel('Usages industriels saisis');
 
             $this->is_saisisable = true;
         }

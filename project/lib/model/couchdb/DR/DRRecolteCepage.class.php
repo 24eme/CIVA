@@ -118,9 +118,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $ret;
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
         
-        return !$this->isUsagesIndustrielsSaisiCepage();
+        return !$this->isLiesSaisisCepage();
     }
 
     protected function update($params = array()) {

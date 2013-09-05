@@ -29,9 +29,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->filter('^cepage');
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
 
-        return !$this->isUsagesIndustrielsSaisiCepage();
+        return !$this->isLiesSaisisCepage();
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {

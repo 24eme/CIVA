@@ -56,16 +56,23 @@
             <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
             <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
-                    <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
                     <li>
                         <input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
                     </li>
                     <li>
-                        <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
                         <?php if (isset($form['lies'])) : ?>
                             <?php echo $form['lies']->render(array('class' => 'num lies')) ?>
                         <?php endif; ?>
+                        <input id="detail_usages_industriels" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                    </li>
+                    <li>
+                        <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
+                        <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
+                        <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
                     </li>
                 </ul>
             <?php endif; ?>

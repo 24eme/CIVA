@@ -59,10 +59,20 @@
                 <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input title="Usages industriels minimum : <?php echoFloat($couleur->getDplc()) ?>" type="text"readonly="readonly" class="jstitle <?php if ($couleur->getDplc() > 0) echo 'rouge'; ?> <?php if ($couleur->getUsagesIndustriels() < $couleur->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?> <?php if ($couleur->getUsagesIndustriels() < $couleur->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
-
-
+        </ul>
+        <ul>
+            <li>
+            <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
+                <input type="text" class="num" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
+            <?php endif; ?>
+            </li>
+            <li>
+            <?php if ($couleur->getConfig()->existRendementCepage()):?>
+                <input type="text" class="num" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
+            <?php endif; ?>
+            </li>
         </ul>
     </div>
 </div>

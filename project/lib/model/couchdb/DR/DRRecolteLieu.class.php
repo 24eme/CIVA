@@ -78,25 +78,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
     }
 
-    public function getUsagesIndustriels($force_calcul = false) {
-
-        return parent::getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsFinal'), $force_calcul);
-    }
-
-    public function getUsagesIndustrielsTotal() {
-
-        return parent::getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
-    }
-
-    public function getUsagesIndustrielsFinal() {
-        if(!$this->canHaveUsagesIndustrielsSaisi()) {
-
-            return $this->getUsagesIndustrielsTotal();
-        }
-
-        return $this->_get('usages_industriels') ? $this->_get('usages_industriels') : 0;
-    }
-
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
@@ -261,9 +242,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return (count($arr_lieux) > 1) ? true : false;
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
         
-        return !$this->isUsagesIndustrielsSaisiCepage() && !$this->getConfig()->existRendementCouleur();
+        return !$this->isLiesSaisisCepage() && !$this->getConfig()->existRendementCouleur();
     }
 
     protected function update($params = array()) {
@@ -280,6 +261,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             $this->dplc = $this->getDplc(true);
             $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
+            $this->lies = $this->getLies(true);
         }
 
         $this->add('acheteurs');
