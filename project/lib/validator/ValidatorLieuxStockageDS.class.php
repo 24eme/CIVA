@@ -41,9 +41,9 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
             $errorSchema->addError(new sfValidatorError($this, 'required_appellation'));
         }
 
-        $num_principale = $this->lieux_stockage->getDocument()->getLieuStockagePrincipal()->getNumeroIncremental();
-
-        if (is_null($values_by_lieux[$this->lieux_stockage->getDocument()->getLieuStockagePrincipal()->getNumeroIncremental()])) {
+        $num_principale = $values['ds_principale'][0];
+        
+        if (is_null($values_by_lieux[$num_principale])) {
             foreach ($values_by_lieux as $key_lieu => $fields) {
                 if ($key_lieu == $num_principale)
                     continue;

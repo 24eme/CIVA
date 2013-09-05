@@ -177,6 +177,7 @@ class dsActions extends sfActions {
                             if($ds_neant){
                                 $ds_to_save->updateEtape(4);
                             }else{
+     //                           var_dump($ds_to_save->_id); 
                             $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash(),$ds_to_save); 
                             }
                             $ds_principale = $ds_to_save;
@@ -190,7 +191,7 @@ class dsActions extends sfActions {
                 {         
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
-                $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id));
+                $this->redirect('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getDSPrincipaleByDs($this->ds)->_id));
             } else {
                 $this->error = true;
             }
