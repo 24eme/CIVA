@@ -28,10 +28,26 @@ class ExportDSPdf extends ExportDocument {
 
         $this->ds_principale = $ds_principale;
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
-
+        $this->trieDSSForPDF();
+        
         $this->init($filename);
     }
 
+    protected function trieDSSForPDF() {
+        $dss_sorted = array();
+        foreach ($this->dss as $key => $ds) {
+            if($ds->isDsPrincipale()){
+                $dss_sorted[] = $ds;
+            }
+        }
+        foreach ($this->dss as $key => $ds) {
+            if(!$ds->isDsPrincipale()){
+                $dss_sorted[] = $ds;
+            }
+        }
+        $this->dss = $dss_sorted;
+    }
+    
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
             $this->create();
