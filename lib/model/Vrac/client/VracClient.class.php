@@ -5,10 +5,19 @@ class VracClient extends acCouchdbClient {
 	const VRAC_PREFIXE_ID = 'VRAC-';
 	const APP_CONFIGURATION = 'app_configuration_vrac';
 	const APP_CONFIGURATION_PRODUITS = 'produits_statiques';
+	const APP_CONFIGURATION_ETAPES = 'etapes';
 	
     public static function getInstance()
     {
       return acCouchdbManager::getClient("Vrac");
+    }
+    
+    public static function getConfig()
+    {
+    	if ($config = sfConfig::get(self::APP_CONFIGURATION)) {
+    		return $config;
+    	}
+    	throw new sfException('Aucune configuration vrac définie dans l\'app!');
     }
     
 	public function buildId($numero_contrat) {
@@ -40,14 +49,12 @@ class VracClient extends acCouchdbClient {
     public function createVrac($date = null) 
     {
     	$date = $this->getDate($date);
-    	if ($config = sfConfig::get(self::APP_CONFIGURATION)) {
-	        $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
-	        $numeroContrat = $this->getNumeroContratSuivant($date);
-	        $vrac = new Vrac();
-	        $vrac->initVrac($config, $numeroContrat, $date, $campagne);
-	        return $vrac;
-    	}
-    	throw new sfException('Aucune configuration vrac définie dans l\'app!');
+    	$config = self::getConfig();
+        $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
+        $numeroContrat = $this->getNumeroContratSuivant($date);
+        $vrac = new Vrac();
+        $vrac->initVrac($config, $numeroContrat, $date, $campagne);
+        return $vrac;
     } 
     
     public function findByNumeroContrat($numeroContrat) 
