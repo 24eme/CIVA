@@ -37,7 +37,7 @@ $hasVolume = false;
 		<table class="table_donnees">
 			<thead>
 				<tr>
-					<th>Lieux de stockage</th>
+                                    <th colspan="2">Lieux de stockage</th>
 					<?php 
 					$configurations = ConfigurationClient::getConfiguration()->getArrayAppellations();
 					foreach ($configurations as $conf):
@@ -49,28 +49,32 @@ $hasVolume = false;
 					<?php
 					endforeach;
 					?>
-                                        <th><span>DS Principale</span></th>
+                                        
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): 
                                                 $num_lieu = str_replace($tiers->cvi, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
+                                                $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
                                     ?>
 				<tr>
-					<td class="adresse_lieu">
+                                        <td>
+                                        <input type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
+					</td>
+                                        <td class="adresse_lieu">
+                                                
                                                 <?php echo ($num_lieu == $ds->getLieuStockage())? "<strong>" : ""; ?>
                                                 
 						<?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
-					<?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
+                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
                                         </td>
 					<?php  $cpt = 0;
 					 $name = 'lieuxStockage_'.$num_lieu;
 						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
 							$paire = ($cpt%2==0)? 'paire' : '';
-							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
-                                                        $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
+							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';                                                        
                                                         $disabled = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume());
                                                         if($disabled){
                                                             $hasVolume =true;  
@@ -86,10 +90,7 @@ $hasVolume = false;
 					</td>
 					<?php endif; ?>
 				   <?php $cpt++;
-				   endforeach; ?>
-                                        <td class="<?php echo $paire ?>">
-                                         <input type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
-					</td>
+				   endforeach; ?>                                       
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
