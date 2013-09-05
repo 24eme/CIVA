@@ -107,7 +107,7 @@ Comme l’an passé pour la plupart d’entre vous ou pour la première fois pou
 Contrairement à l’an passé ce lien est un lien permanent vous donnant accès, dans un espace totalement sécurisé, à votre dossier Déclaration de Récolte.
 Celui-ci sera décliné par année de récolte et donc enrichi au fil des campagnes ; vous n’y trouverez pour l’instant que le dossier 2011 mais dans quelques jours également le dossier 2010.
  
-https://declaration.vinsalsace.pro/mise_a_disposition/".$export->cle."/declarations_de_recolte
+https://declaration.vinsalsace.pro/mise_a_disposition/".$export->cle."/DR
  
 D’autre part nous vous ferons également parvenir début 2012 la consolidation des surfaces et volumes par cépage déclarés dans votre commune pour l’ensemble des déclarants.
  
