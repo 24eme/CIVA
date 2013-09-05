@@ -5,6 +5,10 @@
 all:
   configuration:
     vrac:
+      etapes:
+        soussignes: 1
+        conditions: 2
+        validation: 3
       produits_statiques:
         declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_GW/:
           position: 1

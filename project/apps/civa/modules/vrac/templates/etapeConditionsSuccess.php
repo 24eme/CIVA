@@ -1,3 +1,6 @@
+<div class="clearfix">
+	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => 'conditions')) ?>
+</div>
 <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape_conditions', $vrac) ?>">
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
@@ -5,10 +8,10 @@
 	<div class="clearfix">
 		<?php include_partial('vrac/produitsListing', array('vrac' => $vrac, 'form' => $form)); ?>
 	</div>
-	<p><a href="#">Ajouter un produit</a>
+	<p><a href="#">Ajouter un produit</a></p>
 	<ul class="btn_prev_suiv clearfix" id="btn_etape">
 	    <li class="prec">
-            <a id="btn_precedent" href="<?php echo url_for('@mon_espace_civa') ?>">
+            <a id="btn_precedent" href="<?php echo url_for('vrac_etape_soussignes', $vrac) ?>">
                 <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retourner_etape_prec.png">
             </a>
 	    </li>
