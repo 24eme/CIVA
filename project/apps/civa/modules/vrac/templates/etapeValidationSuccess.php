@@ -1,4 +1,7 @@
 <div class="clearfix">
+	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => 'validation')) ?>
+</div>
+<div class="clearfix">
 		WESH MORRAY !
 </div>
 <ul class="btn_prev_suiv clearfix" id="btn_etape">
