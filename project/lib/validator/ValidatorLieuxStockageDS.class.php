@@ -13,7 +13,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
 
     protected function configure($options = array(), $messages = array()) {
         $this->addMessage('required_appellation', "Aucune appellation n'a été séléctionné, et la DS n'est pas à néant");
-        $this->addMessage('invalid_lieux_stockage', "Il n'est pas possible de sauvegarder un lieu de stockage secondaire avec des appellations alors que le principal n'en possède pas.");
+        $this->addMessage('invalid_lieux_stockage', "La DS principale doit avoir au moins une appelation.");
         if ($this->ds->isDsPrincipale() && $this->ds->isDateDepotMairie()) {
             $this->addMessage('invalid_date_depot_mairie', "Il n'est pas possible de sauvegarder une DS dont la date de dépot en mairie a dépassée le 31 aout.");
         }
