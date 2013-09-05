@@ -897,10 +897,10 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     $(elementCssId+'_volume_dplc').val($(elementCssId+'_dplc_rendement').val());
 
     if($(elementCssId+'_total_dplc_sum').length > 0 && $(elementCssId+'_total_dplc_sum').val() > $(elementCssId+'_dplc_rendement').val()) {
-        $(elementCssId+'_volume_dplc').val($(elementCssId+'_total_dplc_sum').val());
+        $(elementCssId+'_volume_dplc').val(parseFloat($(elementCssId+'_total_dplc_sum').val().replace('Σ ', '')));
     }
 
-    if(parseFloat($(elementCssId+'_volume_dplc').val()) > 0) {
+    if(parseFloat($(elementCssId+'_volume_dplc').val()) > parseFloat($(elementCssId+'_lies').val())) {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val()); 
     } else {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val()); 
@@ -963,10 +963,15 @@ var volumeOnChange = function(input) {
 
     addClassAlerteIfNeeded($('#appellation_volume_revendique'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
-    addClassAlerteIfNeeded($('#appellation_usages_industriels'), parseFloat($('#appellation_volume_dplc').val()) > parseFloat($('#appellation_usages_industriels').val()), 'alerte');
+    addClassAlerteIfNeeded($('#appellation_dplc_rendement'), parseFloat($('#appellation_dplc_rendement').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#appellation_dplc_rendement'), parseFloat($('#appellation_dplc_rendement').val()) > 0 && parseFloat($('#appellation_dplc_rendement').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
+    addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0 && parseFloat($('#appellation_total_dplc_sum').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
+    
     addClassAlerteIfNeeded($('#cepage_volume_revendique'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
-    addClassAlerteIfNeeded($('#cepage_usages_industriels'), parseFloat($('#cepage_volume_dplc').val()) > parseFloat($('#cepage_usages_industriels').val()));
+    addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0, 'rouge');
+    addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0 && parseFloat($('#cepage_dplc_rendement').val()) == parseFloat($('#cepage_volume_dplc').val()), 'alerte');
     addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
 

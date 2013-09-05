@@ -88,6 +88,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
     }
 
+    public function getUsagesIndustrielsCalcule() {
+
+        return $this->getUsagesIndustriels();
+    }
+
     public function findDplc() {
         $dplc_total = $this->getDplcTotal();
         $dplc = $dplc_total;
@@ -158,7 +163,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);
         }
 
-        return $this->getDplc() > 0 ? $this->getDplc() : $this->getLies();
+        return $this->getDplc() > $this->getLies() ? $this->getDplc() : $this->getLies();
     }
 
     public function getUsagesIndustrielsTotal() {
@@ -182,6 +187,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             $sum += $noeud->get($field);
         }
         return $sum;
+    }
+
+    public function cleanLies() {
+        foreach($this->getChildrenNode() as $item) {
+            $item->cleanLies();
+        }
+
     }
 
     public function isLiesSaisisCepage() {
