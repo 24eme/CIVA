@@ -153,6 +153,7 @@ class DSCivaClient extends DSClient {
         $new_ds->date_stock = $ds->date_stock;
         $new_ds->identifiant = $ds->identifiant;
         $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
+        $new_ds->add('ds_principale',0);
         $new_ds->storeInfos();
         return $new_ds;
     }
@@ -253,6 +254,15 @@ class DSCivaClient extends DSClient {
         return null;
     }
 
+    
+     public function getFirstDSByDs($ds) {
+        $dss = $this->findDssByDS($ds);     
+        foreach ($dss as $current_ds) {
+                return $current_ds;
+        }
+        return null;
+    }
+    
     public function createOrFind($etablissementId, $date_stock) {
       throw sfException('createOrFind deprecated use findOrCreateDsByEtbId instead');
     }
@@ -480,6 +490,7 @@ class DSCivaClient extends DSClient {
         if($last_ds_principale->getLieuStockage() == $num_new_principale){
             return $dss;
         }
+    //    var_dump($last_ds_principale->_id); exit;
         $num_etape = $last_ds_principale->get('num_etape');
         $rebeches = $last_ds_principale->get('rebeches');
         $dplc = $last_ds_principale->get('dplc');
