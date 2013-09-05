@@ -62,8 +62,11 @@
                     <li>
                         <?php if (isset($form['lies'])) : ?>
                             <?php echo $form['lies']->render(array('class' => 'num lies')) ?>
+                        <?php else: ?>
+                            <input id="detail_lies" type="hidden" class="lies num readonly" readonly="readonly" value="<?php echo $detail->lies ?>" />
                         <?php endif; ?>
-                        <input id="detail_usages_industriels" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
+                        
+                        <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
                     </li>
                 </ul>
                 <ul>
@@ -72,7 +75,7 @@
                     <li>
                         <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
                         <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
-                        <input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
+                        <input id="detail_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
                     </li>
                 </ul>
             <?php endif; ?>

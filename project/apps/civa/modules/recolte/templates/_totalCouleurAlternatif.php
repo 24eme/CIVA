@@ -59,7 +59,7 @@
                 <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?> <?php if ($couleur->getUsagesIndustriels() < $couleur->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
+                <input type="text" readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?> <?php if ($couleur->getUsagesIndustriels() < $couleur->getDplc()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
         </ul>
         <ul>

@@ -70,7 +70,7 @@
                                                         <?php if(isset($form['lies'])) :?>
                                                             <?php echo $form['lies']->render(array('class' => 'num')) ?>
                                                         <?php else: ?>
-                                                            <input id="recapitulatif_usages_industriels" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getLies()); ?>" />
+                                                            <input id="recapitulatif_lies" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getLies()); ?>" />
                                                         <?php endif; ?>
                                                     </td>
                                                 </tr>

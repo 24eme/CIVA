@@ -56,22 +56,26 @@
             <li class="rendement <?php if ($lieu->getDplc()) echo 'rouge'; ?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($lieu->getRendementRecoltant(),0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
             <?php endif; ?>
             <?php if ($lieu->getConfig()->hasRendementNoeud()) : ?>
-	        <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxRendement()); ?>"/>
             <li>
                     <input class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?>" type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
-    		        <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
-    		    </li>
+                    <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
+                </li>
             <li>
                 <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($lieu->getDplc()); ?>" />
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplc()); ?>"/>
-                <input type="text" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?> <?php if ($lieu->getUsagesIndustriels() < $lieu->getDplc()) echo 'alerte'; ?>" <?php if($lieu->isLiesSaisisCepage()) echo "mode='sum'" ?> id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
-                <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/> 
+               
+                <input type="text" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?> <?php if ($lieu->getUsagesIndustriels() < $lieu->getDplc()) echo 'alerte'; ?>" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
+                <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
+
+                <input type="hidden" id="appellation_lies" readonly="readonly" <?php if($lieu->isLiesSaisisCepage()) echo "mode='sum'" ?> class="num" value="<?php echoFloat($lieu->getLies()); ?>" />
+                <input type="hidden" id="appellation_lies_orig" readonly="readonly" value="<?php echoFloat($lieu->getLies()); ?>" />
             </li>
           <?php endif; ?>
       </ul>
       <ul>
             <li>
             <?php if ($lieu->getConfig()->hasRendementNoeud()):?>
+	            <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxRendement()); ?>"/>
                 <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getConfig()->getRendementNoeud()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" readonly="readonly" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>

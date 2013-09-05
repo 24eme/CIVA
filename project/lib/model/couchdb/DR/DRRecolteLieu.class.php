@@ -259,9 +259,9 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         parent::update($params);
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->dplc = $this->getDplc(true);
+            $this->lies = $this->getLies(true);
             $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
-            $this->lies = $this->getLies(true);
         }
 
         $this->add('acheteurs');

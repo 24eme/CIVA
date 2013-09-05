@@ -62,9 +62,11 @@
                 <input type="hidden" id="cepage_volume_revendique_orig" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input type="text" id="cepage_lies" readonly="readonly" class="num" value="<?php echoFloat($cepage->getLies()); ?>" />
+                <input type="hidden" id="cepage_volume_dplc" readonly="readonly" value="<?php echoFloat($cepage->getDplc()); ?>" />
+                <input type="hidden" id="cepage_volume_dplc_orig" value="<?php echoFloat($cepage->getDplc()); ?>" />
+                <input type="hidden" id="cepage_lies" readonly="readonly" value="<?php echoFloat($cepage->getLies()); ?>" />
                 <input type="hidden" id="cepage_lies_orig" value="<?php echoFloat($cepage->getLies()); ?>" />
-                <input type="hidden" id="cepage_usages_industriels" readonly="readonly" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
+                <input type="text" id="cepage_usages_industriels" readonly="readonly" class="num" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
                 <input type="hidden" id="cepage_usages_industriels_orig" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
             </li>
         </ul>
@@ -73,8 +75,8 @@
             </li>
             <li>
                 <?php if ($cepage->getConfig()->hasRendementNoeud()):?>
-                <input type="text" id="cepage_volume_dplc" class="num <?php if ($cepage->getDplc() > 0) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($cepage->getDplc()); ?>" />
-                <input type="hidden" id="cepage_volume_dplc_orig" value="<?php echoFloat($cepage->getDplc()); ?>" />
+                <input type="text" id="cepage_dplc_rendement" class="num <?php if ($cepage->getDplc() > 0) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($cepage->getDplc()); ?>" />
+                <input type="hidden" id="cepage_dplc_rendement_orig" value="<?php echoFloat($cepage->getDplcRendement()); ?>" />
                 <?php endif; ?>
             </li>
         </ul>

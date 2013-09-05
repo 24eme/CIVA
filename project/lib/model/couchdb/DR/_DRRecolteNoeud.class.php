@@ -158,11 +158,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);
         }
 
-        if(!$this->canHaveUsagesLiesSaisi()) {
-
-            return $this->getDplc();
-        }
-
         return $this->getDplc() > 0 ? $this->getDplc() : $this->getLies();
     }
 

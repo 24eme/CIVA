@@ -100,6 +100,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
             $this->dplc = $this->getDplc(true);
+            $this->lies = $this->getLies(true);
             $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
         }
