@@ -928,7 +928,7 @@ var volumeOnChange = function(input) {
 
     updateElementRows($('input.volume'), $('#detail_vol_total_recolte'));
     updateRevendiqueDPLC('#detail_vol_total_recolte', '#detail');
-    console.log('test1');
+
     if (!autoTotal) {
         return ;
     }
@@ -972,9 +972,7 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0 && parseFloat($('#cepage_dplc_rendement').val()) == parseFloat($('#cepage_volume_dplc').val()), 'alerte');
-    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
-    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_volume_dplc').val()) > 0, 'rouge');
-
+    
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
 
@@ -988,6 +986,10 @@ var volumeOnChange = function(input) {
         val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
     }
     $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
+
+    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_current_rendement').html()) > parseFloat($('#cepage_rendement').val()), 'rouge');
+    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_current_rendement').html()) > parseFloat($('#appellation_rendement').val()), 'rouge');
+    addClassAlerteIfNeeded($('#col_couleur_totale .rendement'), parseFloat($('#appellation_current_rendement').html()) > parseFloat($('#appellation_rendement').val()), 'rouge');
 
     $('.num').each(function() { $(this).verifNettoyageChamp()});
 };
