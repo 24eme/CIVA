@@ -54,7 +54,7 @@
         </p>
         <ul class="vol_revendique_dplc">
             <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
-            <li class="rendement <?php if ($couleur->getDplc()) echo 'rouge'; ?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
+            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getConfig()->getRendementNoeud())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
             <?php endif; ?>
             <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
             <li>
