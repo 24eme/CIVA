@@ -68,9 +68,9 @@
                                                     <td>Usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                     <td class="valeur alt saisi">
                                                         <?php if(isset($form['lies'])) :?>
-                                                            <?php echo $form['lies']->render(array('class' => 'num')) ?>
+                                                            <?php echo $form['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
                                                         <?php else: ?>
-                                                            <input id="recapitulatif_lies" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getLies()); ?>" />
+                                                            <input id="recapitulatif_lies" style="text-align: right;" type="text" class="num readonly recapitulatif_lies" readonly="readonly" value="<?php echoFloat($appellationlieu->getLies()); ?>" />
                                                         <?php endif; ?>
                                                     </td>
                                                 </tr>
@@ -96,43 +96,43 @@
                                 <div class="contenu_section">
                                     <div class="bloc_gris">
                                         <table cellspacing="0" cellpadding="0" class="table_donnees">
-                                            <thead>
-                                                <tr>
-                                                    <th style="">Couleur</th>
-                                                    <th>Dépassement</th>
-                                                    <th>Usages industriels saisis</th>               
-                                                    <th>Usages industriels final</th>               
-                                                </tr>
-                                            </thead>
                                             <tbody>
-                                                <?php $saisi = false ?>
-                                                <?php foreach($form as $key => $item): ?>
-                                                <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
                                                 <tr>
-                                                    <td style="width: 113px">
-                                                        <?php echo $appellationlieu->get($key)->getLibelle() ?>
-                                                    </td>
-                                                    <td style="width: 113px" class="valeur">
-                                                        <?php echoFloat($appellationlieu->get($key)->getDplc()) ?> hl
-                                                    </td>
-                                                    <td class="valeur" style="width: 113px">
-                                                        <?php if($appellationlieu->get($key)->canHaveUsagesLiesSaisi()): ?>
-                                                            <?php $saisi = true ?>
-                                                            <?php echo $item['lies']->render(array('class' => 'num', 'style' => 'width: 100%; text-align: right')) ?>
-                                                        <?php else: ?>
-                                                            <input style="width: 100%; text-align: right" id="recapitulatif_lies" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getLies()); ?>" />
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td style="width: 113px" class="valeur">
-                                                        <?php echoFloat($appellationlieu->get($key)->getUsagesIndustriels()) ?> hl
-                                                    </td>
+                                                    <td></td>
+                                                    <?php $saisi = false ?>
+                                                    <?php foreach($form as $key => $item): ?>
+                                                        <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
+                                                        <?php $saisi = true ?>
+                                                        <td class="valeur"><?php echo $appellationlieu->get($key)->getLibelle();?></td>
+                                                    <?php endforeach; ?>
                                                 </tr>
-                                                <?php endforeach; ?>
                                                 <tr>
-                                                    <td><strong>Total</strong></td>
-                                                    <td class="valeur"><?php echoFloat($appellationlieu->getDplc()) ?> hl</td>
-                                                    <td class="valeur"><?php echoFloat($appellationlieu->getLies()) ?> hl</td>
-                                                    <td class="valeur"><?php echoFloat($appellationlieu->getUsagesIndustriels()) ?> hl</td>
+                                                    <td>Dépassement <span class="unites">(hl)</span> :</td>
+                                                    <?php foreach($form as $key => $item): ?>
+                                                        <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
+                                                        <td class="valeur"><?php echoFloat($appellationlieu->get($key)->getDplc()) ;?></td>
+                                                    <?php endforeach; ?>
+                                                </tr>
+                                                <tr>
+                                                    <td>Usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                    <?php foreach($form as $key => $item): ?>
+                                                        <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
+                                                        <td class="valeur saisi">
+                                                            <?php if(isset($item['lies'])) :?>
+                                                                <?php echo $item['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
+                                                            <?php else: ?>
+                                                                <input id="recapitulatif_lies_<?php echo $key ?>" style="text-align: right;" type="text" class="num readonly recapitulatif_lies" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getLies()); ?>" />
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    <?php endforeach; ?>
+                                                </tr>
+                                                <tr>
+                                                    <td>Usages industriels final <span class="unites">(hl)</span> :</td>
+                                                    <?php foreach($form as $key => $item): ?>
+                                                        <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
+                                                        <td class="valeur"><?php echoFloat($appellationlieu->get($key)->getUsagesIndustriels()) ?> hl</td>
+                                                    <?php endforeach; ?>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <?php if($saisi): ?>
