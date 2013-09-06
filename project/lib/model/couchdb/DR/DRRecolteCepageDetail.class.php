@@ -209,4 +209,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
         return $this->lies;
     }
+
+    public function cleanLies() {
+        $this->lies = null;
+    }
 }

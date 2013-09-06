@@ -190,10 +190,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function cleanLies() {
+        $this->lies = null;
+
         foreach($this->getChildrenNode() as $item) {
             $item->cleanLies();
         }
-
     }
 
     public function isLiesSaisisCepage() {
