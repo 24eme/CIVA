@@ -29,9 +29,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->filter('^cepage');
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
 
-        return !$this->isUsagesIndustrielsSaisiCepage();
+        return !$this->isLiesSaisisCepage();
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -100,6 +100,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
             $this->dplc = $this->getDplc(true);
+            $this->lies = $this->getLies(true);
             $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
         }

@@ -23,6 +23,10 @@ class DRRecolte extends BaseDRRecolte {
         return $this->filter('^certification');
     }
 
+    public function setLies() {
+        
+    }
+
     /**
      *
      * @param array $params

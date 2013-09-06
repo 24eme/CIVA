@@ -61,24 +61,28 @@
                                         <table cellspacing="0" cellpadding="0" class="table_donnees">
                                             <tbody>
                                                 <tr>
-                                                    <td>Usages industriels min <span class="unites">(hl)</span> :</td>
+                                                    <td>Dépassement <span class="unites">(hl)</span> :</td>
                                                     <td class="valeur alt"><?php echoFloat($appellationlieu->getDplc()) ;?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Usages industriels <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                    <td>Usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                     <td class="valeur alt saisi">
-                                                        <?php if(isset($form['usages_industriels'])) :?>
-                                                            <?php echo $form['usages_industriels']->render(array('class' => 'num')) ?>
+                                                        <?php if(isset($form['lies'])) :?>
+                                                            <?php echo $form['lies']->render(array('class' => 'num')) ?>
                                                         <?php else: ?>
-                                                            <input id="recapitulatif_usages_industriels" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getUsagesIndustriels()); ?>" />
+                                                            <input id="recapitulatif_lies" style="text-align: right;" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->getLies()); ?>" />
                                                         <?php endif; ?>
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Usages industriels final <span class="unites">(hl)</span> :</td>
+                                                    <td class="valeur alt"><?php echoFloat($appellationlieu->getUsagesIndustriels()) ;?></td>
                                                 </tr>
 											</tbody>
 										</table>
 
-                                    <?php if( isset($form['usages_industriels'])
-                                           && !$form['usages_industriels']->getWidget()->getAttribute('readonly')) :?>
+                                    <?php if( isset($form['lies'])
+                                           && !$form['lies']->getWidget()->getAttribute('readonly')) :?>
                                         <div class="btn">
                                             <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
                                         </div>
@@ -95,8 +99,9 @@
                                             <thead>
                                                 <tr>
                                                     <th style="">Couleur</th>
-                                                    <th>Usages industriels min</th>
-                                                    <th>Usages industriels</th>               
+                                                    <th>Dépassement</th>
+                                                    <th>Usages industriels saisis</th>               
+                                                    <th>Usages industriels final</th>               
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -104,21 +109,29 @@
                                                 <?php foreach($form as $key => $item): ?>
                                                 <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
                                                 <tr>
-                                                    <td style="width: 113px"><?php echo $appellationlieu->get($key)->getLibelle() ?></td>
-                                                    <td style="width: 113px" class="valeur"><?php echoFloat($appellationlieu->get($key)->getDplc()) ?> hl</td>
+                                                    <td style="width: 113px">
+                                                        <?php echo $appellationlieu->get($key)->getLibelle() ?>
+                                                    </td>
+                                                    <td style="width: 113px" class="valeur">
+                                                        <?php echoFloat($appellationlieu->get($key)->getDplc()) ?> hl
+                                                    </td>
                                                     <td class="valeur" style="width: 113px">
-                                                        <?php if($appellationlieu->get($key)->canHaveUsagesIndustrielsSaisi()): ?>
+                                                        <?php if($appellationlieu->get($key)->canHaveUsagesLiesSaisi()): ?>
                                                             <?php $saisi = true ?>
-                                                            <?php echo $item['usages_industriels']->render(array('class' => 'num', 'style' => 'width: 100%; text-align: right')) ?>
+                                                            <?php echo $item['lies']->render(array('class' => 'num', 'style' => 'width: 100%; text-align: right')) ?>
                                                         <?php else: ?>
-                                                            <input style="width: 100%; text-align: right" id="recapitulatif_usages_industriels" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getUsagesIndustriels()); ?>" />
+                                                            <input style="width: 100%; text-align: right" id="recapitulatif_lies" type="text" class="num readonly" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getLies()); ?>" />
                                                         <?php endif; ?>
+                                                    </td>
+                                                    <td style="width: 113px" class="valeur">
+                                                        <?php echoFloat($appellationlieu->get($key)->getUsagesIndustriels()) ?> hl
                                                     </td>
                                                 </tr>
                                                 <?php endforeach; ?>
                                                 <tr>
                                                     <td><strong>Total</strong></td>
                                                     <td class="valeur"><?php echoFloat($appellationlieu->getDplc()) ?> hl</td>
+                                                    <td class="valeur"><?php echoFloat($appellationlieu->getLies()) ?> hl</td>
                                                     <td class="valeur"><?php echoFloat($appellationlieu->getUsagesIndustriels()) ?> hl</td>
                                             </tbody>
                                         </table>

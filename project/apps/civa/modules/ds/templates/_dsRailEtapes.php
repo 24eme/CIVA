@@ -39,7 +39,7 @@ $ds_neant = $ds_principale->isDsNeant();
                         ?>
 			<li class="<?php echo ((!$ds_noAppellation && !$ds_neant) && $etape==3)? 'actif ' : ''; echo ((!$ds_noAppellation && !$ds_neant) && $passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
                             <?php if($to_linked) : ?> 
-                                <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $ds->_id));?>">
+                                <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getFirstDSByDs($ds_principale)->_id));?>">
                             <?php endif; ?> 
                                 <span>Stocks</span> <em>Etape 3<span class="lieu" ><?php echo getEtape3Label($etape,$many_lieux,$dss,$ds);?></span></em>
                             <?php if($to_linked) echo "</a>"; ?>
@@ -49,7 +49,7 @@ $ds_neant = $ds_principale->isDsNeant();
 									$num = 1;
 									foreach ($dss as $current_ds) : ?>
 										<li class="<?php echo ($current_ds->_id == $ds->_id)? 'actif' : '' ?>">
-											<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu de stockage n°<?php echo $num; ?></a>
+											<a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => $current_ds->_id)); ?>">Lieu <?php echo ($current_ds->isDsPrincipale())? '' : 'de stockage'; ?> n°<?php echo $num; ?>  <?php echo ($current_ds->isDsPrincipale())? '(principal)' : ''; ?></a>
 										</li>
 									<?php 
 									$num++;

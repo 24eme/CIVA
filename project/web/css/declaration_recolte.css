@@ -525,7 +525,7 @@ table.table_donnees tbody td span {
 	height: 17px;
 }
 
-#recapitulatif_usages_industriels_saisi {
+#recapitulatif_lies_saisi {
 	text-align: right;
 }
 
@@ -1677,6 +1677,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	background-repeat: no-repeat;
 	padding: 0 5px;
 	width: 88px;
+	color: #bc0d0d;
 }
 
 #gestion_recolte .col_recolte .vol_total_recolte input,#gestion_recolte .col_validee .vol_total_recolte input
@@ -1832,7 +1833,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	padding: 0;
 }
 
-#gestion_recolte .col_total .vol_revendique_dplc .rouge, #gestion_recolte .col_total .vol_revendique_dplc .alerte {
+#gestion_recolte .col_total li.rouge, #gestion_recolte .col_total li .rouge, #gestion_recolte .col_total li .alerte {
 	color: #bc0d0d;
 }
 
@@ -1909,13 +1910,13 @@ div#migration_compte .contenu_section#infos_traitement {
 	text-align: right;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels {
+#gestion_recolte #recapitulatif_lies {
 	width: 90px;
 	text-align:right;
 	padding-right:2px;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels.readonly {
+#gestion_recolte #recapitulatif_lies.readonly {
 	color: #9FAC01;
 	font-weight: bold;
 	text-align: center;

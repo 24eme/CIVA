@@ -61,6 +61,7 @@ class declarationActions extends EtapesActions {
                 $doc->remove('etape');
                 $doc->remove('utilisateurs');
                 $doc->remove('import_db2');
+                $doc->setDeclarantForUpdate();
                 $doc->storeDeclarant();
                 $doc->update();
                 $doc->save();

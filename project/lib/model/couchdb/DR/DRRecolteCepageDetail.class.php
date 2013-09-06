@@ -174,7 +174,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             }
         }
 
-        $this->usages_industriels = $this->getUsagesIndustriels(true);
+        $this->lies = $this->getLies(true);
+        $this->usages_industriels = null;
         $this->volume_revendique = $this->volume - $this->usages_industriels;
 
         if ($this->volume && $this->volume > 0) {
@@ -189,23 +190,27 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
     }
 
-    public function canHaveUsagesIndustrielsSaisi() {
+    public function canHaveUsagesLiesSaisi() {
 
-        return $this->getCepage()->isUsagesIndustrielsSaisiCepage();
+        return $this->getCepage()->isLiesSaisisCepage();
     }
 
-    public function getUsagesIndustriels($force = false) {
+    public function getLies($force = false) {
         if(!$force) {
 
-            return $this->_get('usages_industriels');
+            return $this->_get('lies');
         }
 
-        if(!$this->canHaveUsagesIndustrielsSaisi()) {
+        if(!$this->canHaveUsagesLiesSaisi()) {
 
             return 0;
         }
 
 
-        return $this->usages_industriels;
+        return $this->lies;
+    }
+
+    public function cleanLies() {
+        $this->lies = null;
     }
 }

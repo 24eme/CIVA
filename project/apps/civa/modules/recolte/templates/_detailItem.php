@@ -68,16 +68,19 @@
                 echo 'ajout_lien'; ?>"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
         <?php endif; ?>
         </p>
-
         <?php if ($detail->getConfig()->existRendement()): ?>
             <ul class="vol_revendique_dplc">
                 <li>
                     <input type="hidden" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
                     </li>
                 <li>
-                    <input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" />
-                    <input type="<?php echo (!$detail->canHaveUsagesIndustrielsSaisi()) ? 'hidden' : 'text' ?>" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
+                    <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
+                    <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num lies readonly" readonly="readonly" value="<?php echoFloat($detail->lies); ?>" />
                 </li>
+            </ul>
+            <ul>
+                <li></li>
+                <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" /></li>
             </ul>
         <?php endif; ?>
     </div>

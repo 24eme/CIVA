@@ -94,7 +94,7 @@ DR:
       jeunes_vignes: {type: float}
       declaration_commune: {}
       declaration_insee: {}
-      usages_industriels_cepage: {type: float, required: false}
+      lies_saisis_cepage: {type: float, required: false}
       etape: {type: string, required: false}
       recolte:
         type: collection
