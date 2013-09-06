@@ -69,7 +69,7 @@ class VracEtapes
 	
 	public function getFirst()
 	{
-		$etapes = $this->getEtapes();
+		$etapes = array_keys($this->getEtapes());
 		return ($this->getNbEtape() > 0)? $etapes[0] : null;
 	}
 	
