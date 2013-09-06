@@ -45,9 +45,12 @@ vrac_etape_validation:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
+annuaire_selectionner:
+  url: /annuaire/selectionner/:type
+  param: { module: annuaire, action: selectionner, type: null }
 annuaire_ajouter:
-  url: /annuaire/ajouter/:id
-  param: { module: annuaire, action: ajouter, id: null }
+  url: /annuaire/ajouter/:type/:identifiant
+  param: { module: annuaire, action: ajouter }
 annuaire_supprimer:
   url: /annuaire/supprimer/:type/:id
   param: { module: annuaire, action: supprimer }

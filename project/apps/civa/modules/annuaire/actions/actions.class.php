@@ -7,27 +7,45 @@ class annuaireActions extends sfActions {
 		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
     }
 
-	public function executeAjouter(sfWebRequest $request) 
+	public function executeSelectionner(sfWebRequest $request) 
 	{
-		$this->tiers = null;
-		if ($id = $request->getParameter('id')) {
-			$this->tiers = _TiersClient::getInstance()->find($id);
-			if (!$this->tiers) {
-				throw new sfError404Exception('Le tiers d\id "'.$id.'" n\'existe pas');
-			}
-		}
+		$this->type = $request->getParameter('type');
 		$this->compte = $this->getUser()->getCompte();
 		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
-		$this->form = new AnnuaireAjoutForm($this->annuaire, $this->tiers);
+		$this->form = new AnnuaireAjoutForm($this->annuaire);
+		$this->form->setDefault('type', $this->type);
+        if ($request->isMethod(sfWebRequest::POST)) {
+        	$this->form->bind($request->getParameter($this->form->getName()));
+        	if ($this->form->isValid()) {
+        		$values = $this->form->getValues();
+        		$tiers = $this->form->getTiers();
+        		return $this->redirect('annuaire_ajouter', array('type' => $values['type'], 'identifiant' => $values['identifiant']));
+        	}
+        }
+    }
+
+	public function executeAjouter(sfWebRequest $request) 
+	{
+		$this->type = $request->getParameter('type');
+		$this->identifiant = $request->getParameter('identifiant');
+		if ($this->type && $this->identifiant) {
+			$this->compte = $this->getUser()->getCompte();
+			$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+			$this->form = new AnnuaireAjoutForm($this->annuaire);
+			$this->form->setDefault('type', $this->type);
+			$this->form->setDefault('identifiant', $this->identifiant);
+			$this->tiers = AnnuaireClient::getInstance()->findTiersByTypeAndIdentifiant($this->type, $this->identifiant);
+		}
         if ($request->isMethod(sfWebRequest::POST)) {
         	$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$tiers = $this->form->getTiers();
-        		if ($this->tiers && $this->tiers->_id == $tiers->_id) {
+        		$values = $this->form->getValues();
+        		if ($this->tiers->_id == $tiers->_id) {
        				$this->form->save();
        				return $this->redirect('@annuaire');
         		}
-        		return $this->redirect('annuaire_ajouter', array('id' => $tiers->_id));
+        		return $this->redirect('annuaire_ajouter', array('type' => $values['type'], 'identifiant' => $values['identifiant']));
         	}
         }
     }

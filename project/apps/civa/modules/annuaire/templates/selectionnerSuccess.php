@@ -1,15 +1,10 @@
-<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_ajouter', array('identifiant' => $identifiant, 'type' => $type)) ?>">
+<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?>">
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
 	<p>Saisissez ici le type et cvi du tiers que vous souhaitez ajouter à votre annuaire.</p><br />
 	<div class="clearfix">
 		<?php include_partial('annuaire/ajouterForm', array('form' => $form)); ?>
 	</div>
-	<?php if ($tiers): ?>
-	<div class="clearfix">
-		<?php include_partial('annuaire/tiersInformations', array('tiers' => $tiers)); ?>
-	</div>
-	<?php endif; ?>
 	<ul class="btn_prev_suiv clearfix" id="btn_etape">
 	    <li class="prec">
             <a id="btn_precedent" href="<?php echo url_for('@annuaire') ?>">
