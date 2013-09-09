@@ -3,6 +3,7 @@ Vrac:
     fields:
       _id: {  }
       _rev: {  }
+      acheteur_type: {  }
       acheteur_identifiant: {  }  
       acheteur:
         type: collection
@@ -20,6 +21,7 @@ Vrac:
             telephone: {  }
             email: {  }
             famille: {  }
+      vendeur_type: {  }
       vendeur_identifiant: {  }
       vendeur:
         type: collection

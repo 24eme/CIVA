@@ -25,8 +25,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'vendeur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => $caveCooperativeChoices))
     	));
         $this->setValidators(array(
-        	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
-        	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
+        	'acheteur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
+        	'vendeur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
         	'acheteur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($negociantChoices))),
         	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
@@ -34,10 +34,33 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'vendeur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($negociantChoices))),
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices)))
         ));
-        $this->setDefault('acheteur_type', AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY);
-        $this->setDefault('vendeur_type', AnnuaireClient::ANNUAIRE_RECOLTANT_KEY);
-        //$this->validatorSchema->setPostValidator(new VracSoussignesValidator());
+        $this->validatorSchema->setPostValidator(new VracSoussignesValidator());
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
+    }
+
+    
+	protected function updateDefaultsFromObject() {
+        parent::updateDefaultsFromObject();
+        $defaults = $this->getDefaults();
+        if ($this->getObject()->acheteur_identifiant) {
+        	$defaults['acheteur_'.str_replace('s', '', $this->getObject()->acheteur_type).'_identifiant'] = $this->getObject()->acheteur_identifiant;
+        }
+        if ($this->getObject()->vendeur_identifiant) {
+        	$defaults['vendeur_'.str_replace('s', '', $this->getObject()->vendeur_type).'_identifiant'] = $this->getObject()->vendeur_identifiant;
+        }
+        $this->setDefaults($defaults); 
+    }
+
+    protected function doUpdateObject($values) 
+    {
+    	$acheteur = $values['acheteur'];
+    	$vendeur = $values['vendeur'];
+    	$this->getObject()->acheteur_type = $values['acheteur_type'];
+    	$this->getObject()->vendeur_type = $values['vendeur_type'];
+    	$this->getObject()->acheteur_identifiant = $acheteur->_id;
+    	$this->getObject()->vendeur_identifiant = $vendeur->_id;
+    	$this->getObject()->storeAcheteurInformations($acheteur);
+    	$this->getObject()->storeVendeurInformations($vendeur);
     }
     
     protected function getTypes()

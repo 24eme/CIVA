@@ -24,6 +24,8 @@ class Vrac extends BaseVrac
         $this->numero_contrat = $numeroContrat;
         $this->valide->date_saisie = $date;
         $this->valide->statut = self::STATUT_CREE;
+        $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
+        $this->vendeur_type = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
         $this->initProduits();
     }
 
@@ -75,5 +77,33 @@ class Vrac extends BaseVrac
             return null;
         }
         return $produit->addDetail($config);
+    }
+    
+    public function storeAcheteurInformations($tiers)
+    {
+    	$this->acheteur->raison_sociale = $tiers->nom;
+    	$this->acheteur->siret = $tiers->siret;
+    	$this->acheteur->cvi = $tiers->cvi;
+    	$this->acheteur->num_accise = null; // A gerer
+    	$this->acheteur->adresse = $tiers->siege->adresse;
+    	$this->acheteur->code_postal = $tiers->siege->code_postal;
+    	$this->acheteur->commune = $tiers->siege->commune;
+    	$this->acheteur->telephone = $tiers->telephone;
+    	$this->acheteur->email = $tiers->email;
+    	$this->acheteur->famille = null;
+    }
+    
+    public function storeVendeurInformations($tiers)
+    {
+    	$this->vendeur->raison_sociale = $tiers->nom;
+    	$this->vendeur->siret = $tiers->siret;
+    	$this->vendeur->cvi = $tiers->cvi;
+    	$this->vendeur->num_accise = null; // A gerer
+    	$this->vendeur->adresse = $tiers->siege->adresse;
+    	$this->vendeur->code_postal = $tiers->siege->code_postal;
+    	$this->vendeur->commune = $tiers->siege->commune;
+    	$this->vendeur->telephone = $tiers->telephone;
+    	$this->vendeur->email = $tiers->email;
+    	$this->vendeur->famille = null;
     }
 }
