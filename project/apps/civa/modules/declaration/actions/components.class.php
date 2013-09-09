@@ -54,6 +54,7 @@ class declarationComponents extends sfComponents {
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
+        $this->volume_rebeches = array();
         $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
@@ -68,6 +69,7 @@ class declarationComponents extends sfComponents {
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
+              $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
           }
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
@@ -75,6 +77,7 @@ class declarationComponents extends sfComponents {
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
         $this->total_revendique = array_sum(array_values($this->revendique));
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
+        $this->total_volume_rebeches = array_sum(array_values($this->volume_rebeches));
         $this->lies = $this->dr->lies;
         $this->jeunes_vignes = $this->dr->jeunes_vignes;
 	

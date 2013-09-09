@@ -36,6 +36,19 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
+    public function getTotalRebeches() {
+      if($this->getKey() != 'cepage_RB') {
+
+        return null;
+      }
+
+      foreach($this->getChildrenNode() as $item) {
+        $volume += $item->cave_particuliere;
+      }
+      
+      return $volume;
+    }
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {

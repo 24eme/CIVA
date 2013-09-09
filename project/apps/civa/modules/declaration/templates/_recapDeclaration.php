@@ -27,6 +27,16 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
+                    <td>Rebêches (hl)</td>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td>
+                        <?php if($volume_rebeches[$a] != 0): ?>
+                            <?php echoFloat( $volume_rebeches[$a]); ?>
+                        <?php endif; ?>
+                    </td>
+                    <?php endif; ?>
+                </tr>
+                <tr>
                     <td>Volume Total (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume[$a]); ?></td>
@@ -65,6 +75,7 @@
         <ul class="contenu_section">
             <li><input type="text" value="<?php echoFloat( $total_superficie);?> ares" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_volume_sur_place);?> hl" readonly="readonly"></li>
+            <li><input type="text" value="<?php echoFloat( $total_volume_rebeches);?> hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_volume);?> hl" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat( $total_revendique);?> hl" readonly="readonly"></li>
             <li>
