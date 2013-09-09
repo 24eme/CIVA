@@ -4,6 +4,7 @@
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];
     $volume_sur_place = $infos['volume_sur_place'];
+    $volume_rebeches = $infos['volume_rebeches'];
 	$volume = $infos['volume'];
 	$revendique = $infos['revendique'];
 	$usages_industriels = $infos['usages_industriels'];
@@ -60,6 +61,15 @@ pre {display: inline;}
             <?php endforeach; ?>
             <?php if ($has_total): ?>
             <td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_sur_place']);?></strong> <small>hl</small></td>
+            <?php endif; ?>
+        </tr>
+        <tr>
+            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Rebêches</td>
+            <?php foreach ($appellations as $a): ?>
+            <td style="width: 120px;"><?php echoFloat( $volume_rebeches[$a]); ?> <small>hl</small></td>
+            <?php endforeach; ?>
+            <?php if ($has_total): ?>
+            <td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_rebeches']);?></strong> <small>hl</small></td>
             <?php endif; ?>
         </tr>
 		<tr>

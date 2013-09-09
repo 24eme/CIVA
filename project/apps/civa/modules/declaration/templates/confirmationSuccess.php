@@ -1,4 +1,4 @@
-<?php include_partial('global/etapes', array('etape' => 4)) ?>
+<?php include_partial('global/etapes', array('etape' => 5)) ?>
 <?php include_partial('global/actions', array('etape' => 0)) ?>
 
 <!-- #principal -->

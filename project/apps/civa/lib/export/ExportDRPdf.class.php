@@ -101,14 +101,16 @@ class ExportDRPdf extends ExportDocument {
       				'libelle' => array_slice($infos['libelle'], $i, $nb_colonnes_by_page),
       				'superficie' => array_slice($infos['superficie'], $i, $nb_colonnes_by_page),
       				'volume' => array_slice($infos['volume'], $i, $nb_colonnes_by_page),
-                    'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
-                    'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
+              'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
+              'volume_rebeches' => array_slice($infos['volume_rebeches'], $i, $nb_colonnes_by_page),
+              'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
       				'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
       				'total_superficie' => $infos['total_superficie'],
         			'total_volume' => $infos['total_volume'],
               'total_usages_industriels' => $infos['total_usages_industriels'],
         			'total_revendique' => $infos['total_revendique'],
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
+              'total_volume_rebeches' => $infos['total_volume_rebeches'],
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
@@ -138,6 +140,7 @@ class ExportDRPdf extends ExportDocument {
         $superficie = array();
         $volume = array();
         $volume_sur_place = array();
+        $volume_rebeches = array();
         $revendique = array();
         $usages_industriels = array();
         $libelle = array();
@@ -156,6 +159,7 @@ class ExportDRPdf extends ExportDocument {
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
+              $volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
           }
         }
         $infos = array();
@@ -164,11 +168,13 @@ class ExportDRPdf extends ExportDocument {
         $infos['superficie'] = $superficie;
         $infos['volume'] = $volume;
         $infos['volume_sur_place'] = $volume_sur_place;
+        $infos['volume_rebeches'] = $volume_rebeches;
         $infos['revendique'] = $revendique;
         $infos['usages_industriels'] = $usages_industriels;
         $infos['total_superficie'] = array_sum(array_values($superficie));
         $infos['total_volume'] = array_sum(array_values($volume));
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
+        $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
         $infos['total_revendique'] = array_sum(array_values($revendique));
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;

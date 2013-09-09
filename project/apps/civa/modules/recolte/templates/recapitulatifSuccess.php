@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
-<?php include_partial('global/etapes', array('etape' => 2)) ?>
-<?php include_partial('global/actions', array('etape' => 2, 'help_popup_action'=>$help_popup_action)) ?>
+<?php include_partial('global/etapes', array('etape' => 3)) ?>
+<?php include_partial('global/actions', array('etape' => 3, 'help_popup_action'=>$help_popup_action)) ?>
 
 <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
