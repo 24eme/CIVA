@@ -42,6 +42,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return null;
       }
 
+      $volume = 0;
+
       foreach($this->getChildrenNode() as $item) {
         $volume += $item->cave_particuliere;
       }
