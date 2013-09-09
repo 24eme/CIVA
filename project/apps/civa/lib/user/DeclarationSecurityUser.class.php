@@ -5,6 +5,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     const CREDENTIAL_DECLARATION_EN_COURS = 'declaration_en_cours';
     const CREDENTIAL_DECLARATION_VALIDE = 'declaration_valide';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'declaration_etape_exploitation';
+    const CREDENTIAL_ETAPE_REPARTITION_RECOLTE = 'declaration_etape_repartition_recolte';
     const CREDENTIAL_ETAPE_RECOLTE = 'declaration_etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'declaration_etape_validation';
 
