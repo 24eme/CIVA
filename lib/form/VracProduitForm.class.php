@@ -33,10 +33,11 @@ class VracProduitForm extends acCouchdbObjectForm
     
     public function getVtSgn()
     {
-    	return array('VT' => 'VT', 'SGN' =>'SGN'); 
+    	return array('' => '', 'VT' => 'VT', 'SGN' =>'SGN'); 
     }
     
     public function doUpdateObject($values) {
         parent::doUpdateObject($values);
+        $this->getObject()->defineActive();
     }
 }

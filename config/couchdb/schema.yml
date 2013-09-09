@@ -144,6 +144,7 @@ Vrac:
                                                                         '*': { type: float }
                                                                   position: { type: integer }
                                                                   supprimable: { type: integer }
+                                                                  actif: { type: integer }
       valide:
         type: collection
         class: VracValide

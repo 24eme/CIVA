@@ -38,5 +38,18 @@ class VracDeclaration extends BaseVracDeclaration {
     	ksort($result);
     	return $result;
     }
+    
+    public function getActifProduitsDetailsSorted()
+    {
+    	$produits = $this->getProduitsDetails();
+    	$result = array();
+    	foreach ($produits as $hash => $values) {
+    		if ($values->actif) {
+    			$result[$values->position] = array($hash => $values);
+    		}
+    	}
+    	ksort($result);
+    	return $result;
+    }
 
 }

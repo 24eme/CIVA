@@ -15,5 +15,14 @@ class VracDetail extends BaseVracDetail {
 
         return $this->getCepage()->getLibelle();
     }
+    
+    public function defineActive()
+    {
+    	if ($this->volume_propose && $this->prix_unitaire) {
+    		$this->actif = 1;
+    	} else {
+    		$this->actif = 0;
+    	}
+    }
 
 }
