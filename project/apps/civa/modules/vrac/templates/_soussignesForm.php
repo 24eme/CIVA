@@ -4,7 +4,7 @@
 		<?php echo $form['vendeur_type']->render() ?>
 	</div>
 	CVI * :	
-	<div id="vendeur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANT_KEY ?>">
+	<div id="vendeur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 		<?php echo $form['vendeur_recoltant_identifiant']->render() ?>
 	</div>
 	<div id="vendeur_negociants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
@@ -24,7 +24,7 @@
 		<?php echo $form['acheteur_type']->render() ?>
 	</div>
 	CVI * :	
-	<div id="acheteur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANT_KEY ?>">
+	<div id="acheteur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 		<?php echo $form['acheteur_recoltant_identifiant']->render() ?>
 	</div>
 	<div id="acheteur_negociants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">

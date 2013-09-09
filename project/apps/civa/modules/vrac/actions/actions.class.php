@@ -64,6 +64,14 @@ class vracActions extends sfActions {
     	if ($nextEtape = $this->getEtapeSuivante($this->vrac, $this->etapes)) {
     		$this->vrac->etape = $nextEtape;
     	}
+    	$this->form = new VracValidationForm($this->vrac->valide);
+        if ($request->isMethod(sfWebRequest::POST)) {
+        	$this->form->bind($request->getParameter($this->form->getName()));
+        	if ($this->form->isValid()) {
+       			$this->form->save();
+       			return $this->redirect('mon_espace_civa');
+        	}
+        }
     }
     
     protected function getEtapeSuivante($vrac, $etapes)
