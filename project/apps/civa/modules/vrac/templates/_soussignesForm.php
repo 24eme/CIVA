@@ -6,16 +6,16 @@
 	CVI * :	
 	<div id="vendeur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANT_KEY ?>">
 		<?php echo $form['vendeur_recoltant_identifiant']->render() ?>
-		<span><?php echo $form['vendeur_recoltant_identifiant']->renderError() ?></span>
 	</div>
 	<div id="vendeur_negociants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 		<?php echo $form['vendeur_negociant_identifiant']->render() ?>
-		<span><?php echo $form['vendeur_negociant_identifiant']->renderError() ?></span>
 	</div>
 	<div id="vendeur_caves_cooperatives" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 		<?php echo $form['vendeur_cave_cooperative_identifiant']->render() ?>
-		<span><?php echo $form['vendeur_cave_cooperative_identifiant']->renderError() ?></span>
 	</div>
+	<span><?php echo $form['vendeur_recoltant_identifiant']->renderError() ?></span>
+	<span><?php echo $form['vendeur_negociant_identifiant']->renderError() ?></span>
+	<span><?php echo $form['vendeur_cave_cooperative_identifiant']->renderError() ?></span>
 </div>
 <br />
 <div>
@@ -26,16 +26,16 @@
 	CVI * :	
 	<div id="acheteur_recoltants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANT_KEY ?>">
 		<?php echo $form['acheteur_recoltant_identifiant']->render() ?>
-		<span><?php echo $form['acheteur_recoltant_identifiant']->renderError() ?></span>
 	</div>
 	<div id="acheteur_negociants" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 		<?php echo $form['acheteur_negociant_identifiant']->render() ?>
-		<span><?php echo $form['acheteur_negociant_identifiant']->renderError() ?></span>
 	</div>
 	<div id="acheteur_caves_cooperatives" class="bloc_conditionner" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 		<?php echo $form['acheteur_cave_cooperative_identifiant']->render() ?>
-		<span><?php echo $form['acheteur_cave_cooperative_identifiant']->renderError() ?></span>
 	</div>
+	<span><?php echo $form['acheteur_recoltant_identifiant']->renderError() ?></span>
+	<span><?php echo $form['acheteur_negociant_identifiant']->renderError() ?></span>
+	<span><?php echo $form['acheteur_cave_cooperative_identifiant']->renderError() ?></span>
 </div>
 <style type="text/css">
 .bloc_conditionner {

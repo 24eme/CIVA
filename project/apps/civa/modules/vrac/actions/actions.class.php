@@ -32,7 +32,11 @@ class vracActions extends sfActions {
     		$this->vrac->etape = $nextEtape;
     	}
     	if ($request->isMethod(sfWebRequest::POST)) {
-        	return $this->redirect('vrac_etape_conditions', array('sf_subject' => $this->vrac));
+    		$this->form->bind($request->getParameter($this->form->getName()));
+        	if ($this->form->isValid()) {
+       			$this->form->save();
+        		return $this->redirect('vrac_etape_conditions', array('sf_subject' => $this->vrac));
+        	}
         }
     }
     
