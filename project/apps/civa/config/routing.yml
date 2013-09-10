@@ -41,6 +41,15 @@ vrac_etape_validation:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_acces:
+  url: /vrac/:numero_contrat/acces
+  param: { module: vrac, action: acces }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get]
 # *********** ANNUAIRE *********
 annuaire:
   url: /annuaire

@@ -6,10 +6,34 @@ class vracActions extends sfActions {
 		
     }
     
+    public function executeAcces(sfWebRequest $request)
+    {
+    	$vrac = $this->getRoute()->getVrac();
+    	$route = null;
+    	switch ($vrac->etape) {
+    		case VracEtapes::ETAPE_SOUSSIGNES:
+    			$route = 'vrac_etape_soussignes';
+    			break;
+    		case VracEtapes::ETAPE_CONDITIONS:
+    			$route = 'vrac_etape_conditions';
+    			break;
+    		case VracEtapes::ETAPE_VALIDATION:
+    			$route = 'vrac_etape_validation';
+    			break;
+    		default:
+    			$route = null;
+    			break;
+    	}
+    	if (!$route) {
+    		throw new sfError404Exception('Etape "'.$vrac->etape.'" non connu');
+    	}
+    	return $this->redirect($route, array('sf_subject' => $vrac));
+    }
+    
 	public function executeNouveau(sfWebRequest $request) 
 	{
 		$tiers = $this->getUser()->getDeclarant();
-		$vrac = VracClient::getInstance()->createVrac();
+		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
 		$vrac->etape = VracEtapes::getInstance()->getFirst();
 		$vrac->save();
 		return $this->redirect('vrac_etape_soussignes', array('sf_subject' => $vrac));

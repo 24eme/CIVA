@@ -4,7 +4,7 @@
 		<?php 
 			$counter = 0;
 			foreach ($vracs as $item) {
-				include_partial('vrac/listingItem', array('item' => $item, 'alt' => ($counter%2)));
+				include_partial('vrac/listingItem', array('item' => $item->value, 'alt' => ($counter%2)));
 				$counter++;
 			}
 		?>
