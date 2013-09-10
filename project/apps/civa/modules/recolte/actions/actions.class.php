@@ -200,6 +200,8 @@ class recolteActions extends EtapesActions {
         }else{
             $this->isGrandCru = false;
         }
+        //$lies = $this->appellationlieu->getLies(true);
+
         $this->form = new RecapitulatifForm($this->appellationlieu);
 
         $forms = $this->form->getEmbeddedForms();
@@ -208,12 +210,13 @@ class recolteActions extends EtapesActions {
             return $this->redirect($this->onglets->getNextUrl());
         }
 
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $redirect = false;
-                if( $this->form->getValue('lies') !=  $this->form->getObject()->getLies() )
-                    $redirect = true;
+                /*if($lies !=  $this->form->getObject()->getLies(true) )
+                    $redirect = true;*/
 
                 $this->form->save();
 

@@ -117,7 +117,7 @@
                                                     <?php foreach($form as $key => $item): ?>
                                                         <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
                                                         <td class="valeur saisi">
-                                                            <?php if(isset($item['lies']) && $appellationlieu->canHaveUsagesLiesSaisi()): ?>
+                                                            <?php if(isset($item['lies']) && !$appellationlieu->isLiesSaisisCepage()): ?>
                                                                 <?php $saisi = true ?>
                                                                 <?php echo $item['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
                                                             <?php else: ?>
