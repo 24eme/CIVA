@@ -212,10 +212,11 @@ class recolteActions extends EtapesActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $redirect = false;
-                if( $this->form->getValue('usages_industriels') !=  $this->form->getObject()->getUsagesIndustriels() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
+                if( $this->form->getValue('lies') !=  $this->form->getObject()->getLies() )
                     $redirect = true;
 
                 $this->form->save();
+
                 if($redirect)
                     return $this->redirect($this->onglets->getUrlRecap());
                 else
