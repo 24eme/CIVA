@@ -95,16 +95,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function findDplc() {
-        if (!$this->getConfig()->hasRendementNoeud() && !$this->getConfig()->existRendementCepage()) {
-
-            return 0;
-        }
-
-        if($this->getConfig()->hasRendementNoeud() && !$this->getConfig()->existRendementCepage()) {
-
-            return $this->getDplcRendement();
-        }
-
         $dplc_total = $this->getDplcTotal();
         $dplc = $dplc_total;
         if ($this->getConfig()->hasRendementNoeud()) {

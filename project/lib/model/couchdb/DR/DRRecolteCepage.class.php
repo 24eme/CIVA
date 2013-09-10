@@ -138,11 +138,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return false;
     }
 
-    public function findDplc() {
-        
-        return $this->getDplcRendement();
-    }
-
     protected function update($params = array()) {
       parent::update($params);
       if ($this->getCouchdbDocument()->canUpdate()) {

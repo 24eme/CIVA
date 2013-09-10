@@ -166,17 +166,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $this->volume = $v;
         $this->volume_revendique = 0;
         $this->volume_dplc = 0;
-
-        if ($this->getConfig()->hasRendementNoeud()) {
-            $volume_max = $this->getVolumeMax();
-            if ($this->volume > $volume_max) {
-                $this->volume_dplc = round($this->volume - $volume_max, 2);
-            }
-        }
-
         $this->lies = $this->getLies(true);
         $this->usages_industriels = null;
-        $this->volume_revendique = $this->volume - $this->usages_industriels;
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');
