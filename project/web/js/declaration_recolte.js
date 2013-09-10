@@ -896,7 +896,11 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
 
     $(elementCssId+'_volume_dplc').val($(elementCssId+'_dplc_rendement').val());
 
-    if($(elementCssId+'_total_dplc_sum').length > 0 && $(elementCssId+'_total_dplc_sum').val() > $(elementCssId+'_dplc_rendement').val()) {
+    if(!$(elementCssId+'_dplc_rendement').length > 0) {
+        $(elementCssId+'_volume_dplc').val($(elementCssId+'_total_dplc_sum').val());
+    }
+
+    if($(elementCssId+'_total_dplc_sum').length > 0 && $(elementCssId+'_dplc_rendement').length > 0 && $(elementCssId+'_total_dplc_sum').val() > $(elementCssId+'_dplc_rendement').val()) {
         $(elementCssId+'_volume_dplc').val(parseFloat($(elementCssId+'_total_dplc_sum').val().replace('Σ ', '')));
     }
 

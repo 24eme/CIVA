@@ -80,10 +80,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplc($force_calcul = false) {
-        if(!$this->getConfig()->hasRendementNoeud()) {
-
-            return $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
-        }
         
         return $this->getDataByFieldAndMethod('dplc', array($this, 'findDplc'), $force_calcul);
     }
@@ -99,6 +95,16 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function findDplc() {
+        if (!$this->getConfig()->hasRendementNoeud() && !$this->getConfig()->existRendementCepage()) {
+
+            return 0;
+        }
+
+        if($this->getConfig()->hasRendementNoeud() && !$this->getConfig()->existRendementCepage()) {
+
+            return $this->getDplcRendement();
+        }
+
         $dplc_total = $this->getDplcTotal();
         $dplc = $dplc_total;
         if ($this->getConfig()->hasRendementNoeud()) {

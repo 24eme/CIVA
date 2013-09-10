@@ -102,7 +102,6 @@
                                                     <?php $saisi = false ?>
                                                     <?php foreach($form as $key => $item): ?>
                                                         <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
-                                                        <?php $saisi = true ?>
                                                         <td class="valeur"><?php echo $appellationlieu->get($key)->getLibelle();?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
@@ -118,7 +117,8 @@
                                                     <?php foreach($form as $key => $item): ?>
                                                         <?php if(!preg_match("/^couleur/", $key)) { continue; } ?>
                                                         <td class="valeur saisi">
-                                                            <?php if(isset($item['lies'])) :?>
+                                                            <?php if(isset($item['lies']) && $appellationlieu->canHaveUsagesLiesSaisi()): ?>
+                                                                <?php $saisi = true ?>
                                                                 <?php echo $item['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
                                                             <?php else: ?>
                                                                 <input id="recapitulatif_lies_<?php echo $key ?>" style="text-align: right;" type="text" class="num readonly recapitulatif_lies" readonly="readonly" value="<?php echoFloat($appellationlieu->get($key)->getLies()); ?>" />
