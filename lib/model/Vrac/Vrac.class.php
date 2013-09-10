@@ -16,7 +16,7 @@ class Vrac extends BaseVrac
 	
 	protected $_config;
     
-    public function initVrac($config, $numeroContrat, $date, $campagne)
+    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
     {
     	
         $this->_config = $config;
@@ -26,6 +26,7 @@ class Vrac extends BaseVrac
         $this->valide->statut = self::STATUT_CREE;
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
         $this->vendeur_type = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
+        $this->createur_identifiant = $createurIdentifiant;
         $this->initProduits();
     }
 

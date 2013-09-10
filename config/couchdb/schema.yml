@@ -3,6 +3,7 @@ Vrac:
     fields:
       _id: {  }
       _rev: {  }
+      createur_identifiant: {  }  
       acheteur_type: {  }
       acheteur_identifiant: {  }  
       acheteur:

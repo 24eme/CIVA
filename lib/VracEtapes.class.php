@@ -4,10 +4,14 @@ class VracEtapes
 	private static $_instance = null;
 	protected $etapes;
 	
+	const ETAPE_SOUSSIGNES = 'soussignes';
+	const ETAPE_CONDITIONS = 'conditions';
+	const ETAPE_VALIDATION = 'validation';
+	
 	static $libelles = array(
-		'soussignes' => 'Soussignés',
-		'conditions' => 'Condtions',
-		'validation' => 'Validation'
+		self::ETAPE_SOUSSIGNES => 'Soussignés',
+		self::ETAPE_CONDITIONS => 'Condtions',
+		self::ETAPE_VALIDATION => 'Validation'
 	);
 	
 	public static function getInstance()
