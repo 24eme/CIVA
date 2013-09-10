@@ -3,10 +3,16 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_RECOLTE = 'recolte';
+    const ETAPE_REPARTITION_RECOLTE = 'repartition_recolte';
     const ETAPE_VALIDATION = 'validation';
 
-    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION), self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE));
+    public static $_etapes = array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION_RECOLTE, self::ETAPE_RECOLTE, self::ETAPE_VALIDATION);
+    public static $_etapes_inclusion = array(
+        self::ETAPE_EXPLOITATION => array(), 
+        self::ETAPE_REPARTITION_RECOLTE => array(self::ETAPE_EXPLOITATION), 
+        self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION_RECOLTE), 
+        self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION_RECOLTE, self::ETAPE_RECOLTE)
+    );
 
     
     protected $utilisateurs_document = null; 

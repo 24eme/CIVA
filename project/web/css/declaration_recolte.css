@@ -1301,6 +1301,28 @@ div#migration_compte .contenu_section#infos_traitement {
 	width: 110px;
 }
 
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list, 
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li,
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li label {
+	display: inline;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li label {
+	display: inline;
+	margin-right: 10px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies table table tr td {
+	border: none;
+	background: #edecec !important;
+} 
+
+#exploitation_acheteurs #choix_mode_saisie_lies table table {
+	width: 600px;
+	display: block;
+	margin: 0 auto;
+}
+
 /**
  * Acheteurs de moults
  ******************************************/

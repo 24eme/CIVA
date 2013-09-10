@@ -9,12 +9,16 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     const CREDENTIAL_ETAPE_RECOLTE = 'declaration_etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'declaration_etape_validation';
 
-    protected $_etapes_credentials = array(DR::ETAPE_EXPLOITATION => self::CREDENTIAL_ETAPE_EXPLOITATION,
+    protected $_etapes_credentials = array(
+        DR::ETAPE_EXPLOITATION => self::CREDENTIAL_ETAPE_EXPLOITATION,
+        DR::ETAPE_REPARTITION_RECOLTE => self::CREDENTIAL_ETAPE_REPARTITION_RECOLTE,
         DR::ETAPE_RECOLTE => self::CREDENTIAL_ETAPE_RECOLTE,
         DR::ETAPE_VALIDATION => self::CREDENTIAL_ETAPE_VALIDATION);
-    protected $_credentials_declaration = array(self::CREDENTIAL_DECLARATION_EN_COURS,
+    protected $_credentials_declaration = array(
+        self::CREDENTIAL_DECLARATION_EN_COURS,
         self::CREDENTIAL_DECLARATION_VALIDE,
         self::CREDENTIAL_ETAPE_EXPLOITATION,
+        self::CREDENTIAL_ETAPE_REPARTITION_RECOLTE,
         self::CREDENTIAL_ETAPE_RECOLTE,
         self::CREDENTIAL_ETAPE_VALIDATION);
     protected $_declaration = null;
