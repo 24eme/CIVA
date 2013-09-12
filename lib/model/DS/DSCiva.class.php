@@ -500,17 +500,23 @@ public function getConfigurationCampagne() {
         }
 
         $this->storeInfos();
-
+        
         $date = (!$date)? date("Y-m-d") : $date;
+        
+        $ds_validee = ($this->exist('validee') && $this->validee);
+        
         $this->add('validee', $date);
         $this->add('modifiee', $date);
+        
         if ($compteValidateurId) {
             $this->addValidation($compteValidateurId, date('Y-m-d'));
         }
         if($this->isDateDepotMairie()){
             $this->add('validee', $this->date_depot_mairie);
-            $this->add('modifiee', $this->date_depot_mairie);
-        }
+            if(!$ds_validee){
+                $this->add('modifiee', $this->date_depot_mairie);
+            }
+        }        
         return $this;
     }
     
