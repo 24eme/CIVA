@@ -504,8 +504,9 @@ public function getConfigurationCampagne() {
         $date = (!$date)? date("Y-m-d") : $date;
         
         $ds_validee = ($this->exist('validee') && $this->validee);
-        
-        $this->add('validee', $date);
+        if(!$ds_validee){
+            $this->add('validee', $date);
+        }
         $this->add('modifiee', $date);
         
         if ($compteValidateurId) {
