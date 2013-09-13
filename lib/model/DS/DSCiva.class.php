@@ -343,18 +343,26 @@ public function getConfigurationCampagne() {
         if($this->exist('ds_principale')){
             return $this->ds_principale;            
         }
-        $is_new_system_dsPrincipal = false;        
-        foreach (DSCivaClient::getInstance()->findDssByDs($this) as $current_ds) {
+        $is_new_system_dsPrincipal = false;
+        $dss = DSCivaClient::getInstance()->findDssByDs($this);       
+        foreach ($dss as $current_ds) {
             if($current_ds->exist('ds_principale')){
                 $is_new_system_dsPrincipal = true;                
                 break;
             }
         }
         if($is_new_system_dsPrincipal){
+            
             return $this->exist('ds_principale') && $this->ds_principale;          
         }
         
-        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
+        $ds_principale = null;
+        foreach($dss as $ds) {
+            $ds_principale = $ds;
+            break;
+        }
+
+        return $this->_id == $ds_principale->_id;
     }
     
     public function isFirstDs(){
