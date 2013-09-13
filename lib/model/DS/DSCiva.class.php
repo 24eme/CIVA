@@ -362,7 +362,11 @@ public function getConfigurationCampagne() {
             break;
         }
 
-        return $this->_id == $ds_principale->_id;
+        if($ds_principale) {
+            return $this->_id == $ds_principale->_id;
+        }
+
+        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
     }
     
     public function isFirstDs(){
