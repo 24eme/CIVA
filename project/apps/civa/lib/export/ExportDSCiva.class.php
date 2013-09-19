@@ -9,6 +9,7 @@ class ExportDSCiva {
 
     const CSV_DS_TRAITEE = 22; // "O" ou "N"
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
+    const CODE_DOUANE_ED = "1B001S";
 
     public function __construct($campagne) {
         if (!preg_match('/^[0-9]{4}$/', $campagne)) {
@@ -83,7 +84,7 @@ class ExportDSCiva {
         $passedCremant = false;
         $rebecheAdded = false;
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true);
-
+        
         foreach ($produitsAgreges as $code_douane => $obj) {
             if ($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)) {
                 $lignes .= $this->addXMLDSRebeches($ds);
@@ -303,7 +304,7 @@ class ExportDSCiva {
         $row .= $this->convertToFloat($ds->mouts) . ",";
         $row .= $this->convertToFloat($ds->dplc) . ",";
         $row .= $this->convertToFloat($ds->rebeches) . ",";
-        $row .= ($ds->isDateDepotMairie()) ? "\"N\"" : "\"O\"";
+        $row .= (DSCivaClient::getInstance()->getDSPrincipaleByDs($ds)->isDateDepotMairie()) ? "\"N\"" : "\"O\"";
         $row .= "," . $date;
 
         return $row;
@@ -313,42 +314,50 @@ class ExportDSCiva {
         $cpt = 1;
         $row = "";
         $produitsAgreges = $this->getProduitsAgregesForDS($ds);
-
-        foreach ($produitsAgreges as $code_douane => $obj) {
-            $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
+       
+        $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
+        
+       foreach ($produitsAgreges as $code_douane => $obj) {
             $app_produit = $obj->hash;
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             $cepage_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z]+)cepage_([A-Z]{2})/', '$4', $app_produit);
 
-
-            if ($cepage_key == 'ED') {
-                $row.= $id_csv . ",";
-                $row.= $this->getAppellationNumero($appellation_key) . ",\"" . $cepage_key . "\",\"BL\",\"\"," . $cpt . ",";
-                $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
-                $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
-                $row.="\r\n";
-                continue;
-            }
             
-            if ($cepage_key == 'PR') {
-                $cepage_key = 'PN';
-            }
-            
-            switch ($appellation_key) {
-                case 'PINOTNOIR':
-                    $row.= $id_csv . ",";
-                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
-                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
-                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
-                    $row.="\r\n";
-                    break;
-                case 'PINOTNOIRROUGE':
+            if($code_douane == "1R001S "){
                     $row.= $id_csv . ",";
                     $row.= "1,\"PN\",\"RG\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
-                    break;
+                    $cpt++;
+                    continue;
+            }
+            
+            if($code_douane == "1S001S "){
+                    $row.= $id_csv . ",";
+                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
+                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+                    $row.="\r\n";
+                    $cpt++;
+                    continue;
+            }
+            
+            switch ($appellation_key) {
+//                case 'PINOTNOIR':
+//                    $row.= $id_csv . ",";
+//                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
+//                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+//                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+//                    $row.="\r\n";
+//                    break;
+//                case 'PINOTNOIRROUGE':
+//                    $row.= $id_csv . ",";
+//                    $row.= "1,\"PN\",\"RG\",\"\"," . $cpt . ",";
+//                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+//                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+//                    $row.="\r\n";
+//                    break;
                 case 'CREMANT':
                     $row.= $id_csv . ",";
                     $row.= "2,\"" . $cepage_key . "\",\"" . $cepage_key . "\",\"\"," . $cpt . ",";
@@ -398,6 +407,7 @@ class ExportDSCiva {
             }
             $cpt++;
         }
+        
         return $row;
     }
 
@@ -448,17 +458,21 @@ class ExportDSCiva {
 
     public function getCodeDouane($cepage, $vtsgn = '') {
         $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $cepage->getHash());
-        if ($cepage->getKey() == 'cepage_ED') {
-            return "1B001S";
-        }
+
         switch ($appellation_key) {
             case 'VINTABLE':
                 return null;
             case 'ALSACEBLANC':
+                if ($cepage->getKey() == 'cepage_ED') {
+                    return self::CODE_DOUANE_ED;
+                }
                 return $cepage->getConfig()->getDouane()->getFullAppCode($vtsgn) . $cepage->getConfig()->getDouane()->getCodeCepage();
             case 'LIEUDIT':
             case 'COMMUNALE':
                 $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
+                if ($cepage->getKey() == 'cepage_ED') {
+                    return self::CODE_DOUANE_ED;
+                }
                 if ($cepage_code == "KL") {
                     $hash = str_replace('/declaration', '/recolte', $cepage->getCouleur()->getHash());
                     $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);

@@ -15,11 +15,14 @@ class ExportDSPdf extends ExportDocument {
     protected $agrega_total;
     protected $ds_principale;
     protected $dss;
+    protected $annexe;
 
-    public function __construct($ds_principale, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($ds_principale, $partial_function, $annexe = true, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         if(!$ds_principale->isDSPrincipale()) {
             throw new sfException("Ce n'est pas la DS principale");
         }
+
+        $this->annexe = $annexe;
 
         $this->type = $type;
         $this->partial_function = $partial_function;
@@ -127,10 +130,15 @@ class ExportDSPdf extends ExportDocument {
                 }
             }
             $this->createMainByDS($ds);
-            $this->createAnnexeByDS($ds);
+            
+            if($this->annexe) {
+                $this->createAnnexeByDS($ds);
+            }
         }
 
-        $this->createRecap();
+        if($this->annexe) {
+            $this->createRecap();
+        }
     }
 
     protected function createMainByDS($ds) {

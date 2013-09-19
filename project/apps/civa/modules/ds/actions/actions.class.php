@@ -516,7 +516,7 @@ Le CIVA';
 
         $this->tiers = $this->getRoute()->getTiers();
 
-        $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
         $document->generatePDF();
 
         $pdfContent = $document->output();
