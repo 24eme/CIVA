@@ -82,14 +82,32 @@ EOF;
 
         $ligne = "%s;%s;%01.02f;%01.02f;%01.02f;%01.02f\n";
 
-        foreach($stats['appellations'] as $appellation_key => $appellation) {
-            foreach($appellation['cepages'] as $cepage_key => $cepage) {
+        $configuration = ConfigurationClient::getConfiguration($arguments['campagne'] - 1);
+
+        foreach($configuration->recolte->getNoeudAppellations() as $c_appellation) {
+            if(!array_key_exists($c_appellation->getKey(), $stats['appellations'])) {
+                continue;
+            }
+
+            $appellation_key = $c_appellation->getKey();
+            $appellation = $stats['appellations'][$appellation_key];
+
+            foreach($c_appellation->getProduits() as $c_cepage) {
+                if(!array_key_exists($c_cepage->getKey(), $appellation['cepages'])) {
+                    continue;
+                }
+
+                $cepage_key = $c_cepage->getKey();
+                $cepage = $appellation['cepages'][$cepage_key];
+
                 echo sprintf($ligne, $appellation_key, 
                                      $cepage_key, 
                                      $cepage['volume_total'],
                                      $cepage['volume_normal'],
                                      $cepage['volume_vt'],
                                      $cepage['volume_sgn']);
+
+                unset($appellation['cepages'][$cepage_key]);
             }
 
             echo sprintf($ligne, $appellation_key, 
@@ -98,6 +116,8 @@ EOF;
                                  $appellation['volume_normal'],
                                  $appellation['volume_vt'],
                                  $appellation['volume_sgn']);
+            
+            unset($stats['appellations'][$appellation_key]);
         }
 
         echo sprintf($ligne, "TOTAL", 
