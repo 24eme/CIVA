@@ -314,11 +314,7 @@ class ExportDSCiva {
         $cpt = 1;
         $row = "";
         $produitsAgreges = $this->getProduitsAgregesForDS($ds);
-
-        if(!$ds->numero_archive){
-            var_dump($ds->_id);
-            exit;
-        }
+       
         $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
         
        foreach ($produitsAgreges as $code_douane => $obj) {
@@ -333,6 +329,7 @@ class ExportDSCiva {
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
+                    $cpt++;
                     continue;
             }
             
@@ -342,6 +339,7 @@ class ExportDSCiva {
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
+                    $cpt++;
                     continue;
             }
             
