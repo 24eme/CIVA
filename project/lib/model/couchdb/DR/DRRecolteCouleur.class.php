@@ -34,48 +34,6 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return !$this->isLiesSaisisCepage();
     }
 
-    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "volume_acheteurs_" . $type;
-        if (!isset($this->_storage[$key])) {
-            $this->_storage[$key] = array();
-            foreach ($this->getCepages() as $cepage) {
-                if ($cepage->getConfig()->excludeTotal()) {
-                    continue;
-                }
-                $acheteurs = $cepage->getVolumeAcheteurs($type);
-                foreach ($acheteurs as $cvi => $quantite_vendue) {
-                    if (!isset($this->_storage[$key][$cvi])) {
-                        $this->_storage[$key][$cvi] = 0;
-                    }
-                    $this->_storage[$key][$cvi] += $quantite_vendue;
-                }
-            }
-        }
-        return $this->_storage[$key];
-    }
-
-    public function getVolumeAcheteur($cvi, $type) {
-        $volume = 0;
-        $acheteurs = $this->getVolumeAcheteurs($type);
-        if (array_key_exists($cvi, $acheteurs)) {
-            $volume = $acheteurs[$cvi];
-        }
-        return $volume;
-    }
-
-    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "total_volume_acheteurs_" . $type;
-        if (!isset($this->_storage[$key])) {
-            $sum = 0;
-            $acheteurs = $this->getVolumeAcheteurs($type);
-            foreach ($acheteurs as $volume) {
-                $sum += $volume;
-            }
-            $this->_storage[$key] = $sum;
-        }
-        return $this->_storage[$key];
-    }
-
     public function getAutreCouleur() {
         $couleurs = $this->getParent()->getCouleurs();
         foreach($couleurs as $couleur) {
@@ -96,6 +54,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
 
     protected function update($params = array()) {
         parent::update($params);
+        
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
@@ -104,6 +63,9 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             $this->usages_industriels = $this->getUsagesIndustriels(true);
             $this->volume_revendique = $this->getVolumeRevendique(true);
         }
+
+        $this->updateAcheteurs();
+
         $this->cleanNoeuds();
     }
     

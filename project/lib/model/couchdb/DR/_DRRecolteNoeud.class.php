@@ -212,6 +212,227 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->store('libelle', array($this, 'findLibelle'));
     }
 
+    public function removeVolumes() {
+        $this->total_volume = null;
+        $this->volume_revendique = null;
+        $this->dplc = null;
+        $this->usages_industriels = null;
+        $this->lies = null;
+
+        if($this->exist('usages_industriels_saisi')) {
+            $this->remove('usages_industriels_saisi');
+        }
+        
+        if($this->exist('usages_industriels_calcule')) {
+            $this->remove('usages_industriels_calcule');
+        }
+
+        foreach ($this->getChildrenNode() as $children) {
+            $children->removeVolumes();
+        }
+    }
+
+    public function isNonSaisie() {
+        foreach ($this->getChildrenNode() as $children) {
+            if (!$children->isNonSaisie())
+                return false;
+            
+        }
+        return true;
+    }
+
+    /******* Acheteurs *******/
+
+    public function hasCompleteRecapitulatifVente() {
+        if (!$this->getConfig()->existRendement() || !$this->hasAcheteurs()) {
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->superficie) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function getTotalSuperficieRecapitulatifVente() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $total_superficie = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->superficie) {
+                    $total_superficie += $acheteur->superficie;
+                }
+            }
+        }
+
+        return $total_superficie;
+    }
+
+    public function getTotalDontDplcRecapitulatifVente() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $total_dontdplc = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->dontdplc) {
+                    $total_dontdplc += $acheteur->dontdplc;
+                }
+            }
+        }
+
+        return $total_dontdplc;
+    }
+
+    public function isValidRecapitulatifVente() {
+        if (!$this->getConfig()->existRendement()) {
+            return true;
+        }
+        return (round($this->getTotalSuperficie(), 2) >= round($this->getTotalSuperficieRecapitulatifVente(), 2) &&
+                round($this->getDplc(), 2) >= round($this->getTotalDontDplcRecapitulatifVente(), 2));
+    }
+
+    public function hasAcheteurs() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $nb_acheteurs = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            $nb_acheteurs += $type_acheteurs->count();
+        }
+
+        return $nb_acheteurs > 0;
+    }
+
+    public function updateAcheteurs() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $total_superficie_before = $this->getTotalSuperficie();
+            $total_volume_before = $this->getTotalVolume();
+            unset($this->_storage['total_superficie']);
+            unset($this->_storage['total_volume']);
+        }
+        
+        $this->add('acheteurs');
+        $types = array('negoces', 'cooperatives', 'mouts');
+        $unique_acheteur = null;
+        foreach ($types as $type) {
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $cvi => $volume) {
+                $acheteur = $this->acheteurs->add($type)->add($cvi);
+                $acheteur->type_acheteur = $type;
+                $unique_acheteur = $acheteur;
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($total_superficie_before, 2) ||
+                                                                 round($this->getTotalVolume(), 2) != round($total_volume_before, 2))) {
+                    $acheteur->superficie = null;
+                    $acheteur->dontdplc = null;
+                }
+            }
+            $acheteurs_to_remove = array();
+            foreach ($this->acheteurs->get($type) as $cvi => $item) {
+                if (!array_key_exists($cvi, $acheteurs)) {
+                    $acheteurs_to_remove[] = $type."/".$cvi;
+                    //$this->acheteurs->get($type)->remove($cvi);
+                }
+            }
+
+            foreach($acheteurs_to_remove as $hash) {
+                $this->acheteurs->remove($hash);
+            }
+        }
+        $this->acheteurs->update();
+
+        if ($this->getCouchdbDocument()->canUpdate() && $this->hasSellToUniqueAcheteur()) {
+            $unique_acheteur->superficie = $this->getTotalSuperficie();
+            $unique_acheteur->dontdplc = $this->getDplc();
+        }
+    }
+
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "volume_acheteurs_" . $type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
+            foreach($this->getChildrenNode() as $children) {
+                if ($children->getConfig()->excludeTotal()) {
+                    continue;
+                }
+                $acheteurs = $children->getVolumeAcheteurs($type);
+                foreach ($acheteurs as $cvi => $quantite_vendue) {
+                        if (!isset($this->_storage[$key][$cvi])) {
+                            $this->_storage[$key][$cvi] = 0;
+                        }
+                        if ($quantite_vendue) {
+                            $this->_storage[$key][$cvi] += $quantite_vendue;
+                        }
+                }   
+            }
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getVolumeAcheteur($cvi, $type) {
+        $volume = 0;
+        $acheteurs = $this->getVolumeAcheteurs($type);
+        if (array_key_exists($cvi, $acheteurs)) {
+            $volume = $acheteurs[$cvi];
+        }
+        return $volume;
+    }
+
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "total_volume_acheteurs_" . $type;
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $volume) {
+                $sum += $volume;
+            }
+            $this->_storage[$key] = $sum;
+        }
+        
+        return $this->_storage[$key];
+    }
+
+    public function hasSellToUniqueAcheteur() {
+        if ($this->getTotalCaveParticuliere() > 0) {
+            return false;
+        }
+        $vol_total_cvi = array();
+        $acheteurs = array();
+        $types = array('negoces', 'cooperatives', 'mouts');
+        foreach ($types as $type) {
+            foreach ($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+                if (!isset($vol_total_cvi[$type . '_' . $cvi])) {
+                    $vol_total_cvi[$type . '_' . $cvi] = 0;
+                }
+                $vol_total_cvi[$type . '_' . $cvi] += $volume;
+            }
+        }
+        if (count($vol_total_cvi) != 1) {
+            return false;
+        }
+        return true;
+    }
+
+    /******* Fin Acheteurs *******/
+
     protected function findLibelle() {
 
         return $this->getConfig()->getLibelle();
