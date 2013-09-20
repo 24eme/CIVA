@@ -86,6 +86,14 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         return $produits;
     }
 
+    public function getNbProduitsDetails() {
+        return count($this->getProduitsDetails());
+    }
+
+    public function getPositionNouveauProduitDetail() {
+        return $this->getNbProduitsDetails() + 1;
+    }
+
     public function getProduitsDetailsSorted() {
         $produits = array();
         foreach($this->getChildrenNodeSorted() as $item) {
@@ -116,6 +124,11 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         }
 
         return $this->_get('libelle_long');
+    }
+    
+    public function getLibelleComplet() {
+    	$libelle = $this->getParent()->getLibelleComplet();
+    	return trim($libelle).' '.$this->libelle;
     }
     
     public function cleanAllNodes() {   

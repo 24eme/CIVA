@@ -1,10 +1,10 @@
 <?php
-class VracForm extends acCouchdbObjectForm 
+class VracProduitsForm extends acCouchdbObjectForm 
 {    
 	public function configure()
     {
         $this->embedForm('produits', new VracProduitCollectionForm($this->getObject()->declaration->getProduitsDetailsSorted()));
-        $this->widgetSchema->setNameFormat('vrac[%s]');
+        $this->widgetSchema->setNameFormat('vrac_produits[%s]');
     }
     
     public function doUpdateObject($values) 

@@ -67,4 +67,11 @@ class VracClient extends acCouchdbClient {
     {
       return self::VRAC_PREFIXE_ID.$numeroContrat;
     }
+
+  	
+  	public function getStatutLibelle($statut)
+  	{
+  		$libelles = Vrac::getStatutsLibelles();
+  		return $libelles[$statut];
+  	}
 }

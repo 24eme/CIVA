@@ -15,6 +15,48 @@ class Vrac extends BaseVrac
 	const STATUT_CLOTURE = 'CLOTURE';
 	
 	protected $_config;
+	
+	static $statuts_libelles = array(
+		self::STATUT_CREE => 'Brouillon',
+		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
+		self::STATUT_VALIDE => 'Validé',
+		self::STATUT_ANNULE => 'Annulé',
+		self::STATUT_ENLEVEMENT => 'En cours d\'enlèvement',
+		self::STATUT_CLOTURE => 'Cloturé'
+	);
+	
+	static $statuts_supprimable = array(
+		self::STATUT_CREE,
+		self::STATUT_VALIDE_PARTIELLEMENT,
+		self::STATUT_VALIDE
+	);
+	
+	static $types_tiers = array(
+		'vendeur',
+		'acheteur',
+		'mandataire'
+	);
+	
+  	public static function getStatutsLibelles() 
+  	{
+  		return self::$statuts_libelles;
+  	}
+	
+  	public static function getStatutsSupprimable() 
+  	{
+  		return self::$statuts_supprimable;
+  	}
+	
+  	public static function getTypesTiers() 
+  	{
+  		return self::$types_tiers;
+  	}
+  	
+  	public function getStatutLibelle()
+  	{
+  		$libelles = self::getStatutsLibelles();
+  		return $libelles[$this->valide->statut];
+  	}
     
     public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
     {
@@ -79,6 +121,15 @@ class Vrac extends BaseVrac
         }
         return $produit->addDetail($config);
     }
+
+    public function addDynamiqueDetail($hash, $lieuDit = null, $vtsgn = null, $config = null) 
+    {
+        $detail = $this->addDetail($hash, $config);
+        $detail->lieu_dit = $lieuDit;
+        $detail->vtsgn = $vtsgn;
+        $detail->supprimable = 1;
+        $detail->position = $this->declaration->getPositionNouveauProduitDetail();
+    }
     
     public function storeAcheteurInformations($tiers)
     {
@@ -106,5 +157,83 @@ class Vrac extends BaseVrac
     	$this->vendeur->telephone = $tiers->telephone;
     	$this->vendeur->email = $tiers->email;
     	$this->vendeur->famille = null;
+    }
+    
+    public function isSupprimable($userId)
+    {
+    	if ($userId == $this->createur_identifiant) {
+    		if (in_array($this->valide->statut, self::getStatutsSupprimable())) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public function isValide()
+    {
+    	return ($this->numero_archive)? true : false;
+    }
+    
+    public function isCloture()
+    {
+    	return ($this->valide->statut == self::STATUT_CLOTURE);
+    }
+    
+    public function getTypeTiers($userId)
+    {
+    	$types = self::getTypesTiers();
+    	$type = null;
+    	foreach ($types as $t) {
+    		if ($this->get($t.'_identifiant') == $userId) {
+    			$type = $t;
+    			break;
+    		}
+    	}
+    	return $type;
+    }
+    
+    public function hasValide($userId)
+    {
+    	try {
+    		$date = $this->getUserDateValidation($userId);
+    	} catch (sfException $e) {
+    		throw new sfException($e->getMessage());
+    	}
+    	return ($date)? true : false;
+    }
+    
+    public function getUserDateValidation($userId)
+    {
+    	$type = $this->getTypeTiers($userId);
+    	if (!$type) {
+    		throw new sfException('Le tiers "'.$userId.'" n\'est pas un acteur du contrat : '.$this->_id);
+    	}
+    	return ($this->valide->get('date_validation_'.$type))? $this->valide->get('date_validation_'.$type) : null;
+    }
+    
+    public function valideUser($userId)
+    {
+    	$type = $this->getTypeTiers($userId);
+    	if (!$type) {
+    		throw new sfException('Le tiers "'.$userId.'" n\'est pas un acteur du contrat : '.$this->_id);
+    	}
+    	$this->valide->set('date_validation_'.$type, date('Y-m-d'));
+    }
+    
+    public function updateValideStatut()
+    {
+    	$valide = true;
+    	if ($this->vendeur_identifiant && !$this->valide->date_validation_vendeur) {
+    		$valide = false;
+    	}
+    	if ($this->acheteur_identifiant && !$this->valide->date_validation_acheteur) {
+    		$valide = false;
+    	}
+    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
+    		$valide = false;
+    	}
+    	if ($valide) {
+    		$this->valide->statut = self::STATUT_VALIDE;
+    	}
     }
 }

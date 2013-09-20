@@ -14,15 +14,17 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$recoltantChoices = $this->getRecoltants();
     	$negociantChoices = $this->getNegociants();
     	$caveCooperativeChoices = $this->getCavesCooperatives();
+    	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
-        	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => $recoltantChoices)),
-        	'acheteur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => $negociantChoices)),
-        	'acheteur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => $caveCooperativeChoices)),
-        	'vendeur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => $recoltantChoices)),
-        	'vendeur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => $negociantChoices)),
-        	'vendeur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => $caveCooperativeChoices))
+        	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
+        	'acheteur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
+        	'acheteur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
+        	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
     	));
         $this->setValidators(array(
         	'acheteur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
@@ -32,7 +34,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
         	'vendeur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
         	'vendeur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($negociantChoices))),
-        	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices)))
+        	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
+        	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($commerciauxChoices)))
         ));
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator());
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
@@ -55,6 +58,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     {
     	$acheteur = $values['acheteur'];
     	$vendeur = $values['vendeur'];
+    	$this->getObject()->interlocuteur_commercial = $values['interlocuteur_commercial'];
     	$this->getObject()->acheteur_type = $values['acheteur_type'];
     	$this->getObject()->vendeur_type = $values['vendeur_type'];
     	$this->getObject()->acheteur_identifiant = $acheteur->_id;
@@ -98,5 +102,14 @@ class VracSoussignesForm extends acCouchdbObjectForm
     		return array();
     	}
     	return array_merge(array('' => ''), $annuaire->caves_cooperatives->toArray());
+    }
+    
+    public function getCommerciaux()
+    {
+    	$annuaire = $this->getAnnuaire();
+    	if (!$annuaire) {
+    		return array();
+    	}
+    	return array_merge(array('' => ''), $annuaire->commerciaux->toArray());
     }
 }

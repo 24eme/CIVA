@@ -3,6 +3,8 @@ Vrac:
     fields:
       _id: {  }
       _rev: {  }
+      conditions_paiement: {  }
+      conditions_particulieres: {  }
       createur_identifiant: {  }  
       acheteur_type: {  }
       acheteur_identifiant: {  }  
@@ -41,6 +43,7 @@ Vrac:
             email: {  }
             famille: {  }
       mandataire_identifiant: {  }
+      interlocuteur_commercial: {  }
       mandataire:
         type: collection
         class: VracMandataire
@@ -132,17 +135,23 @@ Vrac:
                                                               definition:
                                                                 fields:
                                                                   vtsgn: { }
+                                                                  lieu_dit: { }
                                                                   millesime: { }
                                                                   prix_unitaire: { type: float }
                                                                   denomination: { }
-                                                                  solde: { type: integer }
+                                                                  cloture: { type: integer }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
                                                                   retiraisons:
-                                                                    type: collection
+                                                                    type: array_collection
                                                                     definition:
                                                                       fields:
-                                                                        '*': { type: float }
+                                                                        '*': 
+                                                                          type: collection
+                                                                          definition:
+                                                                            fields:
+                                                                              date: {  }
+                                                                              volume: {  }
                                                                   position: { type: integer }
                                                                   supprimable: { type: integer }
                                                                   actif: { type: integer }

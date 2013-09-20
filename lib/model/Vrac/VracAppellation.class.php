@@ -30,5 +30,10 @@ class VracAppellation extends BaseVracAppellation {
     {  
         return $this->mention->getLieuxSorted();
     }
+    
+     public function getLibelleComplet() 
+     {
+     	return $this->libelle;
+     }
 
 }

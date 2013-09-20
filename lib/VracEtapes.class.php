@@ -5,12 +5,12 @@ class VracEtapes
 	protected $etapes;
 	
 	const ETAPE_SOUSSIGNES = 'soussignes';
-	const ETAPE_CONDITIONS = 'conditions';
+	const ETAPE_PRODUITS = 'produits';
 	const ETAPE_VALIDATION = 'validation';
 	
 	static $libelles = array(
 		self::ETAPE_SOUSSIGNES => 'Soussignés',
-		self::ETAPE_CONDITIONS => 'Condtions',
+		self::ETAPE_PRODUITS => 'Produits',
 		self::ETAPE_VALIDATION => 'Validation'
 	);
 	
@@ -109,5 +109,10 @@ class VracEtapes
   	{
   		$libelles = $this->getLibelles();
   		return $libelles[$etape];
+  	}
+  	
+  	public function exist($etape)
+  	{
+  		return array_key_exists($etape, $this->getLibelles());
   	}
 }
