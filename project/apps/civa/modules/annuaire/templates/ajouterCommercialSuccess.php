@@ -1,9 +1,23 @@
-<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?><?php if ($redirect): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
+<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('@annuaire_commercial_ajouter') ?>">
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
-	<p>Saisissez ici le type et cvi du tiers que vous souhaitez ajouter à votre annuaire.</p><br />
+	<p>Saisissez ici l'identité du commercial de vous souhaitez ajouter.</p><br />
 	<div class="clearfix">
-		<?php include_partial('annuaire/ajouterForm', array('form' => $form)); ?>
+		<table class="table_donnees" cellspacing="0" cellpadding="0">
+			<thead>
+				<tr>
+					<th><span>Identité</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<span><?php echo $form['identite']->renderError() ?></span>
+						<?php echo $form['identite']->render() ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 	<ul class="btn_prev_suiv clearfix" id="btn_etape">
 	    <li class="prec">

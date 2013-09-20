@@ -36,5 +36,18 @@
 		<?php endif; ?>
 		<br /><br />
 		<p><a href="<?php echo url_for('@annuaire_selectionner') ?>">+ Ajouter une entrée</a></p>
+		<br /><br />
+		<h1>Commerciaux (<?php echo count($annuaire->commerciaux) ?>)</h1><br />
+		<?php if (count($annuaire->commerciaux) > 0): ?>
+		<ul>
+		<?php foreach ($annuaire->commerciaux as $key => $item): ?>
+			<li><?php echo $item ?> <a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>">X</a></li>
+		<?php endforeach; ?>
+		</ul>
+		<?php else: ?>
+		<i>Aucun commercial</i>
+		<?php endif; ?>
+		<br /><br />
+		<p><a href="<?php echo url_for('@annuaire_commercial_ajouter') ?>">+ Ajouter une entrée</a></p>
 </div>
 
