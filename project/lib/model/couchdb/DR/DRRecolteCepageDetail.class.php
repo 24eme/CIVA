@@ -55,6 +55,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->cave_particuliere;
     }
 
+    public function getTotalDontDplcVendus() {
+
+        return null;
+    }
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {

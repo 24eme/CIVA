@@ -39,6 +39,11 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->_get($couleur);
     }
 
+    public function hasCepageRB() {
+
+        return $this->getCepageRB() !== null;
+    }
+
     public function getCepageRB() {
 
         $cepage_rebeche = array();

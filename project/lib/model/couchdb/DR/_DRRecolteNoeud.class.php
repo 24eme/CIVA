@@ -65,9 +65,24 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
     }
 
+    public function getVolumeRevendiqueCaveParticuliere() {
+
+        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere(), 2);
+    }
+
+    public function getUsagesIndustrielsCaveParticuliere() {
+
+        return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
+    }
+
     public function getTotalRebeches() {
 
         return $this->getDataByFieldAndMethod('total_rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getTotalRebeches', false) );
+    }
+
+    public function getTotalVolumeVendus() {
+
+        return $this->getTotalVolumeAcheteurs();
     }
     
     public function getLies($force_calcul = false) {
@@ -242,6 +257,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     /******* Acheteurs *******/
+
+    public function getTotalDontDplcVendus() {
+        if(!$this->exist('acheteurs') || !$this->getConfig()->hasRendementNoeud()) {
+            
+            return $this->getDataByFieldAndMethod('total_dont_dplc_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontDplcVendus'));
+        }
+
+        return $this->getTotalDontDplcRecapitulatifVente();
+    }
 
     public function hasCompleteRecapitulatifVente() {
         if (!$this->getConfig()->existRendement() || !$this->hasAcheteurs()) {
