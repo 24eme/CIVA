@@ -53,6 +53,7 @@ EOF;
 		$json->err_dr_popup_unique_lieu_denomination_vtsgn  = "Il faut distinguer la colonne par une mention complémentaire ou par une mention VT/SGN.";
 		$json->err_dr_recap_vente_popup_superficie_trop_eleve  = "La somme des superficies des acheteurs ne peut pas être superieure au total de l'appellation";
 		$json->err_dr_recap_vente_popup_dplc_trop_eleve  = "La somme des 'volumes en dépassement' des acheteurs ne peut pas être superieure au 'volume en dépassement' total de l'appellation";
+		$json->err_dr_recap_vente_popup_dplc_superieur_volume  = "Le 'volume en dépassement' ne peut pas être supérieur au 'volume acheté'";
 		$json->err_log_lieu_non_saisie  = "Lieu non saisi";
 		$json->err_log_cepage_non_saisie  = "Cépage non saisi";
 		$json->err_log_detail_non_saisie  = "Details non saisis";

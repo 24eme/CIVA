@@ -1919,7 +1919,6 @@ div#migration_compte .contenu_section#infos_traitement {
 #gestion_recolte .recapitulatif_lies.readonly {
 	color: #9FAC01;
 	font-weight: bold;
-	text-align: center;
 }
 
 #gestion_recolte .btn {

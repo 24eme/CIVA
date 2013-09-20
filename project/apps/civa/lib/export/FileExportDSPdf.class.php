@@ -10,7 +10,7 @@ class FileExportDSPdf extends FileExportMiseADispo
 
     protected function getExport() {
 
-        return new ExportDSPDF($this->getDocument(), $this->_function_get_partial, 'pdf',  $this->_file_dir, false, $this->_filename);
+        return new ExportDSPDF($this->getDocument(), $this->_function_get_partial, false, 'pdf',  $this->_file_dir, false, $this->_filename);
     }
 
     protected function getFileDir() {

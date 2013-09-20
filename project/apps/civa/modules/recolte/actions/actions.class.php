@@ -200,9 +200,7 @@ class recolteActions extends EtapesActions {
         }else{
             $this->isGrandCru = false;
         }
-        $this->form = new RecapitulatifForm($this->appellationlieu);
-
-        $forms = $this->form->getEmbeddedForms();
+        $this->form = new RecapitulatifContainerForm($this->appellationlieu);
 
         if ($request->getParameter('redirect') && !$this->form->isSaisisable()) {
             return $this->redirect($this->onglets->getNextUrl());

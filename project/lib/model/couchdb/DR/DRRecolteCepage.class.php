@@ -51,56 +51,6 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $volume;
     }
 
-    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "volume_acheteurs_".$type;
-        if (!isset($this->_storage[$key])) {
-            $this->_storage[$key] = array();
-            foreach($this->detail as $object) {
-                $acheteurs = $object->getVolumeAcheteurs($type);
-                foreach($acheteurs as $cvi => $quantite_vendue) {
-                    if (!isset($this->_storage[$key][$cvi])) {
-                        $this->_storage[$key][$cvi] = 0;
-                    }
-		    if ($quantite_vendue)
-		      $this->_storage[$key][$cvi] += $quantite_vendue;
-                }
-            }
-        }
-        return $this->_storage[$key];
-    }
-
-    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "total_volume_acheteurs_" . $type;
-        if (!isset($this->_storage[$key])) {
-            $sum = 0;
-            $acheteurs = $this->getVolumeAcheteurs($type);
-            foreach ($acheteurs as $volume) {
-                $sum += $volume;
-            }
-            $this->_storage[$key] = $sum;
-        }
-        return $this->_storage[$key];
-    }
-
-    public function removeVolumes() {
-      $this->total_volume = null;
-      $this->volume_revendique = null;
-      $this->dplc = null;
-      foreach($this->getDetail() as $detail) {
-	$detail->removeVolumes();
-      }
-    }
-
-    public function isNonSaisie() {
-      if (!$this->exist('detail') || !count($this->detail))
-	return false;
-      foreach($this->detail as $detail) {
-	if(!$detail->isNonSaisie())
-	  return false;
-      }
-      return true;
-    }
-
     public function getArrayUniqueKey($out = array()) {
         $resultat = array();
         if ($this->exist('detail')) {
