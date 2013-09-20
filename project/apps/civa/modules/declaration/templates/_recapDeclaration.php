@@ -21,29 +21,31 @@
                     <?php endif; ?>
                 </tr>
                 <tr>
-                    <td>Volume sur place (hl)</td>
-                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
-                    <td><?php echoFloat( $volume_sur_place[$a]); ?></td>
-                    <?php endif; ?>
-                </tr>
-                <tr>
-                    <td>Rebêches (hl)</td>
-                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
-                    <td>
-                        <?php if($volume_rebeches[$a] != 0): ?>
-                            <?php echoFloat( $volume_rebeches[$a]); ?>
-                        <?php endif; ?>
-                    </td>
-                    <?php endif; ?>
-                </tr>
-                <tr>
                     <td>Volume Total (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $volume[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
+                    <td>Volume vendus (hl)</td>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td><?php echoFloat( $volume[$a]); ?></td>
+                    <?php endif; ?>
+                </tr>
+                <tr>
+                    <td>Volume sur place (hl)</td>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td><?php echoFloat( $volume_sur_place[$a]); ?></td>
+                    <?php endif; ?>
+                </tr>
+                <tr>
                     <td>Volume Revendiqué (hl)</td>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td><?php echoFloat( $revendique[$a]); ?></td>
+                    <?php endif; ?>
+                </tr>
+                <tr>
+                    <td>> dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td><?php echoFloat( $revendique[$a]); ?></td>
                     <?php endif; ?>
@@ -65,6 +67,26 @@
                         <?php endif; ?>
                     </td>
                     <?php endif;  ?>
+                </tr>
+                <tr>
+                    <td>
+                    > dont sur place
+                    </td>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td>
+                        <?php echoFloat($usages_industriels[$a]); ?>
+                    </td>
+                    <?php endif;  ?>
+                </tr>
+                <tr>
+                    <td>Rebêches (hl)</td>
+                    <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td>
+                        <?php if($volume_rebeches[$a] != 0): ?>
+                            <?php echoFloat( $volume_rebeches[$a]); ?>
+                        <?php endif; ?>
+                    </td>
+                    <?php endif; ?>
                 </tr>
             </tbody>
         </table>

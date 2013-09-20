@@ -6,12 +6,11 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function __construct(acCouchdbJson $object, $options = array(), $CSRFSecret = null) {
         parent::__construct($object, $options, $CSRFSecret);
-        $this->getDocable()->remove();
     }
 
     public function configure() {
-        $lieu = $this->getObject();
-        if($lieu->canHaveUsagesLiesSaisi() && $lieu->getConfig()->existRendement() && !$lieu->getConfig()->existRendementCouleur()){
+        $object = $this->getObject();
+        if($object->canHaveUsagesLiesSaisi() && $object->getConfig()->existRendement()){
             $this->setWidgets(array(
                 'lies' => new sfWidgetFormInputFloat(array()),
             ));
@@ -24,44 +23,30 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
             $this->is_saisisable = true;
         }
-
-        if($this->getObject()->getConfig()->existRendementCouleur()) {
-            foreach($this->getObject()->getCouleurs() as $couleur) {
-                $this->embedForm($couleur->getKey(), new RecapitulatifCouleurUsagesIndustrielsForm());            
-            }
-            $this->is_saisisable = true;
-        }
         
         $form_acheteurs = new BaseForm();
-        foreach ($lieu->acheteurs as $type => $acheteurs_type) {
+        foreach ($object->acheteurs as $type => $acheteurs_type) {
             $form_type = new BaseForm();
             foreach ($acheteurs_type as $cvi => $acheteur) {
-                $form_type->embedForm($cvi, new RecapitulatifAcheteurForm());
+                $form_type->embedForm($cvi, new RecapitulatifAcheteurForm($acheteur));
                 
                 $this->is_saisisable = true;
             }
             $form_acheteurs->embedForm($type, $form_type);
         }
-        $this->embedForm('acheteurs', $form_acheteurs);
 
-        
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
-        $this->widgetSchema->setNameFormat('recapitulatif[%s]');
 
-        $this->disableLocalCSRFProtection();
-        $this->disabledRevisionVerification();
+        $this->embedForm('acheteurs', $form_acheteurs);
+    }
+
+    public function doUpdateObject($values) {
+
+        return parent::doUpdateObject($values);
     }
 
     public function isSaisisable() {
 
         return $this->is_saisisable;
     }
-
-    public function doUpdateObject($values) {
-        parent::doUpdateObject($values);
-
-        $this->getObject()->getCouchdbDocument()->update();
-    }
 }
-
-?>
