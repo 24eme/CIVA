@@ -5,6 +5,11 @@
 vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
+vrac_soussigne_informations:
+  url: /vrac/soussignes-informations
+  param: { module: vrac, action: soussigneInformations }
+  requirements:
+    sf_method: [get, post]
 vrac_supprimer:
   url: /vrac/:numero_contrat/supprimer
   param: { module: vrac, action: supprimer }
@@ -14,42 +19,60 @@ vrac_supprimer:
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_etape_soussignes:
-  url: /vrac/:numero_contrat/soussignes
-  param: { module: vrac, action: etapeSoussignes }
+vrac_fiche:
+  url: /vrac/:numero_contrat/fiche/:validation
+  param: { module: vrac, action: fiche, validation: null }
   class: VracRoute
   options:
     model:    Vrac
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_etape_conditions:
-  url: /vrac/:numero_contrat/conditions
-  param: { module: vrac, action: etapeConditions }
+vrac_etape:
+  url: /vrac/:numero_contrat/:etape
+  param: { module: vrac, action: etape }
   class: VracRoute
   options:
     model:    Vrac
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_etape_validation:
-  url: /vrac/:numero_contrat/validation
-  param: { module: vrac, action: etapeValidation }
+vrac_ajout_produit:
+  url: /vrac/:numero_contrat/:etape/ajouter
+  param: { module: vrac, action: ajouterProduit }
   class: VracRoute
   options:
     model:    Vrac
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_acces:
-  url: /vrac/:numero_contrat/acces
-  param: { module: vrac, action: acces }
+vrac_ajout_produit_lieux:
+  url: /vrac/:numero_contrat/:etape/ajouter/lieux
+  param: { module: vrac, action: ajouterProduitLieux }
   class: VracRoute
   options:
     model:    Vrac
     type:     object
   requirements:
-    sf_method: [get]
+    sf_method: [get, post]
+vrac_ajout_produit_cepages:
+  url: /vrac/:numero_contrat/:etape/ajouter/cepages
+  param: { module: vrac, action: ajouterProduitCepages }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_ajout_produit_vtsgn:
+  url: /vrac/:numero_contrat/:etape/ajouter/vtsgn
+  param: { module: vrac, action: ajouterProduitVtsgn }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 # *********** ANNUAIRE *********
 annuaire:
   url: /annuaire
@@ -57,6 +80,9 @@ annuaire:
 annuaire_selectionner:
   url: /annuaire/selectionner/:type
   param: { module: annuaire, action: selectionner, type: null }
+annuaire_commercial_ajouter:
+  url: /annuaire/ajouter/commercial
+  param: { module: annuaire, action: ajouterCommercial }
 annuaire_ajouter:
   url: /annuaire/ajouter/:type/:identifiant
   param: { module: annuaire, action: ajouter }

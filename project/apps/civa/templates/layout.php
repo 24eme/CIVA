@@ -13,6 +13,7 @@
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php include_stylesheets() ?>
+    <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script>
   </head>
   <body id="declaration_recolte">
     <!-- #global -->

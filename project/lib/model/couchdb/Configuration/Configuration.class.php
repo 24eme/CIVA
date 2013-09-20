@@ -11,6 +11,19 @@ class Configuration extends BaseConfiguration {
 
         return $this->recolte->getProduitsDetails();
     }
+    
+    public function getAppellationsLieuDit()
+    {
+    	$result = array();
+    	foreach ($this->recolte->getCertifications() as $certification) {
+    		foreach ($certification->getAppellations() as $key => $appellation) {
+    			if ($appellation->exist('detail_lieu_editable') && $appellation->detail_lieu_editable) {
+    				$result[$key] = $appellation->libelle;
+    			}
+    		}
+    	}
+    	return $result;
+    }
 
     public function getArrayAppellationsMout() {
         $appellations = $this->getRecolte()->getNoeudAppellations();

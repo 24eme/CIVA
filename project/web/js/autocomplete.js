@@ -141,14 +141,13 @@
 					self._trigger( "selected", event, {
 						item: ui.item.option
 					});
+					select.trigger( "change");
 					$(this).val(ui.item.value.replace(new RegExp("[ ]*\\(.+\\)[ ]*"), " "));
 					$(input).parent().find('button').hide();
 					$(input).parent().find('a.remove_autocomplete').show();
 					return false;
 				},
 				change: function( event, ui ) {
-					//console.log('change');
-					
 					if ( !ui.item ) {
 						var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
 						valid = false;

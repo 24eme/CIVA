@@ -20,7 +20,7 @@ class annuaireActions extends sfActions {
         		$values = $this->form->getValues();
         		$tiers = $this->form->getTiers();
         		return $this->redirect('annuaire_ajouter', array('type' => $values['type'], 'identifiant' => $values['identifiant']));
-        	}
+        	}	
         }
     }
 
@@ -50,11 +50,25 @@ class annuaireActions extends sfActions {
         }
     }
 
+	public function executeAjouterCommercial(sfWebRequest $request) 
+	{
+		$this->compte = $this->getUser()->getCompte();
+		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+		$this->form = new AnnuaireAjoutCommercialForm($this->annuaire);
+        if ($request->isMethod(sfWebRequest::POST)) {
+        	$this->form->bind($request->getParameter($this->form->getName()));
+        	if ($this->form->isValid()) {
+       			$this->form->save();
+       			return $this->redirect('@annuaire');
+        	}
+        }
+    }
+
 	public function executeSupprimer(sfWebRequest $request) 
 	{
 		$type = $request->getParameter('type');
 		$id = $request->getParameter('id');
-		if ($type && $id) {
+		if ($type !== null && $id !== null) {
 			$compte = $this->getUser()->getCompte();
 			$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
 			if ($annuaire && $annuaire->exist($type)) {
