@@ -2,7 +2,7 @@
 
 class RecapitulatifForm extends acCouchdbObjectForm {
 
-    protected $is_saisisable = false;
+    protected $is_lies_saisisables = false;
 
     public function __construct(acCouchdbJson $object, $options = array(), $CSRFSecret = null) {
         parent::__construct($object, $options, $CSRFSecret);
@@ -10,6 +10,7 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
     public function configure() {
         $object = $this->getObject();
+        $this->is_lies_saisisable = false;
         if($object->canHaveUsagesLiesSaisi() && $object->getConfig()->existRendement()){
             $this->setWidgets(array(
                 'lies' => new sfWidgetFormInputFloat(array()),
@@ -21,7 +22,7 @@ class RecapitulatifForm extends acCouchdbObjectForm {
 
             $this->getWidget('lies')->setLabel('Usages industriels saisis');
 
-            $this->is_saisisable = true;
+            $this->is_lies_saisisables = true;
         }
         
         $form_acheteurs = new BaseForm();
@@ -29,8 +30,6 @@ class RecapitulatifForm extends acCouchdbObjectForm {
             $form_type = new BaseForm();
             foreach ($acheteurs_type as $cvi => $acheteur) {
                 $form_type->embedForm($cvi, new RecapitulatifAcheteurForm($acheteur));
-                
-                $this->is_saisisable = true;
             }
             $form_acheteurs->embedForm($type, $form_type);
         }
@@ -45,8 +44,8 @@ class RecapitulatifForm extends acCouchdbObjectForm {
         return parent::doUpdateObject($values);
     }
 
-    public function isSaisisable() {
+    public function isLiesSaisisables() {
 
-        return $this->is_saisisable;
+        return $this->is_lies_saisisables;
     }
 }

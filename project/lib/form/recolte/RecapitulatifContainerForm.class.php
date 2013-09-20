@@ -35,4 +35,14 @@ class RecapitulatifContainerForm extends acCouchdbForm {
 
         return $this->lieu;
     }
+
+    public function isLiesSaisisables() {
+        foreach($this->getEmbeddedForms() as $form) {
+            if($form->isLiesSaisisables()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

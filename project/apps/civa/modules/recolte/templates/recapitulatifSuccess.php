@@ -90,8 +90,11 @@
                                                     <td>Usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur saisi">
-                                                                <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
-                                                          
+                                                                <?php if(isset($form[$key]['lies'])): ?>
+                                                                    <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
+                                                                <?php else: ?>
+                                                                    <input type="text" readonly="readonly" class="num readonly recapitulatif_lies" value="<?php echoFloat($form_item->getObject()->lies) ?>" />
+                                                                <?php endif; ?>
                                                         </td>
                                                     <?php endforeach; ?>
                                                 </tr>
@@ -103,9 +106,11 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <?php if ($form->isLiesSaisisables()): ?>
                                         <div class="btn">
                                             <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
                                         </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
