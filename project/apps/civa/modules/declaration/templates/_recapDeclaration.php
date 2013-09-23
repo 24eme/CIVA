@@ -26,12 +26,14 @@
                     <td class="volume"><?php echoFloat($volume[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
+                <?php if(isset($total_volume_vendus)): ?>
                 <tr>
-                    <td>Volume vendus (hl)</td>
+                    <td>Volume vendu (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td class="volume"><?php echoFloat($volume_vendus[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
+                <?php endif; ?>
                 <tr>
                     <td>Volume sur place (hl)</td>
                     <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
@@ -46,7 +48,7 @@
                 </tr>
                 <?php if(isset($total_revendique_sur_place) && !$has_no_usages_industriels): ?>
                 <tr class="small">
-                    <td>dont sur place (hl)</td>
+                    <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td class="volume"><?php echoFloat($revendique_sur_place[$a]); ?></td>
                     <?php endif; ?>
@@ -72,9 +74,13 @@
                 </tr>
                 <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
                 <tr class="small">
-                    <td>dont sur place (hl)</td>
+                    <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
-                    <td class="volume"><?php echoFloat($usages_industriels_sur_place[$a]); ?></td>
+                    <td class="volume">
+                    <?php if($usages_industriels[$a] != 0): ?>
+                        <?php echoFloat($usages_industriels_sur_place[$a]); ?>
+                    <?php endif; ?>
+                    </td>
                     <?php endif;  ?>
                 </tr>
                 <?php endif; ?>
@@ -99,7 +105,9 @@
         <ul class="contenu_section">
             <li><input type="text" value="<?php echoFloat($total_superficie);?>" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat($total_volume);?>" readonly="readonly"></li>
+            <?php if(isset($total_volume_vendus)): ?>
             <li><input type="text" value="<?php echoFloat($total_volume_vendus);?>" readonly="readonly"></li>
+            <?php endif; ?>
             <li><input type="text" value="<?php echoFloat($total_volume_sur_place);?>" readonly="readonly"></li>
             <li><input type="text" value="<?php echoFloat($total_revendique);?>" readonly="readonly"></li>
             <?php if(isset($total_revendique_sur_place)): ?>
@@ -115,10 +123,10 @@
                 <?php endif; ?>
             </li>
             <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
-            <li class="small last"><input type="text" value="<?php echoFloat($total_usages_industriels_sur_place);?>" readonly="readonly"></li>
+            <li class="small"><input type="text" value="<?php echoFloat($total_usages_industriels_sur_place);?>" readonly="readonly"></li>
             <?php endif; ?>
-            <?php if(isset($total_volume_rebeches) && !$has_no_usages_industriels): ?>
-            <li class="last"><input type="text" value="<?php echoFloat($total_volume_rebeches);?>" readonly="readonly"></li>
+            <?php if(isset($total_volume_rebeches)): ?>
+            <li><input type="text" value="<?php echoFloat($total_volume_rebeches);?>" readonly="readonly"></li>
             <?php endif; ?>
         </ul>
     </div>

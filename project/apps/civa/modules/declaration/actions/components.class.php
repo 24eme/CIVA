@@ -71,13 +71,9 @@ class declarationComponents extends sfComponents {
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
               $this->volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              if($this->dr->recolte->getTotalCaveParticuliere() > 0) {
-                $this->revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
-              }
+              $this->revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
-              if($this->dr->recolte->getTotalCaveParticuliere() > 0) {
-                $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
-              }
+              $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
               if($appellation->hasCepageRB()) {
                 $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
@@ -88,11 +84,11 @@ class declarationComponents extends sfComponents {
         $this->total_volume = array_sum(array_values($this->volume));
         $this->total_volume_vendus = array_sum(array_values($this->volume_vendus));
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
-        if(count($this->usages_industriels_sur_place) > 0) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
           $this->total_usages_industriels_sur_place= array_sum(array_values($this->usages_industriels_sur_place));
         }
         $this->total_revendique = array_sum(array_values($this->revendique));
-        if(count($this->revendique_sur_place) > 0) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
           $this->total_revendique_sur_place = array_sum(array_values($this->revendique_sur_place));
         }
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
