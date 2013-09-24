@@ -31,8 +31,8 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($sf_user->hasCredential('recoltant') && !$sf_user->isInDelegateMode()): ?>
-                <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Ma déclaration</a></li>
+            <?php if ($sf_user->hasCredential('recoltant')): ?>
+                <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mes déclarations</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
                 <li><a href="http://vinsalsace.pro/">Mon espace civa</a></li>
