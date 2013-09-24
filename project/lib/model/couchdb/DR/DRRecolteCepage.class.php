@@ -98,8 +98,19 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return false;
     }
 
+    protected function getSumNoeudFields($field, $exclude = true) {
+        
+        return parent::getSumNoeudFields($field, false);
+    }
+
+    protected function getSumNoeudWithMethod($method, $exclude = true) {
+
+        return parent::getSumNoeudWithMethod($method, false);
+    }
+
     protected function update($params = array()) {
       parent::update($params);
+
       if ($this->getCouchdbDocument()->canUpdate()) {
           $this->total_volume = $this->getTotalVolume(true);
           $this->total_superficie = $this->getTotalSuperficie(true);

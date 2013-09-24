@@ -389,7 +389,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         $cepage = $couleur->get($key);
-                        $totalVolRevendique = $cepage->getTotalVolume();
+                        $totalVolRevendique = $cepage->getTotalVolume(true);
+                        echo $cepage->getHash()." : ".$totalVolRevendique."\n";
 
                         if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
                             $couleur->remove($key);

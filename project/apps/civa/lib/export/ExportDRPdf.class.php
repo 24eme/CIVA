@@ -171,9 +171,7 @@ class ExportDRPdf extends ExportDocument {
               $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
               $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              if($appellation->hasCepageRB()) {
-                $volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
-              }
+              $volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
           }
         }
 
@@ -194,11 +192,13 @@ class ExportDRPdf extends ExportDocument {
 
         if($dr->recolte->getTotalVolumeVendus() > 0) {
           $infos['total_volume_vendus'] = array_sum(array_values($volume_vendus));
+        } else {
+          $infos['total_volume_vendus'] = null;
         }
 
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
 
-        if(count($volume_rebeches) > 0) {
+        if($appellation->getTotalRebeches() > 0) {
           $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
         } else {
           $infos['total_volume_rebeches'] = null;

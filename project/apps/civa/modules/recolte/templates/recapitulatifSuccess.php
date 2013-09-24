@@ -9,6 +9,7 @@
             <?php echo $form->renderHiddenFields(); ?>
             <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
                                                                'onglets' => $onglets)); ?>
+                <input name="is_validation_interne" type="hidden" value="0" />
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
 				
@@ -19,7 +20,9 @@
                                                                                               'recapitulatif' => true)); ?>
 
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
-					       <p class="intro"></p>
+                           <?php if($sf_user->hasFlash('recapitulatif_confirmation')) : ?>
+                                <p class="flash_message"><?php echo $sf_user->getFlash('recapitulatif_confirmation'); ?></p>
+                            <?php endif; ?>
 				            <div id="total_appelation">
 								<h2 class="titre_section">
                                     <?php if($isGrandCru){ ?>
@@ -108,7 +111,7 @@
                                         </table>
                                         <?php if ($form->isLiesSaisisables()): ?>
                                         <div class="btn">
-                                            <input type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
+                                            <input name="validation_interne" type="image" src="/images/boutons/btn_valider_2.png" alt="Valider" type="submit">
                                         </div>
                                         <?php endif; ?>
                                     </div>
@@ -166,7 +169,7 @@
 											</tbody>
 										</table>
 										<div class="btn">
-											<input type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
+											<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 										</div>
                                         <?php else: ?>
                                         <p> Aucune vente </p>
@@ -198,6 +201,10 @@
                                                          'url_lieu' => $url_ajout_lieu)) ?>
 
                         <script type="text/javascript">
+                            $('input[name="validation_interne"]').click(function() {
+                                $('input[name="is_validation_interne"]').val("1");
+                            });
+
                             function valider_can_submit()
                             {
                                 <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
