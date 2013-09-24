@@ -18,9 +18,19 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return $this->getMention()->getAppellation();
     }
 
+    public function getLieu() {
+
+        return $this;
+    }
+
     public function getChildrenNode() {
 
         return $this->getCouleurs();
+    }
+
+    public function hasRecapitulatif() {
+
+        return !$this->getConfig()->existRendementCouleur();
     }
 
     public function getCouleurs() {

@@ -108,6 +108,14 @@
             }
 <?php endif; ?>
 
+    <?php if (isset($form['lies'])) : ?>
+    if (parseFloat($('#detail_lies').val()) > parseFloat($('#detail_vol_total_recolte').val())) {
+        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_log_usages_industriels_superieur_volume')); ?></p>');
+        openPopup($('#popup_msg_erreur'), 0);
+        return false;
+    }
+    <?php endif; ?>
+
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
             var total_non_negociant = <?php echo $onglets->getCurrentLieu()->getTotalVolumeForMinQuantite() ?>;
             var min = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>);
