@@ -420,17 +420,6 @@ EOF;
 
         $docs[] = $json;
 
-        $json = new stdClass();
-        $json->_id = 'CURRENT';
-        $json->type = 'Current';
-        $json->campagne = $annee;
-        $json->dr_non_editable = 1;
-        $json->dr_non_ouverte = 0;
-        $json->ds_non_editable = 0;
-        $json->ds_non_ouverte = 0;
-        $json->declaration_courante = 'DS';
-        $docs[] = $json;
-
         if ($options['import'] == 'couchdb') {
             foreach ($docs as $data) {
                 $doc = acCouchdbManager::getClient("DR")->find($data->_id, acCouchdbClient::HYDRATE_JSON);
