@@ -1,0 +1,145 @@
+/**
+ * Fichier : contrats_vrac.css
+ * Description : styles spécifiques à la création de contrats vrac
+ * Auteur : Mikaël Guillin - mguillin[at]actualys.com
+ * Version : 1.0.0
+ ******************************************/
+
+/* =================================================== */
+/* STRUCTURE / ELEMENTS GENERIQUES */
+/* =================================================== */
+
+#contrats_vrac
+{
+	background: #f7f6f6;
+	clear: both;
+	padding: 30px 20px;
+}
+
+/* Rail d'étapes */
+
+#contrats_vrac #etape_declaration
+{
+	background: none;
+	border: 0;
+	padding-left: 0;
+}
+
+#contrats_vrac #etape_declaration.etapes_ds { margin: 0; }
+
+#contrats_vrac #etape_declaration li em
+{
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+}
+
+/* Boutons précédent / suivant */
+
+#contrats_vrac #btn_etape { padding: 0; }
+
+
+/* Formulaire */
+
+#contrats_vrac form#principal,
+#contrats_vrac form#principal input[type="text"]
+{
+	color: #7a7a7a;
+	font-size: 14px;
+}
+
+#contrats_vrac form#principal input[type="text"]
+{
+	border: 1px solid #c1c1c1;
+	border-bottom-color: #e1e1e1;
+	border-top-color: #848484; 
+}
+
+#contrats_vrac form#principal { margin: 30px 0 0; }
+
+#contrats_vrac form#principal fieldset
+{
+	border: 1px solid #cccdcd;
+	margin: 0 0 25px;
+	padding: 40px 15px 15px;
+	position: relative;
+}
+
+#contrats_vrac form#principal fieldset legend
+{
+	color: #acb701;
+	font-size: 16px;
+	font-weight: bold;
+	position: absolute;
+	left: 15px;
+	top: 10px;
+}
+
+#contrats_vrac form#principal .bloc_conditionner 
+{ 
+	display: inline-block; 
+	padding: 0 0 0 10px;
+}
+
+#contrats_vrac form#principal .ui-button
+{
+	background: url('../images/puces/fleche_sous_menu.png') 50% 50% no-repeat;
+	border: 0;
+	cursor: pointer;
+	height: 17px;
+	margin: 0 5px;
+	vertical-align: top;
+	width: 17px;
+}
+
+#contrats_vrac form#principal .ui-autocomplete-input
+{
+	background: #FFF url('../images/pictos/pi_loupe_2.png') 98% 50% no-repeat;
+	padding: 0 20px 0 0;
+}
+
+#contrats_vrac form#principal .remove_autocomplete 
+{ 
+	background: url('../images/pictos/pi_supprimer.png') no-repeat;
+	display: inline-block;
+	height: 14px;
+	margin: 0 5px;
+	overflow: hidden;
+	text-indent: 100%;
+	white-space: nowrap;
+	width: 14px;
+}
+
+#contrats_vrac form#principal .bold { font-weight: bold; }
+
+#contrats_vrac form#principal a 
+{
+	color: #acb701;
+	text-decoration: underline;
+}
+
+#contrats_vrac form#principal .form_col { float: left; }
+
+#contrats_vrac form#principal .form_col + .form_col { margin: 0 0 0 50px; }
+
+#contrats_vrac form#principal .ligne_form { margin: 0 0 25px; }
+
+#contrats_vrac form#principal .nom_cvi .ligne_form { margin: 0 0 5px; }
+
+#contrats_vrac form#principal .informations ul li { margin: 0 0 7px; }
+
+#contrats_vrac form#principal .radio_list { display: inline-block; }
+
+#contrats_vrac form#principal .radio_list li
+{
+	display: inline-block;
+	margin: 0 0 0 32px;
+}
+
+/* Tableau */
+
+#contrats_vrac form#principal .table_donnees + a
+{
+	display: inline-block;
+	margin: 20px 0;
+}
