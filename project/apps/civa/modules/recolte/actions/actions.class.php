@@ -91,7 +91,6 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($this->details->exist($detail_key));
 
         $this->details->remove($detail_key);
-        $this->onglets->getCurrentCouleur()->cleanAllNodes();
         $this->declaration->update();
         $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
         $this->declaration->save();
