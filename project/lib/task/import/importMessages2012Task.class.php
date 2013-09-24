@@ -58,7 +58,7 @@ EOF;
 		$json->err_log_cepage_non_saisie  = "Les détails de ce cépage n'ont pas été saisis";
 		$json->err_log_detail_non_saisie  = "Le détail n'a pas été saisi";
 		$json->err_log_ED_non_saisie  = "Vous nous avez indiqué comme motif de non récolte \"assemblage Edel\" mais vous n'avez pas saisi d'Edel";
-		$json->err_log_usages_industriels_superieur_volume  = "Le volume d'usages industriels  ne peut pas être supérieur au volume total";
+		$json->err_log_usages_industriels_superieur_volume  = "Le volume d'usages industriels saisi ne peut pas être supérieur au volume total";
 		$json->err_log_cremant_pas_rebeches  = "Vous avez oublié de saisir les rebêches";
 		$json->err_log_cremant_min_quantite  = "Les rebêches doivent représenter au minimum 2% du volume total produit";
 		$json->err_log_cremant_max_quantite  = "Les rebêches doivent représenter au maximum 10% des volumes produits";
