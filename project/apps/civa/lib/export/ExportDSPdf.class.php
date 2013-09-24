@@ -83,11 +83,11 @@ class ExportDSPdf extends ExportDocument {
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
-
+            
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
 
         if ($this->type == 'html') {
-          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
+           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }else {
           $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }
