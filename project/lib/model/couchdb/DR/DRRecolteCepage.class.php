@@ -108,6 +108,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return parent::getSumNoeudWithMethod($method, false);
     }
 
+    public function cleanAllNodes() {   
+        
+        return;
+    }
+
     protected function update($params = array()) {
       parent::update($params);
 
