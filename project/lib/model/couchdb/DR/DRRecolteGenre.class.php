@@ -14,6 +14,11 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return $this->filter('^appellation');
     }
 
+    public function getAppellationsSorted() {
+        
+        return $this->getChildrenNodeSorted();
+    }
+
     /**
      *
      * @return boolean

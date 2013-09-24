@@ -138,7 +138,28 @@ class ExportDRPdf extends ExportDocument {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
+
+          $this->createRecap($dr);
     }
+
+      protected function createRecap($dr) {
+        $recap = $this->getRecapTotal($dr);
+        $total = array("revendique_sur_place" => null, 
+                       "usages_industriels_sur_place" => null);
+        foreach($recap as $key => $item) {
+          $total["revendique_sur_place"] += $item->revendique_sur_place;
+          $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
+        }
+        $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
+                                                                                   'recap_total' => $recap,
+                                                                                   'total' => $total)));
+    }
+
+    protected function getRecapTotal($dr) {
+
+        return DRClient::getInstance()->getTotauxByAppellationsRecap($dr);
+    }
+
     
     private function getRecapitulatifInfos($dr)
     {
