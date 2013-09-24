@@ -12,7 +12,7 @@ abstract class _Tiers extends Base_Tiers {
      * @return array 
      */
     public function getDeclarationsArchivesSince($campagne) {
-        return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne, 4);
     }
 
         /**

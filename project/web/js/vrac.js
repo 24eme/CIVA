@@ -144,11 +144,46 @@ var initValidContratPopup = function()
 
     }
 
+    /**
+	*  Gère les champs du tableaux de 
+	*  l'étape produits de la création de contrats
+	******************************************/
+	var initChampsTableauProduits = function()
+	{
+		var tableau = $('#contrats_vrac .table_donnees');
+		var lignes_tableau = tableau.find('tr');
+		var champs_volume = tableau.find('.volume input');
+		var champs_prix = tableau.find('.prix_unitaire input');
+		var champs_requis = champs_volume.add(champs_prix);
+		var champs = tableau.find('input:text');
+
+		champs.focus(function()
+		{
+			lignes_tableau.removeClass('actif');
+			$(this).parents('tr').addClass('actif');
+		});
+
+		champs.blur(function()
+		{
+			champs_requis.each(function()
+			{
+				if($(this).val() !== '')
+				{
+					$(this).parents('tr').addClass('coche');
+				}else
+				{
+					$(this).parents('tr').removeClass('coche');
+				}
+			});
+		});
+	};
+
 	$(document).ready(function()
 	{
 		 $(this).initBlocCondition();
 		 initCollectionAddTemplate('.btn_ajouter_ligne_template', /var---nbItem---/g, callbackAddTemplate);
 		 initCollectionDeleteTemplate();
                  initValidContratPopup();
+         initChampsTableauProduits();
 	});
 })(jQuery);

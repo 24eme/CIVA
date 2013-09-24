@@ -207,6 +207,12 @@ Le CIVA';
         $this->help_popup_action = "help_popup_visualisation";
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+
+        if($annee + 4 < $this->getUser()->getCampagne()) {
+            
+            $this->forward404("Cette DR n'est plus accessible");
+        }
+
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = acCouchdbManager::getClient()->find($key);
         $this->forward404Unless($this->dr);

@@ -24,11 +24,11 @@
 					<span><?php echo $embedForm['millesime']->renderError() ?></span>
 					<?php echo $embedForm['millesime']->render() ?>
 				</td>
-				<td>
+				<td class="volume">
 					<span><?php echo $embedForm['volume_propose']->renderError() ?></span>
 					<?php echo $embedForm['volume_propose']->render() ?>&nbsp;Hl
 				</td>
-				<td>
+				<td class="prix_unitaire">
 					<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
 					<?php echo $embedForm['prix_unitaire']->render() ?>&nbsp;&euro;/Hl
 				</td>
