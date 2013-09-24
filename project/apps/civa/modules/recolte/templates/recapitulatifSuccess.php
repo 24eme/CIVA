@@ -81,13 +81,13 @@
                                                 </tr>
                                                 <?php endif; ?>
                                                 <tr>
-                                                    <td>Dépassement <span class="unites">(hl)</span> :</td>
+                                                    <td>Usages industriels globaux <span class="unites">(hl)</span> :</td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplc()) ; ?></td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?> hl</td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr>
-                                                    <td>Usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                    <td style="font-size: 11px;">Dont usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur saisi">
                                                                 <?php if(isset($form[$key]['lies'])): ?>
@@ -99,9 +99,9 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr>
-                                                    <td>Usages industriels final <span class="unites">(hl)</span> :</td>
+                                                    <td style="font-size: 11px;">Dépassement <span class="unites">(hl)</span> :</td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?> hl</td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplc()) ; ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                             </tbody>
