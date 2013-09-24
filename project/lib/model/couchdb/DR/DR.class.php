@@ -444,7 +444,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                 }
 
                                 if ($detail->lies > $detail->volume) {
-                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_detail_vol_revendique_negatif')));
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume')));
 
                                     continue;
                                 }
@@ -484,16 +484,18 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
 
-        if (!$noeud->isValidRecapitulatifVente()) {
-            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
-        }
-
         //Verifie que le recapitulatif des ventes à du dplc si le total dplc du noeud est > 0
         if ($noeud->getConfig()->existRendement() && $noeud->hasAcheteurs() && $noeud->hasCompleteRecapitulatifVente() && $noeud->getDplc() > 0 && !$noeud->getTotalDontDplcRecapitulatifVente()) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
             return;
         }
 
+        if (!$noeud->isValidRecapitulatifVente()) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+            return;
+        }
+
+        $recap_is_ok = true;
         //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
         foreach($noeud->acheteurs as $type => $acheteurs) {
             foreach($acheteurs as $cvi => $acheteur) {
@@ -501,14 +503,24 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
                 if(!$acheteur->superficie) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $libelle . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+                        $recap_is_ok = false;
+                        continue;
                 }
                 if($noeud->getConfig()->existRendement() && $acheteur->superficie && $acheteur->dontdplc === null && $noeud->getDplc() > 0) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $libelle . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
+                        $recap_is_ok = false;
+                        continue;
                 }
                 if($acheteur->dontdplc > $volume) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $libelle . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
+                        $recap_is_ok = false;
+                        continue;
                 }
             }
+        }
+
+        if(!$recap_is_ok) {
+            return;
         }
 
         if($noeud->getVolumeRevendiqueCaveParticuliere() < 0) {
@@ -525,8 +537,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $lieu = $noeud->getLieu();
 
         // Verifie que le volume revendique n'est pas négatif, cad usage industriel saisi > vol revendique
-        if($noeud->getVolumeRevendique() < 0){
-            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_has_too_many_usages_industriels')));
+        if($noeud->getLies() > $noeud->getTotalVolume()){
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume')));
         }
     }
 
