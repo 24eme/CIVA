@@ -49,7 +49,7 @@
 					</tbody>
 				</table>
  				<p class="lien_tout"><a href="#">Tout voir</a></p>
- 				<p class="lien_nouveau"><a href="<?php echo url_for('@vrac_nouveau') ?>">Créer un nouveau contrat</a></p>
+ 				<p class="lien_nouveau"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst())) ?>">Créer un nouveau contrat</a></p>
  			</div>
  		</div>
  		<div id="documents_aide">
