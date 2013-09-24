@@ -111,14 +111,16 @@ class DRClient extends acCouchdbClient {
      * @param string $campagne
      * @return array 
      */
-    public function getArchivesSince($cvi, $campagne) {
+    public function getArchivesSince($cvi, $campagne, $limit) {
         $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         $campagnes = array();
         foreach($docs->getIds() as $doc_id) {
             preg_match('/DR-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches);
             $campagnes[$doc_id] = $matches['campagne'];
         }
-        return $campagnes;
+        krsort($campagnes);
+
+        return array_slice($campagnes, 0, $limit);
     }
 
     public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
