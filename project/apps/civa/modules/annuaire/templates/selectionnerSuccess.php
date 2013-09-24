@@ -1,4 +1,4 @@
-<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?><?php if ($redirect): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
+<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?><?php if (isset($redirect)): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
 	<p>Saisissez ici le type et cvi du tiers que vous souhaitez ajouter à votre annuaire.</p><br />

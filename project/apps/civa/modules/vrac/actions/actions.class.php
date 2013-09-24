@@ -1,16 +1,6 @@
 <?php
 class vracActions extends sfActions 
-{
-	
-	public function executeNouveau(sfWebRequest $request) 
-	{
-		$tiers = $this->getUser()->getDeclarant();
-		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
-		$vrac->etape = VracEtapes::getInstance()->getFirst();
-		$vrac->save();
-		return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => $vrac->etape));
-    }
-    
+{    
 	public function executeSupprimer(sfWebRequest $request) 
 	{
 		$this->vrac = $this->getRoute()->getVrac();
@@ -51,11 +41,14 @@ class vracActions extends sfActions
     
     public function executeEtape(sfWebRequest $request) 
     {
-    	$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
+    	$this->vrac = $this->getRoute()->getVrac();
+    	if (!$this->vrac) {
+    		$this->vrac = $this->getNouveauVrac($this->user);
+    	}
 		$this->annuaire = $this->getAnnuaire();
     	$this->form = $this->getForm($this->vrac, $this->etape, $this->annuaire);
     	if ($nextEtape = $this->getEtapeSuivante($this->etape, $this->etapes)) {
@@ -72,6 +65,15 @@ class vracActions extends sfActions
        			}
         	}
         }
+    }
+    
+    protected function getNouveauVrac($tiers)
+    {
+		$tiers = $this->getUser()->getDeclarant();
+		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
+		$vrac->mandataire_identifiant = $tiers->_id;
+		$vrac->storeMandataireInformations($tiers);
+		return $vrac;
     }
     
     public function executeAjouterProduit(sfWebRequest $request) 
@@ -195,5 +197,5 @@ class vracActions extends sfActions
     {
     	$compte = $this->getUser()->getCompte();
 		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
-    }
+    }    
 }

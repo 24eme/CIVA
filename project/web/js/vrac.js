@@ -114,6 +114,30 @@
 	        return false;
 	    });
 	}
+        
+        
+        
+        /**
+ * Initalise la popup previsualisation des Contrat
+ ******************************************/
+var initValidContratPopup = function()
+{
+    $('#previsualiserContrat').click(function() {
+        openPopup($("#popup_loader"));
+        $.ajax({
+            url: ajax_url_to_print,
+            success: function(data) {
+                $('.popup-loading').empty();
+                $('.popup-loading').css('background', 'none');
+                $('.popup-loading').css('padding-top', '10px');
+                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds" title="Télécharger la DS"></a></p>');
+                openPopup($("#popup_loader"));
+
+            }
+        });
+        return false;
+    });
+};
 	
     var callbackAddTemplate = function(bloc) 
     {
@@ -125,5 +149,6 @@
 		 $(this).initBlocCondition();
 		 initCollectionAddTemplate('.btn_ajouter_ligne_template', /var---nbItem---/g, callbackAddTemplate);
 		 initCollectionDeleteTemplate();
+                 initValidContratPopup();
 	});
 })(jQuery);

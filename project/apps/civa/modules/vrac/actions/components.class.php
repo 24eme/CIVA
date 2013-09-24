@@ -6,6 +6,7 @@ class vracComponents extends sfComponents {
 	{
 		$tiers = $this->getUser()->getDeclarant();
         $this->vracs = VracTousView::getInstance()->findBy($tiers->_id, ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
+        $this->etapes = VracEtapes::getInstance();
     }
     
 }
