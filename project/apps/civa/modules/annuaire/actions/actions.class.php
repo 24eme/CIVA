@@ -43,6 +43,11 @@ class annuaireActions extends sfActions {
         		$values = $this->form->getValues();
         		if ($this->tiers->_id == $tiers->_id) {
        				$this->form->save();
+       				if ($vracIdentifiant = $this->getUser()->getAttribute('annuaire_vrac_id', null)) {
+       					$this->getUser()->setAttribute('annuaire_vrac_id', null);
+       					$etapes = VracEtapes::getInstance();
+       					return $this->redirect('vrac_etape', array('numero_contrat' => $vracIdentifiant, 'etape' => $etapes->getFirst()));
+       				}
        				return $this->redirect('@annuaire');
         		}
         		return $this->redirect('annuaire_ajouter', array('type' => $values['type'], 'identifiant' => $values['identifiant']));

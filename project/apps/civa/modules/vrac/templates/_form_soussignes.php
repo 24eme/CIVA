@@ -12,15 +12,15 @@
 				<label for="vrac_soussignes_vendeur_recoltant_identifiant" class="bold">Nom / CVI * :</label>	
 				<div id="vendeur_recoltants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 					<?php echo $form['vendeur_recoltant_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 				<div id="vendeur_negociants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 					<?php echo $form['vendeur_negociant_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 				<div id="vendeur_caves_cooperatives" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 					<?php echo $form['vendeur_cave_cooperative_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 			</div>
 		</div>
@@ -50,16 +50,16 @@
 				<label for="vrac_soussignes_acheteur_recoltant_identifiant" class="bold">Nom / CVI * :</label>	
 				<div id="acheteur_recoltants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 					<?php echo $form['acheteur_recoltant_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 
 				<div id="acheteur_negociants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 					<?php echo $form['acheteur_negociant_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 				<div id="acheteur_caves_cooperatives" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 					<?php echo $form['acheteur_cave_cooperative_identifiant']->render() ?>
-					<a href="<?php echo url_for('annuaire_selectionner', array('type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
+					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 			</div>
 		</div>
@@ -103,37 +103,37 @@
 		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").combobox();		
 		$("#<?php echo $form['vendeur_recoltant_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants')) ?>";
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'recoltants')) ?>";
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#vendeur_infos').empty(); $('#vendeur_infos').append(data);});
 		});
 		$("#<?php echo $form['vendeur_negociant_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'negociants')) ?>"; 
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'negociants')) ?>"; 
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#vendeur_infos').empty(); $('#vendeur_infos').append(data);});
 		});
 		$("#<?php echo $form['vendeur_cave_cooperative_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'caves_cooperatives')) ?>"; 
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'caves_cooperatives')) ?>"; 
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#vendeur_infos').empty(); $('#vendeur_infos').append(data);});
 		});
 		$("#<?php echo $form['acheteur_recoltant_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants')) ?>";
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'recoltants')) ?>";
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#acheteur_infos').empty(); $('#acheteur_infos').append(data);});
 		});
 		$("#<?php echo $form['acheteur_negociant_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'negociants')) ?>"; 
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'negociants')) ?>"; 
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#acheteur_infos').empty(); $('#acheteur_infos').append(data);});
 		});
 		$("#<?php echo $form['acheteur_cave_cooperative_identifiant']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') { 
-				return document.location.href="<?php echo url_for('annuaire_selectionner', array('type' => 'caves_cooperatives')) ?>"; 
+				return document.location.href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => 'caves_cooperatives')) ?>"; 
 			}
 			$.post("<?php echo url_for('vrac_soussigne_informations') ?>", { identifiant: $(this).val() }, function(data) {$('#acheteur_infos').empty(); $('#acheteur_infos').append(data);});
 		});

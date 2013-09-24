@@ -1,6 +1,19 @@
 <?php
 class vracActions extends sfActions 
 {    
+	public function executeAnnuaire(sfWebRequest $request)
+	{
+		$this->vrac = $this->getRoute()->getVrac();
+		$this->type = $request->getParameter('type');
+		$types = array_keys(AnnuaireClient::getAnnuaireTypes());
+		if (!in_array($this->type, $types)) {
+			throw new sfError404Exception('Le type "'.$this->type.'" n\'est pas pris en charge.');
+		}
+		$vracIdentifiant = ($this->vrac->numero_contrat)? $this->vrac->numero_contrat : VracRoute::NOUVEAU;
+		$this->getUser()->setAttribute('annuaire_vrac_id', $vracIdentifiant);
+		return $this->redirect('annuaire_selectionner', array('type' => $this->type));
+	}
+	
 	public function executeSupprimer(sfWebRequest $request) 
 	{
 		$this->vrac = $this->getRoute()->getVrac();
@@ -31,14 +44,6 @@ class vracActions extends sfActions
         }
     }
     
-    protected function getFormRetiraisons($vrac)
-    {
-    	if ($vrac->isValide() && !$vrac->isCloture()) {
-    		return new VracProduitsEnlevementsForm($vrac);
-    	}
-    	return null;
-    }
-    
     public function executeEtape(sfWebRequest $request) 
     {
 		$this->user = $this->getUser()->getDeclarant();
@@ -65,15 +70,6 @@ class vracActions extends sfActions
        			}
         	}
         }
-    }
-    
-    protected function getNouveauVrac($tiers)
-    {
-		$tiers = $this->getUser()->getDeclarant();
-		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
-		$vrac->mandataire_identifiant = $tiers->_id;
-		$vrac->storeMandataireInformations($tiers);
-		return $vrac;
     }
     
     public function executeAjouterProduit(sfWebRequest $request) 
@@ -198,4 +194,21 @@ class vracActions extends sfActions
     	$compte = $this->getUser()->getCompte();
 		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
     }    
+    
+    protected function getFormRetiraisons($vrac)
+    {
+    	if ($vrac->isValide() && !$vrac->isCloture()) {
+    		return new VracProduitsEnlevementsForm($vrac);
+    	}
+    	return null;
+    }
+    
+    protected function getNouveauVrac($tiers)
+    {
+		$tiers = $this->getUser()->getDeclarant();
+		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
+		$vrac->mandataire_identifiant = $tiers->_id;
+		$vrac->storeMandataireInformations($tiers);
+		return $vrac;
+    }
 }
