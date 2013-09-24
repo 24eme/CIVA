@@ -481,7 +481,6 @@ class DSCivaClient extends DSClient {
         if ($last_ds_principale->getLieuStockage() == $num_new_principale) {
             return $dss;
         }
-        //    var_dump($last_ds_principale->_id); exit;
         $num_etape = $last_ds_principale->get('num_etape');
         $rebeches = $last_ds_principale->get('rebeches');
         $dplc = $last_ds_principale->get('dplc');

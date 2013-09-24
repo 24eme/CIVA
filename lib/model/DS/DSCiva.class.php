@@ -397,7 +397,6 @@ public function getConfigurationCampagne() {
     }
     
     public function updateEtape($etape_rail, $current_ds = null, $new_hash = "",$ds_p = null) {
-      //   var_dump($etape_rail); exit;
          $courant_stock = $this->getMajCourantStock($current_ds,$new_hash,$ds_p); 
        
          if($this->isDsPrincipale()){
