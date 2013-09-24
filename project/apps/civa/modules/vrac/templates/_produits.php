@@ -122,4 +122,5 @@
 	    </li>
 	</ul>
 </form>
+<a href="<?php echo url_for('vrac_cloture', $vrac) ?>">Cloturer le contrat</a>
 <?php endif; ?>

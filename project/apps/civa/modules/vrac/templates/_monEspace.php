@@ -23,7 +23,7 @@
 									continue;
 								}
 								$alt = ($counter%2);
-								$validation = null;
+								$hasValidated = false;
 						?>
 						<tr<?php if($alt): ?> class="alt"<?php endif; ?>>
 							<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
@@ -31,30 +31,24 @@
 								<ul>
 									<?php 
 										if ($item->soussignes->vendeur->identifiant): 
-											if ($item->soussignes->vendeur->identifiant == $user->_id) {
-												if (!$item->soussignes->vendeur->date_validation) {
-													$validation = 'validation';
-												}
+											if ($item->soussignes->vendeur->identifiant == $user->_id && $item->soussignes->vendeur->date_validation) {
+												$hasValidated = true;
 											}
 									?>
 									<li>Vendeur : <strong><?php echo $item->soussignes->vendeur->raison_sociale; ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> V<?php endif; ?></li>
 									<?php endif; ?>
 									<?php 
 										if ($item->soussignes->acheteur->identifiant):
-											if ($item->soussignes->acheteur->identifiant == $user->_id) {
-												if (!$item->soussignes->acheteur->date_validation) {
-													$validation = 'validation';
-												}
+											if ($item->soussignes->acheteur->identifiant == $user->_id && $item->soussignes->acheteur->date_validation) {
+												$hasValidated = true;
 											}
-									 ?>
+									?>
 									<li>Acheteur : <strong><?php echo $item->soussignes->acheteur->raison_sociale; ?></strong><?php if ($item->soussignes->acheteur->date_validation): ?> V<?php endif; ?></li>
 									<?php endif; ?>
 									<?php 
-										if ($item->soussignes->mandataire->identifiant): 
-											if ($item->soussignes->mandataire->identifiant == $user->_id) {
-												if (!$item->soussignes->mandataire->date_validation) {
-													$validation = 'validation';
-												}
+										if ($item->soussignes->mandataire->identifiant):
+											if ($item->soussignes->mandataire->identifiant == $user->_id && $item->soussignes->mandataire->date_validation) {
+												$hasValidated = true;
 											}
 									?>
 									<li>Courtier : <strong><?php echo $item->soussignes->mandataire->raison_sociale; ?></strong><?php if ($item->soussignes->mandataire->date_validation): ?> V<?php endif; ?></li>
@@ -68,7 +62,7 @@
 								<?php 
 									else:
 								?>
-								<a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero, 'validation' => $validation)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a>
+								<a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated) ?></a>
 								<?php endif; ?>
 								| <a href="<?php echo url_for('vrac_supprimer', array('numero_contrat' => $item->numero)) ?>">X</a></td>
 						</tr>

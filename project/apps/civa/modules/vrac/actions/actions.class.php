@@ -14,6 +14,14 @@ class vracActions extends sfActions
 		return $this->redirect('annuaire_selectionner', array('type' => $this->type));
 	}
 	
+	public function executeCloture(sfWebRequest $request)
+	{
+		$this->vrac = $this->getRoute()->getVrac();
+		$this->vrac->clotureProduits();
+		$this->vrac->save();
+		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+	}
+	
 	public function executeSupprimer(sfWebRequest $request) 
 	{
 		$this->vrac = $this->getRoute()->getVrac();
@@ -29,12 +37,6 @@ class vracActions extends sfActions
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
 		$this->form = $this->getFormRetiraisons($this->vrac);
-		if ($request->getParameter('validation')) {
-			$this->vrac->valideUser($this->user);
-			$this->vrac->updateValideStatut();
-			$this->vrac->save();
-			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-		}
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
@@ -42,6 +44,16 @@ class vracActions extends sfActions
        			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
+    }
+    
+	public function executeValidation(sfWebRequest $request) 
+	{
+		$this->vrac = $this->getRoute()->getVrac();
+		$this->user = $this->getUser()->getDeclarant();
+		$this->vrac->valideUser($this->user->_id);
+		$this->vrac->updateValideStatut();
+		$this->vrac->save();
+		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
     
     public function executeEtape(sfWebRequest $request) 
@@ -63,6 +75,9 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
        			$this->form->save();
+       			if ($request->isXmlHttpRequest()) {
+       				return sfView::NONE;
+       			}
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {

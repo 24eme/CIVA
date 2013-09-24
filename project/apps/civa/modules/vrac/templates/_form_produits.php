@@ -36,7 +36,18 @@
 		<?php endforeach; ?>
 		</tbody>
 </table>
-<a href="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">Ajouter un produit</a>
+<a href="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>" id="ajouter-produit">Ajouter un produit</a>
 </div>
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#ajouter-produit").click(function() {
+		var lien = $(this);
+		$.post($("#principal").attr('action'), $("#principal").serialize(), function(data){
+        	document.location.href = lien.attr('href');
+        });
+		return false;
+	});
+});
+</script>
 	
 
