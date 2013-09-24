@@ -127,7 +127,7 @@ input[type=radio]
 .message {
 	background: #fffcef;
 	border: 1px solid #f90;
-	margin: 15px 0;
+	margin: 0 0 15px 0;
 	padding: 10px 15px;
 }
 

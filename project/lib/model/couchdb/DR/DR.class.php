@@ -261,43 +261,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      * @return boolean
      */
     public function cleanNoeuds() {
-        /*$clean = false;
-        $hash_to_delete = array();
-        foreach($this->recolte->certification->genre->getAppellations() as $appellation) {
-            foreach($appellation->getLieux() as $lieu) {
-                foreach($lieu->getCouleurs() as $couleur) {
-                    foreach($couleur->getCepages() as $cepage) {
-                        if (count($cepage->detail) < 1) {
-                            $cepage->delete($cepage->getKey());
-                            $clean = true;
-                        }
-                    }
-                    if (count($couleur->getCepages()) < 1) {
-                        $couleur->delete();
-                        $clean = true;
-                    }
-                }
-                if (count($lieu->getCouleurs()) < 1) {
-                    //$lieu->getParent()->remove($lieu->getKey());
-                    $clean = true;
-                }
-            }
-            if (count($appellation->getLieux()) < 1) {
-                //$this->recolte->certification->genre->remove($appellation->getKey());
-                $this->acheteurs->remove($appellation->getKey());
-                $clean = true;
-            }
-        }
 
-        if (count($this->recolte->certification->genre->getAppellations()) == 0) {
-            $this->recolte->remove('certification');
-        }
-
-        if (count($this->acheteurs->getNoeudAppellations()) == 0) {
-            $this->acheteurs->remove('certification');
-        }
-
-        return $clean;*/
+        return $this->recolte->cleanAllNodes();
     }
 
     /**
@@ -389,7 +354,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         $cepage = $couleur->get($key);
-                        $totalVolRevendique = $cepage->getTotalVolume();
+                        $totalVolRevendique = $cepage->getTotalVolume(true);
 
                         if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
                             $couleur->remove($key);

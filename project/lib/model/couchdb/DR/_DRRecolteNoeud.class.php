@@ -25,6 +25,20 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
       return $node->getChildrenNode();
     }
 
+    public function getChildrenNodeSorted() {
+        $items = $this->getChildrenNode();
+        $items_config = $this->getConfig()->getChildrenNode();
+        $items_sorted = array();
+
+        foreach($items_config as $hash => $item_config) {
+            if($this->exist($item_config->getKey())) {
+                $items_sorted[$hash] = $this->get($item_config->getKey());
+            }
+        }
+
+        return $items_sorted;
+    }
+
     public function getProduits() {
         $produits = array();
         foreach($this->getChildrenNode() as $key => $item) {
@@ -555,6 +569,17 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             $sum += $noeud->$method();
         }
         return $sum;
+    }
+
+    public function cleanAllNodes() {   
+        $keys_to_delete = array();
+        foreach($this->getChildrenNodeSorted() as $item) {
+            $item->cleanAllNodes();
+
+            if(!count($item->getProduitsDetails())){
+                $this->remove($item->getKey());
+            }
+        }
     }
 
 } 

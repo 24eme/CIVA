@@ -47,6 +47,18 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
+    public function cleanAllNodes() {   
+        $keys_to_delete = array();
+        foreach($this->getChildrenNodeSorted() as $item) {
+            $item->cleanAllNodes();
+
+            if(!count($item->getProduitsDetails())){
+                $this->getDocument()->acheteurs->certification->genre->remove($item->getKey());
+                $this->remove($item->getKey());
+            }
+        }
+    }
+
     /**
      *
      * @param array $params

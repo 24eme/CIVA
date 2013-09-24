@@ -91,9 +91,7 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($this->details->exist($detail_key));
 
         $this->details->remove($detail_key);
-        if ($this->details->count() == 0) {
-            $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
-        }
+        $this->onglets->getCurrentCouleur()->cleanAllNodes();
         $this->declaration->update();
         $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
         $this->declaration->save();
@@ -202,22 +200,16 @@ class recolteActions extends EtapesActions {
         }
         $this->form = new RecapitulatifContainerForm($this->appellationlieu);
 
-        if ($request->getParameter('redirect') && !$this->form->isSaisisable()) {
-            return $this->redirect($this->onglets->getNextUrl());
-        }
-
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $redirect = false;
-                if( $this->form->getValue('usages_industriels') !=  $this->form->getObject()->getUsagesIndustriels() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
-                    $redirect = true;
-
                 $this->form->save();
-                if($redirect)
+                if($request->getParameter("is_validation_interne")) {
+                    $this->getUser()->setFlash('recapitulatif_confirmation', 'Votre saisie a bien été enregistrée');
                     return $this->redirect($this->onglets->getUrlRecap());
-                else
+                } else {
                     return $this->redirect($this->onglets->getNextUrl());
+                }
             }
         }
     }
