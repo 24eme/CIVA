@@ -138,6 +138,15 @@
 
 /* Tableau */
 
+#contrats_vrac form#principal .table_donnees input[type="text"] { background: #efeeee; }
+
+#contrats_vrac form#principal .table_donnees .actif input { background: #FFF; }
+
+#contrats_vrac form#principal .table_donnees .coche .prix_unitaire
+{
+	background: #edecec url('../images/pictos/pi_check.png') 98% 50% no-repeat;
+}
+
 #contrats_vrac form#principal .table_donnees + a
 {
 	display: inline-block;
