@@ -1275,6 +1275,30 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin: 0 0 0 5px;
 }
 
+#exploitation_acheteurs #choix_mode_saisie_lies td.td_intro {
+	font-size: 14px;
+	color: #666666;
+	padding: 8px 0 10px 174px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies table.table_checkbox td {
+	background: #EDECEC;
+	border: none;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li {
+	display: inline-block;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li:first-child {
+	padding-right: 208px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list input,
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list label {
+	display: inline-block;
+}
+
 /**
  * Ajout d'acheteurs
  ******************************************/
@@ -1311,7 +1335,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 /**
- * Acheteurs de moults
+ * Acheteurs de mouts
  ******************************************/
 #acheteurs_mouts {
 	margin: 0;
