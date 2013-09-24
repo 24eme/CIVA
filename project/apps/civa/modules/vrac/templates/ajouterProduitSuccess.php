@@ -65,7 +65,9 @@ $(document).ready(function(){
 	var appellationsLieuDit = Object.keys(jQuery.parseJSON('<?php echo $sf_data->getRaw('appellationsLieuDit'); ?>'));
     $("#choix_appellation").change(function() {
         var value = $(this).val();
+        
         $.post("<?php echo url_for('vrac_ajout_produit_lieux', array('sf_subject' => $vrac, 'etape' => $etape)) ?>", { appellation: value }, function(data){
+        	$("#<?php echo $form['hash']->renderId() ?>").val(null);
 			var json = jQuery.parseJSON(data);
 			var size = Object.keys(json).length;
 			if (size > 0) {
@@ -75,6 +77,7 @@ $(document).ready(function(){
 	        	}
 	        	$("#choix_lieu").html(opts);
 	        	$("#ligne_lieu").removeClass("hidden");
+	        	$("#ligne_cepage").addClass("hidden");
 			} else {
 				$("#ligne_lieu").addClass("hidden");
 				$("#choix_lieu").trigger("change");
@@ -94,6 +97,7 @@ $(document).ready(function(){
 			value = '';
         }
         $.post("<?php echo url_for('vrac_ajout_produit_cepages', array('sf_subject' => $vrac, 'etape' => $etape)) ?>", { appellation: appellation, lieu: value }, function(data){
+        	$("#<?php echo $form['hash']->renderId() ?>").val(null);
 			var json = jQuery.parseJSON(data);
 			var size = Object.keys(json).length;
 			if (size > 0) {
