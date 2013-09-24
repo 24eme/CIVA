@@ -48,14 +48,13 @@ class ExportVracPdf extends ExportDocument {
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($filename = null) {       
-        $title = 'Contrat numéro '.$this->vrac->_id;
-        $header = sprintf("Contrat entre : %s et %s", $this->vrac->acheteur->raison_sociale, $this->vrac->vendeur->raison_sociale);
+    protected function init($filename = null) {    
+        $title = "CONTRAT DE VENTE n° ".$this->vrac->numero_contrat;
+        $header = "DE VINS AOC PRODUITS EN ALSACE";
 
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
-        var_dump($filename); exit;
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
         if ($this->type == 'html') {
           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
@@ -87,8 +86,8 @@ class ExportVracPdf extends ExportDocument {
         return $filename.'.pdf';
     }
 
-    protected function create() {
-        var_dump("Le vla ton PDF MAN");
+    protected function create() {    
+            $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac)));
     }
 
     protected function getPartial($templateName, $vars = null) {
