@@ -25,6 +25,20 @@ class Vrac extends BaseVrac
 		self::STATUT_CLOTURE => 'Cloturé'
 	);
 	
+	static $statuts_libelles_actions = array(
+		self::STATUT_CREE => null,
+		self::STATUT_VALIDE_PARTIELLEMENT => 'Valider',
+		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_ANNULE => 'Visualiser',
+		self::STATUT_ENLEVEMENT => 'Enlever',
+		self::STATUT_CLOTURE => 'Visualiser'
+	);
+	
+	static $statuts_libelles_actions_proprietaire = array(
+		self::STATUT_CREE => 'Continuer',
+		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
+	);
+	
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
 		self::STATUT_VALIDE_PARTIELLEMENT,
@@ -36,6 +50,16 @@ class Vrac extends BaseVrac
 		'acheteur',
 		'mandataire'
 	);
+	
+  	public static function getStatutsLibellesActions() 
+  	{
+  		return self::$statuts_libelles_actions;
+  	}
+	
+  	public static function getStatutsLibellesActionsProprietaire() 
+  	{
+  		return array_merge(self::$statuts_libelles_actions, self::$statuts_libelles_actions_proprietaire);
+  	}
 	
   	public static function getStatutsLibelles() 
   	{
@@ -56,6 +80,15 @@ class Vrac extends BaseVrac
   	{
   		$libelles = self::getStatutsLibelles();
   		return $libelles[$this->valide->statut];
+  	}
+  	
+  	public function getStatutLibelleAction($proprietaire = false)
+  	{
+  		$libelles = self::getStatutsLibellesActions();
+  		if ($proprietaire) {
+  			$libelles = self::getStatutsLibellesActionsProprietaire();
+  		}
+  		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
     
     public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
@@ -183,6 +216,11 @@ class Vrac extends BaseVrac
     	return false;
     }
     
+    public function isBrouillon()
+    {
+    	return (!$this->valide->statut || $this->valide->statut == self::STATUT_CREE)? true : false;
+    }
+    
     public function isValide()
     {
     	return ($this->numero_archive)? true : false;
@@ -249,5 +287,10 @@ class Vrac extends BaseVrac
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
     	}
+    }
+    
+    public function isProprietaire($identifiant)
+    {
+    	return ($this->createur_identifiant == $identifiant)? true : false;
     }
 }
