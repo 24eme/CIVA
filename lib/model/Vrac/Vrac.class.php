@@ -159,6 +159,20 @@ class Vrac extends BaseVrac
     	$this->vendeur->famille = null;
     }
     
+    public function storeMandataireInformations($tiers)
+    {
+    	$this->mandataire->nom = $tiers->nom;
+    	$this->mandataire->raison_sociale = $tiers->nom;
+    	$this->mandataire->siret = $tiers->siret;
+    	$this->mandataire->carte_pro = null; // A gerer
+    	$this->mandataire->adresse = $tiers->siege->adresse;
+    	$this->mandataire->code_postal = $tiers->siege->code_postal;
+    	$this->mandataire->commune = $tiers->siege->commune;
+    	$this->mandataire->telephone = $tiers->telephone;
+    	$this->mandataire->email = $tiers->email;
+    	$this->mandataire->famille = null;
+    }
+    
     public function isSupprimable($userId)
     {
     	if ($userId == $this->createur_identifiant) {
