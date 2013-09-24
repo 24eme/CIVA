@@ -12,7 +12,8 @@
 #contrats_vrac
 {
 	background: #f7f6f6;
-	padding: 30px;
+	clear: both;
+	padding: 30px 20px;
 }
 
 /* Rail d'étapes */
@@ -23,6 +24,8 @@
 	border: 0;
 	padding-left: 0;
 }
+
+#contrats_vrac #etape_declaration.etapes_ds { margin: 0; }
 
 #contrats_vrac #etape_declaration li em
 {
@@ -52,11 +55,7 @@
 	border-top-color: #848484; 
 }
 
-#contrats_vrac form#principal
-{
-	margin: 30px 0 0;
-	width: 810px;
-}
+#contrats_vrac form#principal { margin: 30px 0 0; }
 
 #contrats_vrac form#principal fieldset
 {
@@ -74,6 +73,23 @@
 	position: absolute;
 	left: 15px;
 	top: 10px;
+}
+
+#contrats_vrac form#principal .bloc_conditionner 
+{ 
+	display: inline-block; 
+	padding: 0 0 0 10px;
+}
+
+#contrats_vrac form#principal .ui-button
+{
+	background: url('../images/puces/fleche_sous_menu.png') 50% 50% no-repeat;
+	border: 0;
+	cursor: pointer;
+	height: 17px;
+	margin: 0 5px;
+	vertical-align: top;
+	width: 17px;
 }
 
 #contrats_vrac form#principal .ui-autocomplete-input
@@ -118,4 +134,12 @@
 {
 	display: inline-block;
 	margin: 0 0 0 32px;
+}
+
+/* Tableau */
+
+#contrats_vrac form#principal .table_donnees + a
+{
+	display: inline-block;
+	margin: 20px 0;
 }

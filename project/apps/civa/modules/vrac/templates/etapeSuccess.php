@@ -1,3 +1,5 @@
+<h2 class="titre_principal">Nouveau contrat</h2>
+
 <div id="contrats_vrac">
 
 	<div class="clearfix">

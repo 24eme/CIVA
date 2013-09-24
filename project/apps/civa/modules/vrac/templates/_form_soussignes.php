@@ -1,24 +1,24 @@
 <div class="clearfix">
-	<fieldset>
+	<fieldset class="clearfix">
 		<legend>Vendeur</legend>
 
 		<div class="form_col">
-			<div class="ligne_form" data-condition-cible="#vendeur_recoltants|#vendeur_negociants|#vendeur_caves_cooperatives">
+			<div class="bloc_condition ligne_form" data-condition-cible="#vendeur_recoltants|#vendeur_negociants|#vendeur_caves_cooperatives">
 				<label for="vrac_soussignes_vendeur_type_recoltants" class="bold">Type :</label>
 				<?php echo $form['vendeur_type']->render() ?>
 			</div>
 
 			<div class="nom_cvi ligne_form">
 				<label for="vrac_soussignes_vendeur_recoltant_identifiant" class="bold">Nom / CVI * :</label>	
-				<div id="vendeur_recoltants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
+				<div id="vendeur_recoltants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 					<?php echo $form['vendeur_recoltant_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
-				<div id="vendeur_negociants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
+				<div id="vendeur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 					<?php echo $form['vendeur_negociant_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
-				<div id="vendeur_caves_cooperatives" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
+				<div id="vendeur_caves_cooperatives" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 					<?php echo $form['vendeur_cave_cooperative_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
@@ -37,27 +37,27 @@
 		</div>
 	</fieldset>
 
-	<fieldset>
+	<fieldset class="clearfix">
 		<legend>Acheteur</legend>
 
 		<div class="form_col">
-			<div class="ligne_form" data-condition-cible="#acheteur_recoltants|#acheteur_negociants|#acheteur_caves_cooperatives">
+			<div class="bloc_condition ligne_form" data-condition-cible="#acheteur_recoltants|#acheteur_negociants|#acheteur_caves_cooperatives">
 				<label for="vrac_soussignes_acheteur_type_recoltants" class="bold">Type :</label>
 				<?php echo $form['acheteur_type']->render() ?>
 			</div>
 
 			<div class="nom_cvi ligne_form">
 				<label for="vrac_soussignes_acheteur_recoltant_identifiant" class="bold">Nom / CVI * :</label>	
-				<div id="acheteur_recoltants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
+				<div id="acheteur_recoltants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 					<?php echo $form['acheteur_recoltant_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
 
-				<div id="acheteur_negociants" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
+				<div id="acheteur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 					<?php echo $form['acheteur_negociant_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
-				<div id="acheteur_caves_cooperatives" class="ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
+				<div id="acheteur_caves_cooperatives" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 					<?php echo $form['acheteur_cave_cooperative_identifiant']->render() ?>
 					<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY)) ?>">Ajouter à mon carnet d'adresse</a>
 				</div>
@@ -76,7 +76,7 @@
 		</div>
 	</fieldset>
 
-	<fieldset>
+	<fieldset class="clearfix">
 		<legend>Courtier</legend>
 
 		<p class="ligne_form">Veuillez selectionner ou saisir l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
