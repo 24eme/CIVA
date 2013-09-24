@@ -46,7 +46,7 @@
                     <td class="volume"><?php echoFloat($revendique[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
-                <?php if(isset($total_revendique_sur_place) && !$has_no_usages_industriels): ?>
+                <?php if(isset($total_revendique_sur_place)): ?>
                 <tr class="small">
                     <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
@@ -72,7 +72,7 @@
                     </td>
                     <?php endif;  ?>
                 </tr>
-                <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
+                <?php if(isset($total_usages_industriels_sur_place)): ?>
                 <tr class="small">
                     <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>

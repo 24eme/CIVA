@@ -26,7 +26,7 @@
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold; background-color: black; color: white;">&nbsp;Total Général AOC</td>
-  <?php if($total["revendique_sur_place"] > 0 || $total["usages_indsurtiels_sur_place"] > 0): ?>
+  <?php if($total["revendique_sur_place"] > 0 || $total["usages_industriels_sur_place"] > 0): ?>
     <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["revendique_sur_place"], true) ?></td>
     <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["usages_industriels_sur_place"], true) ?></td>
   <?php else: ?>
@@ -43,6 +43,10 @@
 </tr>
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Vins Sans IG <small>sur place</small></td>
+  <?php if($dr->recolte->exist('certification/genre/appellation_VINTABLE')): ?>
   <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->certification->genre->appellation_VINTABLE->getTotalCaveParticuliere(), true) ?></td>
+  <?php else: ?>
+  <td style="width: 200px; border: 1px solid black; text-align:center; font-weight: bold;"><i>Néant</i></td>
+  <?php endif; ?>
 </tr>
 </table>

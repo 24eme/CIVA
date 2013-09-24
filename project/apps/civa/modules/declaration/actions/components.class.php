@@ -57,6 +57,7 @@ class declarationComponents extends sfComponents {
         $this->volume_sur_place = array();
         $this->volume_rebeches = array();
         $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
+        $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($this->dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
@@ -80,17 +81,19 @@ class declarationComponents extends sfComponents {
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
-        $this->total_volume_vendus = array_sum(array_values($this->volume_vendus));
+        if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
+          $this->total_volume_vendus = array_sum(array_values($this->volume_vendus));
+        }
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
-        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_usages_industriels_sur_place= array_sum(array_values($this->usages_industriels_sur_place));
         }
         $this->total_revendique = array_sum(array_values($this->revendique));
-        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_revendique_sur_place = array_sum(array_values($this->revendique_sur_place));
         }
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
-        if(count($this->volume_rebeches) > 0) {
+        if(count($this->volume_rebeches) > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_volume_rebeches = array_sum(array_values($this->volume_rebeches));
         }
         $this->lies = $this->dr->lies;
