@@ -19,28 +19,58 @@
 							$counter = 0;
 							foreach ($vracs as $item) :
 								$item = $item->value;
-								if ($item->valide->statut == Vrac::STATUT_CLOTURE) {
+								if ($item->statut == Vrac::STATUT_CLOTURE) {
 									continue;
 								}
 								$alt = ($counter%2);
+								$validation = null;
 						?>
 						<tr<?php if($alt): ?> class="alt"<?php endif; ?>>
-							<td><?php echo ($item->valide->date_validation)? format_date($item->valide->date_validation, 'p', 'fr') : format_date($item->valide->date_saisie, 'p', 'fr'); ?></td>
+							<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
 							<td>
 								<ul>
-									<?php if ($item->vendeur_identifiant): ?>
-									<li>Vendeur : <strong><?php echo $item->vendeur->raison_sociale; ?></strong></li>
+									<?php 
+										if ($item->soussignes->vendeur->identifiant): 
+											if ($item->soussignes->vendeur->identifiant == $user->_id) {
+												if (!$item->soussignes->vendeur->date_validation) {
+													$validation = 'validation';
+												}
+											}
+									?>
+									<li>Vendeur : <strong><?php echo $item->soussignes->vendeur->raison_sociale; ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> V<?php endif; ?></li>
 									<?php endif; ?>
-									<?php if ($item->acheteur_identifiant): ?>
-									<li>Acheteur : <strong><?php echo $item->acheteur->raison_sociale; ?></strong></li>
+									<?php 
+										if ($item->soussignes->acheteur->identifiant):
+											if ($item->soussignes->acheteur->identifiant == $user->_id) {
+												if (!$item->soussignes->acheteur->date_validation) {
+													$validation = 'validation';
+												}
+											}
+									 ?>
+									<li>Acheteur : <strong><?php echo $item->soussignes->acheteur->raison_sociale; ?></strong><?php if ($item->soussignes->acheteur->date_validation): ?> V<?php endif; ?></li>
 									<?php endif; ?>
-									<?php if ($item->mandataire_identifiant): ?>
-									<li>Courtier : <strong><?php echo $item->mandataire->raison_sociale; ?></strong></li>
+									<?php 
+										if ($item->soussignes->mandataire->identifiant): 
+											if ($item->soussignes->mandataire->identifiant == $user->_id) {
+												if (!$item->soussignes->mandataire->date_validation) {
+													$validation = 'validation';
+												}
+											}
+									?>
+									<li>Courtier : <strong><?php echo $item->soussignes->mandataire->raison_sociale; ?></strong><?php if ($item->soussignes->mandataire->date_validation): ?> V<?php endif; ?></li>
 									<?php endif; ?>
 								</ul>
 							</td>
-							<td><?php echo VracClient::getInstance()->getStatutLibelle($item->valide->statut) ?></td>
-							<td class="actions"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => $item, 'etape' => $item->etape)) ?>">Accéder</a> | <a href="<?php echo url_for('vrac_supprimer', $item) ?>">X</a></td>
+							<td><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?></td>
+							<td class="actions">
+								<?php if ($item->statut == Vrac::STATUT_CREE): ?>
+								<a href="<?php echo url_for('vrac_etape', array('numero_contrat' => $item->numero, 'etape' => $item->etape)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a> 
+								<?php 
+									else:
+								?>
+								<a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero, 'validation' => $validation)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a>
+								<?php endif; ?>
+								| <a href="<?php echo url_for('vrac_supprimer', array('numero_contrat' => $item->numero)) ?>">X</a></td>
 						</tr>
 							<?php
 								$counter++;
@@ -49,7 +79,7 @@
 					</tbody>
 				</table>
  				<p class="lien_tout"><a href="#">Tout voir</a></p>
- 				<p class="lien_nouveau"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst())) ?>">Créer un nouveau contrat</a></p>
+ 				<p class="lien_nouveau"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst())) ?>">Créer un nouveau contrat</a> | <a href="<?php echo url_for('@annuaire') ?>">Annuaire</a></p>
  			</div>
  		</div>
  		<div id="documents_aide">
