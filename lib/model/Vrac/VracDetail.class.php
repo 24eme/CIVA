@@ -58,10 +58,41 @@ class VracDetail extends BaseVracDetail {
     public function updateVolumeEnleve()
     {
     	$total = 0;
-    	foreach ($this->retiraisons as $retiraison) {
+    	$indices = array();
+    	foreach ($this->retiraisons as $key => $retiraison) {
+    		if (!$retiraison->volume && !$retiraison->date) {
+    			$indices[] = $key;
+    			continue;
+    		}
     		$total += $retiraison->volume;
     	}
+    	foreach ($indices as $indice) {
+    		$this->retiraisons->remove($indice);
+    	}
     	$this->volume_enleve = $total;
+    }
+    
+    public function getTotalVolumeEnleve()
+    {
+    	return ($this->volume_enleve && $this->actif)? $this->volume_enleve : 0;
+    }
+    
+    public function getTotalVolumePropose()
+    {
+    	return ($this->volume_propose && $this->actif)? $this->volume_propose : 0;
+    }
+    
+    public function allProduitsClotures()
+    {
+    	return (!$this->cloture && $this->actif)? false : true;
+    }
+    
+    public function clotureProduits()
+    {
+    	if (!$this->cloture && $this->actif) {
+    		$this->cloture = 1;
+    	}
+    	return null;
     }
 
 }

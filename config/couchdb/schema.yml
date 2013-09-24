@@ -165,6 +165,7 @@ Vrac:
             date_validation_acheteur: {  }
             date_validation_mandataire: {  }
             date_validation: {  }
+            date_cloture: {  }
             statut: { }
       campagne: {  }
       numero_contrat: {  }

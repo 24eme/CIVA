@@ -82,11 +82,14 @@ class Vrac extends BaseVrac
   		return $libelles[$this->valide->statut];
   	}
   	
-  	public function getStatutLibelleAction($proprietaire = false)
+  	public function getStatutLibelleAction($proprietaire = false, $hasValidated = false)
   	{
   		$libelles = self::getStatutsLibellesActions();
   		if ($proprietaire) {
   			$libelles = self::getStatutsLibellesActionsProprietaire();
+  		}
+  		if ($this->valide->statut == self::STATUT_VALIDE_PARTIELLEMENT && $hasValidated) {
+  			return $libelles[self::STATUT_CLOTURE];
   		}
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
@@ -286,7 +289,44 @@ class Vrac extends BaseVrac
     	}
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
+    		$this->valide->date_validation = date('Y-m-d');
+    		if (!$this->numero_archive) {
+    			$this->numero_archive = $this->numero_contrat;
+    		}
     	}
+    }
+    
+    public function updateEnlevementStatut()
+    {
+    	if ($this->getTotalVolumeEnleve() > 0 && $this->valide->statut == self::STATUT_VALIDE) {
+    		$this->valide->statut = self::STATUT_ENLEVEMENT;
+    	}
+    	if ($this->allProduitsClotures()) {
+    		$this->valide->statut = self::STATUT_CLOTURE;
+    		$this->valide->date_cloture = date('Y-m-d');
+    	}
+    }
+    
+    public function clotureProduits()
+    {
+    	$this->declaration->clotureProduits();
+    	$this->valide->statut = self::STATUT_CLOTURE;
+    	$this->valide->date_cloture = date('Y-m-d');
+    }
+    
+    public function getTotalVolumeEnleve()
+    {
+    	return $this->declaration->getTotalVolumeEnleve();
+    }
+    
+    public function getTotalVolumePropose()
+    {
+    	return $this->declaration->getTotalVolumePropose();
+    }
+    
+    public function allProduitsClotures()
+    {
+    	return $this->declaration->allProduitsClotures();
     }
     
     public function isProprietaire($identifiant)
