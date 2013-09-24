@@ -307,7 +307,7 @@ class recolteActions extends EtapesActions {
         }
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
-            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
+            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.') !');
         }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());

@@ -1892,23 +1892,62 @@ div#migration_compte .contenu_section#infos_traitement {
 	color: #000;
 }
 
+#gestion_recolte #donnees_recolte_sepage.recapitualtif h3.titre_section {
+	font-size: 14px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif #recap_ventes .bloc_gris {
+	margin-bottom: 12px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif #recap_ventes .contenu_section {
+	padding-bottom: 3px;
+}
+
 /* Total appelation */
 #gestion_recolte #total_appelation {
 	margin: 0 0 15px;
-	width: 390px;
+	width: auto;
+}
+
+#gestion_recolte #total_appelation .bloc_gris,
+#gestion_recolte #total_appelation .contenu_section 
+{
+	display: inline-block;
+	width: auto;
+}
+
+#gestion_recolte #total_appelation table {
+	width: auto;
 }
 
 #gestion_recolte #total_appelation table tbody td {
-	color: #000;
-	width: 200px;
+	color: #666666;
+	width: 230px;
 }
 
 #gestion_recolte #total_appelation table tbody td.valeur {
-	color: #9fac01;
-	font-weight: bold;
 	text-align: right;
-	width: 100px;
+	width: 110px;
 	padding-right: 6px;
+	color: #666666;
+}
+
+#gestion_recolte #total_appelation table tbody tr.chef_tr td:first-child {
+	color: #000;
+}
+
+#gestion_recolte #total_appelation table tbody tr.sous_tr td:first-child {
+	padding-left: 10px;
+	width: 220px;
+}
+
+#gestion_recolte #total_appelation table tbody td.entete {
+	width: 110px;
+	text-align: center;
+	font-size: 14px;
+	color: #E78800;
+	font-weight: bold;
 }
 
 #gestion_recolte #total_appelation table tbody td.saisi {
@@ -1936,7 +1975,9 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #gestion_recolte #recap_ventes table tbody td.superficie input,#gestion_recolte #recap_ventes table tbody td.dplc input
 	{
-	width: 63px;
+	width: 61px;
+	text-align: right;
+	padding-right: 2px;
 }
 
 #gestion_recolte #recap_ventes .btn {
