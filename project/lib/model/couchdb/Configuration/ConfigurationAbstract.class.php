@@ -8,6 +8,21 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
     const TYPE_DECLARATION_DR = 'DR';
     const TYPE_DECLARATION_DS = 'DS';
 
+    protected function loadAllData() {
+      parent::loadAllData();
+      $this->getProduits();
+      $this->getProduitsFilter(self::TYPE_DECLARATION_DR);
+      $this->getProduitsFilter(self::TYPE_DECLARATION_DS);
+      $this->getRendementAppellation();
+      $this->getRendementCouleur();
+      $this->getRendementCepage();
+      $this->existRendementAppellation();
+      $this->existRendementCouleur();
+      $this->existRendementCepage();
+      $this->getChildrenFilter(self::TYPE_DECLARATION_DR);
+      $this->getChildrenFilter(self::TYPE_DECLARATION_DS);
+    }
+
     abstract public function getChildrenNode();
 
     public function getChildrenNodeArray() {
@@ -20,6 +35,11 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
     }
 
     public function getChildrenFilter($type_declaration = null) {
+      
+      return $this->store('get_children_filter_'.$type_declaration, array($this, 'getChildrenFilterStorable'), array($type_declaration));
+    }
+
+    public function getChildrenFilterStorable($type_declaration = null) {
       $children = array();
       foreach($this->getChildrenNode() as $item) {
         if($type_declaration == self::TYPE_DECLARATION_DR && !$item->isForDR()) {
@@ -43,11 +63,6 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
       }
 
       return $this->getLibelle();
-    }
-
-    protected function loadAllData() {
-        parent::loadAllData();
-        $this->getProduits();
     }
 
     public function getParentNode() {
@@ -180,27 +195,12 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
         return ($r && $r > 0);
     }
 
-    protected function getRendementByKey($key) {
-      
-        return $this->findRendementByKey($key);
-    }
-
-    protected function findRendementByKey($key) {
-        if ($this->exist($key) && $this->_get($key)) {
-
-            return $this->_get($key);
-        }
-
-        return $this->getParentNode()->get($key);
-    }
-
-    protected function hasRendementByKey($key) {
-        $r = $this->getRendementByKey($key);
-
-        return ($r && $r > 0);
-    }
-
     public function existRendementByKey($key) {
+        
+        return $this->store('exist_rendement_by_key_'.$key, array($this, 'existRendementByKeyStorable'), array($key));
+    }
+
+    protected function existRendementByKeyStorable($key) {
       if($this->hasRendementByKey($key)) {
 
         return true;
@@ -215,6 +215,27 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
 
       return false;
     }
+
+    protected function getRendementByKey($key) {
+      
+        return $this->store('rendement_by_key_'.$key, array($this, 'findRendementByKeyStorable'), array($key));
+    }
+
+    protected function findRendementByKeyStorable($key) {
+        if ($this->exist($key) && $this->_get($key)) {
+
+            return $this->_get($key);
+        }
+
+        return $this->getParentNode()->get($key);
+    }
+
+    protected function hasRendementByKey($key) {
+        $r = $this->getRendementByKey($key);
+
+        return ($r && $r > 0);
+    }
+
 
     /**** FIN DU RENDEMENT POUR LA DR ****/
 
@@ -233,6 +254,12 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
     }
 
     public function hasTotalCepage() {
+      
+      return $this->store('has_total_cepage', array($this, 'hasTotalCepageStorable'));
+    }
+
+    protected function hasTotalCepageStorable() {
+
       if ($this->exist('no_total_cepage')) {
         
           return !($this->no_total_cepage == 1);
@@ -243,7 +270,7 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
           return false;
       } 
 
-      return $this->getParentNode()->hasTotalCepage();
+      return $this->getParentNode()->hasTotalCepage(); 
     }
 
     public function hasVtsgn() {
