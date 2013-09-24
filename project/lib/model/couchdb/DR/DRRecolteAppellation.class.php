@@ -26,6 +26,17 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     }
 
+    public function hasCepageRB() {
+        foreach($this->getLieux() as $lieu) {
+            if($lieu->hasCepageRB()) {
+                return true;
+            }
+        }
+       
+        return false;
+    }
+
+
     public function hasAllDistinctLieu() {
         $nb_lieu = count($this->getDistinctLieux());
         $nb_lieu_config = count($this->getConfig()->getDistinctLieux());

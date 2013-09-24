@@ -48,8 +48,11 @@ class declarationComponents extends sfComponents {
         $this->appellations = array();
         $this->superficie = array();
         $this->volume = array();
+        $this->volume_vendus = array();
         $this->revendique = array();
+        $this->revendique_sur_place = array();
         $this->usages_industriels = array();
+        $this->usages_industriels_sur_place = array();
         $this->libelle = array();
         $this->volume_negoces = array();
         $this->volume_cooperatives = array();
@@ -66,18 +69,32 @@ class declarationComponents extends sfComponents {
               $this->libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
               $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+              $this->volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
+              $this->revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
+              $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
+              if($appellation->hasCepageRB()) {
+                $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
+              }
           }
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
+        $this->total_volume_vendus = array_sum(array_values($this->volume_vendus));
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
+        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
+          $this->total_usages_industriels_sur_place= array_sum(array_values($this->usages_industriels_sur_place));
+        }
         $this->total_revendique = array_sum(array_values($this->revendique));
+        if($this->dr->recolte->getTotalVolumeVendus() > 0) {
+          $this->total_revendique_sur_place = array_sum(array_values($this->revendique_sur_place));
+        }
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
-        $this->total_volume_rebeches = array_sum(array_values($this->volume_rebeches));
+        if(count($this->volume_rebeches) > 0) {
+          $this->total_volume_rebeches = array_sum(array_values($this->volume_rebeches));
+        }
         $this->lies = $this->dr->lies;
         $this->jeunes_vignes = $this->dr->jeunes_vignes;
 	
