@@ -24,3 +24,7 @@
 		<p>En cas d'erreur sur le contrat, veuillez contacter votre interlocuteur commercial.</p>
 	<?php endif; ?>
 <?php endif; ?>
+                
+<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserContrat">
+
+<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>

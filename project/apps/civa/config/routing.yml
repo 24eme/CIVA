@@ -28,6 +28,15 @@ vrac_fiche:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_export_pdf:
+  url: /vrac/:numero_contrat/pdf
+  param: { module: vrac_export, action: PDF }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]  
 vrac_etape:
   url: /vrac/:numero_contrat/:etape
   param: { module: vrac, action: etape }

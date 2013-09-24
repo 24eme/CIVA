@@ -195,5 +195,5 @@ class vracActions extends sfActions
     {
     	$compte = $this->getUser()->getCompte();
 		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
-    }
+    }    
 }
