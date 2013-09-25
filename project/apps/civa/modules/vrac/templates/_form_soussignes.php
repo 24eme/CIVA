@@ -78,12 +78,19 @@
 
 	<fieldset class="clearfix">
 		<legend>Courtier</legend>
-
-		<p class="ligne_form">Veuillez selectionner ou saisir l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
-		<?php echo $form['interlocuteur_commercial']->render() ?>
-		<a href="<?php echo url_for('@annuaire_commercial_ajouter') ?>">Ajouter à mon carnet d'adresse</a>
-
+		<div class="form_col">
+			<p class="ligne_form">Veuillez selectionner ou saisir l'identité de l'interlocuteur commercial en charge de<br />ce contrat de vente en vrac :</p>
+			<?php echo $form['interlocuteur_commercial']->render() ?>
+			<a href="<?php echo url_for('@annuaire_commercial_ajouter') ?>">Ajouter à mon carnet d'adresse</a>
+		</div>
 		<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<div id="mandataire_infos" class="informations form_col">
+			<?php 
+				if ($vrac->mandataire_identifiant) {
+					include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire));
+				} 
+			?>
+		</div>
 	</fieldset>
 
 	<style type="text/css">
