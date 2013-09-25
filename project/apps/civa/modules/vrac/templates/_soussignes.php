@@ -20,3 +20,14 @@
 		<?php endif; ?>
 	</tr>
 </table>
+
+
+<div>
+	<h3>Vendeur <?php if ($vrac->vendeur_identifiant == $vrac->createur_identifiant): ?> *<?php endif; ?></h3>
+
+	<div>
+		
+	</div>
+</div>
+<div></div>
+<div></div>

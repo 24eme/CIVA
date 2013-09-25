@@ -150,30 +150,76 @@ var initValidContratPopup = function()
 	******************************************/
 	var initChampsTableauProduits = function()
 	{
-		var tableau = $('#contrats_vrac .table_donnees');
-		var lignes_tableau = tableau.find('tr');
-		var champs_volume = tableau.find('.volume input');
-		var champs_prix = tableau.find('.prix_unitaire input');
-		var champs_requis = champs_volume.add(champs_prix);
-		var champs = tableau.find('input:text');
+		var tableau = $('#contrats_vrac .table_donnees'),
+			lignes_tableau = tableau.find('tr');
 
-		champs.focus(function()
+		// On parcourt chaque ligne
+		lignes_tableau.each(function()
 		{
-			lignes_tableau.removeClass('actif');
-			$(this).parents('tr').addClass('actif');
-		});
+			var ligne_courante = $(this),
+				champs = ligne_courante.find('input'),
+				champs_requis = champs.filter('.volume input').add(champs.filter('.prix_unitaire input')),
+				btn_balayette = ligne_courante.find('a.balayette'),
+				champs_vides = true; 
 
-		champs.blur(function()
-		{
-			champs_requis.each(function()
+			// Ligne active
+			champs.focus(function()
 			{
-				if($(this).val() !== '')
+				ligne_courante.addClass('actif');
+			});
+
+			// Affichage du picto coche
+			champs.blur(function()
+			{
+				champs.each(function(i)
 				{
-					$(this).parents('tr').addClass('coche');
-				}else
+					var champ_volume = ligne_courante.find('.volume input'),
+						champ_prix = ligne_courante.find('.prix_unitaire input');
+
+					if($.trim(champ_volume.val()) !== '' && $.trim(champ_prix.val()) !== '')
+					{
+						ligne_courante.addClass('coche');
+					}else
+					{
+						ligne_courante.removeClass('coche');
+					}
+
+					if($.trim($(this).val()) !== '')
+					{
+						champs_vides = false;
+					}
+				});
+
+				if(champs_vides)
 				{
-					$(this).parents('tr').removeClass('coche');
+					ligne_courante.removeClass('actif');
 				}
+			});
+
+			// Affichage du picto balayette
+			ligne_courante.hover
+			(
+				function()
+				{
+					champs.each(function()
+					{
+						if($.trim($(this).val()) !== '')
+						{
+							ligne_courante.addClass('effacable');
+						}
+					});
+				},
+
+				function()
+				{
+					$(this).removeClass('effacable')
+				}
+			);
+
+			btn_balayette.click(function()
+			{
+				champs.val('');
+				ligne_courante.removeClass('coche effacable actif');
 			});
 		});
 	};

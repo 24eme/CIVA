@@ -31,6 +31,7 @@
 				<td class="prix_unitaire">
 					<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
 					<?php echo $embedForm['prix_unitaire']->render() ?>&nbsp;&euro;/Hl
+					<a href="#" class="balayette" title="Effacer les champs">Effacer les champs</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

@@ -13,26 +13,24 @@
 {
 	background: #f7f6f6;
 	clear: both;
+	margin: 15px 0 22px;
 	padding: 30px 20px;
+}
+
+.btn_header
+{
+	padding: 0 20px 0 0;
+	text-align: right;
 }
 
 /* Rail d'étapes */
 
 #contrats_vrac #etape_declaration
 {
-	background: none;
-	border: 0;
 	padding-left: 0;
 }
 
 #contrats_vrac #etape_declaration.etapes_ds { margin: 0; }
-
-#contrats_vrac #etape_declaration li em
-{
-	overflow: hidden;
-	text-indent: 100%;
-	white-space: nowrap;
-}
 
 /* Boutons précédent / suivant */
 
@@ -136,19 +134,34 @@
 	margin: 0 0 0 32px;
 }
 
-/* Tableau */
+/* Tableau produits */
 
 #contrats_vrac form#principal .table_donnees input[type="text"] { background: #efeeee; }
 
 #contrats_vrac form#principal .table_donnees .actif input { background: #FFF; }
 
-#contrats_vrac form#principal .table_donnees .coche .prix_unitaire
+#contrats_vrac form#principal .table_donnees .coche .prix_unitaire { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+
+#contrats_vrac form#principal .table_donnees .balayette
 {
-	background: #edecec url('../images/pictos/pi_check.png') 98% 50% no-repeat;
+	background: #edecec url('../images/pictos/pi_balayette.png') no-repeat;
+	display: inline-block;
+	height: 15px;
+	overflow: hidden;
+	text-indent: 100%;
+	vertical-align: middle;
+	visibility: hidden;
+	width: 12px;
+    white-space: nowrap;
 }
+
+#contrats_vrac form#principal .table_donnees .effacable .balayette { visibility: visible; }
 
 #contrats_vrac form#principal .table_donnees + a
 {
 	display: inline-block;
 	margin: 20px 0;
 }
+
+/* Validation */
+
