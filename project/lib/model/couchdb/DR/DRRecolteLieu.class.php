@@ -30,7 +30,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function hasRecapitulatif() {
 
-        return !$this->getConfig()->existRendementCouleur();
+        return !$this->getConfig()->existRendementCouleur() && $this->getConfig()->existRendement();
     }
 
     public function getCouleurs() {

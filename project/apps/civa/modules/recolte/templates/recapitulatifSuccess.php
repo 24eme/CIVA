@@ -170,9 +170,11 @@
                                             <?php endforeach; ?>
 											</tbody>
 										</table>
+                                        <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
 										<div class="btn">
 											<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 										</div>
+                                        <?php endif; ?>
                                         <?php else: ?>
                                         <p> Aucune vente </p>
                                         <?php endif; ?>
