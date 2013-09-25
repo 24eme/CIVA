@@ -333,4 +333,9 @@ class Vrac extends BaseVrac
     {
     	return ($this->createur_identifiant == $identifiant)? true : false;
     }
+    
+    public function hasCourtier() {
+        //A implémenter
+        return true;
+    }
 }
