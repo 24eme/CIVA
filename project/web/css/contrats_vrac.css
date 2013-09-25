@@ -165,3 +165,43 @@
 
 /* Validation */
 
+#contrats_vrac .soussignes
+{
+	margin: 0 0 40px;
+}
+
+#contrats_vrac .bloc_soussigne
+{
+	float: left;
+	width: 280px;
+}
+
+#contrats_vrac .bloc_soussigne + .bloc_soussigne
+{
+	margin: 0 0 0 15px;
+}
+
+#contrats_vrac .bloc_soussigne h3
+{
+	background: #dcdfa9;
+	color: #848c03;
+	font-size: 18px;
+	font-weight: normal;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 0 0 12px;
+	width: 86px;
+}
+
+#contrats_vrac .bloc_soussigne ul li
+{
+	margin: 5px 0;
+}
+
+#contrats_vrac .bloc_soussigne .cadre
+{
+	background: #f1f1f1;
+	border: 1px solid #c6c8c7;
+	padding: 10px;
+}
+

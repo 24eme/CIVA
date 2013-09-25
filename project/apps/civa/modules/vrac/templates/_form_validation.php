@@ -1,5 +1,5 @@
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac)) ?>
-<br />
+
 <div class="clearfix">
 		<table class="table_donnees" cellspacing="0" cellpadding="0">
 			<thead>
