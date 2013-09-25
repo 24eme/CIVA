@@ -183,6 +183,11 @@ Le CIVA';
     private function updateUrlLog($array) {
       $ret = array();
       foreach ($array as $log) {
+        if(!isset($log['url_log_param'])) {
+            $log['url_log'] = false;
+            array_push($ret, $log);
+            continue;
+        }
         if (!isset($log['url_log_page']))
           $log['url_log_page'] = 'recolte';
         $log['url_log'] = $this->generateUrl($log['url_log_page'], $log['url_log_param']);

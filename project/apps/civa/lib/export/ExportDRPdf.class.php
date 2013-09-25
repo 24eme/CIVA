@@ -218,6 +218,7 @@ class ExportDRPdf extends ExportDocument {
 
         $has_no_usages_industriels = $dr->recolte->getConfig()->hasNoUsagesIndustriels();
         $has_no_recapitulatif_couleur = $dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
+        $can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
 
         if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_volume_vendus'] = array_sum(array_values($volume_vendus));
@@ -235,7 +236,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
 
-        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+        if($dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_usages_industriels_sur_place'] = array_sum(array_values($usages_industriels_sur_place));
         } else {
           $infos['total_usages_industriels_sur_place'] = null;
@@ -243,7 +244,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_revendique'] = array_sum(array_values($revendique));
         
-        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+        if($dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_revendique_sur_place'] = array_sum(array_values($revendique_sur_place));
         } else {
           $infos['total_revendique_sur_place'] = null;

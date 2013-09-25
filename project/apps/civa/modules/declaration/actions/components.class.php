@@ -58,6 +58,7 @@ class declarationComponents extends sfComponents {
         $this->volume_rebeches = array();
         $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
         $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
+        $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
           if ($this->dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
@@ -85,11 +86,11 @@ class declarationComponents extends sfComponents {
           $this->total_volume_vendus = array_sum(array_values($this->volume_vendus));
         }
         $this->total_usages_industriels= array_sum(array_values($this->usages_industriels));
-        if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0 && $this->can_calcul_volume_revendique_sur_place && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_usages_industriels_sur_place= array_sum(array_values($this->usages_industriels_sur_place));
         }
         $this->total_revendique = array_sum(array_values($this->revendique));
-        if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
+        if($this->dr->recolte->getTotalVolumeVendus() > 0 && $this->can_calcul_volume_revendique_sur_place && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_revendique_sur_place = array_sum(array_values($this->revendique_sur_place));
         }
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));

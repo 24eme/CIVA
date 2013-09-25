@@ -303,6 +303,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return false;
     }
 
+    public function canCalculVolumeRevendiqueSurPlace() {
+        if(!$this->hasCompleteRecapitulatifVenteDplc()) {
+
+            return false;
+        }
+        foreach($this->getChildrenNode() as $item) {
+            if(!$item->canCalculVolumeRevendiqueSurPlace()) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /******* Acheteurs *******/
 
     public function getTotalDontDplcVendus() {
@@ -349,7 +364,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->exist('acheteurs') && $this->hasRecapitulatif();
     }
 
-    public function hasCompleteRecapitulatifVente() {
+    public function hasCompleteRecapitulatifVenteDplc() {
         if(!$this->hasRecapitulatifVente()) {
             return true;
         }
@@ -361,13 +376,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         foreach ($this->acheteurs as $type => $type_acheteurs) {
             foreach ($type_acheteurs as $cvi => $acheteur) {
-                if ($acheteur->superficie) {
-                    return true;
+                if ($this->getDplc() > 0 && is_null($acheteur->dontdplc)) {
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     public function getTotalSuperficieRecapitulatifVente() {
