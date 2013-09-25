@@ -1,4 +1,5 @@
 <?php use_helper('Float') ?>
+<?php use_helper('Date') ?>
 <?php  use_helper('vracExport'); ?>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
@@ -36,24 +37,10 @@
 endforeach;
 endforeach; 
 ?>
-<?php for($i=0;$i<3;$i++): ?>
-<tr>
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>    
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>
-    <td style="border: 1px solid black;">&nbsp;</td>
-</tr>
-<?php 
-endfor;
-?>
 
 <tr>
-    <td style="border: none; text-align: left; font-size:12px;" colspan="5" >&nbsp;**<span style="font-size:12px; padding-left: 20px"><?php echo getFirstExplicationEtoile(); ?></span>
-                                                    <br/>&nbsp;**<span style="font-size:12px; padding-left: 20px"><?php echo getSecondExplicationEtoile(); ?></span></td>
+    <td style="border: none; text-align: left;" colspan="5" >&nbsp;**<span style="font-size:16px; padding-left: 20px"><?php echo getFirstExplicationEtoile(); ?></span>
+                                                    <br/>&nbsp;**<span style="font-size:16px; padding-left: 20px"><?php echo getSecondExplicationEtoile(); ?></span></td>
     <td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(), true); ?></td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>    
     <td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumeEnleve(), true); ?></td>
@@ -75,21 +62,37 @@ endfor;
 <br /><br />
 <table cellspacing=10 cellpadding=0 style="text-align: right; border: none;">
 <tr>
-  <td style="text-align: left; width: 600px; border: none; font-size:12px;"><?php echo getFirstSentence(); ?><br/>
+  <td style="text-align: left; width: 600px; border: none; font-size:16px;"><?php echo getFirstSentence(); ?><br/>
   <?php echo getSecondSentence(); ?></td>
 </tr>
 </table>
 
-<br /><br />
+<!--<br /><br />
 <table cellspacing=10 cellpadding=0 style="text-align: left; border: none;">
 <tr>
-  <td style="text-align: right; width: 630px; border: none; font-weight: bold;">Saisi sur l'application du CIVA, le <?php echo $vrac->valide->date_saisie; ?>,</td>
+  <td style="text-align: right; width: 630px; border: none; font-weight: bold;">Saisi sur l'application du CIVA, le <?php //echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_saisie); ?>,</td>
   </tr>
-  
-  <tr>
-    <td style="text-align: right; width: 630px; border: none; font-weight: bold;">et signé par les différentes parties sur l'application du CIVA le <?php echo $vrac->valide->date_validation; ?>.</td>
+</table>-->
 
+<br /><br />
+<table cellspacing=10 cellpadding=0 style="text-align: left; border: none;">
+<?php $widthAcheteur = ($vrac->hasCourtier())? "width: 210px;" : "width: 420px;"; ?>
+<tr>
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold;">LE VENDEUR</td>  
+  <?php if($vrac->hasCourtier()): ?>
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold;">VU, le Courtier</td>
+  <?php  endif; ?>
+  <td style="text-align: right; <?php echo $widthAcheteur; ?> border: none; font-weight: bold;">L'ACHETEUR</td>
 </tr>
+<tr>
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_vendeur); ?></td>  
+  <?php if($vrac->hasCourtier()): ?>
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_mandataire); ?></td>
+  <?php  endif; ?>
+  <td style="text-align: right; <?php echo $widthAcheteur; ?> border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_acheteur); ?></td>
+</tr>
+  
+
 </table>
 
 
@@ -102,7 +105,7 @@ endfor;
 
 <table  style="text-align: right; border: none;">
 <tr>
-    <td style="text-align: left; width: 630px; border: none; font-size:12px;"><?php echo getLastSentence(); ?></td>
+    <td style="text-align: left; width: 630px; border: none; font-size:16px;"><?php echo getLastSentence(); ?></td>
 </tr>
 </table>
 
