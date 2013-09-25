@@ -71,14 +71,17 @@
             </li>
         </ul>
         <ul>
+             <?php if ($cepage->getConfig()->existRendementAppellation() || $cepage->getConfig()->existRendementCouleur()):?>
             <li>
             </li>
+            <?php endif; ?>
+            <?php if ($cepage->getConfig()->hasRendementNoeud()):?>
             <li>
-                <?php if ($cepage->getConfig()->hasRendementNoeud()):?>
+                
                 <input type="text" id="cepage_dplc_rendement" class="num <?php if ($cepage->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($cepage->getDplcRendement() > 0 && $cepage->getDplc() == $cepage->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($cepage->getDplcRendement()); ?>" />
                 <input type="hidden" id="cepage_dplc_rendement_orig" value="<?php echoFloat($cepage->getDplcRendement()); ?>" />
-                <?php endif; ?>
             </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>
