@@ -144,11 +144,11 @@
                 </tr>
                 <?php endif; ?>
 				<tr>
-                    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat($jeunes_vignes); ?>&nbsp;<small>ares</small></td>
+                    <td class="premiere_colonne">Jeunes Vignes : </td><td class="volume"><?php echoFloat($jeunes_vignes); ?>&nbsp;<small>ares</small></td>
 				</tr>
 			    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
-				   <td class="premiere_colonne volume">Vins sans IG : </td><td><?php echoFloat($vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat($vintable['volume']); ?> hl</td>
+				   <td class="premiere_colonne">Vins sans IG : </td><td class="volume"><?php echoFloat($vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat($vintable['volume']); ?> hl</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>
