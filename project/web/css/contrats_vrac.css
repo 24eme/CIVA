@@ -25,10 +25,7 @@
 
 /* Rail d'étapes */
 
-#contrats_vrac #etape_declaration
-{
-	padding-left: 0;
-}
+#contrats_vrac #etape_declaration { padding-left: 0; }
 
 #contrats_vrac #etape_declaration.etapes_ds { margin: 0; }
 
@@ -52,8 +49,6 @@
 	border-bottom-color: #e1e1e1;
 	border-top-color: #848484; 
 }
-
-#contrats_vrac form#principal { margin: 30px 0 0; }
 
 #contrats_vrac form#principal fieldset
 {
@@ -96,6 +91,7 @@
 	padding: 0 20px 0 0;
 }
 
+#contrats_vrac .btn_supprimer,
 #contrats_vrac form#principal .remove_autocomplete 
 { 
 	background: url('../images/pictos/pi_supprimer.png') no-repeat;
@@ -165,21 +161,22 @@
 
 /* Validation */
 
-#contrats_vrac .soussignes
+#contrats_vrac .soussignes,
+#contrats_vrac .soussignes + .table_donnees,
+#contrats_vrac .conditions
 {
-	margin: 0 0 40px;
+	color: #3b3b3b;
 }
+
+#contrats_vrac .soussignes { margin: 0 0 40px; }
 
 #contrats_vrac .bloc_soussigne
 {
 	float: left;
-	width: 280px;
+	width: 309px;
 }
 
-#contrats_vrac .bloc_soussigne + .bloc_soussigne
-{
-	margin: 0 0 0 15px;
-}
+#contrats_vrac .bloc_soussigne + .bloc_soussigne { margin: 0 0 0 15px; }
 
 #contrats_vrac .bloc_soussigne h3
 {
@@ -193,10 +190,7 @@
 	width: 86px;
 }
 
-#contrats_vrac .bloc_soussigne ul li
-{
-	margin: 5px 0;
-}
+#contrats_vrac .bloc_soussigne ul li { margin: 5px 0; }
 
 #contrats_vrac .bloc_soussigne .cadre
 {
@@ -205,3 +199,68 @@
 	padding: 10px;
 }
 
+#contrats_vrac .soussignes + .table_donnees { margin: 0 0 50px; }
+
+#contrats_vrac form#principal .conditions .ligne_form { margin: 15px 0 0; }
+
+#contrats_vrac .conditions label 
+{
+	display: inline-block;
+	width: 150px;  
+}
+
+/* Annuaire */
+
+#contrats_vrac .annuaire 
+{
+	font-size: 14px;
+	margin: 0 0 0 -105px; 
+}
+
+#contrats_vrac .bloc_annuaire 
+{ 
+	float: left;
+	margin: 0 0 55px 105px;
+	width: 312px; 
+}
+
+#contrats_vrac .bloc_annuaire h2
+{
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 15px;
+}
+
+#contrats_vrac .bloc_annuaire h3
+{
+	background: #dcdfa9;
+	color: #848c03;
+	font-size: 18px;
+	font-weight: normal;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 0 0 12px;
+}
+
+#contrats_vrac .bloc_annuaire .btn 
+{ 
+	display: block;
+	margin: 20px 0 0; 
+}
+
+#contrats_vrac .bloc_annuaire ul { border: 1px solid #c6c8c7; }
+
+#contrats_vrac .bloc_annuaire ul li 
+{ 
+	padding: 5px 13px 5px;
+	position: relative;
+}
+
+#contrats_vrac .bloc_annuaire ul li.alt { background: #dddddd; }
+
+#contrats_vrac .bloc_annuaire ul li .btn_supprimer
+{
+	position: absolute;
+	right: -27px; 
+	top: 5px;
+}
