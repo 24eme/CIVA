@@ -82,7 +82,11 @@
         </div>
 
         <div class="col_btn">
-            <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
+            <?php if(!$is_new): ?>
+            <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')">
+            <img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" /></a>
+            <?php endif; ?>
+            <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" style="<?php echo (!$is_new) ? "display: none" : null ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
             <script><!--
 <?php if ($onglets->getCurrentCepage()->getConfig()->excludeTotal()) : ?>
         autoTotal = false;
