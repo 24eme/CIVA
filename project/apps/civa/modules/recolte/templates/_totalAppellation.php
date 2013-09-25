@@ -73,20 +73,21 @@
           <?php endif; ?>
       </ul>
       <ul>
+            <?php if ($lieu->getConfig()->hasRendementNoeud()):?>
             <li>
-            <?php if ($lieu->getConfig()->existRendement()):?>
 	            <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxRendement()); ?>"/>
                 <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getConfig()->getRendementNoeud()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($lieu->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcRendement() > 0 && $lieu->getDplc() == $lieu->getDplcRendement()) echo 'alerte'; ?>" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" readonly="readonly" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
-            <?php endif; ?>
             </li>
-            <li>
+            <?php endif; ?>
             <?php if ($lieu->getConfig()->existRendementCepage()):?>
+            <li>
+            
                 <input type="text" id="appellation_total_dplc_sum" class="<?php if ($lieu->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcTotal() > 0 && $lieu->getDplc() == $lieu->getDplcTotal()) echo 'alerte'; ?>" readonly="readonly" value="Σ <?php echoFloat($lieu->getDplcTotal()); ?>"/>
                 <input type="hidden" id="appellation_total_dplc_sum_orig" class="num" value="<?php echoFloat($lieu->getDplcTotal()); ?>"/>
-            <?php endif; ?>
             </li>
+            <?php endif; ?>
       </ul>
     </div>
 </div>

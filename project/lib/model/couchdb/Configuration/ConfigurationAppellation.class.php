@@ -35,15 +35,16 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
         return ($this->filter('^mention')->count() > 1);
     }
     
-
-/*
-    public function getMention() {
-        if( count($this->filter('^mention')) > 1)
-        throw new sfException("getMention() ne peut être appelé d'une appellation qui a plusieurs mentions...");
-
-        return $this->_get('mention');
+    public function hasCepageRB() {
+        foreach($this->getLieux() as $lieu) {
+            if($lieu->hasCepageRB()) {
+                return true;
+            }
+        }
+       
+        return false;
     }
-*/
+
     public function getDistinctLieux()
     {
         $arrLieux = array();

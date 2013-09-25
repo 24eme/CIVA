@@ -29,9 +29,15 @@
             <fieldset class="message">
                 <legend class="message_title">Points de vigilance <a href="" class="msg_aide_ds" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
                 <ul class="messages_log">
-                    <?php foreach($validLogVigilance as $key=>$log) { ?>
-                    <li><a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_vigilance', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a></li>
-                    <?php } ?>
+                    <?php foreach($validLogVigilance as $key=>$log): ?>
+                    <li>
+                        <?php if($log['url_log']): ?>
+                            <a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_vigilance', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a>
+                        <?php else: ?>
+                            <?php echo $log['log']; ?>
+                        <?php endif; ?>
+                    </li>
+                    <?php endforeach; ?>
                 </ul>
             </fieldset>
         <?php } ?>
