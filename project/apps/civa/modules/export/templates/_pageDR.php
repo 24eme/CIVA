@@ -1,4 +1,5 @@
-<?php use_helper('Float') ?>
+<?php use_helper('Float'); ?>
+<?php use_helper('drExport'); ?>
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
 pre {display: inline;}
@@ -22,7 +23,7 @@ pre {display: inline;}
 </table>
 </td></tr></table>
   <div><span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle_appellation; ?></span></div>
-<table border="1" cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
+<table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
 <?php 
 
 if (!function_exists('printColonne')) {
@@ -43,7 +44,7 @@ if (!function_exists('printColonne')) {
         if (array_key_exists($key, $c->getRawValue())) {
         $v = $c[$key];
 
-	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black;">';
+	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black; '. ((!$unite) ? "text-align: center;" : "") .'">';
 	if ($c['type'] == 'total')    echo '<b>';
 
         if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'usages_industriels', 'cave_particuliere'))) {
@@ -64,8 +65,15 @@ if (!function_exists('printColonne')) {
           echo $v;
 
           if ($c['type'] == 'total')    echo '</b>';
-	        if ($unite)
+	        if ($unite) {
 	         echo "&nbsp;<small>$unite</small>";
+           if($unite == 'hl') {
+              echo "&nbsp;&nbsp;&nbsp;";
+           }
+           if($unite == 'ares') {
+            echo "<small>&nbsp;</small>";
+           }
+          }
         } else {
           echo "&nbsp;&nbsp;";
           if ($c['type'] == 'total')    echo '</b>';
@@ -133,9 +141,9 @@ if($has_no_usages_industriels) {
                     <small><i>(Acheteur de mouts)</i></small>
                 <?php endif; ?>
             </td>
-            <td style="border: 1px solid black;width: 120px;"><?php echo echoFloatFr($a->superficie); ?>&nbsp;<small>ares</small></td>
-            <td  style="border: 1px solid black;width: 120px;"><?php echoFloatFr($a->volume); ?>&nbsp;<small>hl</small></td>
-            <td style="border: 1px solid black;width: 180px;"><?php echoFloatFr($a->dontdplc); ?>&nbsp;<small>hl</small></td></tr>
+            <td style="border: 1px solid black;width: 120px; text-align: right;"><?php echoSuperficie($a->superficie); ?></td>
+            <td  style="border: 1px solid black;width: 120px; text-align: right;"><?php echoVolume($a->volume); ?></td>
+            <td style="border: 1px solid black;width: 180px; text-align: right;"><?php echoVolume($a->dontdplc); ?></td></tr>
     <?php endforeach; ?>
   <?php endforeach; ?>
 </table>

@@ -1,5 +1,6 @@
 <?php 
 	use_helper('Float');
+	use_helper('drExport');
 	$appellations = $infos['appellations'];
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];
@@ -35,15 +36,15 @@ pre {display: inline;}
 </td></tr></table>
 <br />
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br/>
-<table border="1" cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
+<table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
 	<thead>
 		<tr>
 			<th style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Appellations</th>
 			<?php foreach ($appellations as $a): ?>
-			<th style="border: 1px solid black;font-weight: bold; width: 120px;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<th style="border: 1px solid black;font-weight: bold; width: 120px;">Total général</th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;">Total général</th>
 			<?php endif; ?>
 		</tr>
 	</thead>
@@ -51,48 +52,48 @@ pre {display: inline;}
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Superficie</td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $superficie[$a]); ?> <small>ares</small></td>
+			<td style="width: 120px;"><?php echoSuperficie($superficie[$a]); ?></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_superficie']);?></strong> <small>ares</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($infos['total_superficie'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Total</td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $volume[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoVolume( $volume[$a]); ?></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php if($infos['total_volume_vendus'] !== null): ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Vendu</td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $volume_vendus[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoVolume( $volume_vendus[$a]); ?></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_vendus']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vendus'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php endif; ?>
         <tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume sur place</td>
             <?php foreach ($appellations as $a): ?>
-            <td style="width: 120px;"><?php echoFloat( $volume_sur_place[$a]); ?> <small>hl</small></td>
+            <td style="width: 120px;"><?php echoVolume( $volume_sur_place[$a]); ?></td>
             <?php endforeach; ?>
             <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_sur_place']);?></strong> <small>hl</small></td>
+            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_sur_place'], true);?></td>
             <?php endif; ?>
         </tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Revendiqué</td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $revendique[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoVolume( $revendique[$a]); ?></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_revendique']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_revendique'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php if($infos['total_revendique_sur_place'] !== null): ?>
@@ -100,21 +101,21 @@ pre {display: inline;}
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;">
-				<?php echoFloat( $revendique_sur_place[$a]); ?> <small>hl</small>
+				<?php echoVolume( $revendique_sur_place[$a]); ?>
 			</td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_revendique_sur_place']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_revendique_sur_place'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php endif; ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;"><?php if($has_no_usages_industriels): ?>&nbsp;DPLC<?php else: ?>&nbsp;Usages industriels<?php endif; ?></td>
 			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoFloat( $usages_industriels[$a]); ?> <small>hl</small></td>
+			<td style="width: 120px;"><?php echoVolume( $usages_industriels[$a]); ?></td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_usages_industriels']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_usages_industriels'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php if($infos['total_usages_industriels_sur_place'] !== null): ?>
@@ -122,11 +123,11 @@ pre {display: inline;}
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;">
-				<?php echoFloat( $usages_industriels_sur_place[$a]); ?> <small>hl</small>
+				<?php echoVolume( $usages_industriels_sur_place[$a]); ?>
 			</td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_usages_industriels_sur_place']);?></strong> <small>hl</small></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_usages_industriels_sur_place'], true);?></td>
 			<?php endif; ?>
 		</tr>
 		<?php endif; ?>
@@ -136,14 +137,14 @@ pre {display: inline;}
             <?php foreach ($appellations as $a): ?>
             <td style="width: 120px;">
             	<?php if($volume_rebeches[$a]): ?>
-        			<?php echoFloat($volume_rebeches[$a]); ?> <small>hl</small>
+        			<?php echoVolume($volume_rebeches[$a]); ?>
         		<?php else: ?>
         			&nbsp;
             	<?php endif; ?>
             </td>
             <?php endforeach; ?>
             <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><strong><?php echoFloat( $infos['total_volume_rebeches']);?></strong> <small>hl</small></td>
+            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches'], true);?></td>
             <?php endif; ?>
         </tr>
     	<?php endif; ?>
@@ -156,16 +157,16 @@ pre {display: inline;}
 <?php else: ?>
 <span style="background-color: black; color: white; font-weight: bold;">Jeunes vignes</span><br/>
 <?php endif; ?>
-<table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
+<table border=1 cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
     <?php if($has_no_usages_industriels): ?>
     <tr>
         <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Lies</td>
-        <td style="border: 1px solid black; width: 120px;"><?php echoFloatFr($infos['lies']); ?>&nbsp;<small>hl</small></td>
+        <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($infos['lies']); ?></td>
     </tr>
     <?php endif; ?>
     <tr>
         <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Jeunes vignes</td>
-        <td style="border: 1px solid black; width: 120px;"><?php echoFloatFr($infos['jeunes_vignes']); ?>&nbsp;<small>ares</small></td>
+        <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($infos['jeunes_vignes']); ?></td>
     </tr>
 </table>
 <?php endif; ?>

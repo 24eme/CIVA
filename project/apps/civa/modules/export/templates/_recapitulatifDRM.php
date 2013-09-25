@@ -1,5 +1,5 @@
 <?php use_helper('Float') ?>
-<?php use_helper('dsExport') ?>
+<?php use_helper('drExport') ?>
 <br /><br />
 <span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM</span>
 <br /><br />
