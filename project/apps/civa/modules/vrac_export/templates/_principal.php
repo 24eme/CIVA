@@ -85,11 +85,11 @@ endforeach;
   <td style="text-align: right; <?php echo $widthAcheteur; ?> border: none; font-weight: bold;">L'ACHETEUR</td>
 </tr>
 <tr>
-  <td style="text-align: right; width: 210px; border: none; font-weight: bold;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_vendeur); ?>.</td>  
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_vendeur); ?></td>  
   <?php if($vrac->hasCourtier()): ?>
-  <td style="text-align: right; width: 210px; border: none; font-weight: bold;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_mandataire); ?>.</td>
+  <td style="text-align: right; width: 210px; border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_mandataire); ?></td>
   <?php  endif; ?>
-  <td style="text-align: right; <?php echo $widthAcheteur; ?> border: none; font-weight: bold;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_acheteur); ?>.</td>
+  <td style="text-align: right; <?php echo $widthAcheteur; ?> border: none; font-weight: bold; font-size:25px;">Signé éléctroniquement, le <?php echo preg_replace('/^(\d+)\-(\d+)\-(\d+)$/', '\3/\2/\1', $vrac->valide->date_validation_acheteur); ?></td>
 </tr>
   
 
