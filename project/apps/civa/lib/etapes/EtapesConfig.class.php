@@ -30,6 +30,12 @@
             }
         }
 
+        public function getUrl($etape) {
+            if(!isset($this->_items[$etape]) || !isset($this->_items[$etape]['url'])) {
+                throw new sfException('Etape does not exist');
+            }
+            return $this->_items[$etape]['url'];
+        }
 
         public function needToChangeEtape() {
             if (array_key_exists('next_is_new_etape', $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]])) {
