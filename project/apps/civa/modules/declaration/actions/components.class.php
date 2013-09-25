@@ -74,7 +74,7 @@ class declarationComponents extends sfComponents {
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              if($appellation->hasCepageRB()) {
+              if($appellation->getConfig()->hasCepageRB()) {
                 $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
               }
           }

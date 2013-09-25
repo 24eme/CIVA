@@ -178,6 +178,7 @@ class ExportDRPdf extends ExportDocument {
         $volume_negoces = array();
         $volume_cooperatives = array();
         $cvi = array();
+        $has_cepage_rb = false;
         foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
           if ($dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
               $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_key);
@@ -193,7 +194,10 @@ class ExportDRPdf extends ExportDocument {
               $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
               $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              $volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
+              $volume_rebeches[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getTotalRebeches() : null;
+              if($appellation->getConfig()->hasCepageRB()) {
+                $has_cepage_rb = true;
+              }
           }
         }
 
@@ -223,7 +227,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
 
-        if($appellation->getTotalRebeches() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+        if($has_cepage_rb && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
         } else {
           $infos['total_volume_rebeches'] = null;
