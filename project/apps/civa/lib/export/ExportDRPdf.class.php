@@ -138,7 +138,29 @@ class ExportDRPdf extends ExportDocument {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
+          if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatidCouleur()) {
+            $this->createRecap($dr);
+          }
     }
+
+      protected function createRecap($dr) {
+        $recap = $this->getRecapTotal($dr);
+        $total = array("revendique_sur_place" => null, 
+                       "usages_industriels_sur_place" => null);
+        foreach($recap as $key => $item) {
+          $total["revendique_sur_place"] += $item->revendique_sur_place;
+          $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
+        }
+        $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
+                                                                                   'recap_total' => $recap,
+                                                                                   'total' => $total)));
+    }
+
+    protected function getRecapTotal($dr) {
+
+        return DRClient::getInstance()->getTotauxByAppellationsRecap($dr);
+    }
+
     
     private function getRecapitulatifInfos($dr)
     {
@@ -190,7 +212,10 @@ class ExportDRPdf extends ExportDocument {
         $infos['total_superficie'] = array_sum(array_values($superficie));
         $infos['total_volume'] = array_sum(array_values($volume));
 
-        if($dr->recolte->getTotalVolumeVendus() > 0) {
+        $has_no_usages_industriels = $dr->recolte->getConfig()->hasNoUsagesIndustriels();
+        $has_no_recapitulatif_couleur = $dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
+
+        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_volume_vendus'] = array_sum(array_values($volume_vendus));
         } else {
           $infos['total_volume_vendus'] = null;
@@ -198,7 +223,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
 
-        if($appellation->getTotalRebeches() > 0) {
+        if($appellation->getTotalRebeches() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
         } else {
           $infos['total_volume_rebeches'] = null;
@@ -206,7 +231,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
 
-        if($dr->recolte->getTotalVolumeVendus() > 0) {
+        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_usages_industriels_sur_place'] = array_sum(array_values($usages_industriels_sur_place));
         } else {
           $infos['total_usages_industriels_sur_place'] = null;
@@ -214,7 +239,7 @@ class ExportDRPdf extends ExportDocument {
 
         $infos['total_revendique'] = array_sum(array_values($revendique));
         
-        if($dr->recolte->getTotalVolumeVendus() > 0) {
+        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_revendique_sur_place'] = array_sum(array_values($revendique_sur_place));
         } else {
           $infos['total_revendique_sur_place'] = null;

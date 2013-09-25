@@ -37,6 +37,8 @@ class recolteActions extends EtapesActions {
             $this->redirect($this->onglets->getUrl('recolte_add'));
         }
 
+        return $this->redirect(array_merge($this->onglets->getUrl('recolte_update'), array('detail_key' => $this->details->getFirst()->getKey())));
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
@@ -91,7 +93,6 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($this->details->exist($detail_key));
 
         $this->details->remove($detail_key);
-        $this->onglets->getCurrentCouleur()->cleanAllNodes();
         $this->declaration->update();
         $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
         $this->declaration->save();
@@ -308,7 +309,7 @@ class recolteActions extends EtapesActions {
         }
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
-            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
+            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.') !');
         }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());

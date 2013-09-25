@@ -18,7 +18,16 @@ class declarationActions extends EtapesActions {
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                $dr = $this->getUser()->getDeclaration();
+                if($dr->etape) {
+                    try {
+                        return $this->redirectToEtape($dr->etape);
+                    } catch (Exception $e) {
+
+                    }
+                }
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
                 $this->redirect('@mon_espace_civa');

@@ -8,7 +8,7 @@
     </li>
     <li class="<?php if ($etape > 2): ?>passe<?php elseif($etape == 2): ?>actif<?php endif; ?>">
         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ETAPE_REPARTITION_RECOLTE)): ?>
-            <a href="<?php echo url_for('@exploitation_acheteurs'); ?>">Répartition de la récolte <em>Etape 2</em></a>
+            <a href="<?php echo url_for('@exploitation_acheteurs'); ?>">Répartition <em>Etape 2</em></a>
         <?php else: ?>
             <a href="#" onclick="return false;">Répartition <em>Etape 2</em></a>
         <?php endif; ?>

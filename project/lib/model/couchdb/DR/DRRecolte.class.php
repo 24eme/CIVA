@@ -17,6 +17,10 @@ class DRRecolte extends BaseDRRecolte {
         return $this->getNoeudAppellations()->getAppellations();
     }
 
+    public function getAppellationsSorted() {
+        if(!$this->exist('certification')) return array();
+        return $this->getChildrenNodeDeep(2)->getAppellationsSorted();
+    }
 
     public function getCertifications() {
 

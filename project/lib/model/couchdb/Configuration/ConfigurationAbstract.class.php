@@ -137,11 +137,8 @@ abstract class ConfigurationAbstract extends acCouchdbDocumentTree {
     }
 
     public function getRendementAppellation() {
-        if($this->hasRendementAppellation()) {
-          return $this->getRendementByKey('rendement_appellation');
-        }
-        
-        return $this->getRendementCepage(); 
+      
+        return $this->getRendementByKey('rendement_appellation');
     }
 
     public function getRendementCouleur() {

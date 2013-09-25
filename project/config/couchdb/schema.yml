@@ -560,6 +560,7 @@ Configuration:
         definition:
           fields:
             no_usages_industriels: { required: false}
+            no_recapitulatif_appellation: { required: false}
             douane :
               type: collection
               class: ConfigurationDouane

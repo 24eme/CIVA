@@ -46,7 +46,7 @@
                     <td class="volume"><?php echoFloat($revendique[$a]); ?></td>
                     <?php endif; ?>
                 </tr>
-                <?php if(isset($total_revendique_sur_place) && !$has_no_usages_industriels): ?>
+                <?php if(isset($total_revendique_sur_place)): ?>
                 <tr class="small">
                     <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
@@ -72,7 +72,7 @@
                     </td>
                     <?php endif;  ?>
                 </tr>
-                <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
+                <?php if(isset($total_usages_industriels_sur_place)): ?>
                 <tr class="small">
                     <td>&nbsp;dont sur place (hl)</td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
@@ -144,11 +144,11 @@
                 </tr>
                 <?php endif; ?>
 				<tr>
-                    <td class="premiere_colonne">Jeunes Vignes : </td><td><?php echoFloat($jeunes_vignes); ?>&nbsp;<small>ares</small></td>
+                    <td class="premiere_colonne">Jeunes Vignes : </td><td class="volume"><?php echoFloat($jeunes_vignes); ?>&nbsp;<small>ares</small></td>
 				</tr>
 			    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
-				   <td class="premiere_colonne volume">Vins sans IG : </td><td><?php echoFloat($vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat($vintable['volume']); ?> hl</td>
+				   <td class="premiere_colonne">Vins sans IG : </td><td class="volume"><?php echoFloat($vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat($vintable['volume']); ?> hl</td>
 				</tr>
 				<?php endif; ?>
 			</tbody>

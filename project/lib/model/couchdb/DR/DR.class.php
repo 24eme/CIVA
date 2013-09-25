@@ -2,11 +2,15 @@
 class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
     
     const ETAPE_EXPLOITATION = 'exploitation';
+    const ETAPE_REPARTITION = 'repartition';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
 
-    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION), self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE));
+    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
+    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), 
+                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION), 
+                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION), 
+                                             self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION, self::ETAPE_RECOLTE));
 
     
     protected $utilisateurs_document = null; 
@@ -51,6 +55,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return false;
         }
         if ($etape == self::ETAPE_EXPLOITATION) {
+            return true;
+        } elseif ($etape == self::ETAPE_REPARTITION) {
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
             return true;

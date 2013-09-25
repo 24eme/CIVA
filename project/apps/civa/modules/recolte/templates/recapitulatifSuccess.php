@@ -31,6 +31,7 @@
                                     Total Appellation
                                     <?php } ?>
                                 </h2>
+                                <div class="clear"></div>
 								<div class="contenu_section">
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees">
@@ -39,25 +40,25 @@
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echo $form_item->getObject()->getLibelle() ?></td>
+                                                        <td class="entete"><?php echo $form_item->getObject()->getLibelle() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
 												<tr>
-													<td>Superficie <span class="unites">(ares)</span> :</td>
+													<td>Superficie <span class="unites">(ares)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                     <td class="valeur"><?php echoFloat($form_item->getObject()->getTotalSuperficie()); ?></td>
                                                     <?php endforeach; ?>
 												</tr>
 												<tr>
-													<td>Volume total récolté <span class="unites">(hl)</span> :</td>
+													<td>Volume total récolté <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                     <td class="valeur"><?php echoFloat($form_item->getObject()->getTotalVolume()) ;?></td>
                                                     <?php endforeach; ?>
 												</tr>
                                                 <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                                     <tr>
-                                                        <td>Volume revendiqué <span class="unites">(hl)</span> :</td>
+                                                        <td>Volume revendiqué <span class="unites">(hl)</span></td>
                                                         <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur"><?php echoFloat($form_item->getObject()->getVolumeRevendique()); ?></td>
                                                         <?php endforeach; ?>
@@ -67,10 +68,12 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class="clear"></div>
                                 <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                 <h2 class="titre_section" style="margin-top: 15px;">
                                     Usages industriels
                                 </h2>
+                                <div class="clear"></div>
                                 <div class="contenu_section">
                                     <div class="bloc_gris">
                                         <table cellspacing="0" cellpadding="0" class="table_donnees">
@@ -79,18 +82,18 @@
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echo $form_item->getObject()->getLibelle() ?></td>
+                                                        <td class="entete"><?php echo $form_item->getObject()->getLibelle() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
-                                                <tr>
-                                                    <td>Usages industriels globaux <span class="unites">(hl)</span> :</td>
+                                                <tr class="chef_tr">
+                                                    <td>Usages industriels globaux <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?> hl</td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
-                                                <tr>
-                                                    <td style="font-size: 11px;">Dont usages industriels saisis <span class="unites">(hl)</span> : <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                <tr class="sous_tr">
+                                                    <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur saisi">
                                                                 <?php if(isset($form[$key]['lies'])): ?>
@@ -101,8 +104,8 @@
                                                         </td>
                                                     <?php endforeach; ?>
                                                 </tr>
-                                                <tr>
-                                                    <td style="font-size: 11px;">Dépassement <span class="unites">(hl)</span> :</td>
+                                                <tr class="sous_tr">
+                                                    <td>Dépassement <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur"><?php echoFloat($form_item->getObject()->getDplc()) ; ?></td>
                                                     <?php endforeach; ?>
@@ -116,7 +119,6 @@
                                         <?php endif; ?>
                                     </div>
                                 </div>
-
                             <?php endif; ?>
                             </div>                  
 							<div id="recap_ventes">
@@ -124,7 +126,7 @@
 								<div class="contenu_section">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                     <?php if (count($form->getEmbeddedForms()) > 1): ?>    
-                                    <p><?php echo $form_item->getObject()->getLibelle(); ?></p>
+                                    <h3 class="titre_section"><?php echo $form_item->getObject()->getLibelle(); ?></h3>
                                     <?php endif; ?>
 									<div class="bloc_gris">
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
@@ -168,9 +170,11 @@
                                             <?php endforeach; ?>
 											</tbody>
 										</table>
+                                        <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
 										<div class="btn">
 											<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 										</div>
+                                        <?php endif; ?>
                                         <?php else: ?>
                                         <p> Aucune vente </p>
                                         <?php endif; ?>

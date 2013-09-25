@@ -1,14 +1,12 @@
 <?php include_partial('global/etapes', array('etape' => 3)) ?>
 <?php include_partial('global/actions', array('etape' => 3, 'help_popup_action' => $help_popup_action)) ?>
 
+<?php if ($sf_user->hasFlash('msg_info')): ?>
+    <p class="message"><?php echo $sf_user->getFlash('msg_info'); ?></p>
+<?php endif; ?>
 
 <!-- #principal -->
 <p class="intro_declaration_recolte"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
-
-
-<?php if ($sf_user->hasFlash('msg_info')): ?>
-    <p><?php echo $sf_user->getFlash('msg_info'); ?></p>
-<?php endif; ?>
 
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 

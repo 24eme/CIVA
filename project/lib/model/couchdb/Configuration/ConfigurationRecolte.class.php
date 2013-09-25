@@ -22,6 +22,11 @@ class ConfigurationRecolte extends BaseConfigurationRecolte {
         return ($this->exist('no_usages_industriels') && $this->get('no_usages_industriels'));
     }
 
+    public function hasNoRecapitulatidCouleur() {
+        
+        return ($this->exist('no_recapitulatif_appellation') && $this->get('no_recapitulatif_appellation'));
+    }
+
     public function getRendementAppellation() {
 
         return 0;

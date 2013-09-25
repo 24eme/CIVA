@@ -109,6 +109,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplc($force_calcul = false) {
+        if($this->_get('dplc') && !$force_calcul) {
+
+            return $this->_get('dplc');
+        }  
+
         if(!$this->getConfig()->hasRendementNoeud()) {
 
             return $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
@@ -163,6 +168,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getVolumeRevendique($force_calcul = false) {
+        if($this->_get('volume_revendique') && !$force_calcul) {
+
+            return $this->_get('volume_revendique');
+        }    
+
         if(!$this->getConfig()->hasRendementNoeud()) {
 
             return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueTotal'), $force_calcul);
@@ -192,6 +202,16 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getUsagesIndustriels($force_calcul = false) {
+        if($this->exist('usages_industriels_calcule') && $this->_get('usages_industriels_calcule') && !$force_calcul) {
+
+            return $this->_get('usages_industriels_calcule');
+        } 
+
+        if($this->_get('usages_industriels') && !$force_calcul) {
+
+            return $this->_get('usages_industriels');
+        }        
+
         if(!$this->getConfig()->hasRendementNoeud()) {
             
             return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);

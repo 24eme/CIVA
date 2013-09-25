@@ -70,15 +70,8 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         }
 
         $this->updateAcheteurs();
-
-        $this->cleanNoeuds();
-    }
-    
-    protected function cleanNoeuds() {
-        foreach($this->getCepages() as $cepage) {
-            if (count($cepage->detail) == 0) {
-                $this->remove($cepage->getKey());
-            }
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->cleanAllNodes();
         }
     }
 }
