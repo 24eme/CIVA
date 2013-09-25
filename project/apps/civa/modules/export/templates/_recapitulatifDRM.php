@@ -3,6 +3,8 @@
 <br /><br />
 <span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM</span>
 <br /><br />
+
+<?php if($dr->recolte->canCalculVolumeRevendiqueSurPlace()): ?>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <tr>
   <th style="width: 214px; border: 1px solid black; background-color: black; color: white; font-weight: bold; border: 1px solid black; text-align: left;">&nbsp;Appellations</th>
@@ -34,6 +36,10 @@
   <?php endif; ?>
 </tr>
 </table>
+<?php else: ?>
+<span>Le tableau du récapitulatif DRM des AOC ne peut pas être affiché : les informations sur les volumes en dépassement des acheteurs sont inconnus</span>
+<br />
+<?php endif; ?>
 <br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <tr>

@@ -42,6 +42,24 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $cepages;
     }
 
+    public function hasCepageRB() {
+
+        return $this->getCepageRB() !== null;
+    }
+
+    public function getCepageRB() {
+
+        $cepage_rebeche = array();
+        foreach ($this->filter('couleur') as $couleur)
+            if( $couleur->exist('cepage_RB'))
+                $cepage_rebeche[] = $couleur->get('cepage_RB');
+
+        if( count($cepage_rebeche) > 1)
+            throw new sfException("getCepagesRB() ne peut retourner plus d'un cepage rebeche par appellation");
+
+        return (count($cepage_rebeche) == 1) ? $cepage_rebeche[0] : null;
+    }
+
     public function getCepages() {
         $cepage = array();
         foreach ($this->getCouleurs() as $couleur) {

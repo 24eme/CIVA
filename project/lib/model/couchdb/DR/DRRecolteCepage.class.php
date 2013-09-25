@@ -98,6 +98,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return false;
     }
 
+    public function canCalculVolumeRevendiqueSurPlace() {
+
+      return true;
+    }
+
     protected function getSumNoeudFields($field, $exclude = true) {
         
         return parent::getSumNoeudFields($field, false);

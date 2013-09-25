@@ -136,7 +136,7 @@ pre {display: inline;}
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Rebêches</td>
             <?php foreach ($appellations as $a): ?>
             <td style="width: 120px;">
-            	<?php if($volume_rebeches[$a]): ?>
+            	<?php if(!is_null($volume_rebeches[$a])): ?>
         			<?php echoVolume($volume_rebeches[$a]); ?>
         		<?php else: ?>
         			&nbsp;
