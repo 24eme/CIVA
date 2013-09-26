@@ -231,5 +231,8 @@ var initValidContratPopup = function()
 		 initCollectionDeleteTemplate();
                  initValidContratPopup();
          initChampsTableauProduits();
+         hauteurEgale('#contrats_vrac .soussignes .cadre');
+
+         hauteurEgale('#contrats_vrac .bloc_annuaire .bloc');
 	});
 })(jQuery);

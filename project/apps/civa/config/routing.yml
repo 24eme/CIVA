@@ -56,7 +56,7 @@ vrac_export_pdf:
   requirements:
     sf_method: [get, post]  
 vrac_annuaire:
-  url: /vrac/:numero_contrat/annuaire/:type
+  url: /vrac/:numero_contrat/annuaire/:acteur/:type
   param: { module: vrac, action: annuaire }
   class: VracRoute
   options:
