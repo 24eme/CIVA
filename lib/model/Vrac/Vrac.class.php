@@ -167,6 +167,23 @@ class Vrac extends BaseVrac
         $detail->position = $this->declaration->getPositionNouveauProduitDetail();
     }
     
+    public function addActeur($type, $tiers)
+    {
+    	$noeud = $type.'_identifiant';
+    	if ($this->exist($noeud)) {
+    		$this->{$noeud} = $tiers->_id;
+    		call_user_func(array('Vrac', 'store'.ucfirst($type).'Informations'), $tiers);
+    	}
+    }
+    
+    public function addType($acteur, $type)
+    {
+    	$noeud = $acteur.'_type';
+    	if ($this->exist($noeud)) {
+    		$this->{$noeud} = $type;
+    	}
+    }
+    
     public function storeAcheteurInformations($tiers)
     {
     	$this->acheteur->raison_sociale = $tiers->nom;
