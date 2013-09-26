@@ -42,8 +42,6 @@ EOF;
 
           $this->desactiveTiers($tiers);
         }
-
-      
   
         if($db2_tiers->isMetteurEnMarche() && $db2_tiers->get(Db2Tiers::COL_CVI)) {
           $acheteur = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($db2_tiers->get(Db2Tiers::COL_CVI));
@@ -60,7 +58,7 @@ EOF;
           $tiers->statut = _TiersClient::STATUT_INACTIF;
           $tiers->save();
 
-          echo sprintf("Le tiers %s;%s a été désactivé\n", $tiers->_id, $tiers->nom);
+          echo sprintf("INFO;Le tiers a été désactivé;%s;%s\n", $tiers->_id, $tiers->nom);
       }
   }
 

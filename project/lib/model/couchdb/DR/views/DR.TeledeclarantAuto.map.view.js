@@ -7,5 +7,5 @@ function(doc) {
     for(u in doc.utilisateurs.validation) {
         return;
     }
-    emit([doc.campagne, doc.cvi], 1);
+    emit([doc.campagne, doc.cvi, doc.email], 1);
 }

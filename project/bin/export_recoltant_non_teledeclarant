@@ -1,13 +1,21 @@
-#!/bin/bash 
+#!/bin/bash
+
+. bin/config.inc
+
+ANNEE=$1
+
+if ! test "$ANNEE"; then
+echo "L'année de déclaration de récolte est requise"
+fi
 
 php symfony export:comptes-csv | sort | grep "Recoltant" | cut -d ";" -f 2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20 | sed -r 's/^"([0-9C]{10})"/\1/' | grep -E "^6" | grep -v ';"INACTIF";' | sort > /tmp/recoltants
 
-curl -X GET "http://localhost:5984/civa/_design/DR/_view/Teledeclarant" | cut -d "[" -f 2 | cut -d "," -f 1,2 | sed 's/"//g' | sed 's/]//' | grep "6" | sed 's/,/;/' > /tmp/teledeclarants
+curl -s GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Teledeclarant?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "[" -f 2 | cut -d "," -f 2 | sed 's/"//g' | sed 's/]//' | grep "6" | sed 's/,/;/' | sort > /tmp/teledeclarants
 
-join -t ";" -v 1 /tmp/recoltants /tmp/teledeclarants > /tmp/recoltants-non-teledeclarant
+curl -s GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/TeledeclarantAuto?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "[" -f 2 | cut -d "," -f 2 | sed 's/"//g' | sed 's/]//' | grep "6" | sed 's/,/;/' | sort > /tmp/teledeclarants-auto
 
-curl -X GET "http://localhost:5984/civa/_design/DR/_view/TeledeclarantAuto" | cut -d "[" -f 2 | cut -d "]" -f 1 | sed 's/"//g' | grep "6" | sort > /tmp/teledeclarant-auto
+cat /tmp/teledeclarants /tmp/teledeclarants-auto | uniq | sort > /tmp/teledeclarants.uniq
 
-join -t ";" -v 1 /tmp/recoltants-non-teledeclarant /tmp/teledeclarant-auto > /tmp/recoltants-non-teledeclarant-final
+join -t ";" -v 1 /tmp/recoltants-non-teledeclarant /tmp/teledeclarants.uniq > /tmp/recoltants-non-teledeclarant-final
 
 cat /tmp/recoltants-non-teledeclarant-final | cut -d ";" -f 1,2,3,8,9,10,11,12 | sed -r "s/\|[0-9a-Z ']+//g" | sed -r 's/\|(")/\1/g'
