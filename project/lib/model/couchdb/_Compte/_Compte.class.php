@@ -127,6 +127,9 @@ abstract class _Compte extends Base_Compte {
 
     public function setActif() {
         $this->statut = self::STATUS_INSCRIT;
+        if(!$this->mot_de_passe) {
+            $this->mot_de_passe = $this->generatePass(); 
+        }
         $this->updateStatut();
     }
     
@@ -150,5 +153,10 @@ abstract class _Compte extends Base_Compte {
     public function hasDelegation(){
         return false;
     }
+
+    public function generatePass() {
+        return sprintf("{TEXT}%04d", rand(0, 9999));
+    }
+
     
 }

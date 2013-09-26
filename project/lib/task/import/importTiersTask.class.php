@@ -40,18 +40,11 @@ EOF;
         //$db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a))));
         $db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
         $tiers = $this->loadAndSaveTiers($db2_tiers);
-        if (!$tiers) {
-          $nb_not_use++;
-        }
 
         if($db2_tiers->isAcheteur()) {
           $tiers = $this->loadAndSaveTiers($db2_tiers, true);
         }
     }
-    
-    $this->logSection("nb not use", $nb_not_use);
-
-    // add your code here
   }
 
   protected function loadAndSaveTiers($db2, $acheteur = false) {
@@ -62,12 +55,11 @@ EOF;
     }
 
     if($tiers->isNew()) {
-       $this->logSection("new", $tiers->get('_id')); 
+       echo "INFO;CREATION;".$tiers->get('_id')."\n";
     } elseif($tiers->isModified()) {
-       $this->logSection("modified", $tiers->get('_id'));  
+       echo "INFO;MODIFICATION;".$tiers->get('_id')."\n";
     }
     if($tiers->save()) {
-      $this->logSection('flag revision', $tiers->get('_id'));
       $tiers->db2->add('import_revision', $tiers->_rev);
       $tiers->db2->import_date = date("Y-m-d");
       $tiers->save();
@@ -146,7 +138,6 @@ EOF;
       $recoltant->cave_cooperative = $this->getCaveParticuliere($db2->get(Db2Tiers::COL_TYPE_DECLARATION));
       $recoltant->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
       $recoltant->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
-
 
       return $recoltant;
   }
