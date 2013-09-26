@@ -87,6 +87,7 @@ $(document).ready(function(){
         	$("#ligne_lieu_dit").removeClass("hidden");
         } else {
         	$("#ligne_lieu_dit").addClass("hidden");
+        	$("#choix_lieu").html('<option value="">--</option>');
         }
     });
 
