@@ -13,8 +13,6 @@
 		<?php echo $form->renderHiddenFields() ?>
 		<?php echo $form->renderGlobalErrors() ?>
 		<?php include_partial('form_'.$etape, array('form' => $form, 'vrac' => $vrac, 'etape' => $etape)) ?>
-	</form>
-</div>
 
 <ul class="btn_prev_suiv clearfix" id="btn_etape">
     <li class="prec">
@@ -34,4 +32,6 @@
         <?php endif; ?>
     </li>
 </ul>
+	</form>
+</div>
 

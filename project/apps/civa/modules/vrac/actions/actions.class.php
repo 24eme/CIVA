@@ -3,14 +3,26 @@ class vracActions extends sfActions
 {    
 	public function executeAnnuaire(sfWebRequest $request)
 	{
-		$this->vrac = $this->getRoute()->getVrac();
+		if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
+    		$this->vrac = unserialize($vrac);
+		} else {
+			$this->vrac = $this->getRoute()->getVrac();	
+		}
+		if (!$this->vrac) {
+			$this->vrac = $this->getNouveauVrac($this->user);
+		}
 		$this->type = $request->getParameter('type');
+		$this->acteur = $request->getParameter('acteur');
 		$types = array_keys(AnnuaireClient::getAnnuaireTypes());
+		$acteurs = Vrac::getTypesTiers();
 		if (!in_array($this->type, $types)) {
 			throw new sfError404Exception('Le type "'.$this->type.'" n\'est pas pris en charge.');
 		}
-		$vracIdentifiant = ($this->vrac->numero_contrat)? $this->vrac->numero_contrat : VracRoute::NOUVEAU;
-		$this->getUser()->setAttribute('annuaire_vrac_id', $vracIdentifiant);
+		if (!in_array($this->acteur, $acteurs)) {
+			throw new sfError404Exception('L\'acteur "'.$this->acteur.'" n\'est pas pris en charge.');
+		}
+		$this->getUser()->setAttribute('vrac_object', serialize($this->vrac));
+		$this->getUser()->setAttribute('vrac_acteur', $this->acteur);
 		return $this->redirect('annuaire_selectionner', array('type' => $this->type));
 	}
 	
@@ -62,7 +74,11 @@ class vracActions extends sfActions
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
-    	$this->vrac = $this->getRoute()->getVrac();
+    	if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
+    		$this->vrac = unserialize($vrac);
+    	} else {
+    		$this->vrac = $this->getRoute()->getVrac();
+    	}
     	if (!$this->vrac) {
     		$this->vrac = $this->getNouveauVrac($this->user);
     	}
@@ -78,6 +94,7 @@ class vracActions extends sfActions
        			if ($request->isXmlHttpRequest()) {
        				return sfView::NONE;
        			}
+    			$this->getUser()->setAttribute('vrac_object', null);
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {
