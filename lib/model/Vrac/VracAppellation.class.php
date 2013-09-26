@@ -35,5 +35,15 @@ class VracAppellation extends BaseVracAppellation {
      {
      	return $this->libelle;
      }
-
+     
+     public function getCodeCiva(){
+         $appellation = preg_replace("/^appellation_/", "", $this->getKey());
+         switch ($appellation) {
+             case "GRDCRU":
+                 return "3";
+             case "CREMANT":
+                 return "2";
+         }
+         return "1";
+     }
 }
