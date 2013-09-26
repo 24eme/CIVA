@@ -462,7 +462,16 @@ class ExportDSCiva {
 
         switch ($appellation_key) {
             case 'VINTABLE':
-                return ($xml)? "4B999" : null;
+                if($xml){
+                    $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
+                    if($cepage->getKey() == 'cepage_VINTABLE'){
+                       return "4B999"; 
+                    }
+                    if($cepage->getKey() == 'cepage_MS'){
+                       return "4B999M"; 
+                    }
+                }
+                return null;
             case 'ALSACEBLANC':
                 if ($cepage->getKey() == 'cepage_ED') {
                     return self::CODE_DOUANE_ED;
