@@ -1,0 +1,11 @@
+#!/bin/bash
+
+. bin/config.inc
+
+ANNEE=$1
+
+if ! test "$ANNEE"; then
+echo "L'année de déclaration de récolte est requise"
+fi
+
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Teledeclarant?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "," -f 4 | sed 's/"//g' | sed 's/\]//' | grep "@" | sort | uniq

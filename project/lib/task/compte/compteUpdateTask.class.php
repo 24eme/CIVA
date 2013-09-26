@@ -11,7 +11,7 @@ class compteUpdateTask extends sfBaseTask {
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
         ));
 
@@ -86,7 +86,6 @@ EOF;
                 unset($compte->compte_reference);
                 $compte_object = acCouchdbManager::getClient()->createDocumentFromData($compte);
                 $compte_object->save();
-                $this->logSection("Compte proxy has been transformed", $compte->_id, null, "ERROR");
             }
             
             if ($compte->type == "CompteTiers") {
@@ -108,7 +107,7 @@ EOF;
                  $compte = new CompteTiers();
                  $compte->login = $login."";
                  $compte->constructId();
-                 $compte->mot_de_passe = $this->generatePass();;
+                 $compte->mot_de_passe = $compte->generatePass();
                  $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             }
 
@@ -145,29 +144,28 @@ EOF;
 
             if($inactif && $compte->isActif()) {
                 $compte->setInactif();
-                echo sprintf("Le compte %s;%s a été désactivé\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Le compte à été désactivé;%s;%s\n", $compte->_id, $compte->nom);
             }
 
             if(!$inactif && !$compte->isActif()) {
                 $compte->setActif();
-                echo sprintf("Le compte %s;%s a été activé\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Le compte a été activé;%s;%s\n", $compte->_id, $compte->nom);
             }
             
             if ($compte->isNew()) {
-                echo sprintf("Création du compte %s:%s\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Création du compte;%s;%s\n", $compte->_id, $compte->nom);
             } elseif ($compte->isModified()) {
-                echo sprintf("Modification du compte %s:%s\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Modification du compte;%s;%s\n", $compte->_id, $compte->nom);
             }
 
             if(!$compte->date_creation && $tiers_date_creation) {
                $compte->date_creation = $tiers_date_creation;
-               $this->logSection('date_creation', $compte->_id.":".$compte->date_creation);
             }
 
             $compte->save();
             
             if ($compte->getStatut() == "INSCRIT" && !$compte->email) {
-                $this->logSection("inscrit ne possédant pas d'email", $compte->get('_id'));
+                echo sprintf("INFO;Inscrit ne possédant pas d'email;%s;%s\n", $compte->_id, $compte->nom);
             }
         }
 
@@ -190,8 +188,9 @@ EOF;
             $tiers->save();
 
             if ($tiers->isModified()) {
-                $this->logSection("saved", $tiers->get('_id'));
+                echo sprintf("INFO;Tiers mis à jour;%s;%s\n", $tiers->_id, $tiers->nom);
             }
+
             $tiers_open[$tiers->_id] = true;
         }
     }
@@ -220,10 +219,6 @@ EOF;
         }
 
         return $value;
-    }
-
-    private function generatePass() {
-        return sprintf("{TEXT}%04d", rand(0, 9999));
     }
 
 }
