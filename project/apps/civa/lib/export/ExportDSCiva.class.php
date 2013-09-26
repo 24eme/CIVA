@@ -76,14 +76,14 @@ class ExportDSCiva {
         if ($ds->isDsPrincipale()) {
             $lignes.="\t\t<volLie>" . $this->convertToFloat($ds->lies, false) . "</volLie>\r\n";
             $lignes.="\t\t<volDplc>" . $this->convertToFloat($ds->dplc, false) . "</volDplc>\r\n";
-            $lignes.="\t\t<volVinNc>" . $this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds), false) . "</volVinNc>\r\n";
+          //  $lignes.="\t\t<volVinNc>" . $this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds), false) . "</volVinNc>\r\n";
         }
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
         $hasRebeches = $ds->hasRebeches();
         $passedCremant = false;
         $rebecheAdded = false;
-        $produitsAgreges = $this->getProduitsAgregesForDS($ds, true);
+        $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
         
         foreach ($produitsAgreges as $code_douane => $obj) {
             if ($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)) {
@@ -114,14 +114,15 @@ class ExportDSCiva {
         return $ligne;
     }
 
-    protected function createProduitsAgregat($products, $vtsgn = false) {
+    protected function createProduitsAgregat($products, $vtsgn = false, $xml = false) {
         $resultAgregat = array();
         foreach ($products as $app_produit => $produit) {
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
-            if ($appellation_key == 'VINTABLE')
-                continue;
+            if ($appellation_key == 'VINTABLE' && !$xml){
+               continue;                
+            }
             if (!$vtsgn || $produit->hasVtsgn()) {
-                $code_douane = $this->getCodeDouane($produit);
+                $code_douane = $this->getCodeDouane($produit,'',$xml);
                 if (!array_key_exists($code_douane, $resultAgregat)) {
                     $resultAgregat[$code_douane] = $this->initProduitAgregat();
                 }
@@ -148,7 +149,7 @@ class ExportDSCiva {
 
                 $volume_normal = $produit->total_normal;
                 if ($volume_normal > 0) {
-                    $code_douane = $this->getCodeDouane($produit);
+                    $code_douane = $this->getCodeDouane($produit,'',$xml);
                     if (!array_key_exists($code_douane, $resultAgregat)) {
                         $resultAgregat[$code_douane] = $this->initProduitAgregat();
                     }
@@ -456,12 +457,12 @@ class ExportDSCiva {
         return null;
     }
 
-    public function getCodeDouane($cepage, $vtsgn = '') {
+    public function getCodeDouane($cepage, $vtsgn = '',$xml=false) {
         $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $cepage->getHash());
 
         switch ($appellation_key) {
             case 'VINTABLE':
-                return null;
+                return ($xml)? "4B999" : null;
             case 'ALSACEBLANC':
                 if ($cepage->getKey() == 'cepage_ED') {
                     return self::CODE_DOUANE_ED;
@@ -517,7 +518,7 @@ class ExportDSCiva {
         $obj->volume_sgn += $vol_sgn;
     }
 
-    protected function getProduitsAgregesForDS($ds, $vtsgn = false) {
+    protected function getProduitsAgregesForDS($ds, $vtsgn = false, $xml = false) {
         $appelations_1 = array("\/appellation_ALSACEBLANC\/",
             "\/appellation_COMMUNALE\/",
             "\/appellation_LIEUDIT\/",
@@ -525,9 +526,13 @@ class ExportDSCiva {
             "\/appellation_PINOTNOIRROUGE\/");
         $appelations_2 = array("\/appellation_GRDCRU\/",
             "\/appellation_CREMANT\/");
+        $appelations_3 = array("\/appellation_VINTABLE\/");
 
         $produits = array_merge($ds->declaration->getProduitsSortedWithFilter($appelations_1), $ds->declaration->getProduitsSortedWithFilter($appelations_2));
-        return $this->createProduitsAgregat($produits, $vtsgn);
+        if($xml){
+            $produits = array_merge($produits, $ds->declaration->getProduitsSortedWithFilter($appelations_3));
+        }
+        return $this->createProduitsAgregat($produits, $vtsgn, $xml);
     }
 
     protected function getAppellationNumero($appellation_key) {
