@@ -27,7 +27,7 @@ class Vrac extends BaseVrac
 	
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => null,
-		self::STATUT_VALIDE_PARTIELLEMENT => 'Valider',
+		self::STATUT_VALIDE_PARTIELLEMENT => 'Signer',
 		self::STATUT_VALIDE => 'Enlever',
 		self::STATUT_ANNULE => 'Visualiser',
 		self::STATUT_ENLEVEMENT => 'Enlever',
