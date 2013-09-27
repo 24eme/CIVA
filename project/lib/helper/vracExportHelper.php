@@ -18,25 +18,16 @@ function getColorRowDetail($detailLine) {
     return (is_null($detailLine->volume_propose))? "background-color: #bbb;" : "";
 }
 
-function getFirstExplicationEtoile(){
-return "Si après chargement, le volume réel chargé par cépage est différent de + ou - 10 % du volume estimé, un rectificatif doit obligatoirement être adressé au CIVA, par fax, immédiatement après le chargement.";
+function getExplicationEtoile(){
+return "Le prix s'entend net, c'est-à-dire hors-taxes et tous escomptes déduits, la cotisation interprofessionnelle ainsi que les commissions de courtage étant à régler séparément.";
 }
 
-function getSecondExplicationEtoile(){
-return "Si la date réel de chargement diffère de plus de 15 jours de la date prévue, un rectificatif doit également être adressé au CIVA par fax.";
+
+
+function getLastSentence(){
+return "Le vendeur déclare être habilité à produire du vin AOC et qu'il n'est pas sous le coup d'une sanction suite à un manquement.";
 }
 
-function getFirstSentence(){
-return "L'acheteur soussigné et sa caution s'engagent à remplir les obligations prévues par la loi.";
-}
-
-function getSecondSentence(){
-return "Conformément à l'arrêté ministériel portant extension des dispositions de l'accord interprofessionnel conclu dans le cadre du Conseil Interprofessionnel des Vins d'Alsace, les parties s'engagent à faire enregistrer le présent contrat par le CIVA au minimun 8 jours avant le chargement. Le vendeur déclare être habilité à produire du vin AOC et qu'il n'est pas sous le coup d'une sanction suite à un manquement.";
-}
-
-function getLastSentence() {
-return "Ce contrat est établi en 5 exemplaire : Les ex. 1 et 2 à déposer au CIVA au plus tard...";
-}
 
 function truncate_text($text, $length = 30, $truncate_string = '<small>…</small>', $truncate_lastspace = false)
 {
