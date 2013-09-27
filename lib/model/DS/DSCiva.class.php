@@ -634,5 +634,11 @@ public function getConfigurationCampagne() {
     public function getDateDepotMairieFr() {
        return Date::francizeDate($this->date_depot_mairie);
     }
+    
+    function setDepotmairie($date_iso) {
+        $this->validee = $date_iso;
+        $this->modifiee = $date_iso;
+        $this->add('date_depot_mairie',$date_iso);
+    }
 }
 
