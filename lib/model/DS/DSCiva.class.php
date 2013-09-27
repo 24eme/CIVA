@@ -636,8 +636,10 @@ public function getConfigurationCampagne() {
     }
     
     function setDepotmairie($date_iso) {
+        if($this->modifiee == $this->validee){
+            $this->modifiee = $date_iso;
+        }
         $this->validee = $date_iso;
-        $this->modifiee = $date_iso;
         $this->add('date_depot_mairie',$date_iso);
     }
 }
