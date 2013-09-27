@@ -1,4 +1,5 @@
 <?php use_helper('Date') ?>
+<?php use_helper('Float') ?>
 <?php if ($form): ?>
 <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_fiche', array('sf_subject' => $vrac)) ?>">
 	<?php echo $form->renderHiddenFields() ?>
@@ -31,29 +32,31 @@
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
 			<td width="40px">
-				<?php echo $detail->volume_propose ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
 			<td width="40px">
-				<?php echo $detail->prix_unitaire ?>&nbsp;&euro;/Hl
+				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td width="40px"></td>
-			<td width="40px"><?php if ($detail->volume_enleve): ?><strong><?php echo $detail->volume_enleve ?> Hl<?php endif; ?></strong></td>
+			<td width="40px"><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?> Hl<?php endif; ?></strong></td>
 			<td width="40px">
 				<span><?php echo $formProduit['cloture']->renderError() ?></span>
 				<?php echo $formProduit['cloture']->render() ?>
 			</td>
 			<td width="40px">
+				<?php if (!$detail->cloture): ?>
 				<a class="btn_ajouter_ligne_template" data-container-last-brother=".produits" data-template="#template_form_<?php echo str_replace('/', '_', $key); ?>_retiraisons_item" href="#">Enlever</a>
 				<script id="template_form_<?php echo str_replace('/', '_', $key); ?>_retiraisons_item" class="template_form" type="text/x-jquery-tmpl">
-    					<?php echo include_partial('form_retiraisons_item', array('form' => $form->getFormTemplateRetiraisons($detail->getRawValue(), $key))); ?>
-					</script>
+    					<?php echo include_partial('form_retiraisons_item', array('detail' => $detail, 'form' => $form->getFormTemplateRetiraisons($detail->getRawValue(), $key))); ?>
+				</script>
+				<?php endif; ?>
 			</td>
 		</tr>
 			<?php 
 				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement): 
 					$enlevement = $vrac->get($key)->retiraisons->get($keySub);
 			?>
-			<?php include_partial('vrac/form_retiraisons_item', array('form' => $formEnlevement)) ?>
+				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement)) ?>
 			<?php endforeach; ?>
 		<?php 
 			endforeach;
@@ -68,13 +71,13 @@
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
 			<td width="40px">
-				<?php echo $detail->volume_propose ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
 			<td width="40px">
-				<?php echo $detail->prix_unitaire ?>&nbsp;&euro;/Hl
+				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td width="40px"></td>
-			<td width="40px"><strong><?php echo $detail->volume_enleve ?>&nbsp;Hl</strong></td>
+			<td width="40px"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
 		<tr>
@@ -82,7 +85,7 @@
 			<td width="40px"></td>
 			<td width="40px"></td>
 			<td width="40px"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
-			<td width="40px"><?php echo $retiraison->volume ?>&nbsp;Hl</td>
+			<td width="40px"><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
 		</tr>
 		<?php endforeach; ?>
 		<?php 
@@ -100,10 +103,10 @@
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
 			<td width="40px">
-				<?php echo $detail->volume_propose ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
 			<td width="40px">
-				<?php echo $detail->prix_unitaire ?>&nbsp;&euro;/Hl
+				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 		</tr>
 		<?php 

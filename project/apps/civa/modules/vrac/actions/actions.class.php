@@ -48,7 +48,7 @@ class vracActions extends sfActions
 	{
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
-		$this->form = $this->getFormRetiraisons($this->vrac);
+		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
@@ -227,9 +227,9 @@ class vracActions extends sfActions
 		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
     }    
     
-    protected function getFormRetiraisons($vrac)
+    protected function getFormRetiraisons($vrac, $user)
     {
-    	if ($vrac->isValide() && !$vrac->isCloture()) {
+    	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id)) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
     	return null;
