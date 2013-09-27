@@ -49,11 +49,17 @@ class vracActions extends sfActions
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
+		$this->validation = new VracValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
-       			$this->form->save();
-       			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+        		$this->form->doUpdateObject($this->form->getValues());
+        		$vrac = $this->form->getObject();
+				$this->validation = new VracValidation($vrac);
+				if ($this->validation->isValide()) {
+       				$vrac->save();
+       				return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
+				}
         	}
         }
     }

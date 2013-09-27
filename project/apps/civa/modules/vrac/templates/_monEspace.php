@@ -55,7 +55,7 @@
 									<?php endif; ?>
 								</ul>
 							</td>
-							<td><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?></td>
+							<td><?php if (!$hasValidated && $item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 							<td class="actions">
 								<?php if ($item->statut == Vrac::STATUT_CREE): ?>
 								<a href="<?php echo url_for('vrac_etape', array('numero_contrat' => $item->numero, 'etape' => $item->etape)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a> 

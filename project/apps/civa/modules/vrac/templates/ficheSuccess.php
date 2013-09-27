@@ -12,7 +12,11 @@
 <?php endif; ?>
 
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac)) ?>
-
+<?php 
+if($validation->hasPoints()) {
+	include_partial('global/validation', array('validation' => $validation)); 
+}
+?>
 <?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form)) ?>
 
 <?php if (!$vrac->isValide()): ?>
