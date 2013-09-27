@@ -80,27 +80,16 @@ class ExportDSCiva {
         }
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        $hasRebeches = $ds->hasRebeches();
-        $passedCremant = false;
-        $rebecheAdded = false;
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
         
-        foreach ($produitsAgreges as $code_douane => $obj) {
-            if ($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)) {
-                $lignes .= $this->addXMLDSRebeches($ds);
-                $passedCremant = false;
-                $rebecheAdded = true;
-            }
-
+        foreach ($produitsAgreges as $code_douane => $obj) {  
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
-
-            if ($hasRebeches && !$passedCremant && preg_match('/appellation_CREMANT/', $obj->hash)) {
-                $passedCremant = true;
-            }
         }
-        if ($hasRebeches && !$rebecheAdded) {
+        
+        if ($ds->hasRebechesForXML()) {
             $lignes .= $this->addXMLDSRebeches($ds);
         }
+        
         $lignes .= $this->addXMLDSMouts($ds);
         return $lignes;
     }
@@ -169,7 +158,7 @@ class ExportDSCiva {
     }
 
     protected function addXMLDSRebeches($ds) {
-        if (!$ds->hasRebeches()) {
+        if (!$ds->hasRebechesForXML()) {
             return '';
         }
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();

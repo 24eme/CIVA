@@ -78,7 +78,7 @@ EOF;
             }
             $old_date = $ds_principale->_get('date_depot_mairie');
             echo "\n".$this->green("Correction de la DS ".$ds_principale->_id.": remplacement de la DDDM ".$old_date." par ".$date_depot_mairie_iso);
-            $ds_principale->add('date_depot_mairie',$date_depot_mairie_iso);
+            $ds_principale->setDepotmairie($date_depot_mairie_iso);
             $ds_principale->save();
       }
   }
