@@ -549,6 +549,10 @@ public function getConfigurationCampagne() {
         return ($this->exist('rebeches') && $this->rebeches > 0);
     }
     
+    public function hasRebechesForXML() {
+        return ($this->isDsPrincipale() && $this->exist('rebeches') && $this->rebeches > 0);
+    }
+    
     public function isValidee(){
 
         return $this->isValideeCiva();
