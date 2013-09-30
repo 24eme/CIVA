@@ -14,24 +14,24 @@
 		<?php echo $form->renderGlobalErrors() ?>
 		<?php include_partial('form_'.$etape, array('form' => $form, 'vrac' => $vrac, 'etape' => $etape)) ?>
 
-<ul class="btn_prev_suiv clearfix" id="btn_etape">
-    <li class="prec">
-        <a id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etapes->getPrev($etape))) ?>">
-        	<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retourner_etape_prec.png">
-    	</a>
-    </li>
-    <li class="suiv">
-    	<?php if ($etapes->getLast() == $etape): ?>		
-    	<button type="submit" name="valider" style="cursor: pointer;">
-    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider.png" />
-    	</button>
-        <?php else: ?>
-    	<button type="submit" name="valider" style="cursor: pointer;">
-    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />
-    	</button>
-        <?php endif; ?>
-    </li>
-</ul>
+        <ul class="btn_prev_suiv clearfix" id="btn_etape">
+            <li class="prec">
+                <a id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etapes->getPrev($etape))) ?>">
+                	<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retourner_etape_prec.png">
+            	</a>
+            </li>
+            <li class="suiv">
+            	<?php if ($etapes->getLast() == $etape): ?>		
+            	<button type="submit" name="valider" style="cursor: pointer;">
+            		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider.png" />
+            	</button>
+                <?php else: ?>
+            	<button type="submit" name="valider" style="cursor: pointer;">
+            		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />
+            	</button>
+                <?php endif; ?>
+            </li>
+        </ul>
 	</form>
 </div>
 

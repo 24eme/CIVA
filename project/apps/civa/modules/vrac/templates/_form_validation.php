@@ -1,11 +1,11 @@
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac)) ?>
 
-<table class="table_donnees">
+<table class="validation table_donnees">
 	<thead>
 		<tr>
 			<th>Produit</th>
-			<th>Volume proposé</th>
-			<th>Prix unitaire</th>
+			<th class="volume">Volume proposé</th>
+			<th class="prix">Prix unitaire</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -17,10 +17,10 @@
 			<td>
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php if ($detail->millesime) { echo ' '.$detail->millesime; } if ($detail->denomination) { echo ' '.$detail->denomination; } if ($detail->vtsgn) { echo ' '.$detail->vtsgn; } ?>
 			</td>
-			<td>
+			<td class="volume">
 				<?php echo $detail->volume_propose ?>&nbsp;Hl
 			</td>
-			<td>
+			<td class="prix">
 				<?php echo $detail->prix_unitaire ?>&nbsp;&euro;/Hl
 			</td>
 		</tr>
@@ -28,17 +28,6 @@
 			endforeach;
 			endforeach;
 		?>
-
-		<tr>
-			<td>Lorem ipsum dolor sit amet.</td>
-			<td>Ipsa nobis voluptas quos cupiditate.</td>
-			<td>Quisquam, quas dignissimos laudantium accusamus.</td>
-		</tr>
-		<tr>
-			<td>Lorem ipsum dolor sit amet.</td>
-			<td>Ipsa nobis voluptas quos cupiditate.</td>
-			<td>Quisquam, quas dignissimos laudantium accusamus.</td>
-		</tr>
 
 	</tbody>
 </table>

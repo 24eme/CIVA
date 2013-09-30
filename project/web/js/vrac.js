@@ -150,7 +150,7 @@ var initValidContratPopup = function()
 	******************************************/
 	var initChampsTableauProduits = function()
 	{
-		var tableau = $('#contrats_vrac .table_donnees'),
+		var tableau = $('#contrats_vrac .produits.table_donnees'),
 			lignes_tableau = tableau.find('tr');
 
 		// On parcourt chaque ligne
@@ -158,7 +158,7 @@ var initValidContratPopup = function()
 		{
 			var ligne_courante = $(this),
 				champs = ligne_courante.find('input'),
-				champs_requis = champs.filter('.volume input').add(champs.filter('.prix_unitaire input')),
+				champs_requis = champs.filter('.volume input').add(champs.filter('.prix input')),
 				btn_balayette = ligne_courante.find('a.balayette'),
 				champs_vides = true; 
 
@@ -171,10 +171,10 @@ var initValidContratPopup = function()
 			// Affichage du picto coche
 			champs.blur(function()
 			{
-				champs.each(function(i)
+				champs.each(function()
 				{
 					var champ_volume = ligne_courante.find('.volume input'),
-						champ_prix = ligne_courante.find('.prix_unitaire input');
+						champ_prix = ligne_courante.find('.prix input');
 
 					if($.trim(champ_volume.val()) !== '' && $.trim(champ_prix.val()) !== '')
 					{
