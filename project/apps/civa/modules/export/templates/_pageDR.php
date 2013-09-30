@@ -45,7 +45,7 @@ if (!function_exists('printColonne')) {
         $v = $c[$key];
 
 	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black; '. ((!$unite) ? "text-align: center;" : "") .'">';
-	if ($c['type'] == 'total')    echo '<b>';
+	if (($c['type'] == 'total') || ($c['cepage'] == 'Assemblage'))    echo '<b>';
 
         if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'usages_industriels', 'cave_particuliere'))) {
             $v = 0;
@@ -64,7 +64,8 @@ if (!function_exists('printColonne')) {
         if($afficher_volume) {
           echo $v;
 
-          if ($c['type'] == 'total')    echo '</b>';
+          if (($c['type'] == 'total') || ($c['cepage'] == 'Assemblage'))    echo '</b>';
+          
 	        if ($unite) {
 	         echo "&nbsp;<small>$unite</small>";
            if($unite == 'hl') {
