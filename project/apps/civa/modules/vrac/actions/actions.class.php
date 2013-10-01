@@ -1,6 +1,42 @@
 <?php
 class vracActions extends sfActions 
 {    
+	
+	public function executeHistorique(sfWebRequest $request)
+	{
+		$this->campagne = $request->getParameter('campagne');
+		if (!$this->campagne) {
+			throw new sfError404Exception('La campagne doit être spécifiée.');
+		}
+		$this->statut = $request->getParameter('statut');
+		if (!$this->campagne) {
+			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
+		}
+		$this->user = $this->getUser()->getDeclarant();
+        $this->vracs = VracTousView::getInstance()->findBy($this->user->_id, $this->campagne, $this->statut);
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
+        $this->statuts = $this->getStatuts();
+	}
+	
+	protected function getCampagnes($vracs, $courante)
+	{
+		$campagnes = array($courante);
+		foreach ($vracs as $vrac) {
+			if (!in_array($vrac->key[1], $campagnes)) {
+				$campagnes[] = $vrac->key[1];
+			}
+		}
+		rsort($campagnes);
+		return $campagnes;
+	}
+	
+	protected function getStatuts()
+	{
+		$statuts = Vrac::getStatutsLibelles();
+		$statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = $statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT].'/signature';
+		return $statuts;
+	}
+	
 	public function executeAnnuaire(sfWebRequest $request)
 	{
 		if ($vrac = $this->getUser()->getAttribute('vrac_object')) {

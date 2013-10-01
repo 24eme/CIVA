@@ -5,6 +5,12 @@
 vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
+vrac_historique:
+  url: /vrac/historique/:campagne
+  param: { module: vrac, action: historique }
+vrac_historique_statut:
+  url: /vrac/historique/:campagne/:statut
+  param: { module: vrac, action: historique }
 vrac_soussigne_informations:
   url: /vrac/soussignes-informations
   param: { module: vrac, action: soussigneInformations }

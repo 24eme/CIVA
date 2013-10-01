@@ -68,6 +68,7 @@ class uploadActions extends EtapesActions {
         $this->nb_noVolumes = 0;
         $this->nb_cremant = 0;
         $this->nb_rebeche = 0;
+	$this->productmd5 = array();
 
         if (isset($this->previous_recoltant))
             unset($this->previous_recoltant);
@@ -124,6 +125,9 @@ class uploadActions extends EtapesActions {
                 $this->nb_noVolumes++;
 	    if ($this->hasForbidenDenomination($line)) {
 	      $this->errors[$cpt][] = 'La dénomination complémentaire utilisée n\'est pas autorisée';
+	    }
+	    if ($this->isProductAlreadyDefined($line)) {
+	      $this->errors[$cpt][] = 'Ce produit semble déjà avoir été renseigné pour ce récoltant';
 	    }
         }
         if ($this->shouldHaveRebeche(array())) {
@@ -203,6 +207,15 @@ class uploadActions extends EtapesActions {
 	if (isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
 	  return true;
 	return false;
+    }
+
+    protected function isProductAlreadyDefined($line) {
+      $md5 = md5($line[CsvFile::CSV_RECOLTANT_CVI].$line[CsvFile::CSV_APPELLATION].$line[CsvFile::CSV_LIEU].$line[CsvFile::CSV_CEPAGE].$line[CsvFile::CSV_VTSGN].$line[CsvFile::CSV_DENOMINATION]);
+      if ($this->productmd5[$md5]) {
+	return true;
+      }
+      $this->productmd5[$md5] = 1;
+      return false;
     }
 
     protected function cannotIdentifyProduct($line) {
