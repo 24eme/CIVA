@@ -1,5 +1,5 @@
 <div class="clearfix">
-	<table class="table_donnees" cellspacing="0" cellpadding="0">
+	<table class="produits table_donnees">
 		<thead>
 			<tr>
 				<th>Produit</th>
@@ -28,7 +28,7 @@
 					<span><?php echo $embedForm['volume_propose']->renderError() ?></span>
 					<?php echo $embedForm['volume_propose']->render() ?>&nbsp;Hl
 				</td>
-				<td class="prix_unitaire">
+				<td class="prix">
 					<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
 					<?php echo $embedForm['prix_unitaire']->render() ?>&nbsp;&euro;/Hl
 					<a href="#" class="balayette" title="Effacer les champs">Effacer les champs</a>

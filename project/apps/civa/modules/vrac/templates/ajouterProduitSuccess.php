@@ -1,65 +1,68 @@
 <div class="clearfix">
 	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
 </div>
-<h1>Ajouter un produit</h1>
-<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
-	<?php echo $form->renderHiddenFields() ?>
-	<table class="table_donnees" cellspacing="0" cellpadding="0">
-		<tr>
-			<th></th>
-			<td><span><?php echo $form['hash']->renderError() ?></span></td>
-		</tr>
-		<tr id="ligne_appellation">
-			<th>Appellation :</th>
-			<td>
-				<select id="choix_appellation" name="appellation">
-					<option value="">--</option>
-					<?php foreach ($config->recolte->certification->getAppellations() as $key => $appellation): ?>
-					<option value="<?php echo $key ?>"><?php echo $appellation->libelle ?></option>
-					<?php endforeach; ?>
-				</select>
-			</td>
-		</tr>
-		<tr id="ligne_lieu" class="hidden">
-			<th>Lieu :</th>
-			<td>
-				<select id="choix_lieu" name="lieu"></select>
-			</td>
-		</tr>
-		<tr id="ligne_cepage" class="hidden">
-			<th>Cépage :</th>
-			<td>
-				<select id="choix_cepage" name="cepage"></select>
-			</td>
-		</tr>
-		<tr id="ligne_lieu_dit" class="hidden">
-			<th>Lieu-Dit :</th>
-			<td>
-				<?php echo $form['lieu_dit']->render() ?>
-				<span><?php echo $form['lieu_dit']->renderError() ?></span>
-			</td>
-		</tr>
-		<tr id="ligne_vtsgn" class="hidden">
-			<th>VT/SGN :</th>
-			<td>
-				<?php echo $form['vtsgn']->render() ?>
-				<span><?php echo $form['vtsgn']->renderError() ?></span>
-			</td>
-		</tr>
-	</table>
-	<ul class="btn_prev_suiv clearfix" id="btn_etape">
-	    <li class="prec">
-            <a id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
-                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retour.png">
-            </a>
-	    </li>
-	    <li class="suiv">
-	    	<button type="submit" name="valider" style="cursor: pointer;">
-	    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
-	    	</button>
-	    </li>
-	</ul>
-</form>
+
+<div id="contrats_vrac">
+	<h2 class="titre_section">Ajouter un produit</h2>
+	<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
+		<?php echo $form->renderHiddenFields() ?>
+		<table class="ajout_produit table_donnees">
+			<tr>
+				<th></th>
+				<td><span><?php echo $form['hash']->renderError() ?></span></td>
+			</tr>
+			<tr id="ligne_appellation">
+				<th>Appellation :</th>
+				<td>
+					<select id="choix_appellation" name="appellation">
+						<option value="">--</option>
+						<?php foreach ($config->recolte->certification->getAppellations() as $key => $appellation): ?>
+						<option value="<?php echo $key ?>"><?php echo $appellation->libelle ?></option>
+						<?php endforeach; ?>
+					</select>
+				</td>
+			</tr>
+			<tr id="ligne_lieu" class="hidden">
+				<th>Lieu :</th>
+				<td>
+					<select id="choix_lieu" name="lieu"></select>
+				</td>
+			</tr>
+			<tr id="ligne_cepage" class="hidden">
+				<th>Cépage :</th>
+				<td>
+					<select id="choix_cepage" name="cepage"></select>
+				</td>
+			</tr>
+			<tr id="ligne_lieu_dit" class="hidden">
+				<th>Lieu-Dit :</th>
+				<td>
+					<?php echo $form['lieu_dit']->render() ?>
+					<span><?php echo $form['lieu_dit']->renderError() ?></span>
+				</td>
+			</tr>
+			<tr id="ligne_vtsgn" class="hidden">
+				<th>VT/SGN :</th>
+				<td>
+					<?php echo $form['vtsgn']->render() ?>
+					<span><?php echo $form['vtsgn']->renderError() ?></span>
+				</td>
+			</tr>
+		</table>
+		<ul class="btn_prev_suiv clearfix" id="btn_etape">
+		    <li class="prec">
+	            <a id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
+	                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retour.png">
+	            </a>
+		    </li>
+		    <li class="suiv">
+		    	<button type="submit" name="valider" style="cursor: pointer;">
+		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
+		    	</button>
+		    </li>
+		</ul>
+	</form>
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
 	var appellationsLieuDit = Object.keys(jQuery.parseJSON('<?php echo $sf_data->getRaw('appellationsLieuDit'); ?>'));

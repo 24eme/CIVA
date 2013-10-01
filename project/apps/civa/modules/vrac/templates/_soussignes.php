@@ -3,32 +3,53 @@
 	<div class="soussignes clearfix">
 
 		<?php if ($vrac->vendeur_identifiant): ?>
-			<div class="bloc_soussigne">
-				<h3>Vendeur<?php if ($vrac->vendeur_identifiant == $vrac->createur_identifiant): ?> *<?php endif; ?></h3>
-
-				<div class="cadre">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->vendeur, 'date_validation' => $vrac->valide->date_validation_vendeur)) ?>
+			<?php if ($vrac->vendeur_identifiant == $vrac->createur_identifiant): ?>
+				<div class="bloc_soussigne responsable">
+					<h3 class="titre_section">Vendeur *</h3>
+					<div class="cadre">
+						<strong class="responsable">Responsable du contrat</strong>
+			<?php else: ?>
+				<div class="bloc_soussigne">
+					<h3 class="titre_section">Vendeur</h3>
+					<div class="cadre">
+			<?php endif; ?>	
+						<?php include_partial('vrac/soussigne', array('tiers' => $vrac->vendeur, 'date_validation' => $vrac->valide->date_validation_vendeur)) ?>
+					</div>
 				</div>
-			</div>
 		<?php endif; ?>
 
 		<?php if ($vrac->acheteur_identifiant): ?>
-			<div class="bloc_soussigne">
-				<h3>Acheteur<?php if ($vrac->acheteur_identifiant == $vrac->createur_identifiant): ?> *<?php endif; ?></h3>
-				<div class="cadre">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur, 'date_validation' => $vrac->valide->date_validation_acheteur)) ?>
+			<?php if ($vrac->acheteur_identifiant == $vrac->createur_identifiant): ?>
+				<div class="bloc_soussigne responsable">
+					<h3 class="titre_section">Acheteur *</h3>
+					<div class="cadre">
+						<strong class="responsable">Responsable du contrat</strong>
+			<?php else: ?>
+				<div class="bloc_soussigne">
+					<h3 class="titre_section">Acheteur</h3>
+					<div class="cadre">
+			<?php endif; ?>
+						<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur, 'date_validation' => $vrac->valide->date_validation_acheteur)) ?>
+					</div>
 				</div>
-			</div>
 		<?php endif; ?>
 
 		<?php if ($vrac->mandataire_identifiant): ?>
-			<div class="bloc_soussigne">
-				<h3>Courtier<?php if ($vrac->mandataire_identifiant == $vrac->createur_identifiant): ?> *<?php endif; ?></h3>
 
-				<div class="cadre">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire, 'date_validation' => $vrac->valide->date_validation_mandataire)) ?>
+			<?php if ($vrac->mandataire_identifiant == $vrac->createur_identifiant): ?>
+				<div class="bloc_soussigne responsable">
+					<h3 class="titre_section">Courtier *</h3>
+
+					<div class="cadre">
+						<strong class="responsable">Responsable du contrat</strong>
+			<?php else: ?>
+				<div class="bloc_soussigne">
+					<h3 class="titre_section">Courtier</h3>
+					<div class="cadre">
+			<?php endif; ?>
+						<?php include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire, 'date_validation' => $vrac->valide->date_validation_mandataire)) ?>
+					</div>
 				</div>
-			</div>
 		<?php endif; ?>
 
 	</div>

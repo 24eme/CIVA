@@ -23,6 +23,20 @@
 	text-align: right;
 }
 
+#contrats_vrac .bloc_annuaire,
+#contrats_vrac .bloc_infos 
+{
+	border: 1px solid #ccc;
+	padding: 15px; 
+}
+
+#contrats_vrac .bloc_infos h2,
+#contrats_vrac .bloc_infos legend { min-width: 100px; }
+
+#contrats_vrac .btn_prev_suiv { margin-top: 20px; }
+
+#contrats_vrac .error_list { margin-top: 10px; }
+
 /* Rail d'étapes */
 
 #contrats_vrac #etape_declaration { padding-left: 0; }
@@ -33,15 +47,16 @@
 
 #contrats_vrac #btn_etape { padding: 0; }
 
+#contrats_vrac #btn_etape button { border: 0; }
 
 /* Formulaire */
 
 #contrats_vrac form#principal,
-#contrats_vrac form#principal input[type="text"]
-{
-	color: #7a7a7a;
-	font-size: 14px;
-}
+#contrats_vrac form#principal input[type="text"] { font-size: 14px; }
+
+#contrats_vrac form#principal input[type="text"],
+#contrats_vrac form#principal input[type="password"],
+#contrats_vrac form#principal textarea { padding: 3px; }
 
 #contrats_vrac form#principal input[type="text"]
 {
@@ -50,29 +65,23 @@
 	border-top-color: #848484; 
 }
 
-#contrats_vrac form#principal fieldset
+#contrats_vrac form#principal .bloc_infos
 {
-	border: 1px solid #cccdcd;
-	margin: 0 0 25px;
-	padding: 40px 15px 15px;
+	margin: 0 0 50px;
 	position: relative;
+	width: 773px;
 }
 
-#contrats_vrac form#principal fieldset legend
+#contrats_vrac form#principal .bloc_infos:first-child { margin-top: 25px; }
+
+#contrats_vrac form#principal .bloc_infos legend
 {
-	color: #acb701;
-	font-size: 16px;
-	font-weight: bold;
 	position: absolute;
-	left: 15px;
-	top: 10px;
+	left: -1px;
+	top: -26px;
 }
 
-#contrats_vrac form#principal .bloc_conditionner 
-{ 
-	display: inline-block; 
-	padding: 0 0 0 10px;
-}
+#contrats_vrac form#principal .bloc_conditionner  { display: inline-block; }
 
 #contrats_vrac form#principal .ui-button
 {
@@ -81,7 +90,7 @@
 	cursor: pointer;
 	height: 17px;
 	margin: 0 5px;
-	vertical-align: top;
+	vertical-align: middle;
 	width: 17px;
 }
 
@@ -112,19 +121,30 @@
 	text-decoration: underline;
 }
 
-#contrats_vrac form#principal .form_col { float: left; }
+#contrats_vrac form#principal .bloc_infos .form_col 
+{ 
+	background: #e0dfdf; 
+	float: left;
+	padding: 15px;
+	width: 426px;
+}
 
-#contrats_vrac form#principal .form_col + .form_col { margin: 0 0 0 50px; }
+#contrats_vrac form#principal .bloc_infos .form_col + .form_col 
+{ 
+	background: #e0e1bd;
+	margin: 0 0 0 20px;
+	width: 267px; 
+}
 
 #contrats_vrac form#principal .ligne_form { margin: 0 0 25px; }
 
-#contrats_vrac form#principal .nom_cvi .ligne_form { margin: 0 0 5px; }
+#contrats_vrac form#principal .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
 
-#contrats_vrac form#principal .informations ul li { margin: 0 0 7px; }
+#contrats_vrac form#principal .bloc_infos .informations ul li { margin: 0 0 7px; }
 
-#contrats_vrac form#principal .radio_list { display: inline-block; }
+#contrats_vrac form#principal .bloc_infos .radio_list { display: inline-block; }
 
-#contrats_vrac form#principal .radio_list li
+#contrats_vrac form#principal .bloc_infos .radio_list li
 {
 	display: inline-block;
 	margin: 0 0 0 32px;
@@ -132,28 +152,28 @@
 
 /* Tableau produits */
 
-#contrats_vrac form#principal .table_donnees input[type="text"] { background: #efeeee; }
+#contrats_vrac form#principal .produits.table_donnees input[type="text"] { background: #efeeee; }
 
-#contrats_vrac form#principal .table_donnees .actif input { background: #FFF; }
+#contrats_vrac form#principal .produits.table_donnees .actif input { background: #FFF; }
 
-#contrats_vrac form#principal .table_donnees .coche .prix_unitaire { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+#contrats_vrac form#principal .produits.table_donnees .coche .prix { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
 
-#contrats_vrac form#principal .table_donnees .balayette
+#contrats_vrac form#principal .produits.table_donnees .balayette
 {
 	background: #edecec url('../images/pictos/pi_balayette.png') no-repeat;
 	display: inline-block;
-	height: 15px;
+	height: 18px;
 	overflow: hidden;
 	text-indent: 100%;
-	vertical-align: middle;
+	vertical-align: 2px;
 	visibility: hidden;
-	width: 12px;
+	width: 15px;
     white-space: nowrap;
 }
 
-#contrats_vrac form#principal .table_donnees .effacable .balayette { visibility: visible; }
+#contrats_vrac form#principal .produits.table_donnees .effacable .balayette { visibility: visible; }
 
-#contrats_vrac form#principal .table_donnees + a
+#contrats_vrac form#principal .produits.table_donnees + a
 {
 	display: inline-block;
 	margin: 20px 0;
@@ -162,11 +182,8 @@
 /* Validation */
 
 #contrats_vrac .soussignes,
-#contrats_vrac .soussignes + .table_donnees,
-#contrats_vrac .conditions
-{
-	color: #3b3b3b;
-}
+#contrats_vrac .validation.table_donnees,
+#contrats_vrac .conditions { color: #3b3b3b; }
 
 #contrats_vrac .soussignes { margin: 0 0 40px; }
 
@@ -180,12 +197,6 @@
 
 #contrats_vrac .bloc_soussigne h3
 {
-	background: #dcdfa9;
-	color: #848c03;
-	font-size: 18px;
-	font-weight: normal;
-	height: 25px;
-	line-height: 25px;
 	padding: 0 0 0 12px;
 	width: 86px;
 }
@@ -199,47 +210,98 @@
 	padding: 10px;
 }
 
-#contrats_vrac .soussignes + .table_donnees { margin: 0 0 50px; }
+/* Bloc du responsable du contrat */
+#contrats_vrac .bloc_soussigne.responsable h3 
+{
+	background: #acb701;
+	color: #FFF;  
+}
+
+#contrats_vrac .bloc_soussigne.responsable .cadre { border-color: #acb701; }
+
+#contrats_vrac .bloc_soussigne.responsable strong.responsable
+{
+	background: url('../images/pictos/responsable.png') no-repeat;
+	color: #acb701;
+	display: block;
+	font-style: italic;
+	font-weight: normal;
+	height: 22px;
+	line-height: 22px;
+	margin: 0 0 10px;
+	padding: 0 0 0 30px;
+}
+
+/* Tableau de la page validation */
+#contrats_vrac .validation.table_donnees 
+{ 
+	margin: 0 0 40px;
+	width: auto;
+}
+
+#contrats_vrac .validation.table_donnees tr :first-child { width: 360px; }
+
+#contrats_vrac .validation.table_donnees tr th 
+{ 
+	background: #dcdfa9;
+	border: 1px solid #FFF;
+	border-bottom: 0;
+	color: #848c03;
+	padding: 5px 10px;
+	text-align: left;
+}
+
+#contrats_vrac .validation.table_donnees .prix,
+#contrats_vrac .validation.table_donnees .volume { width: 105px; }
+
+#contrats_vrac .validation.table_donnees td.prix,
+#contrats_vrac .validation.table_donnees td.volume { text-align:right; }
+
+#contrats_vrac form#principal .conditions { margin: 0 0 20px; }
 
 #contrats_vrac form#principal .conditions .ligne_form { margin: 15px 0 0; }
 
-#contrats_vrac .conditions label 
+#contrats_vrac form#principal .conditions label 
 {
 	display: inline-block;
 	width: 150px;  
 }
+
+#contrats_vrac form#principal .conditions input { width: 473px; }
 
 /* Annuaire */
 
 #contrats_vrac .annuaire 
 {
 	font-size: 14px;
-	margin: 0 0 0 -105px; 
+	margin: 0 0 0 -32px; 
 }
 
 #contrats_vrac .bloc_annuaire 
 { 
+	background: #f1f1f1;
 	float: left;
-	margin: 0 0 55px 105px;
-	width: 312px; 
+	margin: 0 0 0 32px;
+	position: relative;
+	width: 356px; 
 }
+
+#contrats_vrac .bloc_annuaire + .bloc_annuaire + .bloc_annuaire { margin-top: 55px; }
+
+#contrats_vrac .bloc_annuaire .bloc { width: 304px; }
 
 #contrats_vrac .bloc_annuaire h2
 {
-	font-size: 16px;
-	font-weight: bold;
+	left: -1px;
 	margin: 0 0 15px;
+	position: absolute;
+	top: -26px;
 }
 
 #contrats_vrac .bloc_annuaire h3
 {
-	background: #dcdfa9;
-	color: #848c03;
 	font-size: 18px;
-	font-weight: normal;
-	height: 25px;
-	line-height: 25px;
-	padding: 0 0 0 12px;
+	width: 284px;
 }
 
 #contrats_vrac .bloc_annuaire .btn 
@@ -248,7 +310,11 @@
 	margin: 20px 0 0; 
 }
 
-#contrats_vrac .bloc_annuaire ul { border: 1px solid #c6c8c7; }
+#contrats_vrac .bloc_annuaire ul 
+{ 
+	background: #edecec;
+	border: 1px solid #c6c8c7; 
+}
 
 #contrats_vrac .bloc_annuaire ul li 
 { 
@@ -256,7 +322,7 @@
 	position: relative;
 }
 
-#contrats_vrac .bloc_annuaire ul li.alt { background: #dddddd; }
+#contrats_vrac .bloc_annuaire ul li + li { border-top: 1px dashed #ccc; }
 
 #contrats_vrac .bloc_annuaire ul li .btn_supprimer
 {
