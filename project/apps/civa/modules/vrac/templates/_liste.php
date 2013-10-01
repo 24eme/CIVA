@@ -15,7 +15,7 @@
 			for ($i=$nb; $i>=0; $i--):
 				$item = $vracs[$i];
 				$item = $item->value;
-				if (!$archive && $item->statut == Vrac::STATUT_CLOTURE) {
+				if (!$archive && ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
 					continue;
 				}
 				$alt = ($counter%2);
@@ -60,7 +60,7 @@
 				?>
 				<a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated) ?></a>
 				<?php endif; ?>
-				| <a href="<?php echo url_for('vrac_supprimer', array('numero_contrat' => $item->numero)) ?>">X</a></td>
+				<?php if ($item->statut != Vrac::STATUT_ANNULE): ?>| <a href="<?php echo url_for('vrac_supprimer', array('numero_contrat' => $item->numero)) ?>">X</a><?php endif; ?></td>
 		</tr>
 			<?php
 				$counter++;
