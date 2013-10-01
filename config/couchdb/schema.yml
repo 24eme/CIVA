@@ -166,6 +166,8 @@ Vrac:
             date_validation_mandataire: {  }
             date_validation: {  }
             date_cloture: {  }
+            email_relance: { }
+            email_validation: { }
             statut: { }
       campagne: {  }
       numero_contrat: {  }

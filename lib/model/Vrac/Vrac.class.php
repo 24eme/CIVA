@@ -355,4 +355,44 @@ class Vrac extends BaseVrac
         //A implémenter
         return true;
     }
+    
+    public function getActeurs($withCreator = true) {
+    	$acteurs = array();
+    	if ($this->vendeur_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['vendeur'] = $this->vendeur;
+    		} elseif($this->vendeur_identifiant != $this->createur_identifiant) {
+    			$acteurs['vendeur'] = $this->vendeur;
+    		}
+    	}
+    	if ($this->acheteur_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['acheteur'] = $this->acheteur;
+    		} elseif($this->acheteur_identifiant != $this->createur_identifiant) {
+    			$acteurs['acheteur'] = $this->acheteur;
+    		}
+    	}
+    	if ($this->mandataire_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['mandataire'] = $this->mandataire;
+    		} elseif($this->mandataire_identifiant != $this->createur_identifiant) {
+    			$acteurs['mandataire'] = $this->mandataire;
+    		}
+    	}
+    	return $acteurs;
+    }
+    
+    public function getCreateurInformations()
+    {
+    	if ($this->createur_identifiant == $this->mandataire_identifiant) {
+    		return $this->mandataire;
+    	}
+    	if ($this->createur_identifiant == $this->vendeur_identifiant) {
+    		return $this->vendeur;
+    	}
+    	if ($this->createur_identifiant == $this->acheteur_identifiant) {
+    		return $this->acheteur;
+    	}
+    	return null;
+    }
 }

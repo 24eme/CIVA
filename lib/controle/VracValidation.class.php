@@ -25,7 +25,7 @@ class VracValidation extends DocumentValidation
 				if ($detail->cloture && !$detail->volume_enleve) {
 					$nbnull++;
 				}
-				if ($detail->volume_propose > self::MIN_VOLUME_CONTROLE) {
+				if ($detail->volume_propose > self::MIN_VOLUME_CONTROLE && $detail->volume_enleve > 0) {
 					$ecart = $detail->volume_propose * self::TAUX_VOLUME_CONTROLE;
 					$min = $detail->volume_propose - $ecart;
 					$max = $detail->volume_propose + $ecart;
