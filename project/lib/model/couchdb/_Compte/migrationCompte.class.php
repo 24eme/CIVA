@@ -18,9 +18,6 @@ class MigrationCompte {
         $this->_nouveau_cvi = $nouveau_cvi;
         $this->nom = $nom;
         $this->commune = $commune;
-        if($withNewPasswords){
-            throw new sfException("Le nouveau mot de passe doit être un nombre chiffres");
-        }
         $this->_newPassword = ($withCopyPasswords && $withCopyPasswords=="NON")? sprintf("%4d", rand(0, 9999)) : null;
     }
 
