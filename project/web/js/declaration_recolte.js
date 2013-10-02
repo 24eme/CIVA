@@ -834,6 +834,7 @@ var initGestionRecolteDonnees = function()
 
 var initGestionRecolteRecapitulatif = function() {
     $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
+    $('#recapitulatif_lieu_lies').focus();
 }
 
 var etatBtnRecolteCanBeInactif = function (actif) {
