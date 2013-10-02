@@ -73,9 +73,21 @@ class vracActions extends sfActions
 	public function executeSupprimer(sfWebRequest $request) 
 	{
 		$this->vrac = $this->getRoute()->getVrac();
+		if (!$this->vrac) {
+			return $this->redirect('mon_espace_civa');
+		}
 		$tiers = $this->getUser()->getDeclarant();
 		if ($this->vrac->isSupprimable($tiers->_id)) {
-			$this->vrac->delete();
+			if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
+				$this->vrac->delete();
+			} else {
+				$this->vrac->valide->statut = Vrac::STATUT_ANNULE;
+				$this->vrac->save();				
+				$acteurs = $this->vrac->getActeurs();
+				foreach ($acteurs as $type => $acteur) {
+					VracMailer::getInstance()->annulationContrat($this->vrac, $acteur->email);
+				}
+			}
 		}
 		return $this->redirect('mon_espace_civa');
     }
@@ -107,6 +119,7 @@ class vracActions extends sfActions
 		$this->vrac->valideUser($this->user->_id);
 		$this->vrac->updateValideStatut();
 		$this->vrac->save();
+		VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->email);
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
     
@@ -140,6 +153,11 @@ class vracActions extends sfActions
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {
+					VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->email);
+					$acteurs = $this->vrac->getActeurs(false);
+					foreach ($acteurs as $type => $acteur) {
+						VracMailer::getInstance()->demandeSignature($this->vrac, $acteur->email);
+					}
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
        			}
         	}

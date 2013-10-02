@@ -5,6 +5,7 @@
 all:
   configuration:
     vrac:
+      delai_suppression: 5
       etapes:
         soussignes: 1
         produits: 2

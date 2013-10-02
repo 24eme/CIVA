@@ -36,6 +36,10 @@ class vrac_exportActions extends sfActions
 
       return $this->renderText($this->document->output());
     }
+	
+    public function executeMain()
+	{
+	}
    
 
     protected function setResponseCsv($filename) {
