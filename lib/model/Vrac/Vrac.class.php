@@ -251,6 +251,11 @@ class Vrac extends BaseVrac
     	return ($this->valide->statut == self::STATUT_CLOTURE);
     }
     
+    public function isAnnule()
+    {
+    	return ($this->valide->statut == self::STATUT_ANNULE);
+    }
+    
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
