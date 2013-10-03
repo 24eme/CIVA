@@ -505,6 +505,33 @@ MetteurEnMarche:
           fields:
             maison_mere: {  }
 
+Courtier:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      cvi: {  }
+      no_accises: {  }
+      no_carte_professionnelle: {  }
+      declaration_insee: { required: false }
+      declaration_commune: { required: false }
+      gamma:
+        required: false
+        type: collection
+        definition:
+          fields:
+            statut: {  }
+            num_cotisant: {  }
+      siret: {  }
+      siren: {  }
+      db2:
+        type: collection
+        definition:
+          fields:
+            maison_mere: {  }
+
 
 Acheteur:
   inheritance: _Tiers

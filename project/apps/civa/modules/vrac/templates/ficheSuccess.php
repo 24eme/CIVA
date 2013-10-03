@@ -1,6 +1,6 @@
 <?php use_helper('Date') ?>
-<?php if ($vrac->isValide()): ?>
-<h1>Contrat en vrac numéro <?php echo $vrac->numero_archive ?><span><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span></h1>
+<?php if ($vrac->isValide() || $vrac->isAnnule()): ?>
+<h1>Contrat en vrac<?php if ($vrac->numero_archive): ?> numéro <?php echo $vrac->numero_archive ?><?php endif; ?><span><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span></h1>
 <?php else: ?>
 <h1>Validation de votre contrat en vrac</h1>
 <?php endif; ?>
