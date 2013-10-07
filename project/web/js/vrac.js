@@ -151,7 +151,8 @@ var initValidContratPopup = function()
 	var initChampsTableauProduits = function()
 	{
 		var tableau = $('#contrats_vrac .produits.table_donnees'),
-			lignes_tableau = tableau.find('tr');
+			lignes_tableau = tableau.find('tr'),
+			verifVolumePrix;
 
 		// On parcourt chaque ligne
 		lignes_tableau.each(function()
@@ -159,18 +160,13 @@ var initValidContratPopup = function()
 			var ligne_courante = $(this),
 				champs = ligne_courante.find('input'),
 				champs_requis = champs.filter('.volume input').add(champs.filter('.prix input')),
-				btn_balayette = ligne_courante.find('a.balayette'),
-				champs_vides = true; 
+				btn_balayette = ligne_courante.find('a.balayette');
 
-			// Ligne active
-			champs.focus(function()
+			// On vérifie d'abord si le couple volume / prix n'est pas déjà renseigné sur une ligne
+			verifVolumePrix = function()
 			{
-				ligne_courante.addClass('actif');
-			});
+				var champs_vides = true;
 
-			// Affichage du picto coche
-			champs.blur(function()
-			{
 				champs.each(function()
 				{
 					var champ_volume = ligne_courante.find('.volume input'),
@@ -187,6 +183,7 @@ var initValidContratPopup = function()
 					if($.trim($(this).val()) !== '')
 					{
 						champs_vides = false;
+						ligne_courante.addClass('actif');
 					}
 				});
 
@@ -194,7 +191,19 @@ var initValidContratPopup = function()
 				{
 					ligne_courante.removeClass('actif');
 				}
+			};
+
+			verifVolumePrix();
+
+
+			// Ligne active
+			champs.focus(function()
+			{
+				ligne_courante.addClass('actif');
 			});
+
+			// Affichage du picto coche
+			champs.blur(verifVolumePrix);
 
 			// Affichage du picto balayette
 			ligne_courante.hover
@@ -220,6 +229,8 @@ var initValidContratPopup = function()
 			{
 				champs.val('');
 				ligne_courante.removeClass('coche effacable actif');
+
+				return false;
 			});
 		});
 	};

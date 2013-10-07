@@ -37,19 +37,25 @@
 
 #contrats_vrac .error_list { margin-top: 10px; }
 
+/* =================================================== */
 /* Rail d'étapes */
+/* =================================================== */
 
 #contrats_vrac #etape_declaration { padding-left: 0; }
 
 #contrats_vrac #etape_declaration.etapes_ds { margin: 0; }
 
+/* =================================================== */
 /* Boutons précédent / suivant */
+/* =================================================== */
 
 #contrats_vrac #btn_etape { padding: 0; }
 
 #contrats_vrac #btn_etape button { border: 0; }
 
+/* =================================================== */
 /* Formulaire */
+/* =================================================== */
 
 #contrats_vrac form#principal,
 #contrats_vrac form#principal input[type="text"] { font-size: 14px; }
@@ -129,18 +135,20 @@
 	width: 426px;
 }
 
-#contrats_vrac form#principal .bloc_infos .form_col + .form_col 
+#contrats_vrac form#principal .informations,
+#contrats_vrac form#principal .bloc_infos .informations
 { 
 	background: #e0e1bd;
 	margin: 0 0 0 20px;
+	padding: 15px;
 	width: 267px; 
 }
+
+#contrats_vrac form#principal .informations ul li { margin: 0 0 7px; }
 
 #contrats_vrac form#principal .ligne_form { margin: 0 0 25px; }
 
 #contrats_vrac form#principal .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
-
-#contrats_vrac form#principal .bloc_infos .informations ul li { margin: 0 0 7px; }
 
 #contrats_vrac form#principal .bloc_infos .radio_list { display: inline-block; }
 
@@ -150,7 +158,9 @@
 	margin: 0 0 0 32px;
 }
 
+/* =================================================== */
 /* Tableau produits */
+/* =================================================== */
 
 #contrats_vrac form#principal .produits.table_donnees input[type="text"] { background: #efeeee; }
 
@@ -179,13 +189,23 @@
 	margin: 20px 0;
 }
 
+/* =================================================== */
 /* Validation */
+/* =================================================== */
 
 #contrats_vrac .soussignes,
 #contrats_vrac .validation.table_donnees,
 #contrats_vrac .conditions { color: #3b3b3b; }
 
 #contrats_vrac .soussignes { margin: 0 0 40px; }
+
+#contrats_vrac .statut_contrat
+{
+	font-size: 20px;
+	margin: 0 0 20px;
+}
+
+#contrats_vrac .statut_contrat span { float: right; }
 
 #contrats_vrac .bloc_soussigne
 {
@@ -210,7 +230,9 @@
 	padding: 10px;
 }
 
+/* =================================================== */
 /* Bloc du responsable du contrat */
+/* =================================================== */
 #contrats_vrac .bloc_soussigne.responsable h3 
 {
 	background: #acb701;
@@ -232,7 +254,9 @@
 	padding: 0 0 0 30px;
 }
 
-/* Tableau de la page validation */
+/* =================================================== */
+/* Tableau de la page de validation */
+/* =================================================== */
 #contrats_vrac .validation.table_donnees 
 { 
 	margin: 0 0 40px;
@@ -269,7 +293,9 @@
 
 #contrats_vrac form#principal .conditions input { width: 473px; }
 
+/* =================================================== */
 /* Annuaire */
+/* =================================================== */
 
 #contrats_vrac .annuaire 
 {
@@ -330,3 +356,20 @@
 	right: -27px; 
 	top: 5px;
 }
+
+/* Formulaire d'ajout de l'annuaire */
+
+#contrats_vrac .ajout_annuaire form#principal .informations,
+#contrats_vrac .ajout_annuaire form#principal .table_donnees { margin: 20px 0 0; }
+
+#contrats_vrac .ajout_annuaire form#principal .informations h2 { margin: 0 0 20px; }
+
+/* =================================================== */
+/* Fiche contrat */
+/* =================================================== */
+
+#contrats_vrac .fiche_contrat #previsualiserContrat { margin: 0 0 0 310px; }
+
+#contrats_vrac .fiche_contrat .echeance,
+#contrats_vrac .fiche_contrat .enleve,
+#contrats_vrac .fiche_contrat .cloture { text-align: center; }

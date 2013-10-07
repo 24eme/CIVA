@@ -5,19 +5,19 @@
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
 <?php endif; ?>
-<table class="table_donnees" cellspacing="0" cellpadding="0">
+<table class="table_donnees">
 	<thead>
 		<tr>
 			<th>Produit</th>
-			<th width="40px"><span>Volume proposé</span></th>
-			<th width="40px"><span>Prix unitaire</span></th>
+			<th><span>Volume proposé</span></th>
+			<th><span>Prix unitaire</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
-			<th width="40px"><span>Echéance</span></th>
-			<th width="40px"><span>Enlevé</span></th>
+			<th><span>Echéance</span></th>
+			<th><span>Enlevé</span></th>
 			<?php endif; ?>
 			<?php if ($form): ?>
-			<th width="40px"><span>Cloturé</span></th>
-			<th width="40px"></th>
+			<th><span>Cloturé</span></th>
+			<th></th>
 			<?php endif; ?>
 		</tr>
 	</thead>
@@ -31,19 +31,19 @@
 			<td>
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
-			<td width="40px"></td>
-			<td width="40px"><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?> Hl<?php endif; ?></strong></td>
-			<td width="40px">
+			<td class="echeance"><input type="text" /></td>
+			<td class="enleve"><input type="text" /><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?> Hl<?php endif; ?></strong></td>
+			<td class="cloture">
 				<span><?php echo $formProduit['cloture']->renderError() ?></span>
 				<?php echo $formProduit['cloture']->render() ?>
 			</td>
-			<td width="40px">
+			<td>
 				<?php if (!$detail->cloture): ?>
 				<a class="btn_ajouter_ligne_template" data-container-last-brother=".produits" data-template="#template_form_<?php echo str_replace('/', '_', $key); ?>_retiraisons_item" href="#">Enlever</a>
 				<script id="template_form_<?php echo str_replace('/', '_', $key); ?>_retiraisons_item" class="template_form" type="text/x-jquery-tmpl">
@@ -70,22 +70,22 @@
 			<td>
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
-			<td width="40px"></td>
-			<td width="40px"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
+			<td></td>
+			<td><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
 		<tr>
 			<td></td>
-			<td width="40px"></td>
-			<td width="40px"></td>
-			<td width="40px"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
-			<td width="40px"><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
+			<td></td>
+			<td></td>
+			<td><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
+			<td><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
 		</tr>
 		<?php endforeach; ?>
 		<?php 
@@ -102,10 +102,10 @@
 			<td>
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td width="40px">
+			<td>
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 		</tr>
@@ -125,5 +125,5 @@
 	    </li>
 	</ul>
 </form>
-<a href="<?php echo url_for('vrac_cloture', $vrac) ?>">Cloturer le contrat</a>
+<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
 <?php endif; ?>

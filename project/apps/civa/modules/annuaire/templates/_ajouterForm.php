@@ -1,4 +1,4 @@
-<table class="table_donnees" cellspacing="0" cellpadding="0">
+<table class="table_donnees">
 	<thead>
 		<tr>
 			<th>Type</th>
