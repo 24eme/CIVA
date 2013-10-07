@@ -38,7 +38,7 @@
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td class="echeance"><input type="text" /></td>
-			<td class="enleve"><input type="text" /><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?> Hl<?php endif; ?></strong></td>
+			<td class="enleve"><input type="text" /><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?></strong><?php endif; ?> Hl</td>
 			<td class="cloture">
 				<span><?php echo $formProduit['cloture']->renderError() ?></span>
 				<?php echo $formProduit['cloture']->render() ?>

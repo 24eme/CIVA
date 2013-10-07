@@ -103,7 +103,9 @@
 	padding: 0 20px 0 0;
 }
 
+/* Boutons de suppression */
 #contrats_vrac .btn_supprimer,
+#contrats_vrac .btn_supprimer_ligne_template,
 #contrats_vrac form#principal .remove_autocomplete 
 { 
 	background: url('../images/pictos/pi_supprimer.png') no-repeat;
