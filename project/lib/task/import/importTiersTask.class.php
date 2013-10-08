@@ -74,7 +74,6 @@ EOF;
    */
   private function loadTiers($db2, $acheteur = false) {
       $tiers = null;
-
       if($acheteur && $db2->isAcheteur()) {
         $tiers = $this->loadAcheteur($db2);
       }
@@ -83,6 +82,8 @@ EOF;
           $tiers = $this->loadRecoltant($db2);
       } elseif(!$acheteur && $db2->isMetteurEnMarche()) {
           $tiers = $this->loadMetteurEnMarche($db2);
+      } elseif(!$acheteur && $db2->isCourtier()) {
+          $tiers = $this->loadCourtier($db2);
       }
       
       if(!$tiers) {
@@ -160,6 +161,28 @@ EOF;
       $metteur->db2->maison_mere = $db2->get(Db2Tiers::COL_MAISON_MERE);
 
       return $metteur;
+  }
+  
+  /**
+   * @param Db2Tiers $db2 
+   * return MetteurEnMarche
+   */
+  private function loadCourtier($db2) {
+  		$siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
+  		if ($siren) {
+  			$courtier = acCouchdbManager::getClient('Courtier')->retrieveBySiren($siren);
+	      	if(!$courtier) {
+	        	$courtier = new Courtier();
+	          	$courtier->set('_id', "COURT-" . $siren);
+	      	}
+	      	$courtier->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
+	      	$courtier->siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
+	      	$courtier->siret = $db2->get(Db2Tiers::COL_SIRET);
+	      	$courtier->no_carte_professionnelle = $db2->get(Db2Tiers::COL_SITE_INTERNET);
+	      	$courtier->db2->maison_mere = $db2->get(Db2Tiers::COL_MAISON_MERE);
+	      	return $courtier;
+  		}
+  		return null;
   }
 
   private function loadAcheteur($db2) {

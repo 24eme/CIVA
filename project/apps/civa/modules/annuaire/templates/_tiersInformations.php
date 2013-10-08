@@ -1,12 +1,11 @@
-<br />
-<h1>INFORMATIONS</h1>
-<br />
-<p>Nom : <strong><?php echo $tiers->nom ?></strong></p>
-<p>Siret : <strong><?php echo $tiers->siret ?></strong></p>
-<p>Téléphone : <strong><?php echo $tiers->telephone ?></strong></p>
-<p>Fax : <strong><?php echo $tiers->fax ?></strong></p>
-<br />
-<p>Adresse : <strong><?php echo $tiers->siege->adresse ?></strong></p>
-<p>Code postal : <strong><?php echo $tiers->siege->code_postal ?></strong></p>
-<p>Commune : <strong><?php echo $tiers->siege->commune ?></strong></p>
-<br />
+<h2>INFORMATIONS</h2>
+
+<ul>
+	<li>Nom : <strong><?php echo $tiers->nom ?></strong></li>
+	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
+	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
+	<li>Fax : <strong><?php echo $tiers->fax ?></strong></li>
+	<li>Adresse : <strong><?php echo $tiers->siege->adresse ?></strong></li>
+	<li>Code postal : <strong><?php echo $tiers->siege->code_postal ?></strong></li>
+	<li>Commune : <strong><?php echo $tiers->siege->commune ?></strong></li>
+</ul>
