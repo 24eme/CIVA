@@ -55,11 +55,27 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       $volume = 0;
 
       foreach($this->getChildrenNode() as $item) {
+        $volume += $item->total_volume;
+      }
+      
+      return $volume;
+    }
+    
+    public function getSurPlaceRebeches() {
+      if($this->getKey() != 'cepage_RB') {
+
+        return null;
+      }
+
+      $volume = 0;
+
+      foreach($this->getChildrenNode() as $item) {
         $volume += $item->cave_particuliere;
       }
       
       return $volume;
     }
+    
 
     public function getArrayUniqueKey($out = array()) {
         $resultat = array();

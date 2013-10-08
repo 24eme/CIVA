@@ -3,7 +3,6 @@
 abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getConfig() {
-
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
@@ -91,7 +90,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getTotalRebeches() {
 
-        return $this->getDataByFieldAndMethod('total_rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getTotalRebeches', false) );
+            return $this->getDataByFieldAndMethod('total_rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getTotalRebeches', false) );
+    }
+    
+    public function getSurPlaceRebeches() {
+
+        return $this->getDataByFieldAndMethod('rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getSurPlaceRebeches', false) );
     }
 
     public function getTotalVolumeVendus() {
@@ -587,8 +591,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->_get($field);
         }
 
-        if(!empty($parameters))
+        if(!empty($parameters)){
             return $this->store($field, $method, $parameters);
+        }
 
         return $this->store($field, $method, array($field));
     }

@@ -104,6 +104,7 @@ class ExportDRPdf extends ExportDocument {
               'volume_vendus' => array_slice($infos['volume_vendus'], $i, $nb_colonnes_by_page),
               'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
               'volume_rebeches' => array_slice($infos['volume_rebeches'], $i, $nb_colonnes_by_page),
+              'volume_rebeches_sur_place' => array_slice($infos['volume_rebeches_sur_place'], $i, $nb_colonnes_by_page),
               'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
               'revendique_sur_place' => array_slice($infos['revendique_sur_place'], $i, $nb_colonnes_by_page),
               'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
@@ -117,6 +118,8 @@ class ExportDRPdf extends ExportDocument {
         			'total_revendique_sur_place' => $infos['total_revendique_sur_place'],
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
               'total_volume_rebeches' => $infos['total_volume_rebeches'],
+              'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
+                            
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
@@ -169,7 +172,9 @@ class ExportDRPdf extends ExportDocument {
         $volume = array();
         $volume_vendus = array();
         $volume_sur_place = array();
-        $volume_rebeches = array();
+  //      $volume_rebeches = array();
+        $volume_rebeches_sur_place = array();
+        $volume_total_rebeches = array();
         $revendique = array();
         $revendique_sur_place = array();
         $usages_industriels = array();
@@ -195,6 +200,7 @@ class ExportDRPdf extends ExportDocument {
               $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
               $volume_rebeches[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getTotalRebeches() : null;
+              $volume_rebeches_sur_place[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getSurPlaceRebeches() : null;
               if($appellation->getConfig()->hasCepageRB()) {
                 $has_cepage_rb = true;
               }
@@ -209,6 +215,7 @@ class ExportDRPdf extends ExportDocument {
         $infos['volume_vendus'] = $volume_vendus;
         $infos['volume_sur_place'] = $volume_sur_place;
         $infos['volume_rebeches'] = $volume_rebeches;
+        $infos['volume_rebeches_sur_place'] = $volume_rebeches_sur_place;
         $infos['revendique'] = $revendique;
         $infos['revendique_sur_place'] = $revendique_sur_place;
         $infos['usages_industriels'] = $usages_industriels;
@@ -229,9 +236,11 @@ class ExportDRPdf extends ExportDocument {
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
 
         if($has_cepage_rb && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
-          $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
+            $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
+            $infos['total_volume_rebeches_sur_place'] = array_sum(array_values($volume_rebeches_sur_place));
         } else {
           $infos['total_volume_rebeches'] = null;
+          $infos['total_volume_rebeches_sur_place'] = null;
         }
 
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
