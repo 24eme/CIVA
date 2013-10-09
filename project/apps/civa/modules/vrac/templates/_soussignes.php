@@ -5,7 +5,7 @@
 		<?php if ($vrac->vendeur_identifiant): ?>
 			<?php if ($vrac->vendeur_identifiant == $vrac->createur_identifiant): ?>
 				<div class="bloc_soussigne responsable">
-					<h3 class="titre_section">Vendeur *</h3>
+					<h3 class="titre_section">Vendeur</h3>
 					<div class="cadre">
 						<strong class="responsable">Responsable du contrat</strong>
 			<?php else: ?>
@@ -21,7 +21,7 @@
 		<?php if ($vrac->acheteur_identifiant): ?>
 			<?php if ($vrac->acheteur_identifiant == $vrac->createur_identifiant): ?>
 				<div class="bloc_soussigne responsable">
-					<h3 class="titre_section">Acheteur *</h3>
+					<h3 class="titre_section">Acheteur</h3>
 					<div class="cadre">
 						<strong class="responsable">Responsable du contrat</strong>
 			<?php else: ?>
@@ -38,7 +38,7 @@
 
 			<?php if ($vrac->mandataire_identifiant == $vrac->createur_identifiant): ?>
 				<div class="bloc_soussigne responsable">
-					<h3 class="titre_section">Courtier *</h3>
+					<h3 class="titre_section">Courtier</h3>
 
 					<div class="cadre">
 						<strong class="responsable">Responsable du contrat</strong>

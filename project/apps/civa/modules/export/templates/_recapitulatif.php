@@ -5,9 +5,10 @@
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];
 	$volume = $infos['volume'];
-    $volume_vendus = $infos['volume_vendus'];
-    $volume_sur_place = $infos['volume_sur_place'];
-    $volume_rebeches = $infos['volume_rebeches'];
+        $volume_vendus = $infos['volume_vendus'];
+        $volume_sur_place = $infos['volume_sur_place'];
+        $volume_rebeches = $infos['volume_rebeches'];
+        $volume_rebeches_sur_place = $infos['volume_rebeches_sur_place'];
 	$revendique = $infos['revendique'];
 	$revendique_sur_place = $infos['revendique_sur_place'];
 	$usages_industriels = $infos['usages_industriels'];
@@ -147,6 +148,24 @@ pre {display: inline;}
             <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches'], true);?></td>
             <?php endif; ?>
         </tr>
+        <?php endif; ?>
+        <?php if($infos['volume_rebeches_sur_place'] !== null): ?>
+                <tr>
+            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
+            <?php foreach ($appellations as $a): ?>
+            <td style="width: 120px;">
+            	<?php if(!is_null($volume_rebeches_sur_place[$a])): ?>
+        			<?php echoVolume($volume_rebeches_sur_place[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            </td>
+            <?php endforeach; ?>
+            <?php if ($has_total): ?>
+            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches_sur_place'], true);?></td>
+            <?php endif; ?>
+        </tr>
+        
     	<?php endif; ?>
 	</tbody>
 </table>
