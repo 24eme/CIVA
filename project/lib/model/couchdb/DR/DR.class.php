@@ -503,6 +503,15 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
     }
 
+    public function hasVolumeSurPlace() {
+        foreach ($this->recolte->getAppellations() as $appellation) {
+            if(($appellation->getVolumeRevendiqueCaveParticuliere() !== null) && ($appellation->getVolumeRevendiqueCaveParticuliere())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public function getPremiereModificationDr() {
 
         return $this->utilisateurs_document->getPremiereModification();

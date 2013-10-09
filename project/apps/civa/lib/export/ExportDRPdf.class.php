@@ -154,9 +154,11 @@ class ExportDRPdf extends ExportDocument {
           $total["revendique_sur_place"] += $item->revendique_sur_place;
           $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
         }
+        if($dr->hasVolumeSurPlace()){
         $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
                                                                                    'recap_total' => $recap,
                                                                                    'total' => $total)));
+        }
     }
 
     protected function getRecapTotal($dr) {
@@ -172,7 +174,7 @@ class ExportDRPdf extends ExportDocument {
         $volume = array();
         $volume_vendus = array();
         $volume_sur_place = array();
-  //      $volume_rebeches = array();
+        $volume_rebeches = array();
         $volume_rebeches_sur_place = array();
         $volume_total_rebeches = array();
         $revendique = array();
