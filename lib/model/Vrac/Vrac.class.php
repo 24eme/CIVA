@@ -338,12 +338,22 @@ class Vrac extends BaseVrac
     
     public function getTotalVolumeEnleve()
     {
-    	return $this->declaration->getTotalVolumeEnleve();
+    	return $this->volume_enleve_total;
     }
     
     public function getTotalVolumePropose()
     {
-    	return $this->declaration->getTotalVolumePropose();
+    	return $this->volume_propose_total;
+    }
+    
+    public function getTotalPrixEnleve()
+    {
+    	return $this->prix_reel_total;
+    }
+    
+    public function getTotalPrixPropose()
+    {
+    	return $this->prix_total;
     }
     
     public function allProduitsClotures()
@@ -399,5 +409,18 @@ class Vrac extends BaseVrac
     		return $this->acheteur;
     	}
     	return null;
+    }
+    
+    public function updateTotaux()
+    {
+    	$this->volume_enleve_total = $this->declaration->getTotalVolumeEnleve();
+    	$this->volume_propose_total = $this->declaration->getTotalVolumePropose();
+    	$this->prix_reel_total = $this->declaration->getTotalPrixPropose();;
+    	$this->prix_total = $this->declaration->getTotalPrixEnleve();
+    }
+    
+    protected function doSave() 
+    {
+        $this->date_modification = date('Y-m-d');
     }
 }

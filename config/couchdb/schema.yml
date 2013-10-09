@@ -173,6 +173,9 @@ Vrac:
       numero_contrat: {  }
       numero_archive: {  }
       prix_total: { type: float }
-      volume_total: { type: float }
+      prix_reel_total: { type: float }
+      volume_propose_total: { type: float }
+      volume_enleve_total: { type: float }
       etape: {  }
       type: {  }
+      date_modification: {  }

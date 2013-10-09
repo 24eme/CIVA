@@ -82,6 +82,16 @@ class VracDetail extends BaseVracDetail {
     	return ($this->volume_propose && $this->actif)? $this->volume_propose : 0;
     }
     
+    public function getTotalPrixPropose()
+    {
+    	return ($this->volume_propose && $this->prix_unitaire && $this->actif)? $this->volume_propose * $this->prix_unitaire : 0;
+    }
+    
+    public function getTotalPrixEnleve()
+    {
+    	return ($this->volume_enleve && $this->prix_unitaire && $this->actif)? $this->volume_enleve * $this->prix_unitaire : 0;
+    }
+    
     public function allProduitsClotures()
     {
     	return (!$this->cloture && $this->actif)? false : true;
