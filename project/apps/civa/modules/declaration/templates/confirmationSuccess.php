@@ -17,7 +17,7 @@
                     <p class="important">Votre déclaration de récoltes a bien été enregistrée au CIVA.</p>
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
                 </div>
-                <div id="div-btn-email"><a href="" id="btn-email"></a></div>
+                <div id="div-btn-email"><a href="" id="btn-email-acheteur"></a></div>
             </div>
         </div>
     </div>
@@ -29,4 +29,5 @@
 <!-- fin #principal -->
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
-<?php include_partial('envoiMailDR') ?>
+<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee)) ?>
+<?php //include_partial('envoiMailDR', array('annee' => $annee)) ?>

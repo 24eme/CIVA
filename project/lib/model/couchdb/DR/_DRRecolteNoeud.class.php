@@ -566,6 +566,20 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         return true;
     }
+    
+    public function getAcheteursArray() {
+        $acheteurs = array();
+        $types = array('negoces', 'cooperatives', 'mouts');
+        foreach ($types as $type) {
+            foreach ($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+                if (!isset($acheteurs[$type . '_' . $cvi])) {
+                    $acheteurs[$type . '_' . $cvi] = 0;
+                }
+                $acheteurs[$type . '_' . $cvi] += $volume;
+            }
+        }        
+        return $acheteurs;
+    }
 
     /******* Fin Acheteurs *******/
 

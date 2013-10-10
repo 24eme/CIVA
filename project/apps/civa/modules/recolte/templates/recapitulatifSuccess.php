@@ -71,7 +71,7 @@
                                 <div class="clear"></div>
                                 <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                 <h2 class="titre_section" style="margin-top: 15px;">
-                                    Usages industriels
+                                    Usages industriels <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels" title="Message aide"></a>
                                 </h2>
                                 <div class="clear"></div>
                                 <div class="contenu_section">
@@ -93,7 +93,7 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_appellation_usage_industriel" title="Message aide"></a></td>
+                                                    <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usage_industriel_saisie" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur saisi">
                                                                 <?php if(isset($form[$key]['lies'])): ?>

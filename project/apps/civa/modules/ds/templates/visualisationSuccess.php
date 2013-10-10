@@ -16,7 +16,7 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
         <?php if($ds_principale->isValidee()): ?>
         <div id="validation_ds">
             <li class="suiv">
-                <div id="div-btn-email"><a href="" id="btn-email"></a></div>
+                <div id="div-btn-email"><a href="" id="btn-email"></a><a href="" id="btn-email-acheteur"></a></div>
             </li>
         </div>
         <?php endif; ?>

@@ -193,7 +193,7 @@ migration_compte:
   param: { module: tiers, action: migrationCompte}
 
 notice_evolutions:
-  url: /notice_evolutions
+  url: /notice_evolutions/:campagne
   param: { module: tiers, action: noticeEvolutions}
 # *********** DECLARATION ***********
 
@@ -364,6 +364,10 @@ print:
 send_email_pdf:
   url: /send-email-pdf
   param: {module: declaration, action: sendPdf}
+  
+send_email_acheteurs_pdf:
+  url: /send-email-acheteurs-pdf
+  param: {module: declaration, action: sendPdfAcheteurs}
 
 xml:
   url: /xml/:annee

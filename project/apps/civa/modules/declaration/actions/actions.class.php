@@ -253,6 +253,24 @@ Le CIVA';
             $this->redirectByBoutonsEtapes();
         }
     }
+    
+    public function executeSendPdfAcheteurs(sfWebRequest $request) {
+        $tiers = $this->getUser()->getTiers('Recoltant');
+        $dr = $this->getUser()->getDeclaration();
+        
+        $document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'));
+        $document->generatePDF();
+        
+        $pdfContent = $document->output();
+        $annee = $this->getRequestParameter('annee', null);
+        
+        
+        $acheteurs = $dr->recolte->getAcheteursArray();
+        $this->sendMailAcheteursReport = array();
+        $this->sendAcheteursMails($acheteurs,$annee,$tiers,$pdfContent,$document);  
+    }
+
+    
 
     public function executeSendPdf(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
@@ -371,5 +389,47 @@ Le CIVA';
 
     public function executeConfirmationMailDR(sfWebRequest $request) {
 
+    }
+    
+    protected function sendAcheteursMails($acheteurs,$annee,$tiers,$pdfContent,$document) {
+        
+            $mess = 'Vous trouverez ci-joint la déclaration de récolte de l\'année ' . $annee . '. de '.$tiers->nom.'
+
+Cordialement,
+
+Le CIVA';
+            $subject = 'CIVA - Déclaration de récolte de '.$this->getUser()->getCompte()->nom;
+        
+        foreach ($acheteurs as $type_cvi => $vol) {
+            $type_cvi_infos = explode('_', $type_cvi);
+            $this->sendMailAcheteursReport[$type_cvi] = new stdClass();
+            $this->sendMailAcheteursReport[$type_cvi]->type = $type_cvi_infos[0];
+            $this->sendMailAcheteursReport[$type_cvi]->cvi = $type_cvi_infos[1];
+            
+            $acheteur = _TiersClient::getInstance()->retrieveByCvi($this->sendMailAcheteursReport[$type_cvi]->cvi, acCouchdbClient::HYDRATE_JSON);
+            $this->sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
+            $mess = 'Bonjour ' . $acheteur->nom . ',
+                
+'.$mess;
+                            //send email
+
+
+        $message = Swift_Message::newInstance()
+                ->setFrom(array($this->getUser()->getCompte()->email => $this->getUser()->getCompte()->nom))
+                ->setTo("mpetit@actualys.com")
+                ->setSubject($subject)
+                ->setBody($mess);
+
+
+        $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
+        $message->attach($attachment);
+        
+            try {
+                $this->getMailer()->send($message);
+            } catch (Exception $e) {
+                $this->sendMailAcheteursReport[$type_cvi]->sended = false;
+            }
+            $this->sendMailAcheteursReport[$type_cvi]->sended = true;
+        }
     }
 }

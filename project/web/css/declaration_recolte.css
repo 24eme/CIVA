@@ -2147,12 +2147,24 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin: 7px 0 0 0;
 }
 
+.btn_prev_suiv #email-visualisation #btn-email-acheteur {
+	margin: 7px 0 0 0;
+}
+
 #div-btn-email {
 	margin: 14px 0 30px;
 }
 
 #btn-email {
 	background: url(../images/boutons/btn-recevoir-ma-dr-par-email.png);
+	display: block;
+	float: right;
+	width: 155px;
+	height: 19px;
+}
+
+#btn-email-acheteur {
+	background: url(../images/boutons/btn-envoyer_a_mes_acheteur.png);
 	display: block;
 	float: right;
 	width: 155px;

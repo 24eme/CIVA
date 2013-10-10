@@ -80,6 +80,7 @@ $(document).ready( function()
         $('#validation_dr').ready( function() {
             initValidationDr();
             initSendDRPopup();
+            initSendDRAcheteurPopup();
         });
     }
 
@@ -87,6 +88,7 @@ $(document).ready( function()
         $('#confirmation_fin_declaration').ready( function() {
             initValidationDr();
             initSendDRPopup();
+            initSendDRAcheteurPopup();
         });
     }
 
@@ -753,6 +755,20 @@ var initSendDRPopup = function()
         return false;
     });
 }
+
+/**
+ * Initalise la popup d'envoie par mail de la DR
+ ******************************************/
+
+var initSendDRAcheteurPopup = function()
+{
+    $('#btn-email-acheteur').click(function() {
+        openPopup($("#popup_confirme_mail_acheteur"));
+        return false;
+    });
+}
+
+
 /* Confirmation de la validation */
 
 var initConfirmeValidationDr = function()
