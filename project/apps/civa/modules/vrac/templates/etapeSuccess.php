@@ -3,7 +3,7 @@
 <?php if ($vrac->isSupprimable($user->_id)): ?>
 	<div class="btn_header">
 		<a id="btn_precedent" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
-			<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_annuler_ajout.png">
+			<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_supprimer_contrat.png">
 		</a>
 	</div>
 <?php endif; ?>

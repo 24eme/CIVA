@@ -37,6 +37,58 @@
 
 #contrats_vrac .error_list { margin-top: 10px; }
 
+#contrats_vrac table.table_donnees thead th {
+	padding: 5px !important; 
+}
+#contrats_vrac ul.filtres {
+	margin: 10px 0;
+	border-bottom: 1px dashed #C6C8C7;
+	padding: 10px 0;
+}
+#contrats_vrac ul.filtres label {
+    padding: 5px 20px 5px 0;
+    font-size: 14px;
+}
+/* =================================================== */
+/* Accueil */
+/* =================================================== */
+ul#actions_contrat {
+    margin: 20px 0px 0px 0px;
+    display: inline-block;	
+    width: 100%;
+}
+ul#actions_contrat li {
+    float: right;
+    padding: 5px 5px 5px 15px;
+}
+ul#actions_contrat li.nouveau_contrat {
+    float: left !important;
+    padding: 5px 0px 5px 5px !important;
+}
+table#soussignes_listing th { 
+	background: none repeat scroll 0 0 #DCDFA9; 
+	padding: 5px; 
+	color: #848C03 !important;
+    font-size: 16px !important;
+    font-weight: normal !important;
+    margin: 0px 1px;
+    border-left: 1px solid #EDECEC;
+    border-right: 1px solid #EDECEC;
+}
+table#soussignes_listing th.col_date { width: 70px; }
+table#soussignes_listing th.col_statut { width: 90px; }
+table#soussignes_listing th.col_actions { width: 90px; }
+table#soussignes_listing td { padding: 0 5px; } 
+table#soussignes_listing li.action_supprimer { background: #dddddd url('../images/pictos/pi_supprimer.png') 0 50% no-repeat; }
+table#soussignes_listing li.action_enlever { background: #dddddd url('../images/pictos/pi_crayon.png') 0 50% no-repeat; }
+table#soussignes_listing li.action_signer { background: #dddddd url('../images/pictos/pi_signer.png') 0 50% no-repeat; }
+table#soussignes_listing li.action_continuer { background: #dddddd url('../images/pictos/pi_fleche_continuer.png') 0 50% no-repeat; }
+table#soussignes_listing li.action_visualiser { background: #dddddd url('../images/pictos/pi_visualiser.png') 0 50% no-repeat; }
+table#soussignes_listing ul.liste_soussignes li { padding: 2px 22px 2px 5px; }
+table#soussignes_listing ul.liste_actions li { padding: 2px 5px 2px 22px; }
+table#soussignes_listing li.soussigne_valide { background: #dddddd url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+table#soussignes_listing li.soussigne_attente { background: #dddddd url('../images/pictos/pi_sablier.png') 98% 50% no-repeat; }
+
 /* =================================================== */
 /* Rail d'étapes */
 /* =================================================== */
@@ -299,7 +351,7 @@
 #contrats_vrac .annuaire 
 {
 	font-size: 14px;
-	margin: 0 0 0 -32px; 
+	margin: 45px 0 0 -32px; 
 }
 
 #contrats_vrac .bloc_annuaire 
@@ -308,12 +360,12 @@
 	float: left;
 	margin: 0 0 0 32px;
 	position: relative;
-	width: 356px; 
+	width: 430px; 
 }
 
 #contrats_vrac .bloc_annuaire + .bloc_annuaire + .bloc_annuaire { margin-top: 55px; }
 
-#contrats_vrac .bloc_annuaire .bloc { width: 304px; }
+#contrats_vrac .bloc_annuaire .bloc { width: 416px; }
 
 #contrats_vrac .bloc_annuaire h2
 {

@@ -14,7 +14,7 @@
 		    </li>
 		    <li class="suiv">
 		    	<button type="submit" name="valider" style="cursor: pointer;">
-		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
+		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider.png" />
 		    	</button>
 		    </li>
 		</ul>

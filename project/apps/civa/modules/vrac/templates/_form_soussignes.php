@@ -26,11 +26,11 @@
 				</div>
 			</div>
 
+			<div id="vendeur_infos" class="cible">
 			<?php if ($vrac->vendeur_identifiant): ?>
-				<div id="vendeur_infos" class="informations form_col">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->vendeur)); ?>
-				</div>
+				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->vendeur)); ?>
 			<?php endif; ?>
+			</div>
 		</div>
 
 		<?php echo $form['vendeur_recoltant_identifiant']->renderError() ?>
@@ -65,12 +65,11 @@
 					</div>
 				</div>
 			</div>
-
+			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
-				<div id="acheteur_infos" class="informations form_col">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur)); ?>
-				</div>
+				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur)); ?>
 			<?php endif; ?>
+			</div>
 		</div>
 
 		<?php echo $form['acheteur_recoltant_identifiant']->renderError() ?>
@@ -87,12 +86,12 @@
 				<?php echo $form['interlocuteur_commercial']->render() ?>
 				<a href="<?php echo url_for('@annuaire_commercial_ajouter') ?>">Ajouter un contact</a>
 			</div>
-
+			
+			<div id="mandataire_infos">
 			<?php if($vrac->mandataire_identifiant): ?>
-				<div id="mandataire_infos" class="informations form_col">
-					<?php include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire)); ?>
-				</div>
+				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire)); ?>
 			<?php endif; ?>
+			</div>
 		</div>
 
 		<?php echo $form['interlocuteur_commercial']->renderError() ?>
@@ -154,7 +153,9 @@
 				return document.location.href="<?php echo url_for('@annuaire_commercial_ajouter') ?>";
 			}
 		});
-		$(".remove_autocomplete").click(function() {$(this).parent().siblings(".informations").empty();});
+		$(".remove_autocomplete").click(function() {
+			$(this).parent().parent().parent().siblings(".cible").empty();
+		});
 	});
 	</script>
 </div>
