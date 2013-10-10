@@ -1,5 +1,5 @@
-<?php use_helper('Float') ?>
-<?php use_helper('drExport') ?>
+<?php use_helper('Float'); ?>
+<?php use_helper('drExport'); ?>
 <br /><br />
 <span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM</span>
 <br /><br />
@@ -18,7 +18,7 @@
   <td style="width: 200px; border: 1px solid black;"><?php echoVolume($item->revendique_sur_place, true) ?></td>
   <td style="width: 200px; border: 1px solid black;"><?php echoVolume($item->usages_industriels_sur_place, true) ?></td>
   <?php else: ?>
-  <td style="border: 1px solid black; text-align: center;" colspan="3"><i>Néant</i></td>
+  <td style="border: 1px solid black; text-align: center;" colspan="2"><i>Néant</i></td>
   <?php endif; ?>
 </tr>
 <?php endforeach; ?>

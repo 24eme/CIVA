@@ -393,12 +393,7 @@ Le CIVA';
     
     protected function sendAcheteursMails($acheteurs,$annee,$tiers,$pdfContent,$document) {
         
-            $mess = 'Vous trouverez ci-joint la déclaration de récolte de l\'année ' . $annee . '. de '.$tiers->nom.'
-
-Cordialement,
-
-Le CIVA';
-            $subject = 'CIVA - Déclaration de récolte de '.$this->getUser()->getCompte()->nom;
+        $subject = 'CIVA - Déclaration de récolte de '.$this->getUser()->getCompte()->nom;
         
         foreach ($acheteurs as $type_cvi => $vol) {
             $type_cvi_infos = explode('_', $type_cvi);
@@ -408,15 +403,22 @@ Le CIVA';
             
             $acheteur = _TiersClient::getInstance()->retrieveByCvi($this->sendMailAcheteursReport[$type_cvi]->cvi, acCouchdbClient::HYDRATE_JSON);
             $this->sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
+            $this->sendMailAcheteursReport[$type_cvi]->email = $acheteur->email;
             $mess = 'Bonjour ' . $acheteur->nom . ',
-                
-'.$mess;
+         
+Le vendeur de raisin '.$tiers->nom.' a souhaité vous faire parvenir sa déclaration de récolte pour l\'année ' . $annee .' depuis le portail du CIVA.
+    
+Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
+
+Cordialement,
+
+Le CIVA';
                             //send email
 
 
         $message = Swift_Message::newInstance()
                 ->setFrom(array($this->getUser()->getCompte()->email => $this->getUser()->getCompte()->nom))
-                ->setTo("mpetit@actualys.com")
+                ->setTo($acheteur->email)
                 ->setSubject($subject)
                 ->setBody($mess);
 
