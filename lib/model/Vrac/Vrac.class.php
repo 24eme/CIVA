@@ -28,15 +28,17 @@ class Vrac extends BaseVrac
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => null,
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Signer',
-		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_VALIDE => 'Visualiser',
 		self::STATUT_ANNULE => 'Visualiser',
-		self::STATUT_ENLEVEMENT => 'Enlever',
+		self::STATUT_ENLEVEMENT => 'Visualiser',
 		self::STATUT_CLOTURE => 'Visualiser'
 	);
 	
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
+		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_ENLEVEMENT => 'Enlever',
 	);
 	
 	static $statuts_supprimable = array(

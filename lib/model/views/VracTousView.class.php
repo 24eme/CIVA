@@ -22,4 +22,14 @@ class VracTousView extends acCouchdbView
                             ->endkey($endkey)
                             ->getView($this->design, $this->view)->rows;
     }
+    
+    public function findSortedBy($identifiant, $campagne = null, $statut = null) {
+    	$items = $this->findBy($identifiant, $campagne, $statut);
+    	$result = array();
+    	foreach ($items as $item) {
+    		$result[$item->value->date] = $item;
+    	}
+    	krsort($result);
+    	return $result;
+    }
 }  
