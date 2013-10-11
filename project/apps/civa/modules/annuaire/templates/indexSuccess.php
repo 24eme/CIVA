@@ -1,5 +1,5 @@
 <div id="contrats_vrac" class="clearfix">
-	
+	<h2 class="statut_contrat">Annuaire de vos interlocutaires</h2>
 	<div class="annuaire">
 		
 		<div class="bloc_annuaire">
@@ -7,18 +7,17 @@
 			
 			<div class="bloc">			
 				<?php if (count($annuaire->recoltants) > 0): ?>
-					<h3 class="titre_section">Raison sociale</h3>
 					<ul>
 						<?php foreach ($annuaire->recoltants as $key => $item): ?>
-							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" class="btn_supprimer">X</a></li>
+							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
 						<?php endforeach; ?>
 					</ul>
 				<?php else: ?>
-					<p>Aucun récoltants</p>
+					<p>Aucun récoltant</p>
 				<?php endif; ?>
 			</div>
 
-			<a href="#" class="btn"><img src="/images/boutons/btn_ajouter_recoltant.png" alt="Ajouter un récoltant" /></a>
+			<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_recoltant.png" alt="Ajouter un récoltant" /></a>
 		</div>
 	
 		<div class="bloc_annuaire">
@@ -26,46 +25,43 @@
 			
 			<div class="bloc">
 				<?php if (count($annuaire->negociants) > 0): ?>
-					<h3 class="titre_section">Raison sociale</h3>
 					<ul>
 						<?php foreach ($annuaire->negociants as $key => $item): ?>
-							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" class="btn_supprimer">X</a></li>
+							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
 						<?php endforeach; ?>
 					</ul>
 				<?php else: ?>
-					<p>Aucun négociants</p>
+					<p>Aucun négociant</p>
 				<?php endif; ?>
 			</div>
 
-			<a href="#" class="btn"><img src="/images/boutons/btn_ajouter_negociant.png" alt="Ajouter un négociant" /></a>
+			<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'negociants')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_negociant.png" alt="Ajouter un négociant" /></a>
 		</div>
 
 		<div class="bloc_annuaire">
 			<h2 class="titre_section">Caves coopératives (<?php echo count($annuaire->caves_cooperatives) ?>)</h2>
 			<div class="bloc">
 				<?php if (count($annuaire->caves_cooperatives) > 0): ?>
-					<h3 class="titre_section">Raison sociale</h3>
 					<ul>
 						<?php foreach ($annuaire->caves_cooperatives as $key => $item): ?>
-							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" class="btn_supprimer">X</a></li>
+							<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
 						<?php endforeach; ?>
 					</ul>
 				<?php else: ?>
-					<p>Aucun négociants</p>
+					<p>Aucune cave coopérative</p>
 				<?php endif; ?>
 			</div>
 
-			<a href="<?php echo url_for('@annuaire_selectionner') ?>" class="btn"><img src="/images/boutons/btn_ajouter_cave.png" alt="Ajouter une cave coopérative" /></a>
+			<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'caves_cooperatives')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_cave.png" alt="Ajouter une cave coopérative" /></a>
 		</div>
 
 		<div class="bloc_annuaire">
-			<h2 class="titre_section">Interlocuteurs commerciaux (<?php echo count($annuaire->commerciaux) ?>)</h2>
+			<h2 class="titre_section">Commerciaux (<?php echo count($annuaire->commerciaux) ?>)</h2>
 			<div class="bloc">
 				<?php if (count($annuaire->commerciaux) > 0): ?>
-					<h3 class="titre_section">Raison sociale</h3>
 					<ul>
 						<?php foreach ($annuaire->commerciaux as $key => $item): ?>
-							<li><?php echo $item ?> <a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" class="btn_supprimer">X</a></li>
+							<li><?php echo $item ?> <a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 						<?php endforeach; ?>
 					</ul>
 				<?php else: ?>
@@ -79,6 +75,6 @@
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv">
-	<li><a href="#"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
+	<li><a href="<?php echo url_for('mon_espace_civa') ?>"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
 </ul>
 

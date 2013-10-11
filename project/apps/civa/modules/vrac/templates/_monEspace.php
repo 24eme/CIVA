@@ -5,8 +5,11 @@
  			<h3 class="titre_section">Contrats vrac <a doc="/vrac/telecharger_la_notice" title="Message aide" rel="help_popup_mon_espace_civa_contrats" class="msg_aide" href=""></a></h3>
  			<div class="contenu_section">
  				<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
- 				<p class="lien_tout"><a href="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>">Tout voir</a></p>
- 				<p class="lien_nouveau"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst())) ?>">Créer un nouveau contrat</a> | <a href="<?php echo url_for('@annuaire') ?>">Annuaire</a></p>
+ 				<ul id="actions_contrat">
+ 					<li class="nouveau_contrat"><a href="<?php echo url_for('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst())) ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
+ 					<li><a href="<?php echo url_for('@annuaire') ?>">Gérer son annuaire</a></li>
+ 					<li><a href="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>">Voir tout</a></li>
+ 				</ul>
  			</div>
  		</div>
  		<div id="documents_aide">

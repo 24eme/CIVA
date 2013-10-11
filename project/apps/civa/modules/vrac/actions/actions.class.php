@@ -13,7 +13,7 @@ class vracActions extends sfActions
 			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
 		}
 		$this->user = $this->getUser()->getDeclarant();
-        $this->vracs = VracTousView::getInstance()->findBy($this->user->_id, $this->campagne, $this->statut);
+        $this->vracs = VracTousView::getInstance()->findSortedBy($this->user->_id, $this->campagne, $this->statut);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
 	}

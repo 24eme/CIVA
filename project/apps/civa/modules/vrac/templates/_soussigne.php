@@ -1,4 +1,5 @@
 <?php use_helper('Date') ?>
+<div class="informations form_col">
 <ul>
 	<li><strong><?php echo $tiers->raison_sociale ?></strong></li>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
@@ -20,3 +21,4 @@
 	<li>Validé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php endif; ?>
 </ul>
+</div>
