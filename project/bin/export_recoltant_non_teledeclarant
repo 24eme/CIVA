@@ -16,6 +16,6 @@ curl -s GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Te
 
 cat /tmp/teledeclarants /tmp/teledeclarants-auto | uniq | sort > /tmp/teledeclarants.uniq
 
-join -t ";" -v 1 /tmp/recoltants-non-teledeclarant /tmp/teledeclarants.uniq > /tmp/recoltants-non-teledeclarant-final
+join -t ";" -v 1 /tmp/recoltants /tmp/teledeclarants.uniq > /tmp/recoltants-non-teledeclarant-final
 
-cat /tmp/recoltants-non-teledeclarant-final | cut -d ";" -f 1,2,3,8,9,10,11,12 | sed -r "s/\|[0-9a-Z ']+//g" | sed -r 's/\|(")/\1/g'
+cat /tmp/recoltants-non-teledeclarant-final | cut -d ";" -f 1,2,3,4,8,9,10,11,12 | sed -r "s/\|[0-9a-Z ']+//g" | sed -r 's/\|(")/\1/g'
