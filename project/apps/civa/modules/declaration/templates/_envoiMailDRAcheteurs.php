@@ -1,10 +1,10 @@
 <script type="text/javascript">
-    ajax_url_to_process = "<?php echo url_for('@send_email_acheteurs_pdf?annee='.$annee.'&message=custom'); ?>;";
+    ajax_url_to_process_send_acheteur = "<?php echo url_for('@send_email_acheteurs_pdf?annee='.$annee.'&message=custom'); ?>;";
 
     var sendMailAcheteurs = function(){
             openPopup($('#popup_loader_send'));
             $.ajax({
-                url: ajax_url_to_process ,
+                url: ajax_url_to_process_send_acheteur ,
                 success: function(data) {
                     $('.popup-loading').empty();
                     $('.popup-loading').css('background', 'none');

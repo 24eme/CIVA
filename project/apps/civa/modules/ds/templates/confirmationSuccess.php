@@ -14,7 +14,7 @@
                     <p class="important">Votre déclaration de stocks a bien été enregistrée au CIVA.</p>
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
                 </div>                
-                <div id="div-btn-email"><a href="" id="btn-email"><a href="" id="btn-email-acheteur"></a></div>
+                <div id="div-btn-email"><a href="" id="btn-email"></a></div>
             </div>
         </div>
         <div id="confirmation_feed_back">

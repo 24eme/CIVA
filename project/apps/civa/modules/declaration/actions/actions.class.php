@@ -392,9 +392,7 @@ Le CIVA';
     }
     
     protected function sendAcheteursMails($acheteurs,$annee,$tiers,$pdfContent,$document) {
-        
-        $subject = 'CIVA - Déclaration de récolte de '.$this->getUser()->getCompte()->nom;
-        
+             
         foreach ($acheteurs as $type_cvi => $vol) {
             $type_cvi_infos = explode('_', $type_cvi);
             $this->sendMailAcheteursReport[$type_cvi] = new stdClass();
@@ -404,6 +402,22 @@ Le CIVA';
             $acheteur = _TiersClient::getInstance()->retrieveByCvi($this->sendMailAcheteursReport[$type_cvi]->cvi, acCouchdbClient::HYDRATE_JSON);
             $this->sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             $this->sendMailAcheteursReport[$type_cvi]->email = $acheteur->email;
+            $message = $this->createMailAcheteurs($tiers,$acheteur,$annee,$pdfContent,$document);
+            
+        
+            try {
+                $this->getMailer()->send($message);
+            } catch (Exception $e) {
+                $this->sendMailAcheteursReport[$type_cvi]->sended = false;
+            }
+            $this->sendMailAcheteursReport[$type_cvi]->sended = true;
+        }
+    }
+    
+    protected function createMailAcheteurs($tiers,$acheteur,$annee,$pdfContent,$document) {
+        
+            $subject = 'CIVA - Déclaration de récolte de '.$this->getUser()->getCompte()->nom;   
+        
             $mess = 'Bonjour ' . $acheteur->nom . ',
          
 Le vendeur de raisin '.$tiers->nom.' a souhaité vous faire parvenir sa déclaration de récolte pour l\'année ' . $annee .' depuis le portail du CIVA.
@@ -422,16 +436,79 @@ Le CIVA';
                 ->setSubject($subject)
                 ->setBody($mess);
 
-
-        $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
-        $message->attach($attachment);
         
-            try {
-                $this->getMailer()->send($message);
-            } catch (Exception $e) {
-                $this->sendMailAcheteursReport[$type_cvi]->sended = false;
-            }
-            $this->sendMailAcheteursReport[$type_cvi]->sended = true;
-        }
+        $csvContent = $this->createCSVDr($tiers,$annee);
+        
+        $attachment_pdf = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
+        $attachment_csv = new Swift_Attachment($csvContent, sprintf("DR_%s_%s", $tiers->cvi, $annee).'.csv', 'application/csv');
+        
+        $message->attach($attachment_pdf);
+        $message->attach($attachment_csv);
+        return $message;
     }
+    
+    protected function createCSVDr($tiers,$annee){
+        
+        $dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($tiers->cvi,$annee);
+        if (!preg_match("/^DR-(67|68)/", $dr->_id)) {
+            return null;
+        }
+        if(!$dr->exist('validee')){
+            return null;
+        }
+        if(!$dr->validee) {
+            return null;
+        }
+        if(!$dr->exist('recolte')) {
+            return null;
+        }
+        if(!$dr->recolte->exist('certification')) {
+            return null;
+        }
+        if(!$dr->recolte->certification->exist('genre')) {
+            return null;
+        }
+        $content_csv = "campagne;cvi;nom;certification;genre;appellation;mention;lieu;couleur;cepage;superficie;volume;volume_revendique;usages_industriels\n";
+
+
+
+            foreach($dr->recolte->certification->genre as $appellation_key => $appellation) {
+                if (!preg_match("/^appellation/", $appellation_key)) {
+                    continue;
+                }
+
+                foreach($appellation->mention as $lieu_key => $lieu) {
+                    if (!preg_match("/^lieu/", $lieu_key)) {
+
+                        continue;
+                    }
+
+                    $total_superficie = 0;
+                    $total_volume = 0;
+
+                    foreach($lieu as $couleur_key => $couleur) {
+                        if (!preg_match("/^couleur/", $couleur_key)) {
+
+                            continue;
+                        }
+
+                        foreach($couleur as $cepage_key => $cepage) {
+                            if (!preg_match("/^cepage/", $cepage_key)) {
+
+                               continue;
+                            }
+
+                            $total_superficie += $cepage->total_superficie;
+                            $total_volume += $cepage->total_volume;
+
+                            $content_csv.= sprintf("%s;%s;%s;certification;genre;%s;mention;%s;%s;%s;%01.02f;%01.02f;;\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $couleur_key, $cepage_key, $cepage->total_superficie, $cepage->total_volume);
+                        }
+                    }
+
+                    $content_csv.= sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels_calcule);
+                }
+            }
+            return $content_csv;
+        }
+    
 }

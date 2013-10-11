@@ -17,7 +17,9 @@
                     <p class="important">Votre déclaration de récoltes a bien été enregistrée au CIVA.</p>
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
                 </div>
-                <div id="div-btn-email"><a href="" id="btn-email-acheteur"></a></div>
+                <div id="div-btn-email">
+                <a href="" id="btn-email-acheteur"></a>
+                </div>
             </div>
         </div>
     </div>
