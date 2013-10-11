@@ -187,7 +187,7 @@ class tiersActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeNoticeEvolutions(sfWebRequest $request) {
-
+        $this->campagne = $request['campagne'];
     }
 
 }
