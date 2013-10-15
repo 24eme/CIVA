@@ -58,6 +58,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     protected function update($params = array()) {
+        $this->preUpdateAcheteurs();
         parent::update($params);
         
         if ($this->getCouchdbDocument()->canUpdate()) {
@@ -70,6 +71,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         }
 
         $this->updateAcheteurs();
+
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->cleanAllNodes();
         }
