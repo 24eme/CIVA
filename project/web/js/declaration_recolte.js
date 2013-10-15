@@ -862,10 +862,6 @@ var etatBtnRecolteCanBeInactif = function (actif) {
     } else {
         $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
         $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
-        $('.col_recolte.col_active .col_btn a.supprimer_tmp').hide();
-        if($('.col_recolte.col_active .col_btn a.supprimer_tmp').length > 0) {
-            $('.col_recolte.col_active .col_btn a.annuler_tmp').show();
-        }
     }
 }
 
