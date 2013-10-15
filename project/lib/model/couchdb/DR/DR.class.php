@@ -217,6 +217,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', date('Y-m-d'));
+            if(!$this->hasDateDepotMairie()){
+                $this->add('en_attente_envoi', true);
+            }
         }
         $this->declarant->nom =  $tiers->get('nom');
         if ($compte) {
@@ -227,6 +230,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declarant->telephone =  $tiers->get('telephone');
         if ($compteValidateurId) {
             $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));
+        }
+    }
+    
+    public function emailSended(){
+        if($this->exist('en_attente_envoi') && $this->en_attente_envoi){
+            $this->remove('en_attente_envoi');
         }
     }
 
@@ -549,6 +558,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declarant_document->storeDeclarant();
     }
     
-
+    public function hasDateDepotMairie() {
+        return $this->exist('date_depot_mairie') && !is_null($this->date_depot_mairie);
+    }
 
 }

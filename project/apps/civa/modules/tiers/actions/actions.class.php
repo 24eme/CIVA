@@ -36,8 +36,10 @@ class tiersActions extends EtapesActions {
         /*return $this->redirect("@mon_espace_civa");*/
          
         $dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
-        if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->isInDelegateMode() && is_null($dr) ){
-            return $this->redirect("@notice_evolutions");
+        if($this->getUser()->hasCredential("recoltant") 
+               // && !$this->getUser()->isInDelegateMode() 
+                && is_null($dr) ){
+            return $this->redirect("notice_evolutions",array('campagne' => '2012'));
         }else{
             return $this->redirect("@mon_espace_civa");
         }
