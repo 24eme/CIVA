@@ -26,11 +26,11 @@
 				</td>
 				<td class="volume">
 					<span><?php echo $embedForm['volume_propose']->renderError() ?></span>
-					<?php echo $embedForm['volume_propose']->render() ?>&nbsp;Hl
+					<?php echo $embedForm['volume_propose']->render(array('class' => 'num')) ?>&nbsp;Hl
 				</td>
 				<td class="prix">
 					<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-					<?php echo $embedForm['prix_unitaire']->render() ?>&nbsp;&euro;/Hl
+					<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num')) ?>&nbsp;&euro;/Hl
 					<a href="#" class="balayette" title="Effacer les champs">Effacer les champs</a>
 				</td>
 			</tr>
