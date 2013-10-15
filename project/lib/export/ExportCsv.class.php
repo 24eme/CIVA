@@ -30,7 +30,7 @@ class ExportCsv {
             if (array_key_exists($key, $validation)) {
                 //$value = $this->cast($value, $validation[$key]['type']);
                 try {
-                    $this->validate($key, $value, $validation[$key]);
+                    //$this->validate($key, $value, $validation[$key]);
                 } catch (Exception $exc) {
                     throw new sfException(implode(";", $data)."\n ".$exc->getMessage());
                 }
@@ -78,6 +78,10 @@ class ExportCsv {
     }
 
     protected function filter($value, $options) {
+        if($value === null) {
+            return $value;
+        }
+        
         $type = $options['type'];
         if ($type == "string") {
             $value = '"' . str_replace('"', '\"', $value) . '"';
