@@ -814,6 +814,8 @@ var initGestionRecolte = function()
      ******************************************/
 var initGestionRecolteDonnees = function()
 {
+    etatBtnAjoutCol();
+
     hauteurEgaleColRecolte();
     largeurColScrollerCont();
     $('span.ombre').height($('#col_scroller').height()-15);
@@ -854,15 +856,9 @@ var initGestionRecolteRecapitulatif = function() {
 }
 
 var etatBtnRecolteCanBeInactif = function (actif) {
-    etatBtnAjoutCol(actif);
     if (actif) {
         $('a.btn_recolte_can_be_inactif').removeClass('btn_inactif');
         $('.col_recolte.col_active .col_btn a.annuler_tmp').addClass('btn_inactif');
-        
-        $('.col_recolte.col_active .col_btn a.supprimer_tmp').show();
-        if($('.col_recolte.col_active .col_btn a.supprimer_tmp').length > 0) {
-            $('.col_recolte.col_active .col_btn a.annuler_tmp').hide();
-        }
     } else {
         $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
         $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
@@ -872,20 +868,6 @@ var etatBtnRecolteCanBeInactif = function (actif) {
         }
     }
 }
-
-/**
-     * Etat du bouton d'ajout de colonne
-     ******************************************/
-var etatBtnAjoutCol = function(actif)
-{
-    var col_recolte = $('#col_scroller .col_recolte');
-    var btn = $('a#ajout_col');
-    if(actif) {
-       btn.removeClass('btn_inactif'); 
-    } else {
-        btn.addClass('btn_inactif');
-    }
-};
 
 var updateElementRows = function (inputObj, totalObj) {
     totalObj.val(0);
@@ -1086,6 +1068,18 @@ var hauteurEgaleLignesRecolte = function(intitule, elem)
 
         hauteurEgale(s);
     });
+};
+
+/**
+     * Etat du bouton d'ajout de colonne
+     ******************************************/
+var etatBtnAjoutCol = function()
+{
+    var col_recolte = $('#col_scroller .col_recolte');
+    var btn = $('a#ajout_col');
+
+    if(col_recolte.filter('.col_active').size() > 0) btn.addClass('btn_inactif');
+    else btn.removeClass('btn_inactif');
 };
 
 /**
