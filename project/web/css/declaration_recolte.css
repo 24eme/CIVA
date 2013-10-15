@@ -13,10 +13,6 @@
 	position: relative;
 }
 
-#principal {
-	
-}
-
 #application_dr {
 	background: #f1f1f1;
 	clear: both;
@@ -557,18 +553,18 @@ ul.error_list li {
 	border: 1px solid #FF3300 !important;
 }
 
-a.btn_inactif {
+.btn_inactif {
 	cursor: default;
 	outline: 0;
 }
 
-a.btn_inactif img {
+.btn_inactif img {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
 }
 
-a.btn_inactif input {
+.btn_inactif input {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
