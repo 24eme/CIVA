@@ -32,21 +32,27 @@
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
                 <div class="vente_raisins">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_acheteur" tabindex="-1">Acheteur</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
                 <div class="caves">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_cave" tabindex="-1">Cave</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
                 <div class="mouts">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_mout" tabindex="-1">Acheteur de mouts</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
