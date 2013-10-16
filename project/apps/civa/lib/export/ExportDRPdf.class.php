@@ -32,7 +32,11 @@ class ExportDRPdf extends ExportDocument {
     protected function init($dr, $tiers, $filename = null) {
         $validee = 'Non Validée';
         if ($dr->exist('validee')) {
-          $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
+            if($dr->hasDateDepotMairie()){
+                $validee = 'Déposée en mairie le '.$dr->getDateDepotMairieFr();
+            }else{
+              $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
+            }
           if ($dr->isHumanlyModifiee()) {
 	    $validee .= ' et modifiée le '.$dr->getDateModifieeFr();
           }

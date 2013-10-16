@@ -59,6 +59,7 @@ class exportActions extends sfActions {
                 throw new Exception();
         }catch(Exception $e) {
             $dr->update();
+            $dr->cleanNoeuds();
             $dr->save();
         }
         $this->forward404Unless($dr);
