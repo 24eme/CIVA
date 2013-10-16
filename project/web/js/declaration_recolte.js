@@ -150,8 +150,9 @@ $(document).ready( function()
     });
 
     if($('.col_active')){
-        $('.superficie').focus();
-        $('.superficie').select();
+        var element_premier_focus = $('.col_active').find('.premier_focus').eq(0);
+        element_premier_focus.focus();
+        element_premier_focus.select();
     }
 
     $(document).find('a.btn_voir_dr_prec').live('click', function() {
@@ -318,6 +319,7 @@ var formExploitationAdministratif = function()
             
             bloc.addClass('edition');
             bloc.find('form input[type!="hidden"], form select').first().focus();
+            
             return false;
         });
 
