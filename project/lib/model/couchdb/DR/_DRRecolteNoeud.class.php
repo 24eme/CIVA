@@ -178,11 +178,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if($this->_get('volume_revendique') && !$force_calcul) {
 
             return $this->_get('volume_revendique');
-        }    
-
-        if(!$this->getConfig()->hasRendementNoeud()) {
-
-            return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueTotal'), $force_calcul);
         }
         
         return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'findVolumeRevendique'), $force_calcul);
@@ -371,6 +366,35 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->exist('acheteurs') && $this->hasRecapitulatif();
     }
 
+    public function hasCompleteRecapitulatifVente() {
+
+        return $this->hasCompleteRecapitulatifVenteDplc() && $this->hasCompleteRecapitulatifVenteSuperficie();
+    }
+
+    public function hasNoCompleteRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+            return false;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return false;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getDplc() > 0 && !is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+                if ($this->getTotalSuperficie() > 0 && !is_null($acheteur->superficie)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function hasCompleteRecapitulatifVenteDplc() {
         if(!$this->hasRecapitulatifVente()) {
             return true;
@@ -384,6 +408,27 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         foreach ($this->acheteurs as $type => $type_acheteurs) {
             foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($this->getDplc() > 0 && is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function hasCompleteRecapitulatifVenteSuperficie() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getTotalSuperficie() > 0 && is_null($acheteur->superficie)) {
                     return false;
                 }
             }

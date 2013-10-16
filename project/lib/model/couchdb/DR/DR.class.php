@@ -462,11 +462,16 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $appellation = $noeud->getAppellation();
         $lieu = $noeud->getLieu();
 
-        $has_complete_recap_vente_dplc = $noeud->hasCompleteRecapitulatifVenteDplc();
+        $has_no_complete = $noeud->hasNoCompleteRecapitulatifVente();
 
-        //Verifie que tous les dont_dplc recapitulatif des ventes est rempli
-        if (!$noeud->hasCompleteRecapitulatifVenteDplc()) {
-            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
+        //Vérifie que le récap des ventes a commencé a être saisi
+        if ($has_no_complete) {
+            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+        }
+
+        //Vérifie que tous les dont_dplc et superficie dans le recapitulatif des ventes est rempli
+        if (!$has_no_complete && !$noeud->hasCompleteRecapitulatifVente()) {
+            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
         }
 
         if (!$noeud->isValidRecapitulatifVente()) {
@@ -475,6 +480,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         $recap_is_ok = true;
+
         //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
         foreach($noeud->acheteurs as $type => $acheteurs) {
             foreach($acheteurs as $cvi => $acheteur) {
@@ -493,7 +499,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
 
-        if($has_complete_recap_vente_dplc && $noeud->getVolumeRevendiqueCaveParticuliere() < 0) {
+        if($noeud->canCalculVolumeRevendiqueSurPlace() && $noeud->getVolumeRevendiqueCaveParticuliere() < 0) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_revendique_sur_place_negatif')));
         }
     }

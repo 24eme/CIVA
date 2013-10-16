@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 
-
 (function($)
 {
 	$.fn.initBlocCondition = function()
@@ -145,14 +144,15 @@ var initValidContratPopup = function()
     }
 
     /**
-	*  Gère les champs du tableaux de 
+	*  Valide les champs du tableaux de 
 	*  l'étape produits de la création de contrats
 	******************************************/
-	var initChampsTableauProduits = function()
+	$.initChampsTableauProduits = function(params)
 	{
 		var contexte = $('#contrats_vrac'),
 			tableau = contexte.find('.produits.table_donnees'),
 			lignes_tableau = tableau.find('tr'),
+			derniere_ligne = lignes_tableau.last(),
 			btnValidation = tableau.parent().next().find('.suiv button'),
 			ligne_valide = false;
 
@@ -263,6 +263,13 @@ var initValidContratPopup = function()
 		{
 			btnValidation.addClass('btn_inactif').attr('disabled', 'disabled');
 		}
+
+		// Si on vient de la page ajout de produit
+		if(params.ajoutProduit)
+		{
+			// On met le focus sur la dernière ligne
+			derniere_ligne.find('input:first').focus();
+		}
 	};
 
 	$(document).ready(function()
@@ -271,9 +278,9 @@ var initValidContratPopup = function()
 		 initCollectionAddTemplate('.btn_ajouter_ligne_template', /var---nbItem---/g, callbackAddTemplate);
 		 initCollectionDeleteTemplate();
                  initValidContratPopup();
-         initChampsTableauProduits();
          hauteurEgale('#contrats_vrac .soussignes .cadre');
 
          hauteurEgale('#contrats_vrac .bloc_annuaire .bloc');
 	});
+
 })(jQuery);

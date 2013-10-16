@@ -25,7 +25,7 @@
 		?>
 		
 		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form)) ?>
-
+		
 		<?php if (!$vrac->isValide()): ?>
 			<?php if ($vrac->hasValide($user->_id)): ?>
 				<p>Vous avez validé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>

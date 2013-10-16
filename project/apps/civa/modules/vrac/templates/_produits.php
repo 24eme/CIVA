@@ -5,7 +5,7 @@
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
 <?php endif; ?>
-<table class="table_donnees">
+<table class="table_donnees produits">
 	<thead>
 		<tr>
 			<th class="produit">Produit</th>
@@ -124,6 +124,6 @@
 	    	</button>
 	    </li>
 	</ul>
+	<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
 </form>
-<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
 <?php endif; ?>
