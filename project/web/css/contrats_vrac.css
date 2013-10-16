@@ -50,35 +50,50 @@
 
 #contrats_vrac .error_list { margin-top: 10px; }
 
-#contrats_vrac table.table_donnees thead th {
+#contrats_vrac table.table_donnees thead th 
+{
 	padding: 5px !important; 
 }
-#contrats_vrac ul.filtres {
+
+#contrats_vrac ul.filtres 
+{
 	margin: 10px 0;
 	border-bottom: 1px dashed #C6C8C7;
 	padding: 10px 0;
 }
-#contrats_vrac ul.filtres label {
+
+#contrats_vrac ul.filtres label 
+{
     padding: 5px 20px 5px 0;
     font-size: 14px;
 }
+
 /* =================================================== */
 /* Accueil */
 /* =================================================== */
-ul#actions_contrat {
+#espace_alsace_contrats ul#actions_contrat 
+{
     margin: 20px 0px 0px 0px;
     display: inline-block;	
     width: 100%;
 }
-ul#actions_contrat li {
+
+#espace_alsace_contrats ul#actions_contrat li 
+{
     float: right;
     padding: 5px 5px 5px 15px;
 }
-ul#actions_contrat li.nouveau_contrat {
+
+#espace_alsace_contrats ul#actions_contrat li.nouveau_contrat 
+{
     float: left !important;
     padding: 5px 0px 5px 5px !important;
 }
-table#soussignes_listing th { 
+
+
+/* Tableau de listing des contrats */
+#espace_alsace_contrats table#soussignes_listing th 
+{ 
 	background: none repeat scroll 0 0 #DCDFA9; 
 	padding: 5px; 
 	color: #848C03 !important;
@@ -88,19 +103,30 @@ table#soussignes_listing th {
     border-left: 1px solid #EDECEC;
     border-right: 1px solid #EDECEC;
 }
-table#soussignes_listing th.col_date { width: 70px; }
-table#soussignes_listing th.col_statut,
-table#soussignes_listing th.col_actions { width: 90px; }
-table#soussignes_listing td { padding: 0 5px; } 
-table#soussignes_listing li.action_supprimer { background: #ddd url('../images/pictos/pi_supprimer.png') 0 50% no-repeat; }
-table#soussignes_listing li.action_enlever { background: #ddd url('../images/pictos/pi_crayon.png') 0 50% no-repeat; }
-table#soussignes_listing li.action_signer { background: #ddd url('../images/pictos/pi_signer.png') 0 50% no-repeat; }
-table#soussignes_listing li.action_continuer { background: #ddd url('../images/pictos/pi_fleche_continuer.png') 0 50% no-repeat; }
-table#soussignes_listing li.action_visualiser { background: #ddd url('../images/pictos/pi_visualiser.png') 0 50% no-repeat; }
-table#soussignes_listing ul.liste_soussignes li { padding: 2px 22px 2px 5px; }
-table#soussignes_listing ul.liste_actions li { padding: 2px 5px 2px 22px; }
-table#soussignes_listing li.soussigne_valide { background: #ddd url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
-table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/pictos/pi_sablier.png') 98% 50% no-repeat; }
+
+#espace_alsace_contrats table#soussignes_listing th.col_date { width: 70px; }
+#espace_alsace_contrats table#soussignes_listing th.col_statut,
+#espace_alsace_contrats table#soussignes_listing th.col_actions { width: 90px; }
+#espace_alsace_contrats table#soussignes_listing td { padding: 0 5px; } 
+
+#espace_alsace_contrats table#soussignes_listing .liste_actions li 
+{ 
+	background: #ddd 0 50% no-repeat;
+	padding: 2px 5px 2px 22px; 
+}
+
+#espace_alsace_contrats table#soussignes_listing li.action_supprimer { background-image: url('../images/pictos/pi_supprimer.png'); }
+#espace_alsace_contrats table#soussignes_listing li.action_enlever { background-image: url('../images/pictos/pi_crayon.png'); }
+#espace_alsace_contrats table#soussignes_listing li.action_signer { background-image: url('../images/pictos/pi_signer.png'); }
+#espace_alsace_contrats table#soussignes_listing li.action_continuer { background-image: url('../images/pictos/pi_fleche_continuer.png'); }
+#espace_alsace_contrats table#soussignes_listing li.action_visualiser { background-image: url('../images/pictos/pi_visualiser.png'); }
+#espace_alsace_contrats table#soussignes_listing ul.liste_soussignes li { padding: 2px 22px 2px 5px; }
+
+#espace_alsace_contrats table#soussignes_listing li.soussigne_valide,
+#espace_alsace_contrats table#soussignes_listing li.soussigne_attente { background: 98% 50% no-repeat; }
+
+#espace_alsace_contrats table#soussignes_listing li.soussigne_valide { background-image: url('../images/pictos/pi_check_2.png'); }
+#espace_alsace_contrats table#soussignes_listing li.soussigne_attente { background-image: url('../images/pictos/pi_sablier.png'); }
 
 /* =================================================== */
 /* Rail d'étapes */
@@ -115,7 +141,7 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
 #contrats_vrac #btn_etape button { border: 0; }
 
 /* =================================================== */
-/* Formulaire */
+/* Formulaires */
 /* =================================================== */
 #contrats_vrac input[type="text"],
 #contrats_vrac input[type="password"],
@@ -144,7 +170,13 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
 	top: -26px;
 }
 
-#contrats_vrac .bloc_conditionner  { display: inline-block; }
+#contrats_vrac .bloc_conditionner  
+{ 
+	display: inline-block;
+	vertical-align: middle; 
+}
+
+.ielt9 #contrats_vrac .bloc_conditionner { display: inline; }  
 
 #contrats_vrac .ui-button
 {
@@ -201,6 +233,7 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
 #contrats_vrac .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
 
 #contrats_vrac .bloc_infos .radio_list { display: inline-block; }
+.ielt9 #contrats_vrac .bloc_infos .radio_list { display: inline; }
 
 #contrats_vrac .bloc_infos .radio_list li
 {
@@ -208,32 +241,34 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
 	margin: 0 0 0 32px;
 }
 
-/* =================================================== */
-/* Tableau produits */
-/* =================================================== */
-#contrats_vrac .produits.table_donnees input[type="text"] { background: #efeeee; }
+.ielt9 #contrats_vrac .bloc_infos .radio_list li { display: inline; }
 
-#contrats_vrac .produits.table_donnees td { text-align: center; }
+/* =================================================== */
+/* Etape produits */
+/* =================================================== */
+#contrats_vrac .etape_produits.table_donnees input[type="text"] { background: #efeeee; }
 
-#contrats_vrac .produits.table_donnees .produit 
+#contrats_vrac .etape_produits.table_donnees td { text-align: center; }
+
+#contrats_vrac .etape_produits.table_donnees .produit 
 { 
 	text-align: left;
 	width: 280px; 
 }
 
-#contrats_vrac .produits.table_donnees .denomination input,
-#contrats_vrac .produits.table_donnees .millesime input { width: 175px; }
+#contrats_vrac .etape_produits.table_donnees .denomination input,
+#contrats_vrac .etape_produits.table_donnees .millesime input { width: 175px; }
 
-#contrats_vrac .produits.table_donnees .prix { width: 140px; }
+#contrats_vrac .etape_produits.table_donnees .prix { width: 140px; }
 
-#contrats_vrac .produits.table_donnees .volume input,
-#contrats_vrac .produits.table_donnees .prix input 
+#contrats_vrac .etape_produits.table_donnees .volume input,
+#contrats_vrac .etape_produits.table_donnees .prix input 
 { 
 	text-align: right;
 	width: 60px;
 }
 
-#contrats_vrac .produits.table_donnees .balayette
+#contrats_vrac .etape_produits.table_donnees .balayette
 {
 	background: #edecec url('../images/pictos/pi_balayette.png') no-repeat;
 	display: inline-block;
@@ -246,20 +281,20 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
     white-space: nowrap;
 }
 
-#contrats_vrac .produits.table_donnees .effacable .balayette { visibility: visible; }
+#contrats_vrac .etape_produits.table_donnees .effacable .balayette { visibility: visible; }
 
-#contrats_vrac .produits.table_donnees .actif input { background: #FFF; }
+#contrats_vrac .etape_produits.table_donnees .actif input { background: #FFF; }
 
-#contrats_vrac .produits.table_donnees .coche .prix { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+#contrats_vrac .etape_produits.table_donnees .coche .prix { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
 
-#contrats_vrac .produits.table_donnees + #ajouter-produit
+#contrats_vrac .etape_produits.table_donnees + #ajouter-produit
 {
 	display: inline-block;
 	margin: 20px 0;
 }
 
 /* =================================================== */
-/* Validation */
+/* Etape de validation */
 /* =================================================== */
 #contrats_vrac .soussignes,
 #contrats_vrac .validation.table_donnees,
@@ -438,9 +473,15 @@ table#soussignes_listing li.soussigne_attente { background: #ddd url('../images/
 
 #contrats_vrac.fiche_contrat .table_donnees { margin: 0 0 20px; }
 
-#contrats_vrac.fiche_contrat .echeance,
-#contrats_vrac.fiche_contrat .enleve,
-#contrats_vrac.fiche_contrat .cloture { text-align: center; }
+#contrats_vrac.fiche_contrat .table_donnees .echeance,
+#contrats_vrac.fiche_contrat .table_donnees .enleve,
+#contrats_vrac.fiche_contrat .table_donnees .cloture { text-align: center; }
+
+#contrats_vrac.fiche_contrat #btn_etape 
+{ 
+	float: right;
+	margin: 0;
+}
 
 /* =================================================== */
 /* Ajout produit */

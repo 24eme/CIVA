@@ -1,4 +1,4 @@
-<table class="produits table_donnees">
+<table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
 			<th class="produit">Produit</th>
@@ -39,15 +39,19 @@
 <a href="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>" id="ajouter-produit">Ajouter un produit</a>
 
 <script type="text/javascript">
-$(document).ready(function () {
-	$("#ajouter-produit").click(function() {
-		var lien = $(this);
-		$.post($("#principal").attr('action'), $("#principal").serialize(), function(data){
-        	document.location.href = lien.attr('href');
-        });
-		return false;
+
+	$(document).ready(function() 
+	{
+		$("#ajouter-produit").click(function() {
+			var lien = $(this);
+			$.post($("#principal").attr('action'), $("#principal").serialize(), function(data){
+	        	document.location.href = lien.attr('href');
+	        });
+			return false;
+		});
+
+		$.initChampsTableauProduits({ajoutProduit: true});
 	});
-});
 </script>
 	
 
