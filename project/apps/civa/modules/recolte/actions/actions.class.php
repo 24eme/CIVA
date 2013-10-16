@@ -37,8 +37,6 @@ class recolteActions extends EtapesActions {
             $this->redirect($this->onglets->getUrl('recolte_add'));
         }
 
-        return $this->redirect(array_merge($this->onglets->getUrl('recolte_update'), array('detail_key' => $this->details->getFirst()->getKey())));
-
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }

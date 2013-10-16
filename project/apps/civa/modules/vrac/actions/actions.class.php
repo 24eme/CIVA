@@ -128,6 +128,7 @@ class vracActions extends sfActions
 		$this->user = $this->getUser()->getDeclarant();
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
+    	$this->referer = (int)$this->getUser()->getFlash('referer');
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
     	if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
     		$this->vrac = unserialize($vrac);
@@ -177,6 +178,7 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
        			$this->form->save();
+       			$this->getUser()->setFlash('referer', 'ajout-produit');
        			return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->etape));
         	}
         }

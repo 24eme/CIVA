@@ -1,3 +1,4 @@
+<?php use_helper('Float') ?>
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac)) ?>
 
 <table class="validation table_donnees">
@@ -18,10 +19,10 @@
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php if ($detail->millesime) { echo ' '.$detail->millesime; } if ($detail->denomination) { echo ' '.$detail->denomination; } if ($detail->vtsgn) { echo ' '.$detail->vtsgn; } ?>
 			</td>
 			<td class="volume">
-				<?php echo $detail->volume_propose ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
 			<td class="prix">
-				<?php echo $detail->prix_unitaire ?>&nbsp;&euro;/Hl
+				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 		</tr>
 		<?php 

@@ -220,8 +220,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
         $this->add(array(
-            "cvi_acheteur" => $this->_acheteur->cvi,
-            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_acheteur" => $acheteur->cvi,
+            "nom_acheteur" => $acheteur->nom,
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
@@ -246,8 +246,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
         $denomination = "";
 
         $this->add(array(
-            "cvi_acheteur" => $this->_acheteur->cvi,
-            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_acheteur" => null,
+            "nom_acheteur" => null,
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
@@ -270,8 +270,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     protected function addLieuAcheteur(DRRecolteLieuAcheteur $acheteur) {
         $lieu = $acheteur->getLieu();
         $this->add(array(
-            "cvi_acheteur" => $this->_acheteur->cvi,
-            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_acheteur" => $acheteur->cvi,
+            "nom_acheteur" => $acheteur->nom,
             "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "appellation" => $lieu->getAppellation()->getConfig()->getLibelle(),
@@ -293,8 +293,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     
     protected function addLieuTotal(DRRecolteLieu $lieu) {
         $this->add(array(
-            "cvi_acheteur" => $this->_acheteur->cvi,
-            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_acheteur" => null,
+            "nom_acheteur" => null,
             "cvi_recoltant" => $lieu->getCouchdbDocument()->cvi,
             "nom_recoltant" => $lieu->getCouchdbDocument()->declarant->nom,
             "appellation" => $lieu->getAppellation()->getConfig()->getLibelle(),
@@ -316,8 +316,8 @@ class ExportDRAcheteurCsv extends ExportCsv {
     
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
-            "cvi_acheteur" => $this->_acheteur->cvi,
-            "nom_acheteur" => $this->_acheteur->nom,
+            "cvi_acheteur" => null,
+            "nom_acheteur" => null,
             "cvi_recoltant" => $dr->cvi,
             "nom_recoltant" => $dr->declarant->nom,
             "appellation" => "Jeunes Vignes",
