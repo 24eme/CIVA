@@ -128,6 +128,7 @@ Le CIVA';
                 // si l'on vient de la page de visualisation
         if($visualisation)
         {
+            $subject = 'CIVA - Votre déclaration de récolte';
             $mess = 'Bonjour ' . $this->tiers->nom . ',
 
 Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $this->annee . '.
@@ -138,9 +139,12 @@ Le CIVA';
 
         }else{
 
+        $subject = 'CIVA - Validation de votre déclaration de récolte';
         $mess = 'Bonjour ' . $this->tiers->nom . ',
 
-Vous trouverez ci-joint votre déclaration de récolte que vous venez de valider.
+Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
+    
+Vous trouverez ci-joint votre déclaration de récolte et vous pouvez la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
 Cordialement,
 
@@ -154,7 +158,7 @@ Le CIVA';
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
                 ->setTo($this->tiers->getCompteEmail())
-                ->setSubject('CIVA - Votre déclaration de récolte')
+                ->setSubject($subject)
                 ->setBody($mess);
 
 

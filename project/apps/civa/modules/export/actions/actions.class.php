@@ -59,6 +59,7 @@ class exportActions extends sfActions {
                 throw new Exception();
         }catch(Exception $e) {
             $dr->update();
+            $dr->cleanNoeuds();
             $dr->save();
         }
         $this->forward404Unless($dr);
@@ -87,10 +88,10 @@ class exportActions extends sfActions {
     }
     
     public function executeDrCsv(sfWebRequest $request) {
-         
+         $this->tiers = $this->getUser()->getTiers();
          $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-         $this->cvi = $this->getRequestParameter('cvi', $this->getUser()->getCvi());
-         $csvContruct = new ExportDRCsv($this->annee,$this->cvi);         
+         $this->cvi = $this->getRequestParameter('cvi', $this->tiers);
+         $csvContruct = new ExportDRCsv($this->annee,$this->tiers->cvi);         
          $csvContruct->export();
          
          return $this->renderText($csvContruct->output());

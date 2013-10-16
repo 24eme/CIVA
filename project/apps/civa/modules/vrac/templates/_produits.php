@@ -5,12 +5,12 @@
 	<?php echo $form->renderHiddenFields() ?>
 	<?php echo $form->renderGlobalErrors() ?>
 <?php endif; ?>
-<table class="table_donnees">
+<table class="table_donnees produits">
 	<thead>
 		<tr>
-			<th>Produit</th>
-			<th><span>Volume proposé</span></th>
-			<th><span>Prix unitaire</span></th>
+			<th class="produit">Produit</th>
+			<th class="volume"><span>Volume proposé</span></th>
+			<th class="prix"><span>Prix unitaire</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
 			<th><span>Echéance</span></th>
 			<th><span>Enlevé</span></th>
@@ -28,13 +28,13 @@
 				$detail = $vrac->get($key);
 		?>
 		<tr class="produits">
-			<td>
+			<td class="produit">
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td>
+			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td>
+			<td class="prix">
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td class="echeance"></td>
@@ -67,17 +67,17 @@
 			foreach ($details as $detail):
 		?>
 		<tr>
-			<td>
+			<td class="produit">
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td>
+			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td>
+			<td class="prix">
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td></td>
-			<td><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
+			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
 		<tr>
@@ -99,13 +99,13 @@
 			foreach ($details as $detail):
 		?>
 		<tr>
-			<td>
+			<td class="produit">
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
-			<td>
+			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
 			</td>
-			<td>
+			<td class="prix">
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 		</tr>
@@ -120,10 +120,10 @@
 	<ul class="btn_prev_suiv clearfix" id="btn_etape">
 	    <li class="suiv">		
 	    	<button type="submit" name="valider" style="cursor: pointer;">
-	    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider.png" />
+	    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_final.png" />
 	    	</button>
 	    </li>
 	</ul>
+	<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
 </form>
-<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
 <?php endif; ?>

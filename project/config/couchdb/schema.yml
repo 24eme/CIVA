@@ -9,6 +9,8 @@ DR:
       updated: { required: false }
       validee: { required: false }
       modifiee: { required: false }
+      en_attente_envoi: { required: false }      
+      date_depot_mairie: { required: false }
       utilisateurs:
         type: collection
         definition:

@@ -41,6 +41,7 @@ class declarationActions extends EtapesActions {
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
                 $doc->identifiant = $tiers->cvi;
+                $this->addDateDepotMairie($doc);                
                 $doc->storeDeclarant();
                 $doc->save();
                 $this->redirectByBoutonsEtapes(array('valider' => 'next'));
@@ -64,6 +65,7 @@ class declarationActions extends EtapesActions {
                 $doc->campagne = $this->getUser()->getCampagne();
                 $doc->declaration_insee = $tiers->declaration_insee;
                 $doc->declaration_commune = $tiers->declaration_commune;
+                $this->addDateDepotMairie($doc); 
                 $doc->removeVolumes();
                 $doc->remove('validee');
                 $doc->remove('modifiee');
@@ -342,10 +344,9 @@ Le CIVA';
 
     }
     
-    
-    
-
-    
-    
-    
+    protected function addDateDepotMairie($doc){
+        if($this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
+            $doc->add('date_depot_mairie',date('Y').'-12-10');                    
+        }
+    }
 }
