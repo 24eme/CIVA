@@ -25,6 +25,7 @@ class vrac_exportActions extends sfActions
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }
+      $this->document->removeCache();
       $this->document->generatePDF();
 
       if ($request->isXmlHttpRequest()) {

@@ -11,7 +11,7 @@
                                                                                                                                             <br/>&nbsp;<b>2</b> Crémant
                                                                                                                                             <br/>&nbsp;<b>3</b> Grands Crus</span></th>
   <th style="width: 116px; font-weight: bold; text-align: center; border: 1px solid black; ">Cépage</th>
-  <th style="width: 138px; font-weight: bold; text-align: center; border: 1px solid black; "><small>Dénominations spécifiques, communales, lieux-dits, VT/SGN, etc...</small></th>
+  <th style="width: 288px; font-weight: bold; text-align: center; border: 1px solid black; "><small>Dénominations spécifiques, communales, lieux-dits, VT/SGN, etc...</small></th>
   <th style="width: 66px; font-weight: bold; text-align: center; border: 1px solid black; ">Millésime</th>  
   <th style="width: 92px; font-weight: bold; text-align: center; border: 1px solid black; ">Prix* de l'hectolitre <small>(en &euro;/HL)</small></th>
   <th style="width: 77px; font-weight: bold; text-align: center; border: 1px solid black; ">VOLUME estimé<br/><small>(en HL)</small></th>
@@ -25,7 +25,7 @@
 <tr>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></td>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left;">&nbsp;<?php echo $detailLine->getCepage()->getLibelle(); ?></td>
-    <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo $detailLine->getDenomination(); ?>&nbsp;</td>
+    <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo $detailLine->getDenomination(); ?> <?php echo $detailLine->getLieuDit(); ?> <?php echo $detailLine->getVtsgn(); ?></td>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
@@ -49,12 +49,12 @@ endforeach;
 <br />
 <table cellspacing="10" cellpadding="0" style="text-align: right; border: none;">
 <tr>
-  <td style="text-align: left; width: 200px; border: none; font-weight: bold;">Conditions de paiement :</td>
-  <td style="width: 420px;"><?php echo $vrac->conditions_paiement; ?></td>
+  <td style="text-align: left; width: 165px; border: none; font-weight: bold;">Conditions de paiement :</td>
+  <td style="width: 520px; text-align: left;"><?php echo $vrac->conditions_paiement; ?></td>
 </tr>
 <tr>
-  <td style="text-align: left; width: 200px; border: none; font-weight: bold;">Conditions particulières :</td>
-  <td style="width: 420px;"><?php echo $vrac->conditions_particulieres; ?></td>
+  <td style="text-align: left; width: 165px; border: none; font-weight: bold;">Conditions particulières :</td>
+  <td style="width: 520px; text-align: left;"><?php echo $vrac->conditions_particulieres; ?></td>
 </tr>
 </table>
 <br />
@@ -91,9 +91,6 @@ endforeach;
 <br />
 <br />
 
-<br />
-<br />
-<br />
 <table cellspacing=10 cellpadding=0 style="text-align: right; border: none;">
 <tr>
   <td style="text-align: left; width: 600px; border: none; font-size:20px;"><?php echo getLastSentence(); ?></td>
