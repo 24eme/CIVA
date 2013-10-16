@@ -69,7 +69,7 @@
         <?php if ($onglets->getCurrentLieu()->getConfig()->existRendementAppellation() || $onglets->getCurrentLieu()->getConfig()->existRendementCouleur()):?>
         <li>Dépassement</li>
         <?php endif; ?>
-        <?php if ($onglets->getCurrentLieu()->getConfig()->existRendementCepage()):?>
+        <?php if ($onglets->getCurrentCepage()->getConfig()->existRendementCepage()):?>
         <li>Dépassement Cépage</li>
         <?php endif; ?>
     </ul>
