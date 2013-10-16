@@ -23,6 +23,13 @@
                            <?php if($sf_user->hasFlash('recapitulatif_confirmation')) : ?>
                                 <p class="flash_message"><?php echo $sf_user->getFlash('recapitulatif_confirmation'); ?></p>
                             <?php endif; ?>
+
+                            <?php if($appellationlieu->canCalculVolumeRevendiqueSurPlace() && $appellationlieu->getVolumeRevendiqueCaveParticuliere() < 0): ?>
+                            <p class="message message_erreur">
+                                <?php echo MessagesClient::getInstance()->getMessage('err_log_recap_vente_revendique_sur_place_negatif') ?>
+                            </p>
+                            <?php endif; ?>
+
 				            <div id="total_appelation">
 								<h2 class="titre_section">
                                     <?php if($isGrandCru){ ?>
@@ -63,6 +70,14 @@
                                                         <td class="valeur"><?php echoFloat($form_item->getObject()->getVolumeRevendique()); ?></td>
                                                         <?php endforeach; ?>
                                                     </tr>
+                                                    <?php if($appellationlieu->canCalculVolumeRevendiqueSurPlace()): ?>
+                                                    <tr class="small">
+                                                        <td>&nbsp;dont sur place <span class="unites">(hl)</span></td>
+                                                        <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getVolumeRevendiqueCaveParticuliere()); ?></td>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
                                             </tbody>
                                         </table>
