@@ -150,9 +150,11 @@ var initValidContratPopup = function()
 	******************************************/
 	var initChampsTableauProduits = function()
 	{
-		var tableau = $('#contrats_vrac .produits.table_donnees'),
+		var contexte = $('#contrats_vrac'),
+			tableau = contexte.find('.produits.table_donnees'),
 			lignes_tableau = tableau.find('tr'),
-			verifVolumePrix;
+			btnValidation = tableau.parent().next().find('.suiv button'),
+			ligne_valide = false;
 
 		// On parcourt chaque ligne
 		lignes_tableau.each(function()
@@ -163,7 +165,7 @@ var initValidContratPopup = function()
 				btn_balayette = ligne_courante.find('a.balayette');
 
 			// On vérifie d'abord si le couple volume / prix n'est pas déjà renseigné sur une ligne
-			verifVolumePrix = function()
+			var verifVolumePrix = function()
 			{
 				var champs_vides = true;
 
@@ -175,6 +177,7 @@ var initValidContratPopup = function()
 					if($.trim(champ_volume.val()) !== '' && $.trim(champ_prix.val()) !== '')
 					{
 						ligne_courante.addClass('coche');
+						ligne_valide = true;
 					}else
 					{
 						ligne_courante.removeClass('coche');
@@ -195,7 +198,6 @@ var initValidContratPopup = function()
 
 			verifVolumePrix();
 
-
 			// Ligne active
 			champs.focus(function()
 			{
@@ -203,7 +205,30 @@ var initValidContratPopup = function()
 			});
 
 			// Affichage du picto coche
-			champs.blur(verifVolumePrix);
+			champs.blur(function()
+			{
+				var ligne_valide = false;
+
+				verifVolumePrix();
+
+				// On vérifie si le tableau comporte une ligne valide
+				lignes_tableau.each(function()
+				{
+					if($(this).hasClass('coche'))
+					{
+						ligne_valide = true;
+					}
+				});
+
+				// Si le tableau n'a pas de lignes valides on désactive le btn continuer
+				if(!ligne_valide)
+				{
+					btnValidation.addClass('btn_inactif').attr('disabled', 'disabled');
+				}else
+				{
+					btnValidation.removeClass('btn_inactif').removeAttr('disabled');
+				}
+			});
 
 			// Affichage du picto balayette
 			ligne_courante.hover
@@ -221,7 +246,7 @@ var initValidContratPopup = function()
 
 				function()
 				{
-					$(this).removeClass('effacable')
+					$(this).removeClass('effacable');
 				}
 			);
 
@@ -233,6 +258,11 @@ var initValidContratPopup = function()
 				return false;
 			});
 		});
+
+		if(!ligne_valide)
+		{
+			btnValidation.addClass('btn_inactif').attr('disabled', 'disabled');
+		}
 	};
 
 	$(document).ready(function()
