@@ -7,7 +7,7 @@
 
             <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
                 <p class="lieu <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                    <?php echo $form['lieu']->render() ?>
+                    <?php echo $form['lieu']->render(array('class' => 'premier_focus')) ?>
                 </p>
             <?php endif; ?>
 
@@ -25,28 +25,34 @@
 
             <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-                    <?php echo $form['superficie']->render(array('class' => 'superficie num')) ?>
+                    <?php echo $form['superficie']->render(array('class' => 'superficie num premier_focus')) ?>
                 <?php endif; ?>
             </p>
 
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
                 <div class="vente_raisins">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_acheteur" tabindex="-1">Acheteur</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
                 <div class="caves">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_cave" tabindex="-1">Cave</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
                 <div class="mouts">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_mout" tabindex="-1">Acheteur de mouts</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -82,11 +88,7 @@
         </div>
 
         <div class="col_btn">
-            <?php if(!$is_new): ?>
-            <a href="<?php echo url_for(array_merge($onglets->getUrl('recolte_delete')->getRawValue(), array('detail_key' => $key))) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')">
-            <img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" /></a>
-            <?php endif; ?>
-            <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" style="<?php echo (!$is_new) ? "display: none" : null ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
+            <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
             <script><!--
 <?php if ($onglets->getCurrentCepage()->getConfig()->excludeTotal()) : ?>
         autoTotal = false;

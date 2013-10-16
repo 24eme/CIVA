@@ -115,6 +115,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     protected function update($params = array()) {
+        $this->preUpdateAcheteurs();
         parent::update($params);
 
         if ($this->getCouchdbDocument()->canUpdate()) {

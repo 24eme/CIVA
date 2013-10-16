@@ -6,9 +6,8 @@
 	</div>
 <?php endif; ?>
 
-<div id="contrats_vrac">
-
-	<div class="fiche_contrat">
+<div id="contrats_vrac" class="fiche_contrat">
+	<div class="fond">		
 		<?php use_helper('Date') ?>
 
 		<?php if ($vrac->isValide() || $vrac->isAnnule()): ?>
@@ -24,9 +23,9 @@
 				include_partial('global/validation', array('validation' => $validation)); 
 			}
 		?>
-
+		
 		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form)) ?>
-
+		
 		<?php if (!$vrac->isValide()): ?>
 			<?php if ($vrac->hasValide($user->_id)): ?>
 				<p>Vous avez validé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
@@ -40,11 +39,7 @@
 		<?php if($vrac->isCloture()): ?>
 			<p>Contrat en vrac numéro <?php echo $vrac->numero_archive ?> cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 		<?php endif; ?>
-		                
-		<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserContrat">
-
-		<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
-
 	</div>
-
+	<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserContrat">
+	<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
 </div>

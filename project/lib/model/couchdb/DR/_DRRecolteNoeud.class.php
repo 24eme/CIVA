@@ -2,6 +2,9 @@
 
 abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
+    protected $total_superficie_before;
+    protected $total_volume_before;
+
     public function getConfig() {
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
@@ -368,6 +371,35 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->exist('acheteurs') && $this->hasRecapitulatif();
     }
 
+    public function hasCompleteRecapitulatifVente() {
+
+        return $this->hasCompleteRecapitulatifVenteDplc() && $this->hasCompleteRecapitulatifVenteSuperficie();
+    }
+
+    public function hasNoCompleteRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+            return false;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return false;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getDplc() > 0 && !is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+                if ($this->getTotalSuperficie() > 0 && !is_null($acheteur->superficie)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function hasCompleteRecapitulatifVenteDplc() {
         if(!$this->hasRecapitulatifVente()) {
             return true;
@@ -381,6 +413,27 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         foreach ($this->acheteurs as $type => $type_acheteurs) {
             foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($this->getDplc() > 0 && is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function hasCompleteRecapitulatifVenteSuperficie() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getTotalSuperficie() > 0 && is_null($acheteur->superficie)) {
                     return false;
                 }
             }
@@ -448,6 +501,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $nb_acheteurs > 0;
     }
 
+    public function preUpdateAcheteurs() {
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->total_superficie_before = $this->getTotalSuperficie();
+            $this->total_volume_before = $this->getTotalVolume(); 
+        }
+    }
+
     public function updateAcheteurs() {
         if(!$this->exist('acheteurs')) {
 
@@ -456,13 +516,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         $this->add('acheteurs');
         $types = array('negoces', 'cooperatives', 'mouts');
-
-        if ($this->getCouchdbDocument()->canUpdate()) {
-            $total_superficie_before = $this->getTotalSuperficie();
-            $total_volume_before = $this->getTotalVolume();
-            unset($this->_storage['total_superficie']);
-            unset($this->_storage['total_volume']);
-        }
         
         $unique_acheteur = null;
         foreach ($types as $type) {
@@ -471,10 +524,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                 $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
                 $unique_acheteur = $acheteur;
-                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($total_superficie_before, 2) ||
-                                                                 round($this->getTotalVolume(), 2) != round($total_volume_before, 2))) {
-                    $acheteur->superficie = null;
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2) || round($this->getTotalVolume(), 2) != round($this->total_volume_before, 2))) {
                     $acheteur->dontdplc = null;
+                }
+
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2))) {
+                    $acheteur->superficie = null;
                 }
 
                 if($this->getCouchdbDocument()->canUpdate() && !$this->hasRecapitulatifVente()) {
