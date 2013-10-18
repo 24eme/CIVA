@@ -207,7 +207,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return acCouchdbManager::getClient('_Tiers')->retrieveByCvi($this->identifiant);
     }
 
-    public function getConfig() {
+    public function getConfig() {        
         return ConfigurationClient::getConfiguration();
     }    
         
@@ -283,9 +283,9 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
     
 public function getConfigurationCampagne() {
-        $campagne = substr($this->campagne,0,4);
+        $campagne = CurrentClient::getCurrent()->campagne;
         $conf_2012 = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-        if($campagne <= '2012'){
+        if($campagne <= 2012){
             return $conf_2012;
         }        
         $conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
