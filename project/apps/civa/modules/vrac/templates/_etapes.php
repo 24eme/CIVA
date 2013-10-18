@@ -13,5 +13,12 @@
 	</li>
 	<?php endforeach; ?>
 </ul>
+<div id="suppression_contrat">
+<?php if ($vrac->isSupprimable($user->_id)): ?>
+	<a id="btn_precedent" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
+		<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_supprimer_contrat.png">
+	</a>
+<?php endif; ?>
+</div>
 </div>
 <?php endif; ?>

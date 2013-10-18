@@ -442,6 +442,11 @@ var initTablesAcheteurs = function()
         }
         );
 
+
+    $('input[name="exploitation_acheteurs[lies_saisis_cepage]"]').change(function() {
+        $("#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div").removeClass('actif');
+        $(this).parent().addClass('actif');
+    });
 };
 
 

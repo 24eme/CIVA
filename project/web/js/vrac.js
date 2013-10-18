@@ -80,7 +80,11 @@
 				bloc_html = bloc_html.replace(new RegExp(key, "g"), params[key]);
 			}
 			
-			
+			if (ligneParent.hasClass("alt")) {
+				var b = $(bloc_html).addClass("alt");
+				var c = b.wrap("<tbody></tbody>");
+				var bloc_html = b.parent().html();
+	    	}
 			if (selecteurLigne) {
 
 				if(ligneParent.find('~ '+selecteurLigne).first().size() > 0)
@@ -97,7 +101,7 @@
 			}
 
 	        if(callback) {
-	        	callback(bloc);
+	        	callback(ligneParent, bloc_html);
 	        }
 	        return false;
 	    });
@@ -129,7 +133,7 @@ var initValidContratPopup = function()
                 $('.popup-loading').empty();
                 $('.popup-loading').css('background', 'none');
                 $('.popup-loading').css('padding-top', '10px');
-                $('.popup-loading').append('<p>Le PDF de votre déclaration de stock à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-ds" title="Télécharger la DS"></a></p>');
+                $('.popup-loading').append('<p>Le PDF de votre contrat en vrac à bien été généré, vous pouvez maintenant le télécharger.<br /><br/><a href="'+data+'" class="telecharger-contrat" title="Télécharger le contrat"></a></p>');
                 openPopup($("#popup_loader"));
 
             }
@@ -137,10 +141,49 @@ var initValidContratPopup = function()
         return false;
     });
 };
-	
-    var callbackAddTemplate = function(bloc) 
-    {
 
+var initConfirmeValidationVrac = function()
+{
+    $('#valideVrac').click(function() {
+        openPopup($("#popup_confirme_validationVrac"));
+        return false;
+    });
+    $('#valideVrac_OK').click(function() {
+        $("#popup_confirme_validationVrac").dialog('close');
+        $("#principal").submit();
+        return false;
+    });
+};
+
+var initConfirmeSignatureVrac = function()
+{
+    $('#signatureVrac').click(function() {
+        openPopup($("#popup_confirme_signatureVrac"));
+        return false;
+    });
+    $('#signatureVrac_OK').click(function() {
+        $("#popup_confirme_signatureVrac").dialog('close');
+        document.location.href=$('#signatureVrac').attr("href");
+        return false;
+    });
+};
+	
+    var callbackAddTemplate = function(ligneParent, bloc) 
+    {
+    	initNettoyageChamps();
+    	var annee = new Date().getFullYear();
+    	$('.datepicker').datepicker(
+    		    {
+    		        changeMonth: true,
+    		        changeYear: true,
+    		        dateFormat: 'dd/mm/yy',
+    		        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    		        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+    		        firstDay: 1,
+    		        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    		        monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    		        yearRange: '1900:'+annee
+    		    });
     }
 
     /**
@@ -281,6 +324,8 @@ var initValidContratPopup = function()
          hauteurEgale('#contrats_vrac .soussignes .cadre');
 
          hauteurEgale('#contrats_vrac .bloc_annuaire .bloc');
+         initConfirmeSignatureVrac();
+         initConfirmeValidationVrac();
 	});
 
 })(jQuery);

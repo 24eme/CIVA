@@ -1,35 +1,33 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Float') ?>
-<?php if ($form): ?>
-<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_fiche', array('sf_subject' => $vrac)) ?>">
-	<?php echo $form->renderHiddenFields() ?>
-	<?php echo $form->renderGlobalErrors() ?>
-<?php endif; ?>
+
 <table class="table_donnees produits">
 	<thead>
 		<tr>
 			<th class="produit">Produit</th>
-			<th class="volume"><span>Volume proposé</span></th>
-			<th class="prix"><span>Prix unitaire</span></th>
+			<th class="volume"><span>Volume</span></th>
+			<th class="prix"><span>Prix</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
-			<th><span>Echéance</span></th>
-			<th><span>Enlevé</span></th>
+			<th class="echeance"><span>Echéance</span></th>
+			<th class="enleve"><span>Enlevé</span></th>
 			<?php endif; ?>
 			<?php if ($form): ?>
-			<th><span>Cloturé</span></th>
-			<th></th>
+			<th class="cloture"><span>Cloturé</span></th>
+			<th class="actions"></th>
 			<?php endif; ?>
 		</tr>
 	</thead>
 	<tbody>
 	<?php if ($form): ?>
 		<?php 
+			$counter = 0;
 			foreach ($form['produits'] as $key => $formProduit):
 				$detail = $vrac->get($key);
+				$alt = ($counter%2);
 		?>
-		<tr class="produits">
+		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
-				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -59,14 +57,16 @@
 				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement)) ?>
 			<?php endforeach; ?>
 		<?php 
-			endforeach;
+			$counter++; endforeach;
 		?>
 	<?php elseif($vrac->isCloture()): ?>
 		<?php 
+			$counter = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
+				$alt = ($counter%2);
 		?>
-		<tr>
+		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
@@ -80,25 +80,27 @@
 			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
-		<tr>
+		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td></td>
 			<td></td>
 			<td></td>
-			<td><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
-			<td><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
+			<td class="echeance"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
+			<td class="volume"><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
 		</tr>
 		<?php endforeach; ?>
 		<?php 
-			endforeach;
+			$counter++; endforeach;
 			endforeach;
 		?>
 	
 	<?php else: ?>
 		<?php 
+			$counter = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
+				$alt = ($counter%2);
 		?>
-		<tr>
+		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
 				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
 			</td>
@@ -110,20 +112,9 @@
 			</td>
 		</tr>
 		<?php 
-			endforeach;
+			$counter++; endforeach;
 			endforeach;
 		?>
 	<?php endif; ?>
 	</tbody>
 </table>
-<?php if ($form): ?>
-	<ul class="btn_prev_suiv clearfix" id="btn_etape">
-	    <li class="suiv">		
-	    	<button type="submit" name="valider" style="cursor: pointer;">
-	    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_final.png" />
-	    	</button>
-	    </li>
-	</ul>
-	<a href="<?php echo url_for('vrac_cloture', $vrac) ?>"><img src="/images/boutons/btn_cloturer_contrat.png" alt="Cloturer le contrat" /></a>
-</form>
-<?php endif; ?>

@@ -56,6 +56,7 @@ class declarationComponents extends sfComponents {
         $this->volume_cooperatives = array();
         $this->volume_sur_place = array();
         $this->volume_rebeches = array();
+        $this->volume_rebeches_sur_place = array();
         $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
         $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
         $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
@@ -77,6 +78,7 @@ class declarationComponents extends sfComponents {
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
               if($appellation->getConfig()->hasCepageRB()) {
                 $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
+                $this->volume_rebeches_sur_place[$appellation->getAppellation()] = $appellation->getSurPlaceRebeches();
               }
           }
         }
@@ -96,6 +98,7 @@ class declarationComponents extends sfComponents {
         $this->total_volume_sur_place = array_sum(array_values($this->volume_sur_place));
         if(count($this->volume_rebeches) > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
           $this->total_volume_rebeches = array_sum(array_values($this->volume_rebeches));
+          $this->total_volume_rebeches_sur_place = array_sum(array_values($this->volume_rebeches_sur_place));
         }
         $this->lies = $this->dr->lies;
         $this->jeunes_vignes = $this->dr->jeunes_vignes;

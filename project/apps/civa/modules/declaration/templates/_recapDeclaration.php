@@ -89,11 +89,21 @@
                     <td>Rebêches (hl)</td>
                     <?php foreach ($appellations as $a)  if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
                     <td class="volume">
-                        <?php if(isset($volume_rebeches[$a])): ?>
-                            <?php echoFloat($volume_rebeches[$a]); ?>
+                    	<?php if(isset($volume_rebeches[$a])): ?>
+                        	<?php echoFloat($volume_rebeches[$a]); ?>
                         <?php endif; ?>
                     </td>
                     <?php endif; ?>
+                </tr>
+                <tr class="small">
+                    <td>&nbsp;dont sur place (hl)</td>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td class="volume">
+                    	<?php if(isset($volume_rebeches_sur_place[$a])): ?>
+                        	<?php echoFloat($volume_rebeches_sur_place[$a]); ?>
+                    	<?php endif; ?>
+                    </td>
+                    <?php endif;  ?>
                 </tr>
                 <?php endif; ?>
             </tbody>
@@ -127,6 +137,7 @@
             <?php endif; ?>
             <?php if(isset($total_volume_rebeches)): ?>
             <li><input type="text" value="<?php echoFloat($total_volume_rebeches);?>" readonly="readonly"></li>
+            <li class="small"><input type="text" value="<?php echoFloat($total_volume_rebeches_sur_place);?>" readonly="readonly"></li>
             <?php endif; ?>
         </ul>
     </div>
