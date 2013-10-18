@@ -421,6 +421,11 @@ class Vrac extends BaseVrac
     	$this->prix_total = $this->declaration->getTotalPrixEnleve();
     }
     
+    public function hasProduits()
+    {
+    	return $this->declaration->hasProduits();
+    }
+    
     protected function doSave() 
     {
         $this->date_modification = date('Y-m-d');

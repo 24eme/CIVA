@@ -19,7 +19,8 @@ class VracMailer {
         $from = self::getFrom();
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
-        $subject = 'Demande de signature d\'un contrat en vrac';
+        $proprietaire = $vrac->getCreateurInformations();
+        $subject = 'Demande de signature d\'un contrat en vrac de la part de '.$proprietaire->raison_sociale;
         $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
 

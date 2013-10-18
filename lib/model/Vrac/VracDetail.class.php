@@ -15,6 +15,10 @@ class VracDetail extends BaseVracDetail {
 
         return $this->getCepage()->getLibelleComplet();
     }
+    
+    public function getLibelleSansCepage() {
+    	return $this->getCepage()->getCouleur()->getLibelleComplet();
+    }
 	
 	public function getComplementPartielLibelle() {
 		$complement = '';
