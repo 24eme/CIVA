@@ -368,7 +368,15 @@ send_email_pdf:
 send_email_acheteurs_pdf:
   url: /send-email-acheteurs-pdf
   param: {module: declaration, action: sendPdfAcheteurs}
-
+  
+recolte_feed_back:
+  url: /declaration/retour-experience
+  param: {module: declaration, action: feedBack}
+  
+recolte_feed_back_confirmation:
+  url: /declaration/retour-experience-confirmation
+  param: {module: declaration, action: feedBackConfirmation}
+  
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}

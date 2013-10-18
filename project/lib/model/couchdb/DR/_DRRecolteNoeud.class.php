@@ -178,11 +178,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if($this->_get('volume_revendique') && !$force_calcul) {
 
             return $this->_get('volume_revendique');
-        }    
-
-        if(!$this->getConfig()->hasRendementNoeud()) {
-
-            return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getVolumeRevendiqueTotal'), $force_calcul);
         }
         
         return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'findVolumeRevendique'), $force_calcul);
