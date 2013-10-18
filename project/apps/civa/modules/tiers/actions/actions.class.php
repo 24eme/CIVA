@@ -39,7 +39,7 @@ class tiersActions extends EtapesActions {
         if($this->getUser()->hasCredential("recoltant") 
                // && !$this->getUser()->isInDelegateMode() 
                 && is_null($dr) ){
-            return $this->redirect("notice_evolutions",array('campagne' => '2012'));
+            return $this->redirect("notice_evolutions",array('campagne' => $this->getUser()->getCampagne()));
         }else{
             return $this->redirect("@mon_espace_civa");
         }
