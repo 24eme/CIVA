@@ -1,5 +1,5 @@
 <div class="clearfix">
-	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
+	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape, 'user' => $user)) ?>
 </div>
 
 <div id="contrats_vrac">
@@ -8,6 +8,8 @@
 		<?php echo $form->renderHiddenFields() ?>
 
 		<div class="fond">
+			
+			<span><?php echo $form['hash']->renderError() ?></span>
 			<h2 class="titre_section">Ajouter un produit</h2>
 
 			<table class="ajout_produit table_donnees">

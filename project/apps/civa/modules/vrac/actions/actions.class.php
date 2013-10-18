@@ -64,6 +64,7 @@ class vracActions extends sfActions
 	
 	public function executeCloture(sfWebRequest $request)
 	{
+		throw new sfError404Exception('Fonctionnalité en attente.');
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->vrac->clotureProduits();
 		$this->vrac->save();
@@ -128,7 +129,7 @@ class vracActions extends sfActions
 		$this->user = $this->getUser()->getDeclarant();
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
-    	$this->referer = (int)$this->getUser()->getFlash('referer');
+    	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
     	if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
     		$this->vrac = unserialize($vrac);
@@ -137,6 +138,9 @@ class vracActions extends sfActions
     	}
     	if (!$this->vrac) {
     		$this->vrac = $this->getNouveauVrac($this->user);
+    	}
+    	if ($this->etapes->isGt($this->etape, VracEtapes::ETAPE_PRODUITS) && !$this->vrac->hasProduits()) {
+    		return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => VracEtapes::ETAPE_PRODUITS));
     	}
 		$this->annuaire = $this->getAnnuaire();
     	$this->form = $this->getForm($this->vrac, $this->etape, $this->annuaire);
@@ -167,6 +171,7 @@ class vracActions extends sfActions
     
     public function executeAjouterProduit(sfWebRequest $request) 
     {
+    	$this->user = $this->getUser()->getDeclarant();
     	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
     	$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
     	$this->vrac = $this->getRoute()->getVrac();
