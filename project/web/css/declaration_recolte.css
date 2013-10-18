@@ -2139,6 +2139,17 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin: 0 0 5px;
 }
 
+#confirmation_fin_declaration {
+	width: 536px;
+	float: left;
+}
+
+#confirmation_fin_declaration p.important {
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
 .btn_prev_suiv #email-visualisation #btn-email {
 	margin: 7px 0 0 0;
 }
