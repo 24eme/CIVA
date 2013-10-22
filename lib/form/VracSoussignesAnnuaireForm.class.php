@@ -1,0 +1,60 @@
+<?php
+class VracSoussignesAnnuaireForm extends VracSoussignesForm 
+{    
+	public function configure()
+    {
+    	$this->disableCSRFProtection();
+    	$types = $this->getTypes();
+    	$recoltantChoices = $this->getRecoltants();
+    	$negociantChoices = $this->getNegociants();
+    	$caveCooperativeChoices = $this->getCavesCooperatives();
+    	$commerciauxChoices = $this->getCommerciaux();
+        $this->setWidgets(array(
+        	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
+        	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
+        	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
+        	'acheteur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
+        	'acheteur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
+        	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
+    	));
+        $this->setValidators(array(
+        	'acheteur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
+        	'vendeur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
+        	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($recoltantChoices, array('add' => ''))))),
+        	'acheteur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($negociantChoices, array('add' => ''))))),
+        	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($caveCooperativeChoices, array('add' => ''))))),
+        	'vendeur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($recoltantChoices, array('add' => ''))))),
+        	'vendeur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($negociantChoices, array('add' => ''))))),
+        	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($caveCooperativeChoices, array('add' => ''))))),
+        	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($commerciauxChoices, array('add' => '')))))
+        ));
+        $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator());
+        $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
+    }
+
+    protected function doUpdateObject($values) 
+    {
+    	$acheteur = $values['acheteur'];
+    	$vendeur = $values['vendeur'];
+    	$this->getObject()->interlocuteur_commercial = $values['interlocuteur_commercial'];
+    	$this->getObject()->acheteur_type = $values['acheteur_type'];
+    	$this->getObject()->vendeur_type = $values['vendeur_type'];
+    	if ($acheteur) {
+    		$this->getObject()->acheteur_identifiant = $acheteur->_id;
+    		$this->getObject()->storeAcheteurInformations($acheteur);
+    	}
+    	if ($vendeur) {
+	    	$this->getObject()->vendeur_identifiant = $vendeur->_id;
+	    	$this->getObject()->storeVendeurInformations($vendeur);
+    	}
+    }
+    
+	public function getUpdatedVrac()
+  	{
+  		$this->doUpdateObject($this->getValues());
+    	return $this->getObject();
+  	}
+}
