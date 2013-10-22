@@ -61,6 +61,15 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]  
+vrac_annuaire_commercial:
+  url: /vrac/:numero_contrat/annuaire/commercial
+  param: { module: vrac, action: annuaireCommercial }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_annuaire:
   url: /vrac/:numero_contrat/annuaire/:acteur/:type
   param: { module: vrac, action: annuaire }
@@ -119,6 +128,9 @@ vrac_ajout_produit_vtsgn:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
+annuaire_retour:
+  url: /annuaire/retour
+  param: { module: annuaire, action: retour }
 annuaire_selectionner:
   url: /annuaire/selectionner/:type
   param: { module: annuaire, action: selectionner, type: null }

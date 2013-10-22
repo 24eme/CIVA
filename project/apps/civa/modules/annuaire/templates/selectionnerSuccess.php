@@ -11,7 +11,7 @@
 		</div>
 		<ul class="btn_prev_suiv clearfix" id="btn_etape">
 		    <li class="prec">
-	            <a id="btn_precedent" href="<?php echo url_for('@annuaire') ?>">
+	            <a id="btn_precedent" href="<?php echo url_for('@annuaire_retour') ?>">
 	                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retour.png">
 	            </a>
 		    </li>
