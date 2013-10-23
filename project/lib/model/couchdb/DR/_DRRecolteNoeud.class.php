@@ -551,12 +551,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
     }
 
-    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts', $excludeTotal = true) {
         $key = "volume_acheteurs_" . $type;
         if (!isset($this->_storage[$key])) {
             $this->_storage[$key] = array();
             foreach($this->getChildrenNode() as $children) {
-                if ($children->getConfig()->excludeTotal()) {
+                if ($excludeTotal && $children->getConfig()->excludeTotal()) {
                     continue;
                 }
                 $acheteurs = $children->getVolumeAcheteurs($type);
@@ -594,6 +594,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         
         return $this->_storage[$key];
+    }
+
+    public function getTotalVolumeForMinQuantite() {
+        
+        return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
+    }
+
+    public function getTotalCaveParticuliereForMinQuantite() {
+
+        return round($this->getTotalCaveParticuliere() + $this->getTotalVolumeAcheteurs('mouts'), 2);
+    }
+
+    public function getVolumeAcheteursForMinQuantite() {
+        
+        return $this->getVolumeAcheteurs('cooperatives');
     }
 
     public function hasSellToUniqueAcheteur() {

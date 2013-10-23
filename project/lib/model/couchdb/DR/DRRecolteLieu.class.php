@@ -93,16 +93,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         }
     }
 
-    public function getTotalVolumeForMinQuantite() {
-        
-        return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
-    }
-
-    public function getTotalCaveParticuliereForMinQuantite() {
-
-        return round($this->getTotalCaveParticuliere() + $this->getTotalVolumeAcheteurs('mouts'), 2);
-    }
-
     public function isInManyMention(){
 
         $arr_lieux = array();

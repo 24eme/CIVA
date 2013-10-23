@@ -130,7 +130,7 @@
             var min_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
             var max_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
             
-            var volume_cooperatives = <?php echo json_encode($onglets->getCurrentLieu()->getVolumeAcheteurs('cooperatives')->getRawValue()) ?>;
+            var volume_cooperatives = <?php echo json_encode($onglets->getCurrentLieu()->getVolumeAcheteursForMinQuantite()->getRawValue()) ?>;
             var volume_cave_particuliere = <?php echo $onglets->getCurrentLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
 
             if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
