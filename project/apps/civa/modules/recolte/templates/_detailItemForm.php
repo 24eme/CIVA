@@ -126,27 +126,12 @@
             var total_non_negociant = <?php echo $onglets->getCurrentLieu()->getTotalVolumeForMinQuantite() ?>;
             var min = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>);
             var max = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>);
-                
-            var rebeche_ratio_respected = true;
-            $("#col_recolte_totale .caves input").each(function()
-            {
-                if($(this).attr('type')!='hidden' && $(this).val()>0){
-                    var css_classes =$(this).attr('class'). split(" ");
-                    var class_cvi = css_classes[1];
-                    if(parseFloat($(".col_active .caves input[class*='"+class_cvi+"']").val())==0){
-                        rebeche_ratio_respected = false;
-                    }
-                }
-            });
-            if (parseFloat($('#detail_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0) {
-                rebeche_ratio_respected = false;
-            }
 
-            if (!rebeche_ratio_respected) {
-                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_dest_rebeches')); ?></p>');
-                openPopup($('#popup_msg_erreur'), 0);
-                return false;
-            }
+            var min_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
+            var max_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
+            
+            var volume_cooperatives = <?php echo json_encode($onglets->getCurrentLieu()->getVolumeAcheteurs('cooperatives')->getRawValue()) ?>;
+            var volume_cave_particuliere = <?php echo $onglets->getCurrentLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
 
             if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_min_quantite')); ?></p>');
@@ -156,6 +141,39 @@
 
             if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p>');
+                openPopup($('#popup_msg_erreur'), 0);
+                return false;
+            }
+
+            for(cvi in volume_cooperatives) { 
+                volume = volume_cooperatives[cvi];
+                volume_saisie = 0;
+                var input_cooperative = $(".col_active .caves input[class*='acheteur_cooperatives_"+cvi+"']");
+                if(input_cooperative.length > 0 && input_cooperative.val()) {
+                    volume_saisie = input_cooperative.val();
+                }
+                if(parseFloat(volume_saisie) < parseFloat(volume * min_quantite)) {
+                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                    openPopup($('#popup_msg_erreur'), 0);
+                    return false;
+                }
+                if(parseFloat(volume_saisie) > parseFloat(volume * max_quantite)) {
+                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                    openPopup($('#popup_msg_erreur'), 0);
+                    return false;
+                }
+            }
+
+            var volume_cave_saisie = parseFloat($('.col_active #detail_cave_particuliere').val());
+
+            if(volume_cave_saisie < parseFloat(volume_cave_particuliere * min_quantite)) {
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                openPopup($('#popup_msg_erreur'), 0);
+                return false;
+            }
+
+            if(volume_cave_saisie > parseFloat(volume_cave_particuliere * max_quantite)) {
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
             }
