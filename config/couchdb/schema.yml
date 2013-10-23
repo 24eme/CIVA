@@ -171,6 +171,7 @@ Vrac:
             statut: { }
       campagne: {  }
       numero_contrat: {  }
+      numero: {  }
       numero_archive: {  }
       prix_total: { type: float }
       prix_reel_total: { type: float }

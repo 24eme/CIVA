@@ -6,6 +6,11 @@ class VracTousView extends acCouchdbView
 
         return acCouchdbManager::getView('VRAC', 'tous', 'Vrac');
     }
+    
+    public function findAll()
+    {
+    	return $this->client->getView($this->design, $this->view)->rows;
+    }
 
     public function findBy($identifiant, $campagne = null, $statut = null) {    
 		$params = array($identifiant);

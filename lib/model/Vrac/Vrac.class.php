@@ -13,6 +13,7 @@ class Vrac extends BaseVrac
 	const STATUT_ANNULE = 'ANNULE';
 	const STATUT_ENLEVEMENT = 'ENLEVEMENT';
 	const STATUT_CLOTURE = 'CLOTURE';
+	const PREFIXE_NUMERO = 8;
 	
 	protected $_config;
 	
@@ -96,12 +97,13 @@ class Vrac extends BaseVrac
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
     
-    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
+    public function initVrac($config, $createurIdentifiant, $numeroContrat, $numero, $date, $campagne)
     {
     	
         $this->_config = $config;
         $this->campagne = $campagne;
         $this->numero_contrat = $numeroContrat;
+        $this->numero = $numero;
         $this->valide->date_saisie = $date;
         $this->valide->statut = self::STATUT_CREE;
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
@@ -315,7 +317,7 @@ class Vrac extends BaseVrac
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
     		if (!$this->numero_archive) {
-    			$this->numero_archive = $this->numero_contrat;
+    			$this->numero_archive = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero);
     		}
     	}
     }
@@ -424,6 +426,21 @@ class Vrac extends BaseVrac
     public function hasProduits()
     {
     	return $this->declaration->hasProduits();
+    }
+    
+    public function refreshNumeros()
+    {
+    	$client = VracClient::getInstance();
+        $this->numero_contrat = $client->getNumeroContratSuivant($this->valide->date_saisie);
+        $this->numero = $client->getNumeroSuivant();
+    }
+
+    protected function preSave() 
+    {
+        if ($this->isNew()) {
+        	$this->refreshNumeros();
+            $this->constructId();
+        }
     }
     
     protected function doSave() 
