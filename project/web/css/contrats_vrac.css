@@ -401,7 +401,7 @@
 	margin: 45px 0 0 -32px; 
 }
 
-#contrats_vrac .bloc_annuaire 
+#contrats_vrac .annuaire .bloc_annuaire 
 { 
 	background: #f1f1f1;
 	float: left;
@@ -410,11 +410,11 @@
 	width: 430px; 
 }
 
-#contrats_vrac .bloc_annuaire + .bloc_annuaire + .bloc_annuaire { margin-top: 55px; }
+#contrats_vrac .annuaire .bloc_annuaire + .bloc_annuaire + .bloc_annuaire { margin-top: 55px; }
 
-#contrats_vrac .bloc_annuaire .bloc { width: 416px; }
+#contrats_vrac .annuaire .bloc_annuaire .bloc { width: 416px; }
 
-#contrats_vrac .bloc_annuaire h2
+#contrats_vrac .annuaire .bloc_annuaire h2
 {
 	left: -1px;
 	margin: 0 0 15px;
@@ -422,33 +422,33 @@
 	top: -26px;
 }
 
-#contrats_vrac .bloc_annuaire h3
+#contrats_vrac .annuaire .bloc_annuaire h3
 {
 	font-size: 18px;
 	width: 284px;
 }
 
-#contrats_vrac .bloc_annuaire .btn 
+#contrats_vrac .annuaire .bloc_annuaire .btn 
 { 
 	display: block;
 	margin: 20px 0 0; 
 }
 
-#contrats_vrac .bloc_annuaire ul 
+#contrats_vrac .annuaire .bloc_annuaire ul 
 { 
 	background: #edecec;
 	border: 1px solid #c6c8c7; 
 }
 
-#contrats_vrac .bloc_annuaire ul li 
+#contrats_vrac .annuaire .bloc_annuaire ul li 
 { 
 	padding: 5px 13px 5px;
 	position: relative;
 }
 
-#contrats_vrac .bloc_annuaire ul li + li { border-top: 1px dashed #ccc; }
+#contrats_vrac .annuaire .bloc_annuaire ul li + li { border-top: 1px dashed #ccc; }
 
-#contrats_vrac .bloc_annuaire ul li .btn_supprimer
+#contrats_vrac .annuaire .bloc_annuaire ul li .btn_supprimer
 {
 	position: absolute;
 	right: -27px; 
