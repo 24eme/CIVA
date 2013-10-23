@@ -43,7 +43,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         $date = $arguments['date'];
-        $dates = array($date, date('Y-m-d', strtotime("1 day ago" )));
+        $dates = array(date('Y-m-d', strtotime("1 day ago" )), $date);
         
         $csvDecven = new ExportCsv();
         $csvDdecvn = new ExportCsv();
@@ -72,49 +72,49 @@ EOF;
         
         $modele_decven = array(
             "numero_archive" => null,
-            "type_contrat" => null, // "P" POUR TOUT 
-            "mercuriales" => null, // cf mail du 5/10/2013
-            "montant_cotisation" => null, // NULL
-            "montant_cotisation_paye" => null, // NULL
-            "mode_de_paiement" => null, // NULL
-            "cvi_acheteur" => null, // civaba !!
-            "type_acheteur" => null, // NULL
-            "tca" => null, // NULL
-            "cvi_vendeur" => null, // cvi
-            "type_vendeur" => null, // NULL
-            "numero_contrat" => null, // cf mail du 5/10/2013
-            "daa" => null, // NULL
-            "date_arrivee" => null, // date creation contrat
-            "date_traitement" => null, // date creation contrat
-            "date_saisie" => null, // date VALIDATION contrat !!
-            "date_circulation" => null, // date validation contrat ou date de premiere retiraison total
+            "type_contrat" => null,
+            "mercuriales" => null,
+            "montant_cotisation" => null, 
+            "montant_cotisation_paye" => null, 
+            "mode_de_paiement" => null,
+            "cvi_acheteur" => null, // civaba !! ATTENTE VINCENT
+            "type_acheteur" => null,
+            "tca" => null,
+            "cvi_vendeur" => null,
+            "type_vendeur" => null,
+            "numero_contrat" => null,
+            "daa" => null,
+            "date_arrivee" => null,
+            "date_traitement" => null,
+            "date_saisie" => null,
+            "date_circulation" => null,
             "numero_courtier" => null, // numero tiers 90000...
-            "reccod" => null, // NULL
+            "reccod" => null,
             "total_volume_propose" => null,
             "total_volume_enleve" => null,
-            "quantite_transferee" => null, // NULl
-            "top_suppression" => null, // NULL
-            "top_instance" => null, // NULL
-            "nombre_contrats" => null, // NULL
-            "heure_traitement" => null, // NULL
-            "utilisateur" => null, // cf mail du 5/10/2013 TELEDECL
-            "date_modif" => null, // = "date_saisie"
+            "quantite_transferee" => null,
+            "top_suppression" => null,
+            "top_instance" => null,
+            "nombre_contrats" => null,
+            "heure_traitement" => null,
+            "utilisateur" => null,
+            "date_modif" => null,
             );
             
         $modele_ddecvn = array(
-            "numero_archive" => null, // cf mail du 5/10/2013
+            "numero_archive" => null,
             "code_cepage" => null, // ordre mercurial "on a pas" !!! attente fichier cepap = couple appellation / cepage
-            "cepage" => null, // "CH", "CR", "ED" ...
-            "code_appellation" => null, // 1, 2, 3
-            "numero_ordre" => null, // position produit dans le contrat
+            "cepage" => null,
+            "code_appellation" => null,
+            "numero_ordre" => null, 
             "volume_propose" => null,
-            "volume_enleve" => null, // volume_enleve = volume_propose a la creation !!
+            "volume_enleve" => null,
             "prix_unitaire" => null, 
-            "degre" => null, // NULL
+            "degre" => null,
             "top_mercuriale" => null, // NULL sauf pour le KL appellation 1 (klevener aligenchtagne) ou (appllation 1 et VTSGN non vide 1/2) = "N"
-            "millesime" => null, // !! sur deux caractere
-            "vtsgn" => null,// 1=vt et 2=sgn
-            "date_circulation" => null, // première date de retiraison si creation = date contrat (validation)
+            "millesime" => null,
+            "vtsgn" => null,
+            "date_circulation" => null,
             );
         
         $folderPath = $arguments['folderPath'];
