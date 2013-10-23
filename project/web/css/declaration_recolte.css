@@ -43,31 +43,6 @@
 	margin: 0px 0 10px;
 }
 
-.titre_principal {
-	background: #acb701;
-	color: #f1f1f1;
-	display: inline-block; !
-	display: inline;
-	font-size: 20px;
-	font-weight: normal;
-	line-height: 26px;
-	margin: 0 0 0 20px;
-	padding: 0 10px;
-	zoom: 1;
-}
-
-.titre_section {
-	background: #dcdfa9;
-	color: #848c03;
-	display: inline-block; !
-	display: inline;
-	font-size: 16px;
-	font-weight: normal;
-	line-height: 25px;
-	padding: 0 10px;
-	zoom: 1;
-}
-
 .contenu_section {
 	background: #edecec;
 	border: 1px solid #c7c9c8;

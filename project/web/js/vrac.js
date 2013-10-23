@@ -315,15 +315,28 @@ var initConfirmeSignatureVrac = function()
 		}
 	};
 
+	/**
+	*  Fixe la hauteur des listes de l'annuaire
+	*  par rapport à un nombre de lignes donné
+	******************************************/ 
+	$.hauteurListesAnnuaire = function()
+	{
+		var liste = $('#contrats_vrac .bloc_annuaire .bloc'),
+			ligne = liste.find('ul li'),
+			hauteurLigne = ligne.outerHeight(),
+			hauteurBlocFinale = hauteurLigne * 10;
+
+		liste.height(hauteurBlocFinale);
+	};
+
 	$(document).ready(function()
 	{
 		 $(this).initBlocCondition();
 		 initCollectionAddTemplate('.btn_ajouter_ligne_template', /var---nbItem---/g, callbackAddTemplate);
 		 initCollectionDeleteTemplate();
                  initValidContratPopup();
-         hauteurEgale('#contrats_vrac .soussignes .cadre');
 
-         hauteurEgale('#contrats_vrac .bloc_annuaire .bloc');
+         $.hauteurListesAnnuaire();
          initConfirmeSignatureVrac();
          initConfirmeValidationVrac();
 	});
