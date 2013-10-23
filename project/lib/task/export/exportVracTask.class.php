@@ -72,49 +72,49 @@ EOF;
         
         $modele_decven = array(
             "numero_archive" => null,
-            "type_contrat" => null, // "P" est la seule valeur présente dans le fichier | "P" POUR TOUT 
-            "mercuriales" => null, // "C", "I", "M" et "X" : à quoi correspondent ces valeurs ? | NULL POUR TOUT
+            "type_contrat" => null, // "P" POUR TOUT 
+            "mercuriales" => null, // cf mail du 5/10/2013
             "montant_cotisation" => null, // NULL
             "montant_cotisation_paye" => null, // NULL
             "mode_de_paiement" => null, // NULL
-            "cvi_acheteur" => null,
-            "type_acheteur" => null, // on a l'info mais NULL dans le fichier | VOIR AVEC DOM
-            "tca" => null, // ?? | VOIR AVEC DOM
-            "cvi_vendeur" => null,
-            "type_vendeur" => null, // on a l'info mais NULL dans le fichier | VOIR AVEC DOM
-            "numero_contrat" => null,
-            "daa" => null, // NULL | NULL POUR TOUT
-            "date_arrivee" => null, // ?? | VOIR AVEC DOM
-            "date_traitement" => null, // ?? | VOIR AVEC DOM
-            "date_saisie" => null,
-            "date_circulation" => null, // ?? | VOIR AVEC DOM
-            "numero_courtier" => null, // SIREN, numéro carte pro, ... ?? | VOIR AVEC DOM
-            "reccod" => null, // ?? | VOIR AVEC DOM
+            "cvi_acheteur" => null, // civaba !!
+            "type_acheteur" => null, // NULL
+            "tca" => null, // NULL
+            "cvi_vendeur" => null, // cvi
+            "type_vendeur" => null, // NULL
+            "numero_contrat" => null, // cf mail du 5/10/2013
+            "daa" => null, // NULL
+            "date_arrivee" => null, // date creation contrat
+            "date_traitement" => null, // date creation contrat
+            "date_saisie" => null, // date VALIDATION contrat !!
+            "date_circulation" => null, // date validation contrat ou date de premiere retiraison total
+            "numero_courtier" => null, // numero tiers 90000...
+            "reccod" => null, // NULL
             "total_volume_propose" => null,
             "total_volume_enleve" => null,
-            "quantite_transferee" => null, // ?? | VOIR AVEC DOM
-            "top_suppression" => null, // ?? (NULL dans le fichier) | VOIR AVEC DOM
-            "top_instance" => null, // ?? (NULL et "D" dans le fichier) | VOIR AVEC DOM
-            "nombre_contrats" => null, // ?? (0 et 1 dans le fichier) | VOIR AVEC DOM
-            "heure_traitement" => null, // ?? | VOIR AVEC DOM
-            "utilisateur" => null, // ?? | VOIR AVEC DOM
-            "date_modif" => null, // ?? | VOIR AVEC DOM
+            "quantite_transferee" => null, // NULl
+            "top_suppression" => null, // NULL
+            "top_instance" => null, // NULL
+            "nombre_contrats" => null, // NULL
+            "heure_traitement" => null, // NULL
+            "utilisateur" => null, // cf mail du 5/10/2013 TELEDECL
+            "date_modif" => null, // = "date_saisie"
             );
             
         $modele_ddecvn = array(
-            "numero_archive" => null,
-            "code_cepage" => null, // ??
+            "numero_archive" => null, // cf mail du 5/10/2013
+            "code_cepage" => null, // ordre mercurial "on a pas" !!! attente fichier cepap = couple appellation / cepage
             "cepage" => null, // "CH", "CR", "ED" ...
             "code_appellation" => null, // 1, 2, 3
             "numero_ordre" => null, // position produit dans le contrat
             "volume_propose" => null,
-            "volume_enleve" => null,
+            "volume_enleve" => null, // volume_enleve = volume_propose a la creation !!
             "prix_unitaire" => null, 
             "degre" => null, // NULL
-            "top_mercuriale" => null, // ?? (NULL et "N" dans le fichier) | NULL POUR TOUT
-            "millesime" => null, 
-            "vtsgn" => null,
-            "date_circulation" => null, // première date de retiraison | VOIR AVEC DOM
+            "top_mercuriale" => null, // NULL sauf pour le KL appellation 1 (klevener aligenchtagne) ou (appllation 1 et VTSGN non vide 1/2) = "N"
+            "millesime" => null, // !! sur deux caractere
+            "vtsgn" => null,// 1=vt et 2=sgn
+            "date_circulation" => null, // première date de retiraison si creation = date contrat (validation)
             );
         
         $folderPath = $arguments['folderPath'];

@@ -23,7 +23,7 @@ class ExportDRCsv extends ExportCsv {
         "vtsgn" => "vtsgn",
         "denomination" => "dénomination",
         "superficie_livree" => "superficie livrée",
-        "volume_livre" => "volume livré",
+        "volume_livre/sur place" => "volume livré/sur place",
         "dont_dplc" => "dont volume à détruire",
         "superficie_totale" => "superficie totale",
         "volume_total" => "volume total",
@@ -43,7 +43,7 @@ class ExportDRCsv extends ExportCsv {
         "vtsgn" => array("type" => "string"),
         "denomination" => array("type" => "string"),
         "superficie_livree" => array("type" => "float", "format" => "%01.02f"),
-        "volume_livre" => array("type" => "float", "format" => "%01.02f"),
+        "volume_livre/sur place" => array("type" => "float", "format" => "%01.02f"),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f"),
         "superficie_totale" => array("type" => "float", "format" => "%01.02f"),
         "creation_date" => array("type" => "string"),
@@ -125,17 +125,17 @@ class ExportDRCsv extends ExportCsv {
         $detail = $acheteur->getParent()->getParent();
         
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi." DETAIL ACHAT",
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
-            "nom_acheteur" => null,
+            "nom_acheteur" => acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi)->getNom(),
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
             "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
             "vtsgn" => $detail->vtsgn,
             "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
             "superficie_livree" => (($detail->volume == $acheteur->quantite_vendue) ? $detail->superficie : null),
-            "volume_livre" => $acheteur->quantite_vendue,
+            "volume_livre/sur place" => $acheteur->quantite_vendue,
             "dont_dplc" => null,
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
@@ -151,7 +151,7 @@ class ExportDRCsv extends ExportCsv {
         $denomination = "";
 
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi." DETAIL TOT",
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
@@ -161,7 +161,7 @@ class ExportDRCsv extends ExportCsv {
             "vtsgn" => $detail->vtsgn,
             "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
             "superficie_livree" => null,
-            "volume_livre" => null,
+            "volume_livre/sur place" => $detail->getTotalCaveParticuliere(),
             "dont_dplc" => null,
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
@@ -175,17 +175,17 @@ class ExportDRCsv extends ExportCsv {
     protected function addLieuAcheteur(DRRecolteLieuAcheteur $acheteur) {
         $lieu = $acheteur->getLieu();
         $this->add(array(
-            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
+            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi." LIEU ACHAT",
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
-            "nom_acheteur" => $acheteur->nom,
+            "nom_acheteur" => $acheteur->getNom(),
             "appellation" => $lieu->getAppellation()->getConfig()->getLibelle(),
             "lieu" => $lieu->getConfig()->getLibelle(),
             "cepage" => "TOTAL",
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => $acheteur->superficie,
-            "volume_livre" => $acheteur->getVolume(),
+            "volume_livre/sur place" => $acheteur->getVolume(),
             "dont_dplc" => $acheteur->dontdplc,
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
@@ -198,7 +198,7 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addLieuTotal(DRRecolteLieu $lieu) {
         $this->add(array(
-            "cvi_recoltant" => $lieu->getCouchdbDocument()->cvi,
+            "cvi_recoltant" => $lieu->getCouchdbDocument()->cvi." LIEU TOT",
             "nom_recoltant" => $lieu->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
@@ -208,7 +208,7 @@ class ExportDRCsv extends ExportCsv {
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => null,
-            "volume_livre" => null,
+            "volume_livre/sur place" => $lieu->getTotalCaveParticuliere(),
             "dont_dplc" => null,
             "superficie_totale" => $lieu->getTotalSuperficie(),
             "volume_total" => $lieu->getTotalVolume(),
@@ -221,7 +221,7 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
-            "cvi_recoltant" => $dr->cvi,
+            "cvi_recoltant" => $dr->cvi." JEUNE VIGNES",
             "nom_recoltant" => $dr->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
@@ -231,7 +231,7 @@ class ExportDRCsv extends ExportCsv {
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => null,
-            "volume_livre" => null,
+            "volume_livre/sur place" => null,
             "dont_dplc" => null,
             "superficie_totale" => $dr->jeunes_vignes,
             "volume_total" => null,

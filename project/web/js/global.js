@@ -15,7 +15,15 @@ $(document).ready( function()
 	initNettoyageChamps();
 	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
 	initJSTitle();
+	initFlashMessage();
 });
+
+var initFlashMessage = function() {
+	$('p.flash_message').delay(2000).animate({
+opacity: 0,
+height: 0
+}, 600);
+}
 
 var initJSTitle = function() {
 	$('.jstitle').mousemove(function(e) {

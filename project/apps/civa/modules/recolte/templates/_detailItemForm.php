@@ -7,7 +7,7 @@
 
             <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
                 <p class="lieu <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                    <?php echo $form['lieu']->render() ?>
+                    <?php echo $form['lieu']->render(array('class' => 'premier_focus')) ?>
                 </p>
             <?php endif; ?>
 
@@ -25,7 +25,7 @@
 
             <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-                    <?php echo $form['superficie']->render(array('class' => 'superficie num')) ?>
+                    <?php echo $form['superficie']->render(array('class' => 'superficie num premier_focus')) ?>
                 <?php endif; ?>
             </p>
 

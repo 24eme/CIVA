@@ -1274,16 +1274,41 @@ div#migration_compte .contenu_section#infos_traitement {
 #exploitation_acheteurs #choix_mode_saisie_lies td.td_intro {
 	font-size: 14px;
 	color: #666666;
-	padding: 8px 0 10px 174px;
+	padding: 8px 0 10px 166px;
 }
 
-#exploitation_acheteurs #choix_mode_saisie_lies table.table_checkbox td {
-	background: #EDECEC;
-	border: none;
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies {
+	width: 628px; 
+	margin: 0 auto; 
+	display: block;
 }
 
-#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li {
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div {
+	float:left; 
+	margin-right: 2px; 
+	padding: 4px 4px 0 4px; 
+	border: 1px solid #EDECEC;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif {
+	background: #DDDDDD; 
+	padding: 4px 4px 0 4px; 
+	border: 1px solid #C6C8C7;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_texte {
 	display: inline-block;
+	margin-left: 4px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image {
+	margin-top: 4px;
+	opacity: 0.60; filter:alpha(opacity=60);
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image:hover, 
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif label.label_image {
+	opacity: 1; filter:alpha(opacity=100);
 }
 
 #exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li:first-child {
@@ -2134,6 +2159,17 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #confirmation_fin_stock p.important {
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
+#confirmation_fin_declaration {
+	width: 536px;
+	float: left;
+}
+
+#confirmation_fin_declaration p.important {
 	color: #acb701;
 	font-size: 16px;
 	margin: 0 0 5px;

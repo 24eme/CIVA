@@ -344,6 +344,60 @@ Le CIVA';
 
     }
     
+    public function executeFeedBack(sfWebRequest $request) {
+        $this->form = new FeedBackForm();
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $message = $this->form->getValue('message');
+
+        /*$mess = 'Bonjour ' . $this->tiers->nom . ',
+
+Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
+
+Cordialement,
+
+Le CIVA';*/
+
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getUser()->getDeclarant()->cvi;
+
+        $to = sfConfig::get('app_email_feed_back');
+        $this->emailSend = true;
+        $mail = Swift_Message::newInstance()
+                ->setFrom($this->getUser()->getCompte()->email)
+                ->setTo($to)
+                ->setSubject("CIVA - Retour d'expérience sur la Déclaration de Récolte")
+                ->setBody($message);
+
+        try {
+            if(is_array($to) && count($to) < 1) {
+                throw new sfException("emails not configure in app.yml email->feed_back");
+            }
+
+            $this->getMailer()->send($mail);
+        } catch (Exception $e) {
+
+            $this->emailSend = false;
+        }
+
+        return $this->redirect('recolte_feed_back_confirmation');
+    }
+
+    public function executeFeedBackConfirmation(sfWebRequest $request) {
+
+    }
+    
+    
     protected function addDateDepotMairie($doc){
         if($this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
             $doc->add('date_depot_mairie',date('Y').'-12-10');                    

@@ -64,7 +64,8 @@ EOF;
 		$json->err_log_cremant_max_quantite  = "Les rebêches doivent représenter au maximum 10% des volumes produits";
 		$json->err_log_superficie_zero  = "Vous n'avez pas renseigné de detail pour cette appellation";
 		$json->err_log_dplc  = "Vous dépassez le rendement butoir de ce cépage. Vous pouvez le replier en Edel. Si vous livrez votre raisin, ce repli ne peut se faire qu'en accord avec votre acheteur.";
-		$json->err_log_recap_vente_non_saisie_dplc  = "Vous n'avez pas complété tous les volumes en dépassement dans le récapitulatif des ventes";
+		$json->err_log_recap_vente_non_saisie  = "Vous n'avez pas complété le récapitulatif des ventes";
+		$json->err_log_recap_vente_non_saisie_superficie_dplc = "Vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement dans le récapitulatif des ventes";
 		$json->err_log_recap_vente_invalide  = "La surface et/ou le volume en dépassement du récapitulatif des ventes est supérieur au total de l'appellation";
 		$json->err_log_recap_vente_dontdplc_superieur_volume = "Dans le récapitulatif des ventes, le volume en 'dont dépassement' d'un acheteur doit être inférieur à son volume vendu";
 		$json->err_log_recap_vente_revendique_sur_place_negatif = "Le volume revendiqué sur place est négatif, la répartition du 'dont dépassement' n'est s'en doute pas correcte";
@@ -145,7 +146,23 @@ EOF;
 		$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez une Communale :";
                 
                 $json->help_popup_DR_lieu_dit = "Vous avez coché une case \"AOC Alsace lieu-dit\" dans l'écran \"répartition de la récolte\". Vous devez renseigner ici le nom du ou des lieux-dits géographiques concernés";
-		$json->notice_evolutions_2012  = "<h2>Lies </h2><p>Sur la déclaration de récolte, la rubrique « LIES » a été supprimée. La rubrique DPLC est remplacée par « volumes à envoyer à la distillation et aux usages industriels » dans laquelle vous totalisez à la fois les lies et les éventuels dépassements de rendements  (instructions DGDDI du 9/5/2012).</p><p>Vous devez déclarer en entrée  le volume total récolté par cépage (même si vous avez déjà effectué des soutirages).</p><p>Il n’y a pas de perte de volume commercialisable puisque vous pouvez revendiquer dans la rubrique volume revendiqué,  le maximum autorisé en vin clair dans la catégorie concernée.</p><p>Les lies connues et les dépassements éventuels sont déclarés sans distinction dans la rubrique « usages industriels ». Si vous êtes en dessous du rendement maximum et que vous souhaitez déclarer vos soutirages,  vous les déclarez globalement,  pour chaque appellation, dans la rubrique correspondante de l’écran<br/> « récapitulatif des sorties ».</p><p>Toutes les lies doivent désormais transiter par la  DRM. Vous continuez à gérer distinctement  les 2 produits (lies et DPLC )  à la fois dans votre cave et sur votre DRM. Pour plus de précisions sur cette nouveauté voir page 9 de la notice explicative que vous pouvez télécharger <b><a id='telecharger_notice_evolutions' href='#'>Télécharger ici</a></b></p><br/><h2>Rendements VT et SGN </h2><p>pas de changement</p><br/><h2>Rendement maximum Crémant d’Alsace </h2><p>80 hl/ha tous cépages et couleurs confondues (sauf instructions contraires)</p><br/>";
+		$json->notice_evolutions_2012  = "<h2>Lies </h2>"
+                        ."<p>Sur la déclaration de récolte, la rubrique « LIES » a été supprimée. La rubrique DPLC est remplacée par « volumes à envoyer à la distillation et aux usages industriels » dans laquelle vous totalisez à la fois les lies et les éventuels dépassements de rendements  (instructions DGDDI du 9/5/2012).</p>"
+                        . "<p>Vous devez déclarer en entrée  le volume total récolté par cépage (même si vous avez déjà effectué des soutirages).</p>"
+                        . "<p>Il n’y a pas de perte de volume commercialisable puisque vous pouvez revendiquer dans la rubrique volume revendiqué,  le maximum autorisé en vin clair dans la catégorie concernée.</p>"
+                        . "<p>Les lies connues et les dépassements éventuels sont déclarés sans distinction dans la rubrique « usages industriels ». Si vous êtes en dessous du rendement maximum et que vous souhaitez déclarer vos soutirages,  vous les déclarez globalement,  pour chaque appellation, dans la rubrique correspondante de l’écran<br/> « récapitulatif des sorties ».</p>"
+                        . "<p>Toutes les lies doivent désormais transiter par la  DRM. Vous continuez à gérer distinctement  les 2 produits (lies et DPLC )  à la fois dans votre cave et sur votre DRM. Pour plus de précisions sur cette nouveauté voir page 9 de la notice explicative que vous pouvez télécharger <b><a id='telecharger_notice_evolutions' href='#'>Télécharger ici</a></b></p><br/>"
+                        . "<h2>Rendements VT et SGN </h2><p>pas de changement</p><br/>"
+                        . "<h2>Rendement maximum Crémant d’Alsace </h2>"
+                        . "<p>80 hl/ha tous cépages et couleurs confondues (sauf instructions contraires)</p><br/>";
+		$json->notice_evolutions_2013  = "<h2>Usages Industriels </h2>"
+                        . "<p>Vous pouvez désormais choisir de saisir <u>par cépage</u> les volumes d’usages industriels soutirés (lies connues). Le système vous calculera automatiquement votre volume revendiqué. Si la totalité de la récolte est logée sur place, vous aurez ainsi directement votre volume de vin clair (sous réserve que tous les soutirages aient été effectués).</p>"
+                        . "<p>Attention : si vous sélectionnez l’option «cépage»,  cela concernera toutes les appellations et la case « dont usages industriels » dans le <u>récapitulatif de l’appellation</u> ne sera plus accessible.</p>"
+                        . "<p>Cependant si vous le souhaitez, il est toujours possible d’indiquer les usages industriels <u>globalement par appellation</u>.</p>"
+                        . "<p>Rendez vous dans l’onglet « répartition de la récolte », et pages 7,8,9  de la notice explicative que vous pouvez <b><a id='telecharger_notice_evolutions' href='#'>télécharger ici</a></b></p>"
+                        . "<br/><h2>Autres nouveautés</h2>"
+                        . "<p>Pour vous faciliter l’inscription de votre récolte sur la DRM, vous trouverez en fin de saisie,  une annexe spécifique reprenant les données de votre récolte sur place, conformément aux colonnes de la DRM.</p>"
+                        . "<p>Vous pouvez désormais d’un simple clic, envoyer à votre (ou vos) acheteur ou cave coopérative, les données relatives à votre déclaration de récolte</p><br/>";
 		$json->help_popup_DR_recap_appellation_usage_industriel  = "A définir";
 		$json->err_log_lieu_usages_industriels_inferieur_dplc = "Le volume d'usages industriels est inférieur au volume minimum requis";
 

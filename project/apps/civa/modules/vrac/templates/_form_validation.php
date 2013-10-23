@@ -1,22 +1,24 @@
 <?php use_helper('Float') ?>
-<?php include_partial('vrac/soussignes', array('vrac' => $vrac)) ?>
+<?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => false)) ?>
 
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th>Produit</th>
-			<th class="volume">Volume proposé</th>
-			<th class="prix">Prix unitaire</th>
+			<th>Produits</th>
+			<th class="volume">Volume</th>
+			<th class="prix">Prix</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php 
+			$counter = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
+			$alt = ($counter%2);
 		?>
-		<tr>
+		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td>
-				<strong><?php echo $detail->getLibelle(); ?></strong><?php if ($detail->millesime) { echo ' '.$detail->millesime; } if ($detail->denomination) { echo ' '.$detail->denomination; } if ($detail->vtsgn) { echo ' '.$detail->vtsgn; } ?>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -26,23 +28,39 @@
 			</td>
 		</tr>
 		<?php 
-			endforeach;
+			$counter++;  endforeach;
 			endforeach;
 		?>
 
 	</tbody>
 </table>
 
-<div class="conditions">
-	<div class="ligne_form">
-		<?php echo $form['conditions_paiement']->renderLabel() ?>
-		<?php echo $form['conditions_paiement']->render() ?>
-		<span><?php echo $form['conditions_paiement']->renderError() ?></span>
-	</div>
-	<div class="ligne_form">
-		<?php echo $form['conditions_particulieres']->renderLabel() ?>
-		<?php echo $form['conditions_particulieres']->render() ?>
-		<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
-	</div>
-</div>
+<table class="validation table_donnees">
+	<thead>
+		<tr>
+			<th>Conditions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<?php echo $form['conditions_paiement']->renderLabel() ?>
+			</td>
+			<td>
+				<span><?php echo $form['conditions_paiement']->renderError() ?></span>
+				<?php echo $form['conditions_paiement']->render(array('class' => 'input_long')) ?>
+			</td>
+		</tr>
+		<tr class="alt">
+			<td>
+				<?php echo $form['conditions_particulieres']->renderLabel() ?>
+			</td>
+			<td>
+				<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
+				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
+			</td>
+		</tr>
 
+	</tbody>
+</table>
+<?php include_partial('vrac/popupConfirmeValidation'); ?>

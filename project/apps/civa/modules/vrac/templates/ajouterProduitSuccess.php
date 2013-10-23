@@ -1,5 +1,5 @@
 <div class="clearfix">
-	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
+	<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape, 'user' => $user)) ?>
 </div>
 
 <div id="contrats_vrac">
@@ -8,6 +8,8 @@
 		<?php echo $form->renderHiddenFields() ?>
 
 		<div class="fond">
+			
+			<span id="errors"><?php echo $form['hash']->renderError() ?></span>
 			<h2 class="titre_section">Ajouter un produit</h2>
 
 			<table class="ajout_produit table_donnees">
@@ -22,6 +24,13 @@
 						</select>
 					</td>
 				</tr>
+				<tr id="ligne_lieu_dit" class="hidden">
+					<th>Lieu-Dit* :</th>
+					<td>
+						<?php echo $form['lieu_dit']->render() ?>
+						<span><?php echo $form['lieu_dit']->renderError() ?></span>
+					</td>
+				</tr>
 				<tr id="ligne_lieu" class="hidden">
 					<th>Lieu :</th>
 					<td>
@@ -32,13 +41,6 @@
 					<th>Cépage :</th>
 					<td>
 						<select id="choix_cepage" name="cepage"></select>
-					</td>
-				</tr>
-				<tr id="ligne_lieu_dit" class="hidden">
-					<th>Lieu-Dit :</th>
-					<td>
-						<?php echo $form['lieu_dit']->render() ?>
-						<span><?php echo $form['lieu_dit']->renderError() ?></span>
 					</td>
 				</tr>
 				<tr id="ligne_vtsgn" class="hidden">
@@ -57,7 +59,7 @@
 	            </a>
 		    </li>
 		    <li class="suiv">
-		    	<button type="submit" name="valider" style="cursor: pointer;">
+		    	<button id="valide_form" type="submit" name="valider" style="cursor: pointer;">
 		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
 		    	</button>
 		    </li>
@@ -66,8 +68,31 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	$("#valide_form").click(function() {
+		console.log(!$("#ligne_lieu_dit").hasClass('hidden'));
+		var valide = true;
+		var errors = "<ul class=\"error_list\">";
+		if (!$("#vrac_produit_ajout_hash").val()) {
+			valide = false;
+			errors += "<li>La saisie du produit n'est pas complète.</li>";
+		}
+		if (!$("#ligne_lieu_dit").hasClass('hidden') && !$("#vrac_produit_ajout_lieu_dit").val()) {
+			valide = false;
+			errors += "<li>Vous devez spécifier le lieu-dit.</li>";
+		}
+		errors += "</ul>";
+		if (valide) {
+			$("#principal").submit();
+		} else {
+			$("#errors").html(errors);
+		}
+		return false;
+	});
+	
 	var appellationsLieuDit = Object.keys(jQuery.parseJSON('<?php echo $sf_data->getRaw('appellationsLieuDit'); ?>'));
     $("#choix_appellation").change(function() {
+    	$("#errors").html('');
         var value = $(this).val();
         
         $.post("<?php echo url_for('vrac_ajout_produit_lieux', array('sf_subject' => $vrac, 'etape' => $etape)) ?>", { appellation: value }, function(data){
@@ -96,6 +121,7 @@ $(document).ready(function(){
     });
 
     $("#choix_lieu").change(function() {
+    	$("#errors").html('');
         var appellation = $("#choix_appellation").val();
         var value = $(this).val();
         if (!value) {
@@ -117,6 +143,7 @@ $(document).ready(function(){
     });
 
     $("#choix_cepage").change(function() {
+    	$("#errors").html('');
         var value = $(this).val();
         if (!value) {
 			value = '';

@@ -61,6 +61,15 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]  
+vrac_annuaire_commercial:
+  url: /vrac/:numero_contrat/annuaire/commercial
+  param: { module: vrac, action: annuaireCommercial }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_annuaire:
   url: /vrac/:numero_contrat/annuaire/:acteur/:type
   param: { module: vrac, action: annuaire }
@@ -119,6 +128,9 @@ vrac_ajout_produit_vtsgn:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
+annuaire_retour:
+  url: /annuaire/retour
+  param: { module: annuaire, action: retour }
 annuaire_selectionner:
   url: /annuaire/selectionner/:type
   param: { module: annuaire, action: selectionner, type: null }
@@ -368,7 +380,15 @@ send_email_pdf:
 send_email_acheteurs_pdf:
   url: /send-email-acheteurs-pdf
   param: {module: declaration, action: sendPdfAcheteurs}
-
+  
+recolte_feed_back:
+  url: /declaration/retour-experience
+  param: {module: declaration, action: feedBack}
+  
+recolte_feed_back_confirmation:
+  url: /declaration/retour-experience-confirmation
+  param: {module: declaration, action: feedBackConfirmation}
+  
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}
