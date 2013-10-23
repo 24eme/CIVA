@@ -83,6 +83,16 @@ class annuaireActions extends sfActions {
         	}
         }
     }
+    
+    public function executeRetour(sfWebRequest $request)
+    {
+    	if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
+       		$vracIdentifiant = ($vrac->_id)? $vrac->_id : VracRoute::NOUVEAU;
+       		$etapes = VracEtapes::getInstance();
+    		return $this->redirect('vrac_etape', array('numero_contrat' => $vracIdentifiant, 'etape' => $etapes->getFirst()));
+    	}
+    	return $this->redirect('@annuaire');
+    }
 
 	public function executeSupprimer(sfWebRequest $request) 
 	{

@@ -43,7 +43,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         $date = $arguments['date'];
-        $dates = array($date, date('Y-m-d', strtotime("1 day ago" )));
+        $dates = array(date('Y-m-d', strtotime("1 day ago" )), $date);
         
         $csvDecven = new ExportCsv();
         $csvDdecvn = new ExportCsv();
@@ -72,49 +72,49 @@ EOF;
         
         $modele_decven = array(
             "numero_archive" => null,
-            "type_contrat" => null, // "P" est la seule valeur présente dans le fichier | "P" POUR TOUT 
-            "mercuriales" => null, // "C", "I", "M" et "X" : à quoi correspondent ces valeurs ? | NULL POUR TOUT
-            "montant_cotisation" => null, // NULL
-            "montant_cotisation_paye" => null, // NULL
-            "mode_de_paiement" => null, // NULL
-            "cvi_acheteur" => null,
-            "type_acheteur" => null, // on a l'info mais NULL dans le fichier | VOIR AVEC DOM
-            "tca" => null, // ?? | VOIR AVEC DOM
+            "type_contrat" => null,
+            "mercuriales" => null,
+            "montant_cotisation" => null, 
+            "montant_cotisation_paye" => null, 
+            "mode_de_paiement" => null,
+            "cvi_acheteur" => null, // civaba !! ATTENTE VINCENT
+            "type_acheteur" => null,
+            "tca" => null,
             "cvi_vendeur" => null,
-            "type_vendeur" => null, // on a l'info mais NULL dans le fichier | VOIR AVEC DOM
+            "type_vendeur" => null,
             "numero_contrat" => null,
-            "daa" => null, // NULL | NULL POUR TOUT
-            "date_arrivee" => null, // ?? | VOIR AVEC DOM
-            "date_traitement" => null, // ?? | VOIR AVEC DOM
+            "daa" => null,
+            "date_arrivee" => null,
+            "date_traitement" => null,
             "date_saisie" => null,
-            "date_circulation" => null, // ?? | VOIR AVEC DOM
-            "numero_courtier" => null, // SIREN, numéro carte pro, ... ?? | VOIR AVEC DOM
-            "reccod" => null, // ?? | VOIR AVEC DOM
+            "date_circulation" => null,
+            "numero_courtier" => null, // numero tiers 90000...
+            "reccod" => null,
             "total_volume_propose" => null,
             "total_volume_enleve" => null,
-            "quantite_transferee" => null, // ?? | VOIR AVEC DOM
-            "top_suppression" => null, // ?? (NULL dans le fichier) | VOIR AVEC DOM
-            "top_instance" => null, // ?? (NULL et "D" dans le fichier) | VOIR AVEC DOM
-            "nombre_contrats" => null, // ?? (0 et 1 dans le fichier) | VOIR AVEC DOM
-            "heure_traitement" => null, // ?? | VOIR AVEC DOM
-            "utilisateur" => null, // ?? | VOIR AVEC DOM
-            "date_modif" => null, // ?? | VOIR AVEC DOM
+            "quantite_transferee" => null,
+            "top_suppression" => null,
+            "top_instance" => null,
+            "nombre_contrats" => null,
+            "heure_traitement" => null,
+            "utilisateur" => null,
+            "date_modif" => null,
             );
             
         $modele_ddecvn = array(
             "numero_archive" => null,
-            "code_cepage" => null, // ??
-            "cepage" => null, // "CH", "CR", "ED" ...
-            "code_appellation" => null, // 1, 2, 3
-            "numero_ordre" => null, // position produit dans le contrat
+            "code_cepage" => null, // ordre mercurial "on a pas" !!! attente fichier cepap = couple appellation / cepage
+            "cepage" => null,
+            "code_appellation" => null,
+            "numero_ordre" => null, 
             "volume_propose" => null,
             "volume_enleve" => null,
             "prix_unitaire" => null, 
-            "degre" => null, // NULL
-            "top_mercuriale" => null, // ?? (NULL et "N" dans le fichier) | NULL POUR TOUT
-            "millesime" => null, 
+            "degre" => null,
+            "top_mercuriale" => null, // NULL sauf pour le KL appellation 1 (klevener aligenchtagne) ou (appllation 1 et VTSGN non vide 1/2) = "N"
+            "millesime" => null,
             "vtsgn" => null,
-            "date_circulation" => null, // première date de retiraison | VOIR AVEC DOM
+            "date_circulation" => null,
             );
         
         $folderPath = $arguments['folderPath'];

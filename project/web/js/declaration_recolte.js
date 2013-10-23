@@ -33,9 +33,9 @@ $(document).ready( function()
         });
     }
 
-    $('.table_donnees').ready( function() {
+    /*$('.table_donnees').ready( function() {
         initTablesDonnes();
-    });
+    });*/
 
     $('.gestion_recolte_donnees input').each(function(e)
     {

@@ -1,12 +1,12 @@
 <div id="contrats_vrac">
 
 	<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('@annuaire_commercial_ajouter') ?>">
-
+		<h2 class="titre_principal">Ajouter un interlocuteur</h2>
 		<div class="fond">
 			<?php echo $form->renderHiddenFields() ?>
 			<?php echo $form->renderGlobalErrors() ?>
 			<p>Saisissez ici l'identité du commercial de vous souhaitez ajouter.</p><br />
-			<table class="table_donnees" cellspacing="0" cellpadding="0">
+			<table class="table_donnees">
 				<thead>
 					<tr>
 						<th><span>Identité</span></th>
@@ -24,7 +24,7 @@
 		</div>
 		<ul class="btn_prev_suiv clearfix" id="btn_etape">
 		    <li class="prec">
-	            <a id="btn_precedent" href="<?php echo url_for('@annuaire') ?>">
+	            <a id="btn_precedent" href="<?php echo url_for('@annuaire_retour') ?>">
 	                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retour.png">
 	            </a>
 		    </li>

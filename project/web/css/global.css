@@ -122,6 +122,41 @@ input[type=radio]
     overflow: hidden;
 }
 
+/* Titres */
+
+.titre_principal,
+.titre_section
+{
+    display: inline-block; !
+    display: inline;
+    font-weight: normal;
+    padding: 0 10px;
+    zoom: 1;
+}
+
+.titre_principal 
+{
+    background: #acb701;
+    color: #f1f1f1;
+    font-size: 20px;
+    line-height: 26px;
+    margin: 0 0 0 20px;
+}
+
+.titre_section 
+{
+    background: #dcdfa9;
+    color: #848c03;
+    font-size: 16px;
+    line-height: 25px;
+}
+
+/* Tableaux / Listes */
+
+table.table_donnees tbody tr.alt td,
+ol li.alt,
+ul li.alt { background: #DDD; }
+
 /* Messages logs */
 
 .message {
@@ -254,14 +289,6 @@ a.msg_aide_ds:hover {
     border-bottom-color: #dedede;
     clear: both;
     padding: 0 0 20px;
-}
-
-#principal
-{
-}
-
-#colonne
-{
 }
 
 #footer
