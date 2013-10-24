@@ -376,11 +376,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                             continue;
                         }
 
+                        $bloquant_rebeche = false;
+
                         //Vérifie le min rebeche autorisé
                         if ($cepage->getConfig()->hasMinQuantite()) {
                             $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
                             if ($totalVolRatioMin > $totalVolRevendique) {
                                 array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+                                $bloquant_rebeche = true;
                             }
                         }
 
@@ -389,6 +392,45 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                             $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
                             if ($totalVolRatioMax < $totalVolRevendique) {
                                 array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
+                                $bloquant_rebeche = true;
+                            }
+                        }
+
+                        if ($cepage->getConfig()->hasMinQuantite() || $cepage->getConfig()->hasMaxQuantite()) {
+                            $volume_acheteurs = $cepage->getVolumeAcheteurs('cooperatives', false);
+                            foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
+                                $volume_min = round($volume * $cepage->getConfig()->min_quantite, 2);
+                                $volume_max = round($volume * $cepage->getConfig()->max_quantite, 2);
+                                $volume_acheteur = (isset($volume_acheteurs[$cvi])) ? $volume_acheteurs[$cvi] : 0;
+                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $volume_acheteur < $volume_min) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
+                                }
+                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $volume_acheteur > $volume_max) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
+                                }
+                            }
+
+                            if(!$bloquant_rebeche && count($volume_acheteurs) != count($lieu->getVolumeAcheteursForMinQuantite())) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
+                            }
+
+                            $volume_cave_particuliere_min = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+                            $volume_cave_particuliere_max = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
+
+                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $cepage->getTotalCaveParticuliere() < $volume_cave_particuliere_min) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                            }
+
+                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $cepage->getTotalCaveParticuliere() > $volume_cave_particuliere_max) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
                             }
                         }
 
