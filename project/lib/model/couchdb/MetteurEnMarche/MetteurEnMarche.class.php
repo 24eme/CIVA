@@ -13,4 +13,11 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
 
         return $this->civaba;
     }
+    
+    public function hasCvi() {
+    	if ($this->cvi_acheteur) {
+    		return true;
+    	}
+    	return false;
+    }
 }
