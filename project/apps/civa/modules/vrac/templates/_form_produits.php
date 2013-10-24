@@ -16,14 +16,14 @@
 			$alt = ($counter%2);
 	?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong></td>
+			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong></td>
 			<td class="denomination">
 				<span><?php echo $embedForm['denomination']->renderError() ?></span>
 				<?php echo $embedForm['denomination']->render() ?>
 			</td>
 			<td class="millesime">
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
-				<?php echo $embedForm['millesime']->render() ?>
+				<?php echo $embedForm['millesime']->render(array("maxlength" => 4)) ?>
 			</td>
 			<td class="volume">
 				<span><?php echo $embedForm['volume_propose']->renderError() ?></span>

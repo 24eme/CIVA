@@ -56,7 +56,7 @@
 	
 	<table id="actions_fiche">
 		<tr>
-			<td><input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserContrat"></td>
+			<td><?php if ($vrac->isSigne()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
 			<td>
 				<?php if (!$vrac->isValide()): ?>
 					<?php if ($vrac->hasValide($user->_id)): ?>

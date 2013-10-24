@@ -10,6 +10,10 @@
 				</div>
 
 				<div class="nom_cvi ligne_form">
+
+					<?php echo $form['vendeur_recoltant_identifiant']->renderError() ?>
+					<?php echo $form['vendeur_negociant_identifiant']->renderError() ?>
+					<?php echo $form['vendeur_cave_cooperative_identifiant']->renderError() ?>
 					<table>
 						<tr>
 							<td valign="top" class="td_label"><label for="vrac_soussignes_vendeur_recoltant_identifiant" class="bold">Nom / CVI * :</label></td>
@@ -38,10 +42,6 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
-		<?php echo $form['vendeur_recoltant_identifiant']->renderError() ?>
-		<?php echo $form['vendeur_negociant_identifiant']->renderError() ?>
-		<?php echo $form['vendeur_cave_cooperative_identifiant']->renderError() ?>
 	</fieldset>
 
 	<fieldset class="bloc_infos">
@@ -55,6 +55,10 @@
 				</div>
 
 				<div class="nom_cvi ligne_form">
+
+					<?php echo $form['acheteur_recoltant_identifiant']->renderError() ?>
+					<?php echo $form['acheteur_negociant_identifiant']->renderError() ?>
+					<?php echo $form['acheteur_cave_cooperative_identifiant']->renderError() ?>
 					<table>
 						<tr>
 							<td valign="top" class="td_label"><label for="vrac_soussignes_acheteur_recoltant_identifiant" class="bold">Nom / CVI * :</label></td>
@@ -83,10 +87,6 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
-		<?php echo $form['acheteur_recoltant_identifiant']->renderError() ?>
-		<?php echo $form['acheteur_negociant_identifiant']->renderError() ?>
-		<?php echo $form['acheteur_cave_cooperative_identifiant']->renderError() ?>
 	</fieldset>
 
 	<fieldset class="bloc_infos">

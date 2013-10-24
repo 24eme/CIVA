@@ -15,7 +15,9 @@
   <th style="width: 66px; font-weight: bold; text-align: center; border: 1px solid black; ">Millésime</th>  
   <th style="width: 92px; font-weight: bold; text-align: center; border: 1px solid black; ">Prix* de l'hectolitre <small>(en &euro;/HL)</small></th>
   <th style="width: 77px; font-weight: bold; text-align: center; border: 1px solid black; ">VOLUME estimé<br/><small>(en HL)</small></th>
+  <?php if ($vrac->isCloture()): ?>
   <th style="width: 77px; font-weight: bold; text-align: center; border: 1px solid black; ">VOLUME réel<br/><small>(en HL)</small></th>
+  <?php endif; ?>
 </tr>
 <?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
     $productLine = $product->getRawValue();
@@ -29,7 +31,9 @@
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
+    <?php if ($vrac->isCloture()): ?>
     <td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_enleve, true); ?></td>
+    <?php endif; ?>
 </tr>
 <?php 
 endforeach;
@@ -40,7 +44,9 @@ endforeach;
     <td style="border: none; text-align: left;" colspan="4" >&nbsp;*<span style="font-size:20px; padding-left: 20px"><?php echo getExplicationEtoile(); ?></span></td>
     <td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(), true); ?></td>
     <td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>    
+    <?php if ($vrac->isCloture()): ?>
     <td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumeEnleve(), true); ?></td>
+    <?php endif; ?>
 </tr>
 </table>
 

@@ -27,7 +27,7 @@
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -54,7 +54,7 @@
 				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement): 
 					$enlevement = $vrac->get($key)->retiraisons->get($keySub);
 			?>
-				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement)) ?>
+				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement, 'alt' => $alt)) ?>
 			<?php endforeach; ?>
 		<?php 
 			$counter++; endforeach;
@@ -68,7 +68,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -102,7 +102,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<strong><?php echo $detail->getLibelle(); ?></strong><?php echo $detail->getComplementLibelle(); ?>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl

@@ -5,8 +5,8 @@
 	<thead>
 		<tr>
 			<th>Produits</th>
-			<th class="volume">Volume</th>
-			<th class="prix">Prix</th>
+			<th class="volume" style="text-align: center">Volume</th>
+			<th class="prix" style="text-align: center">Prix</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,7 +18,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td>
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
