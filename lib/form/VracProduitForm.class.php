@@ -18,7 +18,7 @@ class VracProduitForm extends acCouchdbObjectForm
         	'volume_propose' => 'Volume proposé:'
         ));
         $this->setValidators(array(
-        	'millesime' => new sfValidatorString(array('required' => false)),
+        	'millesime' => new sfValidatorString(array('required' => false, 'max_length' => 4), array('max_length' =>  '4 caractères max.')),
         	'denomination' => new sfValidatorString(array('required' => false)),
         	//'vtsgn' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getVtSgn()))),
         	'prix_unitaire' => new sfValidatorNumber(array('required' => false)),

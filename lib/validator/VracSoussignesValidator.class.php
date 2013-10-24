@@ -4,6 +4,7 @@ class VracSoussignesValidator extends sfValidatorBase
     
     public function configure($options = array(), $messages = array()) 
     {
+    	$this->setMessage('required', "Champ obligatoire");
         $this->setMessage('invalid', "Ce tiers n'existe plus");
         $this->addMessage('inconsistent', "L'acheteur et le vendeur ne peuvent être les mêmes");
     }

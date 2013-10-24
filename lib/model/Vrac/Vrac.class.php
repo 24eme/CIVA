@@ -260,6 +260,11 @@ class Vrac extends BaseVrac
     	return ($this->valide->statut == self::STATUT_ANNULE);
     }
     
+    public function isSigne()
+    {
+    	return !($this->valide->statut == self::STATUT_VALIDE_PARTIELLEMENT || $this->valide->statut == self::STATUT_CREE);
+    }
+    
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
