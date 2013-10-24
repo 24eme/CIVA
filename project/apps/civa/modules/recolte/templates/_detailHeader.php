@@ -62,7 +62,7 @@
     <?php if ($onglets->getCurrentLieu()->getConfig()->existRendement()): ?>
         <ul class="vol_revendique_dplc">
             <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
-            <li>Usages industriels <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
+            <li>Usages industriels <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_usages_industriels" title="Message aide"></a></li>
         </ul>
     <?php endif; ?>
     <ul>
