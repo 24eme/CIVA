@@ -294,8 +294,9 @@ class ExportDRPdf extends ExportDocument {
   					$c['denomination'] = $detail->denomination;
   					$c['vtsgn'] = $detail->vtsgn;
   					$c['superficie'] = $detail->superficie;
-  					$c['volume'] = $detail->volume;
+            $c['volume'] = $detail->volume;
             if($detail->canHaveUsagesLiesSaisi()) {
+              $c['revendique'] = $detail->volume_revendique;
               $c['usages_industriels'] = $detail->lies;
             }
   					if ($hasLieuEditable)
