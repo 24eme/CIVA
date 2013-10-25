@@ -174,8 +174,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         } else {
             $this->lies = $this->getLies(true);
         }
-        $this->usages_industriels = null;
-        $this->volume_revendique = $this->volume - $this->lies;
+        $this->usages_industriels = $this->lies;
+        $this->volume_revendique = $this->volume - $this->usages_industriels;
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');
