@@ -30,7 +30,9 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        
+
+        $ids_for_dr = array();
+
         foreach (file($arguments['file']) as $a) {
             $json = new stdClass();
             $db2 = new Db2Achat(explode(',', preg_replace('/"/', '', $a)));
@@ -62,20 +64,24 @@ EOF;
             }
             $acheteur->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $db2->get(Db2Achat::COL_NOM)));
             $acheteur->commune = rtrim($db2->get(Db2Achat::COL_COMMUNE));
-            //$acheteur->db2->num = $db2->get(Db2Achat::COL_NUM);
-            
-            if($acheteur->isModified()) {
-                $acheteur->db2->import_date = date("Y-m-d");
-            }
-
-            if($acheteur->isNew()) {
-               $this->logSection("new", $acheteur->get('_id')); 
-            } elseif($acheteur->isModified()) {
-               $this->logSection("modified", $acheteur->get('_id'));  
-            }
+            $acheteur->acheteur_dr = 1;
             
             $acheteur->save();
+            $ids_for_dr[] = $acheteur->_id;
         }
+
+        $ids = AcheteurClient::getInstance()->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+
+        foreach($ids as $id) {
+            if(in_array($id, $ids_for_dr)) {
+                continue;
+            }
+            $acheteur = AcheteurClient::getInstance()->find($id);
+            $acheteur->acheteur_dr = 0;
+            $acheteur->save();
+        }
+
+        $this->logSection("Acheteur pour la DR", count($ids_for_dr));
     }
 
     private function recode_number($val) {
