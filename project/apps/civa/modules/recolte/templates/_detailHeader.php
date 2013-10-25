@@ -67,10 +67,17 @@
     <?php endif; ?>
     <ul>
         <?php if ($onglets->getCurrentLieu()->getConfig()->existRendementAppellation() || $onglets->getCurrentLieu()->getConfig()->existRendementCouleur()):?>
-        <li>Dépassement</li>
+        <li>
+            Dépassement
+            <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
         <?php endif; ?>
         <?php if ($onglets->getCurrentCepage()->getConfig()->existRendementCepage()):?>
-        <li>Dépassement Cépage</li>
+        <li>
+            Dépassement Cépage 
+            <?php if (!($onglets->getCurrentLieu()->getConfig()->existRendementAppellation() || $onglets->getCurrentLieu()->getConfig()->existRendementCouleur())): ?>
+            <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a>
+            <?php endif; ?>
+        </li>
         <?php endif; ?>
     </ul>
 </div>
