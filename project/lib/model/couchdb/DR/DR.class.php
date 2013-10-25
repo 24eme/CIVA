@@ -570,8 +570,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
     
     public function getPremiereModificationDr() {
+        if(!$this->utilisateurs_document->getPremiereModification()) {
 
-        return $this->utilisateurs_document->getPremiereModification();
+            return null;
+        }
+        
+        preg_match("/^(\d+)\/(\d+)\/(\d+)$/", $this->utilisateurs_document->getPremiereModification(), $matches);
+
+        return $matches[3]."-".$matches[2]."-".$matches[1];
     }
 
     public function addEdition($id_user, $date) {

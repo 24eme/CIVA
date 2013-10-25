@@ -255,6 +255,7 @@ class ExportDRCsv extends ExportCsv {
             "nom_acheteur" => null,
             "appellation" => "Jeunes Vignes",
             "lieu" => null,
+            "couleur" => null,
             "cepage" => null,
             "vtsgn" => null,
             "denomination" => null,
