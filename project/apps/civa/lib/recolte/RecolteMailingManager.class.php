@@ -35,7 +35,7 @@ class RecolteMailingManager {
         $this->csvContent = $this->getCSVDrContent();
         
         $this->acheteurs = $this->dr->recolte->getAcheteursArray();
-        $this->current_document = new ExportDRPdf($this->dr, $this->tiers, $this->partial_function);
+        $this->current_document = new ExportDRPdf($this->dr, $this->partial_function);
         $this->current_document->generatePDF();
         $this->current_pdf_content = $this->current_document->output();
         

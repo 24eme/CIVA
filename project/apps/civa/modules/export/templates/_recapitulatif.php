@@ -19,22 +19,7 @@
 pre {display: inline;}
 </style>
 
-<span style="background-color: grey; color: white; font-weight: bold;">Exploitation</span><br/>
-<table style="border: 1px solid grey;"><tr><td>
-<table border="0">
-  <tr><td>&nbsp;N° CVI : <i><?php echo $tiers->cvi; ?></i></td><td>Nom : <i><?php echo $tiers->intitule.' '.$tiers->nom; ?></i></td></tr>
-  <tr><td>&nbsp;SIRET : <i><?php echo $tiers->siret; ?></i></td><td>Adresse : <i><?php echo $tiers->siege->adresse; ?></i></td></tr>
-  <tr><td>&nbsp;Tel. : <i><?php echo $tiers->telephone; ?></i></td><td>Commune : <i><?php echo $tiers->siege->code_postal." ".$tiers->siege->commune; ?></i></td></tr>
-  <tr><td>&nbsp;Fax : <i><?php echo $tiers->fax; ?></i></td><td>&nbsp;</td></tr>
-</table>
-</td></tr></table>
-<span style="background-color: grey; color: white; font-weight: bold;">Gestionnaire de l'exploitation</span><br/>
-<table style="border: 1px solid grey;"><tr><td>
-<table border="0" style="margin: 0px; padding: 0px;">
-  <tr><td>&nbsp;Nom et prénom : <i><?php echo $tiers->exploitant->nom; ?></i></td><td>Né(e) le <i><?php echo $tiers->exploitant->getDateNaissanceFr(); ?></i></td></tr>
-  <tr><td>&nbsp;Adresse complete : <i><?php echo $tiers->exploitant->adresse.', '.$tiers->exploitant->code_postal.' '.$tiers->exploitant->commune; ?></i></td><td>Tel. <i><?php echo $tiers->exploitant->telephone; ?></i></td></tr>
-</table>
-</td></tr></table>
+<?php include_partial('export/exploitation', array('dr' => $dr)); ?>
 <br />
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br/>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">

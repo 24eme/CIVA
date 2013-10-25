@@ -64,7 +64,7 @@ class exportActions extends sfActions {
         }
         $this->forward404Unless($dr);
 
-        $this->document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
         if($request->getParameter('force')) {
             $this->document->removeCache();
