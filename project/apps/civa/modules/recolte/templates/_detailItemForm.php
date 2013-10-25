@@ -63,11 +63,11 @@
             <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
                     <li>
-                        <input id="detail_volume_revendique" tabindex="-1" type="<?php echo (isset($form['lies'])) ? "text" : "hidden" ?>" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
+                        <input id="detail_volume_revendique" tabindex="-1" type="<?php echo (isset($form['lies'])) ? "text" : "hidden" ?>" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" />
                     </li>
                     <li>
                         <?php if (isset($form['lies'])) : ?>
-                            <?php echo $form['lies']->render(array('class' => 'num lies')) ?>
+                            <?php echo $form['lies']->render() ?>
                         <?php else: ?>
                             <input id="detail_lies" type="hidden" class="lies num readonly" readonly="readonly" value="<?php echo $detail->lies ?>" />
                         <?php endif; ?>

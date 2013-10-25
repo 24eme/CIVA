@@ -110,13 +110,15 @@
                                                 <tr class="sous_tr">
                                                     <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels_saisies" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur saisi">
-                                                                <?php if(isset($form[$key]['lies'])): ?>
-                                                                    <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
-                                                                <?php else: ?>
-                                                                    <input type="text" readonly="readonly" class="num readonly recapitulatif_lies" value="<?php echoFloat($form_item->getObject()->lies) ?>" />
-                                                                <?php endif; ?>
-                                                        </td>
+                                                        <?php if(isset($form[$key]['lies'])): ?>
+                                                            <td class="valeur saisi">
+                                                                <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
+                                                            </td>
+                                                        <?php else: ?>
+                                                            <td class="valeur">
+                                                                <?php echoFloat($form_item->getObject()->getLies()) ?>
+                                                            </td>
+                                                            <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
