@@ -169,10 +169,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $v += $this->getSumAcheteur('mouts');
 
         $this->volume = $v;
-        $this->volume_revendique = null;
         $this->volume_dplc = null;
         $this->lies = $this->getLies(true);
         $this->usages_industriels = null;
+        $this->volume_revendique = $this->volume - $this->lies;
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');

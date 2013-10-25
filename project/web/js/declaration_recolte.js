@@ -930,15 +930,19 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_dplc').val(parseFloat($(elementCssId+'_total_dplc_sum').val().replace('Σ ', '')));
     }
 
-
-
     if(parseFloat($(elementCssId+'_volume_dplc').val()) > parseFloat($(elementCssId+'_lies').val())) {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val()); 
     } else {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val()); 
     }
 
-    $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_usages_industriels').val()));
+    var usages_industriels = 0;
+
+    if($(elementCssId+'_usages_industriels').val()) {
+        usages_industriels = $(elementCssId+'_usages_industriels').val();
+    }
+
+    $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - parseFloat(usages_industriels));
 };
 
 var addClassAlerteIfNeeded = function (inputObj, condition, css_class)

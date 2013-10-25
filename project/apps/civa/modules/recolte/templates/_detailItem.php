@@ -71,7 +71,7 @@
         <?php if ($detail->getConfig()->existRendement()): ?>
             <ul class="vol_revendique_dplc">
                 <li>
-                    <input type="hidden" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
+                    <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
                     </li>
                 <li>
                     <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
@@ -80,7 +80,7 @@
             </ul>
             <ul>
                 <li></li>
-                <li><input type="hidden" class="num dplc readonly" readonly="readonly" value="<?php echoFloat($detail->volume_dplc); ?>" /></li>
+                <li></li>
             </ul>
         <?php endif; ?>
     </div>

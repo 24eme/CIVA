@@ -63,7 +63,7 @@
             <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
                     <li>
-                        <input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
+                        <input id="detail_volume_revendique" tabindex="-1" type="<?php echo (isset($form['lies'])) ? "text" : "hidden" ?>" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" />
                     </li>
                     <li>
                         <?php if (isset($form['lies'])) : ?>
@@ -76,13 +76,8 @@
                     </li>
                 </ul>
                 <ul>
-                    <li>
-                    </li>
-                    <li>
-                        <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-                        <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendementNoeud(); ?>"/>
-                        <input id="detail_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" />
-                    </li>
+                    <li></li>
+                    <li></li>
                 </ul>
             <?php endif; ?>
         </div>
