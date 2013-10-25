@@ -149,7 +149,7 @@ pre {display: inline;}
             <?php endif; ?>
         </tr>
         <?php endif; ?>
-        <?php if($infos['volume_rebeches_sur_place'] !== null): ?>
+        <?php if($infos['total_volume_rebeches_sur_place'] !== null): ?>
                 <tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
             <?php foreach ($appellations as $a): ?>
@@ -165,7 +165,6 @@ pre {display: inline;}
             <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches_sur_place'], true);?></td>
             <?php endif; ?>
         </tr>
-        
     	<?php endif; ?>
 	</tbody>
 </table>

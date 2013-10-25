@@ -123,7 +123,6 @@ class ExportDRPdf extends ExportDocument {
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
               'total_volume_rebeches' => $infos['total_volume_rebeches'],
               'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
-                            
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
@@ -180,7 +179,6 @@ class ExportDRPdf extends ExportDocument {
         $volume_sur_place = array();
         $volume_rebeches = array();
         $volume_rebeches_sur_place = array();
-        $volume_total_rebeches = array();
         $revendique = array();
         $revendique_sur_place = array();
         $usages_industriels = array();
