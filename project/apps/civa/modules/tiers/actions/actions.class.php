@@ -114,9 +114,7 @@ class tiersActions extends EtapesActions {
             }
             if (!$this->form_gest_err && !$this->form_expl_err) {
                 $dr = $this->getUser()->getDeclaration();
-                $dr->declarant->nom = $this->tiers->exploitant->nom;
-                $dr->declarant->telephone = $this->tiers->exploitant->telephone;
-                $dr->declarant->email = $this->tiers->email;
+                $dr->storeDeclarant();
                 $dr->save();
                 $boutons = $this->getRequestParameter('boutons', null);
             	if ($boutons && in_array('previous', array_keys($boutons))) {

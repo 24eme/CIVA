@@ -30,53 +30,33 @@ class declarationActions extends EtapesActions {
                 return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
-                $this->redirect('@mon_espace_civa');
+                
+                return $this->redirect('@mon_espace_civa');
             } elseif ($dr_data['type_declaration'] == 'visualisation') {
                 $this->redirect('@visualisation?annee=' . $this->getUser()->getCampagne());
             } elseif ($dr_data['type_declaration'] == 'vierge') {
-                $doc = new DR();
-                $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne());
-                $doc->cvi = $tiers->cvi;
-                $doc->campagne = $this->getUser()->getCampagne();
-                $doc->declaration_insee = $tiers->declaration_insee;
-                $doc->declaration_commune = $tiers->declaration_commune;
-                $doc->identifiant = $tiers->cvi;
-                $this->addDateDepotMairie($doc);                
-                $doc->storeDeclarant();
+                $doc = DRClient::getInstance()->createDeclaration($tiers, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
                 $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $acheteurs = array();
-                $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
-                $dr->declaration_insee = $tiers->declaration_insee;
-                $dr->declaration_commune = $tiers->declaration_commune;
+                $dr = DRClient::getInstance()->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs, $this->getUser()->isSimpleOperateur());
                 $dr->save();
                 $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
                 if (!$old_doc) {
                     throw new Exception("Bug: " . $dr_data['liste_precedentes_declarations'] . " not found :()");
                 }
-                $doc = clone $old_doc;
-                $doc->_id = 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne();
-                $doc->campagne = $this->getUser()->getCampagne();
-                $doc->declaration_insee = $tiers->declaration_insee;
-                $doc->declaration_commune = $tiers->declaration_commune;
-                $this->addDateDepotMairie($doc); 
-                $doc->removeVolumes();
-                $doc->remove('validee');
-                $doc->remove('modifiee');
-                $doc->remove('etape');
-                $doc->remove('utilisateurs');
-                $doc->remove('import_db2');
-                $doc->setDeclarantForUpdate();
-                $doc->storeDeclarant();
-                $doc->update();
+                $doc = DRClient::getInstance()->createDeclarationClone($old_doc, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
         $this->redirect('@mon_espace_civa');
@@ -322,7 +302,7 @@ Le CIVA';
     public function executeVisualisationAvantImport(sfWebRequest $request) {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
-        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs);
+        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
         $this->visualisation_avant_import = true;
     }
 
@@ -397,10 +377,4 @@ Le CIVA';*/
 
     }
     
-    
-    protected function addDateDepotMairie($doc){
-        if($this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
-            $doc->add('date_depot_mairie',date('Y').'-12-10');                    
-        }
-    }
 }

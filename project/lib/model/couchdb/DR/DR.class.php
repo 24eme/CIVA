@@ -15,16 +15,26 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     
     protected $utilisateurs_document = null; 
     protected $declarant_document = null;
-    
+
+
     public function  __construct() {
-        parent::__construct();         
+        parent::__construct();   
+        $this->initDocuments();
+    }
+
+    public function __clone() {
+        parent::__clone();
+        $this->identifiant = $this->cvi;
+        $this->initDocuments();
+    } 
+
+    protected function initDocuments() {
         $this->utilisateurs_document = new UtilisateursDocument($this);
         $this->declarant_document = new DeclarantDocument($this);
     }
     
-    public function setDeclarantForUpdate() {
-        $this->identifiant = $this->cvi;
-        $this->declarant_document = new DeclarantDocument($this);
+    public function constructId() {
+        $this->set('_id', 'DR-' . $this->cvi . '-' . $this->campagne);
     }
     
     /**
@@ -214,6 +224,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->update();
         $this->cleanNoeuds();
         $this->remove('etape');
+        $this->storeDeclarant();
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', date('Y-m-d'));
@@ -221,16 +232,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 $this->add('en_attente_envoi', true);
             }
         }
-        $this->declarant->nom =  $tiers->get('nom');
-        if ($compte) {
-            $this->declarant->email =  $compte->email;
-        } else {
-            $this->declarant->email =  $tiers->get('email');
-        }
-        $this->declarant->telephone =  $tiers->get('telephone');
         if ($compteValidateurId) {
             $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));
         }
+    }
+
+    public function devalidate(){
+        $this->remove('validee');
+        $this->remove('modifiee');
     }
     
     public function emailSended(){
@@ -609,7 +618,25 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
     
     public function storeDeclarant() {
+        $this->identifiant = $this->cvi;
         $this->declarant_document->storeDeclarant();
+
+        $tiers = $this->getEtablissement();
+
+        $this->declaration_commune = $tiers->declaration_commune;
+        $this->declaration_insee = $tiers->declaration_insee;
+
+        if(!$this->declarant->email) {
+            $this->declarant->email = $tiers->getCompteEmail();
+        }
+
+        $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
+        $this->declarant->exploitant->nom = $tiers->exploitant->nom;
+        $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
+        $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
+        $this->declarant->exploitant->commune = $tiers->exploitant->commune;
+        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
+        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
     }
     
     public function hasDateDepotMairie() {

@@ -32,7 +32,7 @@
     <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["revendique_sur_place"], true) ?></td>
     <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["usages_industriels_sur_place"], true) ?></td>
   <?php else: ?>
-    <td style="width: 400px; border: 1px solid black; text-align:center; font-weight: bold;"><i>Néant</i></td>
+    <td style="width: 400px; border: 1px solid black; text-align:center;"><i>Néant</i></td>
   <?php endif; ?>
 </tr>
 </table>
@@ -52,7 +52,7 @@
   <?php if($dr->recolte->exist('certification/genre/appellation_VINTABLE')): ?>
   <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->certification->genre->appellation_VINTABLE->getTotalCaveParticuliere(), true) ?></td>
   <?php else: ?>
-  <td style="width: 200px; border: 1px solid black; text-align:center; font-weight: bold;"><i>Néant</i></td>
+  <td style="width: 200px; border: 1px solid black; text-align:center;"><i>Néant</i></td>
   <?php endif; ?>
 </tr>
 </table>

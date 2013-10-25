@@ -47,7 +47,7 @@ class exportActions extends sfActions {
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
+            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
         } else {
             $dr = acCouchdbManager::getClient()->find($key);
         }
