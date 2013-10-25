@@ -41,7 +41,7 @@
                                 <div class="clear"></div>
 								<div class="contenu_section">
 									<div class="bloc_gris">
-										<table cellspacing="0" cellpadding="0" class="table_donnees">
+										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<tbody>
                                                 <?php if (count($form->getEmbeddedForms()) > 1): ?>
                                                 <tr>
@@ -91,7 +91,7 @@
                                 <div class="clear"></div>
                                 <div class="contenu_section">
                                     <div class="bloc_gris">
-                                        <table cellspacing="0" cellpadding="0" class="table_donnees">
+                                        <table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
                                             <tbody>
                                                 <?php if (count($form->getEmbeddedForms()) > 1): ?>
                                                 <tr>
@@ -145,7 +145,7 @@
                                     <?php endif; ?>
 									<div class="bloc_gris">
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
-										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees">
+										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<thead>
 												<tr>
 													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>

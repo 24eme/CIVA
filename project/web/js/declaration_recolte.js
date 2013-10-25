@@ -33,9 +33,9 @@ $(document).ready( function()
         });
     }
 
-    /*$('.table_donnees').ready( function() {
+    $('.table_donnees').ready( function() {
         initTablesDonnes();
-    });*/
+    });
 
     $('.gestion_recolte_donnees input').each(function(e)
     {
@@ -370,7 +370,7 @@ var formModificationCompte = function()
  ******************************************/
 var initTablesDonnes = function()
 {
-    var tables = $('table.table_donnees');
+    var tables = $('table.pyjama_auto');
 
     tables.each(function()
     {

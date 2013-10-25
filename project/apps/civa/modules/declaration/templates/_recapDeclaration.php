@@ -4,7 +4,7 @@
 
     <div id="appelations">
 
-        <table cellpadding="0" cellspacing="0" class="table_donnees">
+        <table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto">
             <thead>
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appellations" /></th>
@@ -142,7 +142,7 @@
         </ul>
     </div>
 	<div id="recap_autres">
-		<table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
+		<table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto autres_infos">
 			<thead>
 				<tr>
 					<th><img src="/images/textes/autres_infos.png" alt="Appellations" /></th>

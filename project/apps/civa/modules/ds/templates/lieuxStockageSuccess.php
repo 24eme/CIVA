@@ -34,7 +34,7 @@ $hasVolume = false;
         </div>
 	
 	<div id="lieux_stockage">
-		<table class="table_donnees">
+		<table class="table_donnees pyjama_auto">
 			<thead>
 				<tr>
                                     <th colspan="2">Lieux de stockage</th>
