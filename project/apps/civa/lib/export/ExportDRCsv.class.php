@@ -13,12 +13,14 @@
 class ExportDRCsv extends ExportCsv {
     
     protected $_headers = array(
+        "type" => "Type",
         "cvi_recoltant" => "CVI récoltant",
         "nom_recoltant" => "nom récoltant",
         "cvi_acheteur" => "CVI acheteur",
         "nom_acheteur" => "nom acheteur",
         "appellation" => "appellation",
         "lieu" => "lieu",
+        "couleur" => "couleur",
         "cepage" => "cépage",
         "vtsgn" => "vtsgn",
         "denomination" => "dénomination",
@@ -33,12 +35,14 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => "validateur",
     );
     protected $_validation_ligne = array(
-        "cvi_acheteur" => array("type" => "double"),
+        "type" => array("type" => "string"),
+        "cvi_acheteur" => array("type" => "string"),
         "nom_acheteur" => array("type" => "string"),
-        "cvi_recoltant" => array("type" => "double"),
+        "cvi_recoltant" => array("type" => "string"),
         "nom_recoltant" => array("type" => "string"),
         "appellation" => array("type" => "string"),
         "lieu" => array("type" => "string"),
+        "couleur" => array("type" => "string"),
         "cepage" => array("type" => "string"),
         "vtsgn" => array("type" => "string"),
         "denomination" => array("type" => "string"),
@@ -105,11 +109,27 @@ class ExportDRCsv extends ExportCsv {
                             }
                         }
                     }
+
+                    if(!$lieu->getConfig()->hasManyCouleur()) {
+                        continue;
+                    }
+
+                    $this->addNoeudTotal($couleur);
+                    foreach ($couleur->acheteurs as $acheteurs) {
+                        foreach ($acheteurs as $cvi_a => $acheteur) {
+                                $this->addNoeudAcheteur($couleur, $acheteur);
+                        }
+                    }
                 }
-                $this->addLieuTotal($lieu);
+
+                if($lieu->getConfig()->hasManyCouleur()) {
+                    continue;
+                }
+
+                $this->addNoeudTotal($lieu);
                 foreach ($lieu->acheteurs as $acheteurs) {
                     foreach ($acheteurs as $cvi_a => $acheteur) {
-                            $this->addLieuAcheteur($acheteur);
+                            $this->addNoeudAcheteur($lieu, $acheteur);
                     }
                 }
             }
@@ -125,7 +145,8 @@ class ExportDRCsv extends ExportCsv {
         $detail = $acheteur->getParent()->getParent();
         
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi." DETAIL ACHAT",
+            "type" => "ACHAT",
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
             "nom_acheteur" => acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi)->getNom(),
@@ -151,7 +172,8 @@ class ExportDRCsv extends ExportCsv {
         $denomination = "";
 
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi." DETAIL TOT",
+            "type" => "SUR PLACE",
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
@@ -172,56 +194,60 @@ class ExportDRCsv extends ExportCsv {
                 ), $this->_validation_ligne);
     }
 
-    protected function addLieuAcheteur(DRRecolteLieuAcheteur $acheteur) {
-        $lieu = $acheteur->getLieu();
+    protected function addNoeudAcheteur($noeud, $acheteur) {
         $this->add(array(
-            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi." LIEU ACHAT",
+            "type" => "ACHAT",
+            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
             "nom_acheteur" => $acheteur->getNom(),
-            "appellation" => $lieu->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => $lieu->getConfig()->getLibelle(),
+            "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
+            "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
+            "couleur" => ($noeud instanceof DRRecolteCouleur) ? $noeud->getConfig()->getLibelle() : null,
             "cepage" => "TOTAL",
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => $acheteur->superficie,
             "volume_livre/sur place" => $acheteur->getVolume(),
             "dont_dplc" => $acheteur->dontdplc,
-            "superficie_totale" => $lieu->getTotalSuperficie(),
-            "volume_total" => $lieu->getTotalVolume(),
-            "volume_a_detruire_total" => $lieu->getUsagesIndustriels(),
+            "superficie_totale" => $noeud->getTotalSuperficie(),
+            "volume_total" => $noeud->getTotalVolume(),
+            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
             "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $acheteur->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
                 ), $this->_validation_ligne);
     }
     
-    protected function addLieuTotal(DRRecolteLieu $lieu) {
+    protected function addNoeudTotal($noeud) {
         $this->add(array(
-            "cvi_recoltant" => $lieu->getCouchdbDocument()->cvi." LIEU TOT",
-            "nom_recoltant" => $lieu->getCouchdbDocument()->declarant->nom,
+            "type" => "SUR PLACE",
+            "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $noeud->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
-            "appellation" => $lieu->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => $lieu->getConfig()->getLibelle(),
+            "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
+            "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
+            "couleur" => ($noeud instanceof DRRecolteCouleur) ? $noeud->getConfig()->getLibelle() : null,
             "cepage" => "TOTAL",
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => null,
-            "volume_livre/sur place" => $lieu->getTotalCaveParticuliere(),
+            "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
             "dont_dplc" => null,
-            "superficie_totale" => $lieu->getTotalSuperficie(),
-            "volume_total" => $lieu->getTotalVolume(),
-            "volume_a_detruire_total" => $lieu->getUsagesIndustriels(),
+            "superficie_totale" => $noeud->getTotalSuperficie(),
+            "volume_total" => $noeud->getTotalVolume(),
+            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
             "creation_date" => $this->dr->getPremiereModificationDr(),
-            "validation_date" => $lieu->getCouchdbDocument()->validee,
-            "validation_user" => $this->getValidationUser($lieu->getCouchdbDocument()),
+            "validation_date" => $noeud->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
                 ), $this->_validation_ligne);
     }
     
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
-            "cvi_recoltant" => $dr->cvi." JEUNE VIGNES",
+            "type" => "JEUNES VIGNES",
+            "cvi_recoltant" => $dr->cvi,
             "nom_recoltant" => $dr->declarant->nom,
             "cvi_acheteur" => null,
             "nom_acheteur" => null,
