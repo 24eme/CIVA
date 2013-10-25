@@ -16,7 +16,7 @@ class acheteurActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeExploitationAcheteurs(sfWebRequest $request) {
-        $this->setCurrentEtape('exploitation_acheteurs');
+        $this->setCurrentEtape('repartition');
         $declaration = $this->getUser()->getDeclaration();
 
         $this->help_popup_action = "help_popup_exploitation_acheteur";

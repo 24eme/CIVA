@@ -33,16 +33,7 @@ class tiersActions extends EtapesActions {
 	    if (!$not_uniq) {
         $this->getUser()->signInTiers(array_values($tiers));
 
-        /*return $this->redirect("@mon_espace_civa");*/
-         
-        $dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
-        if($this->getUser()->hasCredential("recoltant") 
-               // && !$this->getUser()->isInDelegateMode() 
-                && is_null($dr) ){
-            return $this->redirect("notice_evolutions",array('campagne' => $this->getUser()->getCampagne()));
-        }else{
-            return $this->redirect("@mon_espace_civa");
-        }
+        return $this->redirect("@mon_espace_civa");
 	    }
     }
 
@@ -75,7 +66,7 @@ class tiersActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeExploitationAdministratif(sfWebRequest $request) {
-        $this->setCurrentEtape('exploitation_administratif');
+        $this->setCurrentEtape('exploitation');
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
         $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
@@ -97,17 +88,7 @@ class tiersActions extends EtapesActions {
             if ($request->getParameter('exploitation')) {
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
                 if ($this->form_expl->isValid()) {
-
                     $tiers = $this->form_expl->save();
-                    // $ldap = new ldap();
-
-                    if ($tiers) {
-                        /* $values['nom'] = $tiers->nom;
-                          $values['adresse'] = $tiers->siege->adresse;
-                          $values['code_postal'] = $tiers->siege->code_postal;
-                          $values['ville'] = $tiers->siege->commune; */
-                        //$ldap->ldapModify($this->getUser()->getTiers());
-                    }
                 } else {
                     $this->form_expl_err = 1;
                 }
@@ -116,12 +97,7 @@ class tiersActions extends EtapesActions {
                 $dr = $this->getUser()->getDeclaration();
                 $dr->storeDeclarant();
                 $dr->save();
-                $boutons = $this->getRequestParameter('boutons', null);
-            	if ($boutons && in_array('previous', array_keys($boutons))) {
-		            $this->redirect('@mon_espace_civa');
-		    	} else {
-                	$this->redirectByBoutonsEtapes();
-		    	}
+                $this->redirectByBoutonsEtapes();
             }
         }
     }
@@ -180,14 +156,4 @@ class tiersActions extends EtapesActions {
         $this->getUser()->signIn($login_current_user);
         $this->redirect('@mon_espace_civa');
     }
-
-
-    /**
-     *
-     * @param sfRequest $request A request object
-     */
-    public function executeNoticeEvolutions(sfWebRequest $request) {
-        $this->campagne = $request['campagne'];
-    }
-
 }

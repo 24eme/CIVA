@@ -154,13 +154,13 @@ EOF;
 		$json->intro_exploitation_lieu_txt_label_communale = "Ajoutez une Communale :";
                 
         $json->help_popup_DR_lieu_dit = "Vous avez coché une case \"AOC Alsace lieu-dit\" dans l'écran \"répartition de la récolte\". Vous devez renseigner ici le nom du ou des lieux-dits géographiques concernés";
-		$json->notice_evolutions_2013  = "<h2>Usages Industriels </h2>"
+		$json->dr_notice_evolutions = "<h2>Usages Industriels </h2>"
                         . "<p>Vous pouvez désormais choisir de saisir <u>par cépage</u> les volumes d’usages industriels soutirés (lies connues). Le système vous calculera automatiquement votre volume revendiqué. Si la totalité de la récolte est logée sur place, vous aurez ainsi directement votre volume de vin clair (sous réserve que tous les soutirages aient été effectués).</p>"
                         . "<p>Attention : si vous sélectionnez l’option «cépage»,  cela concernera toutes les appellations et la case « dont usages industriels » dans le <u>récapitulatif de l’appellation</u> ne sera plus accessible.</p>"
                         . "<p>Cependant si vous le souhaitez, il est toujours possible d’indiquer les usages industriels <u>globalement par appellation</u>.</p>"
-                        . "<p>Rendez vous dans l’onglet « répartition de la récolte », et pages 7,8,9  de la notice explicative que vous pouvez <b><a id='telecharger_notice_evolutions' href='#'>télécharger ici</a></b></p>"
+                        . "<p>Rendez vous dans l’onglet «&nbsp;répartition de la récolte&nbsp;», et pages 7,8,9  de la notice explicative que vous pouvez télécharger.&nbsp;&nbsp;&nbsp;<a href='/telecharger_la_notice' style='display:inline-block; height: 20px; float: none;' class='telecharger-btn'></a></p>"
                         . "<br/><h2>Autres nouveautés</h2>"
-                        . "<p>Pour vous faciliter l’inscription de votre récolte sur la DRM, vous trouverez en fin de saisie,  une annexe spécifique reprenant les données de votre récolte sur place, conformément aux colonnes de la DRM.</p>"
+                        . "<p>Pour vous faciliter l’inscription de votre récolte sur la DRM, vous trouverez en fin de saisie, une annexe spécifique reprenant les données de votre récolte sur place, conformément aux colonnes de la DRM.</p>"
                         . "<p>Vous pouvez désormais d’un simple clic, envoyer à votre (ou vos) acheteur ou cave coopérative, les données relatives à votre déclaration de récolte</p><br/>";
 
 		$json->help_popup_DR_recap_appellation_usage_industriel  = "A définir";

@@ -37,7 +37,7 @@ class declarationActions extends EtapesActions {
             } elseif ($dr_data['type_declaration'] == 'vierge') {
                 $doc = DRClient::getInstance()->createDeclaration($tiers, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
-                
+        
                 return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
                 $this->redirect('@visualisation_avant_import');
@@ -66,15 +66,18 @@ class declarationActions extends EtapesActions {
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_recolte.pdf", "aide recolte.pdf");
     }
 
-    protected function renderPdf($path, $filename) {
-        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
-        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
-        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
-        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
-        $this->getResponse()->setHttpHeader('Pragma', '');
-        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
-        $this->getResponse()->setHttpHeader('Expires', '0');
-        return $this->renderText(file_get_contents($path));
+    public function executeNoticeEvolutions(sfWebRequest $request) {
+        $this->setCurrentEtape('notice_evolutions');
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $boutons = $this->getRequestParameter('boutons', null);
+            if ($boutons && in_array('previous', array_keys($boutons))) {
+                
+                return $this->redirect('@mon_espace_civa'); 
+            }   
+            
+            return $this->redirectByBoutonsEtapes();
+        }
     }
 
     /**
@@ -375,6 +378,17 @@ Le CIVA';*/
 
     public function executeFeedBackConfirmation(sfWebRequest $request) {
 
+    }
+
+    protected function renderPdf($path, $filename) {
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path));
     }
     
 }
