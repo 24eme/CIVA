@@ -327,6 +327,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     /******* Acheteurs *******/
 
+    public function getDontDplcVendusMax() {
+
+        return round($this->getUsagesIndustriels() - $this->getLies(), 2);
+    }
+
     public function getTotalDontDplcVendus() {
         if(!$this->hasRecapitulatifVente()) {
             

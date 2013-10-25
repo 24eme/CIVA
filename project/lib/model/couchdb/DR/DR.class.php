@@ -532,6 +532,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $recap_is_ok = true;
 
+        if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
+            return;
+        }
+
         //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
         foreach($noeud->acheteurs as $type => $acheteurs) {
             foreach($acheteurs as $cvi => $acheteur) {
