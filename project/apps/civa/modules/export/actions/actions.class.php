@@ -64,7 +64,6 @@ class exportActions extends sfActions {
         }
 
         if(!$dr->isValideeCiva()) {
-            exit;
             $dr->cleanNoeuds();
             $dr->storeDeclarant();
         }
