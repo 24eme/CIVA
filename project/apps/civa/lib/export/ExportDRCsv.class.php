@@ -13,7 +13,6 @@
 class ExportDRCsv extends ExportCsv {
     
     protected $_headers = array(
-        "type" => "Type",
         "cvi_recoltant" => "CVI récoltant",
         "nom_recoltant" => "nom récoltant",
         "cvi_acheteur" => "CVI acheteur",
@@ -24,8 +23,9 @@ class ExportDRCsv extends ExportCsv {
         "cepage" => "cépage",
         "vtsgn" => "vtsgn",
         "denomination" => "dénomination",
-        "superficie_livree" => "superficie livrée",
-        "volume_livre/sur place" => "volume livré/sur place",
+        "destination" => "destination",
+        "superficie_livree" => "superficie",
+        "volume_livre/sur place" => "volume",
         "dont_dplc" => "dont volume à détruire",
         "superficie_totale" => "superficie totale",
         "volume_total" => "volume total",
@@ -35,7 +35,6 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => "validateur",
     );
     protected $_validation_ligne = array(
-        "type" => array("type" => "string"),
         "cvi_acheteur" => array("type" => "string"),
         "nom_acheteur" => array("type" => "string"),
         "cvi_recoltant" => array("type" => "string"),
@@ -46,6 +45,7 @@ class ExportDRCsv extends ExportCsv {
         "cepage" => array("type" => "string"),
         "vtsgn" => array("type" => "string"),
         "denomination" => array("type" => "string"),
+        "destination" => array("type" => "string"),
         "superficie_livree" => array("type" => "float", "format" => "%01.02f"),
         "volume_livre/sur place" => array("type" => "float", "format" => "%01.02f"),
         "dont_dplc" => array("type" => "float", "format" => "%01.02f"),
@@ -101,7 +101,9 @@ class ExportDRCsv extends ExportCsv {
                 foreach($lieu->getCouleurs() as $couleur) {
                     foreach ($couleur->getCepages() as $cepage) {
                         foreach ($cepage->getDetail() as $detail) {
-                            $this->addDetailTotal($detail);
+                            if($detail->cave_particuliere > 0) {
+                                $this->addDetailTotal($detail);
+                            }
                             foreach ($detail->filter('negoces|cooperatives') as $acheteurs) {
                                 foreach ($acheteurs as $acheteur) {
                                         $this->addDetailAcheteur($acheteur);
@@ -114,7 +116,9 @@ class ExportDRCsv extends ExportCsv {
                         continue;
                     }
 
-                    $this->addNoeudTotal($couleur);
+                    if($couleur->getTotalCaveParticuliere() > 0) {
+                        $this->addNoeudTotal($couleur);
+                    }
                     foreach ($couleur->acheteurs as $acheteurs) {
                         foreach ($acheteurs as $cvi_a => $acheteur) {
                                 $this->addNoeudAcheteur($couleur, $acheteur);
@@ -125,8 +129,9 @@ class ExportDRCsv extends ExportCsv {
                 if($lieu->getConfig()->hasManyCouleur()) {
                     continue;
                 }
-
-                $this->addNoeudTotal($lieu);
+                if($lieu->getTotalCaveParticuliere() > 0) {
+                    $this->addNoeudTotal($lieu);
+                }
                 foreach ($lieu->acheteurs as $acheteurs) {
                     foreach ($acheteurs as $cvi_a => $acheteur) {
                             $this->addNoeudAcheteur($lieu, $acheteur);
@@ -145,7 +150,6 @@ class ExportDRCsv extends ExportCsv {
         $detail = $acheteur->getParent()->getParent();
         
         $this->add(array(
-            "type" => "ACHAT",
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
@@ -156,6 +160,7 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
             "vtsgn" => $detail->vtsgn,
             "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
+            "destination" => "LIVRE",
             "superficie_livree" => (($detail->volume == $acheteur->quantite_vendue) ? $detail->superficie : null),
             "volume_livre/sur place" => $acheteur->quantite_vendue,
             "dont_dplc" => null,
@@ -173,7 +178,6 @@ class ExportDRCsv extends ExportCsv {
         $denomination = "";
 
         $this->add(array(
-            "type" => "SUR PLACE",
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
@@ -184,6 +188,7 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
             "vtsgn" => $detail->vtsgn,
             "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
+            "destination" => "SUR PLACE",
             "superficie_livree" => null,
             "volume_livre/sur place" => $detail->getTotalCaveParticuliere(),
             "dont_dplc" => null,
@@ -198,7 +203,6 @@ class ExportDRCsv extends ExportCsv {
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
         $this->add(array(
-            "type" => "ACHAT",
             "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
@@ -209,6 +213,7 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => "TOTAL",
             "vtsgn" => null,
             "denomination" => null,
+            "destination" => "LIVRE",
             "superficie_livree" => $acheteur->superficie,
             "volume_livre/sur place" => $acheteur->getVolume(),
             "dont_dplc" => $acheteur->dontdplc,
@@ -223,7 +228,6 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addNoeudTotal($noeud) {
         $this->add(array(
-            "type" => "SUR PLACE",
             "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
             "nom_recoltant" => $noeud->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => null,
@@ -234,6 +238,7 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => "TOTAL",
             "vtsgn" => null,
             "denomination" => null,
+            "destination" => "SUR PLACE",
             "superficie_livree" => null,
             "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
             "dont_dplc" => null,
@@ -248,7 +253,6 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
-            "type" => "JEUNES VIGNES",
             "cvi_recoltant" => $dr->cvi,
             "nom_recoltant" => $dr->declarant->nom,
             "cvi_acheteur" => null,
@@ -259,6 +263,7 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => null,
             "vtsgn" => null,
             "denomination" => null,
+            "destination" => "SUR PLACE",
             "superficie_livree" => null,
             "volume_livre/sur place" => null,
             "dont_dplc" => null,
