@@ -62,6 +62,13 @@ class exportActions extends sfActions {
             $dr->cleanNoeuds();
             $dr->save();
         }
+
+        if(!$dr->isValideeCiva()) {
+            exit;
+            $dr->cleanNoeuds();
+            $dr->storeDeclarant();
+        }
+
         $this->forward404Unless($dr);
 
         $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
