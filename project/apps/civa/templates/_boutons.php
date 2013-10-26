@@ -19,9 +19,8 @@
     <?php endif; ?>
     <?php if(in_array('email', $display->getRawValue())): ?>
     <li id="email-visualisation">
-        <a href="#" id="btn-email"></a><a href="#" id="btn-email-acheteur"></a>
+        <a href="#" id="btn-email"></a>
+        <!--<a href="#" id="btn-email-acheteur"></a>-->
     </li>
     <?php endif; ?>
-
-
 </ul>
