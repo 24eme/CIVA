@@ -7,7 +7,7 @@
 <?php endif; ?>
 <div id="application_dr" class="clearfix">
 
-        <?php //include_component('vrac', 'monEspace') ?>
+        <?php include_component('vrac', 'monEspace') ?>
         
         <?php 
         if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
