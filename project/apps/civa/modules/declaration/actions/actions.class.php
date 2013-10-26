@@ -233,6 +233,7 @@ Le CIVA';
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
+        $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
