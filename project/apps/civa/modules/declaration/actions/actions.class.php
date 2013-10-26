@@ -194,7 +194,7 @@ Le CIVA';
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
         $this->getUser()->getAttributeHolder()->remove('log_vigilance');
 
-        $this->getUser()->setFlash('flash_message', $flash_messages[$id]['log']);
+        $this->getUser()->setFlash('flash_message', $flash_messages[$id]['info']);
         $this->redirect($flash_messages[$id]['url_log']);
     }
 

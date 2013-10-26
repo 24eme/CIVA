@@ -126,10 +126,8 @@
             <li>
                 <?php if($has_no_usages_industriels): ?>
                     <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
-                <?php elseif($total_usages_industriels != 0): ?>
-                    <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
                 <?php else: ?>
-                    <input type="text" value="" readonly="readonly">
+                    <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
                 <?php endif; ?>
             </li>
             <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
