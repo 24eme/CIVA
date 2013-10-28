@@ -19,14 +19,13 @@ class declarationActions extends EtapesActions {
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
                 $dr = $this->getUser()->getDeclaration();
-                if($dr->etape) {
-                    try {
+                try {
+                    if($dr->etape) {
                         return $this->redirectToEtape($dr->etape);
-                    } catch (Exception $e) {
-
                     }
+                } catch (Exception $e) {
+
                 }
-                
                 return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
