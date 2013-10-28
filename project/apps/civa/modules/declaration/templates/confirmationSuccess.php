@@ -14,9 +14,8 @@
             <h2 class="titre_section">Confirmation</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre déclaration de récoltes a bien été enregistrée au CIVA.</p>
-                    <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation.<br /><br /></p>
-                    <p>Tous les éléments renseignés sont disponibles dans votre espace CIVA.</p>
+                    <p class="important">Votre déclaration de récolte a bien été enregistrée au CIVA.</p>
+                    <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de récolte au format PDF et en format Tableur.</p>
                 </div>
                 <?php if($has_import && $dr->declaration->getTotalVolumeVendus() > 0): ?>
                 <div id="div-btn-email">

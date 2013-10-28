@@ -95,9 +95,6 @@ class DRClient extends acCouchdbClient {
           $acheteur->cvi = $acheteur_cvi;
           $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
         }
-        if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
-          $detail->volume_dplc += $this->recodeNumber($line[CsvFile::CSV_VOLUME_DPLC]);
-        }
     }
     $doc->utilisateurs->edition->add('csv', date('d/m/Y'));
     $doc->update();
