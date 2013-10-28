@@ -33,9 +33,9 @@ $(document).ready( function()
         });
     }
 
-    /*$('.table_donnees').ready( function() {
+    $('.table_donnees').ready( function() {
         initTablesDonnes();
-    });*/
+    });
 
     $('.gestion_recolte_donnees input').each(function(e)
     {
@@ -370,7 +370,7 @@ var formModificationCompte = function()
  ******************************************/
 var initTablesDonnes = function()
 {
-    var tables = $('table.table_donnees');
+    var tables = $('table.pyjama_auto');
 
     tables.each(function()
     {
@@ -930,15 +930,19 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_dplc').val(parseFloat($(elementCssId+'_total_dplc_sum').val().replace('Σ ', '')));
     }
 
-
-
     if(parseFloat($(elementCssId+'_volume_dplc').val()) > parseFloat($(elementCssId+'_lies').val())) {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val()); 
     } else {
         $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val()); 
     }
 
-    $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_usages_industriels').val()));
+    var usages_industriels = 0;
+
+    if($(elementCssId+'_usages_industriels').val()) {
+        usages_industriels = $(elementCssId+'_usages_industriels').val();
+    }
+
+    $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - parseFloat(usages_industriels));
 };
 
 var addClassAlerteIfNeeded = function (inputObj, condition, css_class)
@@ -975,6 +979,15 @@ var volumeOnChange = function(input) {
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
     updateElementRows($('input.total'), $('#cepage_total_volume'));
     updateElementRows($('input.lies'), $('#cepage_lies'));
+
+    if(!parseFloat($('input.cave').val()) > 0) {
+       $('input.lies').val("");
+       $('input.lies').addClass("readonly");
+       $('input.lies').attr("readonly", "readonly");
+    } else {
+       $('input.lies').removeClass("readonly");
+       $('input.lies').removeAttr("readonly");
+    }
 
     if ($('#cepage_rendement').val() == -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_volume').val()));

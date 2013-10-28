@@ -550,6 +550,7 @@ Acheteur:
       declaration_insee: {  }
       declaration_commune: {  }
       achnum: { required: false }
+      acheteur_dr: { type: float }
 
 Current:
   definition:

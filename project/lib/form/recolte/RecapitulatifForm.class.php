@@ -11,7 +11,7 @@ class RecapitulatifForm extends acCouchdbObjectForm {
     public function configure() {
         $object = $this->getObject();
         $this->is_lies_saisisable = false;
-        if($object->canHaveUsagesLiesSaisi() && $object->getConfig()->existRendement()){
+        if($object->canHaveUsagesLiesSaisi() && $object->getConfig()->existRendement() && $this->getObject()->getTotalCaveParticuliere() > 0){
             $this->setWidgets(array(
                 'lies' => new sfWidgetFormInputFloat(array()),
             ));

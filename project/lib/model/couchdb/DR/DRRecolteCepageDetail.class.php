@@ -158,7 +158,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return str_replace(' ', '', $this->_get('vtsgn'));
     }
 
-
     protected function update($params = array()) {
         parent::update($params);
         if (!$this->getCouchdbDocument()->canUpdate())
@@ -169,10 +168,14 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $v += $this->getSumAcheteur('mouts');
 
         $this->volume = $v;
-        $this->volume_revendique = null;
         $this->volume_dplc = null;
-        $this->lies = $this->getLies(true);
-        $this->usages_industriels = null;
+        if(!$this->cave_particuliere > 0) {
+            $this->lies = null;
+        } else {
+            $this->lies = $this->getLies(true);
+        }
+        $this->usages_industriels = $this->lies;
+        $this->volume_revendique = $this->volume - $this->usages_industriels;
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');

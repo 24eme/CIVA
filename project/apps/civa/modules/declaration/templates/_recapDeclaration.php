@@ -4,7 +4,7 @@
 
     <div id="appelations">
 
-        <table cellpadding="0" cellspacing="0" class="table_donnees">
+        <table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto">
             <thead>
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appellations" /></th>
@@ -126,10 +126,8 @@
             <li>
                 <?php if($has_no_usages_industriels): ?>
                     <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
-                <?php elseif($total_usages_industriels != 0): ?>
-                    <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
                 <?php else: ?>
-                    <input type="text" value="" readonly="readonly">
+                    <input type="text" value="<?php echoFloat($total_usages_industriels);?>" readonly="readonly">
                 <?php endif; ?>
             </li>
             <?php if(isset($total_usages_industriels_sur_place) && !$has_no_usages_industriels): ?>
@@ -142,7 +140,7 @@
         </ul>
     </div>
 	<div id="recap_autres">
-		<table cellpadding="0" cellspacing="0" class="table_donnees autres_infos">
+		<table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto autres_infos">
 			<thead>
 				<tr>
 					<th><img src="/images/textes/autres_infos.png" alt="Appellations" /></th>

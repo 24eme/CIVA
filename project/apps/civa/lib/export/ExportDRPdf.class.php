@@ -9,27 +9,25 @@ class ExportDRPdf extends ExportDocument {
     protected $no_cache;
     protected $filename;
     protected $dr;
-    protected $tiers;
 
-    public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($dr, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
         $this->dr = $dr;
-        $this->tiers = $tiers;
 
-        $this->init($dr, $tiers, $filename);
+        $this->init($dr, $filename);
     }
 
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
-          $this->create($this->dr, $this->tiers);
+          $this->create($this->dr);
         }
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($dr, $tiers, $filename = null) {
+    protected function init($dr, $filename = null) {
         $validee = 'Non Validée';
         if ($dr->exist('validee')) {
             if($dr->hasDateDepotMairie()){
@@ -43,7 +41,7 @@ class ExportDRPdf extends ExportDocument {
         }
         
         $title = 'Déclaration de récolte '.$dr->campagne;
-        $header = $dr->declarant->intitule.' '.$dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
+        $header = $dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
@@ -75,7 +73,7 @@ class ExportDRPdf extends ExportDocument {
       return $filename.'.pdf';
     }
 
-    protected function create($dr, $tiers) {
+    protected function create($dr) {
         
           foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
@@ -84,7 +82,7 @@ class ExportDRPdf extends ExportDocument {
                   if (!$appellation->getLieux()->exist($lieu->getKey()))
                     continue;
                   $lieu = $appellation->getLieux()->get($lieu->getKey());
-                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
+                  $this->createAppellationLieu($lieu, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
                 }
             }
           }
@@ -123,7 +121,6 @@ class ExportDRPdf extends ExportDocument {
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
               'total_volume_rebeches' => $infos['total_volume_rebeches'],
               'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
-                            
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
@@ -138,12 +135,12 @@ class ExportDRPdf extends ExportDocument {
     				$has_total = true;
     			else 
     				$has_total = false;
-    			$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+    			$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
     			$currentPage++;
     		}
           	
           } else {
-          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+          	$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
           if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatidCouleur()) {
             $this->createRecap($dr);
@@ -180,7 +177,6 @@ class ExportDRPdf extends ExportDocument {
         $volume_sur_place = array();
         $volume_rebeches = array();
         $volume_rebeches_sur_place = array();
-        $volume_total_rebeches = array();
         $revendique = array();
         $revendique_sur_place = array();
         $usages_industriels = array();
@@ -270,7 +266,7 @@ class ExportDRPdf extends ExportDocument {
         return $infos;
     }
     
-	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable, $hasVTSGN) {
+	private function createAppellationLieu($lieu, $hasLieuEditable, $hasVTSGN) {
       $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
     	$colonnes = array();
     	$afterTotal = array();
@@ -294,8 +290,9 @@ class ExportDRPdf extends ExportDocument {
   					$c['denomination'] = $detail->denomination;
   					$c['vtsgn'] = $detail->vtsgn;
   					$c['superficie'] = $detail->superficie;
-  					$c['volume'] = $detail->volume;
+            $c['volume'] = $detail->volume;
             if($detail->canHaveUsagesLiesSaisi()) {
+              $c['revendique'] = $detail->volume_revendique;
               $c['usages_industriels'] = $detail->lies;
             }
   					if ($hasLieuEditable)
@@ -433,7 +430,7 @@ class ExportDRPdf extends ExportDocument {
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
+	      $this->document->addPage($this->getPartial('export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
 	      $identification_enabled = 0;
 	    }
   	}

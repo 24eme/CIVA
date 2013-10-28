@@ -112,6 +112,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getDataByFieldAndMethod('lies', array($this, 'getSumNoeudWithMethod'), $force_calcul, array('getLies') );
         }
 
+        if(!$this->getTotalCaveParticuliere() > 0) {
+            
+            return 0;
+        }
+
         return $this->_get('lies') ? $this->_get('lies') : 0;
     }
 
@@ -321,6 +326,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     /******* Acheteurs *******/
+
+    public function getDontDplcVendusMax() {
+
+        return round($this->getUsagesIndustriels() - $this->getLies(), 2);
+    }
 
     public function getTotalDontDplcVendus() {
         if(!$this->hasRecapitulatifVente()) {

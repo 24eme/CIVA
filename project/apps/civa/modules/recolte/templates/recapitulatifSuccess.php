@@ -41,7 +41,7 @@
                                 <div class="clear"></div>
 								<div class="contenu_section">
 									<div class="bloc_gris">
-										<table cellspacing="0" cellpadding="0" class="table_donnees">
+										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<tbody>
                                                 <?php if (count($form->getEmbeddedForms()) > 1): ?>
                                                 <tr>
@@ -91,7 +91,7 @@
                                 <div class="clear"></div>
                                 <div class="contenu_section">
                                     <div class="bloc_gris">
-                                        <table cellspacing="0" cellpadding="0" class="table_donnees">
+                                        <table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
                                             <tbody>
                                                 <?php if (count($form->getEmbeddedForms()) > 1): ?>
                                                 <tr>
@@ -108,15 +108,17 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usage_industriel_saisie" title="Message aide"></a></td>
+                                                    <td>Dont usages industriels saisis <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels_saisies" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur saisi">
-                                                                <?php if(isset($form[$key]['lies'])): ?>
-                                                                    <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
-                                                                <?php else: ?>
-                                                                    <input type="text" readonly="readonly" class="num readonly recapitulatif_lies" value="<?php echoFloat($form_item->getObject()->lies) ?>" />
-                                                                <?php endif; ?>
-                                                        </td>
+                                                        <?php if(isset($form[$key]['lies'])): ?>
+                                                            <td class="valeur saisi">
+                                                                <?php echo $form[$key]['lies']->render(array('class' => 'num recapitulatif_lies')) ?>
+                                                            </td>
+                                                        <?php else: ?>
+                                                            <td class="valeur">
+                                                                <?php echoFloat($form_item->getObject()->getLies()) ?>
+                                                            </td>
+                                                            <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
@@ -145,7 +147,7 @@
                                     <?php endif; ?>
 									<div class="bloc_gris">
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
-										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees">
+										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<thead>
 												<tr>
 													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
@@ -238,7 +240,7 @@
 
                                     <?php if($form_item->getObject()->acheteurs->count() > 0 && $form_item->getObject()->getConfig()->existRendement()): ?>
                                     var total_superficie = <?php echoFloat( $form_item->getObject()->getTotalSuperficie()); ?>;
-                                    var total_dontdplc = <?php echoFloat( $form_item->getObject()->getDplc()); ?>;
+                                    var total_dontdplc = <?php echoFloat($form_item->getObject()->getUsagesIndustriels()- $form_item->getObject()->getLies()); ?>;
                                     var sum_superficie = 0;
                                     var sum_dont_dplc = 0;
                                     $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {

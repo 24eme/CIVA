@@ -7,19 +7,44 @@ class DRClient extends acCouchdbClient {
     return acCouchdbManager::getClient('DR');
   }
 
-  public function createFromCSVRecoltant($campagne, $tiers, &$import) {
+  public function createDeclaration($tiers, $campagne, $depot_mairie = false) {
+    $doc = new DR();
+    $doc->campagne = $campagne;
+    $doc->cvi = $tiers->cvi;
+    $this->initDeclaration($doc, $depot_mairie);
+
+    return $doc;
+  }
+
+  public function createDeclarationClone($dr, $campagne, $depot_mairie) {
+    $doc = clone $dr;
+    $doc->campagne = $campagne;
+    $this->initDeclaration($doc, $depot_mairie);
+    $doc->devalidate();
+    $doc->removeVolumes();
+    $doc->remove('etape');
+    $doc->remove('utilisateurs');
+    $doc->remove('import_db2');
+    $doc->update();
+
+    return $doc;
+  }
+
+  protected function initDeclaration($doc, $depot_mairie = false) {
+    $doc->constructId();
+    $doc->storeDeclarant();
+    if($depot_mairie){
+      $doc->add('date_depot_mairie',date('Y').'-12-10');                    
+    }
+  }
+
+  public function createFromCSVRecoltant($campagne, $tiers, &$import, $depot_mairie = false) {
     $csvs = acCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
-    $doc = new DR();
-    $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $campagne);
-    $doc->cvi = $tiers->cvi;
-    $doc->campagne = $campagne;
-    $doc->declaration_insee = $tiers->declaration_insee;
-    $doc->declaration_commune = $tiers->declaration_commune;
-    $doc->identifiant = $tiers->cvi;
-    $doc->storeDeclarant();
+    
+    $doc = $this->createDeclaration($tiers, $campagne, $depot_mairie);
 
     foreach ($csvs as $csv) {
           $acheteur_cvi = $csv->cvi;
@@ -69,9 +94,6 @@ class DRClient extends acCouchdbClient {
             $acheteur = $acheteurs->add();
           $acheteur->cvi = $acheteur_cvi;
           $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
-        }
-        if (isset($line[CsvFile::CSV_VOLUME_DPLC]))
-          $detail->volume_dplc += $this->recodeNumber($line[CsvFile::CSV_VOLUME_DPLC]);
         }
     }
     $doc->utilisateurs->edition->add('csv', date('d/m/Y'));

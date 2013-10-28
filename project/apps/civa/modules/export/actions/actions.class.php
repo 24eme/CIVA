@@ -47,7 +47,7 @@ class exportActions extends sfActions {
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
+            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
         } else {
             $dr = acCouchdbManager::getClient()->find($key);
         }
@@ -62,9 +62,15 @@ class exportActions extends sfActions {
             $dr->cleanNoeuds();
             $dr->save();
         }
+
+        if(!$dr->isValideeCiva()) {
+            $dr->cleanNoeuds();
+            $dr->storeDeclarant();
+        }
+
         $this->forward404Unless($dr);
 
-        $this->document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
         if($request->getParameter('force')) {
             $this->document->removeCache();

@@ -1,6 +1,6 @@
 function(doc) { 
     if (doc['type'] == 'Acheteur') { 
-        if (doc.statut == 'INACTIF') {
+        if (!doc.acheteur_dr) {
 
             return;
         }

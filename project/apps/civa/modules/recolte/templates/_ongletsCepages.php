@@ -23,5 +23,5 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
     <!--<li class="alerte"><a href="#">Rebêche <span></span></a></li>-->
-    <li class="recapitulatif <?php if ($recapitulatif): ?> ui-tabs-selected<?php endif; ?>" ><a href="<?php echo url_for($onglets->getUrlRecap()->getRawValue()) ?>">Recapitulatif des sorties<span></span></a></li>
+    <li class="recapitulatif <?php if ($recapitulatif): ?> ui-tabs-selected<?php endif; ?>" ><a href="<?php echo url_for($onglets->getUrlRecap()->getRawValue()) ?>">Récap. des<br />Ventes&nbsp;et<br />Us.&nbsp;industriels<span></span></a></li>
 </ul>

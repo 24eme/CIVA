@@ -204,9 +204,9 @@ migration_compte:
   url: /migration_compte
   param: { module: tiers, action: migrationCompte}
 
-notice_evolutions:
-  url: /notice_evolutions/:campagne
-  param: { module: tiers, action: noticeEvolutions}
+dr_notice_evolutions:
+  url: /notice_evolutions
+  param: { module: declaration, action: noticeEvolutions}
 # *********** DECLARATION ***********
 
 declaration_init:
@@ -259,7 +259,7 @@ admin_gamma:
   param: { module: admin, action: gamma }
 
 delegate_mode_retour_espace_civa:
-   url : /tiers/retour_mon_espace
+   url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }
 
 # *********** EXPLOITATION ***********
