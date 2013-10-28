@@ -144,7 +144,8 @@ Le CIVA';
 
 Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
     
-Vous trouverez ci-joint votre déclaration de récolte et vous pouvez la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.\n\n
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
 Cordialement,
 
