@@ -135,6 +135,9 @@ class declarationActions extends EtapesActions {
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
 	        $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+            if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+                $this->add('en_attente_envoi', true);
+            }
 	        $this->dr->save();
 	        $this->getUser()->initCredentialsDeclaration();
 
