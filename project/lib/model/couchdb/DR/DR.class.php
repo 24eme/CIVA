@@ -228,9 +228,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', date('Y-m-d'));
-            if(!$this->hasDateDepotMairie()){
-                $this->add('en_attente_envoi', true);
-            }
         }
         if ($compteValidateurId) {
             $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));

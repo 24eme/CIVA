@@ -135,30 +135,11 @@ class declarationActions extends EtapesActions {
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
 	        $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+            if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+                $this->dr->add('en_attente_envoi', true);
+            }
 	        $this->dr->save();
 	        $this->getUser()->initCredentialsDeclaration();
-	      
-	        $mess = 'Bonjour ' . $tiers->nom . ',
-
-Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
-
-Cordialement,
-
-Le CIVA';
-
-                //send email
-
-            $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-                                                       $this->getUser()->getCompte()->email,
-                                                       'CIVA - Validation de votre déclaration de récolte', $mess);
-                
-            if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
-                try {
-                    $this->getMailer()->send($message);
-                } catch (Exception $e) {
-                    $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé, veuillez contacter CIVA');
-                }
-            }
 
             return $this->redirectByBoutonsEtapes();
         }
@@ -233,6 +214,7 @@ Le CIVA';
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
+        $this->dr = $this->getUser()->getDeclaration();
         $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
