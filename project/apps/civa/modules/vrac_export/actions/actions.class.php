@@ -20,7 +20,7 @@ class vrac_exportActions extends sfActions
       $this->vrac->declaration->cleanAllNodes();
       $this->setLayout(false);
 
-      $this->document = new ExportVracPdf($this->vrac, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      $this->document = new ExportVracPdf($this->vrac, array($this, 'getPartial'), $this->getRequestParameter('output', 'html'));
       
       if($request->getParameter('force')) {
         $this->document->removeCache();
