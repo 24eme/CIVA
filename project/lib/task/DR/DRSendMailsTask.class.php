@@ -17,12 +17,11 @@ class DRSendMailsTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
         ));
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
         ));
 
@@ -43,11 +42,11 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
         
-        $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findByCampagne($arguments['campagne']);
+        $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll($arguments['campagne']);
         foreach ($drs_to_send_mail as $dr_result) {
             $dr = acCouchdbManager::getClient("DR")->find($dr_result->id);        
             $tiers = acCouchdbManager::getClient("Recoltant")->retrieveByCvi($dr->cvi);
-            $annee = $arguments['campagne'];
+            $annee = $dr->campagne;
             $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
             $this->mailerManager->sendMail(false);
             $dr->emailSended();

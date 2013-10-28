@@ -22,10 +22,8 @@ class DRAttenteEnvoiMailView extends acCouchdbView
         return acCouchdbManager::getView('DR', 'AttenteEnvoiMail', 'Dr');
     }
     
-    public function findByCampagne($campagne) 
+    public function findAll($campagne) 
     {
-    	return $this->client->startkey(array($campagne))
-                            ->endkey(array($campagne,array()))
-                            ->getView($this->design, $this->view)->rows;
+    	return $this->client->getView($this->design, $this->view)->rows;
     }
 }  
