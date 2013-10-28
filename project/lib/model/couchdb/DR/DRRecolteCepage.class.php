@@ -114,6 +114,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return false;
     }
 
+    public function canCalculSuperficieSurPlace() {
+
+      return true;
+    }
+
     public function canCalculVolumeRevendiqueSurPlace() {
 
       return true;

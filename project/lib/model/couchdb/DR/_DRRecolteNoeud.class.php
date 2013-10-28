@@ -81,6 +81,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
     }
 
+    public function getSuperficieCaveParticuliere() {
+
+        return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
+    }
+
     public function getVolumeRevendiqueCaveParticuliere() {
 
         return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere(), 2);
@@ -325,6 +330,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return true;
     }
 
+    public function canCalculSuperficieSurPlace() {
+        if(!$this->hasCompleteRecapitulatifVenteSuperficie()) {
+
+            return false;
+        }
+        foreach($this->getChildrenNode() as $item) {
+            if(!$item->canCalculSuperficieSurPlace()) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /******* Acheteurs *******/
 
     public function getDontDplcVendusMax() {
@@ -339,6 +359,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
 
         return $this->getTotalDontDplcRecapitulatifVente();
+    }
+
+    public function getTotalSuperficieVendus() {
+        if(!$this->hasRecapitulatifVente()) {
+            
+            return $this->getDataByFieldAndMethod('total_superficie_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalSuperficieVendus'));
+        }
+
+        return $this->getTotalSuperficieRecapitulatifVente();
     }
 
      public function getTotalSuperficieVendusByCvi($type, $cvi) {
