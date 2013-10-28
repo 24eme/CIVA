@@ -18,7 +18,7 @@
 	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
 	<li>E-mail : <strong><?php echo $tiers->email ?></strong></li>
 	<?php if (isset($date_validation) && $date_validation): ?>
-	<li>Validé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
+	<li>Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php endif; ?>
 </ul>
 </div>

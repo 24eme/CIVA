@@ -2,6 +2,7 @@
 
 <ul>
 	<li>Nom : <strong><?php echo $tiers->nom ?></strong></li>
+	<li>Cvi : <strong><?php echo $tiers->cvi ?></strong></li>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
 	<li>Fax : <strong><?php echo $tiers->fax ?></strong></li>

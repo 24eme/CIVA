@@ -1,6 +1,11 @@
 <?php use_helper('Float') ?>
 <?php use_helper('Date') ?>
 <?php  use_helper('vracExport'); ?>
+<html class="no-js">
+	<head>
+	
+	</head>
+	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
 <span style="display: block; background-color: black; color: white; font-weight: bold; text-align: center; padding: 5px; width: 220px;">&nbsp;<?php echo "TRANSACTIONS EN VRAC"; ?>&nbsp;</span>
@@ -123,4 +128,5 @@
 		<td style="text-align: left; width: 600px; border: none; font-size:20px;"><?php echo getLastSentence(); ?></td>
 	</tr>
 </table>
-
+</body>
+</html>
