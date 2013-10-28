@@ -21,7 +21,7 @@
 		<th style="font-weight: bold; text-align: center; border: 1px solid black;">Prix* de l'hectolitre <small>(en &euro;/HL)</small></th>
 		<th style="font-weight: bold; text-align: center; border: 1px solid black;">VOLUME estimé<br/><small>(en HL)</small></th>
 		<?php if ($vrac->isCloture()): ?>
-			<th style="width: 77px; font-weight: bold; text-align: center; border: 1px solid black;">VOLUME réel<br/><small>(en HL)</small></th>
+			<th style="font-weight: bold; text-align: center; border: 1px solid black;">VOLUME réel<br/><small>(en HL)</small></th>
 		<?php endif; ?>
 	</tr>
 	<?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
