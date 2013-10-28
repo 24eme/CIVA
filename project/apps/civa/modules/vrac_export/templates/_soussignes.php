@@ -3,9 +3,11 @@
 <br/>
 <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: collapse;">
 	<tr>
-		<td width="50%" valign="top" style="padding-right: 10px;">
-			<span style="display:block; background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center; width: 120px;">&nbsp;VENDEUR&nbsp;</span>
-			<table cellpadding="5" cellspacing="0" border="0" width="100%" style="border: 1px solid grey;">
+		<td width="50%" valign="top" style="border: 1px solid #000;">
+			<table cellpadding="5" cellspacing="0" border="0" width="100%">
+				<tr>
+					<th colspan="2" style="background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center;">&nbsp;VENDEUR&nbsp;</th>
+				</tr>
 				<tr>
 					<td valign="top" width="100px">Raison Sociale :</td>
 					<td><i><?php echo truncate_text($vrac->vendeur->raison_sociale); ?></i></td>
@@ -36,9 +38,11 @@
 				</tr>
 			</table>
 		</td>
-		<td width="50%" valign="top">
-			<span style="display: block; background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center; width: 120px;">&nbsp;ACHETEUR&nbsp;</span>
-			<table cellpadding="5" cellspacing="0" width="100%" style="border: 1px solid grey;">
+		<td width="50%" valign="top" style="border: 1px solid #000;">
+			<table cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<th colspan="2" style="background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center;">&nbsp;ACHETEUR&nbsp;</th>
+				</tr>
 				<tr>
 					<td valign="top" width="100px">Raison Sociale :</td>
 					<td><i><?php echo $vrac->acheteur->raison_sociale; ?></i></td>
@@ -75,8 +79,10 @@
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>
 		<td width="100%">
-			<span style="display: block; background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center; width: 120px;">&nbsp;COURTIER&nbsp;</span>
-			<table cellpadding="5" cellspacing="0" width="100%" style="border: 1px solid grey;">
+			<table cellpadding="5" cellspacing="0" width="100%" style="border: 1px solid #000;">
+				<tr>
+					<th colspan="4" style="background-color: grey; color: white; font-weight: bold; padding: 5px; text-align: center;">&nbsp;COURTIER&nbsp;</th>
+				</tr>
 				<tr>
 					<td valign="top" width="100px">Raison Sociale :</td>
 					<td><i><?php echo $vrac->mandataire->raison_sociale; ?></i></td> 
