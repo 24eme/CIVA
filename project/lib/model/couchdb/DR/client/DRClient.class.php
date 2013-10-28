@@ -81,19 +81,20 @@ class DRClient extends acCouchdbClient {
           $detail->denomination = 'repli';
           $detail->add('motif_non_recolte', 'AE');
         }
-        if($this->recodeNumber($line[CsvFile::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]) > 0)
-        {
-          $acheteurs = $detail->add($acheteur_obj->getAcheteurDRType());
-          $acheteur = null;
-          foreach ($acheteurs as $a) {
-            if ($a->cvi == $acheteur_cvi)
-                $acheteur = $a;
-                break;
+          if($this->recodeNumber($line[CsvFile::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]) > 0)
+          {
+            $acheteurs = $detail->add($acheteur_obj->getAcheteurDRType());
+            $acheteur = null;
+            foreach ($acheteurs as $a) {
+              if ($a->cvi == $acheteur_cvi)
+                  $acheteur = $a;
+                  break;
+            }
+            if (!$acheteur)
+              $acheteur = $acheteurs->add();
+            $acheteur->cvi = $acheteur_cvi;
+            $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
           }
-          if (!$acheteur)
-            $acheteur = $acheteurs->add();
-          $acheteur->cvi = $acheteur_cvi;
-          $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
         }
     }
     $doc->utilisateurs->edition->add('csv', date('d/m/Y'));
