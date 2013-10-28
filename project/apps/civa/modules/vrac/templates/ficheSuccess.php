@@ -60,7 +60,7 @@
 			<td>
 				<?php if (!$vrac->isValide()): ?>
 					<?php if ($vrac->hasValide($user->_id)): ?>
-						<p>Vous avez validé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
+						<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 					<?php else: ?>
 						<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
 							<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
@@ -70,7 +70,7 @@
 				<?php if ($form): ?>
 					<input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider vos enlèvements" />
 				<?php endif; ?>
-				<?php if($vrac->isCloture()): ?>
+				<?php if(!$form && $vrac->isCloture()): ?>
 					<p>Contrat en vrac numéro <?php echo $vrac->numero_archive ?> cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 			</td>

@@ -1,6 +1,11 @@
 <?php use_helper('Float') ?>
 <?php use_helper('Date') ?>
 <?php  use_helper('vracExport'); ?>
+<html class="no-js">
+	<head>
+	
+	</head>
+	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
 <table border="0" cellspacing="0" cellpadding="5" width="100%" style="text-align: right; border-collapse: collapse;">
@@ -32,7 +37,7 @@
 	<tr>
 			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></td>
 			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left;">&nbsp;<?php echo $detailLine->getCepage()->getLibelle(); ?></td>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo $detailLine->getDenomination(); ?> <?php echo $detailLine->getLieuDit(); ?> <?php echo $detailLine->getVtsgn(); ?></td>
+			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo $detailLine->getLieuLibelle(); ?> <?php echo $detailLine->getLieuDit(); ?> <?php echo $detailLine->getVtsgn(); ?> <?php echo $detailLine->getDenomination(); ?></td>
 			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
 			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
 			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
@@ -129,4 +134,5 @@
 		<td style="text-align: left; font-size: 8pt;"><?php echo getLastSentence(); ?></td>
 	</tr>
 </table>
-
+</body>
+</html>

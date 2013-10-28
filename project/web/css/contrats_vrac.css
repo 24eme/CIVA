@@ -319,7 +319,7 @@
 
 #contrats_vrac .etape_produits.table_donnees .balayette
 {
-	background: #edecec url('../images/pictos/pi_balayette.png') no-repeat;
+	background: transparent url('../images/pictos/pi_balayette.png') no-repeat;
 	display: inline-block;
 	height: 18px;
 	overflow: hidden;
@@ -335,6 +335,7 @@
 #contrats_vrac .etape_produits.table_donnees .actif input { background: #FFF; }
 
 #contrats_vrac .etape_produits.table_donnees .coche .prix { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+#contrats_vrac .etape_produits.table_donnees .alt .prix { background-color: #DDDDDD !important; }
 
 #contrats_vrac .etape_produits.table_donnees + #ajouter-produit
 {
@@ -373,15 +374,14 @@
 	width: 86px;
 }
 
-#contrats_vrac .bloc_soussigne h3.soussigne_valide,
-#contrats_vrac .bloc_soussigne h3.soussigne_attente { background: #DCDFA9 98% 50% no-repeat; }
 
-#contrats_vrac .bloc_soussigne h3.soussigne_valide { background-image: url('../images/pictos/pi_check_2.png'); }
+#contrats_vrac .bloc_soussigne h3.soussigne_valide { background: #DCDFA9 url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
 
-#contrats_vrac .bloc_soussigne h3.soussigne_attente { background-image: url('../images/pictos/pi_sablier.png'); }
+#contrats_vrac .bloc_soussigne h3.soussigne_attente { background: #DCDFA9 url('../images/pictos/pi_sablier.png') 98% 50% no-repeat; }
 
-#contrats_vrac .bloc_soussigne.actif h3.soussigne_valide,
-#contrats_vrac .bloc_soussigne.actif h3.soussigne_attente { background-color: #ACB701; }
+#contrats_vrac .bloc_soussigne.actif h3.soussigne_valide { background: #ACB701 url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
+
+#contrats_vrac .bloc_soussigne.actif h3.soussigne_attente { background: #ACB701 url('../images/pictos/pi_sablier.png') 98% 50% no-repeat; }
 
 #contrats_vrac .bloc_soussigne ul li { margin: 5px 0; }
 

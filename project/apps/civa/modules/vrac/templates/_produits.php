@@ -27,7 +27,7 @@
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -52,10 +52,12 @@
 		</tr>
 			<?php 
 				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement): 
+					if ($vrac->get($key)->retiraisons->exist($keySub)) {
 					$enlevement = $vrac->get($key)->retiraisons->get($keySub);
 			?>
 				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement, 'alt' => $alt)) ?>
-			<?php endforeach; ?>
+			<?php 	}
+				endforeach; ?>
 		<?php 
 			$counter++; endforeach;
 		?>
@@ -68,7 +70,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
@@ -102,7 +104,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?> <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
 			</td>
 			<td class="volume">
 				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
