@@ -61,7 +61,7 @@ class statistiquesActions extends sfActions {
     }
 
     protected function processStatsDR() {
-        $campagne = "2012";
+        $campagne = $this->getUser()->getCampagne();
         $this->etapeDrValidee=0;
         $this->etapeValidation = 0;
         $this->etapeRecolte = 0;
