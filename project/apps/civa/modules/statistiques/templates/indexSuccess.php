@@ -20,7 +20,7 @@
                     <li><strong>Nombre de déclarations en cours : <?php echo $etapeDrNonValidee; ?></strong>
                         <ul>
                             <li>à l'étape exploitation : <?php echo $etapeExploitation; ?></li>
-                            <li>à l'étape repartition : <?php echo $etapeRepartition; ?></li>
+                            <li>à l'étape répartition : <?php echo $etapeRepartition; ?></li>
                             <li>à l'étape récolte : <?php echo $etapeRecolte; ?></li>
                             <li>à l'étape validation : <?php echo $etapeValidation; ?></li>
                         </ul>
