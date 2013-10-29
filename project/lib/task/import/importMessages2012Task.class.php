@@ -63,7 +63,7 @@ EOF;
 		$json->err_log_cremant_min_quantite  = "Les rebêches doivent représenter au minimum 2% du volume total produit";
 		$json->err_log_cremant_max_quantite  = "Les rebêches doivent représenter au maximum 10% des volumes produits";
 		$json->err_log_cremant_rebeches_repartition = "Vous n'avez pas respecté la répartition des rebêches";
-		$json->err_log_superficie_zero  = "Vous n'avez pas renseigné de detail pour cette appellation";
+		$json->err_log_superficie_zero  = "Vous n'avez pas renseigné de détail pour cette appellation";
 		$json->err_log_dplc  = "Vous dépassez le rendement butoir de ce cépage. Vous pouvez le replier en Edel. Si vous livrez votre raisin, ce repli ne peut se faire qu'en accord avec votre acheteur";
 		$json->err_log_recap_vente_non_saisie  = "Vous n'avez pas complété le récapitulatif des ventes";
 		$json->err_log_recap_vente_non_saisie_superficie_dplc = "Vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement dans le récapitulatif des ventes";

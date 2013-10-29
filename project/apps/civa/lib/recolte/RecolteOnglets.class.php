@@ -333,9 +333,12 @@ class RecolteOnglets {
     }
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
+        $lieu = $this->getLieu($appellation, $lieu)->getKey();
+        
         if (!$lieu) {
             $lieu = $this->getFirstKeyLieu($appellation);
         }
+
         return $this->getItemsCouleur($appellation, $lieu)->getFirstKey();
     }
 
