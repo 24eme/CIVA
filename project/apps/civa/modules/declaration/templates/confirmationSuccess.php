@@ -14,8 +14,8 @@
             <h2 class="titre_section">Confirmation</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre déclaration de récolte a bien été enregistrée au CIVA.</p>
-                    <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de récolte au format PDF et au format Tableur.</p>
+                    <p class="important">Votre déclaration de Récolte a bien été enregistrée au CIVA.</p>
+                    <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de Récolte au format PDF et au format Tableur.</p>
                 </div>
                 <?php if($has_import && $dr->recolte->getTotalVolumeVendus() > 0): ?>
                 <div id="div-btn-email">
@@ -29,7 +29,7 @@
         <div class="contenu_section">
             <div class="bloc_vert">
                 <p class="important">Votre retour d'expérience nous intéresse</p>
-                <p>Laisser nous votre commentaires à propos de la saisie de la déclaration de Stocks</p>
+                <p>Laissez nous vos commentaires à propos de la saisie de la déclaration de Récolte</p>
             </div>
             <div class="ligne_form ligne_btn">
                 <a href="<?php echo url_for('recolte_feed_back'); ?>">

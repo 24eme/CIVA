@@ -22,7 +22,7 @@
             <div class="contenu_section">
                 <div class="bloc_vert">
                     <p class="important">Votre retour d'expérience nous intéresse</p>
-                    <p>Laisser nous votre commentaires à propos de la saisie de la déclaration de Stocks</p>
+                    <p>Laissez nous vos commentaires à propos de la saisie de la déclaration de Stocks</p>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <a href="<?php echo url_for('ds_feed_back'); ?>">
