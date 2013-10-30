@@ -72,6 +72,7 @@ EOF;
 		$json->err_log_recap_vente_dontdplc_superieur_volume = "Dans le récapitulatif des ventes, le volume en \"dont dépassement\" d'un acheteur doit être inférieur à son volume vendu";
 		$json->err_log_recap_vente_revendique_sur_place_negatif = "Le volume revendiqué sur place est négatif, la répartition du 'dont dépassement' n'est s'en doute pas correcte";
 		$json->err_log_pas_calculer_revendique_sur_place = "Le volume revendiqué sur place ne peut pas être calculé car tous les volumes en dépassement de vos acheteurs n'ont pas été saisis dans le récapitulatif des ventes. Si vous n'affectez pas de dépassement à vos acheteurs, tapez 0 dans la zone \"dont dépassement\"";
+		$json->err_log_superficie_zero_detail = "Vous n'avez pas saisi de superficie pour ce détail";
 		$json->help_popup_exploitation_administratif  = "Identification de l'exploitation : les renseignements affichés correspondent aux données que nous connaissons vous concernant. Vous pouvez procéder à des modifications, mais elles ne seront définitivement prises en compte, qu'après validation par le Service Douane Viticulture  de Colmar";
 		$json->help_popup_exploitation_administratif_exploitation  = "Nom déclaré auprès de l'Administration des Douanes (nom de l'exploitant ou nom déclaré de la Société)";
 		$json->help_popup_exploitation_administratif_gestionnaire  = "Nom de la personne désignée pour être l'interlocutrice de l'Administration";

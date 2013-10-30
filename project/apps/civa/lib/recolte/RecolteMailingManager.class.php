@@ -75,7 +75,7 @@ class RecolteMailingManager {
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
             $email = $acheteur->email;
-            $compte = $acheteur->getCompteObject();
+            $compte = CompteClient::getInstance()->findByLogin($acheteur->cvi);
             if($compte) {
                 $email = $compte->email;
             }
