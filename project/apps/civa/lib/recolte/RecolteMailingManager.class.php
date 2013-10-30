@@ -70,12 +70,12 @@ class RecolteMailingManager {
             $sendMailAcheteursReport[$type_cvi]->type = $type_cvi_infos[0];
             $sendMailAcheteursReport[$type_cvi]->cvi = $type_cvi_infos[1];
             
-            $acheteur = _TiersClient::getInstance()->retrieveByCvi($sendMailAcheteursReport[$type_cvi]->cvi, acCouchdbClient::HYDRATE_JSON);
+            $acheteur = _TiersClient::getInstance()->retrieveByCvi($sendMailAcheteursReport[$type_cvi]->cvi);
             
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
             $email = $acheteur->email;
-            $compte = CompteClient::getInstance()->findByLogin($acheteur->cvi);
+            $compte = $acheteur->getCompteObject();
             if($compte) {
                 $email = $compte->email;
             }
