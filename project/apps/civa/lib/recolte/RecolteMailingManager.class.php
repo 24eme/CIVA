@@ -73,9 +73,14 @@ class RecolteMailingManager {
             $acheteur = _TiersClient::getInstance()->retrieveByCvi($sendMailAcheteursReport[$type_cvi]->cvi, acCouchdbClient::HYDRATE_JSON);
             
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
-            $sendMailAcheteursReport[$type_cvi]->email = $acheteur->email;
-            $message = $this->getMailForAcheteur($acheteur);
             
+            $email = $acheteur->email;
+            $compte = $acheteur->getCompteObject();
+            if($compte) {
+                $email = $compte->email;
+            }
+            $sendMailAcheteursReport[$type_cvi]->email = $email;
+            $message = $this->getMailForAcheteur($acheteur);
         
             try {
                 $this->mailer->send($message);
