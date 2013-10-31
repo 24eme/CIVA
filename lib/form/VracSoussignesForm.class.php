@@ -110,6 +110,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	if (!$annuaire) {
     		return array();
     	}
-    	return array_merge(array('' => ''), $annuaire->commerciaux->toArray());
+    	$commerciaux = $annuaire->commerciaux->toArray();
+    	$choices = array();
+    	foreach ($commerciaux as $commercial) {
+    		$choices[$commercial] = $commercial;
+    	}
+    	return array_merge(array('' => ''), $choices);
     }
 }

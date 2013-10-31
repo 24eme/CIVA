@@ -18,7 +18,7 @@ class VracRoute extends sfObjectRoute
 
     protected function doConvertObjectToArray($object) {
         $parameters = array();
-        $parameters["numero_contrat"] = ($object->numero_contrat)? $object->numero_contrat : self::NOUVEAU;
+        $parameters["numero_contrat"] = ($object->_id)? $object->numero_contrat : self::NOUVEAU;
         return $parameters;
     }
     

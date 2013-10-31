@@ -6,21 +6,13 @@ class VracEnlevementsCollectionForm extends acCouchdbObjectForm
 	public function configure()
 	{
 		$this->disableLocalCSRFProtection();
-		if (count($this->getObject()) == 0) {
+		/*if (count($this->getObject()) == 0) {
 			$this->virgin_object = $this->getObject()->add();
-		}
+		}*/
 		foreach ($this->getObject() as $key => $object) {
 			$this->embedForm ($key, new VracEnlevementForm($object));
 		}
 	}
-    
-    public function doUpdateObject($values) 
-    {
-        parent::doUpdateObject($values);
-        foreach ($this->getEmbeddedForms() as $key => $embedForm) {
-        	$embedForm->doUpdateObject($values[$key]);
-        }
-    }
 
 	public function bind(array $taintedValues = null, array $taintedFiles = null)
 	{

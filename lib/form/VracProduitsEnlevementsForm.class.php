@@ -13,6 +13,7 @@ class VracProduitsEnlevementsForm extends acCouchdbObjectForm
         foreach ($this->getEmbeddedForms() as $key => $embedForm) {
         	$embedForm->doUpdateObject($values[$key]);
         }
+        $this->getObject()->updateTotaux();
         $this->getObject()->updateEnlevementStatut();
     }
     

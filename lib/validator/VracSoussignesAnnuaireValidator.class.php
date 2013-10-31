@@ -1,13 +1,6 @@
 <?php
-class VracSoussignesValidator extends sfValidatorBase 
+class VracSoussignesAnnuaireValidator extends VracSoussignesValidator 
 {
-    
-    public function configure($options = array(), $messages = array()) 
-    {
-    	$this->setMessage('required', "Champ obligatoire");
-        $this->setMessage('invalid', "Ce tiers n'existe plus");
-        $this->addMessage('inconsistent', "L'acheteur et le vendeur ne peuvent être les mêmes");
-    }
 
     protected function doClean($values) 
     {
@@ -17,6 +10,29 @@ class VracSoussignesValidator extends sfValidatorBase
     	$acheteur = null;
     	$vendeur_type = (isset($values['vendeur_type']) && !empty($values['vendeur_type']))? str_replace('s', '', $values['vendeur_type']) : null;
     	$acheteur_type = (isset($values['acheteur_type']) && !empty($values['acheteur_type']))? str_replace('s', '', $values['acheteur_type']) : null;
+    	
+    	if (isset($values['acheteur_recoltant_identifiant']) && $values['acheteur_recoltant_identifiant'] == 'add') {
+    		$values['acheteur_recoltant_identifiant'] = null;
+    	}
+    	if (isset($values['acheteur_negociant_identifiant']) && $values['acheteur_negociant_identifiant'] == 'add') {
+    		$values['acheteur_negociant_identifiant'] = null;
+    	}
+    	if (isset($values['acheteur_cave_cooperative_identifiant']) && $values['acheteur_cave_cooperative_identifiant'] == 'add') {
+    		$values['acheteur_cave_cooperative_identifiant'] = null;
+    	}
+    	if (isset($values['vendeur_recoltant_identifiant']) && $values['vendeur_recoltant_identifiant'] == 'add') {
+    		$values['vendeur_recoltant_identifiant'] = null;
+    	}
+    	if (isset($values['vendeur_negociant_identifiant']) && $values['vendeur_negociant_identifiant'] == 'add') {
+    		$values['vendeur_negociant_identifiant'] = null;
+    	}
+    	if (isset($values['vendeur_cave_cooperative_identifiant']) && $values['vendeur_cave_cooperative_identifiant'] == 'add') {
+    		$values['vendeur_cave_cooperative_identifiant'] = null;
+    	}
+    	if (isset($values['interlocuteur_commercial']) && $values['interlocuteur_commercial'] == 'add') {
+    		$values['interlocuteur_commercial'] = null;
+    	}
+    	
     	if (isset($values['vendeur_recoltant_identifiant']) && !empty($values['vendeur_recoltant_identifiant'])) {
     		$vendeur = $values['vendeur_recoltant_identifiant'];
     	}
@@ -35,37 +51,12 @@ class VracSoussignesValidator extends sfValidatorBase
     	if (isset($values['acheteur_cave_cooperative_identifiant']) && !empty($values['acheteur_cave_cooperative_identifiant'])) {
     		$acheteur = $values['acheteur_cave_cooperative_identifiant'];
     	}
-    	if (!$vendeur) {
-    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('vendeur_'.$vendeur_type.'_identifiant' => new sfValidatorError($this, 'required'))));
-            $hasErrors = true;
-    	} else {
+    	if ($vendeur) {
     		$vendeur = $this->getTiers($vendeur);
-	    	if (!$vendeur) {
-	    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('vendeur_'.$vendeur_type.'_identifiant' => new sfValidatorError($this, 'invalid'))));
-                $hasErrors = true;
-	    	}
     	}
-    	if (!$acheteur) {
-    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('acheteur_'.$acheteur_type.'_identifiant' => new sfValidatorError($this, 'required'))));
-            $hasErrors = true;
-    	} else {
+    	if ($acheteur) {
     		$acheteur = $this->getTiers($acheteur);
-	    	if (!$acheteur) {
-	    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('acheteur_'.$acheteur_type.'_identifiant' => new sfValidatorError($this, 'invalid'))));
-	    		$hasErrors = true;
-	    	}
     	}
-        if ($hasErrors) {
-        	throw $errorSchema;
-        }
-        if ($vendeur->_id == $acheteur->_id) {
-        	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'inconsistent')));
-        }
         return array_merge($values, array('acheteur' => $acheteur, 'vendeur' => $vendeur));
-    }
-    
-    protected function getTiers($id)
-    {
-    	return _TiersClient::getInstance()->find($id);
     }
 }

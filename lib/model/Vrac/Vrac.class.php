@@ -13,6 +13,7 @@ class Vrac extends BaseVrac
 	const STATUT_ANNULE = 'ANNULE';
 	const STATUT_ENLEVEMENT = 'ENLEVEMENT';
 	const STATUT_CLOTURE = 'CLOTURE';
+	const PREFIXE_NUMERO = 8;
 	
 	protected $_config;
 	
@@ -30,13 +31,15 @@ class Vrac extends BaseVrac
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
 		self::STATUT_VALIDE => 'Visualiser',
 		self::STATUT_ANNULE => 'Visualiser',
-		self::STATUT_ENLEVEMENT => 'Enlever',
+		self::STATUT_ENLEVEMENT => 'Visualiser',
 		self::STATUT_CLOTURE => 'Visualiser'
 	);
 	
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
+		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_ENLEVEMENT => 'Enlever',
 	);
 	
 	static $statuts_supprimable = array(
@@ -94,12 +97,13 @@ class Vrac extends BaseVrac
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
     
-    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
+    public function initVrac($config, $createurIdentifiant, $numeroContrat, $numero, $date, $campagne)
     {
     	
         $this->_config = $config;
         $this->campagne = $campagne;
         $this->numero_contrat = $numeroContrat;
+        $this->numero = $numero;
         $this->valide->date_saisie = $date;
         $this->valide->statut = self::STATUT_CREE;
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
@@ -165,6 +169,23 @@ class Vrac extends BaseVrac
         $detail->vtsgn = $vtsgn;
         $detail->supprimable = 1;
         $detail->position = $this->declaration->getPositionNouveauProduitDetail();
+    }
+    
+    public function addActeur($type, $tiers)
+    {
+    	$noeud = $type.'_identifiant';
+    	if ($this->exist($noeud)) {
+    		$this->{$noeud} = $tiers->_id;
+    		call_user_func(array('Vrac', 'store'.ucfirst($type).'Informations'), $tiers);
+    	}
+    }
+    
+    public function addType($acteur, $type)
+    {
+    	$noeud = $acteur.'_type';
+    	if ($this->exist($noeud)) {
+    		$this->{$noeud} = $type;
+    	}
     }
     
     public function storeAcheteurInformations($tiers)
@@ -237,6 +258,16 @@ class Vrac extends BaseVrac
     	return ($this->valide->statut == self::STATUT_CLOTURE);
     }
     
+    public function isAnnule()
+    {
+    	return ($this->valide->statut == self::STATUT_ANNULE);
+    }
+    
+    public function isSigne()
+    {
+    	return !($this->valide->statut == self::STATUT_VALIDE_PARTIELLEMENT || $this->valide->statut == self::STATUT_CREE);
+    }
+    
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
@@ -294,7 +325,7 @@ class Vrac extends BaseVrac
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
     		if (!$this->numero_archive) {
-    			$this->numero_archive = $this->numero_contrat;
+    			$this->numero_archive = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero);
     		}
     	}
     }
@@ -319,12 +350,22 @@ class Vrac extends BaseVrac
     
     public function getTotalVolumeEnleve()
     {
-    	return $this->declaration->getTotalVolumeEnleve();
+    	return $this->volume_enleve_total;
     }
     
     public function getTotalVolumePropose()
     {
-    	return $this->declaration->getTotalVolumePropose();
+    	return $this->volume_propose_total;
+    }
+    
+    public function getTotalPrixEnleve()
+    {
+    	return $this->prix_reel_total;
+    }
+    
+    public function getTotalPrixPropose()
+    {
+    	return $this->prix_total;
     }
     
     public function allProduitsClotures()
@@ -335,5 +376,83 @@ class Vrac extends BaseVrac
     public function isProprietaire($identifiant)
     {
     	return ($this->createur_identifiant == $identifiant)? true : false;
+    }
+    
+    public function hasCourtier() {
+        //A implémenter
+        return true;
+    }
+    
+    public function getActeurs($withCreator = true) {
+    	$acteurs = array();
+    	if ($this->vendeur_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['vendeur'] = $this->vendeur;
+    		} elseif($this->vendeur_identifiant != $this->createur_identifiant) {
+    			$acteurs['vendeur'] = $this->vendeur;
+    		}
+    	}
+    	if ($this->acheteur_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['acheteur'] = $this->acheteur;
+    		} elseif($this->acheteur_identifiant != $this->createur_identifiant) {
+    			$acteurs['acheteur'] = $this->acheteur;
+    		}
+    	}
+    	if ($this->mandataire_identifiant) {
+    		if ($withCreator) {
+    			$acteurs['mandataire'] = $this->mandataire;
+    		} elseif($this->mandataire_identifiant != $this->createur_identifiant) {
+    			$acteurs['mandataire'] = $this->mandataire;
+    		}
+    	}
+    	return $acteurs;
+    }
+    
+    public function getCreateurInformations()
+    {
+    	if ($this->createur_identifiant == $this->mandataire_identifiant) {
+    		return $this->mandataire;
+    	}
+    	if ($this->createur_identifiant == $this->vendeur_identifiant) {
+    		return $this->vendeur;
+    	}
+    	if ($this->createur_identifiant == $this->acheteur_identifiant) {
+    		return $this->acheteur;
+    	}
+    	return null;
+    }
+    
+    public function updateTotaux()
+    {
+    	$this->volume_enleve_total = $this->declaration->getTotalVolumeEnleve();
+    	$this->volume_propose_total = $this->declaration->getTotalVolumePropose();
+    	$this->prix_reel_total = $this->declaration->getTotalPrixPropose();;
+    	$this->prix_total = $this->declaration->getTotalPrixEnleve();
+    }
+    
+    public function hasProduits()
+    {
+    	return $this->declaration->hasProduits();
+    }
+    
+    public function refreshNumeros()
+    {
+    	$client = VracClient::getInstance();
+        $this->numero_contrat = $client->getNumeroContratSuivant($this->valide->date_saisie);
+        $this->numero = $client->getNumeroSuivant();
+    }
+
+    protected function preSave() 
+    {
+        if ($this->isNew()) {
+        	$this->refreshNumeros();
+            $this->constructId();
+        }
+    }
+    
+    protected function doSave() 
+    {
+        $this->date_modification = date('Y-m-d');
     }
 }

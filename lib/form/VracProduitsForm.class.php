@@ -13,5 +13,6 @@ class VracProduitsForm extends acCouchdbObjectForm
         foreach ($this->getEmbeddedForms() as $key => $embedForm) {
         	$embedForm->doUpdateObject($values[$key]);
         }
+        $this->getObject()->updateTotaux();
     }
 }

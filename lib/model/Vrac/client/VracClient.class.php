@@ -6,6 +6,7 @@ class VracClient extends acCouchdbClient {
 	const APP_CONFIGURATION = 'app_configuration_vrac';
 	const APP_CONFIGURATION_PRODUITS = 'produits_statiques';
 	const APP_CONFIGURATION_ETAPES = 'etapes';
+	const NB_MAX_CONTRAT_DB2 = 99999;
 	
     public static function getInstance()
     {
@@ -29,6 +30,11 @@ class VracClient extends acCouchdbClient {
     	return ($date)? $date : date('Y-m-d');
     }
     
+    protected function getCampagne($campagne = null)
+    {
+    	return ($campagne)? $campagne : ConfigurationClient::getInstance()->buildCampagne($this->getDate());
+    }
+    
     public function getNumeroContratSuivant($date = null)
     {
     	$date = $this->getDate($date);
@@ -41,6 +47,16 @@ class VracClient extends acCouchdbClient {
         }
         return $id;
     }
+    
+    public function getNumeroSuivant()
+    {
+        $contrats = VracTousView::getInstance()->findAll();
+        $numeroSuivant = count($contrats) + 1;
+        if ($numeroSuivant > self::NB_MAX_CONTRAT_DB2) {
+        	throw new sfException('ATTENTION : Limite de contrat possible pour db2 atteinte (plus aucun contrat ne peut être créé).');
+        }
+        return sprintf('%05d', $numeroSuivant);
+    }
 
     public function getAtDate($date, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
@@ -52,8 +68,9 @@ class VracClient extends acCouchdbClient {
     	$config = self::getConfig();
         $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
         $numeroContrat = $this->getNumeroContratSuivant($date);
+        $numero = $this->getNumeroSuivant();
         $vrac = new Vrac();
-        $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);
+        $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $numero, $date, $campagne);
         return $vrac;
     } 
     

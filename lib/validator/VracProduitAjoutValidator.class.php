@@ -5,6 +5,7 @@ class VracProduitAjoutValidator extends sfValidatorBase
     public function configure($options = array(), $messages = array()) 
     {
         $this->addMessage('exist', "Produit déjà présent dans la liste.");
+        $this->addMessage('lieu_dit_required', "Le lieu dit est obligatoire");
     }
 
     protected function doClean($values) 
@@ -24,6 +25,15 @@ class VracProduitAjoutValidator extends sfValidatorBase
     						}
     					}
     				}
+					$pattern = '/appellation_[a-zA-Z0-9]+/';
+					if (preg_match($pattern, $values['hash'], $matches)) {
+						$config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+    					$appellationsLieuDit = array_keys($config->getAppellationsLieuDit()); 
+    					$lieu_dit = (isset($values['lieu_dit']) && !empty($values['lieu_dit']))? $values['lieu_dit'] : null;   							
+    					if(in_array($matches[0], $appellationsLieuDit) && !$lieu_dit) {
+    						throw new sfValidatorErrorSchema($this, array('hash' => new sfValidatorError($this, 'lieu_dit_required')));
+    					}
+					}
     			}
     			
     		}

@@ -70,5 +70,14 @@ class VracCepage extends BaseVracCepage
         }
         return $detail;
     }
+    
+    public function cleanAllNodes() {
+        $details = $this->getProduitsDetails();
+        foreach ($details as $detail) {
+            if(!$detail->actif){
+                $detail->delete();
+            }
+        }    
+    }
 
 }

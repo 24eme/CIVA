@@ -51,5 +51,10 @@ class VracDeclaration extends BaseVracDeclaration {
     	ksort($result);
     	return $result;
     }
+    
+    public function hasProduits()
+    {
+    	return (count($this->getActifProduitsDetailsSorted()) > 0)? true : false;
+    }
 
 }

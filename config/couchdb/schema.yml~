@@ -182,4 +182,8 @@ Vrac:
       volume_enleve_total: { type: float }
       etape: {  }
       type: {  }
+<<<<<<< HEAD
       date_modification: {  }
+=======
+      date_modification: {  }
+>>>>>>> 076aed1a0f877dba045828e2d681d56d0833f951
