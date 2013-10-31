@@ -194,6 +194,7 @@ class declarationActions extends EtapesActions {
 
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = acCouchdbManager::getClient()->find($key);
+        $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne); 
         $this->forward404Unless($this->dr);
 
         try {
@@ -214,7 +215,7 @@ class declarationActions extends EtapesActions {
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
         $this->dr = $this->getUser()->getDeclaration();
-        $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
+        $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();

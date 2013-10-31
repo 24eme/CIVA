@@ -9,4 +9,3 @@
     <?php include_partial('declaration/monEspaceNonEditable') ?>
 <?php endif; ?>
 </div>
-<?php //include_partial('declaration/monEspaceValidee') ?>
