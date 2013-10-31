@@ -67,7 +67,7 @@ EOF;
         $json->_id = 'CONFIGURATION-' . $annee;
         $json->type = 'Configuration';
         $json->campagne = $annee;
-        $json->recolte->no_recapitulatif_appellation = 1;
+        $json->recolte->no_recapitulatif_couleur = 1;
         $json->recolte->douane->appellation_lieu = '001';
         $json->recolte->douane->type_aoc = '1';
         $json->recolte->douane->couleur = 'B';
