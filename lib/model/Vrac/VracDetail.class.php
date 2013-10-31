@@ -116,5 +116,17 @@ class VracDetail extends BaseVracDetail {
     	}
     	return null;
     }
+    
+    public function clear()
+    {
+    	$this->vtsgn = null;
+    	$this->lieu_dit = null;
+    	$this->millesime = null;
+    	$this->prix_unitaire = null;
+    	$this->denomination = null;
+    	$this->cloture = null;
+    	$this->volume_propose = null;
+    	$this->volume_enleve = null;
+    }
 
 }

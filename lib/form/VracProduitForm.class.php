@@ -39,5 +39,8 @@ class VracProduitForm extends acCouchdbObjectForm
     public function doUpdateObject($values) {
         parent::doUpdateObject($values);
         $this->getObject()->defineActive();
+        if (!$this->getObject()->actif) {
+        	$this->getObject()->clear();
+        }
     }
 }
