@@ -34,11 +34,15 @@ class RecolteMailingManager {
         
         $this->csvContent = $this->getCSVDrContent();
         
-        $this->acheteurs = $this->dr->recolte->getAcheteursArray();
+        $this->acheteurs = DRClient::getInstance()->getAcheteursApporteur($this->dr->cvi, $this->dr->campagne);
         $this->current_document = new ExportDRPdf($this->dr, $this->partial_function);
         $this->current_document->generatePDF();
         $this->current_pdf_content = $this->current_document->output();
         
+    }
+
+    public function getAcheteurs() {
+        return $this->acheteurs;
     }
     
     public function setDR($dr) {
@@ -64,14 +68,14 @@ class RecolteMailingManager {
     public function sendAcheteursMails() {                
       $sendMailAcheteursReport = array();
         
-      foreach ($this->acheteurs as $type_cvi => $vol) {
-            $type_cvi_infos = explode('_', $type_cvi);
+      foreach ($this->getAcheteurs() as $acheteur) {
+            
+            
+            $type_cvi = $acheteur->qualite."_".$acheteur->cvi;
+
             $sendMailAcheteursReport[$type_cvi] = new stdClass();
-            $sendMailAcheteursReport[$type_cvi]->type = $type_cvi_infos[0];
-            $sendMailAcheteursReport[$type_cvi]->cvi = $type_cvi_infos[1];
-            
-            $acheteur = _TiersClient::getInstance()->retrieveByCvi($sendMailAcheteursReport[$type_cvi]->cvi);
-            
+            $sendMailAcheteursReport[$type_cvi]->type = $acheteur->qualite;
+            $sendMailAcheteursReport[$type_cvi]->cvi = $acheteur->cvi;
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
             $email = $acheteur->getCompteEmail();

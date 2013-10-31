@@ -7,7 +7,7 @@ class CSVClient extends acCouchdbClient {
     return acCouchdbManager::getClient('CSV'); 
   }
 
-  private function getCSVsFromRecoltantArray($campagne, $cvi) {
+  public function getCSVsFromRecoltantArray($campagne, $cvi) {
     $csv = $this->startkey(array($campagne, $cvi))->endkey(array($campagne, $cvi, array()))->executeView('CSV', 'recoltant');
     $ids = array();
     foreach ($csv as $k => $c) 
