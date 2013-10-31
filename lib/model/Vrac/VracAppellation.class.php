@@ -40,10 +40,14 @@ class VracAppellation extends BaseVracAppellation {
          $appellation = preg_replace("/^appellation_/", "", $this->getKey());
          switch ($appellation) {
              case "GRDCRU":
-                 return "3";
+                 return "Grds crus";
              case "CREMANT":
-                 return "2";
+                 return "Crémant";
+             case "COMMUNALE":
+                 return "Communales";
+             case "LIEUDIT":
+                 return "Lieux-dits";
          }
-         return "1";
+         return "Alsace";
      }
 }

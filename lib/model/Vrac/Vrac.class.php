@@ -27,8 +27,8 @@ class Vrac extends BaseVrac
 	
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => null,
-		self::STATUT_VALIDE_PARTIELLEMENT => 'Valider',
-		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
+		self::STATUT_VALIDE => 'Visualiser',
 		self::STATUT_ANNULE => 'Visualiser',
 		self::STATUT_ENLEVEMENT => 'Enlever',
 		self::STATUT_CLOTURE => 'Visualiser'
@@ -169,6 +169,7 @@ class Vrac extends BaseVrac
     
     public function storeAcheteurInformations($tiers)
     {
+    	$this->acheteur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->acheteur->raison_sociale = $tiers->nom;
     	$this->acheteur->siret = $tiers->siret;
     	$this->acheteur->cvi = $tiers->cvi;
@@ -183,6 +184,7 @@ class Vrac extends BaseVrac
     
     public function storeVendeurInformations($tiers)
     {
+    	$this->vendeur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->vendeur->raison_sociale = $tiers->nom;
     	$this->vendeur->siret = $tiers->siret;
     	$this->vendeur->cvi = $tiers->cvi;
@@ -197,6 +199,7 @@ class Vrac extends BaseVrac
     
     public function storeMandataireInformations($tiers)
     {
+    	$this->mandataire->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->mandataire->nom = $tiers->nom;
     	$this->mandataire->raison_sociale = $tiers->nom;
     	$this->mandataire->siret = $tiers->siret;

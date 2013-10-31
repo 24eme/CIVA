@@ -14,6 +14,7 @@ Vrac:
         inheritance: _VracTiers
         definition:
           fields:
+            intitule: {  }
             raison_sociale: {  }
             siret: {  }
             cvi: {  }
@@ -32,6 +33,7 @@ Vrac:
         inheritance: _VracTiers
         definition:
           fields:
+            intitule: {  }
             raison_sociale: {  }
             siret: {  }
             cvi: {  }
@@ -50,6 +52,7 @@ Vrac:
         inheritance: _VracTiers
         definition:
           fields:
+            intitule: {  }
             nom: {  }
             raison_sociale: {  }
             siret: {  }
@@ -174,3 +177,4 @@ Vrac:
       volume_total: { type: float }
       etape: {  }
       type: {  }
+      date_modification: {  }
