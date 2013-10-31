@@ -112,9 +112,15 @@ Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 Cordialement,
 
 Le CIVA';
+
+        $email = $acheteur->getCompteEmail();
+        if($email) {
+            $email = $acheteur->email;
+        }
+
         $message = Swift_Message::newInstance()
                 ->setFrom(array($this->tiers->getCompteEmail() => $this->tiers->nom))
-                ->setTo($acheteur->email)
+                ->setTo($email)
                 ->setSubject($subject)
                 ->setBody($mess);        
         
