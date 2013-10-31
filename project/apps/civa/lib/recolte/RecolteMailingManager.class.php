@@ -82,7 +82,6 @@ class RecolteMailingManager {
             $message = $this->getMailForAcheteur($acheteur);
         
             try {
-                $message->setBcc("vlaurent@actualys.com");
                 $this->mailer->send($message);
             } catch (Exception $e) {
                $sendMailAcheteursReport[$type_cvi]->sended = false;
