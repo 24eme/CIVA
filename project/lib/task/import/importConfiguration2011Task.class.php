@@ -66,6 +66,7 @@ EOF;
         $json->campagne = $annee;
 
         $json->recolte->no_usages_industriels = 1;
+        $json->recolte->no_recapitulatif_couleur = 1;
 
         $json->recolte->douane->appellation_lieu = '001';
         $json->recolte->douane->type_aoc = '1';

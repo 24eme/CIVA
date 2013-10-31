@@ -1,4 +1,4 @@
-<div id="popup_confirme_validation" class="popup_ajout" title="Validation de votre DR">
+<div id="popup_confirme_validation" class="popup_ajout popup_confirme" title="Validation de votre DR">
     <form method="post" action="">
         <p>
             Une fois votre déclaration validée, vous ne pourrez plus la modifier. <br /><br />

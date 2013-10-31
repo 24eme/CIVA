@@ -58,7 +58,7 @@ class declarationComponents extends sfComponents {
         $this->volume_rebeches = array();
         $this->volume_rebeches_sur_place = array();
         $this->has_no_usages_industriels = $this->dr->recolte->getConfig()->hasNoUsagesIndustriels();
-        $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
+        $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatifCouleur();
         $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {

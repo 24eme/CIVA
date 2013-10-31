@@ -38,6 +38,11 @@ class DRClient extends acCouchdbClient {
     }
   }
 
+  public function hasImport($cvi, $campagne) {
+
+    return acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($campagne, $cvi) > 0;
+  }
+
   public function getAcheteursApporteur($cvi, $campagne) {
     $csv_ids = CSVClient::getInstance()->getCSVsFromRecoltantArray($campagne, $cvi);
     $acheteurs = array();

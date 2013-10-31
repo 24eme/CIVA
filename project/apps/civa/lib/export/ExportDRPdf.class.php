@@ -142,7 +142,7 @@ class ExportDRPdf extends ExportDocument {
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
-          if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatidCouleur()) {
+          if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()) {
             $this->createRecap($dr);
           }
     }
@@ -155,10 +155,10 @@ class ExportDRPdf extends ExportDocument {
           $total["revendique_sur_place"] += $item->revendique_sur_place;
           $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
         }
-        if($dr->hasVolumeSurPlace()){
-        $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
-                                                                                   'recap_total' => $recap,
-                                                                                   'total' => $total)));
+        if($dr->hasVolumeSurPlace() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()){
+          $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
+                                                                                      'recap_total' => $recap,
+                                                                                      'total' => $total)));
         }
     }
 
@@ -226,7 +226,7 @@ class ExportDRPdf extends ExportDocument {
         $infos['total_volume'] = array_sum(array_values($volume));
 
         $has_no_usages_industriels = $dr->recolte->getConfig()->hasNoUsagesIndustriels();
-        $has_no_recapitulatif_couleur = $dr->recolte->getConfig()->hasNoRecapitulatidCouleur();
+        $has_no_recapitulatif_couleur = $dr->recolte->getConfig()->hasNoRecapitulatifCouleur();
         $can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
 
         if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
