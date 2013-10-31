@@ -157,6 +157,7 @@ class vracActions extends sfActions
         		$vrac = $this->form->getObject();
 				$this->validation = new VracValidation($vrac);
 				if ($this->validation->isValide()) {
+					$this->getUser()->setFlash('notice', 'Contrat mis à jour avec succès');
        				$vrac->save();
        				return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
 				}
@@ -173,6 +174,8 @@ class vracActions extends sfActions
 		$this->vrac->valideUser($this->user->_id);
 		$this->vrac->updateValideStatut();
 		$this->vrac->save();
+		
+		$this->getUser()->setFlash('notice', 'Contrat signé avec succès');
 		VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->email);
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
@@ -217,6 +220,7 @@ class vracActions extends sfActions
 					foreach ($acteurs as $type => $acteur) {
 						VracMailer::getInstance()->demandeSignature($this->vrac, $acteur->email);
 					}
+					$this->getUser()->setFlash('notice', 'Contrat créé avec succès');
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
        			}
         	}

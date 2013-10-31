@@ -10,9 +10,9 @@
 	<li class="ui-tabs-selected">
 		<a href="#" style="height: 18px;">
 		<?php if ($vrac->isValide() || $vrac->isAnnule()): ?>
-			Contrat en vrac<?php if ($vrac->numero_archive): ?> numéro <?php echo $vrac->numero_archive ?><?php endif; ?>
+			Contrat vrac<?php if ($vrac->numero_archive): ?> numéro de visa <?php echo $vrac->numero_archive ?><?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat en vrac
+			Validation de votre contrat vrac
 		<?php endif; ?>
 		</a>
 		<span class="statut"><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span>
@@ -26,6 +26,11 @@
 		<?php echo $form->renderGlobalErrors() ?>
 	<?php endif; ?>
 	<div class="fond">		
+		
+		<?php if($sf_user->hasFlash('notice')) : ?>
+			<p class="flash_message" style="margin-bottom: 20px;"><?php echo $sf_user->getFlash('notice'); ?></p>
+		<?php endif; ?>
+		
 		<?php use_helper('Date') ?>
 		
 		<?php if (!$vrac->isValide() && !$vrac->hasValide($user->_id)): ?>
@@ -33,7 +38,7 @@
 		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
 		     <ul class="messages_log">
 		        <li>
-	                En cas d'erreur sur le contrat, veuillez contacter votre interlocuteur commercial.
+	                En cas d'erreur sur le contrat, veuillez contacter le responsable du contrat.
 		        </li>
 			</ul>
 		</fieldset>
@@ -81,8 +86,9 @@
 	
 	<table id="actions_fiche">
 		<tr>
-			<td><?php if ($vrac->isSigne()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
-			<td>
+			<td style="width: 33%">&nbsp;</td>
+			<td align="center"><?php if ($vrac->isSigne()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
+			<td style="width: 33%; text-align: right;">
 				<?php if (!$vrac->isValide()): ?>
 					<?php if ($vrac->hasValide($user->_id)): ?>
 						<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
@@ -96,7 +102,7 @@
 					<input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider vos enlèvements" />
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture()): ?>
-					<p>Contrat en vrac numéro <?php echo $vrac->numero_archive ?> cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
+					<p>Contrat vrac numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 			</td>
 		</tr>

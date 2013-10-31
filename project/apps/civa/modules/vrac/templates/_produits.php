@@ -9,10 +9,10 @@
 			<th class="prix"><span>Prix</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
 			<th class="echeance"><span>Date</span></th>
-			<th class="enleve"><span>Enlevé</span></th>
+			<th class="enleve"><span>Volume</span></th>
 			<?php endif; ?>
 			<?php if ($form): ?>
-			<th class="cloture"><span>Cloturé</span></th>
+			<th class="cloture"><span>Cloture</span></th>
 			<th class="actions"></th>
 			<?php endif; ?>
 		</tr>

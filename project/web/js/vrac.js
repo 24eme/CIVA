@@ -220,10 +220,12 @@ var initConfirmeSignatureVrac = function()
 					if($.trim(champ_volume.val()) !== '' && $.trim(champ_prix.val()) !== '')
 					{
 						ligne_courante.addClass('coche');
+						ligne_courante.removeClass('croix');
 						ligne_valide = true;
 					}else
 					{
 						ligne_courante.removeClass('coche');
+						ligne_courante.addClass('croix');
 					}
 
 					if($.trim($(this).val()) !== '')
@@ -236,6 +238,7 @@ var initConfirmeSignatureVrac = function()
 				if(champs_vides)
 				{
 					ligne_courante.removeClass('actif');
+					ligne_courante.removeClass('croix');
 				}
 			};
 

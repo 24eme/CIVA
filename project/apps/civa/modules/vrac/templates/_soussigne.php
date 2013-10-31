@@ -21,10 +21,12 @@
 	<li>Commune : <strong><?php echo $tiers->commune ?></strong></li>
 	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
 	<li>E-mail : <strong><?php echo $tiers->email ?></strong></li>
+	<?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
 	<li>Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php else: ?>
 	<li>En attente de signature</li>
+	<?php endif; ?>
 	<?php endif; ?>
 </ul>
 </div>
