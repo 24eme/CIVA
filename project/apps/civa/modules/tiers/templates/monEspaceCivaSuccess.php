@@ -11,9 +11,9 @@
         
         <?php 
         if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
-            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
+            include_partial('tiers/monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
         else:
-            include_partial('monEspaceDs',array('sf_user' => $sf_user));
+            include_partial('tiers/monEspaceDs',array('sf_user' => $sf_user));
         endif;
         ?>
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
@@ -37,9 +37,9 @@
             
         <?php 
         if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
-            include_partial('monEspaceDs',array('sf_user' => $sf_user));
+            include_partial('tiers/monEspaceDs',array('sf_user' => $sf_user));
         else:
-            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
+            include_partial('tiers/monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
         endif;
         ?>      
     </div>

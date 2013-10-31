@@ -2,7 +2,7 @@
         Votre déclaration de récolte a bien été envoyée par email aux acheteurs suivant :
         <ul>
         <?php foreach ($sendMailAcheteursReport as $acheteurReport) : ?>
-            <li>Type : <?php echo $acheteurReport->type; ?> | CVI : <?php echo $acheteurReport->cvi; ?> | NOM : <?php echo $acheteurReport->nom; ?></li>
+            <li><?php echo $acheteurReport->type; ?>, <?php echo $acheteurReport->nom ?>, <?php echo $acheteurReport->cvi; ?></li>
         <?php endforeach; ?>
         </ul>
        

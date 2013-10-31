@@ -154,7 +154,7 @@ class acheteurActions extends EtapesActions {
     }
     
     public function executeExploitationAcheteursNoRecolte(sfWebRequest $request) {
-        $this->setCurrentEtape('exploitation_acheteurs');
+        $this->setCurrentEtape('repartition');
         $this->redirectToNextEtapes();
     }
 
