@@ -38,6 +38,21 @@ class DRClient extends acCouchdbClient {
     }
   }
 
+  public function hasImport($cvi, $campagne) {
+
+    return acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($campagne, $cvi) > 0;
+  }
+
+  public function getAcheteursApporteur($cvi, $campagne) {
+    $csv_ids = CSVClient::getInstance()->getCSVsFromRecoltantArray($campagne, $cvi);
+    $acheteurs = array();
+    foreach($csv_ids as $csv_id) {
+      $acheteurs[] = acCouchdbManager::getClient()->find(preg_replace("/^CSV-([0-9]+)-.*/", 'ACHAT-\1', $csv_id));
+    }
+
+    return $acheteurs;
+  }
+
   public function createFromCSVRecoltant($campagne, $tiers, &$import, $depot_mairie = false) {
     $csvs = acCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))

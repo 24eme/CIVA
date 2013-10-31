@@ -13,13 +13,17 @@
             <!-- fin #acheteurs_caves -->
         </div>
     </div>
+    <?php $boutons = array('retour','previsualiser'); ?>
 
     <?php if($dr->isValideeTiers()): ?>
-        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser','email'))) ?>
-    <?php else: ?>
-        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser'))) ?>
+        <?php array_push($boutons, 'email') ?>
     <?php endif; ?>
 
+    <?php if($dr->isValideeTiers() && $has_import): ?>
+        <?php array_push($boutons, 'email_acheteurs') ?>
+    <?php endif; ?>
+
+    <?php include_partial('global/boutons', array('display' => $boutons)) ?>
 
 </form>
 <!-- fin #principal -->

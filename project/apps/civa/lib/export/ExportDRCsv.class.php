@@ -13,10 +13,10 @@
 class ExportDRCsv extends ExportCsv {
     
     protected $_headers = array(
-        "cvi_recoltant" => "CVI récoltant",
-        "nom_recoltant" => "nom récoltant",
         "cvi_acheteur" => "CVI acheteur",
         "nom_acheteur" => "nom acheteur",
+        "nom_recoltant" => "nom récoltant",
+        "cvi_recoltant" => "CVI récoltant",
         "appellation" => "appellation",
         "lieu" => "lieu",
         "cepage" => "cépage",
@@ -130,10 +130,10 @@ class ExportDRCsv extends ExportCsv {
         $detail = $acheteur->getParent()->getParent();
         
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
-            "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
             "nom_acheteur" => acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi)->getNom(),
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
             "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
@@ -156,10 +156,10 @@ class ExportDRCsv extends ExportCsv {
         $denomination = "";
 
         $this->add(array(
-            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
-            "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $detail->getCouchdbDocument()->cvi,
             "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
             "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
             "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
@@ -179,10 +179,10 @@ class ExportDRCsv extends ExportCsv {
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
         $this->add(array(
-            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
-            "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $acheteur->cvi,
             "nom_acheteur" => $acheteur->getNom(),
+            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
             "cepage" => "TOTAL",
@@ -202,10 +202,10 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addNoeudTotal($noeud) {
         $this->add(array(
-            "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
-            "nom_recoltant" => $noeud->getCouchdbDocument()->declarant->nom,
             "cvi_acheteur" => $noeud->getCouchdbDocument()->cvi,
             "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $noeud->getCouchdbDocument()->declarant->nom,
             "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
             "cepage" => "TOTAL",
@@ -225,10 +225,10 @@ class ExportDRCsv extends ExportCsv {
     
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
-            "cvi_recoltant" => $dr->cvi,
-            "nom_recoltant" => $dr->declarant->nom,
             "cvi_acheteur" => $dr->cvi,
             "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $dr->cvi,
+            "nom_recoltant" => $dr->declarant->nom,
             "appellation" => "Jeunes Vignes",
             "lieu" => null,
             "cepage" => null,

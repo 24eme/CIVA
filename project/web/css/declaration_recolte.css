@@ -2155,7 +2155,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 .btn_prev_suiv #email-visualisation #btn-email-acheteur {
-	margin: 7px 0 0 0;
+	margin: 7px 15px 0 0;
 }
 
 #div-btn-email {
@@ -2456,8 +2456,7 @@ a.msg_aide {
 	padding: 0 0 0 20px;
 }
 
-/** popup confirme validation **/
-#popup_confirme_validation #btns {
+.popup_confirme #btns{
 	margin-top: 15px;
 	text-align: center;
 }

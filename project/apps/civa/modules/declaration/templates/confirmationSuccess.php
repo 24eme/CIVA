@@ -17,7 +17,7 @@
                     <p class="important">Votre déclaration de Récolte a bien été enregistrée au CIVA.</p>
                     <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de Récolte au format PDF et au format Tableur.</p>
                 </div>
-                <?php if($has_import && $dr->recolte->getTotalVolumeVendus() > 0): ?>
+                <?php if($has_import): ?>
                 <div id="div-btn-email">
                 <a href="" title="Envoyer à mes acheteurs" alt="Envoyer à mes acheteurs" id="btn-email-acheteur"></a>
                 </div>

@@ -34,11 +34,15 @@ class RecolteMailingManager {
         
         $this->csvContent = $this->getCSVDrContent();
         
-        $this->acheteurs = $this->dr->recolte->getAcheteursArray();
+        $this->acheteurs = DRClient::getInstance()->getAcheteursApporteur($this->dr->cvi, $this->dr->campagne);
         $this->current_document = new ExportDRPdf($this->dr, $this->partial_function);
         $this->current_document->generatePDF();
         $this->current_pdf_content = $this->current_document->output();
         
+    }
+
+    public function getAcheteurs() {
+        return $this->acheteurs;
     }
     
     public function setDR($dr) {
@@ -64,20 +68,19 @@ class RecolteMailingManager {
     public function sendAcheteursMails() {                
       $sendMailAcheteursReport = array();
         
-      foreach ($this->acheteurs as $type_cvi => $vol) {
-            $type_cvi_infos = explode('_', $type_cvi);
+      foreach ($this->getAcheteurs() as $acheteur) {
+            
+            
+            $type_cvi = $acheteur->qualite."_".$acheteur->cvi;
+
             $sendMailAcheteursReport[$type_cvi] = new stdClass();
-            $sendMailAcheteursReport[$type_cvi]->type = $type_cvi_infos[0];
-            $sendMailAcheteursReport[$type_cvi]->cvi = $type_cvi_infos[1];
-            
-            $acheteur = _TiersClient::getInstance()->retrieveByCvi($sendMailAcheteursReport[$type_cvi]->cvi);
-            
+            $sendMailAcheteursReport[$type_cvi]->type = $acheteur->qualite;
+            $sendMailAcheteursReport[$type_cvi]->cvi = $acheteur->cvi;
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
-            $email = $acheteur->email;
-            $compte = $acheteur->getCompteObject();
-            if($compte) {
-                $email = $compte->email;
+            $email = $acheteur->getCompteEmail();
+            if(!$email) {
+                $email = $acheteur->email;
             }
             $sendMailAcheteursReport[$type_cvi]->email = $email;
             $message = $this->getMailForAcheteur($acheteur);
@@ -103,18 +106,23 @@ class RecolteMailingManager {
         
             $subject = 'CIVA - Déclaration de récolte de '.$this->tiers->nom;   
         
-            $mess = 'Bonjour ' . $acheteur->nom . ',
+            $mess = 'Bonjour,
          
-Le vendeur de raisin '.$this->tiers->nom.' a souhaité vous faire parvenir sa déclaration de récolte pour l\'année ' . $this->annee .' depuis le portail du CIVA.
+Le vendeur de raisin '.$this->tiers->nom.' a souhaité vous faire parvenir sa déclaration de récolte pour l\'année ' . $this->annee .'.
     
 Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 
-Cordialement,
+--
+L\'application de télédéclaration de récoltes du CIVA';
 
-Le CIVA';
+        $email = $acheteur->getCompteEmail();
+        if(!$email) {
+            $email = $acheteur->email;
+        }
+
         $message = Swift_Message::newInstance()
-                ->setFrom(array($this->tiers->getCompteEmail() => $this->tiers->nom))
-                ->setTo($acheteur->email)
+                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                ->setTo($email)
                 ->setSubject($subject)
                 ->setBody($mess);        
         
@@ -134,28 +142,26 @@ Le CIVA';
         if($visualisation)
         {
             $subject = 'CIVA - Votre déclaration de récolte';
-            $mess = 'Bonjour ' . $this->tiers->nom . ',
+            $mess = 'Bonjour,
 
 Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $this->annee . '.
 
-Cordialement,
-
-Le CIVA';
+--
+L\'application de télédéclaration de récoltes du CIVA';
 
         }else{
 
         $subject = 'CIVA - Validation de votre déclaration de récolte';
-        $mess = 'Bonjour ' . $this->tiers->nom . ',
+        $mess = 'Bonjour,
 
 Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
     
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
-Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
 
-Cordialement,
-
-Le CIVA';
+--
+L\'application de télédéclaration de récoltes du CIVA';
 
         }
 

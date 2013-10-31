@@ -612,14 +612,3 @@ a.msg_aide_ds {
 	margin-left: 115px;
 	width: 130px;
 }
-
-/**
- * Popup de validation de DS / confirmation d'envoi de mail
- ******************************************/
-
-#popup_confirme_validationDS #btns,
-#popup_confirme_mail #btns 
-{ 
-	margin: 15px 0 0;
-	text-align: center;
-}

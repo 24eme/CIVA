@@ -590,7 +590,7 @@ Configuration:
         definition:
           fields:
             no_usages_industriels: { required: false}
-            no_recapitulatif_appellation: { required: false}
+            no_recapitulatif_couleur: { required: false}
             douane :
               type: collection
               class: ConfigurationDouane
