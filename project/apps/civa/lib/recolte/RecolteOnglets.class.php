@@ -428,7 +428,7 @@ class RecolteOnglets {
 
     public function getPreviousUrlCepage() {
         $keys = array_keys($this->getCurrentCouleur()->getConfig()->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR));
-        $first_key = current($keys);
+        $first_key = key($keys);
         if (!$this->hasPreviousCepage()) {
             return false;
         } elseif($first_key == $this->getCurrentKeyCepage() && $this->hasPreviousCouleur()) {
@@ -440,7 +440,8 @@ class RecolteOnglets {
 
     public function getNextUrlCepage() {
         $keys = $this->getCurrentCouleur()->getConfig()->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR);
-        $last_key = end($keys);
+        end($keys);
+        $last_key = key($keys);
         if (!$this->hasNextCepage()) {
             return false;
         } elseif($last_key == $this->getCurrentKeyCepage() && $this->hasNextCouleur()) {
