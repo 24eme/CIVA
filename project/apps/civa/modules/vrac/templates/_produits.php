@@ -8,7 +8,7 @@
 			<th class="volume"><span>Volume</span></th>
 			<th class="prix"><span>Prix</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
-			<th class="echeance"><span>Echéance</span></th>
+			<th class="echeance"><span>Date</span></th>
 			<th class="enleve"><span>Enlevé</span></th>
 			<?php endif; ?>
 			<?php if ($form): ?>

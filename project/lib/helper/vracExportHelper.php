@@ -25,7 +25,7 @@ return "Le prix s'entend net, c'est-à-dire hors-taxes et tous escomptes déduit
 
 
 function getLastSentence(){
-return "Le vendeur déclare être habilité à produire du vin AOC et qu'il n'est pas sous le coup d'une sanction suite à un manquement.";
+return "Le vendeur déclare être habilité à produire du vin AOC.";
 }
 
 

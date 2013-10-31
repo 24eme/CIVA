@@ -8,25 +8,17 @@
 	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
-<table border="0" cellspacing="0" cellpadding="5" width="100%" style="text-align: right; border-collapse: collapse;">
+<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions vrac&nbsp;</span><br/>
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
-		<th <?php echo ($vrac->isCloture()) ? 'colspan="7"' : 'colspan="6"'; ?> style="background-color: black; color: white; font-weight: bold; text-align: center; padding: 5px;">&nbsp;<?php echo "TRANSACTIONS EN VRAC"; ?>&nbsp;</th>
-	</tr>
-	<tr>
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;">AOC
-			<span style="font-size: 5pt;">
-				<br/>&nbsp;<b>1</b> Alsace
-				<br/>&nbsp;<b>2</b> Crémant
-				<br/>&nbsp;<b>3</b> Grands Crus
-			</span>
+		<th width="60px" style="font-weight: bold; text-align: center; border: 1px solid black;">AOC
 		</th>
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;">Cépage</th>
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;"><small>Dénominations spécifiques, communales, lieux-dits, VT/SGN, etc...</small></th>
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;">Millésime</th>  
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;">Prix* de l'hectolitre <small>(en &euro;/HL)</small></th>
-		<th style="font-weight: bold; text-align: center; border: 1px solid black;">VOLUME estimé<br/><small>(en HL)</small></th>
-		<?php if ($vrac->isCloture()): ?>
-			<th style="font-weight: bold; text-align: center; border: 1px solid black;">VOLUME réel<br/><small>(en HL)</small></th>
+		<th width="320px" style="font-weight: bold; text-align: center; border: 1px solid black;">Produit</th>
+		<th width="50px" style="font-weight: bold; text-align: center; border: 1px solid black;">Mill.</th>  
+		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small>(en &euro;/HL)</small></th>
+		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
+		<?php if (1 || $vrac->isCloture()): ?>
+			<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
 		<?php endif; ?>
 	</tr>
 	<?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
@@ -35,14 +27,13 @@
 							$backgroundColor = getColorRowDetail($detailLine);
 			?>
 	<tr>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></td>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left;">&nbsp;<?php echo $detailLine->getCepage()->getLibelle(); ?></td>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo $detailLine->getLieuLibelle(); ?> <?php echo $detailLine->getLieuDit(); ?> <?php echo $detailLine->getVtsgn(); ?> <?php echo $detailLine->getDenomination(); ?></td>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
-			<?php if ($vrac->isCloture()): ?>
-			<td style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_enleve, true); ?></td>
+			<td width="60px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><span style="font-size: 5pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
+			<td width="320px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left;">&nbsp;<?php echo $detailLine->getCepage()->getLibelle(); echo " ".$detailLine->getLieuLibelle(); ?> <?php echo $detailLine->getLieuDit(); ?> <?php echo $detailLine->getVtsgn(); ?> <?php echo $detailLine->getDenomination(); ?></td>
+			<td width="50px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
+			<?php if (1 || $vrac->isCloture()): ?>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_enleve, true); ?></td>
 			<?php endif; ?>
 	</tr>
 	<?php 
@@ -51,28 +42,26 @@
 	?>
 
 	<tr>
-			<td style="text-align: left;" colspan="4" >&nbsp;*<span style="font-size: 8pt; padding-left: 20px"><?php echo getExplicationEtoile(); ?></span></td>
+			<td style="text-align: left;" colspan="4" >&nbsp;</td>
 			<td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(), true); ?></td>
-			<td style="border: 1px solid black; background-color: #bbb;">&nbsp;</td>    
 			<?php if ($vrac->isCloture()): ?>
 			<td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumeEnleve(), true); ?></td>
 			<?php endif; ?>
 	</tr>
 </table>
-
-<br />
-<br />
-<br />
-<table cellspacing="0" cellpadding="0" border="0" width="100%" style="text-align: right;">
-	<tr>
-		<td style="text-align: left; width: 200px; font-weight: bold;">Conditions de paiement :</td>
-		<td style="text-align: left;"><?php echo $vrac->conditions_paiement; ?></td>
-	</tr>
-	<tr>
-		<td style="text-align: left; width: 200px; font-weight: bold;">Conditions particulières :</td>
-		<td style="text-align: left;"><?php echo $vrac->conditions_particulieres; ?></td>
-	</tr>
-</table>
+<p>*&nbsp;<span style="font-size: 8pt; padding-left: 20px"><?php echo getExplicationEtoile(); ?></span></p>
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<br />&nbsp;
+<p>Conditions de paiement : <?php echo $vrac->conditions_paiement; ?></p>
+<p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p>
 <br />
 <br />
 

@@ -578,7 +578,7 @@
 	padding: 0px 20px;
 }
 
-#contrats_vrac table#actions_fiche td:first-child { text-align: left !important; }
+#contrats_vrac table#actions_fiche td:first-child { text-align: left !important; width:50%; }
 
 #contrats_vrac.fiche_contrat .table_donnees td.enleve,
 #contrats_vrac table tr.retiraisons input,

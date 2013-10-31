@@ -29,7 +29,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->vendeur->identifiant): ?>_grey<?php endif; ?>">Vendeur : <strong><?php echo $item->soussignes->vendeur->raison_sociale; ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
+					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->vendeur->identifiant): ?>_grey<?php endif; ?>">Vendeur : <strong><?php echo ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' ' : ''; echo $item->soussignes->vendeur->raison_sociale; ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->acheteur->identifiant):
@@ -37,7 +37,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->acheteur->identifiant): ?>_grey<?php endif; ?>">Acheteur : <strong><?php echo $item->soussignes->acheteur->raison_sociale; ?></strong></li>
+					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->acheteur->identifiant): ?>_grey<?php endif; ?>">Acheteur : <strong><?php echo ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' ' : ''; echo $item->soussignes->acheteur->raison_sociale; ?></strong></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->mandataire->identifiant):
@@ -45,7 +45,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->mandataire->identifiant): ?>_grey<?php endif; ?>">Courtier : <strong><?php echo $item->soussignes->mandataire->raison_sociale; ?></strong></li>
+					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->mandataire->identifiant): ?>_grey<?php endif; ?>">Courtier : <strong><?php echo ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' ' : ''; echo $item->soussignes->mandataire->raison_sociale; ?></strong></li>
 					<?php endif; ?>
 				</ul>
 			</td>
