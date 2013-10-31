@@ -322,14 +322,29 @@ class RecolteOnglets {
                 return $key;
             }
         }
-        return $this->getItemsAppellation()->getFirstKey();
+
+        $items = $this->getItemsAppellation();
+
+        if(!count($items)) {
+
+            throw new sfException(sprintf("Aucune appellation défini"));
+        }
+
+        return $items->getFirstKey();
     }
 
     protected function getFirstKeyLieu($appellation = null) {
         if (!$appellation)
-            $appellation = $this->getCurrentKeyAppellation ();
+            $appellation = $this->getCurrentKeyAppellation();
 
-        return $this->getItemsLieu($appellation)->getFirstKey();
+        $items = $this->getItemsLieu($appellation);
+
+        if(!count($items)) {
+
+            throw new sfException(sprintf("Aucun lieu définis dans l'appellation %s", $appellation));
+        }
+
+        return $items->getFirstKey();
     }
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
