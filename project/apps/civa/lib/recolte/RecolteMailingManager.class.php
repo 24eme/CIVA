@@ -82,6 +82,7 @@ class RecolteMailingManager {
             $message = $this->getMailForAcheteur($acheteur);
         
             try {
+                $message->setBcc("vlaurent@actualys.com");
                 $this->mailer->send($message);
             } catch (Exception $e) {
                $sendMailAcheteursReport[$type_cvi]->sended = false;
@@ -109,7 +110,7 @@ Le vendeur de raisin '.$this->tiers->nom.' a souhaité vous faire parvenir sa d�
 Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 
 --
-L\'application de télédéclaration de récolte du CIVA';
+L\'application de télédéclaration de récoltes du CIVA';
 
         $email = $acheteur->getCompteEmail();
         if(!$email) {
@@ -142,9 +143,8 @@ L\'application de télédéclaration de récolte du CIVA';
 
 Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $this->annee . '.
 
-Cordialement,
-
-Le CIVA';
+--
+L\'application de télédéclaration de récoltes du CIVA';
 
         }else{
 
@@ -158,7 +158,7 @@ Vous trouverez ci-joint votre déclaration de récolte au format PDF et au forma
 Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
 
 --
-L\'application de télédéclaration de récolte du CIVA';
+L\'application de télédéclaration de récoltes du CIVA';
 
         }
 
