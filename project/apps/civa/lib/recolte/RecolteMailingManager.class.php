@@ -75,7 +75,7 @@ class RecolteMailingManager {
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
             $email = $acheteur->getCompteEmail();
-            if($email) {
+            if(!$email) {
                 $email = $acheteur->email;
             }
             $sendMailAcheteursReport[$type_cvi]->email = $email;
@@ -114,7 +114,7 @@ Cordialement,
 Le CIVA';
 
         $email = $acheteur->getCompteEmail();
-        if($email) {
+        if(!$email) {
             $email = $acheteur->email;
         }
 
