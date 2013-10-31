@@ -15,9 +15,7 @@
 			Validation de votre contrat en vrac
 		<?php endif; ?>
 		</a>
-		<?php if ($vrac->isValide() || $vrac->isAnnule()): ?>
-			<span class="statut"><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span>
-		<?php endif; ?>
+		<span class="statut"><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span>
 	</li>
 </ul>
 </div>
@@ -50,6 +48,33 @@
 		?>
 		
 		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form)) ?>
+		
+<table class="validation table_donnees">
+	<thead>
+		<tr>
+			<th style="width: 212px;">Conditions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				Conditions de paiement
+			</td>
+			<td>
+				<?php echo $vrac->conditions_paiement ?>
+			</td>
+		</tr>
+		<tr class="alt">
+			<td>
+				Conditions particulières
+			</td>
+			<td>
+				<?php echo $vrac->conditions_particulieres ?>
+			</td>
+		</tr>
+
+	</tbody>
+</table>
 		
 		
 	</div>

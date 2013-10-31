@@ -38,7 +38,7 @@
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th>Conditions</th>
+			<th style="width: 212px;">Conditions</th>
 		</tr>
 	</thead>
 	<tbody>
