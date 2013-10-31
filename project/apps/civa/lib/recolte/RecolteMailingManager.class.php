@@ -82,7 +82,7 @@ class RecolteMailingManager {
             $message = $this->getMailForAcheteur($acheteur);
         
             try {
-                $message->setBcc("vlaurent@actualys.com");
+                $message->setBcc("vince.laurent@gmail.com");
                 $this->mailer->send($message);
             } catch (Exception $e) {
                $sendMailAcheteursReport[$type_cvi]->sended = false;
@@ -103,15 +103,13 @@ class RecolteMailingManager {
         
             $subject = 'CIVA - Déclaration de récolte de '.$this->tiers->nom;   
         
-            $mess = 'Bonjour ' . $acheteur->nom . ',
+            $mess = 'Bonjour,
          
 Le vendeur de raisin '.$this->tiers->nom.' a souhaité vous faire parvenir sa déclaration de récolte pour l\'année ' . $this->annee .' depuis le portail du CIVA.
     
 Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 
-Cordialement,
-
-Le CIVA';
+L\'application de télédéclaration de récolte du CIVA';
 
         $email = $acheteur->getCompteEmail();
         if(!$email) {
@@ -119,7 +117,7 @@ Le CIVA';
         }
 
         $message = Swift_Message::newInstance()
-                ->setFrom(array($this->tiers->getCompteEmail() => $this->tiers->nom))
+                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
                 ->setTo($email)
                 ->setSubject($subject)
                 ->setBody($mess);        
@@ -140,7 +138,7 @@ Le CIVA';
         if($visualisation)
         {
             $subject = 'CIVA - Votre déclaration de récolte';
-            $mess = 'Bonjour ' . $this->tiers->nom . ',
+            $mess = 'Bonjour,
 
 Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $this->annee . '.
 
@@ -151,17 +149,15 @@ Le CIVA';
         }else{
 
         $subject = 'CIVA - Validation de votre déclaration de récolte';
-        $mess = 'Bonjour ' . $this->tiers->nom . ',
+        $mess = 'Bonjour,
 
 Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
     
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
-Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
 
-Cordialement,
-
-Le CIVA';
+L\'application de télédéclaration de récolte du CIVA';
 
         }
 
