@@ -19,9 +19,8 @@ $(document).ready( function()
 });
 
 var initFlashMessage = function() {
-	$('p.flash_message').delay(2000).animate({
-opacity: 0,
-height: 0
+	$('p.flash_message').delay(5000).animate({
+opacity: 0
 }, 600);
 }
 
