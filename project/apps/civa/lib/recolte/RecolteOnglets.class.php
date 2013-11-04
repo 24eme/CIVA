@@ -323,14 +323,12 @@ class RecolteOnglets {
             }
         }
 
-        $items = $this->getItemsAppellation();
-
-        if(!count($items)) {
+        if(!count($this->getItemsAppellation())) {
 
             throw new sfException(sprintf("Aucune appellation défini"));
         }
 
-        return $items->getFirstKey();
+        return $this->getItemsAppellation()->getFirstKey();
     }
 
     protected function getFirstKeyLieu($appellation = null) {
@@ -339,12 +337,12 @@ class RecolteOnglets {
 
         $items = $this->getItemsLieu($appellation);
 
-        if(!count($items)) {
+        if(!count($this->getItemsLieu($appellation))) {
 
             throw new sfException(sprintf("Aucun lieu définis dans l'appellation %s", $appellation));
         }
 
-        return $items->getFirstKey();
+        return $this->getItemsLieu($appellation)->getFirstKey();
     }
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
