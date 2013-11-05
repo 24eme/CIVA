@@ -47,8 +47,7 @@
             <?php endif;  ?>
 
             <?php if($sf_user->isAuthenticated()): ?>
-
-                <?php if($sf_user->isInDelegateMode()):?>
+                <?php if($sf_user->isInDelegateMode() && !$sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)):?>
                      <li class="red"><a href="<?php echo url_for('@delegate_mode_retour_espace_civa'); ?>">Retour à mon espace</a></li>
                 <?php else : ?>
                      <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
