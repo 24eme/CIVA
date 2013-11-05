@@ -242,9 +242,7 @@ class declarationActions extends EtapesActions {
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
         
-        $visualisation = $this->getRequestParameter('message', null) == "custom" && !is_null(($annee));
-        $this->emailSend = $this->mailerManager->sendMail($visualisation);       
-
+        $this->emailSend = $this->mailerManager->sendMail(true);       
     }
 
     /**

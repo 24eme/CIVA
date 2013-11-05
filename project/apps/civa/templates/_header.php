@@ -42,15 +42,14 @@
             <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE): ?>
                 <li><a href="<?php echo url_for('@compte_modification_oublie'); ?>">Mon compte</a></li>
             <?php endif; ?>
-            <?php  if ($sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)): ?>
-                <li class="admin"><a href="<?php echo url_for('@admin'); ?>">Administration</a></li>
-            <?php endif;  ?>
 
             <?php if($sf_user->isAuthenticated()): ?>
-
-                <?php if($sf_user->isInDelegateMode()):?>
+                <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)): ?>
+                    <li class="admin"><a href="<?php echo url_for('@admin'); ?>">Administration</a></li>
+                <?php elseif($sf_user->isInDelegateMode()):?>
                      <li class="red"><a href="<?php echo url_for('@delegate_mode_retour_espace_civa'); ?>">Retour à mon espace</a></li>
-                <?php else : ?>
+                <?php endif; ?>
+                <?php if(!$sf_user->isInDelegateMode()) : ?>
                      <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
                 <?php endif; ?>
             <?php else : ?>
