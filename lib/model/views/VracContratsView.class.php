@@ -51,7 +51,7 @@ class VracContratsView extends acCouchdbView
     public function findForDb2Export(array $date, $type = "C") 
     {
     	$contrats = array();
-    	$statuts = ($type == "C")? array(Vrac::STATUT_VALIDE) : array(Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE);
+    	$statuts = ($type == "C")? array(Vrac::STATUT_VALIDE, Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE) : array(Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE);
 		foreach ($statuts as $statut) {
 			$contrats = array_merge($this->findBy($statut, $date), $contrats);
 		}
