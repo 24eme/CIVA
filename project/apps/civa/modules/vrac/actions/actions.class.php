@@ -260,7 +260,7 @@ class vracActions extends sfActions
     	if (!$tiers) {
     		throw new sfException('Le tiers d\'id "'.$identifiant.'" n\'existe pas.');
     	}
-    	return $this->renderPartial('vrac/soussigne', array('tiers' => $tiers));	
+    	return $this->renderPartial('vrac/soussigne', array('tiers' => $tiers, 'fiche' => false));	
     }
     
     public function executeAjouterProduitLieux(sfWebRequest $request) 
