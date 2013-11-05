@@ -33,7 +33,7 @@ class CompteTiers extends BaseCompteTiers {
     public function getTiersType($type) {
     	foreach ($this->tiers as $tiers) {
     		if ($tiers->type == $type) {
-    			return acCouchdbManager::getClient()->find($tiers->_id);
+    			return acCouchdbManager::getClient()->find($tiers->id);
     		}
     	}
     	return null;
