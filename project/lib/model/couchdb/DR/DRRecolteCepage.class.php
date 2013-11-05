@@ -22,6 +22,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return array($this->getHash() => $this);
     }
 
+     public function getTotalSuperficieVendus() {
+
+      return null;
+    }
+
     public function getTotalSuperficieVendusByCvi($type, $cvi) {
 
       return null;
