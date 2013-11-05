@@ -19,6 +19,7 @@ Vrac:
             siret: {  }
             cvi: {  }
             num_accise: {  }
+            civaba: {  }
             adresse: {  }
             code_postal: {  }
             commune: {  }
@@ -38,6 +39,7 @@ Vrac:
             siret: {  }
             cvi: {  }
             num_accise: {  }
+            civaba: {  }
             adresse: {  }
             code_postal: {  }
             commune: {  }
