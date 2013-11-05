@@ -52,7 +52,7 @@ class declarationActions extends EtapesActions {
                 if (!$old_doc) {
                     throw new Exception("Bug: " . $dr_data['liste_precedentes_declarations'] . " not found :()");
                 }
-                $doc = DRClient::getInstance()->createDeclarationClone($old_doc, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
+                $doc = DRClient::getInstance()->createDeclarationClone($old_doc, $tiers, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
                 
                 return $this->redirectByBoutonsEtapes(array('valider' => 'next'));

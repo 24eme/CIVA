@@ -2221,13 +2221,6 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 /**
- * Popup de confirmation d'envoi de mail
- ******************************************/
-#popup_confirme_mail #btns {
-	margin: 15px 0 0 95px;
-}
-
-/**
  * Popup d'ajout
  ******************************************/
 .popup_ajout {

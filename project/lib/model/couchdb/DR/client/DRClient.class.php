@@ -16,9 +16,10 @@ class DRClient extends acCouchdbClient {
     return $doc;
   }
 
-  public function createDeclarationClone($dr, $campagne, $depot_mairie) {
+  public function createDeclarationClone($dr, $tiers, $campagne, $depot_mairie) {
     $doc = clone $dr;
     $doc->campagne = $campagne;
+    $doc->cvi = $tiers->cvi;
     $this->initDeclaration($doc, $depot_mairie);
     $doc->devalidate();
     $doc->removeVolumes();
@@ -123,7 +124,8 @@ class DRClient extends acCouchdbClient {
   }
 
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-      return parent::find('DR-'.$cvi.'-'.$campagne, $hydrate);
+
+      return $this->find('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
 
     public function getAllByCampagne($campagne, $hydrate = acCouchdbClient::HYDRATE_ON_DEMAND) {
