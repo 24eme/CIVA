@@ -16,8 +16,9 @@ class exportVracTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date'),
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
+            new sfCommandArgument('date_begin', sfCommandArgument::REQUIRED, 'date'),
+            new sfCommandArgument('date_end', sfCommandArgument::OPTIONAL, 'date'),
         ));
 
         $this->addOptions(array(
@@ -42,33 +43,63 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
-        $date = $arguments['date'];
-        $dates = array(date('Y-m-d', strtotime("1 day ago" )), $date);
         
-        $csvDecven = new ExportCsv();
-        $csvDdecvn = new ExportCsv();
-		$contrats = VracContratsView::getInstance()->findForDb2Export($dates);
-        foreach($contrats as $contrat) {
-            $valuesContrat = $contrat->value;
-            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
-            $i = 0;
-            $dateRetiraison = null;
-            foreach ($produits as $produit) {
-            	$i++;
-            	$valuesProduit = $produit->value;
-            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
-            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
-            	if (!$dateRetiraison || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraison)) {
-            		$dateRetiraison = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
-            	}
-            	$csvDdecvn->add($valuesProduit);
-            }
-            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = $dateRetiraison;
-            $csvDecven->add($valuesContrat);
+        $configCepappctr = new Cepappctr();
+        $date_begin = $arguments['date_begin'];
+        $date_end = ($arguments['date_end'])? $arguments['date_end'] : date('Y-m-d');
+        $dates = array($date_begin, $date_end);
+        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
+        
+        /*
+         * CREATION
+         */
+        $types = array('C', 'M');
+        foreach ($types as $type) {
+        	$csvDecven = new ExportCsv();
+	        $csvDdecvn = new ExportCsv();
+			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
+	        foreach($contrats as $contrat) {
+	            $valuesContrat = $contrat->value;
+	            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
+	            $i = 0;
+	            $dateRetiraison = null;
+	            foreach ($produits as $produit) {
+	            	$i++;
+	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
+	            		continue;
+	            	}
+	            	$valuesProduit = $produit->value;
+	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
+	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
+	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
+	            	if (!$dateRetiraison || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraison)) {
+	            		$dateRetiraison = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
+	            	}
+	            	$csvDdecvn->add($valuesProduit);
+	            }
+	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = $dateRetiraison;
+	            $csvDecven->add($valuesContrat);
+	        }
+	
+	        $decven = $csvDecven->output();
+	        $ddecvn = $csvDdecvn->output();
+	        
+	        $folderPath = $arguments['folderPath'];
+	        $path_ddecvn = $folderPath.'/'.$filenameHeader.'DDECVN-'.$type;
+	        $path_decven = $folderPath.'/'.$filenameHeader.'DECVEN-'.$type;
+	        
+	        $file_ddecvn = fopen($path_ddecvn, 'w');
+	        fwrite($file_ddecvn, "\xef\xbb\xbf");
+	        fclose($file_ddecvn);
+	        
+	        $file_decven = fopen($path_decven, 'w');
+	        fwrite($file_decven, "\xef\xbb\xbf");
+	        fclose($file_decven);
+	        
+	        file_put_contents($path_ddecvn, $ddecvn);        
+	        file_put_contents($path_decven, $decven);
         }
-
-        $decven = $csvDecven->output();
-        $ddecvn = $csvDdecvn->output();
         
         $modele_decven = array(
             "numero_archive" => null,
@@ -77,7 +108,7 @@ EOF;
             "montant_cotisation" => null, 
             "montant_cotisation_paye" => null, 
             "mode_de_paiement" => null,
-            "cvi_acheteur" => null, // civaba !! ATTENTE VINCENT
+            "cvi_acheteur" => null,
             "type_acheteur" => null,
             "tca" => null,
             "cvi_vendeur" => null,
@@ -103,7 +134,7 @@ EOF;
             
         $modele_ddecvn = array(
             "numero_archive" => null,
-            "code_cepage" => null, // ordre mercurial "on a pas" !!! attente fichier cepap = couple appellation / cepage
+            "code_cepage" => null,
             "cepage" => null,
             "code_appellation" => null,
             "numero_ordre" => null, 
@@ -111,32 +142,32 @@ EOF;
             "volume_enleve" => null,
             "prix_unitaire" => null, 
             "degre" => null,
-            "top_mercuriale" => null, // NULL sauf pour le KL appellation 1 (klevener aligenchtagne) ou (appllation 1 et VTSGN non vide 1/2) = "N"
+            "top_mercuriale" => null,
             "millesime" => null,
             "vtsgn" => null,
             "date_circulation" => null,
             );
-        
-        $folderPath = $arguments['folderPath'];
-        $path_ddecvn = $folderPath.'/DDECVN'.'_'.$date;
-        $path_decven = $folderPath.'/DECVEN'.'_'.$date;
-        
-        $file_ddecvn = fopen($path_ddecvn, 'w');
-        fwrite($file_ddecvn, "\xef\xbb\xbf");
-        fclose($file_ddecvn);
-        
-        $file_decven = fopen($path_decven, 'w');
-        fwrite($file_decven, "\xef\xbb\xbf");
-        fclose($file_decven);
-        
-        file_put_contents($path_ddecvn, $ddecvn);        
-        file_put_contents($path_decven, $decven);
+            
         echo "EXPORT fini\n";
+    }
+    
+    protected function getTopMercuriale ($ligne) 
+    {
+    	$top_mercuriale = null;
+    	if ($ligne[VracProduitsView::VALUE_CODE_APPELLATION] == 1) {
+    		if ($ligne[VracProduitsView::VALUE_VTSGN]) {
+    			$top_mercuriale = "N";
+    		}
+    		if ($ligne[VracProduitsView::VALUE_CEPAGE] == "KL") {
+    			$top_mercuriale = "N";
+    		}
+    	}
+    	return $top_mercuriale;
     }
     
     protected function getCodeAppellation($appellation)
     {
-    	$code = null;
+    	$code = 1;
     	switch ($appellation) {
                 case 'CREMANT':
                     $code = 2;
@@ -144,6 +175,11 @@ EOF;
                 case 'GRDCRU':
                     $code = 3;
                     break;
+             	case "COMMUNALE":
+                    $code = 7;
+             	case "LIEUDIT":
+                 	return "Lieux-dits";
+                    $code = 8;
                 default:
                     $code = 1;
         }
