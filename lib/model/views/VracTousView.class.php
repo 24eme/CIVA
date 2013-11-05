@@ -32,7 +32,7 @@ class VracTousView extends acCouchdbView
     	$items = $this->findBy($identifiant, $campagne, $statut);
     	$result = array();
     	foreach ($items as $item) {
-    		$result[$item->value->date] = $item;
+    		$result[$item->id] = $item;
     	}
     	krsort($result);
     	return $result;
