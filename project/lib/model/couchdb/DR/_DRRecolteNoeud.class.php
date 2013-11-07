@@ -117,11 +117,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getDataByFieldAndMethod('lies', array($this, 'getSumNoeudWithMethod'), $force_calcul, array('getLies') );
         }
 
-        if(!$this->getTotalCaveParticuliere() > 0) {
-            
-            return 0;
-        }
-
         return $this->_get('lies') ? $this->_get('lies') : 0;
     }
 

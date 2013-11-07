@@ -980,15 +980,6 @@ var volumeOnChange = function(input) {
     updateElementRows($('input.total'), $('#cepage_total_volume'));
     updateElementRows($('input.lies'), $('#cepage_lies'));
 
-    if(!parseFloat($('input.cave').val()) > 0) {
-       $('input.lies').val("");
-       $('input.lies').addClass("readonly");
-       $('input.lies').attr("readonly", "readonly");
-    } else {
-       $('input.lies').removeClass("readonly");
-       $('input.lies').removeAttr("readonly");
-    }
-
     if ($('#cepage_rendement').val() == -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_volume').val()));
     }

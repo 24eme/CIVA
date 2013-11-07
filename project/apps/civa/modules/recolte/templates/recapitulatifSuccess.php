@@ -24,10 +24,18 @@
                                 <p class="flash_message"><?php echo $sf_user->getFlash('recapitulatif_confirmation'); ?></p>
                             <?php endif; ?>
 
-                            <?php if($appellationlieu->canCalculVolumeRevendiqueSurPlace() && $appellationlieu->getVolumeRevendiqueCaveParticuliere() < 0): ?>
-                            <p class="message message_erreur">
-                                <?php echo MessagesClient::getInstance()->getMessage('err_log_recap_vente_revendique_sur_place_negatif') ?>
-                            </p>
+                            <?php if(!$appellationlieu->getTotalCaveParticuliere() && $appellationlieu->getLies() > 0): ?>
+                                <p class="message message_erreur">
+                                <?php echo MessagesClient::getInstance()->getMessage('err_log_usages_industriels_pas_volume_sur_place') ?>
+                                </p>
+                            <?php elseif($appellationlieu->getLies() > $appellationlieu->getTotalCaveParticuliere()): ?>
+                                <p class="message message_erreur">
+                                <?php echo MessagesClient::getInstance()->getMessage('err_log_usages_industriels_superieur_volume_sur_place') ?>
+                                </p>
+                            <?php elseif($appellationlieu->canCalculVolumeRevendiqueSurPlace() && $appellationlieu->getVolumeRevendiqueCaveParticuliere() < 0): ?>
+                                <p class="message message_erreur">
+                                    <?php echo MessagesClient::getInstance()->getMessage('err_log_recap_vente_revendique_sur_place_negatif') ?>
+                                </p>
                             <?php endif; ?>
 
 				            <div id="total_appelation">
@@ -231,11 +239,18 @@
                                 <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
 
                                     <?php if(isset($form[$key]['lies'])): ?>
-                                    if(parseFloat($('#recapitulatif_<?php echo $key ?>_lies').val()) > parseFloat(<?php echo $form_item->getObject()->getTotalVolume() ?>)) {
-                                        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_log_usages_industriels_superieur_volume')); ?></p>');
-                                        openPopup($('#popup_msg_erreur'), 0);
-                                        return false;
-                                    }
+                                        <?php if(!$form_item->getObject()->getTotalCaveParticuliere()): ?>
+                                        if(parseFloat($('#recapitulatif_<?php echo $key ?>_lies').val()) > 0) {
+                                            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_log_usages_industriels_pas_volume_sur_place')); ?></p>');
+                                            openPopup($('#popup_msg_erreur'), 0);
+                                            return false;
+                                        }
+                                        <?php endif; ?>
+                                        if(parseFloat($('#recapitulatif_<?php echo $key ?>_lies').val()) > parseFloat(<?php echo $form_item->getObject()->getTotalCaveParticuliere() ?>)) {
+                                            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_log_usages_industriels_superieur_volume_sur_place')); ?></p>');
+                                            openPopup($('#popup_msg_erreur'), 0);
+                                            return false;
+                                        }
                                     <?php endif; ?>
 
                                     <?php if($form_item->getObject()->acheteurs->count() > 0 && $form_item->getObject()->getConfig()->existRendement()): ?>

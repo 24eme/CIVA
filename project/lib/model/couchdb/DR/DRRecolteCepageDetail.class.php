@@ -169,11 +169,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
         $this->volume = $v;
         $this->volume_dplc = null;
-        if(!$this->cave_particuliere > 0) {
-            $this->lies = null;
-        } else {
-            $this->lies = $this->getLies(true);
-        }
+        $this->lies = $this->getLies(true);
+        
         $this->usages_industriels = $this->lies;
         $this->volume_revendique = $this->volume - $this->usages_industriels;
 
