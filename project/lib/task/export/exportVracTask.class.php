@@ -73,6 +73,9 @@ EOF;
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
 	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
+	            	if ($type == 'C') {
+	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
+	            	}
 	            	if (!$dateRetiraison || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraison)) {
 	            		$dateRetiraison = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
 	            	}
@@ -178,7 +181,6 @@ EOF;
              	case "COMMUNALE":
                     $code = 7;
              	case "LIEUDIT":
-                 	return "Lieux-dits";
                     $code = 8;
                 default:
                     $code = 1;
