@@ -1,4 +1,5 @@
 <?php use_helper('Date') ?>
+<?php use_helper('Text') ?>
 <table id="soussignes_listing" cellspacing="0" cellpadding="0" class="table_listing">
 	<thead>
 		<tr>
@@ -16,6 +17,9 @@
 				if (!$archive && ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
 					continue;
 				}
+				if ($item->statut == Vrac::STATUT_CREE && !$item->is_proprietaire) {
+					continue;
+				}
 				$alt = ($counter%2);
 				$hasValidated = false;
 		?>
@@ -29,7 +33,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->vendeur->identifiant): ?>_grey<?php endif; ?>">Vendeur : <strong><?php echo ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' ' : ''; echo $item->soussignes->vendeur->raison_sociale; ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
+					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->vendeur->identifiant): ?>_grey<?php endif; ?>">Vendeur : <strong><?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35); ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->acheteur->identifiant):
@@ -37,7 +41,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->acheteur->identifiant): ?>_grey<?php endif; ?>">Acheteur : <strong><?php echo ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' ' : ''; echo $item->soussignes->acheteur->raison_sociale; ?></strong></li>
+					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->acheteur->identifiant): ?>_grey<?php endif; ?>">Acheteur : <strong><?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35); ?></strong></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->mandataire->identifiant):
@@ -45,7 +49,7 @@
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->mandataire->identifiant): ?>_grey<?php endif; ?>">Courtier : <strong><?php echo ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' ' : ''; echo $item->soussignes->mandataire->raison_sociale; ?></strong></li>
+					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->mandataire->identifiant): ?>_grey<?php endif; ?>">Courtier : <strong><?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35); ?></strong></li>
 					<?php endif; ?>
 				</ul>
 			</td>

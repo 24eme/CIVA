@@ -82,9 +82,9 @@
 						<ul>
 							<?php foreach ($annuaire->commerciaux as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $item ?> <a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $key ?><?php if ($item): ?> (<?php echo $item; ?>)<?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $key ?><?php if ($item): ?> (<?php echo $item; ?>)<?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>

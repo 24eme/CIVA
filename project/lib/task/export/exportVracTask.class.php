@@ -60,6 +60,9 @@ EOF;
 			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
+            	if ($type == 'C') {
+            		$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE];
+            	}
 	            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 	            $i = 0;
 	            $dateRetiraison = null;
@@ -75,6 +78,7 @@ EOF;
 	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
 	            	if ($type == 'C') {
 	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
+	            		$valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] = null;
 	            	}
 	            	if (!$dateRetiraison || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraison)) {
 	            		$dateRetiraison = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];

@@ -12,8 +12,9 @@ class ExportVracPdf extends ExportDocument {
     protected $no_cache;
     
     protected $vrac;
+    protected $odg;
 
-    public function __construct($vrac, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($vrac, $odg, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
 
         $this->type = $type;
         $this->partial_function = $partial_function;
@@ -21,24 +22,9 @@ class ExportVracPdf extends ExportDocument {
         $this->no_cache = $no_cache;
 
         $this->vrac = $vrac;
-     //   $this->trieVracForPDF();
+        $this->odg = $odg;
         
         $this->init($filename);
-    }
-
-    protected function trieVracForPDF() {
-//        $dss_sorted = array();
-//        foreach ($this->dss as $key => $ds) {
-//            if($ds->isDsPrincipale()){
-//                $dss_sorted[] = $ds;
-//            }
-//        }
-//        foreach ($this->dss as $key => $ds) {
-//            if(!$ds->isDsPrincipale()){
-//                $dss_sorted[] = $ds;
-//            }
-//        }
-//        $this->dss = $dss_sorted;
     }
     
     public function generatePDF() {
@@ -87,7 +73,7 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function create() {    
-            $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac)));
+            $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
     }
 
     protected function getPartial($templateName, $vars = null) {

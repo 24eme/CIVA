@@ -5,11 +5,11 @@
 	<thead>
 		<tr>
 			<th class="produit">Produit</th>
-			<th class="volume"><span>Volume</span></th>
+			<th class="volume"><span>Volume estimé</span></th>
 			<th class="prix"><span>Prix</span></th>
 			<?php if ($vrac->isCloture() || $form): ?>
 			<th class="echeance"><span>Date</span></th>
-			<th class="enleve"><span>Volume</span></th>
+			<th class="enleve"><span>Volume réel</span></th>
 			<?php endif; ?>
 			<?php if ($form): ?>
 			<th class="cloture"><span>Cloture</span></th>
