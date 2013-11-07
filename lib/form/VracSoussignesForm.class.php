@@ -37,7 +37,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($commerciauxChoices)))
         ));
-        $this->validatorSchema->setPostValidator(new VracSoussignesValidator());
+        $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
 
@@ -58,7 +58,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
     {
     	$acheteur = $values['acheteur'];
     	$vendeur = $values['vendeur'];
-    	$this->getObject()->interlocuteur_commercial = $values['interlocuteur_commercial'];
+    	if ($values['interlocuteur_commercial']) {
+    		$commercialEmail = $this->annuaire->commerciaux->get($values['interlocuteur_commercial']);
+    		$this->getObject()->interlocuteur_commercial->nom = $values['interlocuteur_commercial'];
+    		$this->getObject()->interlocuteur_commercial->email = $commercialEmail;
+    	}
     	$this->getObject()->acheteur_type = $values['acheteur_type'];
     	$this->getObject()->vendeur_type = $values['vendeur_type'];
     	$this->getObject()->acheteur_identifiant = $acheteur->_id;
@@ -112,8 +116,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	}
     	$commerciaux = $annuaire->commerciaux->toArray();
     	$choices = array();
-    	foreach ($commerciaux as $commercial) {
-    		$choices[$commercial] = $commercial;
+    	foreach ($commerciaux as $key => $commercial) {
+    		$choices[$key] = $key;
     	}
     	return array_merge(array('' => ''), $choices);
     }

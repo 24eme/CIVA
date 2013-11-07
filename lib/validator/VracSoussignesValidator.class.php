@@ -1,12 +1,21 @@
 <?php
 class VracSoussignesValidator extends sfValidatorBase 
 {
+	
+	protected $vrac;
+	
+	public function __construct($vrac, $options = array(), $messages = array())
+  	{
+  		$this->vrac = $vrac;
+  		parent::__construct($options, $messages);
+  	}
     
     public function configure($options = array(), $messages = array()) 
     {
     	$this->setMessage('required', "Champ obligatoire");
         $this->setMessage('invalid', "Ce tiers n'existe plus");
         $this->addMessage('inconsistent', "L'acheteur et le vendeur ne peuvent être les mêmes");
+        $this->addMessage('email', "Des informations obligatoires sont manquantes");
     }
 
     protected function doClean($values) 
@@ -60,6 +69,12 @@ class VracSoussignesValidator extends sfValidatorBase
         }
         if ($vendeur->_id == $acheteur->_id) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'inconsistent')));
+        }
+        $vendeurHasEmail = ($vendeur->email)? true : false;
+        $acheteurHasEmail = ($acheteur->email)? true : false;
+        $mandataireHasEmail = ($this->vrac->mandataire_identifiant && $this->vrac->mandataire->email)? true : false;
+        if (!$vendeurHasEmail || !$acheteurHasEmail || !$mandataireHasEmail) {
+        	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }
         return array_merge($values, array('acheteur' => $acheteur, 'vendeur' => $vendeur));
     }

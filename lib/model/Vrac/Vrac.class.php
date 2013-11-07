@@ -14,6 +14,8 @@ class Vrac extends BaseVrac
 	const STATUT_ENLEVEMENT = 'ENLEVEMENT';
 	const STATUT_CLOTURE = 'CLOTURE';
 	const PREFIXE_NUMERO = 8;
+	const CEPAGE_EDEL = "cepage_ED";
+	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
 	
 	protected $_config;
 	
@@ -145,6 +147,9 @@ class Vrac extends BaseVrac
         $produit = $this->getOrAdd($hash);
         $config = $produit->getConfig();
         $produit->libelle = $config->getLibelle();
+        if ($produit->getKey() == self::CEPAGE_EDEL) {
+        	$produit->libelle .= self::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
+        }
         $produit->getCouleur()->libelle = $produit->getConfig()->getCouleur()->libelle;
         $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
         $produit->getMention()->libelle = $produit->getConfig()->getMention()->libelle;
@@ -168,7 +173,7 @@ class Vrac extends BaseVrac
         $detail->lieu_dit = $lieuDit;
         $detail->vtsgn = $vtsgn;
         $detail->supprimable = 1;
-        $detail->position = $this->declaration->getPositionNouveauProduitDetail();
+        $detail->position = ($this->declaration->getPositionNouveauProduitDetail() - 1);
     }
     
     public function addActeur($type, $tiers)
@@ -198,6 +203,14 @@ class Vrac extends BaseVrac
     			$num_accise = $metteurEnMarche->no_accises;
     			$civaba = $metteurEnMarche->civaba;
     		}
+    	} 
+    	if (!$num_accise) {
+    		if ($tiers->exist('civaba') && $tiers->civaba) {
+    			if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
+	    			$num_accise = $metteurEnMarche->no_accises;
+	    			$civaba = $metteurEnMarche->civaba;
+    			}
+    		}
     	}
     	$this->acheteur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->acheteur->raison_sociale = $tiers->nom;
@@ -211,6 +224,7 @@ class Vrac extends BaseVrac
     	$this->acheteur->telephone = $tiers->telephone;
     	$this->acheteur->email = $tiers->email;
     	$this->acheteur->famille = null;
+    	$this->acheteur->identifiant = $tiers->_id;
     }
     
     public function storeVendeurInformations($tiers)
@@ -223,19 +237,28 @@ class Vrac extends BaseVrac
     			$num_accise = $metteurEnMarche->no_accises;
     			$civaba = $metteurEnMarche->civaba;
     		}
+    	} 
+    	if (!$num_accise) {
+    		if ($tiers->exist('civaba') && $tiers->civaba) {
+    			if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
+	    			$num_accise = $metteurEnMarche->no_accises;
+	    			$civaba = $metteurEnMarche->civaba;
+    			}
+    		}
     	}
     	$this->vendeur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->vendeur->raison_sociale = $tiers->nom;
     	$this->vendeur->siret = $tiers->siret;
     	$this->vendeur->cvi = $tiers->cvi;
-    	$this->acheteur->num_accise = $num_accise;
-    	$this->acheteur->civaba = $civaba;
+    	$this->vendeur->num_accise = $num_accise;
+    	$this->vendeur->civaba = $civaba;
     	$this->vendeur->adresse = $tiers->siege->adresse;
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
     	$this->vendeur->commune = $tiers->siege->commune;
     	$this->vendeur->telephone = $tiers->telephone;
     	$this->vendeur->email = $tiers->email;
     	$this->vendeur->famille = null;
+    	$this->vendeur->identifiant = $tiers->_id;
     }
     
     public function storeMandataireInformations($tiers)
@@ -251,6 +274,7 @@ class Vrac extends BaseVrac
     	$this->mandataire->telephone = $tiers->telephone;
     	$this->mandataire->email = $tiers->email;
     	$this->mandataire->famille = null;
+    	$this->mandataire->identifiant = $tiers->_id;
     }
     
     public function isSupprimable($userId)

@@ -26,6 +26,7 @@ Vrac:
             telephone: {  }
             email: {  }
             famille: {  }
+            identifiant: {  }
       vendeur_type: {  }
       vendeur_identifiant: {  }
       vendeur:
@@ -46,8 +47,15 @@ Vrac:
             telephone: {  }
             email: {  }
             famille: {  }
+            identifiant: {  }
       mandataire_identifiant: {  }
-      interlocuteur_commercial: {  }
+      interlocuteur_commercial:
+        type: collection
+        class: VracCommercial
+        definition:
+          fields:
+            nom: {  }
+            email: {  }
       mandataire:
         type: collection
         class: VracMandataire
@@ -65,6 +73,7 @@ Vrac:
             telephone: {  }
             email: {  }
             famille: {  }
+            identifiant: {  }
       declaration:
         type: collection
         class: VracDeclaration
@@ -185,3 +194,4 @@ Vrac:
       etape: {  }
       type: {  }
       date_modification: {  }
+      motif_suppression: {  }
