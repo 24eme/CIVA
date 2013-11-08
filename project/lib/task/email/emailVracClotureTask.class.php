@@ -9,7 +9,7 @@
  * Description of class emailDSValidationtask
  * @author mathurin
  */
-class emailVracValidationTask extends sfBaseTask {
+class emailVracClotureTask extends sfBaseTask {
     
   protected function configure()
   {
@@ -22,7 +22,7 @@ class emailVracValidationTask extends sfBaseTask {
     ));
 
     $this->namespace        = 'email';
-    $this->name             = 'vrac-validation';
+    $this->name             = 'vrac-cloture';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [EmailValidationVrac|INFO] task does things.

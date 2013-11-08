@@ -1,8 +1,6 @@
-Madame, Monsieur,<br /><br />
-Le contrat de vente saisi le <?php echo strftime('%d/%m/%Y', strtotime($vrac->valide->date_saisie)) ?> vous concernant a été validé par toutes les parties et enregistré par votre interprofession qui vous attribue un numéro de VISA.<br />
-Vous trouverez ci-joint une version pdf avec le numéro de contrat correspondant.<br />
-Nous vous invitons à bien conserver ce document, preuve de la transaction passée entre les différentes parties.<br />
-Il sera également accessible dans votre historique des contrats.<br /><br />
-Pour toute information, vous pouvez contacter votre interprofession ou votre interlocuteur commercial.<br /><br />
-Cordialement,<br />
-Le CIVA
+<?php include_partial('email/_header', array('vrac' => $vrac)); ?>
+Ce contrat, ayant été validé par toutes les parties, a été visé par le CIVA.<br /><br />
+Vous trouverez ci-joint la version pdf avec le numéro de visa suivant <?php echo $vrac->numero_visa ?>.<br /><br />
+Dès que tous les enlèvements auront été effectués le contrat sera cloturé et vous recevrez un nouveau mail avec en pièce jointe le contrat définitif comportant les volumes rééls.<br /><br />
+Il sera également accessible sur la plateforme du CIVA à l'adresse suivante : <?php echo ProjectConfiguration::getAppRouting()->generate('vrac_fiche', array('sf_subject' => $vrac), true); ?><br /><br />
+<?php include_partial('email/_footer', array('vrac' => $vrac)); ?>
