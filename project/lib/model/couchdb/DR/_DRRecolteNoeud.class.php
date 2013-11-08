@@ -219,11 +219,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->_get('usages_industriels');
         }        
 
-        if(!$this->getConfig()->hasRendementNoeud()) {
-            
-            return $this->getDataByFieldAndMethod('usages_industriels', array($this, 'getUsagesIndustrielsTotal'), $force_calcul);
-        }
-
         return $this->getDplc() > $this->getLies() ? $this->getDplc() : $this->getLies();
     }
 
@@ -343,8 +338,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     /******* Acheteurs *******/
 
     public function getDontDplcVendusMax() {
+        $dont_dplc_vendus_max = round($this->getUsagesIndustriels() - $this->getLies(), 2);
+        if($dont_dplc_vendus_max < 0) {
 
-        return round($this->getUsagesIndustriels() - $this->getLies(), 2);
+            return 0;
+        }
+        return $dont_dplc_vendus_max;
     }
 
     public function getTotalDontDplcVendus() {
