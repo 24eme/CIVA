@@ -111,11 +111,14 @@ class vracActions extends sfActions
 	
 	public function executeCloture(sfWebRequest $request)
 	{
-		throw new sfError404Exception('Fonctionnalité en attente.');
 		$this->vrac = $this->getRoute()->getVrac();
-		$this->vrac->clotureProduits();
-		$this->vrac->save();
-		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+		$this->validation = new VracValidation($this->vrac);
+		if ($this->vrac->allProduitsClotures() && !$this->validation->hasErreurs()) {
+			$this->vrac->clotureContrat();
+			$this->vrac->save();
+			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+		}
+		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
 	}
 	
 	public function executeSupprimer(sfWebRequest $request) 
@@ -160,14 +163,9 @@ class vracActions extends sfActions
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
-        		$this->form->doUpdateObject($this->form->getValues());
-        		$vrac = $this->form->getObject();
-				$this->validation = new VracValidation($vrac);
-				if ($this->validation->isValide()) {
-					$this->getUser()->setFlash('notice', 'Contrat mis à jour avec succès');
-       				$vrac->save();
-       				return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
-				}
+        		$vrac = $this->form->save();
+				$this->getUser()->setFlash('notice', 'Contrat mis à jour avec succès');
+       			return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
         	}
         }
     }

@@ -167,6 +167,15 @@ var initConfirmeSignatureVrac = function()
         return false;
     });
 };
+
+var initClotureContrat = function()
+{
+    $('#clotureContrat_OK').click(function() {
+        $("#popup_cloture_contrat").dialog('close');
+        document.location.href=$('#cloture_contrat_form').attr("action");
+        return false;
+    });
+};
 	
     var callbackAddTemplate = function(ligneParent, bloc) 
     {
@@ -342,6 +351,7 @@ var initConfirmeSignatureVrac = function()
          $.hauteurListesAnnuaire();
          initConfirmeSignatureVrac();
          initConfirmeValidationVrac();
+         initClotureContrat();
 	});
 
 })(jQuery);

@@ -108,8 +108,17 @@
 		</tr>
 	</table>
 	<?php include_partial('popupConfirmeSignature'); ?>
+	<?php include_partial('popupClotureContrat', array('vrac' => $vrac, 'validation' => $validation)); ?>
 	<?php if ($form): ?>
 	</form>
 	<?php endif; ?>
 	<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
 </div>
+<?php if (($vrac->valide->statut == Vrac::STATUT_ENLEVEMENT) && $vrac->allProduitsClotures() && !$validation->hasErreurs()): ?>
+<script type="text/javascript">
+$(document).ready(function()
+{
+openPopup($("#popup_cloture_contrat"));
+});
+</script>
+<?php endif; ?>
