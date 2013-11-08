@@ -38,7 +38,7 @@
 		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
 		     <ul class="messages_log">
 		        <li>
-	                En cas d'erreur sur le contrat, veuillez contacter le responsable du contrat.
+	                En cas d'erreur sur le contrat, veuillez contacter votre interlocuteur, le responsable du contrat.
 		        </li>
 			</ul>
 		</fieldset>

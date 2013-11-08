@@ -18,9 +18,11 @@ class vrac_exportActions extends sfActions
       set_time_limit(180);
       $this->vrac = $this->getRoute()->getVrac();
       $this->vrac->declaration->cleanAllNodes();
+      $odg = $request->getParameter('odg');
+      
       $this->setLayout(false);
 
-      $this->document = new ExportVracPdf($this->vrac, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      $this->document = new ExportVracPdf($this->vrac, $odg, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
       
       if($request->getParameter('force')) {
         $this->document->removeCache();

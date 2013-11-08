@@ -54,13 +54,22 @@ vrac_validation:
     sf_method: [get, post]
 vrac_export_pdf:
   url: /vrac/:numero_contrat/pdf
-  param: { module: vrac_export, action: PDF }
+  param: { module: vrac_export, action: PDF, odg: 0}
   class: VracRoute
   options:
     model:    Vrac
     type:     object
   requirements:
     sf_method: [get, post]  
+vrac_export_odg:
+  url: /vrac/:numero_contrat/odg
+  param: { module: vrac_export, action: PDF, odg: 1}
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_annuaire_commercial:
   url: /vrac/:numero_contrat/annuaire/commercial
   param: { module: vrac, action: annuaireCommercial }

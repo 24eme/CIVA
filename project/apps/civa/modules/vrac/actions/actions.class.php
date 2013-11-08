@@ -126,20 +126,27 @@ class vracActions extends sfActions
 		if (!$this->vrac) {
 			return $this->redirect('mon_espace_civa');
 		}
-		$tiers = $this->getUser()->getDeclarant();
-		if ($this->vrac->isSupprimable($tiers->_id)) {
+		$this->user = $this->getUser()->getDeclarant();
+		if ($this->vrac->isSupprimable($this->user->_id)) {
 			if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 				$this->vrac->delete();
-			} else {
-				$this->vrac->valide->statut = Vrac::STATUT_ANNULE;
-				$this->vrac->save();				
-				$acteurs = $this->vrac->getActeurs();
-				foreach ($acteurs as $type => $acteur) {
-					VracMailer::getInstance()->annulationContrat($this->vrac, $acteur->email);
-				}
+				return $this->redirect('mon_espace_civa');
 			}
+			$this->form = new VracSuppressionForm($this->vrac);
+			if ($request->isMethod(sfWebRequest::POST)) {
+	    		$this->form->bind($request->getParameter($this->form->getName()));
+	        	if ($this->form->isValid()) {
+	        		$this->vrac = $this->form->save();
+		        	$acteurs = $this->vrac->getActeurs();
+					foreach ($acteurs as $type => $acteur) {
+						VracMailer::getInstance()->annulationContrat($this->vrac, $acteur->email);
+					}
+					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+	        	}
+	        }
+		} else {
+			throw new sfError404Exception('Contrat '.$this->vrac->_id.' non supprimable.');
 		}
-		return $this->redirect('mon_espace_civa');
     }
     
 	public function executeFiche(sfWebRequest $request) 
@@ -260,7 +267,13 @@ class vracActions extends sfActions
     	if (!$tiers) {
     		throw new sfException('Le tiers d\'id "'.$identifiant.'" n\'existe pas.');
     	}
-    	return $this->renderPartial('vrac/soussigne', array('tiers' => $tiers, 'fiche' => false));	
+    	$num_accise = null;
+    	if ($tiers->exist('civaba') && $tiers->civaba) {
+    		if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
+	    		$num_accise = $metteurEnMarche->no_accises;
+    		}
+    	}
+    	return $this->renderPartial('vrac/soussigne', array('tiers' => $tiers, 'num_accise' => $num_accise, 'fiche' => false));	
     }
     
     public function executeAjouterProduitLieux(sfWebRequest $request) 
@@ -308,6 +321,9 @@ class vracActions extends sfActions
     	$result = array();
 		foreach ($this->config->recolte->certification->genre->get($appellation)->mention->get($lieu)->getCepages() as $key => $cepage) {
 			$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $cepage->libelle;
+			if ($key == Vrac::CEPAGE_EDEL) {
+				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
+			}
 		}
     	return $this->renderText(json_encode($result));
     }
@@ -354,7 +370,7 @@ class vracActions extends sfActions
     
     protected function getFormRetiraisons($vrac, $user)
     {
-    	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id)) {
+    	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule()) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
     	return null;

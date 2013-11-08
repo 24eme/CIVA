@@ -6,10 +6,11 @@
 			<?php echo $form->renderHiddenFields() ?>
 			<?php echo $form->renderGlobalErrors() ?>
 			<p>Saisissez ici l'identité du commercial de vous souhaitez ajouter.</p><br />
-			<table class="table_donnees">
+			<table class="table_donnees" style="width: 465px;">
 				<thead>
 					<tr>
-						<th><span>Identité</span></th>
+						<th>Identité</th>
+						<th><span>Email</span></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -17,6 +18,10 @@
 						<td>
 							<span><?php echo $form['identite']->renderError() ?></span>
 							<?php echo $form['identite']->render() ?>
+						</td>
+						<td>
+							<span><?php echo $form['email']->renderError() ?></span>
+							<?php echo $form['email']->render() ?>
 						</td>
 					</tr>
 				</tbody>
