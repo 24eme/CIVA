@@ -68,9 +68,8 @@ class VracClient extends acCouchdbClient {
     	$config = self::getConfig();
         $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
         $numeroContrat = $this->getNumeroContratSuivant($date);
-        $numero = $this->getNumeroSuivant();
         $vrac = new Vrac();
-        $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $numero, $date, $campagne);
+        $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);
         return $vrac;
     } 
     

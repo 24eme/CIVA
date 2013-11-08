@@ -4,7 +4,7 @@
  *
  */
 
-class Vrac extends BaseVrac 
+class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 	
 	const STATUT_CREE = 'CREE';
@@ -80,6 +80,11 @@ class Vrac extends BaseVrac
   	{
   		return self::$types_tiers;
   	}
+    
+    public function  __construct() {
+        parent::__construct();         
+        $this->archivage_document = new ArchivageDocument($this);
+    }
   	
   	public function getStatutLibelle()
   	{
@@ -99,13 +104,13 @@ class Vrac extends BaseVrac
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
     
-    public function initVrac($config, $createurIdentifiant, $numeroContrat, $numero, $date, $campagne)
+    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
     {
     	
         $this->_config = $config;
         $this->campagne = $campagne;
+        $this->campagne_archive = 1;
         $this->numero_contrat = $numeroContrat;
-        $this->numero = $numero;
         $this->valide->date_saisie = $date;
         $this->valide->statut = self::STATUT_CREE;
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
@@ -294,7 +299,7 @@ class Vrac extends BaseVrac
     
     public function isValide()
     {
-    	return ($this->numero_archive)? true : false;
+    	return ($this->numero_visa)? true : false;
     }
     
     public function isCloture()
@@ -368,9 +373,6 @@ class Vrac extends BaseVrac
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
-    		if (!$this->numero_archive) {
-    			$this->numero_archive = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero);
-    		}
     	}
     }
     
@@ -379,10 +381,12 @@ class Vrac extends BaseVrac
     	if ($this->getTotalVolumeEnleve() > 0 && $this->valide->statut == self::STATUT_VALIDE) {
     		$this->valide->statut = self::STATUT_ENLEVEMENT;
     	}
-    	if ($this->allProduitsClotures()) {
-    		$this->valide->statut = self::STATUT_CLOTURE;
-    		$this->valide->date_cloture = date('Y-m-d');
-    	}
+    }
+    
+    public function clotureContrat()
+    {
+    	$this->valide->statut = self::STATUT_CLOTURE;
+    	$this->valide->date_cloture = date('Y-m-d');
     }
     
     public function clotureProduits()
@@ -479,20 +483,13 @@ class Vrac extends BaseVrac
     {
     	return $this->declaration->hasProduits();
     }
-    
-    public function refreshNumeros()
-    {
-    	$client = VracClient::getInstance();
-        $this->numero_contrat = $client->getNumeroContratSuivant($this->valide->date_saisie);
-        $this->numero = $client->getNumeroSuivant();
-    }
 
     protected function preSave() 
     {
-        if ($this->isNew()) {
-        	$this->refreshNumeros();
-            $this->constructId();
-        }
+        $this->archivage_document->preSave();
+        if (!$this->numero_visa && $this->numero_archive) {
+    		$this->numero_visa = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero_archive);
+    	}
     }
     
     protected function doSave() 
@@ -500,5 +497,10 @@ class Vrac extends BaseVrac
     	if ($this->valide->statut == self::STATUT_ENLEVEMENT || $this->valide->statut == self::STATUT_CLOTURE) {
         	$this->date_modification = date('Y-m-d');
     	}
+    }
+    
+    public function isArchivageCanBeSet() 
+    {
+        return ($this->valide->statut == self::STATUT_VALIDE);
     }
 }
