@@ -129,6 +129,31 @@ EOF;
                 continue;
             }
 
+            if($tiers->type != "MetteurEnMarche") {
+                $compte = _CompteClient::getInstance()->retrieveByLogin($tiers->cvi, acCouchdbClient::HYDRATE_JSON);
+                $met = null;
+                foreach($compte->tiers as $t) {
+                    if($t->type == 'MetteurEnMarche') {
+                        $met = _TiersClient::getInstance()->find($t->id, acCouchdbClient::HYDRATE_JSON);
+                    }
+                }
+                if($met) {
+                    if($met->telephone == $tiers->telephone) {
+                        $tiers->telephone = null;
+                    }
+
+                    if($met->exploitant->telephone == $tiers->exploitant->telephone) {
+                        $tiers->exploitant->telephone1 = null;
+                    }
+
+                    if($met->fax == $tiers->fax) {
+                        $tiers->fax = null;
+                    }
+                    
+                    $tiers_modifies[$met->_id] = $met;
+                }
+            }
+
             $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
 
