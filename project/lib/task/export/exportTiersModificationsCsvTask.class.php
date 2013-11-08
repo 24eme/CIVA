@@ -129,6 +129,22 @@ EOF;
                 continue;
             }
 
+            if($tiers->exploitant->adresse == $tiers->siege->adresse && 
+               $tiers->exploitant->code_postal == $tiers->siege->code_postal && 
+               $tiers->exploitant->commune == $tiers->siege->commune) {
+                $tiers->exploitant->adresse = null;
+                $tiers->exploitant->code_postal = null;
+                $tiers->exploitant->commune = null;
+            }
+
+            if(!$tiers->exploitant->sexe && $tiers->exploitant->nom == $tiers->nom) {
+                $tiers->exploitant->nom = null;
+            }
+
+            if(!$tiers->exploitant->telephone == $tiers->telephone) { 
+                $tiers->exploitant->telephone = null;
+            }
+
             if($tiers->type != "MetteurEnMarche") {
                 $compte = _CompteClient::getInstance()->retrieveByLogin($tiers->cvi, acCouchdbClient::HYDRATE_JSON);
                 $met = null;
