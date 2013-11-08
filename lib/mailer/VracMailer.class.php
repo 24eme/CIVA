@@ -20,7 +20,8 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $subject = 'Demande de signature d\'un contrat en vrac de la part de '.$proprietaire->raison_sociale;
+        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat vrac] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
 
@@ -32,7 +33,9 @@ class VracMailer {
         $from = self::getFrom();
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
-        $subject = 'Confirmation de signature d\'un contrat en vrac';
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat vrac] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
 
@@ -44,7 +47,9 @@ class VracMailer {
         $from = self::getFrom();
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
-        $subject = 'Validation d\'un contrat en vrac';
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat vrac] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));        
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
@@ -62,28 +67,38 @@ class VracMailer {
         $from = self::getFrom();
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
-        $subject = 'Annulation d\'un contrat en vrac';
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat vrac] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
 
         return self::getMailer()->send($message);
     }
     
-    public function expirationContrat($vrac, $destinataire) 
+    public function clotureContrat($vrac, $destinataire, $filePath) 
     {
         $from = self::getFrom();
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
-        $subject = 'Expiration d\'un contrat en vrac';
-        $body = self::getBodyFromPartial('vrac_expiration_contrat', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
-
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat vrac] Cloture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_cloture_contrat', array('vrac' => $vrac));        
+		$message = Swift_Message::newInstance()
+  					->setFrom($from)
+  					->setTo($to)
+  					->setSubject($subject)
+  					->setBody($body)
+  					->setContentType('text/html')
+  					->attach(Swift_Attachment::fromPath($filePath));
+		
         return self::getMailer()->send($message);
     }
     
     protected static function getFrom()
     {
-    	return array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro");
+    	return array('teledeclaration@civa.fr' => "Contrats CIVA");
     }
 
     protected static function getMailer() 

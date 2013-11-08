@@ -18,6 +18,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
 	
 	protected $_config;
+	protected $archivage_document;
 	
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Brouillon',
@@ -122,6 +123,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function constructId() 
     {
         $this->set('_id', VracClient::getInstance()->buildId($this->numero_contrat));
+    }
+    
+    public function getNumeroArchive()
+    {
+    	return $this->_get('numero_archive');
     }
     
 	public function getConfiguration() 
@@ -427,8 +433,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
     
     public function hasCourtier() {
-        //A implémenter
-        return true;
+        return ($this->mandataire_identifiant)? true : false;
     }
     
     public function getActeurs($withCreator = true) {
@@ -475,8 +480,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     {
     	$this->volume_enleve_total = $this->declaration->getTotalVolumeEnleve();
     	$this->volume_propose_total = $this->declaration->getTotalVolumePropose();
-    	$this->prix_reel_total = $this->declaration->getTotalPrixPropose();;
-    	$this->prix_total = $this->declaration->getTotalPrixEnleve();
+    	$this->prix_reel_total = $this->declaration->getTotalPrixEnleve();
+    	$this->prix_total = $this->declaration->getTotalPrixPropose();
     }
     
     public function hasProduits()
