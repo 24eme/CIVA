@@ -1,5 +1,7 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Float') ?>
+<?php use_helper('Text') ?>
+<?php use_helper('vrac') ?>
 
 <table class="table_donnees produits">
 	<thead>
@@ -30,13 +32,13 @@
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
 			</td>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
+				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;Hl
 			</td>
 			<td class="prix">
 				<?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/Hl
 			</td>
 			<td class="echeance"></td>
-			<td class="enleve"><?php if ($detail->volume_enleve): ?><strong><?php echo echoFloat($detail->volume_enleve) ?></strong> Hl<?php endif; ?></td>
+			<td class="enleve"><strong id="vol<?php echo renderProduitIdentifiant($detail) ?>" data-compare="prop<?php echo renderProduitIdentifiant($detail) ?>" data-cibling="<?php echo $formProduit['cloture']->renderId() ?>"><?php echo echoFloat($detail->volume_enleve) ?></strong> Hl</td>
 			<td class="cloture">
 				<span><?php echo $formProduit['cloture']->renderError() ?></span>
 				<?php echo $formProduit['cloture']->render() ?>

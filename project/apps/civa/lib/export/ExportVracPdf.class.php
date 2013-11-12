@@ -35,8 +35,8 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function init($filename = null) {    
-        $title = "CONTRAT DE VENTE n° ".$this->vrac->numero_archive;
-        $header = "DE VINS AOC PRODUITS EN ALSACE";
+        $title = "CONTRAT DE VENTE EN VRAC                                                      Visa du CIVA N° ".$this->vrac->numero_visa;
+        $header = "DE VINS AOC PRODUITS EN ALSACE                                                        du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
         if (!$filename) {
             $filename = $this->getFileName(true, true);

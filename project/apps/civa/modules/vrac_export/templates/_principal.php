@@ -9,7 +9,7 @@
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions vrac&nbsp;</span><br/>
-<?php $widthProduit = ($vrac->isCloture())? 320 : 390; ?>
+<?php $widthProduit = 320; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
@@ -21,9 +21,7 @@
 		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small>(en &euro;/HL)</small></th>
 		<?php endif; ?>
 		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
-		<?php if ($vrac->isCloture()): ?>
-			<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
-		<?php endif; ?>
+		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
 	</tr>
 	<?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
 			$productLine = $product->getRawValue();
@@ -38,9 +36,7 @@
 			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire(), true); ?></td>
 			<?php endif; ?>
 			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose, true); ?></td>
-			<?php if ($vrac->isCloture()): ?>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_enleve, true); ?></td>
-			<?php endif; ?>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php echoVolume($detailLine->volume_enleve, true); ?></td>
 	</tr>
 	<?php 
 		endforeach;
@@ -50,9 +46,7 @@
 	<tr>
 			<td style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
 			<td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(), true); ?></td>
-			<?php if ($vrac->isCloture()): ?>
-			<td style="border: 2px solid black;"><?php echoVolume($vrac->getTotalVolumeEnleve(), true); ?></td>
-			<?php endif; ?>
+			<td style="border: 2px solid black;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(), true); ?><?php endif; ?></td>
 	</tr>
 	<?php if (!$odg): ?>
 	<tr>

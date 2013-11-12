@@ -10,3 +10,7 @@ function renderTiersLibelle($tiers) {
     $libelle .= $tiers->raison_sociale;
     return truncate_text($libelle, 35);
 }
+
+function renderProduitIdentifiant($detail) {
+	return str_replace('/', '_', $detail->getCepage()->getHash());
+}

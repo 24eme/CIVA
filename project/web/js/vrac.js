@@ -113,6 +113,9 @@
 	    {
 	    	var element = $(this).attr('data-container');
 	        $(this).parents(element).remove();
+	    	var brothers = $('.'+$(this).attr('data-brother'));
+	    	var cible = $('#'+$(this).attr('data-mother'));
+	    	sumContrat(brothers, cible);
 	
 	        return false;
 	    });
@@ -176,10 +179,45 @@ var initClotureContrat = function()
         return false;
     });
 };
+
+var initSummableContrat = function()
+{
+    $('.summable').blur(function() {
+    	var brothers = $('.'+$(this).attr('data-brother'));
+    	var cible = $('#'+$(this).attr('data-mother'));
+    	sumContrat(brothers, cible);
+    });
+};
+
+var sumContrat = function(brothers, cible)
+{
+	var sum = 0;
+	var compare = parseFloat($('#'+cible.attr('data-compare')).text());
+	var cb = $('#'+cible.attr('data-cibling'));
+	if (isNaN(compare)) {
+		compare = 0;
+	} else {
+		compare = compare - compare * 0.1;
+	}
+	brothers.each(function() {
+		var value = parseFloat($(this).val());
+		if (!isNaN(value)) {
+    		sum = sum + value;
+		}
+	});
+	sum = sum.toFixed(2);
+	cible.text(sum);
+	if (sum >= compare) {
+		cb.attr('checked', true);
+	} else {
+		cb.attr('checked', false);
+	}
+};
 	
     var callbackAddTemplate = function(ligneParent, bloc) 
     {
     	initNettoyageChamps();
+        initSummableContrat();
     	var annee = new Date().getFullYear();
     	$('.datepicker').datepicker(
     		    {
@@ -352,6 +390,7 @@ var initClotureContrat = function()
          initConfirmeSignatureVrac();
          initConfirmeValidationVrac();
          initClotureContrat();
+         initSummableContrat();
 	});
 
 })(jQuery);

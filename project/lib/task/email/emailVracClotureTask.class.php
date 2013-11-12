@@ -41,17 +41,17 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 	$contextInstance = sfContext::createInstance($this->configuration);
-  	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
+  	$contrats = VracMailingView::getInstance()->getContratsForEmailCloture();
     foreach ($contrats as $contrat) {
     	$document = new ExportVracPdf($contrat, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
     	$document->generatePDF();
     	$filePath = sfConfig::get('sf_cache_dir').'/pdf/'.$document->getFileName(true, true);
     	$acteurs = $contrat->getActeurs();
 		foreach ($acteurs as $type => $acteur) {
-			VracMailer::getInstance()->validationContrat($contrat, $acteur->email, $filePath);
+			VracMailer::getInstance()->clotureContrat($contrat, $acteur->email, $filePath);
 			$this->logSection('sended', $contrat->_id . ' => ' . $acteur->raison_sociale);
 		}
-		$contrat->valide->email_validation = date('Y-m-d');
+		$contrat->valide->email_cloture = date('Y-m-d');
 		$contrat->save();
     }
   }
