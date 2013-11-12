@@ -2,6 +2,11 @@
 
 class _CompteClient extends acCouchdbClient {
     
+    public static function getInstance() {
+    
+        return acCouchdbManager::getClient('_Compte'); 
+    }
+
     /**
      *
      * @param string $login
