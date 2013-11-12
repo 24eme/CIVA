@@ -5,13 +5,16 @@ class VracMailingView extends acCouchdbView
 	const VALUE_STATUT = 1;
 	const VALUE_DOCUMENT_ID = 2;
 	
+	const KEY_TYPE_RELANCE = "RELANCE";
+	const KEY_TYPE_CLOTURE = "CLOTURE";
+	
     public static function getInstance() {
 
         return acCouchdbManager::getView('VRAC', 'mailing', 'Vrac');
     }
 
-    public function findBy($valide, $emailValide = null, $emailRelance = null) {    
-		$params = array($valide);
+    public function findBy($type, $valide, $emailValide = null, $emailRelance = null) {    
+		$params = array($type, $valide);
 		if ($emailValide !== null) {
 			$params[] = $emailValide;
 			if ($emailRelance !== null) {
@@ -29,22 +32,29 @@ class VracMailingView extends acCouchdbView
     public function getContratsForEmailValide()
     {
     	$result = array();
-    	$items = $this->findBy(1, 0);
+    	$items = $this->findBy(self::KEY_TYPE_RELANCE, 1, 0);
     	foreach ($items as $item) {
     		$result[] = VracClient::getInstance()->find($item->value[self::VALUE_DOCUMENT_ID]);
     	}
     	return $result;
     }
     
-    public function getContratsForEmailRelance($delai)
+    public function getContratsForEmailCloture()
     {
-    	$items = $this->findBy(1, 1, 0);
+    	$result = array();
+    	$items = $this->findBy(self::KEY_TYPE_CLOTURE, 1, 1, 0);
+    	foreach ($items as $item) {
+    		if ($item->value[self::VALUE_STATUT] == Vrac::STATUT_CLOTURE) {
+    			$result[] = VracClient::getInstance()->find($item->value[self::VALUE_DOCUMENT_ID]);
+    		}
+    	}
+    	return $result;
     }
     
     public function getContratsExpires($delai)
     {
     	$result = array();
-    	$items = $this->findBy(0);
+    	$items = $this->findBy(self::KEY_TYPE_RELANCE, 0);
     	foreach ($items as $item) {
     		if ($item->value[self::VALUE_STATUT] == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
     			if (strtotime(date('Y-m-d')) > strtotime(date("Y-m-d", strtotime($item->value[self::VALUE_DATE_SAISIE])) . " +".$delai." day")) {

@@ -20,7 +20,7 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
@@ -34,7 +34,7 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
@@ -48,7 +48,7 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));        
 		$message = Swift_Message::newInstance()
@@ -68,7 +68,7 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/html');
@@ -82,7 +82,7 @@ class VracMailer {
         //$to = array($destinataire);
         $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = if ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Cloture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_cloture_contrat', array('vrac' => $vrac));        
 		$message = Swift_Message::newInstance()
