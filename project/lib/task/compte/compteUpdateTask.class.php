@@ -87,15 +87,6 @@ EOF;
                 $compte_object = acCouchdbManager::getClient()->createDocumentFromData($compte);
                 $compte_object->save();
             }
-            
-            if ($compte->type == "CompteTiers") {
-                if(!array_key_exists($compte->login, $comptes)) {
-                    //Todo : si le compte n'existe en faire un compte proxy
-
-                    //$this->logSection("compte deleted", $compte->_id, null, "ERROR");
-                    //acCouchdbManager::getClient()->deleteDoc($compte);
-                }
-            }
         }
         
         $tiers_compte = array();
@@ -110,23 +101,13 @@ EOF;
                  $compte->mot_de_passe = $compte->generatePass();
                  $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             }
-
-            /*$email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
-            if($email) {
-                if ($email != $compte->email && $compte->email) {
-                    $this->logSection("L'email a été modifié", $compte->_id);
-                }
-                $compte->email = $email;
-            } elseif(!$email && $compte->email) {
-                //$this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
-            }*/
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 
             $compte->remove("tiers");
             $compte->add("tiers");
 
-            $inactif = false;
+            $actif = false;
 
             $tiers_date_creation = null;
 
@@ -136,18 +117,20 @@ EOF;
                 $obj->id = $t->_id;
                 $obj->type = $t->type;
                 $obj->nom = $t->nom;
-                $inactif = (isset($t->statut) && $t->statut == _TiersClient::STATUT_INACTIF);
+                if(!$actif) {
+                    $actif = (!isset($t->statut) || $t->statut != _TiersClient::STATUT_INACTIF);
+                }
                 if(!$tiers_date_creation) {
                     $tiers_date_creation = $t->db2->import_date;
                 }
             }
 
-            if($inactif && $compte->isActif()) {
+            if(!$actif && $compte->isActif()) {
                 $compte->setInactif();
                 echo sprintf("INFO;Le compte à été désactivé;%s;%s\n", $compte->_id, $compte->nom);
             }
 
-            if(!$inactif && !$compte->isActif()) {
+            if($actif && !$compte->isActif()) {
                 $compte->setActif();
                 echo sprintf("INFO;Le compte a été activé;%s;%s\n", $compte->_id, $compte->nom);
             }
