@@ -156,7 +156,7 @@ abstract class _Tiers extends Base_Tiers {
             }
 
             foreach($cvis as $cvi) {
-                if(!in_array($cvi->email, $emails)) {
+                if($cvi->email && !in_array($cvi->email, $emails)) {
                     $emails[] = $cvi->email;
                 }
             }

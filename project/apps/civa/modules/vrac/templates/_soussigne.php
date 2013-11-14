@@ -4,7 +4,7 @@
 <div class="informations form_col">
 <ul>
 	<li><strong><?php echo renderTiersLibelle($tiers) ?></strong></li>
-	<?php if (!$fiche && !count($tiers->emails	)): ?>
+	<?php if (!$fiche && !count($tiers->emails)): ?>
     <fieldset class="message message_erreur">
     	<legend class="message_title" style="position: relative;">Point bloquant <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
