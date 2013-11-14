@@ -5,7 +5,7 @@
 		<div class="fond">
 			<?php echo $form->renderHiddenFields() ?>
 			<?php echo $form->renderGlobalErrors() ?>
-			<p>Saisissez ici l'identité du commercial de vous souhaitez ajouter.</p><br />
+			<p>Saisissez ici l'identité et l'email de l'interlocuteur commercial que vous souhaitez ajouter.</p><br />
 			<table class="table_donnees" style="width: 465px;">
 				<thead>
 					<tr>
