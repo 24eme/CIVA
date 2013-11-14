@@ -1,14 +1,5 @@
 <?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape, 'user' => $user)) ?>
-
-<ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected">
-		<a href="#" style="height: 18px;"><?php echo $etapes->getLibelle($etape) ?></a>
-	</li>
-</ul>
-<div id="contrats_vrac">
-
-    <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
-    	<p>
+    	<p style="margin: 20px;">
     	<?php if($etape == VracEtapes::ETAPE_SOUSSIGNES): ?>
     	Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.
     	<?php elseif($etape == VracEtapes::ETAPE_PRODUITS): ?>
@@ -17,6 +8,15 @@
     	Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernés. Saisissez ici les conditions éventuelles du contrat.
     	<?php endif; ?>
     	</p>
+<ul id="onglets_majeurs" class="clearfix">
+	<li class="ui-tabs-selected">
+		<a href="#" style="height: 18px;"><?php echo $etapes->getLibelle($etape) ?></a>
+	</li>
+</ul>
+<div id="contrats_vrac">
+
+    <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
+
 
         <div class="fond">
             <?php echo $form->renderHiddenFields() ?>
