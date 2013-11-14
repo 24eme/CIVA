@@ -241,6 +241,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->famille = null;
     	$this->acheteur->identifiant = $tiers->_id;
 
+        $this->acheteur->remove('emails'); 
+        $this->acheteur->add('emails'); 
+
         if($this->isProprietaire($this->acheteur->identifiant)) {
             $this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
         } else {
@@ -280,6 +283,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->famille = null;
     	$this->vendeur->identifiant = $tiers->_id;
 
+        $this->vendeur->remove('emails'); 
+        $this->vendeur->add('emails'); 
+
         if($this->isProprietaire($this->vendeur->identifiant)) {
             $this->vendeur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
         } else {
@@ -300,6 +306,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->telephone = $tiers->telephone;
     	$this->mandataire->famille = null;
     	$this->mandataire->identifiant = $tiers->_id;
+
+        $this->mandataire->remove('emails'); 
+        $this->mandataire->add('emails'); 
 
         if($this->isProprietaire($this->mandataire->identifiant)) {
             $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
