@@ -130,7 +130,7 @@ class vracActions extends sfActions
 	        		$this->vrac = $this->form->save();
 		        	$acteurs = $this->vrac->getActeurs();
 					foreach ($acteurs as $type => $acteur) {
-                        foreach($acteur as $email) {
+                        foreach($acteur->emails as $email) {
                             VracMailer::getInstance()->annulationContrat($this->vrac, $email);
                         }
 					}
@@ -207,7 +207,7 @@ class vracActions extends sfActions
 					VracMailer::getInstance()->confirmationSignature($this->vrac, $this->getUser()->getCompte()->email);
 					$acteurs = $this->vrac->getActeurs(false);
 					foreach ($acteurs as $type => $acteur) {
-                        foreach($acteur as $email) {
+                        foreach($acteur->emails as $email) {
 						  VracMailer::getInstance()->demandeSignature($this->vrac, $email);
                         }
 					}
