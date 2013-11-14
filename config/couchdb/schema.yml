@@ -24,7 +24,11 @@ Vrac:
             code_postal: {  }
             commune: {  }
             telephone: {  }
-            email: {  }
+            emails:
+              type: array_collection
+              definition:
+                fields:
+                  '*': { }
             famille: {  }
             identifiant: {  }
       vendeur_type: {  }
@@ -45,7 +49,11 @@ Vrac:
             code_postal: {  }
             commune: {  }
             telephone: {  }
-            email: {  }
+            emails:
+              type: array_collection
+              definition:
+                fields:
+                  '*': { }
             famille: {  }
             identifiant: {  }
       mandataire_identifiant: {  }
@@ -71,7 +79,11 @@ Vrac:
             code_postal: {  }
             commune: {  }
             telephone: {  }
-            email: {  }
+            emails:
+              type: array_collection
+              definition:
+                fields:
+                  '*': { }
             famille: {  }
             identifiant: {  }
       declaration:

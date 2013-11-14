@@ -70,9 +70,9 @@ class VracSoussignesValidator extends sfValidatorBase
         if ($vendeur->_id == $acheteur->_id) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'inconsistent')));
         }
-        $vendeurHasEmail = ($vendeur->email)? true : false;
-        $acheteurHasEmail = ($acheteur->email)? true : false;
-        $mandataireHasEmail = ($this->vrac->mandataire_identifiant && $this->vrac->mandataire->email)? true : false;
+        $vendeurHasEmail = (count($vendeur->emails))? true : false;
+        $acheteurHasEmail = (count($acheteur->emails))? true : false;
+        $mandataireHasEmail = ($this->vrac->mandataire_identifiant && count($this->vrac->mandataire->emails))? true : false;
         if (!$vendeurHasEmail || !$acheteurHasEmail || !$mandataireHasEmail) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }

@@ -203,7 +203,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$this->{$noeud} = $type;
     	}
     }
-    
+
     public function storeAcheteurInformations($tiers)
     {
     	$compte = $tiers->getCompteObject();
@@ -233,9 +233,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->code_postal = $tiers->siege->code_postal;
     	$this->acheteur->commune = $tiers->siege->commune;
     	$this->acheteur->telephone = $tiers->telephone;
-    	$this->acheteur->email = $tiers->email;
     	$this->acheteur->famille = null;
     	$this->acheteur->identifiant = $tiers->_id;
+
+        if($this->isProprietaire($this->acheteur->identifiant)) {
+            $this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+        } else {
+            $this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+        }
     }
     
     public function storeVendeurInformations($tiers)
@@ -267,11 +272,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
     	$this->vendeur->commune = $tiers->siege->commune;
     	$this->vendeur->telephone = $tiers->telephone;
-    	$this->vendeur->email = $tiers->email;
     	$this->vendeur->famille = null;
     	$this->vendeur->identifiant = $tiers->_id;
+
+        if($this->isProprietaire($this->vendeur->identifiant)) {
+            $this->vendeur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+        } else {
+            $this->vendeur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+        }
     }
-    
+
     public function storeMandataireInformations($tiers)
     {
     	$this->mandataire->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
@@ -283,9 +293,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->code_postal = $tiers->siege->code_postal;
     	$this->mandataire->commune = $tiers->siege->commune;
     	$this->mandataire->telephone = $tiers->telephone;
-    	$this->mandataire->email = $tiers->email;
     	$this->mandataire->famille = null;
     	$this->mandataire->identifiant = $tiers->_id;
+
+        if($this->isProprietaire($this->mandataire->identifiant)) {
+            $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+        } else {
+            $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+        }
     }
     
     public function isSupprimable($userId)
