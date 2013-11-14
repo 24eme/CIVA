@@ -112,6 +112,8 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
                 $type = 'Recoltant';
             } elseif (array_key_exists('Acheteur', $this->_tiers)) {
                 $type = 'Acheteur';
+            } elseif (array_key_exists('Courtier', $this->_tiers)) {
+                $type = 'Courtier';
             } else {
                 $type = 'MetteurEnMarche';
             }

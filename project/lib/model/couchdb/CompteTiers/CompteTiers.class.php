@@ -112,7 +112,7 @@ class CompteTiers extends BaseCompteTiers {
     public function isCompteSociete() {
         $login = str_replace('C', '', $this->login);
         
-        return strlen($login) == 10;
+        return strlen($login) <= 10;
     }
 
     public function getIdCompteSociete() {
