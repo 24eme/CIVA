@@ -65,9 +65,10 @@
 		<br />&nbsp;
 <?php endfor;?>
 <div style="display: absolute; bottom: 5px;">
+<?php if($vrac->hasCourtier()) {$widthSignataire = 33.33;} else {$widthSignataire = 50; } ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="text-align: left; border-collapse: collapse;">
 	<tr>
-		<td width="33.33%" valign="top" style="border: 1px solid #000;">
+		<td width="<?php echo $widthSignataire ?>%" valign="top" style="border: 1px solid #000;">
 			<table cellspacing="0" cellpadding="5" border="0" width="100%">
 				<tr>
 					<th style="background-color: grey; text-align: center; color: #FFF; font-weight: bold;">LE VENDEUR</th>
@@ -81,7 +82,7 @@
 			</table>
 		</td>
 		<?php if($vrac->hasCourtier()): ?>
-		<td width="33.33%" valign="top" style="border: 1px solid #000;">
+		<td width="<?php echo $widthSignataire ?>%" valign="top" style="border: 1px solid #000;">
 			<table cellspacing="0" cellpadding="5" border="0" width="100%">
 				<tr>
 					<th style="background-color: grey; text-align: center; color: #FFF; font-weight: bold;">VU, le Courtier</th>
@@ -95,7 +96,7 @@
 			</table>
 		</td>
 		<?php endif; ?>
-		<td width="33.33%" valign="top" style="border: 1px solid #000;">
+		<td width="<?php echo $widthSignataire ?>%" valign="top" style="border: 1px solid #000;">
 			<table cellspacing="0" cellpadding="5" border="0" width="100%">
 				<tr>
 					<th style="background-color: grey; text-align: center; color: #FFF; font-weight: bold;">L'ACHETEUR</th>

@@ -86,6 +86,7 @@ vrac_annuaire:
   options:
     model:    Vrac
     type:     object
+    allow_empty: true
   requirements:
     sf_method: [get, post]
 vrac_etape:

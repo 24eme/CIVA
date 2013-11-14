@@ -39,7 +39,7 @@ class ExportVracPdf extends ExportDocument {
         $header = "DE VINS AOC PRODUITS EN ALSACE                                                        du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
         if (!$filename) {
-            $filename = $this->getFileName(true, true);
+            $filename = $this->getFileName(true, false);
         }
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
         if ($this->type == 'html') {
@@ -55,12 +55,28 @@ class ExportVracPdf extends ExportDocument {
     }
 
     public static function buildFileName($vrac, $with_name = true, $with_rev = false) {
-        $filename = sprintf("CONTRAT_%s", $vrac->numero_contrat);        
+        $filename = sprintf("%s_Contrat-Vrac_%s", str_replace('-', '', $vrac->valide->date_validation), $vrac->numero_visa);        
         
         if($with_name) {            
-            $declarant_nom = _TiersClient::getInstance()->find($vrac->mandataire_identifiant,  acCouchdbClient::HYDRATE_JSON)->exploitant->nom;
-            $declarant_nom = strtoupper(KeyInflector::slugify($declarant_nom));
-            $filename .= '_'.$declarant_nom;
+            $libelle = '';
+		    if($vrac->vendeur->intitule) {
+		    	$libelle .= $vrac->vendeur->intitule.'-';	
+		    }
+		    $libelle .= $vrac->vendeur->raison_sociale.'_';
+		    if($vrac->acheteur->intitule) {
+		    	$libelle .= $vrac->acheteur->intitule.'-';	
+		    }
+		    $libelle .= $vrac->acheteur->raison_sociale;
+		    if ($vrac->hasCourtier()) {
+		    	$libelle .= '_';
+		    	if($vrac->mandataire->intitule) {
+		    		$libelle .= $vrac->mandataire->intitule.'-';	
+		    	}
+		    	$libelle .= $vrac->mandataire->raison_sociale;
+		    }
+		    
+            $libelle = strtoupper(KeyInflector::slugify($libelle));
+            $filename .= '_'.$libelle;
         }
 
         if($with_rev) {            

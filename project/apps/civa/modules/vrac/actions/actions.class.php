@@ -378,8 +378,16 @@ class vracActions extends sfActions
     {
 		$tiers = $this->getUser()->getDeclarant();
 		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
-		$vrac->mandataire_identifiant = $tiers->_id;
-		$vrac->storeMandataireInformations($tiers);
+		if ($tiers->type == 'Courtier') {
+			$vrac->mandataire_identifiant = $tiers->_id;
+			$vrac->storeMandataireInformations($tiers);
+		} elseif ($tiers->type == 'Acheteur') {
+			$vrac->acheteur_identifiant = $tiers->_id;
+			$vrac->storeAcheteurInformations($tiers);
+			$vrac->setAcheteurQualite($tiers->qualite);
+		} else {
+			throw new sfException('Ce tiers ne peut pas créer de contrat vrac.');
+		}
 		return $vrac;
     }
 }
