@@ -153,6 +153,7 @@
 		var url_soussigne = "<?php echo url_for('vrac_soussigne_informations', array('sf_subject' => $vrac, 'acteur' => '-acteur-')) ?>";
 
 		$("select.choix_soussigne").combobox();
+		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").combobox();
 		$("select.choix_soussigne").change(function() { 
 			var acteur = $(this).attr('data-acteur');
 			var type = $(this).attr('data-type');
@@ -164,13 +165,13 @@
 			$.post(url_soussigne.replace('-acteur-', acteur), { identifiant: $(this).val() }, function(data) {$('#'+acteur+'_infos').empty(); $('#'+acteur+'_infos').append(data);});
 		});
 		
-		/*$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").change(function() { 
+		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").change(function() { 
 			if ($(this).val() == 'add') {
 				$("#principal").attr('action', '<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>');
 				$("#principal").submit();
 				return; 
 			}
-		});*/
+		});
 		$(".remove_autocomplete").click(function() {
 			$(this).parents(".selecteur").siblings(".cible").empty();
 		});
