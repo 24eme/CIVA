@@ -11,8 +11,8 @@ class VracValidationForm extends acCouchdbObjectForm
         	'conditions_particulieres' => new sfWidgetFormInputText()
     	));
         $this->widgetSchema->setLabels(array(
-        	'conditions_paiement' => 'Conditions de paiement:',
-        	'conditions_particulieres' => 'Conditions particulières:'
+        	'conditions_paiement' => 'Conditions de paiement :',
+        	'conditions_particulieres' => 'Conditions particulières :'
         ));
         $this->setValidators(array(
         	'date_validation_mandataire' => new sfValidatorPass(array('required' => true)),
