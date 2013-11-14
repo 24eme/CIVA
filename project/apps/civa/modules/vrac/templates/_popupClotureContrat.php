@@ -1,7 +1,7 @@
 <div id="popup_cloture_contrat" class="popup_ajout" title="Cloture de votre contrat">
     <form id="cloture_contrat_form" method="post" action="<?php echo url_for('vrac_cloture', $vrac) ?>">
         <p>
-            Tous les produits du contrat sont cloturés.<br />
+            Tous les produits du contrat sont cloturés.<br /><br />
             Confirmez vous la cloture général de votre contrat vrac ?<br />
         </p>
         <br />
