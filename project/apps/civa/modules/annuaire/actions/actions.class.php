@@ -51,7 +51,7 @@ class annuaireActions extends sfActions {
        					$this->getUser()->setAttribute('vrac_object', serialize($vrac));
        					$this->getUser()->setAttribute('vrac_acteur', null);
        					$etapes = VracEtapes::getInstance();
-       					return $this->redirect('vrac_etape', array('numero_contrat' => $vrac->numero_contrat, 'etape' => $etapes->getFirst()));
+       					return $this->redirect('vrac_etape', array('numero_contrat' => !$vrac->isNew() ? $vrac->numero_contrat : VracRoute::NOUVEAU, 'etape' => $etapes->getFirst()));
        				}
        				return $this->redirect('@annuaire');
         		}
@@ -72,12 +72,11 @@ class annuaireActions extends sfActions {
        			$this->form->save();
        			if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
        				$vrac = unserialize($vrac);
-       				$vracIdentifiant = ($vrac->_id)? $vrac->_id : VracRoute::NOUVEAU;
 					$vrac->interlocuteur_commercial->nom = $values['identite'];
 					$vrac->interlocuteur_commercial->email = $values['email'];
        				$this->getUser()->setAttribute('vrac_object', serialize($vrac));
        				$etapes = VracEtapes::getInstance();
-       				return $this->redirect('vrac_etape', array('numero_contrat' => $vracIdentifiant, 'etape' => $etapes->getFirst()));
+       				return $this->redirect('vrac_etape', array('numero_contrat' => !$vrac->isNew() ? $vrac->numero_contrat : VracRoute::NOUVEAU, 'etape' => $etapes->getFirst()));
        			}
        			return $this->redirect('@annuaire');
         	}
