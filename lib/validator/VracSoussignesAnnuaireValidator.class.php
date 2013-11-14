@@ -29,9 +29,6 @@ class VracSoussignesAnnuaireValidator extends VracSoussignesValidator
     	if (isset($values['vendeur_cave_cooperative_identifiant']) && $values['vendeur_cave_cooperative_identifiant'] == 'add') {
     		$values['vendeur_cave_cooperative_identifiant'] = null;
     	}
-    	if (isset($values['interlocuteur_commercial']) && $values['interlocuteur_commercial'] == 'add') {
-    		$values['interlocuteur_commercial'] = null;
-    	}
     	
     	if (isset($values['vendeur_recoltant_identifiant']) && !empty($values['vendeur_recoltant_identifiant'])) {
     		$vendeur = $values['vendeur_recoltant_identifiant'];

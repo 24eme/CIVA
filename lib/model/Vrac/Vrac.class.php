@@ -283,7 +283,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->nom = $tiers->nom;
     	$this->mandataire->raison_sociale = $tiers->nom;
     	$this->mandataire->siret = $tiers->siret;
-    	$this->mandataire->carte_pro = null; // A gerer
+    	$this->mandataire->carte_pro = $tiers->no_carte_professionnelle;
     	$this->mandataire->adresse = $tiers->siege->adresse;
     	$this->mandataire->code_postal = $tiers->siege->code_postal;
     	$this->mandataire->commune = $tiers->siege->commune;
@@ -379,7 +379,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$valide = false;
     	}
     	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
-    		$valide = false;
+    		if (!$this->isAcheteurProprietaire()) {
+    			$valide = false;
+    		}
     	}
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
@@ -435,6 +437,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isProprietaire($identifiant)
     {
     	return ($this->createur_identifiant == $identifiant)? true : false;
+    }
+    
+    public function isAcheteurProprietaire()
+    {
+    	return ($this->createur_identifiant == $this->acheteur_identifiant)? true : false;
     }
     
     public function hasCourtier() {
@@ -512,5 +519,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isArchivageCanBeSet() 
     {
         return ($this->valide->statut == self::STATUT_VALIDE);
+    }
+    
+    public function setAcheteurQualite($qualite)
+    {
+    	if ($qualite == 'Negociant') {
+    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
+    	}
+    	if ($qualite == 'Cooperative') {
+    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
+    	}
     }
 }

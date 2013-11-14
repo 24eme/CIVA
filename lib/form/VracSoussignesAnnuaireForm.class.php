@@ -21,8 +21,8 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
     	));
         $this->setValidators(array(
-        	'acheteur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
-        	'vendeur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
+        	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
+        	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($recoltantChoices, array('add' => ''))))),
         	'acheteur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($negociantChoices, array('add' => ''))))),
         	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($caveCooperativeChoices, array('add' => ''))))),
@@ -31,7 +31,7 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($caveCooperativeChoices, array('add' => ''))))),
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($commerciauxChoices, array('add' => '')))))
         ));
-        $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator());
+        $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
 
@@ -39,7 +39,13 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
     {
     	$acheteur = $values['acheteur'];
     	$vendeur = $values['vendeur'];
-    	$this->getObject()->interlocuteur_commercial = $values['interlocuteur_commercial'];
+    	if ($values['interlocuteur_commercial']) {
+    		if ($this->annuaire->commerciaux->exist($values['interlocuteur_commercial'])) {
+	    		$commercialEmail = $this->annuaire->commerciaux->get($values['interlocuteur_commercial']);
+	    		$this->getObject()->interlocuteur_commercial->nom = $values['interlocuteur_commercial'];
+	    		$this->getObject()->interlocuteur_commercial->email = $commercialEmail;
+    		}
+    	}
     	$this->getObject()->acheteur_type = $values['acheteur_type'];
     	$this->getObject()->vendeur_type = $values['vendeur_type'];
     	if ($acheteur) {
