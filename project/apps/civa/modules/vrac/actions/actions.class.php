@@ -58,14 +58,9 @@ class vracActions extends sfActions
 		if (!in_array($this->acteur, $acteurs)) {
 			throw new sfError404Exception('L\'acteur "'.$this->acteur.'" n\'est pas pris en charge.');
 		}
-		if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
-    		$this->vrac = unserialize($vrac);
-		} else {
-			$this->vrac = $this->getRoute()->getVrac();	
-		}
-		if (!$this->vrac) {
-			$this->vrac = $this->getNouveauVrac($this->user);
-		}
+
+		$this->vrac = $this->getRoute()->getVrac();	
+
 		$this->annuaire = $this->getAnnuaire();
 		$this->form = new VracSoussignesAnnuaireForm($this->vrac, $this->annuaire);
 		if ($request->isMethod(sfWebRequest::POST)) {
@@ -85,14 +80,7 @@ class vracActions extends sfActions
 	
 	public function executeAnnuaireCommercial(sfWebRequest $request)
 	{
-		if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
-    		$this->vrac = unserialize($vrac);
-		} else {
-			$this->vrac = $this->getRoute()->getVrac();	
-		}
-		if (!$this->vrac) {
-			$this->vrac = $this->getNouveauVrac($this->user);
-		}
+		$this->vrac = $this->getRoute()->getVrac();	
 		$this->annuaire = $this->getAnnuaire();
 		$this->form = new VracSoussignesAnnuaireForm($this->vrac, $this->annuaire);
 		if ($request->isMethod(sfWebRequest::POST)) {
@@ -142,7 +130,9 @@ class vracActions extends sfActions
 	        		$this->vrac = $this->form->save();
 		        	$acteurs = $this->vrac->getActeurs();
 					foreach ($acteurs as $type => $acteur) {
-						VracMailer::getInstance()->annulationContrat($this->vrac, $acteur->email);
+                        foreach($acteur as $email) {
+                            VracMailer::getInstance()->annulationContrat($this->vrac, $email);
+                        }
 					}
 					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	        	}
@@ -223,7 +213,9 @@ class vracActions extends sfActions
 					VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->email);
 					$acteurs = $this->vrac->getActeurs(false);
 					foreach ($acteurs as $type => $acteur) {
-						VracMailer::getInstance()->demandeSignature($this->vrac, $acteur->email);
+                        foreach($acteur as $email) {
+						  VracMailer::getInstance()->demandeSignature($this->vrac, $email);
+                        }
 					}
 					$this->getUser()->setFlash('notice', 'Contrat créé avec succès');
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
@@ -265,13 +257,14 @@ class vracActions extends sfActions
     	if (!$tiers) {
     		throw new sfException('Le tiers d\'id "'.$identifiant.'" n\'existe pas.');
     	}
-    	$num_accise = null;
-    	if ($tiers->exist('civaba') && $tiers->civaba) {
-    		if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
-	    		$num_accise = $metteurEnMarche->no_accises;
-    		}
-    	}
-    	return $this->renderPartial('vrac/soussigne', array('tiers' => $tiers, 'num_accise' => $num_accise, 'fiche' => false));	
+
+        $acteur = $request->getParameter('acteur');
+
+        $this->vrac = $this->getRoute()->getVrac();
+
+        $this->vrac->addActeur($acteur, $tiers);
+
+    	return $this->renderPartial('vrac/soussigne', array('tiers' => $this->vrac->{$acteur}, 'fiche' => false));	
     }
     
     public function executeAjouterProduitLieux(sfWebRequest $request) 
@@ -373,13 +366,5 @@ class vracActions extends sfActions
     	}
     	return null;
     }
-    
-    protected function getNouveauVrac($tiers)
-    {
-		$tiers = $this->getUser()->getDeclarant();
-		$vrac = VracClient::getInstance()->createVrac($tiers->_id);
-		$vrac->mandataire_identifiant = $tiers->_id;
-		$vrac->storeMandataireInformations($tiers);
-		return $vrac;
-    }
+
 }

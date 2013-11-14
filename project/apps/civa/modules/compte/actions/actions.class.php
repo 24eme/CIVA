@@ -206,4 +206,57 @@ class compteActions extends sfActions {
         
     }
 
+    public function executeDroits(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
+        $this->form = new CompteDroitsForm($this->compte);
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if(!$this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        return $this->redirect('compte_droits');
+    }
+
+    public function executePersonneAjouter(sfWebRequest $request) {
+        $this->setTemplate('personne');
+        $this->compte = $this->getUser()->getCompte();
+        $this->personne = _CompteClient::getInstance()->generateComptePersonne($this->compte);
+        
+        $this->form = $this->processFormPersonne($this->personne, $request);
+    }
+
+    public function executePersonneModifier(sfWebRequest $request) {
+        $this->setTemplate('personne');
+        $this->compte = $this->getUser()->getCompte();
+        $this->personne = _CompteClient::getInstance()->findByLogin($request->getParameter('login'));
+        $this->forward404Unless($this->personne);
+        
+        $this->form = $this->processFormPersonne($this->personne, $request);
+    }
+
+    protected function processFormPersonne($personne, sfWebRequest $request) {
+        $form = new ComptePersonneForm($personne);
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+            return $form;
+        }
+
+        $form->bind($request->getParameter($form->getName()));
+
+        if(!$form->isValid()) {
+            return $form;
+        }
+
+        $form->save();
+
+        return $this->redirect('compte_droits');
+    }
 }

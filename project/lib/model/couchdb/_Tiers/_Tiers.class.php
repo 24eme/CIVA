@@ -147,5 +147,23 @@ abstract class _Tiers extends Base_Tiers {
         return null;
     }
 
+    public function getEmailsByDroit($droit) {
+        $emails = array();
+
+        foreach($this->emails as $d => $cvis) {
+            if($droit != $d) {
+                continue;
+            }
+
+            foreach($cvis as $cvi) {
+                if(!in_array($cvi->email, $emails)) {
+                    $emails[] = $cvi->email;
+                }
+            }
+        }
+
+        return $emails;
+    }
+
     abstract public function getIdentifiant();
 }

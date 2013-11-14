@@ -9,6 +9,12 @@ abstract class _Compte extends Base_Compte {
         parent::constructId();
         $this->set('_id', 'COMPTE-' . $this->login);
         $this->date_creation = date("Y-m-d");
+        if(!$this->statut) {
+            $this->statut = self::STATUS_NOUVEAU;
+        }
+        if($this->statut == self::STATUS_NOUVEAU && !$this->mot_de_passe) { 
+            $this->mot_de_passe = $this->generatePass();
+        }
     }
 
     /**
@@ -132,10 +138,12 @@ abstract class _Compte extends Base_Compte {
         }
         $this->updateStatut();
     }
+
+    public function getComptesPersonnes() {
+
+        return _CompteClient::getInstance()->getComptesPersonnes($this);
+    }
     
-    /**
-     * 
-     */
     public function save() {
         $this->updateStatut();
         $this->updateLdap();
@@ -155,7 +163,7 @@ abstract class _Compte extends Base_Compte {
     }
 
     public function generatePass() {
-        return sprintf("{TEXT}%04d", rand(0, 9999));
+        return sprintf("{TEXT}%04d", rand(1000, 9999));
     }
 
     

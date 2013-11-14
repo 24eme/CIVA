@@ -372,6 +372,7 @@ CompteTiers:
       _id: {  }
       _rev: {  }
       type: {  }
+      nom: {  }
       db2:
         type: collection
         definition:
@@ -459,6 +460,21 @@ _Tiers:
             code_postal: { }
             commune: {  }
       categorie: { }
+      emails: 
+        type: collection
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  '*':
+                    type: collection
+                    definition:
+                      fields:
+                        nom: { }
+                        email: { }
+
       db2:
         type: collection
         definition:

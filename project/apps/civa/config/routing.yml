@@ -12,8 +12,12 @@ vrac_historique_statut:
   url: /vrac/historique/:campagne/:statut
   param: { module: vrac, action: historique }
 vrac_soussigne_informations:
-  url: /vrac/soussignes-informations
+  url: /vrac/:numero_contrat/soussignes-informations
   param: { module: vrac, action: soussigneInformations }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
   requirements:
     sf_method: [get, post]
 vrac_supprimer:
@@ -194,6 +198,18 @@ compte_mot_de_passe_oublie:
 compte_mot_de_passe_oublie_confirm:
   url: /mot_de_passe_oublie/confirm
   param: { module: compte, action: motDePasseOublieConfirm }
+
+compte_droits:
+  url: /compte/droits
+  param: { module: compte, action: droits }
+
+compte_personne_ajouter:
+  url: /compte/personne/ajouter
+  param: { module: compte, action: personneAjouter }
+
+compte_personne_modifier:
+  url: /compte/personne/modifier/:login
+  param: { module: compte, action: personneModifier }
 
 # *********** TIERS ***********
 

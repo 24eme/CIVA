@@ -12,9 +12,15 @@ modificationOublie:
 modification:
   is_secure: true
   credentials: [compte]
+
+droits:
+  is_secure: true
+  credentials: [compte]
+
+personneAjouter:
+  is_secure: true
+  credentials: [compte]
   
-  
-
-
-
-
+personneModifier:
+  is_secure: true
+  credentials: [compte]
