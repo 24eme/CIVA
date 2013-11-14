@@ -1,3 +1,6 @@
+<?php if(!$sf_user->hasCredential(_CompteClient::DROIT_VRAC_RESPONSABLE) && !$sf_user->hasCredential(_CompteClient::DROIT_VRAC_SIGNATURE)): ?>
+	<?php return; ?>
+<?php endif; ?>
 <div id="espace_alsace_contrats">
     <h2>Alsace Contrats</h2>
     <div class="contenu clearfix">  
@@ -6,8 +9,10 @@
  			<div class="contenu_section">
  				<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
  				<ul id="actions_contrat">
+ 					<?php if($sf_user->hasCredential(_CompteClient::DROIT_VRAC_RESPONSABLE)): ?>
  					<li class="nouveau_contrat"><a href="<?php echo url_for('@vrac_nouveau') ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
  					<li><a href="<?php echo url_for('@annuaire') ?>">Gérer son annuaire</a></li>
+ 					<?php endif; ?>
  					<li><a href="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>">Voir tout</a></li>
  				</ul>
  			</div>
