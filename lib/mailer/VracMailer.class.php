@@ -23,7 +23,7 @@ class VracMailer {
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text');
+        $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
     }
@@ -36,7 +36,7 @@ class VracMailer {
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/plain');
+        $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
     }
@@ -54,7 +54,6 @@ class VracMailer {
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
-  					->setContentType('text/plain')
   					->attach(Swift_Attachment::fromPath($filePath));
 		
         return self::getMailer()->send($message);
@@ -68,7 +67,7 @@ class VracMailer {
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body)->setContentType('text/plain');
+        $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
     }
@@ -86,7 +85,6 @@ class VracMailer {
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
-  					->setContentType('text/plain')
   					->attach(Swift_Attachment::fromPath($filePath));
 		
         return self::getMailer()->send($message);
