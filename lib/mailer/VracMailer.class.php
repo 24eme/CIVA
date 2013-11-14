@@ -41,7 +41,7 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
     
-    public function validationContrat($vrac, $destinataire, $filePath) 
+    public function validationContrat($vrac, $destinataire, $document) 
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -54,7 +54,7 @@ class VracMailer {
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
-  					->attach(Swift_Attachment::fromPath($filePath));
+  					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
 		
         return self::getMailer()->send($message);
     }
@@ -72,7 +72,7 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
     
-    public function clotureContrat($vrac, $destinataire, $filePath) 
+    public function clotureContrat($vrac, $destinataire, $document) 
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -85,7 +85,7 @@ class VracMailer {
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
-  					->attach(Swift_Attachment::fromPath($filePath));
+  					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
 		
         return self::getMailer()->send($message);
     }
