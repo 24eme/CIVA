@@ -27,8 +27,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
     	));
         $this->setValidators(array(
-        	'acheteur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
-        	'vendeur_type' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($types))),
+        	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
+        	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
         	'acheteur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($negociantChoices))),
         	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),

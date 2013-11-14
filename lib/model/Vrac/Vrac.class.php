@@ -16,6 +16,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const PREFIXE_NUMERO = 8;
 	const CEPAGE_EDEL = "cepage_ED";
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
+	const CEPAGE_MUSCAT = "cepage_MU";
+	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
 	
 	protected $_config;
 	protected $archivage_document;
@@ -161,6 +163,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         if ($produit->getKey() == self::CEPAGE_EDEL) {
         	$produit->libelle .= self::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
         }
+        if ($produit->getKey() == self::CEPAGE_MUSCAT) {
+        	$produit->libelle = self::CEPAGE_MUSCAT_LIBELLE;
+        }
         $produit->getCouleur()->libelle = $produit->getConfig()->getCouleur()->libelle;
         $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
         $produit->getMention()->libelle = $produit->getConfig()->getMention()->libelle;
@@ -288,7 +293,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->nom = $tiers->nom;
     	$this->mandataire->raison_sociale = $tiers->nom;
     	$this->mandataire->siret = $tiers->siret;
-    	$this->mandataire->carte_pro = null; // A gerer
+    	$this->mandataire->carte_pro = $tiers->no_carte_professionnelle;
     	$this->mandataire->adresse = $tiers->siege->adresse;
     	$this->mandataire->code_postal = $tiers->siege->code_postal;
     	$this->mandataire->commune = $tiers->siege->commune;
@@ -389,7 +394,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$valide = false;
     	}
     	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
-    		$valide = false;
+    		if (!$this->isAcheteurProprietaire()) {
+    			$valide = false;
+    		}
     	}
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
@@ -445,6 +452,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isProprietaire($identifiant)
     {
     	return ($this->createur_identifiant == $identifiant)? true : false;
+    }
+    
+    public function isAcheteurProprietaire()
+    {
+    	return ($this->createur_identifiant == $this->acheteur_identifiant)? true : false;
     }
     
     public function hasCourtier() {
@@ -522,5 +534,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isArchivageCanBeSet() 
     {
         return ($this->valide->statut == self::STATUT_VALIDE);
+    }
+    
+    public function setAcheteurQualite($qualite)
+    {
+    	if ($qualite == 'Negociant') {
+    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
+    	}
+    	if ($qualite == 'Cooperative') {
+    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
+    	}
     }
 }

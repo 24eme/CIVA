@@ -36,6 +36,7 @@ class VracRoute extends sfObjectRoute
     
 	public function getVrac() 
 	{
+
     	return $this->getObject();
     }
 
