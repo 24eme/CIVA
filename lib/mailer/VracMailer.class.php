@@ -102,7 +102,7 @@ class VracMailer {
 
     protected static function getBodyFromPartial($partial, $vars = null) 
     {
-        return htmlspecialchars_decode(sfContext::getInstance()->getController()->getAction('email', 'main')->getPartial('email/' . $partial, $vars));
+        return htmlspecialchars_decode(sfContext::getInstance()->getController()->getAction('email', 'main')->getPartial('email/' . $partial, $vars), ENT_QUOTES);
     }
 
 }
