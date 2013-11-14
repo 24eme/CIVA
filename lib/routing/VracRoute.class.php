@@ -11,7 +11,7 @@ class VracRoute extends sfObjectRoute
         }
 
     	if ($parameters['numero_contrat'] == self::NOUVEAU && $this->getUser()->getAttribute('vrac_object')) {
-            return unserialize($vrac);
+            return unserialize($this->getUser()->getAttribute('vrac_object'));
     	}
 
         if ($parameters['numero_contrat'] == self::NOUVEAU) {
@@ -30,7 +30,7 @@ class VracRoute extends sfObjectRoute
 
     protected function doConvertObjectToArray($object) {
         $parameters = array();
-        $parameters["numero_contrat"] = ($object->_id)? $object->numero_contrat : self::NOUVEAU;
+        $parameters["numero_contrat"] = (!$object->isNew()) ? $object->numero_contrat : self::NOUVEAU;
         return $parameters;
     }
     
@@ -44,8 +44,16 @@ class VracRoute extends sfObjectRoute
     {
         $tiers = $this->getUser()->getDeclarant();
         $vrac = VracClient::getInstance()->createVrac($tiers->_id);
-        $vrac->mandataire_identifiant = $tiers->_id;
-        $vrac->storeMandataireInformations($tiers);
+        if ($tiers->type == 'Courtier') {
+            $vrac->mandataire_identifiant = $tiers->_id;
+            $vrac->storeMandataireInformations($tiers);
+        } elseif ($tiers->type == 'Acheteur') {
+            $vrac->acheteur_identifiant = $tiers->_id;
+            $vrac->storeAcheteurInformations($tiers);
+            $vrac->setAcheteurQualite($tiers->qualite);
+        } else {
+            throw new sfException('Ce tiers ne peut pas créer de contrat vrac.');
+        }
         return $vrac;
     }
 
