@@ -95,6 +95,7 @@ vrac_etape:
   options:
     model:    Vrac
     type:     object
+    allow_empty: true
   requirements:
     sf_method: [get, post]
 vrac_ajout_produit:
