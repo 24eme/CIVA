@@ -6,14 +6,26 @@ class VracRoute extends sfObjectRoute
 	
 	protected function getObjectForParameters($parameters) 
 	{
-        if(isset($parameters['numero_contrat'])) {
-        	if ($parameters['numero_contrat'] == self::NOUVEAU) {
-        		return null;
-        	}
-            $this->vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
-            return $this->vrac;
+        if(!isset($parameters['numero_contrat'])) {
+            throw new sfError404Exception('Numéro de contrat inexistant');
         }
-        throw new sfError404Exception('Contrat vrac inexistant.');
+
+    	if ($parameters['numero_contrat'] == self::NOUVEAU && $this->getUser()->getAttribute('vrac_object')) {
+            return unserialize($vrac);
+    	}
+
+        if ($parameters['numero_contrat'] == self::NOUVEAU) {
+            return $this->getNouveauVrac(sfContext::getInstance()->getUser());
+        }
+
+        $vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
+
+        if ($vrac) {
+            
+            return $vrac;
+        }
+
+        throw new sfError404Exception(sprintf("Contrat %s introuvable", $parameters['numero_contrat']));
     }
 
     protected function doConvertObjectToArray($object) {
@@ -24,10 +36,20 @@ class VracRoute extends sfObjectRoute
     
 	public function getVrac() 
 	{
-		try {
-        	return $this->getObject();
-		} catch (Exception $e) {
-			return null;
-		}
+    	return $this->getObject();
+    }
+
+    protected function getNouveauVrac($tiers)
+    {
+        $tiers = $this->getUser()->getDeclarant();
+        $vrac = VracClient::getInstance()->createVrac($tiers->_id);
+        $vrac->mandataire_identifiant = $tiers->_id;
+        $vrac->storeMandataireInformations($tiers);
+        return $vrac;
+    }
+
+    public function getUser() {
+
+        return sfContext::getInstance()->getUser();
     }
 }
