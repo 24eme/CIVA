@@ -22,16 +22,14 @@
 	<?php endif; ?>
 	<?php if (isset($interlocuteur_commercial) && $interlocuteur_commercial->nom): ?>
 	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?></li>
-	<?php else: ?>
-	<li>&nbsp;</li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('cvi')): ?>
 	<li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
 	<?php endif; ?>
+	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('carte_pro')): ?>
 	<li>N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
 	<?php endif; ?>
-	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('num_accise')): ?>
 	<li>N°Accises : <strong><?php echo $tiers->num_accise ?></strong></li>
 	<?php endif; ?>
