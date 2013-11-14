@@ -16,6 +16,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const PREFIXE_NUMERO = 8;
 	const CEPAGE_EDEL = "cepage_ED";
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
+	const CEPAGE_MUSCAT = "cepage_MU";
+	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
 	
 	protected $_config;
 	protected $archivage_document;
@@ -160,6 +162,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $produit->libelle = $config->getLibelle();
         if ($produit->getKey() == self::CEPAGE_EDEL) {
         	$produit->libelle .= self::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
+        }
+        if ($produit->getKey() == self::CEPAGE_MUSCAT) {
+        	$produit->libelle = self::CEPAGE_MUSCAT_LIBELLE;
         }
         $produit->getCouleur()->libelle = $produit->getConfig()->getCouleur()->libelle;
         $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
