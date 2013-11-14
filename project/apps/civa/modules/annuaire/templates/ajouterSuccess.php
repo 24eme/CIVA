@@ -8,7 +8,7 @@
 				<?php echo $form->renderHiddenFields() ?>
 				<?php echo $form->renderGlobalErrors() ?>
 	
-				<p>Saisissez ici le type et cvi du tiers que vous souhaitez ajouter à votre annuaire.</p>
+				<p>Saisissez ici le type et le CVI du tiers que vous souhaitez ajouter à votre annuaire.</p>
 				<?php include_partial('annuaire/ajouterForm', array('form' => $form)); ?>
 	
 				<?php if ($tiers): ?>
