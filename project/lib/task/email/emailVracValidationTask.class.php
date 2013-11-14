@@ -48,8 +48,10 @@ EOF;
     	$filePath = sfConfig::get('sf_cache_dir').'/pdf/'.$document->getFileName(true, true);
     	$acteurs = $contrat->getActeurs();
 		foreach ($acteurs as $type => $acteur) {
-			VracMailer::getInstance()->validationContrat($contrat, $acteur->email, $filePath);
-			$this->logSection('sended', $contrat->_id . ' => ' . $acteur->raison_sociale);
+      foreach($acteur->emails as $email) {
+			    VracMailer::getInstance()->validationContrat($contrat, $email, $filePath);
+			    $this->logSection('sended', $contrat->_id . ' => ' . $acteur->raison_sociale);
+      }
 		}
 		$contrat->valide->email_validation = date('Y-m-d');
 		$contrat->save();
