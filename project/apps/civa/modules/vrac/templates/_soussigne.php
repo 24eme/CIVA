@@ -29,7 +29,7 @@
 	<li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('carte_pro')): ?>
-	<li>N° Carte professionnelle : <strong><?php echo $tiers->carte_pro ?></strong></li>
+	<li>N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
 	<?php endif; ?>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('num_accise')): ?>
