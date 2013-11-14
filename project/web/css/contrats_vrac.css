@@ -9,6 +9,12 @@
 /* STRUCTURE / ELEMENTS GENERIQUES */
 /* =================================================== */
 
+.intro_contrat_vrac {
+    clear: both;
+    color: #666;
+    font-size: 14px;
+    padding: 0 0 15px 0;
+}
 
 .telecharger-contrat {
     background: url("../images/boutons/btn_telecharger_votre_contrat.png") no-repeat scroll 0 0 transparent;

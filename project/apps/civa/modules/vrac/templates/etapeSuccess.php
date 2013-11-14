@@ -1,13 +1,5 @@
 <?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape, 'user' => $user)) ?>
-    	<p style="margin: 20px;">
-    	<?php if($etape == VracEtapes::ETAPE_SOUSSIGNES): ?>
-    	Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.
-    	<?php elseif($etape == VracEtapes::ETAPE_PRODUITS): ?>
-    	Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.
-    	<?php elseif($etape == VracEtapes::ETAPE_VALIDATION): ?>
-    	Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernés. Saisissez ici les conditions éventuelles du contrat.
-    	<?php endif; ?>
-    	</p>
+
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected">
 		<a href="#" style="height: 18px;"><?php echo $etapes->getLibelle($etape) ?></a>

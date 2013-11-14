@@ -1,3 +1,4 @@
+<p class="intro_contrat_vrac">Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.</p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>

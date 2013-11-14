@@ -1,3 +1,4 @@
+<p class="intro_contrat_vrac">Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.</p>
 <div class="clearfix">
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Vendeur</legend>
