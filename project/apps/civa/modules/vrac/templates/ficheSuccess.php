@@ -52,7 +52,7 @@
 			}
 		?>
 		
-		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form)) ?>
+		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form, 'produits_hash_in_error' => $validation->getProduitsHashInError())) ?>
 		
 <table class="validation table_donnees">
 	<thead>
