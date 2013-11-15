@@ -93,6 +93,7 @@ class ExportVracPdf extends ExportDocument {
 
     protected function create() {    
             $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
+            $this->document->addPage($this->getPartial('vrac_export/annexe', array('vrac' => $this->vrac, 'odg' => $this->odg)));
     }
 
     protected function getPartial($templateName, $vars = null) {

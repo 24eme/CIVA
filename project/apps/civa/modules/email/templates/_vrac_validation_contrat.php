@@ -5,6 +5,7 @@ Vous trouverez ci-joint la version pdf avec le numéro de visa suivant <?php ech
 
 Dès que tous les enlèvements auront été effectués le contrat sera cloturé et vous recevrez un nouveau mail avec en pièce jointe le contrat définitif comportant les volumes rééls.
 
-Il sera également accessible sur la plateforme du CIVA à l'adresse suivante : <?php echo sfConfig::get('app_base_url').ProjectConfiguration::getAppRouting()->generate('vrac_fiche', array('sf_subject' => $vrac), true); ?>
+Il sera également accessible sur la plateforme du CIVA à l'adresse suivante : <?php echo sfConfig::get('app_base_url').ProjectConfiguration::getAppRouting()->generate('vrac_fiche', array('sf_subject' => $vrac)); ?>
+
 
 <?php include_partial('email/footer', array('vrac' => $vrac)); ?>

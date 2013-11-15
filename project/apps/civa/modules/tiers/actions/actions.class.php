@@ -17,25 +17,30 @@ class tiersActions extends EtapesActions {
      */
     public function executeLogin(sfWebRequest $request) {
 
-       $this->getUser()->signOutTiers();
+        $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
-	$not_uniq = 0;
-	$tiers = array();
-    if (count($this->compte->tiers) >= 1) {
-	    foreach ($this->compte->tiers as $t) {
-            if (isset($tiers[$t->type])) {
-              $not_uniq = 1;
-              continue;
+    	$not_uniq = 0;
+    	$tiers = array();
+        if (count($this->compte->tiers) >= 1) {
+    	    foreach ($this->compte->tiers as $t) {
+                if (isset($tiers[$t->type])) {
+                  $not_uniq = 1;
+                  continue;
+                }
+                $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
             }
-            $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
+
+    	    if (!$not_uniq) {
+                $this->getUser()->signInTiers(array_values($tiers));
+
+                if($referer = $this->getUser()->getFlash('referer')) {
+
+                    return $this->redirect($referer);
+                }
+
+                return $this->redirect("@mon_espace_civa");
+    	    }
         }
-
-	    if (!$not_uniq) {
-        $this->getUser()->signInTiers(array_values($tiers));
-
-        return $this->redirect("@mon_espace_civa");
-	    }
-    }
 
     $this->form = new TiersLoginForm($this->compte);
 
