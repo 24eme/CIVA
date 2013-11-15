@@ -21,8 +21,11 @@ class compteActions extends sfActions {
         }
 
         if ($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential("compte")) {
-            $this->redirect('@tiers');
-        } elseif ($request->getParameter('ticket')) {
+            
+            return $this->redirectAfterLogin($request);
+        }
+        
+        if ($request->getParameter('ticket')) {
             /** CAS * */
             error_reporting(E_ALL);
             require_once(sfConfig::get('sf_lib_dir') . '/vendor/phpCAS/CAS.class.php');
@@ -33,18 +36,28 @@ class compteActions extends sfActions {
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
             /** ***** */
             $this->getUser()->signIn(phpCAS::getUser());
-            $this->redirect('@tiers');
-        } else {
+            
+            return $this->redirectAfterLogin($request);
+        }
+
 		if(sfConfig::has('app_autologin') && sfConfig::get('app_autologin')) {
 			$this->getUser()->signIn(sfConfig::get('app_autologin'));
-			   	           
-			return $this->redirect('@tiers');
+            
+            return $this->redirectAfterLogin($request);
 		}	   
 		
-	    	$url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
-	    	$this->redirect($url);
-        }
+	    $url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
+	    
+        return $this->redirect($url);
     }
+
+    protected function redirectAfterLogin($request) {
+        if($request->getReferer()) {
+            return $this->redirect($request->getReferer());
+        } 
+
+        return $this->redirect('@tiers');
+    } 
 
     public function executeLoginNoCas(sfWebRequest $request) {
         if (!(sfConfig::has('app_login_no_cas') && sfConfig::get('app_login_no_cas'))) {
