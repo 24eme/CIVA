@@ -92,7 +92,7 @@ class VracMailer {
     
     protected static function getFrom()
     {
-    	return array('teledeclaration@civa.fr' => "Contrats CIVA");
+    	return array("ne_pas_repondre_contrat@civa.fr" => "Contrats CIVA");
     }
 
     protected static function getMailer() 
