@@ -18,6 +18,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
 	const CEPAGE_MUSCAT = "cepage_MU";
 	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
+    const CAMPAGNE_ARCHIVE = 'UNIQUE';
 	
 	protected $_config;
 	protected $archivage_document;
@@ -109,10 +110,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     
     public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
     {
-    	
         $this->_config = $config;
         $this->campagne = $campagne;
-        $this->campagne_archive = 1;
+        $this->campagne_archive = self::CAMPAGNE_ARCHIVE;
         $this->numero_contrat = $numeroContrat;
         $this->valide->date_saisie = $date;
         $this->valide->statut = self::STATUT_CREE;
@@ -120,6 +120,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->vendeur_type = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
         $this->createur_identifiant = $createurIdentifiant;
         $this->initProduits();
+    }
+
+    public function getCampagneArchive() {
+        if(!$this->_get('campagne_archive')) {
+            $this->_set('campagne_archive', self::CAMPAGNE_ARCHIVE);
+        }
+        return $this->_get('campagne_archive');
     }
 
     public function constructId() 
