@@ -53,7 +53,8 @@ class compteActions extends sfActions {
 
     protected function redirectAfterLogin($request) {
         if($request->getReferer()) {
-            return $this->redirect($request->getReferer());
+
+            $this->getUser()->setFlash('referer', $request->getReferer());
         } 
 
         return $this->redirect('@tiers');
