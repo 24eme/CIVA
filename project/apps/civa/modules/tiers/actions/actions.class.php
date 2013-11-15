@@ -33,9 +33,9 @@ class tiersActions extends EtapesActions {
     	    if (!$not_uniq) {
                 $this->getUser()->signInTiers(array_values($tiers));
 
-                if($referer = $this->getUser()->getFlash('referer')) {
-
-                    return $this->redirect($referer);
+                $referer = $this->getUser()->getFlash('referer');
+                if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
+                    return $this->redirect($referer);                                                                                                            
                 }
 
                 return $this->redirect("@mon_espace_civa");
