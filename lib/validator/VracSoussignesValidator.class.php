@@ -54,6 +54,7 @@ class VracSoussignesValidator extends sfValidatorBase
                 $hasErrors = true;
 	    	}
     	}
+
     	if (!$acheteur && $this->vrac->isAcheteurProprietaire()) {
     		$acheteur = $this->vrac->acheteur_identifiant;
     	}
@@ -73,9 +74,13 @@ class VracSoussignesValidator extends sfValidatorBase
         if ($vendeur->_id == $acheteur->_id) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'inconsistent')));
         }
-        $vendeurHasEmail = ($vendeur->email)? true : false;
-        $acheteurHasEmail = ($acheteur->email)? true : false;
-        $mandataireHasEmail = ($this->vrac->mandataire_identifiant && $this->vrac->mandataire->email)? true : false;
+
+        $this->vrac->storeVendeurInformations($vendeur);
+        $this->vrac->storeAcheteurInformations($acheteur);
+
+        $vendeurHasEmail = (count($this->vrac->vendeur->emails))? true : false;
+        $acheteurHasEmail = (count($this->vrac->acheteur->emails))? true : false;
+        $mandataireHasEmail = ($this->vrac->mandataire_identifiant && count($this->vrac->mandataire->emails))? true : false;
         if (!$vendeurHasEmail || !$acheteurHasEmail) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }

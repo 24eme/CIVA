@@ -3,6 +3,8 @@ class VracValidation extends DocumentValidation
 {
 	const MIN_VOLUME_CONTROLE = 5;
 	const TAUX_VOLUME_CONTROLE = 0.1;
+
+	protected $produits_controle = array();
 	
 	public function __construct($document, $options = null)
     {
@@ -18,30 +20,38 @@ class VracValidation extends DocumentValidation
 
   	public function controle()
   	{
-		$nbnull = 0;
-		$nbecart = 0;
+  		$this->produits_controle = array();
+		$null_libelles = array();
+		$ecart_libelles = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
 				if ($detail->cloture && !$detail->volume_enleve) {
-					$nbnull++;
+					$null_libelles[] = $detail->getLibelle();
+					$this->produits_controle[$detail->getHash()] = $detail;
 				}
 				if ($detail->volume_propose > self::MIN_VOLUME_CONTROLE && $detail->volume_enleve > 0) {
 					$ecart = $detail->volume_propose * self::TAUX_VOLUME_CONTROLE;
 					$min = $detail->volume_propose - $ecart;
 					$max = $detail->volume_propose + $ecart;
 					if (($detail->volume_enleve < $min || $detail->volume_enleve > $max) && $detail->cloture) {
-						$nbecart++;
+						$ecart_libelles[] = $detail->getLibelle();
+						$this->produits_controle[$detail->getHash()] = $detail;
 					}
 				}
 			}
 		}
 	
-	    if ($nbnull > 0) {
-	      $this->addPoint('erreur', 'volume_non_saisi', $nbnull.' produit(s) concerné(s)'); 
+	    if (count($null_libelles) > 0) {
+	      $this->addPoint('erreur', 'volume_non_saisi', implode(",", $null_libelles)); 
 	    }
-	
-	    if($nbecart > 0){
-	      $this->addPoint('vigilance', 'ecart_volume', $nbecart.' produit(s) concerné(s)'); 
+
+	    if(count($ecart_libelles) > 0){
+	      $this->addPoint('vigilance', 'ecart_volume', implode(",", $ecart_libelles)); 
 	    }
+  	}
+
+  	public function getProduitsHashInError() {
+
+  		return array_keys($this->produits_controle);
   	}
 }

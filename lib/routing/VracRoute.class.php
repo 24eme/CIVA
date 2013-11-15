@@ -6,26 +6,59 @@ class VracRoute extends sfObjectRoute
 	
 	protected function getObjectForParameters($parameters) 
 	{
-        if(isset($parameters['numero_contrat'])) {
-        	if ($parameters['numero_contrat'] == self::NOUVEAU) {
-        		return null;
-        	}
-            $this->vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
-            if ($this->vrac) {
-            	return $this->vrac;
-            }
+        if(!isset($parameters['numero_contrat'])) {
+            throw new sfError404Exception('Numéro de contrat inexistant');
         }
-        throw new sfError404Exception('Contrat vrac inexistant.');
+
+    	if ($parameters['numero_contrat'] == self::NOUVEAU && $this->getUser()->getAttribute('vrac_object')) {
+            return unserialize($this->getUser()->getAttribute('vrac_object'));
+    	}
+
+        if ($parameters['numero_contrat'] == self::NOUVEAU) {
+            return $this->getNouveauVrac(sfContext::getInstance()->getUser());
+        }
+
+        $vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
+
+        if ($vrac) {
+            
+            return $vrac;
+        }
+
+        throw new sfError404Exception(sprintf("Contrat %s introuvable", $parameters['numero_contrat']));
     }
 
     protected function doConvertObjectToArray($object) {
         $parameters = array();
-        $parameters["numero_contrat"] = ($object->_id)? $object->numero_contrat : self::NOUVEAU;
+        $parameters["numero_contrat"] = (!$object->isNew()) ? $object->numero_contrat : self::NOUVEAU;
         return $parameters;
     }
     
 	public function getVrac() 
 	{
-        return $this->getObject();
+
+    	return $this->getObject();
+    }
+
+    protected function getNouveauVrac($tiers)
+    {
+        $tiers = $this->getUser()->getDeclarant();
+        $vrac = VracClient::getInstance()->createVrac($tiers->_id);
+        if ($tiers->type == 'Courtier') {
+            $vrac->mandataire_identifiant = $tiers->_id;
+            $vrac->storeMandataireInformations($tiers);
+        } elseif ($tiers->type == 'Acheteur') {
+            $vrac->acheteur_identifiant = $tiers->_id;
+            $vrac->storeAcheteurInformations($tiers);
+            $vrac->setAcheteurQualite($tiers->qualite);
+        } else {
+            throw new sfException('Ce tiers ne peut pas créer de contrat vrac.');
+        }
+        return $vrac;
+    }
+
+    public function getUser() {
+
+        return sfContext::getInstance()->getUser();
     }
 }
