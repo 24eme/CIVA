@@ -1,7 +1,7 @@
 <div id="popup_confirme_validationVrac" class="popup_ajout popup_confirme" title="Validation de votre contrat">
     <form method="post" action="">
         <p>
-            Une fois votre contrat validée, vous ne pourrez plus le modifier. <br /><br />
+            Une fois votre contrat validé, vous ne pourrez plus le modifier. <br /><br />
             Confirmez vous la signature de votre contrat vrac ? <br />
         </p>
         <div id="btns" class="clearfix" style="text-align: center; margin-top: 8px;">

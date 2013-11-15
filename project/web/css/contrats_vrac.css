@@ -373,6 +373,11 @@
 	width: 309px;
 }
 
+#contrats_vrac .bloc_soussigne_large
+{
+    width: 470px !important;
+}
+
 #contrats_vrac .bloc_soussigne + .bloc_soussigne { margin: 0 0 0 15px; }
 
 #contrats_vrac .bloc_soussigne h3
@@ -429,7 +434,7 @@
 	width: 100%;
 }
 
-#contrats_vrac .validation.table_donnees tr :first-child { width: auto; }
+#contrats_vrac .validation.table_donnees tr:first-child { width: auto; }
 
 #contrats_vrac .validation.table_donnees tr th 
 { 

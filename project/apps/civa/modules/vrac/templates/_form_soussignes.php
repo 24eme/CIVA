@@ -39,7 +39,7 @@
 
 			<div id="vendeur_infos" class="cible">
 			<?php if ($vrac->vendeur_identifiant): ?>
-				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->vendeur, 'fiche' => false)); ?>
+				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->vendeur, 'fiche' => false)); ?>
 			<?php endif; ?>
 			</div>
 		</div>
@@ -85,7 +85,7 @@
 			</div>
 			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
-				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur, 'fiche' => false)); ?>
+				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->acheteur, 'fiche' => false)); ?>
 			<?php endif; ?>
 			</div>
 		</div>
@@ -104,7 +104,7 @@
 			
 			<div id="mandataire_infos">
 			<?php if($vrac->mandataire_identifiant): ?>
-				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->mandataire, 'fiche' => false)); ?>
+				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->mandataire, 'fiche' => false)); ?>
 			<?php endif; ?>
 			</div>
 		</div>
@@ -128,7 +128,7 @@
 			
 			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
-				<?php include_partial('vrac/soussigne', array('tiers' => $vrac->acheteur, 'fiche' => false)); ?>
+				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->acheteur, 'fiche' => false)); ?>
 			<?php endif; ?>
 			</div>
 		</div>

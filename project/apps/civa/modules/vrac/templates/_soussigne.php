@@ -12,7 +12,7 @@
 		</ul>
     </fieldset>
 	<?php endif; ?>
-	<?php if (!$fiche && !$tiers->getCompteObject()->isActif()): ?>
+	<?php if (!$fiche && !$tiers->getCompteObject()->isInscrit()): ?>
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
@@ -22,6 +22,10 @@
 	<?php endif; ?>
 	<?php if (isset($interlocuteur_commercial) && $interlocuteur_commercial->nom): ?>
 	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?></li>
+	<?php else: ?>
+	<?php if ($vrac->interlocuteur_commercial->nom && !$vrac->hasCourtier()): ?>
+	<li>&nbsp;</li>
+	<?php endif; ?>
 	<?php endif; ?>
 	<?php if ($tiers->exist('cvi')): ?>
 	<li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
