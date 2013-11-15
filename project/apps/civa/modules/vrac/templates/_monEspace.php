@@ -9,7 +9,7 @@
  			<div class="contenu_section">
  				<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
  				<ul id="actions_contrat">
- 					<?php if($sf_user->hasCredential(_CompteClient::DROIT_VRAC_RESPONSABLE)): ?>
+ 					<?php if($user->type == 'Courtier' || $user->type == 'Acheteur'): ?>
  					<li class="nouveau_contrat"><a href="<?php echo url_for('@vrac_nouveau') ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
  					<li><a href="<?php echo url_for('@annuaire') ?>">Gérer son annuaire</a></li>
  					<?php endif; ?>

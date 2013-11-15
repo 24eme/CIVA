@@ -258,7 +258,7 @@ class vracActions extends sfActions
 
         $this->vrac->addActeur($acteur, $tiers);
 
-    	return $this->renderPartial('vrac/soussigne', array('tiers' => $this->vrac->{$acteur}, 'fiche' => false));	
+    	return $this->renderPartial('vrac/soussigne', array('vrac' => $this->vrac, 'tiers' => $this->vrac->{$acteur}, 'fiche' => false));	
     }
     
     public function executeAjouterProduitLieux(sfWebRequest $request) 
@@ -308,6 +308,9 @@ class vracActions extends sfActions
 			$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $cepage->libelle;
 			if ($key == Vrac::CEPAGE_EDEL) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
+			}
+			if ($key == Vrac::CEPAGE_MUSCAT) {
+				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = Vrac::CEPAGE_MUSCAT_LIBELLE;
 			}
 		}
     	return $this->renderText(json_encode($result));

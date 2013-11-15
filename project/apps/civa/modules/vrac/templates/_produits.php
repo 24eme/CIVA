@@ -3,18 +3,18 @@
 <?php use_helper('Text') ?>
 <?php use_helper('vrac') ?>
 
-<table class="table_donnees produits">
+<table class="table_donnees produits validation">
 	<thead>
 		<tr>
 			<th class="produit">Produit</th>
-			<th class="volume"><span>Volume estimé</span></th>
-			<th class="prix"><span>Prix</span></th>
+			<th class="volume">Volume estimé</th>
+			<th class="prix">Prix</th>
 			<?php if ($vrac->isCloture() || $form): ?>
-			<th class="echeance"><span>Date</span></th>
-			<th class="enleve"><span>Volume réel</span></th>
+			<th class="echeance">Date</th>
+			<th class="enleve">Volume réel</th>
 			<?php endif; ?>
 			<?php if ($form): ?>
-			<th class="cloture"><span>Cloture</span></th>
+			<th class="cloture">Cloture</th>
 			<th class="actions"></th>
 			<?php endif; ?>
 		</tr>

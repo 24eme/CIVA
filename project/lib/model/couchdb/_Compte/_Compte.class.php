@@ -126,6 +126,11 @@ abstract class _Compte extends Base_Compte {
 
         return $this->statut != self::STATUS_INACTIF;
     }
+    
+    public function isInscrit()
+    {
+    	return $this->statut == self::STATUS_INSCRIT;
+    }
 
     public function setInactif() {
         $this->statut = self::STATUS_INACTIF;

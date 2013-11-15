@@ -66,7 +66,7 @@
 				Conditions de paiement
 			</td>
 			<td>
-				<?php echo $vrac->conditions_paiement ?>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
 			</td>
 		</tr>
 		<tr class="alt">
@@ -74,7 +74,7 @@
 				Conditions particulières
 			</td>
 			<td>
-				<?php echo $vrac->conditions_particulieres ?>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
 			</td>
 		</tr>
 
