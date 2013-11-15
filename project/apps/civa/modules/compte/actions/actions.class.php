@@ -36,7 +36,7 @@ class compteActions extends sfActions {
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
             /** ***** */
             $this->getUser()->signIn(phpCAS::getUser());
-            
+
             return $this->redirectAfterLogin($request);
         }
 
@@ -52,12 +52,15 @@ class compteActions extends sfActions {
     }
 
     protected function redirectAfterLogin($request) {
-        if($request->getReferer()) {
+        if($request->getParameter('ticket')) {
+
+            $this->getUser()->setFlash('referer', $request->getUri());
+        } elseif($request->getReferer()) {
 
             $this->getUser()->setFlash('referer', $request->getReferer());
         } 
 
-        return $this->redirect('@tiers');
+        return $this->redirect('tiers');
     } 
 
     public function executeLoginNoCas(sfWebRequest $request) {
