@@ -52,13 +52,10 @@ class compteActions extends sfActions {
     }
 
     protected function redirectAfterLogin($request) {
-        if($request->getParameter('ticket')) {
+        if($request->getParameter('ticket') && $request->getParameter('service')) {
 
-            $this->getUser()->setFlash('referer', $request->getUri());
-        } elseif($request->getReferer()) {
-
-            $this->getUser()->setFlash('referer', $request->getReferer());
-        } 
+            $this->getUser()->setFlash('referer', $request->getParameter('service'));
+        }
 
         return $this->redirect('tiers');
     } 
