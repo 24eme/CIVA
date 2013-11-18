@@ -115,7 +115,7 @@ EOF;
     	}
     	if ($tiers->type == 'MetteurEnMarche') {
     		if ($tiers->hasCvi()) {
-    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi) {
+    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi)) {
     				return $this->getType($achat);
     			}
     			if ($tiers->exist('qualite_categorie')) {
