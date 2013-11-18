@@ -63,7 +63,7 @@ class Db2Tiers extends Db2 {
 
     function isCourtier() {
 
-        return ($this->get(self::COL_NUM) > 90000 || $this->get(self::COL_COURTIER)) ;
+        return (!$this->isMetteurEnMarche() && !$this->isRecoltant() && !$this->isAcheteur()) && ($this->get(self::COL_NUM) > 90000 || $this->get(self::COL_COURTIER)) ;
     }
     
 }
