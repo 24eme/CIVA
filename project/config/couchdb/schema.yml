@@ -495,7 +495,7 @@ Recoltant:
       type: {  }
       cvi: {  }
       civaba: {  }
-      qualite: {  }
+      qualite: { required: false }
       declaration_insee: {  }
       declaration_commune: {  }
       cave_cooperative: {  }

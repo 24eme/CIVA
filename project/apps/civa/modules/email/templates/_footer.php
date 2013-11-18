@@ -1,4 +1,3 @@
-
 Pour toutes questions, veuillez contacter l'interlocuteur commercial, responsable du contrat.
 
 --
