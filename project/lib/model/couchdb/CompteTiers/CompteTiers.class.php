@@ -189,7 +189,7 @@ class CompteTiers extends BaseCompteTiers {
         $droits = $this->getDroits();
 
         foreach($this->getTiersObject() as $tiers) {
-            $droits_type = _CompteClient<::getDroitsType($tiers->type);
+            $droits_type = _CompteClient::getDroitsType($tiers->type);
             foreach($droits_type as $droit) {
                 if(in_array($droit, $droits_type)) {
                     $tiers->emails->add($droit)->add($this->_id, array('nom' => $this->nom, 'email' => $this->email));
