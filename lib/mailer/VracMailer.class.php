@@ -18,7 +18,6 @@ class VracMailer {
     {
         $from = self::getFrom();
         $to = array($destinataire);
-        $to = array('jblemetayer@actualys.com');
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat vrac] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
