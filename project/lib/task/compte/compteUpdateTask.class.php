@@ -35,9 +35,16 @@ EOF;
         $liaisons = acCouchdbManager::getClient()->group_level(3)->getView("TIERS", "liaison");
         $stocks = array();
         $acheteurs = array();
+        $courtiers = array();
         foreach ($liaisons->rows as $liaison) {
             if (preg_match('/^ACHAT-/', $liaison->key[2])) {
                 $acheteurs[] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
+
+                continue;
+            }
+
+            if (preg_match('/^COURT-/', $liaison->key[2])) {
+                $courtiers[] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
 
                 continue;
             }
@@ -75,6 +82,12 @@ EOF;
            $tiers = array($acheteur);
            $comptes[$this->getLogin($tiers)] = $tiers;     
         }
+
+        foreach($courtiers as $courtier) {
+           $tiers = array($courtier);
+           $comptes[$this->getLogin($tiers)] = $tiers;     
+        }
+
 
         // Suppression des comptes inexistants
         $ids_compte = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
@@ -181,7 +194,12 @@ EOF;
     private function getLogin(array $tiers) {
         $login = null;
         foreach ($tiers as $t) {
+            if($t->type == 'Courtier') {
+
+                return $t->siren;
+            }
             if (($t->type == 'Recoltant' || $t->type == 'Acheteur') && $t->cvi) {
+                
                 return $t->cvi;
             }
             if (is_null($login) && $t->civaba) {
