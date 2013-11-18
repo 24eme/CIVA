@@ -224,7 +224,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->raison_sociale = $tiers->nom;
     	$this->acheteur->siret = $tiers->siret;
     	$this->acheteur->cvi = $tiers->cvi;
-    	$this->acheteur->num_accise = $tiers->num_accise;
+    	$this->acheteur->num_accise = $tiers->no_accises;
     	$this->acheteur->civaba = $civaba;
     	$this->acheteur->adresse = $tiers->siege->adresse;
     	$this->acheteur->code_postal = $tiers->siege->code_postal;
@@ -246,12 +246,29 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function storeVendeurInformations($tiers)
     {
     	$compte = $tiers->getCompteObject();
+        $num_accise = null;
+        $civaba = null;
+        if ($compte) {
+            if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
+                      $num_accise = $metteurEnMarche->no_accises;
+                       $civaba = $metteurEnMarche->civaba;
+            }
+        } 
+       if (!$num_accise) {
+               if ($tiers->exist('civaba') && $tiers->civaba) {
+                       if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
+                               $num_accise = $metteurEnMarche->no_accises;
+                               $civaba = $metteurEnMarche->civaba;
+                       }
+               }
+        }
+
 
     	$this->vendeur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->vendeur->raison_sociale = $tiers->nom;
     	$this->vendeur->siret = $tiers->siret;
     	$this->vendeur->cvi = $tiers->cvi;
-    	$this->vendeur->num_accise = $tiers->num_accise;
+    	$this->vendeur->num_accise = $num_accise;
     	$this->vendeur->civaba = $civaba;
     	$this->vendeur->adresse = $tiers->siege->adresse;
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
