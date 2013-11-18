@@ -1,6 +1,3 @@
-<?php if(!$sf_user->hasCredential(_CompteClient::DROIT_VRAC_RESPONSABLE) && !$sf_user->hasCredential(_CompteClient::DROIT_VRAC_SIGNATURE)): ?>
-	<?php return; ?>
-<?php endif; ?>
 <div id="espace_alsace_contrats">
     <h2>Alsace Contrats</h2>
     <div class="contenu clearfix">  

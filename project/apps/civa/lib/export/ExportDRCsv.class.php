@@ -15,8 +15,8 @@ class ExportDRCsv extends ExportCsv {
     protected $_headers = array(
         "cvi_acheteur" => "CVI acheteur",
         "nom_acheteur" => "nom acheteur",
-        "nom_recoltant" => "nom récoltant",
         "cvi_recoltant" => "CVI récoltant",
+        "nom_recoltant" => "nom récoltant",
         "appellation" => "appellation",
         "lieu" => "lieu",
         "cepage" => "cépage",

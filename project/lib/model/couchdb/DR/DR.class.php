@@ -471,7 +471,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_lieudit_non_saisie_detail')));
                                 }
 
-                                if ($detail->lies > $detail->cave_particuliere) {
+                                if ($detail->lies > ($detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('mouts'))) {
                                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume_sur_place')));
 
                                     continue;
@@ -548,7 +548,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
 
-        if($noeud->getLies() > $noeud->getTotalCaveParticuliere()) {
+        if($noeud->getLies() > $noeud->getLiesMax()) {
 
             return;
         }
@@ -567,10 +567,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $lieu = $noeud->getLieu();
 
         // Verifie que les lies sont inférieur au volume sur place
-        if(!$noeud->getTotalCaveParticuliere() && $noeud->getLies() > 0) {
+        if(!$noeud->getLiesMax() && $noeud->getLies() > 0) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_pas_volume_sur_place')));
         
-        } elseif($noeud->getLies() > $noeud->getTotalCaveParticuliere()){
+        } elseif($noeud->getLies() > $noeud->getLiesMax()) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume_sur_place')));
         }
     }
