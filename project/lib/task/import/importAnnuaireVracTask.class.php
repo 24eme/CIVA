@@ -48,11 +48,14 @@ EOF;
         $proprietaireTiers = _TiersClient::getInstance()->findByCvi($proprietaire);
         $acteurTiers = _TiersClient::getInstance()->findByCvi($acteur);
         if (!$proprietaireTiers) {
+        	$proprietaireTiers = _TiersClient::getInstance()->findBySiren($proprietaire);
+        }
+        if (!$proprietaireTiers) {
         	$proprietaireTiers = _TiersClient::getInstance()->find('MET-'.$proprietaire);
         }
         if (!$acteurTiers) {
         	$acteurTiers = _TiersClient::getInstance()->find('MET-'.$acteur);
-        	if ($acteurTiers->hasCvi()) {
+        	if ($acteurTiers && $acteurTiers->hasCvi()) {
         		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi)) {
         			$acteurTiers = $achat;
         		}
@@ -66,7 +69,7 @@ EOF;
         }
         if ($proprietaireTiers && $acteurTiers) {
         	if ($proprietaireCompte = $proprietaireTiers->getCompteObject()) {
-	        	if ($proprietaireCompte->isInscrit()) {
+	        	if ($proprietaireTiers->isActif()) {
 	        		$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($proprietaireCompte->login);
 	        		$type = $this->getType($acteurTiers);
 	        		if ($type) {
@@ -78,7 +81,7 @@ EOF;
 	        			$this->logSection('Type', "Type non determiné pour le tiers : ".$acteurTiers->_id, null, 'ERROR');
 	        		}
 	        	} else {
-	        		$this->logSection('Compte', "Compte non inscrit : ".$proprietaireCompte->_id, null, 'ERROR');
+	        		$this->logSection('Tiers', "Tiers non actif : ".$proprietaireTiers->_id, null, 'ERROR');
 	        	}
         	} else {
         		$this->logSection('Compte', "Pas de compte : ".$proprietaireTiers->_id, null, 'ERROR');
@@ -100,13 +103,13 @@ EOF;
     		return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
     	}
     	if ($tiers->type == 'Acheteur') {
-    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
+    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
     			return AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
     		}
-    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
+    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
     			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
     		}
-    		if ($tiers->qualite == 'Recoltant') {
+    		if ($tiers->qualite_categorie == _TiersClient::QUALITE_RECOLTANT) {
     			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
     		}
     	}
@@ -115,14 +118,14 @@ EOF;
     			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi) {
     				return $this->getType($achat);
     			}
-    			if ($tiers->exist('qualite')) {
-		    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
+    			if ($tiers->exist('qualite_categorie')) {
+		    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
 		    			return AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
 		    		}
-		    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
+		    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
 		    			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
 		    		}
-		    		if ($tiers->qualite == 'Recoltant') {
+		    		if ($tiers->qualite_categorie == _TiersClient::QUALITE_RECOLTANT) {
 		    			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
 		    		}
     			}
