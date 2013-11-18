@@ -55,6 +55,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->cave_particuliere;
     }
 
+    public function getLiesMax() {
+
+        return round($this->cave_particuliere + $this->getVolumeAcheteurs('mouts'), 2);
+    }
+
     public function getTotalDontDplcVendus() {
 
         return null;

@@ -92,6 +92,10 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getUsagesIndustrielsCaveParticuliere() {
+        if(!$this->getTotalCaveParticuliere()) {
+
+            return 0;
+        }
 
         return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
     }
@@ -118,6 +122,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
 
         return $this->_get('lies') ? $this->_get('lies') : 0;
+    }
+
+    public function getLiesMax($force_calcul = false) {
+
+        return round($this->getTotalCaveParticuliere($force_calcul) + $this->getTotalVolumeAcheteurs('mouts'), 2);
     }
 
     public function getDplc($force_calcul = false) {
@@ -610,6 +619,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         return $volume;
     }
+
 
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "total_volume_acheteurs_" . $type;
