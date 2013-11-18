@@ -17,6 +17,8 @@ class importAnnuaireVracTask extends importAbstractTask {
         $this->addArguments(array(
             new sfCommandArgument('proprietaire', sfCommandArgument::REQUIRED, "Identifiant du compte annuaire"),
             new sfCommandArgument('acteur', sfCommandArgument::REQUIRED, "Identifiant du compte à ajouter à l'annuaire"),
+            new sfCommandArgument('proprietaire_type', sfCommandArgument::REQUIRED, "Type du compte annuaire"),
+            new sfCommandArgument('acteur_type', sfCommandArgument::REQUIRED, "Type du compte à ajouter à l'annuaire"),
         ));
 
         $this->addOptions(array(
@@ -44,22 +46,13 @@ EOF;
         
         $proprietaire = $arguments['proprietaire'];
         $acteur = $arguments['acteur'];
+        $proprietaireType = $arguments['proprietaire_type'];
+        $acteurType = $arguments['acteur_type'];
         
-        $proprietaireTiers = _TiersClient::getInstance()->findByCvi($proprietaire);
-        $acteurTiers = _TiersClient::getInstance()->findByCvi($acteur);
+        $proprietaireTiers = ($proprietaireType == 'cvi')? _TiersClient::getInstance()->findByCvi($proprietaire) : _TiersClient::getInstance()->findByCivaba($proprietaire);
+        $acteurTiers = ($acteurType == 'cvi')? _TiersClient::getInstance()->findByCvi($acteur) : _TiersClient::getInstance()->findByCivaba($acteur);
         if (!$proprietaireTiers) {
         	$proprietaireTiers = _TiersClient::getInstance()->findBySiren($proprietaire);
-        }
-        if (!$proprietaireTiers) {
-        	$proprietaireTiers = _TiersClient::getInstance()->find('MET-'.$proprietaire);
-        }
-        if (!$acteurTiers) {
-        	$acteurTiers = _TiersClient::getInstance()->find('MET-'.$acteur);
-        	if ($acteurTiers && $acteurTiers->hasAcheteur()) {
-        		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi)) {
-        			$acteurTiers = $achat;
-        		}
-        	}
         }
         if (!$proprietaireTiers) {
         	$liaisons = acCouchdbManager::getClient()->reduce(false)->startkey(array($proprietaire))->endkey(array($proprietaire, array()))->getView("TIERS", "liaison");
@@ -68,6 +61,16 @@ EOF;
 	        }
         }
         if ($proprietaireTiers && $acteurTiers) {
+	        if ($acteurTiers->type == 'MetteurEnMarche' && $acteurTiers->hasAcheteur()) {
+        		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi_acheteur)) {
+        			$acteurTiers = $achat;
+        		}
+	        }
+	        if ($proprietaireTiers->type == 'MetteurEnMarche' && $proprietaireTiers->hasAcheteur()) {
+        		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$proprietaireTiers->cvi_acheteur)) {
+        			$proprietaireTiers = $achat;
+        		}
+	        }
         	if ($proprietaireCompte = $proprietaireTiers->getCompteObject()) {
 	        	if ($proprietaireTiers->isActif()) {
 	        		$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($proprietaireCompte->login);
@@ -115,7 +118,7 @@ EOF;
     	}
     	if ($tiers->type == 'MetteurEnMarche') {
     		if ($tiers->hasAcheteur()) {
-    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi)) {
+    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi_acheteur)) {
     				return $this->getType($achat);
     			}
     			if ($tiers->exist('qualite_categorie')) {
