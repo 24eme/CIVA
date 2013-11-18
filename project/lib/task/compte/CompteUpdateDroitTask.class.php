@@ -16,7 +16,7 @@ class compteUpdateDroitTask extends sfBaseTask {
         ));
 
         $this->namespace = 'compte';
-        $this->name = 'update';
+        $this->name = 'update-droit';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
 The [importCompte|INFO] task does things.
