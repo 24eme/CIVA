@@ -19,6 +19,11 @@ class _TiersClient extends acCouchdbClient {
             $tiers = parent::find('ACHAT-'.$cvi, $hydrate);
         }
 
+        if(!$tiers) {
+
+            $tiers = parent::find('COURT-'.$cvi, $hydrate);
+        }
+
         return $tiers;
     }
 
