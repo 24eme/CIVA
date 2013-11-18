@@ -109,7 +109,7 @@ EOF;
     		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
     			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
     		}
-    		if ($tiers->qualite_categorie == 'Recoltant') {
+    		if ($tiers->qualite_categorie == _TiersClient::QUALITE_RECOLTANT) {
     			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
     		}
     	}
@@ -125,7 +125,7 @@ EOF;
 		    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
 		    			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
 		    		}
-		    		if ($tiers->qualite_categorie == 'Recoltant') {
+		    		if ($tiers->qualite_categorie == _TiersClient::QUALITE_RECOLTANT) {
 		    			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
 		    		}
     			}
