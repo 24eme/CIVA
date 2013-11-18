@@ -103,13 +103,13 @@ EOF;
     		return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
     	}
     	if ($tiers->type == 'Acheteur') {
-    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
+    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
     			return AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
     		}
-    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
+    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
     			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
     		}
-    		if ($tiers->qualite == 'Recoltant') {
+    		if ($tiers->qualite_categorie == 'Recoltant') {
     			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
     		}
     	}
@@ -118,14 +118,14 @@ EOF;
     			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi_acheteur)) {
     				return $this->getType($achat);
     			}
-    			if ($tiers->exist('qualite')) {
-		    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
+    			if ($tiers->exist('qualite_categorie')) {
+		    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY]) {
 		    			return AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
 		    		}
-		    		if ($tiers->qualite == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
+		    		if ($tiers->qualite_categorie == $tiersQualites[AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY]) {
 		    			return AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
 		    		}
-		    		if ($tiers->qualite == 'Recoltant') {
+		    		if ($tiers->qualite_categorie == 'Recoltant') {
 		    			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
 		    		}
     			}
