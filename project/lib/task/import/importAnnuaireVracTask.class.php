@@ -66,7 +66,7 @@ EOF;
         }
         if ($proprietaireTiers && $acteurTiers) {
         	if ($proprietaireCompte = $proprietaireTiers->getCompteObject()) {
-	        	if ($proprietaireCompte->isInscrit()) {
+	        	if ($proprietaireTiers->isActif()) {
 	        		$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($proprietaireCompte->login);
 	        		$type = $this->getType($acteurTiers);
 	        		if ($type) {
@@ -78,7 +78,7 @@ EOF;
 	        			$this->logSection('Type', "Type non determiné pour le tiers : ".$acteurTiers->_id, null, 'ERROR');
 	        		}
 	        	} else {
-	        		$this->logSection('Compte', "Compte non inscrit : ".$proprietaireCompte->_id, null, 'ERROR');
+	        		$this->logSection('Tiers', "Tiers non actif : ".$proprietaireTiers->_id, null, 'ERROR');
 	        	}
         	} else {
         		$this->logSection('Compte', "Pas de compte : ".$proprietaireTiers->_id, null, 'ERROR');
