@@ -49,7 +49,7 @@ EOF;
         }
 
         $tiers = array();
-        $tiers_types = array("Recoltant", "MetteurEnMarche", "Acheteur");
+        $tiers_types = array("Recoltant", "MetteurEnMarche", "Acheteur", "Courtier");
         foreach ($tiers_types as $tiers_type) {
             $tiers = array_merge($tiers, acCouchdbManager::getClient($tiers_type)->getAll(acCouchdbClient::HYDRATE_JSON)->getDocs());
         }

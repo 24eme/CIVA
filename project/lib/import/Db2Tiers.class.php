@@ -45,13 +45,13 @@ class Db2Tiers extends Db2 {
     const COL_SITE_INTERNET         = 82;
     
     function isRecoltant() {
-        return (!$this->isCourtier() && $this->get(self::COL_CVI) && 
+        return ($this->get(self::COL_CVI) && 
                     (($this->get(self::COL_RECOLTANT) == "O") || 
                     (($this->get(self::COL_RECOLTANT) == "N" || !$this->get(self::COL_RECOLTANT)) && !$this->get(self::COL_CIVABA))));
     }
     
     function isMetteurEnMarche() {
-        return (!$this->isCourtier() && $this->get(self::COL_CIVABA) && 
+        return ($this->get(self::COL_CIVABA) && 
                 ($this->get(self::COL_RECOLTANT) == "N" || !$this->get(self::COL_RECOLTANT)));
                    
     }
