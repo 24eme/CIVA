@@ -506,8 +506,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     {
         $this->archivage_document->preSave();
         if (!$this->numero_visa && $this->numero_archive) {
-    		$this->numero_visa = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero_archive);
+    		$this->numero_visa = $this->numero_archive;
+                $this->numero_db2 = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero_archive);
     	}
+        if(!$this->numero_db2 && $this->numero_archive){
+                $this->numero_visa = $this->numero_archive;
+                $this->numero_db2 = sprintf('%06d', self::PREFIXE_NUMERO.$this->numero_archive);
+        }
     }
     
     protected function doSave() 

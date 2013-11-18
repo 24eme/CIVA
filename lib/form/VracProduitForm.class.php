@@ -15,10 +15,10 @@ class VracProduitForm extends acCouchdbObjectForm
         	'denomination' => 'Dénomination:',
         	//'vtsgn' => 'VT/SGN:',
         	'prix_unitaire' => 'Prix unitaire:',
-        	'volume_propose' => 'Volume proposé:'
+        	'volume_propose' => 'Volume estimé:'
         ));
         $this->setValidators(array(
-        	'millesime' => new sfValidatorString(array('required' => false, 'max_length' => 4), array('max_length' =>  '4 caractères max.')),
+        	'millesime' => new sfValidatorString(array('required' => false, 'max_length' => 4, 'min_length' => 4), array('max_length' =>  '4 caractères max.', 'min_length' =>  '4 caractères min.')),
         	'denomination' => new sfValidatorString(array('required' => false)),
         	//'vtsgn' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getVtSgn()))),
         	'prix_unitaire' => new sfValidatorNumber(array('required' => false)),

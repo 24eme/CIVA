@@ -14,8 +14,8 @@ class VracValidation extends DocumentValidation
     
   	public function configure() 
   	{
-    	$this->addControle('vigilance', 'ecart_volume', 'Il y a un écart de volume important entre le volume proposé et le volume réel d\'enlèvement');
-    	$this->addControle('erreur', 'volume_non_saisi', 'La cloture d\'un produit n\'est pas possible sans spécifier un volume réel d\'enlèvement');
+    	$this->addControle('vigilance', 'ecart_volume', 'Il y a un écart de volume important entre le volume estimé et le volume réel d\'enlèvement.');
+    	$this->addControle('erreur', 'volume_non_saisi', 'La cloture d\'un produit n\'est pas possible sans spécifier un volume réel d\'enlèvement.');
   	}
 
   	public function controle()

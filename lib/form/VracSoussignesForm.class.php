@@ -62,6 +62,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
     		$commercialEmail = $this->annuaire->commerciaux->get($values['interlocuteur_commercial']);
     		$this->getObject()->interlocuteur_commercial->nom = $values['interlocuteur_commercial'];
     		$this->getObject()->interlocuteur_commercial->email = $commercialEmail;
+    	} else {
+    		$this->getObject()->remove('interlocuteur_commercial');
+    		$this->getObject()->add('interlocuteur_commercial');
     	}
     	$this->getObject()->acheteur_type = $values['acheteur_type'];
     	$this->getObject()->vendeur_type = $values['vendeur_type'];
@@ -87,7 +90,12 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	if (!$annuaire) {
     		return array();
     	}
-    	return array_merge(array('' => ''), $annuaire->recoltants->toArray());
+    	$result = array();
+    	foreach ($annuaire->recoltants as $key => $value) {
+    		$num = explode('-', $key);
+    		$result[$key] = $value." (".$num[1].")";
+    	}
+    	return array_merge(array('' => ''), $result);
     }
     
     public function getNegociants()
@@ -96,7 +104,12 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	if (!$annuaire) {
     		return array();
     	}
-    	return array_merge(array('' => ''), $annuaire->negociants->toArray());
+    	$result = array();
+    	foreach ($annuaire->negociants as $key => $value) {
+    		$num = explode('-', $key);
+    		$result[$key] = $value." (".$num[1].")";
+    	}
+    	return array_merge(array('' => ''), $result);
     }
     
     public function getCavesCooperatives()
@@ -105,7 +118,12 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	if (!$annuaire) {
     		return array();
     	}
-    	return array_merge(array('' => ''), $annuaire->caves_cooperatives->toArray());
+    	$result = array();
+    	foreach ($annuaire->caves_cooperatives as $key => $value) {
+    		$num = explode('-', $key);
+    		$result[$key] = $value." (".$num[1].")";
+    	}
+    	return array_merge(array('' => ''), $result);
     }
     
     public function getCommerciaux()
