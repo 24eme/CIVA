@@ -416,13 +416,13 @@ _Tiers:
         definition:
           fields:
             '*': {  }
-      civaba: {  }
       intitule: {  }
       nom: {  }
       telephone: {  }
       fax: {  }
       email: {  }
       web: {  }
+      siret:  {  }
       lieux_stockage:
         type: collection
         required: false
@@ -460,6 +460,7 @@ _Tiers:
             code_postal: { }
             commune: {  }
       categorie: { }
+      qualite_categorie: { }
       emails: 
         type: collection
         definition:
@@ -493,7 +494,8 @@ Recoltant:
       _rev: {  }
       type: {  }
       cvi: {  }
-      siret: {  }
+      civaba: {  }
+      qualite: {  }
       declaration_insee: {  }
       declaration_commune: {  }
       cave_cooperative: {  }
@@ -505,7 +507,9 @@ MetteurEnMarche:
       _id: {  }
       _rev: {  }
       type: {  }
-      cvi_acheteur: {  }
+      cvi: {  }
+      civaba: {  }
+      cvi_acheteur: { required: false }
       no_accises: {  }
       declaration_insee: { required: false }
       declaration_commune: { required: false }
@@ -516,7 +520,7 @@ MetteurEnMarche:
           fields:
             statut: {  }
             num_cotisant: {  }
-      siren: {  }
+      siren: { required: false }
       db2:
         type: collection
         definition:
@@ -530,26 +534,11 @@ Courtier:
       _id: {  }
       _rev: {  }
       type: {  }
-      cvi: {  }
       no_accises: {  }
       no_carte_professionnelle: {  }
-      declaration_insee: { required: false }
-      declaration_commune: { required: false }
-      gamma:
-        required: false
-        type: collection
-        definition:
-          fields:
-            statut: {  }
-            num_cotisant: {  }
-      siret: {  }
       siren: {  }
-      db2:
-        type: collection
-        definition:
-          fields:
-            maison_mere: {  }
-
+      cvi: { required: false }
+      civaba: { required: false }
 
 Acheteur:
   inheritance: _Tiers
@@ -557,12 +546,13 @@ Acheteur:
     fields:
       _id: {  }
       _rev: {  }
-      cvi: {  }
+      cvi: { }
+      civaba: { }
       type: {  }
       qualite: {  }
       nom: {  }
       commune: {  }
-      siret: {  }
+      no_accises: {  }
       declaration_insee: {  }
       declaration_commune: {  }
       achnum: { required: false }
