@@ -37,8 +37,8 @@ EOF;
         $cvi_acheteur_no_stock = array();
 
         foreach ($mets as $met) {
-            if ($met->cvi_acheteur) {
-                $cvi_acheteur_no_stock[$met->cvi_acheteur] = $met;
+            if ($met->cvi) {
+                $cvi_acheteur_no_stock[$met->cvi] = $met;
             }
         }
 

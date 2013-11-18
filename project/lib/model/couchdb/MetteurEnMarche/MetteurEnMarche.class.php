@@ -6,7 +6,7 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
 
     public function getAcheteur() {
 
-        return acCouchdbManager::getClient('Acheteur')->retrieveByCvi($this->cvi_acheteur);
+        return acCouchdbManager::getClient('Acheteur')->findByCvi($this->cvi);
     }
 
     public function getIdentifiant() {
@@ -15,9 +15,24 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
     }
     
     public function hasCvi() {
-    	if ($this->cvi_acheteur) {
+    	if ($this->cvi) {
     		return true;
     	}
     	return false;
     }
+
+    public function getCviObject() {
+
+        return $this->getAcheteur();
+    }
+
+    public function getCvi() {
+        if(!$this->_get('cvi') && $this->exist('cvi_acheteur')) {
+
+            return $this->_get('cvi_acheteur');
+        }
+
+        return $this->_get('cvi');
+    }
+
 }

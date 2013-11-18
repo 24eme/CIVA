@@ -56,7 +56,7 @@ EOF;
         if (!$acteurTiers) {
         	$acteurTiers = _TiersClient::getInstance()->find('MET-'.$acteur);
         	if ($acteurTiers && $acteurTiers->hasCvi()) {
-        		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi_acheteur)) {
+        		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi)) {
         			$acteurTiers = $achat;
         		}
         	}
@@ -115,7 +115,7 @@ EOF;
     	}
     	if ($tiers->type == 'MetteurEnMarche') {
     		if ($tiers->hasCvi()) {
-    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi_acheteur)) {
+    			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi)) {
     				return $this->getType($achat);
     			}
     			if ($tiers->exist('qualite_categorie')) {

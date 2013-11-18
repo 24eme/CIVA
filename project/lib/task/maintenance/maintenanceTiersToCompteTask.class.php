@@ -108,17 +108,17 @@ EOF;
         $mets = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
         foreach ($mets as $met) {
 
-            if ($met->cvi_acheteur) {
+            if ($met->cvi) {
                 $tiers_civaba = acCouchdbManager::getClient()->find("TIERS-C" . $met->civaba, acCouchdbClient::HYDRATE_JSON);
-                $tiers_cvi = acCouchdbManager::getClient()->find("TIERS-" . $met->cvi_acheteur, acCouchdbClient::HYDRATE_JSON);
+                $tiers_cvi = acCouchdbManager::getClient()->find("TIERS-" . $met->cvi, acCouchdbClient::HYDRATE_JSON);
                 if ($tiers_civaba) {
                     
                 } elseif ($tiers_cvi && $tiers_cvi->civaba == $met->civaba) {
                     $compte = acCouchdbManager::getClient()->find("COMPTE-C" . $met->civaba);
-                    $compte_acheteur = acCouchdbManager::getClient()->find("COMPTE-" . $met->cvi_acheteur);
+                    $compte_acheteur = acCouchdbManager::getClient()->find("COMPTE-" . $met->cvi);
                     if ($compte) {
                         /*$this->log($met->_id);
-                        $this->logSection("metteur", $met->cvi_acheteur);
+                        $this->logSection("metteur", $met->cvi);
                         $this->logSection("ancien login", $tiers_cvi->cvi);
                         $this->logSection("nouveau login", "C" . $met->civaba);*/
 
