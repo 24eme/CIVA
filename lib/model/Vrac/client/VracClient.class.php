@@ -15,7 +15,7 @@ class VracClient extends acCouchdbClient {
 
     public static function canBeHaveVrac($tiers)
     {
-      if($tiers->type == 'MetteurEnMarche' && $tiers->hasCvi()) {
+      if($tiers->type == 'MetteurEnMarche' && $tiers->hasAcheteur()) {
 
         return false;
       }
@@ -28,7 +28,7 @@ class VracClient extends acCouchdbClient {
     	if ($tiers->type == 'Acheteur' || $tiers->type == 'Courtier') {
     		return true;
     	}
-    	if ($tiers->type == 'MetteurEnMarche' && !$tiers->hasCvi()) {
+    	if ($tiers->type == 'MetteurEnMarche' && !$tiers->hasAcheteur()) {
     		return true;
     	}
     	return false;

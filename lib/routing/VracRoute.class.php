@@ -51,15 +51,10 @@ class VracRoute extends sfObjectRoute
             $vrac->acheteur_identifiant = $tiers->_id;
             $vrac->storeAcheteurInformations($tiers);
             $vrac->setAcheteurQualite($tiers->qualite_categorie);
-        } elseif($tiers->type == 'MetteurEnMarche' && $tiers->hasCvi()) {
-        	if ($achat = _TiersClient::getInstance()->findByCvi($tiers->cvi)) {
-	            $vrac->acheteur_identifiant = $achat->_id;
-	            $vrac->storeAcheteurInformations($achat);
-	            $vrac->setAcheteurQualite($achat->qualite_categorie);
-        	} else {
-        		throw new sfException('Acheteur non présent dans la base '.$tiers->cvi);
-        	}
-        	
+        } elseif($tiers->type == 'MetteurEnMarche' && !$tiers->hasAcheteur()) {
+            $vrac->acheteur_identifiant = $tiers->_id;
+            $vrac->storeAcheteurInformations($tiers);
+            $vrac->setAcheteurQualite($tiers->qualite_categorie);
         } else {
             throw new sfException('Ce tiers ne peut pas créer de contrat vrac.');
         }
