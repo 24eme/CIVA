@@ -12,13 +12,23 @@ class VracClient extends acCouchdbClient {
     {
       return acCouchdbManager::getClient("Vrac");
     }
+
+    public static function canBeHaveVrac($tiers)
+    {
+      if($tiers->type == 'MetteurEnMarche' && $tiers->hasCvi()) {
+
+        return false;
+      }
+
+      return true;
+    }
     
     public static function canBeCreate($tiers)
     {
     	if ($tiers->type == 'Acheteur' || $tiers->type == 'Courtier') {
     		return true;
     	}
-    	if ($tiers->type == 'MetteurEnMarche' && $tiers->hasCvi()) {
+    	if ($tiers->type == 'MetteurEnMarche' && !$tiers->hasCvi()) {
     		return true;
     	}
     	return false;
