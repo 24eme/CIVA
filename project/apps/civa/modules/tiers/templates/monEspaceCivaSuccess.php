@@ -6,8 +6,6 @@
     <h2 class="titre_principal">Mon espace déclaratif</h2>
 <?php endif; ?>
 <div id="application_dr" class="clearfix">
-
-        <?php include_component('vrac', 'monEspace') ?>
         
         <?php 
         if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
@@ -16,6 +14,7 @@
             include_partial('tiers/monEspaceDs',array('sf_user' => $sf_user));
         endif;
         ?>
+        
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
             <h2>Acheteurs</h2>
@@ -23,7 +22,9 @@
                  <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
         </div>
-        <?php endif; ?>             
+        <?php endif; ?>   
+        
+        <?php include_component('vrac', 'monEspace') ?>          
 
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
         <div id="espace_gamma">
