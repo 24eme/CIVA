@@ -20,7 +20,7 @@ class _CompteClient extends acCouchdbClient {
 
     public static $droits_type = array(
         'Recoltant' => array(self::DROIT_DR_RECOLTANT, self::DROIT_VRAC_SIGNATURE, self::DROIT_DS_DECLARANT),
-        'MetteurEnMarche' => array(self::DROIT_GAMMA, self::DROIT_VRAC_SIGNATURE, self::DROIT_DS_DECLARANT),
+        'MetteurEnMarche' => array(self::DROIT_GAMMA, self::DROIT_VRAC_SIGNATURE, self::DROIT_VRAC_RESPONSABLE, self::DROIT_DS_DECLARANT),
         'Acheteur' => array(self::DROIT_DR_ACHETEUR, self::DROIT_VRAC_SIGNATURE, self::DROIT_VRAC_RESPONSABLE, self::DROIT_DS_DECLARANT),
         'Courtier' => array(self::DROIT_VRAC_SIGNATURE, self::DROIT_VRAC_RESPONSABLE),
     );

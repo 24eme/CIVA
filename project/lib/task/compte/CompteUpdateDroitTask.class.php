@@ -32,7 +32,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $compte = _CompteClient::getInstance()->find($arguments['id']);
-
+        $compte->updateTiers();
         $compte->save();
     }
 }
