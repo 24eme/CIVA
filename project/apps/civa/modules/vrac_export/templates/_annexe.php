@@ -1,5 +1,5 @@
 <div style="font-size: 7pt;">
-<h4><b>Art. R644-6 du Code Rural modifié par le décret 2008-998 du 23/9/08</b></h4>
+<h4><b>Art. D644-6 du Code Rural modifié par le décret 2008-998 du 23/9/08</b></h4>
 <p>
 L’article susmentionné rend obligatoire l’information des organismes de contrôle agréés sur les intentions de transactions de vins non conditionnés.
 </p>
