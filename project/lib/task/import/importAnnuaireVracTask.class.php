@@ -125,6 +125,7 @@ EOF;
     			if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$tiers->cvi_acheteur)) {
     				return $this->getType($achat);
     			}
+    		}
     			if ($tiers->exist('qualite_categorie')) {
 		    		if ($tiers->qualite_categorie == _TiersClient::QUALITE_NEGOCIANT) {
 		    			return AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
@@ -136,7 +137,6 @@ EOF;
 		    			return AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
 		    		}
     			}
-    		}
     	}
     	return null;
     }
