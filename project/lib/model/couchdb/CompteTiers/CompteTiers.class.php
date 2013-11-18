@@ -162,7 +162,8 @@ class CompteTiers extends BaseCompteTiers {
                 if ($t->no_accises) {
                     $droits[_CompteClient::DROIT_GAMMA] = null;
                 }
-                if (!$t->cvi_acheteur) {
+                if (!$t->cvi) {
+                    $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
                     $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
                 }
             } elseif ($t->type == "Acheteur") {

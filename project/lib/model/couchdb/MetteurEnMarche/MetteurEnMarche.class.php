@@ -25,4 +25,9 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
 
         return $this->getAcheteur();
     }
+
+    public function getCviAcheteur() {
+
+        return $this->cvi;
+    }
 }
