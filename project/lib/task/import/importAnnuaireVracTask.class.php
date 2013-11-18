@@ -48,11 +48,14 @@ EOF;
         $proprietaireTiers = _TiersClient::getInstance()->findByCvi($proprietaire);
         $acteurTiers = _TiersClient::getInstance()->findByCvi($acteur);
         if (!$proprietaireTiers) {
+        	$proprietaireTiers = _TiersClient::getInstance()->findBySiren($proprietaire);
+        }
+        if (!$proprietaireTiers) {
         	$proprietaireTiers = _TiersClient::getInstance()->find('MET-'.$proprietaire);
         }
         if (!$acteurTiers) {
         	$acteurTiers = _TiersClient::getInstance()->find('MET-'.$acteur);
-        	if ($acteurTiers->hasCvi()) {
+        	if ($acteurTiers && $acteurTiers->hasCvi()) {
         		if ($achat = _TiersClient::getInstance()->find('ACHAT-'.$acteurTiers->cvi_acheteur)) {
         			$acteurTiers = $achat;
         		}
