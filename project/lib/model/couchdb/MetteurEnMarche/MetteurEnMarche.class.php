@@ -26,8 +26,13 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
         return $this->getAcheteur();
     }
 
-    public function getCviAcheteur() {
+    public function getCvi() {
+        if(!$this->_get('cvi') && $this->exist('cvi_acheteur')) {
 
-        return $this->cvi;
+            return $this->_get('cvi_acheteur');
+        }
+
+        return $this->_get('cvi');
     }
+
 }

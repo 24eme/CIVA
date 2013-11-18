@@ -156,6 +156,7 @@ EOF;
           $metteur->set('_id', "MET-" . $db2->get(Db2Tiers::COL_CIVABA));
       }
       
+      $metteur->remove('cvi_acheteur');
       $metteur->cvi = ($db2->get(Db2Tiers::COL_CVI)) ? $db2->get(Db2Tiers::COL_CVI) : null;
       $metteur->civaba = $db2->get(Db2Tiers::COL_CIVABA);
       $metteur->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
