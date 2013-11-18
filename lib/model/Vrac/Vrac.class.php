@@ -225,7 +225,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->siret = $tiers->siret;
     	$this->acheteur->cvi = $tiers->cvi;
     	$this->acheteur->num_accise = $tiers->no_accises;
-    	$this->acheteur->civaba = $civaba;
+    	$this->acheteur->civaba = $tiers->civaba;
     	$this->acheteur->adresse = $tiers->siege->adresse;
     	$this->acheteur->code_postal = $tiers->siege->code_postal;
     	$this->acheteur->commune = $tiers->siege->commune;
