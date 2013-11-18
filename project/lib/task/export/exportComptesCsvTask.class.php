@@ -8,7 +8,7 @@ class exportComptesCsvTask extends sfBaseTask {
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
                 // add your own options here
         ));
@@ -56,7 +56,7 @@ EOF;
 
         foreach ($tiers as $t) {
             if (count($t->compte) == 0) {
-                $this->logSection($t->cvi, "COMPTE VIDE", null, 'ERROR');
+                //$this->logSection($t->cvi, "COMPTE VIDE", null, 'ERROR');
                 continue;
             }
             foreach ($t->compte as $id_compte) {
