@@ -497,6 +497,34 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return $acteurs;
     }
     
+    public function getEmails($withCreator = true) {
+    	$acteurs = $this->getActeurs($withCreator);
+    	$emails = array();
+    	foreach ($acteurs as $type => $acteur) {
+        	foreach($acteur->emails as $email) {
+        		$emails[] = $email;
+        	}
+    	}
+    	if ($this->interlocuteur_commercial->email) {
+    		$emails[] = $this->interlocuteur_commercial->email;
+    	}
+    }
+    
+    public function getEmailsActeur($acteurIdentifiant) {
+    	$acteurs = $this->getActeurs(true);
+    	$type = $this->getTypeTiers($acteurIdentifiant);
+    	$emails = array();
+    	if (isset($acteurs[$type])) {
+        	foreach($acteurs[$type]->emails as $email) {
+        		$emails[] = $email;
+        	}
+    	}
+    	if ($acteurIdentifiant == $this->createur_identifiant && $this->interlocuteur_commercial->email) {
+    		$emails[] = $this->interlocuteur_commercial->email;
+    	}
+    	return $emails;
+    }
+    
     public function getCreateurInformations()
     {
     	if ($this->createur_identifiant == $this->mandataire_identifiant) {
