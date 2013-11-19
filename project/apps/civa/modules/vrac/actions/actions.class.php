@@ -166,8 +166,7 @@ class vracActions extends sfActions
     	$this->getUser()->setAttribute('vrac_acteur', null);
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
-		$this->vrac->valideUser($this->user->_id);
-		$this->vrac->updateValideStatut();
+		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 		
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');

@@ -14,10 +14,9 @@ class vrac_exportActions extends sfActions
   */
     public function executePDF(sfWebRequest $request)
     {
-
       set_time_limit(180);
       $this->vrac = $this->getRoute()->getVrac();
-      $this->vrac->declaration->cleanAllNodes();
+      
       $odg = $request->getParameter('odg');
       
       $this->setLayout(false);
@@ -27,7 +26,6 @@ class vrac_exportActions extends sfActions
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }
-      $this->document->removeCache();
       $this->document->generatePDF();
 
       if ($request->isXmlHttpRequest()) {
