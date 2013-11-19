@@ -41,7 +41,7 @@
 	<li>Code postal : <strong><?php echo $tiers->code_postal ?></strong></li>
 	<li>Commune : <strong><?php echo $tiers->commune ?></strong></li>
 	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
-	<li>E-mail : <strong><?php echo implode(",", $tiers->getRawValue()->emails->toArray(true, false)) ?></strong></li>
+	<li>E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
 	<?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
 	<li>Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>

@@ -1,4 +1,6 @@
-<?php use_helper('vracExport') ?>
+<?php use_helper('vracExport');
+$hasCourtier = $vrac->hasCourtier();
+?>
 <br/>
 <table cellpadding="0" cellspacing="0" width="100%">
 	<tr>
@@ -52,7 +54,6 @@
 		</td>
 	</tr>
 </table>
-<?php if($vrac->hasCourtier()): ?>
 <br/>
 <span style="background-color: grey; color: white; font-weight: bold;">&nbsp;Courtier&nbsp;</span><br/>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -60,21 +61,20 @@
 		<td width="100%">
 			<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #000;">
 				<tr>
-					<td>&nbsp;<i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i></td> 
-					<td>N° de Carte Pro : <i><?php echo $vrac->mandataire->carte_pro; ?></i></td> 
+					<td>&nbsp;<?php if($hasCourtier): ?><i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i><?php endif; ?></td> 
+					<td>N° de Carte Pro : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td> 
 				</tr>
 				<tr>
-					<td>&nbsp;<i><?php echo $vrac->mandataire->adresse ?></i><br/>
-                                        &nbsp;<i><?php echo $vrac->mandataire->code_postal; ?></i>&nbsp;<i><?php echo $vrac->mandataire->commune; ?></i></td>
+					<td>&nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->adresse ?></i><?php endif; ?><br/>
+                                        &nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->code_postal; ?></i>&nbsp;<i><?php echo $vrac->mandataire->commune; ?></i><?php endif; ?></td>
 
-					<td>SIRET : <i><?php echo $vrac->mandataire->siret ?></i></td>
+					<td>SIRET : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->siret ?></i><?php endif; ?></td>
 				</tr>
 				<tr>
-					<td>&nbsp;Tel : <i><?php echo $vrac->mandataire->telephone; ?></i></td>
-                    <td><i><?php echo $vrac->interlocuteur_commercial->nom; ?><?php if ($vrac->interlocuteur_commercial->email): ?>&nbsp;&nbsp;(<?php echo $vrac->interlocuteur_commercial->email ?>)<?php endif; ?></i></td>
+					<td>&nbsp;Tel : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->telephone; ?></i><?php endif; ?></td>
+                    <td><?php if($hasCourtier): ?><i><?php echo $vrac->interlocuteur_commercial->nom; ?><?php if ($vrac->interlocuteur_commercial->email): ?>&nbsp;&nbsp;(<?php echo $vrac->interlocuteur_commercial->email ?>)<?php endif; ?></i><?php endif; ?></td>
 				</tr>
 			</table>
 		</td>
 	</tr>
 </table>
-<?php endif; ?>

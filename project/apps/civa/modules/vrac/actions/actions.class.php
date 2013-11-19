@@ -104,6 +104,7 @@ class vracActions extends sfActions
 		if ($this->vrac->allProduitsClotures() && !$this->validation->hasErreurs()) {
 			$this->vrac->clotureContrat();
 			$this->vrac->save();
+			$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès');
 			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 		}
 		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
@@ -217,7 +218,7 @@ class vracActions extends sfActions
         }
     }
     
-    public function executeAjouterProduit(sfWebRequest $request) 
+    public function executeAjouterProduit(sfWebRequest $request)
     {
     	$this->user = $this->getUser()->getDeclarant();
     	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
