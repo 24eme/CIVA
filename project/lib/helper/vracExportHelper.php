@@ -75,7 +75,7 @@ function echoVolume($volume, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>hl</small>&nbsp;&nbsp;&nbsp;";
+        echo "&nbsp;<small>hl</small>&nbsp;";
     } else {
         echo "&nbsp;";
     }
@@ -93,7 +93,7 @@ function echoPrix($prix, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>&euro;</small>&nbsp;&nbsp;&nbsp;";
+        echo "&nbsp;<small>&euro;</small>&nbsp;";
     } else {
         echo "&nbsp;";
     }
