@@ -69,14 +69,16 @@ class VracDetail extends BaseVracDetail {
     
     public function updateVolumeEnleve()
     {
-    	$total = 0;
+    	$total = null;
     	$indices = array();
     	foreach ($this->retiraisons as $key => $retiraison) {
     		if (!$retiraison->volume && !$retiraison->date) {
     			$indices[] = $key;
     			continue;
     		}
-    		$total += $retiraison->volume;
+    		if ($retiraison->volume !== null) {
+    			$total += $retiraison->volume;
+    		}
     	}
     	foreach ($indices as $indice) {
     		$this->retiraisons->remove($indice);
@@ -107,6 +109,11 @@ class VracDetail extends BaseVracDetail {
     public function allProduitsClotures()
     {
     	return (!$this->cloture && $this->actif)? false : true;
+    }
+    
+    public function hasRetiraisons()
+    {
+    	return (count($this->retiraisons) > 0)? true : false;
     }
     
     public function clotureProduits()
