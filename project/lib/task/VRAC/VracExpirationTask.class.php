@@ -51,7 +51,7 @@ EOF;
     
     	$emails = $contrat->getEmails();
                     foreach($emails as $email) {
-                    	VracMailer::getInstance()->validationContrat($this->vrac, $email, $document);
+                    	VracMailer::getInstance()->annulationContrat($contrat, $email);
           				$this->logSection('sended', $contrat->_id . ' => ' . $email);
                     }
 

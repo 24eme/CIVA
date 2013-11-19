@@ -47,7 +47,7 @@ EOF;
     	$document->generatePDF();
     	$emails = $contrat->getEmails();
                     foreach($emails as $email) {
-                    	VracMailer::getInstance()->validationContrat($this->vrac, $email, $document);
+                    	VracMailer::getInstance()->validationContrat($contrat, $email, $document);
           				$this->logSection('sended', $contrat->_id . ' => ' . $email);
                     }
 

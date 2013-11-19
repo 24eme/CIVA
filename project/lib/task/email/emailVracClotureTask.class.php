@@ -47,7 +47,7 @@ EOF;
     	$document->generatePDF();
     	$emails = $contrat->getEmails();
                     foreach($emails as $email) {
-                    	VracMailer::getInstance()->clotureContrat($this->vrac, $email, $document);
+                    	VracMailer::getInstance()->clotureContrat($contrat, $email, $document);
           				$this->logSection('sended', $contrat->_id . ' => ' . $email);
                     }
 

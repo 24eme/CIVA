@@ -169,7 +169,7 @@ class vracActions extends sfActions
 		$this->vrac->save();
 		
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');
-		$emails = $this->getEmailsActeur($this->user->_id);
+		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 		foreach ($emails as $email) {
 			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
 		}
@@ -206,7 +206,7 @@ class vracActions extends sfActions
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {
-		       		$emails = $this->getEmailsActeur($this->user->_id);
+		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 					foreach ($emails as $email) {
 						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
 					}
