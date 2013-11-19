@@ -86,7 +86,7 @@
 	
 	<table id="actions_fiche">
 		<tr>
-			<td style="width: 33%">&nbsp;</td>
+			<td style="width: 33%"><a href="<?php echo url_for('mon_espace_civa') ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
 			<td align="center"><?php if ($vrac->isSigne()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
 			<td style="width: 33%; text-align: right;">
 				<?php if (!$vrac->isValide()): ?>
