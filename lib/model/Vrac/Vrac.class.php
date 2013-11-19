@@ -409,7 +409,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     
     public function updateEnlevementStatut()
     {
-    	if ($this->getTotalVolumeEnleve() > 0 && $this->valide->statut == self::STATUT_VALIDE) {
+    	if ($this->hasRetiraisons() && $this->valide->statut == self::STATUT_VALIDE) {
     		$this->valide->statut = self::STATUT_ENLEVEMENT;
     	}
     }
@@ -450,6 +450,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function allProduitsClotures()
     {
     	return $this->declaration->allProduitsClotures();
+    }
+    
+    public function hasRetiraisons()
+    {
+    	return $this->declaration->hasRetiraisons();
     }
     
     public function isProprietaire($identifiant)

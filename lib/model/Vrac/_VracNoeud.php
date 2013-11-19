@@ -188,6 +188,18 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         return $result;
     }
     
+    public function hasRetiraisons()
+    {
+    	$result = false;
+        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        	if ($item->hasRetiraisons()) {
+        		$result = true;
+        		break;
+        	}
+        }
+        return $result;
+    }
+    
     public function clotureProduits()
     {
         foreach($this->getChildrenNodeSorted() as $key => $item) {

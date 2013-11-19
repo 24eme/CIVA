@@ -25,7 +25,7 @@ class VracValidation extends DocumentValidation
 		$ecart_libelles = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
-				if ($detail->cloture && !$detail->volume_enleve) {
+				if ($detail->cloture && $detail->volume_enleve === null) {
 					$null_libelles[] = $detail->getLibelle();
 					$this->produits_controle[$detail->getHash()] = $detail;
 				}
