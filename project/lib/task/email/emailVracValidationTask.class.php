@@ -45,13 +45,12 @@ EOF;
     foreach ($contrats as $contrat) {
     	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
     	$document->generatePDF();
-    	$acteurs = $contrat->getActeurs();
-		foreach ($acteurs as $type => $acteur) {
-      foreach($acteur->emails as $email) {
-			    VracMailer::getInstance()->validationContrat($contrat, $email, $document);
-			    $this->logSection('sended', $contrat->_id . ' => ' . $acteur->raison_sociale);
-      }
-		}
+    	$emails = $contrat->getEmails();
+                    foreach($emails as $email) {
+                    	VracMailer::getInstance()->validationContrat($this->vrac, $email, $document);
+          				$this->logSection('sended', $contrat->_id . ' => ' . $email);
+                    }
+
 		$contrat->valide->email_validation = date('Y-m-d');
 		$contrat->save();
     }

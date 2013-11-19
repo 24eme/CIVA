@@ -45,14 +45,16 @@ EOF;
 	$delai = $delai['delai_suppression'];
   	$contrats = VracMailingView::getInstance()->getContratsExpires($delai);
     foreach ($contrats as $contrat) {		
-		$acteurs = $contrat->getActeurs();
 		$contrat->motif_suppression = "Non signature dans un délai de 5 jours";
 		$contrat->valide->statut = Vrac::STATUT_ANNULE;
 		$contrat->save();
-		foreach ($acteurs as $type => $acteur) {
-			VracMailer::getInstance()->annulationContrat($contrat, $acteur->email);
-			$this->logSection('sended', $contrat->_id . ' => ' . $acteur->raison_sociale);
-		}
+    
+    	$emails = $contrat->getEmails();
+                    foreach($emails as $email) {
+                    	VracMailer::getInstance()->validationContrat($this->vrac, $email, $document);
+          				$this->logSection('sended', $contrat->_id . ' => ' . $email);
+                    }
+
     }
   }
 }

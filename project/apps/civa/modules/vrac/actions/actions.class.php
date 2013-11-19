@@ -129,12 +129,10 @@ class vracActions extends sfActions
 	    		$this->form->bind($request->getParameter($this->form->getName()));
 	        	if ($this->form->isValid()) {
 	        		$this->vrac = $this->form->save();
-		        	$acteurs = $this->vrac->getActeurs();
-					foreach ($acteurs as $type => $acteur) {
-                        foreach($acteur->emails as $email) {
-                            VracMailer::getInstance()->annulationContrat($this->vrac, $email);
-                        }
-					}
+		        	$emails = $this->vrac->getEmails();
+                    foreach($emails as $email) {
+                    	VracMailer::getInstance()->annulationContrat($this->vrac, $email);
+                    }
 					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	        	}
 	        }
@@ -172,7 +170,10 @@ class vracActions extends sfActions
 		$this->vrac->save();
 		
 		$this->getUser()->setFlash('notice', 'Contrat signé avec succès');
-		VracMailer::getInstance()->confirmationSignature($this->vrac, $this->getUser()->getCompte()->email);
+		$emails = $this->getEmailsActeur($this->user->_id);
+		foreach ($emails as $email) {
+			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
+		}
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
     
@@ -205,12 +206,13 @@ class vracActions extends sfActions
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {
-					VracMailer::getInstance()->confirmationSignature($this->vrac, $this->getUser()->getCompte()->email);
-					$acteurs = $this->vrac->getActeurs(false);
-					foreach ($acteurs as $type => $acteur) {
-                        foreach($acteur->emails as $email) {
-						  VracMailer::getInstance()->demandeSignature($this->vrac, $email);
-                        }
+		       		$emails = $this->getEmailsActeur($this->user->_id);
+					foreach ($emails as $email) {
+						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
+					}
+					$emails = $this->vrac->getEmails(false);
+					foreach ($emails as $email) {
+						VracMailer::getInstance()->demandeSignature($this->vrac, $email);
 					}
 					$this->getUser()->setFlash('notice', 'Contrat créé avec succès');
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
