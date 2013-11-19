@@ -521,6 +521,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->interlocuteur_commercial->email) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
+    	return $emails;
     }
     
     public function getEmailsActeur($acteurIdentifiant) {
