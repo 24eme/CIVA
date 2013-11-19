@@ -32,7 +32,7 @@
                         ?>
 	<tr>
 			<td width="65px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><span style="font-size: 6pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
-			<td width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left;">&nbsp;<?php echo truncate_text($libelle_produit,40);  ?></td>
+			<td width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left; font-size: 8pt;">&nbsp;<?php echo truncate_text($libelle_produit,55);  ?></td>
 			<td width="42px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>    
 			<?php if (!$odg): ?>
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
@@ -49,8 +49,8 @@
 
 	<tr>
 			<td style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
-			<td style="border: 1px solid black; font-size: 08pt;"><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
-                        <td style="border: 1px solid black; font-size: 08pt;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+			<td style="border: 1px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
+                        <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
 	<?php if (!$odg): ?>
 	<tr>
