@@ -378,13 +378,26 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return ($this->valide->get('date_validation_'.$type))? $this->valide->get('date_validation_'.$type) : null;
     }
     
-    public function valideUser($userId)
+    public function signerProrietaire()
+    {   
+        $this->signer($this->createur_identifiant);
+    }
+
+    public function signer($tiers_id)
     {
-    	$type = $this->getTypeTiers($userId);
+    	$type = $this->getTypeTiers($tiers_id);
     	if (!$type) {
-    		throw new sfException('Le tiers "'.$userId.'" n\'est pas un acteur du contrat : '.$this->_id);
+    		throw new sfException('Le tiers "'.$tiers_id.'" n\'est pas un acteur du contrat : '.$this->_id);
     	}
+
+        if($this->isProprietaire($tiers_id)) {
+            $this->declaration->cleanAllNodes();
+            $this->valide->statut = Vrac::STATUT_VALIDE_PARTIELLEMENT;
+        }
+
     	$this->valide->set('date_validation_'.$type, date('Y-m-d'));
+
+        $this->updateValideStatut();
     }
     
     public function updateValideStatut()
