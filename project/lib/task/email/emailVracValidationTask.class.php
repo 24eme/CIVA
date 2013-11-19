@@ -43,7 +43,7 @@ EOF;
 	$contextInstance = sfContext::createInstance($this->configuration);
   	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
     foreach ($contrats as $contrat) {
-    	$document = new ExportVracPdf($contrat, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
+    	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
     	$document->generatePDF();
     	$acteurs = $contrat->getActeurs();
 		foreach ($acteurs as $type => $acteur) {
