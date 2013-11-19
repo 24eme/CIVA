@@ -144,7 +144,7 @@ class CompteTiers extends BaseCompteTiers {
 
     public function getDroits() {
         if($this->isCompteSociete()) {
-            $this->droits = array_keys($this->getDroitsTiers());
+            return array_keys($this->getDroitsTiers());
         }
 
         return $this->_get('droits');
@@ -162,7 +162,7 @@ class CompteTiers extends BaseCompteTiers {
                 if ($t->no_accises) {
                     $droits[_CompteClient::DROIT_GAMMA] = null;
                 }
-                if (!$t->cvi) {
+                if (!$t->hasAcheteur()) {
                     $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
                     $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
                 }

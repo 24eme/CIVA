@@ -1,3 +1,6 @@
+<?php if(!VracClient::canBeHaveVrac($user)): ?>
+	<?php return; ?>
+<?php endif; ?>
 <div id="espace_alsace_contrats">
     <h2>Alsace Contrats</h2>
     <div class="contenu clearfix">  
