@@ -153,7 +153,7 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$vrac = $this->form->save();
-				$this->getUser()->setFlash('notice', 'Contrat mis à jour avec succès');
+				$this->getUser()->setFlash('notice', 'Le contrat a été mis à jour avec succès.');
        			return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
         	}
         }
@@ -165,15 +165,15 @@ class vracActions extends sfActions
     	$this->getUser()->setAttribute('vrac_acteur', null);
 		$this->vrac = $this->getRoute()->getVrac();
 		$this->user = $this->getUser()->getDeclarant();
-		$this->vrac->valideUser($this->user->_id);
-		$this->vrac->updateValideStatut();
+		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 		
-		$this->getUser()->setFlash('notice', 'Contrat signé avec succès');
+		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');
 		$emails = $this->getEmailsActeur($this->user->_id);
 		foreach ($emails as $email) {
 			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
 		}
+
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
     
@@ -214,7 +214,7 @@ class vracActions extends sfActions
 					foreach ($emails as $email) {
 						VracMailer::getInstance()->demandeSignature($this->vrac, $email);
 					}
-					$this->getUser()->setFlash('notice', 'Contrat créé avec succès');
+					$this->getUser()->setFlash('notice', 'Le contrat a été créé avec succès et votre signature a bien été prise en compte. Chacun des acteurs du contrat va recevoir un email de demande de signature.');
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
        			}
         	}
