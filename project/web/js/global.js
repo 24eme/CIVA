@@ -231,6 +231,18 @@ function var_dump(arr,level)
 	console.log(dumped_text);
 };
 
+/**
+ * Object.keys - Fixe IE < 9 
+ */
+Object.keys = Object.keys || function(o) { 
+    var result = []; 
+    for(var name in o) { 
+        if (o.hasOwnProperty(name)) 
+          result.push(name); 
+    } 
+    return result; 
+};
+
 
 
 
