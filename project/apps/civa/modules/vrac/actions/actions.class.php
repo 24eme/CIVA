@@ -218,7 +218,7 @@ class vracActions extends sfActions
         }
     }
     
-    public function executeAjouterProduit(sfWebRequest $request) 
+    public function executeAjouterProduit(sfWebRequest $request)
     {
     	$this->user = $this->getUser()->getDeclarant();
     	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
