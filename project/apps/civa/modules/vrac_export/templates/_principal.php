@@ -22,7 +22,7 @@
 		<?php endif; ?>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
-                <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>De Chargt</th>
+                <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>de Chargt</th>
 	</tr>
 	<?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
 			$productLine = $product->getRawValue();
