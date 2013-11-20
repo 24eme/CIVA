@@ -144,6 +144,7 @@ class Ldap {
         $info['gidNumber']     = $this->getGid($compte);
         $info['homeDirectory'] = '/home/'.$compte->login;
         $info['gecos']         = $compte->getGecos();
+        $info['description']   = "(=".$compte->getLogin().")(=".$compte->email.")";
         $info['mail']          = $compte->email;
         $info['postalAddress'] = $compte->getAdresse();
         $info['postalCode']    = $compte->getCodePostal();
