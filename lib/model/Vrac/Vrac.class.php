@@ -300,6 +300,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->telephone = $tiers->telephone;
     	$this->mandataire->famille = null;
     	$this->mandataire->identifiant = $tiers->_id;
+    	$this->mandataire->num_db2 = ($tiers->exist("db2"))? $tiers->db2->num : null;
 
         $this->mandataire->remove('emails'); 
         $this->mandataire->add('emails'); 

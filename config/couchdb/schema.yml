@@ -79,6 +79,7 @@ Vrac:
             code_postal: {  }
             commune: {  }
             telephone: {  }
+            num_db2: {  }
             emails:
               type: array_collection
               definition:

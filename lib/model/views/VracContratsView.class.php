@@ -38,6 +38,11 @@ class VracContratsView extends acCouchdbView
     {
         return acCouchdbManager::getView('VRAC', 'contrats', 'Vrac');
     }
+    
+    public function findAll()
+    {
+    	return $this->client->getView($this->design, $this->view)->rows;
+    }
 
     public function findBy($statut, array $date) 
     {    
