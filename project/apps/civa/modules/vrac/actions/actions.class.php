@@ -115,7 +115,7 @@ class vracActions extends sfActions
 		$this->getUser()->setAttribute('vrac_object', null);
     	$this->getUser()->setAttribute('vrac_acteur', null);
 		$this->vrac = $this->getRoute()->getVrac();
-		if (!$this->vrac) {
+		if ($this->vrac->isNew()) {
 			return $this->redirect('mon_espace_civa');
 		}
 		$this->user = $this->getUser()->getDeclarant();
