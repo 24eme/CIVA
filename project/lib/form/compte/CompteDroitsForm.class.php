@@ -34,10 +34,6 @@ class CompteDroitsForm extends acCouchdbForm {
 
     public function save() {
         foreach($this->comptes as $compte) {
-            if($compte->isCompteSociete()) {
-                
-                continue;
-            }
             $compte->remove('droits');
             $compte->add('droits', $this->values[$compte->_id]["droits"]);
             $compte->save();

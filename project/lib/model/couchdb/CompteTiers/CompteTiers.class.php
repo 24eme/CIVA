@@ -144,7 +144,7 @@ class CompteTiers extends BaseCompteTiers {
 
     public function getDroits() {
         if($this->isCompteSociete()) {
-            return array_keys($this->getDroitsTiers());
+            $this->droits = array_keys($this->getDroitsTiers());
         }
 
         return $this->_get('droits');
@@ -181,6 +181,8 @@ class CompteTiers extends BaseCompteTiers {
             $droits[$key] = _CompteClient::getInstance()->getDroitLibelle($key);
         }
 
+        ksort($droits);
+
         return $droits;
     }
 
@@ -189,7 +191,7 @@ class CompteTiers extends BaseCompteTiers {
         $droits = $this->getDroits();
 
         foreach($this->getTiersObject() as $tiers) {
-            $droits_type = _CompteClient::getDroitsType($tiers->type);
+            $droits_type = _CompteClient::getInstance()->getDroitsType($tiers->type);
             foreach($droits_type as $droit) {
                 if(in_array($droit, $droits_type)) {
                     $tiers->emails->add($droit)->add($this->_id, array('nom' => $this->nom, 'email' => $this->email));
