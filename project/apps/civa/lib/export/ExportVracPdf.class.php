@@ -42,7 +42,7 @@ class ExportVracPdf extends ExportDocument {
         }
 
         if (!$filename) {
-            $filename = $this->getFileName(true, false);
+            $filename = $this->getFileName(true, true);
         }
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
         if ($this->type == 'html') {
