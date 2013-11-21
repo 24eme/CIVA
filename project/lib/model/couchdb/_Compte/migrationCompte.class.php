@@ -18,9 +18,6 @@ class MigrationCompte {
         $this->_nouveau_cvi = $nouveau_cvi;
         $this->nom = $nom;
         $this->commune = $commune;
-        if($withNewPasswords){
-            throw new sfException("Le nouveau mot de passe doit être un nombre chiffres");
-        }
         $this->_newPassword = ($withCopyPasswords && $withCopyPasswords=="NON")? sprintf("%4d", rand(0, 9999)) : null;
     }
 
@@ -47,16 +44,7 @@ class MigrationCompte {
         $this->_nouveau_compte->_id = self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi;
         $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
         $this->_nouveau_compte->setActif();
-        $this->_nouveau_compte->update();
-        $this->_nouveau_compte->save();
-
-        $id_recoltant = self::PREFIX_KEY_REC . $this->_ancien_cvi;
-        $this->_nouveau_compte->tiers->add(self::PREFIX_KEY_REC . $this->_nouveau_cvi, $this->_nouveau_compte->tiers->get($id_recoltant));
-        $this->_nouveau_compte->tiers->remove($id_recoltant);
-        $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('id', self::PREFIX_KEY_REC . $this->_nouveau_cvi );
-        if(!is_null($this->nom))
-            $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('nom', $this->nom);
-
+        $this->_nouveau_compte->tiers->remove( self::PREFIX_KEY_REC . $this->_ancien_cvi);
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
 
@@ -78,9 +66,21 @@ class MigrationCompte {
 
         if(!is_null($this->commune))
             $this->new_rec->commune= $this->commune;
-
+        
+        $this->new_rec->remove('emails');
+        $this->new_rec->add('emails');
         $this->new_rec->update();
         $this->new_rec->save();
+
+        
+        $this->_nouveau_compte->tiers->add(self::PREFIX_KEY_REC . $this->_nouveau_cvi);
+        $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('id', self::PREFIX_KEY_REC . $this->_nouveau_cvi );
+       
+        if(!is_null($this->nom))
+            $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('nom', $this->nom);
+
+        $this->_nouveau_compte->update();
+        $this->_nouveau_compte->save();
     }
 
     public function createLienSymbolique(){
