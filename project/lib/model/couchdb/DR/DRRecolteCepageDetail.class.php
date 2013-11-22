@@ -177,7 +177,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $this->lies = $this->getLies(true);
         
         $this->usages_industriels = $this->lies;
-        $this->volume_revendique = $this->volume - $this->usages_industriels;
+        $this->volume_revendique = $this->volume - ($this->usages_industriels - $this->getLiesMouts());
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');
@@ -189,6 +189,22 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             $this->deleteAcheteurUnused('cooperatives');
             $this->deleteAcheteurUnused('mouts');
         }
+    }
+
+    public function getLiesMouts() {
+        $volume_mouts = $this->getTotalVolumeAcheteurs('mouts');
+
+        if(!$volume_mouts) {
+
+            return 0;
+        }
+
+        if($this->cave_particuliere > 0) {
+
+            return 0;
+        }
+
+        return $this->lies;
     }
 
     public function canHaveUsagesLiesSaisi() {
