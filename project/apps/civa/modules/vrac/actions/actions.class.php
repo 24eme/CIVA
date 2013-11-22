@@ -315,6 +315,9 @@ class vracActions extends sfActions
 			if ($key == Vrac::CEPAGE_MUSCAT) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = Vrac::CEPAGE_MUSCAT_LIBELLE;
 			}
+                        if (($appellation == 'appellation_'.Vrac::APPELLATION_PINOTNOIRROUGE) &&  ($key == Vrac::CEPAGE_PR)) {
+				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_PR_LIBELLE_COMPLEMENT;
+			}
 		}
     	return $this->renderText(json_encode($result));
     }

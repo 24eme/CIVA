@@ -124,6 +124,27 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->_get('lies') ? $this->_get('lies') : 0;
     }
 
+    public function getLiesMouts() {
+        if(!$this->canHaveUsagesLiesSaisi()) {
+
+            return $this->getSumNoeudWithMethod('getLiesMouts');
+        }
+
+        $volume_mouts = $this->getTotalVolumeAcheteurs('mouts');
+
+        if(!$volume_mouts) {
+
+            return 0;
+        }
+
+        if($this->getTotalCaveParticuliere() > 0) {
+
+            return 0;
+        }
+
+        return $this->getLies();
+    }
+
     public function getLiesMax($force_calcul = false) {
 
         return round($this->getTotalCaveParticuliere($force_calcul) + $this->getTotalVolumeAcheteurs('mouts'), 2);
@@ -214,7 +235,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getVolumeRevendiqueWithUI() {
         
-        return $this->getTotalVolume() - $this->getUsagesIndustriels();
+        return $this->getTotalVolume() - ($this->getUsagesIndustriels() - $this->getLiesMouts());
     }
 
     public function getUsagesIndustriels($force_calcul = false) {
