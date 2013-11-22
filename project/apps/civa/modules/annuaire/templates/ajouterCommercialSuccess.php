@@ -1,7 +1,7 @@
 <div id="contrats_vrac">
 
 	<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('@annuaire_commercial_ajouter') ?>">
-		<h2 class="titre_principal">Ajouter un interlocuteur</h2>
+		<h2 class="titre_principal">Ajouter un contact</h2>
 		<div class="fond">
 			<?php echo $form->renderHiddenFields() ?>
 			<?php echo $form->renderGlobalErrors() ?>

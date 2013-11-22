@@ -1,5 +1,5 @@
 <div id="contrats_vrac" class="clearfix">
-	<h2 class="titre_principal">Annuaire de vos interlocuteurs</h2>
+	<h2 class="titre_principal">Annuaire de vos contacts</h2>
 
 	<div class="fond">
 		<div class="annuaire clearfix">
