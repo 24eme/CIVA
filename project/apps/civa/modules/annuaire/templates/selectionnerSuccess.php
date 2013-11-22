@@ -1,7 +1,7 @@
 <div id="contrats_vrac" class="clearfix">
 	<div class="ajout_annuaire">
 		<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?><?php if (isset($redirect)): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
-			<h2 class="titre_principal">Ajouter un interlocuteur</h2>
+			<h2 class="titre_principal">Ajouter un contact</h2>
 	
 			<div class="fond">
 				<?php echo $form->renderHiddenFields() ?>
