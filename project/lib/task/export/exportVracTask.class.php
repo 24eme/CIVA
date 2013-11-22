@@ -65,7 +65,8 @@ EOF;
             	}
 	            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 	            $i = 0;
-	            $dateRetiraison = null;
+	            $dateRetiraison = $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION];
+	            $dateRetiraisonTmp = null;
 	            foreach ($produits as $produit) {
 	            	$i++;
 	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
@@ -78,14 +79,14 @@ EOF;
 	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
 	            	if ($type == 'C') {
 	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
-	            		$valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] = null;
+	            		$valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] = $valuesContrat[VracContratsView::VALUE_DATE_SAISIE];
 	            	}
-	            	if (!$dateRetiraison || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraison)) {
-	            		$dateRetiraison = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
+	            	if (!$dateRetiraisonTmp || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraisonTmp)) {
+	            		$dateRetiraisonTmp = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
 	            	}
 	            	$csvDdecvn->add($valuesProduit);
 	            }
-	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = $dateRetiraison;
+	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
 	            $csvDecven->add($valuesContrat);
 	        }
 	

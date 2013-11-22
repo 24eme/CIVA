@@ -75,10 +75,6 @@ EOF;
 	        	if ($proprietaireTiers->isActif()) {
 	        		if ($acteurTiers->isActif()) {
 		        		$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($proprietaireCompte->login);
-		        		if (!$annuaire->isNew()) {
-		        			$annuaire->delete();
-		        			$annuaire = AnnuaireClient::getInstance()->createAnnuaire($proprietaireCompte->login);
-		        		}
 		        		$type = $this->getType($acteurTiers);
 		        		if ($type) {
 		    				$libelle = ($acteurTiers->intitule)? $acteurTiers->intitule.' '.$acteurTiers->nom : $acteurTiers->nom;
