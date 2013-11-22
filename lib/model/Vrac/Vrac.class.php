@@ -14,21 +14,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const STATUT_ENLEVEMENT = 'ENLEVEMENT';
 	const STATUT_CLOTURE = 'CLOTURE';
 	const PREFIXE_NUMERO = 8;
-        const CEPAGE_PR = "cepage_PR";
-	const CEPAGE_PR_LIBELLE_COMPLEMENT = " (rouge)";
 	const CEPAGE_EDEL = "cepage_ED";
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
 	const CEPAGE_MUSCAT = "cepage_MU";
 	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
         const CAMPAGNE_ARCHIVE = 'UNIQUE';
-<<<<<<< Updated upstream
         const APPELLATION_PINOTNOIRROUGE = "PINOTNOIRROUGE";
-        const CEPAGE_PR = 'cepage_PR';
+        const CEPAGE_PR = "cepage_PR";
 	const CEPAGE_PR_LIBELLE_COMPLEMENT = " (rouge)";
 	
-        
-=======
->>>>>>> Stashed changes
 	
 	protected $_config;
 	protected $archivage_document;
@@ -177,15 +171,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $produit = $this->getOrAdd($hash);
         $config = $produit->getConfig();
         $produit->libelle = $config->getLibelle();
-        if ($produit->getKey() == self::CEPAGE_PR) {
+        if (($produit->getAppellation()->getKey() == 'appellation_'.self::APPELLATION_PINOTNOIRROUGE) &&  ($produit->getKey() == self::CEPAGE_PR)) {
         	$produit->libelle .= self::CEPAGE_PR_LIBELLE_COMPLEMENT;
         }
         if ($produit->getKey() == self::CEPAGE_EDEL) {
         	$produit->libelle .= self::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
-        }        
-        if ($produit->getKey() == self::CEPAGE_PR) {
-        	$produit->libelle .= self::CEPAGE_PR_LIBELLE_COMPLEMENT;
-        }        
+        }          
         if ($produit->getKey() == self::CEPAGE_MUSCAT) {
         	$produit->libelle = self::CEPAGE_MUSCAT_LIBELLE;
         }
