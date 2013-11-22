@@ -227,6 +227,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function storeAcheteurInformations($tiers)
     {
     	$compte = $tiers->getCompteObject();
+       
+        if((!$tiers->civaba || !$tiers->no_accises) && $compte) {
+            if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
+                      $tiers->no_accises = $metteurEnMarche->no_accises;
+                      $tiers->civaba = $metteurEnMarche->civaba;
+            }
+        }
 
     	$this->acheteur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->acheteur->raison_sociale = $tiers->nom;
@@ -254,21 +261,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function storeVendeurInformations($tiers)
     {
     	$compte = $tiers->getCompteObject();
-        $num_accise = null;
-        $civaba = null;
-        if ($compte) {
+       
+        if((!$tiers->civaba || !$tiers->no_accises) && $compte) {
             if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
-                      $num_accise = $metteurEnMarche->no_accises;
-                       $civaba = $metteurEnMarche->civaba;
+                      $tiers->no_accises = $metteurEnMarche->no_accises;
+                      $tiers->civaba = $metteurEnMarche->civaba;
             }
-        } 
-       if (!$num_accise) {
-               if ($tiers->exist('civaba') && $tiers->civaba) {
-                       if ($metteurEnMarche = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($tiers->civaba)) {
-                               $num_accise = $metteurEnMarche->no_accises;
-                               $civaba = $metteurEnMarche->civaba;
-                       }
-               }
         }
 
 
@@ -276,8 +274,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->raison_sociale = $tiers->nom;
     	$this->vendeur->siret = $tiers->siret;
     	$this->vendeur->cvi = $tiers->cvi;
-    	$this->vendeur->num_accise = $num_accise;
-    	$this->vendeur->civaba = $civaba;
+    	$this->vendeur->num_accise = $tiers->no_accises;
+    	$this->vendeur->civaba = $tiers->civaba;
     	$this->vendeur->adresse = $tiers->siege->adresse;
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
     	$this->vendeur->commune = $tiers->siege->commune;
