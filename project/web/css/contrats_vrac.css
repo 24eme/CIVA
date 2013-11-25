@@ -604,6 +604,10 @@
 
 #contrats_vrac table tr.retiraisons input.input_date { width: 80px; }
 
+#contrats_vrac table tr.retiraisons input.input_volume[readonly] { background-color: lightgray; color: black; }
+
+#contrats_vrac table tr.retiraisons input.input_date[readonly] { background-color: lightgray; color: black; }
+
 #contrats_vrac table th.echeance { width: 101px; }
 
 #contrats_vrac table th.enleve { width: 84px; }

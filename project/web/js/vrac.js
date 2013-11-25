@@ -180,6 +180,46 @@ var initClotureContrat = function()
     });
 };
 
+var initClotureContratCheckboxes = function()
+{
+    $('.cloture input').change(function (){
+        $(this).checkboxesBehaviour();               
+    });
+    
+};
+
+$.fn.checkboxesBehaviour = function(){
+  var reg_debut = new RegExp("vrac_produits__", "g");
+  var reg_fin = new RegExp("_detail([A-Za-z0-9\_\-])*", "g");        
+  var champsClass = $(this).attr('id').replace(reg_fin,'').replace(reg_debut,'ret_');
+  var date = $('.'+champsClass).parent().parent().children('td.echeance').children('input.input_date');
+
+    if($(this).is(':checked')){
+        $('.'+champsClass).attr('readonly','readonly');
+        date.attr('readonly','readonly');
+        date.datepicker('destroy');            
+
+    }else{
+        $('.'+champsClass).removeAttr('readonly');
+        date.removeAttr('readonly');            
+        date.datepickerInit();
+    }  
+};
+
+$.fn.datepickerInit = function(){
+    $(this).datepicker({
+    		        changeMonth: true,
+    		        changeYear: true,
+    		        dateFormat: 'dd/mm/yy',
+    		        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    		        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+    		        firstDay: 1,
+    		        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    		        monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    		        yearRange: '1900:'+new Date().getFullYear()
+    		    });
+};
+
 var initSummableContrat = function()
 {
     $('.summable').blur(function() {
@@ -201,36 +241,30 @@ var sumContrat = function(brothers, cible)
 	}
 	brothers.each(function() {
 		var value = parseFloat($(this).val());
+                var reg = new RegExp("enlevements([A-Za-z0-9\_\-])*", "g");
+                var idCheckbox = $(this).attr('id').replace(reg,'cloture');
 		if (!isNaN(value)) {
     		sum = sum + value;
+                if(sum > 0) $('#'+idCheckbox).show();
 		}
+                else{
+                if(sum <= 0) $('#'+idCheckbox).hide();   
+                }
 	});
 	sum = sum.toFixed(2);
 	cible.text(sum);
 	if (sum >= compare) {
 		cb.attr('checked', true);
-	} else {
-		cb.attr('checked', false);
-	}
+                cb.checkboxesBehaviour();    
+                
+	} 
 };
 	
     var callbackAddTemplate = function(ligneParent, bloc) 
     {
     	initNettoyageChamps();
         initSummableContrat();
-    	var annee = new Date().getFullYear();
-    	$('.datepicker').datepicker(
-    		    {
-    		        changeMonth: true,
-    		        changeYear: true,
-    		        dateFormat: 'dd/mm/yy',
-    		        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-    		        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
-    		        firstDay: 1,
-    		        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    		        monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-    		        yearRange: '1900:'+annee
-    		    });
+    	$('.datepicker').datepickerInit();
     }
 
     /**
@@ -391,6 +425,7 @@ var sumContrat = function(brothers, cible)
          initConfirmeValidationVrac();
          initClotureContrat();
          initSummableContrat();
+         initClotureContratCheckboxes();
 	});
 
 })(jQuery);
