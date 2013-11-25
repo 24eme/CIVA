@@ -43,8 +43,7 @@
 			<td class="echeance"></td>
 			<td class="enleve"><strong id="vol<?php echo renderProduitIdentifiant($detail) ?>" data-compare="prop<?php echo renderProduitIdentifiant($detail) ?>" data-cibling="<?php echo $formProduit['cloture']->renderId() ?>"><?php echo echoFloat($detail->volume_enleve) ?></strong> Hl</td>
 			<td class="cloture">
-				<span><?php echo $formProduit['cloture']->renderError() ?></span>
-				<?php echo $formProduit['cloture']->render() ?>
+                               <input type="checkbox" name="<?php echo $formProduit['cloture']->renderName(); ?>" id="<?php echo $formProduit['cloture']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($detail->cloture)? "checked='checked'" : '' ?>  <?php echo ($detail->exist('volume_enleve') && $detail->volume_enleve)? '' : "style='display:none'"; ?> />
 			</td>
 			<td>
 				<?php if (!$detail->cloture): ?>
