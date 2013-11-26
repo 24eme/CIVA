@@ -17,7 +17,7 @@
         
         <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
         <div id="espace_acheteurs">
-            <h2>Acheteurs</h2>
+            <h2>Alsace Récolte</h2>
             <div class="contenu clearfix">
                  <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
             </div>
