@@ -5,7 +5,7 @@
     <h2>Alsace Contrats</h2>
     <div class="contenu clearfix">  
  		<div id="liste_contrats" class="listing">
- 			<h3 class="titre_section">Contrats vrac <a doc="/vrac/telecharger_la_notice" title="Message aide" rel="help_popup_mon_espace_civa_contrats" class="msg_aide" href=""></a></h3>
+ 			<h3 class="titre_section">Contrats vrac</h3>
  			<div class="contenu_section">
  				<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
  				<ul id="actions_contrat">
