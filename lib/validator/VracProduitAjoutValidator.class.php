@@ -27,7 +27,7 @@ class VracProduitAjoutValidator extends sfValidatorBase
     				}
 					$pattern = '/appellation_[a-zA-Z0-9]+/';
 					if (preg_match($pattern, $values['hash'], $matches)) {
-						$config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+						$config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration();
     					$appellationsLieuDit = array_keys($config->getAppellationsLieuDit()); 
     					$lieu_dit = (isset($values['lieu_dit']) && !empty($values['lieu_dit']))? $values['lieu_dit'] : null;   							
     					if(in_array($matches[0], $appellationsLieuDit) && !$lieu_dit) {
