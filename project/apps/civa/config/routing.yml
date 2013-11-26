@@ -139,6 +139,11 @@ vrac_ajout_produit_vtsgn:
     type:     object
   requirements:
     sf_method: [get, post]
+
+telecharger_la_notice_vrac:
+  url:   /vrac/telecharger_la_notice
+  param: { module: vrac, action: downloadNotice }
+
 # *********** ANNUAIRE *********
 annuaire:
   url: /annuaire
