@@ -98,3 +98,12 @@ function echoPrix($prix, $bold = false) {
         echo "&nbsp;";
     }
 }
+
+function getDateFr($dateIso) {
+    $dateExplosed = explode('-', $dateIso);
+    return $dateExplosed[2].'/'.$dateExplosed[1].'/'.substr($dateExplosed[0],2);
+}
+
+function echoDateFr($dateIso) {    
+    echo getDateFr($dateIso);
+}
