@@ -52,8 +52,8 @@
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
 			<?php endif; ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
-			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-                        <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: grey;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
+			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
+                        <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
 	
         </tr>
         <?php 
@@ -61,11 +61,11 @@
         if($vrac->isCloture() && (count($detailLine->retiraisons) > 1)):
         $cpt = 0;
         foreach ($detailLine->retiraisons as $retiraison): 
-            $border_bottom = (((count($detailLine->retiraisons) - 1 ) == $cpt) && $lastDetail)? "border-bottom: 1px solid black; border-bottom: 1px solid black;" : "border-bottom: 1px solid grey;";
+            $border_bottom = (((count($detailLine->retiraisons) - 1 ) == $cpt) && $lastDetail)? "border-bottom: 1px solid black; border-bottom: 1px solid black;" : "";
             $nb_ligne--;
             ?>
                 <tr>
-                    <td colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?>  background-color: grey;"></td>
+                    <td colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?> "></td>
                     <td width="75px" style="border: 1px solid black; text-align: right;"><?php echoVolume($retiraison->volume); ?></td>
                     <td width="62px" style="border: 1px solid black;  text-align: center;"><?php echoDateFr($retiraison->date); ?></td>
                 </tr>
