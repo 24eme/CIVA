@@ -1,15 +1,16 @@
-<?php if ($vrac->isSupprimable($user->_id)): ?>
+<?php if(VracSecurity::getInstance($sf_user, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
 	<div class="btn_header">
 		<a id="btn_precedent" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
 			<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_supprimer_contrat.png">
 		</a>
 	</div>
 <?php endif; ?>
+
 <div id="contrat_onglet">
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected">
 		<a href="#" style="height: 18px;">
-		<?php if ($vrac->isValide() || $vrac->isAnnule()): ?>
+		<?php if ($vrac->isValide()): ?>
 			Contrat vrac<?php if ($vrac->numero_archive): ?> numéro de visa <?php echo $vrac->numero_archive ?><?php endif; ?>
 		<?php else: ?>
 			Validation de votre contrat vrac
@@ -87,16 +88,15 @@
 	<table id="actions_fiche">
 		<tr>
 			<td style="width: 33%"><a href="<?php echo url_for('mon_espace_civa') ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
-			<td align="center"><?php if ($vrac->isSigne()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
+			<td align="center"><?php if ($vrac->isValide()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
 			<td style="width: 33%; text-align: right;">
-				<?php if (!$vrac->isValide()): ?>
-					<?php if ($vrac->hasValide($user->_id)): ?>
-						<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
-					<?php else: ?>
-						<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
-							<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
-						</a>
-					<?php endif; ?>
+				<?php if(VracSecurity::getInstance($sf_user, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
+					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
+						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
+					</a>
+				<?php endif; ?>
+				<?php if(!$vrac->isValide() && $vrac->hasValide($user->_id)): ?>
+					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
 					<input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider vos enlèvements" />
