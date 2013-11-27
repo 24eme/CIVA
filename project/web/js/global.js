@@ -99,6 +99,45 @@ var videInputFocus = function()
 };
 
 /**
+ * Vérifie la "propreté" du champ
+ * $(champ).verifNettoyageChamp();
+ ******************************************/
+$.fn.verifNettoyageChamp = function()
+{
+	var champ = $(this);
+	var val = champ.attr('value');
+	var float = champ.hasClass('num_float');
+	
+	// Si quelque chose a été saisi
+	if(val)
+	{
+		// Remplacement de toutes les virgules par des points
+		if(val.indexOf(',') != -1) val = val.replace(',', '.');
+		
+		// Si un point a été saisi sans chiffre
+		if(val.indexOf('.') != -1 && val.length == 1) val = ''; //val = '0';
+		
+		// Un nombre commençant par 0 peut être interprété comme étant en octal
+		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
+		
+		// Comparaison nombre entier / flottant
+		/*if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
+		else val = parseInt(val);*/
+		
+		val = parseFloat(val).toFixed(2);
+	}
+	// Si rien n'a été saisi
+	//else val = 0;
+	else val = '';
+	
+	// Si ce n'est pas un nombre (ex : copier/coller d'un texte)
+	if(isNaN(val)) val = ''; //val = 0;
+
+	champ.attr('value', val);
+};
+
+
+/**
  * Nettoie les champs
  ******************************************/
 var initNettoyageChamps = function()
@@ -146,47 +185,6 @@ var initNettoyageChamps = function()
 		champ.verifNettoyageChamp();
 	});
 };
-
-
-
-/**
- * Vérifie la "propreté" du champ
- * $(champ).verifNettoyageChamp();
- ******************************************/
-$.fn.verifNettoyageChamp = function()
-{
-	var champ = $(this);
-	var val = champ.attr('value');
-	var float = champ.hasClass('num_float');
-	
-	// Si quelque chose a été saisi
-	if(val)
-	{
-		// Remplacement de toutes les virgules par des points
-		if(val.indexOf(',') != -1) val = val.replace(',', '.');
-		
-		// Si un point a été saisi sans chiffre
-		if(val.indexOf('.') != -1 && val.length == 1) val = ''; //val = '0';
-		
-		// Un nombre commençant par 0 peut être interprété comme étant en octal
-		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
-		
-		// Comparaison nombre entier / flottant
-		/*if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
-		else val = parseInt(val);*/
-		
-		val = parseFloat(val).toFixed(2);
-	}
-	// Si rien n'a été saisi
-	//else val = 0;
-	else val = '';
-	
-	// Si ce n'est pas un nombre (ex : copier/coller d'un texte)
-	if(isNaN(val)) val = ''; //val = 0;
-
-	champ.attr('value', val);
-};
-
 
 /**
  * Colonnes de même hauteur

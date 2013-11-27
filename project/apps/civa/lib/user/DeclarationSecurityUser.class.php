@@ -86,6 +86,14 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
+     * @return string
+     */
+    public function getCampagneDS()
+    {
+        return CurrentClient::getCurrent()->getCampagneDS();
+    }
+
+    /**
      *
      * @param string $etape 
      */
@@ -195,7 +203,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
-            $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
+            $this->_ds = $this->getDeclarant()->getDs($this->getCampagneDS());
             if (!$this->_ds) {
                 $ds = new DSCiva();
                 $ds->identifiant = $this->getDeclarant()->cvi;

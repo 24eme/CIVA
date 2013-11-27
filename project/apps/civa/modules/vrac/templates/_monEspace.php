@@ -1,15 +1,15 @@
-<?php if(!VracClient::canBeHaveVrac($user)): ?>
+<?php if(!VracSecurity::getInstance($sf_user, null)->isAuthorized(VracSecurity::DECLARANT)): ?>
 	<?php return; ?>
 <?php endif; ?>
 <div id="espace_alsace_contrats">
     <h2>Alsace Contrats</h2>
     <div class="contenu clearfix">  
  		<div id="liste_contrats" class="listing">
- 			<h3 class="titre_section">Contrats vrac <a doc="/vrac/telecharger_la_notice" title="Message aide" rel="help_popup_mon_espace_civa_contrats" class="msg_aide" href=""></a></h3>
+ 			<h3 class="titre_section">Contrats vrac</h3>
  			<div class="contenu_section">
  				<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
  				<ul id="actions_contrat">
- 					<?php if(VracClient::canBeCreate($user)): ?>
+ 					<?php if(VracSecurity::getInstance($sf_user, null)->isAuthorized(VracSecurity::CREATION)): ?>
  					<li class="nouveau_contrat"><a href="<?php echo url_for('@vrac_nouveau') ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
  					<li><a href="<?php echo url_for('@annuaire') ?>">Gérer son annuaire</a></li>
  					<?php endif; ?>
@@ -22,10 +22,7 @@
 			<div class="contenu_section">
 				<p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
 				<ul>
-					<li>
-                                            <!--<a href="<?php // echo url_for('@telecharger_la_notice') ?>" class="pdf"> Télécharger la notice</a>-->
-                                           <i>Notice en cours d'élaboration</i>
-                                        </li>
+					<li><a href="<?php echo url_for('@telecharger_la_notice_vrac') ?>" class="pdf">Télécharger la notice</a></li>
 				</ul>
 				<p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
 			</div>

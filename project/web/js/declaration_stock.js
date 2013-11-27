@@ -19,6 +19,12 @@ $(document).ready(function()
     //navOngletsStock();
     initMsgAideDS();
     choixPrecDS();
+
+    if(!appDS.length) {
+
+        return;
+    }
+
     initDSSommesCol();
     initLieuxStockage();
     initLieuxStockageNeant();

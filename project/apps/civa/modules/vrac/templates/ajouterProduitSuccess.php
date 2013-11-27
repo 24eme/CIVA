@@ -70,7 +70,6 @@
 $(document).ready(function(){
 	
 	$("#valide_form").click(function() {
-		console.log(!$("#ligne_lieu_dit").hasClass('hidden'));
 		var valide = true;
 		var errors = "<ul class=\"error_list\">";
 		if (!$("#vrac_produit_ajout_hash").val()) {
