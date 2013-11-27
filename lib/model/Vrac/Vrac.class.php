@@ -18,9 +18,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const CEPAGE_EDEL_LIBELLE_COMPLEMENT = " (Edel)";
 	const CEPAGE_MUSCAT = "cepage_MU";
 	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
-        const CAMPAGNE_ARCHIVE = 'UNIQUE';
-        const APPELLATION_PINOTNOIRROUGE = "PINOTNOIRROUGE";
-        const CEPAGE_PR = "cepage_PR";
+    const CAMPAGNE_ARCHIVE = 'UNIQUE';
+    const APPELLATION_PINOTNOIRROUGE = "PINOTNOIRROUGE";
+    const CEPAGE_PR = "cepage_PR";
 	const CEPAGE_PR_LIBELLE_COMPLEMENT = " (rouge)";
 	
 	
@@ -317,14 +317,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
     }
     
-    public function isSupprimable($userId)
+    public function isSupprimable()
     {
-    	if ($userId == $this->createur_identifiant) {
-    		if (in_array($this->valide->statut, self::getStatutsSupprimable())) {
-    			return true;
-    		}
-    	}
-    	return false;
+    	
+        return in_array($this->valide->statut, self::getStatutsSupprimable());
     }
     
     public function isBrouillon()
@@ -347,11 +343,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return ($this->valide->statut == self::STATUT_ANNULE);
     }
     
-    public function isSigne()
-    {
-    	return !($this->valide->statut == self::STATUT_VALIDE_PARTIELLEMENT || $this->valide->statut == self::STATUT_CREE);
-    }
-    
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
@@ -363,6 +354,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		}
     	}
     	return $type;
+    }
+
+    public function isActeur($userId) {
+        if(!$this->getTypeTiers($userId)) {
+            return false;
+        } 
+
+        return true;
+    }
+
+    public function hasSigne($userId)
+    {
+
+        return $this->hasValide($userId);
     }
     
     public function hasValide($userId)

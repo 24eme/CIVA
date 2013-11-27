@@ -23,17 +23,6 @@ class VracClient extends acCouchdbClient {
       return true;
     }
     
-    public static function canBeCreate($tiers)
-    {
-    	if ($tiers->type == 'Acheteur' || $tiers->type == 'Courtier') {
-    		return true;
-    	}
-    	if ($tiers->type == 'MetteurEnMarche' && !$tiers->hasAcheteur()) {
-    		return true;
-    	}
-    	return false;
-    }
-    
     public static function getConfig()
     {
     	if ($config = sfConfig::get(self::APP_CONFIGURATION)) {
@@ -42,7 +31,8 @@ class VracClient extends acCouchdbClient {
     	throw new sfException('Aucune configuration vrac définie dans l\'app!');
     }
     
-	public function buildId($numero_contrat) {
+	  public function buildId($numero_contrat) {
+        
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
     
