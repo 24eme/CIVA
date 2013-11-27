@@ -37,6 +37,7 @@ class DRClient extends acCouchdbClient {
     if($depot_mairie){
       $doc->add('date_depot_mairie',date('Y').'-12-10');                    
     }
+    $doc->add('lies_saisis_cepage', 1);
   }
 
   public function hasImport($cvi, $campagne) {
