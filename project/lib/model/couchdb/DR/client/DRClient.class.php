@@ -239,7 +239,7 @@ class DRClient extends acCouchdbClient {
         }
 
         $totauxByAppellationsRecap[$key]->revendique_sur_place += ($node->getVolumeRevendiqueCaveParticuliere()) ? $node->getVolumeRevendiqueCaveParticuliere() : 0;
-        $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getUsagesIndustrielsCaveParticuliere()) ? $node->getUsagesIndustrielsCaveParticuliere() : 0;
+        $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getUsagesIndustrielsSurPlace()) ? $node->getUsagesIndustrielsSurPlace() : 0;
 
         $totauxByAppellationsRecap[$key]->revendique_sur_place += $node->getTotalVolumeAcheteurs("mouts");
 

@@ -213,7 +213,7 @@ class ExportDRCsv extends ExportCsv {
             "denomination" => null,
             "superficie_livree" => ($noeud->canCalculSuperficieSurPlace()) ? $noeud->getSuperficieCaveParticuliere() : null,
             "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
-            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace()) ? $noeud->getUsagesIndustrielsCaveParticuliere() : null,
+            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace()) ? $noeud->getUsagesIndustrielsSurPlace() : null,
             "superficie_totale" => $noeud->getTotalSuperficie(),
             "volume_total" => $noeud->getTotalVolume(),
             "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
