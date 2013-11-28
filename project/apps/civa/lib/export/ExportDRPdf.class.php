@@ -198,7 +198,7 @@ class ExportDRPdf extends ExportDocument {
               $volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
-              $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
+              $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsSurPlace();
               $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
               $volume_rebeches[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getTotalRebeches() : null;
