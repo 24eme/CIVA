@@ -11,6 +11,10 @@
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions vrac&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
+<?php      $nb_ligne = 30;
+           $nb_ligne -= (!$odg)? 0 : 2; 
+?>
+
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
 		<th width="65px" style="font-weight: bold; text-align: center; border: 1px solid black;">AOC
@@ -24,11 +28,21 @@
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
                 <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>de Chargt</th>
 	</tr>
-	<?php foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
+	<?php 
+        $cptDetail = 0;
+        foreach ($vrac->declaration->getProduitsDetailsSorted() as $product): 
 			$productLine = $product->getRawValue();
 					foreach ($productLine as $detailKey => $detailLine): 
+                                            $nb_ligne--;
 							$backgroundColor = getColorRowDetail($detailLine);
 			$libelle_produit = $detailLine->getCepage()->getLibelle()." ".$detailLine->getLieuLibelle()." ".$detailLine->getLieuDit()." ".$detailLine->getVtsgn()." ".$detailLine->getDenomination();
+                        $isOnlyOneRetiraison = $vrac->isCloture() && (count($detailLine->retiraisons) === 1);
+                        $dateRetiraison = "";                        
+                        $lastDetail = ((count($vrac->declaration->getProduitsDetailsSorted()) - 1) == $cptDetail);
+                        if($isOnlyOneRetiraison){
+                            $retiraisons = $detailLine->retiraisons->toArray(true,false);
+                            $dateRetiraison = getDateFr($retiraisons[0]['date']);
+                        }
                         ?>
 	<tr>
 			<td width="65px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><span style="font-size: 6pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
@@ -38,19 +52,35 @@
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
 			<?php endif; ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
-			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-                        <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php endif; ?></td>
+			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
+                        <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
 	
         </tr>
-	<?php 
+        <?php 
+        $cptDetail++;
+        if($vrac->isCloture() && (count($detailLine->retiraisons) > 1)):
+        $cpt = 0;
+        foreach ($detailLine->retiraisons as $retiraison): 
+            $border_bottom = (((count($detailLine->retiraisons) - 1 ) == $cpt) && $lastDetail)? "border-bottom: 1px solid black; border-bottom: 1px solid black;" : "";
+            $nb_ligne--;
+            ?>
+                <tr>
+                    <td colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?> "></td>
+                    <td width="75px" style="border: 1px solid black; text-align: right;"><?php echoVolume($retiraison->volume); ?></td>
+                    <td width="62px" style="border: 1px solid black;  text-align: center;"><?php echoDateFr($retiraison->date); ?></td>
+                </tr>
+        <?php 
+        $cpt++;
+                        endforeach;
+                endif;
 		endforeach;
-	endforeach; 
+        endforeach; 
 	?>
 
 	<tr>
 			<td style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
 			<td style="border: 1px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
-                        <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: grey;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+                        <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
 	<?php if (!$odg): ?>
 	<tr>
@@ -63,12 +93,13 @@
 	</tr>
 	<?php endif; ?>
 </table>
-<?php $cond = (!$odg)? 0 : 2; ?>
-<?php if ($vrac->conditions_paiement): $cond++; ?><p>Conditions de paiement : <?php echo $vrac->conditions_paiement; ?></p><?php endif; ?>
-<?php if ($vrac->conditions_particulieres): $cond++; ?><p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p><?php endif; ?>
-<?php for($i=0;$i<30-$cond-count($vrac->declaration->getProduitsDetailsSorted())*2;$i++): ?>
-		<br />&nbsp;
+<?php if ($vrac->conditions_paiement): $nb_ligne-=2; ?><p>Conditions de paiement : <?php echo $vrac->conditions_paiement; ?></p><?php endif; ?>
+<?php if ($vrac->conditions_particulieres): $nb_ligne-=2; ?><p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p><?php endif; ?>
+
+<?php for($i=0;$i<$nb_ligne;$i++): ?>
+<br />&nbsp;
 <?php endfor;?>
+                
 <div style="display: absolute; bottom: 5px;">
 <?php if($vrac->hasCourtier()) {$widthSignataire = 33.33;} else {$widthSignataire = 50; } ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="text-align: left; border-collapse: collapse;">

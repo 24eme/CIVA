@@ -15,7 +15,7 @@ function printCepageKey($detailLine) {
 }
 
 function getColorRowDetail($detailLine) {
-    return (is_null($detailLine->volume_propose))? "background-color: #bbb;" : "";
+    return (is_null($detailLine->volume_propose))? "background-color: lightgray;" : "";
 }
 
 function getExplicationEtoile(){
@@ -97,4 +97,13 @@ function echoPrix($prix, $bold = false) {
     } else {
         echo "&nbsp;";
     }
+}
+
+function getDateFr($dateIso) {
+    $dateExplosed = explode('-', $dateIso);
+    return $dateExplosed[2].'/'.$dateExplosed[1].'/'.substr($dateExplosed[0],2);
+}
+
+function echoDateFr($dateIso) {    
+    echo getDateFr($dateIso);
 }
