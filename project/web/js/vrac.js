@@ -190,7 +190,8 @@ var initClotureContratCheckboxes = function()
 
 $.fn.checkboxesBehaviour = function(){
   var reg_debut = new RegExp("vrac_produits__", "g");
-  var reg_fin = new RegExp("_detail([A-Za-z0-9\_\-])*", "g");        
+  var reg_fin = new RegExp("_detail([A-Za-z0-9\_\-])*", "g");    
+  console.log($(this).attr('id'));
   var champsClass = $(this).attr('id').replace(reg_fin,'').replace(reg_debut,'ret_');
   var date = $('.'+champsClass).parent().parent().children('td.echeance').children('input.input_date');
 
@@ -241,14 +242,21 @@ var sumContrat = function(brothers, cible)
 	}
 	brothers.each(function() {
 		var value = parseFloat($(this).val());
+                if($(this).attr('readonly')=='readonly') return;
                 var reg = new RegExp("enlevements([A-Za-z0-9\_\-])*", "g");
                 var idCheckbox = $(this).attr('id').replace(reg,'cloture');
 		if (!isNaN(value)) {
     		sum = sum + value;
-                if(sum > 0) $('#'+idCheckbox).show();
+                if(sum > 0) {
+                    $('#'+idCheckbox).show();
+                    cb.checkboxesBehaviour();
+                    }
 		}
                 else{
-                if(sum <= 0) $('#'+idCheckbox).hide();   
+                if(sum <= 0){
+                    $('#'+idCheckbox).hide();
+                    cb.checkboxesBehaviour();
+                }   
                 }
 	});
 	sum = sum.toFixed(2);
