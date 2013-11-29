@@ -100,6 +100,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
     }
 
+    public function getUsagesIndustrielsSurPlace() {
+        if(!$this->getTotalCaveParticuliere()) {
+
+            return $this->getLiesMouts();
+        }
+
+        return $this->getUsagesIndustrielsCaveParticuliere();
+    }
+
     public function getTotalRebeches() {
 
             return $this->getDataByFieldAndMethod('total_rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getTotalRebeches', false) );

@@ -74,7 +74,7 @@ class declarationComponents extends sfComponents {
               $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
               $this->revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
               $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
-              $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCaveParticuliere();
+              $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsSurPlace();
               $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
               if($appellation->getConfig()->hasCepageRB()) {
                 $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
