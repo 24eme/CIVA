@@ -62,7 +62,7 @@ class DRClient extends acCouchdbClient {
     $campagne = $csvs[0]->campagne;
     
     $doc = $this->createDeclaration($tiers, $campagne, $depot_mairie);
-
+    $doc->jeunes_vignes = 0;
     foreach ($csvs as $csv) {
           $acheteur_cvi = $csv->cvi;
           $acheteur_obj = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
@@ -75,7 +75,10 @@ class DRClient extends acCouchdbClient {
           foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
         $linenum++;
         if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
-          $doc->jeunes_vignes = $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
+          if($doc->jeunes_vignes == $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE])) {
+            continue;
+          }
+          $doc->jeunes_vignes += $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
           continue;
         }
         $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION],
