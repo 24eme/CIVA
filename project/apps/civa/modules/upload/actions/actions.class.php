@@ -161,7 +161,7 @@ class uploadActions extends EtapesActions {
             $csv = acCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
             $csv->storeCSV($this->csv);
             $csv->save();
-            $this->getUser()->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
+            $this->getUser()->setFlash('confirmation', 'Les informations concernant la récolte de cette année ont bien été intégrées à notre base');
             if (!$nb_warnings)
                 return $this->redirect('@mon_espace_civa');
         }

@@ -6,6 +6,10 @@
     <h2 class="titre_principal">Mon espace déclaratif</h2>
 <?php endif; ?>
 <div id="application_dr" class="clearfix">
+
+        <?php if($sf_user->hasFlash('confirmation')) : ?>
+            <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
+        <?php endif; ?>
         
         <?php 
         if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):

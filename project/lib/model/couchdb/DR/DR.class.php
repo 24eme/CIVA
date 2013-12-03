@@ -646,7 +646,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
     
     public function hasDateDepotMairie() {
-        return $this->exist('date_depot_mairie') && !is_null($this->date_depot_mairie);
+        return $this->exist('date_depot_mairie');
     }
     
     public function getDateDepotMairieFr() {
