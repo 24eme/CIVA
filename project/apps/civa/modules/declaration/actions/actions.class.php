@@ -68,7 +68,7 @@ class declarationActions extends EtapesActions {
     public function executeNoticeEvolutions(sfWebRequest $request) {
         $this->setCurrentEtape('notice_evolutions');
 
-        if($this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+        if($this->getUser()->isSimpleOperateur()) {
 
             return $this->redirectToNextEtapes();
         }
