@@ -228,6 +228,11 @@ mon_espace_civa:
   url:   /mon_espace_civa
   param: { module: tiers, action: monEspaceCiva }
 
+# Inté accueil
+mon_espace_civa_inte:
+  url:   /mon_espace_civa_inte
+  param: { module: tiers, action: monEspaceCivaInte }
+
 delegation:
   url: /delegation
   param: { module: tiers, action: delegation}

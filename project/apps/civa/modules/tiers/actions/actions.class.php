@@ -161,4 +161,10 @@ class tiersActions extends EtapesActions {
         $this->getUser()->signIn($login_current_user);
         $this->redirect('@mon_espace_civa');
     }
+
+    /* Inté de l'accueil */
+    public function executeMonEspaceCivaInte(sfWebRequest $request)
+    {
+    
+    }
 }
