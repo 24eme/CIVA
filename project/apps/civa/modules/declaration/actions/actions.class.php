@@ -68,6 +68,11 @@ class declarationActions extends EtapesActions {
     public function executeNoticeEvolutions(sfWebRequest $request) {
         $this->setCurrentEtape('notice_evolutions');
 
+        if($this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+
+            return $this->redirectToNextEtapes();
+        }
+
         if ($request->isMethod(sfWebRequest::POST)) {
             $boutons = $this->getRequestParameter('boutons', null);
             if ($boutons && in_array('previous', array_keys($boutons))) {

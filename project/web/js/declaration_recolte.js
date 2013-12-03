@@ -107,6 +107,8 @@ $(document).ready( function()
         yearRange: '1900:'+annee
     });
 
+    $('.datepickerOpenOnLoad').focus();
+
     $(document).find('a.btn_inactif, input.btn_inactif').live('click', function() {
         return false;
     });

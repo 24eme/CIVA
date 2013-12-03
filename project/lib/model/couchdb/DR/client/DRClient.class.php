@@ -35,7 +35,7 @@ class DRClient extends acCouchdbClient {
     $doc->constructId();
     $doc->storeDeclarant();
     if($depot_mairie){
-      $doc->add('date_depot_mairie',date('Y').'-12-10');                    
+      $doc->add('date_depot_mairie', null);                    
     }
     $doc->add('lies_saisis_cepage', 1);
   }
