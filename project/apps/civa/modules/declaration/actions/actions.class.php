@@ -219,6 +219,10 @@ class declarationActions extends EtapesActions {
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
+        if($this->getUser()->isSimpleOperateur()) {
+
+            return $this->redirect('mon_espace_civa');
+        }
         $this->dr = $this->getUser()->getDeclaration();
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
