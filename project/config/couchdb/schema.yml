@@ -373,6 +373,7 @@ CompteTiers:
       _rev: {  }
       type: {  }
       nom: {  }
+      id_compte_societe: { required: false }
       db2:
         type: collection
         definition:

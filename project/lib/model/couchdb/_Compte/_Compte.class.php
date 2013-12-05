@@ -27,6 +27,14 @@ abstract class _Compte extends Base_Compte {
         $hash = "{SSHA}" . base64_encode(pack("H*", sha1($mot_de_passe . $salt)) . $salt);
         $this->_set('mot_de_passe', $hash);
     }
+ 
+    public function getCodeCreation() {
+        if($this->statut != self::STATUS_NOUVEAU) {
+            return null;
+        }
+
+        return preg_replace('/^\{TEXT\}/', "", $this->mot_de_passe);
+    }
     
     /**
      * 

@@ -2,11 +2,7 @@
 <?php echo $form->renderHiddenFields() ?>
 <?php echo $form->renderGlobalErrors() ?>
  	<h2 class="titre_principal">Gestion des droits</h2>
-
-    <!-- #application_dr -->
     <div class="clearfix" id="application_dr">
-
-        <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration" style="width: 100%;">
                 <table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto">
                 	<thead>
@@ -16,6 +12,7 @@
 						<?php foreach($compte->getDroitsTiers() as $droit): ?>
 							<th><?php echo $droit ?></th>
 						<?php endforeach; ?>
+						<th>Code de création</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -28,20 +25,25 @@
 							<input type="checkbox" id="comptes_droits<?php echo $compte_personne->_id ?>_droits_<?php echo $key ?>" value="<?php echo $key ?>" name="comptes_droits[<?php echo $compte_personne->_id ?>][droits][]" <?php echo (in_array($key, $compte_personne->droits->toArray())) ? 'checked="checked"' : null ?>>
 						</td>
 						<?php endforeach; ?>
+						<td>
+							<?php if($compte_personne->getCodeCreation()): ?>
+							<?php echo $compte_personne->getCodeCreation() ?>
+							<?php else: ?>
+								Compte déjà créé
+							<?php endif; ?>
+						</td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table>
 
                 <div class="ligne_form ligne_btn">
+                    <a href="<?php echo url_for('compte_personne_ajouter') ?>">Ajouter un compte</a>
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
                 </div>
         </div>
-        <!-- fin #nouvelle_declaration -->
-
-        <!-- #precedentes_declarations -->
-
-        <!-- fin #precedentes_declarations -->
     </div>
-    <!-- fin #application_dr -->
+    <ul id="btn_etape" class="btn_prev_suiv clearfix">
+    <li><a href="<?php echo url_for('@mon_espace_civa') ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" /></a></li>
+    </ul>
 </form>

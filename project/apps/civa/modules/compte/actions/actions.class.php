@@ -221,6 +221,12 @@ class compteActions extends sfActions {
 
     public function executeDroits(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
+
+        if($this->compte->type != 'CompteTiers') {
+
+            return $this->forward404();
+        }
+
         $this->form = new CompteDroitsForm($this->compte);
 
         if(!$request->isMethod(sfWebRequest::POST)) {

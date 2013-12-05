@@ -77,15 +77,21 @@ class _CompteClient extends acCouchdbClient {
         
         $personne = new CompteTiers();
         $personne->login = sprintf("%s%02d", $compte->login, $this->getComptePersonneDernierNumero($compte) + 1);
+        $personne->add("id_compte_societe", $compte->_id);
         $personne->constructId();
         return $personne;
     }
 
     public function getComptePersonneDernierNumero($compte) {
         $ids = $this->getComptesPersonnes($compte, acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-        $last_numero = 1;
+        $last_numero = 0;
         foreach($ids as $id) {
-            $numero = (int)substr($id, strlen($id)-3, 2);
+            $c = _CompteClient::getInstance()->find($id);
+            if($c->isCompteSociete()) {
+                $numero = 0;
+            } else {
+                $numero = (int)substr($c->login, strlen($c->login)-2, 2);
+            }
             if($last_numero < $numero) {
                 $last_numero = $numero;
             }

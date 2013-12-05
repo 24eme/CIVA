@@ -110,18 +110,8 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function isCompteSociete() {
-        $login = str_replace('C', '', $this->login);
         
-        return strlen($login) <= 10;
-    }
-
-    public function getIdCompteSociete() {
-        if($this->isCompteSociete()) {
-
-            return $this->_id;
-        }
-
-        return substr($this->_id, 0, strlen($this->_id) - 2);
+        return !$this->exist("id_compte_societe") || !$this->id_compte_societe || $this->id_compte_societe == $this->_id;
     }
 
     public function getCompteSociete() {
@@ -143,7 +133,7 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function getDroits() {
-        if($this->isCompteSociete()) {
+        if($this->isCompteSociete() && count($this->_get('droits')->toArray(true, false)) == 0) {
             $this->droits = array_keys($this->getDroitsTiers());
         }
 
@@ -188,14 +178,11 @@ class CompteTiers extends BaseCompteTiers {
 
     public function updateTiers() {
         $this->_tiers = null;
-        $droits = $this->getDroits();
+        $droits = $this->getDroits()->toArray(true, false);
 
         foreach($this->getTiersObject() as $tiers) {
-            $droits_type = _CompteClient::getInstance()->getDroitsType($tiers->type);
-            foreach($droits_type as $droit) {
-                if(in_array($droit, $droits_type)) {
-                    $tiers->emails->add($droit)->add($this->_id, array('nom' => $this->nom, 'email' => $this->email));
-                }
+            foreach($droits as $droit) {
+                $tiers->emails->add($droit)->add($this->_id, array('nom' => $this->nom, 'email' => $this->email));
             }
 
             $tiers->save();
