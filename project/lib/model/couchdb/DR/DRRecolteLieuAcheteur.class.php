@@ -32,6 +32,9 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
     if (!$this->acheteur) {
       $this->acheteur = acCouchdbManager::getClient()->find('ACHAT-'.$this->getKey());
     }
+    if(!$this->acheteur) {
+      $this->acheteur = acCouchdbManager::getClient()->find('REC-'.$this->getKey());
+    }
     if (!$this->acheteur) {
         $this->acheteur = new Acheteur();
     }
