@@ -47,11 +47,12 @@ EOF;
             $dr = acCouchdbManager::getClient("DR")->find($dr_result->id);        
             $tiers = acCouchdbManager::getClient("Recoltant")->retrieveByCvi($dr->cvi);
             $annee = $dr->campagne;
+            $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
+            
             if(!($dr->exist('en_attente_envoi') && $dr->en_attente_envoi)) {
                 continue;
             }
-            
-            $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
+
             try {
                 $this->mailerManager->sendMail(false);
             } catch(Exception $e) {
