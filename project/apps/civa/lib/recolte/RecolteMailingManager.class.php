@@ -56,12 +56,8 @@ class RecolteMailingManager {
     
     public function sendMail($visualisation = true) {
         $message = $this->getMailForRecoltant($visualisation);
-        try {
-            $this->mailer->send($message);
-        } catch (Exception $e) {
-
-            return false;
-        }
+        $this->mailer->send($message);
+       
         return true;
     }
     
