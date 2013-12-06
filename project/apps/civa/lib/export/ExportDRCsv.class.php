@@ -129,9 +129,15 @@ class ExportDRCsv extends ExportCsv {
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
         
+        $acheteurObject = acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi);
+
+        if(!$acheteurObject) {
+            $acheteurObject = acCouchdbManager::getClient()->find('REC-'.$acheteur->cvi);
+        }
+
         $this->add(array(
             "cvi_acheteur" => $acheteur->cvi,
-            "nom_acheteur" => acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi)->getNom(),
+            "nom_acheteur" => $acheteurObject->getNom(),
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
