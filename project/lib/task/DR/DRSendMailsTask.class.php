@@ -61,7 +61,7 @@ EOF;
 
             try {
                 $this->mailerManager->sendMail(false);
-                echo $dr->_id.":Email envoyé à ".$tiers->getCompteEmail()."\n"
+                echo $dr->_id.":Email envoyé à ".$tiers->getCompteEmail()."\n";
             } catch(Exception $e) {
                 echo $dr->_id.":".$e->getMessage()."\n";
                 continue;
