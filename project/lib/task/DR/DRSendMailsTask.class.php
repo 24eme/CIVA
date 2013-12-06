@@ -48,7 +48,13 @@ EOF;
             $tiers = acCouchdbManager::getClient("Recoltant")->retrieveByCvi($dr->cvi);
             $annee = $dr->campagne;
             $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
-            $this->mailerManager->sendMail(false);
+            try {
+                $this->mailerManager->sendMail(false);
+            } catch(Exception $e) {
+                echo $e->getMessage();
+                continue;
+            }
+
             $dr->emailSended();
             $dr->save();
         }
