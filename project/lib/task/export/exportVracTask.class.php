@@ -46,9 +46,10 @@ EOF;
         
         $configCepappctr = new Cepappctr();
         $date_begin = $arguments['date_begin'];
-        $date_end = ($arguments['date_end'])? $arguments['date_end'] : date('Y-m-d');
+        $date_end = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
+        $fin = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d");
         $dates = array($date_begin, $date_end);
-        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
+        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $fin).'.';
         
         /*
          * CREATION
