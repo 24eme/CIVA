@@ -44,19 +44,26 @@ EOF;
         
         $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll($arguments['campagne']);
         foreach ($drs_to_send_mail as $dr_result) {
-            $dr = acCouchdbManager::getClient("DR")->find($dr_result->id);        
+            $dr = acCouchdbManager::getClient("DR")->find($dr_result->id);   
             $tiers = acCouchdbManager::getClient("Recoltant")->retrieveByCvi($dr->cvi);
             $annee = $dr->campagne;
             $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
             
+            $dr_new = acCouchdbManager::getClient("DR")->find($dr_result->id); 
+
+            if($dr->_rev != $dr_new->_rev) {
+                continue;
+            }
+
             if(!($dr->exist('en_attente_envoi') && $dr->en_attente_envoi)) {
                 continue;
             }
 
             try {
                 $this->mailerManager->sendMail(false);
+                echo $dr->_id.":Email envoyé à ".$tiers->getCompteEmail()."\n";
             } catch(Exception $e) {
-                echo $e->getMessage();
+                echo $dr->_id.":".$e->getMessage()."\n";
                 continue;
             }
 

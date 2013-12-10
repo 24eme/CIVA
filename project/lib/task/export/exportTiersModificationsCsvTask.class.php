@@ -145,7 +145,7 @@ EOF;
                 $tiers->exploitant->telephone = null;
             }
 
-            if($tiers->type != "MetteurEnMarche") {
+            if($tiers->type != "MetteurEnMarche" && $tiers->type != "Courtier") {
                 $compte = _CompteClient::getInstance()->retrieveByLogin($tiers->cvi, acCouchdbClient::HYDRATE_JSON);
                 $met = null;
                 foreach($compte->tiers as $t) {

@@ -501,6 +501,7 @@ Recoltant:
       declaration_insee: {  }
       declaration_commune: {  }
       cave_cooperative: {  }
+      acheteur_dr: { required: false, type: float }
 
 MetteurEnMarche:
   inheritance: _Tiers

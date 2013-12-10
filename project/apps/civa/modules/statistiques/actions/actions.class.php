@@ -84,26 +84,26 @@ class statistiquesActions extends sfActions {
         $dr_non_validees_etapes_exploitation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'exploitation'))
-                                              ->endkey(array($campagne, false, false, null, 'exploitation'))
+                                              ->endkey(array($campagne, false, false, null, 'exploitation', array()))
                                               ->getView("STATS", "DR");
 
         $dr_non_validees_etapes_repartition = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'repartition'))
-                                              ->endkey(array($campagne, false, false, null, 'repartition'))
+                                              ->endkey(array($campagne, false, false, null, 'repartition', array()))
                                               ->getView("STATS", "DR");
          
          
         $dr_non_validees_etapes_recolte = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'recolte'))
-                                              ->endkey(array($campagne, false, false, null, 'recolte'))
+                                              ->endkey(array($campagne, false, false, null, 'recolte', array()))
                                               ->getView("STATS", "DR");
         
         $dr_non_validees_etapes_validation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'validation'))
-                                              ->endkey(array($campagne, false, false, null, 'validation'))
+                                              ->endkey(array($campagne, false, false, null, 'validation', array()))
                                               ->getView("STATS", "DR");
 
         $this->nb_csv_acheteurs = acCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
