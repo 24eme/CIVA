@@ -1,3 +1,5 @@
+. bin/config.inc
+
 ANNEE=$1
 
 if ! test "$ANNEE"; then
