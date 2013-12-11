@@ -387,7 +387,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getDataByFieldAndMethod('total_dont_dplc_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontDplcVendus'));
         }
 
-        return $this->getTotalDontDplcRecapitulatifVente();
+        return round($this->getTotalDontDplcRecapitulatifVente(), 2);
     }
 
     public function getTotalSuperficieVendus() {
