@@ -44,7 +44,7 @@ EOF;
         if (count($check['erreur']) > 0) {
             $libelle_erreurs = array();
             foreach($check['erreur'] as $err) {
-	            $libelle_erreurs[] = $err['log'];
+	            $libelle_erreurs[] = $err['info'] . ":" . $err['log'];
             }
             print "ERROR: ".$dr->_id." a des erreurs : " .implode("|", $libelle_erreurs). " \n";
         }
@@ -73,7 +73,7 @@ EOF;
 	  return false;
 	}
 	try {
-	  $dr->save();
+	  //$dr->save();
 	}catch(sfException $e) {	
 	  print "ERROR: ".$dr->_id." NOT saved\n";
 	  return false;
