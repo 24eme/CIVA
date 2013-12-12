@@ -42,15 +42,16 @@ EOF;
 	  $check = $dr->check();
 	  if (count($check['erreur']) || count($check['vigilance'])) {
         if (count($check['erreur']) > 0) {
-            $libelle_erreurs = array();
             foreach($check['erreur'] as $err) {
-	            $libelle_erreurs[] = $err['info'] . ":" . $err['log'];
+	            print "ERROR: ".$dr->_id." a des erreurs : " .$err['info'] . ":" . $err['log']. " \n";
             }
-            print "ERROR: ".$dr->_id." a des erreurs : " .implode("|", $libelle_erreurs). " \n";
         }
 
         if (count($check['vigilance']) > 0) {
-            print "VIGILANCE: ".$dr->_id." a des points de vigilance\n";
+            foreach($check['vigilance'] as $err) {
+	            print "VIGILANCE: ".$dr->_id." a des points de vigilance " .$err['info'] . ":" . $err['log']. "\n";
+            }
+            
         }
     
         if (count($check['vigilance']) && !$this->save_vigilance)
@@ -66,14 +67,14 @@ EOF;
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
-	    $dr->validate($tiers);
+	    $dr->validate($tiers, null, "COMPTE-auto");
 	  }
 	}catch(sfException $e) {
 	  print 'ERROR: '.$e->getMessage()."\n";
 	  return false;
 	}
 	try {
-	  //$dr->save();
+	  $dr->save();
 	}catch(sfException $e) {	
 	  print "ERROR: ".$dr->_id." NOT saved\n";
 	  return false;
