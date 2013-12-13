@@ -3,15 +3,15 @@
 . bin/config.inc
 
 ANNEE=$1
-DATE=$2
+COMPTE=$2
 
 if ! test "$ANNEE"; then
 	echo "L'année de déclaration de récolte est requise"
 	exit;
 fi
 
-if ! test "$DATE"; then
-	echo "La date à ne pas dépassé est requise"
+if ! test "$COMPTE"; then
+	echo "Le compte à changer est requis"
 	exit;
 fi
 
@@ -20,5 +20,5 @@ curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?
 while read ligne  
 do
 	#echo $ligne
-    php symfony dr:changeDate $ligne $DATE  
+    php symfony dr:changeUtilisateurCompte $ligne $COMPTE  
 done < /tmp/drs_validees
