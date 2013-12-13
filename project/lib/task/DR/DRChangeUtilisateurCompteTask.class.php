@@ -46,7 +46,7 @@ EOF;
         return;
       }
 
-      if(!$dr->hasDateDepotMairie()) {
+      if($dr->hasDateDepotMairie()) {
 
         return;
       }
