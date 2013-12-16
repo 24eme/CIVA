@@ -1,1 +1,3 @@
-bash bin/exports_ventes_mouts.sh 2013 | grep ";mouts;"
+#!/bin/bash
+
+bash bin/export_drs_ventes_mouts.sh 2013 | grep ";mouts;"
