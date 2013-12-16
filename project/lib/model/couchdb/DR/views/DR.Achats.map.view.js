@@ -33,12 +33,15 @@ function(doc) {
         var superficies = new Array();
         superficies['negoces'] = new Array();
         superficies['cooperatives'] = new Array();
+        superficies['mouts'] = new Array();
         var dontdplcs = new Array();
         dontdplcs['negoces'] = new Array();
         dontdplcs['cooperatives'] = new Array();
+        dontdplcs['mouts'] = new Array();
         var volumes = new Array();
         volumes['negoces'] = new Array();
         volumes['cooperatives'] = new Array();
+        volumes['mouts'] = new Array();
 
         for(lieu_key in doc.recolte.certification.genre[appellation_key].mention) {
             if(!lieu_key.match('^lieu')) {
@@ -72,12 +75,14 @@ function(doc) {
                             }
                             volumes['cooperatives'][acheteur.cvi] = volumes['cooperatives'][acheteur.cvi] + acheteur.quantite_vendue; 
                         }
-                        for(acheteur_key in lieu[couleur_key][cepage_key].detail[detail_key].mouts) {
-                            var acheteur = lieu[couleur_key][cepage_key].detail[detail_key].mouts[acheteur_key];
-                            if (!volumes['mouts'][acheteur.cvi]) {
-                                volumes['mouts'][acheteur.cvi] = 0;
+                        if(lieu[couleur_key][cepage_key].detail[detail_key].mouts) {
+                            for(acheteur_key in lieu[couleur_key][cepage_key].detail[detail_key].mouts) {
+                                var acheteur = lieu[couleur_key][cepage_key].detail[detail_key].mouts[acheteur_key];
+                                if (!volumes['mouts'][acheteur.cvi]) {
+                                    volumes['mouts'][acheteur.cvi] = 0;
+                                }
+                                volumes['mouts'][acheteur.cvi] = volumes['mouts'][acheteur.cvi] + acheteur.quantite_vendue; 
                             }
-                            volumes['mouts'][acheteur.cvi] = volumes['mouts'][acheteur.cvi] + acheteur.quantite_vendue; 
                         }
                     }
 
@@ -123,9 +128,9 @@ function(doc) {
         for(acheteur_type_key in volumes) {
             for(acheteur_key in volumes[acheteur_type_key]) {
                 emit([doc.campagne, doc.cvi, appellation_key, acheteur_type_key, acheteur_key], 
-                     [Math.round(volumes[acheteur_type_key][acheteur_key]*100)/100, 
-                      Math.round(superficies[acheteur_type_key][acheteur_key]*100)/100,
-                      Math.round(dontdplcs[acheteur_type_key][acheteur_key]*100)/100]);
+                     [(Math.round(volumes[acheteur_type_key][acheteur_key]*100)/100).toFixed(2), 
+                      (Math.round(superficies[acheteur_type_key][acheteur_key]*100)/100).toFixed(2),
+                      (Math.round(dontdplcs[acheteur_type_key][acheteur_key]*100)/100).toFixed(2)]);
             }
         }
     }
