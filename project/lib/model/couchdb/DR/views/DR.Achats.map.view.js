@@ -85,43 +85,43 @@ function(doc) {
                             }
                         }
                     }
-
-                    for(acheteur_key in lieu.acheteurs.negoces) {
-                        var detail = lieu.acheteurs.negoces[acheteur_key];
-                        if (!superficies['negoces'][acheteur_key]) {
-                            superficies['negoces'][acheteur_key] = 0;
-                        }
-                        superficies['negoces'][acheteur_key] = superficies['negoces'][acheteur_key] + detail.superficie;
-                        if (!dontdplcs['negoces'][acheteur_key]) {
-                            dontdplcs['negoces'][acheteur_key] = 0;
-                        }
-                        dontdplcs['negoces'][acheteur_key] = dontdplcs['negoces'][acheteur_key] + detail.dontdplc;
-                    }
-
-                    for(acheteur_key in lieu.acheteurs.cooperatives) {
-                        var detail = lieu.acheteurs.cooperatives[acheteur_key];
-                        if (!superficies['cooperatives'][acheteur_key]) {
-                            superficies['cooperatives'][acheteur_key] = 0;
-                        }
-                        superficies['cooperatives'][acheteur_key] = superficies['cooperatives'][acheteur_key] + detail.superficie;
-                        if (!dontdplcs['cooperatives'][acheteur_key]) {
-                            dontdplcs['cooperatives'][acheteur_key] = 0;
-                        }
-                        dontdplcs['cooperatives'][acheteur_key] = dontdplcs['cooperatives'][acheteur_key] + detail.dontdplc;
-                    }
-
-                    for(acheteur_key in lieu.acheteurs.mouts) {
-                        var detail = lieu.acheteurs.mouts[acheteur_key];
-                        if (!superficies['mouts'][acheteur_key]) {
-                            superficies['mouts'][acheteur_key] = 0;
-                        }
-                        superficies['mouts'][acheteur_key] = superficies['mouts'][acheteur_key] + detail.superficie;
-                        if (!dontdplcs['mouts'][acheteur_key]) {
-                            dontdplcs['mouts'][acheteur_key] = 0;
-                        }
-                        dontdplcs['mouts'][acheteur_key] = dontdplcs['mouts'][acheteur_key] + detail.dontdplc;
-                    }
                 }
+            }
+
+            for(acheteur_key in lieu.acheteurs.negoces) {
+                var detail = lieu.acheteurs.negoces[acheteur_key];
+                if (!superficies['negoces'][acheteur_key]) {
+                    superficies['negoces'][acheteur_key] = 0;
+                }
+                superficies['negoces'][acheteur_key] = superficies['negoces'][acheteur_key] + detail.superficie;
+                if (!dontdplcs['negoces'][acheteur_key]) {
+                    dontdplcs['negoces'][acheteur_key] = 0;
+                }
+                dontdplcs['negoces'][acheteur_key] = dontdplcs['negoces'][acheteur_key] + detail.dontdplc;
+            }
+
+            for(acheteur_key in lieu.acheteurs.cooperatives) {
+                var detail = lieu.acheteurs.cooperatives[acheteur_key];
+                if (!superficies['cooperatives'][acheteur_key]) {
+                    superficies['cooperatives'][acheteur_key] = 0;
+                }
+                superficies['cooperatives'][acheteur_key] = superficies['cooperatives'][acheteur_key] + detail.superficie;
+                if (!dontdplcs['cooperatives'][acheteur_key]) {
+                    dontdplcs['cooperatives'][acheteur_key] = 0;
+                }
+                dontdplcs['cooperatives'][acheteur_key] = dontdplcs['cooperatives'][acheteur_key] + detail.dontdplc;
+            }
+
+            for(acheteur_key in lieu.acheteurs.mouts) {
+                var detail = lieu.acheteurs.mouts[acheteur_key];
+                if (!superficies['mouts'][acheteur_key]) {
+                    superficies['mouts'][acheteur_key] = 0;
+                }
+                superficies['mouts'][acheteur_key] = superficies['mouts'][acheteur_key] + detail.superficie;
+                if (!dontdplcs['mouts'][acheteur_key]) {
+                    dontdplcs['mouts'][acheteur_key] = 0;
+                }
+                dontdplcs['mouts'][acheteur_key] = dontdplcs['mouts'][acheteur_key] + detail.dontdplc;
             }
         }
 
