@@ -55,7 +55,7 @@ class ExportDRXml {
                     continue;
                 }
                 $lieu = $appellation->getLieux()->get($lieu_config->getKey());
-                $usage_industriel_saisi = $lieu->getUsageIndustrielSaisi();
+                //$usage_industriel_saisi = $lieu->getUsageIndustrielSaisi();
 
                 foreach($lieu_config->getCouleurs() as $couleur_config) {
                     if (!$lieu->exist($couleur_config->getKey())) {
@@ -77,16 +77,16 @@ class ExportDRXml {
 
                     if($this->destinataire == self::DEST_CIVA) {
                         $volume_revendique = $object->findVolumeRevendique();
-                        $dplc = $object->findDplc();
+                        $usages_industriels = $object->getUsagesIndustriels();
                     } elseif($this->destinataire == self::DEST_DOUANE) {
-                        $volume_revendique = $object->getVolumeRevendiqueRendement();
-                        $dplc = $object->getDplcRendement();
+                        $volume_revendique = $object->getVolumeRevendiqueWithDplc();
+                        $usages_industriels = $object->getUsagesIndustriels();
                     }
 
-                    $volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
-                    $dplc = round($dplc + $usage_industriel_saisi, 2);
+                    /*$volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
+                    $dplc = round($dplc + $usage_industriel_saisi, 2);*/
 
-                    $usage_industriel_saisi = 0;
+                    //$usage_industriel_saisi = 0;
 
                     //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
                     $acheteurs = array();
@@ -113,7 +113,7 @@ class ExportDRXml {
                     }
                     $total['exploitant']['L15'] = $l15; //Volume revendique
                     // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                    $total['exploitant']['L16'] = $dplc; //DPLC
+                    $total['exploitant']['L16'] = $usages_industriels; //DPLC
                     $total['exploitant']['L17'] = 0; //HS
                     $total['exploitant']['L18'] = 0; //HS
                     $total['exploitant']['L19'] = 0; //HS
@@ -190,8 +190,14 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                $col['exploitant']['L15'] = 0; //Volume revendique
-                                $col['exploitant']['L16'] = 0; //DPLC
+                                if($detail->canHaveUsagesLiesSaisi()) {
+                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique(); //Volume revendique
+                                    $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
+                                } else {
+                                    $col['exploitant']['L15'] = 0;
+                                    $col['exploitant']['L16'] = 0;
+                                }
+
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
                                 $col['exploitant']['L19'] = 0; //HS
