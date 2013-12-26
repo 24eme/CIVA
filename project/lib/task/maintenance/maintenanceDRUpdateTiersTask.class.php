@@ -40,9 +40,18 @@ EOF;
             $dr->storeDeclarant();
             $new_declarant = $dr->declarant->toArray(true, false);
             $diff = $this->array_diff_assoc_recursive($old_declarant, $new_declarant);
+
+
             if(count($diff )) {
-              $this->logSection('try', $dr->get('_id'));
-              print_r($diff);
+              foreach($diff as $key => $value) {
+                if(is_array($value)) {
+                  foreach($value as $subkey => $subvalue) {
+                    echo $dr->cvi.";".$key."/".$subkey.";".$old_declarant[$key][$subkey].";".$new_declarant[$key][$subkey]."\n";
+                  }
+                  continue;
+                }
+                echo $dr->cvi.";".$key.";".$old_declarant[$key].";".$new_declarant[$key]."\n";
+              }
             }
         }
     }
@@ -51,7 +60,7 @@ EOF;
     $difference=array();
     foreach($array1 as $key => $value) {
         if( is_array($value) ) {
-            if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+            if(!isset($array2[$key]) || !is_array($array2[$key]) ) {
                 $difference[$key] = $value;
             } else {
                 $new_diff = $this->array_diff_assoc_recursive($value, $array2[$key]);
