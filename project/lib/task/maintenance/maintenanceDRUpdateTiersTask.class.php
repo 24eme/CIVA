@@ -42,7 +42,7 @@ EOF;
             $diff = $this->array_diff_assoc_recursive($old_declarant, $new_declarant);
 
 
-            if(count($diff )) {
+            if(count($diff)) {
               foreach($diff as $key => $value) {
                 if(is_array($value)) {
                   foreach($value as $subkey => $subvalue) {
@@ -52,6 +52,8 @@ EOF;
                 }
                 echo $dr->cvi.";".$key.";".$old_declarant[$key].";".$new_declarant[$key]."\n";
               }
+
+              $dr->save();
             }
         }
     }
