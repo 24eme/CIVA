@@ -35,6 +35,8 @@ EOF;
         $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
         $stats = array();
+        $n=0;
+
         foreach ($dr_ids as $id) {
             if (!preg_match("/^DR-(67|68)/", $id)) {
 
@@ -43,17 +45,24 @@ EOF;
 
             $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
 
+            if(!isset($dr->validee)) {
+
+                continue;
+            }
+
+            $n++;
+
             if(!isset($dr->recolte->certification->genre)) {
 
                 continue;
             }
 
-            if(!$dr->validee) {
-
-                continue;
-            }
-
             $insee = $dr->declaration_insee;
+
+            if(!$insee) {
+                echo sprintf("ERREUR;INSEE MANQUANT;%s\n", $dr->_id);
+                exit;
+            }
 
             if(!array_key_exists($insee, $stats)) {
                 $stats[$insee]['superficie'] = 0;
@@ -84,9 +93,9 @@ EOF;
                     }
 
                     $stats[$insee]['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels_calcule;
+                    $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
                     $stats[$insee]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats[$insee]['usages_industriels'] += $lieu->usages_industriels_calcule;
+                    $stats[$insee]['usages_industriels'] += $lieu->usages_industriels;
 
                     foreach($lieu as $couleur_key => $couleur) {
                         if (!preg_match("/^couleur/", $couleur_key)) {
@@ -131,6 +140,9 @@ EOF;
             }
 
             echo sprintf("%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $insee, $stat['superficie'],$stat['volume'],$stat['volume_revendique'],$stat['usages_industriels']);
+
         }
+
+        echo sprintf("NB_DR;%s",$n)."\n";
     }
 }

@@ -44,7 +44,7 @@ EOF;
 
             $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
 
-            if(!$dr->validee) {
+            if(!isset($dr->validee)) {
 
                 continue;
             }
@@ -88,7 +88,7 @@ EOF;
                         }
                     }
 
-                    echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels_calcule);
+                    echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels);
                 }
             }
         }
