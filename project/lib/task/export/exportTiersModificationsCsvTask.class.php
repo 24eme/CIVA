@@ -159,7 +159,7 @@ EOF;
                     }
 
                     if($met->exploitant->telephone == $tiers->exploitant->telephone) {
-                        $tiers->exploitant->telephone1 = null;
+                        $tiers->exploitant->telephone = null;
                     }
 
                     if($met->fax == $tiers->fax) {

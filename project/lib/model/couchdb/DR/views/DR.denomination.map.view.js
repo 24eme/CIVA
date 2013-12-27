@@ -29,7 +29,7 @@ function(doc) {
                                 for(detail_key in cepage.detail) {
                                     detail = cepage.detail[detail_key];
                                     if (!detail.denomination) { continue; }
-                                    emit([doc.campagne, doc.cvi, detail.denomination], 1)
+                                    emit([doc.campagne, doc.cvi, appellation_key + "/" + lieu_key + "/" + cepage_key, detail.denomination], 1)
                                 }
                             } 
                         }

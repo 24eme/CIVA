@@ -1,13 +1,12 @@
 <?php
 
-class DRChangeDateTask extends sfBaseTask
+class DRDateModificationTask extends sfBaseTask
 {
 
     protected function configure()
     {
         $this->addArguments(array(
           new sfCommandArgument('id', sfCommandArgument::REQUIRED, 'id'),
-          new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date'),
         ));
 
         $this->addOptions(array(
@@ -17,13 +16,9 @@ class DRChangeDateTask extends sfBaseTask
         ));
 
         $this->namespace = 'dr';
-        $this->name = 'changeDate';
+        $this->name = 'date-modification';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
-The [maintenance:DRVT|INFO] task does things.
-Call it with:
-
-  [php symfony maintenance:DRVT|INFO]
 EOF;
     }
 
@@ -36,8 +31,6 @@ EOF;
       
       $dr = DRClient::getInstance()->find($arguments['id']);
 
-      $date = $arguments['date'];
-
       if(!$dr) {
         echo "ERREUR;".$dr->_id.";La DR n'existe pas\n";
         return;
@@ -48,15 +41,16 @@ EOF;
         return;
       }
 
-      if($dr->validee <= $date) {
+      if($dr->validee == $dr->modifiee) {
         return;
       }
 
-      $dr->validee = $date;
+      $dr->modifiee = $dr->validee;
       
-      echo "INFO;".$dr->_id.";Date de validation passé au ".$date."\n";
+      echo "INFO;".$dr->_id.";Date de modification changé à la date de validation\n";
 
       $dr->save();
+
     }
     
 }

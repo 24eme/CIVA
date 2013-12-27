@@ -165,5 +165,10 @@ abstract class _Tiers extends Base_Tiers {
         return $emails;
     }
 
+    public function getTiersExtend() {
+
+        return false;
+    }
+
     abstract public function getIdentifiant();
 }

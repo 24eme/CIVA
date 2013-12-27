@@ -124,7 +124,7 @@ class DRClient extends acCouchdbClient {
 
   protected function recodeNumber($value) {
 
-    return str_replace(",", ".", $value)*1;
+    return round(str_replace(",", ".", $value)*1, 2);
   }
 
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
