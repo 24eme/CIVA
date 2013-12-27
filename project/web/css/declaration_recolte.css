@@ -573,9 +573,57 @@ input.btn_inactif {
 
 #application_dr.mon_espace_civa .contenu h3
 {
-	font-size: 16px;
-	margin: 10px 0;
+	font-size: 20px;
+	margin: 0 0 20px;
 }
+
+#application_dr.mon_espace_civa .tableau_echeances
+{
+	border: 1px solid #c6c8c7;
+	font-size:  14px;
+	width: 100%;
+}
+
+#application_dr.mon_espace_civa .tableau_echeances th,
+#application_dr.mon_espace_civa .tableau_echeances td 
+{
+	min-width: 20%;
+	max-width: 25%; 
+	width: 20%;
+	padding: 15px;
+	text-align: center;
+}
+
+#application_dr.mon_espace_civa .tableau_echeances th
+{
+	background: #acb701 10px 50% no-repeat;
+	color: #fff;
+	font-weight: bold;
+	text-transform: uppercase;	
+}
+
+#application_dr.mon_espace_civa .tableau_echeances th.recolte { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
+#application_dr.mon_espace_civa .tableau_echeances th.contrats { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
+#application_dr.mon_espace_civa .tableau_echeances th.gamma { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }
+#application_dr.mon_espace_civa .tableau_echeances th.stocks { background-image: url('../images/pictos/pi_mon_espace_stocks.png'); }
+#application_dr.mon_espace_civa .tableau_echeances th.drm { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
+
+
+#application_dr.mon_espace_civa .tableau_echeances td 
+{
+	background: #edecec;
+	vertical-align: top;
+}
+
+#application_dr.mon_espace_civa .tableau_echeances td.alt
+{
+	background: #ddd;
+}
+
+
+
+#application_dr.mon_espace_civa .tableau_echeances a { text-decoration: underline; }
+#application_dr.mon_espace_civa .tableau_echeances a:hover { text-decoration: none; }
 
 #application_dr.mon_espace_civa .table_listing { width: auto; }
 

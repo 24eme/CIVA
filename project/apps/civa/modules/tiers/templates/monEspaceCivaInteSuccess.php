@@ -12,38 +12,28 @@
 
 	<div class="contenu">
 		<h3>Vos échéances</h3>
-		
-		<table class="table_listing">
+
+		<table class="tableau_echeances">
 			<thead>
 				<tr>
-					<th>Type</th>
-					<th>Echéance</th>
-					<th>Actions</th>
+					<th class="recolte">Alsace Récolte</th>
+					<th class="contrats">Alsace Contrats</th>
+					<th class="gamma">Espace G@mma</th>
+					<th class="stocks">Alsace stocks</th>
+					<th class="drm">Alsace DRM</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="recolte">
-					<td>Alsace Récolte</td>
-					<td class="alt">31/08/13</td>
-					<td><a href="#" class="vert">Valider</a></td>
-				</tr>
-				<tr class="contrats">
-					<td>Alsace Contrats</td>
-					<td class="alt">15/09/13</td>
-					<td><a href="#" class="orange">22 contrats à valider</a></td>
-				</tr>
-				<tr class="gamma">
-					<td>Espace G@mma</td>
-					<td class="alt">10/11/13</td>
-					<td><a href="#" class="rouge">Visualiser</a></td>
-				</tr>
-				<tr class="stocks">
-					<td>Alsace Stocks</td>
-					<td class="alt"></td>
-					<td><a href="#" class="vert">Accéder</a></td>
+				<tr>
+					<td><a href="#">Visualiser &gt;</a></td>
+					<td class="alt"><a href="#">22 contrats à valider avant le 15/09/13</a></td>
+					<td><a href="#">Accéder &gt;</a></td>
+					<td class="alt"><a href="#">A valider avant le 31/08/13</a></td>
+					<td><a href="#">A valider avant le 31/08/13</a></td>
 				</tr>
 			</tbody>
 		</table>
+		
 	</div>
 </div>
 
