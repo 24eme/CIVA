@@ -30,7 +30,7 @@ class declarationActions extends EtapesActions {
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
                 
-                return $this->redirect('@mon_espace_civa');
+                return $this->redirect('@mon_espace_civa_dr');
             } elseif ($dr_data['type_declaration'] == 'visualisation') {
                 $this->redirect('@visualisation?annee=' . $this->getUser()->getCampagne());
             } elseif ($dr_data['type_declaration'] == 'vierge') {
@@ -58,7 +58,7 @@ class declarationActions extends EtapesActions {
                 return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
-        $this->redirect('@mon_espace_civa');
+        $this->redirect('@mon_espace_civa_dr');
     }
 
     public function executeDownloadNotice() {
@@ -77,7 +77,7 @@ class declarationActions extends EtapesActions {
             $boutons = $this->getRequestParameter('boutons', null);
             if ($boutons && in_array('previous', array_keys($boutons))) {
                 
-                return $this->redirect('@mon_espace_civa'); 
+                return $this->redirect('@mon_espace_civa_dr'); 
             }   
             
             return $this->redirectByBoutonsEtapes();
@@ -221,7 +221,7 @@ class declarationActions extends EtapesActions {
         $this->setCurrentEtape('confirmation');
         if($this->getUser()->isSimpleOperateur()) {
 
-            return $this->redirect('mon_espace_civa');
+            return $this->redirect('mon_espace_civa_dr');
         }
         $this->dr = $this->getUser()->getDeclaration();
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
@@ -289,7 +289,7 @@ class declarationActions extends EtapesActions {
         }
 
         $this->getUser()->initCredentialsDeclaration();
-        $this->redirect('@mon_espace_civa');
+        $this->redirect('@mon_espace_civa_dr');
     }
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {
@@ -307,7 +307,7 @@ class declarationActions extends EtapesActions {
         }
         if ($boutons && in_array('previous', array_keys($boutons))) {
             $this->getUser()->removeDeclaration();
-            $this->redirect('@mon_espace_civa');
+            $this->redirect('@mon_espace_civa_dr');
         } elseif ($boutons && in_array('next', array_keys($boutons))) {
             $this->redirectToNextEtapes();
         }

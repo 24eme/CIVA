@@ -2,6 +2,10 @@
 
 class Current extends BaseCurrent {
 
+    public function isDREditable() {
+        return (CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
+    }
+
     public function isDSEditable() {
 
         return (CurrentClient::getCurrent()->ds_non_editable == 0 && CurrentClient::getCurrent()->ds_non_ouverte == 0);

@@ -26,7 +26,7 @@ class gammaActions extends sfActions
 		return $this->redirect(sfConfig::get('app_gamma_url_prod'));
 	}
 	if (isset($inscription) || !isset($type)) {
-		return $this->redirect('@mon_espace_civa');
+		return $this->redirect('@mon_espace_civa_gamma');
 	}
         if ($type['type_acces'] == 'plateforme') {
             return $this->redirect(sfConfig::get('app_gamma_url_prod'));

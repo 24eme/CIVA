@@ -11,7 +11,7 @@
             <label for="gamma_type_acces_test">Administrateur Plateforme de test</label>
         </div>
         <div class="ligne_form ligne_btn">
-            <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+            <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
         </div>
     </div>
 </form>

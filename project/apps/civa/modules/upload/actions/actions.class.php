@@ -163,11 +163,11 @@ class uploadActions extends EtapesActions {
             $csv->save();
             $this->getUser()->setFlash('confirmation', 'Les informations concernant la récolte de cette année ont bien été intégrées à notre base');
             if (!$nb_warnings)
-                return $this->redirect('@mon_espace_civa');
+                return $this->redirect('@mon_espace_civa_dr_apporteur');
         }
         if (!$this->csv) {
             $this->getUser()->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');
-            return $this->redirect('@mon_espace_civa');
+            return $this->redirect('@mon_espace_civa_dr_apporteur');
         }
     }
 

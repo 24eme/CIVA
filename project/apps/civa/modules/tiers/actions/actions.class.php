@@ -42,28 +42,53 @@ class tiersActions extends EtapesActions {
     	    }
         }
 
-    $this->form = new TiersLoginForm($this->compte);
+        $this->form = new TiersLoginForm($this->compte);
 
-    if ($request->isMethod(sfWebRequest::POST)) {
-        $this->form->bind($request->getParameter($this->form->getName()));
-        if ($this->form->isValid()) {
-            $t = $this->form->process();
-            $tiers[$t->type] = $t;
-            $this->getUser()->signInTiers(array_values($tiers));
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $t = $this->form->process();
+                $tiers[$t->type] = $t;
+                $this->getUser()->signInTiers(array_values($tiers));
 
+            }
         }
     }
- }
 
-    /**
-     *
-     * @param sfWebRequest $request 
-     */
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-        $this->formUploadCsv = new UploadCSVForm();
+        $this->vracs = VracTousView::getInstance()->findSortedBy($this->getUser()->getDeclarant()->_id, $this->getUser()->getCampagne(), Vrac::STATUT_VALIDE_PARTIELLEMENT);
+    }
 
+    public function executeMonEspaceDR(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+    }
+
+    public function executeMonEspaceDRApporteur(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+        $this->formUploadCsv = new UploadCSVForm();
+    }
+
+    public function executeMonEspaceDS(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+    }
+
+    public function executeMonEspaceVrac(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+        $this->user = $this->getUser()->getDeclarant();
+        $this->vracs = VracTousView::getInstance()->findSortedBy($this->user->_id);
+        $this->etapes = VracEtapes::getInstance();
+        $this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
+    }
+
+    public function executeMonEspaceGamma(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
     }
 
     /**
@@ -162,9 +187,4 @@ class tiersActions extends EtapesActions {
         $this->redirect('@mon_espace_civa');
     }
 
-    /* Inté de l'accueil */
-    public function executeMonEspaceCivaInte(sfWebRequest $request)
-    {
-    
-    }
 }
