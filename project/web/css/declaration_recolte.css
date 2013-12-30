@@ -571,7 +571,7 @@ input.btn_inactif {
     padding: 15px;
 }
 
-#application_dr.mon_espace_civa .contenu h3
+#application_dr.mon_espace_civa .contenu h3.noir
 {
 	font-size: 20px;
 	margin: 0 0 20px;

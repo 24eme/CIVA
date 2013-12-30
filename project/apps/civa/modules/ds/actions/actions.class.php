@@ -16,7 +16,7 @@ class dsActions extends sfActions {
                 return $this->redirect('ds_etape_redirect', $ds_principale);
             } elseif ($ds_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDs();
-                return  $this->redirect('mon_espace_civa');
+                return  $this->redirect('mon_espace_civa_ds');
             } elseif ($ds_data['type_declaration'] == 'visualisation') {
                 return $this->redirect('ds_visualisation', $this->getUser()->getDs());
             }    
@@ -481,7 +481,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
 
-        $this->redirect('mon_espace_civa');
+        $this->redirect('mon_espace_civa_ds');
     }
     
     public function executeInvaliderRecoltant(sfWebRequest $request) {
@@ -493,7 +493,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale);
         
-        $this->redirect('mon_espace_civa');
+        $this->redirect('mon_espace_civa_ds');
     }
 
 

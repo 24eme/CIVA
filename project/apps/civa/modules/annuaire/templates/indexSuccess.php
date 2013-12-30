@@ -101,6 +101,6 @@
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv">
-	<li><a href="<?php echo url_for('mon_espace_civa') ?>"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
+	<li><a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
 </ul>
 

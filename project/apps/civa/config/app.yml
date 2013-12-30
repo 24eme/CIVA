@@ -47,7 +47,7 @@ all:
   etapes:
     items:
       mon_espace_civa:
-        url: "@mon_espace_civa"
+        url: "@mon_espace_civa_dr"
         next_is_new_etape: exploitation
       exploitation_message:
         url: "@exploitation_message"

@@ -113,7 +113,7 @@ class vracActions extends sfActions
 
 		if ($this->vrac->isNew()) {
 			
-            return $this->redirect('mon_espace_civa');
+            return $this->redirect('mon_espace_civa_vrac');
 		}
 
 		$this->user = $this->getUser()->getDeclarant();
@@ -121,7 +121,7 @@ class vracActions extends sfActions
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
 			
-            return $this->redirect('mon_espace_civa');
+            return $this->redirect('mon_espace_civa_vrac');
 		}
 
 		$this->form = new VracSuppressionForm($this->vrac);
