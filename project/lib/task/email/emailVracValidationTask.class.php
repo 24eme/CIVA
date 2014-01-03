@@ -40,11 +40,14 @@ EOF;
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-	$contextInstance = sfContext::createInstance($this->configuration);
+    $routing = clone ProjectConfiguration::getAppRouting();
+	  $contextInstance = sfContext::createInstance($this->configuration);
+    $contextInstance->set('routing', $routing);
+
   	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
     foreach ($contrats as $contrat) {
     	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
-    	$document->generatePDF();
+      $document->generatePDF();
     	$emails = $contrat->getEmails();
                     foreach($emails as $email) {
                     	VracMailer::getInstance()->validationContrat($contrat, $email, $document);
