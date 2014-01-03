@@ -14,6 +14,21 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
         return $this->civaba;
     }
 
+    public function isDeclarantContratForSignature() {
+
+        return !$this->hasAcheteur();
+    }
+
+    public function isDeclarantContratForResponsable() {
+
+        return true;
+    }
+
+    public function isDeclarantGamma() {
+
+        return ($this->no_accises) ? true : false;
+    }
+
     public function hasAcheteur() {
         if(!$this->hasCvi()) {
             return false;            

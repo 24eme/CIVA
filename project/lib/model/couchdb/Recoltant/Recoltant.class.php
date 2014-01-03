@@ -6,7 +6,17 @@ class Recoltant extends BaseRecoltant {
         return $this->getNom() . " - Récoltant";
     }
 
+    public function isDeclarantDR() {
+
+        return true;
+    }
+
     public function isDeclarantStock() {
+
+        return true;
+    }
+
+    public function isDeclarantContratForSignature() {
 
         return true;
     }

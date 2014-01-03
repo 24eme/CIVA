@@ -105,6 +105,36 @@ abstract class _Tiers extends Base_Tiers {
         return false;
     }
 
+    public function isDeclarantDR() {
+
+        return false;
+    }
+
+    public function isDeclarantDRAcheteur() {
+
+        return false;
+    }
+
+    public function isDeclarantContrat() {
+
+        return $this->isDeclarantContratForSignature() || $this->isDeclarantContratForResponsable();
+    }
+
+    public function isDeclarantContratForSignature() {
+
+        return false;
+    }
+
+    public function isDeclarantContratForResponsable() {
+        
+        return false;
+    }
+
+    public function isDeclarantGamma() {
+
+        return false;
+    }
+
     public function getRegion() {
         return null;
     }

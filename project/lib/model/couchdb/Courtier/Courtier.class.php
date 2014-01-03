@@ -10,6 +10,16 @@ class Courtier extends BaseCourtier {
         return $this->getNom() . " - "."Courtier";
     }
 
+    public function isDeclarantContratForSignature() {
+
+        return true;
+    }
+
+    public function isDeclarantContratForResponsable() {
+
+        return true;
+    }
+
     public function getIdentifiant() {
 
         return $this->siren;

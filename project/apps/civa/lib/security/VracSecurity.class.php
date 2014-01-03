@@ -1,6 +1,6 @@
 <?php
 
-class VracSecurity {
+class VracSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
     const CONSULTATION = 'CONSULTATION';
@@ -15,12 +15,12 @@ class VracSecurity {
     protected $vrac;
     protected $myUser;
 
-    public static function getInstance($myUser, $vrac) {
+    public static function getInstance($myUser, $vrac = null) {
 
         return new VracSecurity($myUser, $vrac);
     }
 
-    public function __construct($myUser, $vrac) {
+    public function __construct($myUser, $vrac = null) {
         $this->myUser = $myUser;
         $this->vrac = $vrac;
         $this->tiers = $this->myUser->getDeclarant();
@@ -33,37 +33,34 @@ class VracSecurity {
 
         /*** DECLARANT ***/
 
-        if(in_array(self::DECLARANT, $droits) && in_array($this->tiers->type, array('Courtier', 'Acheteur', 'Recoltant'))) {
+        if(!$this->tiers->isDeclarantContrat()) {
             
-            return true;
+            return false;
         }
 
-        if(in_array(self::DECLARANT, $droits) && $this->tiers->type == 'MetteurEnMarche' && !$this->tiers->hasAcheteur()) {
-
-            return true;
+        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
+            
+            return false;
         }
 
         if(in_array(self::DECLARANT, $droits)) {
 
-            return false;
+            return true;
         }
 
         /*** CREATION ***/
 
-        if(in_array(self::CREATION, $droits) && in_array($this->tiers->type, array('Courtier', 'Acheteur'))) {
+        if(in_array(self::CREATION, $droits) && $this->tiers->isDeclarantContratForResponsable()) {
 
-            return true;
-        }
-
-        if(in_array(self::CREATION, $droits) && $this->tiers->type == 'MetteurEnMarche' && !$this->tiers->hasAcheteur()) {
-
-            return true;
+            return false;
         }
 
         if(in_array(self::CREATION, $droits)) {
 
-            return false;
+            return true;
         }
+
+        /*** EDITION ***/
 
         if(!$this->vrac) {
 
@@ -74,8 +71,6 @@ class VracSecurity {
 
             return false;
         }
-
-        /*** EDITION ***/
 
         if(in_array(self::EDITION, $droits) && !$this->vrac->isProprietaire($this->tiers->_id)) {
 

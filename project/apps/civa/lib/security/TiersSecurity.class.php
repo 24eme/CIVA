@@ -1,6 +1,6 @@
 <?php
 
-class TiersSecurity {
+class TiersSecurity implements SecurityInterface {
 
     const DR = 'DR';
     const DR_APPORTEUR = 'DR_APPORTEUR';
@@ -18,6 +18,7 @@ class TiersSecurity {
 
     public function __construct($myUser) {
         $this->myUser = $myUser;
+        $this->tiers = $this->myUser->getDeclarant();
     }
 
     public function isAuthorized($droits) {
@@ -27,27 +28,27 @@ class TiersSecurity {
 
         if(in_array(self::DR, $droits)) {
 
-            return $this->myUser->hasCredential(myUser::CREDENTIAL_DECLARATION);
+            return DRSecurity::getInstance($this->myUser)->isAuthorized(DRSecurity::DECLARANT);
         }
 
         if(in_array(self::DR_APPORTEUR, $droits)) {
 
-            return $this->myUser->hasCredential(myUser::CREDENTIAL_ACHETEUR);
+            return DRAcheteurSecurity::getInstance($this->myUser)->isAuthorized(DRAcheteurSecurity::DECLARANT);
         }
 
         if(in_array(self::DS, $droits)) {
 
-            return $this->myUser->getTiers()->isDeclarantStock();
+            return DSSecurity::getInstance($this->myUser)->isAuthorized(DSSecurity::DECLARANT);
         }
         
         if(in_array(self::VRAC, $droits)) {
 
-            return VracSecurity::getInstance($this->myUser, null)->isAuthorized(VracSecurity::DECLARANT);
+            return VracSecurity::getInstance($this->myUser)->isAuthorized(VracSecurity::DECLARANT);
         }
 
         if(in_array(self::GAMMA, $droits)) {
 
-            return $this->myUser->hasCredential(myUser::CREDENTIAL_DECLARATION);
+            return GammaSecurity::getInstance($this->myUser)->isAuthorized(GammaSecurity::DECLARANT);
         }
 
         return false;

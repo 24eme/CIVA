@@ -132,6 +132,13 @@ class CompteTiers extends BaseCompteTiers {
         return $this->getCompteSociete()->tiers;
     }
 
+    public function hasDroit($droit) {
+
+        $droits = $this->getDroits();
+
+        return in_array($droit, $droits->toArray(true, false));
+    }
+
     public function getDroits() {
         if($this->isCompteSociete() && count($this->_get('droits')->toArray(true, false)) == 0) {
             $this->droits = array_keys($this->getDroitsTiers());
@@ -144,26 +151,27 @@ class CompteTiers extends BaseCompteTiers {
         $droits = array();
         $tiers = $this->getTiersObject();
         foreach ($tiers as $t) {
-            if ($t->type == "Recoltant") {
+            if($t->isDeclarantDR()) {
                 $droits[_CompteClient::DROIT_DR_RECOLTANT] = null;
+            }
+            if($t->isDeclarantStock()) {
                 $droits[_CompteClient::DROIT_DS_DECLARANT] = null;
+            }
+
+            if($t->isDeclarantContratForSignature()) {
                 $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
-            } elseif ($t->type == "MetteurEnMarche") {
-                if ($t->no_accises) {
-                    $droits[_CompteClient::DROIT_GAMMA] = null;
-                }
-                if (!$t->hasAcheteur()) {
-                    $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
-                    $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
-                }
-            } elseif ($t->type == "Acheteur") {
+            }
+
+            if($t->isDeclarantContratForSignature()) {
+                $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
+            }
+
+            if($t->isDeclarantGamma()) {
+                $droits[_CompteClient::DROIT_GAMMA] = null;
+            }
+
+            if($t->isDeclarantDRAcheteur()) {
                 $droits[_CompteClient::DROIT_DR_ACHETEUR] = null;
-                $droits[_CompteClient::DROIT_DS_DECLARANT] = null;
-                $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
-                $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
-            } elseif ($t->type == "Courtier") {
-                $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
-                $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
             }
         }
 
