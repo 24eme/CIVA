@@ -78,6 +78,8 @@ class ExportDRXml {
                     $volume_revendique = $object->getVolumeRevendique();
                     $usages_industriels = $object->getUsagesIndustriels();
 
+                    echo $object->getHash().":".$volume_revendique."\n";
+
                     /*$volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
                     $dplc = round($dplc + $usage_industriel_saisi, 2);*/
 
@@ -185,12 +187,17 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                                echo $detail->getHash().":".$detail->getVolumeRevendique()."\n";
                                 if($detail->canHaveUsagesLiesSaisi()) {
-                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique(); //Volume revendique
+                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                     $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                 } else {
                                     $col['exploitant']['L15'] = 0;
                                     $col['exploitant']['L16'] = 0;
+                                }
+
+                                if ($col['exploitant']['L15'] < 0) {
+                                    $col['exploitant']['L15'] = 0;
                                 }
 
                                 $col['exploitant']['L17'] = 0; //HS
@@ -200,7 +207,7 @@ class ExportDRXml {
                                 if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                                     $col['exploitant']['L14'] = $detail->volume;
                                 } elseif($appellation->getKey() == 'appellation_VINTABLE') {
-                                    $l14 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
+                                    $l14 = $detail->volume ;
                                     if ($l14 < 0) {
                                         $l14 = 0;
                                     }
@@ -208,12 +215,6 @@ class ExportDRXml {
                                     if ($this->destinataire == self::DEST_CIVA) {
                                         $col['exploitant']['L14'] = $detail->volume;
                                     }
-                                } else {
-                                    $l15 = $detail->volume - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts');
-                                    if ($l15 < 0) {
-                                        $l15 = 0;
-                                    }
-                                    $col['exploitant']['L15'] = $l15;
                                 }
 
                                 uksort($col['exploitant'], 'exportDRXml::sortXML');
