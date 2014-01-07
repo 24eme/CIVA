@@ -78,8 +78,6 @@ class ExportDRXml {
                     $volume_revendique = $object->getVolumeRevendique();
                     $usages_industriels = $object->getUsagesIndustriels();
 
-                    echo $object->getHash().":".$volume_revendique."\n";
-
                     /*$volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
                     $dplc = round($dplc + $usage_industriel_saisi, 2);*/
 
@@ -187,7 +185,6 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                echo $detail->getHash().":".$detail->getVolumeRevendique()."\n";
                                 if($detail->canHaveUsagesLiesSaisi()) {
                                     $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                     $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
