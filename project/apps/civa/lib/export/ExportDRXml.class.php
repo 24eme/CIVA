@@ -75,13 +75,8 @@ class ExportDRXml {
                         }
                     }
 
-                    if($this->destinataire == self::DEST_CIVA) {
-                        $volume_revendique = $object->findVolumeRevendique();
-                        $usages_industriels = $object->getUsagesIndustriels();
-                    } elseif($this->destinataire == self::DEST_DOUANE) {
-                        $volume_revendique = $object->getVolumeRevendiqueWithDplc();
-                        $usages_industriels = $object->getUsagesIndustriels();
-                    }
+                    $volume_revendique = $object->getVolumeRevendique();
+                    $usages_industriels = $object->getUsagesIndustriels();
 
                     /*$volume_revendique = round($volume_revendique - $usage_industriel_saisi, 2);
                     $dplc = round($dplc + $usage_industriel_saisi, 2);*/
