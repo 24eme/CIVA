@@ -185,17 +185,11 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                if($detail->canHaveUsagesLiesSaisi()) {
-                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
-                                    $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
-                                } else {
-                                    $col['exploitant']['L15'] = 0;
-                                    $col['exploitant']['L16'] = 0;
-                                }
-
+                                $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                 if ($col['exploitant']['L15'] < 0) {
                                     $col['exploitant']['L15'] = 0;
                                 }
+                                $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
 
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
