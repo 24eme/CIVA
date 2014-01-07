@@ -577,24 +577,32 @@ input.btn_inactif {
 	margin: 0 0 20px;
 }
 
-#application_dr.mon_espace_civa .tableau_echeances
+#application_dr.mon_espace_civa .bloc_acceuil
 {
 	border: 1px solid #c6c8c7;
 	font-size:  14px;
-	width: 100%;
+	width: 230px;
+	float:left;
+	border-right: none;
+	border-left: none;
 }
 
-#application_dr.mon_espace_civa .tableau_echeances th,
-#application_dr.mon_espace_civa .tableau_echeances td 
+#application_dr.mon_espace_civa .bloc_acceuil.bloc_acceuil_first {
+	border-left: 1px solid #c6c8c7;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.bloc_acceuil_last {
+	border-right: 1px solid #c6c8c7;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header,
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content 
 {
-	min-width: 20%;
-	max-width: 25%; 
-	width: 20%;
 	padding: 15px;
 	text-align: center;
 }
 
-#application_dr.mon_espace_civa .tableau_echeances th
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header
 {
 	background: #acb701 10px 50% no-repeat;
 	color: #fff;
@@ -602,28 +610,28 @@ input.btn_inactif {
 	text-transform: uppercase;	
 }
 
-#application_dr.mon_espace_civa .tableau_echeances th.recolte { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
-#application_dr.mon_espace_civa .tableau_echeances th.contrats { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
-#application_dr.mon_espace_civa .tableau_echeances th.gamma { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }
-#application_dr.mon_espace_civa .tableau_echeances th.stocks { background-image: url('../images/pictos/pi_mon_espace_stocks.png'); }
-#application_dr.mon_espace_civa .tableau_echeances th.drm { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.recolte .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.contrats .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.gamma .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.stocks .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_stocks.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.drm .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
 
 
-#application_dr.mon_espace_civa .tableau_echeances td 
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content
 {
 	background: #edecec;
 	vertical-align: top;
 }
 
-#application_dr.mon_espace_civa .tableau_echeances td.alt
+#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_content
 {
 	background: #ddd;
 }
 
 
 
-#application_dr.mon_espace_civa .tableau_echeances a { text-decoration: underline; }
-#application_dr.mon_espace_civa .tableau_echeances a:hover { text-decoration: none; }
+#application_dr.mon_espace_civa .bloc_acceuil a { text-decoration: underline; }
+#application_dr.mon_espace_civa .bloc_acceuil a:hover { text-decoration: none; }
 
 #application_dr.mon_espace_civa .table_listing { width: auto; }
 

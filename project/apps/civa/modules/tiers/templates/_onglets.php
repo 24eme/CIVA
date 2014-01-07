@@ -1,5 +1,7 @@
 <ul id="onglets_majeurs" class="clearfix">
+	<?php if(count(TiersSecurity::getInstance($sf_user)->getBlocs()) > 1): ?>
 	<li class="<?php if($active== 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa") ?>">Accueil</a></li>
+	<?php endif; ?>
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
 	<li class="<?php if($active== 'recolte'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr") ?>">Alsace Récolte</a></li>
 	<?php endif; ?>

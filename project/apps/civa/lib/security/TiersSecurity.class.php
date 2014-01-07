@@ -54,4 +54,26 @@ class TiersSecurity implements SecurityInterface {
         return false;
     }
 
+    public function getBlocs() {
+        $blocs = array();
+        foreach($this->getDroitUrls() as $droit => $url) {
+            if ($this->isAuthorized($droit)) {
+                $blocs[$droit] = $url;
+            }
+        }
+
+        return $blocs;
+    }
+
+    public function getDroitUrls() {
+        
+        return array(
+            TiersSecurity::DR => 'mon_espace_civa_dr',
+            TiersSecurity::DR_APPORTEUR => 'mon_espace_civa_dr_apporteur',
+            TiersSecurity::VRAC => 'mon_espace_civa_vrac',
+            TiersSecurity::GAMMA => 'mon_espace_civa_gamma',
+            TiersSecurity::DS => 'mon_espace_civa_ds',
+        );
+    }
+
 }

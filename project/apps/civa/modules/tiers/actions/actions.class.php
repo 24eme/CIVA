@@ -59,25 +59,44 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         $this->vracs = VracTousView::getInstance()->findSortedBy($this->getUser()->getDeclarant()->_id, $this->getUser()->getCampagne(), Vrac::STATUT_VALIDE_PARTIELLEMENT);
+
+        $blocs = TiersSecurity::getInstance($this->getUser())->getBlocs();
+
+        $this->nb_blocs = count($blocs);
+            
+        if($this->nb_blocs == 1) {
+            foreach($blocs as $droit => $url) {
+
+                return $this->redirect($url);
+            }
+        } 
     }
 
     public function executeMonEspaceDR(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR);
+
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceDRApporteur(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR_APPORTEUR);
+
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         $this->formUploadCsv = new UploadCSVForm();
     }
 
     public function executeMonEspaceDS(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DS);
+
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::VRAC);
+
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         $this->user = $this->getUser()->getDeclarant();
@@ -87,6 +106,8 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeMonEspaceGamma(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::GAMMA);
+
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
     }
@@ -186,5 +207,20 @@ class tiersActions extends EtapesActions {
         $this->getUser()->signIn($login_current_user);
         $this->redirect('@mon_espace_civa');
     }
+
+    protected function secureTiers($droits) {
+        if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
+            
+            return $this->forwardSecure();
+        }
+    }
+
+    protected function forwardSecure()
+    {    
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    } 
+
 
 }
