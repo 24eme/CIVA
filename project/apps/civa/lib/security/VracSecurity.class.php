@@ -50,7 +50,7 @@ class VracSecurity implements SecurityInterface {
 
         /*** CREATION ***/
 
-        if(in_array(self::CREATION, $droits) && $this->tiers->isDeclarantContratForResponsable()) {
+        if(in_array(self::CREATION, $droits) && !$this->tiers->isDeclarantContratForResponsable()) {
 
             return false;
         }
