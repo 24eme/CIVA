@@ -17,9 +17,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
-                    <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Visualiser ma déclaration <?php echo $sf_user->getCampagne() ?></a>
-                    <?php elseif(CurrentClient::getCurrent()->isDREditable()): ?>
+                    <?php if(CurrentClient::getCurrent()->isDREditable() && !$sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
                     <a href="<?php echo url_for('mon_espace_civa_dr') ?>">A valider avant le 10/12/<?php echo $sf_user->getCampagne() ?></a> <br />
                     <?php else: ?>
                     <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Accéder</a>
@@ -41,10 +39,25 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_header">Alsace Contrats</div>
                 <div class="bloc_acceuil_content">
-                    <?php if(count($vracs) > 0): ?>
-                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo count($vracs) ?> contrat(s) non signé(s)</a>
-                    <?php else: ?>
-                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>">Accéder</a>
+                    <?php $acceder = true ?>
+                    <?php if($vracs['CONTRAT_A_TERMINER']): ?>
+                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat(s) à finir de créer</a><br />
+                    <?php $acceder = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_A_SIGNER']): ?>
+                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat(s) à signer</a><br />
+                    <?php $acceder = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
+                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de signature</a><br />
+                    <?php $acceder = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
+                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat(s) à enlever</a><br />
+                    <?php $acceder = false ?>
+                    <?php endif; ?>
+                    <?php if($acceder): ?>
+                    <a href="<?php echo url_for('mon_espace_civa_vrac') ?>">Accéder</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -54,11 +67,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
                 <div class="bloc_acceuil_header">Alsace Gamm@</div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->getTiers('MetteurEnMarche')->gamma->statut == "INSCRIT"): ?>
-                        <a href="<?php echo url_for(sfConfig::get('app_gamma_url_prod')) ?>">Accéder</a>
-                    <?php else: ?>
-                        <a href="<?php echo url_for('mon_espace_civa_gamma') ?>">Accéder</a>
-                    <?php endif; ?>
+                    <a href="<?php echo url_for('mon_espace_civa_gamma') ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -67,9 +76,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_header">Alsace stocks</div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->hasLieuxStockage() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
-                        <a href="<?php echo url_for('mon_espace_civa_ds') ?>">Visualiser ma déclaration <?php echo $sf_user->getCampagne() ?></a>
-                    <?php elseif($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable()): ?>
+                    <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
                         <a href="<?php echo url_for('mon_espace_civa_ds') ?>">A valider avant le 31/08/<?php echo $sf_user->getCampagne() ?></a>
                     <?php else: ?>
                         <a href="<?php echo url_for('mon_espace_civa_ds') ?>">Accéder</a>

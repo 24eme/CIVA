@@ -58,7 +58,42 @@ class tiersActions extends EtapesActions {
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-        $this->vracs = VracTousView::getInstance()->findSortedBy($this->getUser()->getDeclarant()->_id, $this->getUser()->getCampagne(), Vrac::STATUT_VALIDE_PARTIELLEMENT);
+
+        $this->vracs = array(
+            'CONTRAT_A_TERMINER' => 0,
+            'CONTRAT_A_SIGNER' => 0,
+            'CONTRAT_EN_ATTENTE_SIGNATURE' => 0,
+            'CONTRAT_A_ENLEVER' => 0,
+        );
+
+        $tiers = $this->getUser()->getTiers();
+        $vracs = VracTousView::getInstance()->findSortedBy($tiers->_id);
+
+        foreach($vracs as $vrac) {
+            $item = $vrac->value;
+            if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
+               $this->vracs['CONTRAT_A_TERMINER'] += 1; 
+            }
+
+            if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
+                if($item->soussignes->vendeur->identifiant == $tiers->_id && !$item->soussignes->vendeur->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if($item->soussignes->acheteur->identifiant == $tiers->_id && !$item->soussignes->acheteur->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if($item->soussignes->mandataire->identifiant == $tiers->_id && !$item->soussignes->mandataire->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if($item->is_proprietaire) {
+                    $this->vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1; 
+                }
+            }   
+
+            if($item->is_proprietaire && ($item->statut == Vrac::STATUT_VALIDE || $item->statut == Vrac::STATUT_ENLEVEMENT)) {
+                $this->vracs['CONTRAT_A_ENLEVER'] += 1; 
+            }
+        }
 
         $blocs = TiersSecurity::getInstance($this->getUser())->getBlocs();
 
@@ -67,7 +102,7 @@ class tiersActions extends EtapesActions {
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
 
-                return $this->redirect($url);
+                //return $this->redirect($url);
             }
         } 
     }
