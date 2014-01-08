@@ -14,6 +14,7 @@ $(document).ready( function()
 	videInputFocus();
 	initNettoyageChamps();
 	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
+	hauteurEgale('.bloc_acceuil_content');
 	initJSTitle();
 	initFlashMessage();
 });

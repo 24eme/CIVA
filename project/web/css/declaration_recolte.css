@@ -577,6 +577,33 @@ input.btn_inactif {
 	margin: 0 0 20px;
 }
 
+#application_dr.mon_espace_civa .blocs_accueil_container_2 {
+ 	width: 542px;
+ 	margin: 0 auto;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_2 .bloc_acceuil {
+	width: 270px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_3 {
+ 	width: 752px;
+ 	margin: 0 auto;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_3 .bloc_acceuil {
+	width: 250px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_4 .bloc_acceuil {
+	width: 230px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_5 .bloc_acceuil {
+	width: 184px;
+	font-size: 13px;
+}
+
 #application_dr.mon_espace_civa .bloc_acceuil
 {
 	border: 1px solid #c6c8c7;
