@@ -660,49 +660,15 @@ input.btn_inactif {
 #application_dr.mon_espace_civa .bloc_acceuil a { text-decoration: underline; }
 #application_dr.mon_espace_civa .bloc_acceuil a:hover { text-decoration: none; }
 
-#application_dr.mon_espace_civa .table_listing { width: auto; }
+#application_dr.mon_espace_civa .bloc_acceuil { width: auto; }
 
-#application_dr.mon_espace_civa .table_listing a { text-decoration: underline; }
+#application_dr.mon_espace_civa .bloc_acceuil a { text-decoration: underline; }
 
-#application_dr.mon_espace_civa .table_listing a.vert { color: #848c03; }
+#application_dr.mon_espace_civa .bloc_acceuil a.vert { color: #848c03; }
 
-#application_dr.mon_espace_civa .table_listing a.orange { color: #e59f25; }
+#application_dr.mon_espace_civa .bloc_acceuil a.orange { color: #e59f25; }
 
-#application_dr.mon_espace_civa .table_listing a.rouge { color: #f30100; }
-
-#application_dr.mon_espace_civa .table_listing th,
-#application_dr.mon_espace_civa .table_listing td 
-{
-	padding-left: 10px;
-	padding-right: 10px; 
-	width: 200px; 
-}
-
-#application_dr.mon_espace_civa .table_listing th
-{
-	background: #dcdfa9;
-	border-left: 1px solid #edecec;
-	border-right: 1px solid #edecec;
-	color: #848c03;
-}
-
-#application_dr.mon_espace_civa .table_listing tr td:first-child 
-{
-	background: 7px 50% no-repeat;
-	padding-left: 30px;
-}
-
-#application_dr.mon_espace_civa .table_listing .recolte td:first-child { background-image: url('../images/pictos/pi_recolte.png'); }
-
-#application_dr.mon_espace_civa .table_listing .contrats td:first-child 
-{ 
-	background-image: url('../images/pictos/pi_contrats.png'); 
-	background-position: 4px 50%;
-}
-
-#application_dr.mon_espace_civa .table_listing .gamma td:first-child { background-image: url('../images/pictos/pi_gamma.png'); }
-
-#application_dr.mon_espace_civa .table_listing .stocks td:first-child { background-image: url('../images/pictos/pi_stocks.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil a.rouge { color: #f30100; }
 
 /**
  * Alsace récolte / Espace contrats
