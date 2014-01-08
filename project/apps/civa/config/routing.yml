@@ -232,9 +232,9 @@ mon_espace_civa_dr:
   url:   /mon_espace_civa/dr
   param: { module: tiers, action: monEspaceDR }
 
-mon_espace_civa_dr_apporteur:
-  url:   /mon_espace_civa/dr_apporteur
-  param: { module: tiers, action: monEspaceDRApporteur }
+mon_espace_civa_dr_acheteur:
+  url:   /mon_espace_civa/dr_acheteur
+  param: { module: tiers, action: monEspaceDRAcheteur }
 
 mon_espace_civa_ds:
   url:   /mon_espace_civa/ds

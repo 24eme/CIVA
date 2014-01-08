@@ -29,8 +29,6 @@ class GammaSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-
-
         if(!$this->tiers->isDeclarantGamma()) {
             
             return false;

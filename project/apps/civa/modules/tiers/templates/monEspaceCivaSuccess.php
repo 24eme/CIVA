@@ -21,7 +21,6 @@
                     <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Visualiser ma déclaration <?php echo $sf_user->getCampagne() ?></a>
                     <?php elseif(CurrentClient::getCurrent()->isDREditable()): ?>
                     <a href="<?php echo url_for('mon_espace_civa_dr') ?>">A valider avant le 10/12/<?php echo $sf_user->getCampagne() ?></a> <br />
-                    <a href="<?php echo url_for('mon_espace_civa_dr') ?>">A valider avant le 10/12/<?php echo $sf_user->getCampagne() ?></a>
                     <?php else: ?>
                     <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Accéder</a>
                     <?php endif; ?>
@@ -29,15 +28,11 @@
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_APPORTEUR)): ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->getTiers('MetteurEnMarche')->gamma->statut == "INSCRIT"): ?>
-                        <a href="<?php echo url_for(sfConfig::get('app_gamma_url_prod')) ?>">Accéder</a>
-                    <?php else: ?>
-                        <a href="<?php echo url_for('mon_espace_civa_gamma') ?>">Accéder</a>
-                    <?php endif; ?>
+                     <a href="<?php echo url_for('mon_espace_civa_dr_acheteur') ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

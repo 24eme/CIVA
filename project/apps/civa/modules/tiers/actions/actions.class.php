@@ -79,8 +79,8 @@ class tiersActions extends EtapesActions {
         $this->setCurrentEtape('mon_espace_civa');
     }
 
-    public function executeMonEspaceDRApporteur(sfWebRequest $request) {
-        $this->secureTiers(TiersSecurity::DR_APPORTEUR);
+    public function executeMonEspaceDRAcheteur(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');

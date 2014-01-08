@@ -5,8 +5,8 @@
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
 	<li class="<?php if($active== 'recolte'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr") ?>">Alsace Récolte</a></li>
 	<?php endif; ?>
-	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_APPORTEUR)): ?>
-	<li class="<?php if($active== 'recolte_apporteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_apporteur") ?>">Alsace Récolte</a></li>
+	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
+	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur") ?>">Alsace Récolte</a></li>
 	<?php endif; ?>
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::VRAC)): ?>
 	<li class="<?php if($active== 'vrac'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_vrac") ?>">Alsace Contrats</a></li>

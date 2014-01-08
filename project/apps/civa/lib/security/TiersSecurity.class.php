@@ -3,7 +3,7 @@
 class TiersSecurity implements SecurityInterface {
 
     const DR = 'DR';
-    const DR_APPORTEUR = 'DR_APPORTEUR';
+    const DR_ACHETEUR = 'DR_ACHETEUR';
     const DS = 'DS';
     const GAMMA = 'GAMMA';
     const VRAC = 'VRAC';
@@ -31,7 +31,7 @@ class TiersSecurity implements SecurityInterface {
             return DRSecurity::getInstance($this->myUser)->isAuthorized(DRSecurity::DECLARANT);
         }
 
-        if(in_array(self::DR_APPORTEUR, $droits)) {
+        if(in_array(self::DR_ACHETEUR, $droits)) {
 
             return DRAcheteurSecurity::getInstance($this->myUser)->isAuthorized(DRAcheteurSecurity::DECLARANT);
         }
@@ -69,7 +69,7 @@ class TiersSecurity implements SecurityInterface {
         
         return array(
             TiersSecurity::DR => 'mon_espace_civa_dr',
-            TiersSecurity::DR_APPORTEUR => 'mon_espace_civa_dr_apporteur',
+            TiersSecurity::DR_ACHETEUR => 'mon_espace_civa_dr_acheteur',
             TiersSecurity::VRAC => 'mon_espace_civa_vrac',
             TiersSecurity::GAMMA => 'mon_espace_civa_gamma',
             TiersSecurity::DS => 'mon_espace_civa_ds',
