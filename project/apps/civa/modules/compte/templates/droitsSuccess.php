@@ -7,7 +7,8 @@
                 <table cellpadding="0" cellspacing="0" class="table_donnees pyjama_auto">
                 	<thead>
 					<tr>
-						<th>Nom</th>
+						<th style="width: auto;">Nom</th>
+						<th>Login</th>
 						<th>Email</th>
 						<?php foreach($compte->getDroitsTiers() as $droit): ?>
 							<th><?php echo $droit ?></th>
@@ -19,6 +20,7 @@
 					<?php foreach($form->getComptes() as $compte_personne): ?>
 						<tr style="<?php echo ($compte_personne->isCompteSociete()) ? "font-weight: bold;" : null ?>">
 						<td><a href="<?php echo url_for('compte_personne_modifier', array('login' => $compte_personne->login)) ?>"><?php echo $compte_personne->nom; ?></a></td>
+						<td><?php echo $compte_personne->login ?></td>
 						<td><?php echo $compte_personne->email; ?></td>
 						<?php foreach($compte_personne->getDroitsTiers() as $key => $libelle): ?>
 						<td style="text-align: center;">
@@ -37,7 +39,7 @@
 					</tbody>
 				</table>
 
-                <div class="ligne_form ligne_btn">
+                <div style="margin-left: 0;" class="ligne_form ligne_btn">
                     <a href="<?php echo url_for('compte_personne_ajouter') ?>">Ajouter un compte</a>
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
                 </div>

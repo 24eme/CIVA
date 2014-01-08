@@ -400,6 +400,7 @@ ul#liens_evitement li.deconnexion a
 #header #acces_directs ul li a { color: #c4d00a; }
 
 #header #acces_directs ul li.admin a { color: #ff0000; }
+a.admin { color: #ff0000; }
 /**
  * Footer
  ******************************************/
