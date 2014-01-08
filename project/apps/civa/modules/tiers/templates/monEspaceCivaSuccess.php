@@ -49,7 +49,7 @@
                     <?php $acceder = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
-                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de signature</a><br />
+                        <a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de signature(s)</a><br />
                     <?php $acceder = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
