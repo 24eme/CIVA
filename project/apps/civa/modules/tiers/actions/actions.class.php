@@ -102,7 +102,7 @@ class tiersActions extends EtapesActions {
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
 
-                //return $this->redirect($url);
+                return $this->redirect($url);
             }
         } 
     }
