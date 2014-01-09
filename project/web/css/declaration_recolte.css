@@ -661,10 +661,10 @@ input.btn_inactif {
 }
 
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p {
-	font-style: italic;
 }
 
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p.mineure {
+	font-style: italic;
 	color: #5e5e5e;
 }
 
