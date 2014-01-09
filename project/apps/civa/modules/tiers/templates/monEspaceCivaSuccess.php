@@ -89,7 +89,7 @@
                 <div class="bloc_acceuil_header">Alsace stocks</div>
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
-                        <p><strong>A valider</strong> avant le 31/08/<?php echo $sf_user->getCampagne() ?></p>
+                        <p><strong>A valider</strong> avant le 31/08/<?php echo date('Y') ?></p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
