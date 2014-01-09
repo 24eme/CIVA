@@ -629,12 +629,22 @@ input.btn_inactif {
 	text-align: center;
 }
 
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content {
+	padding: 15px 10px;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_footer {
+	text-align: center;
+	padding: 5px 15px 15px 15px;
+}
+
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header
 {
 	background: #acb701 10px 50% no-repeat;
 	color: #fff;
 	font-weight: bold;
-	text-transform: uppercase;	
+	text-transform: uppercase;
+	text-align: center;
 }
 
 #application_dr.mon_espace_civa .bloc_acceuil.recolte .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
@@ -644,13 +654,22 @@ input.btn_inactif {
 #application_dr.mon_espace_civa .bloc_acceuil.drm .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
 
 
-#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content,
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_footer
 {
 	background: #edecec;
-	vertical-align: top;
 }
 
-#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_content
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p {
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p.mineure {
+	color: #5e5e5e;
+	font-style: italic;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_content,
+#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_footer
 {
 	background: #ddd;
 }
