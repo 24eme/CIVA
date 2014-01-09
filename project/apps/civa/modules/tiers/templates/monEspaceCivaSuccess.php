@@ -18,7 +18,7 @@
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if(CurrentClient::getCurrent()->isDREditable() && !$sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
-                    <p>A valider avant le 10/12/<?php echo $sf_user->getCampagne() ?></p>
+                    <p><strong>A valider</strong> avant le 10/12/<?php echo $sf_user->getCampagne() ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
@@ -47,11 +47,11 @@
                 <div class="bloc_acceuil_content">
                     <?php $infos = true ?>
                     <?php if($vracs['CONTRAT_A_TERMINER']): ?>
-                        <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat<?php echo ($vracs['CONTRAT_A_TERMINER'] > 1) ? "s" : "" ?> à finaliser</p>
+                        <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat<?php echo ($vracs['CONTRAT_A_TERMINER'] > 1) ? "s" : "" ?> <strong>à finaliser</strong></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_SIGNER']): ?>
-                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> à signer</p>
+                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> <strong>à signer</strong></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
@@ -59,7 +59,7 @@
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
-                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> à enlever</p>
+                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> <strong>à enlever</strong></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($infos): ?>
@@ -89,7 +89,7 @@
                 <div class="bloc_acceuil_header">Alsace stocks</div>
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
-                        <p>A valider avant le 31/08/<?php echo $sf_user->getCampagne() ?></p>
+                        <p><strong>A valider</strong> avant le 31/08/<?php echo $sf_user->getCampagne() ?></p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
