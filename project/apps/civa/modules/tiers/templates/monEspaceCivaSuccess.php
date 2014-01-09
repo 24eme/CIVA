@@ -47,19 +47,19 @@
                 <div class="bloc_acceuil_content">
                     <?php $infos = true ?>
                     <?php if($vracs['CONTRAT_A_TERMINER']): ?>
-                        <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat(s) à finaliser</p>
+                        <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat<?php echo ($vracs['CONTRAT_A_TERMINER'] > 1) ? "s" : "" ?> à finaliser</p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_SIGNER']): ?>
-                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat(s) à signer</p>
+                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> à signer</p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
-                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?>&nbsp;contrat(s)&nbsp;en&nbsp;attente&nbsp;de&nbsp;signature(s)</p>
+                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?>&nbsp;contrat<?php echo ($vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] > 1) ? "s" : "" ?>&nbsp;en&nbsp;attente&nbsp;de&nbsp;signature<?php echo ($vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] > 1) ? "s" : "" ?></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
-                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat(s) à enlever</p>
+                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> à enlever</p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($infos): ?>
