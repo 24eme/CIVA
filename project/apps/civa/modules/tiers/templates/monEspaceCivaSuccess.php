@@ -55,7 +55,7 @@
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
-                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de sign.</p>
+                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de signature(s)</p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
@@ -89,7 +89,7 @@
                 <div class="bloc_acceuil_header">Alsace stocks</div>
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
-                        <a href="<?php echo url_for('mon_espace_civa_ds') ?>">A valider avant le 31/08/<?php echo $sf_user->getCampagne() ?></a>
+                        <p>A valider avant le 31/08/<?php echo $sf_user->getCampagne() ?></p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
