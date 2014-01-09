@@ -31,7 +31,7 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($sf_user->hasCredential('recoltant')): ?>
+            <?php if ($sf_user->hasCredential('tiers')): ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mes déclarations</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
