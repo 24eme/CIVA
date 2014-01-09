@@ -55,7 +55,7 @@
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
-                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?> contrat(s) en attente de signature(s)</p>
+                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?>&nbsp;contrat(s)&nbsp;en&nbsp;attente&nbsp;de&nbsp;signature(s)</p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
