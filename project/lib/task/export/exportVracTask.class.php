@@ -61,6 +61,8 @@ EOF;
 			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
+	            $isInCreation = ($valuesContrat[VracContratsView::VALUE_CREATION])? true : false;
+	            unset($valuesContrat[VracContratsView::VALUE_CREATION]);
             	if ($type == 'C') {
             		$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE];
             	}
@@ -75,8 +77,10 @@ EOF;
 	            	}
 	            	$valuesProduit = $produit->value;
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
+	            	$valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] = $valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
 	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
 	            	if ($type == 'C') {
 	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
@@ -88,6 +92,9 @@ EOF;
 	            	$csvDdecvn->add($valuesProduit);
 	            }
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
+	        	if ($type == 'C' && !$isInCreation) {
+	            	continue;
+	            }
 	            $csvDecven->add($valuesContrat);
 	        }
 	
@@ -192,5 +199,13 @@ EOF;
                     $code = 1;
         }
         return $code;
+    }
+    
+    protected function getCepage($cepage)
+    {
+    	if ($cepage == "BL" || $cepage == "RS") {
+    		$cepage = "CR";
+    	}
+    	return $cepage;
     }
 }
