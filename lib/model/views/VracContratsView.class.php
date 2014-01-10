@@ -33,6 +33,7 @@ class VracContratsView extends acCouchdbView
 	const VALUE_HEURE_TRAITEMENT = 25;
 	const VALUE_UTILISATEUR = 26;
 	const VALUE_DATE_MODIF = 27;
+	const VALUE_CREATION = 28;
 	
     public static function getInstance() 
     {
