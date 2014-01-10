@@ -46,12 +46,12 @@
                 <div class="bloc_acceuil_header">Alsace Contrats</div>
                 <div class="bloc_acceuil_content">
                     <?php $infos = true ?>
+                    <?php if($vracs['CONTRAT_A_SIGNER']): ?>
+                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> reçu<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> <strong>à signer</strong></p>
+                    <?php $infos = false ?>
+                    <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_TERMINER']): ?>
                         <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat<?php echo ($vracs['CONTRAT_A_TERMINER'] > 1) ? "s" : "" ?> <strong>à finaliser</strong></p>
-                        <?php $infos = false ?>
-                    <?php endif; ?>
-                    <?php if($vracs['CONTRAT_A_SIGNER']): ?>
-                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> <strong>à signer</strong></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
