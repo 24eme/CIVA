@@ -264,12 +264,12 @@ class ExportDRXml {
                                     }
 
                                     if(!$vtsgn) {
-                                        $l15 = $col_final['exploitant']['L15'] - $cepage->dplc;
+                                        $l15 = $col_final['exploitant']['L15'];
                                         if ($l15 < 0) {
                                             $l15 = 0;
                                         }
                                         $col_final['exploitant']['L15'] = $l15;
-                                        $col_final['exploitant']['L16'] = $cepage->dplc;
+                                        $col_final['exploitant']['L16'] = $cepage->getUsagesIndustriels();
                                     }
 
                                     if (in_array($appellation->getKey(), array('appellation_CREMANT'))) {
