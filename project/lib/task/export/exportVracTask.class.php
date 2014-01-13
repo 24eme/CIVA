@@ -66,6 +66,9 @@ EOF;
             	if ($type == 'C') {
             		$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE];
             	}
+	        	if ($type == 'C' && !$isInCreation) {
+	            	continue;
+	            }
 	            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 	            $i = 0;
 	            $dateRetiraison = $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION];
@@ -92,10 +95,12 @@ EOF;
 	            	$csvDdecvn->add($valuesProduit);
 	            }
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
-	        	if ($type == 'C' && !$isInCreation) {
-	            	continue;
-	            }
 	            $csvDecven->add($valuesContrat);
+	        	if ($type == 'C') {
+	            	$c = VracClient::getInstance()->find($contrat->key);
+	            	$c->date_export_creation = date('Y-m-d');
+	            	$c->save();
+	            }
 	        }
 	
 	        $decven = $csvDecven->output();
