@@ -61,9 +61,14 @@ EOF;
 			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
+	            $isInCreation = ($valuesContrat[VracContratsView::VALUE_CREATION])? true : false;
+	            unset($valuesContrat[VracContratsView::VALUE_CREATION]);
             	if ($type == 'C') {
             		$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE];
             	}
+	        	if ($type == 'C' && !$isInCreation) {
+	            	continue;
+	            }
 	            $produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 	            $i = 0;
 	            $dateRetiraison = $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION];
@@ -75,8 +80,10 @@ EOF;
 	            	}
 	            	$valuesProduit = $produit->value;
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
+	            	$valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] = $valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
 	            	$valuesProduit[VracProduitsView::VALUE_TOP_MERCURIALE] = $this->getTopMercuriale($valuesProduit);
 	            	if ($type == 'C') {
 	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
@@ -89,6 +96,11 @@ EOF;
 	            }
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
 	            $csvDecven->add($valuesContrat);
+	        	if ($type == 'C') {
+	            	$c = VracClient::getInstance()->find($contrat->key);
+	            	$c->date_export_creation = date('Y-m-d');
+	            	$c->save();
+	            }
 	        }
 	
 	        $decven = $csvDecven->output();
@@ -192,5 +204,13 @@ EOF;
                     $code = 1;
         }
         return $code;
+    }
+    
+    protected function getCepage($cepage)
+    {
+    	if ($cepage == "BL" || $cepage == "RS") {
+    		$cepage = "CR";
+    	}
+    	return $cepage;
     }
 }
