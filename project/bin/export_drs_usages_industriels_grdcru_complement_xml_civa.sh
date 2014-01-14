@@ -14,5 +14,5 @@ curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?
 while read ligne  
 do
 	#echo $ligne
-    php symfony export:dr-lies $ligne  
+    php symfony export:dr-usages-industriels $ligne | grep "GRDCRU" | grep -v ";1$"
 done < /tmp/drs_validees

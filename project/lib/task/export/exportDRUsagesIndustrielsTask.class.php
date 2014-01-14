@@ -1,6 +1,6 @@
 <?php
 
-class exportDRLiesTask extends sfBaseTask
+class exportDRUsagesIndustrielsTask extends sfBaseTask
 {
   protected function configure()
   {
@@ -18,7 +18,7 @@ class exportDRLiesTask extends sfBaseTask
     ));
 
     $this->namespace        = 'export';
-    $this->name             = 'dr-lies';
+    $this->name             = 'dr-usages-industriels';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [exportDRXml|INFO] task does things.
@@ -42,16 +42,16 @@ EOF;
 
     foreach($dr->recolte->certification->genre->getAppellations() as $appellation) {
       foreach($appellation->getLieux() as $lieu) {
-        if($lieu->hasRecapitulatif() && $lieu->getLies() > 0 && !$lieu->isLiesSaisisCepage()) {
-              echo sprintf("%s;%s;%s;%s\n", $dr->campagne, $dr->cvi, $lieu->getHash(), $lieu->getLies());
+        if($lieu->hasRecapitulatif() && ($lieu->getUsagesIndustrielsTotal() != $lieu->getUsagesIndustriels() || $lieu->getVolumeRevendiqueTotal() != $lieu->getVolumeRevendique())) {
+              echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;\n", $dr->campagne, $dr->cvi, $lieu->getHash(), $lieu->getTotalVolume(), $lieu->getVolumeRevendique(), $lieu->getUsagesIndustriels(), $lieu->getDplc(), $lieu->getLies(), $lieu->getLiesMouts());
         }
         foreach($lieu->getCouleurs() as $couleur) {
-          if($couleur->hasRecapitulatif() && $couleur->getLies() > 0 && !$couleur->isLiesSaisisCepage()) {
-            echo sprintf("%s;%s;%s;%s\n", $dr->campagne, $dr->cvi, $couleur->getHash(), $couleur->getLies());
+          if($couleur->hasRecapitulatif() && ($couleur->getUsagesIndustrielsTotal() != $couleur->getUsagesIndustriels() || $couleur->getVolumeRevendiqueTotal() != $couleur->getVolumeRevendique())) {
+            echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;\n", $dr->campagne, $dr->cvi, $couleur->getHash(), $couleur->getTotalVolume(), $couleur->getVolumeRevendique(), $couleur->getUsagesIndustriels(), $couleur->getDplc(), $couleur->getLies(), $couleur->getLiesMouts());
           }
           foreach($couleur->getCepages() as $cepage) {
-            if($cepage->getLies() > 0 && $cepage->isLiesSaisisCepage()) {
-              echo sprintf("%s;%s;%s;%s\n", $dr->campagne, $dr->cvi, $cepage->getHash(), $cepage->getLies());
+            if($cepage->getUsagesIndustrielsTotal() != $cepage->getUsagesIndustriels() || $cepage->getVolumeRevendiqueTotal() != $cepage->getVolumeRevendique()) {
+              echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", $dr->campagne, $dr->cvi, $cepage->getHash(), $cepage->getTotalVolume(), $cepage->getVolumeRevendique(), $cepage->getUsagesIndustriels(), $cepage->getDplc(), $cepage->getLies(), $cepage->getLiesMouts(), count($cepage->detail->toArray(true, false)));
             }
           }
         }
