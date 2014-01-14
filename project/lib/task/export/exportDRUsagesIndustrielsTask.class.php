@@ -42,15 +42,15 @@ EOF;
 
     foreach($dr->recolte->certification->genre->getAppellations() as $appellation) {
       foreach($appellation->getLieux() as $lieu) {
-        if($lieu->hasRecapitulatif() && ($lieu->getUsagesIndustrielsTotal() != $lieu->getUsagesIndustriels() || $lieu->getVolumeRevendiqueTotal() != $lieu->getVolumeRevendique())) {
+        if($lieu->hasRecapitulatif() && (round($lieu->getUsagesIndustrielsTotal(), 2) != $lieu->getUsagesIndustriels() || round($lieu->getVolumeRevendiqueTotal(), 2) != $lieu->getVolumeRevendique())) {
               echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;\n", $dr->campagne, $dr->cvi, $lieu->getHash(), $lieu->getTotalVolume(), $lieu->getVolumeRevendique(), $lieu->getUsagesIndustriels(), $lieu->getDplc(), $lieu->getLies(), $lieu->getLiesMouts());
         }
         foreach($lieu->getCouleurs() as $couleur) {
-          if($couleur->hasRecapitulatif() && ($couleur->getUsagesIndustrielsTotal() != $couleur->getUsagesIndustriels() || $couleur->getVolumeRevendiqueTotal() != $couleur->getVolumeRevendique())) {
+          if($couleur->hasRecapitulatif() && (round($couleur->getUsagesIndustrielsTotal(), 2) != $couleur->getUsagesIndustriels() || round($couleur->getVolumeRevendiqueTotal(), 2) != $couleur->getVolumeRevendique())) {
             echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;\n", $dr->campagne, $dr->cvi, $couleur->getHash(), $couleur->getTotalVolume(), $couleur->getVolumeRevendique(), $couleur->getUsagesIndustriels(), $couleur->getDplc(), $couleur->getLies(), $couleur->getLiesMouts());
           }
           foreach($couleur->getCepages() as $cepage) {
-            if($cepage->getUsagesIndustrielsTotal() != $cepage->getUsagesIndustriels() || $cepage->getVolumeRevendiqueTotal() != $cepage->getVolumeRevendique()) {
+            if(round($cepage->getUsagesIndustrielsTotal(), 2) != $cepage->getUsagesIndustriels() || round($cepage->getVolumeRevendiqueTotal(), 2) != $cepage->getVolumeRevendique()) {
               echo sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", $dr->campagne, $dr->cvi, $cepage->getHash(), $cepage->getTotalVolume(), $cepage->getVolumeRevendique(), $cepage->getUsagesIndustriels(), $cepage->getDplc(), $cepage->getLies(), $cepage->getLiesMouts(), count($cepage->detail->toArray(true, false)));
             }
           }
