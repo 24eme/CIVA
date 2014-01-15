@@ -185,7 +185,7 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                if (count($cepage->detail->toArray(true, false)) > 1 && $this->destinataire == self::DEST_CIVA) {
+                                if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
                                     $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                     if ($col['exploitant']['L15'] < 0) {
                                         $col['exploitant']['L15'] = 0;
@@ -198,8 +198,6 @@ class ExportDRXml {
                                     }
                                     $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                 }
-
-
 
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
