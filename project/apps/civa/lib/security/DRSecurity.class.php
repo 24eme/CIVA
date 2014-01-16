@@ -3,8 +3,9 @@
 class DRSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
-    const CONSULTATION = 'CONSULTATION';
     const EDITION = 'EDITION';
+    const DEVALIDATION = 'DEVALIDATION_TIERS';
+    const DEVALIDATION_CIVA = 'DEVALIDATION_CIVA';
 
     protected $instance;
     protected $dr;
@@ -39,14 +40,43 @@ class DRSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::DECLARANT, $droits)) {
+        if(in_array(self::EDITION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)
+                                            && $this->dr
+                                            && $this->dr->isValideeCiva()) {
+
+            return false;
+        }
+
+        if(in_array(self::EDITION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
 
             return true;
         }
 
-        if(!$this->dr) {
+        if(in_array(self::EDITION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)
+                                            && $this->dr
+                                            && $this->dr->isValideeTiers()) {
 
             return false;
+        }
+
+        if(in_array(self::EDITION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+
+            return true;
+        }
+
+        if(in_array(self::EDITION, $droits) && !CurrentClient::getCurrent()->isDREditable()) {
+
+            return false;
+        }
+
+        if(in_array(self::EDITION, $droits) && $this->dr && $this->dr->isValideeTiers()) {
+
+            return false;
+        }
+
+        if(in_array(self::EDITION, $droits)) {
+
+            return true;
         }
 
         return true;
