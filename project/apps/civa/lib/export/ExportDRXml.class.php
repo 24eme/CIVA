@@ -199,12 +199,17 @@ class ExportDRXml {
                                     $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                 }
 
+                                if(is_null($col['exploitant']['L16'])) {
+                                    $col['exploitant']['L16'] = 0;
+                                }
+
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
                                 $col['exploitant']['L19'] = 0; //HS
 
                                 if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                                     $col['exploitant']['L14'] = $detail->volume;
+                                    $col['exploitant']['L15'] = 0;
                                 } elseif($appellation->getKey() == 'appellation_VINTABLE') {
                                     $l14 = $detail->volume ;
                                     if ($l14 < 0) {
@@ -214,6 +219,7 @@ class ExportDRXml {
                                     if ($this->destinataire == self::DEST_CIVA) {
                                         $col['exploitant']['L14'] = $detail->volume;
                                     }
+                                    $col['exploitant']['L15'] = 0;
                                 }
 
                                 uksort($col['exploitant'], 'exportDRXml::sortXML');
@@ -281,6 +287,10 @@ class ExportDRXml {
                                         }
 
                                         if ($col_final['exploitant']['L15'] < 0) {
+                                            $col_final['exploitant']['L15'] = 0;
+                                        }
+
+                                        if($appellation->getKey() == 'appellation_VINTABLE') {
                                             $col_final['exploitant']['L15'] = 0;
                                         }
                                     }
