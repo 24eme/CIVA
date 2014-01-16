@@ -24,6 +24,9 @@ class ExportDRXml {
     private function setAcheteursForXml(&$xml, $obj, $type) {
         $acheteurs = array();
         foreach($obj->getVolumeAcheteurs($type) as $cvi => $volume) {
+            if($volume == 0) {
+                continue;
+            }
             $item = array('numCvi' => $cvi, 'volume' => $volume);
             $xml[self::$type2douane[$type].'_'.$cvi] = $item;
         }
@@ -220,6 +223,10 @@ class ExportDRXml {
                                         $col['exploitant']['L14'] = $detail->volume;
                                     }
                                     $col['exploitant']['L15'] = 0;
+
+                                    if($this->destinataire == self::DEST_DOUANE && round($cepage->getTotalVolumeAcheteurs('negoces'), 2) == $cepage->getTotalVolume()) {
+                                        $col['exploitant']['L14'] = 0;
+                                    }
                                 }
 
                                 uksort($col['exploitant'], 'exportDRXml::sortXML');
