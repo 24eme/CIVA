@@ -25,7 +25,9 @@ if (!function_exists('printColonne')) {
     foreach($colonnes as $c) {
         $arr_col = $c->getRawValue();
 
-        if(  $arr_col['cepage'] == 'Rebêches' && $key == 'superficie') continue;
+        if($arr_col['cepage'] == 'Rebêches' && $key == 'superficie') continue;
+        if($arr_col['cepage'] == 'Rebêches' && $key == 'revendique') continue;
+        if($arr_col['cepage'] == 'Rebêches' && $key == 'usages_industriels') continue;
         if (array_key_exists($key, $c->getRawValue())) {
         $v = $c[$key];
 
