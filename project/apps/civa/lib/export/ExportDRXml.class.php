@@ -24,6 +24,9 @@ class ExportDRXml {
     private function setAcheteursForXml(&$xml, $obj, $type) {
         $acheteurs = array();
         foreach($obj->getVolumeAcheteurs($type) as $cvi => $volume) {
+            if($volume == 0) {
+                continue;
+            }
             $item = array('numCvi' => $cvi, 'volume' => $volume);
             $xml[self::$type2douane[$type].'_'.$cvi] = $item;
         }
@@ -185,11 +188,23 @@ class ExportDRXml {
                                 $col['exploitant']['L12'] = 0; //HS
                                 $col['exploitant']['L13'] = 0; //HS
                                 $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
-                                if ($col['exploitant']['L15'] < 0) {
-                                    $col['exploitant']['L15'] = 0;
+                                if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
+                                    $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                    if ($col['exploitant']['L15'] < 0) {
+                                        $col['exploitant']['L15'] = 0;
+                                    }
+                                    $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                } else {
+                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                    if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
+                                        $col['exploitant']['L15'] = 0;
+                                    }
+                                    $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                 }
-                                $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
+
+                                if(is_null($col['exploitant']['L16'])) {
+                                    $col['exploitant']['L16'] = 0;
+                                }
 
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
@@ -197,6 +212,7 @@ class ExportDRXml {
 
                                 if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                                     $col['exploitant']['L14'] = $detail->volume;
+                                    $col['exploitant']['L15'] = 0;
                                 } elseif($appellation->getKey() == 'appellation_VINTABLE') {
                                     $l14 = $detail->volume ;
                                     if ($l14 < 0) {
@@ -205,6 +221,11 @@ class ExportDRXml {
                                     $col['exploitant']['L14'] = $l14;
                                     if ($this->destinataire == self::DEST_CIVA) {
                                         $col['exploitant']['L14'] = $detail->volume;
+                                    }
+                                    $col['exploitant']['L15'] = 0;
+
+                                    if($this->destinataire == self::DEST_DOUANE && round($cepage->getTotalVolumeAcheteurs('negoces'), 2) == $cepage->getTotalVolume()) {
+                                        $col['exploitant']['L14'] = 0;
                                     }
                                 }
 
@@ -247,7 +268,6 @@ class ExportDRXml {
                                 }
                             }
 
-
                             if ($this->destinataire == self::DEST_DOUANE) {
                                 $col_final = null;
                                 foreach($cols as $vtsgn => $groupe_cols) {
@@ -264,12 +284,22 @@ class ExportDRXml {
                                     }
 
                                     if(!$vtsgn) {
-                                        $l15 = $col_final['exploitant']['L15'] - $cepage->dplc;
-                                        if ($l15 < 0) {
-                                            $l15 = 0;
+                                        if($cepage->getDplc() > $cepage->getLies()) {
+                                            $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
+                                            $col_final['exploitant']['L16'] = $cepage->getDplc();
                                         }
-                                        $col_final['exploitant']['L15'] = $l15;
-                                        $col_final['exploitant']['L16'] = $cepage->dplc;
+
+                                        if($cepage->getDplc() > $cepage->getLies() && $cepage->getLies() && count($cepage->detail->toArray(true, false)) > 1) {
+                                            echo "Warning DPLC > lies et lies > 0 et plusieurs détails : " . $dr->_id . "\n";
+                                        }
+
+                                        if ($col_final['exploitant']['L15'] < 0) {
+                                            $col_final['exploitant']['L15'] = 0;
+                                        }
+
+                                        if($appellation->getKey() == 'appellation_VINTABLE') {
+                                            $col_final['exploitant']['L15'] = 0;
+                                        }
                                     }
 
                                     if (in_array($appellation->getKey(), array('appellation_CREMANT'))) {

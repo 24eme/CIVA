@@ -34,5 +34,5 @@ if (!function_exists('printXml')) {
 <rensComp><typeViti>C</typeViti><modeFV>P</modeFV><persCtc><?php echo str_replace('&', 'et', $dr->declarant->getNom(ESC_RAW)) ?></persCtc><numTel><?php echo $dr->declarant->telephone; ?></numTel><mel><?php echo $dr->declarant->email; ?></mel></rensComp>
 <?php foreach($xml as $colonne) : ?><colonne><?php printXml($colonne); ?></colonne>
 <?php endforeach; ?>
-<?php if($destinataire == ExportDRXml::DEST_CIVA): ?><qteLies><?php printf('%04.02f', $dr->lies); ?></qteLies><?php echo "\n" ?><?php endif; ?>
+<?php if($destinataire == ExportDRXml::DEST_CIVA): ?><qteLies></qteLies><?php echo "\n" ?><?php endif; ?>
 </decRec>

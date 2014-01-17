@@ -61,7 +61,7 @@ EOF;
     $content = preg_replace("/(<\/colonneAss>)/", "\t\\1\n", $content);
     $content = preg_replace("/(<\/colonne>)/", "\n\\1", $content);
     $content = preg_replace("/(<exploitant>)/", "\t\\1\n", $content);
-    $content = preg_replace("/(<\/exploitant>)/", "\t\\1", $content);
+    $content = preg_replace("/(<\/exploitant>)/", "\t\\1\n", $content);
     $content = preg_replace("/(<\/L[0-9]+>)/", "\\1\n", $content);
     $content = preg_replace("/(<L[0-9]+>)/", "\t\\1", $content);
 
