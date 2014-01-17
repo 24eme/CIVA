@@ -63,7 +63,7 @@ class DSCivaClient extends DSClient {
 
     public function retrieveDsPrincipalesByCampagneAndCvi($cvi, $campagne) {
         $dss_principales = array();
-        $annee = $campagne + 1;
+        $annee = $campagne;
         $docs = $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-' . $annee . '99-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
             if (preg_match('/DS-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches)) {
@@ -78,15 +78,9 @@ class DSCivaClient extends DSClient {
     public function findByCviAndCampagne($cvi, $campagne) {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
         foreach ($tiers->lieux_stockage as $lieu_stockage) {
-            for ($month = 8; $month > 0; $month--) {
-                if ($ds = $this->find('DS-' . $cvi . '-' . ($campagne + 1) . sprintf("%02d", $month) . '-' . $lieu_stockage->getNumeroIncremental())) {
-                    return $ds;
-                }
-            }
-            for ($month = 8; $month < 13; $month++) {
-                if ($ds = $this->find('DS-' . $cvi . '-' . $campagne . sprintf("%02d", $month) . '-' . $tiers->getLieuStockagePrincipal()->getNumeroIncremental())) {
-                    return $ds;
-                }
+            if($ds = $this->find('DS-' . $cvi . '-' . $campagne . sprintf("%02d", 7) . '-' . $tiers->getLieuStockagePrincipal()->getNumeroIncremental())) {
+
+                return $ds;
             }
         }
         return null;
