@@ -97,9 +97,9 @@ EOF;
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
 	            $csvDecven->add($valuesContrat);
 	        	if ($type == 'C') {
-	            	$c = VracClient::getInstance()->find($contrat->key);
+	            	$c = VracClient::getInstance()->find($contrat->id);
 	            	$c->date_export_creation = date('Y-m-d');
-	            	$c->save();
+	            	$c->forceSave();
 	            }
 	        }
 	

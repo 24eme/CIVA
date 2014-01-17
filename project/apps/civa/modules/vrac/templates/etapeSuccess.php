@@ -11,6 +11,11 @@
 
 
         <div class="fond">
+        	<?php 
+				if($validation->hasPoints() && !$next_etape) {
+					include_partial('global/validation', array('validation' => $validation)); 
+				}
+			?>
             <?php echo $form->renderHiddenFields() ?>
             <?php echo $form->renderGlobalErrors() ?>
             <?php include_partial('form_'.$etape, array('form' => $form, 'vrac' => $vrac, 'etape' => $etape, 'referer' => $referer, 'user' => $user)) ?>
@@ -24,6 +29,7 @@
                 </a>
                 <?php endif; ?>
             </li>
+            <?php if(!$validation->hasErreurs() || $next_etape): ?>
             <li class="suiv">
                 <?php if ($etapes->getLast() == $etape): ?>
                  <input tabindex="1" type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre contrat" id="valideVrac" />
@@ -33,6 +39,7 @@
                 </button>
                 <?php endif; ?>
             </li>
+            <?php endif; ?>
         </ul>
     </form>
 </div>
