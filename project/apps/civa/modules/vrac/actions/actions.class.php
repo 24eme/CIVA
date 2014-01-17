@@ -201,9 +201,11 @@ class vracActions extends sfActions
     	}
 		$this->annuaire = $this->getAnnuaire();
     	$this->form = $this->getForm($this->vrac, $this->etape, $this->annuaire);
+    	$this->next_etape = null;
     	if ($nextEtape = $this->getEtapeSuivante($this->etape, $this->etapes)) {
-    		$this->vrac->etape = $nextEtape;
+    		$this->next_etape = $this->vrac->etape = $nextEtape;    		
     	}
+    	$this->validation = new VracContratValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
