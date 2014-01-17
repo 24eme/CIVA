@@ -13,7 +13,7 @@ class VracProduitAjoutValidator extends sfValidatorBase
     	if (isset($values['vrac']) && !empty($values['vrac'])) {
     		if (isset($values['hash']) && !empty($values['hash'])) {
     			if ($vrac = VracClient::getInstance()->find($values['vrac'])) {
-    				if ($vrac->exist($values['hash'])) {
+    				/*if ($vrac->exist($values['hash'])) {
     					$node = $vrac->get($values['hash']);
     					if ($node instanceof VracCepage) {
     						foreach ($node->getProduitsDetails() as $detail) {
@@ -24,7 +24,7 @@ class VracProduitAjoutValidator extends sfValidatorBase
 	    						}
     						}
     					}
-    				}
+    				}*/
 					$pattern = '/appellation_[a-zA-Z0-9]+/';
 					if (preg_match($pattern, $values['hash'], $matches)) {
 						$config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration();
