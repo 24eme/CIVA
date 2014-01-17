@@ -14,7 +14,12 @@ class Current extends BaseCurrent {
     public function getCampagneDS() {
     	$campagne_manager = new CivaCampagneManager('08-01');
     	
-    	return (string) ($campagne_manager->getCurrent() - 1);
+    	return $campagne_manager->getCurrent();
+    }
+
+    public function getAnneeDS() {
+
+        return preg_replace("/^[0-9]+-/", "", $this->getCampagneDS());
     }
 
 }

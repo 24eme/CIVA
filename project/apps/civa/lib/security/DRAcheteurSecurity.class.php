@@ -4,7 +4,6 @@ class DRAcheteurSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
 
-    protected $instance;
     protected $myUser;
     protected $tiers;
 

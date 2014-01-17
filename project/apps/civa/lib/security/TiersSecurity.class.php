@@ -8,7 +8,6 @@ class TiersSecurity implements SecurityInterface {
     const GAMMA = 'GAMMA';
     const VRAC = 'VRAC';
 
-    protected $instance;
     protected $myUser;
 
     public static function getInstance($myUser) {

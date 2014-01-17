@@ -11,7 +11,6 @@ class VracSecurity implements SecurityInterface {
     const ENLEVEMENT = 'ENLEVEMENT';
     const CLOTURE = 'CLOTURE';
 
-    protected $instance;
     protected $vrac;
     protected $myUser;
 

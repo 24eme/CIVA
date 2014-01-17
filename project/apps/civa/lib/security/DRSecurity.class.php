@@ -7,7 +7,6 @@ class DRSecurity implements SecurityInterface {
     const DEVALIDATION = 'DEVALIDATION_TIERS';
     const DEVALIDATION_CIVA = 'DEVALIDATION_CIVA';
 
-    protected $instance;
     protected $dr;
     protected $myUser;
     protected $tiers;

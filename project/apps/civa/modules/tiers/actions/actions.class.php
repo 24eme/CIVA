@@ -127,6 +127,8 @@ class tiersActions extends EtapesActions {
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
+
+        
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {

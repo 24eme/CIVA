@@ -27,7 +27,7 @@ class dsActions extends sfActions {
         }
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
-        $date = date('Y-m-d');
+        $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
@@ -43,7 +43,7 @@ class dsActions extends sfActions {
     public function executeRedirectEtape(sfWebRequest $request) {
         $this->secureDS(array(DSSecurity::CONSULTATION, 
                               DSSecurity::EDITION));
-
+        
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
@@ -194,29 +194,6 @@ class dsActions extends sfActions {
             } else {
                 $this->error = true;
             }
-        }
-    }
-    
-    public function executeMonEspace(sfWebRequest $request) {    
-         
-        $this->tiers = $this->getRoute()->getTiers();        
-        $this->dsHistorique = DSClient::getInstance()->getHistoryByOperateur($this->etablissement);
-        $this->generationOperateurForm = new DSGenerationOperateurForm();
-        
-        if ($request->isMethod(sfWebRequest::POST)) {
-              $this->generationOperateurForm->bind($request->getParameter($this->generationOperateurForm->getName()));
-              if ($this->generationOperateurForm->isValid()) {
-                $values = $this->generationOperateurForm->getValues();
-                $date = $values["date_declaration"];
-                try {
-                    $ds = DSClient::getInstance()->findOrCreateDsByEtbId($this->etablissement->identifiant, $date);     
-                    $ds->save($this->getUserId());
-                }catch(sfException $e) {
-                    $this->getUser()->setFlash('global_error', $e->getMessage());
-                    $this->redirect('ds');
-                }                
-                return $this->redirect('ds_generation_operateur', $ds);
-              }
         }
     }
 

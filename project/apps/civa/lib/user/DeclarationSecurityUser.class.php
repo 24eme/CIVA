@@ -94,6 +94,14 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
+     * @return string
+     */
+    public function getAnneeDS()
+    {
+        return CurrentClient::getCurrent()->getAnneeDS();
+    }
+
+    /**
      *
      * @param string $etape 
      */
@@ -203,11 +211,11 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
-            $this->_ds = $this->getDeclarant()->getDs($this->getCampagneDS());
+            $this->_ds = $this->getDeclarant()->getDs($this->getAnneeDS());
             if (!$this->_ds) {
                 $ds = new DSCiva();
                 $ds->identifiant = $this->getDeclarant()->cvi;
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . (CurrentClient::getCurrent()->getAnneeDS()).'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
                 return $ds;
             }
         }
