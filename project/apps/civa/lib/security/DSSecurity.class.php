@@ -4,17 +4,16 @@ class DSSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
     const CONSULTATION = 'CONSULTATION';
-    const CREATION = 'EDITION';
+    const CREATION = 'CREATION';
     const EDITION = 'EDITION';
 
-    protected $instance;
     protected $ds;
     protected $myUser;
     protected $tiers;
 
     public static function getInstance($myUser, $ds_principale = null) {
 
-        return new DSSecurity($myUser, $ds_principale = null);
+        return new DSSecurity($myUser, $ds_principale);
     }
 
     public function __construct($myUser, $ds_principale = null) {
@@ -45,7 +44,27 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
+        if(!$this->myUser->hasLieuxStockage()) {
+
+            return false;
+        }
+
         /*** CREATION ***/
+
+        if(in_array(self::CREATION, $droits) && $this->ds && !$this->ds->isNew()) {
+
+            return false;
+        }
+
+        if(in_array(self::CREATION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+
+            return true;
+        }
+
+        if(in_array(self::CREATION, $droits) && !CurrentClient::getCurrent()->isDSEditable()) {
+
+            return false;
+        }
 
         if(in_array(self::CREATION, $droits)) {
 
@@ -64,8 +83,8 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if($this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
-            
+        if(in_array(self::EDITION , $droits) &&$this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+                
             return true;
         }
 
@@ -74,7 +93,7 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if($this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+        if(in_array(self::EDITION , $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
         }

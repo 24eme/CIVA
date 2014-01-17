@@ -88,7 +88,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_header">Alsace stocks</div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && $sf_user->getDs() && $sf_user->getDs()->isValideeTiers()): ?>
+                    <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs() || !$sf_user->getDs()->isValideeTiers())): ?>
                         <p><strong>A valider</strong> avant le 31/08/<?php echo date('Y') ?></p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>

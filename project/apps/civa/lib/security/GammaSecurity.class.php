@@ -4,7 +4,6 @@ class GammaSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
 
-    protected $instance;
     protected $myUser;
     protected $tiers;
 
