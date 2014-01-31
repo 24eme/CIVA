@@ -136,7 +136,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      */
     public function isDrEditable()
     {
-        if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
+        if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
             return true;
         }
          
