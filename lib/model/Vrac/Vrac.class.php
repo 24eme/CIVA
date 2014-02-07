@@ -597,6 +597,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     }
     
+    public function forceSave()
+    {
+    	$this->definitionValidation();
+        if ($this->isModified()) {
+    		$ret = acCouchdbManager::getClient()->save($this);
+        	$this->_rev = $ret->rev;
+        	$this->_serialize_loaded_json = serialize(new acCouchdbJsonNative($this->getData()));
+         	return $ret;
+        }
+        return false;
+    }
+    
     public function isArchivageCanBeSet() 
     {
         return ($this->valide->statut == self::STATUT_VALIDE);

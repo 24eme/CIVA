@@ -3,7 +3,6 @@ class VracContratValidation extends DocumentValidation
 {
     const PRIX_SEUIL = 50;
 
-
 	protected $produits_controle = array();
 	
 	public function __construct($document, $options = null)
