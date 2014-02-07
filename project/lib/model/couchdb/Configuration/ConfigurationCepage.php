@@ -145,5 +145,14 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
     return $this->getRendementCepage();
   }
+
+  public function existRendement() {
+    if($this->getKey() == 'cepage_RB') {
+      
+      return false;
+    }
+
+    return parent::existRendement();
+  }
   
 }

@@ -13,5 +13,10 @@
 
       	<?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
     </div>
+    <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
+        <div class="contenu clearfix">
+                <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
+        </div>
+    <?php endif;?>
 </div>
         
