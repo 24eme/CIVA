@@ -532,6 +532,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->interlocuteur_commercial->email) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
+
+        $emails = array_unique($emails);
+
     	return $emails;
     }
     
@@ -547,6 +550,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($acteurIdentifiant == $this->createur_identifiant && $this->interlocuteur_commercial->email) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
+
+        $emails = array_unique($emails);
+
     	return $emails;
     }
     
