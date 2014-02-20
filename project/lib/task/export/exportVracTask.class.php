@@ -61,7 +61,7 @@ EOF;
 			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
-	            $isInCreation = ($valuesContrat[VracContratsView::VALUE_CREATION])? true : false;
+	            $isInCreation = (isset($valuesContrat[VracContratsView::VALUE_CREATION]) && $valuesContrat[VracContratsView::VALUE_CREATION])? true : false;
 	            unset($valuesContrat[VracContratsView::VALUE_CREATION]);
             	if ($type == 'C') {
             		$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE];
