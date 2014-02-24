@@ -64,6 +64,7 @@ Vrac:
           fields:
             nom: {  }
             email: {  }
+            telephone: {  }
       mandataire:
         type: collection
         class: VracMandataire

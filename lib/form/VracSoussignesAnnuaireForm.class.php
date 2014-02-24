@@ -41,9 +41,9 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
     	$vendeur = $values['vendeur'];
     	if ($values['interlocuteur_commercial']) {
     		if ($this->annuaire->commerciaux->exist($values['interlocuteur_commercial'])) {
-	    		$commercialEmail = $this->annuaire->commerciaux->get($values['interlocuteur_commercial']);
-	    		$this->getObject()->interlocuteur_commercial->nom = $values['interlocuteur_commercial'];
-	    		$this->getObject()->interlocuteur_commercial->email = $commercialEmail;
+	    		$this->getObject()->storeInterlocuteurCommercialInformations(
+                                        $values['interlocuteur_commercial'],
+                                        $this->annuaire->commerciaux->get($values['interlocuteur_commercial']));
     		}
     	}
     	$this->getObject()->acheteur_type = $values['acheteur_type'];
