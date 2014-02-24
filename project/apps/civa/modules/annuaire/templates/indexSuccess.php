@@ -12,9 +12,9 @@
 						<ul>
 							<?php foreach ($annuaire->recoltants as $key => $item): ?>
 								<?php if ($i % 2 == 0): ?>
-									<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -36,9 +36,9 @@
 						<ul>
 							<?php foreach ($annuaire->negociants as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -59,9 +59,9 @@
 						<ul>
 							<?php foreach ($annuaire->caves_cooperatives as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <small>(<?php echo $key ?>)</small><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -82,9 +82,9 @@
 						<ul>
 							<?php foreach ($annuaire->commerciaux as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $key ?><?php if ($item): ?> (<?php echo $item; ?>)<?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $key ?><?php if ($item): ?> (<?php echo $item; ?>)<?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>

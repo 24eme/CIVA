@@ -72,8 +72,7 @@ class annuaireActions extends sfActions {
        			$this->form->save();
        			if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
        				$vrac = unserialize($vrac);
-					$vrac->interlocuteur_commercial->nom = $values['identite'];
-					$vrac->interlocuteur_commercial->email = $values['email'];
+              $vrac->storeInterlocuteurCommercialInformations($values['identite'], $value['contact']);
        				$this->getUser()->setAttribute('vrac_object', serialize($vrac));
        				$etapes = VracEtapes::getInstance();
        				return $this->redirect('vrac_etape', array('numero_contrat' => !$vrac->isNew() ? $vrac->numero_contrat : VracRoute::NOUVEAU, 'etape' => $etapes->getFirst()));

@@ -11,6 +11,7 @@
 					<tr>
 						<th>Identité</th>
 						<th><span>Email</span></th>
+						<th><span>Téléphone</span></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -22,6 +23,10 @@
 						<td>
 							<span><?php echo $form['email']->renderError() ?></span>
 							<?php echo $form['email']->render() ?>
+						</td>
+						<td>
+							<span><?php echo $form['telephone']->renderError() ?></span>
+							<?php echo $form['telephone']->render() ?>
 						</td>
 					</tr>
 				</tbody>

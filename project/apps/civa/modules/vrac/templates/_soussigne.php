@@ -21,11 +21,11 @@
     </fieldset>
 	<?php endif; ?>
 	<?php if (isset($interlocuteur_commercial) && $interlocuteur_commercial->nom): ?>
-	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?></li>
-	<?php else: ?>
-	<?php if ($vrac->interlocuteur_commercial->nom && !$vrac->hasCourtier()): ?>
+	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email && !$interlocuteur_commercial->telephone): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?><?php if ($interlocuteur_commercial->telephone): ?> Tél. <?php echo $interlocuteur_commercial->telephone ?><?php endif; ?></li>
+    <?php elseif(!$tiers->exist('cvi')): ?>
+    <li>&nbsp;</li>
+	<?php elseif ($vrac->interlocuteur_commercial->nom && !$vrac->hasCourtier()): ?>
 	<li>&nbsp;</li>
-	<?php endif; ?>
 	<?php endif; ?>
 	<?php if ($tiers->exist('cvi')): ?>
 	<li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
