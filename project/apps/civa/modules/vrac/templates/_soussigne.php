@@ -1,6 +1,7 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Text') ?>
 <?php use_helper('vrac') ?>
+<?php use_helper('Phone') ?>
 <div class="informations form_col">
 <ul>
 	<li><strong><?php echo renderTiersLibelle($tiers) ?></strong></li>
@@ -21,7 +22,7 @@
     </fieldset>
 	<?php endif; ?>
 	<?php if (isset($interlocuteur_commercial) && $interlocuteur_commercial->nom): ?>
-	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email && !$interlocuteur_commercial->telephone): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?><?php if ($interlocuteur_commercial->telephone): ?> Tél. <?php echo $interlocuteur_commercial->telephone ?><?php endif; ?></li>
+	<li><strong><?php echo $interlocuteur_commercial->nom ?></strong><?php if ($interlocuteur_commercial->email && !$interlocuteur_commercial->telephone): ?> <?php echo $interlocuteur_commercial->email ?><?php endif; ?><?php if ($interlocuteur_commercial->telephone): ?> Tél. <?php echo formatPhone($interlocuteur_commercial->telephone) ?><?php endif; ?></li>
     <?php elseif(!$tiers->exist('cvi')): ?>
     <li>&nbsp;</li>
 	<?php elseif ($vrac->interlocuteur_commercial->nom && !$vrac->hasCourtier()): ?>
@@ -40,7 +41,7 @@
 	<li>Adresse : <strong><?php echo $tiers->adresse ?></strong></li>
 	<li>Code postal : <strong><?php echo $tiers->code_postal ?></strong></li>
 	<li>Commune : <strong><?php echo $tiers->commune ?></strong></li>
-	<li>Téléphone : <strong><?php echo $tiers->telephone ?></strong></li>
+	<li>Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
 	<li>E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
 	<?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
