@@ -58,7 +58,12 @@ EOF;
         foreach ($types as $type) {
         	$csvDecven = new ExportCsv();
 	        $csvDdecvn = new ExportCsv();
-			$contrats = VracContratsView::getInstance()->findForDb2Export($dates, $type);
+			$items = VracContratsView::getInstance()->findForDb2Export($dates, $type);
+			$contrats = array();
+			foreach ($items as $item) {
+				$contrats[$item->value[VracContratsView::VALUE_NUMERO_ARCHIVE]] = $item;
+			}
+			ksort($contrats);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
 	            $isInCreation = (isset($valuesContrat[VracContratsView::VALUE_CREATION]) && $valuesContrat[VracContratsView::VALUE_CREATION])? true : false;
