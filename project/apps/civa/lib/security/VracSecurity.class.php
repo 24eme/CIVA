@@ -22,7 +22,7 @@ class VracSecurity implements SecurityInterface {
     public function __construct($myUser, $vrac = null) {
         $this->myUser = $myUser;
         $this->vrac = $vrac;
-        $this->tiers = $this->myUser->getDeclarant();
+        $this->tiers = $this->myUser->getDeclarantVrac();
     }
 
     public function isAuthorized($droits) {

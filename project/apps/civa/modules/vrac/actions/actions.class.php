@@ -25,8 +25,8 @@ class vracActions extends sfActions
 		if (!$this->campagne) {
 			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
 		}
-		$this->user = $this->getUser()->getDeclarant();
-        $this->vracs = VracTousView::getInstance()->findSortedBy($this->user->_id, $this->campagne, $this->statut);
+		$this->user = $this->getUser()->getDeclarantVrac();
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
 	}
@@ -116,7 +116,7 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac');
 		}
 
-		$this->user = $this->getUser()->getDeclarant();
+		$this->user = $this->getUser()->getDeclarantVrac();
 		
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
@@ -148,7 +148,7 @@ class vracActions extends sfActions
 
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
-		$this->user = $this->getUser()->getDeclarant();
+		$this->user = $this->getUser()->getDeclarantVrac();
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
 		$this->validation = new VracValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
@@ -172,7 +172,7 @@ class vracActions extends sfActions
 
         $this->secureVrac(VracSecurity::SIGNATURE, $this->vrac);
 
-		$this->user = $this->getUser()->getDeclarant();
+		$this->user = $this->getUser()->getDeclarantVrac();
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 		
@@ -187,7 +187,7 @@ class vracActions extends sfActions
     
     public function executeEtape(sfWebRequest $request) 
     {
-		$this->user = $this->getUser()->getDeclarant();
+		$this->user = $this->getUser()->getDeclarantVrac();
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
@@ -236,7 +236,7 @@ class vracActions extends sfActions
     public function executeAjouterProduit(sfWebRequest $request)
     {
 
-        $this->user = $this->getUser()->getDeclarant();
+        $this->user = $this->getUser()->getDeclarantVrac();
         $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
         $this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
         $this->vrac = $this->getRoute()->getVrac();

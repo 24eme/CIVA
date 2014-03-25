@@ -136,10 +136,6 @@ class tiersActions extends EtapesActions {
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-        $this->user = $this->getUser()->getDeclarant();
-        $this->vracs = VracTousView::getInstance()->findSortedBy($this->user->_id);
-        $this->etapes = VracEtapes::getInstance();
-        $this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
     }
 
     public function executeMonEspaceGamma(sfWebRequest $request) {

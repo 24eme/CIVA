@@ -29,7 +29,13 @@
 	<li>&nbsp;</li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('cvi')): ?>
-	<li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
+        <?php if ($tiers->cvi): ?>    
+            <li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
+        <?php elseif ($tiers->civaba): ?>
+            <li>CIVA : <strong><?php echo $tiers->civaba ?></strong></li>
+        <?php else: ?>
+            <li>nbsp;</li>
+        <?php endif; ?>
 	<?php endif; ?>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('carte_pro')): ?>

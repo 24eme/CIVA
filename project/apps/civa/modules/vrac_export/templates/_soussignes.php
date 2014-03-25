@@ -18,7 +18,13 @@ $hasCourtier = $vrac->hasCourtier();
                                         <i>&nbsp;<?php echo $vrac->vendeur->code_postal; ?></i>&nbsp;<i><?php echo $vrac->vendeur->commune; ?></i><br/></td>
                                 </tr>
 				<tr>
-					<td>&nbsp;CVI : <i><?php echo $vrac->vendeur->cvi; ?></i></td>
+					<?php if($vrac->vendeur->cvi): ?>
+                    <td>&nbsp;CVI : <i><?php echo $vrac->vendeur->cvi; ?></i></td>
+                    <?php elseif($vrac->vendeur->civaba): ?>
+                    <td>&nbsp;CIVA : <i><?php echo $vrac->vendeur->civaba; ?></i></td> 
+                    <?php else: ?>
+                    <td>&nbsp;</td>
+                    <?php endif; ?>
 				</tr>
 				<tr>
 					<td>&nbsp;Tel. : <i><?php echo formatPhone($vrac->vendeur->telephone); ?></i></td>
@@ -41,8 +47,14 @@ $hasCourtier = $vrac->hasCourtier();
                                         <td>&nbsp;<i><?php echo truncate_text($vrac->acheteur->adresse, 50, "...", false) ?></i><br/>
                                         <i>&nbsp;<?php echo $vrac->acheteur->code_postal; ?></i>&nbsp;<i><?php echo $vrac->acheteur->commune; ?></i><br/></td>
                                 </tr>
-                                <tr>
+                                <tr>    
+                                        <?php if($vrac->acheteur->cvi): ?>
                                         <td>&nbsp;CVI : <i><?php echo $vrac->acheteur->cvi; ?></i></td>
+                                        <?php elseif($vrac->acheteur->civaba): ?>
+                                        <td>&nbsp;CIVA : <i><?php echo $vrac->acheteur->civaba; ?></i></td> 
+                                        <?php else: ?>
+                                        <td>&nbsp;</td>
+                                        <?php endif; ?>
                                 </tr>
                                 <tr>
                                         <td>&nbsp;Tel. : <i><?php echo formatPhone($vrac->acheteur->telephone); ?></i></td>

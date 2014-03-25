@@ -128,6 +128,26 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         return $this->getTiers();
     }
 
+    public function getDeclarantVrac() {
+        $declarants = $this->getDeclarantsVrac();
+
+        return $declarants[0];
+    }
+
+    public function getDeclarantsVrac() {
+        $declarants = array();
+        $tiers = $this->getTiers();
+
+        if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche']) && $this->_tiers['MetteurEnMarche']->qualite_categorie == 'Negociant') {
+
+            $declarants[] = $this->_tiers['MetteurEnMarche'];
+        }
+
+        $declarants[] = $tiers;
+
+        return $declarants;
+    }
+
     /**
      * 
      */
