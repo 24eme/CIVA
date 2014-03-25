@@ -37,4 +37,13 @@ class VracTousView extends acCouchdbView
     	krsort($result);
     	return $result;
     }
+
+    public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null) {
+        $result = array();
+        foreach($tiers as $t) {
+            $result = array_merge($result, $this->findSortedBy($t->_id, $campagne, $statut));
+        }
+        krsort($result);
+        return $result;
+    }
 }  

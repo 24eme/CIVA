@@ -42,7 +42,7 @@ class VracRoute extends sfObjectRoute
 
     protected function getNouveauVrac()
     {
-        $tiers = $this->getUser()->getDeclarant();
+        $tiers = $this->getUser()->getDeclarantVrac();
         $vrac = VracClient::getInstance()->createVrac($tiers->_id);
         if ($tiers->type == 'Courtier') {
             $vrac->mandataire_identifiant = $tiers->_id;
