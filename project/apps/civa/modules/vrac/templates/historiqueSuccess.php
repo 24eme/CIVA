@@ -8,7 +8,7 @@
 		</ul>
 		<div id="espace_alsace_contrats">
 		<?php if (count($vracs) > 0): ?>
-		<?php include_partial('vrac/liste', array('vracs' => $vracs, 'user' => $user, 'limite' => false, 'archive' => true)) ?>
+		<?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
 		<?php else: ?>
 		<p><i>Aucun contrat.</i></p>
 		<?php endif; ?>

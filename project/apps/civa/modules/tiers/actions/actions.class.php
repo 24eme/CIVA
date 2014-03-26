@@ -65,9 +65,8 @@ class tiersActions extends EtapesActions {
             'CONTRAT_EN_ATTENTE_SIGNATURE' => 0,
             'CONTRAT_A_ENLEVER' => 0,
         );
-
-        $tiers = $this->getUser()->getTiers();
-        $vracs = VracTousView::getInstance()->findSortedBy($tiers->_id);
+        $tiers = $this->getUser()->getDeclarantsVrac();
+        $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
 
         foreach($vracs as $vrac) {
             $item = $vrac->value;
@@ -76,13 +75,13 @@ class tiersActions extends EtapesActions {
             }
 
             if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
-                if($item->soussignes->vendeur->identifiant == $tiers->_id && !$item->soussignes->vendeur->date_validation) {
+                if(array_key_exists($item->soussignes->vendeur->identifiant, $tiers) && !$item->soussignes->vendeur->date_validation) {
                     $this->vracs['CONTRAT_A_SIGNER'] += 1; 
                 }
-                if($item->soussignes->acheteur->identifiant == $tiers->_id && !$item->soussignes->acheteur->date_validation) {
+                if(array_key_exists($item->soussignes->acheteur->identifiant, $tiers) && !$item->soussignes->acheteur->date_validation) {
                     $this->vracs['CONTRAT_A_SIGNER'] += 1; 
                 }
-                if($item->soussignes->mandataire->identifiant == $tiers->_id && !$item->soussignes->mandataire->date_validation) {
+                if(array_key_exists($item->soussignes->mandataire->identifiant, $tiers) && !$item->soussignes->mandataire->date_validation) {
                     $this->vracs['CONTRAT_A_SIGNER'] += 1; 
                 }
                 if($item->is_proprietaire) {

@@ -148,7 +148,8 @@ class vracActions extends sfActions
 
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
-		$this->user = $this->getUser()->getDeclarantVrac();
+        $this->user = $this->getTiersOfVrac($this->vrac);
+        
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
 		$this->validation = new VracValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
@@ -163,6 +164,19 @@ class vracActions extends sfActions
         	}
         }
     }
+
+    protected function getTiersOfVrac($vrac) {
+        $tiers = $this->getUser()->getDeclarantsVrac();
+        $user = null;
+
+        foreach($tiers as $t) {
+            if($vrac->isActeur($t->_id)) {
+                $user = $t;
+            }
+        }
+
+        return $user;
+    }
     
 	public function executeValidation(sfWebRequest $request) 
 	{
@@ -172,7 +186,8 @@ class vracActions extends sfActions
 
         $this->secureVrac(VracSecurity::SIGNATURE, $this->vrac);
 
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = $this->getTiersOfVrac($this->vrac);
+        
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 		

@@ -131,7 +131,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     public function getDeclarantVrac() {
         $declarants = $this->getDeclarantsVrac();
 
-        return $declarants[0];
+        return current($declarants);
     }
 
     public function getDeclarantsVrac() {
@@ -140,10 +140,10 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
         if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche']) && $this->_tiers['MetteurEnMarche']->qualite_categorie == 'Negociant') {
 
-            $declarants[] = $this->_tiers['MetteurEnMarche'];
+            $declarants[$this->_tiers['MetteurEnMarche']->_id] = $this->_tiers['MetteurEnMarche'];
         }
 
-        $declarants[] = $tiers;
+        $declarants[$tiers->_id] = $tiers;
 
         return $declarants;
     }
