@@ -30,6 +30,13 @@ class vracActions extends sfActions
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
 	}
+
+    public function executeExportCSV(sfWebRequest $request)
+    {
+        $this->secureVrac(VracSecurity::DECLARANT, null);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
+        $this->setLayout(false);
+    }
 	
 	public function executeAnnuaire(sfWebRequest $request)
 	{
@@ -187,7 +194,7 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::SIGNATURE, $this->vrac);
 
 		$this->user = $this->getTiersOfVrac($this->vrac);
-        
+
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 		
