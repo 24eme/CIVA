@@ -157,9 +157,9 @@ input[type=radio]
 {
     border: 1px solid #b8b4b4;
     border-radius: 2px;
-    color: #4e4b4b;
+    color: #2a2a2a;
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     padding: 5px 10px;
     position: relative;
 }
@@ -167,9 +167,9 @@ input[type=radio]
 .btn_majeur:hover,
 .btn_majeur:focus { text-decoration: none; }
 
-.btn_petit { padding: 2px 5px; }
+.btn_petit { padding: 3px 8px; font-size: 13px; }
 
-.btn_grand { padding: 10px; }
+.btn_grand { padding: 10px; font-size: 16px; font-weight: bold; }
 
 .btn_vert
 {
@@ -187,6 +187,7 @@ input[type=radio]
     background-image: -moz-linear-gradient(98deg, #ffa200, #ffe0a5);
     background-image: -o-linear-gradient(98deg, #ffa200, #ffe0a5);
     background-image: linear-gradient(-8deg, #ffa200, #ffe0a5);
+    color: #2a2a2a;
 }
 
 .btn_rouge
@@ -196,7 +197,7 @@ input[type=radio]
     background-image: -moz-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: -o-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: linear-gradient(-8deg, #b70101, #fdafaf);
-    color: #FFF;
+    color: #000;
 }
 
 .btn_fleche { padding-right: 25px; }
