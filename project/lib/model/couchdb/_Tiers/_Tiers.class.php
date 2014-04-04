@@ -53,8 +53,7 @@ abstract class _Tiers extends Base_Tiers {
      */
     public function getTypeDs() {
         if($this->type == _TiersClient::QUALITE_RECOLTANT){
-            return DSCivaClient::TYPE_DS_NEGOCE;
-            //return DSCivaClient::TYPE_DS_PROPRIETE;
+            return DSCivaClient::TYPE_DS_PROPRIETE;
         }
         return DSCivaClient::TYPE_DS_NEGOCE;
     }

@@ -90,6 +90,18 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
         return $this->_storage[$key];
     }
+    
+    public function getVolumeByAcheteur($cvi) {
+       if(!$this->exist('negoces')){
+           return 0;
+       }
+       foreach ($this->negoces as $negoce) {
+           if($negoce->cvi == $cvi){
+               return $negoce->quantite_vendue;
+           }
+       }
+       return 0;
+    }
 
     protected function deleteAcheteurUnused($type) {
         $appellation_key = $this->getCepage()->getLieu()->getAppellation()->getKey();
