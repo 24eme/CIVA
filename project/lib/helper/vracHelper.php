@@ -8,7 +8,7 @@ function renderTiersLibelle($tiers) {
     	$libelle .= $tiers->intitule.' ';	
     }
     $libelle .= $tiers->raison_sociale;
-    return truncate_text($libelle, 35);
+    return truncate_text($libelle, 35, '...', true);
 }
 
 function renderProduitIdentifiant($detail) {

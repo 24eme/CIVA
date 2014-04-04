@@ -31,27 +31,27 @@
 				<ul class="liste_soussignes">
 					<?php 
 						if ($item->soussignes->vendeur->identifiant): 
-							if ($item->soussignes->vendeur->identifiant == $user->_id && $item->soussignes->vendeur->date_validation) {
+							if (array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue()) && $item->soussignes->vendeur->date_validation) {
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->vendeur->identifiant): ?>_grey<?php endif; ?>">Vendeur : <strong><?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35); ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
+					<li class="<?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Vendeur : <strong><?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?></strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->acheteur->identifiant):
-							if ($item->soussignes->acheteur->identifiant == $user->_id && $item->soussignes->acheteur->date_validation) {
+							if (array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue()) && $item->soussignes->acheteur->date_validation) {
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->acheteur->identifiant): ?>_grey<?php endif; ?>">Acheteur : <strong><?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35); ?></strong></li>
+					<li class="<?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Acheteur : <strong><?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?></strong></li>
 					<?php endif; ?>
 					<?php 
 						if ($item->soussignes->mandataire->identifiant):
-							if ($item->soussignes->mandataire->identifiant == $user->_id && $item->soussignes->mandataire->date_validation) {
+							if (array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue()) && $item->soussignes->mandataire->date_validation) {
 								$hasValidated = true;
 							}
 					?>
-					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if ($user->_id != $item->soussignes->mandataire->identifiant): ?>_grey<?php endif; ?>">Courtier : <strong><?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35); ?></strong></li>
+					<li class="<?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!in_array($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Courtier : <strong><?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35, '...', true); ?></strong></li>
 					<?php endif; ?>
 				</ul>
 			</td>

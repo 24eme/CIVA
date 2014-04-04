@@ -129,7 +129,7 @@
 }
 
 #espace_alsace_contrats table#soussignes_listing th.col_numero { width: 35px;  }
-#espace_alsace_contrats table#soussignes_listing th.col_date { width: 70px; }
+#espace_alsace_contrats table#soussignes_listing th.col_date { width: 76px; }
 #espace_alsace_contrats table#soussignes_listing th.col_statut,
 #espace_alsace_contrats table#soussignes_listing th.col_actions { width: 90px; }
 #espace_alsace_contrats table#soussignes_listing td { padding: 0 5px; } 

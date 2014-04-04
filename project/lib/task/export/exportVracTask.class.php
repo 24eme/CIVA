@@ -78,6 +78,7 @@ EOF;
 	            $i = 0;
 	            $dateRetiraison = $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION];
 	            $dateRetiraisonTmp = null;
+	            $totalVolEnleve = 0;
 	            foreach ($produits as $produit) {
 	            	$i++;
 	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
@@ -94,10 +95,14 @@ EOF;
 	            		$valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE] = $valuesProduit[VracProduitsView::VALUE_VOLUME_PROPOSE];
 	            		$valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] = $valuesContrat[VracContratsView::VALUE_DATE_SAISIE];
 	            	}
+	            	$totalVolEnleve += $valuesProduit[VracProduitsView::VALUE_VOLUME_ENLEVE];
 	            	if (!$dateRetiraisonTmp || ($valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] && $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION] < $dateRetiraisonTmp)) {
 	            		$dateRetiraisonTmp = $valuesProduit[VracProduitsView::VALUE_DATE_CIRCULATION];
 	            	}
 	            	$csvDdecvn->add($valuesProduit);
+	            }
+	            if ($type == 'M') {
+	            	$valuesContrat[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE] = $totalVolEnleve;
 	            }
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
 	            $csvDecven->add($valuesContrat);

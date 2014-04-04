@@ -1,7 +1,7 @@
 <div id="liste_contrats" class="listing">
 	<h3 class="titre_section">Contrats vrac</h3>
 	<div class="contenu_section">
-		<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'user' => $user)); ?>
+		<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'tiers' => $tiers)); ?>
 		<ul id="actions_contrat">
 			<?php if(VracSecurity::getInstance($sf_user, null)->isAuthorized(VracSecurity::CREATION)): ?>
 			<li class="nouveau_contrat"><a href="<?php echo url_for('@vrac_nouveau') ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
