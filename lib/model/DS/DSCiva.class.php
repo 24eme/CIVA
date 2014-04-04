@@ -76,42 +76,32 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     private function getLastDR() {
+        $last_dr = DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, substr($this->campagne,0,4));
         return DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, substr($this->campagne,0,4));
     }
 
-    public function updateProduits() {
-        if($this->isTypeDsPropriete()){
-            $this->updateProduitsPropriete();            
-        }
-        
-        if($this->isTypeDsNegoce()){
-        $this->updateProduitsNegoce();
-        }
-    }
-
-    private function updateProduitsPropriete()
-    {
-        $dr = $this->getLastDR();
-        if ($dr) {
-            return $this->updateProduitsFromDR($dr);
-        }
-        $ds = $this->getLastDS();
-        if ($ds) {
-            return $this->updateProduitsFromDS($ds);
-        }
-    }
-    
-    private function updateProduitsNegoce()
-    {
+    public function updateProduitsFromLastDs() {
         $ds = $this->getLastDS();
         if ($ds) {
             $this->updateProduitsFromDS($ds);
         }
+    }
+    
+    public function updateProduitsFromLastDr(){
         $dr = $this->getLastDR();
         if ($dr) {            
-            $this->updateProduitsFromDRNegoce($dr);
+                $this->drm_origine = $dr->_id;  
+            if($this->isTypeDsPropriete()){
+                $this->addDetailsFromDRPropriete($dr);   
+            }
+            if($this->isTypeDsNegoce()){   
+                $this->addDetailsFromDRNegoce($dr);
+            }
+            
         }
     }
+
+    
     
     protected function updateProduitsFromDS($ds) {  
         $this->drm_origine = $ds->_id;     
@@ -165,7 +155,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return $this->addNoeud($hash);
     }
 
-    public function addDetailsFromDR($dr) {
+    public function addDetailsFromDRPropriete($dr) {
         foreach ($dr->getProduitsDetails() as $detail) {
             if(!$detail->cave_particuliere) {
 
@@ -175,23 +165,25 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
     }
     
-    public function addDetailsFromDRNegoce($dr)
+    public function addDetailsFromDRNegoce()
     {
-       //     var_dump($dr->getProduitsDetails());
-        foreach ($dr->getProduitsDetails() as $detail) {
-            if(!$detail->cave_particuliere) {
+        $campagne = CurrentClient::getCurrent()->getCampagneDS();
+        $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $this->identifiant);
+        foreach ($drs as $dr) {
+            foreach ($dr->getProduitsDetails() as $detail) {
+            if(!$detail->getVolumeByAcheteur($this->identifiant)) {
 
                 continue;
             }
             $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
+            }
         }
-      //  exit;
+        
     }
     
     public function addDetailsFromDS($ds)
     {
         foreach ($ds->declaration->getProduitsDetails() as $detail) {       
-//            $hashConf = preg_replace($detail, $replacement, $detail->getCepage()->getHash());
             $this->addDetail($detail->getCepage()->getHash(), $detail->lieu, true);
         }
     }
@@ -238,19 +230,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
             return;
         }
         return $produit->addDetail($lieudit);
-    }
-
-    protected function updateProduitsFromDR($dr) {     
-        $this->drm_origine = $dr->_id;     
-        $this->addDetailsFromDR($dr);              
-    }
-    
-    protected function updateProduitsFromDRNegoce($dr)
-    {
-        $this->drm_origine = $dr->_id;     
-        $this->addDetailsFromDRNegoce($dr);     
-    }
-        
+    }        
     
     public function getLieuStockage() {
         $matches = array();

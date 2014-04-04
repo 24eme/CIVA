@@ -115,7 +115,6 @@ class DSCivaClient extends DSClient {
         $dss = array();
         $ds_principale_exist = false;
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
-
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
             if ($ds)
@@ -135,8 +134,7 @@ class DSCivaClient extends DSClient {
             }
             $ds->storeInfos();
             if (!$ds_neant) {
-                $ds->updateProduits();
-                
+                $ds->updateProduitsFromLastDs();
             } else {
                 $ds->add('ds_neant', 1);
             }
@@ -144,11 +142,15 @@ class DSCivaClient extends DSClient {
             if (!$ds->isDsPrincipale() && $ds_neant) {
                 continue;
             }
-            if ($ds->isDsPrincipale())
+            if ($ds->isDsPrincipale()){
                 $ds->add('num_etape', 1);
+            }
 
             $dss[] = $ds;
             $cpt++;
+        }       
+        foreach ($dss as $ds) {            
+            $ds->updateProduitsFromLastDr();
         }
         return $dss;
     }
@@ -301,12 +303,19 @@ class DSCivaClient extends DSClient {
     {
         $allDssByCvi = $this->findAllByCvi($ds->identifiant);
         $last_ds = null;
-        foreach ($allDssByCvi as $id => $ds) {
-            if((!$last_ds) || ($ds->periode > $last_ds->periode)){
-                $last_ds = $ds;
+        foreach ($allDssByCvi as $dsByCvi) {
+            if((!$last_ds) || ($dsByCvi->periode > $last_ds->periode)){
+                $last_ds = $dsByCvi;
             }
         }
-        return $this->getDSPrincipaleByDs($ds);
+        $last_ds_principale = $this->getDSPrincipaleByDs($last_ds);
+        $last_dss = $this->findDssByDS($last_ds_principale);
+        foreach ($last_dss as $current_ds) {
+            if($current_ds->getLieuStockage() == $ds->getLieuStockage()){
+                return $current_ds;
+            }
+        }
+        return null;
     }
     
     public function getLibelleFromId($id) {
