@@ -45,6 +45,20 @@ abstract class _Tiers extends Base_Tiers {
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
     
+    
+    /**
+     *
+     * @param string $campagne
+     * @return DR 
+     */
+    public function getTypeDs() {
+        if($this->type == _TiersClient::QUALITE_RECOLTANT){
+            return DSCivaClient::TYPE_DS_NEGOCE;
+            //return DSCivaClient::TYPE_DS_PROPRIETE;
+        }
+        return DSCivaClient::TYPE_DS_NEGOCE;
+    }
+    
     /**
      *
      * @return string 
