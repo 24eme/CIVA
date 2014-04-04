@@ -80,6 +80,17 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function updateProduits() {
+        if($this->isTypeDsPropriete()){
+            $this->updateProduitsPropriete();            
+        }
+        
+        if($this->isTypeDsNegoce()){
+        $this->updateProduitsNegoce();
+        }
+    }
+
+    private function updateProduitsPropriete()
+    {
         $dr = $this->getLastDR();
         if ($dr) {
             return $this->updateProduitsFromDR($dr);
@@ -89,10 +100,34 @@ class DSCiva extends DS implements IUtilisateursDocument {
             return $this->updateProduitsFromDS($ds);
         }
     }
-
+    
+    private function updateProduitsNegoce()
+    {
+        $ds = $this->getLastDS();
+        if ($ds) {
+            $this->updateProduitsFromDS($ds);
+        }
+        $dr = $this->getLastDR();
+        if ($dr) {            
+            $this->updateProduitsFromDRNegoce($dr);
+        }
+    }
+    
+    protected function updateProduitsFromDS($ds) {  
+        $this->drm_origine = $ds->_id;     
+        $this->addDetailsFromDS($ds);     
+    }
+    
+    public function isTypeDsPropriete(){
+        return ($this->exist('type_ds') && ($this->get('type_ds') == DSCivaClient::TYPE_DS_PROPRIETE));
+    }
+    
+    public function isTypeDsNegoce(){
+        return ($this->exist('type_ds') && ($this->get('type_ds') == DSCivaClient::TYPE_DS_NEGOCE));
+    }
+    
     public function getLastDS() {
-
-        return null;
+        return DSCivaClient::getInstance()->getLastDs($this);
     }
 
     public function addNoeud($hash) {
@@ -140,6 +175,27 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
     }
     
+    public function addDetailsFromDRNegoce($dr)
+    {
+       //     var_dump($dr->getProduitsDetails());
+        foreach ($dr->getProduitsDetails() as $detail) {
+            if(!$detail->cave_particuliere) {
+
+                continue;
+            }
+            $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
+        }
+      //  exit;
+    }
+    
+    public function addDetailsFromDS($ds)
+    {
+        foreach ($ds->declaration->getProduitsDetails() as $detail) {       
+//            $hashConf = preg_replace($detail, $replacement, $detail->getCepage()->getHash());
+            $this->addDetail($detail->getCepage()->getHash(), $detail->lieu, true);
+        }
+    }
+    
      protected function preSave() {
         $this->archivage_document->preSave();
     }
@@ -153,9 +209,12 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
 
-    public function addProduit($hash) {
+    public function addProduit($hash,$fromDs = false) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash_config = preg_replace('/^declaration/','recolte', $hash);
+        if($fromDs){
+            $hash_config = preg_replace('/^\/declaration/','/recolte', $hash);
+        }
         if(!$this->getConfig()->get($hash_config)->isForDS()) {
             $this->addNoeud($this->getConfig()->get($hash_config)->getParent()->getHash());
             return null;
@@ -173,8 +232,8 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return $produit;
     }
 
-    public function addDetail($hash, $lieudit = null) {
-        $produit = $this->addProduit($hash);
+    public function addDetail($hash, $lieudit = null, $fromDs = false) {
+        $produit = $this->addProduit($hash, $fromDs);
         if(!$produit) {
             return;
         }
@@ -184,6 +243,12 @@ class DSCiva extends DS implements IUtilisateursDocument {
     protected function updateProduitsFromDR($dr) {     
         $this->drm_origine = $dr->_id;     
         $this->addDetailsFromDR($dr);              
+    }
+    
+    protected function updateProduitsFromDRNegoce($dr)
+    {
+        $this->drm_origine = $dr->_id;     
+        $this->addDetailsFromDRNegoce($dr);     
     }
         
     

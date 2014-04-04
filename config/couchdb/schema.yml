@@ -5,6 +5,7 @@ DS:
       _id: {}
       _rev: {}
       type: {}
+      type_ds: {required: false}
       identifiant: {}
       date_emission: {}
       date_echeance: {}

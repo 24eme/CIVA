@@ -22,6 +22,9 @@ class DSCivaClient extends DSClient {
     const ETAPE_AUTRES = 4;
     const ETAPE_VALIDATION = 5;
     const ETAPE_VISUALISATION = 6;
+    
+    const TYPE_DS_PROPRIETE = 'propriete';
+    const TYPE_DS_NEGOCE = 'negoce';
 
     public static $etapes = array(
         self::ETAPE_EXPLOITATION => "Exploitation",
@@ -75,6 +78,10 @@ class DSCivaClient extends DSClient {
         return $dss_principales;
     }
 
+     public function findAllByCvi($cvi) {
+         return $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-999999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
+     }
+    
     public function findByCviAndCampagne($cvi, $campagne) {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
         foreach ($tiers->lieux_stockage as $lieu_stockage) {
@@ -91,14 +98,19 @@ class DSCivaClient extends DSClient {
         return $this->findByCviAndCampagne($cvi, $campagne);
     }
 
-    public function buildPeriode($date) {
-        preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
-
-        return sprintf('%d%02d', $matches[1], '07');
+    public function buildPeriode($date, $type_ds = null) {
+        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE){
+            preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
+            return sprintf('%d%02d', $matches[1], '07');
+        }
+        else{
+            return CurrentClient::getCurrent()->getPeriodeDS();
+        }
     }
-
+    
     public function findOrCreateDssByTiers($tiers, $date_stock, $ds_neant = false) {
-        $periode = $this->buildPeriode($this->createDateStock($date_stock));
+        $type_ds = $tiers->getTypeDs();
+        $periode = $this->buildPeriode($this->createDateStock($date_stock), $type_ds);
         $cpt = 1;
         $dss = array();
         $ds_principale_exist = false;
@@ -110,6 +122,7 @@ class DSCivaClient extends DSClient {
                 continue;
 
             $ds = new DSCiva();
+            $ds->add('type_ds', $type_ds);
             $ds->date_emission = date('Y-m-d');
             $ds->date_stock = $this->createDateStock($date_stock);
             $ds->identifiant = $tiers->cvi;
@@ -123,6 +136,7 @@ class DSCivaClient extends DSClient {
             $ds->storeInfos();
             if (!$ds_neant) {
                 $ds->updateProduits();
+                
             } else {
                 $ds->add('ds_neant', 1);
             }
@@ -283,6 +297,18 @@ class DSCivaClient extends DSClient {
         return $doc;
     }
 
+    public function getLastDs($ds)
+    {
+        $allDssByCvi = $this->findAllByCvi($ds->identifiant);
+        $last_ds = null;
+        foreach ($allDssByCvi as $id => $ds) {
+            if((!$last_ds) || ($ds->periode > $last_ds->periode)){
+                $last_ds = $ds;
+            }
+        }
+        return $this->getDSPrincipaleByDs($ds);
+    }
+    
     public function getLibelleFromId($id) {
         if (!preg_match('/^DS-[0-9]+-([0-9]{4})([0-9]{2})/', $id, $matches)) {
 
