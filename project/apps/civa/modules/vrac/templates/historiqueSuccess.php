@@ -1,6 +1,6 @@
 <div id="contrats_vrac">
 	<h2 class="titre_principal">Historique de vos contrats vrac</h2>
-	
+	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv') ?>">Exporter les contrats en CSV</a>
 	<div class="fond">
 		<ul class="filtres clearfix">
 			<li><label for="statut">Statut :</label><select id="statut" name="statut"><option value="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>">Tous</option><?php foreach ($statuts as $k => $s): ?><option value="<?php echo url_for('vrac_historique_statut', array('campagne' => $campagne, 'statut' => $k)) ?>"<?php if ($statut == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>

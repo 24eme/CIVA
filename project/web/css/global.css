@@ -151,6 +151,80 @@ input[type=radio]
     line-height: 25px;
 }
 
+/* Boutons */
+
+.btn_majeur
+{
+    border: 1px solid #b8b4b4;
+    border-radius: 2px;
+    color: #2a2a2a;
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 10px;
+    position: relative;
+}
+
+.btn_majeur:hover,
+.btn_majeur:focus { text-decoration: none; }
+
+.btn_petit { padding: 3px 8px; font-size: 13px; }
+
+.btn_grand { padding: 10px; font-size: 16px; font-weight: bold; }
+
+.btn_vert
+{
+    background: #9caa02;
+    background-image: -webkit-linear-gradient(bottom, #9caa02, #e4e4b5);
+    background-image: -moz-linear-gradient(bottom, #9caa02, #e4e4b5);
+    background-image: -o-linear-gradient(bottom, #9caa02, #e4e4b5);
+    background-image: linear-gradient(to top, #9caa02, #e4e4b5);
+}
+
+.btn_jaune
+{
+    background: #ffa200;
+    background-image: -webkit-linear-gradient(98deg, #ffa200, #ffe0a5);
+    background-image: -moz-linear-gradient(98deg, #ffa200, #ffe0a5);
+    background-image: -o-linear-gradient(98deg, #ffa200, #ffe0a5);
+    background-image: linear-gradient(-8deg, #ffa200, #ffe0a5);
+    color: #2a2a2a;
+}
+
+.btn_rouge
+{
+    background: #b70101;
+    background-image: -webkit-linear-gradient(98deg, #b70101, #fdafaf);
+    background-image: -moz-linear-gradient(98deg, #b70101, #fdafaf);
+    background-image: -o-linear-gradient(98deg, #b70101, #fdafaf);
+    background-image: linear-gradient(-8deg, #b70101, #fdafaf);
+    color: #000;
+}
+
+.btn_fleche { padding-right: 25px; }
+
+.btn_fleche:after
+{
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid #FFF;
+    content: '';
+    position: absolute;
+    height: 0; 
+    right: 5px;
+    top: 7px;
+    width: 0; 
+}
+
+.btn_petit.btn_fleche:after 
+{
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #FFF;
+    top: 6px; 
+}
+
+.btn_grand.btn_fleche:after { top: 13px; }
+
 /* Tableaux / Listes */
 
 table.table_donnees tbody tr.alt td,

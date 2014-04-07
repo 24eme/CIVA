@@ -11,6 +11,9 @@ vrac_historique:
 vrac_historique_statut:
   url: /vrac/historique/:campagne/:statut
   param: { module: vrac, action: historique }
+vrac_export_csv:
+  url: /vrac/export/csv
+  param: { module: vrac, action: exportCSV }
 vrac_soussigne_informations:
   url: /vrac/:numero_contrat/soussignes-informations
   param: { module: vrac, action: soussigneInformations }

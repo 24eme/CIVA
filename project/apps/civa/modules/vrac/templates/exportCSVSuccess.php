@@ -22,9 +22,9 @@
                        $produit->getLibellePartiel(),
                        $produit->denomination,
                        $produit->millesime,
-                       sprintFloatFr($produit->prix_unitaire),
-                       sprintFloatFr($produit->volume_propose),
-                       sprintFloatFr($produit->volume_enleve),
+                       sprintFloat($produit->prix_unitaire),
+                       sprintFloat($produit->volume_propose),
+                       sprintFloat($produit->volume_enleve),
                        (count($produit->retiraisons) > 0) ? $produit->retiraisons[0]->date : null
                        ); ?>
 <?php endforeach; ?>
