@@ -672,6 +672,11 @@ public function getConfigurationCampagne() {
         return $this->utilisateurs_document->getLastValidation();        
     }
     
+    public function isAjoutLieuxDeStockage()
+    {
+        return $this->getEtablissement()->isAjoutLieuxDeStockage();
+    }
+    
     public function isArchivageCanBeSet() {
 
         return $this->isValidee();

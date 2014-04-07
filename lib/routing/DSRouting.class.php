@@ -33,6 +33,11 @@ class DSRouting {
                         array('model' => 'DS',
                             'type' => 'object')));
         
+        $r->prependRoute('ds_ajout_lieux_stockage', new DSRoute('/ds/:id/lieux-stockage-ajout', array('module' => 'ds',
+                    'action' => 'lieuxStockageAjout'),
+                        array('sf_method' => array('get', 'post')),
+                        array('model' => 'DS',
+                            'type' => 'object')));        
         
         $r->prependRoute('ds_tiers', new TiersRoute('/ds/:cvi', array('module' => 'ds',
                     'action' => 'monEspace'),

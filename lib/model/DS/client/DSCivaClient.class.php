@@ -117,8 +117,10 @@ class DSCivaClient extends DSClient {
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
-            if ($ds)
+            
+            if ($ds){
                 continue;
+            }
 
             $ds = new DSCiva();
             $ds->add('type_ds', $type_ds);
@@ -148,9 +150,11 @@ class DSCivaClient extends DSClient {
 
             $dss[] = $ds;
             $cpt++;
-        }       
-        foreach ($dss as $ds) {            
-            $ds->updateProduitsFromLastDr();
+        }
+        if(count($dss)){
+            foreach ($dss as $ds) {            
+                $ds->updateProduitsFromLastDr();
+            }
         }
         return $dss;
     }
@@ -231,7 +235,9 @@ class DSCivaClient extends DSClient {
     }
 
     public function findDssByDS($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        if (!$ds) return null;
+        if (!$ds){
+            return null;
+        }
 //            throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
         return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode, $hydrate);
     }
@@ -304,12 +310,20 @@ class DSCivaClient extends DSClient {
         $allDssByCvi = $this->findAllByCvi($ds->identifiant);
         $last_ds = null;
         foreach ($allDssByCvi as $dsByCvi) {
-            if((!$last_ds) || ($dsByCvi->periode > $last_ds->periode)){
-                $last_ds = $dsByCvi;
+            if($ds->periode > $dsByCvi->periode){
+                if((!$last_ds) || ($dsByCvi->periode > $last_ds->periode)){
+                    $last_ds = $dsByCvi;
+                }
             }
         }
+        
+        if(!$last_ds){
+            return null; 
+        }
+        
         $last_ds_principale = $this->getDSPrincipaleByDs($last_ds);
         $last_dss = $this->findDssByDS($last_ds_principale);
+        
         foreach ($last_dss as $current_ds) {
             if($current_ds->getLieuStockage() == $ds->getLieuStockage()){
                 return $current_ds;
