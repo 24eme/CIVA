@@ -36,7 +36,16 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::DECLARANT, null);
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
         $this->setLayout(false);
+        $this->setResponseCsv(sprintf('export_contrats_%s.csv', date('Ymd')));
     }
+
+    protected function setResponseCsv($filename) {
+        $this->response->setContentType('application/csv');
+        $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);
+        $this->response->setHttpHeader('Pragma', 'o-cache', true);
+        $this->response->setHttpHeader('Expires', '0', true);
+    }
+
 	
 	public function executeAnnuaire(sfWebRequest $request)
 	{
