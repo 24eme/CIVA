@@ -30,13 +30,16 @@ class dsActions extends sfActions {
         $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
-            if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
+            if($ds->isDsPrincipale() && $ds->isAjoutLieuxDeStockage()){
+                $ds->add('num_etape',3);
+            }
+            elseif($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
                 $ds->add('date_depot_mairie',date('Y').'-08-31');
             }
             $ds->save($this->getUserId());
         }
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);        
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
         $this->redirect('ds_etape_redirect', $this->ds);
     } 
     
