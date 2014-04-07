@@ -52,9 +52,10 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getTypeDs() {
-        if($this->type == _TiersClient::QUALITE_RECOLTANT){
-            return DSCivaClient::TYPE_DS_PROPRIETE;
-        }
+//        if($this->type == _TiersClient::QUALITE_RECOLTANT){
+//            return DSCivaClient::TYPE_DS_PROPRIETE;
+//        }
+        
         return DSCivaClient::TYPE_DS_NEGOCE;
     }
     
@@ -113,9 +114,48 @@ abstract class _Tiers extends Base_Tiers {
         return $this->getNom();
     }
 
-    public function isDeclarantStock() {
-
+    public function isDeclarantStock() {       
         return false;
+       // return $this->isDeclarantStock() || $this->isDeclarantStockNegoce();
+    }
+    
+    public function isDeclarantStockPropriete()
+    {
+        return ($this->categorie == "VRA");
+    }
+    
+    public function isDeclarantStockNegoce() {
+
+       return (($this->categorie == "PN") || ($this->categorie == "CCV") || ($this->categorie == "SIC"));
+    }
+    
+    public function isAjoutLieuxDeStockage(){
+        return true;
+        $this->isDeclarantStockNegoce();
+    }
+    
+    public function addLieuStockage($nom,$adresse,$commune,$code_postal)
+    {
+        $newId = 1;
+        if(!$this->exist('lieux_stockage')){
+            $this->add('lieux_stockage');
+        }
+        $lieux_stockage = $this->lieux_stockage;
+        foreach ($lieux_stockage as $key => $value) {
+            $current_id = intval(str_replace($this->cvi, '', $key));
+            if($current_id > $newId){
+                $newId = $current_id;
+            }
+        }
+        $newId = $this->cvi.sprintf('%03d',$newId+1);
+        $lieu_stockage = new stdClass();
+        $lieu_stockage->numero = $newId;
+        $lieu_stockage->nom = $nom;
+        $lieu_stockage->adresse = $adresse;
+        $lieu_stockage->commune = $commune;
+        $lieu_stockage->code_postal = $code_postal;        
+        $lieux_stockage->add($newId, $lieu_stockage);
+        return $lieu_stockage;
     }
 
     public function isDeclarantDR() {

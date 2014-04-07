@@ -197,6 +197,25 @@ class dsActions extends sfActions {
         }
     }
 
+    public function executeLieuxStockageAjout(sfWebRequest $request)
+    {
+        $this->ds = $this->getRoute()->getDS();
+        $this->tiers = $this->getRoute()->getTiers();
+        if(!$this->ds->isAjoutLieuxDeStockage()){
+            $this->forwardSecure();
+        }
+        $this->form = new DSEditionAddLieuStockageFormCiva($this->ds);
+        
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->doAddLieuStockage();
+                $this->redirect("ds_lieux_stockage", $this->ds);
+            }
+        }
+        
+    }
+    
     public function executeStock(sfWebRequest $request) {
         $this->secureDS(array(DSSecurity::CONSULTATION, 
                               DSSecurity::EDITION));

@@ -142,6 +142,19 @@ ul#etape_declaration li.actif a em span.lieu
     padding: 6px 0 0;*/
 }
 
+
+ul#etape_declaration.etapes_ds li.sous_menu ul li.ajouter_lieu_stockage{
+    margin: 10 0 0 0;
+    padding: 0 0 0 0;
+}
+
+#etape_declaration.etapes_ds li.ajouter_lieu_stockage a {
+    background: #666 url(../images/pictos/pi_ajout.png)  center no-repeat;
+    color: #fff;
+    padding-left: 30px;
+    height: 30px;
+}
+
 /* Barre de progression */
 .progression_ds
 {
@@ -196,6 +209,7 @@ ul#etape_declaration li.actif a em span.lieu
 	color: #fff;
 	padding-left: 22px;
 }
+
 
 #onglets_majeurs.onglets_stock li.recap_stock { float: right; }
 
