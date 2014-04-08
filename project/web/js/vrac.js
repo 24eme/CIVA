@@ -190,11 +190,9 @@ var initClotureContratCheckboxes = function()
 
 $.fn.checkboxesBehaviour = function(){
   var reg_debut = new RegExp("vrac_produits__", "g");
-  var reg_fin = new RegExp("_detail([A-Za-z0-9\_\-])*", "g");    
-  console.log($(this).attr('id'));
-  var champsClass = $(this).attr('id').replace(reg_fin,'').replace(reg_debut,'ret_');
+  var reg_fin = new RegExp("(_detail_[0-9]+)_[A-Za-z0-9\_\-]*", "g");
+  var champsClass = $(this).attr('id').replace(reg_fin,'$1').replace(reg_debut,'ret_');
   var date = $('.'+champsClass).parent().parent().children('td.echeance').children('input.input_date');
-
     if($(this).is(':checked')){
         $('.'+champsClass).attr('readonly','readonly');
         date.attr('readonly','readonly');
