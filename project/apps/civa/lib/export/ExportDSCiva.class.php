@@ -11,13 +11,13 @@ class ExportDSCiva {
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
     const CODE_DOUANE_ED = "1B001S";
 
-    public function __construct($campagne) {
+    public function __construct($campagne, $onlyPropriete = false) {
         if (!preg_match('/^[0-9]{4}$/', $campagne)) {
             throw new sfException("La campagne doit être une année ($campagne)");
         }
         $this->campagne = $campagne;
         $this->client_ds = DSCivaClient::getInstance();
-        $this->ds_ids = $this->client_ds->getAllIdsByCampagne($this->campagne);
+        $this->ds_ids = $this->client_ds->getAllIdsByCampagne($this->campagne, $onlyPropriete);
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);
@@ -195,12 +195,13 @@ class ExportDSCiva {
         }
 
         $principale = ($ds->isDsPrincipale()) ? "\"P\"" : "\"S\"";
+        $proprieteNegoce = ($ds->isTypeDsNegoce())? "\"N\"" : "\"P\"";
         $num_db2 = ($etb->exist('db2') && $etb->db2->exist('num')) ? $etb->db2->num : '';
         $cvi = "\"" . $ds->identifiant . "\"";
         $civagene0 = "0"; // A trouvé
 
 
-        $row = $this->campagne . "," . $id_csv . ",\"P\",\"" . $lieu_stockage . "\"," . $principale . "," . $num_db2 . "," . $cvi . "," . $civagene0 . ",";
+        $row = $this->campagne . "," . $id_csv . ",".$proprieteNegoce."," . $lieu_stockage . "\"," . $principale . "," . $num_db2 . "," . $cvi . "," . $civagene0 . ",";
 
 //VINTABLE
         $vin_table_volume = 0;
