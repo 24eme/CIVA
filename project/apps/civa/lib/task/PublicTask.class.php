@@ -49,6 +49,8 @@ class PublicTask
         $filename = array_pop($parts);
         $name = str_replace(".sh", "", $filename);
         $name = str_replace("_", " ", $name);
+        $name = str_replace("-", " ", $name);
+        $name = strtolower($name);
         $name = ucwords($name);
 
         return $name;
