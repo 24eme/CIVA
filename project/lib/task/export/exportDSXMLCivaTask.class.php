@@ -45,7 +45,7 @@ EOF;
         set_time_limit(0);
         $campagne = $arguments['campagne'];
         $date = $arguments['date'];
-        $exportXmlManager = new ExportDSCiva($campagne);
+        $exportXmlManager = new ExportDSCiva($campagne,true);
         $xml = $exportXmlManager->exportXml();
         
         $folderPath = $arguments['folderPath'];

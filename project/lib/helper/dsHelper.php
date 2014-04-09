@@ -91,3 +91,23 @@ function getTitleLieuStockageStock($ds){
 function isEtapePasse($etape,$ds){
     return ($etape < $ds->num_etape);
 }
+
+
+function getDateDeclaration($ds){
+    if(substr($ds->periode,4) == '12'){
+        return '31 décembre '.($ds->getCampagne());
+    }
+    return '31 Juillet '.($ds->getCampagne() + 1);
+}
+
+
+function getHeader($ds, $validee){
+    if($ds->isTypeDsNegoce()){
+        $result = "Stocks Coopération et Négoce";
+    }
+    $result .= sprintf("\n%s", $ds->declarant->nom);
+    if($ds->isTypeDsPropriete()){
+       $result .= sprintf("\nCommune de déclaration%s", $ds->declarant->commune); 
+    }
+   return $result.sprintf("\n%s", $validee);
+}
