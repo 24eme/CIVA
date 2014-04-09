@@ -16,6 +16,7 @@ $(document).ready( function()
 	hauteurEgale('.bloc_acceuil_content');
 	initJSTitle();
 	initFlashMessage();
+	initPopupTask();
 });
 
 var initFlashMessage = function() {
@@ -185,6 +186,28 @@ var initNettoyageChamps = function()
 		champ.verifNettoyageChamp();
 	});
 };
+
+var initPopupTask = function()
+{
+	$('.tache-popup').live('click', function() {
+    	$('.popup_ajout').dialog('close');
+    	var htmlLoader = null;
+    	if($(this).attr('data-loader')) {
+    		htmlLoader = $($(this).attr('data-loader'));
+    		openPopup(htmlLoader);
+    	}
+        $.ajax({
+            url: $(this).attr('href'),
+            success: function(data) {
+            	if(htmlLoader) {
+            		htmlLoader.dialog('close');
+            	}
+                openPopup($(data));
+            }
+        });
+        return false;
+    });
+}
 
 /**
  * Colonnes de même hauteur
