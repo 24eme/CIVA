@@ -170,6 +170,8 @@ Vrac:
                                                                   cloture: { type: integer }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
+                                                                  centilisation: { type: float, required: false }
+                                                                  nb_bouteille: { type: integer, required: false }
                                                                   retiraisons:
                                                                     type: array_collection
                                                                     definition:
@@ -200,6 +202,7 @@ Vrac:
             statut: { }
       campagne: {  }
       campagne_archive: {  }
+      type_archive: {  }
       numero_contrat: {  }
       numero_visa: {  }
       numero_db2: { }
@@ -210,6 +213,7 @@ Vrac:
       volume_enleve_total: { type: float }
       etape: {  }
       type: {  }
+      type_contrat: {  }
       date_modification: {  }
       date_export_creation: {  }
       motif_suppression: {  }

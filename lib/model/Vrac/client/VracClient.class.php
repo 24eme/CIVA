@@ -4,13 +4,61 @@ class VracClient extends acCouchdbClient {
 	
 	const VRAC_PREFIXE_ID = 'VRAC-';
 	const APP_CONFIGURATION = 'app_configuration_vrac';
-	const APP_CONFIGURATION_PRODUITS = 'produits_statiques';
+	const APP_CONFIGURATION_VRAC_PRODUITS = 'produits_vrac_statiques';
+	const APP_CONFIGURATION_BOUTEILLE_PRODUITS = 'produits_bouteille_statiques';
 	const APP_CONFIGURATION_ETAPES = 'etapes';
 	const NB_MAX_CONTRAT_DB2 = 99999;
+	const TYPE_VRAC = 'VRAC';
+	const TYPE_BOUTEILLE = 'BOUTEILLE';
+	const TYPE_VRAC_LIBELLE = 'Vrac';
+	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
+	
+	protected static $_contrat_types = array(
+									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE, 
+                                    self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE
+                                 );
+	
+	protected static $_centilisations = array(
+									'75' => '75 cL', 
+									'50' => '50 cL',
+                                    '100' => '1 L',
+									'37.5' => '37,5 cL',
+									'150' => '1,5 L',
+									'18.7' => '18,7 cL',
+									'20' => '20 cL',
+									'25' => '25 cL',
+									'300' => '3 L',
+									'600' => '6 L'
+                                 );
 	
     public static function getInstance()
     {
       return acCouchdbManager::getClient("Vrac");
+    }
+    
+    public static function getConfigurationProduits($type)
+    {
+    	if ($type == self::TYPE_BOUTEILLE) {
+    		return self::APP_CONFIGURATION_BOUTEILLE_PRODUITS;
+    	}
+    	return self::APP_CONFIGURATION_VRAC_PRODUITS;
+    }
+    
+	public static function getContratTypes()
+    {
+      return self::$_contrat_types;
+    }
+    
+	public static function getCentilisations()
+    {
+      return self::$_centilisations;
+    }
+    
+    public static function getLibelleCentilisation($centilisation)
+    {
+    	$centilisations = self::getCentilisations();
+    	$centilisation = ''.$centilisation;
+    	return (isset($centilisations[$centilisation]))? $centilisations[$centilisation] : null;
     }
 
     public static function canBeHaveVrac($tiers)

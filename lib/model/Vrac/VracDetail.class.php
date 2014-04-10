@@ -60,10 +60,15 @@ class VracDetail extends BaseVracDetail {
     
     public function defineActive()
     {
-    	if ($this->volume_propose && $this->prix_unitaire) {
-    		$this->actif = 1;
+    	$this->actif = 0;
+    	if ($this->exist('nb_bouteille')) {
+    		if ($this->nb_bouteille && $this->centilisation) {
+	    		$this->actif = 1;
+	    	}
     	} else {
-    		$this->actif = 0;
+	    	if ($this->volume_propose && $this->prix_unitaire) {
+	    		$this->actif = 1;
+	    	}
     	}
     }
     
@@ -98,12 +103,20 @@ class VracDetail extends BaseVracDetail {
     
     public function getTotalPrixPropose()
     {
-    	return ($this->volume_propose && $this->prix_unitaire && $this->actif)? $this->volume_propose * $this->prix_unitaire : 0;
+    	if ($this->exist('nb_bouteille')) {
+    		return ($this->nb_bouteille && $this->prix_unitaire && $this->actif)? $this->nb_bouteille * $this->prix_unitaire : 0;
+    	} else {
+    		return ($this->volume_propose && $this->prix_unitaire && $this->actif)? $this->volume_propose * $this->prix_unitaire : 0;
+    	}
     }
     
     public function getTotalPrixEnleve()
     {
-    	return ($this->volume_enleve && $this->prix_unitaire && $this->actif)? $this->volume_enleve * $this->prix_unitaire : 0;
+    	if ($this->exist('nb_bouteille')) {
+    		return ($this->nb_bouteille && $this->prix_unitaire && $this->actif)? $this->nb_bouteille * $this->prix_unitaire : 0;
+    	} else {
+    		return ($this->volume_enleve && $this->prix_unitaire && $this->actif)? $this->volume_enleve * $this->prix_unitaire : 0;
+    	}
     }
     
     public function allProduitsClotures()
@@ -124,6 +137,15 @@ class VracDetail extends BaseVracDetail {
     	return null;
     }
     
+    public function updateProduit()
+    {
+    	if ($this->exist('nb_bouteille') && $this->actif) {
+    		$this->volume_propose = round(($this->nb_bouteille * $this->centilisation) / 10000, 2);
+    		$this->volume_enleve = $this->volume_propose;
+    		$this->clotureProduits();
+    	}
+    }
+    
     public function clear()
     {
     	$this->vtsgn = null;
@@ -134,6 +156,10 @@ class VracDetail extends BaseVracDetail {
     	$this->cloture = null;
     	$this->volume_propose = null;
     	$this->volume_enleve = null;
+    	if ($this->exist('nb_bouteille')) {
+	    	$this->nb_bouteille = null;
+	    	$this->centilisation = null;
+    	}
     }
 
 }

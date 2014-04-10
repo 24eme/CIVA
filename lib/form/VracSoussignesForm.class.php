@@ -10,12 +10,14 @@ class VracSoussignesForm extends acCouchdbObjectForm
     }
 	public function configure()
     {
+    	$contratTypes = $this->getContratTypes();
     	$types = $this->getTypes();
     	$recoltantChoices = $this->getRecoltants();
     	$negociantChoices = $this->getNegociants();
     	$caveCooperativeChoices = $this->getCavesCooperatives();
     	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
+            'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
@@ -27,6 +29,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
     	));
         $this->setValidators(array(
+        	'type_contrat' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($contratTypes))),
         	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
@@ -51,6 +54,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if ($this->getObject()->vendeur_identifiant) {
         	$defaults['vendeur_'.str_replace('s', '', $this->getObject()->vendeur_type).'_identifiant'] = $this->getObject()->vendeur_identifiant;
         }
+        if ($this->getObject()->isNew()) {
+        	$defaults['type_contrat'] = VracClient::TYPE_VRAC;
+        }
         $this->setDefaults($defaults); 
     }
 
@@ -72,6 +78,15 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->vendeur_identifiant = $vendeur->_id;
     	$this->getObject()->storeAcheteurInformations($acheteur);
     	$this->getObject()->storeVendeurInformations($vendeur);
+    	$this->getObject()->type_contrat = $values['type_contrat'];
+    	if ($this->getObject()->isNew()) {
+    		$this->getObject()->initProduits();
+    	}
+    }
+    
+    protected function getContratTypes()
+    {
+    	return VracClient::getContratTypes();
     }
     
     protected function getTypes()

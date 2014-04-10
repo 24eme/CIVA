@@ -1,9 +1,9 @@
 <?php
 class VracContratsView extends acCouchdbView
 {
-
-	const KEY_STATUT = 0;
-	const KEY_DATE = 1;
+	const KEY_TYPE = 0;
+	const KEY_STATUT = 1;
+	const KEY_DATE = 2;
 	
 	const VALUE_NUMERO_ARCHIVE = 0;
 	const VALUE_TYPE_CONTRAT = 1;
@@ -42,13 +42,13 @@ class VracContratsView extends acCouchdbView
     
     public function findAll()
     {
-    	return $this->client->getView($this->design, $this->view)->rows;
+    	return $this->client->startkey(array(VracClient::TYPE_VRAC))->endkey(array(VracClient::TYPE_VRAC, array()))->getView($this->design, $this->view)->rows;
     }
 
     public function findBy($statut, array $date) 
     {    
-		$startkey = array($statut, $date[0]);
-		$endkey = array($statut, $date[1], array());
+		$startkey = array(VracClient::TYPE_VRAC, $statut, $date[0]);
+		$endkey = array(VracClient::TYPE_VRAC, $statut, $date[1], array());
         return $this->client->startkey($startkey)
                             ->endkey($endkey)
                             ->getView($this->design, $this->view)->rows;
