@@ -503,6 +503,24 @@ csv_download:
   url: /download/csv
   param: {module: upload, action: csvDownload}
 
+task_list:
+  url: /taches
+  param: {module: task, action: list}
+
+task_info:
+  url: /taches/:namespace/:slug/infos
+  param: {module: task, action: info}
+  requirements:
+    namespace: '[a-zA-Z0-9_-]+'
+    slug: '[a-zA-Z0-9_-]+'
+
+task_run:
+  url: /taches/:namespace/:slug/lancer
+  param: {module: task, action: run}
+  requirements:
+    namespace: '[a-zA-Z0-9_-]+'
+    slug: '[a-zA-Z0-9_-]+'
+
 default_index:
   url:   /:module
   param: { action: index }

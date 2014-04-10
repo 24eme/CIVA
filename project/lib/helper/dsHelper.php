@@ -36,7 +36,9 @@ function getProgressionEtape3($dss,$ds,$recap = false) {
     $courant_stock = ($ds->exist('courant_stock'))? $ds->courant_stock : null;
     $courant_id = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$1', $courant_stock);
     $hash_lieu = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$2', $courant_stock);
-    if(!$courant_stock) return $step_pourcent+10;
+    if(!$courant_stock){
+        return 10;
+    }
     foreach (array_keys($dss) as $cpt => $id_ds) {
         if($id_ds == $courant_id){
             $ds_courante = $dss[$courant_id];
@@ -88,4 +90,24 @@ function getTitleLieuStockageStock($ds){
 
 function isEtapePasse($etape,$ds){
     return ($etape < $ds->num_etape);
+}
+
+
+function getDateDeclaration($ds){
+    if(substr($ds->periode,4) == '12'){
+        return '31 décembre '.($ds->getCampagne());
+    }
+    return '31 Juillet '.($ds->getCampagne() + 1);
+}
+
+
+function getHeader($ds, $validee){
+    if($ds->isTypeDsNegoce()){
+        $result = "Stocks Coopération et Négoce";
+    }
+    $result .= sprintf("\n%s", $ds->declarant->nom);
+    if($ds->isTypeDsPropriete()){
+       $result .= sprintf("\nCommune de déclaration%s", $ds->declarant->commune); 
+    }
+   return $result.sprintf("\n%s", $validee);
 }
