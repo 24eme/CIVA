@@ -321,6 +321,12 @@
     width: 60px; 
 }
 
+#contrats_vrac .etape_produits.table_donnees .bouteille input 
+{ 
+    text-align: right;
+    width: 60px; 
+}
+
 #contrats_vrac .etape_produits.table_donnees .volume input,
 #contrats_vrac .etape_produits.table_donnees .prix input 
 { 
@@ -455,7 +461,9 @@
 #contrats_vrac .validation.table_donnees .volume { width: 105px; }
 
 #contrats_vrac .validation.table_donnees td.prix,
-#contrats_vrac .validation.table_donnees td.volume { text-align:right; }
+#contrats_vrac .validation.table_donnees td.volume,
+#contrats_vrac .validation.table_donnees td.bouteille,
+#contrats_vrac .validation.table_donnees td.centilisation { text-align:right; }
 
 #contrats_vrac .conditions { margin: 0 0 20px; }
 

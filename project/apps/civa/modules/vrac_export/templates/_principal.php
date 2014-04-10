@@ -8,7 +8,7 @@
 	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions vrac&nbsp;</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions <?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>bouteilles<?php else: ?>vrac<?php endif; ?>&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
 <?php      $nb_ligne = 30;
@@ -22,11 +22,17 @@
 		<th width="<?php echo $widthProduit ?>px" style="font-weight: bold; text-align: center; border: 1px solid black;">Produit</th>
 		<th width="42px" style="font-weight: bold; text-align: center; border: 1px solid black;">Mill.</th>  
 		<?php if (!$odg): ?>
-		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small>(en &euro;/HL)</small></th>
+		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>(en &euro;/blle)<?php else: ?>(en &euro;/HL)<?php endif; ?></small></th>
 		<?php endif; ?>
+		<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+		<th width="85px" style="font-weight: bold; text-align: center; border: 1px solid black;">Centilisation</th>
+		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nombre de<br />bouteilles</th>
+                <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en HL)</small></th>
+		<?php else: ?>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
                 <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>de Chargt</th>
+        <?php endif; ?>
 	</tr>
 	<?php 
         $cptDetail = 0;
@@ -51,10 +57,15 @@
 			<?php if (!$odg): ?>
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
 			<?php endif; ?>
+			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo VracClient::getLibelleCentilisation($detailLine->centilisation) ?></td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoFloat($detailLine->nb_bouteille); ?><?php endif; ?></td>
+            <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
+			<?php else: ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-                        <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
-	
+            <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
+			<?php endif; ?>
         </tr>
         <?php 
         $cptDetail++;
@@ -76,12 +87,18 @@
 		endforeach;
         endforeach; 
 	?>
-
+	<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+	<tr>
+			<td style="text-align: left;" colspan="<?php if (!$odg): ?>6<?php else: ?>5<?php endif; ?>" >&nbsp;</td>
+            <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+	</tr>
+	<?php else: ?>
 	<tr>
 			<td style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
 			<td style="border: 1px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
                         <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
+	<?php endif; ?>
 	<?php if (!$odg): ?>
 	<tr>
 		<td style="text-align: left;" colspan="4" >*&nbsp;<span style="font-size: 6pt; padding-left: 20px"><?php echo getExplicationEtoile(); ?></span></td>
