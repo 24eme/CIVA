@@ -29,7 +29,7 @@ class VracValidation extends DocumentValidation
 					$null_libelles[] = $detail->getLibelle();
 					$this->produits_controle[$detail->getHash()] = $detail;
 				}
-				if ($detail->volume_propose > self::MIN_VOLUME_CONTROLE && $detail->volume_enleve > 0) {
+				if ($detail->volume_propose > self::MIN_VOLUME_CONTROLE && $detail->volume_enleve !== null) {
 					$ecart = $detail->volume_propose * self::TAUX_VOLUME_CONTROLE;
 					$min = $detail->volume_propose - $ecart;
 					$max = $detail->volume_propose + $ecart;
