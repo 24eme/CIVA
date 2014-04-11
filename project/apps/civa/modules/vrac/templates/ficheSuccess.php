@@ -11,9 +11,9 @@
 	<li class="ui-tabs-selected">
 		<a href="#" style="height: 18px;">
 		<?php if ($vrac->isValide()): ?>
-			Contrat vrac<?php if ($vrac->numero_archive): ?> numéro de visa <?php echo $vrac->numero_archive ?><?php endif; ?>
+			Contrat <?php if ($vrac->numero_archive): ?> numéro de visa <?php echo $vrac->numero_archive ?><?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat vrac
+			Validation de votre contrat
 		<?php endif; ?>
 		</a>
 		<span class="statut"><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span>

@@ -290,21 +290,28 @@ var sumContrat = function(brothers, cible)
 		lignes_tableau.each(function()
 		{
 			var ligne_courante = $(this),
-				champs = ligne_courante.find('input'),
-				champs_requis = champs.filter('.volume input').add(champs.filter('.prix input')),
+				champs = ligne_courante.find('input, select'),
 				btn_balayette = ligne_courante.find('a.balayette');
 
-			// On vérifie d'abord si le couple volume / prix n'est pas déjà renseigné sur une ligne
-			var verifVolumePrix = function()
+			// Vérifie les champs requis
+			var verifChampsRequis = function()
 			{
 				var champs_vides = true;
 
 				champs.each(function()
 				{
 					var champ_volume = ligne_courante.find('.volume input'),
-						champ_prix = ligne_courante.find('.prix input');
-
-					if($.trim(champ_volume.val()) !== '' && $.trim(champ_prix.val()) !== '')
+						champ_prix = ligne_courante.find('.prix input'),
+						champ_centilisation = ligne_courante.find('.centilisation select'),
+						champ_bouteille = ligne_courante.find('.bouteille input');
+					
+					if
+					(
+						(champ_volume.length > 0 && $.trim(champ_volume.val()))
+						&& (champ_prix.length > 0 && $.trim(champ_prix.val())) 
+						|| (champ_centilisation.length > 0 && champ_centilisation.val()) 
+						&& (champ_bouteille.length > 0 && $.trim(champ_bouteille.val()))
+					)
 					{
 						ligne_courante.addClass('coche');
 						ligne_courante.removeClass('croix');
@@ -315,7 +322,7 @@ var sumContrat = function(brothers, cible)
 						ligne_courante.addClass('croix');
 					}
 
-					if($.trim($(this).val()) !== '')
+					if($.trim($(this).val()))
 					{
 						champs_vides = false;
 						ligne_courante.addClass('actif');
@@ -329,7 +336,7 @@ var sumContrat = function(brothers, cible)
 				}
 			};
 
-			verifVolumePrix();
+			verifChampsRequis();
 
 			// Ligne active
 			champs.focus(function()
@@ -342,7 +349,7 @@ var sumContrat = function(brothers, cible)
 			{
 				var ligne_valide = false;
 
-				verifVolumePrix();
+				verifChampsRequis();
 
 				// On vérifie si le tableau comporte une ligne valide
 				lignes_tableau.each(function()

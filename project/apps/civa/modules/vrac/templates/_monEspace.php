@@ -7,7 +7,7 @@
 			<li class="nouveau_contrat"><a href="<?php echo url_for('@vrac_nouveau') ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
 			<li><a href="<?php echo url_for('@annuaire') ?>">Gérer son annuaire</a></li>
 			<?php endif; ?>
-			<li><a href="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>">Voir tout</a></li>
+			<li><a href="<?php echo url_for('vrac_historique') ?>">Voir tout</a></li>
 		</ul>
 	</div>
 </div>

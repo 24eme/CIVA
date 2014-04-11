@@ -1,4 +1,4 @@
-Contrat vrac du <?php echo strftime('%d/%m/%Y', strtotime($vrac->valide->date_saisie)) ?>
+Contrat de vente du <?php echo strftime('%d/%m/%Y', strtotime($vrac->valide->date_saisie)) ?>
 
 
 Vendeur : <?php echo ($vrac->vendeur->intitule)? $vrac->vendeur->intitule.' '.$vrac->vendeur->raison_sociale : $vrac->vendeur->raison_sociale ?>

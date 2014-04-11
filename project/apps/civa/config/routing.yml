@@ -6,10 +6,7 @@ vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
 vrac_historique:
-  url: /vrac/historique/:campagne
-  param: { module: vrac, action: historique }
-vrac_historique_statut:
-  url: /vrac/historique/:campagne/:statut
+  url: /vrac/historique
   param: { module: vrac, action: historique }
 vrac_export_csv:
   url: /vrac/export/csv
