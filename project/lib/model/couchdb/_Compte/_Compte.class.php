@@ -137,7 +137,7 @@ abstract class _Compte extends Base_Compte {
     
     public function isInscrit()
     {
-    	return $this->statut == self::STATUS_INSCRIT;
+    	return $this->statut != self::STATUS_NOUVEAU && $this->isActif();
     }
 
     public function setInactif() {

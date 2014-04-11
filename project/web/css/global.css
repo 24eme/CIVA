@@ -100,18 +100,18 @@ input[type=radio]
 
 .clearfix
 {
-	zoom: 1;
-	min-height: 1px;
+    zoom: 1;
+    min-height: 1px;
 }
 
 .clearfix:before,
 .clearfix:after
 {
-	content: "\0020";
-	display: block;
-	font-size: 0;
-	height: 0;
-	visibility: hidden; 
+    content: "\0020";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden; 
 }
 
 .clearfix:after { clear: both; }
@@ -153,6 +153,7 @@ input[type=radio]
 
 /* Boutons */
 
+/* Structure */
 .btn_majeur
 {
     border: 1px solid #b8b4b4;
@@ -167,26 +168,23 @@ input[type=radio]
 .btn_majeur:hover,
 .btn_majeur:focus { text-decoration: none; }
 
-.btn_petit { padding: 3px 8px; font-size: 13px; }
-
-.btn_grand { padding: 10px; font-size: 16px; font-weight: bold; }
-
+/* Couleurs */
 .btn_vert
 {
-    background: #9caa02;
-    background-image: -webkit-linear-gradient(bottom, #9caa02, #e4e4b5);
-    background-image: -moz-linear-gradient(bottom, #9caa02, #e4e4b5);
-    background-image: -o-linear-gradient(bottom, #9caa02, #e4e4b5);
-    background-image: linear-gradient(to top, #9caa02, #e4e4b5);
+    background: #BBCC00;
+    background-image: -webkit-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: -moz-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: -o-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: linear-gradient(to top, #BBCC00, #e4e4b5);
 }
 
 .btn_jaune
 {
-    background: #ffa200;
-    background-image: -webkit-linear-gradient(98deg, #ffa200, #ffe0a5);
-    background-image: -moz-linear-gradient(98deg, #ffa200, #ffe0a5);
-    background-image: -o-linear-gradient(98deg, #ffa200, #ffe0a5);
-    background-image: linear-gradient(-8deg, #ffa200, #ffe0a5);
+    background: #FF8500;
+    background-image: -webkit-linear-gradient(98deg, #FF8500, #ffe0a5);
+    background-image: -moz-linear-gradient(98deg, #FF8500, #ffe0a5);
+    background-image: -o-linear-gradient(98deg, #FF8500, #ffe0a5);
+    background-image: linear-gradient(-8deg, #FF8500, #ffe0a5);
     color: #2a2a2a;
 }
 
@@ -200,30 +198,71 @@ input[type=radio]
     color: #000;
 }
 
-.btn_fleche { padding-right: 25px; }
+/* Tailles */
+.btn_petit 
+{ 
+    font-size: 13px; 
+    padding: 3px 8px; 
+}
 
-.btn_fleche:after
+.btn_grand 
+{ 
+    font-size: 16px; 
+    font-weight: bold;
+    padding: 10px; 
+}
+
+/* Boutons fleche */
+.btn_fleche_g { padding-left: 25px; }
+
+.btn_fleche_d { padding-right: 25px; }
+
+.btn_fleche_g:after,
+.btn_fleche_d:after
 {
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-left: 7px solid #FFF;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
     content: '';
     position: absolute;
     height: 0; 
-    right: 5px;
     top: 7px;
     width: 0; 
 }
 
-.btn_petit.btn_fleche:after 
+.btn_fleche_g:after
+{
+    border-right: 7px solid #FFF;
+    left: 5px;
+}
+
+.btn_fleche_d:after
+{
+    border-left: 7px solid #FFF;
+    right: 5px;
+}
+
+/* Tailles fleches */
+.btn_petit.btn_fleche_g:after,
+.btn_petit.btn_fleche_d:after
 {
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    border-left: 5px solid #FFF;
-    top: 6px; 
+    top: 6px;
 }
 
-.btn_grand.btn_fleche:after { top: 13px; }
+.btn_petit.btn_fleche_g:after { border-right: 6px solid #FFF; }
+.btn_petit.btn_fleche_d:after { border-left: 6px solid #FFF; }
+
+.btn_grand.btn_fleche_g:after, 
+.btn_grand.btn_fleche_d:after 
+{ 
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    top: 11px; 
+}
+
+.btn_grand.btn_fleche_g:after { border-right: 9px solid #FFF; }
+.btn_grand.btn_fleche_d:after { border-left: 9px solid #FFF; }
 
 /* Tableaux / Listes */
 
@@ -234,29 +273,29 @@ ul li.alt { background: #DDD; }
 /* Messages logs */
 
 .message {
-	background: #fffcef;
-	border: 1px solid #f90;
-	margin: 0 0 15px 0;
-	padding: 10px 15px;
+    background: #fffcef;
+    border: 1px solid #f90;
+    margin: 0 0 15px 0;
+    padding: 10px 15px;
 }
 
 .message_erreur {
-	background: #FDD;
-	border: 1px solid #FF3300;
+    background: #FDD;
+    border: 1px solid #FF3300;
 }
 
 .message ul.messages_log li {
-	background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
-	margin: 5px 0;
-	padding: 0 0 0 15px;
+    background: url(../images/puces/bullet_noir.png) 0 5px no-repeat;
+    margin: 5px 0;
+    padding: 0 0 0 15px;
 }
 
 .message ul.messages_log li a { text-decoration: underline; }
 
 .message_title {
-	padding: 0 10px;
-	font-weight: bold;
-	font-size: 14px;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 p.flash_message
@@ -284,58 +323,58 @@ p.flash_message
 
 /* Popup d'aide */
 a.msg_aide {
-	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
-	display: inline-block;
-	height: 17px;
-	outline: 0;
-	vertical-align: middle;
-	width: 17px;
-	opacity: 0.5;
+    background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 17px;
+    outline: 0;
+    vertical-align: middle;
+    width: 17px;
+    opacity: 0.5;
 }
 
 a.msg_aide:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 #popup_msg_aide {
-	display: none;
+    display: none;
 }
 
 #popup_msg_aide p {
-	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
-		transparent;
-	color: #656565;
-	font-size: 15px;
-	padding: 0 10px 10px 25px;
-	text-align: justify;
+    background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+        transparent;
+    color: #656565;
+    font-size: 15px;
+    padding: 0 10px 10px 25px;
+    text-align: justify;
 }
 
 a.msg_aide_ds {
-	background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
-	display: inline-block;
-	height: 17px;
-	outline: 0;
-	vertical-align: middle;
-	width: 17px;
-	opacity: 0.5;
+    background: url(../images/pictos/pi_aide.png) 0 0 no-repeat;
+    display: inline-block;
+    height: 17px;
+    outline: 0;
+    vertical-align: middle;
+    width: 17px;
+    opacity: 0.5;
 }
 
 
 a.msg_aide_ds:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 #popup_msg_aide_ds {
-	display: none;
+    display: none;
 }
 
 #popup_msg_aide_ds p {
-	background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
-		transparent;
-	color: #656565;
-	font-size: 15px;
-	padding: 0 10px 10px 25px;
-	text-align: justify;
+    background: url("../images/pictos/pi_aide.png") no-repeat scroll 0 0
+        transparent;
+    color: #656565;
+    font-size: 15px;
+    padding: 0 10px 10px 25px;
+    text-align: justify;
 }
 
 /**

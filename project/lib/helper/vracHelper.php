@@ -12,5 +12,5 @@ function renderTiersLibelle($tiers) {
 }
 
 function renderProduitIdentifiant($detail) {
-	return str_replace('/', '_', $detail->getCepage()->getHash());
+	return str_replace('/', '_', $detail->getHash());
 }

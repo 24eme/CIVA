@@ -40,9 +40,9 @@
 				<h3>Boutons petits</h3>
 
 				<div>
-					<a href="#" class="btn_majeur btn_petit btn_vert btn_fleche">Bouton vert</a>
+					<a href="#" class="btn_majeur btn_petit btn_vert btn_fleche_d">Bouton vert</a>
 					<a href="#" class="btn_majeur btn_petit btn_jaune">Bouton jaune</a>
-					<a href="#" class="btn_majeur btn_petit btn_rouge">Bouton rouge</a>
+					<a href="#" class="btn_majeur btn_petit btn_rouge btn_fleche_g">Bouton rouge</a>
 				</div>
 
 
@@ -53,9 +53,9 @@
 				<h3>Boutons moyens</h3>
 
 				<div>
-					<a href="#" class="btn_majeur btn_vert btn_fleche">Bouton vert</a>
+					<a href="#" class="btn_majeur btn_vert btn_fleche_d">Bouton vert</a>
 					<a href="#" class="btn_majeur btn_jaune">Bouton jaune</a>
-					<a href="#" class="btn_majeur btn_rouge">Bouton rouge</a>
+					<a href="#" class="btn_majeur btn_rouge btn_fleche_g">Bouton rouge</a>
 				</div>
 
 				<br />
@@ -64,9 +64,9 @@
 				<h3>Boutons grands</h3>
 
 				<div>
-					<a href="#" class="btn_majeur btn_grand btn_vert btn_fleche">Bouton vert</a>
+					<a href="#" class="btn_majeur btn_grand btn_vert btn_fleche_d">Bouton vert</a>
 					<a href="#" class="btn_majeur btn_grand btn_jaune">Bouton jaune</a>
-					<a href="#" class="btn_majeur btn_grand btn_rouge">Bouton rouge</a>
+					<a href="#" class="btn_majeur btn_grand btn_rouge btn_fleche_g">Bouton rouge</a>
 				</div>
 			</div>
 			<!-- fin #contenu -->
