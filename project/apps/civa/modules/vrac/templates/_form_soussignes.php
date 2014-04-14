@@ -1,6 +1,6 @@
 
 <div class="clearfix">
-	<fieldset class="bloc_infos">
+	<fieldset id="type_contrat" class="bloc_infos">
 		<legend class="titre_section">Type de contrat</legend>
 		
 		<div class="clearfix">

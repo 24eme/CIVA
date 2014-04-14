@@ -26,7 +26,9 @@
 				$hasValidated = false;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td class="col_type"><?php echo ($item->type_contrat) ? $item->type_contrat : "" ?></td>
+			<td class="col_type <?php echo ($item->type_contrat) ? strtolower($item->type_contrat) : "" ?>">
+				<?php echo ($item->type_contrat) ? $item->type_contrat : "" ?>
+			</td>
 			<td class="col_numero"><?php echo ($item->numero_visa) ? $item->numero_visa : "" ?></td>
 			<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
 			<td>
