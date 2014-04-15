@@ -1,0 +1,34 @@
+/**
+ * Fichier : page_composants.css
+ * Description : styles de mise en forme pour la page des composants
+ * Auteur : Mikaël Guillin - mguillin[at]actualys.com
+ * Version : 1.0.0
+ ******************************************/
+
+/*************** Couleurs ***************/
+.composants .couleur
+{
+	background: red;
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+}
+
+.composants .c-dcdfa9 { background: #dcdfa9; }
+.composants .c-848C03 { background: #848C03; }
+
+
+/*************** Titres ***************/
+
+.composants h2
+{
+	font-size: 20px;
+	margin: 10px 0;
+}
+
+.composants h3
+{
+	font-size: 14px;
+	margin: 0 0 10px;
+}
+
