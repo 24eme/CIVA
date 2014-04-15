@@ -128,16 +128,14 @@
     border-right: 1px solid #EDECEC;
 }
 
-#espace_alsace_contrats table#soussignes_listing th.col_type { width: 85px; }
+#espace_alsace_contrats table#soussignes_listing th.col_type { width: 45px; }
 #espace_alsace_contrats table#soussignes_listing th.col_numero { width: 35px; }
 #espace_alsace_contrats table#soussignes_listing th.col_date { width: 76px; }
 #espace_alsace_contrats table#soussignes_listing th.col_statut,
 #espace_alsace_contrats table#soussignes_listing th.col_actions { width: 70px; }
 #espace_alsace_contrats table#soussignes_listing td { padding: 0 5px; }
 
-#espace_alsace_contrats table#soussignes_listing td.col_type { padding: 0 0 0 25px; }
-#espace_alsace_contrats table#soussignes_listing .col_type.vrac { background: url('../images/pictos/pi_vrac.png') 3px 50% no-repeat; }
-#espace_alsace_contrats table#soussignes_listing .col_type.bouteille { background: url('../images/pictos/pi_bouteille.png') 8px 50% no-repeat; }
+#espace_alsace_contrats table#soussignes_listing td.col_type { text-align: center; }
 
 #espace_alsace_contrats table#soussignes_listing .liste_actions li 
 { 
@@ -233,14 +231,14 @@
 	display: inline-block;
 	height: 25px;
 	line-height: 25px;
-	padding: 0 0 0 20px;
+	padding: 0 0 0 30px;
 }
 
 #contrats_vrac #type_contrat.bloc_infos .radio_list li input { vertical-align: middle; }
 
-#contrats_vrac #type_contrat.bloc_infos label[for$="VRAC"] { background: url('../images/pictos/pi_vrac.png') 0 50% no-repeat; }
+#contrats_vrac #type_contrat.bloc_infos label[for$="VRAC"] { background: url('../images/pictos/pi_vrac.png') 5px 50% no-repeat; }
 
-#contrats_vrac #type_contrat.bloc_infos label[for$="BOUTEILLE"] { background: url('../images/pictos/pi_bouteille.png') 4px 50% no-repeat; }
+#contrats_vrac #type_contrat.bloc_infos label[for$="BOUTEILLE"] { background: url('../images/pictos/pi_bouteille.png') 8px 50% no-repeat; }
 
 #contrats_vrac .bloc_conditionner  
 { 
