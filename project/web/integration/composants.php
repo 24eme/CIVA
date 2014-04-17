@@ -217,12 +217,14 @@
 						<h3 class="h3_composants">Boutons petits</h3>
 						
 						<div>
+							<a href="#" class="btn btn-sm btn-default">Bouton default</a>
 							<a href="#" class="btn btn-sm btn-success btn_fleche_d">Bouton success</a>
 							<a href="#" class="btn btn-sm btn-primary">Bouton primary</a>
 							<a href="#" class="btn btn-sm btn-danger btn_fleche_g">Bouton danger</a>
 						</div>
 						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-sm btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
+<pre><code class="language-html">&lt;a href="#" class="btn btn-sm btn-default"&gt;Bouton default&lt;/a&gt;
+&lt;a href="#" class="btn btn-sm btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
 &lt;a href="#" class="btn btn-sm btn-primary"&gt;Bouton primary&lt;/a&gt;
 &lt;a href="#" class="btn btn-sm btn-danger btn_fleche_g"&gt;Bouton danger&lt;/a&gt;</code></pre>
 						
@@ -230,12 +232,14 @@
 						<h3 class="h3_composants">Boutons moyens</h3>
 						
 						<div>
+							<a href="#" class="btn btn-default">Bouton default</a>
 							<a href="#" class="btn btn-success btn_fleche_d">Bouton success</a>
 							<a href="#" class="btn btn-primary">Bouton primary</a>
 							<a href="#" class="btn btn-danger btn_fleche_g">Bouton danger</a>
 						</div>
 						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-success btn_fleche_d"&gt;Bouton vert&lt;/a&gt;
+<pre><code class="language-html">&lt;a href="#" class="btn btn-default"&gt;Bouton default&lt;/a&gt;
+&lt;a href="#" class="btn btn-success btn_fleche_d"&gt;Bouton vert&lt;/a&gt;
 &lt;a href="#" class="btn btn-primary"&gt;Bouton jaune&lt;/a&gt; 
 &lt;a href="#" class="btn btn-danger btn_fleche_g"&gt;Bouton rouge&lt;/a&gt;</code></pre>
 			
@@ -243,12 +247,14 @@
 						<h3 class="h3_composants">Boutons grands</h3>
 						
 						<div>
+							<a href="#" class="btn btn-lg btn-default">Bouton default</a>
 							<a href="#" class="btn btn-lg btn-success btn_fleche_d">Bouton success</a>
 							<a href="#" class="btn btn-lg btn-primary">Bouton primary</a>
 							<a href="#" class="btn btn-lg btn-danger btn_fleche_g">Bouton danger</a>
 						</div>
 						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-lg btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
+<pre><code class="language-html">&lt;a href="#" class="btn btn-lg btn-default"&gt;Bouton default&lt;/a&gt;
+&lt;a href="#" class="btn btn-lg btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
 &lt;a href="#" class="btn btn-lg btn-primary"&gt;Bouton primary&lt;/a&gt;
 &lt;a href="#" class="btn btn-lg btn-danger btn_fleche_g"&gt;Bouton danger&lt;/a&gt;</code></pre>
 
@@ -259,6 +265,7 @@
 		</div>
 		<!-- fin #global -->
 
+		<!-- Coloration syntaxique -->
 		<script type="text/javascript" src="js/highlight.pack.js"></script>
 		<script type="text/javascript">
 			hljs.configure({tabReplace: '  '}); // 2 spaces

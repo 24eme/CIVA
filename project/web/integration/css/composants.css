@@ -82,6 +82,15 @@ h2 span,
 }
 
 /* Couleurs */
+.btn-default
+{
+    background: #7d7d7d;
+    background-image: -webkit-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: -moz-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: -o-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: linear-gradient(to top, #7d7d7d, #d4d4d4);
+}
+
 .btn-success
 {
     background: #BBCC00;
