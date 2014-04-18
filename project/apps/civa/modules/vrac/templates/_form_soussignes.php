@@ -1,5 +1,20 @@
-<p class="intro_contrat_vrac">Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.</p>
+
 <div class="clearfix">
+	<fieldset id="type_contrat" class="bloc_infos">
+		<legend class="titre_section">Type de contrat</legend>
+		
+		<div class="clearfix">
+			<div class="form_col selecteur">
+				<div class="ligne_form">
+					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold">Veuillez selectionner le type de votre contrat :</label>
+					<?php echo ($form->getObject()->isNew())? $form['type_contrat']->render() : $form['type_contrat']->render(array('readonly' => 'readonly')); ?>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	
+	<p class="intro_contrat_vrac">Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.</p>
+	
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Vendeur</legend>
 		

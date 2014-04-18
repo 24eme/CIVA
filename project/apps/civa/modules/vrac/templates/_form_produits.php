@@ -5,7 +5,12 @@
 			<th class="produit">Produits</th>
 			<th class="denomination"><span>Dénomination</span></th>
 			<th class="millesime"><span>Millésime</span></th>
+			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+			<th class="bouteille"><span>Nb bouteille</span></th>
+			<th class="centilisation"><span>Centilisation</span></th>
+			<?php else: ?>
 			<th class="volume"><span>Volume</span></th>
+			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
 		</tr>
 	</thead>
@@ -26,13 +31,24 @@
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
 				<?php echo $embedForm['millesime']->render(array("maxlength" => 4)) ?>
 			</td>
+			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+			<td class="bouteille">
+				<span><?php echo $embedForm['nb_bouteille']->renderError() ?></span>
+				<?php echo $embedForm['nb_bouteille']->render(array('class' => 'num')) ?>
+			</td>
+			<td class="centilisation">
+				<span><?php echo $embedForm['centilisation']->renderError() ?></span>
+				<?php echo $embedForm['centilisation']->render() ?>
+			</td>
+			<?php else: ?>
 			<td class="volume">
 				<span><?php echo $embedForm['volume_propose']->renderError() ?></span>
 				<?php echo $embedForm['volume_propose']->render(array('class' => 'num')) ?>&nbsp;Hl
 			</td>
+			<?php endif; ?>
 			<td class="prix">
 				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num')) ?>&nbsp;&euro;/Hl
+				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num')) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?>
 				<a href="#" class="balayette" title="Effacer les champs">Effacer les champs</a>
 			</td>
 		</tr>

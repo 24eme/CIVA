@@ -1,0 +1,78 @@
+/**
+ * Fichier : page_composants.css
+ * Description : styles de mise en forme pour la page des composants
+ * Auteur : Mikaël Guillin - mguillin[at]actualys.com
+ * Version : 1.0.0
+ ******************************************/
+
+/*************** Grille ***************/
+
+#contenu { border: 0; }
+
+[class^="col-"]
+{
+	background: #ccc;
+	border: 1px solid #000;
+	padding: 10px;
+	font-size: 14px;
+	text-align: center;
+}
+
+/*************** Couleurs ***************/
+.composants .couleur
+{
+	display: inline-block;
+	font-size: 14px;
+	margin: 0 5px;
+	text-align: center;
+}
+
+.composants .couleur:before
+{
+	content: '';
+	display: block;
+	margin: 0 auto 5px;
+	height: 30px;
+	width: 30px;
+}
+
+/* titres */
+.composants .c-dcdfa9:before { background: #dcdfa9; }
+.composants .c-848c03:before { background: #848C03; }
+
+/* bouton primary */
+.composants .c-ffe0a5:before { background: #ffe0a5; }
+.composants .c-ff8500:before { background: #FF8500; }
+
+/* bouton danger */
+.composants .c-fa9090:before { background: #fa9090; }
+.composants .c-b70101:before { background: #b70101; }
+
+/* bouton success */
+.composants .c-e4e4b5:before { background: #e4e4b5; }
+.composants .c-bbcc00:before { background: #bbcc00; }
+
+
+/*************** Titres ***************/
+.h2_composants,
+.h3_composants { color: #474B50; }
+
+.h2_composants
+{
+	font-size: 25px;
+	margin: 10px 0;
+}
+
+.h3_composants
+{
+	font-size: 18px;
+	margin: 10px 0;
+}
+
+/*************** Blocs de code ***************/
+.composants pre 
+{ 
+	line-height: 1.4;
+	margin: 15px 0; 
+}
+

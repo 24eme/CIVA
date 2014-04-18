@@ -3,6 +3,7 @@
 <table id="soussignes_listing" cellspacing="0" cellpadding="0" class="table_listing">
 	<thead>
 		<tr>
+			<th class="col_type">Type</th>
 			<th class="col_numero">N°</th>
 			<th class="col_date">Date</th>
 			<th class="col_soussignes">Soussignés</th>
@@ -25,6 +26,11 @@
 				$hasValidated = false;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+			<td class="col_type">
+				<?php if($item->type_contrat): ?>
+					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?>.png" title="Type <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
+				<?php endif ?>
+			</td>
 			<td class="col_numero"><?php echo ($item->numero_visa) ? $item->numero_visa : "" ?></td>
 			<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
 			<td>

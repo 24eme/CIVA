@@ -18,17 +18,16 @@ class vracActions extends sfActions
 		$this->getUser()->setAttribute('vrac_object', null);
     	$this->getUser()->setAttribute('vrac_acteur', null);
 		$this->campagne = $request->getParameter('campagne');
-		if (!$this->campagne) {
-			throw new sfError404Exception('La campagne doit être spécifiée.');
-		}
 		$this->statut = $request->getParameter('statut');
+		$this->type = $request->getParameter('type');
 		if (!$this->campagne) {
 			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
 		}
 		$this->user = $this->getUser()->getDeclarantVrac();
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
+        $this->types = VracClient::getContratTypes();
 	}
 
     public function executeExportCSV(sfWebRequest $request)

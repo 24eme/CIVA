@@ -35,7 +35,7 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function init($filename = null) {    
-        $title = "CONTRAT DE VENTE EN VRAC                                                      Visa du CIVA N° ".$this->vrac->numero_visa;
+        $title = "CONTRAT DE VENTE EN ".$this->vrac->type_contrat."                                                      Visa du CIVA N° ".$this->vrac->numero_visa;
         $header = "DE VINS AOC PRODUITS EN ALSACE                                                        du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
         if ($this->vrac->isAnnule()) {
         	$header .= "\n\nANNULÉ";
@@ -58,7 +58,7 @@ class ExportVracPdf extends ExportDocument {
     }
 
     public static function buildFileName($vrac, $with_name = true, $with_rev = false) {
-        $filename = sprintf("%s_Contrat-Vrac_%s", str_replace('-', '', $vrac->valide->date_validation), $vrac->numero_visa);        
+        $filename = sprintf("%s_Contrat-%s_%s", $vrac->type_archive, str_replace('-', '', $vrac->valide->date_validation), $vrac->numero_visa);        
         
         if($with_name) {            
             $libelle = '';

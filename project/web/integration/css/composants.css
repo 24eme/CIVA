@@ -1,0 +1,232 @@
+/**
+ * Fichier : composants.css
+ * Description : styles spécifiques à la création de contrats vrac
+ * Auteur : Mikaël Guillin - mguillin[at]actualys.com
+ * Version : 1.0.0
+ ******************************************/
+
+/*************** Grille ***************/
+.row
+{
+    margin: 15px 0 15px -15px;
+}
+
+.row:before,
+.row:after
+{
+    content: ' ';
+    display: table;
+}
+
+.row:after
+{
+    clear: both;
+}
+
+[class^="col-"]
+{
+    box-sizing: border-box;
+    float: left;
+    margin: 0 0 0 15px;
+}
+
+.col-1 { width: 310px; }
+.col-2 { width: 635px; }
+.col-3 { width: 960px; }
+
+/*************** Titres ***************/
+h1 span, 
+h2 span, 
+.h1 span, 
+.h2 span
+{
+    display: inline-block;
+    font-weight: normal;
+    padding: 0 10px;
+}
+
+h1 span, 
+.h1 span 
+{
+	background: #acb701;
+	color: #fff;
+	font-size: 20px;
+	padding: 0 10px;
+}
+
+h2 span, 
+.h2 span
+{
+    background: #dcdfa9;
+    color: #848c03;
+    font-size: 16px;
+}
+
+
+/*************** Boutons ***************/
+.btn
+{
+    border: 1px solid #b8b4b4;
+    border-radius: 2px;
+    color: #2a2a2a;
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 10px;
+    position: relative;
+}
+
+.btn:hover,
+.btn:focus 
+{ 
+    text-decoration: none;
+}
+
+/* Couleurs */
+.btn-default
+{
+    background: #7d7d7d;
+    background-image: -webkit-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: -moz-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: -o-linear-gradient(bottom, #7d7d7d, #d4d4d4);
+    background-image: linear-gradient(to top, #7d7d7d, #d4d4d4);
+}
+
+.btn-success
+{
+    background: #BBCC00;
+    background-image: -webkit-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: -moz-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: -o-linear-gradient(bottom, #BBCC00, #e4e4b5);
+    background-image: linear-gradient(to top, #BBCC00, #e4e4b5);
+}
+
+.btn-primary
+{
+    background: #FF8500;
+    background-image: -webkit-linear-gradient(bottom, #FF8500, #ffe0a5);
+    background-image: -moz-linear-gradient(bottom, #FF8500, #ffe0a5);
+    background-image: -o-linear-gradient(bottom, #FF8500, #ffe0a5);
+    background-image: linear-gradient(to top, #FF8500, #ffe0a5);
+    color: #2a2a2a;
+}
+
+.btn-danger
+{
+    background: #b70101;
+    background-image: -webkit-linear-gradient(bottom, #b70101, #FA9090);
+    background-image: -moz-linear-gradient(bottom, #b70101, #FA9090);
+    background-image: -o-linear-gradient(bottom, #b70101, #FA9090);
+    background-image: linear-gradient(to top, #b70101, #FA9090);
+    color: #000;
+}
+
+/* Tailles */
+.btn-sm
+{ 
+    font-size: 13px; 
+    padding: 3px 8px; 
+}
+
+.btn-lg 
+{ 
+    font-size: 16px; 
+    font-weight: bold;
+    padding: 10px; 
+}
+
+/* Boutons fleche */
+.btn_fleche_g { padding-left: 25px; }
+
+.btn_fleche_d { padding-right: 25px; }
+
+.btn_fleche_g:after,
+.btn_fleche_d:after
+{
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    content: '';
+    position: absolute;
+    height: 0; 
+    top: 7px;
+    width: 0; 
+}
+
+.btn_fleche_g:after
+{
+    border-right: 7px solid #FFF;
+    left: 5px;
+}
+
+.btn_fleche_d:after
+{
+    border-left: 7px solid #FFF;
+    right: 5px;
+}
+
+/* Tailles fleches */
+.btn-sm.btn_fleche_g:after,
+.btn-sm.btn_fleche_d:after
+{
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    top: 6px;
+}
+
+.btn-sm.btn_fleche_g:after { border-right: 6px solid #FFF; }
+.btn-sm.btn_fleche_d:after { border-left: 6px solid #FFF; }
+
+.btn-lg.btn_fleche_g:after, 
+.btn-lg.btn_fleche_d:after 
+{ 
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    top: 11px; 
+}
+
+.btn-lg.btn_fleche_g:after { border-right: 9px solid #FFF; }
+.btn-lg.btn_fleche_d:after { border-left: 9px solid #FFF; }
+
+
+/*************** Tableaux ***************/
+.table
+{
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.table tbody { border: 1px solid #c6c8c7; }
+
+.table th
+{
+	background: #dcdfa9;
+	border-left: 1px solid #edecec;
+	border-right: 1px solid #edecec;
+	color: #848C03;
+	font-size: 16px;
+	font-weight: normal;
+	padding: 5px;
+	text-align: left;
+}
+
+.table th.no-bg
+{
+    background: none;
+    border-color: transparent;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table td
+{
+	background: #edecec;
+	border-bottom: 1px dashed #c6c8c7;
+	color: #666;
+	padding: 5px;
+}
+
+.table tr:nth-child(even) td { background: #ddd; }
+
+
+
