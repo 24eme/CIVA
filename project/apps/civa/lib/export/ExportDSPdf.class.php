@@ -220,7 +220,7 @@ class ExportDSPdf extends ExportDocument {
 
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
-
+        
         $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES);
         $this->rowspanPaginate($paginate);
 
@@ -272,12 +272,11 @@ class ExportDSPdf extends ExportDocument {
                      "Mousseux" => DSCivaClient::getInstance()->getTotalSansIGMousseux($this->ds_principale));
     }
 
-    protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-
+    protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false, $empty =false) {
         if(!$ds->declaration->getAppellations()){
             return; 
         }
-        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key)) {
+        if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key) && !$empty) {
             return; 
         }
 
@@ -285,9 +284,16 @@ class ExportDSPdf extends ExportDocument {
 
         $details = $appellation->getProduitsDetails();
         
+        if($empty && !count($details)){
+            foreach ($recap["colonnes"] as $key => $colonne) {
+                $colonnes[$key] = array("rowspan" => 1, "libelle" => "");
+            }
+            $recap["produits"]["empty"] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null, "vide" => true);
+        }
+        
         foreach($details as $detail) {
             $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
-
+            $recap["produits"][$key]['vtsgn'] = $detail->getCepage()->getConfig()->hasVtsgn();
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
                 $recap["total"]["normal"] += $detail->volume_normal;
@@ -304,7 +310,6 @@ class ExportDSPdf extends ExportDocument {
                 $recap["total"]["sgn"] += $detail->volume_sgn;
             }
         }
-
         ksort($recap['produits']);
     }
 
