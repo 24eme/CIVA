@@ -116,6 +116,12 @@ class DSRouting {
                 array('sf_method' => array('get')),
                 array('model' => 'DS',
                     'type' => 'object') ));
+        
+        $r->prependRoute('ds_export_pdf_empty', new TiersRoute('/ds/:cvi/pdf-vide', array('module' => 'ds_export',
+                'action' => 'PDFEmpty'),
+                array('sf_method' => array('get')),
+                array('model' => 'DS',
+                    'type' => 'object') ));
 
         $r->prependRoute('ds_export_csv_en_cours', new sfRoute('/ds/csv/en_cours', array('module' => 'ds_export',
                 'action' => 'csvEnCours'),

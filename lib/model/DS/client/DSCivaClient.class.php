@@ -108,7 +108,21 @@ class DSCivaClient extends DSClient {
         }
     }
     
-    public function findOrCreateDssByTiers($tiers, $date_stock, $ds_neant = false) {
+    public function createDssByTiers($tiers, $date_stock, $ds_neant = false) {    
+       $dss = $this->findOrCreateDssByTiers($tiers, $date_stock, $ds_neant, true);
+       foreach ($dss as $ds) {
+           $ds->addAppellation('declaration/certification/genre/appellation_ALSACEBLANC');
+           $ds->addAppellation('declaration/certification/genre/appellation_COMMUNALE');
+           $ds->addAppellation('declaration/certification/genre/appellation_GRDCRU');
+           $ds->addAppellation('declaration/certification/genre/appellation_LIEUDIT');
+           $ds->addAppellation('declaration/certification/genre/appellation_PINOTNOIR');
+           $ds->addAppellation('declaration/certification/genre/appellation_PINOTNOIRROUGE');
+           $ds->addAppellation('declaration/certification/genre/appellation_CREMANT');
+       }
+       return $dss;
+    }
+    
+    public function findOrCreateDssByTiers($tiers, $date_stock, $ds_neant = false, $onlyCreate = false) {
         $type_ds = $tiers->getTypeDs();
         $periode = $this->buildPeriode($this->createDateStock($date_stock), $type_ds);
         $cpt = 1;
@@ -117,7 +131,9 @@ class DSCivaClient extends DSClient {
         foreach ($tiers->lieux_stockage as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantAndPeriode($tiers->cvi, $periode, $num_lieu);
-            
+            if($onlyCreate){
+                $ds = null;
+            }
             if ($ds){
                 continue;
             }
@@ -238,7 +254,6 @@ class DSCivaClient extends DSClient {
         if (!$ds){
             return null;
         }
-//            throw new sfException("La DS passée en argument de findDssByDS ne peut pas être null");
         return $this->findDssByCviAndPeriode($ds->identifiant, $ds->periode, $hydrate);
     }
 
