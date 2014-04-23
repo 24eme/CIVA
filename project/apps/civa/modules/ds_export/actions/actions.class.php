@@ -28,7 +28,7 @@ class ds_exportActions extends sfActions
       $this->ds->storeStockage();
 
       $this->setLayout(false);
-
+      
       $this->document = new ExportDSPdf($this->ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
       
       if($request->getParameter('force')) {
@@ -41,6 +41,35 @@ class ds_exportActions extends sfActions
           return $this->ajaxPdf();
       }
 
+      $this->document->addHeaders($this->getResponse());
+
+      return $this->renderText($this->document->output());
+    }
+    
+    
+    public function executePDFEmpty(sfWebRequest $request)
+    {
+      if(!TiersSecurity::getInstance($this->getUser())) {
+
+         throw new sfSecurityException("Vous n'avez pas accès au DS pour ce tiers");
+      }
+      $this->tiers = $this->getRoute()->getTiers(); 
+      
+      set_time_limit(180);
+
+      $this->setLayout(false);
+
+      $this->document = new ExportDSPdfEmpty($this->tiers, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
+      
+      if($request->getParameter('force')) {
+        $this->document->removeCache();
+      }
+      $this->document->generatePDF();
+
+      if ($request->isXmlHttpRequest()) {
+          
+          return $this->ajaxPdf();
+      }
       $this->document->addHeaders($this->getResponse());
 
       return $this->renderText($this->document->output());
