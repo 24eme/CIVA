@@ -11,7 +11,7 @@
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions vrac&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
-<?php      $nb_ligne = 30;
+<?php      $nb_ligne = 29;
            $nb_ligne -= (!$odg)? 0 : 2; 
 ?>
 

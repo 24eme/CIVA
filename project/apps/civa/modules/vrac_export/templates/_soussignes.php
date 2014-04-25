@@ -35,6 +35,13 @@ $hasCourtier = $vrac->hasCourtier();
 				<tr>
 					<td>&nbsp;N° d'accise : <i><?php echo $vrac->vendeur->num_accise; ?></i></td>  
 				</tr>
+                <tr>
+                    <?php if(count($vrac->vendeur->emails->toArray(true, false)) > 0): ?>
+                    <td>&nbsp;Email : <i><?php echo $vrac->vendeur->emails[0]; ?></i></td>  
+                    <?php else: ?>
+                    <td>&nbsp;</td>
+                    <?php endif; ?>
+                </tr>
 			</table>
 		</td>
 		<td width="50%" valign="top" >
@@ -64,6 +71,13 @@ $hasCourtier = $vrac->hasCourtier();
                                 </tr>
                                 <tr>
                                         <td>&nbsp;N° d'accise : <i><?php echo $vrac->acheteur->num_accise; ?></i></td>
+                                </tr>
+                                <tr>
+                                    <?php if(count($vrac->acheteur->emails->toArray(true, false)) > 0): ?>
+                                        <td>&nbsp;Email : <i><?php echo $vrac->acheteur->emails[0]; ?></i></td>  
+                                    <?php else: ?>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
                                 </tr>
 			</table>
 		</td>
