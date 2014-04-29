@@ -43,7 +43,7 @@
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
-				<?php echoFloat($detail->nb_bouteille) ?>
+				<?php echo $detail->nb_bouteille ?>
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
@@ -98,7 +98,7 @@
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
-				<?php echoFloat($detail->nb_bouteille) ?>
+				<?php echo $detail->nb_bouteille ?>
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
@@ -143,7 +143,7 @@
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
-				<?php echoFloat($detail->nb_bouteille) ?>
+				<?php echo $detail->nb_bouteille ?>
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">

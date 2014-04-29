@@ -34,7 +34,7 @@
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
 				<span><?php echo $embedForm['nb_bouteille']->renderError() ?></span>
-				<?php echo $embedForm['nb_bouteille']->render(array('class' => 'num')) ?>
+				<?php echo $embedForm['nb_bouteille']->render() ?>
 			</td>
 			<td class="centilisation">
 				<span><?php echo $embedForm['centilisation']->renderError() ?></span>

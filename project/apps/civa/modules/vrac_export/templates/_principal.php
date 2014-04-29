@@ -59,7 +59,7 @@
 			<?php endif; ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo VracClient::getLibelleCentilisation($detailLine->centilisation) ?></td>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoFloat($detailLine->nb_bouteille); ?><?php endif; ?></td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?></td>
             <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
 			<?php else: ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
