@@ -7,7 +7,7 @@
 		<tr>
 			<th>Produits</th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<th class="bouteille" style="text-align: center">Nb bouteille</th>
+			<th class="bouteille" style="text-align: center">Nb bouteilles</th>
 			<th class="centilisation" style="text-align: center">Centilisation</th>
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>

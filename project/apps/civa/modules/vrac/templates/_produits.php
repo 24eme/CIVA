@@ -8,7 +8,7 @@
 		<tr>
 			<th class="produit">Produit</th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<th class="bouteille">Nb bouteille</th>
+			<th class="bouteille">Nb bouteilles</th>
 			<th class="centilisation">Centilisation</th>
 			<th class="prix">Prix</th>
 			<th class="volume">Volume</th>
