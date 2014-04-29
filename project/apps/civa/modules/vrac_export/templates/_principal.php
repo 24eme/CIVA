@@ -26,7 +26,7 @@
 		<?php endif; ?>
 		<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 		<th width="85px" style="font-weight: bold; text-align: center; border: 1px solid black;">Centilisation</th>
-		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nombre de<br />bouteilles</th>
+		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nb bouteilles</th>
                 <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en HL)</small></th>
 		<?php else: ?>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
@@ -58,9 +58,9 @@
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
 			<?php endif; ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo VracClient::getLibelleCentilisation($detailLine->centilisation) ?></td>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?></td>
-            <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
+			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoCentilisation(VracClient::getLibelleCentilisation($detailLine->centilisation)) ?></td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?></td>
+            <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
 			<?php else: ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>

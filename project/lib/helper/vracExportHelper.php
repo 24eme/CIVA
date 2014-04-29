@@ -107,3 +107,11 @@ function getDateFr($dateIso) {
 function echoDateFr($dateIso) {    
     echo getDateFr($dateIso);
 }
+
+function echoCentilisation($centilisation) {
+	if (preg_match('/([0-9,]+)\ ([a-zA-Z]+)/', $centilisation, $matches)) {
+		echo $matches[1].' <small>'.$matches[2].'</small>';
+	} else {
+		echo $centilisation;
+	}
+}
