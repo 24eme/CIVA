@@ -40,6 +40,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($commerciauxChoices)))
         ));
+        if (!$this->getObject()->isNew()) {
+        	unset($this['type_contrat']);
+        }
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
@@ -78,8 +81,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->vendeur_identifiant = $vendeur->_id;
     	$this->getObject()->storeAcheteurInformations($acheteur);
     	$this->getObject()->storeVendeurInformations($vendeur);
-    	$this->getObject()->type_contrat = $values['type_contrat'];
     	if ($this->getObject()->isNew()) {
+    		$this->getObject()->type_contrat = $values['type_contrat'];
     		$this->getObject()->initProduits();
     	}
     }
