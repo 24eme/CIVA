@@ -10,8 +10,7 @@
         <?php if($sf_user->hasFlash('confirmation')) : ?>
             <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
-		
-		<?php include_component('ds', 'monEspace') ?>
+        <?php include_component('ds', 'monEspace') ?>
         <?php include_component('ds', 'monEspaceColonne') ?>
     </div>
 </div>

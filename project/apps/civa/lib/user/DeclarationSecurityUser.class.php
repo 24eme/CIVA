@@ -98,6 +98,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      */
     public function getAnneeDS()
     {
+        if(CurrentClient::getCurrent()->exist('ds_periode')){
+            return substr("".CurrentClient::getCurrent()->ds_periode,0,4);
+        }
         return CurrentClient::getCurrent()->getAnneeDS();
     }
 
@@ -225,7 +228,6 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function hasLieuxStockage() {
         $this->requireTiers();
-        if(!$this->getDeclarant()->exist('lieux_stockage') || count($this->getDeclarant()->lieux_stockage) == 0) return false;
         return (int) count($this->getDeclarant()->lieux_stockage);
     }
 

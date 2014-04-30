@@ -1,6 +1,17 @@
 <?php
 abstract class _Tiers extends Base_Tiers {
     
+    const CATEGORIE_VRP = 'VRP';
+    const CATEGORIE_VRT = 'VRT';
+    const CATEGORIE_VVV = 'VVV';
+    
+    const CATEGORIE_PN = 'PN';
+    const CATEGORIE_CCV = 'CCV';
+    const CATEGORIE_SIC = 'SIC';
+    
+    public static $array_ds_negoce = array(self::CATEGORIE_PN,self::CATEGORIE_CCV,self::CATEGORIE_SIC);
+    public static $array_ds_propriete = array(self::CATEGORIE_VRP,self::CATEGORIE_VRT,self::CATEGORIE_VVV);
+    
     public function isActif() {
 
         return $this->statut != _TiersClient::STATUT_INACTIF;
@@ -45,18 +56,24 @@ abstract class _Tiers extends Base_Tiers {
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
     
-    
     /**
      *
      * @param string $campagne
      * @return DR 
      */
     public function getTypeDs() {
-//        if($this->type == _TiersClient::QUALITE_RECOLTANT){
-//            return DSCivaClient::TYPE_DS_PROPRIETE;
-//        }
+        if(!$this->categorie){
+            return null;
+        }
+        if(in_array($this->categorie, self::$array_ds_negoce)){
+            return DSCivaClient::TYPE_DS_NEGOCE;
+        }
         
-        return DSCivaClient::TYPE_DS_NEGOCE;
+        if(in_array($this->categorie, self::$array_ds_propriete)){
+            return DSCivaClient::TYPE_DS_PROPRIETE;
+        }
+        
+        return null;
     }
     
     /**
@@ -115,8 +132,7 @@ abstract class _Tiers extends Base_Tiers {
     }
 
     public function isDeclarantStock() {       
-        return false;
-       // return $this->isDeclarantStock() || $this->isDeclarantStockNegoce();
+        return ($this->getTypeDs() != null);
     }
     
     public function isDeclarantStockPropriete()
@@ -125,22 +141,20 @@ abstract class _Tiers extends Base_Tiers {
     }
     
     public function isDeclarantStockNegoce() {
-
        return (($this->categorie == "PN") || ($this->categorie == "CCV") || ($this->categorie == "SIC"));
     }
     
     public function isAjoutLieuxDeStockage(){
-        return true;
-        $this->isDeclarantStockNegoce();
+        return $this->isDeclarantStockNegoce();
     }
     
-    public function addLieuStockage($nom,$adresse,$commune,$code_postal)
+    public function storeLieuStockage($nom,$adresse,$commune,$code_postal)
     {
-        $newId = 1;
+        $newId = 0;
         if(!$this->exist('lieux_stockage')){
             $this->add('lieux_stockage');
         }
-        $lieux_stockage = $this->lieux_stockage;
+        $lieux_stockage = $this->_get('lieux_stockage');
         foreach ($lieux_stockage as $key => $value) {
             $current_id = intval(str_replace($this->cvi, '', $key));
             if($current_id > $newId){
@@ -221,8 +235,26 @@ abstract class _Tiers extends Base_Tiers {
         return $compte->email;
     }
 
+    public function getLieuxStockage()
+    {
+        if($this->isAjoutLieuxDeStockage() &&
+                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
+           $lieu_stockage = $this->storeLieuStockage($this->nom,
+                    $this->siege->adresse,
+                    $this->siege->commune,
+                    $this->siege->code_postal);
+            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
+            return $this->_get('lieux_stockage');
+        }
+        if($this->exist('lieux_stockage')){
+            return $this->_get('lieux_stockage');
+        }
+        return array();
+    }
+    
+    
     public function getLieuStockagePrincipal() {
-        foreach($this->lieux_stockage as $lieu_stockage) {
+        foreach($this->getLieuxStockage() as $lieu_stockage) {
 
             return $lieu_stockage;
         }
