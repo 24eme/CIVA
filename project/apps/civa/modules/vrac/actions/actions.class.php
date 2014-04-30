@@ -439,8 +439,8 @@ class vracActions extends sfActions
     {
         $campagnes = array($courante);
         foreach ($vracs as $vrac) {
-            if (!in_array($vrac->key[1], $campagnes)) {
-                $campagnes[] = $vrac->key[1];
+            if (!in_array($vrac->key[2], $campagnes)) {
+                $campagnes[] = $vrac->key[2];
             }
         }
         rsort($campagnes);

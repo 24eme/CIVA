@@ -6,7 +6,7 @@
 			<th class="denomination"><span>Dénomination</span></th>
 			<th class="millesime"><span>Millésime</span></th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<th class="bouteille"><span>Nb bouteille</span></th>
+			<th class="bouteille"><span>Nb bouteilles</span></th>
 			<th class="centilisation"><span>Centilisation</span></th>
 			<?php else: ?>
 			<th class="volume"><span>Volume</span></th>
@@ -34,7 +34,7 @@
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
 				<span><?php echo $embedForm['nb_bouteille']->renderError() ?></span>
-				<?php echo $embedForm['nb_bouteille']->render(array('class' => 'num')) ?>
+				<?php echo $embedForm['nb_bouteille']->render() ?>
 			</td>
 			<td class="centilisation">
 				<span><?php echo $embedForm['centilisation']->renderError() ?></span>

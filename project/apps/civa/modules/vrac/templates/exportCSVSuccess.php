@@ -1,10 +1,11 @@
 <?php use_helper('Float'); ?>
 <?php printf("\xef\xbb\xbf");//UTF8 BOM (pour windows) ?>
-<?php echo "campagne;identifiant interne;date saisie;numero visa;statut;vendeur cvi/civa;vendeur raison sociale;vendeur date signature;acheteur cvi/civa;acheteur raison sociale;acheteur date signature;courtier siret;courtier raison sociale;courtier date signature;produit;denomination;millesime;prix unitaire;volume estime;volume reel;date_enlevement;\n"; ?>
+<?php echo "type;campagne;identifiant interne;date saisie;numero visa;statut;vendeur cvi/civa;vendeur raison sociale;vendeur date signature;acheteur cvi/civa;acheteur raison sociale;acheteur date signature;courtier siret;courtier raison sociale;courtier date signature;produit;denomination;millesime;nb bouteilles;centilisation;prix unitaire;volume estime;volume reel;date_enlevement;\n"; ?>
 <?php foreach($vracs as $item): ?>
 <?php $vrac = acCouchdbManager::getClient()->find($item->id) ?>
 <?php foreach($vrac->declaration->getProduitsDetails() as $produit): ?>
-<?php echo sprintf("\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";%s;%s;%s;\"%s\";\n", 
+<?php echo sprintf("\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";%s;%s;%s;\"%s\";\n", 
+					   strtolower($vrac->type_contrat),
                        $vrac->campagne,
                        $vrac->_id,
                        $vrac->valide->date_saisie,
@@ -22,6 +23,8 @@
                        $produit->getLibellePartiel(),
                        $produit->denomination,
                        $produit->millesime,
+                       ($produit->exist('nb_bouteille'))? $produit->nb_bouteille : null,
+                       ($produit->exist('centilisation'))? VracClient::getLibelleCentilisation($produit->centilisation) : null,
                        sprintFloat($produit->prix_unitaire),
                        sprintFloat($produit->volume_propose),
                        sprintFloat($produit->volume_enleve),

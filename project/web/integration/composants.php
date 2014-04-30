@@ -48,6 +48,8 @@
 
 					<div class="composants">
 
+						<!--************* Couleurs *************-->
+
 						<h2 class="h2_composants">Couleurs</h2>
 
 						<h3 class="h3_composants">Titres</h3>
@@ -68,6 +70,8 @@
 						<div class="couleur c-e4e4b5">#e4e4b5</div>
 						<div class="couleur c-bbcc00">#bbcc00</div>
 
+						<!--************* Titres *************-->
+
 						<h2 class="h2_composants">Titres</h2>
 
 						<h1><span>Titre h1</span></h1><br />
@@ -77,6 +81,8 @@
 <pre><code class="language-html">&lt;h1&gt;&lt;span&gt;Titre h1&lt;/span&gt;&lt;/h1&gt; &lt;!-- ou --&gt; &lt;span class="h1"&gt;&lt;span&gt;Titre h1&lt;/span&gt;&lt;/span&gt;
 &lt;h2&gt;&lt;span&gt;Titre h2&lt;/span&gt;&lt;/h2&gt; &lt;!-- ou --&gt; &lt;span class="h2"&gt;&lt;span&gt;Titre h2&lt;/span&gt;&lt;/span&gt;
 </code></pre>
+
+						<!--************* Grille *************-->
 
 						<h2 class="h2_composants">Grille</h2>
 
@@ -109,6 +115,8 @@
 &lt;div class="row"&gt;
 	&lt;div class="col-3"&gt;.col-3&lt;/div&gt;
 &lt;/div&gt;</code></pre>
+
+						<!--************* Grille *************-->
 
 						<h2 class="h2_composants">Tableaux</h2>
 						
@@ -212,51 +220,95 @@
 &lt;/table&gt;
 </code></pre>
 						
+						<!--************* Boutons *************-->
+
 						<h2 class="h2_composants">Boutons</h2>
-						
-						<h3 class="h3_composants">Boutons petits</h3>
-						
-						<div>
-							<a href="#" class="btn btn-sm btn-default">Bouton default</a>
-							<a href="#" class="btn btn-sm btn-success btn_fleche_d">Bouton success</a>
-							<a href="#" class="btn btn-sm btn-primary">Bouton primary</a>
-							<a href="#" class="btn btn-sm btn-danger btn_fleche_g">Bouton danger</a>
-						</div>
-						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-sm btn-default"&gt;Bouton default&lt;/a&gt;
-&lt;a href="#" class="btn btn-sm btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
-&lt;a href="#" class="btn btn-sm btn-primary"&gt;Bouton primary&lt;/a&gt;
-&lt;a href="#" class="btn btn-sm btn-danger btn_fleche_g"&gt;Bouton danger&lt;/a&gt;</code></pre>
-						
-						
-						<h3 class="h3_composants">Boutons moyens</h3>
-						
+
+						<h3 class="h3_composants">Types</h3>
+
 						<div>
 							<a href="#" class="btn btn-default">Bouton default</a>
-							<a href="#" class="btn btn-success btn_fleche_d">Bouton success</a>
+							<a href="#" class="btn btn-success">Bouton success</a>
 							<a href="#" class="btn btn-primary">Bouton primary</a>
-							<a href="#" class="btn btn-danger btn_fleche_g">Bouton danger</a>
+							<a href="#" class="btn btn-danger">Bouton danger</a>
 						</div>
-						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-default"&gt;Bouton default&lt;/a&gt;
-&lt;a href="#" class="btn btn-success btn_fleche_d"&gt;Bouton vert&lt;/a&gt;
-&lt;a href="#" class="btn btn-primary"&gt;Bouton jaune&lt;/a&gt; 
-&lt;a href="#" class="btn btn-danger btn_fleche_g"&gt;Bouton rouge&lt;/a&gt;</code></pre>
+
+						<pre><code class="language-html">&lt;a href="#" class="btn btn-sm btn-default"&gt;Bouton default&lt;/a&gt;
+&lt;a href="#" class="btn btn-success"&gt;Bouton success&lt;/a&gt;
+&lt;a href="#" class="btn btn-primary"&gt;Bouton primary&lt;/a&gt;
+&lt;a href="#" class="btn btn-danger"&gt;Bouton danger&lt;/a&gt;</code></pre>
+
+						<h3 class="h3_composants">Disabled</h3>
+
+						<div>
+							<button class="btn btn-default" disabled="disabled">Bouton disabled</button>
+						</div>
+
+<pre><code class="language-html">&lt;button class="btn btn-default" disabled="disabled"&gt;Bouton disabled&lt;/button&gt; 
+&lt;!-- ou --&gt; 
+&lt;button class="btn btn-default disabled"&gt;Bouton disabled&lt;/button&gt;</code></pre>
+
+						<h3 class="h3_composants">Tailles</h3>
+
+						<div>
+							<a href="#" class="btn btn-default btn-sm">Petit bouton</a>
+							<a href="#" class="btn btn-default">Moyen bouton</a>
+							<a href="#" class="btn btn-default btn-lg">Grand bouton</a>
+						</div>
+
+						<pre><code class="language-html">&lt;a href="#" class="btn btn-default btn-sm"&gt;Petit bouton&lt;/a&gt;
+&lt;a href="#" class="btn btn-default"&gt;Moyen bouton&lt;/a&gt;
+&lt;a href="#" class="btn btn-default btn-lg"&gt;Grand bouton&lt;/a&gt;</code></pre>
 			
 						
-						<h3 class="h3_composants">Boutons grands</h3>
+						<h3 class="h3_composants">Flèches</h3>
 						
 						<div>
-							<a href="#" class="btn btn-lg btn-default">Bouton default</a>
-							<a href="#" class="btn btn-lg btn-success btn_fleche_d">Bouton success</a>
-							<a href="#" class="btn btn-lg btn-primary">Bouton primary</a>
-							<a href="#" class="btn btn-lg btn-danger btn_fleche_g">Bouton danger</a>
+							<a href="#" class="btn btn-primary btn-arrow-l">Bouton flèche gauche</a>
+							<a href="#" class="btn btn-default btn-arrow-r">Bouton flèche droite</a>
 						</div>
 						
-<pre><code class="language-html">&lt;a href="#" class="btn btn-lg btn-default"&gt;Bouton default&lt;/a&gt;
-&lt;a href="#" class="btn btn-lg btn-success btn_fleche_d"&gt;Bouton success&lt;/a&gt;
-&lt;a href="#" class="btn btn-lg btn-primary"&gt;Bouton primary&lt;/a&gt;
-&lt;a href="#" class="btn btn-lg btn-danger btn_fleche_g"&gt;Bouton danger&lt;/a&gt;</code></pre>
+<pre><code class="language-html">&lt;a href="#" class="btn btn-primary btn-arrow-l"&gt;Bouton flèche gauche&lt;/a&gt;
+&lt;a href="#" class="btn btn-default btn-arrow-r"&gt;Bouton flèche droite&lt;/a&gt;</code></pre>
+
+						<h3 class="h3_composants">Icônes</h3>
+
+						<div>
+							<a href="#" class="btn btn-primary btn-icon-l"><img src="/images/pictos/pi_supprimer.png" alt="" />Bouton icône gauche</a>
+							<a href="#" class="btn btn-primary btn-icon-r">Bouton icône droite<img src="/images/pictos/pi_visualiser.png" alt="" /></a>
+						</div>
+<pre><code class="language-html">&lt;a href="#" class="btn btn-primary btn-icon-l"&gt;&lt;img src="/images/pictos/pi_supprimer.png" alt="" /&gt;Bouton icône gauche&lt;/a&gt;
+&lt;a href="#" class="btn btn-primary btn-icon-r"&gt;Bouton icône droite&lt;img src="/images/pictos/pi_visualiser.png" alt="" /&gt;&lt;/a&gt;</code></pre>					
+
+						<!--************* Onglets *************-->
+
+						<h2 class="h2_composants">Onglets</h2>
+
+						<!-- <ul class="nav nav-tabs">
+							<li><a href="#">Accueil</a></li>
+							<li><a href="#">Alsace Récolte</a></li>
+							<li><a href="#">Alsace Contrats</a></li>
+						</ul> -->
+
+
+						<!--************* Blocs *************-->
+
+						<h2 class="h2_composants">Blocs</h2>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+								Bloc normal
+							</div>
+						</div>
+
+						<h2 class="h2_composants">Blocs avec titre</h2>
+
+						<div class="panel panel-default">
+							<div class="panel-heading">Titre</div>
+							<div class="panel-body">
+								Bloc avec titre
+							</div>
+						</div>
 
 					</div>
 				</div>
@@ -268,7 +320,7 @@
 		<!-- Coloration syntaxique -->
 		<script type="text/javascript" src="js/highlight.pack.js"></script>
 		<script type="text/javascript">
-			hljs.configure({tabReplace: '  '}); // 2 spaces
+			hljs.configure({tabReplace: ' '}); // 2 spaces
 			hljs.initHighlightingOnLoad();
 		</script>
 	</body>
