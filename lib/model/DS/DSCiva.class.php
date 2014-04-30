@@ -35,7 +35,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
         $num_lieu = $this->identifiant.$this->getLieuStockage();
 
-        if(!$tiers->exist('lieux_stockage')) {
+        if(!$tiers->getLieuxStockage()) {
             throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
         }
         if(!$tiers->lieux_stockage->exist($num_lieu)) {
@@ -696,6 +696,12 @@ public function getConfigurationCampagne() {
         }
         $this->validee = $date_iso;
         $this->add('date_depot_mairie',$date_iso);
+    }
+    
+    public function setDateStock($date_stock) {
+        $this->date_echeance = Date::getIsoDateFinDeMoisISO($date_stock, 1);
+        $this->periode = DSCivaClient::getInstance()->buildPeriode($date_stock, $this->get('type_ds'));
+        return $this->_set('date_stock', $date_stock);
     }
 }
 

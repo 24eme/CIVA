@@ -34,7 +34,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
 
     public function configure() {
         foreach ($this->lieux_stockage as $lieu_s => $value) {
-            $id_lieu = str_replace($this->tiers->cvi,'', $lieu_s);               
+            $id_lieu = str_replace($this->tiers->cvi,'', $lieu_s);
               $this->setWidget('lieuxStockage_'.$id_lieu, new sfWidgetFormChoice(array('choices' => $this->getAppelations(),'expanded' => true, 'multiple' => true)));
               $this->setValidator('lieuxStockage_'.$id_lieu, new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getAppelations()), 'multiple' => true)));
         }

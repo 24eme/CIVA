@@ -42,7 +42,7 @@ class DSEditionAddLieuStockageFormCiva extends acCouchdbForm
     public function doAddLieuStockage()
     {
         $values = $this->values;
-        $this->_tiers->addLieuStockage($values['nom'],
+        $this->_tiers->storeLieuStockage($values['nom'],
                                        $values['adresse'],
                                        $values['commune'],
                                        $values['code_postal']);   
