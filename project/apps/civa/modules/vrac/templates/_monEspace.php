@@ -1,5 +1,5 @@
 <div id="liste_contrats" class="listing">
-	<h3 class="titre_section">Contrats vrac</h3>
+	<h3 class="titre_section">Contrats de vente</h3>
 	<div class="contenu_section">
 		<?php include_partial('vrac/liste', array('limite' => 4, 'archive' => false, 'vracs' => $vracs, 'tiers' => $tiers)); ?>
 		<ul id="actions_contrat">
