@@ -21,14 +21,14 @@ class VracClient extends acCouchdbClient {
 	protected static $_centilisations = array(
 									'75' => '75 cL', 
 									'50' => '50 cL',
-                                    '100' => '1 L',
+                                    '100' => '100 cL',
 									'37.5' => '37,5 cL',
-									'150' => '1,5 L',
+									'150' => '150 cL',
 									'18.7' => '18,7 cL',
 									'20' => '20 cL',
 									'25' => '25 cL',
-									'300' => '3 L',
-									'600' => '6 L'
+									'300' => '300 cL',
+									'600' => '600 cL'
                                  );
 	
     public static function getInstance()
