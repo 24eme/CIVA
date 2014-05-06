@@ -1,4 +1,4 @@
-<p class="intro_contrat_vrac">Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.</p>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteilles et la centilisation.<br />La saisie des zones "Dénomination", "Millésime" et "Prix" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
