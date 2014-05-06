@@ -11,7 +11,7 @@
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions <?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>bouteilles<?php else: ?>vrac<?php endif; ?>&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
-<?php      $nb_ligne = 30;
+<?php      $nb_ligne = 29;
            $nb_ligne -= (!$odg)? 0 : 2; 
 ?>
 
