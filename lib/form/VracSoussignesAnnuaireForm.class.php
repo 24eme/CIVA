@@ -5,11 +5,13 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
     {
     	$this->disableCSRFProtection();
     	$types = $this->getTypes();
+    	$contratTypes = $this->getContratTypes();
     	$recoltantChoices = $this->getRecoltants();
     	$negociantChoices = $this->getNegociants();
     	$caveCooperativeChoices = $this->getCavesCooperatives();
     	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
+            'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
@@ -21,6 +23,7 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
     	));
         $this->setValidators(array(
+        	'type_contrat' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($contratTypes))),
         	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($recoltantChoices, array('add' => ''))))),
@@ -31,6 +34,9 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($caveCooperativeChoices, array('add' => ''))))),
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($commerciauxChoices, array('add' => '')))))
         ));
+        if (!$this->getObject()->isNew()) {
+        	unset($this['type_contrat']);
+        }
         $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
@@ -56,6 +62,14 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
 	    	$this->getObject()->vendeur_identifiant = $vendeur->_id;
 	    	$this->getObject()->storeVendeurInformations($vendeur);
     	}
+    	if ($this->getObject()->isNew()) {
+    		$this->getObject()->type_contrat = $values['type_contrat'];
+    	}
+    }
+    
+    protected function getContratTypes()
+    {
+    	return VracClient::getContratTypes();
     }
     
 	public function getUpdatedVrac()

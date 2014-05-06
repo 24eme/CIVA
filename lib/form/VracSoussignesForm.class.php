@@ -57,7 +57,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if ($this->getObject()->vendeur_identifiant) {
         	$defaults['vendeur_'.str_replace('s', '', $this->getObject()->vendeur_type).'_identifiant'] = $this->getObject()->vendeur_identifiant;
         }
-        if ($this->getObject()->isNew()) {
+        if ($this->getObject()->isNew() && !$this->getObject()->type_contrat) {
         	$defaults['type_contrat'] = VracClient::TYPE_VRAC;
         }
         $this->setDefaults($defaults); 
