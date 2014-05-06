@@ -34,9 +34,14 @@ class ExportVracPdf extends ExportDocument {
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($filename = null) {    
-        $title = "CONTRAT DE VENTE EN ".$this->vrac->type_contrat."                                                      Visa du CIVA N° ".$this->vrac->numero_visa;
-        $header = "DE VINS AOC PRODUITS EN ALSACE                                                        du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
+    protected function init($filename = null) {  
+    	if ($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+        	$title = "CONTRAT DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
+        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
+    	} else {
+        	$title = "CONTRAT DE VENTE EN VRAC                                                          Visa du CIVA N° ".$this->vrac->numero_visa;
+        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
+    	}
         if ($this->vrac->isAnnule()) {
         	$header .= "\n\nANNULÉ";
         }

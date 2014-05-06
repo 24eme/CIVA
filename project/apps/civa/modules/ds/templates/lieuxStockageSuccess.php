@@ -22,11 +22,12 @@ $hasVolume = false;
         <?php endif; ?>
 </ul>
     
+        
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
 	
-	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
+	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>        
             <div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
@@ -54,7 +55,7 @@ $hasVolume = false;
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): 
+				<?php foreach($tiers->getLieuxStockage() as $numero => $lieu_stockage): 
                                                 $num_lieu = str_replace($tiers->cvi, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
                                                 $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
@@ -97,6 +98,7 @@ $hasVolume = false;
 			</tbody>
 		</table>
 	</div>	
+            <a class="ajax btn_majeur btn_petit btn_vert" style="float: left; padding: 10px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">

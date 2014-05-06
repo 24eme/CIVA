@@ -43,7 +43,7 @@ class DSSecurity implements SecurityInterface {
 
             return true;
         }
-
+        
         if(!$this->myUser->hasLieuxStockage()) {
 
             return false;

@@ -7,7 +7,7 @@
 		<tr>
 			<th>Produits</th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<th class="bouteille" style="text-align: center">Nb bouteille</th>
+			<th class="bouteille" style="text-align: center">Nb bouteilles</th>
 			<th class="centilisation" style="text-align: center">Centilisation</th>
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>
@@ -26,7 +26,7 @@
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td class="bouteille"><?php echoFloat($detail->nb_bouteille) ?></td>
+			<td class="bouteille"><?php echo $detail->nb_bouteille ?></td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<?php endif; ?>
 			<td class="volume">

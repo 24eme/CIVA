@@ -15,11 +15,6 @@ class Acheteur extends BaseAcheteur {
         return $this->acheteur_dr == 1;
     }
 
-    public function isDeclarantStock() {
-
-        return in_array($this->qualite, array(self::ACHETEUR_COOPERATIVE, self::ACHETEUR_NEGOCAVE));
-    }
-
     public function isDeclarantContratForSignature() {
 
         return true;
