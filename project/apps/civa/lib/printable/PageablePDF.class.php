@@ -23,8 +23,8 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetKeywords('Declaration, DR, récolte, vins d\'alsace');
 
         // set default header dat
-       
-        $this->pdf->SetHeaderData("civa.jpg", $header_logo_width, $this->title, $this->subtitle);
+        $logo_file = (isset($this->config['LOGO_FILE'])) ? $this->config['LOGO_FILE'] : 'civa.jpg';
+        $this->pdf->SetHeaderData($logo_file, $header_logo_width, $this->title, $this->subtitle);
 
         // set header and footer fonts
         $this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',  $pdf_font_size_main));

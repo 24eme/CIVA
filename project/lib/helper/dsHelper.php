@@ -112,3 +112,10 @@ function getHeader($ds, $validee){
     }
    return $result.sprintf("\n%s", $validee);
 }
+
+function getHeaderBrouillon($ds, $validee){
+    $result = "Ce document est une aide à la saisie pour la télédéclaration\n";
+    $result .= "/!\\ Il ne doit pas être envoyé au CIVA";
+
+   return $result;
+}

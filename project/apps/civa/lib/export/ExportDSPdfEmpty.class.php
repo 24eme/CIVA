@@ -34,14 +34,15 @@ class ExportDSPdfEmpty extends ExportDSPdf {
     protected function init($filename = null) {
         
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
-        $title = 'Déclaration de Stocks au 31/07/'.date('Y');
+        $title = 'BROUILLON - Déclaration de Stocks au 31/07/'.date('Y');
         
-        $header = getHeader($this->ds_principale,'');
+        $header = getHeaderBrouillon($this->ds_principale,'');
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
             
-        $config = array('PDF_FONT_SIZE_MAIN' => 9);
+        $config = array('PDF_FONT_SIZE_MAIN' => 9,
+                        'LOGO_FILE' => 'civa_brouillon.jpg');
 
         if ($this->type == 'html') {
            $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
@@ -52,11 +53,7 @@ class ExportDSPdfEmpty extends ExportDSPdf {
 
     public function getFileName($with_name = true, $with_rev = false) {
 
-      return self::buildFileName($this->ds_principale, $with_name, $with_rev);
-    }
-
-    public static function buildFileName($ds_principale, $with_name = true, $with_rev = false) {
-         return parent::buildFileName($ds_principale, $with_name, $with_rev);
+      return "BROUILLON_".parent::getFileName($with_name, $with_rev);
     }
 
     protected function create() {
