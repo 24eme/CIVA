@@ -93,6 +93,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         return CurrentClient::getCurrent()->getCampagneDS();
     }
 
+    public function getPeriodeDS(){
+        return CurrentClient::getCurrent()->getPeriodeDS();
+    }
+    
     /**
      * @return string
      */
@@ -214,11 +218,14 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
-            $this->_ds = $this->getDeclarant()->getDs($this->getAnneeDS());
+            $periode = ($this->getDeclarant()->isDeclarantStockNegoce())? 
+                    CurrentClient::getCurrent()->getDsPeriode() :
+                    CurrentClient::getCurrent()->getAnneeDS().'07'; 
+            $this->_ds = $this->getDeclarant()->getDs($periode);
             if (!$this->_ds) {
                 $ds = new DSCiva();
-                $ds->identifiant = $this->getDeclarant()->cvi;
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . (CurrentClient::getCurrent()->getAnneeDS()).'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                $ds->identifiant = $this->getDeclarant()->getIdentifiant();
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->getIdentifiant() . '-' .$periode.'-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
                 return $ds;
             }
         }
