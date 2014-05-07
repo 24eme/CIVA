@@ -5,7 +5,7 @@
             <p class="intro">Vous souhaitez :</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_visualisation" name="ds[type_declaration]" value="visualisation"  />
-                <label for="type_ds_visualisation">Visualiser ma déclaration en cours</label>
+                <label for="type_ds_visualisation">Visualiser ma déclaration en cours (<?php echo $sf_user->getDeclarant()->getTypeDs(); ?>)</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_brouillon" name="ds[type_declaration]" value="brouillon" checked="checked" />
@@ -35,3 +35,7 @@
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
     </div>
 </form>
+<?php
+if($sf_user->getDeclarant()->isDeclarantStockPropriete() && $sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) : ?>
+<a class="btn_majeur btn_petit btn_vert" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarant()->getCvi())); ?>" onClick="alert('Vous-êtes sur le point de générer la DS brouillon de <?php echo $sf_user->getDeclarant()->getNom(); ?>.')" style="float: left; margin-top: 20px;">Visualiser le brouillon à envoyer</a>
+<?php endif; ?>
