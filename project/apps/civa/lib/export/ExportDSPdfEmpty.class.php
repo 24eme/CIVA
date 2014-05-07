@@ -143,13 +143,4 @@ class ExportDSPdfEmpty extends ExportDSPdf {
                 'is_last_page' => $is_last)));
         }
     }
-
-    protected function createRecap() {
-        
-        $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale, 
-                                                                            'recap_total' => $this->getRecapTotal(),
-                                                                            'recap_autres' => $this->getRecapAutres(),
-                                                                            'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
-    }
-
 }
