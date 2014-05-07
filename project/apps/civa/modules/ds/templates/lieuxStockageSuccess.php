@@ -100,7 +100,7 @@ $hasVolume = false;
 		</table>
 	</div>	
         <?php if($ds->isTypeDsNegoce()): ?>
-            <a class="btn_majeur btn_petit btn_vert" style="float: left; padding: 10px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
+            <a class="btn_majeur btn_petit btn_vert" style="float: left; margin-top: 20px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
        <?php endif; ?>
 </div>
 
