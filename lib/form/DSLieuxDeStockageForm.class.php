@@ -14,7 +14,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         $this->lieux_stockage = $this->tiers->lieux_stockage;
         $this->appelations = $this->getAppelations();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
-        $this->identifiant = ($this->tiers->cvi)? $this->tiers->cvi : $this->tiers->civaba;
+        $this->identifiant = $this->tiers->getIdentifiant();
         
         $defaults = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
@@ -106,7 +106,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                         }
                     }
                 }
-            }   
+        }
         }
         
         $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
