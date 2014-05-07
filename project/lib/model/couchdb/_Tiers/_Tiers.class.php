@@ -32,7 +32,7 @@ abstract class _Tiers extends Base_Tiers {
      * @return array 
      */
     public function getDsArchivesSince($campagne) {
-        return acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByCampagneAndCvi($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByCampagneAndCvi($this->getIdentifiant(), $campagne);
     }
         
     
@@ -42,16 +42,17 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getDeclaration($campagne) {
-        return acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getIdentifiant(), $campagne);
     }
     
     /**
      *
-     * @param string $campagne
+     * @param string $periode
      * @return DR 
      */
-    public function getDs($campagne) {
-        $ds = acCouchdbManager::getClient('DSCiva')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+    public function getDs($periode) {
+        $identifiant = $this->getIdentifiant();
+        $ds = acCouchdbManager::getClient('DSCiva')->retrieveByPeriodeAndIdentifiant($identifiant, $periode);
         if(!$ds) return $ds;
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
@@ -151,17 +152,18 @@ abstract class _Tiers extends Base_Tiers {
     public function storeLieuStockage($nom,$adresse,$commune,$code_postal)
     {
         $newId = 0;
+        $identifiant = $this->getIdentifiant();
         if(!$this->exist('lieux_stockage')){
             $this->add('lieux_stockage');
         }
         $lieux_stockage = $this->_get('lieux_stockage');
         foreach ($lieux_stockage as $key => $value) {
-            $current_id = intval(str_replace($this->cvi, '', $key));
+            $current_id = intval(str_replace($identifiant, '', $key));
             if($current_id > $newId){
                 $newId = $current_id;
             }
         }
-        $newId = $this->cvi.sprintf('%03d',$newId+1);
+        $newId = $identifiant.sprintf('%03d',$newId+1);
         $lieu_stockage = new stdClass();
         $lieu_stockage->numero = $newId;
         $lieu_stockage->nom = $nom;
@@ -286,4 +288,12 @@ abstract class _Tiers extends Base_Tiers {
     }
 
     abstract public function getIdentifiant();
+    
+//    public function getIdentifiant(){
+//        $identifiant = $this->cvi;
+//        if(!$identifiant){
+//            $identifiant = $this->civaba;
+//        }
+//        return $identifiant;
+//    }
 }
