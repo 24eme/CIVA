@@ -59,7 +59,7 @@ class ds_exportActions extends sfActions
 
       $this->setLayout(false);
 
-      $this->document = new ExportDSPdfEmpty($this->tiers, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
+      $this->document = new ExportDSPdfEmpty($this->tiers, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'),null,$this->getRequestParameter('force', 0));
       
       if($request->getParameter('force')) {
         $this->document->removeCache();

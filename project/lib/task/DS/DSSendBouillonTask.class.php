@@ -35,14 +35,16 @@ EOF;
         $comptes = _CompteClient::getInstance()->getAll();
         foreach ($comptes as $id => $compteView) {
             $compte = _CompteClient::getInstance()->findByLogin(str_replace('COMPTE-', '', $id));
-            //checker compte actif
-             foreach($compte->tiers as $tiers) {
+            if($compte->isActif()){
+             foreach($compte->getTiersObject() as $tiers) {
+                 var_dump($tiers); exit;
                  //checker tiers has droit DS
                     $cvi = str_replace("REC-", "", $tiers->id);
                     echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->id)."\n";
                     $rec = RecoltantClient::getInstance()->find($tiers->id); 
                     $this->executeSendMail($rec);
                     continue;
+                }
             }
         }
     }
