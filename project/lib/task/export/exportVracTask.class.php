@@ -19,13 +19,13 @@ class exportVracTask extends sfBaseTask
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
-            new sfCommandArgument('date_end', sfCommandArgument::OPTIONAL, 'date'),
         ));
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default')
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('date-end', null, sfCommandOption::PARAMETER_OPTIONAL, 'The end date au format yyyy-mm-dd (default : date of day - 1)'),
         ));
 
         $this->namespace = 'export';
@@ -47,7 +47,7 @@ EOF;
         
         $configCepappctr = new Cepappctr();
         $date_begin = Flag::getFlag(self::VRAC_EXPORT_DB2, date('1990-01-01'));
-        $date_end = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
+        $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);
         $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
 
