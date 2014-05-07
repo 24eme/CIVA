@@ -43,7 +43,7 @@ $ds_neant = $ds_principale->isDsNeant();
                     <?php endif; ?> 
                         <span>Stocks</span> <em>Etape 3<span class="lieu" ><?php echo getEtape3Label($etape,$many_lieux,$dss,$ds);?></span></em>
                     <?php if($to_linked) echo "</a>"; ?>
-                    <?php if(($etape==3) && ($many_lieux)) : ?>
+                    <?php if(($etape==3) && ($many_lieux || $ds_principale->isAjoutLieuxDeStockage())) : ?>
                         <ul id="liste_lieux_stockage">
                             <?php 
                             $num = 1;

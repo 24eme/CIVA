@@ -102,12 +102,13 @@ function getDateDeclaration($ds){
 
 
 function getHeader($ds, $validee){
+    $result = "";
     if($ds->isTypeDsNegoce()){
         $result = "Stocks Coopération et Négoce";
     }
     $result .= sprintf("\n%s", $ds->declarant->nom);
     if($ds->isTypeDsPropriete()){
-       $result .= sprintf("\nCommune de déclaration%s", $ds->declarant->commune); 
+       $result .= sprintf("\nCommune de déclaration : %s", $ds->declarant->commune); 
     }
    return $result.sprintf("\n%s", $validee);
 }

@@ -22,7 +22,7 @@
             <p class="intro">Démarrer une déclaration de stocks</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_normal" name="ds[type_declaration]" value="ds_normal" checked="checked" />
-                <label for="type_ds_normal">Déclaration de Stocks</label>
+                <label for="type_ds_normal">Déclaration de Stocks (<?php echo $sf_user->getDeclarant()->getTypeDs(); ?>)</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_neant" name="ds[type_declaration]" value="ds_neant" />

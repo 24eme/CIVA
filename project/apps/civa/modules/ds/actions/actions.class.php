@@ -30,8 +30,9 @@ class dsActions extends sfActions {
         $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
-            if($ds->isDsPrincipale() && $ds->isAjoutLieuxDeStockage()){
+            if($ds->isDsPrincipale() && $ds->isTypeDsNegoce()){
                 $ds->add('num_etape',3);
+                $ds->add('courant_stock',$ds->_id);
             }
             elseif($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
@@ -565,13 +566,15 @@ Le CIVA';
 
     protected function redirectEtapeAfterStock($ds){
             $courant_stock = ($ds->exist('courant_stock'))? $ds->courant_stock : null;
-            if(!$courant_stock){
+            
+            if(!$courant_stock && !$ds->isTypeDsNegoce()){
                 return $this->redirect('ds_edition_operateur', $ds);
             }
-
+            
             $courant_id = preg_replace('/^(DS-[0-9]{10}-[0-9]{6}-[0-9]{3})-([A-Za-z0-9\_\-\/]*)/', '$1', $courant_stock);
+            
             $ds_courante = DSCivaClient::getInstance()->find($courant_id);
-
+            
             if(!$ds_courante) {
                 return $this->redirect('ds_edition_operateur', $ds);
             }

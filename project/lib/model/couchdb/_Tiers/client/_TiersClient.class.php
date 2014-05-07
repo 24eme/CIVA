@@ -42,8 +42,16 @@ class _TiersClient extends acCouchdbClient {
         return $this->retrieveByCvi($cvi);
     }
 
+//    public function findByIdentifiant($identifiant) {
+//
+//        return $this->retrieveByCvi($identifiant);
+//    }
+    
     public function findByIdentifiant($identifiant) {
-
-        return $this->retrieveByCvi($identifiant);
+        $tiers = $this->retrieveByCvi($identifiant);        
+        if(!$tiers){
+            $tiers = $this->findByCivaba($identifiant); 
+        }
+        return $tiers;
     }
 }

@@ -1,5 +1,4 @@
 <div id="nouvelle_declaration">
-    <?php echo $sf_user->getDeclarant()->getTypeDs(); ?>
 <?php if(DSSecurity::getInstance($sf_user->getRawValue(), $ds)->isAuthorized(DSSecurity::CREATION)): ?>
 	<?php include_component('ds', 'monEspaceEnCours');  ?>
 <?php elseif (DSSecurity::getInstance($sf_user->getRawValue(), $ds)->isAuthorized(DSSecurity::EDITION)): ?>
