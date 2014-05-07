@@ -75,8 +75,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     private function getLastDR() {
-        $last_dr = DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, substr($this->campagne,0,4));
-        return DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, substr($this->campagne,0,4));
+        return DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, CurrentClient::getCurrent()->campagne);
     }
 
     public function updateProduitsFromLastDs() {
@@ -87,17 +86,17 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
     
     public function updateProduitsFromLastDr(){
-        $dr = $this->getLastDR();
-        if ($dr) {            
+        if ($this->isTypeDsPropriete()) {            
+            $dr = $this->getLastDR();
+            if($dr){
                 $this->drm_origine = $dr->_id;  
-            if($this->isTypeDsPropriete()){
                 $this->addDetailsFromDRPropriete($dr);   
             }
-            if($this->isTypeDsNegoce()){   
-                $this->addDetailsFromDRNegoce($dr);
-            }
-            
         }
+        if($this->isTypeDsNegoce()){   
+            $this->addDetailsFromDRNegoce();
+        }
+
     }
 
     
@@ -166,7 +165,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
     
     public function addDetailsFromDRNegoce()
     {
-        $campagne = CurrentClient::getCurrent()->getCampagneDS();
+        $campagne = CurrentClient::getCurrent()->campagne;
         $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $this->identifiant);
         foreach ($drs as $dr) {
             foreach ($dr->getProduitsDetails() as $detail) {
