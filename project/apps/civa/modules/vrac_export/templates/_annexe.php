@@ -75,7 +75,7 @@ Cette obligation a été reprise par les cahiers des charges de l’ensemble des
 </p>
 
 <h4>Art.5 du 13e Accord Interprofessionnel du Conseil Interprofessionnel des Vins d’Alsace</h4>
-<i>(arrêté ministériel d’extension du 13/12/2012)</i>
+<i>(arrêté ministériel d’extension du 13/11/2012)</i>
  
 <p>
 Toute transaction de vin AOC produit en Alsace, entre deux opérateurs du vignoble AOC, donne lieu dès la conclusion de la vente et quelle que

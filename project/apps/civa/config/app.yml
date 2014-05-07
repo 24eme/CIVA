@@ -69,8 +69,11 @@ all:
         declaration/certification/genre/appellation_PINOTNOIR/mention/lieu/couleur/cepage_PN/:
           position: 8
           supprimable: 0
-        declaration/certification/genre/appellation_PINOTNOIRROUGE/mention/lieu/couleur/cepage_PR/:
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_BL/:
           position: 9
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
+          position: 10
           supprimable: 0
   etapes:
     items:
