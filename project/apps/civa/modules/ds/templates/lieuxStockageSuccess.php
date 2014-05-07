@@ -3,7 +3,7 @@
 $dss = $dss->getRawValue();
 $hasVolume = false;
 ?>
-<form action="<?php echo url_for('ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->cvi; ?>" class="ajaxForm">
+<form action="<?php echo url_for('ds_lieux_stockage', $ds); ?>" method="POST" id="form_lieux_stockage_<?php echo $tiers->getIdentifiant(); ?>" class="ajaxForm">
 <?php include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 2)); ?>
 <?php
     echo $form->renderHiddenFields();
@@ -56,7 +56,8 @@ $hasVolume = false;
 			</thead>
 			<tbody>
 				<?php foreach($tiers->getLieuxStockage() as $numero => $lieu_stockage): 
-                                                $num_lieu = str_replace($tiers->cvi, '', $numero);
+                                                $identifiant = $tiers->getIdentifiant();
+                                                $num_lieu = str_replace($identifiant, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
                                                 $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
                                     ?>
@@ -98,7 +99,9 @@ $hasVolume = false;
 			</tbody>
 		</table>
 	</div>	
-            <a class="ajax btn_majeur btn_petit btn_vert" style="float: left; padding: 10px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
+        <?php if($ds->isTypeDsNegoce()): ?>
+            <a class="btn_majeur btn_petit btn_vert" style="float: left; padding: 10px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
+       <?php endif; ?>
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
