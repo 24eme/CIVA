@@ -9,7 +9,7 @@ $ds_noAppellation = $ds_principale->hasNoAppellation();
 $ds_neant = $ds_principale->isDsNeant();
 ?>
 <!-- .header_ds -->
-<div class="header_ds clearfix <?php if(($etape==3) && ($many_lieux)) echo "sous_menu"; ?>">
+<div class="header_ds clearfix <?php if(($etape==3) && ($many_lieux || $ds_principale->isAjoutLieuxDeStockage())) echo "sous_menu"; ?>">
     <ul id="etape_declaration" class="etapes_ds clearfix">
             <?php 
             $passe = isset($force_passe) || isEtapePasse(1,  $ds_principale); 
@@ -37,7 +37,7 @@ $ds_neant = $ds_principale->isDsNeant();
                 $passe = isset($force_passe) || isEtapePasse(3,  $ds_principale);
                 $to_linked = !isset($force_no_link) && ((!$ds_noAppellation && !$ds_neant) && ($passe || ($ds_principale->num_etape>=2))); 
                 ?>
-                <li class="<?php echo ((!$ds_noAppellation && !$ds_neant) && $etape==3)? 'actif ' : ''; echo ((!$ds_noAppellation && !$ds_neant) && $passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux))? 'sous_menu' : '' ?>" >
+                <li class="<?php echo ((!$ds_noAppellation && !$ds_neant) && $etape==3)? 'actif ' : ''; echo ((!$ds_noAppellation && !$ds_neant) && $passe && $etape!=3)? 'passe ' : ''; ?> <?php echo (($etape==3) && ($many_lieux || $ds_principale->isAjoutLieuxDeStockage()))? 'sous_menu' : '' ?>" >
                     <?php if($to_linked) : ?> 
                         <a class="ajax" href="<?php echo url_for('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getFirstDSByDs($ds_principale)->_id));?>">
                     <?php endif; ?> 
