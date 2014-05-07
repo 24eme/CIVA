@@ -218,9 +218,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
-            $periode = ($this->getDeclarant()->isDeclarantStockNegoce())? 
-                    CurrentClient::getCurrent()->getDsPeriode() :
-                    CurrentClient::getCurrent()->getAnneeDS().'07'; 
+            $periode = CurrentClient::getCurrent()->getDsPeriode();
             $this->_ds = $this->getDeclarant()->getDs($periode);
             if (!$this->_ds) {
                 $ds = new DSCiva();
