@@ -12,12 +12,13 @@
 class exportVracTask extends sfBaseTask
 {
 
+    const VRAC_EXPORT_DB2 = 'VRAC_EXPORT_DB2';
+
     protected function configure()
     {
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
-            new sfCommandArgument('date_begin', sfCommandArgument::REQUIRED, 'date'),
             new sfCommandArgument('date_end', sfCommandArgument::OPTIONAL, 'date'),
         ));
 
@@ -45,12 +46,11 @@ EOF;
         set_time_limit(0);
         
         $configCepappctr = new Cepappctr();
-        $date_begin = $arguments['date_begin'];
+        $date_begin = Flag::getFlag(self::VRAC_EXPORT_DB2, date('1990-01-01'));
         $date_end = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
-        $fin = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d");
         $dates = array($date_begin, $date_end);
-        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $fin).'.';
-        
+        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
+
         /*
          * CREATION
          */
@@ -60,6 +60,7 @@ EOF;
 	        $csvDdecvn = new ExportCsv();
 			$items = VracContratsView::getInstance()->findForDb2Export($dates, $type);
 			$contrats = array();
+            $contrats_to_flag = array();
 			foreach ($items as $item) {
 				$contrats[$item->value[VracContratsView::VALUE_NUMERO_ARCHIVE]] = $item;
 			}
@@ -107,9 +108,7 @@ EOF;
 	            $valuesContrat[VracContratsView::VALUE_DATE_CIRCULATION] = ($type == 'M' && $dateRetiraisonTmp)? $dateRetiraisonTmp : $dateRetiraison;
 	            $csvDecven->add($valuesContrat);
 	        	if ($type == 'C') {
-	            	$c = VracClient::getInstance()->find($contrat->id);
-	            	$c->date_export_creation = date('Y-m-d');
-	            	$c->forceSave();
+                    $contrats_to_flag[] = $contrat->id;
 	            }
 	        }
 	
@@ -130,6 +129,14 @@ EOF;
 	        
 	        file_put_contents($path_ddecvn, $ddecvn);        
 	        file_put_contents($path_decven, $decven);
+
+            foreach($contrats_to_flag as $id) {
+                $c = VracClient::getInstance()->find($contrat->id);
+                $c->date_export_creation = date('Y-m-d');
+                $c->forceSave();
+            }
+
+            Flag::setFlag(self::VRAC_EXPORT_DB2, $date_end);
         }
         
         $modele_decven = array(
