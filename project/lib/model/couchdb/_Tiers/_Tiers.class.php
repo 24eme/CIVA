@@ -138,11 +138,11 @@ abstract class _Tiers extends Base_Tiers {
     
     public function isDeclarantStockPropriete()
     {
-        return ($this->categorie == "VRA");
+        return in_array($this->categorie, self::$array_ds_propriete);
     }
     
     public function isDeclarantStockNegoce() {
-       return (($this->categorie == "PN") || ($this->categorie == "CCV") || ($this->categorie == "SIC"));
+       return in_array($this->categorie, self::$array_ds_negoce);
     }
     
     public function isAjoutLieuxDeStockage(){
