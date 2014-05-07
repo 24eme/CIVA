@@ -49,9 +49,8 @@ class DSCiva extends DS implements IUtilisateursDocument {
         parent::storeDeclarant();
 
         $tiers = $this->getEtablissement();
-
-        $this->declaration_commune = $tiers->declaration_commune;
-        $this->declaration_insee = $tiers->declaration_insee;
+        $this->declaration_commune = ($tiers->type == "MetteurEnMarche")?  $tiers->siege->commune : $tiers->declaration_commune;
+        $this->declaration_insee = ($tiers->type == "MetteurEnMarche")?  $tiers->siege->insee_commune : $tiers->declaration_insee;
 
         if(!$this->declarant->email) {
             $this->declarant->email = $tiers->getCompteEmail();
@@ -250,7 +249,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
    public function getEtablissement() {
-        return acCouchdbManager::getClient('_Tiers')->retrieveByCvi($this->identifiant);
+        return acCouchdbManager::getClient('_Tiers')->findByIdentifiant($this->identifiant);
     }
 
     public function getConfig() {        

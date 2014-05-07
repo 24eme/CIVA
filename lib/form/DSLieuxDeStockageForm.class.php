@@ -5,16 +5,20 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
     protected $lieux_stockage = null;
     protected $tiers = null;
     protected $ds = null;
-    
+    protected $identifiant = null;
+
+
     public function __construct(acCouchdbJson $ds, $defaults = array(), $options = array(), $CSRFSecret = null) {
         $this->ds =$ds;
         $this->tiers = $this->ds->getEtablissement();
         $this->lieux_stockage = $this->tiers->lieux_stockage;
         $this->appelations = $this->getAppelations();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
+        $this->identifiant = ($this->tiers->cvi)? $this->tiers->cvi : $this->tiers->civaba;
+        
         $defaults = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
-            $id_lieu = str_replace($this->tiers->cvi,'', $lieu_s);
+            $id_lieu = str_replace($this->identifiant,'', $lieu_s);
             $ds_id = preg_replace("/[0-9]{3}$/", $id_lieu, $this->ds->_id);
             if(array_key_exists($ds_id, $this->dss)){
                 $current_ds = $this->dss[$ds_id];
@@ -34,7 +38,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
 
     public function configure() {
         foreach ($this->lieux_stockage as $lieu_s => $value) {
-            $id_lieu = str_replace($this->tiers->cvi,'', $lieu_s);
+            $id_lieu = str_replace($this->identifiant,'', $lieu_s);
               $this->setWidget('lieuxStockage_'.$id_lieu, new sfWidgetFormChoice(array('choices' => $this->getAppelations(),'expanded' => true, 'multiple' => true)));
               $this->setValidator('lieuxStockage_'.$id_lieu, new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getAppelations()), 'multiple' => true)));
         }
@@ -73,7 +77,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         $num = $values['ds_principale'][0];
         
         $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
-        
+
         foreach ($this->lieux_stockage as $lieu_id => $lieu) {
             $lieu_num = preg_replace('/^([0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
             $ds_id = preg_replace("/[0-9]{3}$/", $lieu_num, $this->ds->_id);
@@ -141,7 +145,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
     public function getLieuxStockage() {
         $lieux_stockages = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
-            $stockage_num = str_replace($this->tiers->cvi,'', $lieu_s);
+            $stockage_num = str_replace($this->identifiant,'', $lieu_s);
             $lieux_stockages[$stockage_num] = $stockage_num; 
          }
          return $lieux_stockages;

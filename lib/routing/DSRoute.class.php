@@ -13,7 +13,7 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
             throw new InvalidArgumentException(sprintf('The DS "%s" is not valid.', $this->pattern, $parameters['id']));
         }
         
-        $this->ds = DSClient::getInstance()->findByIdentifiantAndPeriode($identifiant, $periode, $lieu_stockage);
+        $this->ds = DSClient::getInstance()->findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $lieu_stockage);
         if (!$this->ds) {
             throw new sfError404Exception(sprintf('No DS found with the id "%s" and the periode "%s".',  $identifiant, $periode));
         }
