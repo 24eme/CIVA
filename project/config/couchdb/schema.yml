@@ -849,4 +849,12 @@ LS:
       type: { }
       pointeur: { }
 
+Flag:
+  definition:
+    fields:
+      _id: {}
+      _rev: {}
+      type: {}
+      *: { }
+
 
