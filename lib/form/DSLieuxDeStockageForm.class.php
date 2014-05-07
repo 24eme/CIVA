@@ -76,8 +76,6 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         }
         $num = $values['ds_principale'][0];
         
-        $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
-
         foreach ($this->lieux_stockage as $lieu_id => $lieu) {
             $lieu_num = preg_replace('/^([0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
             $ds_id = preg_replace("/[0-9]{3}$/", $lieu_num, $this->ds->_id);
@@ -110,6 +108,9 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
             }   
         }
+        
+        $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
+        
         $is_neant = $values['neant'] && $values['neant'][0] == 1;
         foreach ($dss as $ds) {
             if($is_neant){

@@ -10,7 +10,7 @@ class DSEditionAddLieuStockageFormCiva extends acCouchdbForm
     {
         $this->_ds = $ds;
         $this->_tiers = $this->_ds->getEtablissement();
-        
+        $this->_tiers->getLieuxStockage();
         $defaults = array();
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }

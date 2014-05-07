@@ -552,6 +552,7 @@ class DSCivaClient extends DSClient {
     }
 
     public function changeDSPrincipale($dss, $last_ds_principale, $num_new_principale) {
+     
         if ($last_ds_principale->getLieuStockage() == $num_new_principale) {
             return $dss;
         }
@@ -563,7 +564,7 @@ class DSCivaClient extends DSClient {
         $date_depot_mairie = ($last_ds_principale->exist('date_depot_mairie')) ? $last_ds_principale->get('date_depot_mairie') : null;
 
         $new_dss = array();
-
+        
         foreach ($dss as $key => $current_ds) {
             if ($current_ds->getLieuStockage() == $num_new_principale) {
                 $current_ds->add('ds_principale', 1);
