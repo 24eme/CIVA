@@ -311,6 +311,10 @@ class ExportDSPdf extends ExportDocument {
             }
         }
         ksort($recap['produits']);
+        $last_produit = end($recap['produits']);
+        $last_produit['last'] = true;
+        $last_key = key($recap['produits']);
+        $recap['produits'][$last_key] = $last_produit;
     }
 
     protected function addProduit(&$recap, $produit_config, $lieu = false, $couleur = false) {

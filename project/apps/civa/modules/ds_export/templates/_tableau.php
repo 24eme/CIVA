@@ -1,6 +1,7 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
 <?php $empty = isset($empty) && $empty; ?>
+<?php $is_first_page = isset($is_first_page) && $is_first_page; ?>
 <?php $colWidth = round(318/count($tableau['colonnes'])); ?>
 <?php $tableau = $tableau->getRawValue(); ?>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
@@ -19,6 +20,8 @@ $produitEmpty = (count($tableau['produits']) == 1 && key($tableau['produits']) =
 $produitFixed = (array_key_exists('fixed', $tableau) && $tableau['fixed']);
 $nbColonne = 0;
 foreach($tableau['produits'] as $key => $produit):   
+    
+    $last_produit = ($empty && array_key_exists('last', $produit) && $produit['last']);
     $nbColonne = count($produit['colonnes']);
     $vtsgn = true;
     if($empty && array_key_exists('vtsgn', $produit)):
@@ -35,8 +38,8 @@ foreach($tableau['produits'] as $key => $produit):
     <td style="border: 1px solid black; width: 106px;<?php if(($empty && !$vtsgn) || (is_null($produit["vt"]) && !$produitEmpty)): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["vt"]) ?></td>
     <td style="border: 1px solid black; width: 106px; <?php if(($empty && !$vtsgn) || (is_null($produit["sgn"]) && !$produitEmpty)): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume($produit["sgn"]) ?></td>
   </tr>
-<?php endforeach; ?>
-<?php if ($empty && !$produitFixed): ?>  
+<?php endforeach;?>
+<?php if ($empty && !$produitFixed && $last_produit): ?>  
 <?php for ($index = (int) $produitEmpty; $index < 3; $index++): ?>
   <tr>
     <?php foreach($produit['colonnes'] as $colonne): ?>
