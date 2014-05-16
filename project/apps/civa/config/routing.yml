@@ -292,6 +292,10 @@ gamma_telecharger_la_liste_nomenclature:
   url:   /gamma/telecharger_la_liste_nomenclature
   param: { module: gamma, action: downloadNomenclatures }
 
+gamma_telecharger_la_procedure_enlevement_propriete:
+  url:   /gamma/telecharger_la_procedure_enlevement_propriete
+  param: { module: gamma, action: downloadEnlevementPropriete }
+
 gamma_telecharger_l_adhesion:
   url:   /gamma/telecharger_l_adhesion
   param: { module: gamma, action: downloadAdhesion }
