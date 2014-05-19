@@ -61,7 +61,7 @@ EOF;
 			ksort($contrats);
 	        foreach($contrats as $contrat) {
 	            $valuesContrat = $contrat->value;
-	            $isInCreation = (isset($valuesContrat[VracBouteillesView::VALUE_CREATION]) && $valuesContrat[VracBouteillesView::VALUE_CREATION])? true : false;
+	            $isInCreation = (isset($valuesContrat[VracBouteillesView::VALUE_CREATION]) && $valuesContrat[VracBouteillesView::VALUE_CREATION])? false : true;
 	        	if (!$isInCreation) {
 	            	continue;
 	            }
