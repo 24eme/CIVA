@@ -18,19 +18,16 @@ class DSEditionAddLieuStockageFormCiva extends acCouchdbForm
     public function configure() 
     {
         $this->setWidgets(array(
-               'nom' => new sfWidgetFormInputText(),
                'adresse' => new sfWidgetFormInputText(),
                'commune' => new sfWidgetFormInputText(),
                'code_postal' => new sfWidgetFormInputText(),
     	));
         $this->widgetSchema->setLabels(array(
-        	'nom' => 'Nom*:',
                 'adresse' => 'Adresse*:',
         	'commune' => 'Commune*:',
         	'code_postal' => 'Code Postal*:',
         ));
         $this->setValidators(array(
-                'nom' => new sfValidatorString(array('required' => true)),
                 'adresse' => new sfValidatorString(array('required' => true)),
                 'commune' => new sfValidatorString(array('required' => true)),
                 'code_postal' => new sfValidatorString(array('required' => true)),
@@ -42,8 +39,7 @@ class DSEditionAddLieuStockageFormCiva extends acCouchdbForm
     public function doAddLieuStockage()
     {
         $values = $this->values;
-        $this->_tiers->storeLieuStockage($values['nom'],
-                                       $values['adresse'],
+        $this->_tiers->storeLieuStockage($values['adresse'],
                                        $values['commune'],
                                        $values['code_postal']);   
         $this->_tiers->save();
