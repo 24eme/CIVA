@@ -35,7 +35,4 @@
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
     </div>
 </form>
-<?php
-if($sf_user->getDeclarant()->isDeclarantStockPropriete() && $sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) : ?>
-<a class="btn_majeur btn_petit btn_vert" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarant()->getCvi())); ?>" style="float: left; margin-top: 20px;">Visualiser le brouillon à envoyer</a>
-<?php endif; ?>
+<a class="btn_majeur btn_petit btn_vert" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarant()->getCvi())); ?>" style="float: left; margin-top: 20px;">Télécharger mon brouillon</a>
