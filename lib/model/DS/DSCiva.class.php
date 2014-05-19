@@ -687,6 +687,26 @@ public function getConfigurationCampagne() {
     public function getDateDepotMairieFr() {
        return Date::francizeDate($this->date_depot_mairie);
     }
+
+    public function getDateValidationFr() {
+        return $this->getDateFromUtilisateurs('validation');
+    }
+    
+    public function getDateEditionFr() {
+       return $this->getDateFromUtilisateurs('edition');
+    }
+    
+    private function getDateFromUtilisateurs($editOrValid)
+    {
+        $date = substr($this->periode, 0,4).'-'.substr($this->periode, 4).'-31';
+        if($this->exist('utilisateurs') && $this->utilisateurs->exist($editOrValid)){
+            $node = $this->utilisateurs->$editOrValid->toSimpleFields();
+            if(count($node)){
+                $date = $node[key($node)];
+            }
+        }   
+       return Date::francizeDate($date);
+    }
     
     function setDepotmairie($date_iso) {
         if($this->modifiee == $this->validee){
