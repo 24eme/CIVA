@@ -13,11 +13,6 @@
     <div id="application_ds" class="clearfix">
         <div id="aucun_produit">      
             <div class="form_ligne">
-                <?php echo $form['nom']->renderLabel(); ?>
-                <?php echo $form['nom']->render(array('autofocus' => "autofocus")); ?>
-                <?php echo $form['nom']->renderError(); ?>
-            </div>
-            <div class="form_ligne">
                 <?php echo $form['adresse']->renderLabel(); ?>
                 <?php echo $form['adresse']->render(array('autofocus' => "autofocus")); ?>
                 <?php echo $form['adresse']->renderError(); ?>

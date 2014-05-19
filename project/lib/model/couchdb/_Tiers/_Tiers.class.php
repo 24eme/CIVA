@@ -149,7 +149,7 @@ abstract class _Tiers extends Base_Tiers {
         return $this->isDeclarantStockNegoce();
     }
     
-    public function storeLieuStockage($nom,$adresse,$commune,$code_postal)
+    public function storeLieuStockage($adresse,$commune,$code_postal)
     {
         $newId = 0;
         $identifiant = $this->getIdentifiant();
@@ -166,7 +166,7 @@ abstract class _Tiers extends Base_Tiers {
         $newId = $identifiant.sprintf('%03d',$newId+1);
         $lieu_stockage = new stdClass();
         $lieu_stockage->numero = $newId;
-        $lieu_stockage->nom = $nom;
+        $lieu_stockage->nom = $this->nom;
         $lieu_stockage->adresse = $adresse;
         $lieu_stockage->commune = $commune;
         $lieu_stockage->code_postal = $code_postal;        
