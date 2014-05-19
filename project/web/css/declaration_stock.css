@@ -234,6 +234,13 @@ a.msg_aide_ds {
 /* GESTION DES STOCK */
 /* =================================================== */
 
+span.label_type_ds{
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
 #application_ds #cont_gestion_stock
 {
 	display: inline-block;

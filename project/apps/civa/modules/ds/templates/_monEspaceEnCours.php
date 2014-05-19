@@ -1,5 +1,6 @@
 <form id="form_ds" action="<?php echo url_for('ds_init', $ds) ?>" method="post">
     <h3 class="titre_section">Déclaration de l'année <a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds" title="Message aide"></a></h3>
+    <span class="label_type_ds"><?php echo strtoupper($sf_user->getDeclarant()->getTypeDs()); ?></span>
     <div class="contenu_section">    
         <?php if (!$ds->isNew()): ?>
             <p class="intro">Vous souhaitez :</p>
@@ -22,7 +23,7 @@
             <p class="intro">Démarrer une déclaration de stocks</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_normal" name="ds[type_declaration]" value="ds_normal" checked="checked" />
-                <label for="type_ds_normal">Déclaration de Stocks (<?php echo $sf_user->getDeclarant()->getTypeDs(); ?>)</label>
+                <label for="type_ds_normal">Déclaration de Stocks</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_neant" name="ds[type_declaration]" value="ds_neant" />
