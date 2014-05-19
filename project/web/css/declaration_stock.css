@@ -541,6 +541,22 @@ a.msg_aide_ds {
 
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
+
+#application_ds #recap_autres_vins_sans_ig { 
+    float: left;
+    margin: 0 20px 0 0;
+    width: 402px; 
+}
+
+#application_ds #administration_validation { 
+    float: left;
+    width: 240px;
+    margin: 15px 25px 0;
+}
+#administration_validation .ligne_form input,select {
+    width: 180px;
+}
+
 #application_ds #recap_autres { margin: 20px 0 0; }
 #application_ds #recap_vins_sans_ig { margin: 20px 0 0; }
 

@@ -420,11 +420,17 @@ class dsActions extends sfActions {
         $this->secureDS(array(DSSecurity::CONSULTATION, 
                               DSSecurity::EDITION));
 
+        $this->isAdmin = $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN);
         $this->ds_principale = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();        
         $this->ds_client = DSCivaClient::getInstance();
         $this->dss = $this->ds_client->findDssByDS($this->ds_principale);
         $this->validation_dss = array();
+        $this->formDatesModification = null;
+        if($this->isAdmin){
+            $this->formDatesModification = new DSEditionDatesModificationFormCiva($this->ds_principale,$this->getUser());
+        }
+        
         foreach ($this->dss as $id_ds => $ds) {
             $this->validation_dss[$id_ds] = new DSValidationCiva($ds);        
         }     
@@ -448,13 +454,16 @@ Le CIVA';
                 $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
                                                        $this->getUser()->getCompte()->email,
                                                        'CIVA - Validation de votre déclaration de Stocks', $mess);
-                
                 if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
                     try {
                         $this->getMailer()->send($message);
                     } catch (Exception $e) {
                         $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé, veuillez contacter CIVA');
                     }
+                }
+                if($this->isAdmin){
+                   $ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->ds_principale);
+                   $this->formDatesModification->doUpdateDatesModificationValidation($request->getParameter("ds_edit_dates"),$ds);
                 }
                 $this->redirect('ds_confirmation', $this->ds_principale);
         }
