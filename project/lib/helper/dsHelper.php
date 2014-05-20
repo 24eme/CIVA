@@ -135,3 +135,16 @@ function getHeaderBrouillon($ds, $validee)
 
     return $result;
 }
+
+function getPeriodeFr($periode){
+    $annee = substr($periode, 0,4);
+    $mois = substr($periode, 4);
+    $periodeFr = "";
+    if($mois == "12"){
+      $periodeFr.= "Décembre";  
+    }
+     if($mois == "07"){
+      $periodeFr.= "Juillet";  
+    }
+    return $periodeFr." ".$annee;
+}

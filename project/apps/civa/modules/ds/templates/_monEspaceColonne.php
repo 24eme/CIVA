@@ -1,13 +1,14 @@
+<?php use_helper('ds'); ?>
 <div id="precedentes_declarations">
     <h3 class="titre_section">Visualiser mes DStocks<a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_visualiser_ds" title="Message aide"></a></h3>
     <div class="contenu_section">
         <ul class="bloc_vert">
             <li>
                 <a href="#">Années précédentes</a>
-                <?php if (count($dsBycampagnes) > 0): ?>
+                <?php if (count($dsByperiodes) > 0): ?>
                     <ul class="declarations">
-                        <?php foreach($dsBycampagnes as $campagne => $ds): ?>
-                            <li><?php echo link_to($ds->getAnnee(), 'ds_visualisation', $ds); ?></li>
+                        <?php foreach($dsByperiodes as $periode => $ds): ?>
+                            <li><?php echo link_to(getPeriodeFr($ds->getPeriode()), 'ds_visualisation', $ds); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php else :

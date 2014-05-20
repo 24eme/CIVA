@@ -28,11 +28,11 @@ abstract class _Tiers extends Base_Tiers {
 
         /**
      *
-     * @param string $campagne
+     * @param string $periode
      * @return array 
      */
-    public function getDsArchivesSince($campagne) {
-        return acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByCampagneAndCvi($this->getIdentifiant(), $campagne);
+    public function getDsArchivesSince($periode) {
+        return acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByPeriodeAndCvi($this->getIdentifiant(), $periode);
     }
         
     
