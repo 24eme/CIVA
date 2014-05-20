@@ -34,7 +34,9 @@ $hasVolume = false;
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
         </div>
         <div class="ds_lieu_toggle_stockage_principale">
-        <a href="#" class="btn_majeur btn_petit" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
+            <?php if(count($tiers->getLieuxStockage()) > 1) : ?>
+                <a href="#" class="btn_majeur btn_petit" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
+            <?php endif; ?>
         </div>
 	<div id="lieux_stockage">
 		<table class="table_donnees pyjama_auto">
@@ -68,9 +70,10 @@ $hasVolume = false;
                                         <input style='visibility:hidden;' type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
 					</td>
                                         <td class="adresse_lieu <?php echo ($num_lieu == $ds->getLieuStockage())? "ds_lieu_principal_bold" : ""; ?>" id="<?php echo "adresse_".$num_lieu; ?>">
-                                                <?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
-						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
+                                                <?php echo formatNumeroStockage($lieu_stockage->numero, $ds->isAjoutLieuxDeStockage()) ?> 
                                                 <?php echo ($num_lieu == $ds->getLieuStockage())? "<span id='principal_label'>(principal)</span>" : ""; ?>
+                                                <br />
+						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
                                         </td>
 					<?php  $cpt = 0;
 					 $name = 'lieuxStockage_'.$num_lieu;
