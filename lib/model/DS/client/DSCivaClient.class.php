@@ -64,15 +64,14 @@ class DSCivaClient extends DSClient {
         return $v->format('Y-m-d');
     }
 
-    public function retrieveDsPrincipalesByCampagneAndCvi($cvi, $campagne) {
+    public function retrieveDsPrincipalesByPeriodeAndCvi($cvi, $periode) {
         $dss_principales = array();
-        $annee = $campagne;
-        $docs = $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-' . $annee . '99-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
+        $docs = $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
-            if (preg_match('/DS-(?P<cvi>\d+)-(?P<campagne>\d+)/', $doc_id, $matches)) {
-                $campagne_t = preg_replace('/^([0-9]{4})([0-9]{2})$/', "$1", $matches['campagne']);
-                if (!array_key_exists($campagne_t, $dss_principales))
-                    $dss_principales[$campagne_t] = $this->getDSPrincipaleByDs($this->find($doc_id, acCouchdbClient::HYDRATE_DOCUMENT));
+            if (preg_match('/DS-(?P<cvi>\d+)-(?P<periode>\d+)/', $doc_id, $matches)) {
+                $periode_t = preg_replace('/^([0-9]{6})$/', "$1", $matches['periode']);
+                if (!array_key_exists($periode_t, $dss_principales))
+                    $dss_principales[$periode_t] = $this->getDSPrincipaleByDs($this->find($doc_id, acCouchdbClient::HYDRATE_DOCUMENT));
             }
         }
         return $dss_principales;
