@@ -53,7 +53,7 @@ class ds_exportActions extends sfActions
 
          throw new sfSecurityException("Vous n'avez pas accès au DS pour ce tiers");
       }
-      $this->tiers = $this->getRoute()->getTiers(); 
+      $this->tiers = $this->getRoute()->getTiers();
       
       set_time_limit(180);
 

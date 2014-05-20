@@ -3,7 +3,7 @@
 </ul>
 
 <?php
-include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client)); 
+include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client, 'isAdmin' => false)); 
 ?>
 <?php include_partial('generationDuPdf', array('ds' => $ds_principale)) ?>
 

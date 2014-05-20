@@ -51,3 +51,9 @@ function truncate_text($text, $length = 30, $truncate_string = '<small>…</smal
 
   return $text;
 }
+
+function echoHl($empty){
+    if($empty){
+        echo "<span>hl&nbsp;</span>";
+    }
+}
