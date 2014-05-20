@@ -33,7 +33,9 @@ $hasVolume = false;
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
         </div>
-	
+        <div class="ds_lieu_toggle_stockage_principale">
+        <a href="#" class="btn_majeur btn_petit" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
+        </div>
 	<div id="lieux_stockage">
 		<table class="table_donnees pyjama_auto">
 			<thead>
@@ -63,15 +65,12 @@ $hasVolume = false;
                                     ?>
 				<tr>
                                         <td>
-                                        <input type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
+                                        <input style='visibility:hidden;' type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
 					</td>
-                                        <td class="adresse_lieu">
-                                                
-                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "<strong>" : ""; ?>
-                                                
-						<?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
+                                        <td class="adresse_lieu <?php echo ($num_lieu == $ds->getLieuStockage())? "ds_lieu_principal_bold" : ""; ?>" id="<?php echo "adresse_".$num_lieu; ?>">
+                                                <?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
-                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
+                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "<span id='principal_label'>(principal)</span>" : ""; ?>
                                         </td>
 					<?php  $cpt = 0;
 					 $name = 'lieuxStockage_'.$num_lieu;

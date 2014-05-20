@@ -86,6 +86,22 @@ var initLieuxStockage = function()
         }
         majCheckboxesAppellation();
     });
+    
+    $('#ds_lieux_stockage_toggle').click(function(){
+        $("input[name='ds_lieu[ds_principale]']").removeAttr("style");
+        $('#ds_lieux_stockage_toggle').remove();
+    });
+    
+    $("input[name='ds_lieu[ds_principale]']").change(function(){        
+        $("#principal_label").remove();
+        var numChecked = $("input[name='ds_lieu[ds_principale]']:checked").val();
+        $("td.adresse_lieu").each(function(){
+            $(this).removeClass("ds_lieu_principal_bold");
+        })
+        $("#adresse_"+numChecked).addClass("ds_lieu_principal_bold");
+        $("#adresse_"+numChecked).append( "<span id='principal_label'>(principal)</span>" );
+    });
+    
 };
 
 var initExploitation = function()

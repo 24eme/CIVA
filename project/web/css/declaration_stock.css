@@ -282,6 +282,23 @@ span.label_type_ds{
 	margin: 0 0 0 5px;
 }
 
+#application_ds .ds_lieu_toggle_stockage_principale
+{
+    margin-bottom: 20px; 
+    height: 20px;
+}
+
+#application_ds .adresse_lieu
+{
+    height: 55px;
+    width: 270px;
+}
+
+#application_ds .ds_lieu_principal_bold
+{
+    font-weight: bold;
+}
+
 #application_ds #lieux_stockage table thead th { font-size: 11px; }
 
 #application_ds #lieux_stockage table thead th:first-child 
