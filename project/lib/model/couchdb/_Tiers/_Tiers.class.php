@@ -239,15 +239,15 @@ abstract class _Tiers extends Base_Tiers {
 
     public function getLieuxStockage()
     {
-        if($this->isAjoutLieuxDeStockage() &&
-                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
-           $lieu_stockage = $this->storeLieuStockage($this->nom,
-                    $this->siege->adresse,
-                    $this->siege->commune,
-                    $this->siege->code_postal);
-            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
-            return $this->_get('lieux_stockage');
-        }
+//        if($this->isAjoutLieuxDeStockage() &&
+//                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
+//           $lieu_stockage = $this->storeLieuStockage($this->nom,
+//                    $this->siege->adresse,
+//                    $this->siege->commune,
+//                    $this->siege->code_postal);
+//            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
+//            return $this->_get('lieux_stockage');
+//        }
         if($this->exist('lieux_stockage')){
             return $this->_get('lieux_stockage');
         }
