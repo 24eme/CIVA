@@ -110,8 +110,8 @@ function echoDateFr($dateIso) {
 
 function echoCentilisation($centilisation) {
 	if (preg_match('/([0-9,]+)\ ([a-zA-Z]+)/', $centilisation, $matches)) {
-		echo $matches[1].' <small>'.$matches[2].'</small>';
+		echo $matches[1].'&nbsp;<small>'.$matches[2].'</small>&nbsp;';
 	} else {
-		echo $centilisation;
+		echo '&nbsp;'.$centilisation.'&nbsp;';
 	}
 }

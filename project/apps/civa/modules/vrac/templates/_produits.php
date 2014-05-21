@@ -47,21 +47,21 @@
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume">
-				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;Hl
+				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;hl
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;Hl
+				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<?php endif; ?>
 			<td class="echeance"></td>
-			<td class="enleve"><strong id="vol<?php echo renderProduitIdentifiant($detail) ?>" data-compare="prop<?php echo renderProduitIdentifiant($detail) ?>" data-cibling="<?php echo $formProduit['cloture']->renderId() ?>"><?php echo echoFloat($detail->volume_enleve) ?></strong> Hl</td>
+			<td class="enleve"><strong id="vol<?php echo renderProduitIdentifiant($detail) ?>" data-compare="prop<?php echo renderProduitIdentifiant($detail) ?>" data-cibling="<?php echo $formProduit['cloture']->renderId() ?>"><?php echo echoFloat($detail->volume_enleve) ?></strong> hl</td>
 			<td class="cloture">
                                <input type="checkbox" name="<?php echo $formProduit['cloture']->renderName(); ?>" id="<?php echo $formProduit['cloture']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($detail->cloture)? "checked='checked'" : '' ?>  <?php echo ($detail->exist('volume_enleve') && $detail->volume_enleve !== null)? '' : "style='display:none'"; ?> />
 			</td>
@@ -102,18 +102,18 @@
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
+			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php else: ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td></td>
-			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;Hl</strong></td>
+			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php endif; ?>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
@@ -122,7 +122,7 @@
 			<td></td>
 			<td></td>
 			<td class="echeance"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
-			<td class="volume"><?php echoFloat($retiraison->volume) ?>&nbsp;Hl</td>
+			<td class="volume"><?php echoFloat($retiraison->volume) ?>&nbsp;hl</td>
 		</tr>
 		<?php endforeach; ?>
 		<?php 
@@ -147,17 +147,17 @@
 			</td>
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<?php endif; ?>
 		</tr>

@@ -4,7 +4,7 @@
 		<legend class="titre_section">Type de contrat</legend>
 		
 		<div class="clearfix">
-			<div class="form_col selecteur">
+			<div id="type_contrat_radio_list" class="form_col selecteur">
 				<div class="ligne_form">
 					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Veuillez selectionner le type de votre contrat :<?php else: ?>Vous avez selectionner le type de contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
@@ -40,15 +40,21 @@
 							<td valign="top">
 								<div id="vendeur_recoltants" data-acteur="vendeur" data-type="recoltant" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 									<?php echo $form['vendeur_recoltant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "recoltants")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 								<div id="vendeur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 									<?php echo $form['vendeur_negociant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "negociants")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 								<div id="vendeur_caves_cooperatives" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 									<?php echo $form['vendeur_cave_cooperative_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "caves_cooperatives")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -86,16 +92,22 @@
 							<td valign="top">
 								<div id="acheteur_recoltants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 									<?php echo $form['acheteur_recoltant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "recoltants")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 			
 								<div id="acheteur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 									<?php echo $form['acheteur_negociant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "negociants")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 								<div id="acheteur_caves_cooperatives" data-acteur="cave_cooperative" data-type="recoltant" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 									<?php echo $form['acheteur_cave_cooperative_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "caves_cooperatives")) ?>
-									<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									<div class="ajouter_annuaire">
+										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -117,7 +129,9 @@
 				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
 				<div class="nom_cvi ligne_form">
 				<?php echo $form['interlocuteur_commercial']->render() ?>
-				<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
+				<div class="ajouter_annuaire">
+					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
+				</div>
 				</div>
 			</div>
 			
@@ -140,7 +154,9 @@
 				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
 				<div class="nom_cvi ligne_form">
 				<?php echo $form['interlocuteur_commercial']->render() ?>
-				<a class="ajouter_annuaire" href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
+				<div class="ajouter_annuaire">
+					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
+				</div>
 				</div>
 			</div>
 			
@@ -163,7 +179,7 @@
 
 	<script type="text/javascript">
 	$(document).ready(function () {
-		$(".ajouter_annuaire").click(function() {
+		$(".ajouter_annuaire a").click(function() {
 			$("#principal").attr('action', $(this).attr('href'));
 			$("#principal").submit();
 			return false;

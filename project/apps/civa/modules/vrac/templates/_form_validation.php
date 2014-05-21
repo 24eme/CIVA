@@ -30,10 +30,10 @@
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<?php endif; ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;Hl
+				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>Hl<?php endif; ?><?php endif; ?>
+				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 		</tr>
 		<?php 
