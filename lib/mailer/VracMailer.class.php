@@ -20,7 +20,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat vrac] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -33,7 +33,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat vrac] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -46,7 +46,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat vrac] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));        
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
@@ -64,7 +64,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat vrac] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -77,7 +77,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat vrac] Cloture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Cloture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_cloture_contrat_'.strtolower($vrac->type_contrat), array('vrac' => $vrac));        
 		$message = Swift_Message::newInstance()
   					->setFrom($from)

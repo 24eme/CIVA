@@ -560,11 +560,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         		$emails[] = $email;
         	}
     	}
-    	if ($this->interlocuteur_commercial->email) {
+        $emails = array_unique($emails);
+    	if ($this->interlocuteur_commercial->email && !in_array($this->interlocuteur_commercial->email, $emails)) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
-
-        $emails = array_unique($emails);
 
     	return $emails;
     }
