@@ -393,7 +393,7 @@ var sumContrat = function(brothers, cible)
 			btn_balayette.click(function()
 			{
 				champs.val('');
-				ligne_courante.removeClass('coche effacable actif');
+				ligne_courante.removeClass('coche effacable croix actif');
 
 				return false;
 			});

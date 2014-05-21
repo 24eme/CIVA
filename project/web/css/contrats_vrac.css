@@ -303,6 +303,8 @@
 #contrats_vrac .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
 
 #contrats_vrac .bloc_infos .radio_list { display: inline-block; }
+#contrats_vrac .bloc_infos #type_contrat_radio_list ul { margin: 10px 0 0 0; }
+#contrats_vrac #type_contrat.bloc_infos #type_contrat_radio_list ul li { margin: 0 30px 0 10px; }
 .ielt9 #contrats_vrac .bloc_infos .radio_list { display: inline; }
 
 #contrats_vrac .bloc_infos .radio_list li
@@ -370,7 +372,7 @@
 #contrats_vrac .etape_produits.table_donnees .actif input { background: #FFF; }
 
 #contrats_vrac .etape_produits.table_donnees .coche .prix { background: #edecec url('../images/pictos/pi_check_2.png') 98% 50% no-repeat; }
-#contrats_vrac .etape_produits.table_donnees .croix .prix { background: #edecec url('../images/pictos/pi_attention.png') 98% 50% no-repeat; }
+#contrats_vrac .etape_produits.table_donnees .croix .prix { background: #edecec url('../images/pictos/pi_attention.png') 99% 50% no-repeat; }
 #contrats_vrac .etape_produits.table_donnees .alt .prix { background-color: #DDDDDD !important; }
 
 #contrats_vrac .etape_produits.table_donnees + #ajouter-produit
@@ -476,12 +478,14 @@
 }
 
 #contrats_vrac .validation.table_donnees .prix,
-#contrats_vrac .validation.table_donnees .volume { width: 105px; }
+#contrats_vrac .validation.table_donnees .volume,
+#contrats_vrac .validation.table_donnees .bouteille,
+#contrats_vrac .validation.table_donnees .centilisation { width: 90px; text-align: center; }
 
 #contrats_vrac .validation.table_donnees td.prix,
 #contrats_vrac .validation.table_donnees td.volume,
 #contrats_vrac .validation.table_donnees td.bouteille,
-#contrats_vrac .validation.table_donnees td.centilisation { text-align:right; }
+#contrats_vrac .validation.table_donnees td.centilisation { text-align:center; }
 
 #contrats_vrac .conditions { margin: 0 0 20px; }
 

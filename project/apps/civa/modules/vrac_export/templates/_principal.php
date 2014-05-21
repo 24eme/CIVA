@@ -22,15 +22,15 @@
 		<th width="<?php echo $widthProduit ?>px" style="font-weight: bold; text-align: center; border: 1px solid black;">Produit</th>
 		<th width="42px" style="font-weight: bold; text-align: center; border: 1px solid black;">Mill.</th>  
 		<?php if (!$odg): ?>
-		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>(en &euro;/blle)<?php else: ?>(en &euro;/HL)<?php endif; ?></small></th>
+		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>(en &euro;/blle)<?php else: ?>(en &euro;/hl)<?php endif; ?></small></th>
 		<?php endif; ?>
 		<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 		<th width="85px" style="font-weight: bold; text-align: center; border: 1px solid black;">Centilisation</th>
 		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nb bouteilles</th>
-                <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en HL)</small></th>
+                <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en hl)</small></th>
 		<?php else: ?>
-		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en HL)</small></th>
-		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en HL)</small></th>
+		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume estimé<br/><small>(en hl)</small></th>
+		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en hl)</small></th>
                 <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>de Chargt</th>
         <?php endif; ?>
 	</tr>
@@ -59,7 +59,7 @@
 			<?php endif; ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoCentilisation(VracClient::getLibelleCentilisation($detailLine->centilisation)) ?></td>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?></td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?>&nbsp;</td>
             <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
 			<?php else: ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
