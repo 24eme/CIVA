@@ -217,26 +217,26 @@ class DSCivaClient extends DSClient {
         return $this->findDssByCviAndPeriode($tiers->getIdentifiant(), $periode, $hydrate);
     }
 
-    public function getNextLieuStockageSecondaireByCviAndDate($cvi, $date_stock) {
-        $tiers = acCouchdbManager::getClient('_Tiers')->findByCvi($cvi);
+    public function getNextLieuStockageSecondaireByIdentifiantAndDate($identifiant, $date_stock) {
+        $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
         $type_ds = $tiers->getTypeDs();
         $periode = $this->buildPeriode($this->createDateStock($date_stock),$type_ds);
         if (!$tiers) {
 
-            throw new sfException(sprintf("Tiers not found %s", $cvi));
+            throw new sfException(sprintf("Tiers not found %s", $identifiant));
         }
         foreach ($tiers->lieux_stockage as $lieu_stockage) {
             if ($lieu_stockage->isPrincipale()) {
                 continue;
             }
-            $ds = $this->findByIdentifiantPeriodeAndLieuStockage($cvi, $periode, $lieu_stockage->getNumeroIncremental());
+            $ds = $this->findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $lieu_stockage->getNumeroIncremental());
             if (!$ds) {
 
                 return $lieu_stockage->getNumeroIncremental();
             }
         }
 
-        throw new sfException(sprintf("Plus aucun lieu de stockage n'existe pour le tiers %s après le numéro de lieu de stockage %s", $cvi, $lieu_stockage->getNumeroIncremental()));
+        throw new sfException(sprintf("Plus aucun lieu de stockage n'existe pour le tiers %s après le numéro de lieu de stockage %s", $identifiant, $lieu_stockage->getNumeroIncremental()));
     }
 
     public function getNextDS($ds) {
