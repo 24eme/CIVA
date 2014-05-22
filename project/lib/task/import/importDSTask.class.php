@@ -411,7 +411,7 @@ EOF;
                 echo $this->error_term . " Le Numéro $identifiant ne correspond pas à un numéro CIVA \n";
                 return null;
             }
-            $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
+            $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiantNegoce($identifiant);
 
             if (is_null($tiers)) {
                 echo $this->error_term . " Le tiers d'identifiant $identifiant n'a pas été trouvé \n";
@@ -425,17 +425,20 @@ EOF;
             $adresse_lieu = $ds_csv_datas[self::CSV_DS_LIEUDESTOCKAGE];
             $is_lieu_principal = ($ds_csv_datas[self::CSV_DS_LIEU_PRINCIPAL] == "P");
             $lieux_existant = $tiers->getLieuxStockage();
+            
             if ($is_lieu_principal) {
-                if ($adresse_lieu == "") {
-                    if(count($lieux_existant) > 0){
-                        foreach ($lieux_existant as $lieu_existant) {
-                            $lieu_stockage = $lieu_existant;                            
-                        }
-                    }
-                    $adresse_lieu = $tiers->siege->adresse;
-                }
+                $lieu_principal_existant = $tiers->getLieuStockagePrincipal();
+                
+                $adresse_lieu = $tiers->siege->adresse;  
                 $commune = $tiers->siege->commune;
                 $code_postal = $tiers->siege->code_postal;
+                
+                if($lieu_principal_existant){
+                    $lieu_stockage = $lieu_principal_existant;
+                    if ($adresse_lieu != "") {
+                        $tiers->lieux_stockage->{$lieu_stockage->numero}->adresse = $adresse_lieu;
+                    }                
+                }
             } else {
                 if ($adresse_lieu == "") {
                     echo $this->warning_term . " L'adresse du lieu secondaire du tiers d'identifiant $identifiant n'est pas spécifié dans le CSV \n";
@@ -445,13 +448,15 @@ EOF;
                         foreach ($lieux_existant as $lieu_existant) {
                             $num = substr($lieu_existant->numero, 10);
                             if($num > 1 && $lieu_existant->adresse == $adresse_lieu){
-                                $lieu_stockage = $lieu_existant;                            
+                                $lieu_stockage = $lieu_existant;  
+                                break;
                             }
                         }
                 }
                 $commune = "";
                 $code_postal = "";
             }
+            
             if(!$lieu_stockage){
                 $lieu_stockage = $tiers->storeLieuStockage($adresse_lieu, $commune, $code_postal);
             }

@@ -7,7 +7,7 @@
             <p class="intro">Vous souhaitez :</p>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_visualisation" name="ds[type_declaration]" value="visualisation"  />
-                <label for="type_ds_visualisation">Visualiser ma déclaration en cours (<?php echo $sf_user->getDeclarant()->getTypeDs(); ?>)</label>
+                <label for="type_ds_visualisation">Visualiser ma déclaration en cours</label>
             </div>
             <div class="ligne_form">
                 <input type="radio" id="type_ds_brouillon" name="ds[type_declaration]" value="brouillon" checked="checked" />
