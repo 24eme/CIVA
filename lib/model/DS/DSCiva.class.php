@@ -248,7 +248,10 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
    public function getEtablissement() {
-        return acCouchdbManager::getClient('_Tiers')->findByIdentifiant($this->identifiant);
+        if($this->isTypeDsNegoce()){
+            return acCouchdbManager::getClient('_Tiers')->findByIdentifiantNegoce($this->identifiant);
+        }
+        return acCouchdbManager::getClient('_Tiers')->findByCvi($this->identifiant);
     }
 
     public function getConfig() {        
