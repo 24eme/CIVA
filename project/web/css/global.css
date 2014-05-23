@@ -56,6 +56,17 @@ table
 /**
  * Eléments génériques
  ******************************************/
+body.bttf { 
+    background: #000 url(../images/fonds/bg_global_bttf.jpg) center 0 no-repeat;
+}
+body.bttf #header { 
+    margin-left 140px;
+}
+body.bttf #header #logo{ 
+    display: none;
+}
+
+
 body
 {
     background: #000 url(../images/fonds/bg_global.jpg) center 0 no-repeat;
