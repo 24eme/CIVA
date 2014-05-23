@@ -9,37 +9,39 @@ class ExportDRPdf extends ExportDocument {
     protected $no_cache;
     protected $filename;
     protected $dr;
-    protected $tiers;
 
-    public function __construct($dr, $tiers, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($dr, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         $this->type = $type;
         $this->partial_function = $partial_function;
         $this->file_dir = $file_dir;
         $this->no_cache = $no_cache;
         $this->dr = $dr;
-        $this->tiers = $tiers;
 
-        $this->init($dr, $tiers, $filename);
+        $this->init($dr, $filename);
     }
 
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
-          $this->create($this->dr, $this->tiers);
+          $this->create($this->dr);
         }
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($dr, $tiers, $filename = null) {
+    protected function init($dr, $filename = null) {
         $validee = 'Non Validée';
         if ($dr->exist('validee')) {
-          $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
+            if($dr->hasDateDepotMairie()){
+                $validee = 'Déposée en mairie le '.$dr->getDateDepotMairieFr();
+            }else{
+              $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
+            }
           if ($dr->isHumanlyModifiee()) {
 	    $validee .= ' et modifiée le '.$dr->getDateModifieeFr();
           }
         }
         
         $title = 'Déclaration de récolte '.$dr->campagne;
-        $header = $dr->declarant->intitule.' '.$dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
+        $header = $dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
@@ -71,7 +73,7 @@ class ExportDRPdf extends ExportDocument {
       return $filename.'.pdf';
     }
 
-    protected function create($dr, $tiers) {
+    protected function create($dr) {
         
           foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
@@ -80,7 +82,7 @@ class ExportDRPdf extends ExportDocument {
                   if (!$appellation->getLieux()->exist($lieu->getKey()))
                     continue;
                   $lieu = $appellation->getLieux()->get($lieu->getKey());
-                  $this->createAppellationLieu($lieu, $tiers, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
+                  $this->createAppellationLieu($lieu, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
                 }
             }
           }
@@ -101,14 +103,24 @@ class ExportDRPdf extends ExportDocument {
       				'libelle' => array_slice($infos['libelle'], $i, $nb_colonnes_by_page),
       				'superficie' => array_slice($infos['superficie'], $i, $nb_colonnes_by_page),
       				'volume' => array_slice($infos['volume'], $i, $nb_colonnes_by_page),
-                    'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
-                    'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
-      				'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
+              'volume_vendus' => array_slice($infos['volume_vendus'], $i, $nb_colonnes_by_page),
+              'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
+              'volume_rebeches' => array_slice($infos['volume_rebeches'], $i, $nb_colonnes_by_page),
+              'volume_rebeches_sur_place' => array_slice($infos['volume_rebeches_sur_place'], $i, $nb_colonnes_by_page),
+              'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
+              'revendique_sur_place' => array_slice($infos['revendique_sur_place'], $i, $nb_colonnes_by_page),
+              'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
+      				'usages_industriels_sur_place' => array_slice($infos['usages_industriels_sur_place'], $i, $nb_colonnes_by_page),
       				'total_superficie' => $infos['total_superficie'],
-        			'total_volume' => $infos['total_volume'],
-                    'total_usages_industriels' => $infos['total_usages_industriels'],
-        			'total_revendique' => $infos['total_revendique'],
+              'total_volume' => $infos['total_volume'],
+        			'total_volume_vendus' => $infos['total_volume_vendus'],
+              'total_usages_industriels' => $infos['total_usages_industriels'],
+              'total_usages_industriels_sur_place' => $infos['total_usages_industriels_sur_place'],
+              'total_revendique' => $infos['total_revendique'],
+        			'total_revendique_sur_place' => $infos['total_revendique_sur_place'],
               'total_volume_sur_place' => $infos['total_volume_sur_place'],
+              'total_volume_rebeches' => $infos['total_volume_rebeches'],
+              'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
               'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
@@ -123,27 +135,57 @@ class ExportDRPdf extends ExportDocument {
     				$has_total = true;
     			else 
     				$has_total = false;
-    			$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+    			$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
     			$currentPage++;
     		}
           	
           } else {
-          	$this->document->addPage($this->getPartial('export/recapitulatif', array('tiers'=> $tiers, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+          	$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+          }
+          if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()) {
+            $this->createRecap($dr);
           }
     }
+
+      protected function createRecap($dr) {
+        $recap = $this->getRecapTotal($dr);
+        $total = array("revendique_sur_place" => null, 
+                       "usages_industriels_sur_place" => null);
+        foreach($recap as $key => $item) {
+          $total["revendique_sur_place"] += $item->revendique_sur_place;
+          $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
+        }
+        if($dr->hasVolumeSurPlace() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()){
+          $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
+                                                                                      'recap_total' => $recap,
+                                                                                      'total' => $total)));
+        }
+    }
+
+    protected function getRecapTotal($dr) {
+
+        return DRClient::getInstance()->getTotauxByAppellationsRecap($dr);
+    }
+
     
     private function getRecapitulatifInfos($dr)
     {
         $appellations = array();
         $superficie = array();
         $volume = array();
+        $volume_vendus = array();
         $volume_sur_place = array();
+        $volume_rebeches = array();
+        $volume_rebeches_sur_place = array();
         $revendique = array();
+        $revendique_sur_place = array();
         $usages_industriels = array();
+        $usages_industriels_sur_place = array();
         $libelle = array();
         $volume_negoces = array();
         $volume_cooperatives = array();
         $cvi = array();
+        $has_cepage_rb = false;
         foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
           if ($dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
               $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_key);
@@ -153,30 +195,78 @@ class ExportDRPdf extends ExportDocument {
               $libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
               $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
               $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
+              $volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
               $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsCalcule();
+              $revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
+              $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsSurPlace();
+              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
               $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
+              $volume_rebeches[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getTotalRebeches() : null;
+              $volume_rebeches_sur_place[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getSurPlaceRebeches() : null;
+              if($appellation->getConfig()->hasCepageRB()) {
+                $has_cepage_rb = true;
+              }
           }
         }
+
         $infos = array();
         $infos['appellations'] = $appellations;
         $infos['libelle'] = $libelle;
         $infos['superficie'] = $superficie;
         $infos['volume'] = $volume;
+        $infos['volume_vendus'] = $volume_vendus;
         $infos['volume_sur_place'] = $volume_sur_place;
+        $infos['volume_rebeches'] = $volume_rebeches;
+        $infos['volume_rebeches_sur_place'] = $volume_rebeches_sur_place;
         $infos['revendique'] = $revendique;
+        $infos['revendique_sur_place'] = $revendique_sur_place;
         $infos['usages_industriels'] = $usages_industriels;
+        $infos['usages_industriels_sur_place'] = $usages_industriels_sur_place;
         $infos['total_superficie'] = array_sum(array_values($superficie));
         $infos['total_volume'] = array_sum(array_values($volume));
+
+        $has_no_usages_industriels = $dr->recolte->getConfig()->hasNoUsagesIndustriels();
+        $has_no_recapitulatif_couleur = $dr->recolte->getConfig()->hasNoRecapitulatifCouleur();
+        $can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
+
+        if($dr->recolte->getTotalVolumeVendus() > 0 && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+          $infos['total_volume_vendus'] = array_sum(array_values($volume_vendus));
+        } else {
+          $infos['total_volume_vendus'] = null;
+        }
+
         $infos['total_volume_sur_place'] = array_sum(array_values($volume_sur_place));
+
+        if($has_cepage_rb && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+            $infos['total_volume_rebeches'] = array_sum(array_values($volume_rebeches));
+            $infos['total_volume_rebeches_sur_place'] = array_sum(array_values($volume_rebeches_sur_place));
+        } else {
+          $infos['total_volume_rebeches'] = null;
+          $infos['total_volume_rebeches_sur_place'] = null;
+        }
+
         $infos['total_usages_industriels'] = array_sum(array_values($usages_industriels));
+
+        if($dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+          $infos['total_usages_industriels_sur_place'] = array_sum(array_values($usages_industriels_sur_place));
+        } else {
+          $infos['total_usages_industriels_sur_place'] = null;
+        }
+
         $infos['total_revendique'] = array_sum(array_values($revendique));
+        
+        if($dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
+          $infos['total_revendique_sur_place'] = array_sum(array_values($revendique_sur_place));
+        } else {
+          $infos['total_revendique_sur_place'] = null;
+        }
+
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
         $infos['lies'] = $dr->lies;
         return $infos;
     }
     
-	private function createAppellationLieu($lieu, $tiers, $hasLieuEditable, $hasVTSGN) {
+	private function createAppellationLieu($lieu, $hasLieuEditable, $hasVTSGN) {
       $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
     	$colonnes = array();
     	$afterTotal = array();
@@ -200,7 +290,11 @@ class ExportDRPdf extends ExportDocument {
   					$c['denomination'] = $detail->denomination;
   					$c['vtsgn'] = $detail->vtsgn;
   					$c['superficie'] = $detail->superficie;
-  					$c['volume'] = $detail->volume;
+            $c['volume'] = $detail->volume;
+            if($detail->canHaveUsagesLiesSaisi()) {
+              $c['revendique'] = $detail->volume_revendique;
+              $c['usages_industriels'] = $detail->lies;
+            }
   					if ($hasLieuEditable)
   						$c['lieu'] = $detail->lieu;
   	        		if ($detail->hasMotifNonRecolteLibelle() && $detail->motif_non_recolte && !in_array($detail->motif_non_recolte, array('AE', 'DC'))) {
@@ -236,7 +330,7 @@ class ExportDRPdf extends ExportDocument {
   		  				$c['volume'] = $cepage->total_volume;
   		  				$c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
   		  				$c['revendique'] = $cepage->volume_revendique;
-  		  				$c['usages_industriels'] = $cepage->dplc;
+  		  				$c['usages_industriels'] = $cepage->usages_industriels;
   		  				if (!$c['usages_industriels'])
   		    				$c['usages_industriels'] = '0,00';
   		  				$negoces = $cepage->getVolumeAcheteurs('negoces');
@@ -256,7 +350,7 @@ class ExportDRPdf extends ExportDocument {
   						}else{
   		  					$colonnes[$last]['type'] = 'total';
   		  					$colonnes[$last]['revendique'] = $cepage->volume_revendique;
-  		  					$colonnes[$last]['usages_industriels'] = $cepage->dplc;
+  		  					$colonnes[$last]['usages_industriels'] = $cepage->usages_industriels;
   		  					if (!$colonnes[$last]['usages_industriels'])
   		    					$colonnes[$last]['usages_industriels'] = '0,00';
   						}
@@ -276,7 +370,7 @@ class ExportDRPdf extends ExportDocument {
 			    $c['volume'] = $couleur->total_volume;
 			    $c['cave_particuliere'] = $couleur->getTotalCaveParticuliere();
 			    $c['revendique'] = $couleur->volume_revendique;
-			    $c['usages_industriels'] = $couleur->dplc;
+			    $c['usages_industriels'] = $couleur->usages_industriels;
 			    if (!$c['usages_industriels'])
 			      $c['usages_industriels'] = '0,00';
 			    $negoces = $couleur->getVolumeAcheteurs('negoces');
@@ -305,7 +399,7 @@ class ExportDRPdf extends ExportDocument {
 	    $c['volume'] = $lieu->total_volume;
 	    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
 	    $c['revendique'] = $lieu->volume_revendique;
-        $c['usages_industriels'] = $lieu->usages_industriels_calcule;
+        $c['usages_industriels'] = $lieu->usages_industriels;
 	    if (!$c['usages_industriels'])
 	      $c['usages_industriels'] = '0,00';
 	    $negoces = $lieu->getVolumeAcheteurs('negoces');
@@ -336,7 +430,7 @@ class ExportDRPdf extends ExportDocument {
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('tiers'=>$tiers, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
+	      $this->document->addPage($this->getPartial('export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
 	      $identification_enabled = 0;
 	    }
   	}

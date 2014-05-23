@@ -2,7 +2,7 @@
 
 $cepage_assemblage = false;
 foreach ( $onglets->getCurrentCepage()->getConfig()->getParent()->filter('^cepage') as $cepage ) {
-    if( $cepage->key == 'cepage_ED' && $cepage->getRendement() == -1  )
+    if( $cepage->key == 'cepage_ED' && $cepage->getRendementCepage() == -1  )
         $cepage_assemblage = true;
 }
 

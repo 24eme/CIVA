@@ -60,6 +60,9 @@
 
 
         </div>
+        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+            <p><br /><a class="admin" href="<?php echo url_for("compte_droits") ?>">Gestion des droits/comptes</a></p>
+        <?php endif; ?>
     </div>
 
 </div>

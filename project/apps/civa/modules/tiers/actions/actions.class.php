@@ -17,55 +17,131 @@ class tiersActions extends EtapesActions {
      */
     public function executeLogin(sfWebRequest $request) {
 
-       $this->getUser()->signOutTiers();
+        $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
-	$not_uniq = 0;
-	$tiers = array();
-    if (count($this->compte->tiers) >= 1) {
-	    foreach ($this->compte->tiers as $t) {
-            if (isset($tiers[$t->type])) {
-              $not_uniq = 1;
-              continue;
+    	$not_uniq = 0;
+    	$tiers = array();
+        if (count($this->compte->tiers) >= 1) {
+    	    foreach ($this->compte->tiers as $t) {
+                if (isset($tiers[$t->type])) {
+                  $not_uniq = 1;
+                  continue;
+                }
+                $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
             }
-            $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
+
+    	    if (!$not_uniq) {
+                $this->getUser()->signInTiers(array_values($tiers));
+
+                $referer = $this->getUser()->getFlash('referer');
+                if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
+                    return $this->redirect($referer);                                                                                                            
+                }
+
+                return $this->redirect("@mon_espace_civa");
+    	    }
         }
 
-	    if (!$not_uniq) {
-        $this->getUser()->signInTiers(array_values($tiers));
+        $this->form = new TiersLoginForm($this->compte);
 
-        /*return $this->redirect("@mon_espace_civa");*/
-         
-        $dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getUser()->getCompte()->getLogin(), $this->getUser()->getCampagne());
-        if($this->getUser()->hasCredential("recoltant") && !$this->getUser()->isInDelegateMode() && is_null($dr) ){
-            return $this->redirect("@notice_evolutions");
-        }else{
-            return $this->redirect("@mon_espace_civa");
-        }
-	    }
-    }
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $t = $this->form->process();
+                $tiers[$t->type] = $t;
+                $this->getUser()->signInTiers(array_values($tiers));
 
-    $this->form = new TiersLoginForm($this->compte);
-
-    if ($request->isMethod(sfWebRequest::POST)) {
-        $this->form->bind($request->getParameter($this->form->getName()));
-        if ($this->form->isValid()) {
-            $t = $this->form->process();
-            $tiers[$t->type] = $t;
-            $this->getUser()->signInTiers(array_values($tiers));
-
+            }
         }
     }
- }
 
-    /**
-     *
-     * @param sfWebRequest $request 
-     */
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-        $this->formUploadCsv = new UploadCSVForm();
 
+        $this->vracs = array(
+            'CONTRAT_A_TERMINER' => 0,
+            'CONTRAT_A_SIGNER' => 0,
+            'CONTRAT_EN_ATTENTE_SIGNATURE' => 0,
+            'CONTRAT_A_ENLEVER' => 0,
+        );
+        $tiers = $this->getUser()->getDeclarantsVrac();
+        $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
+
+        foreach($vracs as $vrac) {
+            $item = $vrac->value;
+            if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
+               $this->vracs['CONTRAT_A_TERMINER'] += 1; 
+            }
+
+            if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
+                if(array_key_exists($item->soussignes->vendeur->identifiant, $tiers) && !$item->soussignes->vendeur->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if(array_key_exists($item->soussignes->acheteur->identifiant, $tiers) && !$item->soussignes->acheteur->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if(array_key_exists($item->soussignes->mandataire->identifiant, $tiers) && !$item->soussignes->mandataire->date_validation) {
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                }
+                if($item->is_proprietaire) {
+                    $this->vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1; 
+                }
+            }   
+
+            if($item->is_proprietaire && ($item->statut == Vrac::STATUT_VALIDE || $item->statut == Vrac::STATUT_ENLEVEMENT)) {
+                $this->vracs['CONTRAT_A_ENLEVER'] += 1; 
+            }
+        }
+
+        $blocs = TiersSecurity::getInstance($this->getUser())->getBlocs();
+
+        $this->nb_blocs = count($blocs);
+            
+        if($this->nb_blocs == 1) {
+            foreach($blocs as $droit => $url) {
+
+                return $this->redirect($url);
+            }
+        } 
+    }
+
+    public function executeMonEspaceDR(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR);
+
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+    }
+
+    public function executeMonEspaceDRAcheteur(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
+
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+        $this->formUploadCsv = new UploadCSVForm();
+    }
+
+    public function executeMonEspaceDS(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DS);
+
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+
+        
+    }
+
+    public function executeMonEspaceVrac(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::VRAC);
+
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
+    }
+
+    public function executeMonEspaceGamma(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::GAMMA);
+
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->setCurrentEtape('mon_espace_civa');
     }
 
     /**
@@ -73,7 +149,7 @@ class tiersActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeExploitationAdministratif(sfWebRequest $request) {
-        $this->setCurrentEtape('exploitation_administratif');
+        $this->setCurrentEtape('exploitation');
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
         $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
@@ -95,33 +171,16 @@ class tiersActions extends EtapesActions {
             if ($request->getParameter('exploitation')) {
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
                 if ($this->form_expl->isValid()) {
-
                     $tiers = $this->form_expl->save();
-                    // $ldap = new ldap();
-
-                    if ($tiers) {
-                        /* $values['nom'] = $tiers->nom;
-                          $values['adresse'] = $tiers->siege->adresse;
-                          $values['code_postal'] = $tiers->siege->code_postal;
-                          $values['ville'] = $tiers->siege->commune; */
-                        //$ldap->ldapModify($this->getUser()->getTiers());
-                    }
                 } else {
                     $this->form_expl_err = 1;
                 }
             }
             if (!$this->form_gest_err && !$this->form_expl_err) {
                 $dr = $this->getUser()->getDeclaration();
-                $dr->declarant->nom = $this->tiers->exploitant->nom;
-                $dr->declarant->telephone = $this->tiers->exploitant->telephone;
-                $dr->declarant->email = $this->tiers->email;
+                $dr->storeDeclarant();
                 $dr->save();
-                $boutons = $this->getRequestParameter('boutons', null);
-            	if ($boutons && in_array('previous', array_keys($boutons))) {
-		            $this->redirect('@mon_espace_civa');
-		    	} else {
-                	$this->redirectByBoutonsEtapes();
-		    	}
+                $this->redirectByBoutonsEtapes();
             }
         }
     }
@@ -181,13 +240,19 @@ class tiersActions extends EtapesActions {
         $this->redirect('@mon_espace_civa');
     }
 
-
-    /**
-     *
-     * @param sfRequest $request A request object
-     */
-    public function executeNoticeEvolutions(sfWebRequest $request) {
-
+    protected function secureTiers($droits) {
+        if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
+            
+            return $this->forwardSecure();
+        }
     }
+
+    protected function forwardSecure()
+    {    
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    } 
+
 
 }

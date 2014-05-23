@@ -1,6 +1,172 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
+# *********** VRAC ***********
+vrac_nouveau:
+  url: /vrac/nouveau
+  param: { module: vrac, action: nouveau }
+vrac_historique:
+  url: /vrac/historique/:campagne
+  param: { module: vrac, action: historique }
+vrac_historique_statut:
+  url: /vrac/historique/:campagne/:statut
+  param: { module: vrac, action: historique }
+vrac_export_csv:
+  url: /vrac/export/csv
+  param: { module: vrac, action: exportCSV }
+vrac_soussigne_informations:
+  url: /vrac/:numero_contrat/soussignes-informations
+  param: { module: vrac, action: soussigneInformations }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_supprimer:
+  url: /vrac/:numero_contrat/supprimer
+  param: { module: vrac, action: supprimer }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_cloture:
+  url: /vrac/:numero_contrat/cloture
+  param: { module: vrac, action: cloture }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_fiche:
+  url: /vrac/:numero_contrat/fiche
+  param: { module: vrac, action: fiche }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_validation:
+  url: /vrac/:numero_contrat/fiche/validation
+  param: { module: vrac, action: validation }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_export_pdf:
+  url: /vrac/:numero_contrat/pdf
+  param: { module: vrac_export, action: PDF, odg: 0}
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]  
+vrac_export_odg:
+  url: /vrac/:numero_contrat/odg
+  param: { module: vrac_export, action: PDF, odg: 1}
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_annuaire_commercial:
+  url: /vrac/:numero_contrat/annuaire/commercial
+  param: { module: vrac, action: annuaireCommercial }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_annuaire:
+  url: /vrac/:numero_contrat/annuaire/:acteur/:type
+  param: { module: vrac, action: annuaire }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+    allow_empty: true
+  requirements:
+    sf_method: [get, post]
+vrac_etape:
+  url: /vrac/:numero_contrat/:etape
+  param: { module: vrac, action: etape }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+    allow_empty: true
+  requirements:
+    sf_method: [get, post]
+vrac_ajout_produit:
+  url: /vrac/:numero_contrat/:etape/ajouter
+  param: { module: vrac, action: ajouterProduit }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_ajout_produit_lieux:
+  url: /vrac/:numero_contrat/:etape/ajouter/lieux
+  param: { module: vrac, action: ajouterProduitLieux }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_ajout_produit_cepages:
+  url: /vrac/:numero_contrat/:etape/ajouter/cepages
+  param: { module: vrac, action: ajouterProduitCepages }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_ajout_produit_vtsgn:
+  url: /vrac/:numero_contrat/:etape/ajouter/vtsgn
+  param: { module: vrac, action: ajouterProduitVtsgn }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+telecharger_la_notice_vrac:
+  url:   /vrac/telecharger_la_notice
+  param: { module: vrac, action: downloadNotice }
+
+# *********** ANNUAIRE *********
+annuaire:
+  url: /annuaire
+  param: { module: annuaire, action: index }
+annuaire_retour:
+  url: /annuaire/retour
+  param: { module: annuaire, action: retour }
+annuaire_selectionner:
+  url: /annuaire/selectionner/:type
+  param: { module: annuaire, action: selectionner, type: null }
+annuaire_commercial_ajouter:
+  url: /annuaire/ajouter/commercial
+  param: { module: annuaire, action: ajouterCommercial }
+annuaire_ajouter:
+  url: /annuaire/ajouter/:type/:identifiant
+  param: { module: annuaire, action: ajouter }
+annuaire_supprimer:
+  url: /annuaire/supprimer/:type/:id
+  param: { module: annuaire, action: supprimer }
+
 
 # *********** COMPTE ***********
 login:
@@ -43,6 +209,18 @@ compte_mot_de_passe_oublie_confirm:
   url: /mot_de_passe_oublie/confirm
   param: { module: compte, action: motDePasseOublieConfirm }
 
+compte_droits:
+  url: /mon_compte/gestion_des_droits
+  param: { module: compte, action: droits }
+
+compte_personne_ajouter:
+  url: /mon_compte/personne/ajouter
+  param: { module: compte, action: personneAjouter }
+
+compte_personne_modifier:
+  url: /mon_compte/personne/modifier/:login
+  param: { module: compte, action: personneModifier }
+
 # *********** TIERS ***********
 
 tiers:
@@ -53,6 +231,27 @@ mon_espace_civa:
   url:   /mon_espace_civa
   param: { module: tiers, action: monEspaceCiva }
 
+mon_espace_civa_dr:
+  url:   /mon_espace_civa/dr
+  param: { module: tiers, action: monEspaceDR }
+
+mon_espace_civa_dr_acheteur:
+  url:   /mon_espace_civa/dr_acheteur
+  param: { module: tiers, action: monEspaceDRAcheteur }
+
+mon_espace_civa_ds:
+  url:   /mon_espace_civa/ds
+  param: { module: tiers, action: monEspaceDS }
+
+mon_espace_civa_gamma:
+  url:   /mon_espace_civa/gamma
+  param: { module: tiers, action: monEspaceGamma }
+
+mon_espace_civa_vrac:
+  url:   /mon_espace_civa/vrac
+  param: { module: tiers, action: monEspaceVrac }
+
+
 delegation:
   url: /delegation
   param: { module: tiers, action: delegation}
@@ -61,9 +260,9 @@ migration_compte:
   url: /migration_compte
   param: { module: tiers, action: migrationCompte}
 
-notice_evolutions:
+dr_notice_evolutions:
   url: /notice_evolutions
-  param: { module: tiers, action: noticeEvolutions}
+  param: { module: declaration, action: noticeEvolutions}
 # *********** DECLARATION ***********
 
 declaration_init:
@@ -93,6 +292,10 @@ gamma_telecharger_la_liste_nomenclature:
   url:   /gamma/telecharger_la_liste_nomenclature
   param: { module: gamma, action: downloadNomenclatures }
 
+gamma_telecharger_la_procedure_enlevement_propriete:
+  url:   /gamma/telecharger_la_procedure_enlevement_propriete
+  param: { module: gamma, action: downloadEnlevementPropriete }
+
 gamma_telecharger_l_adhesion:
   url:   /gamma/telecharger_l_adhesion
   param: { module: gamma, action: downloadAdhesion }
@@ -116,7 +319,7 @@ admin_gamma:
   param: { module: admin, action: gamma }
 
 delegate_mode_retour_espace_civa:
-   url : /tiers/retour_mon_espace
+   url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }
 
 # *********** EXPLOITATION ***********
@@ -233,7 +436,19 @@ print:
 send_email_pdf:
   url: /send-email-pdf
   param: {module: declaration, action: sendPdf}
-
+  
+send_email_acheteurs_pdf:
+  url: /send-email-acheteurs-pdf
+  param: {module: declaration, action: sendPdfAcheteurs}
+  
+recolte_feed_back:
+  url: /declaration/retour-experience
+  param: {module: declaration, action: feedBack}
+  
+recolte_feed_back_confirmation:
+  url: /declaration/retour-experience-confirmation
+  param: {module: declaration, action: feedBackConfirmation}
+  
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}

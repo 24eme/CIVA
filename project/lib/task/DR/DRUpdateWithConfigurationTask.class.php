@@ -107,7 +107,7 @@ EOF;
                             if (isset($lieu->dplc)) {
                                 $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels_calcule = $lieu->dplc;
                             }
-                            $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels_saisi = 0;
+                            $dr_clone->recolte->certification->genre->{$key_app}->mention->{$key_lieu}->usages_industriels = 0;
 						}
 					}		
 				}	

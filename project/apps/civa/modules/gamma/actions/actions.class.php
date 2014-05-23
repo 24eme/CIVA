@@ -26,7 +26,7 @@ class gammaActions extends sfActions
 		return $this->redirect(sfConfig::get('app_gamma_url_prod'));
 	}
 	if (isset($inscription) || !isset($type)) {
-		return $this->redirect('@mon_espace_civa');
+		return $this->redirect('@mon_espace_civa_gamma');
 	}
         if ($type['type_acces'] == 'plateforme') {
             return $this->redirect(sfConfig::get('app_gamma_url_prod'));
@@ -48,6 +48,14 @@ class gammaActions extends sfActions
      */
     public function executeDownloadNomenclatures(sfWebRequest $request) {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/liste_nomenclatures_douanieres.pdf", "liste_nomenclatures_douanieres.pdf");
+    }
+
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeDownloadEnlevementPropriete(sfWebRequest $request) {
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/procedure_enlevement_propriete.pdf", "procedure_enlevement_propriete.pdf");
     }
 
     /**

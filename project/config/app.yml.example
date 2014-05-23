@@ -4,6 +4,7 @@
 # default values
 all:
   base_url : http://declaration.vinsalsace.pro/
+  routing_context_production_host: declaration.vinsalsace.pro
   tomcat_dir : /var/www/tomcat6/webapps/cas
   #login_no_cas: false
   #autologin: login

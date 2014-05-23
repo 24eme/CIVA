@@ -5,15 +5,19 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     const CREDENTIAL_DECLARATION_EN_COURS = 'declaration_en_cours';
     const CREDENTIAL_DECLARATION_VALIDE = 'declaration_valide';
     const CREDENTIAL_ETAPE_EXPLOITATION = 'declaration_etape_exploitation';
+    const CREDENTIAL_ETAPE_REPARTITION_RECOLTE = 'declaration_etape_repartition_recolte';
     const CREDENTIAL_ETAPE_RECOLTE = 'declaration_etape_recolte';
     const CREDENTIAL_ETAPE_VALIDATION = 'declaration_etape_validation';
 
     protected $_etapes_credentials = array(DR::ETAPE_EXPLOITATION => self::CREDENTIAL_ETAPE_EXPLOITATION,
-        DR::ETAPE_RECOLTE => self::CREDENTIAL_ETAPE_RECOLTE,
-        DR::ETAPE_VALIDATION => self::CREDENTIAL_ETAPE_VALIDATION);
-    protected $_credentials_declaration = array(self::CREDENTIAL_DECLARATION_EN_COURS,
+                                           DR::ETAPE_REPARTITION => self::CREDENTIAL_ETAPE_REPARTITION_RECOLTE,
+                                           DR::ETAPE_RECOLTE => self::CREDENTIAL_ETAPE_RECOLTE,
+                                           DR::ETAPE_VALIDATION => self::CREDENTIAL_ETAPE_VALIDATION);
+    protected $_credentials_declaration = array(
+        self::CREDENTIAL_DECLARATION_EN_COURS,
         self::CREDENTIAL_DECLARATION_VALIDE,
         self::CREDENTIAL_ETAPE_EXPLOITATION,
+        self::CREDENTIAL_ETAPE_REPARTITION_RECOLTE,
         self::CREDENTIAL_ETAPE_RECOLTE,
         self::CREDENTIAL_ETAPE_VALIDATION);
     protected $_declaration = null;
@@ -82,6 +86,22 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
+     * @return string
+     */
+    public function getCampagneDS()
+    {
+        return CurrentClient::getCurrent()->getCampagneDS();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAnneeDS()
+    {
+        return CurrentClient::getCurrent()->getAnneeDS();
+    }
+
+    /**
      *
      * @param string $etape 
      */
@@ -116,7 +136,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      */
     public function isDrEditable()
     {
-        if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
+        if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
             return true;
         }
          
@@ -172,7 +192,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      */
     public function isDsEditable()
     {
-        if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
+        if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
             return true;
         }
          
@@ -191,11 +211,11 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
-            $this->_ds = $this->getDeclarant()->getDs($this->getCampagne());
+            $this->_ds = $this->getDeclarant()->getDs($this->getAnneeDS());
             if (!$this->_ds) {
                 $ds = new DSCiva();
                 $ds->identifiant = $this->getDeclarant()->cvi;
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . date('Y').'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->cvi . '-' . (CurrentClient::getCurrent()->getAnneeDS()).'07-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
                 return $ds;
             }
         }

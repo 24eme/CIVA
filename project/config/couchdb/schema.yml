@@ -9,6 +9,8 @@ DR:
       updated: { required: false }
       validee: { required: false }
       modifiee: { required: false }
+      en_attente_envoi: { required: false }      
+      date_depot_mairie: { required: false }
       utilisateurs:
         type: collection
         definition:
@@ -94,6 +96,7 @@ DR:
       jeunes_vignes: {type: float}
       declaration_commune: {}
       declaration_insee: {}
+      lies_saisis_cepage: {type: float, required: false}
       etape: {type: string, required: false}
       recolte:
         type: collection
@@ -110,7 +113,9 @@ DR:
                   total_superficie: {type: float}
                   volume_revendique: {type:float }
                   dplc: {type:float }
-                  usages_industriels_calcule: {type:float }
+                  usages_industriels_calcule: { type:float, required: false }
+                  usages_industriels: { type:float }
+                  lies: { type: float }
                   '*':
                   #------ Genre ------
                     type: collection
@@ -121,7 +126,9 @@ DR:
                         total_superficie: {type: float}
                         volume_revendique: {type:float }
                         dplc: {type:float }
-                        usages_industriels_calcule: {type:float }
+                        usages_industriels_calcule: { type:float, required: false }
+                        usages_industriels: { type:float }
+                        lies: { type: float }
                         '*':
                           # ------ Appellation ------
                           type: collection
@@ -133,7 +140,9 @@ DR:
                               total_superficie: {type: float}
                               volume_revendique: {type:float }
                               dplc: {type:float }
-                              usages_industriels_calcule: {type:float }
+                              usages_industriels_calcule: { type:float, required: false }
+                              usages_industriels: { type:float }
+                              lies: { type: float }
                               # ------- MENTION ----------
                               'mention':
                                 type : collection
@@ -144,7 +153,9 @@ DR:
                                     total_superficie: {type:float }
                                     volume_revendique: {type:float }
                                     dplc: {type:float }
-                                    usages_industriels_calcule: {type:float }
+                                    usages_industriels_calcule: { type:float, required: false }
+                                    usages_industriels: { type:float }
+                                    lies: { type: float }
                                     # ------- LIEU ----------
                                     '*':
                                       type: collection
@@ -155,8 +166,10 @@ DR:
                                           total_superficie: {type:float}
                                           volume_revendique: {type: float}
                                           dplc: {type: float}
-                                          usages_industriels_calcule: {type:float }
-                                          usages_industriels_saisi: {type:float }
+                                          usages_industriels_calcule: { type:float, required: false }
+                                          usages_industriels: { type: float }
+                                          lies: { type: float }
+                                          usages_industriels_saisi : { type: float, required: false }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -213,6 +226,54 @@ DR:
                                                 total_superficie: {type:float}
                                                 volume_revendique: {type: float}
                                                 dplc: {type: float}
+                                                usages_industriels: { ype:float }
+                                                lies: { type: float }
+                                                acheteurs:
+                                                  type: collection
+                                                  definition:
+                                                   fields:
+                                                     negoces:
+                                                       type: collection
+                                                       definition:
+                                                         fields:
+                                                           '*':
+                                                             type: collection
+                                                             class: DRRecolteLieuAcheteur
+                                                             definition:
+                                                               fields:
+                                                                 type_acheteur: {}
+                                                                 nom: {}
+                                                                 commune: {}
+                                                                 superficie: {type:float}
+                                                                 dontdplc: {type:float}
+                                                     cooperatives:
+                                                       type: collection
+                                                       definition:
+                                                         fields:
+                                                           '*':
+                                                             type: collection
+                                                             class: DRRecolteLieuAcheteur
+                                                             definition:
+                                                               fields:
+                                                                 type_acheteur: {}
+                                                                 nom: {}
+                                                                 commune: {}
+                                                                 superficie: {type:float}
+                                                                 dontdplc: {type:float}
+                                                     mouts:
+                                                       type: collection
+                                                       definition:
+                                                         fields:
+                                                           '*':
+                                                             type: collection
+                                                             class: DRRecolteLieuAcheteur
+                                                             definition:
+                                                               fields:
+                                                                 type_acheteur: {}
+                                                                 nom: {}
+                                                                 commune: {}
+                                                                 superficie: {type:float}
+                                                                 dontdplc: {type:float}
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
@@ -223,6 +284,8 @@ DR:
                                                       total_superficie: {type:float }
                                                       volume_revendique: {type:float }
                                                       dplc: {type:float }
+                                                      usages_industriels: { type:float }
+                                                      lies: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
@@ -275,6 +338,8 @@ DR:
                                                                   cave_particuliere: { type: float }
                                                                   volume_revendique: { type: float }
                                                                   volume_dplc: { type: float }
+                                                                  usages_industriels: { type: float }
+                                                                  lies: { type: float }
 
 _Compte:
   type: abstract
@@ -307,6 +372,8 @@ CompteTiers:
       _id: {  }
       _rev: {  }
       type: {  }
+      nom: {  }
+      id_compte_societe: { required: false }
       db2:
         type: collection
         definition:
@@ -350,13 +417,13 @@ _Tiers:
         definition:
           fields:
             '*': {  }
-      civaba: {  }
       intitule: {  }
       nom: {  }
       telephone: {  }
       fax: {  }
       email: {  }
       web: {  }
+      siret:  {  }
       lieux_stockage:
         type: collection
         required: false
@@ -394,6 +461,22 @@ _Tiers:
             code_postal: { }
             commune: {  }
       categorie: { }
+      qualite_categorie: { }
+      emails: 
+        type: collection
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  '*':
+                    type: collection
+                    definition:
+                      fields:
+                        nom: { }
+                        email: { }
+
       db2:
         type: collection
         definition:
@@ -412,10 +495,13 @@ Recoltant:
       _rev: {  }
       type: {  }
       cvi: {  }
-      siret: {  }
+      civaba: {  }
+      no_accises: {  }
+      qualite: { required: false }
       declaration_insee: {  }
       declaration_commune: {  }
       cave_cooperative: {  }
+      acheteur_dr: { required: false, type: float }
 
 MetteurEnMarche:
   inheritance: _Tiers
@@ -424,7 +510,9 @@ MetteurEnMarche:
       _id: {  }
       _rev: {  }
       type: {  }
-      cvi_acheteur: {  }
+      cvi: {  }
+      civaba: {  }
+      cvi_acheteur: { required: false }
       no_accises: {  }
       declaration_insee: { required: false }
       declaration_commune: { required: false }
@@ -435,13 +523,25 @@ MetteurEnMarche:
           fields:
             statut: {  }
             num_cotisant: {  }
-      siren: {  }
+      siren: { required: false }
       db2:
         type: collection
         definition:
           fields:
             maison_mere: {  }
 
+Courtier:
+  inheritance: _Tiers
+  definition:
+    fields:
+      _id: {  }
+      _rev: {  }
+      type: {  }
+      no_accises: {  }
+      no_carte_professionnelle: {  }
+      siren: {  }
+      cvi: { required: false }
+      civaba: { required: false }
 
 Acheteur:
   inheritance: _Tiers
@@ -449,15 +549,17 @@ Acheteur:
     fields:
       _id: {  }
       _rev: {  }
-      cvi: {  }
+      cvi: { }
+      civaba: { }
       type: {  }
       qualite: {  }
       nom: {  }
       commune: {  }
-      siret: {  }
+      no_accises: {  }
       declaration_insee: {  }
       declaration_commune: {  }
       achnum: { required: false }
+      acheteur_dr: { type: float }
 
 Current:
   definition:
@@ -497,6 +599,7 @@ Configuration:
         definition:
           fields:
             no_usages_industriels: { required: false}
+            no_recapitulatif_couleur: { required: false}
             douane :
               type: collection
               class: ConfigurationDouane
@@ -670,6 +773,19 @@ CSV:
       type: {}
       campagne: {}
       cvi: {}
+      _attachments:
+        type: collection
+        definition:
+          fields: 
+            '*':
+              type: collection
+              definition:
+                fields:
+                  content_type: { }
+                  revpos: { }
+                  length: { }
+                  stub: { }
+                  digest: { }
       recoltants : 
         type: array_collection
         definition:

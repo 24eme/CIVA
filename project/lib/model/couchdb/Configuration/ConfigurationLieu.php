@@ -42,6 +42,24 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $cepages;
     }
 
+    public function hasCepageRB() {
+
+        return $this->getCepageRB() !== null;
+    }
+
+    public function getCepageRB() {
+
+        $cepage_rebeche = array();
+        foreach ($this->filter('couleur') as $couleur)
+            if( $couleur->exist('cepage_RB'))
+                $cepage_rebeche[] = $couleur->get('cepage_RB');
+
+        if( count($cepage_rebeche) > 1)
+            throw new sfException("getCepagesRB() ne peut retourner plus d'un cepage rebeche par appellation");
+
+        return (count($cepage_rebeche) == 1) ? $cepage_rebeche[0] : null;
+    }
+
     public function getCepages() {
         $cepage = array();
         foreach ($this->getCouleurs() as $couleur) {
@@ -50,29 +68,18 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return $cepage;
     }
 
-    public function hasRendementCepage() {
-        foreach ($this->getCepages() as $cepage) {
-            if ($cepage->hasRendement())
-                return true;
-        }
-        return false;
-    }
-    
-    public function hasRendementCouleur() {
-        return $this->hasManyCouleur();
-    }
-
-    public function hasRendement() {
-
-        return ($this->hasRendementCepage() ||  $this->hasRendementCouleur() || $this->hasRendementAppellation() );
-    }
-
     public function hasManyCouleur() {
         return (!$this->exist('couleur') || $this->filter('^couleur.+')->count() > 0);
     }
     
     public function hasLieuEditable(){
+
         return $this->getAppellation()->hasLieuEditable();
+    }
+
+    public function getRendementNoeud() {
+
+        return $this->getRendementAppellation();
     }
 
 }

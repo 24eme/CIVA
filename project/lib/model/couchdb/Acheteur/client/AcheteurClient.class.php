@@ -67,9 +67,14 @@ class AcheteurClient extends acCouchdbClient {
     }
 
     public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        
         return parent::find('ACHAT-' . $cvi, $hydrate);
     }
 
+    public function findByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+
+        return $this->retrieveByCvi($cvi, $hydrate);
+    }
     public static function sortByNom($a, $b) {
         return strcmp($a['nom'], $b['nom']);
     }

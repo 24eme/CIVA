@@ -14,7 +14,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 		
 		<div id="recap_lieu_stockage" class="page_recap">
 			<div id="recap_appellations">
-				<table class="table_donnees">
+				<table class="table_donnees pyjama_auto">
 					<thead>
 						<tr>
 							<th class="appellation">Appellations</th>
@@ -53,7 +53,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 
 			<?php if($ds->declaration->getAppellations()->exist('appellation_VINTABLE')): ?>
 			<div id="recap_vins_sans_ig">
-				<table class="table_donnees">
+				<table class="table_donnees pyjama_auto">
 					<thead>
 						<tr>
 							<th class="appellation">Vins sans IG</th>

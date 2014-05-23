@@ -10,19 +10,12 @@ class FileExportDRPdf extends FileExportMiseADispo
 
     protected function getExport() {
 
-        $recoltant = $this->getDocument()->getRecoltantObject();
-
-        if (!$recoltant) {
-            
-            throw new sfException("Recoltant failed : " . $this->getDocument()->_id);  
-        }
-
         if (!$this->updateDocument()) {
             
             throw new sfException("Update failed : " . $this->getDocument()->_id);
         }
 
-        return new ExportDRPdf($this->getDocument(), $recoltant, $this->_function_get_partial, 'pdf',  $this->_file_dir, false, $this->_filename);
+        return new ExportDRPdf($this->getDocument(), $this->_function_get_partial, 'pdf',  $this->_file_dir, false, $this->_filename);
     }
 
     protected function getFileDir() {

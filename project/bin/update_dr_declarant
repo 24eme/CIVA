@@ -1,0 +1,32 @@
+#!/bin/bash 
+
+if [ $# -ne 1 ]
+    then
+	echo Usage: $0 nom_du_dossier 1>&2
+        exit 1
+fi
+
+
+mkdir -p data/maintenance > /dev/null
+DIR=data/maintenance
+
+FOLDER=$DIR/$1
+
+mkdir -p $FOLDER > /dev/null
+
+DATE=$(date +%Y%m%d%H%M%S)
+
+
+for (( i=07; i<=12; i++ ))
+do
+   annee=20
+   if [ $i -le 9 ]
+    then
+       annee="$annee"0;
+    fi
+   annee="$annee"$i;
+   echo "UPDATE DES DECLARANT DR POUR "$annee;
+   php symfony maintenance:dr-suppression-dependances $annee > $FOLDER"/update_de_declarant_"$annee"_"$DATE".log"
+done
+
+echo "FIN DES UPDATES DES DECLARANT DR";

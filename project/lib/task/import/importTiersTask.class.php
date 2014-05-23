@@ -40,18 +40,11 @@ EOF;
         //$db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a))));
         $db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
         $tiers = $this->loadAndSaveTiers($db2_tiers);
-        if (!$tiers) {
-          $nb_not_use++;
-        }
 
         if($db2_tiers->isAcheteur()) {
           $tiers = $this->loadAndSaveTiers($db2_tiers, true);
         }
     }
-    
-    $this->logSection("nb not use", $nb_not_use);
-
-    // add your code here
   }
 
   protected function loadAndSaveTiers($db2, $acheteur = false) {
@@ -62,12 +55,11 @@ EOF;
     }
 
     if($tiers->isNew()) {
-       $this->logSection("new", $tiers->get('_id')); 
+       echo "INFO;CREATION;".$tiers->get('_id')."\n";
     } elseif($tiers->isModified()) {
-       $this->logSection("modified", $tiers->get('_id'));  
+       echo "INFO;MODIFICATION;".$tiers->get('_id')."\n";
     }
     if($tiers->save()) {
-      $this->logSection('flag revision', $tiers->get('_id'));
       $tiers->db2->add('import_revision', $tiers->_rev);
       $tiers->db2->import_date = date("Y-m-d");
       $tiers->save();
@@ -82,7 +74,6 @@ EOF;
    */
   private function loadTiers($db2, $acheteur = false) {
       $tiers = null;
-
       if($acheteur && $db2->isAcheteur()) {
         $tiers = $this->loadAcheteur($db2);
       }
@@ -91,6 +82,8 @@ EOF;
           $tiers = $this->loadRecoltant($db2);
       } elseif(!$acheteur && $db2->isMetteurEnMarche()) {
           $tiers = $this->loadMetteurEnMarche($db2);
+      } elseif(!$acheteur && $db2->isCourtier()) {
+          $tiers = $this->loadCourtier($db2);
       }
       
       if(!$tiers) {
@@ -98,7 +91,6 @@ EOF;
       }
 
       $tiers->statut = _TiersClient::STATUT_ACTIF;
-      $tiers->civaba = $db2->get(Db2Tiers::COL_CIVABA);
       $tiers->intitule = $db2->get(Db2Tiers::COL_INTITULE);
       $tiers->nom = preg_replace('/ +/', ' ', $db2->get(Db2Tiers::COL_NOM_PRENOM));
       $tiers->telephone = $db2->get(Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d', $db2->get(Db2Tiers::COL_TELEPHONE_PRO)) : null;
@@ -122,6 +114,7 @@ EOF;
       $tiers->siege->code_postal = $db2->get(Db2Tiers::COL_CODE_POSTAL_SIEGE);
       $tiers->siege->commune = $db2->get(Db2Tiers::COL_COMMUNE_SIEGE);
       $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
+      $tiers->qualite_categorie = $this->getQualite($db2);
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
       $tiers->db2->remove('export_revision');
@@ -141,12 +134,12 @@ EOF;
           $recoltant->set('_id', "REC-" . $db2->get(Db2Tiers::COL_CVI));
       }
       
+      $recoltant->civaba = ($db2->get(Db2Tiers::COL_CIVABA)) ? $db2->get(Db2Tiers::COL_CIVABA) : null;
       $recoltant->cvi = $db2->get(Db2Tiers::COL_CVI);
       $recoltant->siret = $db2->get(Db2Tiers::COL_SIRET);
       $recoltant->cave_cooperative = $this->getCaveParticuliere($db2->get(Db2Tiers::COL_TYPE_DECLARATION));
       $recoltant->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
       $recoltant->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
-
 
       return $recoltant;
   }
@@ -163,12 +156,34 @@ EOF;
           $metteur->set('_id', "MET-" . $db2->get(Db2Tiers::COL_CIVABA));
       }
       
-      $metteur->cvi_acheteur = $db2->get(Db2Tiers::COL_CVI);
+      $metteur->remove('cvi_acheteur');
+      $metteur->cvi = ($db2->get(Db2Tiers::COL_CVI)) ? $db2->get(Db2Tiers::COL_CVI) : null;
+      $metteur->civaba = $db2->get(Db2Tiers::COL_CIVABA);
       $metteur->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
-      $metteur->siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
-      $metteur->db2->maison_mere = $db2->get(Db2Tiers::COL_MAISON_MERE);
+      $metteur->siret = $db2->get(Db2Tiers::COL_SIRET);
 
       return $metteur;
+  }
+  
+  /**
+   * @param Db2Tiers $db2 
+   * return MetteurEnMarche
+   */
+  private function loadCourtier($db2) {
+  		$siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
+  		if ($siren) {
+  			$courtier = acCouchdbManager::getClient('Courtier')->retrieveBySiren($siren);
+	      	if(!$courtier) {
+	        	$courtier = new Courtier();
+	          	$courtier->set('_id', "COURT-" . $siren);
+	      	}
+	      	$courtier->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
+	      	$courtier->siren = ($db2->get(Db2Tiers::COL_SIRET)) ? substr($db2->get(Db2Tiers::COL_SIRET), 0, 9) : null;
+	      	$courtier->siret = $db2->get(Db2Tiers::COL_SIRET);
+	      	$courtier->no_carte_professionnelle = $db2->get(Db2Tiers::COL_SITE_INTERNET);
+	      	return $courtier;
+  		}
+  		return null;
   }
 
   private function loadAcheteur($db2) {
@@ -178,13 +193,45 @@ EOF;
 
           return null;
       }
-      
+      $achat->civaba = ($db2->get(Db2Tiers::COL_CIVABA)) ? $db2->get(Db2Tiers::COL_CIVABA) : null;
       $achat->cvi = $db2->get(Db2Tiers::COL_CVI);
       $achat->declaration_insee = $db2->get(Db2Tiers::COL_INSEE_DECLARATION);
       $achat->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
       $achat->siret = $db2->get(Db2Tiers::COL_SIRET);
+      $achat->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
       
       return $achat;
+  }
+
+  private function getQualite($db2) {
+
+    if($db2->isRecoltant()) {
+
+      return _TiersClient::QUALITE_RECOLTANT;
+    }
+
+    if($db2->isCourtier()) {
+
+      return _TiersClient::QUALITE_COURTIER;
+    }
+
+    if($db2->get(Db2Tiers::COL_TYPE_TIERS) == 'PN' || $db2->get(Db2Tiers::COL_TYPE_TIERS) == 'SIC') {
+
+      return _TiersClient::QUALITE_NEGOCIANT;
+    }
+
+    if($db2->get(Db2Tiers::COL_TYPE_TIERS) == 'CCV') {
+
+      return _TiersClient::QUALITE_COOPERATIVE;
+    }
+
+    if(preg_match("/^V/", $db2->get(Db2Tiers::COL_TYPE_TIERS))) {
+
+      return _TiersClient::QUALITE_RECOLTANT;
+    }
+
+    
+    return null;
   }
   
   private function getCommune($insee) {

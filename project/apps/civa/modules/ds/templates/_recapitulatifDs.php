@@ -19,9 +19,14 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
         	<?php endif; ?>
         <?php endif; ?>
 		<div id="recap_total_ds" class="page_recap">
-			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small><a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a></p>
+			<p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small>
+                            <a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a>
+                            <?php if($ds_principale->isDateDepotMairie()) : ?>
+                            <span style="float: right;">Date de dépot en mairie : <?php echo $ds_principale->getDateDepotMairieFr(); ?> </span>
+                            <?php endif; ?>
+                        </p>
 			<div id="recap_appellations">
-				<table class="table_donnees">
+				<table class="table_donnees pyjama_auto">
 					<thead>
 						<tr>
 							<th class="appellation">Appellations</th>
@@ -55,7 +60,7 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
 			</div>
                     
         	<div id="recap_autres">				
-				<table class="table_donnees">
+				<table class="table_donnees pyjama_auto">
 					<thead>
 						<tr>
 							<th class="appellation">Autres</th>
@@ -75,7 +80,7 @@ if(isset($validation_dss)) { foreach ($validation_dss as $id_ds => $validation_d
 				</table>     
 			</div>	
 			<div id="recap_vins_sans_ig">
-			<table class="table_donnees">
+			<table class="table_donnees pyjama_auto">
 				<thead>
 					<tr>
                                             <th class="appellation">Vins sans IG&nbsp;<a title="Message aide" rel="help_popup_validation_vins_sans_ig" class="msg_aide_ds" href=""></a></th>

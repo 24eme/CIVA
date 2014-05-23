@@ -12,7 +12,7 @@ abstract class _Tiers extends Base_Tiers {
      * @return array 
      */
     public function getDeclarationsArchivesSince($campagne) {
-        return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne);
+        return acCouchdbManager::getClient('DR')->getArchivesSince($this->cvi, $campagne, 4);
     }
 
         /**
@@ -40,7 +40,9 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getDs($campagne) {
-        return acCouchdbManager::getClient('DSCiva')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        $ds = acCouchdbManager::getClient('DSCiva')->retrieveByCampagneAndCvi($this->cvi, $campagne);
+        if(!$ds) return $ds;
+        return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
     
     /**
@@ -103,6 +105,36 @@ abstract class _Tiers extends Base_Tiers {
         return false;
     }
 
+    public function isDeclarantDR() {
+
+        return false;
+    }
+
+    public function isDeclarantDRAcheteur() {
+
+        return false;
+    }
+
+    public function isDeclarantContrat() {
+
+        return $this->isDeclarantContratForSignature() || $this->isDeclarantContratForResponsable();
+    }
+
+    public function isDeclarantContratForSignature() {
+
+        return false;
+    }
+
+    public function isDeclarantContratForResponsable() {
+        
+        return false;
+    }
+
+    public function isDeclarantGamma() {
+
+        return false;
+    }
+
     public function getRegion() {
         return null;
     }
@@ -143,6 +175,29 @@ abstract class _Tiers extends Base_Tiers {
         }
 
         return null;
+    }
+
+    public function getEmailsByDroit($droit) {
+        $emails = array();
+
+        foreach($this->emails as $d => $cvis) {
+            if($droit != $d) {
+                continue;
+            }
+
+            foreach($cvis as $cvi) {
+                if($cvi->email && !in_array($cvi->email, $emails)) {
+                    $emails[] = $cvi->email;
+                }
+            }
+        }
+
+        return $emails;
+    }
+
+    public function getTiersExtend() {
+
+        return false;
     }
 
     abstract public function getIdentifiant();

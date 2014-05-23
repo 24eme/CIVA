@@ -18,7 +18,7 @@
 	            </div>
 	            <div class="ligne_form ligne_btn" style="display: inline-block">
 	            <br/>
-	                <input class="btn" type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="bouton" class="btn" src="../images/boutons/btn_valider.png" alt="Valider" />
+	                <input class="btn" type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
 	            </div>
 	        </div>
 	           <?php if(isset($success) && $success) : ?>

@@ -25,6 +25,7 @@ class Db2Tiers extends Db2 {
     const COL_CODE_POSTAL           = 15;
     const COL_TYPE_TIERS            = 17;
     const COL_RECOLTANT             = 23;
+    const COL_COURTIER              = 31;
     const COL_TELEPHONE_PRO         = 37;
     const COL_TELEPHONE_PRIVE       = 38;
     const COL_FAX                   = 39;
@@ -58,6 +59,11 @@ class Db2Tiers extends Db2 {
     function isAcheteur() {
 
         return $this->isMetteurEnMarche() && $this->get(self::COL_CVI);
+    }
+
+    function isCourtier() {
+
+        return (!$this->isMetteurEnMarche() && !$this->isRecoltant() && !$this->isAcheteur()) && ($this->get(self::COL_NUM) > 90000 || $this->get(self::COL_COURTIER)) ;
     }
     
 }

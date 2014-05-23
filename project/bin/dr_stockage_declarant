@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. bin/config.inc
+
+#curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_all_docs?startkey=\"DR-0000000000-0000\"&endkey=\"DR-9999999999-9999\"" | grep -Eo "DR-[0-9]+-[0-9]+" | sort | uniq > /tmp/drs_id
+
+cat /tmp/drs_id | while read ligne  
+do
+   php symfony maintenance:dr-stockage-declarant $ligne
+done

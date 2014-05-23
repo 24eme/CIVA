@@ -61,7 +61,7 @@ class statistiquesActions extends sfActions {
     }
 
     protected function processStatsDR() {
-        $campagne = "2012";
+        $campagne = $this->getUser()->getCampagne();
         $this->etapeDrValidee=0;
         $this->etapeValidation = 0;
         $this->etapeRecolte = 0;
@@ -84,20 +84,26 @@ class statistiquesActions extends sfActions {
         $dr_non_validees_etapes_exploitation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'exploitation'))
-                                              ->endkey(array($campagne, false, false, null, 'exploitation'))
+                                              ->endkey(array($campagne, false, false, null, 'exploitation', array()))
+                                              ->getView("STATS", "DR");
+
+        $dr_non_validees_etapes_repartition = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(5)
+                                              ->startkey(array($campagne, false, false, null, 'repartition'))
+                                              ->endkey(array($campagne, false, false, null, 'repartition', array()))
                                               ->getView("STATS", "DR");
          
          
         $dr_non_validees_etapes_recolte = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'recolte'))
-                                              ->endkey(array($campagne, false, false, null, 'recolte'))
+                                              ->endkey(array($campagne, false, false, null, 'recolte', array()))
                                               ->getView("STATS", "DR");
         
         $dr_non_validees_etapes_validation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($campagne, false, false, null, 'validation'))
-                                              ->endkey(array($campagne, false, false, null, 'validation'))
+                                              ->endkey(array($campagne, false, false, null, 'validation', array()))
                                               ->getView("STATS", "DR");
 
         $this->nb_csv_acheteurs = acCouchdbManager::getClient('CSV')->countCSVsAcheteurs();
@@ -107,6 +113,9 @@ class statistiquesActions extends sfActions {
         
         if (isset($dr_non_validees_etapes_exploitation->rows) && count($dr_non_validees_etapes_exploitation->rows) > 0) {
             $this->etapeExploitation = $dr_non_validees_etapes_exploitation->rows[0]->value;
+        }
+        if (isset($dr_non_validees_etapes_repartition->rows) && count($dr_non_validees_etapes_repartition->rows) > 0) {
+            $this->etapeRepartition = $dr_non_validees_etapes_repartition->rows[0]->value;
         }
         if (isset($dr_non_validees_etapes_recolte->rows) && count($dr_non_validees_etapes_recolte->rows) > 0) {
             $this->etapeRecolte = $dr_non_validees_etapes_recolte->rows[0]->value;

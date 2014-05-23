@@ -20,6 +20,7 @@
                     <li><strong>Nombre de déclarations en cours : <?php echo $etapeDrNonValidee; ?></strong>
                         <ul>
                             <li>à l'étape exploitation : <?php echo $etapeExploitation; ?></li>
+                            <li>à l'étape répartition : <?php echo $etapeRepartition; ?></li>
                             <li>à l'étape récolte : <?php echo $etapeRecolte; ?></li>
                             <li>à l'étape validation : <?php echo $etapeValidation; ?></li>
                         </ul>
@@ -41,8 +42,8 @@
             <h3 class="titre_section">Statistiques des DS de l'année</h3>
             <div class="contenu_section">
                 <ul class="statistiques">
-                    <li><strong>Nombre de déclarations validées : <?php echo $etapeDsValidee; ?></strong></li>
-                    <li><strong>Nombre de déclarations en cours : <?php echo $etapeDsNonValidee; ?></strong>
+                    <li><strong>Nombre d'opérateurs ayant validé leur DS : <?php echo $etapeDsValidee; ?></strong></li>
+                    <li><strong>Nombre d'opérateurs ayant des DS en cours : <?php echo $etapeDsNonValidee; ?></strong>
                         <ul>
                             <?php foreach($etapeDsNonValideeEtapes as $libelle => $nb): ?>
                             <li>à l'étape <?php echo $libelle ?> : <?php echo $nb; ?></li>

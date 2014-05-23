@@ -18,13 +18,51 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->getCepage()->getCouleur();
     }
 
+    public function getLieuNode() {
+        return $this->getCouleur()->getLieu();
+    }
 
     public function getMention() {
-        return $this->getLieu()->getMention();
+        return $this->getLieuNode()->getMention();
     }
 
     public function getCodeDouane() {
         return $this->getCepage()->getCodeDouane($this->vtsgn);
+    }
+
+    public function getTotalVolume() {
+
+        return $this->volume;
+    }
+
+    public function getTotalSuperficie() {
+
+        return $this->superficie;
+    }
+
+    public function getDplc() {
+
+        return $this->volume_dplc;
+    }
+
+    public function getRevendique() {
+
+        return $this->volume_revendique;
+    }
+
+    public function getTotalCaveParticuliere() {
+
+        return $this->cave_particuliere;
+    }
+
+    public function getLiesMax() {
+
+        return round($this->cave_particuliere + $this->getVolumeAcheteurs('mouts'), 2);
+    }
+
+    public function getTotalDontDplcVendus() {
+
+        return null;
     }
 
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -67,7 +105,8 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getVolumeMax() {
-        return round(($this->superficie / 100) * $this->getConfig()->getRendement(), 2);
+        
+        return round(($this->superficie / 100) * $this->getConfig()->getRendementNoeud(), 2);
     }
 
     public function setVolume($v) {
@@ -124,7 +163,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return str_replace(' ', '', $this->_get('vtsgn'));
     }
 
-
     protected function update($params = array()) {
         parent::update($params);
         if (!$this->getCouchdbDocument()->canUpdate())
@@ -135,20 +173,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $v += $this->getSumAcheteur('mouts');
 
         $this->volume = $v;
-        $this->volume_revendique = 0;
-        $this->volume_dplc = 0;
-
-        if ($this->getConfig()->hasRendement()) {
-            $volume_max = $this->getVolumeMax();
-            if ($this->volume > $volume_max) {
-                $this->volume_revendique = $volume_max;
-                $this->volume_dplc = round($this->volume - $volume_max, 2);
-            } else {
-                $this->volume_revendique = $this->volume;
-            }
-        } else {
-            $this->volume_revendique = $this->volume;
-        }
+        $this->volume_dplc = null;
+        $this->lies = $this->getLies(true);
+        
+        $this->usages_industriels = $this->lies;
+        $this->volume_revendique = $this->volume - ($this->usages_industriels - $this->getLiesMouts());
 
         if ($this->volume && $this->volume > 0) {
             $this->remove('motif_non_recolte');
@@ -162,4 +191,43 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
     }
 
+    public function getLiesMouts() {
+        $volume_mouts = $this->getTotalVolumeAcheteurs('mouts');
+
+        if(!$volume_mouts) {
+
+            return 0;
+        }
+
+        if($this->cave_particuliere > 0) {
+
+            return 0;
+        }
+
+        return $this->lies;
+    }
+
+    public function canHaveUsagesLiesSaisi() {
+
+        return $this->getCepage()->isLiesSaisisCepage();
+    }
+
+    public function getLies($force = false) {
+        if(!$force) {
+
+            return $this->_get('lies');
+        }
+
+        if(!$this->canHaveUsagesLiesSaisi()) {
+
+            return 0;
+        }
+
+
+        return $this->lies;
+    }
+
+    public function cleanLies() {
+        $this->lies = null;
+    }
 }

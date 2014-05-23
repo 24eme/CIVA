@@ -48,15 +48,6 @@ class recolteActions extends EtapesActions {
         $this->initAcheteurs();
         $this->initPrecDR();
 
-
-        if( $this->onglets->getCurrentLieu()->dplc != 0)
-        {
-           $appellation = $this->declaration->recolte->getNoeudAppellations()->get($this->onglets->getCurrentAppellation()->getKey());
-           $lieu = $appellation->getLieux()->get($this->onglets->getCurrentLieu()->getKey());
-           $lieu->set("usages_industriels_saisi", 0);
-           $this->declaration->save();
-        }
-
         $this->detail_action_mode = 'update';
         $this->is_detail_edit = true;
 
@@ -100,9 +91,6 @@ class recolteActions extends EtapesActions {
         $this->forward404Unless($this->details->exist($detail_key));
 
         $this->details->remove($detail_key);
-        if ($this->details->count() == 0) {
-            $this->onglets->getCurrentLieu()->remove($this->onglets->getCurrentKeyCepage());
-        }
         $this->declaration->update();
         $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
         $this->declaration->save();
@@ -209,26 +197,18 @@ class recolteActions extends EtapesActions {
         }else{
             $this->isGrandCru = false;
         }
-        $this->form = new RecapitulatifForm($this->appellationlieu);
-
-        $forms = $this->form->getEmbeddedForms();
-
-        if ($request->getParameter('redirect') && !$this->form->isSaisisable()) {
-            return $this->redirect($this->onglets->getNextUrl());
-        }
+        $this->form = new RecapitulatifContainerForm($this->appellationlieu);
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $redirect = false;
-                if( $this->form->getValue('usages_industriels_saisi') !=  $this->form->getObject()->getUsagesIndustrielsSaisi() && count($this->form->getObject()->getAcheteurs()->getNegoces()) > 0 )
-                    $redirect = true;
-
                 $this->form->save();
-                if($redirect)
+                if($request->getParameter("is_validation_interne")) {
+                    $this->getUser()->setFlash('recapitulatif_confirmation', 'Votre saisie a bien été enregistrée');
                     return $this->redirect($this->onglets->getUrlRecap());
-                else
+                } else {
                     return $this->redirect($this->onglets->getNextUrl());
+                }
             }
         }
     }
@@ -244,7 +224,7 @@ class recolteActions extends EtapesActions {
     		if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
     			$appellation = $dr->recolte->getNoeudAppellations()->get($key_appellation);
     			foreach ($appellation->getDistinctLieux() as $lieu) {
-    				if ($lieu->getConfig()->getRendementAppellation() == -1)
+    				if ($lieu->getConfig()->getRendementNoeud() == -1)
     				continue;
     				if ($lieu->getConfig()->hasRendementCouleur()) {
     					//$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
@@ -254,8 +234,8 @@ class recolteActions extends EtapesActions {
     					}
     				} else {
     					
-	    				if ($lieu->getConfig()->getRendementAppellation()) {
-	    					$rd = $lieu->getConfig()->getRendementAppellation();
+	    				if ($lieu->getConfig()->getRendementNoeud()) {
+	    					$rd = $lieu->getConfig()->getRendementNoeud();
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
 						foreach($lieu->getCouleurs() as $couleur) {
@@ -264,8 +244,8 @@ class recolteActions extends EtapesActions {
 	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
 	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
 	    					}
-	    					if($cepage_config->getRendement()) {
-	    						$rd = $cepage_config->getRendement();
+	    					if($cepage_config->getRendementCepage()) {
+	    						$rd = $cepage_config->getRendementCepage();
 	    						if($appellation->getConfig()->hasManyLieu()) {
 	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
 	    						}else {
@@ -291,6 +271,8 @@ class recolteActions extends EtapesActions {
             if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
+
+            
             $this->redirect($this->onglets->getUrl('recolte'));
         }
     }
@@ -325,7 +307,7 @@ class recolteActions extends EtapesActions {
         }
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
-            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.')!!');
+            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.') !');
         }
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
@@ -358,7 +340,6 @@ class recolteActions extends EtapesActions {
 
     protected function initPrecDR(){
         $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
-        krsort($this->campagnes);
     }
 
     protected function getFormDetailsOptions() {

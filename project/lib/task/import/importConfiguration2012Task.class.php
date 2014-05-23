@@ -67,7 +67,7 @@ EOF;
         $json->_id = 'CONFIGURATION-' . $annee;
         $json->type = 'Configuration';
         $json->campagne = $annee;
-
+        $json->recolte->no_recapitulatif_couleur = 1;
         $json->recolte->douane->appellation_lieu = '001';
         $json->recolte->douane->type_aoc = '1';
         $json->recolte->douane->couleur = 'B';
@@ -418,17 +418,6 @@ EOF;
 
         $json->motif_non_recolte = array('AE' => "Assemblage Edelzwicker", 'DC' => "Déclaration en cours", 'PC' => "Problème climatique", 'MV' => "Maladie de la vigne", 'MP' => "Motifs personnels", 'VV' => "Vendanges en Vert");
 
-        $docs[] = $json;
-
-        $json = new stdClass();
-        $json->_id = 'CURRENT';
-        $json->type = 'Current';
-        $json->campagne = $annee;
-        $json->dr_non_editable = 1;
-        $json->dr_non_ouverte = 0;
-        $json->ds_non_editable = 0;
-        $json->ds_non_ouverte = 0;
-        $json->declaration_courante = 'DS';
         $docs[] = $json;
 
         if ($options['import'] == 'couchdb') {

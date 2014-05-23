@@ -2,21 +2,41 @@
 class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
     
     const ETAPE_EXPLOITATION = 'exploitation';
+    const ETAPE_REPARTITION = 'repartition';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
 
-    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION), self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_RECOLTE));
+    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
+    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), 
+                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION), 
+                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION), 
+                                             self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION, self::ETAPE_RECOLTE));
 
     
     protected $utilisateurs_document = null; 
     protected $declarant_document = null;
-    
+
+
     public function  __construct() {
-        parent::__construct();         
+        parent::__construct();   
+        $this->initDocuments();
+    }
+
+    public function __clone() {
+        parent::__clone();
+        $this->identifiant = $this->cvi;
+        $this->initDocuments();
+    } 
+
+    protected function initDocuments() {
         $this->utilisateurs_document = new UtilisateursDocument($this);
         $this->declarant_document = new DeclarantDocument($this);
     }
+    
+    public function constructId() {
+        $this->set('_id', 'DR-' . $this->cvi . '-' . $this->campagne);
+    }
+    
     /**
      *
      * @param string $etape
@@ -45,6 +65,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return false;
         }
         if ($etape == self::ETAPE_EXPLOITATION) {
+            return true;
+        } elseif ($etape == self::ETAPE_REPARTITION) {
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
             return true;
@@ -202,19 +224,24 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->update();
         $this->cleanNoeuds();
         $this->remove('etape');
+        $this->storeDeclarant();
         $this->add('modifiee', date('Y-m-d'));
         if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', date('Y-m-d'));
         }
-        $this->declarant->nom =  $tiers->get('nom');
-        if ($compte) {
-            $this->declarant->email =  $compte->email;
-        } else {
-            $this->declarant->email =  $tiers->get('email');
-        }
-        $this->declarant->telephone =  $tiers->get('telephone');
         if ($compteValidateurId) {
             $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));
+        }
+    }
+
+    public function devalidate(){
+        $this->remove('validee');
+        $this->remove('modifiee');
+    }
+    
+    public function emailSended(){
+        if($this->exist('en_attente_envoi') && $this->en_attente_envoi){
+            $this->remove('en_attente_envoi');
         }
     }
 
@@ -255,43 +282,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      * @return boolean
      */
     public function cleanNoeuds() {
-        /*$clean = false;
-        $hash_to_delete = array();
-        foreach($this->recolte->certification->genre->getAppellations() as $appellation) {
-            foreach($appellation->getLieux() as $lieu) {
-                foreach($lieu->getCouleurs() as $couleur) {
-                    foreach($couleur->getCepages() as $cepage) {
-                        if (count($cepage->detail) < 1) {
-                            $cepage->delete($cepage->getKey());
-                            $clean = true;
-                        }
-                    }
-                    if (count($couleur->getCepages()) < 1) {
-                        $couleur->delete();
-                        $clean = true;
-                    }
-                }
-                if (count($lieu->getCouleurs()) < 1) {
-                    //$lieu->getParent()->remove($lieu->getKey());
-                    $clean = true;
-                }
-            }
-            if (count($appellation->getLieux()) < 1) {
-                //$this->recolte->certification->genre->remove($appellation->getKey());
-                $this->acheteurs->remove($appellation->getKey());
-                $clean = true;
-            }
-        }
 
-        if (count($this->recolte->certification->genre->getAppellations()) == 0) {
-            $this->recolte->remove('certification');
-        }
-
-        if (count($this->acheteurs->getNoeudAppellations()) == 0) {
-            $this->acheteurs->remove('certification');
-        }
-
-        return $clean;*/
+        return $this->recolte->cleanAllNodes();
     }
 
     /**
@@ -352,94 +344,148 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
               foreach ($appellation->getLieux() as $lieu) {
                 //check le total superficie
                 if ($lieu->getTotalSuperficie() == 0) {
-                    array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
+                    array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
                 }
+
                 //check le lieu
                 if ($lieu->isNonSaisie()) {
-                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
-                } else {
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_non_saisie')));
 
-                    //Verifie que le recapitulatif des ventes est rempli
-                    if (!$lieu->hasCompleteRecapitulatifVente()) {
-                        array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
-                    }
+                    continue;
+                }
 
-                    //Verifie que le recapitulatif des ventes à du dplc si le total dplc du lieu est > 0
-                    if ($lieu->getConfig()->hasRendement() && $lieu->hasAcheteurs() && $lieu->hasCompleteRecapitulatifVente() && $lieu->getDplc() > 0 && !$lieu->getTotalDontDplcRecapitulatifVente()) {
-                        array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_dplc')));
-                    }
+                $this->checkNoeudRecapitulatif($onglet, $lieu, $validLogErreur, $validLogVigilance);
+                $this->checkNoeudRecapitulatifVentes($onglet, $lieu, $validLogErreur, $validLogVigilance);
 
-                    //Verifie que le recapitulatif des ventes n'est pas supérieur aux totaux
-                    if (!$lieu->isValidRecapitulatifVente()) {
-                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
-                    }
+                //check les cepages
+                foreach ($lieu->filter('couleur') as $couleur) {
+                    $this->checkNoeudRecapitulatif($onglet, $couleur, $validLogErreur, $validLogVigilance);
+                    $this->checkNoeudRecapitulatifVentes($onglet, $couleur, $validLogErreur, $validLogVigilance);
 
-                    // Verifie que le volume revendique n'est pas négatif, cad usage industriel saisi > vol revendique
-                    if($lieu->getVolumeRevendique() < 0){
-                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $lieu->getLibelleWithAppellation() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_lieu_has_too_many_usages_industriels')));
-                    }
+                    foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
 
-                    //check les cepages
-                    foreach ($lieu->filter('couleur') as $couleur) {
-                        foreach ($couleur->getConfig()->filter('cepage_') as $key => $cepage_config) {
-                            if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
-                                if(!$couleur->exist($key)) {
-                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage_config->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                        if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
+                            if(!$couleur->exist($key)) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage_config->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                            }
+                        }
+
+                        if(!$couleur->exist($key)) {
+                            continue;
+                        }
+
+                        $cepage = $couleur->get($key);
+                        $totalVolRevendique = $cepage->getTotalVolume(true);
+
+                        if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
+                            $couleur->remove($key);
+                            continue;
+                        }
+
+                        $bloquant_rebeche = false;
+
+                        //Vérifie le min rebeche autorisé
+                        if ($cepage->getConfig()->hasMinQuantite()) {
+                            $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+                            if ($totalVolRatioMin > $totalVolRevendique) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+                                $bloquant_rebeche = true;
+                            }
+                        }
+
+                        //Vérifie le max rebeche autorisé
+                        if ($cepage->getConfig()->hasMaxQuantite()) {
+                            $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
+                            if ($totalVolRatioMax < $totalVolRevendique) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
+                                $bloquant_rebeche = true;
+                            }
+                        }
+
+                        if ($cepage->getConfig()->hasMinQuantite() || $cepage->getConfig()->hasMaxQuantite()) {
+                            $volume_acheteurs = $cepage->getVolumeAcheteurs('cooperatives', false);
+                            foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
+                                $volume_min = round($volume * $cepage->getConfig()->min_quantite, 2);
+                                $volume_max = round($volume * $cepage->getConfig()->max_quantite, 2);
+                                $volume_acheteur = (isset($volume_acheteurs[$cvi])) ? $volume_acheteurs[$cvi] : 0;
+                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $volume_acheteur < $volume_min) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
+                                }
+                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $volume_acheteur > $volume_max) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
                                 }
                             }
-                            if ($couleur->exist($key)) {
-                                $cepage = $couleur->get($key);
-                                $totalVolRevendique = $cepage->getTotalVolume();
 
-                                    if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
-                                        $couleur->remove($key);
-                                        continue;
-                                    }
+                            if(!$bloquant_rebeche && count($volume_acheteurs) != count($lieu->getVolumeAcheteursForMinQuantite())) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                    $bloquant_rebeche = true;
+                                    break;
+                            }
 
-                                    if ($cepage->getConfig()->hasMinQuantite()) {
-                                        $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
-                                        if ($totalVolRatioMin > $totalVolRevendique) {
-                                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
-                                        }
-                                    }
+                            $volume_cave_particuliere_min = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->min_quantite, 2);
+                            $volume_cave_particuliere_max = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
 
-                                    if ($cepage->getConfig()->hasMaxQuantite()) {
-                                        $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->max_quantite, 2);
-                                        if ($totalVolRatioMax < $totalVolRevendique) {
-                                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
-                                        }
-                                    }
+                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $cepage->getTotalCaveParticuliere() < $volume_cave_particuliere_min) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                            }
 
-                                    if ($cepage->isNonSaisie()) {
-                                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
-                                    } else {
-                                    // vérifie le trop plein de DPLC
-                                    if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendement() && round($cepage->getDplc(), 2) > 0) {
-                                        array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
-                                    }
-                                    foreach ($cepage->filter('detail') as $details) {
-                                        foreach ($details as $detail) {
-                                            $detail_nom = '';
-                                            if ($detail->denomination != '' || $detail->vtsgn != '') {
-                                                $detail_nom .= ' - ';
-                                            }
-                                            if ($detail->denomination != '')
-                                                $detail_nom .= $detail->denomination . ' ';
-                                            if ($detail->vtsgn != '')
-                                                $detail_nom .= $detail->vtsgn . ' ';
+                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $cepage->getTotalCaveParticuliere() > $volume_cave_particuliere_max) {
+                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                            }
+                        }
 
-                                            if ($cepage_config->isSuperficieRequired() && $detail->superficie == 0) {
-                                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero_detail')));
-                                            }
+                        //Vérifie si aucune des colonnes d'un cépage est saisi
+                        if ($cepage->isNonSaisie()) {
+                            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cepage_non_saisie')));
 
-                                            if ($detail->isNonSaisie()) {
-                                                array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie')));
-                                            } elseif ($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle() == "Assemblage Edelzwicker") {
-                                                if (!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
-                                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom . ' => ' . acCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
-                                                }
-                                            }
-                                        }
+                            continue;
+                        }
+
+                        // vérifie le trop plein de DPLC
+                        if ($appellation->getConfig()->appellation == 'ALSACEBLANC' && $cepage->getConfig()->hasRendementCepage() && round($cepage->getDplc(), 2) > 0) {
+                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
+                        }
+
+                        foreach ($cepage->filter('detail') as $details) {
+                            foreach ($details as $detail) {
+                                $detail_nom = '';
+                                if ($detail->denomination != '' || $detail->vtsgn != '') {
+                                    $detail_nom .= ' - ';
+                                }
+                                if ($detail->denomination != '')
+                                    $detail_nom .= $detail->denomination . ' ';
+                                if ($detail->vtsgn != '')
+                                    $detail_nom .= $detail->vtsgn . ' ';
+
+                                if ($cepage_config->isSuperficieRequired() && $detail->superficie <= 0) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero_detail')));
+                                }
+
+                                if($cepage_config->hasLieuEditable() && !$detail->lieu) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_lieudit_non_saisie_detail')));
+                                }
+
+                                if ($detail->lies > ($detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('mouts'))) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume_sur_place')));
+
+                                    continue;
+                                }
+
+                                if ($detail->isNonSaisie()) {
+                                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_detail_non_saisie')));
+
+                                    continue;
+                                }
+                                
+                                if ($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle() == "Assemblage Edelzwicker") {
+                                    if (!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
+                                        array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
                                     }
                                 }
                             }
@@ -448,12 +494,105 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 }
             }
         }
+
         return array('erreur' => $validLogErreur, 'vigilance' => $validLogVigilance);
     }
 
-    public function getPremiereModificationDr() {
+    protected function checkNoeudRecapitulatifVentes($onglet, $noeud, &$validLogErreur, &$validLogVigilance) {
+        if(!$noeud->hasRecapitulatifVente()) {
+            return;
+        }
 
-        return $this->utilisateurs_document->getPremiereModification();
+        $appellation = $noeud->getAppellation();
+        $lieu = $noeud->getLieu();
+
+        $has_no_complete = $noeud->hasNoCompleteRecapitulatifVente();
+
+        //Vérifie que le récap des ventes a commencé a être saisi
+        if ($has_no_complete) {
+            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
+        }
+
+        //Vérifie que tous les dont_dplc et superficie dans le recapitulatif des ventes est rempli
+        if (!$has_no_complete && !$noeud->hasCompleteRecapitulatifVente()) {
+            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
+        }
+
+        if (!$noeud->isValidRecapitulatifVente()) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+            return;
+        }
+
+        $recap_is_ok = true;
+
+        if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
+            return;
+        }
+
+        //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
+        foreach($noeud->acheteurs as $type => $acheteurs) {
+            foreach($acheteurs as $cvi => $acheteur) {
+                $volume = $noeud->getVolumeAcheteur($cvi, $type);
+                $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
+                
+                if($acheteur->dontdplc > $volume) {
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
+                        $recap_is_ok = false;
+                        continue;
+                }
+            }
+        }
+
+        if(!$recap_is_ok) {
+            return;
+        }
+
+        if($noeud->getLies() > $noeud->getLiesMax()) {
+
+            return;
+        }
+
+        if($noeud->canCalculVolumeRevendiqueSurPlace() && $noeud->getVolumeRevendiqueCaveParticuliere() < 0) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_revendique_sur_place_negatif')));
+        }
+    }
+
+    protected function checkNoeudRecapitulatif($onglet, $noeud, &$validLogErreur, &$validLogVigilance) {
+        if(!$noeud->hasRecapitulatif()) {
+            return;
+        }
+
+        $appellation = $noeud->getAppellation();
+        $lieu = $noeud->getLieu();
+
+        // Verifie que les lies sont inférieur au volume sur place
+        if(!$noeud->getLiesMax() && $noeud->getLies() > 0) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_pas_volume_sur_place')));
+        
+        } elseif($noeud->getLies() > $noeud->getLiesMax()) {
+            array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume_sur_place')));
+        }
+    }
+
+    public function hasVolumeSurPlace() {
+        foreach ($this->recolte->getAppellations() as $appellation) {
+            if(($appellation->getVolumeRevendiqueCaveParticuliere() !== null) && ($appellation->getVolumeRevendiqueCaveParticuliere())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function getPremiereModificationDr() {
+        if(!$this->utilisateurs_document->getPremiereModification()) {
+
+            return null;
+        }
+        
+        preg_match("/^(\d+)\/(\d+)\/(\d+)$/", $this->utilisateurs_document->getPremiereModification(), $matches);
+
+        return $matches[3]."-".$matches[2]."-".$matches[1];
     }
 
     public function addEdition($id_user, $date) {
@@ -485,13 +624,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
     
     public function storeDeclarant() {
+        $this->identifiant = $this->cvi;
+        $this->declarant_document->storeDeclarant();
 
         $tiers = $this->getEtablissement();
+
         $this->declaration_commune = $tiers->declaration_commune;
         $this->declaration_insee = $tiers->declaration_insee;
-        $this->declarant->cvi = $tiers->cvi;
-        $this->declarant->intitule = $tiers->intitule;
-        
+
         if(!$this->declarant->email) {
             $this->declarant->email = $tiers->getCompteEmail();
         }
@@ -502,9 +642,23 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
         $this->declarant->exploitant->commune = $tiers->exploitant->commune;
         $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
-        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone; 
+        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
     }
     
-
+    public function hasDateDepotMairie() {
+        return $this->exist('date_depot_mairie');
+    }
+    
+    public function getDateDepotMairieFr() {
+       return Date::francizeDate($this->date_depot_mairie);
+    }
+    
+    function setDepotmairie($date_iso) {
+        if($this->modifiee == $this->validee){
+            $this->modifiee = $date_iso;
+        }
+        $this->validee = $date_iso;
+        $this->add('date_depot_mairie',$date_iso);
+    }
 
 }

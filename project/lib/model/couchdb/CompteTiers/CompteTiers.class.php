@@ -6,8 +6,12 @@ class CompteTiers extends BaseCompteTiers {
     protected $_duplicated = null;
     
     public function getNom() {
-        
-        return $this->getTiersField('nom');
+        if($this->isCompteSociete()) {
+            
+            return $this->getTiersField('nom');
+        }
+
+        return $this->_get('nom');
     }
 
     public function getIntitule() {
@@ -28,6 +32,15 @@ class CompteTiers extends BaseCompteTiers {
 	  }
         }
         return $this->_tiers;
+    }
+    
+    public function getTiersType($type) {
+    	foreach ($this->tiers as $tiers) {
+    		if ($tiers->type == $type) {
+    			return acCouchdbManager::getClient()->find($tiers->id);
+    		}
+    	}
+    	return null;
     }
 
     /**
@@ -94,5 +107,98 @@ class CompteTiers extends BaseCompteTiers {
     public function hasDelegation(){
 
         return $this->exist('delegation') && count($this->delegation) > 0;
+    }
+
+    public function isCompteSociete() {
+        
+        return !$this->exist("id_compte_societe") || !$this->id_compte_societe || $this->id_compte_societe == $this->_id;
+    }
+
+    public function getCompteSociete() {
+        if($this->isCompteSociete()) {
+
+            return $this;
+        }
+
+        return _CompteClient::getInstance()->find($this->getIdCompteSociete());
+    }
+
+    public function getTiers() {
+        if($this->isCompteSociete()) {
+
+            return $this->_get('tiers');
+        }
+
+        return $this->getCompteSociete()->tiers;
+    }
+
+    public function hasDroit($droit) {
+
+        $droits = $this->getDroits();
+
+        return in_array($droit, $droits->toArray(true, false));
+    }
+
+    public function getDroits() {
+        if($this->isCompteSociete() && count($this->_get('droits')->toArray(true, false)) == 0) {
+            $this->droits = array_keys($this->getDroitsTiers());
+        }
+
+        return $this->_get('droits');
+    }
+
+    public function getDroitsTiers() {
+        $droits = array();
+        $tiers = $this->getTiersObject();
+        foreach ($tiers as $t) {
+            if($t->isDeclarantDR()) {
+                $droits[_CompteClient::DROIT_DR_RECOLTANT] = null;
+            }
+            if($t->isDeclarantStock()) {
+                $droits[_CompteClient::DROIT_DS_DECLARANT] = null;
+            }
+
+            if($t->isDeclarantContratForSignature()) {
+                $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
+            }
+
+            if($t->isDeclarantContratForSignature()) {
+                $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
+            }
+
+            if($t->isDeclarantGamma()) {
+                $droits[_CompteClient::DROIT_GAMMA] = null;
+            }
+
+            if($t->isDeclarantDRAcheteur()) {
+                $droits[_CompteClient::DROIT_DR_ACHETEUR] = null;
+            }
+        }
+
+        foreach($droits as $key => $libelle) {
+            $droits[$key] = _CompteClient::getInstance()->getDroitLibelle($key);
+        }
+
+        ksort($droits);
+
+        return $droits;
+    }
+
+    public function updateTiers() {
+        $this->_tiers = null;
+        $droits = $this->getDroits()->toArray(true, false);
+
+        foreach($this->getTiersObject() as $tiers) {
+            foreach($droits as $droit) {
+                $tiers->emails->add($droit)->add($this->_id, array('nom' => $this->nom, 'email' => $this->email));
+            }
+
+            $tiers->save();
+        }
+    }
+
+    public function save() {
+        parent::save();
+        $this->updateTiers();
     }
 }

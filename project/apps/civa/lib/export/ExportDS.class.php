@@ -10,7 +10,7 @@ class ExportDS extends ExportMiseAdispo
 
     protected function getDocumentFolder() {
 
-        return 'declarations_de_stocks';
+        return 'DS';
     }
 
     protected function getFileExportClassName() {

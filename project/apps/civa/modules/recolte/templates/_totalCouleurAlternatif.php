@@ -48,23 +48,30 @@
             <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement <?php if ($couleur->getDplcTotal())
-            echo 'alerte'; ?>">
-                Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong>
+            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getConfig()->getRendementNoeud())): echo 'rouge'; endif;?>">
+                Rdt : <strong><span><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong>
                 <span class="picto_rdt_aide_col_total">
                     <a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a>
                 </span>
             </li>
             <li>
-
-                <input type="text"readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendiqueCouleur()); ?>" />
+                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input type="text"readonly="readonly" class="<?php if ($couleur->getDplcCouleur())
-    echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcCouleur()); ?>"/>
+                <input type="text" readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
-
-
+        </ul>
+        <ul>
+            <li>
+            <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
+                <input type="text" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
+            <?php endif; ?>
+            </li>
+            <li>
+            <?php if ($couleur->getConfig()->existRendementCepage()):?>
+                <input type="text" class="num <?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
+            <?php endif; ?>
+            </li>
         </ul>
     </div>
 </div>

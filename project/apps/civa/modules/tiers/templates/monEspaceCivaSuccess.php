@@ -1,43 +1,106 @@
 <?php include_partial('global/actions', array('etape' => 0, 'help_popup_action' => $help_popup_action)) ?>
 
-<?php if($sf_user->isInDelegateMode()): ?>
-    <h2 class="titre_principal">Espace de <?php echo $sf_user->getCompte(myUser::NAMESPACE_COMPTE_USED)->getNom()?></h2>
-<?php else: ?>
-    <h2 class="titre_principal">Mon espace déclaratif</h2>
-<?php endif; ?>
-<div id="application_dr" class="clearfix">
-        <?php 
-        if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
-            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
-        else:
-            include_partial('monEspaceDs',array('sf_user' => $sf_user));
-        endif;
-        ?>
-        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_ACHETEUR)): ?>
-        <div id="espace_acheteurs">
-            <h2>Acheteurs</h2>
-            <div class="contenu clearfix">
-                 <?php include_component('acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv)) ?>
-            </div>
-        </div>
-        <?php endif; ?>             
+<?php include_partial('tiers/title') ?>
 
-        <?php if($sf_user->hasCredential(myUser::CREDENTIAL_GAMMA)): ?>
-        <div id="espace_gamma">
-            <h2>Espace Gamm@</h2>
-            <div class="contenu clearfix">
-                 <?php include_partial('gamma/monEspace') ?>
-                 <?php include_partial('gamma/monEspaceColonne') ?>
-            </div>
-        </div>
+<div id="application_dr" class="mon_espace_civa clearfix">
+
+    <?php include_partial('tiers/onglets', array('active' => 'accueil')) ?>
+
+    <div class="contenu">
+        <?php if($sf_user->hasFlash('confirmation')) : ?>
+            <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
-            
-        <?php 
-        if(CurrentClient::getCurrent()->exist('declaration_courante') && CurrentClient::getCurrent()->declaration_courante == 'DR'):
-            include_partial('monEspaceDs',array('sf_user' => $sf_user));
-        else:
-            include_partial('monEspaceDr',array('sf_user' => $sf_user, 'formDelegation' => isset($formDelegation) ? $formDelegation : null));
-        endif;
-        ?>      
+        <h3 class="noir">Vos téléservices</h3>
+        <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">
+            <?php $i = $nb_blocs ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+                <div class="bloc_acceuil_header">Alsace Récolte</div>
+                <div class="bloc_acceuil_content">
+                    <?php if(CurrentClient::getCurrent()->isDREditable() && !$sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
+                    <p><strong>A valider</strong> avant le 10/12/<?php echo $sf_user->getCampagne() ?></p>
+                    <?php else: ?>
+                    <p class="mineure">Aucune information à signaler</p>
+                    <?php endif; ?>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+                <div class="bloc_acceuil_header">Alsace Récolte</div>
+                <div class="bloc_acceuil_content">
+                     <p class="mineure">Aucune information à signaler</p>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_dr_acheteur') ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::VRAC)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
+                <div class="bloc_acceuil_header">Alsace Contrats</div>
+                <div class="bloc_acceuil_content">
+                    <?php $infos = true ?>
+                    <?php if($vracs['CONTRAT_A_SIGNER']): ?>
+                        <p><?php echo $vracs['CONTRAT_A_SIGNER'] ?> contrat<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> reçu<?php echo ($vracs['CONTRAT_A_SIGNER'] > 1) ? "s" : "" ?> <strong>à signer</strong></p>
+                    <?php $infos = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_A_TERMINER']): ?>
+                        <p><?php echo $vracs['CONTRAT_A_TERMINER'] ?> contrat<?php echo ($vracs['CONTRAT_A_TERMINER'] > 1) ? "s" : "" ?> <strong>à finaliser</strong></p>
+                        <?php $infos = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_EN_ATTENTE_SIGNATURE']): ?>
+                        <p><?php echo $vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] ?>&nbsp;contrat<?php echo ($vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] > 1) ? "s" : "" ?>&nbsp;en&nbsp;attente&nbsp;de&nbsp;signature<?php echo ($vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] > 1) ? "s" : "" ?></p>
+                        <?php $infos = false ?>
+                    <?php endif; ?>
+                    <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
+                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> <strong>à enlever</strong></p>
+                        <?php $infos = false ?>
+                    <?php endif; ?>
+                    <?php if($infos): ?>
+                    <p class="mineure">Aucune information à signaler</p>
+                    <?php endif; ?>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_vrac') ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::GAMMA)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
+                <div class="bloc_acceuil_header">Alsace Gamm@</div>
+                <div class="bloc_acceuil_content">
+                    <p class="mineure">Aucune information à signaler</p>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_gamma') ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
+                <div class="bloc_acceuil_header">Alsace stocks</div>
+                <div class="bloc_acceuil_content">
+                    <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs() || !$sf_user->getDs()->isValideeTiers())): ?>
+                        <p><strong>A valider</strong> avant le 31/08/<?php echo date('Y') ?></p>
+                    <?php else: ?>
+                        <p class="mineure">Aucune information à signaler</p>
+                    <?php endif; ?>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_ds') ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <div class="clearfix"></div>
+        </div>
     </div>
-
+</div>

@@ -11,7 +11,7 @@ class compteUpdateTask extends sfBaseTask {
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
         ));
 
@@ -35,9 +35,16 @@ EOF;
         $liaisons = acCouchdbManager::getClient()->group_level(3)->getView("TIERS", "liaison");
         $stocks = array();
         $acheteurs = array();
+        $courtiers = array();
         foreach ($liaisons->rows as $liaison) {
             if (preg_match('/^ACHAT-/', $liaison->key[2])) {
                 $acheteurs[] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
+
+                continue;
+            }
+
+            if (preg_match('/^COURT-/', $liaison->key[2])) {
+                $courtiers[] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
 
                 continue;
             }
@@ -76,6 +83,12 @@ EOF;
            $comptes[$this->getLogin($tiers)] = $tiers;     
         }
 
+        foreach($courtiers as $courtier) {
+           $tiers = array($courtier);
+           $comptes[$this->getLogin($tiers)] = $tiers;     
+        }
+
+
         // Suppression des comptes inexistants
         $ids_compte = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         foreach ($ids_compte as $id) {
@@ -86,16 +99,6 @@ EOF;
                 unset($compte->compte_reference);
                 $compte_object = acCouchdbManager::getClient()->createDocumentFromData($compte);
                 $compte_object->save();
-                $this->logSection("Compte proxy has been transformed", $compte->_id, null, "ERROR");
-            }
-            
-            if ($compte->type == "CompteTiers") {
-                if(!array_key_exists($compte->login, $comptes)) {
-                    //Todo : si le compte n'existe en faire un compte proxy
-
-                    //$this->logSection("compte deleted", $compte->_id, null, "ERROR");
-                    //acCouchdbManager::getClient()->deleteDoc($compte);
-                }
             }
         }
         
@@ -108,26 +111,16 @@ EOF;
                  $compte = new CompteTiers();
                  $compte->login = $login."";
                  $compte->constructId();
-                 $compte->mot_de_passe = $this->generatePass();;
+                 $compte->mot_de_passe = $compte->generatePass();
                  $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
             }
-
-            /*$email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
-            if($email) {
-                if ($email != $compte->email && $compte->email) {
-                    $this->logSection("L'email a été modifié", $compte->_id);
-                }
-                $compte->email = $email;
-            } elseif(!$email && $compte->email) {
-                //$this->logSection("Pas d'email touvé chez les tiers du compte alors qui lui en possède une", $compte->_id);
-            }*/
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 
             $compte->remove("tiers");
             $compte->add("tiers");
 
-            $inactif = false;
+            $actif = false;
 
             $tiers_date_creation = null;
 
@@ -137,37 +130,38 @@ EOF;
                 $obj->id = $t->_id;
                 $obj->type = $t->type;
                 $obj->nom = $t->nom;
-                $inactif = (isset($t->statut) && $t->statut == _TiersClient::STATUT_INACTIF);
+                if(!$actif) {
+                    $actif = (!isset($t->statut) || $t->statut != _TiersClient::STATUT_INACTIF);
+                }
                 if(!$tiers_date_creation) {
                     $tiers_date_creation = $t->db2->import_date;
                 }
             }
 
-            if($inactif && $compte->isActif()) {
+            if(!$actif && $compte->isActif()) {
                 $compte->setInactif();
-                echo sprintf("Le compte %s;%s a été désactivé\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Le compte à été désactivé;%s;%s\n", $compte->_id, $compte->nom);
             }
 
-            if(!$inactif && !$compte->isActif()) {
+            if($actif && !$compte->isActif()) {
                 $compte->setActif();
-                echo sprintf("Le compte %s;%s a été activé\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Le compte a été activé;%s;%s\n", $compte->_id, $compte->nom);
             }
             
             if ($compte->isNew()) {
-                echo sprintf("Création du compte %s:%s\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Création du compte;%s;%s\n", $compte->_id, $compte->nom);
             } elseif ($compte->isModified()) {
-                echo sprintf("Modification du compte %s:%s\n", $compte->_id, $compte->nom);
+                echo sprintf("INFO;Modification du compte;%s;%s\n", $compte->_id, $compte->nom);
             }
 
             if(!$compte->date_creation && $tiers_date_creation) {
                $compte->date_creation = $tiers_date_creation;
-               $this->logSection('date_creation', $compte->_id.":".$compte->date_creation);
             }
 
             $compte->save();
             
             if ($compte->getStatut() == "INSCRIT" && !$compte->email) {
-                $this->logSection("inscrit ne possédant pas d'email", $compte->get('_id'));
+                echo sprintf("INFO;Inscrit ne possédant pas d'email;%s;%s\n", $compte->_id, $compte->nom);
             }
         }
 
@@ -190,8 +184,9 @@ EOF;
             $tiers->save();
 
             if ($tiers->isModified()) {
-                $this->logSection("saved", $tiers->get('_id'));
+                echo sprintf("INFO;Tiers mis à jour;%s;%s\n", $tiers->_id, $tiers->nom);
             }
+
             $tiers_open[$tiers->_id] = true;
         }
     }
@@ -199,7 +194,12 @@ EOF;
     private function getLogin(array $tiers) {
         $login = null;
         foreach ($tiers as $t) {
+            if($t->type == 'Courtier') {
+
+                return $t->siren;
+            }
             if (($t->type == 'Recoltant' || $t->type == 'Acheteur') && $t->cvi) {
+                
                 return $t->cvi;
             }
             if (is_null($login) && $t->civaba) {
@@ -220,10 +220,6 @@ EOF;
         }
 
         return $value;
-    }
-
-    private function generatePass() {
-        return sprintf("{TEXT}%04d", rand(0, 9999));
     }
 
 }

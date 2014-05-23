@@ -26,6 +26,17 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     }
 
+    public function hasCepageRB() {
+        foreach($this->getLieux() as $lieu) {
+            if($lieu->hasCepageRB()) {
+                return true;
+            }
+        }
+       
+        return false;
+    }
+
+
     public function hasAllDistinctLieu() {
         $nb_lieu = count($this->getDistinctLieux());
         $nb_lieu_config = count($this->getConfig()->getDistinctLieux());
@@ -36,42 +47,6 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     public function getUsagesIndustrielsCalcule(){
         
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
-    }
-
-    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
-        $key = "volume_acheteurs_".$type;
-        if (!isset($this->_storage[$key])) {
-            $this->_storage[$key] = array();
-            foreach ($this->getLieux() as $lieu) {
-                $acheteurs = $lieu->getVolumeAcheteurs($type);
-                foreach ($acheteurs as $cvi => $quantite_vendue) {
-                  if (!isset($this->_storage[$key][$cvi])) {
-                    $this->_storage[$key][$cvi] = 0;
-                  }
-                  $this->_storage[$key][$cvi] += $quantite_vendue;
-                }
-            }
-        }
-        return $this->_storage[$key];
-    }
-
-    public function getVolumeAcheteur($cvi, $type) {
-        $volume = 0;
-        $acheteurs = $this->getVolumeAcheteurs($type);
-        if (array_key_exists($cvi, $acheteurs)) {
-            $volume = $acheteurs[$cvi];
-        }
-        return $volume;
-    }
-
-    public function removeVolumes() {
-        $this->total_superficie = null;
-        $this->volume_revendique = null;
-        $this->total_volume = null;
-        $this->dplc = null;
-        foreach ($this->getLieux() as $lieu) {
-            $lieu->removeVolumes();
-        }
     }
 
     public function getAppellation() {

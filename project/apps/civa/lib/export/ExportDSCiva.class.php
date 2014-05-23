@@ -9,6 +9,7 @@ class ExportDSCiva {
 
     const CSV_DS_TRAITEE = 22; // "O" ou "N"
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
+    const CODE_DOUANE_ED = "1B001S";
 
     public function __construct($campagne) {
         if (!preg_match('/^[0-9]{4}$/', $campagne)) {
@@ -75,31 +76,20 @@ class ExportDSCiva {
         if ($ds->isDsPrincipale()) {
             $lignes.="\t\t<volLie>" . $this->convertToFloat($ds->lies, false) . "</volLie>\r\n";
             $lignes.="\t\t<volDplc>" . $this->convertToFloat($ds->dplc, false) . "</volDplc>\r\n";
-            $lignes.="\t\t<volVinNc>" . $this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds), false) . "</volVinNc>\r\n";
+          //  $lignes.="\t\t<volVinNc>" . $this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds), false) . "</volVinNc>\r\n";
         }
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        $hasRebeches = $ds->hasRebeches();
-        $passedCremant = false;
-        $rebecheAdded = false;
-        $produitsAgreges = $this->getProduitsAgregesForDS($ds,true);
+        $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
         
-        foreach ($produitsAgreges as $code_douane => $obj) {
-            if($hasRebeches && $passedCremant && !preg_match('/appellation_CREMANT/', $obj->hash)){
-                $lignes .= $this->addXMLDSRebeches($ds);
-                $passedCremant = false;
-                $rebecheAdded = true;
-            }
-            
+        foreach ($produitsAgreges as $code_douane => $obj) {  
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
-            
-            if($hasRebeches && !$passedCremant && preg_match('/appellation_CREMANT/', $obj->hash)){
-                $passedCremant = true;
-            }
         }
-        if($hasRebeches && !$rebecheAdded){
+        
+        if ($ds->hasRebechesForXML()) {
             $lignes .= $this->addXMLDSRebeches($ds);
         }
+        
         $lignes .= $this->addXMLDSMouts($ds);
         return $lignes;
     }
@@ -113,18 +103,19 @@ class ExportDSCiva {
         return $ligne;
     }
 
-    protected function createProduitsAgregat($products, $vtsgn = false) {
+    protected function createProduitsAgregat($products, $vtsgn = false, $xml = false) {
         $resultAgregat = array();
         foreach ($products as $app_produit => $produit) {
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
-            if ($appellation_key == 'VINTABLE')
-                continue;
+            if ($appellation_key == 'VINTABLE' && !$xml){
+               continue;                
+            }
             if (!$vtsgn || $produit->hasVtsgn()) {
-                $code_douane = $this->getCodeDouane($produit);
+                $code_douane = $this->getCodeDouane($produit,'',$xml);
                 if (!array_key_exists($code_douane, $resultAgregat)) {
                     $resultAgregat[$code_douane] = $this->initProduitAgregat();
                 }
-                $this->setProduitAgregat($resultAgregat[$code_douane], $this->convertToFloat($produit->total_stock, false), $produit->getHash(), $produit,$this->convertToFloat($produit->total_normal, false),$this->convertToFloat($produit->total_vt, false),$this->convertToFloat($produit->total_sgn, false));
+                $this->setProduitAgregat($resultAgregat[$code_douane], $this->convertToFloat($produit->total_stock, false), $produit->getHash(), $produit, $this->convertToFloat($produit->total_normal, false), $this->convertToFloat($produit->total_vt, false), $this->convertToFloat($produit->total_sgn, false));
             } else {
 
                 $volume_vt = $produit->total_vt;
@@ -147,7 +138,7 @@ class ExportDSCiva {
 
                 $volume_normal = $produit->total_normal;
                 if ($volume_normal > 0) {
-                    $code_douane = $this->getCodeDouane($produit);
+                    $code_douane = $this->getCodeDouane($produit,'',$xml);
                     if (!array_key_exists($code_douane, $resultAgregat)) {
                         $resultAgregat[$code_douane] = $this->initProduitAgregat();
                     }
@@ -166,15 +157,14 @@ class ExportDSCiva {
         return $this->makeXMLDSLigne($lieu_stockage, "MC", $ds->getMouts());
     }
 
-    
     protected function addXMLDSRebeches($ds) {
-       if (!$ds->hasRebeches()) {
+        if (!$ds->hasRebechesForXML()) {
             return '';
         }
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        return $this->makeXMLDSLigne($lieu_stockage, "4B999B", $ds->getRebeches()); 
+        return $this->makeXMLDSLigne($lieu_stockage, "4B999B", $ds->getRebeches());
     }
-    
+
     public function exportEntete() {
         $entete_string = "";
         foreach ($this->ds_liste as $cpt => $ds) {
@@ -199,9 +189,9 @@ class ExportDSCiva {
         $etb = $ds->getEtablissement();
         $lieu_stockage = "";
         if ($ds->stockage->exist("adresse")) {
-            $lieu_stockage = str_replace(',','',$ds->stockage->adresse);
+            $lieu_stockage = str_replace(',', '', $ds->stockage->adresse);
         } elseif ($ds->declarant->exist("adresse")) {
-            $lieu_stockage = str_replace(',','',$ds->declarant->adresse);
+            $lieu_stockage = str_replace(',', '', $ds->declarant->adresse);
         }
 
         $principale = ($ds->isDsPrincipale()) ? "\"P\"" : "\"S\"";
@@ -304,7 +294,7 @@ class ExportDSCiva {
         $row .= $this->convertToFloat($ds->mouts) . ",";
         $row .= $this->convertToFloat($ds->dplc) . ",";
         $row .= $this->convertToFloat($ds->rebeches) . ",";
-        $row .= ($ds->isValidee()) ? "\"O\"" : "\"N\"";
+        $row .= (DSCivaClient::getInstance()->getDSPrincipaleByDs($ds)->isDateDepotMairie()) ? "\"N\"" : "\"O\"";
         $row .= "," . $date;
 
         return $row;
@@ -314,35 +304,50 @@ class ExportDSCiva {
         $cpt = 1;
         $row = "";
         $produitsAgreges = $this->getProduitsAgregesForDS($ds);
+       
+        $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
         
-        foreach ($produitsAgreges as $code_douane => $obj) {
-            $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
+       foreach ($produitsAgreges as $code_douane => $obj) {
             $app_produit = $obj->hash;
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             $cepage_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z]+)cepage_([A-Z]{2})/', '$4', $app_produit);
-            if ($cepage_key == 'ED') {
-                $row.= $id_csv . ",";
-                $row.= "1,\"" . $cepage_key . "\",\"BL\",\"\"," . $cpt . ",";
-                $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
-                $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
-                $row.="\r\n";
-                continue;
-            }
-            switch ($appellation_key) {
-                case 'PINOTNOIR':
-                    $row.= $id_csv . ",";
-                    $row.= "1,\"" . $cepage_key . "\",\"RS\",\"\"," . $cpt . ",";
-                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
-                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
-                    $row.="\r\n";
-                    break;
-                case 'PINOTNOIRROUGE':
+
+            
+            if($code_douane == "1R001S "){
                     $row.= $id_csv . ",";
                     $row.= "1,\"PN\",\"RG\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
-                    break;                
+                    $cpt++;
+                    continue;
+            }
+            
+            if($code_douane == "1S001S "){
+                    $row.= $id_csv . ",";
+                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
+                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+                    $row.="\r\n";
+                    $cpt++;
+                    continue;
+            }
+            
+            switch ($appellation_key) {
+//                case 'PINOTNOIR':
+//                    $row.= $id_csv . ",";
+//                    $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
+//                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+//                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+//                    $row.="\r\n";
+//                    break;
+//                case 'PINOTNOIRROUGE':
+//                    $row.= $id_csv . ",";
+//                    $row.= "1,\"PN\",\"RG\",\"\"," . $cpt . ",";
+//                    $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
+//                    $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
+//                    $row.="\r\n";
+//                    break;
                 case 'CREMANT':
                     $row.= $id_csv . ",";
                     $row.= "2,\"" . $cepage_key . "\",\"" . $cepage_key . "\",\"\"," . $cpt . ",";
@@ -374,7 +379,7 @@ class ExportDSCiva {
                     if ($lieu == 'KLEV') {
                         $row.= "1,\"KL\",\"BL\",\"\"," . $cpt . ",";
                     } else {
-                        $row.= "1,\"" . $cepage_key . "\",\"".$couleur."\",\"\"," . $cpt . ",";
+                        $row.= "1,\"" . $cepage_key . "\",\"" . $couleur . "\",\"\"," . $cpt . ",";
                     }
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
@@ -384,14 +389,15 @@ class ExportDSCiva {
                 case 'LIEUDIT':
                     $row.= $id_csv . ",";
                     $couleur = $this->getCouleurForExport(preg_replace('/^([\/a-zA-Z]+)appellation_([A-Z]+)([\/a-zA-Z]+)lieu\/couleur([A-Za-z]+)\/([\/a-zA-Z_-]+)/', '$4', $app_produit));
-                    $row.= "1,\"" . $cepage_key . "\",\"".$couleur."\",\"\"," . $cpt . ",";
+                    $row.= "1,\"" . $cepage_key . "\",\"" . $couleur . "\",\"\"," . $cpt . ",";
                     $row.= $this->convertToFloat($obj->volume_normal) . "," . $this->convertToFloat($obj->volume_vt) . ",";
                     $row.= $this->convertToFloat($obj->volume_sgn) . "," . $this->convertToFloat($obj->volume);
                     $row.="\r\n";
                     break;
-                }
+            }
             $cpt++;
         }
+        
         return $row;
     }
 
@@ -440,19 +446,32 @@ class ExportDSCiva {
         return null;
     }
 
-    public function getCodeDouane($cepage, $vtsgn = '') {
+    public function getCodeDouane($cepage, $vtsgn = '',$xml=false) {
         $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $cepage->getHash());
-        if ($cepage->getKey() == 'cepage_ED') {
-            return "1B001S";
-        }
+
         switch ($appellation_key) {
             case 'VINTABLE':
+                if($xml){
+                    $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
+                    if($cepage->getKey() == 'cepage_VINTABLE'){
+                       return "4B999"; 
+                    }
+                    if($cepage->getKey() == 'cepage_MS'){
+                       return "4B999M"; 
+                    }
+                }
                 return null;
             case 'ALSACEBLANC':
+                if ($cepage->getKey() == 'cepage_ED') {
+                    return self::CODE_DOUANE_ED;
+                }
                 return $cepage->getConfig()->getDouane()->getFullAppCode($vtsgn) . $cepage->getConfig()->getDouane()->getCodeCepage();
             case 'LIEUDIT':
             case 'COMMUNALE':
                 $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
+                if ($cepage->getKey() == 'cepage_ED') {
+                    return self::CODE_DOUANE_ED;
+                }
                 if ($cepage_code == "KL") {
                     $hash = str_replace('/declaration', '/recolte', $cepage->getCouleur()->getHash());
                     $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
@@ -492,24 +511,44 @@ class ExportDSCiva {
         $obj->volume += $vol;
         $obj->hash = $hash;
         $obj->produit = $prod;
-        $obj->volume_normal += $vol_normal;        
-        $obj->volume_vt += $vol_vt;        
+        $obj->volume_normal += $vol_normal;
+        $obj->volume_vt += $vol_vt;
         $obj->volume_sgn += $vol_sgn;
-        
     }
-    
-    protected function getProduitsAgregesForDS($ds, $vtsgn = false) {
-         $appelations_1 = array("\/appellation_ALSACEBLANC\/",
-                                "\/appellation_COMMUNALE\/",
-                                "\/appellation_LIEUDIT\/",
-                                "\/appellation_PINOTNOIR\/",
-                                "\/appellation_PINOTNOIRROUGE\/");
+
+    protected function getProduitsAgregesForDS($ds, $vtsgn = false, $xml = false) {
+        $appelations_1 = array("\/appellation_ALSACEBLANC\/",
+            "\/appellation_COMMUNALE\/",
+            "\/appellation_LIEUDIT\/",
+            "\/appellation_PINOTNOIR\/",
+            "\/appellation_PINOTNOIRROUGE\/");
         $appelations_2 = array("\/appellation_GRDCRU\/",
-                                "\/appellation_CREMANT\/");
-        
-        $produits = array_merge($ds->declaration->getProduitsSortedWithFilter($appelations_1),
-                                $ds->declaration->getProduitsSortedWithFilter($appelations_2));        
-        return $this->createProduitsAgregat($produits, $vtsgn);
+            "\/appellation_CREMANT\/");
+        $appelations_3 = array("\/appellation_VINTABLE\/");
+
+        $produits = array_merge($ds->declaration->getProduitsSortedWithFilter($appelations_1), $ds->declaration->getProduitsSortedWithFilter($appelations_2));
+        if($xml){
+            $produits = array_merge($produits, $ds->declaration->getProduitsSortedWithFilter($appelations_3));
+        }
+        return $this->createProduitsAgregat($produits, $vtsgn, $xml);
+    }
+
+    protected function getAppellationNumero($appellation_key) {
+        switch ($appellation_key) {
+            case 'CREMANT':
+                return 2;
+            case 'GRDCRU':
+                return 3;
+            case 'PINOTNOIR':
+            case 'PINOTNOIRROUGE':
+            case 'ALSACEBLANC':
+            case 'VINTABLE':
+            case 'LIEUDIT':
+            case 'COMMUNALE':
+            default:
+                return 1;
+        }
+        return 1;
     }
 
 }

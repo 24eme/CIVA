@@ -28,7 +28,7 @@
             <?php echo $form['lieu']->render(); ?>
         </div>
         <div class="ligne_form_btn">
-            <input name="<?php echo $form->getName() ?>" type="image" alt="valider" src="../images/boutons/btn_valider.png" class="btn">
+            <input name="<?php echo $form->getName() ?>" type="image" alt="valider" src="/images/boutons/btn_valider.png" class="btn">
         </div>
    </div>
 </div>

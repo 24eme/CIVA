@@ -2,67 +2,50 @@
 
 class RecapitulatifForm extends acCouchdbObjectForm {
 
-    protected $is_saisisable = false;
+    protected $is_lies_saisisables = false;
 
     public function __construct(acCouchdbJson $object, $options = array(), $CSRFSecret = null) {
         parent::__construct($object, $options, $CSRFSecret);
-        $this->getDocable()->remove();
     }
 
     public function configure() {
-        $lieu = $this->getObject();
-        if($lieu->canHaveUsagesIndustrielsSaisi()){
+        $object = $this->getObject();
+        $this->is_lies_saisisable = false;
+        if($object->canHaveUsagesLiesSaisi() && $object->getConfig()->existRendement()) {
             $this->setWidgets(array(
-                'usages_industriels_saisi' => new sfWidgetFormInputFloat(array()),
+                'lies' => new sfWidgetFormInputFloat(array()),
             ));
 
             $this->setValidators(array(
-                'usages_industriels_saisi' => new sfValidatorNumber(array('required' => false, 'max' => $this->getObject()->getVolumeRevendiqueWithoutUIS())),
+                'lies' => new sfValidatorNumber(array('required' => false)),
             ));
 
-            $this->getWidget('usages_industriels_saisi')->setLabel('Usages industriels');
+            $this->getWidget('lies')->setLabel('Usages industriels saisis');
 
-            $this->getValidator('usages_industriels_saisi')->setMessage('max', "Les usages industriels ne peuvent pas être supérieurs au volume total récolté");
-
-            $this->is_saisisable = true;
-
+            $this->is_lies_saisisables = true;
         }
-
         
         $form_acheteurs = new BaseForm();
-        foreach ($lieu->acheteurs as $type => $acheteurs_type) {
+        foreach ($object->acheteurs as $type => $acheteurs_type) {
             $form_type = new BaseForm();
             foreach ($acheteurs_type as $cvi => $acheteur) {
-                $form_type->embedForm($cvi, new RecapitulatifAcheteurForm());
-                
-                $this->is_saisisable = true;
+                $form_type->embedForm($cvi, new RecapitulatifAcheteurForm($acheteur));
             }
             $form_acheteurs->embedForm($type, $form_type);
         }
-        $this->embedForm('acheteurs', $form_acheteurs);
 
-        
         $this->getValidatorSchema()->setPostValidator(new ValidatorRecapitulatif(null, array('object' => $this->getObject())));
-        $this->widgetSchema->setNameFormat('recapitulatif[%s]');
 
-        $this->disableLocalCSRFProtection();
-        $this->disabledRevisionVerification();
-    }
-
-    public function isSaisisable() {
-
-        return $this->is_saisisable;
+        $this->embedForm('acheteurs', $form_acheteurs);
     }
 
     public function doUpdateObject($values) {
-        parent::doUpdateObject($values);
-        $lieu = $this->getObject();
 
-        if( isset($values['usages_industriels_saisi']))
-            $lieu ->set("usages_industriels_saisi", (float) $values['usages_industriels_saisi']);
+        return parent::doUpdateObject($values);
+    }
 
-        $this->getObject()->getCouchdbDocument()->update();
+    public function isLiesSaisisables() {
+
+        return $this->is_lies_saisisables;
     }
 }
-
-?>

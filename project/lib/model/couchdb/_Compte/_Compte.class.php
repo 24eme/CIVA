@@ -9,6 +9,12 @@ abstract class _Compte extends Base_Compte {
         parent::constructId();
         $this->set('_id', 'COMPTE-' . $this->login);
         $this->date_creation = date("Y-m-d");
+        if(!$this->statut) {
+            $this->statut = self::STATUS_NOUVEAU;
+        }
+        if($this->statut == self::STATUS_NOUVEAU && !$this->mot_de_passe) { 
+            $this->mot_de_passe = $this->generatePass();
+        }
     }
 
     /**
@@ -20,6 +26,14 @@ abstract class _Compte extends Base_Compte {
         $salt = pack("CCCC", mt_rand(), mt_rand(), mt_rand(), mt_rand());
         $hash = "{SSHA}" . base64_encode(pack("H*", sha1($mot_de_passe . $salt)) . $salt);
         $this->_set('mot_de_passe', $hash);
+    }
+ 
+    public function getCodeCreation() {
+        if($this->statut != self::STATUS_NOUVEAU) {
+            return null;
+        }
+
+        return preg_replace('/^\{TEXT\}/', "", $this->mot_de_passe);
     }
     
     /**
@@ -120,6 +134,11 @@ abstract class _Compte extends Base_Compte {
 
         return $this->statut != self::STATUS_INACTIF;
     }
+    
+    public function isInscrit()
+    {
+    	return $this->statut != self::STATUS_NOUVEAU && $this->isActif();
+    }
 
     public function setInactif() {
         $this->statut = self::STATUS_INACTIF;
@@ -127,12 +146,17 @@ abstract class _Compte extends Base_Compte {
 
     public function setActif() {
         $this->statut = self::STATUS_INSCRIT;
+        if(!$this->mot_de_passe) {
+            $this->mot_de_passe = $this->generatePass(); 
+        }
         $this->updateStatut();
     }
+
+    public function getComptesPersonnes() {
+
+        return _CompteClient::getInstance()->getComptesPersonnes($this);
+    }
     
-    /**
-     * 
-     */
     public function save() {
         $this->updateStatut();
         $this->updateLdap();
@@ -150,5 +174,10 @@ abstract class _Compte extends Base_Compte {
     public function hasDelegation(){
         return false;
     }
+
+    public function generatePass() {
+        return sprintf("{TEXT}%04d", rand(1000, 9999));
+    }
+
     
 }

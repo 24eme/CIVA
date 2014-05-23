@@ -21,8 +21,11 @@ class compteActions extends sfActions {
         }
 
         if ($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential("compte")) {
-            $this->redirect('@tiers');
-        } elseif ($request->getParameter('ticket')) {
+            
+            return $this->redirectAfterLogin($request);
+        }
+        
+        if ($request->getParameter('ticket')) {
             /** CAS * */
             error_reporting(E_ALL);
             require_once(sfConfig::get('sf_lib_dir') . '/vendor/phpCAS/CAS.class.php');
@@ -33,18 +36,28 @@ class compteActions extends sfActions {
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} auth is good');
             /** ***** */
             $this->getUser()->signIn(phpCAS::getUser());
-            $this->redirect('@tiers');
-        } else {
+
+            return $this->redirectAfterLogin($request);
+        }
+
 		if(sfConfig::has('app_autologin') && sfConfig::get('app_autologin')) {
 			$this->getUser()->signIn(sfConfig::get('app_autologin'));
-			   	           
-			return $this->redirect('@tiers');
+            
+            return $this->redirectAfterLogin($request);
 		}	   
 		
-	    	$url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
-	    	$this->redirect($url);
-        }
+	    $url = sfConfig::get('app_cas_url') . '/login?service=' . $request->getUri();
+	    
+        return $this->redirect($url);
     }
+
+    protected function redirectAfterLogin($request) {
+        if($request->getParameter('ticket')) {
+            $this->getUser()->setFlash('referer', preg_replace("/\?$/", "", preg_replace("/ticket=[a-zA-Z0-9-]+(&|$)/", "", $request->getUri())));
+        }
+
+        return $this->redirect('tiers');
+    } 
 
     public function executeLoginNoCas(sfWebRequest $request) {
         if (!(sfConfig::has('app_login_no_cas') && sfConfig::get('app_login_no_cas'))) {
@@ -206,4 +219,63 @@ class compteActions extends sfActions {
         
     }
 
+    public function executeDroits(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
+
+        if($this->compte->type != 'CompteTiers') {
+
+            return $this->forward404();
+        }
+
+        $this->form = new CompteDroitsForm($this->compte);
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if(!$this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        return $this->redirect('compte_droits');
+    }
+
+    public function executePersonneAjouter(sfWebRequest $request) {
+        $this->setTemplate('personne');
+        $this->compte = $this->getUser()->getCompte();
+        $this->personne = _CompteClient::getInstance()->generateComptePersonne($this->compte);
+        
+        $this->form = $this->processFormPersonne($this->personne, $request);
+    }
+
+    public function executePersonneModifier(sfWebRequest $request) {
+        $this->setTemplate('personne');
+        $this->compte = $this->getUser()->getCompte();
+        $this->personne = _CompteClient::getInstance()->findByLogin($request->getParameter('login'));
+        $this->forward404Unless($this->personne);
+        
+        $this->form = $this->processFormPersonne($this->personne, $request);
+    }
+
+    protected function processFormPersonne($personne, sfWebRequest $request) {
+        $form = new ComptePersonneForm($personne);
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+            return $form;
+        }
+
+        $form->bind($request->getParameter($form->getName()));
+
+        if(!$form->isValid()) {
+            return $form;
+        }
+
+        $form->save();
+
+        return $this->redirect('compte_droits');
+    }
 }

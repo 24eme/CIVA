@@ -158,6 +158,11 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         return $this->_compte[$namespace];
     }
 
+    public function isSimpleOperateur() {
+
+        return $this->hasCredential(self::CREDENTIAL_OPERATEUR) && !$this->hasCredential(self::CREDENTIAL_ADMIN);
+    }
+
     protected function requireCompte() {
         if (!$this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_COMPTE)) {
 	  throw new sfException("you must be logged with a tiers");

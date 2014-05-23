@@ -5,7 +5,7 @@
 </ul>-->
 
 <ul id="actions_declaration">
-<?php if($etape == 2): ?>
+<?php if($etape == 3): ?>
         <li class="btn"><a href="" class="btn_voir_dr_prec"><img src="/images/boutons/btn_voir_dr_prec.png" alt="Voir les DR précedentes" /></a></li>
         
     <?php endif; ?>

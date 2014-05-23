@@ -7,7 +7,7 @@
 
             <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
                 <p class="lieu <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                    <?php echo $form['lieu']->render() ?>
+                    <?php echo $form['lieu']->render(array('class' => 'premier_focus')) ?>
                 </p>
             <?php endif; ?>
 
@@ -25,41 +25,59 @@
 
             <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
-                    <?php echo $form['superficie']->render(array('class' => 'superficie num')) ?>
+                    <?php echo $form['superficie']->render(array('class' => 'superficie num premier_focus')) ?>
                 <?php endif; ?>
             </p>
 
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
                 <div class="vente_raisins">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_acheteur" tabindex="-1">Acheteur</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
                 <div class="caves">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_cave" tabindex="-1">Cave</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
                 <div class="mouts">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
+                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_mout" tabindex="-1">Acheteur de mouts</a>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <p class="vol_place <?php echo ($form['cave_particuliere']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                 <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
             </p>
-            <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echo $detail->volume ?>" /></p>
-            <?php if ($detail->getConfig()->hasRendement()): ?>
+            <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
+            <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
-                    <input type="hidden" id="detail_max_volume" value="<?php echo $detail->getVolumeMax(); ?>"/>
-                    <input type="hidden" id="detail_rendement" value="<?php echo $detail->getConfig()->getRendement(); ?>"/>
-                    <li><input id="detail_volume_revendique" type="hidden" class="revendique num readonly" readonly="readonly" value="<?php echo $detail->volume_revendique ?>" /></li>
-                    <li><input id="detail_volume_dplc" type="hidden" class="dplc num readonly" readonly="readonly" value="<?php echo $detail->volume_dplc ?>" /></li>
+                    <li>
+                        <input id="detail_volume_revendique" tabindex="-1" type="<?php echo (isset($form['lies'])) ? "text" : "hidden" ?>" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" />
+                    </li>
+                    <li>
+                        <?php if (isset($form['lies'])) : ?>
+                            <?php echo $form['lies']->render() ?>
+                        <?php else: ?>
+                            <input id="detail_lies" type="hidden" class="lies num readonly" readonly="readonly" value="<?php echo $detail->lies ?>" />
+                        <?php endif; ?>
+                        
+                        <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
+                    </li>
+                </ul>
+                <ul>
+                    <li></li>
+                    <li></li>
                 </ul>
             <?php endif; ?>
         </div>
@@ -76,7 +94,7 @@
     {
         
 <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()) : ?>
-            if (!document.getElementById('recolte_lieu').value) {
+            if (!document.getElementById('detail_lieu').value) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_lieu')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
@@ -84,38 +102,39 @@
 <?php endif; ?>
 
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie() && $onglets->getCurrentCepage()->getConfig()->isSuperficieRequired()) : ?>
-            if (!document.getElementById('recolte_superficie').value || !(document.getElementById('recolte_superficie').value > 0)) {
+            if (!document.getElementById('detail_superficie').value || !(document.getElementById('detail_superficie').value > 0)) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_superficie')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
             }
 <?php endif; ?>
 
+    <?php if (isset($form['lies'])) : ?>
+    var inputs_mouts = $(".col_active .mouts input[class*='acheteur_mouts_']");
+    if(!inputs_mouts.length) {
+        if (parseFloat($('#detail_lies').val()) > 0 && (!$('#detail_cave_particuliere').val() || parseFloat($('#detail_cave_particuliere').val()) == 0)) { 
+            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_log_usages_industriels_pas_volume_sur_place')); ?></p>');
+            openPopup($('#popup_msg_erreur'), 0);
+            return false;
+        }
+        if(parseFloat($('#detail_lies').val()) > parseFloat($('#detail_cave_particuliere').val())) {
+            $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_log_usages_industriels_superieur_volume_sur_place')); ?></p>');
+            openPopup($('#popup_msg_erreur'), 0);
+            return false;
+        }
+    }
+    <?php endif; ?>
+
 <?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
             var total_non_negociant = <?php echo $onglets->getCurrentLieu()->getTotalVolumeForMinQuantite() ?>;
             var min = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>);
             var max = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>);
-                
-            var rebeche_ratio_respected = true;
-            $("#col_recolte_totale .caves input").each(function()
-            {
-                if($(this).attr('type')!='hidden' && $(this).val()>0){
-                    var css_classes =$(this).attr('class'). split(" ");
-                    var class_cvi = css_classes[1];
-                    if(parseFloat($(".col_active .caves input[class*='"+class_cvi+"']").val())==0){
-                        rebeche_ratio_respected = false;
-                    }
-                }
-            });
-            if (parseFloat($('#recolte_cave_particuliere').val()) == 0 && parseFloat($('#appellation_total_cave').val()) > 0) {
-                rebeche_ratio_respected = false;
-            }
 
-            if (!rebeche_ratio_respected) {
-                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_dest_rebeches')); ?></p>');
-                openPopup($('#popup_msg_erreur'), 0);
-                return false;
-            }
+            var min_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
+            var max_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
+
+            var volume_cooperatives = <?php echo json_encode($onglets->getCurrentLieu()->getVolumeAcheteursForMinQuantite()->getRawValue()) ?>;
+            var volume_cave_particuliere = <?php echo $onglets->getCurrentLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
 
             if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_min_quantite')); ?></p>');
@@ -125,6 +144,39 @@
 
             if (parseFloat($('#detail_vol_total_recolte').val()) > max) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_max_quantite')); ?></p>');
+                openPopup($('#popup_msg_erreur'), 0);
+                return false;
+            }
+
+            for(cvi in volume_cooperatives) { 
+                volume = volume_cooperatives[cvi];
+                volume_saisie = 0;
+                var input_cooperative = $(".col_active .caves input[class*='acheteur_cooperatives_"+cvi+"']");
+                if(input_cooperative.length > 0 && input_cooperative.val()) {
+                    volume_saisie = input_cooperative.val();
+                }
+                if(parseFloat(volume_saisie) < truncTotal(parseFloat(volume * min_quantite))) {
+                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                    openPopup($('#popup_msg_erreur'), 0);
+                    return false;
+                }
+                if(parseFloat(volume_saisie) > truncTotal(parseFloat(volume * max_quantite))) {
+                    $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                    openPopup($('#popup_msg_erreur'), 0);
+                    return false;
+                }
+            }
+
+            var volume_cave_saisie = parseFloat($('.col_active #detail_cave_particuliere').val());
+
+            if(volume_cave_saisie < truncTotal(parseFloat(volume_cave_particuliere * min_quantite))) {
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
+                openPopup($('#popup_msg_erreur'), 0);
+                return false;
+            }
+
+            if(volume_cave_saisie > truncTotal(parseFloat(volume_cave_particuliere * max_quantite))) {
+                $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_popup_dest_rebeches')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
                 return false;
             }

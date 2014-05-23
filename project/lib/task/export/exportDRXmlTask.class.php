@@ -50,7 +50,7 @@ EOF;
 
     $nb_exported = 0;
 
-    file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>", FILE_APPEND);
+    file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>\n", FILE_APPEND);
 
     $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     
@@ -68,8 +68,11 @@ EOF;
                 continue;
             }
 
-            if (count($dr->recolte->getAppellations()) == 0) {
+            if (count($dr->recolte->getAppellations()) == 0 && $arguments['destinataire'] == "Civa") {
+              $this->logSection($dr->_id, 'DR Vide');
+            }
 
+            if (count($dr->recolte->getAppellations()) == 0 && $arguments['destinataire'] != "Civa") {
                 continue;
             }
 

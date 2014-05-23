@@ -112,6 +112,8 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
                 $type = 'Recoltant';
             } elseif (array_key_exists('Acheteur', $this->_tiers)) {
                 $type = 'Acheteur';
+            } elseif (array_key_exists('Courtier', $this->_tiers)) {
+                $type = 'Courtier';
             } else {
                 $type = 'MetteurEnMarche';
             }
@@ -124,6 +126,26 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     
     public function getDeclarant() {
         return $this->getTiers();
+    }
+
+    public function getDeclarantVrac() {
+        $declarants = $this->getDeclarantsVrac();
+
+        return current($declarants);
+    }
+
+    public function getDeclarantsVrac() {
+        $declarants = array();
+        $tiers = $this->getTiers();
+
+        if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche']) && $this->_tiers['MetteurEnMarche']->qualite_categorie == 'Negociant') {
+
+            $declarants[$this->_tiers['MetteurEnMarche']->_id] = $this->_tiers['MetteurEnMarche'];
+        }
+
+        $declarants[$tiers->_id] = $tiers;
+
+        return $declarants;
     }
 
     /**

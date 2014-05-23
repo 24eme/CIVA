@@ -2,9 +2,10 @@
 
 abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
+    protected $total_superficie_before;
+    protected $total_volume_before;
 
     public function getConfig() {
-
         return $this->getCouchdbDocument()->getConfigurationCampagne()->get($this->getHash());
     }
 
@@ -26,6 +27,20 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
       return $node->getChildrenNode();
     }
 
+    public function getChildrenNodeSorted() {
+        $items = $this->getChildrenNode();
+        $items_config = $this->getConfig()->getChildrenNode();
+        $items_sorted = array();
+
+        foreach($items_config as $hash => $item_config) {
+            if($this->exist($item_config->getKey())) {
+                $items_sorted[$hash] = $this->get($item_config->getKey());
+            }
+        }
+
+        return $items_sorted;
+    }
+
     public function getProduits() {
         $produits = array();
         foreach($this->getChildrenNode() as $key => $item) {
@@ -41,6 +56,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             $produits = array_merge($produits, $item->getProduitsDetails());
         }
         return $produits;
+    }
+
+    public function getRendementRecoltant() {
+        if ($this->getTotalSuperficie() > 0) {
+            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100), 0);
+        } else {
+            return 0;
+        }
     }
     
     public function getTotalSuperficie($force_calcul = false) {
@@ -58,15 +81,194 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDataByFieldAndMethod('total_cave_particuliere', array($this, 'getSumNoeudWithMethod'), true, array('getTotalCaveParticuliere') );
     }
 
-    public function getDataByFieldAndMethod($field, $method, $force_calcul = false, $parameters = array()) {
-        if (!$force_calcul && $this->issetField($field)) {
-            return $this->_get($field);
+    public function getSuperficieCaveParticuliere() {
+
+        return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
+    }
+
+    public function getVolumeRevendiqueCaveParticuliere() {
+
+        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere(), 2);
+    }
+
+    public function getUsagesIndustrielsCaveParticuliere() {
+        if(!$this->getTotalCaveParticuliere()) {
+
+            return 0;
         }
 
-        if(!empty($parameters))
-            return $this->store($field, $method, $parameters);
+        return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
+    }
 
-        return $this->store($field, $method, array($field));
+    public function getUsagesIndustrielsSurPlace() {
+        if(!$this->getTotalCaveParticuliere()) {
+
+            return $this->getLiesMouts();
+        }
+
+        return $this->getUsagesIndustrielsCaveParticuliere();
+    }
+
+    public function getTotalRebeches() {
+
+            return $this->getDataByFieldAndMethod('total_rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getTotalRebeches', false) );
+    }
+    
+    public function getSurPlaceRebeches() {
+
+        return $this->getDataByFieldAndMethod('rebeches', array($this, 'getSumNoeudWithMethod'), true, array('getSurPlaceRebeches', false) );
+    }
+
+    public function getTotalVolumeVendus() {
+
+        return $this->getTotalVolumeAcheteurs();
+    }
+    
+    public function getLies($force_calcul = false) {
+        if(!$this->canHaveUsagesLiesSaisi()) {
+
+            return $this->getDataByFieldAndMethod('lies', array($this, 'getSumNoeudWithMethod'), $force_calcul, array('getLies') );
+        }
+
+        return $this->_get('lies') ? $this->_get('lies') : 0;
+    }
+
+    public function getLiesMouts() {
+        if(!$this->canHaveUsagesLiesSaisi()) {
+
+            return $this->getSumNoeudWithMethod('getLiesMouts');
+        }
+
+        $volume_mouts = $this->getTotalVolumeAcheteurs('mouts');
+
+        if(!$volume_mouts) {
+
+            return 0;
+        }
+
+        if($this->getTotalCaveParticuliere() > 0) {
+
+            return 0;
+        }
+
+        return $this->getLies();
+    }
+
+    public function getLiesMax($force_calcul = false) {
+
+        return round($this->getTotalCaveParticuliere($force_calcul) + $this->getTotalVolumeAcheteurs('mouts'), 2);
+    }
+
+    public function getDplc($force_calcul = false) {
+        if($this->_get('dplc') && !$force_calcul) {
+
+            return $this->_get('dplc');
+        }  
+
+        if(!$this->getConfig()->hasRendementNoeud()) {
+
+            return $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
+        }
+        
+        return $this->getDataByFieldAndMethod('dplc', array($this, 'findDplc'), $force_calcul);
+    }
+
+    public function getDplcTotal() {
+
+        return $this->getDataByFieldAndMethod('dplc_total', array($this, 'getSumNoeudFields'),true, array('dplc'));
+    }
+
+    public function getUsagesIndustrielsCalcule() {
+
+        return $this->getUsagesIndustriels();
+    }
+
+    public function findDplc() {
+        $dplc_total = $this->getDplcTotal();
+        $dplc = $dplc_total;
+        if ($this->getConfig()->hasRendementNoeud()) {
+            $dplc_rendement = $this->getDplcRendement();
+            if ($dplc_total < $dplc_rendement) {
+                $dplc = $dplc_rendement;
+            }
+        }
+        return $dplc;
+    }
+
+    public function getDplcRendement() {
+        $key = "dplc_rendement";
+        if (!isset($this->_storage[$key])) {
+            $volume_dplc = 0;
+            if ($this->getConfig()->hasRendementNoeud()) {
+                $volume = $this->getTotalVolume();
+                $volume_max = $this->getVolumeMaxRendement();
+                if ($volume > $volume_max) {
+                    $volume_dplc = $volume - $volume_max;
+                } else {
+                    $volume_dplc = 0;
+                }
+            }
+            $this->_storage[$key] = round($volume_dplc, 2);
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getVolumeMaxRendement() {
+            
+        return round(($this->getTotalSuperficie() / 100) * $this->getConfig()->getRendementNoeud(), 2);
+    }
+
+    public function getVolumeRevendique($force_calcul = false) {
+        if($this->_get('volume_revendique') && !$force_calcul) {
+
+            return $this->_get('volume_revendique');
+        }
+        
+        return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'findVolumeRevendique'), $force_calcul);
+    }
+
+    public function getVolumeRevendiqueTotal($force_calcul = false) {
+
+        return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'getSumNoeudFields'), $force_calcul);
+    }
+
+    public function findVolumeRevendique() {
+
+        return round(min($this->getVolumeRevendiqueWithDplc(), $this->getVolumeRevendiqueWithUI()), 2);
+    }
+
+    public function getVolumeRevendiqueWithDplc() {
+        
+        return $this->getTotalVolume() - $this->getDplc();
+    }
+
+    public function getVolumeRevendiqueWithUI() {
+        
+        return $this->getTotalVolume() - ($this->getUsagesIndustriels() - $this->getLiesMouts());
+    }
+
+    public function getUsagesIndustriels($force_calcul = false) {
+        if($this->exist('usages_industriels_calcule') && $this->_get('usages_industriels_calcule') && !$force_calcul) {
+
+            return $this->_get('usages_industriels_calcule');
+        } 
+
+        if($this->_get('usages_industriels') && !$force_calcul) {
+
+            return $this->_get('usages_industriels');
+        }        
+
+        return $this->getDplc() > $this->getLies() ? $this->getDplc() : $this->getLies();
+    }
+
+    public function getUsagesIndustrielsTotal() {
+
+        return $this->getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
+    }
+
+    public function canHaveUsagesLiesSaisi() {
+
+        return false;
     }
 
     protected function getSumNoeudFields($field, $exclude = true) {
@@ -82,26 +284,440 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $sum;
     }
 
-    protected function getSumNoeudWithMethod($method, $exclude = true) {
-        $sum = 0;
-        foreach ($this->getChildrenNode() as $noeud) {
-            if($exclude && $noeud->getConfig()->excludeTotal()) {
+    public function cleanLies() {
+        $this->lies = null;
 
-                continue;
-            }
-
-            $sum += $noeud->$method();
+        foreach($this->getChildrenNode() as $item) {
+            $item->cleanLies();
         }
-        return $sum;
     }
 
+    public function isLiesSaisisCepage() {
+
+        return $this->getDocument()->exist('lies_saisis_cepage') && $this->getDocument()->get('lies_saisis_cepage');
+    }
 
     public function getLibelle() {
 
-        return $this->store('libelle', array($this, 'getInternalLibelle'));
+        return $this->store('libelle', array($this, 'findLibelle'));
     }
 
-    public function getInternalLibelle() {
+    public function removeVolumes() {
+        $this->total_volume = null;
+        $this->volume_revendique = null;
+        $this->dplc = null;
+        $this->usages_industriels = null;
+        $this->lies = null;
+
+        if($this->exist('usages_industriels_saisi')) {
+            $this->remove('usages_industriels_saisi');
+        }
+        
+        if($this->exist('usages_industriels_calcule')) {
+            $this->remove('usages_industriels_calcule');
+        }
+
+        foreach ($this->getChildrenNode() as $children) {
+            $children->removeVolumes();
+        }
+    }
+
+    public function isNonSaisie() {
+        $details = $this->getProduitsDetails();
+
+        if(count($details) == 0) {
+
+            return false;
+        }
+
+        foreach ($this->getProduitsDetails() as $children) {
+            if (!$children->isNonSaisie())
+                return false;
+            
+        }
+        return true;
+    }
+
+
+    public function hasRecapitulatif() {
+
+        return false;
+    }
+
+    public function canCalculVolumeRevendiqueSurPlace() {
+        if(!$this->hasCompleteRecapitulatifVenteDplc()) {
+
+            return false;
+        }
+        foreach($this->getChildrenNode() as $item) {
+            if(!$item->canCalculVolumeRevendiqueSurPlace()) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function canCalculSuperficieSurPlace() {
+        if(!$this->hasCompleteRecapitulatifVenteSuperficie()) {
+
+            return false;
+        }
+        foreach($this->getChildrenNode() as $item) {
+            if(!$item->canCalculSuperficieSurPlace()) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /******* Acheteurs *******/
+
+    public function getDontDplcVendusMax() {
+
+        return round($this->getUsagesIndustriels() - $this->getLies(), 2);
+    }
+
+    public function getTotalDontDplcVendus() {
+        if(!$this->hasRecapitulatifVente()) {
+            
+            return $this->getDataByFieldAndMethod('total_dont_dplc_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontDplcVendus'));
+        }
+
+        return round($this->getTotalDontDplcRecapitulatifVente(), 2);
+    }
+
+    public function getTotalSuperficieVendus() {
+        if(!$this->hasRecapitulatifVente()) {
+            
+            return $this->getDataByFieldAndMethod('total_superficie_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalSuperficieVendus'));
+        }
+
+        return $this->getTotalSuperficieRecapitulatifVente();
+    }
+
+     public function getTotalSuperficieVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatifVente() && $this->acheteurs->exist($type."/".$cvi)) {
+            
+            return $this->acheteurs->get($type)->get($cvi)->superficie;
+        }
+
+        $superficie = null;
+
+        foreach($this->getChildrenNode() as $children) {
+            $superficie += $children->getTotalSuperficieVendusByCvi($type, $cvi);
+        }
+        
+        return $superficie;
+    }
+
+    public function getTotalDontDplcVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatifVente() && $this->acheteurs->exist($type."/".$cvi)) {
+            
+            return $this->acheteurs->get($type)->get($cvi)->dontdplc;
+        }
+
+        $dontdplc = null;
+
+        foreach($this->getChildrenNode() as $children) {
+            $dontdplc += $children->getTotalDontDplcVendusByCvi($type, $cvi);
+        }
+        
+        return $dontdplc;
+    }
+
+    public function hasRecapitulatifVente() {
+
+        return $this->exist('acheteurs') && $this->hasRecapitulatif();
+    }
+
+    public function hasCompleteRecapitulatifVente() {
+
+        return $this->hasCompleteRecapitulatifVenteDplc() && $this->hasCompleteRecapitulatifVenteSuperficie();
+    }
+
+    public function hasNoCompleteRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+            return false;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return false;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getDplc() > 0 && !is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+                if ($this->getTotalSuperficie() > 0 && !is_null($acheteur->superficie)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function hasCompleteRecapitulatifVenteDplc() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getDplc() > 0 && is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function hasCompleteRecapitulatifVenteSuperficie() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getTotalSuperficie() > 0 && is_null($acheteur->superficie)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function getTotalSuperficieRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $total_superficie = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->superficie) {
+                    $total_superficie += $acheteur->superficie;
+                }
+            }
+        }
+
+        return $total_superficie;
+    }
+
+    public function getTotalDontDplcRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $total_dontdplc = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->dontdplc) {
+                    $total_dontdplc += $acheteur->dontdplc;
+                }
+            }
+        }
+
+        return $total_dontdplc;
+    }
+
+    public function isValidRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        return (round($this->getTotalSuperficie(), 2) >= round($this->getTotalSuperficieRecapitulatifVente(), 2) &&
+                round($this->getDplc(), 2) >= round($this->getTotalDontDplcRecapitulatifVente(), 2));
+    }
+
+    public function hasAcheteurs() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $nb_acheteurs = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            $nb_acheteurs += $type_acheteurs->count();
+        }
+
+        return $nb_acheteurs > 0;
+    }
+
+    public function preUpdateAcheteurs() {
+        if ($this->getCouchdbDocument()->canUpdate()) {
+            $this->total_superficie_before = $this->getTotalSuperficie();
+            $this->total_volume_before = $this->getTotalVolume(); 
+        }
+    }
+
+    public function updateAcheteurs() {
+        if(!$this->exist('acheteurs')) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $this->add('acheteurs');
+        $types = array('negoces', 'cooperatives', 'mouts');
+        
+        $unique_acheteur = null;
+        foreach ($types as $type) {
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $cvi => $volume) {
+                $acheteur = $this->acheteurs->add($type)->add($cvi);
+                $acheteur->type_acheteur = $type;
+                $unique_acheteur = $acheteur;
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2) || round($this->getTotalVolume(), 2) != round($this->total_volume_before, 2))) {
+                    $acheteur->dontdplc = null;
+                }
+
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2))) {
+                    $acheteur->superficie = null;
+                }
+
+                if($this->getCouchdbDocument()->canUpdate() && !$this->hasRecapitulatifVente()) {
+                    $acheteur->superficie = $this->getTotalSuperficieVendusByCvi($type, $cvi);
+                    $acheteur->dontdplc = $this->getTotalDontDplcVendusByCvi($type, $cvi);
+                }
+            }
+            $acheteurs_to_remove = array();
+            foreach ($this->acheteurs->get($type) as $cvi => $item) {
+                if (!array_key_exists($cvi, $acheteurs)) {
+                    $acheteurs_to_remove[] = $type."/".$cvi;
+                }
+            }
+
+            foreach($acheteurs_to_remove as $hash) {
+                $this->acheteurs->remove($hash);
+            }
+        }
+        $this->acheteurs->update();
+
+        if ($this->getCouchdbDocument()->canUpdate() && $this->hasSellToUniqueAcheteur()) {
+            $unique_acheteur->superficie = $this->getTotalSuperficie();
+            $unique_acheteur->dontdplc = $this->getDplc();
+        }
+    }
+
+    public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts', $excludeTotal = true) {
+        $key = "volume_acheteurs_" . $type;
+        if (!isset($this->_storage[$key])) {
+            $this->_storage[$key] = array();
+            foreach($this->getChildrenNode() as $children) {
+                if ($excludeTotal && $children->getConfig()->excludeTotal()) {
+                    continue;
+                }
+                $acheteurs = $children->getVolumeAcheteurs($type);
+                foreach ($acheteurs as $cvi => $quantite_vendue) {
+                        if (!isset($this->_storage[$key][$cvi])) {
+                            $this->_storage[$key][$cvi] = 0;
+                        }
+                        if ($quantite_vendue) {
+                            $this->_storage[$key][$cvi] += $quantite_vendue;
+                        }
+                }   
+            }
+        }
+        return $this->_storage[$key];
+    }
+
+    public function getVolumeAcheteur($cvi, $type) {
+        $volume = 0;
+        $acheteurs = $this->getVolumeAcheteurs($type);
+        if (array_key_exists($cvi, $acheteurs)) {
+            $volume = $acheteurs[$cvi];
+        }
+        return $volume;
+    }
+
+
+    public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
+        $key = "total_volume_acheteurs_" . $type;
+        if (!isset($this->_storage[$key])) {
+            $sum = 0;
+            $acheteurs = $this->getVolumeAcheteurs($type);
+            foreach ($acheteurs as $volume) {
+                $sum += $volume;
+            }
+            $this->_storage[$key] = $sum;
+        }
+        
+        return $this->_storage[$key];
+    }
+
+    public function getTotalVolumeForMinQuantite() {
+        
+        return round($this->getTotalVolume() - $this->getTotalVolumeAcheteurs('negoces'), 2);
+    }
+
+    public function getTotalCaveParticuliereForMinQuantite() {
+
+        return round($this->getTotalCaveParticuliere() + $this->getTotalVolumeAcheteurs('mouts'), 2);
+    }
+
+    public function getVolumeAcheteursForMinQuantite() {
+        
+        return $this->getVolumeAcheteurs('cooperatives');
+    }
+
+    public function hasSellToUniqueAcheteur() {
+        if ($this->getTotalCaveParticuliere() > 0) {
+            return false;
+        }
+        $vol_total_cvi = array();
+        $acheteurs = array();
+        $types = array('negoces', 'cooperatives', 'mouts');
+        foreach ($types as $type) {
+            foreach ($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+                if (!isset($vol_total_cvi[$type . '_' . $cvi])) {
+                    $vol_total_cvi[$type . '_' . $cvi] = 0;
+                }
+                $vol_total_cvi[$type . '_' . $cvi] += $volume;
+            }
+        }
+        if (count($vol_total_cvi) != 1) {
+            return false;
+        }
+        return true;
+    }
+    
+    public function getAcheteursArray() {
+        $acheteurs = array();
+        $types = array('negoces', 'cooperatives', 'mouts');
+        foreach ($types as $type) {
+            foreach ($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+                if (!isset($acheteurs[$type . '_' . $cvi])) {
+                    $acheteurs[$type . '_' . $cvi] = 0;
+                }
+                $acheteurs[$type . '_' . $cvi] += $volume;
+            }
+        }        
+        return $acheteurs;
+    }
+
+    /******* Fin Acheteurs *******/
+
+    protected function findLibelle() {
 
         return $this->getConfig()->getLibelle();
     }
@@ -118,4 +734,40 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return ($this->_get($field) || $this->_get($field) === 0);
     }
 
-}
+    protected function getDataByFieldAndMethod($field, $method, $force_calcul = false, $parameters = array()) {
+        if (!$force_calcul && $this->issetField($field)) {
+            return $this->_get($field);
+        }
+
+        if(!empty($parameters)){
+            return $this->store($field, $method, $parameters);
+        }
+
+        return $this->store($field, $method, array($field));
+    }
+
+    protected function getSumNoeudWithMethod($method, $exclude = true) {
+        $sum = 0;
+        foreach ($this->getChildrenNode() as $noeud) {
+            if($exclude && $noeud->getConfig()->excludeTotal()) {
+
+                continue;
+            }
+
+            $sum += $noeud->$method();
+        }
+        return $sum;
+    }
+
+    public function cleanAllNodes() {   
+        $keys_to_delete = array();
+        foreach($this->getChildrenNodeSorted() as $item) {
+            $item->cleanAllNodes();
+
+            if(!count($item->getProduitsDetails())){
+                $this->remove($item->getKey());
+            }
+        }
+    }
+
+} 

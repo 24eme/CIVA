@@ -129,6 +129,47 @@ EOF;
                 continue;
             }
 
+            if($tiers->exploitant->adresse == $tiers->siege->adresse && 
+               $tiers->exploitant->code_postal == $tiers->siege->code_postal && 
+               $tiers->exploitant->commune == $tiers->siege->commune) {
+                $tiers->exploitant->adresse = null;
+                $tiers->exploitant->code_postal = null;
+                $tiers->exploitant->commune = null;
+            }
+
+            if(!$tiers->exploitant->sexe && $tiers->exploitant->nom == $tiers->nom) {
+                $tiers->exploitant->nom = null;
+            }
+
+            if(!$tiers->exploitant->telephone == $tiers->telephone) { 
+                $tiers->exploitant->telephone = null;
+            }
+
+            if($tiers->type != "MetteurEnMarche" && $tiers->type != "Courtier") {
+                $compte = _CompteClient::getInstance()->retrieveByLogin($tiers->cvi, acCouchdbClient::HYDRATE_JSON);
+                $met = null;
+                foreach($compte->tiers as $t) {
+                    if($t->type == 'MetteurEnMarche') {
+                        $met = _TiersClient::getInstance()->find($t->id, acCouchdbClient::HYDRATE_JSON);
+                    }
+                }
+                if($met) {
+                    if($met->telephone == $tiers->telephone) {
+                        $tiers->telephone = null;
+                    }
+
+                    if($met->exploitant->telephone == $tiers->exploitant->telephone) {
+                        $tiers->exploitant->telephone = null;
+                    }
+
+                    if($met->fax == $tiers->fax) {
+                        $tiers->fax = null;
+                    }
+                    
+                    $tiers_modifies[$met->_id] = $met;
+                }
+            }
+
             $tiers_object = new sfCouchdbJsonNative($tiers);
             $tiers_array = $tiers_object->toFlatArray();
 
@@ -160,7 +201,7 @@ EOF;
 
             if($nb_diff > 0) {
                 if($options['flag_revision']) {
-                    $tiers_object = acCouchdbClient::getInstance()->find($tiers->_id);
+                    $tiers_object = acCouchdbManager::getClient()->find($tiers->_id);
                     $tiers_object->db2->import_revision = $tiers_object->_rev;
                     $tiers_object->save();
                 }

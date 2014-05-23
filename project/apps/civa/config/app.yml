@@ -3,16 +3,60 @@
 
 # default values
 all:
+  configuration:
+    vrac:
+      delai_suppression: 5
+      etapes:
+        soussignes: 1
+        produits: 2
+        validation: 3
+      produits_statiques:
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:
+          position: 1
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_PB/:
+          position: 2
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_ED/:
+          position: 3
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI/:
+          position: 4
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_PG/:
+          position: 5
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_MU/:
+          position: 6
+          supprimable: 0
+        declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_GW/:
+          position: 7
+          supprimable: 0
+        declaration/certification/genre/appellation_PINOTNOIR/mention/lieu/couleur/cepage_PN/:
+          position: 8
+          supprimable: 0
+        declaration/certification/genre/appellation_PINOTNOIRROUGE/mention/lieu/couleur/cepage_PR/:
+          position: 9
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_BL/:
+          position: 10
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
+          position: 11
+          supprimable: 0
   etapes:
     items:
       mon_espace_civa:
-        url: "@mon_espace_civa"
+        url: "@mon_espace_civa_dr"
         next_is_new_etape: exploitation
       exploitation_message:
         url: "@exploitation_message"
-      exploitation_administratif:
+      notice_evolutions:
+        url: "@dr_notice_evolutions"
+      exploitation:
         url: "@exploitation_administratif"
-      exploitation_acheteurs:
+        next_is_new_etape: repartition
+      repartition:
         url: "@exploitation_acheteurs"
       exploitation_lieu:
         url: "@exploitation_lieu"
@@ -26,7 +70,7 @@ all:
         url: "@validation"
       confirmation:
         url: "@confirmation"
-    orders: [mon_espace_civa,exploitation_message,exploitation_administratif, exploitation_acheteurs, exploitation_lieu, recolte, exploitation_autres, validation, confirmation, ds]
+    orders: [mon_espace_civa, exploitation_message, notice_evolutions, exploitation, repartition, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
   css_class_field_error: "erreur"
 
 

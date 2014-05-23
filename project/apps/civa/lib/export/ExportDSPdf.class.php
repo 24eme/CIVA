@@ -15,11 +15,14 @@ class ExportDSPdf extends ExportDocument {
     protected $agrega_total;
     protected $ds_principale;
     protected $dss;
+    protected $annexe;
 
-    public function __construct($ds_principale, $partial_function, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($ds_principale, $partial_function, $annexe = true, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
         if(!$ds_principale->isDSPrincipale()) {
             throw new sfException("Ce n'est pas la DS principale");
         }
+
+        $this->annexe = $annexe;
 
         $this->type = $type;
         $this->partial_function = $partial_function;
@@ -28,10 +31,26 @@ class ExportDSPdf extends ExportDocument {
 
         $this->ds_principale = $ds_principale;
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
-
+        $this->trieDSSForPDF();
+        
         $this->init($filename);
     }
 
+    protected function trieDSSForPDF() {
+        $dss_sorted = array();
+        foreach ($this->dss as $key => $ds) {
+            if($ds->isDsPrincipale()){
+                $dss_sorted[] = $ds;
+            }
+        }
+        foreach ($this->dss as $key => $ds) {
+            if(!$ds->isDsPrincipale()){
+                $dss_sorted[] = $ds;
+            }
+        }
+        $this->dss = $dss_sorted;
+    }
+    
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
             $this->create();
@@ -42,7 +61,11 @@ class ExportDSPdf extends ExportDocument {
     protected function init($filename = null) {
         if($this->ds_principale->isValideeTiers()) {
             $date_validee = new DateTime($this->ds_principale->validee);
-            $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
+            if($this->ds_principale->isDateDepotMairie()){
+                $validee = 'Déposée en mairie le '.$date_validee->format('d/m/Y');
+            }else{
+                $validee = 'Déclaration validée le '.$date_validee->format('d/m/Y');
+            }
         }
 
         if($this->ds_principale->isValideeEtModifiee()) {
@@ -60,11 +83,11 @@ class ExportDSPdf extends ExportDocument {
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
-
+            
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
 
         if ($this->type == 'html') {
-          $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
+           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }else {
           $this->document = new PageablePDF($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }
@@ -107,10 +130,15 @@ class ExportDSPdf extends ExportDocument {
                 }
             }
             $this->createMainByDS($ds);
-            $this->createAnnexeByDS($ds);
+            
+            if($this->annexe) {
+                $this->createAnnexeByDS($ds);
+            }
         }
 
-        $this->createRecap();
+        if($this->annexe) {
+            $this->createRecap();
+        }
     }
 
     protected function createMainByDS($ds) {

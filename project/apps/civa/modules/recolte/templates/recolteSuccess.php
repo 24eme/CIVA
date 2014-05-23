@@ -1,14 +1,12 @@
-<?php include_partial('global/etapes', array('etape' => 2)) ?>
-<?php include_partial('global/actions', array('etape' => 2, 'help_popup_action' => $help_popup_action)) ?>
+<?php include_partial('global/etapes', array('etape' => 3)) ?>
+<?php include_partial('global/actions', array('etape' => 3, 'help_popup_action' => $help_popup_action)) ?>
 
+<?php if ($sf_user->hasFlash('msg_info')): ?>
+    <p class="message"><?php echo $sf_user->getFlash('msg_info'); ?></p>
+<?php endif; ?>
 
 <!-- #principal -->
 <p class="intro_declaration_recolte"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
-
-
-<?php if ($sf_user->hasFlash('msg_info')): ?>
-    <p><?php echo $sf_user->getFlash('msg_info'); ?></p>
-<?php endif; ?>
 
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 
@@ -57,7 +55,7 @@
                     <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                 <?php endif; ?>
                 <?php if ($onglets->hasNextCepage()): ?>
-                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage précédent" /></a></li>
+                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
                         <?php endif; ?>
             </ul>
         </div>

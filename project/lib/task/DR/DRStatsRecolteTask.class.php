@@ -40,6 +40,7 @@ EOF;
         $stats['volume_revendique'] = 0;
         $stats['usages_industriels'] = 0;
         $stats['appellations'] = array();
+        $n=0;
         foreach ($dr_ids as $id) {
             if (!preg_match("/^DR-(67|68)/", $id)) {
 
@@ -48,15 +49,19 @@ EOF;
 
             $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
 
-            if(!$dr->validee) {
+            if(!isset($dr->validee)) {
 
                 continue;
             }
+
+            $n++;
 
             if(!isset($dr->recolte->certification->genre)) {
 
                 continue;
             }
+
+            
 
             foreach($dr->recolte->certification->genre as $appellation_key => $appellation) {
                 if (!preg_match("/^appellation/", $appellation_key)) {
@@ -79,9 +84,9 @@ EOF;
                     }
 
                     $stats['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels_calcule;
+                    $stats['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
                     $stats['volume_revendique'] += $lieu->volume_revendique;
-                    $stats['usages_industriels'] += $lieu->usages_industriels_calcule;
+                    $stats['usages_industriels'] += $lieu->usages_industriels;
 
                     foreach($lieu as $couleur_key => $couleur) {
                         if (!preg_match("/^couleur/", $couleur_key)) {
@@ -125,5 +130,7 @@ EOF;
         }
 
         echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
+        
+        echo sprintf("NB_DR;%s",$n)."\n";
     }
 }

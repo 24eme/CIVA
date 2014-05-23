@@ -18,71 +18,70 @@ class declarationActions extends EtapesActions {
         $dr_data = $this->getRequestParameter('dr', null);
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                $dr = $this->getUser()->getDeclaration();
+                try {
+                    if($dr->etape) {
+                        return $this->redirectToEtape($dr->etape);
+                    }
+                } catch (Exception $e) {
+
+                }
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDeclaration();
-                $this->redirect('@mon_espace_civa');
+                
+                return $this->redirect('@mon_espace_civa_dr');
             } elseif ($dr_data['type_declaration'] == 'visualisation') {
                 $this->redirect('@visualisation?annee=' . $this->getUser()->getCampagne());
             } elseif ($dr_data['type_declaration'] == 'vierge') {
-                $doc = new DR();
-                $doc->set('_id', 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne());
-                $doc->cvi = $tiers->cvi;
-                $doc->campagne = $this->getUser()->getCampagne();
-                $doc->declaration_insee = $tiers->declaration_insee;
-                $doc->declaration_commune = $tiers->declaration_commune;
-                $doc->identifiant = $tiers->cvi;
-                $doc->storeDeclarant();
+                $doc = DRClient::getInstance()->createDeclaration($tiers, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+        
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
                 $this->redirect('@visualisation_avant_import');
             } elseif ($dr_data['type_declaration'] == 'import') {
                 $acheteurs = array();
-                $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs);
-                $dr->declaration_insee = $tiers->declaration_insee;
-                $dr->declaration_commune = $tiers->declaration_commune;
+                $dr = DRClient::getInstance()->createFromCSVRecoltant($this->getUser()->getCampagne(), $tiers, $acheteurs, $this->getUser()->isSimpleOperateur());
                 $dr->save();
                 $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             } elseif ($dr_data['type_declaration'] == 'precedente') {
                 $old_doc = $tiers->getDeclaration($dr_data['liste_precedentes_declarations']);
                 if (!$old_doc) {
                     throw new Exception("Bug: " . $dr_data['liste_precedentes_declarations'] . " not found :()");
                 }
-                $doc = clone $old_doc;
-                $doc->_id = 'DR-' . $tiers->cvi . '-' . $this->getUser()->getCampagne();
-                $doc->campagne = $this->getUser()->getCampagne();
-                $doc->declaration_insee = $tiers->declaration_insee;
-                $doc->declaration_commune = $tiers->declaration_commune;
-                $doc->removeVolumes();
-                $doc->remove('validee');
-                $doc->remove('modifiee');
-                $doc->remove('etape');
-                $doc->remove('utilisateurs');
-                $doc->remove('import_db2');
-                $doc->storeDeclarant();
-                $doc->update();
+                $doc = DRClient::getInstance()->createDeclarationClone($old_doc, $tiers, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
                 $doc->save();
-                $this->redirectByBoutonsEtapes(array('valider' => 'next'));
+                
+                return $this->redirectByBoutonsEtapes(array('valider' => 'next'));
             }
         }
-        $this->redirect('@mon_espace_civa');
+        $this->redirect('@mon_espace_civa_dr');
     }
 
     public function executeDownloadNotice() {
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_recolte.pdf", "aide recolte.pdf");
     }
 
-    protected function renderPdf($path, $filename) {
-        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
-        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
-        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
-        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
-        $this->getResponse()->setHttpHeader('Pragma', '');
-        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
-        $this->getResponse()->setHttpHeader('Expires', '0');
-        return $this->renderText(file_get_contents($path));
+    public function executeNoticeEvolutions(sfWebRequest $request) {
+        $this->setCurrentEtape('notice_evolutions');
+
+        if($this->getUser()->isSimpleOperateur()) {
+
+            return $this->redirectToNextEtapes();
+        }
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $boutons = $this->getRequestParameter('boutons', null);
+            if ($boutons && in_array('previous', array_keys($boutons))) {
+                
+                return $this->redirect('@mon_espace_civa_dr'); 
+            }   
+            
+            return $this->redirectByBoutonsEtapes();
+        }
     }
 
     /**
@@ -140,30 +139,11 @@ class declarationActions extends EtapesActions {
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
 	        $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
+            if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+                $this->dr->add('en_attente_envoi', true);
+            }
 	        $this->dr->save();
 	        $this->getUser()->initCredentialsDeclaration();
-	      
-	        $mess = 'Bonjour ' . $tiers->nom . ',
-
-Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '. Pour la visualiser rendez-vous sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
-
-Cordialement,
-
-Le CIVA';
-
-                //send email
-
-            $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
-                                                       $this->getUser()->getCompte()->email,
-                                                       'CIVA - Validation de votre déclaration de récolte', $mess);
-                
-            if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
-                try {
-                    $this->getMailer()->send($message);
-                } catch (Exception $e) {
-                    $this->getUser()->setFlash('error', 'Erreur de configuration : Mail de confirmation non envoyé, veuillez contacter CIVA');
-                }
-            }
 
             return $this->redirectByBoutonsEtapes();
         }
@@ -173,6 +153,11 @@ Le CIVA';
     private function updateUrlLog($array) {
       $ret = array();
       foreach ($array as $log) {
+        if(!isset($log['url_log_param'])) {
+            $log['url_log'] = false;
+            array_push($ret, $log);
+            continue;
+        }
         if (!isset($log['url_log_page']))
           $log['url_log_page'] = 'recolte';
         $log['url_log'] = $this->generateUrl($log['url_log_page'], $log['url_log_param']);
@@ -194,7 +179,7 @@ Le CIVA';
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
         $this->getUser()->getAttributeHolder()->remove('log_vigilance');
 
-        $this->getUser()->setFlash('flash_message', $flash_messages[$id]['log']);
+        $this->getUser()->setFlash('flash_message', $flash_messages[$id]['info']);
         $this->redirect($flash_messages[$id]['url_log']);
     }
 
@@ -206,8 +191,15 @@ Le CIVA';
         $this->help_popup_action = "help_popup_visualisation";
         $tiers = $this->getUser()->getTiers('Recoltant');
         $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+
+        if($annee + 4 < $this->getUser()->getCampagne()) {
+            
+            $this->forward404("Cette DR n'est plus accessible");
+        }
+
         $key = 'DR-' . $tiers->cvi . '-' . $annee;
         $this->dr = acCouchdbManager::getClient()->find($key);
+        $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne); 
         $this->forward404Unless($this->dr);
 
         try {
@@ -227,66 +219,39 @@ Le CIVA';
      */
     public function executeConfirmation(sfWebRequest $request) {
         $this->setCurrentEtape('confirmation');
+        if($this->getUser()->isSimpleOperateur()) {
+
+            return $this->redirect('mon_espace_civa_dr');
+        }
+        $this->dr = $this->getUser()->getDeclaration();
+        $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
         }
     }
+    
+    public function executeSendPdfAcheteurs(sfWebRequest $request) {
+        $tiers = $this->getUser()->getTiers('Recoltant');
+        $dr = $this->getUser()->getDeclaration();        
+        
+        $annee = $this->getRequestParameter('annee', null);
+        
+        $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
+        
+        $this->sendMailAcheteursReport = $this->mailerManager->sendAcheteursMails();
+    }
+
+    
 
     public function executeSendPdf(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getUser()->getDeclaration();
-
-        $document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'));
-        $document->generatePDF();
-
-        $pdfContent = $document->output();
         $annee = $this->getRequestParameter('annee', null);
 
-        // si l'on vient de la page de visualisation
-        if($this->getRequestParameter('message', null) == "custom" && !is_null(($annee)))
-        {
-            $mess = 'Bonjour ' . $tiers->nom . ',
-
-Vous trouverez ci-joint votre déclaration de récolte pour l\'année ' . $annee . '.
-
-Cordialement,
-
-Le CIVA';
-
-        }else{
-
-        $mess = 'Bonjour ' . $tiers->nom . ',
-
-Vous trouverez ci-joint votre déclaration de récolte que vous venez de valider.
-
-Cordialement,
-
-Le CIVA';
-
-        }
-
-        //send email
-
-
-        $message = Swift_Message::newInstance()
-                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                ->setTo($this->getUser()->getCompte()->email)
-                ->setSubject('CIVA - Votre déclaration de récolte')
-                ->setBody($mess);
-
-
-        $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
-        $message->attach($attachment);
+        $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
         
-        try {
-            $this->getMailer()->send($message);
-        } catch (Exception $e) {
-
-            $this->emailSend = false;
-        }
-        
-        $this->emailSend = true;
+        $this->emailSend = $this->mailerManager->sendMail(true);       
     }
 
     /**
@@ -324,13 +289,13 @@ Le CIVA';
         }
 
         $this->getUser()->initCredentialsDeclaration();
-        $this->redirect('@mon_espace_civa');
+        $this->redirect('@mon_espace_civa_dr');
     }
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
-        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs);
+        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
         $this->visualisation_avant_import = true;
     }
 
@@ -342,7 +307,7 @@ Le CIVA';
         }
         if ($boutons && in_array('previous', array_keys($boutons))) {
             $this->getUser()->removeDeclaration();
-            $this->redirect('@mon_espace_civa');
+            $this->redirect('@mon_espace_civa_dr');
         } elseif ($boutons && in_array('next', array_keys($boutons))) {
             $this->redirectToNextEtapes();
         }
@@ -351,4 +316,69 @@ Le CIVA';
     public function executeConfirmationMailDR(sfWebRequest $request) {
 
     }
+    
+    public function executeFeedBack(sfWebRequest $request) {
+        $this->form = new FeedBackForm();
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $message = $this->form->getValue('message');
+
+        /*$mess = 'Bonjour ' . $this->tiers->nom . ',
+
+Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
+
+Cordialement,
+
+Le CIVA';*/
+
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getUser()->getDeclarant()->cvi;
+
+        $to = sfConfig::get('app_email_feed_back');
+        $this->emailSend = true;
+        $mail = Swift_Message::newInstance()
+                ->setFrom($this->getUser()->getCompte()->email)
+                ->setTo($to)
+                ->setSubject("CIVA - Retour d'expérience sur la Déclaration de Récolte")
+                ->setBody($message);
+
+        try {
+            if(is_array($to) && count($to) < 1) {
+                throw new sfException("emails not configure in app.yml email->feed_back");
+            }
+
+            $this->getMailer()->send($mail);
+        } catch (Exception $e) {
+
+            $this->emailSend = false;
+        }
+
+        return $this->redirect('recolte_feed_back_confirmation');
+    }
+
+    public function executeFeedBackConfirmation(sfWebRequest $request) {
+
+    }
+
+    protected function renderPdf($path, $filename) {
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path));
+    }
+    
 }

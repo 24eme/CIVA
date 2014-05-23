@@ -11,6 +11,19 @@ class Configuration extends BaseConfiguration {
 
         return $this->recolte->getProduitsDetails();
     }
+    
+    public function getAppellationsLieuDit()
+    {
+    	$result = array();
+    	foreach ($this->recolte->getCertifications() as $certification) {
+    		foreach ($certification->getAppellations() as $key => $appellation) {
+    			if ($appellation->exist('detail_lieu_editable') && $appellation->detail_lieu_editable) {
+    				$result[$key] = $appellation->libelle;
+    			}
+    		}
+    	}
+    	return $result;
+    }
 
     public function getArrayAppellationsMout() {
         $appellations = $this->getRecolte()->getNoeudAppellations();
@@ -125,4 +138,31 @@ class Configuration extends BaseConfiguration {
       return array("ids" => $appid.'/'.$lieuid.'/'.$cepageid, "hash" => $prodhash);
     }
 
+    public function getProduitsLibellesByCodeDouane() {
+        $produits = array();
+        foreach($this->recolte->certification->genre->getAppellations() as $appellation) {
+          foreach($appellation->getLieux() as $lieu) {
+            foreach($lieu->getCouleurs() as $couleur) {
+              foreach($couleur->getCepages() as $cepage) {
+                $produits[trim($cepage->getDouane()->getFullAppCode(null).$cepage->getDouane()->getCodeCepage())] = preg_replace("/[ ]+/", " ", sprintf('%s %s %s %s', $appellation->getLibelle(), $lieu->getLibelle(), $couleur->getLibelle(), $cepage->getLibelle()));
+                  if ($cepage->hasVtsgn()) {
+                    $produits[trim($cepage->getDouane()->getFullAppCode("VT").$cepage->getDouane()->getCodeCepage())] = preg_replace("/[ ]+/", " ",sprintf('%s %s %s %s %s', $appellation->getLibelle(), $lieu->getLibelle(), $couleur->getLibelle(), $cepage->getLibelle(), "VT"));
+                    $produits[trim($cepage->getDouane()->getFullAppCode("VT").$cepage->getDouane()->getCodeCepage())] = preg_replace("/[ ]+/", " ",sprintf('%s %s %s %s %s', $appellation->getLibelle(), $lieu->getLibelle(), $couleur->getLibelle(), $cepage->getLibelle(), "SGN"));
+                  }
+              }
+              if ($lieu->hasManyCouleur()) {
+                $produits[trim($couleur->getDouane()->getFullAppCode(null))] = preg_replace("/[ ]+/", " ",sprintf('%s %s %s Total', $appellation->getLibelle(), $lieu->getLibelle(), $couleur->getLibelle(), "Total", ""));
+              }
+          }
+          if (!$lieu->hasManyCouleur() && $appellation->hasManyLieu()) {
+              $produits[trim($lieu->getDouane()->getFullAppCode(null))] = preg_replace("/[ ]+/", " ",sprintf('%s %s Total', $appellation->getLibelle(), $lieu->getLibelle()));
+          }
+        }
+        if (!$appellation->hasManyLieu() && !$appellation->getLieux()->lieu->hasManyCouleur()) {
+            $produits[trim($appellation->getDouane()->getFullAppCode(null))] = preg_replace("/[ ]+/", " ",sprintf('%s Total', $appellation->getLibelle()));
+        }
+      }
+
+      return $produits;
+    } 
 }

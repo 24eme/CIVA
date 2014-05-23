@@ -13,15 +13,20 @@
             <!-- fin #acheteurs_caves -->
         </div>
     </div>
+    <?php $boutons = array('retour','previsualiser'); ?>
 
-    <?php if($dr->isValideeTiers()): ?>
-        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser','email'))) ?>
-    <?php else: ?>
-        <?php include_partial('global/boutons', array('display' => array('retour','previsualiser'))) ?>
+    <?php if($sf_user->getCampagne() == $dr->campagne && $dr->isValideeTiers()): ?>
+        <?php array_push($boutons, 'email') ?>
     <?php endif; ?>
 
+    <?php if($sf_user->getCampagne() == $dr->campagne && $dr->isValideeTiers() && $has_import): ?>
+        <?php array_push($boutons, 'email_acheteurs') ?>
+    <?php endif; ?>
+
+    <?php include_partial('global/boutons', array('display' => $boutons)) ?>
 
 </form>
 <!-- fin #principal -->
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
+<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee)) ?>
 <?php include_partial('envoiMailDR', array('annee' => $annee)) ?>

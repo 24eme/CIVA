@@ -59,10 +59,25 @@
 
     <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide"></a></p>
     <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide"></a></p>
-<?php if ($onglets->getCurrentLieu()->getConfig()->hasRendement()): ?>
+    <?php if ($onglets->getCurrentLieu()->getConfig()->existRendement()): ?>
         <ul class="vol_revendique_dplc">
             <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
-            <li>Usages industriels <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
+            <li>Usages industriels <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_usages_industriels" title="Message aide"></a></li>
         </ul>
-<?php endif; ?>
+    <?php endif; ?>
+    <ul>
+        <?php if ($onglets->getCurrentLieu()->getConfig()->existRendementAppellation() || $onglets->getCurrentLieu()->getConfig()->existRendementCouleur()):?>
+        <li>
+            Dépassement
+            <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a></li>
+        <?php endif; ?>
+        <?php if ($onglets->getCurrentCepage()->getConfig()->existRendementCepage()):?>
+        <li>
+            Dépassement Cépage 
+            <?php if (!($onglets->getCurrentLieu()->getConfig()->existRendementAppellation() || $onglets->getCurrentLieu()->getConfig()->existRendementCouleur())): ?>
+            <a href="" class="msg_aide" rel="help_popup_DR_dplc" title="Message aide"></a>
+            <?php endif; ?>
+        </li>
+        <?php endif; ?>
+    </ul>
 </div>

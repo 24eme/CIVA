@@ -19,6 +19,12 @@ $(document).ready(function()
     //navOngletsStock();
     initMsgAideDS();
     choixPrecDS();
+
+    if(!appDS.length) {
+
+        return;
+    }
+
     initDSSommesCol();
     initLieuxStockage();
     initLieuxStockageNeant();
@@ -51,6 +57,8 @@ $(document).ready(function()
     initRecapStocks();
 	
 	scrollLieuxStockage();
+        
+    initDatepicker();
 });
 
 
@@ -379,6 +387,20 @@ var initLieuxStockageNeant = function()
         } 
     });
 }
+
+var initDatepicker = function(){
+    
+    $(".datepicker").datepicker({
+        showOn: "button",
+        buttonImage: "/images/pictos/pi_calendrier.png",
+        buttonImageOnly: true,
+        dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+        monthNames: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"],
+        dateFormat: 'dd/mm/yy',
+        firstDay:1
+});
+};
+
 
 /**
  * Messages d'aide

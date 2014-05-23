@@ -10,19 +10,24 @@ class Acheteur extends BaseAcheteur {
         return "negoces";
     }
 
-    public function getSiret() {
+    public function isDeclarantDRAcheteur() {
 
-        return null;
-    }
-
-    public function setSiret($value) {
-
-        return null;
+        return $this->acheteur_dr == 1;
     }
 
     public function isDeclarantStock() {
 
         return in_array($this->qualite, array(self::ACHETEUR_COOPERATIVE, self::ACHETEUR_NEGOCAVE));
+    }
+
+    public function isDeclarantContratForSignature() {
+
+        return true;
+    }
+
+    public function isDeclarantContratForResponsable() {
+
+        return true;
     }
 
     public function getIdentifiant() {

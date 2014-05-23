@@ -13,8 +13,41 @@ $(document).ready( function()
 	rolloverImg();
 	videInputFocus();
 	initNettoyageChamps();
-	hauteurEgale('#logo, #titre_rubrique, #acces_directs');
+	hauteurEgale('.bloc_acceuil_content');
+	initJSTitle();
+	initFlashMessage();
 });
+
+var initFlashMessage = function() {
+	$('p.flash_message').delay(5000).animate({
+opacity: 0
+}, 600);
+}
+
+var initJSTitle = function() {
+	$('.jstitle').mousemove(function(e) {
+		if ($('#jstitle').length == 0) {
+			$('body').append('<div id="jstitle" style="text-align: center; display:none; position: absolute; z-index: 888; border: 1px solid black;padding:5px;"></div>');
+		}
+		if ($(this).attr('title')) {
+			title = $(this).attr('title').replace(/ \-\- /g,'<br/>').replace(/^([^<]+)<br/, '<b>$1</b><br');
+			if ($(this).hasClass('phototitle') && !title.match(/<img src/)) {
+				title = '<img src=\'' + $(this).children('.urlphoto')[0].href.replace(/\/([^\/]+)$/,"/depute/photo/$1/70") + '\'/><br/>' + title;
+			}
+			$(this).attr('jstitle', title);
+			$(this).attr('title', '');
+		}
+		$('#jstitle').html($(this).attr('jstitle'));
+		$('#jstitle').css('background-color', "white");
+		$('#jstitle').css('top', e.pageY+10);
+		$('#jstitle').css('left', e.pageX+10);
+		$('#jstitle').css('display', 'block');
+	});
+	$('.jstitle').mouseout(function() {
+		$(this).attr('title', $(this).attr('jstitle'));
+		$('#jstitle').css('display', 'none');
+	});
+}
 
 /**
  * Rollover
@@ -66,6 +99,45 @@ var videInputFocus = function()
 };
 
 /**
+ * Vérifie la "propreté" du champ
+ * $(champ).verifNettoyageChamp();
+ ******************************************/
+$.fn.verifNettoyageChamp = function()
+{
+	var champ = $(this);
+	var val = champ.attr('value');
+	var float = champ.hasClass('num_float');
+	
+	// Si quelque chose a été saisi
+	if(val)
+	{
+		// Remplacement de toutes les virgules par des points
+		if(val.indexOf(',') != -1) val = val.replace(',', '.');
+		
+		// Si un point a été saisi sans chiffre
+		if(val.indexOf('.') != -1 && val.length == 1) val = ''; //val = '0';
+		
+		// Un nombre commençant par 0 peut être interprété comme étant en octal
+		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
+		
+		// Comparaison nombre entier / flottant
+		/*if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
+		else val = parseInt(val);*/
+		
+		val = parseFloat(val).toFixed(2);
+	}
+	// Si rien n'a été saisi
+	//else val = 0;
+	else val = '';
+	
+	// Si ce n'est pas un nombre (ex : copier/coller d'un texte)
+	if(isNaN(val)) val = ''; //val = 0;
+
+	champ.attr('value', val);
+};
+
+
+/**
  * Nettoie les champs
  ******************************************/
 var initNettoyageChamps = function()
@@ -114,47 +186,6 @@ var initNettoyageChamps = function()
 	});
 };
 
-
-
-/**
- * Vérifie la "propreté" du champ
- * $(champ).verifNettoyageChamp();
- ******************************************/
-$.fn.verifNettoyageChamp = function()
-{
-	var champ = $(this);
-	var val = champ.attr('value');
-	var float = champ.hasClass('num_float');
-	
-	// Si quelque chose a été saisi
-	if(val)
-	{
-		// Remplacement de toutes les virgules par des points
-		if(val.indexOf(',') != -1) val = val.replace(',', '.');
-		
-		// Si un point a été saisi sans chiffre
-		if(val.indexOf('.') != -1 && val.length == 1) val = ''; //val = '0';
-		
-		// Un nombre commençant par 0 peut être interprété comme étant en octal
-		if(val.indexOf('0') == 0 && val.length > 1) val = val.substring(1);
-		
-		// Comparaison nombre entier / flottant
-		/*if(float || parseInt(val) != parseFloat(val)) val = parseFloat(val).toFixed(2);		
-		else val = parseInt(val);*/
-		
-		val = parseFloat(val).toFixed(2);
-	}
-	// Si rien n'a été saisi
-	//else val = 0;
-	else val = '';
-	
-	// Si ce n'est pas un nombre (ex : copier/coller d'un texte)
-	if(isNaN(val)) val = ''; //val = 0;
-
-	champ.attr('value', val);
-};
-
-
 /**
  * Colonnes de même hauteur
  ******************************************/
@@ -196,6 +227,18 @@ function var_dump(arr,level)
 		dumped_text = "===>"+arr+"<===("+typeof(arr)+")";
 	}
 	console.log(dumped_text);
+};
+
+/**
+ * Object.keys - Fixe IE < 9 
+ */
+Object.keys = Object.keys || function(o) { 
+    var result = []; 
+    for(var name in o) { 
+        if (o.hasOwnProperty(name)) 
+          result.push(name); 
+    } 
+    return result; 
 };
 
 

@@ -13,10 +13,6 @@
 	position: relative;
 }
 
-#principal {
-	
-}
-
 #application_dr {
 	background: #f1f1f1;
 	clear: both;
@@ -45,31 +41,6 @@
 	color: #666;
 	font-size: 14px;
 	margin: 0px 0 10px;
-}
-
-.titre_principal {
-	background: #acb701;
-	color: #f1f1f1;
-	display: inline-block; !
-	display: inline;
-	font-size: 20px;
-	font-weight: normal;
-	line-height: 26px;
-	margin: 0 0 0 20px;
-	padding: 0 10px;
-	zoom: 1;
-}
-
-.titre_section {
-	background: #dcdfa9;
-	color: #848c03;
-	display: inline-block; !
-	display: inline;
-	font-size: 16px;
-	font-weight: normal;
-	line-height: 25px;
-	padding: 0 10px;
-	zoom: 1;
 }
 
 .contenu_section {
@@ -334,13 +305,96 @@ td.premiere_colonne {
 	width: 202px;
 }
 
+table.table_listing thead th {
+    color: #acb701;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    padding: 3px;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+table.table_listing tbody td.actions, table.table_listing tbody th.actions {
+    width: 70px;
+}
+
+table.table_listing thead th:first-child {
+    vertical-align: middle;
+    padding: 0;
+    width: 150px;
+}
+
+table.table_listing thead th span {
+    color: #000;
+    display: block;
+    font-weight: bold;
+}
+
+table.table_listing tbody td {
+    background: #edecec;
+    border-bottom: 1px dashed #c6c8c7;
+    color: #666;
+    font-size: 12px;
+    line-height: 17px;
+    padding: 3px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+table.table_listing tbody td.alt, table.table_listing tbody tr.alt td {
+    background: #ddd;
+}
+
+table.table_listing tbody tr:first-child td,table.table_listing tbody tr.premier td
+    {
+    border-top: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td:first-child {
+    border-left: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td:last-child {
+    border-right: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody tr:last-child td {
+    border-bottom: 1px solid #c6c8c7;
+}
+
+table.table_listing tbody td input[type=text] {
+    background: #f6f6f6;
+    border: 1px solid #c2c1ba;
+    color: #7a7a7a;
+    font-size: 12px;
+}
+
+table.table_listing tbody td.alt input {
+    background: #efeeee;
+}
+
+table.table_listing tbody td a.supprimer {
+    position: absolute;
+    right: -20px;
+}
+
+table.table_listing tbody td label {
+    display: block;
+}
+
+table.table_listing tbody td span {
+    min-height: 17px; !
+    height: 17px;
+}
+
 table.table_donnees thead th {
 	color: #acb701;
 	font-size: 14px;
 	font-weight: normal;
 	line-height: 1;
 	padding: 3px;
-	text-align: left;
+	text-align: center;
 	vertical-align: bottom;
 }
 
@@ -349,6 +403,7 @@ table.table_donnees thead th:first-child,table.table_donnees thead th.cvi,table.
 	color: #848c03 !important;
 	font-size: 16px !important;
 	font-weight: normal !important;
+	text-align: left;
 }
 
 table.table_donnees tbody td.cvi,table.table_donnees thead th.cvi {
@@ -384,6 +439,10 @@ table.table_donnees tbody td {
 	vertical-align: middle;
 }
 
+table.table_donnees tbody tr.small td {
+	font-size: 11px;
+}
+
 table.table_donnees tbody td.alt {
 	background: #ddd;
 }
@@ -416,6 +475,10 @@ table.table_donnees tbody td.alt input {
 	background: #efeeee;
 }
 
+table.table_donnees tbody td.volume {
+	text-align: right;
+}
+
 table.table_donnees tbody td.nom input {
 	width: 313px;
 }
@@ -442,7 +505,7 @@ table.table_donnees tbody td span {
 	height: 17px;
 }
 
-#recapitulatif_usages_industriels_saisi {
+#recapitulatif_lies_saisi {
 	text-align: right;
 }
 
@@ -465,18 +528,18 @@ ul.error_list li {
 	border: 1px solid #FF3300 !important;
 }
 
-a.btn_inactif {
+.btn_inactif {
 	cursor: default;
 	outline: 0;
 }
 
-a.btn_inactif img {
+.btn_inactif img {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
 }
 
-a.btn_inactif input {
+.btn_inactif input {
 	cursor: default;
 	opacity: 0.3;
 	filter: Alpha(Opacity = 30);
@@ -488,6 +551,188 @@ input.btn_inactif {
 	filter: Alpha(Opacity = 30);
 }
 
+/**
+ * Mon espace civa
+ ******************************************/
+#application_dr.mon_espace_civa #onglets_majeurs
+{
+	float: none;
+	padding: 0;
+}
+
+#application_dr.mon_espace_civa #onglets_majeurs li a { background: #bcbdbc; }
+
+#application_dr.mon_espace_civa #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
+
+#application_dr.mon_espace_civa .contenu
+{
+	background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+
+#application_dr.mon_espace_civa .contenu h3.noir
+{
+	font-size: 20px;
+	margin: 0 0 20px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_2 {
+ 	width: 542px;
+ 	margin: 0 auto;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_2 .bloc_acceuil {
+	width: 270px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_3 {
+ 	width: 752px;
+ 	margin: 0 auto;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_3 .bloc_acceuil {
+	width: 250px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_4 .bloc_acceuil {
+	width: 230px;
+}
+
+#application_dr.mon_espace_civa .blocs_accueil_container_5 .bloc_acceuil {
+	width: 184px;
+	font-size: 13px;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil
+{
+	border: 1px solid #c6c8c7;
+	font-size:  14px;
+	width: 230px;
+	float:left;
+	border-right: none;
+	border-left: none;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.bloc_acceuil_first {
+	border-left: 1px solid #c6c8c7;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.bloc_acceuil_last {
+	border-right: 1px solid #c6c8c7;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header,
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content 
+{
+	padding: 15px;
+	text-align: center;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content {
+	padding: 15px 10px;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_footer {
+	text-align: center;
+	padding: 5px 15px 15px 15px;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header
+{
+	background: #acb701 10px 50% no-repeat;
+	color: #fff;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.recolte .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.contrats .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.gamma .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.stocks .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_stocks.png'); }
+#application_dr.mon_espace_civa .bloc_acceuil.drm .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
+
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content,
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_footer
+{
+	background: #edecec;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p {
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content p.mineure {
+	font-style: italic;
+	color: #5e5e5e;
+}
+
+#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_content,
+#application_dr.mon_espace_civa .bloc_acceuil.alt .bloc_acceuil_footer
+{
+	background: #ddd;
+}
+
+
+
+#application_dr.mon_espace_civa .bloc_acceuil a { text-decoration: underline; }
+#application_dr.mon_espace_civa .bloc_acceuil a:hover { text-decoration: none; }
+
+#application_dr.mon_espace_civa .bloc_acceuil { width: auto; }
+
+#application_dr.mon_espace_civa .bloc_acceuil a { text-decoration: underline; }
+
+#application_dr.mon_espace_civa .bloc_acceuil a.vert { color: #848c03; }
+
+#application_dr.mon_espace_civa .bloc_acceuil a.orange { color: #e59f25; }
+
+#application_dr.mon_espace_civa .bloc_acceuil a.rouge { color: #f30100; }
+
+/**
+ * Alsace récolte / Espace contrats
+ ******************************************/
+#espace_alsace_contrats {
+    margin: 0 0 20px;
+}
+
+#espace_alsace_contrats h2 {
+    background: #dcdfa9;
+    color: #848C03;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 25px;
+    padding: 0 10px;
+}
+
+#espace_alsace_contrats .contenu {
+    background: #edecec;
+    border: 1px solid #c7c9c8;
+    padding: 15px;
+}
+#espace_alsace_contrats .listing {
+	float: left;
+    margin: 0 20px 0 0;
+}
+#espace_alsace_contrats #liste_contrats {
+	width: 672px;
+}
+#espace_alsace_contrats #documents_aide {
+    width: 234px;
+}
+
+#espace_alsace_contrats #liste_contrats .lien_tout {
+    text-align:right;
+    font-size: 13px;
+    padding: 5px 1px;
+}
+#espace_alsace_contrats #liste_contrats .lien_tout a {
+    color: #666666;
+    text-decoration: underline;
+}
+#espace_alsace_contrats #liste_contrats .lien_tout a:hover {
+    color: #000000;
+}
 /**
  * Alsace récolte / Espace acheteurs
  ******************************************/
@@ -1139,6 +1384,55 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin: 0 0 0 5px;
 }
 
+#exploitation_acheteurs #choix_mode_saisie_lies td.td_intro {
+	font-size: 14px;
+	color: #666666;
+	padding: 8px 0 10px 166px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies {
+	width: 628px; 
+	margin: 0 auto; 
+	display: block;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div {
+	float:left; 
+	margin-right: 2px; 
+	padding: 4px 4px 0 4px; 
+	border: 1px solid #EDECEC;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif {
+	background: #DDDDDD; 
+	padding: 4px 4px 0 4px; 
+	border: 1px solid #C6C8C7;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_texte {
+	display: inline-block;
+	margin-left: 4px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image {
+	margin-top: 4px;
+	opacity: 0.60; filter:alpha(opacity=60);
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image:hover, 
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif label.label_image {
+	opacity: 1; filter:alpha(opacity=100);
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list li:first-child {
+	padding-right: 208px;
+}
+
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list input,
+#exploitation_acheteurs #choix_mode_saisie_lies ul.radio_list label {
+	display: inline-block;
+}
+
 /**
  * Ajout d'acheteurs
  ******************************************/
@@ -1175,7 +1469,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 /**
- * Acheteurs de moults
+ * Acheteurs de mouts
  ******************************************/
 #acheteurs_mouts {
 	margin: 0;
@@ -1550,6 +1844,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	background-repeat: no-repeat;
 	padding: 0 5px;
 	width: 88px;
+	color: #bc0d0d;
 }
 
 #gestion_recolte .col_recolte .vol_total_recolte input,#gestion_recolte .col_validee .vol_total_recolte input
@@ -1705,7 +2000,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	padding: 0;
 }
 
-#gestion_recolte .col_total .vol_revendique_dplc .alerte {
+#gestion_recolte .col_total li.rouge, #gestion_recolte .col_total li .rouge, #gestion_recolte .col_total li .alerte {
 	color: #bc0d0d;
 }
 
@@ -1731,22 +2026,66 @@ div#migration_compte .contenu_section#infos_traitement {
 	color: #000;
 }
 
+#gestion_recolte #donnees_recolte_sepage.recapitualtif h3.titre_section {
+	font-size: 14px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif #recap_ventes .bloc_gris {
+	margin-bottom: 12px;
+}
+
+#gestion_recolte #donnees_recolte_sepage.recapitualtif #recap_ventes .contenu_section {
+	padding-bottom: 3px;
+}
+
 /* Total appelation */
 #gestion_recolte #total_appelation {
 	margin: 0 0 15px;
-	width: 350px;
+	width: auto;
+}
+
+#gestion_recolte #total_appelation .bloc_gris,
+#gestion_recolte #total_appelation .contenu_section 
+{
+	display: inline-block;
+	width: auto;
+}
+
+#gestion_recolte #total_appelation table {
+	width: auto;
 }
 
 #gestion_recolte #total_appelation table tbody td {
-	color: #000;
-	width: 200px;
+	color: #666666;
+	width: 230px;
 }
 
 #gestion_recolte #total_appelation table tbody td.valeur {
-	color: #9fac01;
-	font-weight: bold;
+	text-align: right;
+	width: 110px;
+	padding-right: 6px;
+	color: #666666;
+}
+
+#gestion_recolte #total_appelation table tbody tr.chef_tr td:first-child {
+	color: #000;
+}
+
+#gestion_recolte #total_appelation table tbody tr.sous_tr td:first-child {
+	padding-left: 10px;
+	width: 220px;
+}
+
+#gestion_recolte #total_appelation table tbody td.entete {
+	width: 110px;
 	text-align: center;
-	width: 140px;
+	font-size: 14px;
+	color: #E78800;
+	font-weight: bold;
+}
+
+#gestion_recolte #total_appelation table tbody td.saisi {
+	padding-right: 3px;
 }
 
 /* Récapitulatif des ventes */
@@ -1770,25 +2109,28 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #gestion_recolte #recap_ventes table tbody td.superficie input,#gestion_recolte #recap_ventes table tbody td.dplc input
 	{
-	width: 63px;
+	width: 61px;
+	text-align: right;
+	padding-right: 2px;
 }
 
 #gestion_recolte #recap_ventes .btn {
 	text-align: right;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels_saisi {
-	width: 96px;
+#gestion_recolte .recapitulatif_lies {
+	width: 90px;
+	text-align:right;
+	padding-right:2px;
 }
 
-#gestion_recolte #recapitulatif_usages_industriels_saisi.readonly {
+#gestion_recolte .recapitulatif_lies.readonly {
 	color: #9FAC01;
 	font-weight: bold;
-	text-align: center;
 }
 
 #gestion_recolte .btn {
-	margin: 7px 0 0 241px;
+	margin: 7px 0 0 299px;
 }
 
 /**
@@ -1845,12 +2187,22 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #recolte_totale #total_general ul {
-	padding: 1px 15px 2px;
+	padding: 1px 0 0;
 	line-height: 1;
 }
 
 #recolte_totale #total_general ul li {
-	padding: 3px 0;
+	padding: 3px 15px;
+	border-bottom: 1px dashed #C6C8C7;
+}
+
+#recolte_totale #total_general ul li:last-child {
+	border-bottom: none;
+}
+ 
+#recolte_totale #total_general ul li.small input {
+	font-size: 11px;
+	font-weight: normal;
 }
 
 #recolte_totale #total_general ul li input {
@@ -1859,8 +2211,9 @@ div#migration_compte .contenu_section#infos_traitement {
 	font-size: 12px;
 	font-weight: bold;
 	height: 15px;
-	text-align: center;
-	width: 86px;
+	text-align: right;
+	width: 80px;
+	padding: 0 3px;
 }
 
 /**
@@ -1924,8 +2277,23 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin: 0 0 5px;
 }
 
+#confirmation_fin_declaration {
+	width: 536px;
+	float: left;
+}
+
+#confirmation_fin_declaration p.important {
+	color: #acb701;
+	font-size: 16px;
+	margin: 0 0 5px;
+}
+
 .btn_prev_suiv #email-visualisation #btn-email {
 	margin: 7px 0 0 0;
+}
+
+.btn_prev_suiv #email-visualisation #btn-email-acheteur {
+	margin: 7px 15px 0 0;
 }
 
 #div-btn-email {
@@ -1934,6 +2302,14 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #btn-email {
 	background: url(../images/boutons/btn-recevoir-ma-dr-par-email.png);
+	display: block;
+	float: right;
+	width: 155px;
+	height: 19px;
+}
+
+#btn-email-acheteur {
+	background: url(../images/boutons/btn-envoyer_a_mes_acheteur.png);
 	display: block;
 	float: right;
 	width: 155px;
@@ -1980,13 +2356,6 @@ div#migration_compte .contenu_section#infos_traitement {
 #confirmation_feed_back .ligne_btn {
 	margin-top: 14px;
 	text-align: right;
-}
-
-/**
- * Popup de confirmation d'envoi de mail
- ******************************************/
-#popup_confirme_mail #btns {
-	margin: 15px 0 0 95px;
 }
 
 /**
@@ -2218,8 +2587,7 @@ a.msg_aide {
 	padding: 0 0 0 20px;
 }
 
-/** popup confirme validation **/
-#popup_confirme_validation #btns {
+.popup_confirme #btns{
 	margin-top: 15px;
 	text-align: center;
 }

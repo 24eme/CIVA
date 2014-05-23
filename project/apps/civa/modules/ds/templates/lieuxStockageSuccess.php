@@ -13,6 +13,13 @@ $hasVolume = false;
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected"><a href="#">Lieux de stockage</a></li>
         <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage" title="Message aide"></a>
+        	<?php if($ds->isDateDepotMairie()):  ?>
+                &nbsp; &nbsp;
+                <?php echo $form['date_depot_mairie']->renderError(); ?>
+                    <?php echo $form['date_depot_mairie']->renderLabel(); ?>
+                <?php echo $form['date_depot_mairie']->render(array('class' => "datepicker")); ?>
+                   
+        <?php endif; ?>
 </ul>
     
 
@@ -20,50 +27,55 @@ $hasVolume = false;
 <div id="application_ds" class="clearfix">
 	
 	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
-	
-	<div class="ds_neant">
+            <div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
         </div>
 	
 	<div id="lieux_stockage">
-		<table class="table_donnees">
+		<table class="table_donnees pyjama_auto">
 			<thead>
 				<tr>
-					<th>Lieux de stockage</th>
+                                    <th colspan="2">Lieux de stockage</th>
 					<?php 
 					$configurations = ConfigurationClient::getConfiguration()->getArrayAppellations();
 					foreach ($configurations as $conf):
-					?>
-					
-					<th><?php $l = $conf->getLibelle();
-						echo (($aoc = substr($l,0,3))=='AOC')? $aoc : ''; ?>
-						<span><?php echo (substr($l,0,3)=='AOC')? substr($l,4) : $l; ?></span></th>
+					?>					
+					<th><?php 
+                                                $l = $conf->getLibelle();
+						echo (($aoc = substr($l,0,3))=='AOC')? $aoc : '';
+                                             ?>
+                                        <span><?php echo (substr($l,0,3)=='AOC')? substr($l,4) : $l; ?></span></th>
 					<?php
 					endforeach;
 					?>
+                                        
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach($tiers->add('lieux_stockage') as $numero => $lieu_stockage): 
                                                 $num_lieu = str_replace($tiers->cvi, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
+                                                $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
                                     ?>
 				<tr>
-					<td class="adresse_lieu">
+                                        <td>
+                                        <input type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
+					</td>
+                                        <td class="adresse_lieu">
+                                                
                                                 <?php echo ($num_lieu == $ds->getLieuStockage())? "<strong>" : ""; ?>
                                                 
 						<?php echo formatNumeroStockage($lieu_stockage->numero) ?> <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
-					<?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
+                                                <?php echo ($num_lieu == $ds->getLieuStockage())? "</strong>" : ""; ?>
                                         </td>
 					<?php  $cpt = 0;
 					 $name = 'lieuxStockage_'.$num_lieu;
 						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
 							$paire = ($cpt%2==0)? 'paire' : '';
-							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
-                                                        $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;
+							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';                                                        
                                                         $disabled = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume());
                                                         if($disabled){
                                                             $hasVolume =true;  
@@ -79,7 +91,7 @@ $hasVolume = false;
 					</td>
 					<?php endif; ?>
 				   <?php $cpt++;
-				   endforeach; ?>				
+				   endforeach; ?>                                       
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

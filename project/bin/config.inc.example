@@ -1,4 +1,6 @@
 COUCHDBDOMAIN=localhost
+COUCHDBPORT=5984
+COUCHDBBASE=civa
 LDAP_PASSWORD=myldappassword
 LDAP_PREFIX=dc=vinsalsace,dc=pro
 LDAP_USERADMIN=cn=admin

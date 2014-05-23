@@ -5,6 +5,16 @@ class _TiersClient extends acCouchdbClient {
     const STATUT_ACTIF = 'ACTIF';
     const STATUT_INACTIF = 'INACTIF';
 
+    const QUALITE_RECOLTANT = 'Recoltant';
+    const QUALITE_COOPERATIVE = 'Cooperative';
+    const QUALITE_NEGOCIANT = 'Negociant';
+    const QUALITE_COURTIER = 'Courtier';
+
+    public static function getInstance() {
+    
+        return acCouchdbManager::getClient('_Tiers'); 
+    }
+
     public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         
         $tiers = parent::find('REC-'.$cvi, $hydrate);
@@ -15,6 +25,16 @@ class _TiersClient extends acCouchdbClient {
         }
 
         return $tiers;
+    }
+
+    public function findByCivaba($civaba, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+
+        return parent::find('MET-'.$civaba, $hydrate);
+    }
+
+    public function findBySiren($siren, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+
+         return parent::find('COURT-'.$siren, $hydrate);
     }
 
     public function findByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {

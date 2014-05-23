@@ -93,7 +93,7 @@ class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsA
 			+-->
 		<bean
 			class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler" >
-                                <property name="filter" value="uid=%u" />
+                                <property name="filter" value="(|(uid=%u)(mail=%u))" />
                                 <property name="searchBase" value="ou=People,dc=vinsalsace,dc=pro" />
                                 <property name="contextSource" ref="contextSource" />
 <!--
@@ -133,9 +133,10 @@ The name of this should remain "userDetailsService" in order for Spring Security
 	      used to perform the LDAP search.  By default, multiple search criteria
 	      are ANDed together.  Set the queryType property to change to OR.
 	    -->
+          <property name="queryTemplate" value="(description=*{0}*)" />
 	  <property name="queryAttributeMapping">
 	    <map>
-	      <entry key="username" value="uid" /> 
+	      <entry key="username" value="" /> 
 	    </map>
 	  </property>
 

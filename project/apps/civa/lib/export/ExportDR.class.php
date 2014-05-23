@@ -10,7 +10,7 @@ class ExportDR extends ExportMiseAdispo
 
     protected function getDocumentFolder() {
 
-        return 'declarations_de_recolte';
+        return 'DR';
     }
 
     protected function getFileExportClassName() {

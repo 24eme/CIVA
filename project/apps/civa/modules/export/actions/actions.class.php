@@ -47,7 +47,7 @@ class exportActions extends sfActions {
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from);
+            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
         } else {
             $dr = acCouchdbManager::getClient()->find($key);
         }
@@ -59,11 +59,18 @@ class exportActions extends sfActions {
                 throw new Exception();
         }catch(Exception $e) {
             $dr->update();
+            $dr->cleanNoeuds();
             $dr->save();
         }
+
+        if(!$dr->isValideeCiva()) {
+            $dr->cleanNoeuds();
+            $dr->storeDeclarant();
+        }
+
         $this->forward404Unless($dr);
 
-        $this->document = new ExportDRPdf($dr, $tiers, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
         if($request->getParameter('force')) {
             $this->document->removeCache();
@@ -84,6 +91,16 @@ class exportActions extends sfActions {
 
         $this->setResponseCsv('comptes.csv');
         return $this->renderText(file_get_contents(sfConfig::get('sf_data_dir').'/export/comptes/comptes.csv'));
+    }
+    
+    public function executeDrCsv(sfWebRequest $request) {
+         $this->tiers = $this->getUser()->getTiers();
+         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+         $this->cvi = $this->getRequestParameter('cvi', $this->tiers);
+         $csvContruct = new ExportDRCsv($this->annee,$this->tiers->cvi);         
+         $csvContruct->export();
+         
+         return $this->renderText($csvContruct->output());
     }
 
     public function executeCsvTiersDREncours(sfWebRequest $request) {

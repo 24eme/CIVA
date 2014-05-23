@@ -68,6 +68,7 @@ class uploadActions extends EtapesActions {
         $this->nb_noVolumes = 0;
         $this->nb_cremant = 0;
         $this->nb_rebeche = 0;
+	$this->productmd5 = array();
 
         if (isset($this->previous_recoltant))
             unset($this->previous_recoltant);
@@ -98,8 +99,11 @@ class uploadActions extends EtapesActions {
 	      if ($this->shouldHaveSuperficie($line))
                 $this->errors[$cpt][] = 'La superficie est erronée.';
 	      if ($this->cannotHaveDenomLieu($line)) {
-                $this->errors[$cpt][] = 'Un dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
-            }
+                $this->errors[$cpt][] = 'Une dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
+	      }
+	    }
+	    if ($this->shouldHaveDenomLieu($line)) {
+	      $this->errors[$cpt][] = 'Un lieu-dit doit être défini pour ce produit';
 	    }
             if (!$this->isVTSGNOk($line))
                 $this->errors[$cpt][] = 'Le champ VT/SGN est non valide.';
@@ -119,6 +123,12 @@ class uploadActions extends EtapesActions {
                 $this->errors[$cpt][] = 'Le volume n\'est pas correct';
             else if (!$this->hasVolume($line))
                 $this->nb_noVolumes++;
+	    if ($this->hasForbidenDenomination($line)) {
+	      $this->errors[$cpt][] = 'La dénomination complémentaire utilisée n\'est pas autorisée';
+	    }
+	    if ($this->isProductAlreadyDefined($line)) {
+	      $this->errors[$cpt][] = 'Ce produit semble déjà avoir été renseigné pour ce récoltant';
+	    }
         }
         if ($this->shouldHaveRebeche(array())) {
             $this->errors[$cpt - 1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
@@ -151,24 +161,36 @@ class uploadActions extends EtapesActions {
             $csv = acCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
             $csv->storeCSV($this->csv);
             $csv->save();
-            $this->getUser()->setFlash('confirmation', 'Les informations concernant la récoltant de cette année ont bien été intégrées à notre base');
+            $this->getUser()->setFlash('confirmation', 'Les informations concernant la récolte de cette année ont bien été intégrées à notre base');
             if (!$nb_warnings)
-                return $this->redirect('@mon_espace_civa');
+                return $this->redirect('@mon_espace_civa_dr_acheteur');
         }
         if (!$this->csv) {
             $this->getUser()->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');
-            return $this->redirect('@mon_espace_civa');
+            return $this->redirect('@mon_espace_civa_dr_acheteur');
         }
     }
 
+    protected function hasForbidenDenomination($line) {
+      if ($line[CsvFile::CSV_DENOMINATION] && $line[CsvFile::CSV_LIEU] == $line[CsvFile::CSV_DENOMINATION])
+	return true;
+      if (preg_match('/VEND\.? TARD\.?/i', $line[CsvFile::CSV_DENOMINATION]))
+	return true;
+      if (preg_match('/vendenges? tardives?/i', $line[CsvFile::CSV_DENOMINATION]))
+	return true;
+      return false;
+    }
+
     protected function isVTSGNOk($line) {
-        if (!$line[CsvFile::CSV_VTSGN])
-            return true;
-        if ($line[CsvFile::CSV_VTSGN] == 'VT')
-            return true;
-        if ($line[CsvFile::CSV_VTSGN] == 'SGN')
-            return true;
-        return false;
+      if (!$line[CsvFile::CSV_VTSGN])
+	return true;
+      if ($line[CsvFile::CSV_VTSGN] && !$this->may_have_vtsgn) 
+	return false;
+      if ($line[CsvFile::CSV_VTSGN] == 'VT')
+	return true;
+      if ($line[CsvFile::CSV_VTSGN] == 'SGN')
+	return true;
+      return false;
     }
 
     protected function hasCVI($line) {
@@ -180,19 +202,29 @@ class uploadActions extends EtapesActions {
     protected function cannotHaveDenomLieu($line) {
         if ($this->has_lieudit && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
             return false;
-	if ($this->may_have_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+	if ($this->need_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
 	  return false;
 	if (isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
 	  return true;
 	return false;
     }
 
+    protected function isProductAlreadyDefined($line) {
+      $md5 = md5($line[CsvFile::CSV_RECOLTANT_CVI].$line[CsvFile::CSV_APPELLATION].$line[CsvFile::CSV_LIEU].$line[CsvFile::CSV_CEPAGE].$line[CsvFile::CSV_VTSGN].$line[CsvFile::CSV_DENOMINATION]);
+      if ($this->productmd5[$md5]) {
+	return true;
+      }
+      $this->productmd5[$md5] = 1;
+      return false;
+    }
+
     protected function cannotIdentifyProduct($line) {
         $this->no_volume = false;
         $this->no_surface = false;
         $this->is_rebeche = false;
-        $this->may_have_denomlieu = false;
+        $this->need_denomlieu = false;
         $this->has_lieudit = false;
+	$this->may_have_vtsgn = false;
 
         if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
             return "appellation vide";
@@ -217,7 +249,7 @@ class uploadActions extends EtapesActions {
             if ($lieu->getKey() != 'lieu')
                 $this->has_lieudit = true;
             if ($lieu->getParent()->getParent()->hasLieuEditable() || preg_match('/_GRDCRU/', $prod['hash']))
-                $this->may_have_denomlieu = true;
+                $this->need_denomlieu = true;
 
             if (preg_match('/_ED$/', $prod['hash'])) {
                 $this->no_surface = true;
@@ -232,11 +264,20 @@ class uploadActions extends EtapesActions {
             if (preg_match('/_CREMANT/', $prod['hash'])) {
                 $this->nb_cremant++;
             }
+
+	    $this->may_have_vtsgn = $cepage->hasVtsgn();
         }
 
         if (!isset($prod['error']))
             return false;
         return $prod['error'];
+    }
+
+    protected function shouldHaveDenomLieu($line) {
+      if ($this->need_denomlieu && !$line[CsvFile::CSV_LIEU]) {
+	return true;
+      }
+      return false;
     }
 
     protected function cannotHaveRebeche($line) {

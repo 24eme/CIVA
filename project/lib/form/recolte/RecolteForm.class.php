@@ -6,7 +6,7 @@ class RecolteForm extends acCouchdbObjectForm {
     const FORM_NAME_COOPERATIVES = 'cooperatives';
     const FORM_NAME_MOUTS = 'mouts';
     const FORM_SUFFIX_NEW = '_new';
-    const FORM_NAME = 'recolte[%s]';
+    const FORM_NAME = 'detail[%s]';
 
     public function configure() {
 
@@ -25,6 +25,12 @@ class RecolteForm extends acCouchdbObjectForm {
             'superficie' => new sfValidatorNumber(array('required' => false)),
             'cave_particuliere' => new sfValidatorNumber(array('required' => false)),
         ));
+
+        if($this->getObject()->canHaveUsagesLiesSaisi()) {
+            $this->setWidget('lies', new sfWidgetFormInputFloat());
+            $this->setValidator('lies', new sfValidatorNumber(array('required' => false)));
+            $this->getWidget('lies')->setAttribute('class', 'num lies');
+        }
         
         if ($this->getOption('lieu_required', false)) {
             $this->getValidator('lieu')->setOption('required', true);
@@ -118,8 +124,6 @@ class RecolteForm extends acCouchdbObjectForm {
             $this->updateAcheteurs(self::FORM_NAME_MOUTS, $values, $this->getObject()->mouts);
             $this->updateAcheteurs(self::FORM_NAME_MOUTS . self::FORM_SUFFIX_NEW, $values, $this->getObject()->mouts, $this->getAcheteursMouts());
         }
-
-        //exit;
 
         $this->getObject()->getCouchdbDocument()->update();
     }

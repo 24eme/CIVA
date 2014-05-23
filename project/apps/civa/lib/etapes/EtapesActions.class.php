@@ -41,6 +41,11 @@ class EtapesActions extends sfActions {
         return $boutons;
     }
 
+    protected function redirectToEtape($etape) {
+
+        return $this->redirect($this->_etapes_config->getUrl($etape));
+    }
+
     protected function askRedirectToNextEtapes() {
         return in_array('next', $this->getBoutons());
     }

@@ -12,10 +12,11 @@ class dsActions extends sfActions {
        $ds_data = $this->getRequestParameter('ds', null);
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
-                return $this->redirect('ds_etape_redirect', $this->getUser()->getDs());
+                $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->getUser()->getDs());
+                return $this->redirect('ds_etape_redirect', $ds_principale);
             } elseif ($ds_data['type_declaration'] == 'supprimer') {
                 $this->getUser()->removeDs();
-                return  $this->redirect('mon_espace_civa');
+                return  $this->redirect('mon_espace_civa_ds');
             } elseif ($ds_data['type_declaration'] == 'visualisation') {
                 return $this->redirect('ds_visualisation', $this->getUser()->getDs());
             }    
@@ -26,9 +27,13 @@ class dsActions extends sfActions {
         }
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
-        $date = date('Y-m-d');
+        $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
         foreach ($dss as $ds) {
+            if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
+                $ds->add('num_etape',2);
+                $ds->add('date_depot_mairie',date('Y').'-08-31');
+            }
             $ds->save($this->getUserId());
         }
         $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);        
@@ -38,7 +43,7 @@ class dsActions extends sfActions {
     public function executeRedirectEtape(sfWebRequest $request) {
         $this->secureDS(array(DSSecurity::CONSULTATION, 
                               DSSecurity::EDITION));
-
+        
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds); 
@@ -172,7 +177,7 @@ class dsActions extends sfActions {
                             if($ds_neant){
                                 $ds_to_save->updateEtape(4);
                             }else{
-                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash()); 
+                            $ds_to_save->updateEtape(3, $ds_to_save, $ds_to_save->getFirstAppellation()->getHash(),$ds_to_save); 
                             }
                             $ds_principale = $ds_to_save;
                         }
@@ -185,33 +190,10 @@ class dsActions extends sfActions {
                 {         
                     return $this->renderText(json_encode(array("success" => true)));                  
                 }
-                $this->redirect('ds_edition_operateur', array('id' => $this->ds->_id));
+                $this->redirect('ds_edition_operateur', array('id' => DSCivaClient::getInstance()->getFirstDSByDs($this->ds)->_id));
             } else {
                 $this->error = true;
             }
-        }
-    }
-    
-    public function executeMonEspace(sfWebRequest $request) {    
-         
-        $this->tiers = $this->getRoute()->getTiers();        
-        $this->dsHistorique = DSClient::getInstance()->getHistoryByOperateur($this->etablissement);
-        $this->generationOperateurForm = new DSGenerationOperateurForm();
-        
-        if ($request->isMethod(sfWebRequest::POST)) {
-              $this->generationOperateurForm->bind($request->getParameter($this->generationOperateurForm->getName()));
-              if ($this->generationOperateurForm->isValid()) {
-                $values = $this->generationOperateurForm->getValues();
-                $date = $values["date_declaration"];
-                try {
-                    $ds = DSClient::getInstance()->findOrCreateDsByEtbId($this->etablissement->identifiant, $date);     
-                    $ds->save($this->getUserId());
-                }catch(sfException $e) {
-                    $this->getUser()->setFlash('global_error', $e->getMessage());
-                    $this->redirect('ds');
-                }                
-                return $this->redirect('ds_generation_operateur', $ds);
-              }
         }
     }
 
@@ -476,7 +458,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
 
-        $this->redirect('mon_espace_civa');
+        $this->redirect('mon_espace_civa_ds');
     }
     
     public function executeInvaliderRecoltant(sfWebRequest $request) {
@@ -488,7 +470,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale);
         
-        $this->redirect('mon_espace_civa');
+        $this->redirect('mon_espace_civa_ds');
     }
 
 
@@ -510,7 +492,7 @@ Le CIVA';
 
         $this->tiers = $this->getRoute()->getTiers();
 
-        $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $document = new ExportDSPdf($this->ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
         $document->generatePDF();
 
         $pdfContent = $document->output();

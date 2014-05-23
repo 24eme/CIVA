@@ -20,6 +20,7 @@ class ConfigurationClient extends acCouchdbClient {
     if (!isset(self::$configuration[$campagne])) {
       self::$configuration[$campagne] = CacheFunction::cache('model', array(acCouchdbManager::getClient(), 'find'), array('CONFIGURATION-'.$campagne));
     }
+
     if (self::$configuration[$campagne]->exist('virtual') && self::$configuration[$campagne]->virtual != $campagne) {
       self::$configuration[$campagne] = self::getConfiguration(self::$configuration[$campagne]->virtual);
     }
