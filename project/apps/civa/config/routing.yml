@@ -318,6 +318,14 @@ admin_gamma:
   url:   /admin/gamma
   param: { module: admin, action: gamma }
 
+admin_back_to_the_future:
+  url: /admin_back_to_the_future
+  param: { module: admin, action: backToFuture }
+
+admin_back_to_now:
+  url: /admin_back_to_now
+  param: { module: admin, action: backToNow }
+
 delegate_mode_retour_espace_civa:
    url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }

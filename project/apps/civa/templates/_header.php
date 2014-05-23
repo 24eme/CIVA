@@ -8,6 +8,10 @@
     <div id="titre_rubrique">
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
 
+        <?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>
+            <?php $title="Hey ! Marty ! Nous sommes en ".acCouchdbManager::getClient("Current")->getCurrentFromTheFuture()->campagne." !"; ?>
+        <?php endif; ?>
+
         <h1>
             <?php if (strrpos($title,' - ') !== false) :?>
                 <?php printf(html_entity_decode(substr($title,strrpos($title,'-')+1,strlen($title))) , $sf_request->getParameter('annee', date("Y")));?>
