@@ -15,7 +15,7 @@
     <?php include_stylesheets() ?>
     <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script>
   </head>
-  <body id="declaration_recolte">
+  <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->
 	<div id="global">
 	  <?php include_partial('global/header'); ?>
