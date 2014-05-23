@@ -4,7 +4,7 @@ class AdminBackToTheFutureForm extends BaseForm {
 
     public function configure() {
         $this->setWidgets(array(
-                'campagne'   => new sfWidgetFormChoice(array('choices' => array('', '2012' => '2012', '2011' => '2011'))),
+                'campagne'   => new sfWidgetFormChoice(array('choices' => array('', '2012' => '2012', '2011' => '2011', '2010' => '2010'))),
         ));
 
         $this->widgetSchema->setLabels(array(
@@ -12,7 +12,7 @@ class AdminBackToTheFutureForm extends BaseForm {
         ));
 
         $this->setValidators(array(
-                'campagne' => new sfValidatorChoice(array('required' => true, 'choices' => array('2012', '2011'))),
+                'campagne' => new sfValidatorChoice(array('required' => true, 'choices' => array('2012', '2011', '2010'))),
         ));
         
         $this->widgetSchema->setNameFormat('admin_back_to_the_future[%s]');
