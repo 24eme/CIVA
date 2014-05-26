@@ -13,6 +13,8 @@ class importDSTask extends importAbstractTask
 {
 
     protected $conf = null;
+    protected $ds_negoce = null;
+    
     protected $error_term = "\033[31mERREUR:\033[0m";
     protected $warning_term = "\033[33m----->ATTENTION:\033[0m ";
 
@@ -81,7 +83,7 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        $ds_negoce = array_key_exists('ds-negoce', $options) && $options['ds-negoce'];
+        $this->ds_negoce = array_key_exists('ds-negoce', $options) && $options['ds-negoce'];
         set_time_limit(0);
         $file = file($arguments['file']);
 
@@ -90,13 +92,13 @@ EOF;
         $dss = $this->transformFileInDSS($file);
         $dss = $this->sortDSSArrayRows($dss);
 
-        if ($ds_negoce) {
+        if ($this->ds_negoce) {
             echo "\n*** CREATION DES LIEUX DE STOCKAGE ***";
             $this->createLieuxStockageForDS($dss);
         }
 
         echo "\n*** Import des DS ***\n";
-        $this->importDSS($dss,$ds_negoce);
+        $this->importDSS($dss);
         echo "\n*** FIN DE l'Import des DS ***\n";
     }
 
@@ -127,12 +129,12 @@ EOF;
         return $dss;
     }
 
-    protected function importDSS($dss, $ds_negoce = false)
+    protected function importDSS($dss)
     {
 
         $ds_client = DSCivaClient::getInstance();
         $tiersListIDs = array();
-        $type_ds = ($ds_negoce) ? DSCivaClient::TYPE_DS_NEGOCE : DSCivaClient::TYPE_DS_PROPRIETE;
+        $type_ds = ($this->ds_negoce) ? DSCivaClient::TYPE_DS_NEGOCE : DSCivaClient::TYPE_DS_PROPRIETE;
 
         foreach ($dss as $id_ds => $ds_csv) {
             $ds = new DSCiva();
@@ -147,7 +149,7 @@ EOF;
             $ds->date_emission = $date;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID], 2);
-            $ds->identifiant = ($ds_negoce) ? $ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
+            $ds->identifiant = ($this->ds_negoce) ? $ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
             $identifiant = $tiers->getIdentifiant();
             if (!in_array($tiers->_id, $tiersListIDs)) {
@@ -259,7 +261,7 @@ EOF;
 
     protected function importProduitInDS($ds, $productRow)
     {
-        $hash = $this->constructHash($productRow);
+        $hash = $this->constructHash($productRow, $ds->_id);
         if ($hash) {
             $detail = $ds->addNoeud($hash);
             $id_ds_import = $productRow[self::CSV_DS_ID];
@@ -284,7 +286,7 @@ EOF;
         return $ds;
     }
 
-    protected function constructHash($productRow)
+    protected function constructHash($productRow, $id_ds = null )
     {
         $conf = $this->getConf();
         switch ($productRow[self::CSV_PRODUIT_APPELLATION]) {
@@ -330,6 +332,10 @@ EOF;
                 $cepage_node = 'cepage_' . $productRow[self::CSV_PRODUIT_CEPAGE];
                 $lieu_node = 'lieu' . $productRow[self::CSV_PRODUIT_LIEUDIT];
                 if (!$conf->recolte->certification->genre->appellation_GRDCRU->mention->exist($lieu_node)) {
+                    if($this->ds_negoce){
+                        echo $this->warning_term . " Le Lieu $lieu_node n'est pas dans la conf grands crus => il a été remplacé par lieu01 A MODIFIE : $id_ds\n";                    
+                        return $conf->recolte->certification->genre->appellation_GRDCRU->mention->lieu01->couleur->$cepage_node->getHash();
+                    }
                     echo $this->error_term . " Le Lieu $lieu_node n'existe pas dans la conf pour les grands crus\n";
                     return null;
                 }
