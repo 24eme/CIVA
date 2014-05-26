@@ -54,6 +54,14 @@ class gammaActions extends sfActions
      *
      * @param sfWebRequest $request
      */
+    public function executeDownloadEnlevementPropriete(sfWebRequest $request) {
+        return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/procedure_enlevement_propriete.pdf", "procedure_enlevement_propriete.pdf");
+    }
+
+    /**
+     *
+     * @param sfWebRequest $request
+     */
     public function executeDownloadAdhesion(sfWebRequest $request) {
         return $this->renderPdf(sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR."images/AdhesionGamma_EDI_CIVA.pdf", "AdhesionGamma_EDI_CIVA.pdf");
     }

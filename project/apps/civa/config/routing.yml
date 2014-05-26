@@ -289,6 +289,10 @@ gamma_telecharger_la_liste_nomenclature:
   url:   /gamma/telecharger_la_liste_nomenclature
   param: { module: gamma, action: downloadNomenclatures }
 
+gamma_telecharger_la_procedure_enlevement_propriete:
+  url:   /gamma/telecharger_la_procedure_enlevement_propriete
+  param: { module: gamma, action: downloadEnlevementPropriete }
+
 gamma_telecharger_l_adhesion:
   url:   /gamma/telecharger_l_adhesion
   param: { module: gamma, action: downloadAdhesion }
@@ -310,6 +314,14 @@ admin:
 admin_gamma:
   url:   /admin/gamma
   param: { module: admin, action: gamma }
+
+admin_back_to_the_future:
+  url: /admin_back_to_the_future
+  param: { module: admin, action: backToFuture }
+
+admin_back_to_now:
+  url: /admin_back_to_now
+  param: { module: admin, action: backToNow }
 
 delegate_mode_retour_espace_civa:
    url: /tiers/retour_mon_espace
