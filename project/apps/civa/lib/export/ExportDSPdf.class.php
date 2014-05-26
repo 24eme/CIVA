@@ -292,8 +292,8 @@ class ExportDSPdf extends ExportDocument {
         }
         
         foreach($details as $detail) {
-            $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
-            $recap["produits"][$key]['vtsgn'] = $detail->getCepage()->getConfig()->hasVtsgn();
+            $key = $this->addProduit($recap, $detail->getCepage(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
+            $recap["produits"][$key]['vtsgn'] = $detail->getCepage()->hasVtsgn();
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
                 $recap["total"]["normal"] += $detail->volume_normal;
