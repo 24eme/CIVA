@@ -15,7 +15,7 @@
 <tr>
   <td style="text-align: left; width: 318px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo $libelle ?></td>
   <td style="width: 106px; border: 1px solid black;<?php if(!$is_last_page || is_null($volume)): ?>background-color: #bbb;<?php endif; ?>"><?php echoVolume(null, true) ?>
-      <?php if(!is_null($volume)): ?>
+      <?php if($is_last_page && !is_null($volume)): ?>
       <?php echoHl(true); ?>
       <?php endif; ?>
   </td>
