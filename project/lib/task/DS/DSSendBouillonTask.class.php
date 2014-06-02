@@ -29,22 +29,24 @@ EOF;
 
     protected function execute($arguments = array(), $options = array())
     {
+        $periode = "201307";
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
-        $comptes = _CompteClient::getInstance()->getAll();
-        foreach ($comptes as $id => $compteView) {
-            $compte = _CompteClient::getInstance()->findByLogin(str_replace('COMPTE-', '', $id));
+        $recoltant = RecoltantClient::getInstance()->getAll();
+        foreach ($recoltant as $id => $recoltantView) {
+            $compte = _CompteClient::getInstance()->findByCvi(str_replace('Rec-', '', $id));
             if($compte->isActif()){
-             foreach($compte->getTiersObject() as $tiers) {
-                 var_dump($tiers); exit;
-                 //checker tiers has droit DS
-                    $cvi = str_replace("REC-", "", $tiers->id);
-                    echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->id)."\n";
-                    $rec = RecoltantClient::getInstance()->find($tiers->id); 
-                    $this->executeSendMail($rec);
+                $tiers = $compte->getTiers();
+                if(!$tiers->isDeclarantStock() || !$tiers->getDs($periode)){
                     continue;
                 }
+                 var_dump($tiers); exit;
+                 //checker tiers has droit DS
+                    $cvi = $tiers->cvi;
+                    echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->_id)."\n";
+                    $rec = RecoltantClient::getInstance()->find($tiers->id); 
+                    $this->executeSendMail($rec);
             }
         }
     }

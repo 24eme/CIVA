@@ -44,7 +44,7 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
         
-        if(!$this->myUser->hasLieuxStockage()) {
+        if(!$this->myUser->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
 
             return false;
         }

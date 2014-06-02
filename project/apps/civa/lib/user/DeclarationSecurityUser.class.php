@@ -212,7 +212,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
-        if (!$this->hasLieuxStockage()) {                                                                                                                                                
+        if (!$this->hasLieuxStockage() && !$this->getTiers()->isAjoutLieuxDeStockage()) {                                                                                                                                                
             return null;
         }
 
@@ -223,7 +223,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             if (!$this->_ds) {
                 $ds = new DSCiva();
                 $ds->identifiant = $this->getDeclarant()->getIdentifiant();
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->getIdentifiant() . '-' .$periode.'-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                $ds->set('_id', 'DS-' . $this->getDeclarant()->getIdentifiant() . '-' .$periode.'-'.$this->getDeclarant()->getLieuStockagePrincipal(true)->getNumeroIncremental());
                 return $ds;
             }
         }
