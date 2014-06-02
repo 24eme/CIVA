@@ -151,7 +151,7 @@ class statistiquesActions extends sfActions {
                           $this->utilisateurs_edition_dr[$u->key[1]] = $u->value;
                       }
         }
-
+        arsort($this->utilisateurs_edition_dr);
         $utilisateurs_validation = acCouchdbManager::getClient()->group(true)
                                               ->group_level(2)
                                               ->startkey(array($campagne))
@@ -160,7 +160,7 @@ class statistiquesActions extends sfActions {
 
         foreach ($utilisateurs_validation->rows as $u) {
           if(preg_match('/^COMPTE-auto$/', $u->key[1])) {
-              $this->drAuto += 1;
+              $this->drAuto = $u->value;
           }
         }
 
