@@ -106,11 +106,16 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
     }
 
     public function getLibelleLong() {
-        if(is_null($this->_get('libelle_long'))) {
-            $this->_set('libelle_long', $this->getConfig()->getLibelleLong());
+        if(!$this->exist('libelle_long') || is_null($this->_get('libelle_long'))) {
+            $this->add('libelle_long', $this->getConfig()->getLibelleLong());
         }
 
         return $this->_get('libelle_long');
+    }
+
+    public function hasLieuEditable() {
+
+        return $this->getConfig()->hasLieuEditable();
     }
     
     public function updateVolumes($vtsgn,$old_volume,$volume) {

@@ -205,6 +205,13 @@ class DSCiva extends DS implements IUtilisateursDocument {
         if($fromDs){
             $hash_config = preg_replace('/^\/declaration/','/recolte', $hash);
         }
+
+        try {
+            $this->getConfig()->get($hash_config)->isForDS();
+        } catch(Exception $e) {
+            return null;
+        }
+
         if(!$this->getConfig()->get($hash_config)->isForDS()) {
             $this->addNoeud($this->getConfig()->get($hash_config)->getParent()->getHash());
             return null;
