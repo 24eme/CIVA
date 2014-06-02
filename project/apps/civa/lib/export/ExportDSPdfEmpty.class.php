@@ -10,7 +10,7 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         $this->tiers = $tiers;
         $this->type = $type;
         $this->annexe = true;
-        $this->dss = DSCivaClient::getInstance()->createDssByTiers($this->tiers,date('Y-m-d'));       
+        $this->dss = DSCivaClient::getInstance()->createDssByTiers($this->tiers,date('Y-m-d'));   
         foreach ($this->dss as $ds) {
             if($ds->isDsPrincipale()){
                 $this->ds_principale = $ds;
