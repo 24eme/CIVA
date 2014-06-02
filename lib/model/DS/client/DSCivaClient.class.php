@@ -130,7 +130,7 @@ class DSCivaClient extends DSClient {
         $cpt = 1;
         $dss = array();
         $ds_principale_exist = false;
-        foreach ($tiers->lieux_stockage as $lieux_stockage) {
+        foreach ($tiers->getLieuxStockage($onlyCreate) as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantPeriodeAndLieuStockage($tiers->getIdentifiant(), $periode, $num_lieu);
             if($onlyCreate){
