@@ -17,6 +17,7 @@ class adminActions extends sfActions {
     public function executeIndex(sfWebRequest $request) {
         $this->getUser()->signOutCompteUsed();
         $this->form = new AdminCompteLoginForm(null, array('comptes_type' => array('CompteTiers', 'CompteProxy')), false);
+        $this->form_back_future = new AdminBackToTheFutureForm();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
@@ -38,5 +39,37 @@ class adminActions extends sfActions {
         } elseif ($request->getParameter('gamma_type_acces') == 'test') {
             $this->redirect(sfConfig::get('app_gamma_url_qualif'));
         }
+    }
+
+    /**
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeBackToFuture(sfWebRequest $request) {
+        $this->form = new AdminBackToTheFutureForm();
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+            
+            return $this->redirect('@admin');
+        }
+        
+        $this->form->bind($request->getParameter($this->form->getName()));
+        
+        if (!$this->form->isValid()) {
+
+            return $this->redirect('@admin');
+        }
+            
+        $campagne = $this->form->getValue('campagne');
+
+        $this->getUser()->setAttribute('back_to_the_future', $campagne);
+
+        return $this->redirect('@admin');
+    }
+
+    public function executeBackToNow(sfWebRequest $request) {
+        $this->getUser()->getAttributeHolder()->remove('back_to_the_future');
+
+        return $this->redirect('@admin');
     }
 }

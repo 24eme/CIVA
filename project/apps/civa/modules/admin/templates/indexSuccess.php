@@ -32,6 +32,8 @@
             <?php include_partial('admin/export') ?>
             <br />
             <?php include_partial('admin/statistiques') ?>
+            <br />
+            <?php include_partial('admin/backToFuture', array('form' => $form_back_future)) ?>
         </div>
         <?php endif; ?>
     </div>
