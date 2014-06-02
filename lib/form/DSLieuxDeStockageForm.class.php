@@ -11,7 +11,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
     public function __construct(acCouchdbJson $ds, $defaults = array(), $options = array(), $CSRFSecret = null) {
         $this->ds =$ds;
         $this->tiers = $this->ds->getEtablissement();
-        $this->lieux_stockage = $this->tiers->lieux_stockage;
+        $this->lieux_stockage = $this->tiers->getLieuxStockage(true);
         $this->appelations = $this->getAppelations();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
         $this->identifiant = $this->tiers->getIdentifiant();

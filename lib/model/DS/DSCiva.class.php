@@ -35,7 +35,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
         $num_lieu = $this->identifiant.$this->getLieuStockage();
 
-        if(!$tiers->getLieuxStockage()) {
+        if(!$tiers->getLieuxStockage(true)) {
             throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
         }
         if(!$tiers->lieux_stockage->exist($num_lieu)) {
