@@ -5,7 +5,7 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
 
 	protected function getObjectForParameters($parameters) {
         $matches = array();
-        if (preg_match('/^DS-([0-9]{10})-([0-9]{4}[0-9]{2})-([0-9]{3})$/',$parameters['id'],$matches)) {   
+        if (preg_match('/^DS-(C?[0-9]{10})-([0-9]{4}[0-9]{2})-([0-9]{3})$/',$parameters['id'],$matches)) {   
             $identifiant = $matches[1];
             $periode = $matches[2];
             $lieu_stockage = $matches[3];

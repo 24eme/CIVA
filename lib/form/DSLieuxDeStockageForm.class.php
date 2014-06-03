@@ -77,7 +77,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         $num = $values['ds_principale'][0];
         
         foreach ($this->lieux_stockage as $lieu_id => $lieu) {
-            $lieu_num = preg_replace('/^([0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
+            $lieu_num = preg_replace('/^(C?[0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
             $ds_id = preg_replace("/[0-9]{3}$/", $lieu_num, $this->ds->_id);
             $current_ds = array_key_exists($ds_id,$dss)? $dss[$ds_id] : null;
             if(!$current_ds){

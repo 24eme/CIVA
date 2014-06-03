@@ -38,6 +38,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         if(!$tiers->getLieuxStockage(true)) {
             throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
         }
+
         if(!$tiers->lieux_stockage->exist($num_lieu)) {
             throw new sfException(sprintf("Le lieu de stockage %s n'existe pas dans l'etablissement de cvi %s ", $num_lieu, $this->identifiant));
         }
@@ -98,8 +99,6 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
 
     }
-
-    
     
     protected function updateProduitsFromDS($ds) {  
         $this->drm_origine = $ds->_id;     
@@ -166,17 +165,20 @@ class DSCiva extends DS implements IUtilisateursDocument {
     public function addDetailsFromDRNegoce()
     {
         $campagne = CurrentClient::getCurrent()->campagne;
-        $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $this->identifiant);
+        $cvi_acheteur = $this->getEtablissement()->getCvi();
+        if(!$cvi_acheteur) {
+            return;
+        }
+        $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur);
         foreach ($drs as $dr) {
             foreach ($dr->getProduitsDetails() as $detail) {
-            if(!$detail->getVolumeByAcheteur($this->identifiant)) {
+                if(!$detail->getVolumeByAcheteur($cvi_acheteur)) {
 
-                continue;
-            }
-            $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
+                    continue;
+                }
+                $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
             }
         }
-        
     }
     
     public function addDetailsFromDS($ds)
@@ -239,7 +241,8 @@ class DSCiva extends DS implements IUtilisateursDocument {
     
     public function getLieuStockage() {
         $matches = array();
-        preg_match('/^DS-([0-9]{10})-([0-9]{6})-([0-9]{3})$/', $this->_id,$matches);
+
+        preg_match('/^DS-(C?[0-9]{10})-([0-9]{6})-([0-9]{3})$/', $this->_id, $matches);
         return $matches[3];
     }
 
@@ -255,10 +258,8 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
    public function getEtablissement() {
-        if($this->isTypeDsNegoce()){
-            return acCouchdbManager::getClient('_Tiers')->findByIdentifiantNegoce($this->identifiant);
-        }
-        return acCouchdbManager::getClient('_Tiers')->findByCvi($this->identifiant);
+
+        return acCouchdbManager::getClient('_Tiers')->findByIdentifiant($this->identifiant);
     }
 
     public function getConfig() {        
