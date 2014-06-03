@@ -52,8 +52,12 @@ abstract class _Tiers extends Base_Tiers {
      */
     public function getDs($periode) {
         $identifiant = $this->getIdentifiant();
-        $ds = acCouchdbManager::getClient('DSCiva')->retrieveByPeriodeAndIdentifiant($identifiant, $periode);
-        if(!$ds) return $ds;
+        $ds = acCouchdbManager::getClient('DSCiva')->findByIdentifiantAndPeriode($identifiant, $periode);
+        if(!$ds) {
+
+            return null;
+        }
+
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
     
@@ -76,7 +80,7 @@ abstract class _Tiers extends Base_Tiers {
         
         return null;
     }
-    
+
     /**
      *
      * @return string 

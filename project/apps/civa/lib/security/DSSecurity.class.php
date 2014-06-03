@@ -19,7 +19,7 @@ class DSSecurity implements SecurityInterface {
     public function __construct($myUser, $ds_principale = null) {
         $this->myUser = $myUser;
         $this->ds = $ds_principale;
-        $this->tiers = $this->myUser->getDeclarant();
+        $this->tiers = $this->myUser->getDeclarantDS();
     }
 
     public function isAuthorized($droits) {
@@ -47,6 +47,13 @@ class DSSecurity implements SecurityInterface {
         if(!$this->myUser->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
 
             return false;
+        }
+
+        /*** CONSULTATION ***/
+
+        if(in_array(self::CONSULTATION, $droits)) {
+
+            return true;
         }
 
         /*** CREATION ***/

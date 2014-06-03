@@ -24,7 +24,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         $values_by_lieux = array();
 
         foreach ($this->lieux_stockage as $lieu_s => $value) {
-            $id_lieu = preg_replace('/^[0-9]{10}/', '', $lieu_s);
+            $id_lieu = preg_replace('/^C?[0-9]{10}/', '', $lieu_s);
             $id_lieu_field = 'lieuxStockage_' . $id_lieu;
             $values_by_lieux[$id_lieu] = $values[$id_lieu_field];
         }

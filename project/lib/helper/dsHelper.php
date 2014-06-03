@@ -84,11 +84,11 @@ function getDefaultTotal($type, $appellation, $current_lieu)
 function formatNumeroStockage($numero, $ajoutLieux = false)
 {
     if ($ajoutLieux) {        
-        if (preg_match("/^([0-9]{10})([0-9]{3})$/", $numero, $matches)) {
+        if (preg_match("/^(C?[0-9]{10})([0-9]{3})$/", $numero, $matches)) {
             $numero = sprintf("n° %s&nbsp;", $matches[2]);
         }
     } else {
-        if (preg_match("/^([0-9]{10})([0-9]{3})$/", $numero, $matches)) {
+        if (preg_match("/^(C?[0-9]{10})([0-9]{3})$/", $numero, $matches)) {
             $numero = sprintf("%s&nbsp;%s", $matches[1], $matches[2]);
         }
     }
