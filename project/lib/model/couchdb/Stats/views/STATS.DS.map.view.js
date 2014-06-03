@@ -7,6 +7,6 @@ function(doc) {
 		if(doc.ds_principale === 0) {
 			return;
 		}
-  		emit([doc.campagne, doc.validee != null, doc.modifiee != null, doc.validee, doc.num_etape], 1);
+  		emit([doc.campagne, doc.validee != null, doc.modifiee != null, doc.validee, doc.num_etape, doc.date_depot_mairie], 1);
 	}
 }

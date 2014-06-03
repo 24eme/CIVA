@@ -13,6 +13,7 @@ class importDSTask extends importAbstractTask
 {
 
     protected $conf = null;
+    protected $current = null;
     protected $ds_negoce = null;
     
     protected $error_term = "\033[31mERREUR:\033[0m";
@@ -83,6 +84,7 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        sfContext::createInstance($this->configuration);
         $this->ds_negoce = array_key_exists('ds-negoce', $options) && $options['ds-negoce'];
         set_time_limit(0);
         $file = file($arguments['file']);
@@ -145,7 +147,7 @@ EOF;
             $ds_csv_datas = str_getcsv($ds_ligne, ',');
 
             $date = date_format($this->convertToDateObject($ds_csv_datas[self::CSV_DS_DATE_SAISIE]), 'Y-m-d');
-            $periode = $ds_client->buildPeriode($date);
+            $periode = $this->getCurrent()->getPeriodeDS();//$ds_client->buildPeriode($date);
             $ds->date_emission = $date;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID], 2);
@@ -249,7 +251,7 @@ EOF;
 
     public function setConf()
     {
-        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');        
     }
 
     public function getConf()
@@ -258,7 +260,21 @@ EOF;
             $this->setConf();
         return $this->conf;
     }
+    
+    public function setCurrent()
+    {
+        $currentClient = acCouchdbManager::getClient('Current');
+        $this->current =  $currentClient::getCurrent();
+    }
 
+    public function getCurrent()
+    {
+        if (!$this->current)
+            $this->setCurrent();
+        return $this->current;
+    }
+    
+    
     protected function importProduitInDS($ds, $productRow)
     {
         $hash = $this->constructHash($productRow, $ds->_id);

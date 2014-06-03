@@ -7,7 +7,7 @@ class DSSendBrouillonTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
+            new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
         ));
 
         $this->addOptions(array(
@@ -29,43 +29,52 @@ EOF;
 
     protected function execute($arguments = array(), $options = array())
     {
-        $periode = "201307";
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
-        $recoltant = RecoltantClient::getInstance()->getAll();
-        foreach ($recoltant as $id => $recoltantView) {
-            $compte = _CompteClient::getInstance()->findByCvi(str_replace('Rec-', '', $id));
-            if($compte->isActif()){
-                $tiers = $compte->getTiers();
-                if(!$tiers->isDeclarantStock() || !$tiers->getDs($periode)){
-                    continue;
-                }
-                 var_dump($tiers); exit;
+        set_time_limit(0);
+        ini_set('memory_limit', '512M');
+        if(!array_key_exists('periode',$arguments) || !preg_match('/^([0-9]{6})$/', $arguments['periode'])){
+            throw new sfException("La periode doit être passé en argument et doit être de la forme AAAAMM");
+        }
+        $periode = $arguments['periode'];
+        $recoltants_identifiant = $this->getIdentifiantRecByPeriode($periode);
+        foreach ($recoltants_identifiant as $id => $cvi) {
+            $tiers = acCouchdbManager::getClient("_Tiers")->findByIdentifiant($cvi);
+            if(!$tiers){
+                echo "Aucun tiers trouvé pour ".$cvi."\n";
+                continue;
+            }
+            $compte = $tiers->getCompteObject();
+            if(!$compte){
+                 echo "Aucun compte trouvé pour ".$tiers->_id."\n";
+                 continue;
+            }
+            if($tiers->getCompteObject()->isActif() && $tiers->isDeclarantStockPropriete()){
                  //checker tiers has droit DS
-                    $cvi = $tiers->cvi;
-                    echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->_id)."\n";
-                    $rec = RecoltantClient::getInstance()->find($tiers->id); 
-                    $this->executeSendMail($rec);
+                 echo $tiers->getIdentifiant().",".$tiers->getCompteEmail();
+//                   echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->_id)."\n";
+//                   $this->executeSendMail($tiers);               
+//                   exit;
             }
         }
     }
     
-    public function executeSendMail($tier)
+    public function executeSendMail($tiers)
     {
-        $mail = $this->sendBrouillon($tier);
+        $mail = $this->sendBrouillon($tiers);
             if($mail){
-               echo $this->green('SUCESS : ')."le mail pour le tiers ".$tier->cvi." a été envoyé à l'adresse email : ".$this->green($mail).".\n";
+               echo $this->green('SUCESS : ')."le mail pour le tiers ".$tiers->getIdentifiant()." a été envoyé à l'adresse email : ".$this->green($mail).".\n";
             }else{
-               echo $this->red('ERROR : ')."le mail pour le tiers ".$tier->cvi." a échoué.\n";
+               echo $this->red('ERROR : ')."le mail pour le tiers ".$tiers->getIdentifiant()." a échoué.\n";
             }
     }
     
-    public function sendBrouillon($tier)
+    public function sendBrouillon($tiers)
     {
         $document = null;
         try{
-        $document = new ExportDSPdfEmpty($tier, array($this, 'getPartial'), true, 'pdf');        
+        $document = new ExportDSPdfEmpty($tiers, array($this, 'getPartial'), true, 'pdf');        
         } 
         catch (sfException $e){
             echo $this->red('[ABSENCE DE LIEUX DE STOCKAGE] ');
@@ -76,16 +85,16 @@ EOF;
        
        $pdfContent = $document->output();
 
-       $mess = 'Bonjour ' . $tier->nom . ',
+       $mess = 'Bonjour ' . $tiers->nom . ',
 Vous trouverez ci-joint votre Déclaration de Stocks brouillon pour l\'année ' . date('Y') . '.
-Ce document constitue un exemple à remplir.
+Ce document constitue un exemple de Déclaration de Stocks, il n\'est donc pas à remplir ni à renvoyer au CIVA.
 
 Cordialement,
 
 Le CIVA';
-       $email = $tier->getCompteEmail();
+       $email = $tiers->getCompteEmail();
        if(!$email){
-            echo $this->yellow('WARNING : ')."le tiers ".$tier->cvi." ne possède pas d'email.\n";
+            echo $this->yellow('WARNING : ')."le tiers ".$tiers->cvi." ne possède pas d'email.\n";
             return false;
         }
         
@@ -108,6 +117,25 @@ Le CIVA';
         }
         
         return $email;
+    }
+    
+    private function getIdentifiantRecByPeriode($periode)
+    {
+        $campagne_view = (substr($periode,0,4)-1) .'-'.substr($periode,0,4);
+        $ds_validees_view = acCouchdbManager::getClient()->reduce(false)
+                                                    ->startkey(array($campagne_view))
+                                                    ->endkey(array($campagne_view,array()))
+                                                    ->getView("STATS", "DS")->rows;
+        
+        $recoltantId = array();
+        foreach ($ds_validees_view as $ds_validee) {
+            if($ds_validee->key[5]){
+                continue;
+            }
+            $identifiant = substr($ds_validee->id,3,10);
+            $recoltantId[$identifiant] = $identifiant;
+        }
+        return $recoltantId;
     }
     
     public function getPartial($templateName, $vars = null) {
