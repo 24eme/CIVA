@@ -71,32 +71,29 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         
         
         $appellations = $ds->declaration->getAppellationsSorted();
-        $limit_alsace_blanc = $this->determineLimite($appellations,'ALSACEBLANC',6);
-        $limit_alsace_lieu_dit = $this->determineLimite($appellations,'LIEUDIT',5);
-        $limit_communale = $this->determineLimite($appellations,'COMMUNALE',5);
         
         $recap["AOC Alsace Blanc"] = array("colonnes" => array("cepage" => "Cépages"), 
                                                 "produits" => array(),
                                                 "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                "limit" => $limit_alsace_blanc,
+                                                "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Lieu-dit"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                 "produits" => array(),
                                                 "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                "limit" => $limit_alsace_lieu_dit,
+                                                "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Communale"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                 "produits" => array(),
                                                 "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                "limit" => $limit_communale,
+                                                "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Grands Crus"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                  "produits" => array(),
                                                  "total" => array("normal" => null, "vt" => null, "sgn" => null),
-                                                 "limit" => 5,
+                                                 "limit" => -1,
                                                  "nb_ligne" => -1);
         
         $recap["AOC Alsace Pinot noir"] = array("colonnes" => array("cepage" => "Cépages"), 
@@ -132,8 +129,8 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         $this->getRecap($ds, "PINOTNOIR", $recap["AOC Alsace Pinot noir"]);
         $this->getRecap($ds, "PINOTNOIRROUGE", $recap["AOC Alsace PN rouge"]);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
-
-        $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES);
+        
+        $paginate = $this->paginate($recap, 35, null);
 
         $this->rowspanPaginate($paginate);
         $this->autoFill($paginate, $recap);        
@@ -147,13 +144,4 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         }
     }
     
-    public function determineLimite($appellations,$name,$limit)
-    {
-        $result = $limit;
-        if(array_key_exists('appellation_'.$name,$appellations) && count($appellations['appellation_'.$name]->getProduits()) == $limit){
-            $result--;
-
-        }  
-        return $result;
-    }
 }
