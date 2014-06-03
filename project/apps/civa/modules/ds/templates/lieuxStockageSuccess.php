@@ -35,7 +35,7 @@ $hasVolume = false;
         </div>
         <div class="ds_lieu_toggle_stockage_principale">
             <?php if(count($tiers->getLieuxStockage(true)) > 1) : ?>
-                <a href="#" class="btn_majeur btn_petit" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
+                <a href="#" class="" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
             <?php endif; ?>
         </div>
 	<div id="lieux_stockage">

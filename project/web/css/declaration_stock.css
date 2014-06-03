@@ -288,6 +288,10 @@ span.label_type_ds{
     height: 20px;
 }
 
+#application_ds .ds_lieu_toggle_stockage_principale a {
+    text-decoration: underline;
+}
+
 #application_ds .adresse_lieu
 {
     height: 55px;
