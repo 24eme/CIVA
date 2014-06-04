@@ -176,8 +176,10 @@ class DSCivaClient extends DSClient {
             $cpt++;
         }
         if(count($dss)){
-            foreach ($dss as $ds) {            
-                $ds->updateProduitsFromLastDr();
+            foreach ($dss as $ds) {
+                if (!$ds_neant) {         
+                    $ds->updateProduitsFromLastDr();
+                }
             }
         }
         return $dss;
