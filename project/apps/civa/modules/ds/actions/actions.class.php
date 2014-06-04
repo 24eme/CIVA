@@ -646,12 +646,15 @@ Le CIVA';
         $this->forward404Unless($request->isXmlHttpRequest());
         return $this->renderText(json_encode(array('titre' => $request->getParameter('title', null),
 						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('telecharger_la_notice_ds')),
-                'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
+                                                   'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
 
     }
     
-    public function executeDownloadNotice() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock.pdf", "aide stock.pdf");
+    public function executeDownloadNotice(sfWebRequest $request) {
+        if($this->getUser()->getDeclarant()->isDeclarantStockNegoce()){
+            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_negoce.pdf", "aide stock negoce.pdf");
+        }
+            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
     }
     
     public function executeDownloadDai() {

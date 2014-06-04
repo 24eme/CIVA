@@ -224,6 +224,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             $this->_ds = $declarant->getDs($periode);
             if (!$this->_ds) {
                 $ds = new DSCiva();
+                if($declarant->exist('civaba') && $declarant->civaba){
+                    $ds->add('civaba', $declarant->civaba);
+                }
                 $ds->identifiant = $declarant->getIdentifiant();
                 $ds->set('_id', 'DS-' . $declarant->getIdentifiant() . '-' .$periode.'-'.$declarant->getLieuStockagePrincipal(true)->getNumeroIncremental());
                 return $ds;

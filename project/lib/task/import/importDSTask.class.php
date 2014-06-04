@@ -140,6 +140,7 @@ EOF;
 
         foreach ($dss as $id_ds => $ds_csv) {
             $ds = new DSCiva();
+            
             $ds->add('type_ds', $type_ds);
             if (!count($ds_csv))
                 throw new sfException("La ligne d'identifiant $id_ds n'est pas valide.");
@@ -153,6 +154,9 @@ EOF;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID], 2);
             $ds->identifiant = ($this->ds_negoce) ? 'C'.$ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
+            if($tiers->exist('civaba') && $tiers->civaba){
+                    $ds->add('civaba', $tiers->civaba);
+            }
             $identifiant = $tiers->getIdentifiant();
             if (!in_array($tiers->_id, $tiersListIDs)) {
                 $removeDss = DSCivaClient::getInstance()->removeAllDssByCvi($tiers, $date);
