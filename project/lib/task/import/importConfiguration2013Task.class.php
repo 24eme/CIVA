@@ -523,7 +523,7 @@ EOF;
         $cepages->cepage_PG->rendement = 80;
         $cepages->cepage_PG->douane->code_cepage = $code_depage;
 
-        $cepages->cepage_MU->libelle = "Muscat d'Alsace";
+        $cepages->cepage_MU->libelle = "Muscat";
         $cepages->cepage_MU->rendement = 90;
         $cepages->cepage_MU->douane->code_cepage = $code_depage;
 
