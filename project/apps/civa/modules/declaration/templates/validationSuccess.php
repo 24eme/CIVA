@@ -15,7 +15,7 @@
 
         <?php if($error && !empty($validLogErreur)): ?>
             <fieldset class="message message_erreur">
-                <legend class="message_title">Points bloquants <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
+                <legend class="message_title">Points bloquants <a href="" class="msg_aide" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
                 <ul class="messages_log">
                 <?php foreach($validLogErreur as $key=>$log): ?>
                     <li>
@@ -27,7 +27,7 @@
         <?php endif; ?>
         <?php if($logVigilance){ ?>
             <fieldset class="message">
-                <legend class="message_title">Points de vigilance <a href="" class="msg_aide_ds" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
+                <legend class="message_title">Points de vigilance <a href="" class="msg_aide" rel="help_popup_validation_log_vigilance" title="Message aide"></a></legend>
                 <ul class="messages_log">
                     <?php foreach($validLogVigilance as $key=>$log): ?>
                     <li>
