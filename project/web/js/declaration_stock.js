@@ -16,9 +16,12 @@ var ajax_post_url = null;
 
 $(document).ready(function()
 {	
+
     //navOngletsStock();
     initMsgAideDS();
     choixPrecDS();
+
+    initLoadingCreationDS();
 
     if(!appDS.length) {
 
@@ -59,6 +62,8 @@ $(document).ready(function()
 	scrollLieuxStockage();
         
     initDatepicker();
+
+    
 });
 
 
@@ -70,6 +75,15 @@ var initValidationDs = function(type)
 {
     initValidDSPopup();
     initConfirmeValidationDs();
+}
+
+var initLoadingCreationDS = function()
+{
+    $('#form_ds #mon_espace_civa_valider[data-popup-loading=true]').bind('click', function() {
+        //if($('#form_ds #type_ds_normal').attr('checked') == 'checked') {
+          openPopup($("#popup_loader"));
+        //}
+    }); 
 }
 
 var initLieuxStockage = function()

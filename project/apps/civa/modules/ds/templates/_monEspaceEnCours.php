@@ -31,7 +31,7 @@
                 <label for="type_ds_neant">Déclaration de Stocks Néant</label>
             </div>
             <div class="ligne_form ligne_btn">
-                <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />
+                <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" data-popup-loading="true" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
@@ -40,3 +40,9 @@
         <?php endif; ?>
     </div>
 </form>
+
+<div style="display: none" id="popup_loader" title="Génération de la déclaration de Stocks">
+    <div class="popup-loading">
+    <p>La génération de votre de déclaration de Stocks est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre jusqu'à 30 secondes</small></p>
+    </div>
+</div>
