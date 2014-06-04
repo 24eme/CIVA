@@ -19,6 +19,7 @@
 	
 	<p class="intro_contrat_vrac">Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.</p>
 	
+	<?php if (!$vrac->isVendeurProprietaire()): ?>
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Vendeur</legend>
 		
@@ -69,6 +70,32 @@
 			</div>
 		</div>
 	</fieldset>
+	<?php else: ?>
+	<fieldset class="bloc_infos">
+		<legend class="titre_section">Vendeur</legend>
+
+		<div class="clearfix">
+			<div class="form_col">
+				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
+				<div class="nom_cvi ligne_form">
+				<?php echo $form['interlocuteur_commercial']->render() ?>
+				<div class="ajouter_annuaire">
+					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
+				</div>
+				</div>
+			</div>
+			
+			
+			<div id="vendeur_infos" class="cible">
+			<?php if($vrac->vendeur_identifiant): ?>
+				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->vendeur, 'fiche' => false)); ?>
+			<?php endif; ?>
+			</div>
+		</div>
+
+		<?php echo $form['interlocuteur_commercial']->renderError() ?>
+	</fieldset>
+	<?php endif; ?>
 	
 	<?php if (!$vrac->isAcheteurProprietaire()): ?>
 	<fieldset class="bloc_infos">
@@ -121,6 +148,7 @@
 			</div>
 		</div>
 	</fieldset>
+	<?php if (!$vrac->isVendeurProprietaire()): ?>
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Courtier</legend>
 
@@ -144,6 +172,7 @@
 
 		<?php echo $form['interlocuteur_commercial']->renderError() ?>
 	</fieldset>
+	<?php endif; ?>
 	<?php else: ?>
 	
 	<fieldset class="bloc_infos">

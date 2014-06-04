@@ -171,6 +171,19 @@ var initConfirmeSignatureVrac = function()
     });
 };
 
+var initChoixTypeVrac = function()
+{
+    $('#choixType').click(function() {
+        openPopup($("#popup_choix_typeVrac"));
+        return false;
+    });
+    $('.choixType_OK').click(function() {
+        $("#popup_choix_typeVrac").dialog('close');
+        document.location.href=$(this).attr("href");
+        return false;
+    });
+};
+
 var initClotureContrat = function()
 {
     $('#clotureContrat_OK').click(function() {
@@ -435,6 +448,7 @@ var sumContrat = function(brothers, cible)
 
          $.hauteurListesAnnuaire();
          initConfirmeSignatureVrac();
+         initChoixTypeVrac();
          initConfirmeValidationVrac();
          initClotureContrat();
          initSummableContrat();

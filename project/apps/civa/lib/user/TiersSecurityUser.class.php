@@ -169,7 +169,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     public function getDeclarantVrac() {
         $declarants = $this->getDeclarantsVrac();
-
+		
         return current($declarants);
     }
 
@@ -183,7 +183,6 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         }
 
         $declarants[$tiers->_id] = $tiers;
-
         return $declarants;
     }
 
