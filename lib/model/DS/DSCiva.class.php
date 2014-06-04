@@ -56,6 +56,10 @@ class DSCiva extends DS implements IUtilisateursDocument {
             $this->declarant->email = $tiers->getCompteEmail();
         }
 
+        if($tiers->exist('civaba') && $tiers->civaba){
+                $this->add('civaba', $tiers->civaba);
+        }
+        
         $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
         $this->declarant->exploitant->nom = $tiers->exploitant->nom;
         $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;

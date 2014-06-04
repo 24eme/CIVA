@@ -146,6 +146,9 @@ class DSCivaClient extends DSClient {
             $ds->date_stock = $this->createDateStock($date_stock);
             $ds->identifiant = $tiers->getIdentifiant();
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
+            if($tiers->exist('civaba') && $tiers->civaba){
+                    $ds->add('civaba', $tiers->civaba);
+            }
             if (!$ds_principale_exist) {
                 $ds->add('ds_principale', 1);
                 $ds_principale_exist = true;
@@ -184,6 +187,9 @@ class DSCivaClient extends DSClient {
         $new_ds->add('type_ds', $ds->_get('type_ds'));
         $new_ds->date_stock = $ds->date_stock;
         $new_ds->_id = sprintf('DS-%s-%s-%s', $new_ds->identifiant, $ds->getPeriode(), $lieu_num);
+        if($ds->exist('civaba') && $ds->civaba){
+                    $new_ds->add('civaba', $ds->civaba);
+            }
         $new_ds->add('ds_principale', 0);
         $new_ds->storeInfos();
         return $new_ds;

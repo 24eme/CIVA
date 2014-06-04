@@ -6,6 +6,7 @@ DS:
       _rev: {}
       type: {}
       type_ds: {required: false}
+      civaba: {required: false}
       identifiant: {}
       date_emission: {}
       date_echeance: {}
