@@ -1,5 +1,7 @@
+<?php use_helper('ds'); ?>
+
 <ul id="onglets_majeurs" class="clearfix">
-    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif Déclaration de Stocks <?php echo $ds_principale->getAnnee();?></a></li>
+    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif Déclaration de Stocks de <?php echo getPeriodeFr($ds_principale->getPeriode());?></a></li>
 </ul>
 
 <?php
