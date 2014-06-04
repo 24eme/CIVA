@@ -514,7 +514,9 @@ public function getConfigurationCampagne() {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $cepage = $this->getOrAdd($hash);
         if(!$cepage) return "NO_CEPAGE";
-        if($lieu == "") $lieu = null;
+        if($lieu == "" || preg_match('/appellation_GRDCRU/', $hash)){
+            $lieu = null;
+        }
         if(!$cepage->checkNoVTSGNImport($vol_vt,$vol_sgn)) return "NO_VTSGN_AND_VTORSGN";
         $detail = $cepage->addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum);
         return $detail;
