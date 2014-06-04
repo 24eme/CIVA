@@ -173,8 +173,9 @@ class DSCiva extends DS implements IUtilisateursDocument {
         if(!$cvi_acheteur) {
             return;
         }
-        $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur);
-        foreach ($drs as $dr) {
+        $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, acCouchdbClient::HYDRATE_ON_DEMAND);
+        foreach ($drs as $id => $doc) {
+            $dr = acCouchdbManager::getClient('DR')->find($id);
             foreach ($dr->getProduitsDetails() as $detail) {
                 if(!$detail->getVolumeByAcheteur($cvi_acheteur)) {
 
