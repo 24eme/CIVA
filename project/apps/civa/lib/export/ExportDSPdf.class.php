@@ -99,7 +99,7 @@ class ExportDSPdf extends ExportDocument {
     }
 
     public static function buildFileName($ds_principale, $with_name = true, $with_rev = false) {
-        $filename = sprintf("DS_%s_%s", $ds_principale->declarant->cvi, $ds_principale->periode);
+        $filename = sprintf("DS_%s_%s", $ds_principale->getIdentifiant(), $ds_principale->periode);
         
         if($with_name) {
             $declarant_nom = strtoupper(KeyInflector::slugify($ds_principale->declarant->nom));
