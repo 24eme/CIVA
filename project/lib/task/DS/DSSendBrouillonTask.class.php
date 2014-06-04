@@ -92,7 +92,9 @@ EOF;
        $pdfContent = $document->output();
 
        $mess = 'Bonjour ' . $tiers->nom . ',
+           
 Vous trouverez ci-joint votre Déclaration de Stocks brouillon pour l\'année ' . date('Y') . '.
+    
 Ce document constitue un exemple de Déclaration de Stocks, il n\'est donc pas à remplir ni à renvoyer au CIVA.
 
 Cordialement,
