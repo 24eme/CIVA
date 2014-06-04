@@ -29,11 +29,9 @@ class VracSecurity implements SecurityInterface {
     public function isAuthorized($droits) {
         foreach($this->tiers as $t) {
             if($this->isAuthorizedTiers($t, $droits)) {
-
                 return true;
             }
         }
-
         return false;
     }
 

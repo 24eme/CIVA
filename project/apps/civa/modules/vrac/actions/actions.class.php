@@ -1,12 +1,19 @@
 <?php
 class vracActions extends sfActions 
 {    
+	public function executeSelectionType(sfWebRequest $request) 
+    {
+    	$this->forward404Unless($this->type = $request->getParameter('type'));
+    	$this->getUser()->setAttribute('vrac_type_tiers', $this->type);
+    	return $this->redirect('vrac_nouveau');
+    }
+    
     public function executeNouveau(sfWebRequest $request) 
     {
         $this->secureVrac(VracSecurity::CREATION, null);
-
 		$this->getUser()->setAttribute('vrac_object', null);
     	$this->getUser()->setAttribute('vrac_acteur', null);
+		
     	$etapes = VracEtapes::getInstance();
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
@@ -14,9 +21,8 @@ class vracActions extends sfActions
 	public function executeHistorique(sfWebRequest $request)
 	{
         $this->secureVrac(VracSecurity::DECLARANT, null);
-
-		$this->getUser()->setAttribute('vrac_object', null);
-    	$this->getUser()->setAttribute('vrac_acteur', null);
+		$this->cleanSessions();
+		
 		$this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
 		$this->type = $request->getParameter('type');
@@ -59,7 +65,7 @@ class vracActions extends sfActions
 			throw new sfError404Exception('L\'acteur "'.$this->acteur.'" n\'est pas pris en charge.');
 		}
 
-		$this->vrac = $this->getRoute()->getVrac();
+		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
@@ -82,7 +88,7 @@ class vracActions extends sfActions
 	
 	public function executeAnnuaireCommercial(sfWebRequest $request)
 	{
-		$this->vrac = $this->getRoute()->getVrac();	
+		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());	
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
@@ -120,14 +126,11 @@ class vracActions extends sfActions
 	
 	public function executeSupprimer(sfWebRequest $request) 
 	{
-		$this->getUser()->setAttribute('vrac_object', null);
-    	$this->getUser()->setAttribute('vrac_acteur', null);
+		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
-
         $this->secureVrac(VracSecurity::SUPPRESSION, $this->vrac);
 
 		if ($this->vrac->isNew()) {
-			
             return $this->redirect('mon_espace_civa_vrac');
 		}
 
@@ -135,7 +138,6 @@ class vracActions extends sfActions
 		
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
-			
             return $this->redirect('mon_espace_civa_vrac');
 		}
 
@@ -156,11 +158,8 @@ class vracActions extends sfActions
     
 	public function executeFiche(sfWebRequest $request) 
 	{
-
-        $this->getUser()->setAttribute('vrac_object', null);
-        $this->getUser()->setAttribute('vrac_acteur', null);
+		$this->cleanSessions();
         $this->vrac = $this->getRoute()->getVrac();
-
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
         $this->user = $this->getTiersOfVrac($this->vrac);
@@ -195,10 +194,8 @@ class vracActions extends sfActions
     
 	public function executeValidation(sfWebRequest $request) 
 	{
-		$this->getUser()->setAttribute('vrac_object', null);
-    	$this->getUser()->setAttribute('vrac_acteur', null);
+		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
-
         $this->secureVrac(VracSecurity::SIGNATURE, $this->vrac);
 
 		$this->user = $this->getTiersOfVrac($this->vrac);
@@ -222,8 +219,8 @@ class vracActions extends sfActions
     	$this->etape = $request->getParameter('etape');
     	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
-		$this->vrac = $this->getRoute()->getVrac();
-
+		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
+		
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
         
     	if ($this->etapes->isGt($this->etape, VracEtapes::ETAPE_PRODUITS) && !$this->vrac->hasProduits()) {
@@ -243,8 +240,7 @@ class vracActions extends sfActions
        			if ($request->isXmlHttpRequest()) {
        				return sfView::NONE;
        			}
-    			$this->getUser()->setAttribute('vrac_object', null);
-    			$this->getUser()->setAttribute('vrac_acteur', null);
+				$this->cleanSessions();
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} else {
@@ -303,8 +299,8 @@ class vracActions extends sfActions
     	}
 
         $acteur = $request->getParameter('acteur');
-
-        $this->vrac = $this->getRoute()->getVrac();
+		$this->user = $this->getUser()->getDeclarantVrac();
+        $this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
@@ -467,6 +463,31 @@ class vracActions extends sfActions
         $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
 
         throw new sfStopException();
+    }
+    
+    protected function cleanSessions()
+    {
+    	$this->getUser()->setAttribute('vrac_object', null);
+    	$this->getUser()->setAttribute('vrac_acteur', null);
+    	$this->getUser()->setAttribute('vrac_type_tiers', null);
+    }
+    
+    protected function populateVracTiers($vrac)
+    {
+    	$declarant = $this->getUser()->getDeclarantVrac();
+    	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
+    	if ($vrac->isNew() && $typeTiers) {
+			if ($typeTiers == 'vendeur') {
+				$vrac->vendeur_identifiant = $declarant->_id;
+	            $vrac->storeVendeurInformations($declarant);
+	            $vrac->setVendeurQualite($declarant->qualite_categorie);
+			} else {
+				$vrac->acheteur_identifiant = $declarant->_id;
+	            $vrac->storeAcheteurInformations($declarant);
+	            $vrac->setAcheteurQualite($declarant->qualite_categorie);
+			}
+		}
+		return $vrac;
     }
 
 }

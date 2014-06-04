@@ -20,6 +20,11 @@ class Recoltant extends BaseRecoltant {
 
         return true;
     }
+    
+	public function isDeclarantContratForResponsable() {
+
+        return true;
+    }
 
     public function getIdentifiant() {
 

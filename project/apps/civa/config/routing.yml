@@ -2,6 +2,9 @@
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
 # *********** VRAC ***********
+vrac_selection_type:
+  url: /vrac/selection-type/:type
+  param: { module: vrac, action: selectionType, type: null }
 vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
