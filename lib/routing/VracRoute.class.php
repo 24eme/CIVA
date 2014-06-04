@@ -47,7 +47,7 @@ class VracRoute extends sfObjectRoute
         if ($tiers->type == 'Courtier') {
             $vrac->mandataire_identifiant = $tiers->_id;
             $vrac->storeMandataireInformations($tiers);
-        } elseif ($tiers->type == 'Acheteur') {
+        } /*elseif ($tiers->type == 'Acheteur') {
             $vrac->acheteur_identifiant = $tiers->_id;
             $vrac->storeAcheteurInformations($tiers);
             $vrac->setAcheteurQualite($tiers->qualite_categorie);
@@ -57,7 +57,7 @@ class VracRoute extends sfObjectRoute
             $vrac->setAcheteurQualite($tiers->qualite_categorie);
         } else {
             throw new sfException('Ce tiers ne peut pas créer de contrat vrac.');
-        }
+        }*/
         return $vrac;
     }
 

@@ -522,6 +522,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return ($this->createur_identifiant == $this->acheteur_identifiant)? true : false;
     }
     
+    public function isVendeurProprietaire()
+    {
+    	return ($this->createur_identifiant == $this->vendeur_identifiant)? true : false;
+    }
+    
     public function hasCourtier() {
         return ($this->mandataire_identifiant)? true : false;
     }
@@ -658,13 +663,23 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->valide->statut == self::STATUT_VALIDE || $this->valide->statut == self::STATUT_CLOTURE);
     }
     
-    public function setAcheteurQualite($qualite)
+    public function setTiersQualite($noeud, $qualite)
     {
     	if ($qualite == 'Negociant') {
-    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
+    		$this->{$noeud} = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
     	}
     	if ($qualite == 'Cooperative') {
-    		$this->acheteur_type = AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
+    		$this->{$noeud} = AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
     	}
+    }
+    
+    public function setAcheteurQualite($qualite)
+    {
+    	$this->setTiersQualite('acheteur_type', $qualite);
+    }
+    
+    public function setVendeurQualite($qualite)
+    {
+    	$this->setTiersQualite('vendeur_type', $qualite);
     }
 }

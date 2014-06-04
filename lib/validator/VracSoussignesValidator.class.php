@@ -44,6 +44,10 @@ class VracSoussignesValidator extends sfValidatorBase
     	if (isset($values['acheteur_cave_cooperative_identifiant']) && !empty($values['acheteur_cave_cooperative_identifiant'])) {
     		$acheteur = $values['acheteur_cave_cooperative_identifiant'];
     	}
+    	if (!$vendeur && $this->vrac->isVendeurProprietaire()) {
+    		$vendeur = $this->vrac->vendeur_identifiant;
+    	}
+    	
     	if (!$vendeur) {
     		$errorSchema->addError(new sfValidatorErrorSchema($this, array('vendeur_'.$vendeur_type.'_identifiant' => new sfValidatorError($this, 'required'))));
             $hasErrors = true;
@@ -54,7 +58,6 @@ class VracSoussignesValidator extends sfValidatorBase
                 $hasErrors = true;
 	    	}
     	}
-
     	if (!$acheteur && $this->vrac->isAcheteurProprietaire()) {
     		$acheteur = $this->vrac->acheteur_identifiant;
     	}
@@ -81,10 +84,11 @@ class VracSoussignesValidator extends sfValidatorBase
         $vendeurHasEmail = (count($this->vrac->vendeur->emails))? true : false;
         $acheteurHasEmail = (count($this->vrac->acheteur->emails))? true : false;
         $mandataireHasEmail = ($this->vrac->mandataire_identifiant && count($this->vrac->mandataire->emails))? true : false;
+
         if (!$vendeurHasEmail || !$acheteurHasEmail) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }
-        if (!$this->vrac->isAcheteurProprietaire() && !$mandataireHasEmail) {
+        if (!$this->vrac->isAcheteurProprietaire() && !$this->vrac->isVendeurProprietaire() && !$mandataireHasEmail) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }
         return array_merge($values, array('acheteur' => $acheteur, 'vendeur' => $vendeur));
