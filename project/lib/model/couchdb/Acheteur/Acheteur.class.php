@@ -20,6 +20,26 @@ class Acheteur extends BaseAcheteur {
         return true;
     }
 
+    public function isDeclarantStockPropriete()
+    {
+        if($this->categorie == self::CATEGORIE_CCV) {
+
+            return true;
+        }
+        
+        return parent::isDeclarantStockPropriete();
+    }
+
+    public function isDeclarantStockNegoce()
+    {
+        if($this->categorie == self::CATEGORIE_CCV) {
+
+            return false;
+        }
+        
+        return parent::isDeclarantStockNegoce();
+    }
+
     public function isDeclarantContratForResponsable() {
 
         return true;

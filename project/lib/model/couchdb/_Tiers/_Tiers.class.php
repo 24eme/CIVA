@@ -67,14 +67,11 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getTypeDs() {
-        if(!$this->categorie){
-            return null;
-        }
-        if(in_array($this->categorie, self::$array_ds_negoce)){
+        if($this->isDeclarantStockNegoce()){
             return DSCivaClient::TYPE_DS_NEGOCE;
         }
         
-        if(in_array($this->categorie, self::$array_ds_propriete)){
+        if($this->isDeclarantStockPropriete()){
             return DSCivaClient::TYPE_DS_PROPRIETE;
         }
         

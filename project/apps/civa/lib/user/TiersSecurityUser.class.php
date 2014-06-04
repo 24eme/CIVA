@@ -148,6 +148,11 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         }
 
         if($typeDS == DSCivaClient::TYPE_DS_NEGOCE) {
+            if($tiers->type == 'MetteurEnMarche') {
+                
+                return $this->_tiers['MetteurEnMarche'];
+            }
+
             if($tiers->type == 'Recoltant') {
 
                 return $this->_tiers['MetteurEnMarche'];
