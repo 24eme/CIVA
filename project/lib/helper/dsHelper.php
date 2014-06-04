@@ -99,7 +99,7 @@ function formatNumeroStockage($numero, $ajoutLieux = false)
 function getTitleLieuStockageStock($ds)
 {
     return '<span style="color: #000000; font-size: 13px">Lieux de stockage : </span>' .
-            sprintf("%s - %s, %s, %s %s", formatNumeroStockage($ds->stockage->numero,$ds->isAjoutLieuxDeStockage()), $ds->stockage->nom, $ds->stockage->adresse, $ds->stockage->code_postal, $ds->stockage->commune);
+            sprintf("%s - %s, %s %s", formatNumeroStockage($ds->stockage->numero,$ds->isAjoutLieuxDeStockage()), $ds->stockage->adresse, $ds->stockage->code_postal, $ds->stockage->commune);
 }
 
 function isEtapePasse($etape, $ds)

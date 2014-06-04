@@ -35,8 +35,8 @@
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
+        <?php if($sf_user->getDeclarantDS()->isDeclarantStockPropriete()): ?>
+        <a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarantDS()->getIdentifiant())); ?>" style="margin-top: 20px;">Télécharger mon brouillon</a>
+        <?php endif; ?>
     </div>
 </form>
-<?php if($sf_user->getDeclarant()->isDeclarantStockPropriete()): ?>
-<a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarantDS()->getIdentifiant())); ?>" style="float: left; margin-top: 20px;">Télécharger mon brouillon</a>
-<?php endif; ?>
