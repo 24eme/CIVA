@@ -68,7 +68,7 @@ class DSCivaClient extends DSClient {
         $dss_principales = array();
         $docs = $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
-            if (preg_match('/DS-(?P<cvi>\d+)-(?P<periode>\d+)/', $doc_id, $matches)) {
+            if (preg_match('/DS-(C?([0-9]){10})-(?P<periode>\d+)/', $doc_id, $matches)) {
                 $periode_t = preg_replace('/^([0-9]{6})$/', "$1", $matches['periode']);
                 if (!array_key_exists($periode_t, $dss_principales))
                     $dss_principales[$periode_t] = $this->getDSPrincipaleByDs($this->find($doc_id, acCouchdbClient::HYDRATE_DOCUMENT));
