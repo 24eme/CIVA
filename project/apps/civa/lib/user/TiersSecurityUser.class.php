@@ -140,11 +140,17 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     public function getDeclarantDS() {
         $tiers = $this->getTiers();
+        
+        if(isset($this->_tiers['MetteurEnMarche'])) {
+
+            $tiers = $this->_tiers['MetteurEnMarche'];
+        }
+
         $typeDS = $tiers->getTypeDs();
 
         if($typeDS == DSCivaClient::TYPE_DS_PROPRIETE) {
             
-            return $tiers;
+            return $this->getTiers();
         }
 
         if($typeDS == DSCivaClient::TYPE_DS_NEGOCE) {
