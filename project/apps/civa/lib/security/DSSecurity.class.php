@@ -27,6 +27,11 @@ class DSSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
+        if(!$this->tiers) {
+
+            return false;
+        }
+
         /*** DECLARANT ***/
 
         if(!$this->tiers->isDeclarantStock()) {
