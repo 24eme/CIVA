@@ -82,13 +82,15 @@ class DSCivaClient extends DSClient {
      }
     
     public function findByIdentifiantAndPeriode($identifiant, $periode) {
-      $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
+        $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
+        $tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage());
         foreach ($tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage()) as $lieu_stockage) {
             if($ds = $this->find('DS-' . $identifiant . '-' . $periode. '-' . $tiers->getLieuStockagePrincipal()->getNumeroIncremental())) {
 
                 return $ds;
             }
         }
+        
         return null;
     }
 
@@ -130,6 +132,7 @@ class DSCivaClient extends DSClient {
         $cpt = 1;
         $dss = array();
         $ds_principale_exist = false;
+        $tiers->getLieuxStockage($onlyCreate);
         foreach ($tiers->getLieuxStockage($onlyCreate) as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantPeriodeAndLieuStockage($tiers->getIdentifiant(), $periode, $num_lieu);

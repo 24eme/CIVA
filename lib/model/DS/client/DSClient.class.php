@@ -79,6 +79,7 @@ class DSClient extends acCouchdbClient {
     }
 
     public function findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $lieu_stockage) {
+        
         return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
     }
     
