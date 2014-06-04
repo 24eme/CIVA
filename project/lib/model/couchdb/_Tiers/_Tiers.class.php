@@ -52,8 +52,12 @@ abstract class _Tiers extends Base_Tiers {
      */
     public function getDs($periode) {
         $identifiant = $this->getIdentifiant();
-        $ds = acCouchdbManager::getClient('DSCiva')->retrieveByPeriodeAndIdentifiant($identifiant, $periode);
-        if(!$ds) return $ds;
+        $ds = acCouchdbManager::getClient('DSCiva')->findByIdentifiantAndPeriode($identifiant, $periode);
+        if(!$ds) {
+
+            return null;
+        }
+
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
     
@@ -63,20 +67,17 @@ abstract class _Tiers extends Base_Tiers {
      * @return DR 
      */
     public function getTypeDs() {
-        if(!$this->categorie){
-            return null;
-        }
-        if(in_array($this->categorie, self::$array_ds_negoce)){
+        if($this->isDeclarantStockNegoce()){
             return DSCivaClient::TYPE_DS_NEGOCE;
         }
         
-        if(in_array($this->categorie, self::$array_ds_propriete)){
+        if($this->isDeclarantStockPropriete()){
             return DSCivaClient::TYPE_DS_PROPRIETE;
         }
         
         return null;
     }
-    
+
     /**
      *
      * @return string 
@@ -237,17 +238,16 @@ abstract class _Tiers extends Base_Tiers {
         return $compte->email;
     }
 
-    public function getLieuxStockage()
+    public function getLieuxStockage($ajoutLieuxStockage = false)
     {
-//        if($this->isAjoutLieuxDeStockage() &&
-//                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
-//           $lieu_stockage = $this->storeLieuStockage($this->nom,
-//                    $this->siege->adresse,
-//                    $this->siege->commune,
-//                    $this->siege->code_postal);
-//            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
-//            return $this->_get('lieux_stockage');
-//        }
+        if($ajoutLieuxStockage && $this->isAjoutLieuxDeStockage() &&
+                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
+            $lieu_stockage = $this->storeLieuStockage($this->siege->adresse,
+                                                    $this->siege->commune,
+                                                   $this->siege->code_postal);
+            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
+            return $this->_get('lieux_stockage');
+        }
         if($this->exist('lieux_stockage')){
             return $this->_get('lieux_stockage');
         }
@@ -255,8 +255,8 @@ abstract class _Tiers extends Base_Tiers {
     }
     
     
-    public function getLieuStockagePrincipal() {
-        foreach($this->getLieuxStockage() as $lieu_stockage) {
+    public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
+        foreach($this->getLieuxStockage($ajoutLieuxStockage) as $lieu_stockage) {
 
             return $lieu_stockage;
         }

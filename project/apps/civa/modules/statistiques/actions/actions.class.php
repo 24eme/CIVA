@@ -68,6 +68,9 @@ class statistiquesActions extends sfActions {
         $this->etapeExploitation = 0;
         $this->etapeDrNonValidee = 0;
         $this->etapeNoDr = 0;
+        $this->drTeledeclare = 0;
+        $this->drPapier = 0;
+        $this->drAuto = 0;
 
         $dr_validees = acCouchdbManager::getClient()->group(true)
                                               ->group_level(3)
@@ -124,6 +127,18 @@ class statistiquesActions extends sfActions {
             $this->etapeValidation = $dr_non_validees_etapes_validation->rows[0]->value;
         }
 
+        $drs = acCouchdbManager::getClient()->reduce(false)
+                                              ->startkey(array($campagne, true, true))
+                                              ->endkey(array($campagne, true, true, array()))
+                                              ->getView("STATS", "DR");
+        foreach($drs->rows as $dr) {
+          if (isset($dr->key[5])) {
+            $this->drPapier += 1;
+          } else {
+            $this->drTeledeclare += 1;
+          }
+        }
+
         $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
                                               ->group_level(2)
                                               ->startkey(array($campagne))
@@ -131,13 +146,27 @@ class statistiquesActions extends sfActions {
                                               ->getView("STATS", "edition_dr");
 
         $this->utilisateurs_edition_dr = array(); 
-        $cpt = 0;
         foreach ($utilisateurs_edition->rows as $u) {
-                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
+                      if(preg_match('/civa/', $u->key[1])) {
                           $this->utilisateurs_edition_dr[$u->key[1]] = $u->value;
                       }
         }
-        arsort($this->utilisateurs_edition_dr);
+
+        $utilisateurs_validation = acCouchdbManager::getClient()->group(true)
+                                              ->group_level(2)
+                                              ->startkey(array($campagne))
+                                              ->endkey(array($campagne, array()))
+                                              ->getView("STATS", "validation_dr");
+
+        foreach ($utilisateurs_validation->rows as $u) {
+          if(preg_match('/^COMPTE-auto$/', $u->key[1])) {
+              $this->drAuto += 1;
+          }
+        }
+
+        $this->drTeledeclare = $this->drTeledeclare - $this->drAuto;
+
+
     }
 
 

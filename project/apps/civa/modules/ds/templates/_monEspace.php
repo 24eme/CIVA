@@ -9,7 +9,7 @@
     <?php include_partial('ds/monEspaceNonEditable',array('ds' => $ds)); ?>
 <?php elseif(!$sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR) && CurrentClient::getCurrent()->exist('ds_non_ouverte') && CurrentClient::getCurrent()->ds_non_ouverte == 1): ?>
     <?php include_partial('ds/monEspaceNonOuvert',array('ds' => $ds)); ?>
-<?php elseif(!$sf_user->hasLieuxStockage()): ?>    
+<?php elseif(!$sf_user->hasLieuxStockage() && !$sf_user->getTiers()->isAjoutLieuxDeStockage()): ?>    
     <?php include_component('ds', 'monEspaceNoLieuxStockage'); ?>
 <?php endif; ?>
 </div>

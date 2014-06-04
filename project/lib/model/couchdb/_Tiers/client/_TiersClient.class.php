@@ -48,11 +48,12 @@ class _TiersClient extends acCouchdbClient {
 //    }
     
     public function findByIdentifiant($identifiant) {
-        $tiers = $this->retrieveByCvi($identifiant);        
-        if(!$tiers){
-            $tiers = $this->findByCivaba($identifiant); 
+        if(strpos($identifiant, 'C') !== false) {
+
+            return $this->findByCivaba(str_replace('C', '', $identifiant));
         }
-        return $tiers;
+        
+        return $this->findByCvi($identifiant);
     }
     
     public function findByIdentifiantNegoce($identifiant) {

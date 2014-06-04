@@ -11,7 +11,7 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
 
     public function getIdentifiant() {
 
-        return $this->civaba;
+        return 'C'.$this->civaba;
     }
 
     public function isDeclarantContratForSignature() {

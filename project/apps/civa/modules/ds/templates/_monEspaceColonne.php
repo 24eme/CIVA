@@ -22,7 +22,7 @@
 	<h3 class="titre_section">Documents d'aide</h3>
 	<div class="contenu_section">
 	    <p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
-	    <ul>
+	    <ul>               
 	        <li><a href="<?php echo url_for('telecharger_la_notice_ds') ?>" class="pdf"> Télécharger la notice</a></li>
 	    </ul>
 	    <p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>

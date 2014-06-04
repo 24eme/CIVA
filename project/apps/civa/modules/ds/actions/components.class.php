@@ -34,7 +34,8 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->dsByperiodes = $this->getUser()->getDeclarant()->getDsArchivesSince(($this->getUser()->getPeriodeDS()-1));
+        $this->dsByperiodes = $this->getUser()->getDeclarantDS()->getDsArchivesSince(($this->getUser()->getPeriodeDS()-1));
+        $this->tiers = $this->getUser()->getDeclarantDS();
         krsort($this->dsByperiodes);
     }
     

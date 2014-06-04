@@ -43,15 +43,15 @@
             </td>
             <td style="border: 1px solid black; width: 106px;<?php if (($empty && !$vtsgn) || (is_null($produit["vt"]) && !$produitEmpty)): ?>background-color: #bbb;<?php endif; ?>">
                 <?php echoVolume($produit["vt"]); ?>
-                <?php if (((is_null($produit["vt"]) && $produitEmpty) || $produitFixed) && $vtsgn): ?>
-                    <?php echoHl($empty); ?>
-                <?php endif; ?>
+                <?php  if (((is_null($produit["vt"]) && $produitEmpty) || $produitFixed) && $vtsgn): ?>
+                    <?php  echoHl($empty);  ?>
+                <?php  endif; ?>
             </td>
             <td style="border: 1px solid black; width: 106px; <?php if (($empty && !$vtsgn) || (is_null($produit["sgn"]) && !$produitEmpty)): ?>background-color: #bbb;<?php endif; ?>">
                 <?php echoVolume($produit["sgn"]); ?>
-                <?php if (((is_null($produit["sgn"]) && $produitEmpty) || $produitFixed) && $vtsgn): ?>
-                    <?php echoHl($empty); ?>
-                <?php endif; ?>
+                <?php  if (((is_null($produit["sgn"]) && $produitEmpty) || $produitFixed) && $vtsgn): ?>
+                    <?php  echoHl($empty); ?>
+                <?php  endif; ?>
             </td>
         </tr>
     <?php endforeach; ?>

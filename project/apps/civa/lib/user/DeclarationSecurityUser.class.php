@@ -208,22 +208,27 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     
     public function getDs()
     {
-        if(!$this->getDeclarant()->isDeclarantStock()) {
+        $declarant = $this->getDeclarantDS();
+
+        if(!$declarant->isDeclarantStock()) {
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
-        if (!$this->hasLieuxStockage()) {                                                                                                                                                
+        if (!$this->hasLieuxStockage() && !$declarant->isAjoutLieuxDeStockage()) {                                                                                                                                                
             return null;
         }
 
         $this->requireTiers();
         if (is_null($this->_ds)) {
             $periode = CurrentClient::getCurrent()->getDsPeriode();
-            $this->_ds = $this->getDeclarant()->getDs($periode);
+            $this->_ds = $declarant->getDs($periode);
             if (!$this->_ds) {
                 $ds = new DSCiva();
-                $ds->identifiant = $this->getDeclarant()->getIdentifiant();
-                $ds->set('_id', 'DS-' . $this->getDeclarant()->getIdentifiant() . '-' .$periode.'-'.$this->getDeclarant()->getLieuStockagePrincipal()->getNumeroIncremental());
+                if($declarant->exist('civaba') && $declarant->civaba){
+                    $ds->add('civaba', $declarant->civaba);
+                }
+                $ds->identifiant = $declarant->getIdentifiant();
+                $ds->set('_id', 'DS-' . $declarant->getIdentifiant() . '-' .$periode.'-'.$declarant->getLieuStockagePrincipal(true)->getNumeroIncremental());
                 return $ds;
             }
         }
@@ -233,7 +238,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function hasLieuxStockage() {
         $this->requireTiers();
-        return (int) count($this->getDeclarant()->lieux_stockage);
+        return (int) count($this->getDeclarantDS()->lieux_stockage);
     }
 
 

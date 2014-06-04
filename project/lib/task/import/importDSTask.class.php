@@ -13,6 +13,7 @@ class importDSTask extends importAbstractTask
 {
 
     protected $conf = null;
+    protected $current = null;
     protected $ds_negoce = null;
     
     protected $error_term = "\033[31mERREUR:\033[0m";
@@ -83,6 +84,7 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        sfContext::createInstance($this->configuration);
         $this->ds_negoce = array_key_exists('ds-negoce', $options) && $options['ds-negoce'];
         set_time_limit(0);
         $file = file($arguments['file']);
@@ -138,6 +140,7 @@ EOF;
 
         foreach ($dss as $id_ds => $ds_csv) {
             $ds = new DSCiva();
+            
             $ds->add('type_ds', $type_ds);
             if (!count($ds_csv))
                 throw new sfException("La ligne d'identifiant $id_ds n'est pas valide.");
@@ -145,12 +148,15 @@ EOF;
             $ds_csv_datas = str_getcsv($ds_ligne, ',');
 
             $date = date_format($this->convertToDateObject($ds_csv_datas[self::CSV_DS_DATE_SAISIE]), 'Y-m-d');
-            $periode = $ds_client->buildPeriode($date);
+            $periode = $this->getCurrent()->getPeriodeDS();//$ds_client->buildPeriode($date);
             $ds->date_emission = $date;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID], 2);
-            $ds->identifiant = ($this->ds_negoce) ? $ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
+            $ds->identifiant = ($this->ds_negoce) ? 'C'.$ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
+            if($tiers->exist('civaba') && $tiers->civaba){
+                    $ds->add('civaba', $tiers->civaba);
+            }
             $identifiant = $tiers->getIdentifiant();
             if (!in_array($tiers->_id, $tiersListIDs)) {
                 $removeDss = DSCivaClient::getInstance()->removeAllDssByCvi($tiers, $date);
@@ -249,7 +255,7 @@ EOF;
 
     public function setConf()
     {
-        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+        $this->conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');        
     }
 
     public function getConf()
@@ -258,7 +264,21 @@ EOF;
             $this->setConf();
         return $this->conf;
     }
+    
+    public function setCurrent()
+    {
+        $currentClient = acCouchdbManager::getClient('Current');
+        $this->current =  $currentClient::getCurrent();
+    }
 
+    public function getCurrent()
+    {
+        if (!$this->current)
+            $this->setCurrent();
+        return $this->current;
+    }
+    
+    
     protected function importProduitInDS($ds, $productRow)
     {
         $hash = $this->constructHash($productRow, $ds->_id);

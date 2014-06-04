@@ -8,7 +8,7 @@ class dsActions extends sfActions {
        $this->secureDS(array(DSSecurity::CONSULTATION, 
                              DSSecurity::EDITION), $this->getUser()->getDs());
 
-       $this->tiers = $this->getUser()->getDeclarant();
+       $this->tiers = $this->getUser()->getDeclarantDS();
        $ds_data = $this->getRequestParameter('ds', null);
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
@@ -28,7 +28,7 @@ class dsActions extends sfActions {
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
         $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
-        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant);
+        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant, true);
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
@@ -37,6 +37,7 @@ class dsActions extends sfActions {
             $ds->save($this->getUserId());
         }
         $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->tiers,$date);
+
         $this->redirect('ds_etape_redirect', $this->ds);
     } 
     
@@ -204,6 +205,7 @@ class dsActions extends sfActions {
         if(!$this->ds->isAjoutLieuxDeStockage()){
             $this->forwardSecure();
         }
+
         $this->form = new DSEditionAddLieuStockageFormCiva($this->ds);
         
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -644,12 +646,15 @@ Le CIVA';
         $this->forward404Unless($request->isXmlHttpRequest());
         return $this->renderText(json_encode(array('titre' => $request->getParameter('title', null),
 						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('telecharger_la_notice_ds')),
-                'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
+                                                   'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
 
     }
     
-    public function executeDownloadNotice() {
-        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock.pdf", "aide stock.pdf");
+    public function executeDownloadNotice(sfWebRequest $request) {
+        if($this->getUser()->getDeclarant()->isDeclarantStockNegoce()){
+            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_negoce.pdf", "aide stock negoce.pdf");
+        }
+            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
     }
     
     public function executeDownloadDai() {

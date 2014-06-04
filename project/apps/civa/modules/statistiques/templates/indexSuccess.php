@@ -16,7 +16,13 @@
             <h3 class="titre_section">Statistiques des DR de l'année</h3>
             <div class="contenu_section">
                 <ul class="statistiques">
-                    <li><strong>Nombre de déclarations validées : <?php echo $etapeDrValidee; ?></strong></li>
+                    <li><strong>Nombre de déclarations validées : <?php echo $etapeDrValidee; ?></strong>
+                        <ul>
+                            <li>Télédéclarées : <?php echo $drTeledeclare; ?></li>
+                            <li>Papiers : <?php echo $drPapier; ?></li>
+                            <li>Automatiques : <?php echo $drAuto; ?></li>
+                        </ul>
+                    </li>
                     <li><strong>Nombre de déclarations en cours : <?php echo $etapeDrNonValidee; ?></strong>
                         <ul>
                             <li>à l'étape exploitation : <?php echo $etapeExploitation; ?></li>
@@ -36,6 +42,7 @@
                         ?>
     		            </li>
                     </ul>
+
                 </ul>
             </div>
             <br />
