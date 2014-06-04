@@ -151,7 +151,7 @@ EOF;
             $ds->date_emission = $date;
             $ds->date_stock = $date;
             $ds->numero_archive = substr($ds_csv_datas[self::CSV_DS_ID], 2);
-            $ds->identifiant = ($this->ds_negoce) ? $ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
+            $ds->identifiant = ($this->ds_negoce) ? 'C'.$ds_csv_datas[self::CSV_DS_TCIVAB_CIVAGEN] : $ds_csv_datas[self::CSV_DS_CVI];
             $tiers = $ds->getEtablissement();
             $identifiant = $tiers->getIdentifiant();
             if (!in_array($tiers->_id, $tiersListIDs)) {
