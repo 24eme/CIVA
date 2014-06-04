@@ -11,9 +11,14 @@ class vracActions extends sfActions
     public function executeNouveau(sfWebRequest $request) 
     {
         $this->secureVrac(VracSecurity::CREATION, null);
-		$this->getUser()->setAttribute('vrac_object', null);
-    	$this->getUser()->setAttribute('vrac_acteur', null);
-		
+        $this->getUser()->setAttribute('vrac_object', null);
+        $this->getUser()->setAttribute('vrac_acteur', null);
+        if($this->getUser()->getDeclarantVrac()->type == 'Courtier') {
+            $this->getUser()->getAttributeHolder()->remove('vrac_type_tiers');
+        } else {
+            $this->getUser()->setAttribute('vrac_type_tiers', 'acheteur');
+        }
+
     	$etapes = VracEtapes::getInstance();
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
