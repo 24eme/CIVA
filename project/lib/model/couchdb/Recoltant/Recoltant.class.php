@@ -23,7 +23,7 @@ class Recoltant extends BaseRecoltant {
     
 	public function isDeclarantContratForResponsable() {
 
-        return true;
+        return false;
     }
 
     public function getIdentifiant() {
