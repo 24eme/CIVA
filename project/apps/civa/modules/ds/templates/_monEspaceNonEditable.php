@@ -6,8 +6,8 @@
         <?php if($ds && $ds->isValideeTiers()): ?>
             <?php echo link_to('<img src="/images/boutons/btn_visualiser.png" alt="" class="btn" />', 'ds_visualisation',$ds); ?>
         <?php endif; ?>
+        <?php if($ds->isTypeDsPropriete()): ?>
+        <a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarant()->getCvi())); ?>" style="margin-top: 20px;">Télécharger mon brouillon</a>
+        <?php endif; ?>
     </div>
 </div>
-<?php if($ds->isTypeDsPropriete()): ?>
-<a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarant()->getCvi())); ?>" style="float: left; margin-top: 20px;">Télécharger mon brouillon</a>
-<?php endif; ?>
