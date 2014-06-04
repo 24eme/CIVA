@@ -3,11 +3,14 @@
 class DSSendBrouillonTask extends sfBaseTask
 {
 
+    protected $debug = false;
+    
     protected function configure()
     {
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
+            new sfCommandArgument('debug', sfCommandArgument::REQUIRED, '0'),
         ));
 
         $this->addOptions(array(
@@ -34,6 +37,7 @@ EOF;
         sfContext::createInstance($this->configuration);
         set_time_limit(0);
         ini_set('memory_limit', '512M');
+        $this->debug = array_key_exists('debug', $arguments) && ((bool) $arguments['debug']);
         if(!array_key_exists('periode',$arguments) || !preg_match('/^([0-9]{6})$/', $arguments['periode'])){
             throw new sfException("La periode doit être passé en argument et doit être de la forme AAAAMM");
         }
@@ -52,10 +56,12 @@ EOF;
             }
             if($tiers->getCompteObject()->isActif() && $tiers->isDeclarantStockPropriete()){
                  //checker tiers has droit DS
-                 echo $tiers->getIdentifiant().",".$tiers->getCompteEmail();
-//                   echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->_id)."\n";
-//                   $this->executeSendMail($tiers);               
-//                   exit;
+                if($this->debug){
+                 echo $tiers->getIdentifiant().",".$tiers->getCompteEmail()."\n";
+                }else{
+                   echo $this->green('Traitement : ')." creation de mail pour le RECOLTANT ".$this->green($tiers->_id)."\n";
+                   $this->executeSendMail($tiers);               
+                }
             }
         }
     }
@@ -94,7 +100,7 @@ Cordialement,
 Le CIVA';
        $email = $tiers->getCompteEmail();
        if(!$email){
-            echo $this->yellow('WARNING : ')."le tiers ".$tiers->cvi." ne possède pas d'email.\n";
+            echo $this->yellow('WARNING : ')."le tiers ".$tiers->getIdentifiant()." ne possède pas d'email.\n";
             return false;
         }
         
