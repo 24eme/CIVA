@@ -8,8 +8,7 @@ class vracComponents extends sfComponents {
     	$this->getUser()->setAttribute('vrac_acteur', null);
     	$this->getUser()->setAttribute('vrac_type_tiers', null);
 		$this->tiers = $this->getUser()->getDeclarantsVrac();
-        //$this->hasDoubt = $this->getUser()->getDeclarantVrac()->type != 'Courtier';
-		$this->hasDoubt = false;
+        $this->hasDoubt = $this->getUser()->getDeclarantVrac()->type != 'Courtier';
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
         $this->etapes = VracEtapes::getInstance();
     }

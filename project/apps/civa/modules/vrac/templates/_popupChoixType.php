@@ -1,4 +1,4 @@
-<div id="popup_choix_typeVrac" class="popup_ajout " title="Selection type">
+<div id="popup_choix_typeVrac" class="popup_ajout " title="Création du contrat">
     <form method="post" action="" id="contrats_vrac">
     		<div class="form_col selecteur bloc_infos" style="width:auto; border:none;margin:0;">
 				<div class="ligne_form" id="type_contrat_radio_list" style="margin:0;">
