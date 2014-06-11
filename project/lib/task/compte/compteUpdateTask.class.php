@@ -62,11 +62,14 @@ EOF;
                 }
             }
             foreach ($nums as $num => $tiers) {
-                if (($met_en_attente && $num == $met_en_attente->db2->num) || $met_en_attente_add) {
+                if (($met_en_attente && $num == $met_en_attente->db2->num)) {
                     continue;
                 }
                 
-                if ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant') {
+                if ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant' && $tiers[0]->statut != _TiersClient::STATUT_INACTIF) {
+                    $tiers[] = $met_en_attente;
+                    $met_en_attente_add = true;
+                } elseif ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant' && $tiers[0]->statut == _TiersClient::STATUT_INACTIF && $met_en_attente->statut == _TiersClient::STATUT_INACTIF) {
                     $tiers[] = $met_en_attente;
                     $met_en_attente_add = true;
                 }
@@ -147,7 +150,7 @@ EOF;
                 $compte->setActif();
                 echo sprintf("INFO;Le compte a été activé;%s;%s\n", $compte->_id, $compte->nom);
             }
-            
+
             if ($compte->isNew()) {
                 echo sprintf("INFO;Création du compte;%s;%s\n", $compte->_id, $compte->nom);
             } elseif ($compte->isModified()) {
