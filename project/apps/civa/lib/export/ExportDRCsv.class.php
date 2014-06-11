@@ -31,6 +31,7 @@ class ExportDRCsv extends ExportCsv {
         "creation_date" => "date de création",
         "validation_date" => "date de validation",
         "validation_user" => "validateur",
+        "hash" => "hash_produit",
     );
     protected $_validation_ligne = array(
         "cvi_acheteur" => array("type" => "string"),
@@ -49,6 +50,7 @@ class ExportDRCsv extends ExportCsv {
         "creation_date" => array("type" => "string"),
         "volume_total" => array("type" => "float", "format" => "%01.02f"),
         "volume_a_detruire_total" => array("type" => "float", "format" => "%01.02f"),
+        "hash" => array("type" => "string"),
     );
     
     protected $_acheteur = null;
@@ -161,6 +163,7 @@ class ExportDRCsv extends ExportCsv {
             "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $detail->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
+            "hash" => $detail->getHash(),
                 ), $this->_validation_ligne);
     }
 
@@ -187,6 +190,7 @@ class ExportDRCsv extends ExportCsv {
             "creation_date" =>  $this->dr->getPremiereModificationDr(),
             "validation_date" => $detail->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
+            "hash" => $detail->getHash(),
                 ), $this->_validation_ligne);
     }
 
@@ -210,6 +214,7 @@ class ExportDRCsv extends ExportCsv {
             "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $acheteur->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
+            "hash" => $noeud->getHash(),
                 ), $this->_validation_ligne);
     }
     
@@ -253,6 +258,7 @@ class ExportDRCsv extends ExportCsv {
             "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $noeud->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
+            "hash" => $noeud->getHash(),
                 ), $this->_validation_ligne);
     }
 
@@ -276,6 +282,7 @@ class ExportDRCsv extends ExportCsv {
             "creation_date" => $this->dr->getPremiereModificationDr(),
             "validation_date" => $dr->validee,
             "validation_user" => $this->getValidationUser($dr),
+            "hash" => "/jeunes_vignes",
                 ), $this->_validation_ligne);
     }
     
