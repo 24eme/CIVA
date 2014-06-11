@@ -7,7 +7,8 @@ class ExportDRCsvTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
+            new sfCommandArgument('cvi', sfCommandArgument::REQUIRED, 'cvi'),
+            new sfCommandArgument('annee', sfCommandArgument::REQUIRED, 'annee'),
         ));
 
         $this->addOptions(array(
@@ -32,9 +33,17 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
+        $csvContruct = new ExportDRCsv($arguments['annee'], $arguments['cvi']);         
+        $csvContruct->export();
+        
+        echo $csvContruct->output();
+
+        return;
+
         $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
         echo "campagne;cvi;nom;certification;genre;appellation;mention;lieu;couleur;cepage;superficie;volume;volume_revendique;usages_industriels\n";
+
 
         foreach ($dr_ids as $id) {
             if (!preg_match("/^DR-(67|68)/", $id)) {

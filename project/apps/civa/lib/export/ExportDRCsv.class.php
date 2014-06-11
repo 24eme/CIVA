@@ -107,16 +107,23 @@ class ExportDRCsv extends ExportCsv {
                             }
                         }
                     }
+                    if($lieu->getConfig()->hasManyCouleur() && $couleur->getTotalCaveParticuliere() > 0) {
+                        $this->addNoeudTotal($couleur);
+                    }
                 }
 
-                if($lieu->getTotalCaveParticuliere() > 0) {
+                if($appellation->getConfig()->hasManyLieu() && $lieu->getTotalCaveParticuliere() > 0) {
                     $this->addNoeudTotal($lieu);
                 }
+
                 foreach ($lieu->acheteurs as $acheteurs) {
                     foreach ($acheteurs as $cvi_a => $acheteur) {
                             $this->addNoeudAcheteur($lieu, $acheteur);
                     }
                 }
+            }
+            if($appellation->getTotalCaveParticuliere() > 0) {
+                $this->addNoeudTotal($appellation);
             }
         }
         $this->addJeunesVignes($dr);
@@ -207,14 +214,34 @@ class ExportDRCsv extends ExportCsv {
     }
     
     protected function addNoeudTotal($noeud) {
+        if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
+            $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
+            $cepage = "";
+        }
+
+        if($noeud instanceof DRRecolteCouleur && $noeud->getAppellation()->getConfig()->hasManyLieu()) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
+        }
+
+        if($noeud instanceof DRRecolteLieu) {
+            $lieu = $noeud->getConfig()->getLibelle();
+            $cepage = "TOTAL";
+        }
+
+        if($noeud instanceof DRRecolteAppellation) {
+            $lieu = "TOTAL";
+            $cepage = "";
+        }
+
         $this->add(array(
             "cvi_acheteur" => $noeud->getCouchdbDocument()->cvi,
             "nom_acheteur" => "SUR PLACE",
             "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
             "nom_recoltant" => $noeud->getCouchdbDocument()->declarant->nom,
-            "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
-            "cepage" => "TOTAL",
+            "appellation" => ($noeud instanceof DRRecolteAppellation) ? $noeud->getConfig()->getLibelle() : $noeud->getAppellation()->getConfig()->getLibelle(),
+            "lieu" => $lieu,
+            "cepage" => $cepage,
             "vtsgn" => null,
             "denomination" => null,
             "superficie_livree" => ($noeud->canCalculSuperficieSurPlace()) ? $noeud->getSuperficieCaveParticuliere() : null,
@@ -228,7 +255,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
                 ), $this->_validation_ligne);
     }
-    
+
     protected function addJeunesVignes(DR $dr) {
         $this->add(array(
             "cvi_acheteur" => $dr->cvi,
