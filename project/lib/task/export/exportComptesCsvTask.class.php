@@ -75,6 +75,7 @@ EOF;
                     "civaba" => "Numéro CIVABA",
                     "siret" => "Numéro Siret",
                     "qualite" => "Qualité",
+                    "categorie" => "Catégorie",
                     "civilite" => "Civilité",
                     "nom" => "Nom Prénom",
                     "adresse" => "Adresse",
@@ -103,6 +104,7 @@ EOF;
             "civaba" => array("required" => false, "type" => "string"),
             "siret" => array("required" => false, "type" => "string"),
             "qualite" => array("required" => false, "type" => "string"),
+            "categorie" => array("required" => false, "type" => "string"),
             "civilite" => array("required" => false, "type" => "string"),
             "nom" => array("required" => true, "type" => "string"),
             "adresse" => array("required" => false, "type" => "string"),
@@ -136,6 +138,7 @@ EOF;
                         "civaba" => null,
                         "siret" => null,
                         "qualite" => null,
+                        "categorie" => null,
                         "civilite" => null,
                         "nom" => $compte->nom,
                         "adresse" => null,
@@ -158,6 +161,7 @@ EOF;
                 $civabas = array();
                 $sirets = array();
                 $qualites = array();
+                $categories = array();
                 $civilites = array();
                 $noms = array();
                 $addresses = array();
@@ -179,6 +183,7 @@ EOF;
                     $civabas[] = isset($tiers->civaba) ? $tiers->civaba : null;
                     $sirets[] = isset($tiers->siret) ? $tiers->siret : null;
                     $qualites[] = isset($tiers->qualite) ? $tiers->qualite : null;
+                    $categories[] = isset($tiers->categorie) ? $tiers->categorie : null;
                     $civilites[] = isset($tiers->intitule) ? $tiers->intitule : null;
                     $noms[] = isset($tiers->nom) ? $tiers->nom : null;
                     $adresse = $tiers->siege;
@@ -214,6 +219,7 @@ EOF;
                         "civaba" => implode('|', $civabas),
                         "siret" => implode('|', $sirets),
                         "qualite" => implode('|', $qualites),
+                        "categorie" => implode('|', $categories),
                         "civilite" => implode('|', $civilites),
                         "nom" => implode('|', $noms),
                         "adresse" => implode('|', $addresses),
@@ -242,6 +248,7 @@ EOF;
                         "civaba" => null,
                         "siret" => null,
                         "qualite" => null,
+                        "categorie" => null,
                         "civilite" => null,
                         "nom" => null,
                         "adresse" => null,
