@@ -464,6 +464,7 @@ class vracActions extends sfActions
     {
         $statuts = Vrac::getStatutsLibelles();
         $statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = $statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT].'/signature';
+        $statuts[Vrac::STATUT_VALIDE] = $statuts[Vrac::STATUT_VALIDE].' / À enlever';
         return $statuts;
     }
 
