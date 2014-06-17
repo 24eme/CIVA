@@ -25,16 +25,33 @@ class vracActions extends sfActions
 		
 		$this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
-		$this->type = $request->getParameter('type');
+        $this->type = $request->getParameter('type');
+		$this->role = $request->getParameter('role');
+
 		if (!$this->campagne) {
 			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
 		}
 		$this->user = $this->getUser()->getDeclarantVrac();
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type, $this->role);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
+        $this->roles = $this->findRoles();
 	}
+
+    protected function findRoles() {
+        $vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
+        $roles = VracClient::getRoles();
+        $roles_vrac = array();
+        foreach($vracs as $vrac) {
+            if(array_key_exists($vrac->value->role, $roles_vrac)) {
+                continue;
+            }
+            $roles_vrac[$vrac->value->role] = $roles[$vrac->value->role];
+        }
+
+        return $roles_vrac;
+    }
 
     public function executeExportCSV(sfWebRequest $request)
     {

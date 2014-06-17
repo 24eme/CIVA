@@ -6,6 +6,9 @@
 			<ul class="filtres clearfix">
 				<li><label for="statut">Type de contrat :</label><select id="type" name="type"><option value="">Tous</option><?php foreach ($types as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($type == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
 				<li><label for="statut">Statut :</label><select id="statut" name="statut"><option value="">Tous</option><?php foreach ($statuts as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($statut == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
+				<?php if(count($roles) > 1): ?>
+				<li><label for="statut">En tant que :</label><select id="role" name="role"><option value="">Tous</option><?php foreach ($roles as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($role == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
+				<?php endif; ?>
 				<li><label for="campagne">Campagne :</label><select id="campagne" name="campagne"><?php foreach ($campagnes as $c): ?><option value="<?php echo $c ?>"<?php if ($campagne == $c): ?> selected="selected"<?php endif; ?>><?php echo $c ?></option><?php endforeach; ?></select></li>
 				<li><button id="valide_form" style="cursor: pointer; background: none repeat scroll 0 0 transparent; border: 0 none;" type="submit"><img src="/images/boutons/btn_valider_2.png" alt="Continuer à l'étape suivante"></button></li>
 			</ul>

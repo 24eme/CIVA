@@ -83,11 +83,15 @@
 
 #contrats_vrac ul.filtres li { float: left; }
 
-#contrats_vrac ul.filtres li + li { margin: 0 0 0 20px; }
+#contrats_vrac ul.filtres li + li { margin: 0 0 0 15px; }
+
+#contrats_vrac ul.filtres li select { width: 100px ;}
+
+#contrats_vrac ul.filtres li select#statut { width: 150px; }
 
 #contrats_vrac ul.filtres label 
 {
-    padding: 5px 20px 5px 0;
+    padding: 5px 8px 5px 0;
     font-size: 14px;
 }
 
@@ -160,6 +164,9 @@
 
 #espace_alsace_contrats table#soussignes_listing li.soussigne_valide_grey { background-image: url('../images/pictos/pi_check_2_grey.png'); }
 #espace_alsace_contrats table#soussignes_listing li.soussigne_attente_grey { background-image: url('../images/pictos/pi_sablier_grey.png'); }
+
+#espace_alsace_contrats table#soussignes_listing li.soussigne_attente.soussigne_moi { }
+#espace_alsace_contrats table#soussignes_listing li.soussigne_valide.soussigne_moi { }
 
 /* =================================================== */
 /* Rail d'étapes */
