@@ -22,7 +22,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     const APPELLATION_PINOTNOIRROUGE = "PINOTNOIRROUGE";
     const CEPAGE_PR = "cepage_PR";
 	const CEPAGE_PR_LIBELLE_COMPLEMENT = " (rouge)";
-	
+
+    const ROLE_VENDEUR = 'vendeur';
+    const ROLE_ACHETEUR = 'acheteur';
+    const ROLE_MANDATAIRE = 'mandataire';
 	
 	protected $_config;
 	protected $archivage_document;
@@ -57,11 +60,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_VALIDE_PARTIELLEMENT,
 		self::STATUT_VALIDE
 	);
-	
+
 	static $types_tiers = array(
-		'vendeur',
-		'acheteur',
-		'mandataire'
+		self::ROLE_VENDEUR,
+		self::ROLE_ACHETEUR,
+		self::ROLE_MANDATAIRE,
 	);
 	
   	public static function getStatutsLibellesActions() 
@@ -535,23 +538,23 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$acteurs = array();
     	if ($this->vendeur_identifiant) {
     		if ($withCreator) {
-    			$acteurs['vendeur'] = $this->vendeur;
+    			$acteurs[self::ROLE_VENDEUR] = $this->vendeur;
     		} elseif($this->vendeur_identifiant != $this->createur_identifiant) {
-    			$acteurs['vendeur'] = $this->vendeur;
+    			$acteurs[self::ROLE_VENDEUR] = $this->vendeur;
     		}
     	}
     	if ($this->acheteur_identifiant) {
     		if ($withCreator) {
-    			$acteurs['acheteur'] = $this->acheteur;
+    			$acteurs[self::ROLE_ACHETEUR] = $this->acheteur;
     		} elseif($this->acheteur_identifiant != $this->createur_identifiant) {
-    			$acteurs['acheteur'] = $this->acheteur;
+    			$acteurs[self::ROLE_ACHETEUR] = $this->acheteur;
     		}
     	}
     	if ($this->mandataire_identifiant) {
     		if ($withCreator) {
-    			$acteurs['mandataire'] = $this->mandataire;
+    			$acteurs[self::ROLE_MANDATAIRE] = $this->mandataire;
     		} elseif($this->mandataire_identifiant != $this->createur_identifiant) {
-    			$acteurs['mandataire'] = $this->mandataire;
+    			$acteurs[self::ROLE_MANDATAIRE] = $this->mandataire;
     		}
     	}
     	return $acteurs;

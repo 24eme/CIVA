@@ -17,6 +17,12 @@ class VracClient extends acCouchdbClient {
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE, 
                                     self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE
                                  );
+
+  protected static $_roles = array(
+                  Vrac::ROLE_VENDEUR => "Vendeur",
+                  Vrac::ROLE_ACHETEUR => "Acheteur",
+                  Vrac::ROLE_MANDATAIRE => "Mandataire",
+                  );
 	
 	protected static $_centilisations = array(
 									'75' => '75 cl', 
@@ -47,6 +53,11 @@ class VracClient extends acCouchdbClient {
 	public static function getContratTypes()
     {
       return self::$_contrat_types;
+    }
+
+  public static function getRoles()
+    {
+      return self::$_roles;
     }
     
 	public static function getCentilisations()
