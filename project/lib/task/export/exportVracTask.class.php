@@ -11,7 +11,7 @@
  */
 class exportVracTask extends sfBaseTask
 {
-    const VRAC_EXPORT_DB2 = 'EXPORT_VRAC_EXPORT_DB2';
+    const FLAG_EXPORT_DB2 = 'EXPORT_VRAC_EXPORT_DB2';
 
     protected function configure()
     {
@@ -45,7 +45,7 @@ EOF;
         set_time_limit(0);
         
         $configCepappctr = new Cepappctr();
-        $date_begin = Flag::getFlag(self::VRAC_EXPORT_DB2, date('1990-01-01'));
+        $date_begin = Flag::getFlag(self::FLAG_EXPORT_DB2, date('1990-01-01'));
         $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);
         $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
@@ -58,7 +58,7 @@ EOF;
         }
 
         $zip = new ZipArchive();
-        $zip->open($folderPath.'/'.$filenameHeader.'CONTRAT_VRAC.zip', ZipArchive::OVERWRITE);
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZipArchive::OVERWRITE);
 
         /*
          * CREATION
@@ -140,8 +140,8 @@ EOF;
 	        file_put_contents($path_ddecvn, $ddecvn);        
 	        file_put_contents($path_decven, $decven);
 
-            $zip->addFile($path_ddecvn, 'export_vrac_db2/'.$filename_decven);
-            $zip->addFile($path_decven, 'export_vrac_db2/'.$filename_ddecvn);
+            $zip->addFile($path_ddecvn, $filename_decven);
+            $zip->addFile($path_decven, $filename_ddecvn);
         }
             
         $zip->close();
@@ -152,7 +152,7 @@ EOF;
             $c->forceSave();
         }
 
-        Flag::setFlag(self::VRAC_EXPORT_DB2, date('Y-m-d'));
+        Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
         
         $modele_decven = array(
             "numero_archive" => null,

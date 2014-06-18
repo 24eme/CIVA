@@ -11,7 +11,7 @@
  */
 class exportBouteilleTask extends sfBaseTask
 {
-    const VRAC_BOUTEILLE_DB2 = 'CONTRAT_BOUTEILLE_EXPORT_DB2';
+    const FLAG_EXPORT_DB2 = 'CONTRAT_BOUTEILLE_EXPORT_DB2';
 
     protected function configure()
     {
@@ -45,7 +45,7 @@ EOF;
         set_time_limit(0);
         
         $configCepappctr = new Cepappctr();
-        $date_begin = Flag::getFlag(self::VRAC_BOUTEILLE_DB2, date('1990-01-01'));
+        $date_begin = Flag::getFlag(self::FLAG_EXPORT_DB2, date('1990-01-01'));
         $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);
         $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
@@ -56,6 +56,9 @@ EOF;
             echo sprintf("Aucun export effectué\n", $date_end);
             return;
         }
+
+        $zip = new ZipArchive();
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZipArchive::OVERWRITE);
 
     	$csvBouent = new ExportCsv();
         $csvBoudet = new ExportCsv();
@@ -89,8 +92,11 @@ EOF;
         $bouent = $csvBouent->output();
         $boudet = $csvBoudet->output();
 
-        $path_bouent = $folderPath.'/'.$filenameHeader.'BOUENT';
-        $path_boudet = $folderPath.'/'.$filenameHeader.'BOUDET';
+        $filename_bouent = $filenameHeader.'BOUENT'; 
+        $filename_boudet = $filenameHeader.'BOUDET';
+
+        $path_bouent = $folderPath.'/'.$filename_bouent;
+        $path_boudet = $folderPath.'/'.$filename_boudet;
         
         $file_bouent = fopen($path_bouent, 'w');
         fwrite($file_bouent, "\xef\xbb\xbf");
@@ -103,13 +109,18 @@ EOF;
         file_put_contents($path_boudet, $boudet);        
         file_put_contents($path_bouent, $bouent);
 
+        $zip->addFile($path_bouent, $filename_bouent);
+        $zip->addFile($path_boudet, $filename_boudet);
+
+        $zip->close();
+
         foreach($contrats_to_flag as $id) {
             $c = VracClient::getInstance()->find($id);
             $c->date_export_creation = date('Y-m-d');
             $c->forceSave();
         }
 
-        Flag::setFlag(self::VRAC_BOUTEILLE_DB2, date('Y-m-d'));
+        Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
 
         echo sprintf("L'export pour la période du %s au %s est terminé\n", $date_begin, $date_end);
     }
