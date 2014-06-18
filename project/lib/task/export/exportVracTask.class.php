@@ -11,7 +11,7 @@
  */
 class exportVracTask extends sfBaseTask
 {
-    const FLAG_EXPORT_DB2 = 'EXPORT_VRAC_EXPORT_DB2';
+    const FLAG_EXPORT_DB2 = 'CONTRAT_VRAC_EXPORT_DB2';
 
     protected function configure()
     {
