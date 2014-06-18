@@ -11,20 +11,20 @@
  */
 class exportBouteilleTask extends sfBaseTask
 {
+    const VRAC_BOUTEILLE_DB2 = 'CONTRAT_BOUTEILLE_EXPORT_DB2';
 
     protected function configure()
     {
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
-            new sfCommandArgument('date_begin', sfCommandArgument::REQUIRED, 'date'),
-            new sfCommandArgument('date_end', sfCommandArgument::OPTIONAL, 'date'),
         ));
 
         $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default')
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('date-end', null, sfCommandOption::PARAMETER_OPTIONAL, 'The end date au format yyyy-mm-dd (default : date of day - 1)'),
         ));
 
         $this->namespace = 'export';
@@ -45,62 +45,73 @@ EOF;
         set_time_limit(0);
         
         $configCepappctr = new Cepappctr();
-        $date_begin = $arguments['date_begin'];
-        $date_end = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
-        $fin = ($arguments['date_end'])? $arguments['date_end'] : date("Y-m-d");
+        $date_begin = Flag::getFlag(self::VRAC_BOUTEILLE_DB2, date('1990-01-01'));
+        $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);
-        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $fin).'.';
+        $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
+        $folderPath = $arguments['folderPath'];
 
-        	$csvBouent = new ExportCsv();
-	        $csvBoudet = new ExportCsv();
-			$items = VracBouteillesView::getInstance()->findForDb2Export($dates);
-			$contrats = array();
-			foreach ($items as $item) {
-				$contrats[$item->value[VracBouteillesView::VALUE_NUMERO_ARCHIVE]] = $item;
-			}
-			ksort($contrats);
-	        foreach($contrats as $contrat) {
-	            $valuesContrat = $contrat->value;
-	            $isInCreation = (isset($valuesContrat[VracBouteillesView::VALUE_CREATION]) && $valuesContrat[VracBouteillesView::VALUE_CREATION])? false : true;
-	        	if (!$isInCreation) {
-	            	continue;
-	            }
-	            $produits = VracBouteillesProduitsView::getInstance()->findForDb2Export($valuesContrat[VracBouteillesView::VALUE_NUMERO_ARCHIVE]);
-	            $i = 0;
-	            foreach ($produits as $produit) {
-	            	$i++;
-	            	$valuesProduit = $produit->value;
-	            	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
-	            	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE]);
-	            	$valuesProduit[VracBouteillesProduitsView::VALUE_NUMERO_ORDRE] = $i;
-	            	$csvBoudet->add($valuesProduit);
-	            }
-	            $csvBouent->add($valuesContrat);
-            	$c = VracClient::getInstance()->find($contrat->id);
-            	$c->date_export_creation = date('Y-m-d');
-            	$c->forceSave();
-	        }
-	
-	        $bouent = $csvBouent->output();
-	        $boudet = $csvBoudet->output();
-	        
-	        $folderPath = $arguments['folderPath'];
-	        $path_bouent = $folderPath.'/'.$filenameHeader.'BOUENT';
-	        $path_boudet = $folderPath.'/'.$filenameHeader.'BOUDET';
-	        
-	        $file_bouent = fopen($path_bouent, 'w');
-	        fwrite($file_bouent, "\xef\xbb\xbf");
-	        fclose($file_bouent);
-	        
-	        $file_boudet = fopen($path_boudet, 'w');
-	        fwrite($file_boudet, "\xef\xbb\xbf");
-	        fclose($file_boudet);
-	        
-	        file_put_contents($path_boudet, $boudet);        
-	        file_put_contents($path_bouent, $bouent);
+        if($date_begin > $date_end) {
+            echo sprintf("Les contrats bouteilles ont déjà été exportés jusqu'au %s\n", $date_end);
+            echo sprintf("Aucun export effectué\n", $date_end);
+            return;
+        }
 
-            
-        echo "EXPORT fini\n";
+    	$csvBouent = new ExportCsv();
+        $csvBoudet = new ExportCsv();
+		$items = VracBouteillesView::getInstance()->findForDb2Export($dates);
+		$contrats = array();
+        $contrats_to_flag = array();
+		foreach ($items as $item) {
+			$contrats[$item->value[VracBouteillesView::VALUE_NUMERO_ARCHIVE]] = $item;
+		}
+		ksort($contrats);
+        foreach($contrats as $contrat) {
+            $valuesContrat = $contrat->value;
+            $isInCreation = (isset($valuesContrat[VracBouteillesView::VALUE_CREATION]) && $valuesContrat[VracBouteillesView::VALUE_CREATION])? false : true;
+        	if (!$isInCreation) {
+            	continue;
+            }
+            $produits = VracBouteillesProduitsView::getInstance()->findForDb2Export($valuesContrat[VracBouteillesView::VALUE_NUMERO_ARCHIVE]);
+            $i = 0;
+            foreach ($produits as $produit) {
+            	$i++;
+            	$valuesProduit = $produit->value;
+            	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
+            	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE]);
+            	$valuesProduit[VracBouteillesProduitsView::VALUE_NUMERO_ORDRE] = $i;
+            	$csvBoudet->add($valuesProduit);
+            }
+            $csvBouent->add($valuesContrat);
+            $contrats_to_flag[] = $contrat->id;
+        }
+
+        $bouent = $csvBouent->output();
+        $boudet = $csvBoudet->output();
+
+        $path_bouent = $folderPath.'/'.$filenameHeader.'BOUENT';
+        $path_boudet = $folderPath.'/'.$filenameHeader.'BOUDET';
+        
+        $file_bouent = fopen($path_bouent, 'w');
+        fwrite($file_bouent, "\xef\xbb\xbf");
+        fclose($file_bouent);
+        
+        $file_boudet = fopen($path_boudet, 'w');
+        fwrite($file_boudet, "\xef\xbb\xbf");
+        fclose($file_boudet);
+        
+        file_put_contents($path_boudet, $boudet);        
+        file_put_contents($path_bouent, $bouent);
+
+        foreach($contrats_to_flag as $id) {
+            $c = VracClient::getInstance()->find($id);
+            $c->date_export_creation = date('Y-m-d');
+            $c->forceSave();
+        }
+
+        Flag::setFlag(self::VRAC_BOUTEILLE_DB2, date('Y-m-d'));
+
+        echo sprintf("L'export pour la période du %s au %s est terminé\n", $date_begin, $date_end);
     }
     
     protected function getCodeAppellation($appellation)
