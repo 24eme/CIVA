@@ -42,11 +42,7 @@
 							}
 					?>
 					<li class="<?php if (array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Vendeur : <strong>
-					<?php if (array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>
-						Vous
-					<?php else: ?>
 					<?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
-					<?php endif; ?>
 					</strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
 					<?php 
@@ -56,11 +52,7 @@
 							}
 					?>
 					<li class="<?php if (array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Acheteur : <strong>
-					<?php if (array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>
-							Vous
-					<?php else: ?>
 						<?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
-					<?php endif; ?>
 					</strong></li>
 					<?php endif; ?>
 					<?php 
@@ -70,11 +62,7 @@
 							}
 					?>
 					<li class="<?php if (array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php else: ?>soussigne_attente<?php endif; ?><?php if (!array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Courtier :  <strong>
-						<?php if (array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>
-							Vous
-						<?php else: ?>
 							<?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
-						<?php endif; ?>
 					</strong></li>
 					<?php endif; ?>
 				</ul>
