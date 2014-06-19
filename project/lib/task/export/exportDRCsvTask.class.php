@@ -7,8 +7,7 @@ class ExportDRCsvTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('cvi', sfCommandArgument::REQUIRED, 'cvi'),
-            new sfCommandArgument('annee', sfCommandArgument::REQUIRED, 'annee'),
+            new sfCommandArgument('id', sfCommandArgument::REQUIRED, 'ID Document'),
         ));
 
         $this->addOptions(array(
@@ -33,73 +32,11 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $csvContruct = new ExportDRCsv($arguments['annee'], $arguments['cvi']);         
+        preg_match("/^DR-([0-9]+)-([0-9]+)$/", $arguments['id'], $matches);
+
+        $csvContruct = new ExportDRCsv($matches[2], $matches[1]);         
         $csvContruct->export();
         
         echo $csvContruct->output();
-
-        return;
-
-        $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-
-        echo "campagne;cvi;nom;certification;genre;appellation;mention;lieu;couleur;cepage;superficie;volume;volume_revendique;usages_industriels\n";
-
-
-        foreach ($dr_ids as $id) {
-            if (!preg_match("/^DR-(67|68)/", $id)) {
-
-                continue;
-            }
-
-            $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
-
-            if(!isset($dr->validee)) {
-
-                continue;
-            }
-
-            if(!isset($dr->recolte->certification->genre)) {
-
-                continue;
-            }
-
-            foreach($dr->recolte->certification->genre as $appellation_key => $appellation) {
-                if (!preg_match("/^appellation/", $appellation_key)) {
-
-                    continue;
-                }
-
-                foreach($appellation->mention as $lieu_key => $lieu) {
-                    if (!preg_match("/^lieu/", $lieu_key)) {
-
-                        continue;
-                    }
-
-                    $total_superficie = 0;
-                    $total_volume = 0;
-
-                    foreach($lieu as $couleur_key => $couleur) {
-                        if (!preg_match("/^couleur/", $couleur_key)) {
-
-                            continue;
-                        }
-
-                        foreach($couleur as $cepage_key => $cepage) {
-                            if (!preg_match("/^cepage/", $cepage_key)) {
-
-                               continue;
-                            }
-
-                            $total_superficie += $cepage->total_superficie;
-                            $total_volume += $cepage->total_volume;
-
-                            echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;%s;%s;%01.02f;%01.02f;;\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $couleur_key, $cepage_key, $cepage->total_superficie, $cepage->total_volume);
-                        }
-                    }
-
-                    echo sprintf("%s;%s;%s;certification;genre;%s;mention;%s;TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $dr->campagne, $dr->cvi, $dr->declarant->nom, $appellation_key, $lieu_key, $total_superficie, $total_volume, $lieu->volume_revendique, $lieu->usages_industriels);
-                }
-            }
-        }
     }
 }
