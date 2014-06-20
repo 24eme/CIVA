@@ -6,7 +6,7 @@ DESCRIPTION="Export CSV des ventes de moûts pour la DR $DR_CAMPAGNE"
 
 . bin/task_start.inc
 
-mkdir $TASK_DIR/tmp > /dev/null
+mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
 EXPORT_FILE=tmp/export_drs_ventes_mouts.csv
 

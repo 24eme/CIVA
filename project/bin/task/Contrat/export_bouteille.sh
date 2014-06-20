@@ -10,7 +10,7 @@ DESCRIPTION="Export DB2 des derniers contrats bouteilles et leurs modifications\
 
 . bin/task_start.inc
 
-mkdir -p $TASK_DIR/$EXPORT_DIR > /dev/null
+mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
 php symfony export:bouteille $TASK_DIR/$EXPORT_DIR
 
