@@ -1,4 +1,5 @@
 bin/config.inc
+bin/task.inc
 config/app.yml
 config/databases.yml
 config/properties.ini

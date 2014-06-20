@@ -11,8 +11,7 @@
  */
 class exportVracTask extends sfBaseTask
 {
-
-    const VRAC_EXPORT_DB2 = 'VRAC_EXPORT_DB2';
+    const FLAG_EXPORT_DB2 = 'CONTRAT_VRAC_EXPORT_DB2';
 
     protected function configure()
     {
@@ -46,20 +45,30 @@ EOF;
         set_time_limit(0);
         
         $configCepappctr = new Cepappctr();
-        $date_begin = Flag::getFlag(self::VRAC_EXPORT_DB2, date('1990-01-01'));
+        $date_begin = Flag::getFlag(self::FLAG_EXPORT_DB2, date('1990-01-01'));
         $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);
         $filenameHeader = str_replace('-', '', $date_begin).'-'.str_replace('-', '', $date_end).'.';
+        $folderPath = $arguments['folderPath'];
+
+        if($date_begin > $date_end) {
+            echo sprintf("Les contrats vracs ont déjà été exportés jusqu'au %s\n", $date_end);
+            echo sprintf("Aucun export effectué\n", $date_end);
+            return;
+        }
+
+        $zip = new ZipArchive();
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZipArchive::OVERWRITE);
 
         /*
          * CREATION
          */
         $types = array('C', 'M');
         foreach ($types as $type) {
-        	$csvDecven = new ExportCsv();
-	        $csvDdecvn = new ExportCsv();
-			$items = VracContratsView::getInstance()->findForDb2Export($dates, $type);
-			$contrats = array();
+            $csvDecven = new ExportCsv();
+            $csvDdecvn = new ExportCsv();
+            $items = VracContratsView::getInstance()->findForDb2Export($dates, $type);
+            $contrats = array();
             $contrats_to_flag = array();
 			foreach ($items as $item) {
 				$contrats[$item->value[VracContratsView::VALUE_NUMERO_ARCHIVE]] = $item;
@@ -115,9 +124,10 @@ EOF;
 	        $decven = $csvDecven->output();
 	        $ddecvn = $csvDdecvn->output();
 	        
-	        $folderPath = $arguments['folderPath'];
-	        $path_ddecvn = $folderPath.'/'.$filenameHeader.'DDECVN-'.$type;
-	        $path_decven = $folderPath.'/'.$filenameHeader.'DECVEN-'.$type;
+            $filename_ddecvn = $filenameHeader.'DDECVN-'.$type; 
+            $filename_decven = $filenameHeader.'DECVEN-'.$type; 
+	        $path_ddecvn = $folderPath.'/'.$filename_ddecvn;
+	        $path_decven = $folderPath.'/'.$filename_decven;
 	        
 	        $file_ddecvn = fopen($path_ddecvn, 'w');
 	        fwrite($file_ddecvn, "\xef\xbb\xbf");
@@ -130,14 +140,19 @@ EOF;
 	        file_put_contents($path_ddecvn, $ddecvn);        
 	        file_put_contents($path_decven, $decven);
 
-            foreach($contrats_to_flag as $id) {
-                $c = VracClient::getInstance()->find($contrat->id);
-                $c->date_export_creation = date('Y-m-d');
-                $c->forceSave();
-            }
-
-            Flag::setFlag(self::VRAC_EXPORT_DB2, $date_end);
+            $zip->addFile($path_ddecvn, $filename_decven);
+            $zip->addFile($path_decven, $filename_ddecvn);
         }
+            
+        $zip->close();
+
+        foreach($contrats_to_flag as $id) {
+            $c = VracClient::getInstance()->find($id);
+            $c->date_export_creation = date('Y-m-d');
+            $c->forceSave();
+        }
+
+        Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
         
         $modele_decven = array(
             "numero_archive" => null,
@@ -185,8 +200,8 @@ EOF;
             "vtsgn" => null,
             "date_circulation" => null,
             );
-            
-        echo "EXPORT fini\n";
+  
+        echo sprintf("L'export pour la période du %s au %s est terminé\n", $date_begin, $date_end);
     }
     
     protected function getTopMercuriale ($ligne) 

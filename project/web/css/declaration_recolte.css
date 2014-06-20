@@ -2718,3 +2718,51 @@ td.csv_num {
 #notice_evolutions a.pdf {
     background: url("../images/pictos/pi_pdf.png") no-repeat scroll 0 1px transparent;
 }
+
+/** popup tache **/
+
+.popup_tache h2 {
+	color: #848C03; 
+	font-weight: normal; 
+	font-size: 16px; 
+	text-align: center;
+}
+
+.popup_tache div.input {
+	margin: 14px 8px 14px 8px;
+	margin-top: 14px;
+	text-align: center;
+	line-height: 20px;
+}
+
+.popup_tache div.output {
+	margin: 14px 8px 14px 8px;
+	font-family: monospace;
+	padding: 6px 8px;
+	background: #000;
+	color: #fff;
+	border: 1px dotted #cecece;
+	line-height: 20px;
+}
+
+.popup_tache div.input a.simple {
+	color: #777;
+}
+
+.popup_tache div.output a.simple {
+	color: #888;
+}
+
+.popup_tache .btns {
+	padding: 0 8px;
+	margin-bottom: 14px;
+	text-align: center;
+}
+
+.popup_tache a.btn_tache {
+	margin-right: 8px;
+}
+
+.popup_tache div.output p {
+	/*line-height: 18px;*/
+}

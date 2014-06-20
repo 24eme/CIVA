@@ -190,7 +190,7 @@ var initNettoyageChamps = function()
 var initPopupTask = function()
 {
 	$('.tache-popup').live('click', function() {
-    	$('.popup_ajout').dialog('close');
+    	$('.popup_ajout').dialog('destroy');
     	var htmlLoader = null;
     	if($(this).attr('data-loader')) {
     		htmlLoader = $($(this).attr('data-loader'));
@@ -200,7 +200,9 @@ var initPopupTask = function()
             url: $(this).attr('href'),
             success: function(data) {
             	if(htmlLoader) {
-            		htmlLoader.dialog('close');
+            		console.log('destroy');
+            		htmlLoader.dialog('destroy');
+            		htmlLoader.remove();
             	}
                 openPopup($(data));
             }
