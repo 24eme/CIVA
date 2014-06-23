@@ -291,10 +291,21 @@ class ExportDRCsv extends ExportCsv {
        return $dr->_rev;
     }
     
-        private function getValidationUser($dr) {
+    private function getValidationUser($dr) {
         $user = null;
+
+        if($dr->exist('date_depot_mairie') && $dr->get('date_depot_mairie')) {
+
+            return 'CIVA';
+        }
+
         if ($dr->exist('utilisateurs')) {
             foreach($dr->utilisateurs->validation as $compte => $date_fr) {
+                if (preg_match('/^COMPTE-auto$/', $compte)) {
+                   
+                   return "Automatique";
+                }
+
                 if (preg_match('/^COMPTE-[0-9]+$/', $compte)) {
                     $user = "Récoltant";
                     break;
