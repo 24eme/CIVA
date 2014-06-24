@@ -12,6 +12,9 @@ class VracSuppressionForm extends acCouchdbObjectForm
         $this->setValidators(array(
         	'motif_suppression' => new sfValidatorString(array('required' => true))
         ));
+
+        $this->validatorSchema['motif_suppression']->setMessage('required', "La saisie d'un motif de suppression est obligatoire");
+
         $this->widgetSchema->setNameFormat('vrac_suppression[%s]');
     }
     
