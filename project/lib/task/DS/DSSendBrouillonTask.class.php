@@ -157,8 +157,7 @@ Le CIVA";
         
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                //->setTo($email)
-                ->setTo("vlaurent@actualys.com")
+                ->setTo($email)
                 ->setSubject('Déclaration de Stocks "Propriété" au 31 Juillet 2014')
                 ->setBody($mess);
 
@@ -208,8 +207,7 @@ Le CIVA";
         
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                //->setTo($email)
-                ->setTo("vlaurent@actualys.com")
+                ->setTo($email)
                 ->setSubject('Déclaration de Stocks "Propriété" au 31 Juillet 2014')
                 ->setBody($mess);
 
@@ -248,8 +246,7 @@ Le CIVA";
         
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-                //->setTo($email)
-                ->setTo("vlaurent@actualys.com")
+                ->setTo($email)
                 ->setSubject('Déclaration de Stocks "Négoce" au 31 Juillet 2014')
                 ->setBody($mess);
 
