@@ -151,6 +151,7 @@ Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon person
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
+
 Cordialement,
 
 Le CIVA";
@@ -194,13 +195,14 @@ Le CIVA";
 
 En 2013 vous avez déposé une Déclaration de Stocks \"papier\", nous allons donc envoyer en Mairie un formulaire pré-identifié pour votre entreprise.
 
-Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 Juillet 2014 sur le Portail CIVA , le télé-service \"Alsace Stocks\" sera accessible à compter du 1er juillet et vous n'aurez donc aucun document à remettre en Mairie.
+Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 Juillet 2014 sur le Portail CIVA, le télé-service \"Alsace Stocks\" sera accessible à compter du 1er juillet et vous n'aurez donc aucun document à remettre en Mairie.
 
 Attention la date limite de télé-déclaration est fixée par les Douanes au 31 Août minuit.
 
 Pour vous aider dans votre démarche vous trouverez ci-joint, un document  explicatif \"Pas à Pas\", ainsi qu'un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
+
 
 Cordialement,
 
@@ -216,7 +218,7 @@ Le CIVA";
         $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
         $message->attach($attachment);
 
-        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_data_dir')."/pdf/votre_declaration_de_stocks_pas_a_pas.pdf"), $document->getFileName(), 'application/pdf');
+        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_data_dir')."/pdf/votre_declaration_de_stocks_pas_a_pas.pdf"), "votre_declaration_de_stocks_pas_a_pas.pdf", 'application/pdf');
         $message->attach($attachment);
         
         try {
@@ -241,6 +243,7 @@ A compter de cette année vous avez la possibilité de télé-déclarer sur le P
 Le télé-service \"Alsace Stocks\" sera accessible du 1er juillet au 10 Septembre inclus, et vous n'aurez donc pas à renvoyer le formulaire papier au CIVA.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+
 
 Cordialement,
 
