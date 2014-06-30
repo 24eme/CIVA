@@ -43,6 +43,13 @@
 
 <div style="display: none" id="popup_loader" title="Génération de la déclaration de Stocks">
     <div class="popup-loading">
-    <p>La génération de votre de déclaration de Stocks est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre jusqu'à 30 secondes</small></p>
+    <p>La génération de votre de déclaration de Stocks est en cours.<br />
+        <br />
+        Les produits qui vous sont proposés sont issus de <strong>votre dernière déclaration de récolte</strong> et/ou de celles de vos apporteurs de raisins.</span><br />
+        <br />
+        Merci de patienter.<br />
+        <br />
+        <small>La procédure peut prendre jusqu'à 30 secondes</small>
+        </p>
     </div>
 </div>
