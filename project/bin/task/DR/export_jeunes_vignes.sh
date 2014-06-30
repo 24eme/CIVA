@@ -6,7 +6,7 @@ DESCRIPTION="Export CSV des superficies de jeunes vignes des DR $DR_CAMPAGNE"
 
 . bin/task_start.inc
 
-mkdir $TASK_DIR/tmp > /dev/null
+mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
 EXPORT_FILE=tmp/export_drs_jeunes_vignes.csv
 
