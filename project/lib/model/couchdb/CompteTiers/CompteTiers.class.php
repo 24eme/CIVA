@@ -34,13 +34,27 @@ class CompteTiers extends BaseCompteTiers {
         return $this->_tiers;
     }
     
-    public function getTiersType($type) {
-    	foreach ($this->tiers as $tiers) {
-    		if ($tiers->type == $type) {
-    			return acCouchdbManager::getClient()->find($tiers->id);
-    		}
-    	}
-    	return null;
+    public function getTiersType($type = null) {
+        $tiers = $this->getTiersIndexedByType();
+
+        if(!$type) {
+            if (array_key_exists('Recoltant', $tiers)) {
+                $type = 'Recoltant';
+            } elseif (array_key_exists('Acheteur', $tiers)) {
+                $type = 'Acheteur';
+            } elseif (array_key_exists('Courtier', $tiers)) {
+                $type = 'Courtier';
+            } else {
+                $type = 'MetteurEnMarche';
+            }
+        }
+
+        if(!isset($tiers[$type])) {
+
+            return null;
+        }
+
+    	return $tiers[$type];
     }
 
     /**
@@ -195,6 +209,53 @@ class CompteTiers extends BaseCompteTiers {
 
             $tiers->save();
         }
+    }
+
+    public function getTiersIndexedByType() {
+        $tiers = array();
+        foreach($this->getTiersObject() as $t) {
+            $tiers[$t->type] = $t;
+        }
+        
+        return $tiers; 
+    }
+
+    public function getDeclarantDS() {
+        $tiers = $this->getTiersIndexedByType();
+        
+        $t = $this->getTiersType();
+
+        if(isset($tiers['MetteurEnMarche'])) {
+
+            $t = $tiers['MetteurEnMarche'];
+        }
+
+        $typeDS = $t->getTypeDs();
+        if($typeDS == DSCivaClient::TYPE_DS_NEGOCE) {
+            if($t->type == 'MetteurEnMarche') {
+                
+                return $t;
+            }
+
+            if($t->type == 'Recoltant') {
+
+                return $tiers['MetteurEnMarche'];
+            }
+
+            if($t->type == 'Acheteur') {
+
+                return _TiersClient::getInstance()->findByCivaba($t->civaba);
+            }
+        }
+
+        $t = $this->getTiersType();
+        $typeDS = $t->getTypeDs();
+        if($typeDS == DSCivaClient::TYPE_DS_PROPRIETE) { 
+            echo $compte->_id;
+            return $t;
+        }
+
+        return null;
     }
 
     public function save() {
