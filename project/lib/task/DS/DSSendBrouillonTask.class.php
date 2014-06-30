@@ -198,7 +198,7 @@ Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 Ju
 
 Attention la date limite de télé-déclaration est fixée par les Douanes au 31 Août minuit.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint, un document  explicatif \"Pas à Pas\", ainsi qu'un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
+Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à Pas\", ainsi qu'un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
@@ -260,33 +260,9 @@ Le CIVA";
             return false;
         }
         
-        sleep(5);
+        //sleep(5);
 
         return $email;
-    }
-    
-    public function sendBrouillon($tiers, $compte)
-    {
-  
-    }
-    
-    private function getIdentifiantRecByPeriode($periode)
-    {
-        $campagne_view = (substr($periode,0,4)-1) .'-'.substr($periode,0,4);
-        $ds_validees_view = acCouchdbManager::getClient()->reduce(false)
-                                                    ->startkey(array($campagne_view))
-                                                    ->endkey(array($campagne_view,array()))
-                                                    ->getView("STATS", "DS")->rows;
-        
-        $recoltantId = array();
-        foreach ($ds_validees_view as $ds_validee) {
-            if($ds_validee->key[5]){
-                continue;
-            }
-            $identifiant = substr($ds_validee->id,3,10);
-            $recoltantId[$identifiant] = $identifiant;
-        }
-        return $recoltantId;
     }
     
     public function getPartial($templateName, $vars = null) {
