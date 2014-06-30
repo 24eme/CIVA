@@ -251,7 +251,7 @@ class CompteTiers extends BaseCompteTiers {
         $t = $this->getTiersType();
         $typeDS = $t->getTypeDs();
         if($typeDS == DSCivaClient::TYPE_DS_PROPRIETE) { 
-            echo $compte->_id;
+
             return $t;
         }
 
