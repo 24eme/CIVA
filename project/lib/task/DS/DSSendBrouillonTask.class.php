@@ -166,7 +166,7 @@ Le CIVA";
         $message->attach($attachment);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -220,7 +220,7 @@ Le CIVA";
         $message->attach($attachment);
         
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -254,13 +254,13 @@ Le CIVA";
                 ->setBody($mess);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
         }
         
-        //sleep(5);
+        sleep(5);
 
         return $email;
     }
