@@ -45,6 +45,7 @@ EOF;
         $this->periode = $arguments['periode'];
 
         $ids = _CompteClient::getInstance()->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $start = false;
         foreach ($ids as $id) {
             $compte = _CompteClient::getInstance()->find($id);
             if(!$compte){
@@ -60,6 +61,17 @@ EOF;
                  //echo "Le compte ne fait pas de stock ".$compte->getTiersType()->_id.":".$compte->getTiersType()->categorie."\n";
                  continue;
             }
+
+            if($tiers->_id == "MET-6806612950") {
+                $start = true;
+                continue;
+            }
+
+            if(!$start) {
+                continue;
+            }
+
+
             if(!$compte->isActif()){
                 continue;
             }
@@ -98,8 +110,12 @@ EOF;
     }
 
     public function sendPropriete($tiers, $compte) {
-        $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
+        $ds = null;
+        try{
+            $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
+        } catch (Exception $e) {
 
+        }
         if(!$ds) {
 
             echo "Pas de DS en 2013 : ".$compte->_id."\n";
