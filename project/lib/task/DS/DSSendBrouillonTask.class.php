@@ -91,15 +91,22 @@ EOF;
        
        $pdfContent = $document->output();
 
-       $mess = 'Bonjour ' . $tiers->nom . ',
-           
-Vous trouverez ci-joint votre Déclaration de Stocks brouillon pour l\'année ' . date('Y') . '.
-    
-Ce document constitue un exemple de Déclaration de Stocks, il n\'est donc pas à remplir ni à renvoyer au CIVA.
+       $mess = "Bonjour " . $tiers->nom . "
+
+Vous avez télé-déclaré votre Stock 2013 sur le Portail du CIVA et nous n'avons donc pas pré-identifié de formulaire pour votre entreprise en Mairie.
+
+Si vous optez à nouveau pour cette solution, la procédure pour la télé-déclaration des Stocks au 31 Juillet 2014 sera accessible à compter du 1er juillet et vous n'avez donc aucun document à remettre en Mairie.
+
+Attention la date limite de télé-déclaration est fixée par les Douanes au 31 Août minuit.
+
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
+
+Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
 Cordialement,
 
-Le CIVA';
+Le CIVA";
+
        $email = $tiers->getCompteEmail();
        if(!$email){
             echo $this->yellow('WARNING : ')."le tiers ".$tiers->getIdentifiant()." ne possède pas d'email.\n";
@@ -109,12 +116,15 @@ Le CIVA';
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
                 //->setTo($email)
-                ->setTo("mpetit@actualys.com")
-                ->setSubject('CIVA - Exemple de déclaration de Stocks')
+                ->setTo("vlaurent@actualys.com")
+                ->setSubject('Déclaration de Stocks "Propriété" au 31 Juillet 2014')
                 ->setBody($mess);
 
 
         $attachment = new Swift_Attachment($pdfContent, $document->getFileName(), 'application/pdf');
+        $message->attach($attachment);
+
+        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_data_dir')."/pdf/votre_declaration_de_stocks_pas_a_pas.pdf"), $document->getFileName(), 'application/pdf');
         $message->attach($attachment);
         
         try {
