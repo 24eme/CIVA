@@ -139,7 +139,7 @@ EOF;
         }
         $pdfContent = $document->output();
 
-        $mess = "Bonjour " . $tiers->nom . "
+        $mess = "Bonjour,
 
 Vous avez télé-déclaré votre Stock 2013 sur le Portail du CIVA et nous n'avons donc pas pré-identifié de formulaire pour votre entreprise en Mairie.
 
@@ -150,7 +150,6 @@ Attention la date limite de télé-déclaration est fixée par les Douanes au 31
 Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
-
 
 Cordialement,
 
@@ -191,7 +190,7 @@ Le CIVA";
             return false;
        }
 
-        $mess = "Bonjour " . $tiers->nom . "
+        $mess = "Bonjour,
 
 En 2013 vous avez déposé une Déclaration de Stocks \"papier\", nous allons donc envoyer en Mairie un formulaire pré-identifié pour votre entreprise.
 
@@ -202,7 +201,6 @@ Attention la date limite de télé-déclaration est fixée par les Douanes au 31
 Pour vous aider dans votre démarche vous trouverez ci-joint, un document  explicatif \"Pas à Pas\", ainsi qu'un brouillon personnalisé de votre DS 2014, qui reprend les produits théoriquement détenus en stocks.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
-
 
 Cordialement,
 
@@ -244,7 +242,6 @@ Le télé-service \"Alsace Stocks\" sera accessible du 1er juillet au 10 Septemb
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
-
 Cordialement,
 
 Le CIVA";
@@ -263,7 +260,7 @@ Le CIVA";
             return false;
         }
         
-        sleep(1000);
+        sleep(5);
 
         return $email;
     }
