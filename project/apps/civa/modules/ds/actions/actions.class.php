@@ -651,10 +651,11 @@ Le CIVA';
     }
     
     public function executeDownloadNotice(sfWebRequest $request) {
-        if($this->getUser()->getDeclarant()->isDeclarantStockNegoce()){
+        if($this->getUser()->getDeclarantDS()->isDeclarantStockNegoce()){
             return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_negoce.pdf", "aide stock negoce.pdf");
         }
-            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
+        
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
     }
     
     public function executeDownloadDai() {
