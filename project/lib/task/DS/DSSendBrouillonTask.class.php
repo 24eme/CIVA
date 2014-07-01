@@ -62,7 +62,7 @@ EOF;
                  continue;
             }
 
-            if($tiers->_id == "MET-6806603320") {
+            if($tiers->_id == "MET-6807800941") {
                 $start = true;
                 continue;
             }
@@ -111,11 +111,9 @@ EOF;
 
     public function sendPropriete($tiers, $compte) {
         $ds = null;
-        try{
-            $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
-        } catch (Exception $e) {
 
-        }
+        $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
+
         if(!$ds) {
 
             echo "Pas de DS en 2013 : ".$compte->_id."\n";
@@ -181,7 +179,7 @@ Le CIVA";
         $message->attach($attachment);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -234,7 +232,7 @@ Le CIVA";
         $message->attach($attachment);
         
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -267,7 +265,7 @@ Le CIVA";
                 ->setBody($mess);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
