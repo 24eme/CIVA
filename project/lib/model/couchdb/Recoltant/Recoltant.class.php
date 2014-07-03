@@ -22,7 +22,8 @@ class Recoltant extends BaseRecoltant {
             return true;
         }
 
-        if($this->exist('lieux_stockage') && count($this->lieux_stockage->toArray(true, false)) > 0) {
+        $met = $this->getMetteurEnMarche();
+        if($met && $this->isCategoriePropriete($met->categorie)) {
 
             return true;
         }
