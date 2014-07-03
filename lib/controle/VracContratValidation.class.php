@@ -2,6 +2,7 @@
 class VracContratValidation extends DocumentValidation
 {
     const PRIX_SEUIL = 50;
+    const PRIX_SEUIL_BLOQUANT = 10;
     const MAX_PRODUIT = 9;
 
 	protected $produits_controle = array();
@@ -16,7 +17,8 @@ class VracContratValidation extends DocumentValidation
   	{
         $this->addControle('erreur', 'nb_produits', 'Vous ne pouvez pas saisir plus de '.self::MAX_PRODUIT.' produits par contrat.');
   		$this->addControle('erreur', 'doublon_produits', 'Vous ne pouvez pas déclarer des produits identiques.');
-    	$this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
+        $this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
+    	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
   	}
 
   	public function controle()
@@ -30,9 +32,12 @@ class VracContratValidation extends DocumentValidation
 					$produits[$detail->getCepage()->getHash()] = array();
 				}
 				$produits[$detail->getCepage()->getHash()][] = $detail;
-                if((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL) {
+                if((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL_BLOQUANT) {
+                    $this->addPoint('erreur', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits'))); 
+                } elseif((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL) {
                     $this->addPoint('vigilance', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits'))); 
                 }
+
 			}
 			foreach ($produits as $produit) {
 				if (count($produit) > 1) {
