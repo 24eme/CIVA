@@ -365,20 +365,6 @@ class DSCivaClient extends DSClient {
         return null;
     }
     
-    public function getLibelleFromId($id) {
-        if (!preg_match('/^DS-[0-9]+-([0-9]{4})([0-9]{2})/', $id, $matches)) {
-
-            return $id;
-        }
-        sfContext::getInstance()->getConfiguration()->loadHelpers(array('Orthographe', 'Date'));
-        $origineLibelle = 'DS de';
-        $annee = $matches[1];
-        $mois = $matches[2];
-        $date = $annee . '-' . $mois . '-01';
-        $df = format_date($date, 'MMMM yyyy', 'fr_FR');
-        return elision($origineLibelle, $df);
-    }
-
     public function getTotauxByAppellationsRecap($ds) {
         $dss = $this->findDssByDS($ds);
         $totauxByAppellationsRecap = array();
