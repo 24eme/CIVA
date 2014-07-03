@@ -85,7 +85,7 @@ class DSCivaClient extends DSClient {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
         $tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage());
         foreach ($tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage()) as $lieu_stockage) {
-            if($ds = $this->find('DS-' . $identifiant . '-' . $periode. '-' . $tiers->getLieuStockagePrincipal()->getNumeroIncremental())) {
+            if($ds = $this->find('DS-' . $identifiant . '-' . $periode. '-' . $lieu_stockage->getNumeroIncremental())) {
 
                 return $ds;
             }
