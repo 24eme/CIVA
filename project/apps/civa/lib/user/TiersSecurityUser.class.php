@@ -139,38 +139,8 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
 
     public function getDeclarantDS() {
-        $tiers = $this->getTiers();
-        
-        if(isset($this->_tiers['MetteurEnMarche'])) {
 
-            $tiers = $this->_tiers['MetteurEnMarche'];
-        }
-
-        $typeDS = $tiers->getTypeDs();
-
-        if($typeDS == DSCivaClient::TYPE_DS_PROPRIETE) {
-            
-            return $this->getTiers();
-        }
-
-        if($typeDS == DSCivaClient::TYPE_DS_NEGOCE) {
-            if($tiers->type == 'MetteurEnMarche') {
-                
-                return $this->_tiers['MetteurEnMarche'];
-            }
-
-            if($tiers->type == 'Recoltant') {
-
-                return $this->_tiers['MetteurEnMarche'];
-            }
-
-            if($tiers->type == 'Acheteur') {
-
-                return _TiersClient::getInstance()->findByCivaba($tiers->civaba);
-            }
-        }
-
-        return null;
+        return $this->getCompte()->getDeclarantDS();
     }
 
     public function getDeclarantVrac() {

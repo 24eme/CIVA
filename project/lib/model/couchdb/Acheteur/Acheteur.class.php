@@ -20,6 +20,15 @@ class Acheteur extends BaseAcheteur {
         return true;
     }
 
+    public function getDeclarantDS() {
+        if($this->isDeclarantStockNegoce()) {
+
+            return _TiersClient::getInstance()->findByCivaba($this->civaba);
+        }
+
+        return parent::getDeclarantDS();
+    }
+
     public function isDeclarantStockPropriete()
     {
         if($this->categorie == self::CATEGORIE_CCV) {

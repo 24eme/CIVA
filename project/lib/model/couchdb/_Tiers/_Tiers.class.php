@@ -145,6 +145,11 @@ abstract class _Tiers extends Base_Tiers {
     public function isDeclarantStockNegoce() {
        return in_array($this->categorie, self::$array_ds_negoce);
     }
+
+    public function getDeclarantDS() {
+
+        return $this;
+    }
     
     public function isAjoutLieuxDeStockage(){
         return $this->isDeclarantStockNegoce();

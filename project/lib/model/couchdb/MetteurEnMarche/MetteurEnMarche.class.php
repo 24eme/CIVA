@@ -24,6 +24,11 @@ class MetteurEnMarche extends BaseMetteurEnMarche {
         return true;
     }
 
+    public function isDeclarantStockPropriete() {
+
+        return false;
+    }
+
     public function isDeclarantGamma() {
 
         return ($this->no_accises) ? true : false;

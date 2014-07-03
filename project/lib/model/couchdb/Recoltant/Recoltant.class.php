@@ -16,6 +16,20 @@ class Recoltant extends BaseRecoltant {
         return true;
     }
 
+    public function isDeclarantStockPropriete() {
+        if(parent::isDeclarantStockPropriete()) {
+
+            return true;
+        }
+
+        if($this->exist('lieux_stockage') && count($this->lieux_stockage->toArray(true, false)) > 0) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function isDeclarantContratForSignature() {
 
         return true;
