@@ -171,28 +171,28 @@ class statistiquesActions extends sfActions {
 
 
     protected function processStatsDS() {
-        $campagne = "2013-2014";
+        $periode = CurrentClient::getCurrent()->ds_periode."";
         $this->etapeDsValidee = 0;
         $this->etapeDsNonValidee = 0;
         $this->etapeDsNonValideeEtapes = array();
 
         $ds_validees = acCouchdbManager::getClient()->group(true)
                                               ->group_level(3)
-                                              ->startkey(array($campagne, true, true))
-                                              ->endkey(array($campagne, true, true, array()))
+                                              ->startkey(array($periode, true, true))
+                                              ->endkey(array($periode, true, true, array()))
                                               ->getView("STATS", "DS");
         
         $ds_non_validees = acCouchdbManager::getClient()->group(true)
                                               ->group_level(3)
-                                              ->startkey(array($campagne, false, false))
-                                              ->endkey(array($campagne, false, false, array()))
+                                              ->startkey(array($periode, false, false))
+                                              ->endkey(array($periode, false, false, array()))
                                               ->getView("STATS", "DS");
 
         foreach(DSCivaClient::$etapes as $num => $libelle) {
             $ds_non_validees_etape = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
-                                              ->startkey(array($campagne, false, false, null, $num))
-                                              ->endkey(array($campagne, false, false, null, $num))
+                                              ->startkey(array($periode, false, false, null, $num))
+                                              ->endkey(array($periode, false, false, null, $num))
                                               ->getView("STATS", "DS");
 
             $this->etapeDsNonValideeEtapes[$libelle] = 0;                              
@@ -211,8 +211,8 @@ class statistiquesActions extends sfActions {
 
         $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
                                               ->group_level(2)
-                                              ->startkey(array($campagne))
-                                              ->endkey(array($campagne, array()))
+                                              ->startkey(array($periode))
+                                              ->endkey(array($periode, array()))
                                               ->getView("STATS", "edition_ds");
 
         $this->utilisateurs_edition_ds = array(); 
