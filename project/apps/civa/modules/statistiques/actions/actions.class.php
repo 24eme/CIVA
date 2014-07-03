@@ -171,7 +171,7 @@ class statistiquesActions extends sfActions {
 
 
     protected function processStatsDS() {
-        $campagne = "2012-2013";
+        $campagne = "2013-2014";
         $this->etapeDsValidee = 0;
         $this->etapeDsNonValidee = 0;
         $this->etapeDsNonValideeEtapes = array();
