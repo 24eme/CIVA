@@ -109,10 +109,10 @@ EOF;
         foreach($contrats_to_flag as $id) {
             $c = VracClient::getInstance()->find($id);
             $c->date_export_creation = date('Y-m-d');
-            //$c->forceSave();
+            $c->forceSave();
         }
 
-        //Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
+        Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
 
         echo sprintf("L'export pour la période du %s au %s est terminé\n", $date_begin, $date_end);
     }
