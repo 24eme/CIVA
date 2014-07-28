@@ -60,8 +60,8 @@ EOF;
         $zip = new ZipArchive();
         $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZipArchive::OVERWRITE);
 
-    	$csvBouent = new ExportCsv();
-        $csvBoudet = new ExportCsv();
+    	$csvBouent = new ExportCsv(null, "\r\n");
+        $csvBoudet = new ExportCsv(null, "\r\n");
 		$items = VracBouteillesView::getInstance()->findForDb2Export($dates);
 		$contrats = array();
         $contrats_to_flag = array();
@@ -98,14 +98,6 @@ EOF;
         $path_bouent = $folderPath.'/'.$filename_bouent;
         $path_boudet = $folderPath.'/'.$filename_boudet;
         
-        $file_bouent = fopen($path_bouent, 'w');
-        fwrite($file_bouent, "\xef\xbb\xbf");
-        fclose($file_bouent);
-        
-        $file_boudet = fopen($path_boudet, 'w');
-        fwrite($file_boudet, "\xef\xbb\xbf");
-        fclose($file_boudet);
-        
         file_put_contents($path_boudet, $boudet);        
         file_put_contents($path_bouent, $bouent);
 
@@ -117,10 +109,10 @@ EOF;
         foreach($contrats_to_flag as $id) {
             $c = VracClient::getInstance()->find($id);
             $c->date_export_creation = date('Y-m-d');
-            $c->forceSave();
+            //$c->forceSave();
         }
 
-        Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
+        //Flag::setFlag(self::FLAG_EXPORT_DB2, date('Y-m-d'));
 
         echo sprintf("L'export pour la période du %s au %s est terminé\n", $date_begin, $date_end);
     }

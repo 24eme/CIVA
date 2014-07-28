@@ -7,13 +7,16 @@
  */
 class ExportCsv {
 
+    protected $newline = "\n";
     /**
      *
      * @var string
      */
     protected $_content = null;
 
-    public function __construct($headers = null) {
+    public function __construct($headers = null, $newline = "\n") {
+        $this->newline = $newline;
+
         if ($headers) {
             $this->add($headers, array());
         }
@@ -40,7 +43,7 @@ class ExportCsv {
             }
         }
 
-        return implode(';', $data) . "\n";
+        return implode(';', $data) . $this->newline;
     }
 
     protected function validate($key, $value, $options) {
