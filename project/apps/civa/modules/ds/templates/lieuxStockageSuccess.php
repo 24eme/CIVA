@@ -12,7 +12,8 @@ $hasVolume = false;
 
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected"><a href="#">Lieux de stockage</a></li>
-        <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage" title="Message aide"></a>
+            <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage<?php if($sf_user->getDeclarantDS()->getTypeDs() == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a>
+
         	<?php if($ds->isDateDepotMairie()):  ?>
                 &nbsp; &nbsp;
                 <?php echo $form['date_depot_mairie']->renderError(); ?>

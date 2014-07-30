@@ -88,7 +88,7 @@ $ds_neant = $ds_principale->isDsNeant();
 	</ul>
 		
 	<div class="progression_ds">
-                <p>Vous avez saisi <span><?php echo $progression.'%';?></span> de votre DS <a href="" class="msg_aide_ds" rel="help_popup_mon_espace_ds_general" title="Message aide"></a></p>
+                <p>Vous avez saisi <span><?php echo $progression.'%';?></span> de votre DS <a href="" class="msg_aide_ds" rel="help_popup_mon_espace_ds_general<?php if($sf_user->getDeclarantDS()->getTypeDs() == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a></p>
                 <div class="barre_progression">
                         <div class="progression" style="<?php echo "width: ".$progression."%;";?>"></div>
                 </div>

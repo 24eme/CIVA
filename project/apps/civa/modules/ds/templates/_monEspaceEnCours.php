@@ -1,6 +1,6 @@
 <?php use_helper('ds'); ?>
 <form id="form_ds" action="<?php echo url_for('ds_init', $ds) ?>" method="post">
-    <h3 class="titre_section">Déclaration de <?php echo getPeriodeFr($sf_user->getPeriodeDS()) ?><a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds" title="Message aide"></a></h3>
+    <h3 class="titre_section">Déclaration de <?php echo getPeriodeFr($sf_user->getPeriodeDS()) ?><a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds<?php if($sf_user->getDeclarantDS()->getTypeDs() == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a></h3>
     <span class="label_type_ds"><?php echo strtoupper($sf_user->getDeclarantDS()->getTypeDs()); ?></span>
     <div class="contenu_section">    
         <?php if (!$ds->isNew()): ?>
