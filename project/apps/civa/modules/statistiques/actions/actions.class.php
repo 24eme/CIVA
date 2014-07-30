@@ -192,7 +192,7 @@ class statistiquesActions extends sfActions {
             $ds_non_validees_etape = acCouchdbManager::getClient()->group(true)
                                               ->group_level(5)
                                               ->startkey(array($periode, false, false, null, $num))
-                                              ->endkey(array($periode, false, false, null, $num))
+                                              ->endkey(array($periode, false, false, null, $num, array()))
                                               ->getView("STATS", "DS");
 
             $this->etapeDsNonValideeEtapes[$libelle] = 0;                              
