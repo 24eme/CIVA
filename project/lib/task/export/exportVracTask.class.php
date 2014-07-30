@@ -64,12 +64,12 @@ EOF;
          * CREATION
          */
         $types = array('C', 'M');
+        $contrats_to_flag = array();
         foreach ($types as $type) {
-            $csvDecven = new ExportCsv();
-            $csvDdecvn = new ExportCsv();
+            $csvDecven = new ExportCsv(null, "\r\n");
+            $csvDdecvn = new ExportCsv(null, "\r\n");
             $items = VracContratsView::getInstance()->findForDb2Export($dates, $type);
             $contrats = array();
-            $contrats_to_flag = array();
 			foreach ($items as $item) {
 				$contrats[$item->value[VracContratsView::VALUE_NUMERO_ARCHIVE]] = $item;
 			}
@@ -129,14 +129,6 @@ EOF;
 	        $path_ddecvn = $folderPath.'/'.$filename_ddecvn;
 	        $path_decven = $folderPath.'/'.$filename_decven;
 	        
-	        $file_ddecvn = fopen($path_ddecvn, 'w');
-	        fwrite($file_ddecvn, "\xef\xbb\xbf");
-	        fclose($file_ddecvn);
-	        
-	        $file_decven = fopen($path_decven, 'w');
-	        fwrite($file_decven, "\xef\xbb\xbf");
-	        fclose($file_decven);
-	        
 	        file_put_contents($path_ddecvn, $ddecvn);        
 	        file_put_contents($path_decven, $decven);
 
@@ -145,7 +137,6 @@ EOF;
         }
             
         $zip->close();
-
         foreach($contrats_to_flag as $id) {
             $c = VracClient::getInstance()->find($id);
             $c->date_export_creation = date('Y-m-d');

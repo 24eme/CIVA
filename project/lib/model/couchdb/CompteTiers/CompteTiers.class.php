@@ -221,41 +221,19 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function getDeclarantDS() {
-        $tiers = $this->getTiersIndexedByType();
-        
-        $t = $this->getTiersType();
-
-        if(isset($tiers['MetteurEnMarche'])) {
-
-            $t = $tiers['MetteurEnMarche'];
-        }
-
-        $typeDS = $t->getTypeDs();
-        if($typeDS == DSCivaClient::TYPE_DS_NEGOCE) {
-            if($t->type == 'MetteurEnMarche') {
+        $tiers_propriete = null;
+        foreach($this->getTiersObject() as $t) {
+            if($t->isDeclarantStockNegoce()) {
                 
-                return $t;
+                return $t->getDeclarantDS();
             }
 
-            if($t->type == 'Recoltant') {
-
-                return $tiers['MetteurEnMarche'];
-            }
-
-            if($t->type == 'Acheteur') {
-
-                return _TiersClient::getInstance()->findByCivaba($t->civaba);
+            if($t->isDeclarantStockPropriete()) {
+                $tiers_propriete = $t->getDeclarantDS();
             }
         }
 
-        $t = $this->getTiersType();
-        $typeDS = $t->getTypeDs();
-        if($typeDS == DSCivaClient::TYPE_DS_PROPRIETE) { 
-
-            return $t;
-        }
-
-        return null;
+        return $tiers_propriete;
     }
 
     public function save() {

@@ -10,7 +10,7 @@ function(doc) {
 	}
 
 	for (u  in doc.utilisateurs.edition) {
-         emit([doc.campagne, u], 1);
+         emit([doc.periode, u], 1);
        	 break;
         }
     }   

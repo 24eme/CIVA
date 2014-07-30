@@ -38,9 +38,7 @@
             <?php if ($sf_user->hasCredential('tiers')): ?>
                 <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mes déclarations</a></li>
             <?php endif; ?>
-            <?php if ($sf_user->hasCredential('metteur_en_marche')) : ?>
-                <li><a href="http://vinsalsace.pro/">Mon espace civa</a></li>
-            <?php endif; ?>
+            <li><a href="http://vinsalsace.pro/">Mon espace civa</a></li>
             <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
             <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE): ?>

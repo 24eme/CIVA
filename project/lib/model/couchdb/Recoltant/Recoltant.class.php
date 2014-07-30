@@ -16,6 +16,21 @@ class Recoltant extends BaseRecoltant {
         return true;
     }
 
+    public function isDeclarantStockPropriete() {
+        if(parent::isDeclarantStockPropriete()) {
+
+            return true;
+        }
+
+        $met = $this->getMetteurEnMarche();
+        if($met && $this->isCategoriePropriete($met->categorie)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function isDeclarantContratForSignature() {
 
         return true;

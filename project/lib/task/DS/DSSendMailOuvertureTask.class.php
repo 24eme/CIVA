@@ -11,7 +11,7 @@ class DSSendBrouillonTask extends sfBaseTask
         // // add your own arguments here
         $this->addArguments(array(
             new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
-            new sfCommandArgument('debug', sfCommandArgument::REQUIRED, '0'),
+            new sfCommandArgument('id_compte', sfCommandArgument::REQUIRED, 'id_compte'),
         ));
 
         $this->addOptions(array(
@@ -21,10 +21,10 @@ class DSSendBrouillonTask extends sfBaseTask
         ));
 
         $this->namespace = 'ds';
-        $this->name = 'send-brouillons';
+        $this->name = 'send-mail-ouverture';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
-The [ds:send-brouillons] task envoie des DS brouillons.
+The [ds:send-brouillons] task envoie du mail d'ouverture
 Call it with:
 
   [php symfony ds:send-brouillons|INFO]
@@ -38,57 +38,47 @@ EOF;
         sfContext::createInstance($this->configuration);
         set_time_limit(0);
         ini_set('memory_limit', '512M');
-        $this->debug = array_key_exists('debug', $arguments) && ((bool) $arguments['debug']);
         if(!array_key_exists('periode',$arguments) || !preg_match('/^([0-9]{6})$/', $arguments['periode'])){
             throw new sfException("La periode doit être passé en argument et doit être de la forme AAAAMM");
         }
         $this->periode = $arguments['periode'];
 
-        $ids = _CompteClient::getInstance()->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-        $start = false;
-        foreach ($ids as $id) {
-            $compte = _CompteClient::getInstance()->find($id);
-            if(!$compte){
-                //echo "Aucun compte trouvé pour ".$id."\n";
-                continue;
-            }
-            if($compte->type != "CompteTiers") {
-                continue;
-            }
-
-            $tiers = $compte->getDeclarantDS();
-            if(!$tiers){
-                 //echo "Le compte ne fait pas de stock ".$compte->getTiersType()->_id.":".$compte->getTiersType()->categorie."\n";
-                 continue;
-            }
-
-            if($tiers->_id == "MET-6806603320") {
-                $start = true;
-                continue;
-            }
-
-            if(!$start) {
-                continue;
-            }
-
-
-            if(!$compte->isActif()){
-                continue;
-            }
-
-            if(!$compte->email){
-                //echo $this->yellow('WARNING : ')."le tiers ".$tiers->getIdentifiant()." ne possède pas d'email.\n";
-                continue;
-            }
-             //checker tiers has droit DS
-            if($this->debug){
-             echo $compte->getLogin().",".$compte->getEmail().",".$tiers->getTypeDS()."\n";
-            }else{
-               
-               $this->executeSendMail($tiers, $compte);               
-            }
+        $compte = _CompteClient::getInstance()->find($arguments["id_compte"]);
+        if(!$compte){
             
+            return;
         }
+        if($compte->type != "CompteTiers") {
+            
+            return;
+        }
+
+        $tiers = $compte->getDeclarantDS();
+        if(!$tiers){
+             
+            return;
+        }
+
+        if(!$compte->isActif()){
+            
+            return;
+        }
+
+        if(!$compte->email){
+            
+            return;
+        }
+
+        if(!$compte->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
+            return;
+        }
+
+        if($tiers->isDeclarantStockPropriete() && !DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode)) {
+            
+            return;
+        }
+
+        $this->executeSendMail($tiers, $compte);
     }
     
     public function executeSendMail($tiers, $compte)
@@ -111,11 +101,9 @@ EOF;
 
     public function sendPropriete($tiers, $compte) {
         $ds = null;
-        try{
-            $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
-        } catch (Exception $e) {
 
-        }
+        $ds = DSCivaClient::getInstance()->findByIdentifiantAndPeriode($tiers->cvi, $this->periode);
+
         if(!$ds) {
 
             echo "Pas de DS en 2013 : ".$compte->_id."\n";
@@ -181,7 +169,7 @@ Le CIVA";
         $message->attach($attachment);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -234,7 +222,7 @@ Le CIVA";
         $message->attach($attachment);
         
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;
@@ -267,7 +255,7 @@ Le CIVA";
                 ->setBody($mess);
 
         try {
-            //$this->getMailer()->send($message);
+            $this->getMailer()->send($message);
         } catch (Exception $e) {
 
             return false;

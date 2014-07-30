@@ -60,8 +60,8 @@ EOF;
         $zip = new ZipArchive();
         $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZipArchive::OVERWRITE);
 
-    	$csvBouent = new ExportCsv();
-        $csvBoudet = new ExportCsv();
+    	$csvBouent = new ExportCsv(null, "\r\n");
+        $csvBoudet = new ExportCsv(null, "\r\n");
 		$items = VracBouteillesView::getInstance()->findForDb2Export($dates);
 		$contrats = array();
         $contrats_to_flag = array();
@@ -97,14 +97,6 @@ EOF;
 
         $path_bouent = $folderPath.'/'.$filename_bouent;
         $path_boudet = $folderPath.'/'.$filename_boudet;
-        
-        $file_bouent = fopen($path_bouent, 'w');
-        fwrite($file_bouent, "\xef\xbb\xbf");
-        fclose($file_bouent);
-        
-        $file_boudet = fopen($path_boudet, 'w');
-        fwrite($file_boudet, "\xef\xbb\xbf");
-        fclose($file_boudet);
         
         file_put_contents($path_boudet, $boudet);        
         file_put_contents($path_bouent, $bouent);
