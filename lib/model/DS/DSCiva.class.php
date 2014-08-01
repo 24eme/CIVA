@@ -343,8 +343,8 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
     
 public function getConfigurationCampagne() {
-        $campagne = CurrentClient::getCurrent()->getCampagneDS();
-        $conf_2012 = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+        $campagne = (int) (preg_replace("/^([0-9]{4})[0-9]{2}$/", '\1', $this->getPeriode()) - 1);
+
         if($campagne <= 2012){
             return $conf_2012;
         }        
