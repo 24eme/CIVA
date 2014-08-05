@@ -102,7 +102,7 @@ class VracClient extends acCouchdbClient {
     
     protected function getCampagne($campagne = null)
     {
-    	return ($campagne)? $campagne : ConfigurationClient::getInstance()->buildCampagne($this->getDate());
+    	return ($campagne)? $campagne : ConfigurationClient::getInstance()->buildCampagneVrac($this->getDate());
     }
     
     public function getNumeroContratSuivant($date = null)
@@ -136,7 +136,7 @@ class VracClient extends acCouchdbClient {
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
-        $campagne = ConfigurationClient::getInstance()->buildCampagne($date);
+        $campagne = ConfigurationClient::getInstance()->buildCampagneVrac($date);
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);
