@@ -69,7 +69,7 @@ class CompteTiers extends BaseCompteTiers {
                 continue;
             }
             if ($tiers->type == 'Recoltant') {
-                return $tiers->get($hash);
+                $value = $tiers->get($hash);
             } elseif (is_null($value)) {
                 $value = $tiers->get($hash);
             }
