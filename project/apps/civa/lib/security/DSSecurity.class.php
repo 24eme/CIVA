@@ -115,7 +115,7 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if($this->myUser->getDeclarant()->getIdentifiant() != $this->ds->identifiant) {
+        if($this->myUser->getDeclarantDS()->getIdentifiant() != $this->ds->identifiant) {
 
             return false;
         }
