@@ -49,4 +49,10 @@ class ConfigurationClient extends acCouchdbClient {
 
         return sprintf(self::CAMPAGNE_DATE_FIN, date('Y', strtotime($this->buildDateDebutCampagne($date)))+1);
     }
+
+    public function buildCampagneVrac($date) {
+      $campagne_manager = new CampagneManager('12-01');
+
+      return $campagne_manager->getCampagneByDate($date);
+    }
 }

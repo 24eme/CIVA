@@ -29,11 +29,11 @@ class vracActions extends sfActions
 		$this->role = $request->getParameter('role');
 
 		if (!$this->campagne) {
-			$this->campagne = ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d'));
+			$this->campagne = ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
 		$this->user = $this->getUser()->getDeclarantVrac();
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type, $this->role);
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagne(date('Y-m-d')));
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
         $this->roles = $this->findRoles();
