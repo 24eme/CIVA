@@ -86,12 +86,12 @@ class dsActions extends sfActions {
 
         $this->form_gest = null;
         $this->form_gest_err = 0;
-        if($this->getUser()->getTiers()->exist('exploitant')) {
-            $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
+        if($this->tiers->exist('exploitant')) {
+            $this->form_gest = new TiersExploitantForm($this->tiers->getExploitant());
             $this->form_gest_err = 0;
         }
 
-        $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
+        $this->form_expl = new TiersExploitationForm($this->tiers);
         $this->form_expl_err = 0;
         if ($request->isMethod(sfWebRequest::POST)) {
             if($request->isXmlHttpRequest())
@@ -120,7 +120,7 @@ class dsActions extends sfActions {
                           $values['adresse'] = $tiers->siege->adresse;
                           $values['code_postal'] = $tiers->siege->code_postal;
                           $values['ville'] = $tiers->siege->commune; */
-                        //$ldap->ldapModify($this->getUser()->getTiers());
+                        //$ldap->ldapModify($this->tiers);
                     }
                 } else {
                     $this->form_expl_err = 1;
