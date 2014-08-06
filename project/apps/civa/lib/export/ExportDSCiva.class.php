@@ -59,7 +59,7 @@ class ExportDSCiva {
                     $export_xml.="\t</decStock>\r\n";
                 }
                 $current_cvi = $ds->declarant->cvi;
-                $export_xml.="\t<decStock numCvi=\"" . $current_cvi . "\">\r\n";
+                $export_xml.="\t<decStock numCvi=\"" . $current_cvi . "\" dateDepot=\"".$ds->validee."\">\r\n";
                 $export_xml.= $this->makeXMLDS($ds);
                 $tab_cvi[] = $current_cvi;
             }
