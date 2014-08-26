@@ -46,13 +46,14 @@
                 </ul>
             </div>
             <br />
-            <h3 class="titre_section">Statistiques des DS de l'année</h3>
+            <?php foreach($ds_types as $type => $libelle): ?>
+            <h3 class="titre_section">Statistiques DS <?php echo $libelle ?></h3>
             <div class="contenu_section">
                 <ul class="statistiques">
-                    <li><strong>Nombre d'opérateurs ayant validé leur DS : <?php echo $etapeDsValidee; ?></strong></li>
-                    <li><strong>Nombre d'opérateurs ayant des DS en cours : <?php echo $etapeDsNonValidee; ?></strong>
+                    <li><strong>Nombre d'opérateurs ayant validé leur DS : <?php echo $etapeDsValidee[$type]; ?></strong></li>
+                    <li><strong>Nombre d'opérateurs ayant des DS en cours : <?php echo $etapeDsNonValidee[$type]; ?></strong>
                         <ul>
-                            <?php foreach($etapeDsNonValideeEtapes as $libelle => $nb): ?>
+                            <?php foreach($etapeDsNonValideeEtapes[$type] as $libelle => $nb): ?>
                             <li>à l'étape <?php echo $libelle ?> : <?php echo $nb; ?></li>
                             <?php endforeach; ?>
                         </ul>
@@ -60,7 +61,7 @@
                     <li><strong>Utililisateurs éditeurs :</strong>
                     <ul>
                         <?php 
-                        foreach ($utilisateurs_edition_ds as $u => $nb) {
+                        foreach ($utilisateurs_edition_ds[$type] as $u => $nb) {
                             $u = str_replace('COMPTE-', '', $u);
                             echo "<li>$u : $nb</li>";
                         }
@@ -69,6 +70,8 @@
                     </ul>
                 </ul>
             </div>
+            <br />
+            <?php endforeach; ?>
             <br />
             <h3 class="titre_section">Statistiques Alsace Gamm@</h3>
             <div class="contenu_section">

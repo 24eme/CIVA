@@ -18,7 +18,13 @@ class statistiquesActions extends sfActions {
         ini_set('memory_limit', '512M');
         $this->processStatsCompte();
         $this->processStatsDR();
-        $this->processStatsDS();
+        $this->ds_types = array(DSCivaClient::TYPE_DS_PROPRIETE => "Propriété", DSCivaClient::TYPE_DS_NEGOCE => "Négoce");
+        $this->etapeDsValidee = array();
+        $this->etapeDsNonValidee = array();
+        $this->etapeDsNonValideeEtapes = array();
+        $this->utilisateurs_edition_ds = array();
+        $this->processStatsDS(DSCivaClient::TYPE_DS_PROPRIETE);
+        $this->processStatsDS(DSCivaClient::TYPE_DS_NEGOCE);
     }
 
 
@@ -170,58 +176,60 @@ class statistiquesActions extends sfActions {
     }
 
 
-    protected function processStatsDS() {
+    protected function processStatsDS($type_ds) {
         $periode = CurrentClient::getCurrent()->ds_periode."";
-        $this->etapeDsValidee = 0;
-        $this->etapeDsNonValidee = 0;
-        $this->etapeDsNonValideeEtapes = array();
+
+
+        $this->etapeDsValidee[$type_ds] = 0;
+        $this->etapeDsNonValidee[$type_ds] = 0;
+        $this->etapeDsNonValideeEtapes[$type_ds] = array();
 
         $ds_validees = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(3)
-                                              ->startkey(array($periode, true, true))
-                                              ->endkey(array($periode, true, true, array()))
+                                              ->group_level(4)
+                                              ->startkey(array($type_ds, $periode, true, true))
+                                              ->endkey(array($type_ds, $periode, true, true, array()))
                                               ->getView("STATS", "DS");
         
         $ds_non_validees = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(3)
-                                              ->startkey(array($periode, false, false))
-                                              ->endkey(array($periode, false, false, array()))
+                                              ->group_level(4)
+                                              ->startkey(array($type_ds, $periode, false, false))
+                                              ->endkey(array($type_ds, $periode, false, false, array()))
                                               ->getView("STATS", "DS");
 
         foreach(DSCivaClient::$etapes as $num => $libelle) {
             $ds_non_validees_etape = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(5)
-                                              ->startkey(array($periode, false, false, null, $num))
-                                              ->endkey(array($periode, false, false, null, $num, array()))
+                                              ->group_level(6)
+                                              ->startkey(array($type_ds, $periode, false, false, null, $num))
+                                              ->endkey(array($type_ds, $periode, false, false, null, $num, array()))
                                               ->getView("STATS", "DS");
 
-            $this->etapeDsNonValideeEtapes[$libelle] = 0;                              
+            $this->etapeDsNonValideeEtapes[$type_ds][$libelle] = 0;                              
             if (isset($ds_non_validees_etape->rows) && count($ds_non_validees_etape->rows) > 0) {
-                $this->etapeDsNonValideeEtapes[$libelle] = $ds_non_validees_etape->rows[0]->value;
+                $this->etapeDsNonValideeEtapes[$type_ds][$libelle] = $ds_non_validees_etape->rows[0]->value;
             }
         }
 
         if (isset($ds_validees->rows) && count($ds_validees->rows) > 0) {
-          $this->etapeDsValidee = $ds_validees->rows[0]->value;
+          $this->etapeDsValidee[$type_ds] = $ds_validees->rows[0]->value;
         }
 
         if (isset($ds_non_validees->rows) && count($ds_non_validees->rows) > 0) {
-          $this->etapeDsNonValidee = $ds_non_validees->rows[0]->value;
+          $this->etapeDsNonValidee[$type_ds] = $ds_non_validees->rows[0]->value;
         }
 
         $utilisateurs_edition = acCouchdbManager::getClient()->group(true)
-                                              ->group_level(2)
-                                              ->startkey(array($periode))
-                                              ->endkey(array($periode, array()))
+                                              ->group_level(3)
+                                              ->startkey(array($type_ds, $periode))
+                                              ->endkey(array($type_ds, $periode, array()))
                                               ->getView("STATS", "edition_ds");
 
-        $this->utilisateurs_edition_ds = array(); 
+        $this->utilisateurs_edition_ds[$type_ds] = array(); 
         $cpt = 0;
         foreach ($utilisateurs_edition->rows as $u) {
-                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[1])) {
-                          $this->utilisateurs_edition_ds[$u->key[1]] = $u->value;
+                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[2])) {
+                          $this->utilisateurs_edition_ds[$type_ds][$u->key[2]] = $u->value;
                       }
         }
-        arsort($this->utilisateurs_edition_ds);
+        arsort($this->utilisateurs_edition_ds[$type_ds]);
     }
 }
