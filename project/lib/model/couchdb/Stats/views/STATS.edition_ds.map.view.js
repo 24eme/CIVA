@@ -1,7 +1,7 @@
 function(doc) {
     if (doc.type == "DS" && doc.mouts != null && doc.utilisateurs && doc.utilisateurs.edition) {
       
-    if(!doc.identifiant.match(/^(67|68)/)) {
+    if(!doc.identifiant.match(/^C?(67|68)/)) {
         return;
     }
 
@@ -14,7 +14,7 @@ function(doc) {
         type_ds = "propriete";
     }
 
-    for (u  in doc.utilisateurs.edition) {
+    for (u in doc.utilisateurs.edition) {
             emit([type_ds, doc.periode, u], 1);
             break;
         }

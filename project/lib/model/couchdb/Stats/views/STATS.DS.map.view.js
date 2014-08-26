@@ -1,8 +1,9 @@
 function(doc) {
     if (doc.type == "DS" && doc.mouts != null ) {
-        if(!doc.identifiant.match(/^(67|68)/)) {
+        
+        if(!doc.identifiant.match(/^C?(67|68)/)) {
             return;
-            }
+        }
 
         if(doc.ds_principale === 0) {
             return;
