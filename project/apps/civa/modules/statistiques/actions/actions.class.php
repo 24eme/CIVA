@@ -226,7 +226,7 @@ class statistiquesActions extends sfActions {
         $this->utilisateurs_edition_ds[$type_ds] = array(); 
         $cpt = 0;
         foreach ($utilisateurs_edition->rows as $u) {
-                      if(!preg_match('/^COMPTE-[0-9]{10}$/', $u->key[2])) {
+                      if(!preg_match('/^COMPTE-[0-9]{10}/', $u->key[2])) {
                           $this->utilisateurs_edition_ds[$type_ds][$u->key[2]] = $u->value;
                       }
         }
