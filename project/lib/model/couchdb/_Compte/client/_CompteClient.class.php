@@ -44,6 +44,24 @@ class _CompteClient extends acCouchdbClient {
         return parent::find('COMPTE-'.$login, $hydrate);
     }
 
+    public function findByLoginMagic($login, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        $compte = $this->findByLogin($login, $hydrate);
+
+        if($compte) {
+
+            return $compte;
+        }
+
+        $met = _TiersClient::getInstance()->findByCivaba(str_replace('C', '', $login));
+
+        if($met) {
+
+            return $met->getCompteObject();
+        }
+
+        return null;
+    }
+
     public function getDroits() {
 
         return self::$droits;
