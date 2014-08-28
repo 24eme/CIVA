@@ -74,6 +74,7 @@ EOF;
                     "cvi" => "Numéro CVI",
                     "civaba" => "Numéro CIVABA",
                     "siret" => "Numéro Siret",
+                    "no_accises" => "Numéro accises",
                     "qualite" => "Qualité",
                     "categorie" => "Catégorie",
                     "civilite" => "Civilité",
@@ -89,8 +90,8 @@ EOF;
                     "exploitant_adresse" => "Adresse de l'exploitant",
                     "exploitant_code_postal" => "Code postal de l'exploitant",
                     "exploitant_commune" => "Commune de l'exploitant",
-                    "exploitant_telephone" => "Téléphone de l'exploitant"
-
+                    "exploitant_telephone" => "Téléphone de l'exploitant",
+                    "gamma" => "Inscription Gamma",
                 ));
 
         $validation = array(
@@ -103,6 +104,7 @@ EOF;
             "cvi" => array("required" => false, "type" => "string"),
             "civaba" => array("required" => false, "type" => "string"),
             "siret" => array("required" => false, "type" => "string"),
+            "no_accises" => array("required" => false, "type" => "string"),
             "qualite" => array("required" => false, "type" => "string"),
             "categorie" => array("required" => false, "type" => "string"),
             "civilite" => array("required" => false, "type" => "string"),
@@ -118,7 +120,8 @@ EOF;
             "exploitant_adresse" => array("required" => false, "type" => "string"),
             "exploitant_code_postal" => array("required" => false, "type" => "string"),
             "exploitant_commune" => array("required" => false, "type" => "string"),
-            "exploitant_telephone" => array("required" => false, "type" => "string")
+            "exploitant_telephone" => array("required" => false, "type" => "string"),
+            "gamma" => "Inscription Gamma",
         );
 
         $validation_proxy = $validation;
@@ -137,6 +140,7 @@ EOF;
                         "cvi" => null,
                         "civaba" => null,
                         "siret" => null,
+                        "no_accises" => null,
                         "qualite" => null,
                         "categorie" => null,
                         "civilite" => null,
@@ -152,7 +156,8 @@ EOF;
                         "exploitant_adresse" => null,
                         "exploitant_code_postal" => null,
                         "exploitant_commune" => null,
-                        "exploitant_telephone" => null
+                        "exploitant_telephone" => null,
+                        "gamma" => null,
                             ), $validation);
 
             } elseif($compte->type == "CompteTiers") {
@@ -160,6 +165,7 @@ EOF;
                 $cvis = array();
                 $civabas = array();
                 $sirets = array();
+                $no_accises = array();
                 $qualites = array();
                 $categories = array();
                 $civilites = array();
@@ -176,12 +182,14 @@ EOF;
                 $code_postals_exploitant = array();
                 $communes_exploitant = array();
                 $telephones_exploitant = array();
+                $inscrit_gamma = null;
 
                 foreach($compte->tiers_object as $tiers) {
                     $types[] = $tiers->type;
                     $cvis[] = isset($tiers->cvi) ? $tiers->cvi : null;
                     $civabas[] = isset($tiers->civaba) ? $tiers->civaba : null;
                     $sirets[] = isset($tiers->siret) ? $tiers->siret : null;
+                    $no_accises[] = isset($tiers->no_accises) ? $tiers->no_accises : null;
                     $qualites[] = isset($tiers->qualite) ? $tiers->qualite : null;
                     $categories[] = isset($tiers->categorie) ? $tiers->categorie : null;
                     $civilites[] = isset($tiers->intitule) ? $tiers->intitule : null;
@@ -206,6 +214,7 @@ EOF;
                     $code_postals_exploitant[] = isset($tiers->exploitant->code_postal) ? $tiers->exploitant->code_postal : null;
                     $communes_exploitant[] = isset($tiers->exploitant->commune) ? $tiers->exploitant->commune : null;
                     $telephones_exploitant[] = isset($tiers->exploitant->telephone) ? $tiers->exploitant->telephone : null;
+                    $inscrit_gamma = ($inscrit_gamma === null && isset($tiers->gamma->statut) && $tiers->gamma->statut == "INSCRIT") ? $tiers->gamma->statut : null;
                 }
 
                 $csv->add(array(
@@ -218,6 +227,7 @@ EOF;
                         "cvi" => implode('|', $cvis),
                         "civaba" => implode('|', $civabas),
                         "siret" => implode('|', $sirets),
+                        "no_accises" => implode('|', $no_accises),
                         "qualite" => implode('|', $qualites),
                         "categorie" => implode('|', $categories),
                         "civilite" => implode('|', $civilites),
@@ -234,6 +244,7 @@ EOF;
                         "exploitant_code_postal" => implode('|', $code_postals_exploitant),
                         "exploitant_commune" => implode('|', $communes_exploitant),
                         "exploitant_telephone" => implode('|', $telephones_exploitant),
+                        "gamma" => $inscrit_gamma,
                             ), $validation);
 
             } elseif($compte->type == "CompteProxy") {
@@ -247,6 +258,7 @@ EOF;
                         "cvi" => null,
                         "civaba" => null,
                         "siret" => null,
+                        "no_accises" => null,
                         "qualite" => null,
                         "categorie" => null,
                         "civilite" => null,
@@ -263,6 +275,7 @@ EOF;
                         "exploitant_code_postal" => null,
                         "exploitant_commune" => null,
                         "exploitant_telephone" => null,
+                        "gamma" => null,
                             ), $validation_proxy);
             }
         }
