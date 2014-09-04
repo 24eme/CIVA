@@ -109,8 +109,8 @@ class DSCivaClient extends DSClient {
         return $periode;        
     }
     
-    public function createDssByTiers($tiers, $date_stock, $ds_neant = false) {    
-       $dss = $this->findOrCreateDssByTiers($tiers, $date_stock, $ds_neant, true);
+    public function createDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false) {    
+       $dss = $this->findOrCreateDssByTiers($tiers, $type_ds, $date_stock, $ds_neant, true);
        foreach ($dss as $ds) {
            $ds->addAppellation('declaration/certification/genre/appellation_ALSACEBLANC');
            $ds->addAppellation('declaration/certification/genre/appellation_COMMUNALE');
@@ -123,8 +123,7 @@ class DSCivaClient extends DSClient {
        return $dss;
     }
     
-    public function findOrCreateDssByTiers($tiers, $date_stock, $ds_neant = false, $onlyCreate = false) {
-        $type_ds = $tiers->getTypeDs();
+    public function findOrCreateDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false, $onlyCreate = false) {
         if(!$type_ds){
             throw new sfException("Il n'est pas possible de créer une Déclaration de Stock avec un compte de catégorie ".$tiers->categorie);
         }

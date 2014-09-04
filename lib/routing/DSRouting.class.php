@@ -117,11 +117,9 @@ class DSRouting {
                 array('model' => 'DS',
                     'type' => 'object') ));
         
-        $r->prependRoute('ds_export_pdf_empty', new TiersRoute('/ds/:cvi/pdf-vide', array('module' => 'ds_export',
+        $r->prependRoute('ds_export_pdf_empty', new sfRoute('/ds/pdf-vide/:type', array('module' => 'ds_export',
                 'action' => 'PDFEmpty'),
-                array('sf_method' => array('get')),
-                array('model' => 'DS',
-                    'type' => 'object') ));
+                array('sf_method' => array('get'))));
 
         $r->prependRoute('ds_export_csv_en_cours', new sfRoute('/ds/csv/en_cours', array('module' => 'ds_export',
                 'action' => 'csvEnCours'),
@@ -133,17 +131,17 @@ class DSRouting {
                 array('model' => 'DS',
                     'type' => 'object') )); 
         
-        $r->prependRoute('telecharger_la_notice_ds', new sfRoute('/ds/telecharger-la-notice-ds', array('module' => 'ds',
+        $r->prependRoute('telecharger_la_notice_ds', new sfRoute('/ds/telecharger-la-notice-ds/:type', array('module' => 'ds',
                 'action' => 'downloadNotice'))); 
         
         $r->prependRoute('telecharger_la_dai', new sfRoute('/ds/telecharger-la-dai', array('module' => 'ds',
                 'action' => 'downloadDai'))); 
         
-        $r->prependRoute('ds_feed_back', new sfRoute('/ds/retour-experience', array('module' => 'ds',
+        $r->prependRoute('ds_feed_back', new sfRoute('/ds/retour-experience/:type', array('module' => 'ds',
                 'action' => 'feedBack'),
                 array('sf_method' => array('get'))));
 
-        $r->prependRoute('ds_feed_back_confirmation', new sfRoute('/ds/retour-experience-confirmation', array('module' => 'ds',
+        $r->prependRoute('ds_feed_back_confirmation', new sfRoute('/ds/retour-experience-confirmation/:type', array('module' => 'ds',
                 'action' => 'feedBackConfirmation'),
                 array('sf_method' => array('get'))));
     }

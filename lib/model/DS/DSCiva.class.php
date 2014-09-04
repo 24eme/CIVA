@@ -116,6 +116,15 @@ class DSCiva extends DS implements IUtilisateursDocument {
     public function isTypeDsNegoce(){
         return ($this->exist('type_ds') && ($this->get('type_ds') == DSCivaClient::TYPE_DS_NEGOCE));
     }
+
+    public function getTypeDs() {
+        if($this->exist('type_ds')) {
+
+            return $this->_get('type_ds');
+        }
+
+        return DSCivaClient::TYPE_DS_PROPRIETE;
+    }
     
     public function getLastDS() {
         return DSCivaClient::getInstance()->getLastDs($this);
