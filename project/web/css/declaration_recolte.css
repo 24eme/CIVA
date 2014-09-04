@@ -647,6 +647,12 @@ input.btn_inactif {
 	text-align: center;
 }
 
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header.bloc_acceuil_header_deux_lignes
+{
+	padding-top: 6px;
+	padding-bottom: 7px;
+}
+
 #application_dr.mon_espace_civa .bloc_acceuil.recolte .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
 #application_dr.mon_espace_civa .bloc_acceuil.contrats .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
 #application_dr.mon_espace_civa .bloc_acceuil.gamma .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }

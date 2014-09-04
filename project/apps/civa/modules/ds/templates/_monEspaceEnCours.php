@@ -1,7 +1,7 @@
 <?php use_helper('ds'); ?>
-<form id="form_ds" action="<?php echo url_for('ds_init', $ds) ?>" method="post">
-    <h3 class="titre_section">Déclaration de <?php echo getPeriodeFr($sf_user->getPeriodeDS()) ?><a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds<?php if($sf_user->getDeclarantDS()->getTypeDs() == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a></h3>
-    <span class="label_type_ds"><?php echo strtoupper($sf_user->getDeclarantDS()->getTypeDs()); ?></span>
+<form id="form_ds" action="<?php echo url_for('ds_init', array('type' => $type_ds, 'sf_subject' => $ds)) ?>" method="post">
+    <h3 class="titre_section">Déclaration de <?php echo getPeriodeFr($sf_user->getPeriodeDS()) ?><a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds<?php if($ds->type_ds == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a></h3>
+    <span class="label_type_ds"><?php echo strtoupper($ds->type_ds); ?></span>
     <div class="contenu_section">    
         <?php if (!$ds->isNew()): ?>
             <p class="intro">Vous souhaitez :</p>
@@ -35,8 +35,8 @@
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
-        <?php if($sf_user->getDeclarantDS()->isDeclarantStockPropriete()): ?>
-        <a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('cvi' => $sf_user->getDeclarantDS()->getIdentifiant())); ?>" style="margin-top: 20px;">Télécharger mon brouillon</a>
+        <?php if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE): ?>
+        <a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('type' => $type_ds)); ?>" style="margin-top: 20px;">Télécharger mon brouillon</a>
         <?php endif; ?>
     </div>
 </form>

@@ -148,3 +148,18 @@ function getPeriodeFr($periode){
     }
     return $periodeFr." ".$annee;
 }
+
+function getLibelleDSType($type_ds) {
+
+    if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
+
+        return "Propriété";
+    }
+
+    if($type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
+
+        return "Négoce";
+    }
+
+    return null;
+}

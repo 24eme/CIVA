@@ -5,6 +5,8 @@ class TiersSecurity implements SecurityInterface {
     const DR = 'DR';
     const DR_ACHETEUR = 'DR_ACHETEUR';
     const DS = 'DS';
+    const DS_PROPRIETE = 'DS_PROPRIETE';
+    const DS_NEGOCE = 'DS_NEGOCE';
     const GAMMA = 'GAMMA';
     const VRAC = 'VRAC';
 
@@ -39,6 +41,16 @@ class TiersSecurity implements SecurityInterface {
 
             return DSSecurity::getInstance($this->myUser)->isAuthorized(DSSecurity::DECLARANT);
         }
+
+        if(in_array(self::DS_PROPRIETE, $droits)) {
+
+            return DSSecurity::getInstance($this->myUser, null, DSCivaClient::TYPE_DS_PROPRIETE)->isAuthorized(DSSecurity::DECLARANT);
+        }
+
+        if(in_array(self::DS_NEGOCE, $droits)) {
+
+            return DSSecurity::getInstance($this->myUser, null, DSCivaClient::TYPE_DS_NEGOCE)->isAuthorized(DSSecurity::DECLARANT);
+        }
         
         if(in_array(self::VRAC, $droits)) {
 
@@ -71,7 +83,8 @@ class TiersSecurity implements SecurityInterface {
             TiersSecurity::DR_ACHETEUR => 'mon_espace_civa_dr_acheteur',
             TiersSecurity::VRAC => 'mon_espace_civa_vrac',
             TiersSecurity::GAMMA => 'mon_espace_civa_gamma',
-            TiersSecurity::DS => 'mon_espace_civa_ds',
+            TiersSecurity::DS_PROPRIETE => array('mon_espace_civa_ds', array('type' => DSCivaClient::TYPE_DS_PROPRIETE)),
+            TiersSecurity::DS_NEGOCE => array('mon_espace_civa_ds', array('type' => DSCivaClient::TYPE_DS_NEGOCE)),
         );
     }
 

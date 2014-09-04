@@ -14,7 +14,10 @@
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::GAMMA)): ?>
 	<li class="<?php if($active== 'gamma'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_gamma") ?>">Alsace Gamm@</a></li>
 	<?php endif; ?>
-	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS)): ?>
-	<li class="<?php if($active== 'stock'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds") ?>">Alsace Stocks</a></li>
+	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_PROPRIETE)): ?>
+	<li class="<?php if($active== 'stock_'.DSCivaClient::TYPE_DS_PROPRIETE): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds", array("type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Alsace Stocks Propriété</a></li>
+	<?php endif; ?>
+	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_NEGOCE)): ?>
+	<li class="<?php if($active== 'stock_'.DSCivaClient::TYPE_DS_NEGOCE): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds", array("type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Alsace Stocks Négoce</a></li>
 	<?php endif; ?>
 </ul>

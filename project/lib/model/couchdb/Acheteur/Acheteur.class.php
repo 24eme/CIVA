@@ -20,13 +20,13 @@ class Acheteur extends BaseAcheteur {
         return true;
     }
 
-    public function getDeclarantDS() {
-        if($this->isDeclarantStockNegoce()) {
+    public function getDeclarantDS($type_ds = null) {
+        if($this->isDeclarantStockNegoce() && $type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
 
             return _TiersClient::getInstance()->findByCivaba($this->civaba);
         }
-
-        return parent::getDeclarantDS();
+        
+        return parent::getDeclarantDS($type_ds);
     }
 
     public function isDeclarantStockPropriete()
@@ -43,7 +43,7 @@ class Acheteur extends BaseAcheteur {
     {
         if($this->categorie == self::CATEGORIE_CCV) {
 
-            return false;
+            return true;
         }
         
         return parent::isDeclarantStockNegoce();

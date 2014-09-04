@@ -9,17 +9,19 @@ class DSSecurity implements SecurityInterface {
 
     protected $ds;
     protected $myUser;
+    protected $type_ds;
     protected $tiers;
 
-    public static function getInstance($myUser, $ds_principale = null) {
+    public static function getInstance($myUser, $ds_principale = null, $type_ds = null) {
 
-        return new DSSecurity($myUser, $ds_principale);
+        return new DSSecurity($myUser, $ds_principale, $type_ds);
     }
 
-    public function __construct($myUser, $ds_principale = null) {
+    public function __construct($myUser, $ds_principale = null, $type_ds = null) {
         $this->myUser = $myUser;
         $this->ds = $ds_principale;
-        $this->tiers = $this->myUser->getDeclarantDS();
+        $this->tiers = $this->myUser->getDeclarantDS($type_ds);
+        $this->type_ds = $type_ds;
     }
 
     public function isAuthorized($droits) {
@@ -49,7 +51,7 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
         
-        if(!$this->myUser->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
+        if(!$this->tiers->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
 
             return false;
         }
@@ -115,7 +117,7 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if($this->myUser->getDeclarantDS()->getIdentifiant() != $this->ds->identifiant) {
+        if($this->tiers->getIdentifiant() != $this->ds->identifiant) {
 
             return false;
         }

@@ -2,23 +2,24 @@
 class dsActions extends sfActions {
 
     public function executeInit(sfWebRequest $request) {
-
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
+
+       $type_ds = $request->getParameter("type");
        
        $this->secureDS(array(DSSecurity::CONSULTATION, 
-                             DSSecurity::EDITION), $this->getUser()->getDs());
+                             DSSecurity::EDITION), $this->getUser()->getDs($type_ds));
 
-       $this->tiers = $this->getUser()->getDeclarantDS();
+       $this->tiers = $this->getUser()->getDeclarantDS($type_ds);
        $ds_data = $this->getRequestParameter('ds', null);
         if ($ds_data) {
             if ($ds_data['type_declaration'] == 'brouillon') {
-                $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->getUser()->getDs());
+                $ds_principale = DSCivaClient::getInstance()->getDSPrincipaleByDs($this->getUser()->getDs($type_ds));
                 return $this->redirect('ds_etape_redirect', $ds_principale);
             } elseif ($ds_data['type_declaration'] == 'supprimer') {
-                $this->getUser()->removeDs();
-                return  $this->redirect('mon_espace_civa_ds');
+                $this->getUser()->removeDs($type_ds);
+                return  $this->redirect('mon_espace_civa_ds', array("type" => $type_ds));
             } elseif ($ds_data['type_declaration'] == 'visualisation') {
-                return $this->redirect('ds_visualisation', $this->getUser()->getDs());
+                return $this->redirect('ds_visualisation', $this->getUser()->getDs($type_ds));
             }    
         }
         $this->ds = null;        
@@ -28,7 +29,7 @@ class dsActions extends sfActions {
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
         $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
-        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $date, $ds_neant, true);
+        $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $type_ds, $date, $ds_neant, true);
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
@@ -488,7 +489,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
 
-        $this->redirect('mon_espace_civa_ds');
+        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds));
     }
     
     public function executeInvaliderRecoltant(sfWebRequest $request) {
@@ -500,7 +501,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale);
         
-        $this->redirect('mon_espace_civa_ds');
+        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds));
     }
 
 
@@ -651,11 +652,20 @@ Le CIVA';
     }
     
     public function executeDownloadNotice(sfWebRequest $request) {
-        if($this->getUser()->getDeclarantDS()->isDeclarantStockNegoce()){
+        $type_ds = $request->getParameter('type');
+
+        if($type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
+            
             return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_negoce.pdf", "aide stock negoce.pdf");
         }
+
+        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
         
-        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
+            return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_stock_propriete.pdf", "aide stock propriete.pdf");
+
+        }
+
+        return $this->forward404();
     }
     
     public function executeDownloadDai() {
@@ -678,6 +688,7 @@ Le CIVA';
     }
 
     public function executeFeedBack(sfWebRequest $request) {
+        $this->type_ds = $request->getParameter("type");
 
         $this->form = new FeedBackForm();
 
@@ -703,7 +714,7 @@ Cordialement,
 
 Le CIVA';*/
 
-        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getUser()->getDeclarant()->cvi;
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\nCVI/CIVABA: ".$this->getUser()->getDeclarantDS($this->type_ds)->identifiant;
 
         $to = sfConfig::get('app_email_feed_back');
         $this->emailSend = true;
@@ -724,10 +735,10 @@ Le CIVA';*/
             $this->emailSend = false;
         }
 
-        return $this->redirect('ds_feed_back_confirmation');
+        return $this->redirect('ds_feed_back_confirmation', array("type" => $this->type_ds));
     }
 
     public function executeFeedBackConfirmation(sfWebRequest $request) {
-
+        $this->type_ds = $request->getParameter("type");
     }
 }

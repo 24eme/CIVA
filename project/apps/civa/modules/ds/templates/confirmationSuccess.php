@@ -25,7 +25,7 @@
                     <p>Laissez nous vos commentaires à propos de la saisie de la déclaration de Stocks</p>
                 </div>
                 <div class="ligne_form ligne_btn">
-                    <a href="<?php echo url_for('ds_feed_back'); ?>">
+                    <a href="<?php echo url_for('ds_feed_back', array("type" => $ds_principale->type_ds)); ?>">
                         <img src="/images/boutons/btn_donnez_votre_avis.png" alt="Donnez votre avis" />
                     </a>
                 </div>
@@ -36,7 +36,7 @@
 
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
     <li class="prec">
-        <a href="<?php echo url_for('mon_espace_civa_ds'); ?>">
+        <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => $ds_principale->type_ds)); ?>">
             <img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à l'étape précédente" />
         </a>
     </li>

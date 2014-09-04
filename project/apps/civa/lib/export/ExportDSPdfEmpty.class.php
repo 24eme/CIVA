@@ -4,13 +4,13 @@ class ExportDSPdfEmpty extends ExportDSPdf {
   
     protected $tiers;
     
-    public function __construct($tiers, $partial_function, $annexe = true, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
+    public function __construct($tiers, $type_ds, $partial_function, $annexe = true, $type = 'pdf', $file_dir = null, $no_cache = false, $filename = null) {
 
         
         $this->tiers = $tiers;
         $this->type = $type;
         $this->annexe = true;
-        $this->dss = DSCivaClient::getInstance()->createDssByTiers($this->tiers,date('Y-m-d'));   
+        $this->dss = DSCivaClient::getInstance()->createDssByTiers($this->tiers, $type_ds, date('Y-m-d'));   
         foreach ($this->dss as $ds) {
             if($ds->isDsPrincipale()){
                 $this->ds_principale = $ds;

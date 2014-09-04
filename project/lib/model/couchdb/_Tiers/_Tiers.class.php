@@ -52,6 +52,7 @@ abstract class _Tiers extends Base_Tiers {
      */
     public function getDs($periode) {
         $identifiant = $this->getIdentifiant();
+
         $ds = acCouchdbManager::getClient('DSCiva')->findByIdentifiantAndPeriode($identifiant, $periode);
         if(!$ds) {
 
@@ -157,12 +158,18 @@ abstract class _Tiers extends Base_Tiers {
         return in_array($categorie, self::$array_ds_negoce);
     }
 
-    public function getDeclarantDS() {
+    public function getDeclarantDS($type_ds = null) {
 
         return $this;
     }
+
+    public function hasLieuxStockage() {
+        
+        return count($this->lieux_stockage) > 0;
+    }
     
     public function isAjoutLieuxDeStockage(){
+        
         return $this->isDeclarantStockNegoce();
     }
     

@@ -100,7 +100,9 @@ class tiersActions extends EtapesActions {
             
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
-
+                if(is_array($url)) {
+                    $this->redirect($url[0], $url[1]);
+                }
                 return $this->redirect($url);
             }
         } 
@@ -122,12 +124,21 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeMonEspaceDS(sfWebRequest $request) {
-        $this->secureTiers(TiersSecurity::DS);
+        $droits = array(TiersSecurity::DS);
+        $this->type_ds = $request->getParameter("type");
+        if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
+               $droits[] = TiersSecurity::DS_NEGOCE; 
+        } elseif($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
+               $droits[] = TiersSecurity::DS_PROPRIETE; 
+        } else {
+
+            return $this->forward404();
+        }
+        
+        $this->secureTiers($droits);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
-
-        
+        $this->setCurrentEtape('mon_espace_civa');   
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {

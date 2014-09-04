@@ -53,13 +53,16 @@ class ds_exportActions extends sfActions
 
          throw new sfSecurityException("Vous n'avez pas accès au DS pour ce tiers");
       }
-      $this->tiers = $this->getRoute()->getTiers();
+
+      $type_ds = $request->getParameter('type');
+
+      $this->tiers = $this->getUser()->getDeclarantDS($type_ds);
       
       set_time_limit(180);
 
       $this->setLayout(false);
 
-      $this->document = new ExportDSPdfEmpty($this->tiers, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'),null,$this->getRequestParameter('force', 0));
+      $this->document = new ExportDSPdfEmpty($this->tiers, $type_ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'), null, $this->getRequestParameter('force', 0));
       
       if($request->getParameter('force')) {
         $this->document->removeCache();

@@ -9,7 +9,7 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspace(sfWebRequest $request) {
-      $this->ds = $this->getUser()->getDs();
+      $this->ds = $this->getUser()->getDs($this->type_ds);
       $this->ds_editable = $this->getUser()->isDsEditable();
     }
     
@@ -18,7 +18,7 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
-        $this->ds = $this->getUser()->getDs();
+        $this->ds = $this->getUser()->getDs($this->type_ds);
     }
     
         /**
@@ -26,7 +26,7 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceValidee(sfWebRequest $request) {
-        $this->ds = $this->getUser()->getDs();
+        $this->ds = $this->getUser()->getDs($this->type_ds);
     }
     
     /**
@@ -34,8 +34,9 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request 
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->dsByperiodes = $this->getUser()->getDeclarantDS()->getDsArchivesSince(($this->getUser()->getPeriodeDS()-1));
-        $this->tiers = $this->getUser()->getDeclarantDS();
+        $this->tiers = $this->getUser()->getDeclarantDS($this->type_ds);
+        $this->dsByperiodes = $this->tiers->getDsArchivesSince(($this->getUser()->getPeriodeDS()-1));
+        
         krsort($this->dsByperiodes);
     }
     

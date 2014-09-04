@@ -138,9 +138,9 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         return $this->getTiers();
     }
 
-    public function getDeclarantDS() {
+    public function getDeclarantDS($type_ds = null) {
 
-        return $this->getCompte()->getDeclarantDS();
+        return $this->getCompte()->getDeclarantDS($type_ds);
     }
 
     public function getDeclarantVrac() {

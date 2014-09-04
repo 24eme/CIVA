@@ -21,7 +21,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         self::CREDENTIAL_ETAPE_RECOLTE,
         self::CREDENTIAL_ETAPE_VALIDATION);
     protected $_declaration = null;
-    protected $_ds = null;
+    protected $_ds = array();
 
     /**
      *
@@ -54,7 +54,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function signOutDeclaration()
     {
         $this->_declaration = null;
-        $this->_ds = null;
+        $this->_ds = array();
         $this->clearCredentialsDeclaration();
     }
 
@@ -206,45 +206,39 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         return (CurrentClient::getCurrent()->ds_non_editable == 0 && CurrentClient::getCurrent()->ds_non_ouverte == 0);
     }
     
-    public function getDs()
+    public function getDs($type_ds)
     {
-        $declarant = $this->getDeclarantDS();
-
+        $declarant = $this->getDeclarantDS($type_ds);
         if(!$declarant->isDeclarantStock()) {
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
-        if (!$this->hasLieuxStockage() && !$declarant->isAjoutLieuxDeStockage()) {                                                                                                                                                
+        if (!$declarant->hasLieuxStockage() && !$declarant->isAjoutLieuxDeStockage()) {                                                                                                                                                
             return null;
         }
 
         $this->requireTiers();
-        if (is_null($this->_ds)) {
+        if (!isset($this->_ds[$type_ds])) {
             $periode = CurrentClient::getCurrent()->getDsPeriode();
-            $this->_ds = $declarant->getDs($periode);
-            if (!$this->_ds) {
+            $this->_ds[$type_ds] = $declarant->getDs($periode);
+            if (!isset($this->_ds[$type_ds])) {
                 $ds = new DSCiva();
                 if($declarant->exist('civaba') && $declarant->civaba){
                     $ds->add('civaba', $declarant->civaba);
                 }
+                $ds->add('type_ds', $type_ds);
                 $ds->identifiant = $declarant->getIdentifiant();
                 $ds->set('_id', 'DS-' . $declarant->getIdentifiant() . '-' .$periode.'-'.$declarant->getLieuStockagePrincipal(true)->getNumeroIncremental());
                 return $ds;
             }
         }
 
-        return $this->_ds;
+        return $this->_ds[$type_ds];
     }
 
-    public function hasLieuxStockage() {
-        $this->requireTiers();
-        return (int) count($this->getDeclarantDS()->lieux_stockage);
-    }
-
-
-    public function removeDs()
+    public function removeDs($type_ds = null)
     {
-        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs());
+        $dss = DSCivaClient::getInstance()->findDssByDS($this->getDs($type_ds));
         foreach ($dss as $ds) {
             $ds->delete();
         }

@@ -84,18 +84,34 @@
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
-                <div class="bloc_acceuil_header">Alsace stocks</div>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_PROPRIETE)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?>  <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Alsace stocks <small style="font-size: 10px;"><br />propriété</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs() || !$sf_user->getDs()->isValideeTiers())): ?>
+                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds') ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
+            <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_NEGOCE)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <small style="font-size: 10px;"><br />négoce</small></div>
+                <div class="bloc_acceuil_content">
+                    <?php if(CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
+                        <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
+                    <?php else: ?>
+                        <p class="mineure">Aucune information à signaler</p>
+                    <?php endif; ?>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

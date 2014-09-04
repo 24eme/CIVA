@@ -220,16 +220,16 @@ class CompteTiers extends BaseCompteTiers {
         return $tiers; 
     }
 
-    public function getDeclarantDS() {
+    public function getDeclarantDS($type_ds = null) {
         $tiers_propriete = null;
         foreach($this->getTiersObject() as $t) {
-            if($t->isDeclarantStockNegoce()) {
+            if($t->isDeclarantStockNegoce() && $type_ds != DSCivaClient::TYPE_DS_PROPRIETE) {
                 
-                return $t->getDeclarantDS();
+                return $t->getDeclarantDS($type_ds);
             }
 
-            if($t->isDeclarantStockPropriete()) {
-                $tiers_propriete = $t->getDeclarantDS();
+            if($t->isDeclarantStockPropriete() && $type_ds != DSCivaClient::TYPE_DS_NEGOCE) {
+                $tiers_propriete = $t->getDeclarantDS($type_ds);
             }
         }
 

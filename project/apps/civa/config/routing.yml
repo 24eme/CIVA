@@ -240,7 +240,7 @@ mon_espace_civa_dr_acheteur:
   param: { module: tiers, action: monEspaceDRAcheteur }
 
 mon_espace_civa_ds:
-  url:   /mon_espace_civa/ds
+  url:   /mon_espace_civa/ds/:type
   param: { module: tiers, action: monEspaceDS }
 
 mon_espace_civa_gamma:

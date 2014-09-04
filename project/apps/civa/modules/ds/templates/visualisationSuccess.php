@@ -1,7 +1,7 @@
 <?php use_helper('ds'); ?>
 
 <ul id="onglets_majeurs" class="clearfix">
-    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif Déclaration de Stocks de <?php echo getPeriodeFr($ds_principale->getPeriode());?></a></li>
+    <li class="ui-tabs-selected"><a href="#recap_total_ds">Récapitulatif Déclaration de Stocks <?php echo getLibelleDSType($ds_principale->type_ds) ?> de <?php echo getPeriodeFr($ds_principale->getPeriode());?></a> </li>
 </ul>
 
 <?php
@@ -11,7 +11,7 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="<?php echo url_for('mon_espace_civa_ds'); ?>">
+		<a href="<?php echo url_for('mon_espace_civa_ds', array('type' => $ds_principale->type_ds)); ?>">
 			<img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
