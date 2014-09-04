@@ -7,10 +7,11 @@ abstract class _Tiers extends Base_Tiers {
     
     const CATEGORIE_PN = 'PN';
     const CATEGORIE_CCV = 'CCV';
+    const CATEGORIE_CCV_REC = 'CCV_REC';
     const CATEGORIE_SIC = 'SIC';
     
     public static $array_ds_negoce = array(self::CATEGORIE_PN,self::CATEGORIE_CCV,self::CATEGORIE_SIC);
-    public static $array_ds_propriete = array(self::CATEGORIE_VRP,self::CATEGORIE_VRT,self::CATEGORIE_VVV);
+    public static $array_ds_propriete = array(self::CATEGORIE_VRP,self::CATEGORIE_VRT, self::CATEGORIE_VVV, self::CATEGORIE_CCV_REC);
     
     public function isActif() {
 
