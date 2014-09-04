@@ -14,7 +14,7 @@
         <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">
             <?php $i = $nb_blocs ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if(CurrentClient::getCurrent()->isDREditable() && !$sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
@@ -30,7 +30,7 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
                      <p class="mineure">Aucune information à signaler</p>
@@ -42,7 +42,7 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::VRAC)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_header">Alsace Contrats</div>
                 <div class="bloc_acceuil_content">
                     <?php $infos = true ?>
@@ -73,7 +73,7 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::GAMMA)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
                 <div class="bloc_acceuil_header">Alsace Gamm@</div>
                 <div class="bloc_acceuil_content">
                     <p class="mineure">Aucune information à signaler</p>
@@ -85,8 +85,8 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_PROPRIETE)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?>  <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
-                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Alsace stocks <small style="font-size: 10px;"><br />propriété</small></div>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Alsace stocks <br /><small style="font-size: 10px;">propriété</small></div>
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
@@ -101,8 +101,8 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DS_NEGOCE)): ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> bloc_acceuil_last <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
-                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <small style="font-size: 10px;"><br />négoce</small></div>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <br /><small style="font-size: 10px;">négoce</small></div>
                 <div class="bloc_acceuil_content">
                     <?php if(CurrentClient::getCurrent()->isDSEditable() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
                         <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
