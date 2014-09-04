@@ -31,6 +31,11 @@ class Recoltant extends BaseRecoltant {
         return false;
     }
 
+    public function isDeclarantStockNegoce() { 
+
+        return false;
+    }
+
     public function isDeclarantContratForSignature() {
 
         return true;
