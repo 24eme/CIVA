@@ -124,7 +124,7 @@ class tiersActions extends EtapesActions {
     }
 
     public function executeMonEspaceDS(sfWebRequest $request) {
-        $droits = array(TiersSecurity::DS);
+        $droits = array();
         $this->type_ds = $request->getParameter("type");
         if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
                $droits[] = TiersSecurity::DS_NEGOCE; 

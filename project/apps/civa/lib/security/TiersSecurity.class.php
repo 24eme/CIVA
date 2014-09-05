@@ -4,7 +4,6 @@ class TiersSecurity implements SecurityInterface {
 
     const DR = 'DR';
     const DR_ACHETEUR = 'DR_ACHETEUR';
-    const DS = 'DS';
     const DS_PROPRIETE = 'DS_PROPRIETE';
     const DS_NEGOCE = 'DS_NEGOCE';
     const GAMMA = 'GAMMA';
@@ -35,11 +34,6 @@ class TiersSecurity implements SecurityInterface {
         if(in_array(self::DR_ACHETEUR, $droits)) {
 
             return DRAcheteurSecurity::getInstance($this->myUser)->isAuthorized(DRAcheteurSecurity::DECLARANT);
-        }
-
-        if(in_array(self::DS, $droits)) {
-
-            return DSSecurity::getInstance($this->myUser)->isAuthorized(DSSecurity::DECLARANT);
         }
 
         if(in_array(self::DS_PROPRIETE, $droits)) {

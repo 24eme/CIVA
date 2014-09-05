@@ -23,6 +23,10 @@ class DSSecurity implements SecurityInterface {
         if($this->ds) {
             $type_ds = $ds_principale->type_ds;
         }
+        if(!$type_ds) {
+
+            throw new sfException("Type DS unknow");
+        }
         $this->tiers = $this->myUser->getDeclarantDS($type_ds);
         $this->type_ds = $type_ds;
     }
@@ -55,6 +59,13 @@ class DSSecurity implements SecurityInterface {
         }
         
         if(!$this->tiers->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
+
+            return false;
+        }
+
+        if($this->tiers && $this->ds && $this->tiers->getIdentifiant() != $this->ds->identifiant) {
+
+            throw new sfException("Pas sa DS");
 
             return false;
         }
@@ -116,11 +127,6 @@ class DSSecurity implements SecurityInterface {
         }
 
         if(in_array(self::EDITION , $droits) && !CurrentClient::getCurrent()->isDSEditable()) {
-
-            return false;
-        }
-
-        if($this->tiers->getIdentifiant() != $this->ds->identifiant) {
 
             return false;
         }
