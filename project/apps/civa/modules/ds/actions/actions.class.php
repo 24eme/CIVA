@@ -646,7 +646,7 @@ Le CIVA';
     public function executeMessageAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
         return $this->renderText(json_encode(array('titre' => $request->getParameter('title', null),
-						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('telecharger_la_notice_ds')),
+						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('telecharger_la_notice_ds', array("type" => DSCivaClient::TYPE_DS_PROPRIETE))),
                                                    'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
 
     }
