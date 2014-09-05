@@ -20,6 +20,9 @@ class DSSecurity implements SecurityInterface {
     public function __construct($myUser, $ds_principale = null, $type_ds = null) {
         $this->myUser = $myUser;
         $this->ds = $ds_principale;
+        if($this->ds) {
+            $type_ds = $ds_principale->type_ds;
+        }
         $this->tiers = $this->myUser->getDeclarantDS($type_ds);
         $this->type_ds = $type_ds;
     }
