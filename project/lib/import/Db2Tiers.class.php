@@ -33,6 +33,7 @@ class Db2Tiers extends Db2 {
     const COL_SEXE_CHEF_ENTR        = 41;
     const COL_NOM_PRENOM_CHEF_ENTR  = 42;
     const COL_ADRESSE_SIEGE         = 46;
+    const COL_CCV_REC               = 55;
     const COL_CVI                   = 57;
     const COL_SIRET                 = 58;
     const COL_INSEE_SIEGE           = 59;

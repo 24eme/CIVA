@@ -113,7 +113,11 @@ EOF;
       $tiers->siege->insee_commune = $db2->get(Db2Tiers::COL_INSEE_SIEGE);
       $tiers->siege->code_postal = $db2->get(Db2Tiers::COL_CODE_POSTAL_SIEGE);
       $tiers->siege->commune = $db2->get(Db2Tiers::COL_COMMUNE_SIEGE);
-      $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
+      if($db2->get(Db2Tiers::COL_TYPE_TIERS) == "CCV" && $db2->get(Db2Tiers::COL_CCV_REC) == "S") {
+        $tiers->categorie = "CCV_REC";
+      } else {
+        $tiers->categorie = $db2->get(Db2Tiers::COL_TYPE_TIERS);
+      }
       $tiers->qualite_categorie = $this->getQualite($db2);
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
