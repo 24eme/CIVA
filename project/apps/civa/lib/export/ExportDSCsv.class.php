@@ -67,7 +67,7 @@ class ExportDSCsv {
                                 }
                             }
 
-                            $output .= sprintf("%s;%s;%s;%s;%s;TOTAL;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $cepage->libelle, $couleur->total_stock, $couleur->total_normal, $couleur->total_vt, $couleur->total_sgn);
+                            $output .= sprintf("%s;%s;%s;%s;%s;TOTAL;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $cepage->libelle, $cepage->total_stock, $cepage->total_normal, $cepage->total_vt, $cepage->total_sgn);
                         }
 
                         if($couleur_key == "couleur") {
