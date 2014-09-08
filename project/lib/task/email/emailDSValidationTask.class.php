@@ -56,11 +56,11 @@ EOF;
                 $dss = $exportManager->getDSNonValideesListe();
             }
 	    foreach ($dss as $ds) {
-		$cvi = $ds->declarant->get('cvi');
+		            $identifiant = $ds->identifiant;
 
                 $nb_item++;
                 if(!$ds->declarant->exist('email')) {
-                    $this->logSection('no email', $cvi, null, 'ERROR');
+                    $this->logSection('no email', $identifiant, null, 'ERROR');
                 continue;
                 }
             
@@ -69,20 +69,20 @@ EOF;
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($ds->declarant->get('email'))
                      // ->setTo('mpetit@actualys.com')
-                      ->setSubject('DEUXIEME RAPPEL DS '.$arguments['campagne'])
+                      ->setSubject('RAPPEL DS '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($ds->declarant->get('nom'), $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);              
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
             } catch (Exception $exc) {     
-                $this->logSection('send error', $cvi . ' : ' . $exc->getMessage());    
+                $this->logSection('send error', $identifiant . ' : ' . $exc->getMessage());    
                 $sended = false;
             }
             
             if ($sended) {
                 $nb_email_send++;
-                $this->logSection('sended', $cvi . ' : ' . $ds->declarant->get('email'));
+                $this->logSection('sended', $identifiant . ' : ' . $ds->declarant->get('email'));
             }else {
-                $this->logSection('send error', $cvi . ' : ' . $ds->declarant->get('email'), null, 'ERROR');
+                $this->logSection('send error', $identifiant . ' : ' . $ds->declarant->get('email'), null, 'ERROR');
             }
         }
         $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
@@ -92,14 +92,14 @@ EOF;
   protected function getMessageBody($nom, $campagne) {
       return "Bonjour,
 
-Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
+Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro, mais ne l’avez pas encore validée. 
 
-Nous vous rappelons que vous devez impérativement la valider avant le 31 août minuit. 
+Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre minuit. 
 
 Pour terminer la saisie, cliquez sur le lien suivant :
 http://declaration.vinsalsace.pro/
 
-Si vous avez déposé en mairie une déclaration papier, merci de m'en informer par retour de mail.
+Si vous avez souscrit une déclaration papier, merci de m'en informer par retour de mail.
 
 Bien cordialement,
 

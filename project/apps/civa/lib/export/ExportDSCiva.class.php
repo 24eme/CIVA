@@ -21,7 +21,7 @@ class ExportDSCiva {
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);
-            if (preg_match('/^(67|68)/', $ds->identifiant) && $this->client_ds->getDSPrincipaleByDs($ds)->isValidee()) {
+            if (preg_match('/^C?(67|68)/', $ds->identifiant) && $this->client_ds->getDSPrincipaleByDs($ds)->isValidee()) {
                 $this->ds_liste[] = $this->client_ds->find($ds_id);
             }
         }
@@ -39,7 +39,7 @@ class ExportDSCiva {
         $result = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);
-            if (preg_match('/^(67|68)/', $ds->identifiant) && $ds->isDsPrincipale() && !$ds->isValidee()) {
+            if (preg_match('/^C?(67|68)/', $ds->identifiant) && $ds->isDsPrincipale() && !$ds->isValidee()) {
                 $result[] = $this->client_ds->find($ds_id);
             }
         }
