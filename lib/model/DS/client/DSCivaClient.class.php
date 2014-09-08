@@ -529,9 +529,12 @@ class DSCivaClient extends DSClient {
 
     public function getAllIdsByCampagne($campagne, $onlyPropriete = false) {
         $ids = $this->startkey('DS-0000000000-000000-000')->endkey('DS-9999999999-99999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds();
+        if(!$onlyPropriete) {
+            $ids = array_merge($ids, $this->startkey('DS-C0000000000-000000-000')->endkey('DS-C9999999999-99999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds());
+        }
         $result_ids = array();
         foreach ($ids as $id) {
-            if (preg_match('/^DS-[0-9]{10}-' . $campagne . '[0-9]{2}-[0-9]{3}$/', $id)) {
+            if (preg_match('/^DS-C?[0-9]{10}-' . $campagne . '[0-9]{2}-[0-9]{3}$/', $id)) {
                 if(!$onlyPropriete){
                     $result_ids[] = $id;
                 }  else {
