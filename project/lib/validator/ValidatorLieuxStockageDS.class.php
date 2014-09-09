@@ -61,7 +61,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
             }
 
             if(Date::getIsoDateFromFrenchDate($values['date_depot_mairie']) > $annee."-09-10"){
-                $errorSchema->addError(new sfValidatorError($this, 'invalid_date_depot_mairie'));
+                //$errorSchema->addError(new sfValidatorError($this, 'invalid_date_depot_mairie'));
             }
         }
         // throws the error for the main form

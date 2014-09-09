@@ -33,7 +33,7 @@ class dsActions extends sfActions {
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
-                $ds->add('date_depot_mairie',date('Y').'-09-10');
+                $ds->add('date_depot_mairie',date('Y').'-08-31');
             }
             $ds->save($this->getUserId());
         }
