@@ -30,8 +30,11 @@ class ExportDSCsv {
         $date_depot_mairie = isset($this->ds_principale->date_depot_mairie) ? $this->ds_principale->date_depot_mairie : null;
         $principale = ($this->ds_principale->_id == $ds->_id) ? "PRINCIPALE" : "SECONDAIRE";
         $statut = ($modifiee) ? "VALIDE" : (($validee) ? "NON_VALIDE_CIVA" : "EN_COURS");
-        
-        $ligneStart = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ds->periode, $ds->_id, $ds->declarant->nom, $ds->identifiant, $ds->stockage->numero, $principale, $statut, $validee, $modifiee, $date_depot_mairie);
+        $userEditeur = str_replace("COMPTE-", "", key($this->ds_principale->utilisateurs->edition));
+        $userValideur = str_replace("COMPTE-", "", key($this->ds_principale->utilisateurs->validation));
+
+
+        $ligneStart = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ds->periode, $ds->_id, $ds->declarant->nom, $ds->identifiant, $ds->stockage->numero, $principale, $statut, $validee, $modifiee, $date_depot_mairie, $userEditeur, $userValideur);
 
         if(isset($ds->declaration->certification->genre)) {
             foreach($ds->declaration->certification->genre as $appellation_key => $appellation) {
