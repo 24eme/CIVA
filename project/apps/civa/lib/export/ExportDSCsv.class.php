@@ -66,7 +66,7 @@ class ExportDSCsv {
                                 $total = $detail->volume_normal + $detail->volume_vt + $detail->volume_sgn;
                                 $hasLieuDit = !$lieu->libelle && $detail->lieu;
                                 if($hasLieuDit) {
-                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle,$cepage->libelle,$detail->lieu, $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0);
+                                    $output .= sprintf("%s;%s;%s;%s;%s;\"%s\";%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle,$cepage->libelle,$detail->lieu, $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0);
                                 }
                             }
 
