@@ -1,7 +1,7 @@
 <div id="nouvelle_declaration">
-<?php if(DSSecurity::getInstance($sf_user->getRawValue(), $ds)->isAuthorized(DSSecurity::CREATION)): ?>
+<?php if(DSSecurity::getInstance($sf_user->getRawValue(), $ds, $type_ds)->isAuthorized(DSSecurity::CREATION)): ?>
 	<?php include_component('ds', 'monEspaceEnCours', array('type_ds' => $type_ds));  ?>
-<?php elseif (DSSecurity::getInstance($sf_user->getRawValue(), $ds)->isAuthorized(DSSecurity::EDITION)): ?>
+<?php elseif (DSSecurity::getInstance($sf_user->getRawValue(), $ds, $type_ds)->isAuthorized(DSSecurity::EDITION)): ?>
 	<?php include_component('ds', 'monEspaceEnCours', array('type_ds' => $type_ds));  ?>
 <?php elseif($ds && $ds->isValidee()): ?>
     <?php include_component('ds', 'monEspaceValidee', array('type_ds' => $type_ds));  ?>
