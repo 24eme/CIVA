@@ -2,7 +2,7 @@
 
 . bin/task.inc
 
-DESCRIPTION="Export CSV des déclarations de Stocks propriete pour la période $DS_PERIODE"
+DESCRIPTION="Export CSV des déclarations de Stocks propriété pour la période $DS_PERIODE"
 
 . bin/task_start.inc
 
