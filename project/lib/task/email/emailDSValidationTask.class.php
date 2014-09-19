@@ -45,11 +45,12 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    if (isset($arguments['campagne']) && !empty($arguments['campagne'])) {
+    if (isset($arguments['periode']) && !empty($arguments['periode'])) {
 	    $nb_item = 0;
 	    $nb_email_send = 0;  
-            $campagne = $arguments['campagne'];
-            $exportManager = new ExportDSCiva($campagne);
+            $periode = $arguments['periode'];
+            $campagne = substr($periode, 0, 4);
+            $exportManager = new ExportDSCiva($periode);
             if ($options['dsid']) {
                 $dss = array(DSCivaClient::getInstance()->find($options['dsid']));
             }else{
@@ -69,10 +70,10 @@ EOF;
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($ds->declarant->get('email'))
                      // ->setTo('mpetit@actualys.com')
-                      ->setSubject('RAPPEL DS '.$arguments['campagne'])
-                      ->setBody($this->getMessageBody($ds->declarant->get('nom'), $arguments['campagne']));
+                      ->setSubject('RAPPEL DS '.$campagne)
+                      ->setBody($this->getMessageBody($ds->declarant->get('nom'), $campagne));
                 $sended = $this->getMailer()->send($message);              
-                //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
+                //echo $this->getMessageBody($compte, $campagne)."\n\n\n";
             } catch (Exception $exc) {     
                 $this->logSection('send error', $identifiant . ' : ' . $exc->getMessage());    
                 $sended = false;

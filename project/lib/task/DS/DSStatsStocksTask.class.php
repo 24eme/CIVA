@@ -7,7 +7,8 @@ class DSStatsStocksTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
+            new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
+            new sfCommandArgument('type_ds', sfCommandArgument::REQUIRED, 'propriete ou negoce'),
         ));
 
         $this->addOptions(array(
@@ -32,7 +33,14 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $exportManager = new ExportDSCiva($arguments['campagne']);
+        if(!in_array($arguments['type_ds'], array(DSCivaClient::TYPE_DS_PROPRIETE, DSCivaClient::TYPE_DS_NEGOCE))) {
+
+            throw new sfException("type ds must be propriete ou negoce");
+        }
+
+        $exportManager = new ExportDSCiva($arguments['periode'], array($arguments['type_ds']));
+
+        $campagne = substr($arguments['periode'], 0, 4);
 
         $dss = $exportManager->getDSListe();
 
@@ -81,8 +89,7 @@ EOF;
         echo "appellation;cepage;volume total;volume normal;volume vt;volume sgn\n";
 
         $ligne = "%s;%s;%01.02f;%01.02f;%01.02f;%01.02f\n";
-
-        $configuration = ConfigurationClient::getConfiguration($arguments['campagne'] - 1);
+        $configuration = ConfigurationClient::getConfiguration($campagne - 1);
 
         foreach($configuration->recolte->getNoeudAppellations() as $c_appellation) {
             if(!array_key_exists($c_appellation->getKey(), $stats['appellations'])) {

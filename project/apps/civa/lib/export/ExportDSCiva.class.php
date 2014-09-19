@@ -2,6 +2,7 @@
 
 class ExportDSCiva {
 
+    protected $periode;
     protected $campagne;
     protected $ds_ids;
     protected $client_ds;
@@ -11,13 +12,14 @@ class ExportDSCiva {
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
     const CODE_DOUANE_ED = "1B001S";
 
-    public function __construct($campagne, $onlyPropriete = false) {
-        if (!preg_match('/^[0-9]{4}$/', $campagne)) {
-            throw new sfException("La campagne doit être une année ($campagne)");
+    public function __construct($periode, $types_ds = array(DSCivaClient::TYPE_DS_PROPRIETE, DSCivaClient::TYPE_DS_NEGOCE)) {
+        if (!preg_match('/^[0-9]{6}$/', $periode)) {
+            throw new sfException("La période doit être au format yyyymm ($periode)");
         }
-        $this->campagne = $campagne;
+        $this->periode = $periode;
+        $this->campagne = substr($periode, 0, 4);
         $this->client_ds = DSCivaClient::getInstance();
-        $this->ds_ids = $this->client_ds->getAllIdsByCampagne($this->campagne, $onlyPropriete);
+        $this->ds_ids = $this->client_ds->getAllIdsByPeriode($this->periode, $types_ds);
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);

@@ -16,7 +16,7 @@ class exportDSCivaTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, 'campagne'),
+            new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
             new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date'),
         ));
@@ -43,15 +43,15 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
-        $campagne = $arguments['campagne'];
+        $periode = $arguments['periode'];
         $date = $arguments['date'];
-        $exportManager = new ExportDSCiva($campagne);
+        $exportManager = new ExportDSCiva($periode);
         $entete = $exportManager->exportEntete();
         $lignes = $exportManager->exportLigne(); 
         
         $folderPath = $arguments['folderPath'];
-        $path_ent = $folderPath.'/STOENT'.substr($campagne, 2).'_'.$date;
-        $path_lig = $folderPath.'/STOLIG'.substr($campagne, 2).'_'.$date;
+        $path_ent = $folderPath.'/STOENT'.substr($periode, 2, 2).'_'.$date;
+        $path_lig = $folderPath.'/STOLIG'.substr($periode, 2, 2).'_'.$date;
         
         $ent = fopen($path_ent, 'w');
         fwrite($ent, "\xef\xbb\xbf");
