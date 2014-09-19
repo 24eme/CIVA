@@ -527,24 +527,21 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
 
-    public function getAllIdsByCampagne($campagne, $onlyPropriete = false) {
-        $ids = $this->startkey('DS-0000000000-000000-000')->endkey('DS-9999999999-99999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds();
-        if(!$onlyPropriete) {
+    public function getAllIdsByPeriode($periode, $types_ds = array(DSCivaClient::TYPE_DS_PROPRIETE, DSCivaClient::TYPE_DS_NEGOCE)) {
+        $ids = array();
+        if(in_array(DSCivaClient::TYPE_DS_PROPRIETE, $types_ds)) {
+            $ids = array_merge($this->startkey('DS-0000000000-000000-000')->endkey('DS-9999999999-99999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds());
+        }
+        if(in_array(DSCivaClient::TYPE_DS_NEGOCE, $types_ds)) {
             $ids = array_merge($ids, $this->startkey('DS-C0000000000-000000-000')->endkey('DS-C9999999999-99999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND_WITH_DATA)->getIds());
         }
         $result_ids = array();
         foreach ($ids as $id) {
-            if (preg_match('/^DS-C?[0-9]{10}-' . $campagne . '[0-9]{2}-[0-9]{3}$/', $id)) {
-                if(!$onlyPropriete){
-                    $result_ids[] = $id;
-                }  else {
-                    $current_ds = $this->find($id);
-                    if($current_ds->isTypeDsPropriete()){
-                        $result_ids[] = $id;
-                    }
-                }
-                
+            if (!preg_match('/^DS-C?[0-9]{10}-' . $periode . '-[0-9]{3}$/', $id)) {
+                continue;
             }
+            
+            $result_ids[] = $id;
         }
         return $result_ids;
     }
