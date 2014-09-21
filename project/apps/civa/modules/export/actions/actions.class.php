@@ -174,8 +174,6 @@ class exportActions extends sfActions {
         return $this->renderText($content);
     }
 
-
-
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');
         $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);

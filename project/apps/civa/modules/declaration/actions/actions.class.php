@@ -370,6 +370,26 @@ Le CIVA';*/
 
     }
 
+    public function executeAutorisation(sfWebRequest $request) {
+        $this->url = $request->getParameter('url');
+        $this->id = $request->getParameter('id');
+        $this->auto = true;
+    }
+
+    public function executeTransmission(sfWebRequest $request) {
+        set_time_limit(180);
+        $this->url = $request->getParameter('url');
+        $this->id = $request->getParameter('id');
+        $dr = acCouchdbManager::getClient()->find($this->id);
+        $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), 'pdf');
+        $this->document->generatePDF();
+        $this->pdf = base64_encode($this->document->output());
+
+        $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi);         
+        $csvContruct->export();
+        $this->csv = base64_encode($csvContruct->output());
+    }
+
     protected function renderPdf($path, $filename) {
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');

@@ -277,6 +277,14 @@ declaration_invalider_civa:
   url:   /admin/declaration/invalider_civa
   param: { module: declaration, action: invaliderCiva }
 
+declaration_autorisation:
+  url:   /declaration/autorisation
+  param: { module: declaration, action: autorisation }
+
+declaration_transmission:
+  url:   /declaration/transmission/:id
+  param: { module: declaration, action: transmission }
+
 
 # *********** GAMMA ***********
 
