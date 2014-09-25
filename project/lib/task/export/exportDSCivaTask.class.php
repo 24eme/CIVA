@@ -18,7 +18,7 @@ class exportDSCivaTask extends sfBaseTask
         $this->addArguments(array(
             new sfCommandArgument('periode', sfCommandArgument::REQUIRED, 'periode'),
             new sfCommandArgument('folderPath', sfCommandArgument::REQUIRED, 'folderPath'),
-            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date'),
+            new sfCommandArgument('type_ds', sfCommandArgument::REQUIRED, 'propriete ou negoce'),
         ));
 
         $this->addOptions(array(
@@ -44,14 +44,20 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         $periode = $arguments['periode'];
-        $date = $arguments['date'];
-        $exportManager = new ExportDSCiva($periode);
+
+        if(!in_array($arguments['type_ds'], array(DSCivaClient::TYPE_DS_PROPRIETE, DSCivaClient::TYPE_DS_NEGOCE))) {
+
+            throw new sfException("type ds must be propriete ou negoce");
+        }
+
+        $exportManager = new ExportDSCiva($periode, array($arguments['type_ds']));
         $entete = $exportManager->exportEntete();
         $lignes = $exportManager->exportLigne(); 
         
         $folderPath = $arguments['folderPath'];
-        $path_ent = $folderPath.'/STOENT'.substr($periode, 2, 2).'_'.$date;
-        $path_lig = $folderPath.'/STOLIG'.substr($periode, 2, 2).'_'.$date;
+        $suffixe_type_ds = strtoupper(substr($arguments['type_ds'], 0, 1));
+        $path_ent = $folderPath.'/STOENT'.substr($periode, 2, 2).$suffixe_type_ds;
+        $path_lig = $folderPath.'/STOLIG'.substr($periode, 2, 2).$suffixe_type_ds;
         
         $ent = fopen($path_ent, 'w');
         fwrite($ent, "\xef\xbb\xbf");
