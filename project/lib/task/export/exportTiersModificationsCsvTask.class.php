@@ -124,6 +124,11 @@ EOF;
         }
 
         foreach($tiers_modifies as $tiers) {
+
+            if(!$tiers) {
+                continue;
+            }
+
             if(isset($tiers->statut) && $tiers->statut == _TiersClient::STATUT_INACTIF) {
                 
                 continue;
