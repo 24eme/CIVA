@@ -73,6 +73,10 @@ class ExportDSPdf extends ExportDocument {
             $validee .= ' et modifiée le '.$date_modifiee->format('d/m/Y');
         }
 
+        if($this->ds_principale->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
+            $validee = "Déclaration validée";
+        }
+
         if(!$this->ds_principale->isValideeTiers()) {
             $validee = 'Non Validée';
         }
