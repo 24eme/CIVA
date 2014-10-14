@@ -2650,9 +2650,8 @@ a.msg_aide {
 .popup_inscription_gamma label {
 	color: #000;
 	font-size: 14px;
-	float: left;
 	width: 30px;
-	padding: 0 0 0 10px;
+	padding: 0 20px 0 6px;
 }
 
 .popup_inscription_gamma .ligne_form {
@@ -2665,10 +2664,16 @@ a.msg_aide {
 
 .popup_inscription_gamma .ligne_form.ligne_btn input {
 	float: right;
+
 }
 
 .popup_inscription_gamma input.check_choix {
-	float: left;
+	/*float: left;*/
+	margin-top: 2px;
+}
+
+.popup_inscription_gamma .bloc_instruction {
+	padding-top: 10px;
 }
 
 .popup_inscription_gamma span {

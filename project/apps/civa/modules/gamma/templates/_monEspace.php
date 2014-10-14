@@ -36,23 +36,43 @@
         <p class="intro">Vous allez vous inscrire sur la plateforme réelle Alsace Gamm@ du CIVA.</p>
         <p>Avez-vous déjà adhéré à Gamm@ sur Prodouane ?</p>
         <form id="form_gamma_inscription" action="<?php echo url_for('@gamma') ?>" method="post">
-            <div class="ligne_form">
-                <input type="radio" class="check_choix" id="gamma_inscription_choix_oui" name="gamma_inscription[choix]" value="1" checked="checked" />
+            <div class="ligne_form" style="text-align: center;">
+                <input type="radio" class="check_choix" id="gamma_inscription_choix_oui" name="gamma_inscription[choix]" value="1" />
                 <label for="gamma_inscription_choix_oui">Oui</label>
-                <span>Ouvrez votre compte sur Alsace Gamm@</span>
-            </div>
-            <div class="ligne_form">
-                <input type="radio" class="check_choix" id="gamma_inscription_choix_non" name="gamma_inscription[choix]" value="0" />
+                <input type="radio" class="check_choix" id="gamma_inscription_choix_non" name="gamma_inscription[choix]" value="1" />
                 <label for="gamma_inscription_choix_non">Non</label>
-                <span>Vous devez impérativement vous inscrire auprès de la Direction Régionale des Douanes de votre département à l'aide du document ci-joint.</span>
+            </div>
+            <div style="display: none;" id="gamma_inscription_choix_oui_bloc" class="ligne_form bloc_instruction">
+                <p>Téléchargez le formulaire d'adhésion ci-dessous, complétez le puis retournez le au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
+                <a href="<?php echo url_for('@gamma_telecharger_l_adhesion'); ?>" class="telecharger-documentation-gamma" title="Document d'adhésion alsace gamm@"></a>
+            </div>
+            <div style="display: none;" id="gamma_inscription_choix_non_bloc" class="ligne_form bloc_instruction">
+                <p>Vous devez <u>impérativement</u> vous inscrire auprès de la Direction Régionale des Douanes de votre département à l'aide du document ci-dessous.</p>
+
+                <p>Vous devez également renvoyer le document compléter au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
                 <a href="<?php echo url_for('@gamma_telecharger_l_adhesion'); ?>" class="telecharger-documentation-gamma" title="Document d'adhésion alsace gamm@"></a>
             </div>
 
            <div class="ligne_form ligne_btn">
-                <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
+                <input style="display: none;" type="image" id="mon_espace_civa_gamma_inscription_valider" name="gamma_bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
            </div>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+   $('#gamma_inscription_choix_oui').click(function() {
+        $('#gamma_inscription_choix_non_bloc').hide();
+        $('#gamma_inscription_choix_oui_bloc').show();
+        $('#popup_inscription_gamma #mon_espace_civa_gamma_inscription_valider').show();
+   });
+   $('#gamma_inscription_choix_non').click(function() {
+        $('#gamma_inscription_choix_oui_bloc').hide();
+        $('#gamma_inscription_choix_non_bloc').show();
+        $('#popup_inscription_gamma #mon_espace_civa_gamma_inscription_valider').show();
+   });
+});
+</script>
 
 
