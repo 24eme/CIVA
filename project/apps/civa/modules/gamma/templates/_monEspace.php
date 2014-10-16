@@ -49,7 +49,7 @@
             <div style="display: none;" id="gamma_inscription_choix_non_bloc" class="ligne_form bloc_instruction">
                 <p>Vous devez <u>impérativement</u> vous inscrire auprès de la Direction Régionale des Douanes de votre département à l'aide du document ci-dessous.</p>
 
-                <p>Vous devez également renvoyer le document complété au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
+                <p>Vous devez <u>également</u> renvoyer le document complété au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
                 <a href="<?php echo url_for('@gamma_telecharger_l_adhesion'); ?>" class="telecharger-documentation-gamma" title="Document d'adhésion alsace gamm@"></a>
             </div>
 
