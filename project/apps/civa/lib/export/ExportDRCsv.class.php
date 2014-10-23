@@ -109,12 +109,12 @@ class ExportDRCsv extends ExportCsv {
                             }
                         }
                     }
-                    if($lieu->getConfig()->hasManyCouleur() && $couleur->getTotalCaveParticuliere() > 0) {
+                    if($lieu->getConfig()->hasManyCouleur()) {
                         $this->addNoeudTotal($couleur);
                     }
                 }
 
-                if($appellation->getConfig()->hasManyLieu() && $lieu->getTotalCaveParticuliere() > 0) {
+                if($appellation->getConfig()->hasManyLieu()) {
                     $this->addNoeudTotal($lieu);
                 }
 
@@ -124,9 +124,8 @@ class ExportDRCsv extends ExportCsv {
                     }
                 }
             }
-            if($appellation->getTotalCaveParticuliere() > 0) {
-                $this->addNoeudTotal($appellation);
-            }
+
+            $this->addNoeudTotal($appellation);
         }
         $this->addJeunesVignes($dr);
                 
