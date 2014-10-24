@@ -1,5 +1,5 @@
 <!-- #principal -->
-<form action="<?php echo url_for("@compte_modification_oublie") ?>" method="post" id="principal">
+<form action="<?php echo url_for("@compte_modification_oublie") ?><?php if($service): ?>?service=<?php echo $service ?><?php endif; ?>" method="post" id="principal">
 
     <h2 class="titre_principal">Modification de votre mot de passe</h2>
 

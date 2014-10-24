@@ -8,7 +8,7 @@
     <div id="nouvelle_declaration" class="mot_de_passe_oublie">
         <h3 class="titre_section">Mot de passe oublié</h3>
         <div class="contenu_section">
-            <form action="<?php echo url_for('@compte_mot_de_passe_oublie') ?>" method="post" id="principal">
+            <form action="<?php echo url_for('@compte_mot_de_passe_oublie') ?><?php if($service): ?>?service=<?php echo $service ?><?php endif; ?>" method="post" id="principal">
                 <p class="intro">Merci d'indiquer votre identifiant :</p>
 
                 <div class="ligne_form ligne_form_label">

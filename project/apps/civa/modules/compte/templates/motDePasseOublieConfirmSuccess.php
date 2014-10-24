@@ -9,7 +9,7 @@
         <h3 class="titre_section">Mot de passe oublié</h3>
         <div class="contenu_section">
             <p class="intro">Un email vient de vous etre envoyé. Veuillez cliquer sur le lien contenu dans cet email afin de redéfinir votre mot de passe</p>
-            <p class="ligne_btn_retour"><a href="<?php echo url_for('@login'); ?>"><img src="/images/boutons/btn_retour.png" alt="Retour" /></a></p>
+            <p class="ligne_btn_retour"><a href="<?php if ($service) { echo $service; } else { echo url_for('@login');} ?>"><img src="/images/boutons/btn_retour.png" alt="Retour" /></a></p>
         </div>
     </div>
     <!-- fin #nouvelle_declaration -->

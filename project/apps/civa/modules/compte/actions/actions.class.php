@@ -148,6 +148,7 @@ class compteActions extends sfActions {
      */
     public function executeModificationOublie(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
+        $this->service = $request->getParameter('service');
         $this->forward404Unless($this->compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE);
 
         $this->form = new CompteModificationOublieForm($this->compte);
@@ -162,7 +163,11 @@ class compteActions extends sfActions {
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
-                $this->redirect('@mon_espace_civa');
+                if ($this->service) {
+                	$this->redirect($this->service);
+                } else {
+                	$this->redirect('@mon_espace_civa');
+                }
             }
         }
     }
@@ -194,29 +199,42 @@ class compteActions extends sfActions {
     public function executeMotDePasseOublieLogin(sfWebRequest $request) {
         $this->forward404Unless($compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($request->getParameter('login', null)));
         $this->forward404Unless($compte->mot_de_passe == '{OUBLIE}' . $request->getParameter('mdp', null));
+        $this->service = $request->getParameter('service');
         $this->getUser()->signInFirst($compte);
-        $this->redirect('@compte_modification_oublie');
+    	if ($this->service) {
+        	$this->redirect($this->generateUrl('compte_modification_oublie').'?service='.$this->service);
+        } else {
+        	$this->redirect('@compte_modification_oublie');
+        }
     }
 
     public function executeMotDePasseOublie(sfWebRequest $request) {
+    	$this->service = $request->getParameter('service');
         $this->form = new CompteMotDePasseOublieForm();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $compte = $this->form->save();
                 $lien = "http://".str_replace("//", "/", str_replace('http://', '', sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)))));
+                if ($this->service) {
+                	$lien += '?service='.$this->service;
+                }
                 try {
                     $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : " . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
-                $this->redirect('@compte_mot_de_passe_oublie_confirm');
+                if ($this->service) {
+                	$this->redirect($this->generateUrl('compte_mot_de_passe_oublie_confirm').'?service='.$this->service);
+                } else {
+                	$this->redirect('@compte_mot_de_passe_oublie_confirm');
+                }
             }
         }
     }
     
     public function executeMotDePasseOublieConfirm(sfWebRequest $request) {
-        
+        $this->service = $request->getParameter('service');
     }
 
     public function executeDroits(sfWebRequest $request) {
