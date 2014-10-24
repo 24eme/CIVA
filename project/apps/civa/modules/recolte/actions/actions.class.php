@@ -214,20 +214,20 @@ class recolteActions extends EtapesActions {
     }
     
     public function executeRendementsMaxAjax(sfWebRequest $request) {
-    	$this->forward404Unless($request->isXmlHttpRequest());
+    	//$this->forward404Unless($request->isXmlHttpRequest());
 
     	$dr = $this->declaration;
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
     	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
-    		if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
+            if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
     			$appellation = $dr->recolte->getNoeudAppellations()->get($key_appellation);
     			foreach ($appellation->getDistinctLieux() as $lieu) {
-    				if ($lieu->getConfig()->getRendementNoeud() == -1)
-    				continue;
-    				if ($lieu->getConfig()->hasRendementCouleur()) {
-    					//$this->rendement[$appellation->getLibelle()]['appellation'][''][$lieu->getLibelle()] = 1;
+                    if ($lieu->getConfig()->getRendementNoeud() == -1) {
+                        continue;
+                    }
+    				if ($lieu->getConfig()->existRendementCouleur()) {
     					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
 	    					$rd = $couleurConfig->getRendementCouleur();
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
@@ -239,6 +239,7 @@ class recolteActions extends EtapesActions {
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
 						foreach($lieu->getCouleurs() as $couleur) {
+                            
 	    				foreach ($couleur->getConfig()->filter('^cepage') as $key => $cepage_config) {
 	    					if($cepage_config->hasMinQuantite()) {
 	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
