@@ -107,12 +107,17 @@ class compteActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeFirst(sfWebRequest $request) {
+        $this->service = $request->getParameter('service');
         $this->form = new CompteLoginFirstForm();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->getUser()->signInFirst($this->form->getValue('compte'));
-                $this->redirect('@compte_creation');
+                if ($this->service) {
+                	$this->redirect($this->generateUrl('compte_creation').'?service='.$this->service);
+                } else {
+                	$this->redirect('@compte_creation');
+                }
             }
         }
     }
@@ -123,6 +128,7 @@ class compteActions extends sfActions {
      */
     public function executeCreation(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
+        $this->service = $request->getParameter('service');
         $this->forward404Unless($this->compte->getStatus() == _Compte::STATUS_NOUVEAU);
 
         $this->form = new CreationCompteForm($this->compte);
@@ -137,7 +143,11 @@ class compteActions extends sfActions {
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
-                $this->redirect('@tiers');
+                if ($this->service) {
+                	$this->redirect($this->service);
+                } else {
+                	$this->redirect('@tiers');
+                }
             }
         }
     }

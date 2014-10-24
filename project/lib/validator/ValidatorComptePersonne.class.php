@@ -1,9 +1,9 @@
 <?php
 
-class ValidatorCompteLoginFirst extends sfValidatorBase {
+class ValidatorComptePersonne extends sfValidatorBase {
 
     public function configure($options = array(), $messages = array()) {
-        $this->setMessage('unique', "Cettre adresse e-mail a déjà été ajouté.");
+        $this->addMessage('unique', "Cettre adresse e-mail a déjà été ajouté.");
     }
 
     protected function doClean($values) {
