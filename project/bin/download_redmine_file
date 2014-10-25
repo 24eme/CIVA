@@ -19,6 +19,7 @@ echo Redmine authentication failed >&2
 exit 2
 fi
 echo "Authentication success"
-curl -s -k -b $COOKIESDIR/cookies_login.txt "$redminefile" > $outputfile
+echo $redminefile
+curl -k -b $COOKIESDIR/cookies_login.txt "$redminefile" > $outputfile
 cat $outputfile | grep -i '<html' && rm $outputfile > /dev/null 
 #rm $COOKIESDIR/cookies_login.txt $COOKIESDIR/cookies_token.txt
