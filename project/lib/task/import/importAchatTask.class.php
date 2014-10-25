@@ -76,9 +76,9 @@ EOF;
             if(in_array($id, $ids_for_dr)) {
                 continue;
             }
-            /*$acheteur = AcheteurClient::getInstance()->find($id);
+            $acheteur = AcheteurClient::getInstance()->find($id);
             $acheteur->acheteur_dr = 0;
-            $acheteur->save();*/
+            $acheteur->save();
         }
 
         $this->logSection("Acheteur pour la DR", count($ids_for_dr));
