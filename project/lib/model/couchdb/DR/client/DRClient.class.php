@@ -2,6 +2,9 @@
 
 class DRClient extends acCouchdbClient {
   
+  const AUTORISATION_ACHETEURS = 'ACHETEURS';
+  const AUTORISATION_AVA = 'AVA';
+
   public static function getInstance() {
 
     return acCouchdbManager::getClient('DR');

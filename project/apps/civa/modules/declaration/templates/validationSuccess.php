@@ -59,4 +59,4 @@
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
 
-<?php include_partial('declaration/popupConfirmeValidation') ?>
+<?php include_partial('declaration/popupConfirmeValidation', array('dr' => $dr)) ?>
