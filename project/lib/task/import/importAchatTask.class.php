@@ -62,7 +62,7 @@ EOF;
             } elseif ($db2->get(Db2Achat::COL_QUALITE) == 'X') {
                 $acheteur->qualite = Acheteur::ACHETEUR_NEGOCAVE;
             }
-            $acheteur->nom = rtrim(preg_replace('/\s{4}\s*/', ', ', $db2->get(Db2Achat::COL_NOM)));
+            $acheteur->nom = rtrim(preg_replace('/ +/', ' ', $db2->get(Db2Achat::COL_NOM)));
             $acheteur->commune = rtrim($db2->get(Db2Achat::COL_COMMUNE));
             $acheteur->acheteur_dr = 1;
             
