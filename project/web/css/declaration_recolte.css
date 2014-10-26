@@ -1596,6 +1596,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	position: relative;
 	width: 106px;
 	z-index: 10;
+	margin-top: 8px;
 }
 
 #gestion_recolte ul#liste_sepages li {
