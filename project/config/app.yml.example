@@ -34,6 +34,8 @@ all:
   email:
     feed_back: ["email@email.email"]
   declarant_class: "_Tiers"
+  ava:
+    url: "https://url_a_remplacer.com"
 test:
 #  autologin: login
 

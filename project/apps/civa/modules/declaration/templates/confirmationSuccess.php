@@ -14,10 +14,30 @@
             <h2 class="titre_section">Confirmation</h2>
             <div class="contenu_section">
                 <div class="bloc_vert">
-                    <p class="important">Votre déclaration de Récolte a bien été enregistrée au CIVA.</p>
+                    <p class="important">Votre Déclaration de Récolte a bien été enregistrée au CIVA.</p>
                     <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de Récolte au format PDF et au format Tableur.</p>
                 </div>
-                <?php if($has_import): ?>
+                <?php if($dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)): ?>
+                <p>&nbsp;</p>
+                <div class="bloc_vert">
+                    <p class="important">Votre Déclaration de Récolte a été envoyé par email aux acheteurs :</p>
+                    <ul>
+                        <?php foreach(DRClient::getInstance()->getAcheteursApporteur($dr->cvi, $dr->campagne) as $acheteur): ?>
+                        <li>- <?php echo $acheteur->qualite; ?>, <?php echo $acheteur->nom ?>, <?php echo $acheteur->cvi; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <?php endif; ?>
+                <?php if($dr->hasAutorisation(DRClient::AUTORISATION_AVA)): ?>
+                <p>&nbsp;</p>
+                <div class="bloc_vert">
+                    <p class="important">Autorisation de transmission à l'AVA (ODG) :</p>
+                    <p>
+                        Vous pourrez récupérer les données de votre Déclaration de Récolte en télédéclarant votre Déclaration de Revendication sur le <a style="text-decoration: underline;" target="_blank" href="<?php echo sfConfig::get('app_ava_url') ?>">portail de télédéclaration de l'Association des Viticulteurs d'Alsace</a>.
+                    </p>
+                </div>    
+                <?php endif; ?>
+                <?php if($has_import && !$dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)): ?>
                 <div id="div-btn-email">
                 <a href="" title="Envoyer à mes acheteurs" alt="Envoyer à mes acheteurs" id="btn-email-acheteur"></a>
                 </div>
