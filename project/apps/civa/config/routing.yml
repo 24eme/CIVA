@@ -67,7 +67,7 @@ vrac_export_pdf:
     model:    Vrac
     type:     object
   requirements:
-    sf_method: [get, post]  
+    sf_method: [get, post]
 vrac_export_odg:
   url: /vrac/:numero_contrat/odg
   param: { module: vrac_export, action: PDF, odg: 1}
