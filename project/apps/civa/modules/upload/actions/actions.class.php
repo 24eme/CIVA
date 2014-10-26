@@ -93,7 +93,7 @@ class uploadActions extends EtapesActions {
                 $this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
             }
             if ($this->errorOnCVIRecoltant($line)) {
-                $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu dans la base du CIVA.';
+                $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu ou actif dans la base du CIVA.';
             }
             if ($errorprod = $this->cannotIdentifyProduct($line))
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $errorprod . '», merci de vérifier les libellés.';
@@ -423,6 +423,9 @@ class uploadActions extends EtapesActions {
         if (!isset($this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]])) {
             try {
                 $rec = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
+                if($rec && !$rec->isActif()) {
+                    $rec = null;
+                }
                 $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = !($rec);
             } catch (Exception $e) {
                 $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = true;
