@@ -70,7 +70,7 @@ class uploadActions extends EtapesActions {
         $this->nb_noVolumes = 0;
         $this->nb_cremant = 0;
         $this->nb_rebeche = 0;
-	$this->productmd5 = array();
+	    $this->productmd5 = array();
 
         if (isset($this->previous_recoltant))
             unset($this->previous_recoltant);
@@ -226,7 +226,7 @@ class uploadActions extends EtapesActions {
         $this->is_rebeche = false;
         $this->need_denomlieu = false;
         $this->has_lieudit = false;
-	$this->may_have_vtsgn = false;
+	    $this->may_have_vtsgn = false;
 
         if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
             return "appellation vide";
