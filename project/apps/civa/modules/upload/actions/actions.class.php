@@ -16,6 +16,7 @@ class uploadActions extends EtapesActions {
      * @param sfRequest $request A request object
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
         
@@ -28,7 +29,7 @@ class uploadActions extends EtapesActions {
             }
         }
         
-        $this->setTemplate('monEspaceCiva', 'tiers');
+        $this->setTemplate('monEspaceDRAcheteur', 'tiers');
     }
     
     public function executeCsvList(sfWebRequest $request) {
@@ -56,6 +57,7 @@ class uploadActions extends EtapesActions {
     }
 
     public function executeCsvView(sfWebRequest $request) {
+        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $md5 = $request->getParameter('md5');
         set_time_limit(600);
 
@@ -211,8 +213,8 @@ class uploadActions extends EtapesActions {
 
     protected function isProductAlreadyDefined($line) {
       $md5 = md5($line[CsvFile::CSV_RECOLTANT_CVI].$line[CsvFile::CSV_APPELLATION].$line[CsvFile::CSV_LIEU].$line[CsvFile::CSV_CEPAGE].$line[CsvFile::CSV_VTSGN].$line[CsvFile::CSV_DENOMINATION]);
-      if ($this->productmd5[$md5]) {
-	return true;
+      if (isset($this->productmd5[$md5])) {
+	   return true;
       }
       $this->productmd5[$md5] = 1;
       return false;
@@ -427,6 +429,20 @@ class uploadActions extends EtapesActions {
             }
         }
         return $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]];
+    }
+
+    protected function secureTiers($droits) {
+        if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
+            
+            return $this->forwardSecure();
+        }
+    }
+
+    protected function forwardSecure()
+    {    
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
     }
 
 }
