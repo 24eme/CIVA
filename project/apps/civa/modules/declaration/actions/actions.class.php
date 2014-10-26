@@ -132,12 +132,41 @@ class declarationActions extends EtapesActions {
         $this->getUser()->setAttribute('log_erreur', $this->validLogErreur);
         $this->getUser()->setAttribute('log_vigilance', $this->validLogVigilance);
 
+        $this->isAdmin = $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN);
+        $this->validation_date = date('Y-m-d');
+        $this->validation_compte_id = (!$this->dr->isValideeTiers()) ? $this->getUser()->getCompte()->get('_id') : $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
+
+        if($this->getUser()->isInDelegateMode() && !$this->isAdmin) {
+            $this->validation_compte_id = $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
+        } 
+
+        if($this->isAdmin){
+            $this->formDatesModification = new DREditionDatesModificationForm($this->dr,
+                $this->getUser());
+        }
+
         if ($this->askRedirectToPreviousEtapes()) {
             
             return $this->redirectByBoutonsEtapes();
         }
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
+
+            if(isset($this->formDatesModification)) {
+                $this->formDatesModification->bind($request->getParameter($this->formDatesModification->getName()));
+
+                if(!$this->formDatesModification->isValid()) {
+
+                    return sfView::SUCCESS;
+                }
+
+                $this->validation_date = $this->formDatesModification->getDate();
+
+                if($this->formDatesModification->getCompteId()) {
+                    $this->validation_compte_id = $this->formDatesModification->getCompteId();
+                }
+            }
+
             $this->dr->remove("autorisations");
             $autorisations = array();
             foreach($request->getParameter('autorisations', array()) as $autorisation) {
@@ -147,10 +176,11 @@ class declarationActions extends EtapesActions {
                 $this->dr->add('autorisations', $autorisations);
             }
 
-	        $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
-            if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+	        $this->dr->validate($this->validation_date, $this->validation_compte_id);
+            if(!$this->dr->hasDateDepotMairie()) {
                 $this->dr->add('en_attente_envoi', true);
             }
+
 	        $this->dr->save();
 	        $this->getUser()->initCredentialsDeclaration();
 

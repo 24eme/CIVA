@@ -59,4 +59,4 @@
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
 
-<?php include_partial('declaration/popupConfirmeValidation', array('dr' => $dr)) ?>
+<?php include_partial('declaration/popupConfirmeValidation', array('dr' => $dr, 'formDatesModification' => isset($formDatesModification) ? $formDatesModification : null, 'validation_compte_id' => $validation_compte_id)) ?>

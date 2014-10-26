@@ -23,6 +23,35 @@
             </div>
             <?php endif; ?>
         <?php endif; ?>
+        <?php if (isset($formDatesModification)): ?>
+            <div id="administration_validation">
+                <h2 class="titre_section">Administration</h2>
+                <div class="contenu_section">
+                    <div class="bloc_gris presentation">
+                    <div class="bloc_form">
+                            <?php echo $formDatesModification->renderGlobalErrors(); ?>
+                            <?php echo $formDatesModification->renderHiddenFields(); ?>
+                            <div class="ligne_form">
+                                <?php echo $formDatesModification['date']->renderLabel(null, array('style' => 'display: inline-block;')); ?>
+                                <?php echo $formDatesModification['date']->renderError(); ?>
+                                <?php echo $formDatesModification['date']->render(array('class' => "datepicker")); ?>
+                            </div>
+                            <?php if (isset($formDatesModification['compte'])): ?>
+                            <div class="ligne_form">
+                                <?php echo $formDatesModification['compte']->renderLabel(null, array('style' => 'display: inline-block;')); ?>
+                                <?php echo $formDatesModification['compte']->renderError(); ?>
+                                <?php echo $formDatesModification['compte']->render(array('class' => "datepicker")); ?>
+                            </div>
+                            <?php else: ?>
+                            <div class="ligne_form">
+                                <label style="display: inline-block;">Validée par</label> <?php echo $validation_compte_id; ?>
+                            </div>    
+                            <?php endif; ?>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <div id="btns">
             <a class="close_popup" href=""><img alt="Annuler" src="/images/boutons/btn_annuler.png"></a>
             <input type="image" src="/images/boutons/btn_valider.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" class="valideDR_OK" />

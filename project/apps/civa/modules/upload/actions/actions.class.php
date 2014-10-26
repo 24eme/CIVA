@@ -93,7 +93,7 @@ class uploadActions extends EtapesActions {
                 $this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
             }
             if ($this->errorOnCVIRecoltant($line)) {
-                $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à déclarant connu ou actif dans la base du CIVA.';
+                $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à un déclarant connu ou actif dans la base du CIVA.';
             }
             if ($errorprod = $this->cannotIdentifyProduct($line))
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $errorprod . '», merci de vérifier les libellés.';

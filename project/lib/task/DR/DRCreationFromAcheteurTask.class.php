@@ -57,7 +57,7 @@ EOF;
         if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
         else
-          $dr->validate($tiers);
+           $dr->validate(null, "COMPTE-auto");
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
 	    
@@ -67,7 +67,7 @@ EOF;
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
-	    $dr->validate($tiers, null, "COMPTE-auto");
+	    $dr->validate(null, "COMPTE-auto");
 	  }
 	}catch(sfException $e) {
 	  print 'ERROR: '.$e->getMessage()."\n";

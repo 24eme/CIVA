@@ -220,17 +220,23 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      *
      * @param Tiers $tiers
      */
-    public function validate($tiers, $compte = null, $compteValidateurId = null){
+    public function validate($date = null, $compte_id = null){
         $this->update();
         $this->cleanNoeuds();
         $this->remove('etape');
         $this->storeDeclarant();
-        $this->add('modifiee', date('Y-m-d'));
-        if (!$this->exist('validee') || !$this->validee) {
-            $this->add('validee', date('Y-m-d'));
+        if(!$date) {
+            $date = date('Y-m-d');
         }
-        if ($compteValidateurId) {
-            $this->utilisateurs_document->addValidation($compteValidateurId, date('d/m/Y'));
+
+        $dateObject = new DateTime($date);
+
+        $this->add('modifiee', $dateObject->format('Y-m-d'));
+        if (!$this->exist('validee') || !$this->validee) {
+            $this->add('validee', $dateObject->format('Y-m-d'));
+        }
+        if ($compte_id) {
+            $this->utilisateurs_document->addValidation($compte_id, $dateObject->format('d/m/Y'));
         }
     }
 
@@ -660,6 +666,26 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
         $this->validee = $date_iso;
         $this->add('date_depot_mairie',$date_iso);
+    }
+
+    public function getDateValidationFr() {
+        return $this->getDateFromUtilisateurs('validation');
+    }
+    
+    public function getDateEditionFr() {
+       return $this->getDateFromUtilisateurs('edition');
+    }
+    
+    private function getDateFromUtilisateurs($editOrValid)
+    {
+        $date = date('Y_m-d');
+        if($this->exist('utilisateurs') && $this->utilisateurs->exist($editOrValid)){
+            $node = $this->utilisateurs->$editOrValid->toSimpleFields();
+            if(count($node)){
+                $date = $node[key($node)];
+            }
+        }   
+       return Date::francizeDate($date);
     }
 
     public function hasAutorisation($autorisation) {
