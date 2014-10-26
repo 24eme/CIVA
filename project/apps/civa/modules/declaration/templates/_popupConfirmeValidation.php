@@ -12,13 +12,13 @@
             </div>
             <?php if($need_acheteurs_autorisation): ?>
             <div class="ligne_form">
-                <input id="checkbox_partage_acheteurs" checked="checked" style="float:left; margin-right: 8px; margin-left: 0px; margin-top: 3px;" type="checkbox" value="" />
+                <input name="autorisations[]" id="checkbox_partage_acheteurs" checked="checked" style="float:left; margin-right: 8px; margin-left: 0px; margin-top: 3px;" type="checkbox" value="<?php echo DRClient::AUTORISATION_ACHETEURS ?>" />
                 <label style="margin-left: 22px;" for="checkbox_partage_acheteurs">À vos acheteurs</label>
             </div>
             <?php endif; ?>
             <?php if($need_ava_autorisation): ?>
             <div class="ligne_form">
-                <input id="checkbox_partage_ava" checked="checked" style="float:left; margin-right: 8px; margin-left: 0px; margin-top: 3px;" type="checkbox" value="" />
+                <input name="autorisations[]" id="checkbox_partage_ava" checked="checked" style="float:left; margin-right: 8px; margin-left: 0px; margin-top: 3px;" type="checkbox" value="<?php echo DRClient::AUTORISATION_AVA ?>" />
                 <label style="margin-left: 22px;" for="checkbox_partage_ava">À l'AVA pour télédéclarer votre Déclaration de Revendication</label>
             </div>
             <?php endif; ?>

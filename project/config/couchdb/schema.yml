@@ -16,7 +16,7 @@ DR:
         type: collection
         definition:
           fields:
-            '*': {  }
+            '*': { type: integer }
       utilisateurs:
         type: collection
         definition:

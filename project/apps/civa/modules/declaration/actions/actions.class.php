@@ -138,6 +138,15 @@ class declarationActions extends EtapesActions {
         }
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
+            $this->dr->remove("autorisations");
+            $autorisations = array();
+            foreach($request->getParameter('autorisations', array()) as $autorisation) {
+                $autorisations[$autorisation] = 1;
+            }
+            if(count($autorisations) > 0) {
+                $this->dr->add('autorisations', $autorisations);
+            }
+
 	        $this->dr->validate($tiers, $this->getUser()->getCompte(), $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'));
             if(!$this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
                 $this->dr->add('en_attente_envoi', true);
