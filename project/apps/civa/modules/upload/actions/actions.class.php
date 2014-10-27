@@ -132,12 +132,13 @@ class uploadActions extends EtapesActions {
 	      $this->errors[$cpt][] = 'Ce produit semble déjà avoir été renseigné pour ce récoltant';
 	    }
         }
-        if ($this->shouldHaveRebeche(array())) {
-            $this->errors[$cpt - 1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
+        if ($this->shouldHaveRebeche(false)) {
+            $this->errors[$cpt][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
         }
-        if ($this->shouldHaveVolume(array())) {
-            $this->errors[$cpt - 1][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
+        if ($this->shouldHaveVolume(false)) {
+            $this->errors[$cpt][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
         }
+        
         $this->recap = new stdClass();
         $this->recap->errors = array();
         $this->recap->warnings = array();
@@ -295,6 +296,10 @@ class uploadActions extends EtapesActions {
     }
 
     private function hasChangedRecoltant($line) {
+        if($line === false) {
+
+            return true;
+        }
         if (!isset($line[CsvFile::CSV_RECOLTANT_CVI])) {
             return false;
         }
