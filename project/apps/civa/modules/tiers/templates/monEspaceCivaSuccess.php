@@ -33,7 +33,11 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                     <p class="mineure">Aucune information à signaler</p>
+                    <?php if(CurrentClient::getCurrent()->isDREditable()): ?>
+                    <p>Le portail est <strong>ouvert</strong></p>
+                    <?php else: ?>
+                    <p class="mineure">Aucune information à signaler</p>
+                    <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
                     <a href="<?php echo url_for('mon_espace_civa_dr_acheteur') ?>">Accéder</a>
