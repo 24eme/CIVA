@@ -61,7 +61,7 @@ EOF;
 
             try {
                 $this->mailerManager->sendMail(false);
-                if($this->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
+                if($this->dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
                     $this->mailerManager->sendAcheteursMails();
                 }
                 echo $dr->_id.":Email envoyé à ".$tiers->getCompteEmail()."\n";
