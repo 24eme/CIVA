@@ -138,6 +138,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     public function removeVolumes() {
         $this->setVolume(null);
         $this->cave_particuliere = null;
+        $this->lies = null;
         $this->remove('cooperatives');
         $this->remove('mouts');
         $this->remove('negoces');

@@ -33,7 +33,7 @@
                 <div class="bloc_vert">
                     <p class="important">Autorisation de transmission à l'AVA (ODG) :</p>
                     <p>
-                        Vous pourrez récupérer les données de votre Déclaration de Récolte en télédéclarant votre Déclaration de Revendication sur le <a style="text-decoration: underline;" target="_blank" href="<?php echo sfConfig::get('app_ava_url') ?>">portail de télédéclaration de l'Association des Viticulteurs d'Alsace</a>.
+                        Vous pourrez directement exploiter les données de votre Déclaration de Récolte en télédéclarant votre Déclaration de Revendication sur le <a style="text-decoration: underline;" target="_blank" href="<?php echo sfConfig::get('app_ava_url') ?>">portail de télédéclaration de l'Association des Viticulteurs d'Alsace</a>.
                     </p>
                 </div>    
                 <?php endif; ?>

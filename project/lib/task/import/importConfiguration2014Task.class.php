@@ -47,7 +47,7 @@ EOF;
             acCouchdbManager::getClient()->createDatabase();
         }
 
-        foreach (file(sfConfig::get('sf_data_dir') . '/import/14/Ceprec14') as $a) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/13/Ceprec13') as $a) {
             $csv = explode(',', preg_replace('/"/', '', $a));
             $cepage_douane[$csv[1]][$csv[0]] = $csv[14];
         }
@@ -119,7 +119,7 @@ EOF;
         $json->recolte->certification->genre->appellation_LIEUDIT->mention->lieu->couleurRouge->cepage_PR = $this->getCepage('PR', $cepage_douane[8]['PR']);
 
         $cepcom = array();
-        foreach (file(sfConfig::get('sf_data_dir') . '/import/14/Cepcom14') as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/'.substr($annee, 2, 2).'/Cepcom'.substr($annee, 2, 2)) as $l) {
             $csv = explode(',', preg_replace('/"/', '', $l));
             if ($csv[0] != $annee) {
                 continue;
@@ -249,8 +249,7 @@ EOF;
         $grdcru->douane->qualite = '';
         
         $grdcru_from_file = new stdClass();
-
-        foreach (file(sfConfig::get('sf_data_dir') . '/import/14/Grdcrv14') as $l) {
+        foreach (file(sfConfig::get('sf_data_dir') . '/import/'.substr($annee, 2, 2).'/Grdcrv'.substr($annee, 2, 2)) as $l) {
             $g = explode(',', preg_replace('/"/', '', $l));
             if ($g[0] == $annee && !isset($g[1]) || $g[1] == "99") {
                 continue;
