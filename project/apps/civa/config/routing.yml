@@ -282,7 +282,7 @@ declaration_autorisation:
   param: { module: declaration, action: autorisation }
 
 declaration_transmission:
-  url:   /declaration/transmission/:id
+  url:   /declaration/transmission
   param: { module: declaration, action: transmission }
 
 

@@ -412,7 +412,17 @@ Le CIVA';*/
     public function executeAutorisation(sfWebRequest $request) {
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
-        $this->auto = true;
+        
+        if(!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
+        }
+
+        $dr = acCouchdbManager::getClient()->find($this->id);
+        $dr->add('autorisations')->add(DRClient::AUTORISATION_AVA, 1);
+        $dr->save();
+
+        return $this->redirect('declaration_transmission', array("url" => $this->url, "id" => $this->id));
     }
 
     public function executeTransmission(sfWebRequest $request) {
@@ -420,6 +430,19 @@ Le CIVA';*/
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
         $dr = acCouchdbManager::getClient()->find($this->id);
+        if(!$dr || !$dr->isValideeTiers()) {
+            
+            return $this->redirect($this->url);
+        }
+
+        if(!$dr->hasAutorisation(DRClient::AUTORISATION_AVA)) {
+
+            return $this->redirect('declaration_autorisation', array('id' => $this->id, 'url' => $this->url));
+        }
+
+        $dr->remove('autorisations');
+        $dr->save();
+
         $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), 'pdf');
         $this->document->generatePDF();
         $this->pdf = base64_encode($this->document->output());
