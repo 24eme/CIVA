@@ -70,6 +70,7 @@ class uploadActions extends EtapesActions {
         $this->nb_noVolumes = 0;
         $this->nb_cremant = 0;
         $this->nb_rebeche = 0;
+        $this->has_superficie = array();
 	    $this->productmd5 = array();
 
         if (isset($this->previous_recoltant))
@@ -85,9 +86,14 @@ class uploadActions extends EtapesActions {
                     continue;
                 $this->errors[$cpt][] = 'Numero CVI invalide';
             }
-            ;
             if ($this->shouldHaveRebeche($line)) {
                 $this->errors[$cpt - 1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
+            }
+            if ($this->shouldHaveVolume($line)) {
+                $this->errors[$cpt - 1][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
+            }
+            if ($this->shouldHaveSuperficieTotal($line)) {
+                $this->errors[$cpt - 1][] = "La superficie total de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
             }
             if ($this->errorOnCVIAcheteur($line)) {
                 $this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
@@ -138,7 +144,10 @@ class uploadActions extends EtapesActions {
         if ($this->shouldHaveVolume(false)) {
             $this->errors[$cpt][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
         }
-        
+        if ($this->shouldHaveSuperficieTotal(false)) {
+            $this->errors[$cpt][] = "La superficie total de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
+        }
+
         $this->recap = new stdClass();
         $this->recap->errors = array();
         $this->recap->warnings = array();
@@ -268,7 +277,17 @@ class uploadActions extends EtapesActions {
                 $this->nb_cremant++;
             }
 
-	    $this->may_have_vtsgn = $cepage->hasVtsgn();
+            $lieu_appellation_libelle = $lieu->getAppellation()->getLibelle()." ".$lieu->getLibelle();
+
+            if(!isset($this->has_superficie[$lieu_appellation_libelle])) {
+                $this->has_superficie[$lieu_appellation_libelle] = false;
+            }
+
+            if($this->isPositive($line[CsvFile::CSV_SUPERFICIE])) {
+                $this->has_superficie[$lieu_appellation_libelle] = true;
+            }
+
+	       $this->may_have_vtsgn = $cepage->hasVtsgn();
         }
 
         if (!isset($prod['error']))
@@ -305,10 +324,10 @@ class uploadActions extends EtapesActions {
         }
         if (!isset($this->previous_recoltant))
             $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
-        if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
-            return false;
         if ($this->has_changed_recoltant)
             return true;
+        if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
+            return false;
         if (isset($line[CsvFile::CSV_RECOLTANT_CVI]))
             $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
         $this->has_changed_recoltant = true;
@@ -402,6 +421,21 @@ class uploadActions extends EtapesActions {
             return false;
         }
         return!$this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
+    }
+
+    protected function shouldHaveSuperficieTotal($line) {
+        if (!$this->hasChangedRecoltant($line)) {
+
+            return false;
+        }
+        foreach($this->has_superficie as $libelle => $has) {
+            if(!$has) {
+                 $this->has_superficie = array();
+                return true;
+            }
+        }
+        $this->has_superficie = array();
+        return false;
     }
 
     protected function couldHaveSuperficie($line) {
