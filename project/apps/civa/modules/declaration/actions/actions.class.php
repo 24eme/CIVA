@@ -440,6 +440,8 @@ Le CIVA';*/
             return $this->redirect('declaration_autorisation', array('id' => $this->id, 'url' => $this->url));
         }
 
+        $this->setLayout(false);
+
         $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), 'pdf');
         $this->document->generatePDF();
         $this->pdf = base64_encode($this->document->output());
