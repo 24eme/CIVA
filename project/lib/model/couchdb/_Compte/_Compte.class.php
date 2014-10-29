@@ -129,6 +129,10 @@ abstract class _Compte extends Base_Compte {
         }
     }
 
+    public function isOperateur() {
+
+        return $this->exist('droits') && (in_array(_CompteClient::DROIT_OPERATEUR, $this->droits->toArray(true, false)) || in_array(_CompteClient::DROIT_OPERATEUR, $this->droits->toArray(true, false)));
+    }
 
     public function isActif() {
 

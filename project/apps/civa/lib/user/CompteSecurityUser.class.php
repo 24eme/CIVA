@@ -9,8 +9,8 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     const NAMESPACE_COMPTE_USED = "CompteSecurityUser_Used";
     const CREDENTIAL_COMPTE = 'compte';
     const CREDENTIAL_COMPTE_TIERS= 'compte_tiers';
-    const CREDENTIAL_OPERATEUR = 'operateur';
-    const CREDENTIAL_ADMIN = 'admin';
+    const CREDENTIAL_ADMIN = _CompteClient::DROIT_ADMIN;
+    const CREDENTIAL_OPERATEUR = _CompteClient::DROIT_OPERATEUR;
     const CREDENTIAL_DELEGATION = 'delegation';
 
     protected $_namespaces_compte = array(self::NAMESPACE_COMPTE_AUTHENTICATED,

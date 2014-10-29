@@ -27,18 +27,39 @@ class ExportDRPdf extends ExportDocument {
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($dr, $filename = null) {
-        $validee = 'Non Validée';
-        if ($dr->exist('validee')) {
-            if($dr->hasDateDepotMairie()){
-                $validee = 'Déposée en mairie le '.$dr->getDateDepotMairieFr();
-            }else{
-              $validee = 'Déclaration validée le '.$dr->getDateValideeFr();
-            }
-          if ($dr->isHumanlyModifiee()) {
-	    $validee .= ' et modifiée le '.$dr->getDateModifieeFr();
-          }
+    protected function getLibelleValidation($dr) {
+        $libelle = "";
+
+        if (!$dr->isValideeTiers()) {
+
+          return "Non Validée";
         }
+
+        if($dr->hasDateDepotMairie()){
+            
+            return 'Déposée en mairie le '.$dr->getDateDepotMairieFr();
+        }
+
+        $libelle = "Déclaration validée le ".$dr->getDateValideeFr();
+
+        if($dr->exist('validee_par') && $dr->validee_par) {
+
+            $libelle .=" par le récoltant";
+        }
+        
+        if ($dr->isHumanlyModifiee()) {
+            $libelle .= ' et modifiée le '.$dr->getDateModifieeFr();
+        }
+
+        if ($dr->isHumanlyModifiee() && $dr->exist('modifiee_par') && $dr->modifiee_par) {
+            $libelle .=" par le CIVA";
+        }
+
+        return $libelle;
+    }
+
+    protected function init($dr, $filename = null) {
+        $validee = $this->getLibelleValidation($dr);
         
         $title = 'Déclaration de récolte '.$dr->campagne;
         $header = $dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;

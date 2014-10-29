@@ -8,7 +8,9 @@ DR:
       identifiant: {  }
       updated: { required: false }
       validee: { required: false }
+      validee_par: { required: false }
       modifiee: { required: false }
+      modifiee_par: { required: false }
       en_attente_envoi: { required: false }
       date_depot_mairie: { required: false }
       autorisations:

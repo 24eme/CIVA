@@ -4,6 +4,8 @@ class DRClient extends acCouchdbClient {
   
   const AUTORISATION_ACHETEURS = 'ACHETEURS';
   const AUTORISATION_AVA = 'AVA';
+  const VALIDEE_PAR_RECOLTANT = "RECOLTANT";
+  const VALIDEE_PAR_CIVA = "CIVA";
 
   public static function getInstance() {
 

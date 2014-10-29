@@ -8,6 +8,8 @@ class _CompteClient extends acCouchdbClient {
     const DROIT_VRAC_SIGNATURE = "VRAC_SIGNATURE";
     const DROIT_DS_DECLARANT = "DS_DECLARANT";
     const DROIT_GAMMA = "GAMMA";
+    const DROIT_ADMIN = "admin";
+    const DROIT_OPERATEUR = "operateur";
 
     public static $droits = array(
         self::DROIT_DR_RECOLTANT => "DR Récoltant",

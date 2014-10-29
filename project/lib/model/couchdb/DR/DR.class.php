@@ -232,12 +232,42 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $dateObject = new DateTime($date);
 
         $this->add('modifiee', $dateObject->format('Y-m-d'));
+        if($compte_id) {
+            $this->add("modifiee_par", $this->getValideeParByCompteId($compte_id));
+        }
         if (!$this->exist('validee') || !$this->validee) {
             $this->add('validee', $dateObject->format('Y-m-d'));
+            if($compte_id) {
+                $this->add("validee_par", $this->getValideeParByCompteId($compte_id));
+            }
         }
+
         if ($compte_id) {
             $this->utilisateurs_document->addValidation($compte_id, $dateObject->format('d/m/Y'));
         }
+    }
+
+    protected function getValideeParByCompteId($compte_id) {
+        $compte = _CompteClient::getInstance()->find($compte_id);
+
+        if(!$compte) {
+
+            return null;
+        }
+
+        $compte_dr = $this->getEtablissementObject()->getCompteObject();
+
+        if($compte->isOperateur()) {
+
+            return DRClient::VALIDEE_PAR_CIVA;
+        }
+        
+        if($compte->_id != $compte_dr->_id) {
+
+            return $compte->getNom();
+        }
+
+        return DRClient::VALIDEE_PAR_RECOLTANT;
     }
 
     public function devalidate(){
@@ -674,6 +704,19 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     
     public function getDateEditionFr() {
        return $this->getDateFromUtilisateurs('edition');
+    }
+
+    public function getValidateurCompteId() {
+        if(!$this->exist("utilisateurs")) {
+            return null;
+        }
+
+        foreach($this->utilisateurs->validation as $compte_id) {
+
+            return $compte_id;
+        }
+
+        return null;
     }
     
     private function getDateFromUtilisateurs($editOrValid)
