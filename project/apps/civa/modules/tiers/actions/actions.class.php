@@ -215,8 +215,8 @@ class tiersActions extends EtapesActions {
             }
         }
 
-        $this->executeMonEspaceCiva($request);
-        $this->setTemplate("monEspaceCiva");
+        $this->executeMonEspaceDRAcheteur($request);
+        $this->setTemplate("monEspaceDRAcheteur");
     }
 
 

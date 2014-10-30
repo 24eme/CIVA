@@ -44,7 +44,7 @@ class ExportDRPdf extends ExportDocument {
 
         if($dr->exist('validee_par') && $dr->validee_par) {
 
-            $libelle .=" par le récoltant";
+            $libelle .= $this->getLibelleValidationPar($dr->validee_par);
         }
         
         if ($dr->isHumanlyModifiee()) {
@@ -52,10 +52,24 @@ class ExportDRPdf extends ExportDocument {
         }
 
         if ($dr->isHumanlyModifiee() && $dr->exist('modifiee_par') && $dr->modifiee_par) {
-            $libelle .=" par le CIVA";
+            $libelle .= $this->getLibelleValidationPar($dr->modifiee_par);
         }
 
         return $libelle;
+    }
+
+    protected function getLibelleValidationPar($par) {
+        if($par == DRClient::VALIDEE_PAR_RECOLTANT) {
+          
+            return " par le récoltant";
+        }
+
+        if($par == DRClient::VALIDEE_PAR_CIVA) {
+          
+            return " par le CIVA";
+        }
+
+        return " par ". $par;
     }
 
     protected function init($dr, $filename = null) {

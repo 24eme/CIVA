@@ -148,21 +148,9 @@ L\'application de télédéclaration de récoltes du CIVA';
         }else{
 
         $subject = 'CIVA - Validation de votre déclaration de récolte';
-        $mess = 'Bonjour,
-
-Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
-    
-Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
-
-Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
-
---
-L\'application de télédéclaration de récoltes du CIVA';
+        $mess = $this->getMessageValidation($this->dr);
 
         }
-
-        //send email
-
 
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
@@ -179,7 +167,36 @@ L\'application de télédéclaration de récoltes du CIVA';
             $message->attach($attachment_csv);
         }
         return $message;      
-    }    
+    }
+
+    protected function getMessageValidation($dr) {
+
+        if($dr->exist('validee_par') && $dr->validee_par && !in_array($dr->validee_par, array(DRClient::VALIDEE_PAR_RECOLTANT, DRClient::VALIDEE_PAR_CIVA))) {
+
+            return 'Bonjour,
+
+Votre déclaration de récolte pour l\'année ' . date("Y") . ' a été validée par ' . $dr->validee_par . '.
+    
+Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
+
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
+
+--
+L\'application de télédéclaration de récoltes du CIVA';
+
+        }
+
+        return 'Bonjour,
+
+Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
+    
+Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
+
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
+
+--
+L\'application de télédéclaration de récoltes du CIVA';
+    }   
     
     protected function getPartial($templateName, $vars = null) {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
