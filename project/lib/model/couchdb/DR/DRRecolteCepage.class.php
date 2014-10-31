@@ -144,6 +144,20 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return;
     }
 
+    public function removeVolumes() {
+      parent::removeVolumes();
+      $details_to_remove = array();
+      foreach($this->getProduitsDetails() as $detail) {
+        if(!$detail->getTotalSuperficie()) {
+          $details_to_remove[] = $detail->getKey();
+        }
+      }
+
+      foreach ($details_to_remove as $key) {
+        $this->detail->remove($key);
+      }
+    }
+
     protected function update($params = array()) {
       parent::update($params);
 
