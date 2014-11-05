@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_057.php
 // Begin       : 2010-04-03
-// Last Update : 2010-08-08
+// Last Update : 2013-05-14
 //
 // Description : Example 057 for TCPDF class
 //               Cell vertical alignments
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,14 +21,11 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Cell vertical alignments
  * @author Nicola Asuni
- * @copyright 2004-2009 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2008-03-04
  */
 
-require_once('../config/lang/eng.php');
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -53,19 +47,22 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
 
 // ---------------------------------------------------------
 
@@ -128,6 +125,37 @@ $pdf->Line(15, 120, 195, 120, $linestyle);
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+// Print an image to explain cell measures
+
+$pdf->Image('images/tcpdf_cell.png', 15, 160, 100, 100, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+$legend = 'LEGEND:
+
+X: cell x top-left origin (top-right for RTL)
+Y: cell y top-left origin (top-right for RTL)
+CW: cell width
+CH: cell height
+LW: line width
+NRL: normal line position
+EXT: external line position
+INT: internal line position
+ML: margin left
+MR: margin right
+MT: margin top
+MB: margin bottom
+PL: padding left
+PR: padding right
+PT: padding top
+PB: padding bottom
+TW: text width
+FA: font ascent
+FB: font baseline
+FD: font descent';
+$pdf->SetFont('helvetica', '', 10);
+$pdf->setCellHeightRatio(1.25);
+$pdf->MultiCell(0, 0, $legend, 0, 'L', false, 1, 125, 160, true, 0, false, true, 0, 'T', false);
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 // CELL BORDERS
 
 // add a page
@@ -140,13 +168,16 @@ $pdf->Write(0, 'Example of borders for Cell()', '', 0, 'L', true, 0, false, fals
 $pdf->SetFont('helvetica', '', 11);
 
 // set border width
-$pdf->SetLineWidth(1);
+$pdf->SetLineWidth(0.508);
 
 // set color for cell border
 $pdf->SetDrawColor(0,128,255);
 
 // set filling color
 $pdf->SetFillColor(255,255,128);
+
+// set cell height ratio
+$pdf->setCellHeightRatio(3);
 
 $pdf->Cell(30, 0, '1', 1, 1, 'C', 1, '', 0, false, 'T', 'C');
 $pdf->Ln(2);

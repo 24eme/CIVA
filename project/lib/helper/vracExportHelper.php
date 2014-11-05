@@ -75,7 +75,7 @@ function echoVolume($volume, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>hl</small>&nbsp;";
+        echo "&nbsp;<small>hl</small>&nbsp;&nbsp;";
     } else {
         echo "&nbsp;";
     }
@@ -93,7 +93,7 @@ function echoPrix($prix, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>&euro;</small>&nbsp;";
+        echo "&nbsp;<small>&euro;</small>&nbsp;&nbsp;";
     } else {
         echo "&nbsp;";
     }
@@ -110,7 +110,7 @@ function echoDateFr($dateIso) {
 
 function echoCentilisation($centilisation) {
 	if (preg_match('/([0-9,]+)\ ([a-zA-Z]+)/', $centilisation, $matches)) {
-		echo $matches[1].'&nbsp;<small>'.$matches[2].'</small>&nbsp;';
+		echo $matches[1].'&nbsp;<small>'.$matches[2].'</small>&nbsp;&nbsp;';
 	} else {
 		echo '&nbsp;'.$centilisation.'&nbsp;';
 	}

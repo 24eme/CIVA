@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_059.php
 // Begin       : 2010-05-06
-// Last Update : 2010-09-13
+// Last Update : 2013-05-14
 //
 // Description : Example 059 for TCPDF class
 //               Table Of Content using HTML templates.
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,14 +21,11 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Table Of Content using HTML templates.
  * @author Nicola Asuni
- * @copyright 2004-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2010-05-06
  */
 
-require_once('../config/lang/eng.php');
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 /**
  * TCPDF class extension with custom header and footer for TOC page
@@ -40,7 +34,7 @@ class TOC_TCPDF extends TCPDF {
 
 	/**
  	 * Overwrite Header() method.
-	 * @access public
+	 * @public
 	 */
 	public function Header() {
 		if ($this->tocpage) {
@@ -54,7 +48,7 @@ class TOC_TCPDF extends TCPDF {
 
 	/**
  	 * Overwrite Footer() method.
-	 * @access public
+	 * @public
 	 */
 	public function Footer() {
 		if ($this->tocpage) {
@@ -88,19 +82,22 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
 
 // set font
 $pdf->SetFont('helvetica', '', 10);
@@ -113,30 +110,31 @@ $pdf->SetFont('helvetica', '', 10);
 $pdf->AddPage();
 
 // set a bookmark for the current position
-$pdf->Bookmark('Chapter 1', 0, 0);
+$pdf->Bookmark('Chapter 1', 0, 0, '', 'B', array(0,64,128));
 
 // print a line using Cell()
 $pdf->Cell(0, 10, 'Chapter 1', 0, 1, 'L');
 
 $pdf->AddPage();
-$pdf->Bookmark('Paragraph 1.1', 1, 0);
+$pdf->Bookmark('Paragraph 1.1', 1, 0, '', '', array(128,0,0));
 $pdf->Cell(0, 10, 'Paragraph 1.1', 0, 1, 'L');
 
 $pdf->AddPage();
-$pdf->Bookmark('Paragraph 1.2', 1, 0);
+$pdf->Bookmark('Paragraph 1.2', 1, 0, '', '', array(128,0,0));
 $pdf->Cell(0, 10, 'Paragraph 1.2', 0, 1, 'L');
 
 $pdf->AddPage();
-$pdf->Bookmark('Sub-Paragraph 1.2.1', 2, 0);
+$pdf->Bookmark('Sub-Paragraph 1.2.1', 2, 0, '', 'I', array(0,128,0));
 $pdf->Cell(0, 10, 'Sub-Paragraph 1.2.1', 0, 1, 'L');
 
 $pdf->AddPage();
-$pdf->Bookmark('Paragraph 1.3', 1, 0);
+$pdf->Bookmark('Paragraph 1.3', 1, 0, '', '', array(128,0,0));
 $pdf->Cell(0, 10, 'Paragraph 1.3', 0, 1, 'L');
 
-for ($i = 2; $i < 12; ++$i) {
+// add some pages and bookmarks
+for ($i = 2; $i < 12; $i++) {
 	$pdf->AddPage();
-	$pdf->Bookmark('Chapter '.$i, 0, 0);
+	$pdf->Bookmark('Chapter '.$i, 0, 0, '', 'B', array(0,64,128));
 	$pdf->Cell(0, 10, 'Chapter '.$i, 0, 1, 'L');
 }
 
@@ -175,7 +173,7 @@ $bookmark_templates[2] = '<table border="0" cellpadding="0" cellspacing="0"><tr>
 
 // add table of content at page 1
 // (check the example n. 45 for a text-only TOC
-$pdf->addHTMLTOC($page=1, $toc_name='INDEX', $bookmark_templates, $correct_align=true);
+$pdf->addHTMLTOC(1, 'INDEX', $bookmark_templates, true, 'B', array(128,0,0));
 
 // end of TOC page
 $pdf->endTOCPage();
@@ -185,7 +183,7 @@ $pdf->endTOCPage();
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('example_059.pdf', 'I');
+$pdf->Output('example_059.pdf', 'D');
 
 //============================================================+
 // END OF FILE

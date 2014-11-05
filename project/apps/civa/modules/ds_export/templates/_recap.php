@@ -39,6 +39,7 @@
 </tr>
 </table>
 <br />
+<br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <?php foreach($recap_autres as $libelle => $volume): ?>
 <tr>

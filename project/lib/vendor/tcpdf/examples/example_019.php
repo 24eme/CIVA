@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_019.php
 // Begin       : 2008-03-07
-// Last Update : 2010-08-08
+// Last Update : 2013-05-14
 //
 // Description : Example 019 for TCPDF class
 //               Non unicode with alternative config file
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,26 +21,21 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Non unicode with alternative config file
  * @author Nicola Asuni
- * @copyright 2004-2009 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2008-03-04
  */
 
-require_once('../config/lang/eng.php');
-
-// load alternative config file
-require_once('../config/tcpdf_config_alt.php');
-define("K_TCPDF_EXTERNAL_CONFIG", true);
-
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, false, 'ISO-8859-1', false);
 
+// Set document information dictionary in unicode mode
+$pdf->SetDocInfoUnicode(true);
+
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Nicola Asuni');
+$pdf->SetAuthor('Nicola Asuni [€]');
 $pdf->SetTitle('TCPDF Example 019');
 $pdf->SetSubject('TCPDF Tutorial');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -58,15 +50,15 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language dependent data:
@@ -76,8 +68,8 @@ $lg['a_meta_dir'] = 'ltr';
 $lg['a_meta_language'] = 'en';
 $lg['w_page'] = 'page';
 
-//set some language-dependent strings
-$pdf->setLanguageArray($lg); 
+// set some language-dependent strings (optional)
+$pdf->setLanguageArray($lg);
 
 // ---------------------------------------------------------
 
@@ -102,5 +94,5 @@ $pdf->MultiCell(0, 0, $txt."\n", 1, 'J', 1, 1, '', '', true, 0, false, true, 0);
 $pdf->Output('example_019.pdf', 'I');
 
 //============================================================+
-// END OF FILE                                                
+// END OF FILE
 //============================================================+

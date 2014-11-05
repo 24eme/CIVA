@@ -6,7 +6,7 @@ pre {display: inline;}
 </style>
 
 <?php include_partial('export/exploitation', array('dr' => $dr)); ?>
-
+<br />
 <div><span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle_appellation; ?></span></div>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
 <?php 
@@ -111,7 +111,8 @@ if($has_no_usages_industriels) {
 }
 ?>
 </table>
-<div style="margin-top: 20px;">
+<br />
+<div>
 <table>
 <tr>
 <td style="width: 820px">

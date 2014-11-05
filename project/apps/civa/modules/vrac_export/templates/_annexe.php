@@ -60,8 +60,6 @@ Les vins et les vins de liqueur préemballés en France peuvent être mis en cir
 </p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <h4 style="text-align: center; font-weight: normal;">CETTE DÉCLARATION EST PROTÉGÉE PAR LE SECRET <br /> PROFESSIONNEL ET LES PRINCIPES DE CONFIDENTIALITÉ</h4>
 </div>
 <?php else: ?>
@@ -126,8 +124,6 @@ La retenue sur les achats de vin en vrac correspond à la moitié de la cotisati
 <p>
 « Dans tous les cas, la mise en œuvre des sanctions prévues à l’alinéa précédent ne fait pas obstacle à l’application éventuelle de celles prévues par les contrats de fourniture ainsi que par les règlements intérieurs des groupements coopératifs agricoles en cause, en cas de défaut d’exécution des clauses de ces règlements. »
 </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

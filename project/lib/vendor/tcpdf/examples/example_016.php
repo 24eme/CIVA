@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_016.php
 // Begin       : 2008-03-04
-// Last Update : 2010-08-08
+// Last Update : 2013-05-14
 //
 // Description : Example 016 for TCPDF class
 //               Document Encryption / Security
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,14 +21,11 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Document Encryption / Security
  * @author Nicola Asuni
- * @copyright 2004-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2008-03-04
  */
 
-require_once('../config/lang/eng.php');
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -53,12 +47,13 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
  If you don't set any password, the document will open as usual.
  If you set a user password, the PDF viewer will ask for it before displaying the document.
- The master (owner) password, if different from the user one, can be used to get full access.
+ The master (owner) password, if different from the user one, can be used to get full document access.
 
  Possible encryption modes are:
- 	- 0 = RSA 40 bit
- 	- 1 = RSA 128 bit
- 	- 2 = AES 128 bit
+ 	0 = RSA 40 bit
+ 	1 = RSA 128 bit
+ 	2 = AES 128 bit
+ 	3 = AES 256 bit
 
  NOTES:
  - To create self-signed signature: openssl req -x509 -nodes -days 365000 -newkey rsa:1024 -keyout tcpdf.crt -out tcpdf.crt
@@ -67,11 +62,11 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 */
 
-$pdf->SetProtection($permissions=array('print', 'copy'), $user_pass='', $owner_pass=null, $mode=0, $pubkeys=null);
+$pdf->SetProtection(array('print', 'copy'), '', null, 0, null);
 
 // Example with public-key
 // To open the document you need to install the private key (tcpdf.p12) on the Acrobat Reader. The password is: 1234
-//$pdf->SetProtection($permissions=array('print', 'copy'), $user_pass='', $owner_pass=null, $mode=1, $pubkeys=array(array('c' => 'file://../tcpdf.crt', 'p' => array('print'))));
+//$pdf->SetProtection($permissions=array('print', 'copy'), $user_pass='', $owner_pass=null, $mode=1, $pubkeys=array(array('c' => 'file://../config/cert/tcpdf.crt', 'p' => array('print'))));
 
 // *********************************************************
 
@@ -93,19 +88,22 @@ $pdf->setFooterFont(Array('helvetica', '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
 
 // ---------------------------------------------------------
 
@@ -129,7 +127,7 @@ $pdf->Write(0, $txt, '', 0, 'L', true, 0, false, false, 0);
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('example_016.pdf', 'I');
+$pdf->Output('example_016.pdf', 'D');
 
 //============================================================+
 // END OF FILE

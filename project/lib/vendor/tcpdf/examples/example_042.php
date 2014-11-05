@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_042.php
 // Begin       : 2008-12-23
-// Last Update : 2010-08-08
+// Last Update : 2013-05-14
 //
 // Description : Example 042 for TCPDF class
 //               Test Image with alpha channel
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,14 +21,11 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Test Image with alpha channel
  * @author Nicola Asuni
- * @copyright 2004-2009 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2008-12-23
  */
 
-require_once('../config/lang/eng.php');
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -53,19 +47,22 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
 
 // ---------------------------------------------------------
 
@@ -84,16 +81,16 @@ $pdf->MultiCell(0, 5, $background_text, 0, 'J', 0, 2, '', '', true, 0, false);
 // --- Method (A) ------------------------------------------
 // the Image() method recognizes the alpha channel embedded on the image:
 
-$pdf->Image('../images/image_with_alpha.png', 50, 50, 100, '', '', 'http://www.tcpdf.org', '', false, 300);
+$pdf->Image('images/image_with_alpha.png', 50, 50, 100, '', '', 'http://www.tcpdf.org', '', false, 300);
 
 // --- Method (B) ------------------------------------------
 // provide image + separate 8-bit mask
 
 // first embed mask image (w, h, x and y will be ignored, the image will be scaled to the target image's size)
-$mask = $pdf->Image('../images/alpha.png', 50, 140, 100, '', '', '', '', false, 300, '', true);
+$mask = $pdf->Image('images/alpha.png', 50, 140, 100, '', '', '', '', false, 300, '', true);
 
 // embed image, masked with previously embedded mask
-$pdf->Image('../images/img.png', 50, 140, 100, '', '', 'http://www.tcpdf.org', '', false, 300, '', false, $mask);
+$pdf->Image('images/img.png', 50, 140, 100, '', '', 'http://www.tcpdf.org', '', false, 300, '', false, $mask);
 
 // ---------------------------------------------------------
 
@@ -101,5 +98,5 @@ $pdf->Image('../images/img.png', 50, 140, 100, '', '', 'http://www.tcpdf.org', '
 $pdf->Output('example_042.pdf', 'I');
 
 //============================================================+
-// END OF FILE                                                
+// END OF FILE
 //============================================================+

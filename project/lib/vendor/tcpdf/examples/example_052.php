@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : example_052.php
 // Begin       : 2009-05-07
-// Last Update : 2010-08-08
+// Last Update : 2013-05-14
 //
 // Description : Example 052 for TCPDF class
 //               Certification Signature (experimental)
@@ -11,10 +11,7 @@
 //
 // (c) Copyright:
 //               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
+//               Tecnick.com LTD
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
@@ -24,14 +21,11 @@
  * @package com.tecnick.tcpdf
  * @abstract TCPDF - Example: Certification Signature (experimental)
  * @author Nicola Asuni
- * @copyright 2004-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
- * @link http://tcpdf.org
- * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2009-05-07
  */
 
-require_once('../config/lang/eng.php');
-require_once('../tcpdf.php');
+// Include the main TCPDF library (search for installation path).
+require_once('tcpdf_include.php');
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -53,19 +47,22 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-//set margins
+// set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-//set auto page breaks
+// set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-//set image scale factor
+// set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
 
 // ---------------------------------------------------------
 
@@ -77,7 +74,7 @@ NOTES:
 */
 
 // set certificate file
-$certificate = 'file://../tcpdf.crt';
+$certificate = 'file://data/cert/tcpdf.crt';
 
 // set additional information
 $info = array(
@@ -100,18 +97,24 @@ $pdf->AddPage();
 $text = 'This is a <b color="#FF0000">digitally signed document</b> using the default (example) <b>tcpdf.crt</b> certificate.<br />To validate this signature you have to load the <b color="#006600">tcpdf.fdf</b> on the Arobat Reader to add the certificate to <i>List of Trusted Identities</i>.<br /><br />For more information check the source code of this example and the source code documentation for the <i>setSignature()</i> method.<br /><br /><a href="http://www.tcpdf.org">www.tcpdf.org</a>';
 $pdf->writeHTML($text, true, 0, true, 0);
 
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // *** set signature appearance ***
 
 // create content for signature (image and/or text)
-$pdf->Image($file='../images/tcpdf_signature.png', $x=180, $y=60, $w=15, $h=15, $type='PNG');
+$pdf->Image('images/tcpdf_signature.png', 180, 60, 15, 15, 'PNG');
+
 // define active area for signature appearance
-$pdf->setSignatureAppearance($x=180, $y=60, $w=15, $h=15);
+$pdf->setSignatureAppearance(180, 60, 15, 15);
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+// *** set an empty signature appearance ***
+$pdf->addEmptySignatureAppearance(180, 80, 15, 15);
 
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('example_052.pdf', 'I');
+$pdf->Output('example_052.pdf', 'D');
 
 //============================================================+
 // END OF FILE

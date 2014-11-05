@@ -11,7 +11,7 @@
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions <?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>bouteilles<?php else: ?>vrac<?php endif; ?>&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
-<?php      $nb_ligne = 29;
+<?php      $nb_ligne = 28;
            $nb_ligne -= (!$odg)? 0 : 2; 
 ?>
 
@@ -59,7 +59,7 @@
 			<?php endif; ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoCentilisation(VracClient::getLibelleCentilisation($detailLine->centilisation)) ?></td>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?>&nbsp;</td>
+			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?>&nbsp;&nbsp;</td>
             <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
 			<?php else: ?>
 			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
@@ -110,8 +110,9 @@
 	</tr>
 	<?php endif; ?>
 </table>
-<?php if ($vrac->conditions_paiement): $nb_ligne-=2; ?><p>Conditions de paiement : <?php echo $vrac->conditions_paiement; ?></p><?php endif; ?>
-<?php if ($vrac->conditions_particulieres): $nb_ligne-=2; ?><p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p><?php endif; ?>
+<br />
+<?php if ($vrac->conditions_paiement): $nb_ligne-=3; ?><p>Conditions de paiement : <?php echo $vrac->conditions_paiement; ?></p><?php endif; ?>
+<?php if ($vrac->conditions_particulieres): $nb_ligne-=3; ?><p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p><?php endif; ?>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;

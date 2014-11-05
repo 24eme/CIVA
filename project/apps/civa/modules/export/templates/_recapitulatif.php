@@ -20,7 +20,7 @@ pre {display: inline;}
 </style>
 
 <?php include_partial('export/exploitation', array('dr' => $dr)); ?>
-<br />
+<br /><br />
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br/>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
 	<thead>
@@ -154,6 +154,7 @@ pre {display: inline;}
 	</tbody>
 </table>
 <?php if ($has_total): ?>
+<br />
 <br />
 <?php if($has_no_usages_industriels): ?>
 <span style="background-color: black; color: white; font-weight: bold;">Lies et Jeunes vignes</span><br/>
