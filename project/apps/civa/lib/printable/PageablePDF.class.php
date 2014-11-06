@@ -20,7 +20,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetAuthor('CIVA');
         $this->pdf->SetTitle($this->title.$this->link.preg_replace('/\n/', ', ', $this->subtitle));
         $this->pdf->SetSubject('PDF CIVA');
-        $this->pdf->SetKeywords('Declaration, DR, récolte, vins d\'alsace');
+        $this->pdf->SetKeywords('Declaration, DR, Recolte, Vins Alsace');
 
         // set default header dat
         $logo_file = (isset($this->config['LOGO_FILE'])) ? $this->config['LOGO_FILE'] : 'civa.jpg';
@@ -47,6 +47,8 @@ class PageablePDF extends PageableOutput {
 
         //set some language-dependent strings
         $this->pdf->setLanguageArray('fra');
+
+        $this->pdf->setFontSubsetting(true);
 
          /* Defaulf file_dir */
         if (!$this->file_dir) {
