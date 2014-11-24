@@ -12,7 +12,7 @@
  */
 class ExportDRCsv extends ExportCsv {
     
-    protected $_headers = array(
+    public static $_headers = array(
         "cvi_acheteur" => "CVI acheteur",
         "nom_acheteur" => "nom acheteur",
         "cvi_recoltant" => "CVI récoltant",
@@ -63,8 +63,10 @@ class ExportDRCsv extends ExportCsv {
      *
      * @param string $campagne 
      */
-    public function __construct($campagne, $cvi, $debug = false) {
-        parent::__construct($this->_headers);
+    public function __construct($campagne, $cvi, $with_header = true, $debug = false) {
+        if($with_header) {
+            parent::__construct(self::$_headers);
+        }
         $this->_debug = $debug;
         $this->_campagne = $campagne;
         $this->dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($cvi,$campagne);
