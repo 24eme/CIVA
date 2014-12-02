@@ -255,7 +255,7 @@
 
                                     <?php if($form_item->getObject()->acheteurs->count() > 0 && $form_item->getObject()->getConfig()->existRendement()): ?>
                                     var total_superficie = <?php echoFloat( $form_item->getObject()->getTotalSuperficie()); ?>;
-                                    var total_dontdplc = <?php echoFloat($form_item->getObject()->getUsagesIndustriels()- $form_item->getObject()->getLies()); ?>;
+                                    var total_dontdplc = <?php echoFloat($form_item->getObject()->getDplc()); ?>;
                                     var sum_superficie = 0;
                                     var sum_dont_dplc = 0;
                                     $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
