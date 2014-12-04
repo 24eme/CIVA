@@ -4,8 +4,8 @@
             Une fois votre déclaration validée, vous ne pourrez plus la modifier. <br /><br />
             Confirmez vous la validation de votre déclaration de récolte ?<br />
         </p>
-        <?php $need_acheteurs_autorisation = DRClient::getInstance()->hasImport($dr->cvi, $dr->campagne); ?>
-        <?php $need_ava_autorisation = $dr->hasVolumeSurPlace(); ?>
+        <?php $need_acheteurs_autorisation = !$dr->hasDateDepotMairie() && DRClient::getInstance()->hasImport($dr->cvi, $dr->campagne); ?>
+        <?php $need_ava_autorisation = !$dr->hasDateDepotMairie() && $dr->hasVolumeSurPlace(); ?>
         <?php if($need_acheteurs_autorisation || $need_ava_autorisation): ?>
             <div style="margin-top: 15px;" class="ligne_form">
             <label>Autorisations de transmission de votre Déclaration de Récolte :</label>
