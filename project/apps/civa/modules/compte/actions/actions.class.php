@@ -226,9 +226,11 @@ class compteActions extends sfActions {
             if ($this->form->isValid()) {
                 $compte = $this->form->save();
                 $lien = "http://".str_replace("//", "/", str_replace('http://', '', sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)))));
+
                 if ($this->service) {
-                	$lien += '?service='.$this->service;
+                	$lien .= '?service='.$this->service;
                 }
+
                 try {
                     $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : " . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
