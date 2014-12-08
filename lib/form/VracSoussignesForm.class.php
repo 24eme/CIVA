@@ -83,6 +83,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->storeVendeurInformations($vendeur);
     	if ($this->getObject()->isNew()) {
     		$this->getObject()->type_contrat = $values['type_contrat'];
+            $this->getObject()->type_archive = null;
+            $this->getObject()->getTypeArchive();
     		$this->getObject()->initProduits();
     	}
     }
