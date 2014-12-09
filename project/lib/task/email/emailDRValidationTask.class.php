@@ -52,8 +52,10 @@ EOF;
 	    	$this->logSection('cvi', $cvi);
 	    	
 	    	$compte = acCouchdbManager::getClient()->find('COMPTE-'.$cvi);
-	    	
-            $nb_item++;
+        $rec = acCouchdbManager::getClient()->find('REC-'.$cvi);
+	    	echo sprintf("%s;%s;%s\n", $rec->cvi, $rec->nom, $rec->categorie);
+        continue;
+        $nb_item++;
             if(!$compte->getEmail()) {
                 $this->logSection('no email', $cvi, null, 'ERROR');
                 continue;
@@ -66,8 +68,8 @@ EOF;
                       //->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
-                $sended = $this->getMailer()->send($message);
-                
+                //$sended = $this->getMailer()->send($message);
+                $sended = true;
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
             } catch (Exception $exc) {
                 $sended = false;
