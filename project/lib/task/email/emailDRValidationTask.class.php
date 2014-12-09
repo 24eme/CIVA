@@ -64,7 +64,6 @@ EOF;
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
                       ->setTo($compte->getEmail())
-                      ->setBcc('vlaurent@actualys.com')
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);
@@ -75,6 +74,7 @@ EOF;
             
             if ($sended) {
                 $nb_email_send++;
+                sleep(1);
                 $this->logSection('sended', $cvi . ' : ' . $compte->getEmail());
             } else {
                 $this->logSection('send error', $cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
