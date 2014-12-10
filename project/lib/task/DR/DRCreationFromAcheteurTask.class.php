@@ -34,7 +34,6 @@ EOF;
 	  print "LOG: DR pour ".$cvi." existe\n";
 	  return false;
 	}
-
 	$import_from = array();
 	try{
       if (!$dr)
@@ -87,6 +86,9 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        $routing = clone ProjectConfiguration::getAppRouting();
+        $context = sfContext::createInstance($this->configuration);
+        $context->set('routing', $routing);
 	$this->save_error = $options['save-error'];
 	$this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
 	
