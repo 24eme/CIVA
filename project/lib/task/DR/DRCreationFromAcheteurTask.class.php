@@ -48,7 +48,7 @@ EOF;
 
         if (count($check['vigilance']) > 0) {
             foreach($check['vigilance'] as $err) {
-	            print "VIGILANCE: ".$dr->_id." a des points de vigilance " .$err['info'] . ":" . $err['log']. "\n";
+	            print "VIGILANCE: ".$dr->_id." a des points de vigilances : " .$err['info'] . ":" . $err['log']. "\n";
             }
             
         }
