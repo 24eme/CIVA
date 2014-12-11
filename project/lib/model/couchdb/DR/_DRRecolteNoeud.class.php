@@ -378,7 +378,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getDontDplcVendusMax() {
 
-        return $this->getDplc();
+        return round($this->getDplc(), 2);
     }
 
     public function getTotalDontDplcVendus() {
