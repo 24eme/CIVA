@@ -69,6 +69,11 @@ class ExportDRPdf extends ExportDocument {
             return " par le CIVA";
         }
 
+        if($par == DRClient::VALIDEE_PAR_AUTO) {
+          
+            return " automatiquement";
+        }
+
         return " par ". $par;
     }
 

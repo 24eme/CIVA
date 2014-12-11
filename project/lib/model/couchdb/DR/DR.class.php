@@ -248,6 +248,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function getValideeParByCompteId($compte_id) {
+
+        if($compte_id == "COMPTE-auto") {
+
+            return DRClient::VALIDEE_PAR_AUTO;
+        }
+        
         $compte = _CompteClient::getInstance()->find($compte_id);
 
         if(!$compte) {
