@@ -41,6 +41,7 @@ EOF;
         $stats['usages_industriels'] = 0;
         $stats['appellations'] = array();
         $n=0;
+        $diff=0;
         foreach ($dr_ids as $id) {
             if (!preg_match("/^DR-(67|68)/", $id)) {
 
@@ -106,10 +107,6 @@ EOF;
                                 $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
                             }
 
-                            if($cepage_key == "cepage_BL" && $appellation_key == "appellation_CREMANT") {
-                                echo $dr->_id."\n";
-                            }
-
                             $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
                             $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
                         }
@@ -120,6 +117,12 @@ EOF;
                 $stats['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
                 $stats['superficie'] += $appellation->total_superficie;
                 $stats['volume'] += $appellation->total_volume;
+
+                if((round($stats['appellations'][$appellation_key]['volume'] - $stats['appellations'][$appellation_key]['usages_industriels'], 2)) != round($stats['appellations'][$appellation_key]['volume_revendique'] - $diff, 2)) {
+
+                    $diff += round($stats['appellations'][$appellation_key]['volume'] - $stats['appellations'][$appellation_key]['usages_industriels'], 2) - round($stats['appellations'][$appellation_key]['volume_revendique'], 2);
+                    echo sprintf("%s;%s;%s\n", $dr->_id, $stats['appellations'][$appellation_key]['volume'] -  $stats['appellations'][$appellation_key]['usages_industriels'], $stats['appellations'][$appellation_key]['volume_revendique']);
+                }
             }
         }
 
@@ -136,5 +139,7 @@ EOF;
         echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
         
         echo sprintf("NB_DR;%s",$n)."\n";
+
+        echo sprintf("DIFF;%s",$diff)."\n";
     }
 }
