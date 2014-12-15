@@ -117,14 +117,13 @@ EOF;
 
                             $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
                             $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
-
-                            $stats[$insee]['appellations'][$appellation_key]['superficie'] += $cepage->total_superficie;
-                            $stats[$insee]['appellations'][$appellation_key]['volume'] += $cepage->total_volume;
-                            $stats[$insee]['superficie'] += $cepage->total_superficie;
-                            $stats[$insee]['volume'] += $cepage->total_volume;
                         }
                     }
                 }
+
+                $stats[$insee]['appellations'][$appellation_key]['superficie'] += $appellation->total_superficie;
+                $stats[$insee]['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
+                $stats[$insee]['superficie'] += $appellation->total_superficie;
             }
         }
 
