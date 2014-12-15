@@ -41,7 +41,6 @@ EOF;
         $stats['usages_industriels'] = 0;
         $stats['appellations'] = array();
         $n=0;
-        $diff=0;
         foreach ($dr_ids as $id) {
             if (!preg_match("/^DR-(67|68)/", $id)) {
 
@@ -61,8 +60,6 @@ EOF;
 
                 continue;
             }
-
-            
 
             foreach($dr->recolte->certification->genre as $appellation_key => $appellation) {
                 if (!preg_match("/^appellation/", $appellation_key)) {
@@ -117,12 +114,6 @@ EOF;
                 $stats['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
                 $stats['superficie'] += $appellation->total_superficie;
                 $stats['volume'] += $appellation->total_volume;
-
-                if((round($stats['appellations'][$appellation_key]['volume'] - $stats['appellations'][$appellation_key]['usages_industriels'], 2)) != round($stats['appellations'][$appellation_key]['volume_revendique'] - $diff, 2)) {
-
-                    $diff += round($stats['appellations'][$appellation_key]['volume'] - $stats['appellations'][$appellation_key]['usages_industriels'], 2) - round($stats['appellations'][$appellation_key]['volume_revendique'], 2);
-                    echo sprintf("%s;%s;%s\n", $dr->_id, $stats['appellations'][$appellation_key]['volume'] -  $stats['appellations'][$appellation_key]['usages_industriels'], $stats['appellations'][$appellation_key]['volume_revendique']);
-                }
             }
         }
 
