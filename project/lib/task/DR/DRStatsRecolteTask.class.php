@@ -106,16 +106,20 @@ EOF;
                                 $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
                             }
 
+                            if($cepage_key == "cepage_BL" && $appellation_key == "appellation_CREMANT") {
+                                echo $dr->_id."\n";
+                            }
+
                             $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
                             $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
-
-                            $stats['appellations'][$appellation_key]['superficie'] += $cepage->total_superficie;
-                            $stats['appellations'][$appellation_key]['volume'] += $cepage->total_volume;
-                            $stats['superficie'] += $cepage->total_superficie;
-                            $stats['volume'] += $cepage->total_volume;
                         }
                     }
                 }
+
+                $stats['appellations'][$appellation_key]['superficie'] += $appellation->total_superficie;
+                $stats['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
+                $stats['superficie'] += $appellation->total_superficie;
+                $stats['volume'] += $appellation->total_volume;
             }
         }
 
