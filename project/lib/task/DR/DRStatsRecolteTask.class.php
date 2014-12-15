@@ -130,7 +130,5 @@ EOF;
         echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
         
         echo sprintf("NB_DR;%s",$n)."\n";
-
-        echo sprintf("DIFF;%s",$diff)."\n";
     }
 }
