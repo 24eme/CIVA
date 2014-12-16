@@ -32,11 +32,33 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
+        for($i = 0; $i < 4200; $i++) {
+
+        $dr = DRClient::getInstance()->find($arguments['id'], acCouchdbClient::HYDRATE_JSON);
+
+        $file = sprintf("%s/%s/%s/DR_%s_%s_%s.csv", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne, $dr->cvi, $dr->campagne, $dr->_rev);
+
+        if(is_file($file)) {
+
+            file_get_contents($file);
+            continue;
+        }
+
+        continue;
+
         preg_match("/^DR-([0-9]+)-([0-9]+)$/", $arguments['id'], $matches);
 
-        $csvContruct = new ExportDRCsv($matches[2], $matches[1]);         
+        $campagne = $matches[2];
+        $cvi = $matches[1];
+
+        $csvContruct = new ExportDRCsv($matches[2], $matches[1], false);         
         $csvContruct->export();
-        
+
+        $content = $csvContruct->output();
+
+        file_put_contents($file, $content);
+
         echo $csvContruct->output();
+        }
     }
 }
