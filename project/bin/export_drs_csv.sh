@@ -9,11 +9,6 @@ if ! test "$ANNEE"; then
     exit;
 fi
 
-curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?reduce=false" | grep "\[\"$ANNEE\",true,true," | grep -Eo "DR-[0-9]+-[0-9]+" > /tmp/drs_validees_$ANNEE
-
 echo '"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"date de creation";"date de validation";"validateur";"hash_produit"'
 
-while read ligne  
-do
-    php symfony export:dr-csv $ligne | grep -v '"CVI acheteur";'
-done < /tmp/drs_validees_$ANNEE
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?reduce=false" | grep "\[\"$ANNEE\",true,true," | grep -Eo "DR-[0-9]+-[0-9]+" | php symfony export:dr-csv

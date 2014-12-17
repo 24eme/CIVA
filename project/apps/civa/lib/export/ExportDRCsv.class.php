@@ -109,6 +109,9 @@ class ExportDRCsv extends ExportCsv {
                                         $this->addDetailAcheteur($acheteur);
                                 }
                             }
+                            if($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                                $this->addDetailNonRecolte($detail);
+                            }
                         }
                     }
                     if($lieu->getConfig()->hasManyCouleur()) {
@@ -139,15 +142,15 @@ class ExportDRCsv extends ExportCsv {
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
         
-        $acheteurObject = acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi);
+        $acheteurObject = acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
 
         if(!$acheteurObject) {
-            $acheteurObject = acCouchdbManager::getClient()->find('REC-'.$acheteur->cvi);
+            $acheteurObject = acCouchdbManager::getClient()->find('REC-'.$acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
         }
 
         $this->add(array(
             "cvi_acheteur" => $acheteur->cvi,
-            "nom_acheteur" => $acheteurObject->getNom(),
+            "nom_acheteur" => $acheteurObject->nom,
             "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
             "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
             "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
@@ -162,6 +165,33 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
             "creation_date" => $this->dr->getPremiereModificationDr(),
+            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
+            "hash" => $detail->getHash(),
+                ), $this->_validation_ligne);
+    }
+
+    protected function addDetailNonRecolte($detail) {
+        $lieu = "";
+        $denomination = "";
+
+        $this->add(array(
+            "cvi_acheteur" => "MOTIF ".$detail->motif_non_recolte,
+            "nom_acheteur" => "NON RECOLTE",
+            "cvi_recoltant" => $detail->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $detail->getCouchdbDocument()->declarant->nom,
+            "appellation" => $detail->getCepage()->getLieu()->getAppellation()->getConfig()->getLibelle(),
+            "lieu" => $detail->getConfig()->hasLieuEditable() ? $detail->lieu : $detail->getCepage()->getLieu()->getConfig()->getLibelle(),
+            "cepage" => $detail->getCepage()->getConfig()->getLibelle(),
+            "vtsgn" => $detail->vtsgn,
+            "denomination" => $detail->getConfig()->hasDenomination() ? $detail->denomination : null,
+            "superficie_livree" => null,
+            "volume_livre/sur place" => $detail->getTotalCaveParticuliere(),
+            "dont_dplc" => null,
+            "superficie_totale" => $detail->superficie,
+            "volume_total" => $detail->volume,
+            "volume_a_detruire_total" => $detail->usages_industriels,
+            "creation_date" =>  $this->dr->getPremiereModificationDr(),
             "validation_date" => $detail->getCouchdbDocument()->validee,
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),

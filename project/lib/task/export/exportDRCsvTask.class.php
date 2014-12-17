@@ -7,7 +7,7 @@ class ExportDRCsvTask extends sfBaseTask
     {
         // // add your own arguments here
         $this->addArguments(array(
-            new sfCommandArgument('id', sfCommandArgument::REQUIRED, 'ID Document'),
+            new sfCommandArgument('ids', sfCommandArgument::IS_ARRAY, 'ID Document'),
         ));
 
         $this->addOptions(array(
@@ -32,33 +32,34 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        for($i = 0; $i < 4200; $i++) {
-
-        $dr = DRClient::getInstance()->find($arguments['id'], acCouchdbClient::HYDRATE_JSON);
-
-        $file = sprintf("%s/%s/%s/DR_%s_%s_%s.csv", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne, $dr->cvi, $dr->campagne, $dr->_rev);
-
-        if(is_file($file)) {
-
-            file_get_contents($file);
-            continue;
+        foreach(file("php://stdin") as $id) {
+            $arguments['ids'][] = trim($id);
         }
 
-        continue;
+        foreach ($arguments['ids'] as $id) {
+            $dr = DRClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
 
-        preg_match("/^DR-([0-9]+)-([0-9]+)$/", $arguments['id'], $matches);
+            if(!$dr) {
 
-        $campagne = $matches[2];
-        $cvi = $matches[1];
+                throw new sfCommandArgumentsException("DR non trouvé : '".$id."'");
+            }
 
-        $csvContruct = new ExportDRCsv($matches[2], $matches[1], false);         
-        $csvContruct->export();
+            $file = sprintf("%s/%s/%s/DR_%s_%s_%s.csv", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne, $dr->cvi, $dr->campagne, $dr->_rev);
 
-        $content = $csvContruct->output();
+            if(is_file($file)) {
 
-        file_put_contents($file, $content);
+                echo file_get_contents($file);
+                continue;
+            }
 
-        echo $csvContruct->output();
+            $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi, false);         
+            $csvContruct->export();
+
+            $content = $csvContruct->output();
+
+            file_put_contents($file, $content);
+
+            echo $csvContruct->output();
         }
     }
 }
