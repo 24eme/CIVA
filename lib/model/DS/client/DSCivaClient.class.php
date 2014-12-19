@@ -100,13 +100,13 @@ class DSCivaClient extends DSClient {
     }
 
     public function buildPeriode($date, $type_ds = null) {
-        $periode = "".CurrentClient::getCurrent()->getPeriodeDS();
-//        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE){
-//            if(substr($periode, -2) == "12"){
-//                $periode = substr($periode, 0,4)."07";
-//            }
-//        }
-        return $periode;        
+        if (!preg_match('/([0-9]{4})-([0-9]{2})-([0-9]{2})/', $date, $matches)) {
+
+            throw new Exception(sprintf("Date de stock invalide : %s" , $date));
+            
+        }
+
+        return $matches[1].$matches[2]; 
     }
     
     public function createDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false) {    

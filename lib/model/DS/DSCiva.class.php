@@ -83,6 +83,11 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return DRClient::getInstance()->retrieveByCampagneAndCvi($this->identifiant, CurrentClient::getCurrent()->campagne);
     }
 
+    public function isDecembre() {
+
+        return substr($this->periode, 4, 2) == "12";
+    }
+
     public function updateProduitsFromLastDs() {
         $ds = $this->getLastDS();
         if ($ds) {
