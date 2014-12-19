@@ -77,6 +77,10 @@ class ExportDSPdf extends ExportDocument {
             $validee = "Déclaration validée";
         }
 
+        if($this->ds_principale->isDecembre()) {
+            $validee = "Déclaration validée";
+        }
+
         if(!$this->ds_principale->isValideeTiers()) {
             $validee = 'Non Validée';
         }

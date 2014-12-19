@@ -24,7 +24,12 @@ class Current extends BaseCurrent {
         return $this->ds_periode;
     }
 
-    public function getMonthPeriodeDS() {
+    public function isDSDecembre() {
+
+        return $this->getMonthDS() == "12";
+    }
+
+    public function getMonthDS() {
 
         return substr($this->ds_periode, 4, 2);
     }

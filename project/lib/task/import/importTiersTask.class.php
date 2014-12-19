@@ -107,7 +107,7 @@ EOF;
       $tiers->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $db2->get(Db2Tiers::COL_ANNEE_NAISSANCE), 
                                                                      $db2->get(Db2Tiers::COL_MOIS_NAISSANCE), 
                                                                      $db2->get(Db2Tiers::COL_JOUR_NAISSANCE));
-      
+
       $tiers->exploitant->telephone = $db2->get(Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d', $db2->get(Db2Tiers::COL_TELEPHONE_PRIVE)) : null;
       $tiers->siege->adresse = $db2->get(Db2Tiers::COL_ADRESSE_SIEGE);
       $tiers->siege->insee_commune = $db2->get(Db2Tiers::COL_INSEE_SIEGE);
@@ -122,6 +122,12 @@ EOF;
       $tiers->db2->num = $db2->get(Db2Tiers::COL_NUM);
       $tiers->db2->no_stock = $db2->get(Db2Tiers::COL_NO_STOCK);
       $tiers->db2->remove('export_revision');
+
+      if($db2->get(Db2Tiers::COL_DS_DECEMBRE) == "O" && !($tiers->type == "Acheteur" && $tiers->categorie == "CCV")) {
+        $tiers->add('ds_decembre', 1);
+      } elseif($tiers->exist('ds_decembre')) {
+        $tiers->remove('ds_decembre');
+      }
 
       return $tiers;
   }
