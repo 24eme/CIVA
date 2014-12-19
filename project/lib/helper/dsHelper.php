@@ -110,7 +110,7 @@ function isEtapePasse($etape, $ds)
 function getDateDeclaration($ds)
 {
     if (substr($ds->periode, 4) == '12') {
-        return '31 décembre ' . ($ds->getCampagne());
+        return '31 décembre ' . ($ds->getCampagne() + 0);
     }
     return '31 Juillet ' . ($ds->getCampagne() + 1);
 }

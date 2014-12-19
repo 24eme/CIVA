@@ -24,6 +24,11 @@ class Current extends BaseCurrent {
         return $this->ds_periode;
     }
 
+    public function getMonthPeriodeDS() {
+
+        return substr($this->ds_periode, 4, 2);
+    }
+
     public function getAnneeDS() {
 
         return $this->getCampagneDS() + 1;
