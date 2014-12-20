@@ -223,9 +223,6 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function isDsEditable($type_ds = null)
     {
-        if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
-            //return true;
-        }
 
         return (!$this->isDsTerminee($type_ds) && !$this->isDsNonOuverte($type_ds));
     }
