@@ -10,7 +10,7 @@ class dsComponents extends sfComponents {
      */
     public function executeMonEspace(sfWebRequest $request) {
       $this->ds = $this->getUser()->getDs($this->type_ds);
-      $this->ds_editable = $this->getUser()->isDsEditable();
+      $this->ds_editable = $this->getUser()->isDsEditable($this->type_ds);
     }
     
     /**
@@ -35,7 +35,7 @@ class dsComponents extends sfComponents {
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
         $this->tiers = $this->getUser()->getDeclarantDS($this->type_ds);
-        $this->dsByperiodes = $this->tiers->getDsArchivesSince(($this->getUser()->getPeriodeDS()-1));
+        $this->dsByperiodes = $this->tiers->getDsArchivesSince(($this->getUser()->getPeriodeDS($this->type_ds)-1));
         
         krsort($this->dsByperiodes);
     }

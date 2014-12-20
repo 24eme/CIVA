@@ -88,13 +88,14 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     /**
      * @return string
      */
-    public function getCampagneDS()
+    public function getCampagneDS($type_ds = null)
     {
-        return (int) (preg_replace("/^([0-9]{4})[0-9]{2}$/", '\1', $this->getPeriodeDS()) - 1);
+        return (int) (preg_replace("/^([0-9]{4})[0-9]{2}$/", '\1', $this->getPeriodeDS($type_ds)) - 1);
     }
 
-    public function getPeriodeDS(){
-        if(CurrentClient::getCurrent()->isDSDecembre() && $this->getDeclarantDS() && $this->getDeclarantDS()->exist('ds_decembre')) {
+    public function getPeriodeDS($type_ds = null){
+        $declarant = $this->getDeclarantDS($type_ds);
+        if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
             
             return CurrentClient::getCurrent()->getPeriodeDS();
         }
@@ -110,17 +111,17 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     /**
      * @return string
      */
-    public function getMonthDS()
+    public function getMonthDS($type_ds = null)
     {
-        return substr($this->getPeriodeDS(), 4, 2);
+        return substr($this->getPeriodeDS($type_ds), 4, 2);
     }
     
     /**
      * @return string
      */
-    public function getAnneeDS()
+    public function getAnneeDS($type_ds = null)
     {
-        return substr($this->getPeriodeDS(), 0, 4);
+        return substr($this->getPeriodeDS($type_ds), 0, 4);
     }
 
     /**
@@ -213,24 +214,26 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      * DS
      */
 
-    public function isDeclarantDSDecembre() {
+    public function isDeclarantDSDecembre($type_ds = null) {
 
-        return $this->getDeclarantDS() && $this->getDeclarantDS()->exist('ds_decembre') && $this->getDeclarantDS()->ds_decembre;
+        $declarant = $this->getDeclarantDS($type_ds);
+
+        return $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre;
     }
 
-    public function isDsEditable()
+    public function isDsEditable($type_ds = null)
     {
         if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
-            return true;
+            //return true;
         }
 
-        return (!$this->isDsTerminee() || !$this->isDsNonOuverte());
+        return (!$this->isDsTerminee($type_ds) && !$this->isDsNonOuverte($type_ds));
     }
 
-    public function isDsTerminee()
+    public function isDsTerminee($type_ds = null)
     {
 
-        if(CurrentClient::getCurrent()->isDSDecembre() && !$this->isDeclarantDSDecembre()) {
+        if(CurrentClient::getCurrent()->isDSDecembre() && !$this->isDeclarantDSDecembre($type_ds)) {
 
             return true;
         }
@@ -238,9 +241,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         return CurrentClient::getCurrent()->ds_non_editable == 1;
     }
 
-    public function isDsNonOuverte()
+    public function isDsNonOuverte($type_ds = null)
     {
-        if(CurrentClient::getCurrent()->isDSDecembre() && !$this->isDeclarantDSDecembre()) {
+        if(CurrentClient::getCurrent()->isDSDecembre() && !$this->isDeclarantDSDecembre($type_ds)) {
 
             return true;
         }
@@ -261,7 +264,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         $this->requireTiers();
         if (!isset($this->_ds[$type_ds])) {
-            $periode = $this->getPeriodeDS();
+            $periode = $this->getPeriodeDS($type_ds);
             $this->_ds[$type_ds] = $declarant->getDs($periode);
             if (!isset($this->_ds[$type_ds])) {
                 $ds = new DSCiva();

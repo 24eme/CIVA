@@ -28,7 +28,7 @@ class dsActions extends sfActions {
         }
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
-        $date = date(sprintf('%s-%s-%s', $this->getUser()->getAnneeDS(), $this->getUser()->getMonthDS(), '31'));
+        $date = date(sprintf('%s-%s-%s', $this->getUser()->getAnneeDS($type_ds), $this->getUser()->getMonthDS($type_ds), '31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $type_ds, $date, $ds_neant, true);
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
