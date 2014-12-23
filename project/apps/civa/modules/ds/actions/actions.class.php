@@ -2,6 +2,8 @@
 class dsActions extends sfActions {
 
     public function executeInit(sfWebRequest $request) {
+       set_time_limit(180);
+
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
 
        $type_ds = $request->getParameter("type");
