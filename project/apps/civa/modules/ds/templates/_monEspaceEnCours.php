@@ -35,7 +35,7 @@
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
-        <?php if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE): ?>
+        <?php if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !CurrentClient::getCurrent()->isDSDecembre()): ?>
         <a class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('ds_export_pdf_empty', array('type' => $type_ds)); ?>" style="margin-top: 20px;">Télécharger mon brouillon</a>
         <?php endif; ?>
     </div>
