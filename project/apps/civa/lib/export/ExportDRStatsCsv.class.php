@@ -109,11 +109,11 @@ class ExportDRStatsCsv {
                     unset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()]);
                 }
 
-                echo sprintf("%s;Total;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $appellation['superficie'],$appellation['volume']);
+                echo sprintf("%s;TOTAL;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $appellation['superficie'],$appellation['volume']);
                 unset($stats['appellations'][$appellation_key]);
         }
 
-        echo sprintf("Total général;;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume']);
+        echo sprintf("TOTAL Général;;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume']);
 
         
 
