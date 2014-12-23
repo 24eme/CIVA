@@ -35,7 +35,7 @@ class ExportDR extends ExportMiseAdispo
     }
 
     public function exportStatsCSVByCampagne($campagne) {
-        $csv_path = sprintf("%s/%s/_RECAPITULATIF_APPELLATION_CEPAGE_%s_%s.csv", $this->_file_dir, $campagne, $campagne, $this->_export->identifiant);
+        $csv_path = sprintf("%s/%s/%s_RECAPITULATIF_APPELLATION_CEPAGE_%s.csv", $this->_file_dir, $campagne, $campagne, $this->_export->identifiant);
 
         if (file_exists($csv_path) && $this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
             return;
