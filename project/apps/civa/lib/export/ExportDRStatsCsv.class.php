@@ -85,7 +85,9 @@ class ExportDRStatsCsv {
             }
         }
 
-        echo "Appellation;Cépage;Superficie (ares);Volume (hl) bruts déclarés en production (dépassements de remdement inclus) \n";
+        $content = "";
+
+        $content .= "Appellation;Cépage;Superficie (ares);Volume brut (hl)\n";
 
         foreach($this->config->recolte->getNoeudAppellations() as $appellation_key => $config_appellation) {
                 if(!isset($stats['appellations'][$appellation_key])) {
@@ -105,18 +107,23 @@ class ExportDRStatsCsv {
                     }
 
                     $cepage = $appellation['cepages'][$config_cepage->getKey()];
-                    echo sprintf("%s;%s;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $config_cepage->getLibelle(), $cepage['superficie'],$cepage['volume']);
+                    $content .= sprintf("%s;%s;%s;%s\n", $config_appellation->getLibelleLong(), $config_cepage->getLibelleLong(), $this->convertFloat2Fr($cepage['superficie']), $this->convertFloat2Fr($cepage['volume']));
                     unset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()]);
                 }
 
-                echo sprintf("%s;TOTAL;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $appellation['superficie'],$appellation['volume']);
+                $content .= sprintf("%s;TOTAL;%s;%s\n", $config_appellation->getLibelleLong(), $this->convertFloat2Fr($appellation['superficie']), $this->convertFloat2Fr($appellation['volume']));
                 unset($stats['appellations'][$appellation_key]);
         }
 
-        echo sprintf("TOTAL Général;;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume']);
+        $content .= sprintf("TOTAL Général;;%s;%s\n", $this->convertFloat2Fr($stats['superficie']), $this->convertFloat2Fr($stats['volume']));
 
-        
+        $content .= sprintf("Nombre de déclarants;%s",$n)."\n";
 
-        echo sprintf("Nombre de déclarants;%s",$n)."\n";
+        return $content;
+    }
+
+    protected function convertFloat2Fr($value) {
+
+        return str_replace(".", ",", sprintf("%01.02f", $value));
     }
 }
