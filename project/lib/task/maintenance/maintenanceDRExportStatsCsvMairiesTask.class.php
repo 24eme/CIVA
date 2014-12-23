@@ -32,7 +32,9 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         $export = new ExportDRStatsCsv($arguments['ids'], '2014');
-        $export->export();
+
+        printf("\xef\xbb\xbf");
+        echo $export->export();
     }
 
 }
