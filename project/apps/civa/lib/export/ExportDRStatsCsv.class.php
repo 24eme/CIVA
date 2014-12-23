@@ -4,16 +4,16 @@ class ExportDRStatsCsv {
 
     protected $ids = array();
 
-    public function __construct($ids) {
+    public function __construct($ids, $campagne) {
 
         $this->ids = $ids;
+        $this->campagne = $campagne;
+        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne);
     }
 
     public function export() {
         $stats['superficie'] = 0;
         $stats['volume'] = 0;
-        $stats['volume_revendique'] = 0;
-        $stats['usages_industriels'] = 0;
         $stats['appellations'] = array();
         $n=0;
 
@@ -21,6 +21,11 @@ class ExportDRStatsCsv {
             $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
 
             if(!isset($dr)) {
+
+                continue;
+            }
+
+            if($dr->campagne != $this->campagne) {
 
                 continue;
             }
@@ -47,15 +52,8 @@ class ExportDRStatsCsv {
                     if(!array_key_exists($appellation_key, $stats['appellations'])) {
                         $stats['appellations'][$appellation_key]['superficie'] = 0;
                         $stats['appellations'][$appellation_key]['volume'] = 0;
-                        $stats['appellations'][$appellation_key]['volume_revendique'] = 0;
-                        $stats['appellations'][$appellation_key]['usages_industriels'] = 0;
                         $stats['appellations'][$appellation_key]['cepages'] = array();
                     }
-
-                    $stats['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
-                    $stats['volume_revendique'] += $lieu->volume_revendique;
-                    $stats['usages_industriels'] += $lieu->usages_industriels;
 
                     foreach($lieu as $couleur_key => $couleur) {
                         if (!preg_match("/^couleur/", $couleur_key)) {
@@ -68,7 +66,6 @@ class ExportDRStatsCsv {
 
                                 continue;
                             }
-
 
                             if(!array_key_exists($cepage_key, $stats['appellations'][$appellation_key]['cepages'])) {
                                 $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
@@ -84,23 +81,42 @@ class ExportDRStatsCsv {
                 $stats['appellations'][$appellation_key]['superficie'] += $appellation->total_superficie;
                 $stats['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
                 $stats['superficie'] += $appellation->total_superficie;
+                $stats['volume'] += $appellation->total_volume;
             }
         }
 
-        echo "appellation;cepage;superficie;volume;volume_revendique;usages_industriels\n";
+        echo "Appellation;Cépage;Superficie (ares);Volume (hl) bruts déclarés en production (dépassements de remdement inclus) \n";
 
-        foreach($stats['appellations'] as $appellation_key => $appellation) {
-            foreach($appellation['cepages'] as $cepage_key => $cepage) {
-                echo sprintf("%s;%s;%01.02f;%01.02f;;\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume']);
-            }
+        foreach($this->config->recolte->getNoeudAppellations() as $appellation_key => $config_appellation) {
+                if(!isset($stats['appellations'][$appellation_key])) {
+                    continue;
 
-            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']);
+                }
+                $appellation = $stats['appellations'][$appellation_key];
+
+                foreach($config_appellation->getProduits() as $config_cepage) { 
+                    if(!isset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()])) {
+                        continue;
+
+                    }
+
+                    if($config_cepage->excludeTotal()) {
+                        continue;
+                    }
+
+                    $cepage = $appellation['cepages'][$config_cepage->getKey()];
+                    echo sprintf("%s;%s;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $config_cepage->getLibelle(), $cepage['superficie'],$cepage['volume']);
+                    unset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()]);
+                }
+
+                echo sprintf("%s;Total;%01.02f;%01.02f\n", $config_appellation->getLibelle(), $appellation['superficie'],$appellation['volume']);
+                unset($stats['appellations'][$appellation_key]);
         }
 
-        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
+        echo sprintf("Total général;;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume']);
 
         
 
-        echo sprintf("NB_DR;%s",$n)."\n";
+        echo sprintf("Nombre de déclarants;%s",$n)."\n";
     }
 }

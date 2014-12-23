@@ -31,7 +31,7 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        $export = new ExportDRStatsCsv($arguments['ids']);
+        $export = new ExportDRStatsCsv($arguments['ids'], '2014');
         $export->export();
     }
 
