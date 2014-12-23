@@ -29,7 +29,7 @@ class ExportDRCsv extends ExportCsv {
         "volume_total" => "volume total",
         "volume_a_detruire_total" => "volume à détruire total",
         "creation_date" => "date de création",
-        "validation_date" => "date de validation",
+        "validation_date" => "date de validation / date de dépot en mairie",
         "validation_user" => "validateur",
         "hash" => "hash_produit",
     );
@@ -165,7 +165,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
             "creation_date" => $this->dr->getPremiereModificationDr(),
-            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
                 ), $this->_validation_ligne);
@@ -192,7 +192,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
             "creation_date" =>  $this->dr->getPremiereModificationDr(),
-            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
                 ), $this->_validation_ligne);
@@ -219,7 +219,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
             "creation_date" =>  $this->dr->getPremiereModificationDr(),
-            "validation_date" => $detail->getCouchdbDocument()->validee,
+            "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
                 ), $this->_validation_ligne);
@@ -243,7 +243,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $noeud->getTotalVolume(),
             "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
             "creation_date" => $this->dr->getPremiereModificationDr(),
-            "validation_date" => $acheteur->getCouchdbDocument()->validee,
+            "validation_date" => $this->getValidationDate($acheteur->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
                 ), $this->_validation_ligne);
@@ -287,7 +287,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => $noeud->getTotalVolume(),
             "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
             "creation_date" => $this->dr->getPremiereModificationDr(),
-            "validation_date" => $noeud->getCouchdbDocument()->validee,
+            "validation_date" => $this->getValidationDate($noeud->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
                 ), $this->_validation_ligne);
@@ -311,7 +311,7 @@ class ExportDRCsv extends ExportCsv {
             "volume_total" => null,
             "volume_a_detruire_total" => null,
             "creation_date" => $this->dr->getPremiereModificationDr(),
-            "validation_date" => $dr->validee,
+            "validation_date" => $this->getValidationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jeunes_vignes",
                 ), $this->_validation_ligne);
@@ -321,6 +321,16 @@ class ExportDRCsv extends ExportCsv {
     protected function calculMd5($dr) {
        return $dr->_rev;
     }
+
+    private function getValidationDate($dr) {
+
+        if($dr->exist('date_depot_mairie') && $dr->date_depot_mairie) {
+
+            return $dr->date_depot_mairie;
+        }
+
+        return $dr->validee;
+    }
     
     private function getValidationUser($dr) {
         $user = null;
@@ -328,6 +338,11 @@ class ExportDRCsv extends ExportCsv {
         if($dr->exist('date_depot_mairie') && $dr->get('date_depot_mairie')) {
 
             return 'CIVA';
+        }
+
+        if($dr->validee_par == DRClient::VALIDEE_PAR_AUTO) {
+
+            return "Automatique";
         }
 
         if ($dr->exist('utilisateurs')) {
