@@ -48,7 +48,9 @@ class ExportDR extends ExportMiseAdispo
         fwrite($f, $export->export());
         fclose($f);
 
-        echo sprintf("csv stats generated %s\n", $csv_path);
+        if ($this->_debug) {
+            echo sprintf("csv stats generated %s\n", $csv_path);
+        }
     }
 
 }
