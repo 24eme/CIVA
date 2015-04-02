@@ -55,7 +55,7 @@
                      <li class="red"><a href="<?php echo url_for('@delegate_mode_retour_espace_civa'); ?>">Retour à mon espace</a></li>
                 <?php endif; ?>
                 <?php if(!$sf_user->isInDelegateMode()) : ?>
-                     <li><a href="<?php echo url_for('@logout'); ?>">Deconnexion</a></li>
+                     <li><a href="<?php echo url_for('@logout'); ?>">Déconnexion</a></li>
                 <?php endif; ?>
             <?php else : ?>
                 <li><a href="<?php echo url_for('@login'); ?>">Connexion</a></li>
