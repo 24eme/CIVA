@@ -482,7 +482,7 @@ ul#liens_evitement li.deconnexion a
     margin: 0 12px;
     padding: 0 12px;
     width: 658px;
-    height: 77px;
+    height: 95px;
 }
 
 #header #titre_rubrique h1
@@ -519,7 +519,7 @@ ul#liens_evitement li.deconnexion a
 {
     font-size: 16px;
     font-weight: normal;
-    margin: 0 0 15px;
+    margin: 0 0 5px;
 }
 
 #header #acces_directs ul li a { color: #c4d00a; }
