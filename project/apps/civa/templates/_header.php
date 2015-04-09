@@ -41,6 +41,7 @@
                 <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
             <?php else: ?>
                 <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
+                <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
             <?php endif; ?>
             <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
