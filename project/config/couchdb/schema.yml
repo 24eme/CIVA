@@ -432,6 +432,7 @@ _Tiers:
       email: {  }
       web: {  }
       siret:  {  }
+      ds_decembre: { required: false, type: integer }
       lieux_stockage:
         type: collection
         required: false

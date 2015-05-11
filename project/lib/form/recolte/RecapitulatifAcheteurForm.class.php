@@ -17,7 +17,7 @@
 			    );
             $this->setValidators(array(
                 'superficie' => new sfValidatorNumber(array('required' => false)),
-                'dontdplc' => new sfValidatorNumber(array('required' => false, 'max' => $this->acheteur->volume)),
+                'dontdplc' => new sfValidatorNumber(array('required' => false, 'max' => round($this->acheteur->volume, 2))),
             ));
 
             $this->widgetSchema->setLabel('superficie', "Superficie (".$this->acheteur->nom.")");

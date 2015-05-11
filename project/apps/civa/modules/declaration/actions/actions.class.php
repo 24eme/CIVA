@@ -138,7 +138,11 @@ class declarationActions extends EtapesActions {
 
         if($this->getUser()->isInDelegateMode() && !$this->isAdmin) {
             $this->validation_compte_id = $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
-        } 
+        }
+
+        if($this->dr->hasDateDepotMairie()) {
+            $this->validation_compte_id = $this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id');
+        }
 
         if($this->isAdmin){
             $this->formDatesModification = new DREditionDatesModificationForm($this->dr,

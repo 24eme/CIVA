@@ -59,6 +59,11 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
 
+        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->getUser())->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
+
+            return $this->redirect('mon_espace_civa_dr');
+        }
+
         $this->vracs = array(
             'CONTRAT_A_TERMINER' => 0,
             'CONTRAT_A_SIGNER' => 0,

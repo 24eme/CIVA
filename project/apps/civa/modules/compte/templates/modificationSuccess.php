@@ -25,7 +25,7 @@
             <div class="modification clearfix"<?php if (!$form->hasErrors()) echo ' style="display:none;"'; ?>>
                 <p class="intro">Modification des informations de votre compte :</p>
                 
-                <form method="post" action="<?php echo url_for("@compte_modification") ?>">
+                <form method="post" action="<?php echo url_for("@compte_modification") ?><?php if($service): ?>?service=<?php echo $service ?><?php endif; ?>">
                     <div class="ligne_form ligne_form_label">
                         <label for="compte_email">Identifiant : </label>
                         <p><?php echo $compte->login; ?></p>

@@ -34,7 +34,6 @@ EOF;
 	  print "LOG: DR pour ".$cvi." existe\n";
 	  return false;
 	}
-
 	$import_from = array();
 	try{
       if (!$dr)
@@ -49,7 +48,7 @@ EOF;
 
         if (count($check['vigilance']) > 0) {
             foreach($check['vigilance'] as $err) {
-	            print "VIGILANCE: ".$dr->_id." a des points de vigilance " .$err['info'] . ":" . $err['log']. "\n";
+	            print "VIGILANCE: ".$dr->_id." a des points de vigilances : " .$err['info'] . ":" . $err['log']. "\n";
             }
             
         }
@@ -57,7 +56,7 @@ EOF;
         if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
         else
-           $dr->validate(null, "COMPTE-auto");
+           $dr->validate("2014-12-10", "COMPTE-auto");
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
 	    
@@ -67,7 +66,7 @@ EOF;
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
-	    $dr->validate(null, "COMPTE-auto");
+	    $dr->validate("2014-12-10", "COMPTE-auto");
 	  }
 	}catch(sfException $e) {
 	  print 'ERROR: '.$e->getMessage()."\n";
@@ -87,6 +86,9 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        $routing = clone ProjectConfiguration::getAppRouting();
+        $context = sfContext::createInstance($this->configuration);
+        $context->set('routing', $routing);
 	$this->save_error = $options['save-error'];
 	$this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
 	

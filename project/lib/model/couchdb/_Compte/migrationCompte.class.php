@@ -45,6 +45,8 @@ class MigrationCompte {
         $this->_nouveau_compte->login  =  $this->_nouveau_cvi;
         $this->_nouveau_compte->setActif();
         $this->_nouveau_compte->tiers->remove( self::PREFIX_KEY_REC . $this->_ancien_cvi);
+        $this->_nouveau_compte->remove('droits');
+        $this->_nouveau_compte->add('droits');
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
 

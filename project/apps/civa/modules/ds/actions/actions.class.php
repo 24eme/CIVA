@@ -2,6 +2,8 @@
 class dsActions extends sfActions {
 
     public function executeInit(sfWebRequest $request) {
+       set_time_limit(180);
+
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
 
        $type_ds = $request->getParameter("type");
@@ -28,12 +30,12 @@ class dsActions extends sfActions {
         }
         $ds_type_arr = $request["ds"]["type_declaration"];
         $ds_neant = ($ds_type_arr == 'ds_neant');
-        $date = date(sprintf('%s-%s', CurrentClient::getCurrent()->getAnneeDS(), '07-31'));
+        $date = date(sprintf('%s-%s-%s', $this->getUser()->getAnneeDS($type_ds), $this->getUser()->getMonthDS($type_ds), '31'));
         $dss = DSCivaClient::getInstance()->findOrCreateDssByTiers($this->tiers, $type_ds, $date, $ds_neant, true);
         foreach ($dss as $ds) {
             if($ds->isDsPrincipale() && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)){
                 $ds->add('num_etape',2);
-                $ds->add('date_depot_mairie',date('Y').'-08-31');
+                $ds->add('date_depot_mairie', $ds->date_echeance);
             }
             $ds->save($this->getUserId());
         }

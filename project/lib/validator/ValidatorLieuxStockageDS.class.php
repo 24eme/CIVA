@@ -55,7 +55,7 @@ class ValidatorLieuxStockageDS extends sfValidatorSchema {
         if ($this->ds->isDsPrincipale() && $this->ds->isDateDepotMairie()) {
             $matches = array();
             $annee = substr(CurrentClient::getCurrent()->getPeriodeDS(),0,4);
-            $pattern = '/^([0-9]){2}\/([0-9]){2}\/' . $annee . '$/';
+            $pattern = '/^([0-9]){2}\/([0-9]){2}\/([0-9]){4}$/';
             if (!preg_match($pattern, $values['date_depot_mairie'], $matches)) {
                 $errorSchema->addError(new sfValidatorError($this, 'invalid_date_depot_mairie'));
             }

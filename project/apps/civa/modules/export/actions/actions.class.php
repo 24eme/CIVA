@@ -72,7 +72,7 @@ class exportActions extends sfActions {
 
         $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
-        if($request->getParameter('force')) {
+        if($request->getParameter('force') || $request->getParameter("from_csv")) {
             $this->document->removeCache();
         }
         $this->document->generatePDF();

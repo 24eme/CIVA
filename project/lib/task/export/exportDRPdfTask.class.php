@@ -41,6 +41,7 @@ EOF;
                 $export_dr->clean();
             }
             $export_dr->publication();
+            $export_dr->exportStatsCSV();
             $export_dr->zip();
             $export_dr->createHashMd5File();
         }

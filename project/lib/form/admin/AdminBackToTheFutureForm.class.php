@@ -3,8 +3,10 @@
 class AdminBackToTheFutureForm extends BaseForm {
 
     public function configure() {
+        $campagnes = $this->getCampagnes();
+
         $this->setWidgets(array(
-                'campagne'   => new sfWidgetFormChoice(array('choices' => array('', '2012' => '2012', '2011' => '2011', '2010' => '2010'))),
+                'campagne'   => new sfWidgetFormChoice(array('choices' => array("" => "") + $campagnes)),
         ));
 
         $this->widgetSchema->setLabels(array(
@@ -12,12 +14,22 @@ class AdminBackToTheFutureForm extends BaseForm {
         ));
 
         $this->setValidators(array(
-                'campagne' => new sfValidatorChoice(array('required' => true, 'choices' => array('2012', '2011', '2010'))),
+                'campagne' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($campagnes))),
         ));
         
         $this->widgetSchema->setNameFormat('admin_back_to_the_future[%s]');
 
         $this->validatorSchema['campagne']->setMessage('required', 'Champ obligatoire');
+    }
+
+    public function getCampagnes() {
+        $campagnes = array();
+        $campagne_current = CurrentClient::getCurrent()->campagne;
+        for($i = 1; $i <= 4; $i++) {
+            $campagnes[($campagne_current - $i).""] = ($campagne_current - $i)."";
+        }
+
+        return $campagnes;
     }
 
 }

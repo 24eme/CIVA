@@ -248,6 +248,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function getValideeParByCompteId($compte_id) {
+
+        if($this->hasDateDepotMairie()) {
+
+            return DRClient::VALIDEE_PAR_CIVA;
+        }
+
+        if($compte_id == "COMPTE-auto") {
+
+            return DRClient::VALIDEE_PAR_AUTO;
+        }
+
         $compte = _CompteClient::getInstance()->find($compte_id);
 
         if(!$compte) {
@@ -563,6 +574,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $recap_is_ok = true;
 
         if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
+            
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
@@ -570,7 +582,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
         foreach($noeud->acheteurs as $type => $acheteurs) {
             foreach($acheteurs as $cvi => $acheteur) {
-                $volume = $noeud->getVolumeAcheteur($cvi, $type);
+                $volume = round($noeud->getVolumeAcheteur($cvi, $type), 2);
                 $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
                 
                 if($acheteur->dontdplc > $volume) {

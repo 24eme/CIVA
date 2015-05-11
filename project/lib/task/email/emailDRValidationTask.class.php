@@ -52,8 +52,9 @@ EOF;
 	    	$this->logSection('cvi', $cvi);
 	    	
 	    	$compte = acCouchdbManager::getClient()->find('COMPTE-'.$cvi);
-	    	
-            $nb_item++;
+        $rec = acCouchdbManager::getClient()->find('REC-'.$cvi);
+	    	echo sprintf("%s;%s;%s\n", $rec->cvi, $rec->nom, $rec->categorie);
+        $nb_item++;
             if(!$compte->getEmail()) {
                 $this->logSection('no email', $cvi, null, 'ERROR');
                 continue;
@@ -63,11 +64,9 @@ EOF;
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
                       ->setTo($compte->getEmail())
-                      //->setTo('vince.laurent@gmail.com')
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);
-                
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
             } catch (Exception $exc) {
                 $sended = false;
@@ -75,6 +74,7 @@ EOF;
             
             if ($sended) {
                 $nb_email_send++;
+                sleep(1);
                 $this->logSection('sended', $cvi . ' : ' . $compte->getEmail());
             } else {
                 $this->logSection('send error', $cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
@@ -87,11 +87,11 @@ EOF;
   }
 
   protected function getMessageBody($compte, $campagne) {
-      return "Bonjour ".$compte->getNom().",
+      return "Bonjour,
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée. 
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider avant ce soir minuit. 
+Nous vous rappelons que vous devez impérativement la valider avant demain soir minuit.
 
 Cordialement,
 

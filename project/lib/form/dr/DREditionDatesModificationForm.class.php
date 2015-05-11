@@ -41,6 +41,10 @@ class DREditionDatesModificationForm extends acCouchdbForm
         if(!$this->dr->isValideeTiers()) {
             unset($this['compte']);
         }
+
+        if($this->dr->hasDateDepotMairie()) {
+            unset($this['compte']);
+        }
         
         $this->widgetSchema->setNameFormat('dr_validation[%s]');
     }

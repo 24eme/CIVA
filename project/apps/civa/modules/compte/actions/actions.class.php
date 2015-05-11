@@ -191,15 +191,15 @@ class compteActions extends sfActions {
         $this->forward404Unless(in_array($this->compte->getStatus(), array(_Compte::STATUS_MOT_DE_PASSE_OUBLIE, _Compte::STATUS_INSCRIT)));
 
         $this->form = new CompteModificationForm($this->compte);
-	$this->redirect = $request->getParameter('redirect');
+	   $this->service = $request->getParameter('service');
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->compte = $this->form->save();
                 $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
-		if ($this->redirect) {
-		  return $this->redirect($this->redirect);
+		if ($this->service) {
+		  return $this->redirect($this->service);
 		}
                 $this->redirect('@compte_modification');
             }
@@ -226,11 +226,13 @@ class compteActions extends sfActions {
             if ($this->form->isValid()) {
                 $compte = $this->form->save();
                 $lien = "http://".str_replace("//", "/", str_replace('http://', '', sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)))));
+
                 if ($this->service) {
-                	$lien += '?service='.$this->service;
+                	$lien .= '?service='.$this->service;
                 }
+
                 try {
-                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : " . $lien . "\n\nCordialement,\n\nLe CIVA");
+                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : <" . $lien . ">\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
