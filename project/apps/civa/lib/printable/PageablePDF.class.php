@@ -1,5 +1,10 @@
 <?php
 
+define('K_PATH_IMAGES', sfConfig::get('sf_web_dir')."/images/pdf/");
+define ('PDF_HEADER_LOGO_WIDTH', 30);
+define('K_CELL_HEIGHT_RATIO', 1.315);
+define('K_TCPDF_CALLS_IN_HTML', true);
+
 require_once(sfConfig::get('sf_lib_dir').'/vendor/tcpdf/tcpdf.php');
 
 class PageablePDF extends PageableOutput {
@@ -8,13 +13,14 @@ class PageablePDF extends PageableOutput {
     protected $pdf_file;
 
     protected function init() {
+        
+        
         $header_logo_width = (isset($this->config['PDF_HEADER_LOGO_WIDTH'])) ? $this->config['PDF_HEADER_LOGO_WIDTH'] : PDF_HEADER_LOGO_WIDTH;
         $pdf_font_size_main = (isset($this->config['PDF_FONT_SIZE_MAIN'])) ? $this->config['PDF_FONT_SIZE_MAIN'] : PDF_FONT_SIZE_MAIN;
         $margin_top = (isset($this->config['PDF_MARGIN_TOP'])) ? $this->config['PDF_MARGIN_TOP'] : PDF_MARGIN_TOP;
 
         // create new PDF document
         $this->pdf = new TCPDF($this->orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
         // set document information
         $this->pdf->SetCreator('CIVA');
         $this->pdf->SetAuthor('CIVA');
