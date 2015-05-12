@@ -1,7 +1,11 @@
 <?php use_helper('Float'); ?>
 <?php use_helper('drExport'); ?>
 <style>
-.tableau td, .tableau th, .tableau table {border: 1px solid black; }
+.tableau td, .tableau th, .tableau table {border: 1px solid black;}
+table {
+  padding-left: 0px;
+  padding-right: 5px;
+}
 pre {display: inline;}
 </style>
 
@@ -21,7 +25,7 @@ if (!function_exists('printColonne')) {
     }
     /*if (!$cpt)
       return ;*/
-    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; padding-left: 5px; border: 1px solid black;">&nbsp;'.$libelle.'</th>';
+    echo '<tr><th style="text-align: left; font-weight: bold; width: 250px; border: 1px solid black;">&nbsp;'.$libelle.'</th>';
     foreach($colonnes as $c) {
         $arr_col = $c->getRawValue();
 
@@ -31,7 +35,7 @@ if (!function_exists('printColonne')) {
         if (array_key_exists($key, $c->getRawValue())) {
         $v = $c[$key];
 
-	echo '<td style="padding-left: 5px;width: 120px; border: 1px solid black; '. ((!$unite) ? "text-align: center;" : "") .'">';
+	echo '<td style="width: 120px; border: 1px solid black; '. ((!$unite) ? "text-align: center;" : "") .'">';
 	if (($c['type'] == 'total'))    echo '<b>';
 
         if (!$v && in_array($key, array('superficie', 'volume', 'revendique', 'usages_industriels', 'cave_particuliere'))) {

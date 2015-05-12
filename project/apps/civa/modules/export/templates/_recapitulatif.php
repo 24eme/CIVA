@@ -17,6 +17,10 @@
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
 pre {display: inline;}
+table {
+   padding-left: 0px;
+   padding-right: 5px;
+}
 </style>
 
 <?php include_partial('export/exploitation', array('dr' => $dr)); ?>
@@ -27,7 +31,7 @@ pre {display: inline;}
 		<tr>
 			<th style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Appellations</th>
 			<?php foreach ($appellations as $a): ?>
-			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;"><?php echo preg_replace('|(<span>AOC</span> Alsace)|', '\1<br />', preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a])); ?></th>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
 			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;">Total général</th>
