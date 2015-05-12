@@ -1,0 +1,216 @@
+#schema des DS
+DS:
+  definition:
+    fields:
+      _id: {}
+      _rev: {}
+      type: {}
+      type_ds: {required: false}
+      civaba: {required: false}
+      identifiant: {}
+      date_emission: {}
+      date_echeance: {}
+      date_stock: {}
+      drm_origine: {}
+      campagne: {}
+      periode: {}
+      numero_archive: {  }
+      statut: {}
+      commentaire: {}
+      ds_principale: {required: false}
+      rebeches: {type: float}
+      dplc: {type: float}
+      lies: {type: float}
+      mouts: {type: float}
+      num_etape: {required: false}
+      ds_neant: {required: false}
+      validee: {required: false}
+      modifiee: {required: false}
+      courant_stock: {required: false}
+      declaration_commune: { }
+      declaration_insee: { }
+      date_depot_mairie: {required: false}
+      declarant:
+        type: collection
+        definition:
+          fields:
+            nom: {  }
+            raison_sociale: {  }
+            cvi: {  }
+            no_accises: {   }
+            adresse: {  }
+            commune: {  }
+            code_postal: {   }
+            region: {  }
+            telephone: {  }
+            fax: {  }
+            email: {  }
+            siret: {  }
+            exploitant:
+              type: collection
+              definition:
+                fields:
+                  sexe: {  }
+                  nom: {  }
+                  adresse: {  }
+                  code_postal: {  }
+                  commune: {  }
+                  date_naissance: {  }
+                  telephone: {  }
+      stockage:
+        type: collection
+        definition:
+          fields:
+            numero: {  }
+            nom: {  }
+            adresse: {  }
+            commune: {  }
+            code_postal: {  }
+      utilisateurs:
+        type: collection
+        definition:
+          fields:
+            edition:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }
+            validation:
+              type: collection
+              definition:
+                fields:
+                  '*': {  }     
+#      produits:
+#        type: collection
+#        definition:
+#          fields:
+#            '*':
+#              class: DSProduit
+#              type: collection
+#              definition:
+#                fields:
+#                  code_produit: { }
+#                  produit_libelle: { }
+#                  produit_hash: { }
+#                  stock_initial: { type: float }
+#                  stock_declare: { type: float }
+#                  vci: { type: float }
+#                  reserve_qualitative: { type: float }
+#                  stock_elaboration: { type: float, required: false }
+#                  lieu: { required: false }
+#                  vt: { required: false }
+#                  sgn: { required: false }
+      declaration:
+        type: collection
+        class: DSDeclaration
+        inheritance: _DSNoeud
+        definition:
+          fields:
+            total_stock: {type: float}
+            total_vt: {type:float}
+            total_sgn: {type:float}
+            total_normal: {type:float}
+            '*':
+              #------ Certification ------
+              type: collection
+              class: DSCertification
+              inheritance: _DSNoeud
+              definition:
+                fields:
+                  total_stock: {type: float}
+                  total_vt: {type:float}
+                  total_sgn: {type:float}
+                  total_normal: {type:float}
+                  '*':
+                    type: collection
+                    class: DSGenre
+                    inheritance: _DSNoeud
+                    definition:
+                      fields:
+                        total_stock: {type: float}
+                        total_vt: {type:float}
+                        total_sgn: {type:float}
+                        total_normal: {type:float}
+                        '*':
+                          # ------ Appellation ------
+                          type: collection
+                          class: DSAppellation
+                          inheritance: _DSNoeud
+                          definition:
+                            fields:
+                              libelle: {  }
+                              libelle_long: { required: false }
+                              total_stock: {type: float}
+                              total_vt: {type:float}
+                              total_sgn: {type:float}
+                              total_normal: {type:float}
+                              # ------- MENTION ----------
+                              'mention':
+                                type : collection
+                                class: DSMention
+                                inheritance: _DSNoeud
+                                definition:
+                                  fields:
+                                    libelle: {  }
+                                    libelle_long: { required: false }
+                                    total_stock: {type: float }
+                                    total_vt: {type:float}
+                                    total_sgn: {type:float}
+                                    total_normal: {type:float}
+                                    # ------- LIEU ----------
+                                    '*':
+                                      type: collection
+                                      class: DSLieu
+                                      inheritance: _DSNoeud
+                                      definition:
+                                        fields:
+                                          libelle: { }
+                                          libelle_long: { required: false }
+                                          total_stock: {type: float}
+                                          total_vt: {type:float}
+                                          total_sgn: {type:float}
+                                          total_normal: {type:float}
+                                          # ------ Couleur ------
+                                          '*':
+                                            type: collection
+                                            class: DSCouleur
+                                            inheritance: _DSNoeud
+                                            definition:
+                                              fields:
+                                                libelle: {  }
+                                                libelle_long: { required: false }
+                                                total_stock: {type:float}
+                                                total_vt: {type:float}
+                                                total_sgn: {type:float}
+                                                total_normal: {type:float}
+                                              # ------ Cépage ------
+                                                '*':
+                                                  type: collection
+                                                  class: DSCepage
+                                                  inheritance: _DSNoeud
+                                                  definition:
+                                                    fields:
+                                                      libelle: {  }
+                                                      libelle_long: { required: false }
+                                                      no_vtsgn: {  }
+                                                      total_stock: {type:float}
+                                                      total_vt: {type:float}
+                                                      total_sgn: {type:float}
+                                                      total_normal: {type:float}
+                                                      detail:                                                        
+                                                        type: array_collection
+                                                        definition:
+                                                          fields:
+                                                            '*':
+                                                              type: collection
+                                                              class: DSDetail
+                                                              definition:
+                                                                fields:
+                                                                  vtsgn: { }
+                                                                  volume_vt: {type:float}
+                                                                  volume_sgn: {type:float}
+                                                                  volume_normal: {type:float}
+                                                                  lieu: {  }
+                                                                  stock_declare: {type: float }
+                                                                  vci: {type: float, required: false}
+                                                                  reserve_qualitative: {type: float, required: false}
