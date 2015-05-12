@@ -1,5 +1,10 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
+<style>
+table {
+  padding-left: 0px;
+}
+</style>
 <?php include_partial("ds_export/exploitation", array('ds' => $ds)) ?>
 <?php include_partial("ds_export/stockage", array('ds' => $ds)) ?>
 <small><br /></small>

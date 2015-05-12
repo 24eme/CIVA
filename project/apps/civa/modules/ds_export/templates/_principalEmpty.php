@@ -1,5 +1,10 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
+<style>
+table {
+  padding-left: 0px;
+}
+</style>
 <small><br /></small>
 <?php $is_last_page = (isset($is_last_page)) && $is_last_page; ?>
 <?php include_partial("ds_export/exploitation", array('ds' => $ds)) ?>

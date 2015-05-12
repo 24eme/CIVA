@@ -1,5 +1,10 @@
 <?php use_helper('Float') ?>
 <?php use_helper('dsExport') ?>
+<style>
+table {
+  padding-left: 0px;
+}
+</style>
 <br /><br />
 <span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM<small><br />(tous lieux de stockage confondus)</small></span>
 <br /><br />
