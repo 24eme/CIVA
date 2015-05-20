@@ -5,9 +5,9 @@ Vrac:
       _rev: {  }
       conditions_paiement: {  }
       conditions_particulieres: {  }
-      createur_identifiant: {  }  
+      createur_identifiant: {  }
       acheteur_type: {  }
-      acheteur_identifiant: {  }  
+      acheteur_identifiant: {  }
       acheteur:
         type: collection
         class: VracAcheteur
