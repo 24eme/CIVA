@@ -13,7 +13,7 @@ class VracSoussignesValidator extends sfValidatorBase
     public function configure($options = array(), $messages = array()) 
     {
     	$this->setMessage('required', "Champ obligatoire");
-        $this->setMessage('invalid', "Cet opérateur n'existe plus ou n'est plus actif");
+        $this->setMessage('invalid', "Cet opérateur n'est plus actif");
         $this->addMessage('inconsistent', "L'acheteur et le vendeur ne peuvent être les mêmes");
         $this->addMessage('email', "Des informations obligatoires sont manquantes");
     }
