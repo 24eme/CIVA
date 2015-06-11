@@ -17,7 +17,7 @@ then
     exit
 fi
 
-NUM_SEQUENCE=$(cat data/export/tiers/tiers_modifications.num_sequence)
+NUM_SEQUENCE=$(cat $PATH_SEQUENCE)
 
 if [ ! $NUM_SEQUENCE ]
 then
@@ -34,9 +34,10 @@ echo '"_id";"type";"db2/num";"db2/no_stock";"cvi";"civaba";"cvi_acheteur";"intit
 
 php symfony export:tiers-modifications-csv --flag_revision=true $NUM_SEQUENCE | sed 's/* ()//g' | grep '*' >> $FILE_EXPORT_COMPLET
 
+curl -s -X GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > $PATH_SEQUENCE
+
 echo "$(cat $FILE_EXPORT_COMPLET | grep -v '^"_id"' | wc -l | cut -d " " -f 1) tiers modifié(s)"
 
 bash bin/postexport_tiers_modifications_sans_emails.sh $FILE_EXPORT_COMPLET > $PATH_EXPORT/tiers-modifications-$DATE_EXPORT-infos.csv
 bash bin/postexport_tiers_modifications_avec_emails.sh $FILE_EXPORT_COMPLET > $PATH_EXPORT/tiers-modifications-$DATE_EXPORT-email.csv
 
-curl -s -X GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
