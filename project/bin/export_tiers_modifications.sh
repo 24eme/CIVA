@@ -36,6 +36,8 @@ php symfony export:tiers-modifications-csv --flag_revision=true $NUM_SEQUENCE | 
 
 curl -s -X GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > $PATH_SEQUENCE
 
+echo "Nouveau numéro de séquence $(cat $PATH_SEQUENCE)"
+
 echo "$(cat $FILE_EXPORT_COMPLET | grep -v '^"_id"' | wc -l | cut -d " " -f 1) tiers modifié(s)"
 
 bash bin/postexport_tiers_modifications_sans_emails.sh $FILE_EXPORT_COMPLET > $PATH_EXPORT/tiers-modifications-$DATE_EXPORT-infos.csv
