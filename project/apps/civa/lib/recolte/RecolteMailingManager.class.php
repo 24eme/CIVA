@@ -179,7 +179,7 @@ Votre déclaration de récolte pour l\'année ' . date("Y") . ' a été validée
     
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
-Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
 --
 L\'application de télédéclaration de récoltes du CIVA';
@@ -192,7 +192,7 @@ Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y"
     
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
-Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . 'mon_espace_civa
+Vous pouvez également toujours la visualiser sur votre espace civa : ' . sfConfig::get('app_base_url') . '/mon_espace_civa
 
 --
 L\'application de télédéclaration de récoltes du CIVA';
