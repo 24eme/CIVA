@@ -5,10 +5,10 @@ class importLieuxStockageTask extends importAbstractTask
 
   const CSV_CVI = 0;
   const CSV_RAISON_SOCIALE = 1;
-  const CSV_CVI_PREC = 2;
-  const CSV_NUMERO_INSTALLATION = 3;
-  const CSV_ADRESSE = 4;
-  const CSV_CODE_POSTAL_COMMUNE = 5;
+  const CSV_NUMERO_INSTALLATION = 2;
+  const CSV_ADRESSE = 3;
+  const CSV_CODE_POSTAL = 4;
+  const CSV_COMMUNE = 5;
   const CSV_TYPE_INSTALLATION = 6;
 
   protected function configure()
@@ -47,8 +47,8 @@ EOF;
     $cvi = null;
     $lines = array();
     $file = file($arguments['file']);
-    $file[] = "7523700100;GARAGE ACTUALYS;NULL;7523700100001;1 RUE GARNIER;75000 PARIS;Installation Mixte\n";
-    $file[] = "7523700100;CAVE ACTUALYS;NULL;7523700100002;1 RUE DES VIGNES;75000 PARIS;Installation Mixte\n";
+    //$file[] = "7523700100;GARAGE ACTUALYS;7523700100001;1 RUE GARNIER;75000 PARIS;Installation Mixte\n";
+    //$file[] = "7523700100;CAVE ACTUALYS;7523700100002;1 RUE DES VIGNES;75000 PARIS;Installation Mixte\n";
 
     foreach($file as $line) {
       $data = str_getcsv($line, ';');
@@ -88,6 +88,7 @@ EOF;
 
       return;
     }
+
     $tiers->remove('lieux_stockage');
     $tiers->add('lieux_stockage');
     foreach($lines as $i => $line) {
@@ -100,6 +101,9 @@ EOF;
     }
 
     try{
+      if($tiers->isModified()) {
+        $this->logLigne("MODIFIED", "", $line, $i);
+      }
       $tiers->save();
     } catch (Exception $e) {
       $this->logLignes("ERROR", $e->getMessage(), $lines, $i);
@@ -112,13 +116,21 @@ EOF;
       throw new sfException(sprintf("Le CVI '%s' n'est pas compris dans le numéro d'installation '%s'", $line[self::CSV_CVI], $line[self::CSV_NUMERO_INSTALLATION]));
     }
 
-    $lieu_stockage = $tiers->add('lieux_stockage')->add($line[self::CSV_NUMERO_INSTALLATION]);
+    $lieu_stockage = $tiers->add('lieux_stockage')->add(trim($line[self::CSV_NUMERO_INSTALLATION]));
   
-    $lieu_stockage->numero = $line[self::CSV_NUMERO_INSTALLATION];
-    $lieu_stockage->nom = $line[self::CSV_RAISON_SOCIALE];
-    $lieu_stockage->adresse = $line[self::CSV_ADRESSE];
-    $lieu_stockage->commune = substr($line[self::CSV_CODE_POSTAL_COMMUNE], (strlen($line[self::CSV_CODE_POSTAL_COMMUNE]) -6) * -1);
-    $lieu_stockage->code_postal  = substr($line[self::CSV_CODE_POSTAL_COMMUNE], 0, 5);
+    $lieu_stockage->numero = trim($line[self::CSV_NUMERO_INSTALLATION]);
+    $lieu_stockage->nom = trim($line[self::CSV_RAISON_SOCIALE]);
+
+
+
+    if(trim($line[self::CSV_CODE_POSTAL])) {
+      $lieu_stockage->code_postal = trim($line[self::CSV_CODE_POSTAL]);
+    } else {
+      $lieu_stockage->code_postal = $tiers->siege->code_postal;
+    }
+    $lieu_stockage->commune  = trim($line[self::CSV_COMMUNE]);
+
+    $lieu_stockage->adresse = trim(preg_replace("/(".$lieu_stockage->commune."|".$lieu_stockage->code_postal.")$/", "", trim($line[self::CSV_ADRESSE])));
   }
 
 }
