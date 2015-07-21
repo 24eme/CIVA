@@ -78,6 +78,9 @@ EOF;
             $produits = VracBouteillesProduitsView::getInstance()->findForDb2Export($valuesContrat[VracBouteillesView::VALUE_NUMERO_ARCHIVE]);
             $i = 0;
             foreach ($produits as $produit) {
+                if($this->getCodeAppellation($produit->value[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]) < 0) {
+                    continue;
+                }
             	$i++;
             	$valuesProduit = $produit->value;
             	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
@@ -119,6 +122,11 @@ EOF;
     
     protected function getCodeAppellation($appellation)
     {
+        if($appellation == "VINTABLE") {
+            
+            return -1;
+        }
+
     	$code = 1;
     	switch ($appellation) {
                 case 'CREMANT':
@@ -130,6 +138,7 @@ EOF;
                 default:
                     $code = 1;
         }
+
         return $code;
     }
     

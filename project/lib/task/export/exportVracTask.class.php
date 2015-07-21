@@ -90,6 +90,9 @@ EOF;
 	            $dateRetiraisonTmp = null;
 	            $totalVolEnleve = 0;
 	            foreach ($produits as $produit) {
+                    if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION]) < 0) {
+                        continue;
+                    }
 	            	$i++;
 	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
 	            		continue;
@@ -211,7 +214,13 @@ EOF;
     
     protected function getCodeAppellation($appellation)
     {
+        if($appellation == "VINTABLE") {
+            
+            return -1;
+        }
+
     	$code = 1;
+
     	switch ($appellation) {
                 case 'CREMANT':
                     $code = 2;
