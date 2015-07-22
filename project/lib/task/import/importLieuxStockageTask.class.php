@@ -53,12 +53,13 @@ EOF;
     foreach($file as $line) {
       $data = str_getcsv($line, ';');
       
-      if($cvi && $cvi != $data[self::CSV_CVI]) {
+      if($cvi && $cvi != trim($data[self::CSV_CVI])) {
         $this->importLieuxStockage($cvi, $lines);
         $lines = array();
       }
       
-      $cvi = $data[self::CSV_CVI];
+      $cvi = trim($data[self::CSV_CVI]);
+
       $lines[$i] = $data;
       $i++;
     }
@@ -91,6 +92,7 @@ EOF;
 
     $tiers->remove('lieux_stockage');
     $tiers->add('lieux_stockage');
+
     foreach($lines as $i => $line) {
       try{
         $this->importLieuStockage($tiers, $line);
@@ -102,7 +104,7 @@ EOF;
 
     try{
       if($tiers->isModified()) {
-        $this->logLigne("MODIFIED", "", $line, $i);
+        $this->logLignes("SUCCESS", "", $lines, $i);
       }
       $tiers->save();
     } catch (Exception $e) {
@@ -116,21 +118,27 @@ EOF;
       throw new sfException(sprintf("Le CVI '%s' n'est pas compris dans le numéro d'installation '%s'", $line[self::CSV_CVI], $line[self::CSV_NUMERO_INSTALLATION]));
     }
 
+    if(trim($line[self::CSV_CODE_POSTAL])) {
+      $code_postal = trim($line[self::CSV_CODE_POSTAL]);
+    } else {
+      $code_postal = $tiers->siege->code_postal;
+    }
+
+    $commune = trim($line[self::CSV_COMMUNE]);
+    $adresse = trim($line[self::CSV_ADRESSE]);
+    $adresse = strtoupper(trim(preg_replace("/".$commune."$/", "", $adresse)));
+    $adresse = strtoupper(trim(preg_replace("/".$code_postal."$/", "", $adresse)));
+    $adresse = strtoupper(trim(preg_replace("/".$commune."$/", "", $adresse)));
+
     $lieu_stockage = $tiers->add('lieux_stockage')->add(trim($line[self::CSV_NUMERO_INSTALLATION]));
   
     $lieu_stockage->numero = trim($line[self::CSV_NUMERO_INSTALLATION]);
     $lieu_stockage->nom = trim($line[self::CSV_RAISON_SOCIALE]);
+    
+    $lieu_stockage->code_postal  = $code_postal;
+    $lieu_stockage->commune  = $commune;
 
-
-
-    if(trim($line[self::CSV_CODE_POSTAL])) {
-      $lieu_stockage->code_postal = trim($line[self::CSV_CODE_POSTAL]);
-    } else {
-      $lieu_stockage->code_postal = $tiers->siege->code_postal;
-    }
-    $lieu_stockage->commune  = trim($line[self::CSV_COMMUNE]);
-
-    $lieu_stockage->adresse = trim(preg_replace("/(".$lieu_stockage->commune."|".$lieu_stockage->code_postal.")$/", "", trim($line[self::CSV_ADRESSE])));
+    $lieu_stockage->adresse = $adresse;
   }
 
 }
