@@ -6,6 +6,6 @@ echo "Type de la DS;Teledeclarant N-1;PDF Brouillon;DS N-1;Login;Email;CVI;CIVAB
 
 curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/COMPTE/_view/tous" | cut -d "," -f 1 | sed 's/{"id":"//' | sed 's/"//' | grep "COMPTE" | while read ligne  
 do
-    php symfony ds:send-mail-ouverture "201407" $ligne --dryrun=true
+    php symfony ds:send-mail-ouverture "201407" $ligne
 done
 
