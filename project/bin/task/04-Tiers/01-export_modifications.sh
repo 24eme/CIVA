@@ -3,7 +3,7 @@
 . bin/task.inc
 
 EXPORT_DIR=tiers/modifications
-LINK="$TASK_URL/$EXPORT_DIR/?C=N;O=D"
+LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
 
 DESCRIPTION="Export des modifications tiers\n
             [Voir tous les exports]($LINK)"
