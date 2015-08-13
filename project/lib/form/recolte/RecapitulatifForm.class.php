@@ -20,7 +20,7 @@ class RecapitulatifForm extends acCouchdbObjectForm {
                 'lies' => new sfValidatorNumber(array('required' => false)),
             ));
 
-            $this->getWidget('lies')->setLabel('Usages industriels saisis');
+            $this->getWidget('lies')->setLabel('Volume à détruire saisi');
 
             $this->is_lies_saisisables = true;
         }

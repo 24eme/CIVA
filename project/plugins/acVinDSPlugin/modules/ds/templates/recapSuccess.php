@@ -105,7 +105,7 @@
 							<td>10</td>
 						</tr>
 						<tr>
-							<td>Total Usages Industriels</td>
+							<td>Total Volume à détruire</td>
 							<td>100</td>
 							<td>80</td>
 							<td>10</td>

@@ -59,7 +59,7 @@
                         <?php if($has_no_usages_industriels): ?>
                             DPLC (hl)
                         <?php else: ?>
-                            Usages industriels (hl)
+                            Volume à détruire (hl)
                         <?php endif; ?>
                     </td>
                     <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
