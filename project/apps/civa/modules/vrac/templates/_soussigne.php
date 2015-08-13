@@ -5,19 +5,30 @@
 <div class="informations form_col">
 <ul>
 	<li><strong><?php echo renderTiersLibelle($tiers) ?></strong></li>
-	<?php if (!$fiche && !count($tiers->emails)): ?>
+    
+    <?php if (!$fiche && !$tiers->isActif()): ?>
+    <fieldset class="message message_erreur">
+        <legend class="message_title" style="position: relative;">Point bloquant <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
+        <ul class="messages_log">
+            <li>Cet opérateur n'est plus actif</li>
+        </ul>
+    </fieldset>
+    <?php endif; ?>
+
+	<?php if (!$fiche && $tiers->isActif() && !count($tiers->emails)): ?>
     <fieldset class="message message_erreur">
     	<legend class="message_title" style="position: relative;">Point bloquant <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
-            <li>Saisie de contrat impossible avec un interlocuteur dépourvu d'adresse e-mail.</li>
+            <li>Saisie de contrat impossible avec un opérateur dépourvu d'adresse e-mail.</li>
 		</ul>
     </fieldset>
 	<?php endif; ?>
-	<?php if (!$fiche && !$tiers->getCompteObject()->isInscrit()): ?>
+    
+	<?php if (!$fiche && $tiers->isActif() && !$tiers->getCompteObject()->isInscrit()): ?>
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
-            <li>Cet interlocuteur n'a pas crée sont compte.</li>
+            <li>Cet opérateur n'a pas crée sont compte.</li>
 		</ul>
     </fieldset>
 	<?php endif; ?>

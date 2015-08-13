@@ -3,7 +3,7 @@
 . bin/task.inc
 
 EXPORT_DIR=contrat/export_vrac_db2
-LINK="$TASK_URL/$EXPORT_DIR/?C=N;O=D"
+LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
 
 DESCRIPTION="Export DB2 des derniers contrats vracs et leurs modifications\n
             [Voir tous les exports]($LINK)"

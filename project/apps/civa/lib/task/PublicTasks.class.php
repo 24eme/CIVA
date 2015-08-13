@@ -12,7 +12,7 @@ class PublicTasks
 
     public function read() {
         $tasks = array();
-        $files = sfFinder::type('file')->name('*.sh')->relative()->in($this->path);
+        $files = sfFinder::type('file')->name('*.sh')->sort_by_name()->relative()->in($this->path);
 
         foreach($files as $file) {
             $namespaces = explode('/', $file);

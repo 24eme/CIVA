@@ -2,10 +2,10 @@
 
 . bin/config.inc
 
-curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/COMPTE/_view/tous" | cut -d "," -f 1 | sed 's/{"id":"//' | sed 's/"//' | grep "COMPTE" > /tmp/comptes
+echo "Type de la DS;Teledeclarant N-1;PDF Brouillon;DS N-1;Login;Email;CVI;CIVABA;Catégorie;Qualité;Nom;Commune;Compte ID;Tiers ID;Mail Envoyé;Commentaires";
 
-while read ligne  
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/COMPTE/_view/tous" | cut -d "," -f 1 | sed 's/{"id":"//' | sed 's/"//' | grep "COMPTE" | while read ligne  
 do
-    php symfony ds:send-mail-ouverture "201307" $ligne
-done < /tmp/comptes
+    php symfony ds:send-mail-ouverture "201407" $ligne
+done
 

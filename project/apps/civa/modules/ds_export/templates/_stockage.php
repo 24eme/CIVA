@@ -4,7 +4,7 @@
 <table style="margin: 0" border="0">
   <tr>
     <td style="width: 420px;">&nbsp;Numéro : <i><?php echo (!$ds->isAjoutLieuxDeStockage())? substr($ds->stockage->numero, 0, 10) : ""; ?>&nbsp;<b><?php echo substr($ds->stockage->numero, -3) ?></b></i></td>
-    <td><?php if($ds->isDSPrincipale()): ?>☒&nbsp;<b>Principal</b><?php else: ?>☐ &nbsp;Principal<?php endif; ?>&nbsp;&nbsp;<?php if(!$ds->isDSPrincipale()): ?>☒&nbsp;<b>Secondaire</b><?php else: ?>☐&nbsp;Secondaire<?php endif; ?></td>
+    <td><?php if($ds->isDSPrincipale()): ?><span style="font-family: Dejavusans">☒</span>&nbsp;<b>Principal</b><?php else: ?><span style="font-family: Dejavusans">☐</span> &nbsp;Principal<?php endif; ?>&nbsp;&nbsp;<?php if(!$ds->isDSPrincipale()): ?><span style="font-family: Dejavusans">☒</span>&nbsp;<b>Secondaire</b><?php else: ?><span style="font-family: Dejavusans">☐</span>&nbsp;Secondaire<?php endif; ?></td>
 </tr>
   <tr><td colspan="2">&nbsp;Adresse : <i><?php echo truncate_text($ds->stockage->adresse. ", ".$ds->stockage->code_postal." ".$ds->stockage->commune, 90) ?></i></td></tr>
 </table>

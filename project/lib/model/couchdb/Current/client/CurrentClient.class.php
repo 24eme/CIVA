@@ -20,7 +20,12 @@ class CurrentClient extends acCouchdbClient {
   }
 
   public function hasCurrentFromTheFuture() {
+    if(!sfContext::hasInstance()) {
+
+      return false;
+    }
     if(sfContext::getInstance()->getUser()->getAttribute('back_to_the_future', null)) {
+      
       return true;
     }
 

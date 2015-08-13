@@ -61,11 +61,17 @@ EOF;
         $current = CurrentClient::getCurrent();
         if ($type_doc == "DS") {
             $current->ds_non_editable = (int) ($ouverture_fermeture+0);
+            if(!$ouverture_fermeture) {
+                $current->ds_non_ouverte = 0;
+            }
             $current->save();
             echo $ouv . " des DS\n";
         }
         if ($type_doc == "DR") {
             $current->dr_non_editable = (int) ($ouverture_fermeture+0);
+            if(!$ouverture_fermeture) {
+                $current->dr_non_ouverte = 0;
+            }
             $current->save();
             echo $ouv . " des DR\n";
         }

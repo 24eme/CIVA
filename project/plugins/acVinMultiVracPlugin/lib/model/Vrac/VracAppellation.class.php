@@ -39,14 +39,16 @@ class VracAppellation extends BaseVracAppellation {
      public function getCodeCiva(){
          $appellation = preg_replace("/^appellation_/", "", $this->getKey());
          switch ($appellation) {
-             case "GRDCRU":
+            case "GRDCRU":
                  return "Grds crus";
-             case "CREMANT":
+            case "CREMANT":
                  return "Crémant";
-             case "COMMUNALE":
+            case "COMMUNALE":
                  return "Communales";
-             case "LIEUDIT":
+            case "LIEUDIT":
                  return "Lieux-dits";
+            case "VINTABLE":
+                 return "Vins sans IG";
          }
          return "Alsace";
      }

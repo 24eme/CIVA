@@ -45,7 +45,7 @@
     <div class="popup-loading">
     <p>La génération de votre de déclaration de Stocks est en cours.<br />
         <br />
-        Les produits qui vous sont proposés sont issus de <strong>votre dernière déclaration de récolte</strong> et/ou de celles de vos apporteurs de raisins.</span><br />
+        Les produits qui vous sont proposés sont issus de <strong>votre dernière déclaration de récolte</strong> et/ou de celles de vos apporteurs de raisins, <strong>ainsi que de votre dernière déclaration de Stocks</strong>.<br />
         <br />
         Merci de patienter.<br />
         <br />

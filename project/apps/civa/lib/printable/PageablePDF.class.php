@@ -69,8 +69,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf_file = $this->file_dir.$this->filename;
 
         // set font
-
-        $this->pdf->SetFont('dejavusans', '', $pdf_font_size_main);
+        $this->pdf->SetFont('helvetica', '', $pdf_font_size_main);
     }
 
     public function isCached() {

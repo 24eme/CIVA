@@ -13,7 +13,7 @@ class VracSoussignesValidator extends sfValidatorBase
     public function configure($options = array(), $messages = array()) 
     {
     	$this->setMessage('required', "Champ obligatoire");
-        $this->setMessage('invalid', "Ce tiers n'existe plus");
+        $this->setMessage('invalid', "Cet opérateur n'est plus actif");
         $this->addMessage('inconsistent', "L'acheteur et le vendeur ne peuvent être les mêmes");
         $this->addMessage('email', "Des informations obligatoires sont manquantes");
     }
@@ -53,7 +53,7 @@ class VracSoussignesValidator extends sfValidatorBase
             $hasErrors = true;
     	} else {
     		$vendeur = $this->getTiers($vendeur);
-	    	if (!$vendeur) {
+	    	if (!$vendeur || !$vendeur->isActif()) {
 	    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('vendeur_'.$vendeur_type.'_identifiant' => new sfValidatorError($this, 'invalid'))));
                 $hasErrors = true;
 	    	}
@@ -66,7 +66,7 @@ class VracSoussignesValidator extends sfValidatorBase
             $hasErrors = true;
     	} else {
     		$acheteur = $this->getTiers($acheteur);
-	    	if (!$acheteur) {
+	    	if (!$acheteur || !$acheteur->isActif()) {
 	    		$errorSchema->addError(new sfValidatorErrorSchema($this, array('acheteur_'.$acheteur_type.'_identifiant' => new sfValidatorError($this, 'invalid'))));
 	    		$hasErrors = true;
 	    	}

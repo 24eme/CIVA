@@ -48,6 +48,7 @@ class PublicTask
         $parts = explode('/', $path);
         $filename = array_pop($parts);
         $name = str_replace(".sh", "", $filename);
+        $name = preg_replace("/^[0-9]+-/", "", $name);
         $name = str_replace("_", " ", $name);
         $name = str_replace("-", " ", $name);
         $name = strtolower($name);

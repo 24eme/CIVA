@@ -153,9 +153,11 @@ EOF;
             if($tiers->type != "MetteurEnMarche" && $tiers->type != "Courtier") {
                 $compte = _CompteClient::getInstance()->retrieveByLogin($tiers->cvi, acCouchdbClient::HYDRATE_JSON);
                 $met = null;
-                foreach($compte->tiers as $t) {
-                    if($t->type == 'MetteurEnMarche') {
-                        $met = _TiersClient::getInstance()->find($t->id, acCouchdbClient::HYDRATE_JSON);
+                if($compte) {
+                    foreach($compte->tiers as $t) {
+                        if($t->type == 'MetteurEnMarche') {
+                            $met = _TiersClient::getInstance()->find($t->id, acCouchdbClient::HYDRATE_JSON);
+                        }
                     }
                 }
                 if($met) {
