@@ -48,7 +48,30 @@ class TiersSecurity implements SecurityInterface {
         
         if(in_array(self::VRAC, $droits)) {
 
-            return VracSecurity::getInstance($this->myUser)->isAuthorized(VracSecurity::DECLARANT);
+            $isDeclarant = VracSecurity::getInstance($this->myUser)->isAuthorized(VracSecurity::DECLARANT);
+            
+            if(!$isDeclarant) {
+
+                return false;
+            }
+
+            if(VracSecurity::getInstance($this->myUser, null)->isAuthorized(VracSecurity::CREATION)) {
+
+                return true;
+            }
+
+            $tiersVrac = $this->myUser->getDeclarantsVrac();
+
+            if($tiersVrac instanceof sfOutputEscaperArrayDecorator) {
+                $tiersVrac = $tiersVrac->getRawValue();
+            }
+
+            if(!count(VracTousView::getInstance()->findSortedByDeclarants($tiersVrac))) {
+
+                return false;
+            }
+
+            return true;
         }
 
         if(in_array(self::GAMMA, $droits)) {
