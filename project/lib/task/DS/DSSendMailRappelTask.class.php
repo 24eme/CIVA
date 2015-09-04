@@ -89,7 +89,7 @@ EOF;
 
         if(!$tiers->hasLieuxStockage() && !$tiers->isAjoutLieuxDeStockage()) {
 
-            echo $type_ds.";ERROR;PAS DE LIEU DE STOCKAGE;".$compte->_id."\n";
+            //echo $type_ds.";ERROR;PAS DE LIEU DE STOCKAGE;".$compte->_id."\n";
             return;
         }
 
