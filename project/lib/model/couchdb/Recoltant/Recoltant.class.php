@@ -23,7 +23,7 @@ class Recoltant extends BaseRecoltant {
         }
 
         $met = $this->getMetteurEnMarche();
-        if($met && $this->isCategoriePropriete($met->categorie)) {
+        if($met && $met->isActif() && $this->isCategoriePropriete($met->categorie)) {
 
             return true;
         }
