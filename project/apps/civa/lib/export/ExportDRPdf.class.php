@@ -37,7 +37,7 @@ class ExportDRPdf extends ExportDocument {
 
         if($dr->hasDateDepotMairie()){
             
-            return 'Déposée en mairie le '.$dr->getDateDepotMairieFr();
+            return 'Déposée en mairie le '.$dr->getDateDepotMairieFr() . $this->getLibelleModification($dr);
         }
 
         $libelle = "Déclaration validée le ".$dr->getDateValideeFr();
@@ -47,6 +47,10 @@ class ExportDRPdf extends ExportDocument {
             $libelle .= $this->getLibelleValidationPar($dr->validee_par);
         }
         
+        return $libelle . $this->getLibelleModification($dr);
+    }
+
+    protected function getLibelleModification($dr) {
         if ($dr->isHumanlyModifiee()) {
             $libelle .= ' et modifiée le '.$dr->getDateModifieeFr();
         }
