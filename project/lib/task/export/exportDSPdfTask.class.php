@@ -41,6 +41,7 @@ EOF;
                 $export_ds->clean();
             }
             $export_ds->publication();
+            $export_ds->exportStatsCSV();
             $export_ds->zip();
             $export_ds->createHashMd5File();
            
