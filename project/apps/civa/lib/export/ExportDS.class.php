@@ -28,4 +28,29 @@ class ExportDS extends ExportMiseAdispo
         return "^".str_replace(".pdf", "", ExportDSPdf::buildFileName($file_export->getDocument(), false, false));
     }
 
+    public function exportStatsCSV() {
+        foreach($this->_campagnes as $campagne) {
+            $this->exportStatsCSVByCampagne($campagne);
+        }
+    }
+
+    public function exportStatsCSVByCampagne($campagne) {
+        $csv_path = sprintf("%s/%s/%s_RECAPITULATIF_APPELLATION_CEPAGE_%s.csv", $this->_file_dir, $campagne, $campagne, $this->_export->identifiant);
+
+        if (file_exists($csv_path) && $this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
+            return;
+        }
+
+        $export = new ExportDSStatsCsv($this->getIds(), $campagne);
+
+        $f = fopen($csv_path, 'w');
+        fwrite($f, "\xef\xbb\xbf");
+        fwrite($f, $export->export());
+        fclose($f);
+
+        if ($this->_debug) {
+            echo sprintf("-- generation csv stats : %s\n", $csv_path);
+        }
+    }
+
 }
