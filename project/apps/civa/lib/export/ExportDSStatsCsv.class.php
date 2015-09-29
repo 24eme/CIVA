@@ -18,11 +18,11 @@ class ExportDSStatsCsv {
         $stats['volume_vt'] = 0;
         $stats['volume_sgn'] = 0;
         $stats['appellations'] = array();
-        $n=0;
+        $identifiants = array();
 
         foreach ($this->ids as $id) {
             $ds = DSCivaClient::getInstance()->find($id);
-            $n++;
+            $identifiants[$ds->identifiant] = true;
 
             $stats['volume_total'] += $ds->declaration->getTotalStock();
             $stats['volume_normal'] += $ds->declaration->getTotalNormal();
@@ -107,7 +107,7 @@ class ExportDSStatsCsv {
                              $this->convertFloat2Fr($stats['volume_vt']),
                              $this->convertFloat2Fr($stats['volume_sgn']));
 
-        $content .= sprintf("Nombre de déclarants;%s\n",$n);
+        $content .= sprintf("Nombre de déclarants;%s\n", count($identifiants));
 
         return $content;
     }
