@@ -50,6 +50,7 @@ EOF;
             if (!$acheteur) {
                 $acheteur = new Acheteur();
                 $acheteur->set('_id', 'ACHAT-'.$db2->get(Db2Achat::COL_CVI));
+                echo "Nouvel acheteur ".$db2->get(Db2Achat::COL_CVI)." ".$db2->get(Db2Achat::COL_NOM)."\n";
             }
 
             $acheteur->cvi = $db2->get(Db2Achat::COL_CVI);
