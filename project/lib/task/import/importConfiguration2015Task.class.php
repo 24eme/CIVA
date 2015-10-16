@@ -369,7 +369,7 @@ EOF;
         @$json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->libelle = "Rebêches";
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->no_ds = 1;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->rendement = -1;
-        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->min_quantite = 0.02;
+        $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->min_quantite = 0.01;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->max_quantite = 0.1;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->no_negociant = 1;
         $json->recolte->certification->genre->appellation_CREMANT->mention->lieu->couleur->cepage_RB->no_mout = 1;
