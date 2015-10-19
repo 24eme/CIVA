@@ -14,7 +14,7 @@ table {
 <tr>
   <th style="width: 214px; border: 1px solid black; background-color: black; color: white; font-weight: bold; border: 1px solid black; text-align: left;">&nbsp;Appellations</th>
   <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;">Volume revendiqué <br /><small>sur place</small></th>
-  <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;">Usages industriels <br /><small>sur place</small></th>
+  <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;"><?php if($dr->campagne < "2015"): ?>Usages industriels<?php else: ?>Volume à détruire<?php endif; ?><br /><small>sur place</small></th>
 </tr>
 <?php foreach($recap_total as $item): ?>
 <tr>

@@ -110,8 +110,10 @@ echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
 
 if($has_no_usages_industriels) {
   echo printColonne('DPLC', $colonnes_cepage, 'usages_industriels', 'hl');
-} else {
+} elseif($dr->campagne < "2015") {
   echo printColonne('Usages Industriels', $colonnes_cepage, 'usages_industriels', 'hl', false);
+} else {
+  echo printColonne('Volume à détruire', $colonnes_cepage, 'usages_industriels', 'hl', false);
 }
 ?>
 </table>
