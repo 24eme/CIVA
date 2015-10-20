@@ -12,6 +12,7 @@ data/export
 data/pdf
 data/vrac
 data/maintenance
+data/mails
 cache/[^.]*
 log/[^.]*
 web/images/liste_nomenclatures_douanieres.pdf

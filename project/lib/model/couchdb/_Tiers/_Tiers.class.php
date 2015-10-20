@@ -306,6 +306,17 @@ abstract class _Tiers extends Base_Tiers {
         return $emails;
     }
 
+    public function getEmailByDroit($droit) {
+        $emails = $this->getEmailsByDroit($droit);
+
+        if(count($emails) > 0) {
+
+            return $emails[0];
+        }
+
+        return null;
+    }
+
     public function getTiersExtend() {
 
         return false;

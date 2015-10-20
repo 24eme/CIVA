@@ -74,11 +74,6 @@ class RecolteMailingManager {
             $sendMailAcheteursReport[$type_cvi]->cvi = $acheteur->cvi;
             $sendMailAcheteursReport[$type_cvi]->nom = $acheteur->nom;
             
-            $email = $acheteur->getCompteEmail();
-            if(!$email) {
-                $email = $acheteur->email;
-            }
-            $sendMailAcheteursReport[$type_cvi]->email = $email;
             $message = $this->getMailForAcheteur($acheteur);
         
             try {
@@ -111,7 +106,12 @@ Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 --
 L\'application de télédéclaration de récoltes du CIVA';
 
-        $email = $acheteur->getCompteEmail();
+        $email = $acheteur->getEmailByDroit(_CompteClient::DROIT_DR_ACHETEUR);
+
+        if(!$email) {
+            $email = $acheteur->getCompteEmail();
+        }
+
         if(!$email) {
             $email = $acheteur->email;
         }
