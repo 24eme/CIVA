@@ -82,7 +82,7 @@ class ExportDSPdf extends ExportDocument {
         }
 
         if(!$this->ds_principale->isValideeTiers()) {
-            $validee = 'Non Validée';
+            $validee = 'Exemplaire brouillon';
         }
       
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');

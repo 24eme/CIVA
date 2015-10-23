@@ -32,7 +32,7 @@ class ExportDRPdf extends ExportDocument {
 
         if (!$dr->isValideeTiers()) {
 
-          return "Non Validée";
+          return "Exemplaire brouillon";
         }
 
         if($dr->hasDateDepotMairie()){
