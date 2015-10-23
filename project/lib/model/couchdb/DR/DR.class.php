@@ -388,18 +388,26 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
-
-                $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
-                foreach($acheteursByType as $type => $cvis) {
-                    if(!$cvis instanceof acCouchdbJson) {
-                        continue;
-                    }
-                    foreach($cvis as $cvi) {
-                        if(round($appellation->getVolumeAcheteur($cvi, $type), 2) == 0) {
-                            $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
-                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), $acheteur->nom), 'info' => "Vous n'avez déclaré aucun volume pour cette appellation / acheteur"));
+                if($appellation->getTotalSuperficie() != 0) {
+                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
+                    foreach($acheteursByType as $type => $cvis) {
+                        if($type == "cave_particuliere" && $cvis && round($appellation->getTotalCaveParticuliere(), 2) == 0) {
+                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucun volume sur place pour cette appellation"));
                         }
-                    } 
+                        if(!$cvis instanceof acCouchdbJson) {
+                            continue;
+                        }
+                        foreach($cvis as $cvi) {
+                            if(round($appellation->getVolumeAcheteur($cvi, $type), 2) == 0) {
+                                $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
+                                array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), ($acheteur) ? $acheteur->nom : $cvi), 'info' => "Vous n'avez déclaré aucune vente de volume pour cette appellation / acheteur"));
+                            }
+                        } 
+                    }
+                }
+
+                if($appellation->getRendementRecoltant() >= 1000) {
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Vous avez dû saisir les volume en litre au lieu d'hectolitre, car le rendement est trop elevé pour cette appellation"));  
                 }
 
               foreach ($appellation->getLieux() as $lieu) {
