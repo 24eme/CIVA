@@ -357,10 +357,12 @@ class RecolteOnglets {
 
     protected function getFirstKeyCepage($appellation = null, $lieu = null, $couleur = null) {
         foreach ($this->getItemsCepage($appellation, $lieu, $couleur) as $key => $item) {
-            if ($this->getCouleur($appellation, $lieu, $couleur)->exist($key)) {
+            if ($this->getCouleur($appellation, $lieu, $couleur)->exist($key) && $this->_declaration->exist($item->getHash()) && count($this->_declaration->get($item->getHash())->detail) > 0) {
+                
                 return $key;
             }
         }
+
         return $this->getItemsCepage($appellation, $lieu, $couleur)->getFirstKey();
     }
 

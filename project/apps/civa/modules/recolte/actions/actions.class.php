@@ -34,7 +34,13 @@ class recolteActions extends EtapesActions {
             if ($this->getUser()->hasFlash('flash_message')) {
                 $this->getUser()->setFlash('flash_message', $this->getUser()->getFlash('flash_message'));
             }
-            $this->redirect($this->onglets->getUrl('recolte_add'));
+            
+            return $this->redirect($this->onglets->getUrl('recolte_add'));
+        }
+
+        if(!$request->getParameter('appellation_lieu', null)) {
+            
+            return $this->redirect($this->onglets->getUrl('recolte'));
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
