@@ -388,6 +388,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
+
+                $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
+                foreach($acheteursByType as $type => $cvis) {
+                    if(!$cvis instanceof acCouchdbJson) {
+                        continue;
+                    }
+                    foreach($cvis as $cvi) {
+                        if(round($appellation->getVolumeAcheteur($cvi, $type), 2) == 0) {
+                            $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
+                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), $acheteur->nom), 'info' => "Vous n'avez déclaré aucun volume pour cette appellation / acheteur"));
+                        }
+                    } 
+                }
+
               foreach ($appellation->getLieux() as $lieu) {
                 if ($lieu->getTotalSuperficie() == 0 && $lieu->getTotalVolume()) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_volume_sans_superfice')));

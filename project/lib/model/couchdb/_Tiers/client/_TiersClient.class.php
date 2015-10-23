@@ -39,7 +39,7 @@ class _TiersClient extends acCouchdbClient {
 
     public function findByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
 
-        return $this->retrieveByCvi($cvi);
+        return $this->retrieveByCvi($cvi, $hydrate);
     }
 
 //    public function findByIdentifiant($identifiant) {
