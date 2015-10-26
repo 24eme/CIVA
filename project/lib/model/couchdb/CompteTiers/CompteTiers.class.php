@@ -176,7 +176,7 @@ class CompteTiers extends BaseCompteTiers {
                 $droits[_CompteClient::DROIT_VRAC_SIGNATURE] = null;
             }
 
-            if($t->isDeclarantContratForSignature()) {
+            if($t->isDeclarantContratForResponsable()) {
                 $droits[_CompteClient::DROIT_VRAC_RESPONSABLE] = null;
             }
 
