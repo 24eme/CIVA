@@ -392,7 +392,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
                     foreach($acheteursByType as $type => $cvis) {
                         if($type == "cave_particuliere" && $cvis && round($appellation->getTotalCaveParticuliere(), 2) == 0) {
-                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucun volume sur place pour cette appellation"));
+                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucune vente pour"));
                         }
                         if(!$cvis instanceof acCouchdbJson) {
                             continue;
@@ -407,7 +407,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 }
 
                 if($appellation->getRendementRecoltant() >= 1000) {
-                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Vous avez dû saisir les volume en litre au lieu d'hectolitre, car le rendement est trop elevé pour cette appellation"));  
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Rendement excessif dans l'appellation (vérifiez votre saisie)"));  
                 }
 
               foreach ($appellation->getLieux() as $lieu) {
