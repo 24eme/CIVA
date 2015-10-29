@@ -400,14 +400,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         foreach($cvis as $cvi) {
                             if(round($appellation->getVolumeAcheteur($cvi, $type), 2) == 0) {
                                 $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
-                                array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), ($acheteur) ? $acheteur->nom : $cvi), 'info' => "Vous n'avez déclaré aucune vente de volume pour cette appellation / acheteur"));
+                                array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), ($acheteur) ? $acheteur->nom : $cvi), 'info' => "Vous n'avez déclaré aucune vente pour cette appellation / acheteur"));
                             }
                         } 
                     }
                 }
 
                 if($appellation->getRendementRecoltant() >= 1000) {
-                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Rendement excessif dans l'appellation (vérifiez votre saisie)"));  
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Vérifiez votre saisie, nous avons constaté un rendement excessif dans l'appellation"));  
                 }
 
               foreach ($appellation->getLieux() as $lieu) {
