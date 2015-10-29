@@ -73,7 +73,7 @@ class ExportDSPdf extends ExportDocument {
             $validee .= ' et modifiée le '.$date_modifiee->format('d/m/Y');
         }
 
-        if($this->ds_principale->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
+        if($this->ds_principale->type_ds == DSCivaClient::TYPE_DS_NEGOCE && $this->ds_principale->isDateDepotMairie()) {
             $validee = "Déclaration validée";
         }
 
