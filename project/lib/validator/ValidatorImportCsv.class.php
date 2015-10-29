@@ -20,7 +20,14 @@ class ValidatorImportCsv extends sfValidatorFile
     $errorSchema = new sfValidatorErrorSchema($this);
 
     //Conversion UTF8
-    $fc = preg_replace('/&([a-z])[^;]+;([^&])/i', '\1\2', htmlentities(str_replace('&', '', utf8_decode(file_get_contents($csvValidated->getTempName()))),ENT_NOQUOTES));
+    $filecontent = preg_replace("/^[^a-z0-9#]*/i", "", file_get_contents($csvValidated->getTempName()));
+    if(htmlentities(utf8_decode($filecontent),ENT_NOQUOTES)) {
+      $filecontent = utf8_encode($filecontent); 
+    }
+    $fc = preg_replace('/&([a-z])[^;]+;([^&])/i', '\1\2', htmlentities(str_replace('&', '', $filecontent),ENT_NOQUOTES));
+    $fc = str_replace("\r", "", $fc);
+    $fc = str_replace(";;;;;;;;;;\n", "", $fc);
+
     $md5 = md5($fc);
     $file = $this->getOption('file_path').'/'.$md5;
     $csvValidated->setMd5($md5);
