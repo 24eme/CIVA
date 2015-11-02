@@ -110,12 +110,20 @@ EOF;
         // Mise à jour ou création des comptes
         foreach ($comptes as $login => $tiers) {
             $compte = acCouchdbManager::getClient()->find('COMPTE-' . $login, acCouchdbClient::HYDRATE_DOCUMENT);
+
+            $emailDb2 = $this->combiner($tiers, 'email', 'MetteurEnMarche');
+
             if (!$compte) {
                  $compte = new CompteTiers();
                  $compte->login = $login."";
                  $compte->constructId();
                  $compte->mot_de_passe = $compte->generatePass();
-                 $compte->email = $this->combiner($tiers, 'email', 'MetteurEnMarche');
+                 $compte->email = $emailDb2;
+            }
+
+            
+            if($emailDb2 && $compte->email != $emailDb2) {
+                echo sprintf("INFO;L'email couchdb et db2 diffèrent;%s;%s;%s\n",$compte->_id, $compte->email, $emailDb2);
             }
             
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
