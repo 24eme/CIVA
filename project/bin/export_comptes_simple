@@ -2,4 +2,5 @@
 
 . bin/config.inc
 
-curl -s http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/COMPTE/_view/tous | cut -d "," -f 6,7,9 | grep -v "commune" | grep -v "compte_reference" | sed 's/"login":"//' | sed 's/,"statut":"/;/' | sed 's/,"mot_de_passe":"/;/' | sed 's/"mot_de_passe":null//' | sed -r 's/\{SSHA\}[0-9a-zA-Z+/]+"//' | sed 's/{TEXT}//' | sed -r 's/\{OUBLIE\}[0-9]+"//' | sed 's/"//g' | sed 's/MOT_DE_PASSE_OUBLIE/INSCRIT/' | sort -t ";" -k 1,1
+bash bin/export_comptes
+cat data/export/comptes/comptes.csv | cut -d ";" -f 2,3,4,5,14
