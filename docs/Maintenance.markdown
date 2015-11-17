@@ -22,7 +22,7 @@ Export des modifications depuis le dernier numéro de séquence :
 
 Stocker le numéro de séquence courant pour exporter les modifications la prochaine fois :
 
- > curl -s -X GET "http://localhost:5984/civa" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
+ > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
 
 ### Désactivation des Tiers inactifs
 
@@ -99,7 +99,7 @@ Enfin dans le cas d'un import complet uniquement, il convient de stocker le num�
 
 Stocker le numéro de séquence courant :
 
- > curl -s -X GET "http://localhost:5984/civa" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
+ > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
 
 ### Mise à jour des comptes
 
