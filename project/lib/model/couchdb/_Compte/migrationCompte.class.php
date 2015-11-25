@@ -81,6 +81,8 @@ class MigrationCompte {
         if(!is_null($this->nom))
             $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('nom', $this->nom);
 
+        $this->_nouveau_compte->remove('droits');
+        $this->_nouveau_compte->add('droits');
         $this->_nouveau_compte->update();
         $this->_nouveau_compte->save();
     }
