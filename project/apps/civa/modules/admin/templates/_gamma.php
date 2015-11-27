@@ -6,10 +6,10 @@
             <input type="radio" id="gamma_type_acces_prod" name="gamma_type_acces" value="prod" checked="checked" />
             <label for="gamma_type_acces_prod">Administrateur Alsace Gamm@</label>
         </div>
-        <div class="ligne_form">
+        <!--<div class="ligne_form">
             <input type="radio" id="gamma_type_acces_test" name="gamma_type_acces" value="test" />
             <label for="gamma_type_acces_test">Administrateur Plateforme de test</label>
-        </div>
+        </div>-->
         <div class="ligne_form ligne_btn">
             <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
         </div>
