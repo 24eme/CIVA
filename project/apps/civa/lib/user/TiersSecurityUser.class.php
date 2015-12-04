@@ -153,7 +153,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         $declarants = array();
         $tiers = $this->getTiers();
 
-        if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche']) && $this->_tiers['MetteurEnMarche']->qualite_categorie == 'Negociant') {
+        if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche'])) {
 
             $declarants[$this->_tiers['MetteurEnMarche']->_id] = $this->_tiers['MetteurEnMarche'];
         }
