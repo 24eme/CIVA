@@ -28,7 +28,7 @@
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
-            <li>Cet opérateur n'a pas crée sont compte.</li>
+            <li>Cet opérateur n'a pas créé son compte.</li>
 		</ul>
     </fieldset>
 	<?php endif; ?>
