@@ -33,7 +33,7 @@ class vracActions extends sfActions
 		}
 		$this->user = $this->getUser()->getDeclarantVrac();
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type, $this->role);
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findBy($this->user->_id), ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac()), ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
         $this->roles = $this->findRoles();
