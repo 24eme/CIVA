@@ -12,7 +12,8 @@ class DRCreationFromAcheteur extends sfBaseTask {
 			      new sfCommandOption('cvi', null, sfCommandOption::PARAMETER_OPTIONAL, 'CVI du récoltant dont il faut générer une DR', ''),
 			      new sfCommandOption('save-error', null, sfCommandOption::PARAMETER_OPTIONAL, 'Sauve la DR même si les données importée sont en erreur', ''),
 			      new sfCommandOption('save-vigilance', null, sfCommandOption::PARAMETER_OPTIONAL, 'Sauve la DR même si les données importée sont en vigileance', ''),
-			      new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'Année de la DR à générer', '')
+			      new sfCommandOption('year', null, sfCommandOption::PARAMETER_REQUIRED, 'Année de la DR à générer', ''),
+                  new sfCommandOption('dryrun', null, sfCommandOption::PARAMETER_REQUIRED, 'Si true ne sauvegarde pas', false)
 			      ));
 
       $this->namespace = 'DR';
@@ -26,12 +27,12 @@ EOF;
     protected function createOne($cvi, $year) {
 	$tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
 	if (!$tiers) {
-	  print "ERROR: ".$cvi." n'existe pas\n";
+	  print "ERROR;;".$cvi.";;;".$e->getMessage()."\n";
 	  return false;
 	}
 	$dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
-	  print "LOG: DR pour ".$cvi." existe\n";
+	  print "EXISTE;;".$cvi."\n";
 	  return false;
 	}
 	$import_from = array();
@@ -39,16 +40,17 @@ EOF;
       if (!$dr)
  	    $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
 	  $check = $dr->check();
+      $acheteurs = array_merge($dr->acheteurs->getArrayNegoces(), $dr->acheteurs->getArrayCooperatives(), $dr->acheteurs->getArrayMouts());
 	  if (count($check['erreur']) || count($check['vigilance'])) {
         if (count($check['erreur']) > 0) {
             foreach($check['erreur'] as $err) {
-	            print "ERROR: ".$dr->_id." a des erreurs : " .$err['info'] . ":" . $err['log']. " \n";
+	            print "ERROR;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";".implode(", ", $acheteurs).";" .$err['info'] . ";" . $err['log']. "\n";
             }
         }
 
         if (count($check['vigilance']) > 0) {
             foreach($check['vigilance'] as $err) {
-	            print "VIGILANCE: ".$dr->_id." a des points de vigilances : " .$err['info'] . ":" . $err['log']. "\n";
+                print "VIGILANCE;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";".implode(", ", $acheteurs).";" .$err['info'] . ";" . $err['log']. "\n";
             }
             
         }
@@ -56,7 +58,7 @@ EOF;
         if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
         else
-           $dr->validate("2014-12-10", "COMPTE-auto");
+           $dr->validate($year."-12-10", "COMPTE-auto");
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
 	    
@@ -66,19 +68,21 @@ EOF;
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
-	    $dr->validate("2014-12-10", "COMPTE-auto");
+	    $dr->validate($year."-12-10", "COMPTE-auto");
 	  }
 	}catch(sfException $e) {
-	  print 'ERROR: '.$e->getMessage()."\n";
+	  print "ERROR;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";;".$e->getMessage()."\n";
 	  return false;
 	}
 	try {
-	  $dr->save();
+        if(!$this->dryrun) {
+	       $dr->save();
+        }
 	}catch(sfException $e) {	
-	  print "ERROR: ".$dr->_id." NOT saved\n";
+	  print "ERROR;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";;".$e->getMessage()."\n";
 	  return false;
 	}
-	print "LOG: ".$dr->_id." saved\n";
+	print "CREEE;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom."\n";
 	return true;
     }
 
@@ -89,8 +93,9 @@ EOF;
         $routing = clone ProjectConfiguration::getAppRouting();
         $context = sfContext::createInstance($this->configuration);
         $context->set('routing', $routing);
-	$this->save_error = $options['save-error'];
-	$this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
+	   $this->save_error = $options['save-error'];
+	   $this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
+       $this->dryrun = $options['dryrun'];
 	
 	$campagne = $options['year'];
 	  
@@ -102,11 +107,12 @@ EOF;
 	  print "ERROR : options --year needed\n";
 	  return ;
 	}
+
+    print "type;ID doc;cvi récoltant;nom récoltant;cvi(s) acheteur(s);erreur;detail de l'erreur\n";
 	
 	$CVIs = acCouchdbManager::getClient()->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->getView("CSV", "recoltant");
 
 	foreach ($CVIs->rows as $o) {
-	  print $o->key[1]."\n";
 	  $this->createOne($o->key[1], $campagne);
 	}
     }
