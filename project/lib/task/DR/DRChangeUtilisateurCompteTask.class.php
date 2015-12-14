@@ -53,6 +53,17 @@ EOF;
 
       $change = false;
 
+      if($arguments["compte_id"] == "COMPTE-auto") {
+          $dr->utilisateurs->remove("validation");
+          $dr->utilisateurs->add("validation");
+          $dateObject = new DateTime($dr->validee);
+          $dr->utilisateurs->validation->add('COMPTE-auto', $dateObject->format('d/m/Y'));
+          $dr->validee_par = "AUTO";
+          $dr->modifiee_par = "AUTO";
+          $dr->save();
+          exit;
+      }
+
       $edition = array();
       $first = true;
       foreach($dr->utilisateurs->edition as $editeur => $date) {
