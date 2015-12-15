@@ -256,6 +256,14 @@ Pour débugguer, il existe une tache qui permet de sortir le XML d'une seule DR 
 
  > bash bin/export_drs_jeunes_vignes.sh [campagne]
 
+### Générer les DRs automatiques
+
+php symfony DR:creationFromAcheteur --year=[campagne] [--dry-run=true]
+
+### Exporter csv drs concernant un acheteur
+
+php symfony export:dr-acheteur-csv [campagne] [cvi]
+
 Contrat Vrac
 ------------
 
