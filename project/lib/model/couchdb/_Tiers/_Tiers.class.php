@@ -55,6 +55,8 @@ abstract class _Tiers extends Base_Tiers {
         $identifiant = $this->getIdentifiant();
 
         $ds = acCouchdbManager::getClient('DSCiva')->findByIdentifiantAndPeriode($identifiant, $periode);
+        var_dump($identifiant);
+        var_dump($periode);
         if(!$ds) {
 
             return null;

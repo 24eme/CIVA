@@ -116,7 +116,8 @@ EOF;
             }
         }
 
-        $ds = $tiers->getDs($this->periode);
+        $previousPeriode=(preg_replace("/[0-9]{2}$/", "", $this->periode)-1).preg_replace("/^[0-9]{4}/", "", $this->periode);
+        $ds = $tiers->getDs($previousPeriode);
         $teledeclarant = ($ds && (!$ds->exist("date_depot_mairie") || !$ds->get("date_depot_mairie")));
         $recuperationDoc = ($type_ds == DSCivaClient::TYPE_DS_PROPRIETE);
         $email = $compte->email;
