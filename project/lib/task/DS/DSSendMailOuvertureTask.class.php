@@ -75,10 +75,7 @@ EOF;
             return;
         }
 
-        if(!$this->is_decembre) {
-            $this->executeSendMail($compte, DSCivaClient::TYPE_DS_PROPRIETE, $options['dryrun']);
-        }
-
+        $this->executeSendMail($compte, DSCivaClient::TYPE_DS_PROPRIETE, $options['dryrun']);
         $this->executeSendMail($compte, DSCivaClient::TYPE_DS_NEGOCE, $options['dryrun']);
     }
     
