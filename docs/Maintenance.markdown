@@ -299,8 +299,8 @@ Tache de génération des PDFs :
 
 Obtenir la liste des déclarants
 
- > bash bin/send_mail_ouverture_ds.sh 201512 --dryrun=true
+ > bash bin/send_mail_ouverture_ds.sh [periode] --dryrun=true
 
 Envoi du mail d'ouverture
 
- > bash bin/send_mail_ouverture_ds.sh 201512
+ > bash bin/send_mail_ouverture_ds.sh [periode]
