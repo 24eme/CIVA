@@ -260,7 +260,7 @@ Pour débugguer, il existe une tache qui permet de sortir le XML d'une seule DR 
 
 php symfony DR:creationFromAcheteur --year=[campagne] [--dry-run=true]
 
-### Exporter csv drs concernant un acheteur
+### Exporter csv des DR concernant un acheteur
 
 php symfony export:dr-acheteur-csv [campagne] [cvi]
 
@@ -294,3 +294,13 @@ Valable pour la création et la mise à jour.
 Tache de génération des PDFs :
 
  > php symfony export:ds-pdf
+
+### Déclarants et envoi du mail d'ouverture
+
+Obtenir la liste des déclarants
+
+ > bash bin/send_mail_ouverture_ds.sh 201512 --dryrun=true
+
+Envoi du mail d'ouverture
+
+ > bash bin/send_mail_ouverture_ds.sh 201512

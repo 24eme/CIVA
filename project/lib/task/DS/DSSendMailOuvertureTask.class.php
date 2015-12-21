@@ -43,6 +43,7 @@ EOF;
             throw new sfException("La periode doit être passé en argument et doit être de la forme AAAAMM");
         }
         $this->periode = $arguments['periode'];
+        $this->is_decembre = preg_match("/12$/", $this->periode);
 
         $compte = _CompteClient::getInstance()->find($arguments["id_compte"]);
 
@@ -74,7 +75,10 @@ EOF;
             return;
         }
 
-        $this->executeSendMail($compte, DSCivaClient::TYPE_DS_PROPRIETE, $options['dryrun']);
+        if(!$this->is_decembre) {
+            $this->executeSendMail($compte, DSCivaClient::TYPE_DS_PROPRIETE, $options['dryrun']);
+        }
+
         $this->executeSendMail($compte, DSCivaClient::TYPE_DS_NEGOCE, $options['dryrun']);
     }
     
@@ -83,6 +87,11 @@ EOF;
         $tiers = $compte->getDeclarantDS($type_ds);
 
         if(!$tiers) {
+
+            return;
+        }
+
+        if($this->is_decembre && (!$tiers->exist('ds_decembre') || !$tiers->ds_decembre)) {
 
             return;
         }
