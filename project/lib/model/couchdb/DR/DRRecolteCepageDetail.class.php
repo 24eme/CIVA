@@ -142,6 +142,9 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $this->remove('cooperatives');
         $this->remove('mouts');
         $this->remove('negoces');
+        if($this->exist('motif_non_recolte') && $this->motif_non_recolte != 'AE') {
+            $this->remove('motif_non_recolte');
+        }
     }
 
     public function hasMotifNonRecolteLibelle() {
