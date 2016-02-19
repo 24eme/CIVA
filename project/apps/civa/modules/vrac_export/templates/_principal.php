@@ -169,6 +169,9 @@
 <table cellspacing="0" cellpadding="0" border="0" style="text-align: right;">
 	<tr>
 		<td style="text-align: left; font-size: 6pt;"><?php echo getLastSentence(); ?></td>
+    </tr>
+    <tr>
+        <td style="text-align: left; font-size: 6pt;">Les parties reconnaissent l'application des stipulations fugurant au verso intitulées «contrat de vente de vins AOC produits en Alsace dont elles déclarent avoir pris pleinement connaissance».</td>
 	</tr>
 </table>
 </div>
