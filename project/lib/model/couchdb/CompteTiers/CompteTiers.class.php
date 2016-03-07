@@ -8,7 +8,11 @@ class CompteTiers extends BaseCompteTiers {
     public function getNom() {
         if($this->isCompteSociete()) {
             
-            return $this->getTiersField('nom');
+            if($nom) {
+                $nom = $this->getTiersField('nom');
+            }
+
+            return $nom;
         }
 
         return $this->_get('nom');
