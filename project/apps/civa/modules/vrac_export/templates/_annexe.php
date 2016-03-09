@@ -128,24 +128,23 @@ La retenue sur les achats de vin en vrac correspond à la moitié de la cotisati
 <h4><b>Clause de réserve de propriété</b></h4>
 
 <p>
-Le transfert de propriété du vin à l'acheteur ne s'avère qu'au fut et à mesure de l'encaissemenr
-du prix de vente, sur un volume de vin proportionnel au paiement encaissé par rappon au prix total, le transfert de propriété s'opérant du prix de vente le plus bas, vers le prix le plus élévé.
+Le transfert de propriété du vin à l'acheteur ne s'opère qu'au fur et à mesure de l'encaissement du prix de vente, sur un volume de vin proportionnel au paiement encaissé par rapport au prix total, le transfert de propriété s'opérant du prix de vente le plus bas, vers le prix le plus élévé.
 </p>
 
 <p>
-L'acheteur s'oblige à faire figurer de façon apparent dans comptabilité les vins soumis à la réserve de propriété et sur une ligne distincte de l'actif de son bilan.
+L'acheteur s'oblige à faire figurer de façon apparente dans sa comptabilité les vins soumis à la réserve de propriété et sur une ligne distincte de l'actif de son bilan.
 </p>
 
-<p>Le vin dont la propriété est reéervée peut être élaboré par l'acheteur. Mais ne peut le céder à titre onéreux ou gratuit, ou le donner en garantie, que proportionnellememt au vin dont la propriété lui à été transférée. En cas de cession prohibée à un tiers, le droit de propriété du vendeur est reportable sur la créance de son acheteur sur le sous-acquéreur.</p>
+<p>Le vin dont la propriété est réservée peut être élaboré par l'acheteur. Mais il ne peut le céder à titre onéreux ou gratuit, ou le donner en garantie, que proportionnellememt au vin dont la propriété lui à été transférée. En cas de cession prohibée à un tiers, le droit de propriété du vendeur est reportable sur la créance de son acheteur sur le sous-acquéreur.</p>
 
 <p>L'acheteur doit conserver le vin dont la propriété est réservée dans un état sain et marchand et bénéficier d'une assurance contre tout risque de dégradation, avarie ou perte, stipulant qu'en cas de sinistre son vendeur sera subrogé dans ses droits contre l'assureur.
 </p>
 
-<p>La saisie ou toute autre intervention d'un tiers sur le vin dont la propriété est réservée oblige l'acheteur à en informer sans délai le vendeur</p>
+<p>La saisie ou toute autre intervention d'un tiers sur le vin dont la propriété est réservée oblige l'acheteur à en informer sans délai le vendeur.</p>
 
 <p>A défaut de paiement intégral et dans le delai, le vendeur peut revendiquer le vin dont la propriété est réservée. L'acheteur doit le restituer dans les 8 jours après la date de réception ou à défaut la date de première présentation de la mise en demeure du vendeur. A défaut de restitution, le vendeur pourra l'y contraindre par voie de justice. Tous les frais en résultant seront à la charge de l'acheteur qui ne peut réclamer aucune indemnité pour le travail réalisé sur le vin. En cas de procédure collective, la procédure de revendication suivra les règles de droit applicable.</p>
 
-<p>La revendication du vin dont la propriété est réservée à en principe lieu en nature, quel que soit son stade d'évolution, d'élaboration, de vinification ou de conditionnement.</p>
+<p>La revendication du vin dont la propriété est réservée a en principe lieu en nature, quel que soit son stade d'évolution, d'élaboration, de vinification ou de conditionnement.</p>
 
 <p>En cas d'assemblage du vin, la revendication a lieu sur l'assemblage à concurrence du volume de vin dont la propriété est restée réservée.</p>
 
