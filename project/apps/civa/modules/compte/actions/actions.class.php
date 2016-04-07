@@ -45,8 +45,7 @@ class compteActions extends sfActions {
             
             return $this->redirectAfterLogin($request);
 		}	   
-		
-	    $url = sfConfig::get('app_cas_url') . '/login?service=' . urlencode($request->getUri());
+	    $url = sfConfig::get('app_cas_url') . '/login?service=' . str_replace('http://', 'https://', urlencode($request->getUri()));
 	    
         return $this->redirect($url);
     }
