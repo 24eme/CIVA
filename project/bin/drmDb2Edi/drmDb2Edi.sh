@@ -7,18 +7,26 @@ PATH_SORTIES_SUSPENDU=data/import/15/drm/DRMDSS1415
 PATH_SORTIES_EXONERES=data/import/15/drm/DRMDSE1415
 PATH_SORTIES_AUTRES=data/import/15/drm/DRMDSO1415
 PATH_SORTIES_ACQUITTE=data/import/15/drm/DRMDSA1415
+PATH_EXPORT=data/import/15/drm/DRMAX21415
+PATH_CRD=data/import/15/drm/DRMCRD1415
 
-AWK_FUNCTIONS='function printLinesDRM(premiereColonneVolume, typeDRM, catMouvement, typeMouvement, descriptionMouvement, nbColonneVolume) {
+AWK_FUNCTIONS='
+function getPrefixe(ligneType) {
     periode=sprintf("%s%02d", $1, $2);
     identifiant=$3;
     accises="";
+
+    return ligneType ";" periode ";" identifiant ";" accises;
+}
+function printLinesDRM(premiereColonneVolume, typeDRM, catMouvement, typeMouvement, descriptionMouvement, nbColonneVolume) {
+
 
     libelle_blanc="AOC Alsace Blanc";
     libelle_rose="AOC Alsace Rosé";
     libelle_grdcru="AOC Alsace Grands Crus";
     libelle_cremant="AOC Alsace Crémant";
 
-    prefixe="CAVE;" periode ";" identifiant ";" accises;
+    prefixe=getPrefixe("CAVE");
 
     volume_blanc=$(premiereColonneVolume);
     volume_rose=$(premiereColonneVolume + 1);
@@ -41,7 +49,8 @@ AWK_FUNCTIONS='function printLinesDRM(premiereColonneVolume, typeDRM, catMouveme
     if(nbColonneVolume >= 4 && volume_cremant > 0) {
         print prefixe ";" libelle_cremant ";;;;;;;" typeDRM ";" catMouvement ";" typeMouvement ";" volume_cremant ";;;;;" descriptionMouvement;
     }
-}';
+}
+';
 
 cat $PATH_ENTREES | awk -F ',' '
 '"$AWK_FUNCTIONS"'
@@ -83,4 +92,22 @@ cat $PATH_SORTIES_ACQUITTE | awk -F ',' '
     printLinesDRM(6, "acquitte", "sorties", "ventefrancecrd", "A - (75 cl) CRD ou DS/DSAC France");
     printLinesDRM(10, "acquitte", "sorties", "ventefrancecrd", "A - CRD ou DS/DSAC France");
     printLinesDRM(14, "acquitte", "sorties", "vracsanscontratacquitte", "A bis - DSA/DSAC Hors France Métropolitaine");
+}'
+
+cat $PATH_EXPORT | awk -F ',' '
+'"$AWK_FUNCTIONS"'
+{
+    print getPrefixe("CAVE") ";AOC Alsace;;;;;;;acquitte;sorties;export;" $8 ";" $7 ";;;;Export 75cl";
+    print getPrefixe("CAVE") ";AOC Alsace;;;;;;;acquitte;sorties;export;" $9 ";" $7 ";;;;Export";
+    print getPrefixe("CAVE") ";AOC Alsace Crémant;;;;;;;acquitte;sorties;export;" $10 ";" $7 ";;;;Export";
+    print getPrefixe("CAVE") ";AOC Alsace Grands Crus;;;;;;;acquitte;sorties;export;" $11 ";" $7 ";;;;Export";
+}'
+
+cat $PATH_CRD | awk -F ',' '
+'"$AWK_FUNCTIONS"'
+{
+    print getPrefixe("CRD") ";TRANQUILLE;VERT;Bouteille " $7 " cl;;;;;sorties;utilisations;" $8 ;
+    print getPrefixe("CRD") ";MOUSSEUX;BLEU;Bouteille " $7 " cl;;;;;sorties;utilisations;" $9 ;
+    print getPrefixe("CRD") ";TRANQUILLE;VERT;Bouteille " $7 " cl;;;;;sorties;destructions;" $10 ;
+    print getPrefixe("CRD") ";MOUSSEUX;BLEU;Bouteille " $7 " cl;;;;;sorties;destructions;" $11 ;
 }'
