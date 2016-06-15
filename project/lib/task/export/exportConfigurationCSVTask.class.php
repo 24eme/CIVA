@@ -29,27 +29,42 @@ EOF;
         foreach($conf->recolte->getProduits() as $produit) {
 
             $certificationKey = "AOC_ALSACE";
+            $certificationLibelle = "AOC";
             $genreKey = "TRANQ";
 
             if($produit->getAppellation()->getKey() == "appellation_VINTABLE") {
                 $certificationKey = "VINSSIG";
-                $certificationLibelle = "";
+                $certificationLibelle = "Vins sans IG";
             }
 
             if($produit->getAppellation()->getKey() == "appellation_CREMANT") {
                 $genreKey = "EFF";
             }
 
+            if($produit->getLibelleLong() == "Mousseux") {
+                $genreKey = "EFF";
+            }
+
+            $cotisationDouane = "L387;Vins Tranquilles;3,75";
+            $cotisationCVO = "5";
+
+            if($genreKey == "EFF") {
+                $cotisationDouane = "L385;Vins Mousseux;9,29";
+            }
+
+            if($certificationKey != "AOC_ALSACE") {
+                $cotisationCVO = "0";
+            }
 
             echo "declaration;".
-                 ";".$certificationKey.";". #Certification
+                 $certificationLibelle.";".$certificationKey.";". #Certification
                  ";".$genreKey.";". #Genre
                  $produit->getAppellation()->getLibelleLong().";".str_replace("appellation_", "", $produit->getAppellation()->getKey()).";". #Appellation
                  ";;". #Mention
                  $produit->getLieu()->getLibelleLong().";".str_replace("lieu", "", $produit->getLieu()->getKey()).";".
                  $produit->getCouleur()->getLibelleLong().";".strtolower(str_replace("couleur", "", $produit->getCouleur()->getKey())).";".
                  $produit->getLibelleLong().";".str_replace("cepage_", "", $produit->getKey()).";".
-                 ";;L387;Vins Tranquilles;3,75;2015-08-01;G;5;2015-08-01;G;;;;;;;;;;;;;;%c% %a% %l% %ce;certification;".
+                 ";".$cotisationDouane.";2015-08-01;G;".$cotisationCVO.";2015-08-01;C;;;;;;;;;;;;;;;%a% %l% %ce;certification;".
                  "\n";
         }
     }
