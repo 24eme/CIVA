@@ -76,8 +76,7 @@ EOF;
             echo count($etablissements)." Etablissement(s)\n";
             $tiers = $etablissements[$numSoc];
 
-
-            $identifiantSociete = $this->getInfos($tiers, Db2Tiers::COL_CVI);
+            $identifiantSociete = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
 
             if(!$identifiantSociete) {
                 continue;
@@ -88,6 +87,8 @@ EOF;
             if(!$societe) {
                 $societe = new Societe();
                 $societe->setIdentifiant($identifiantSociete);
+                $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
+                $societe->constructId();
             }
 
             $societe->setRaisonSociale(preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))));
@@ -101,7 +102,6 @@ EOF;
             $societe->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
             $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
             $societe->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
-
             $societe->save();
 
             $identifiantEtablissement = $societe->getIdentifiant()."01";
@@ -112,7 +112,7 @@ EOF;
                 $etablissement = new Etablissement();
                 $etablissement->setIdSociete($societe->_id);
                 $etablissement->setIdentifiant($societe->getIdentifiant()."01");
-                $etablissement->save();
+                $etablissement->constructId();
                 $societe->pushContactAndAdresseTo($etablissement);
             }
 
