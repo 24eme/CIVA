@@ -10,12 +10,12 @@ Etablissement:
        identifiant: {  }
        id_societe: {  }
        statut: {  }
-       raisins_mouts: {  }
-       exclusion_drm: {  }
-       relance_ds: {  }
+       raisins_mouts: { required: false }
+       exclusion_drm: { required: false }
+       relance_ds: { required: false  }
        teledeclaration_email: {  }
        nature_inao: {  }
-       recette_locale: 
+       recette_locale:
          type: collection
          definition:
            fields:
@@ -23,7 +23,7 @@ Etablissement:
              nom: {  }
              ville: {  }
        region: {  }
-       type_dr: {  }
+       type_dr: { required: false }
        liaisons_operateurs:
            type: collection
            definition:
@@ -41,16 +41,17 @@ Etablissement:
                        definition:
                          fields:
                            '*': { }
-       site_fiche: {  }
+       site_fiche: { required: false }
        compte: {  }
        num_interne: {  }
        raison_sociale: {  }
        nom: {  }
+       intitule: {  }
        cvi: {  }
        no_accises: {  }
        carte_pro: {  }
        famille: {  }
-       sous_famille: {  }
+       sous_famille: { required: false }
        email: {  }
        telephone: {  }
        fax: {  }

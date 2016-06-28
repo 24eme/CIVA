@@ -19,13 +19,21 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     public function constructId() {
         $this->set('_id', 'ETABLISSEMENT-' . $this->identifiant);
         if ($this->isViticulteur()) {
-            $this->raisins_mouts = is_null($this->raisins_mouts) ? EtablissementClient::RAISINS_MOUTS_NON : $this->raisins_mouts;
-            $this->exclusion_drm = is_null($this->exclusion_drm) ? EtablissementClient::EXCLUSION_DRM_NON : $this->exclusion_drm;
-            $this->type_dr = is_null($this->type_dr) ? EtablissementClient::TYPE_DR_DRM : $this->type_dr;
+            if($this->exist('raisins_mouts')) {
+                $this->raisins_mouts = is_null($this->raisins_mouts) ? EtablissementClient::RAISINS_MOUTS_NON : $this->raisins_mouts;
+            }
+            if($this->exist('exclusion_drm')) {
+                $this->exclusion_drm = is_null($this->exclusion_drm) ? EtablissementClient::EXCLUSION_DRM_NON : $this->exclusion_drm;
+            }
+            if($this->exist('type_dr')) {
+                $this->type_dr = is_null($this->type_dr) ? EtablissementClient::TYPE_DR_DRM : $this->type_dr;
+            }
         }
 
         if ($this->isViticulteur() || $this->isNegociant()) {
-            $this->relance_ds = is_null($this->relance_ds) ? EtablissementClient::RELANCE_DS_OUI : $this->relance_ds;
+            if($this->exist('relance_ds')) {
+                $this->relance_ds = is_null($this->relance_ds) ? EtablissementClient::RELANCE_DS_OUI : $this->relance_ds;
+            }
         }
 
         $this->statut = is_null($this->statut) ? EtablissementClient::STATUT_ACTIF : $this->statut;
@@ -233,7 +241,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         $this->initFamille();
         $this->raison_sociale = $societe->raison_sociale;
         $this->interpro = "INTERPRO-declaration";
-        $this->region = EtablissementClient::getInstance()->calculRegion($this); 
+        $this->region = EtablissementClient::getInstance()->calculRegion($this);
 
         if($this->isNew()) {
             $societe->addEtablissement($this);

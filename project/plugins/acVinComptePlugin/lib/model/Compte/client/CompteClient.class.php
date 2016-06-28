@@ -26,7 +26,7 @@ class CompteClient extends acCouchdbClient {
         $comptes = self::getAtSociete($societe_id, acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         $last_num = 0;
         foreach ($comptes as $id) {
-            if (!preg_match('/COMPTE-[0-9]{6}([0-9]{2})/', $id, $matches)) {
+            if (!preg_match('/COMPTE-[0-9]+([0-9]{2})/', $id, $matches)) {
                 continue;
             }
 
@@ -134,7 +134,7 @@ class CompteClient extends acCouchdbClient {
      *
      * @param string $login
      * @param integer $hydrate
-     * @return Compte 
+     * @return Compte
      */
     public function retrieveByLogin($login, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->findByLogin($login, $hydrate);

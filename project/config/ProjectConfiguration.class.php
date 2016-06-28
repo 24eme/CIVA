@@ -6,7 +6,7 @@ sfCoreAutoload::register();
 class ProjectConfiguration extends sfProjectConfiguration
 {
 	protected static $routing = null;
-	
+
   	public function setup()
   	{
 	    $this->enablePlugins('acCouchdbPlugin');
@@ -16,8 +16,11 @@ class ProjectConfiguration extends sfProjectConfiguration
 	    $this->enablePlugins('acVinLibPlugin');
 	    $this->enablePlugins('acVinAnnuairePlugin');
 	    $this->enablePlugins('acVinDocumentPlugin');
+	    $this->enablePlugins('acVinSocietePlugin');
+	    $this->enablePlugins('acVinEtablissementPlugin');
+	    $this->enablePlugins('acVinComptePlugin');
   	}
-	
+
 	public static function getAppRouting()
 	{
 		if (null !== self::$routing) {
