@@ -9,7 +9,6 @@ Compte:
       civilite: { }
       prenom: { }
       nom: { }
-      mot_de_passe: { }
       nom_a_afficher: {}
       fonction: { }
       commentaire: { }
@@ -68,4 +67,3 @@ Compte:
         definition:
           fields:
             '*': { }
- 

@@ -277,7 +277,7 @@ class EtablissementClient extends acCouchdbClient {
             return self::REGION_HORS_CVO;
         }
 
-        if(!preg_match("/".VracConfiguration::getInstance()->getRegionDepartement()."/", $etablissement->getCodePostal())) {
+        if(class_exists("VracConfiguration") && !preg_match("/".VracConfiguration::getInstance()->getRegionDepartement()."/", $etablissement->getCodePostal())) {
 
             return self::REGION_HORS_CVO;
         }
