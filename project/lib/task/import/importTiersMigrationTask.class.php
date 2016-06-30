@@ -63,7 +63,7 @@ EOF;
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
                 if(isset($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]) && $this->getInfos($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)], Db2Tiers::COL_CVI) && $db2Tiers->get(Db2Tiers::COL_CVI)) {
-                    $societes[$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL"][$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL"][] = $db2Tiers;
+                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL"][] = $db2Tiers;
                 } else {
                     $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][] = $db2Tiers;
                 }
@@ -81,7 +81,7 @@ EOF;
         foreach($societes as $numSoc => $etablissements) {
             ksort($societes, SORT_NUMERIC);
             if(count($etablissements) == 1) {
-                //continue;
+                continue;
             }
 
             $tiers = $etablissements[$numSoc];
@@ -93,10 +93,9 @@ EOF;
             $num++;
 
             foreach($etablissements as $numEt => $tiers) {
-                if($numSoc == $numEt) {
+                if($numSoc === $numEt) {
                     continue;
                 }
-
                 $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
                 $num++;
             }
@@ -114,7 +113,7 @@ EOF;
 
         $societe = SocieteClient::getInstance()->find("SOCIETE-".$identifiantSociete);
 
-        if($societe) { return $societe; }
+        //if($societe) { return $societe; }
 
         if(!$societe) {
             $societe = new Societe();
@@ -132,22 +131,28 @@ EOF;
         $societe->setInsee($this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE));
         $societe->setPays("FR");
         $societe->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
-        $societe->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
         $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $societe->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
         $societe->save();
 
-        echo $societe->_id." (".$societe->getRaisonSociale().")\n";
+        echo $societe->_id." (".$societe->getRaisonSociale().") avec le compte ".$societe->getCompteSociete()."\n";
 
         return $societe;
     }
 
     protected function importEtablissement($societe, $tiers, $num)
     {
-        $identifiantEtablissement = $societe->getIdentifiant().$num;
+        $identifiantEtablissement = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $identifiantEtablissement = $identifiantEtablissement;
+
+        if(count($tiers) > 2) {
+            echo "/!\ Plus de 2 tiers\n";
+        } else {
+            //return;
+        }
 
         //echo $identifiantEtablissement;
-        if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
+        //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
 
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement);
 
@@ -159,7 +164,7 @@ EOF;
             $etablissement->constructId();
         }
 
-        $societe->pushContactAndAdresseTo($etablissement);
+        //$societe->pushContactAndAdresseTo($etablissement);
 
         $etablissement->setIntitule($this->getInfos($tiers, Db2Tiers::COL_INTITULE));
         $etablissement->setNom(preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))));
@@ -174,12 +179,24 @@ EOF;
         $etablissement->setInsee($this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE));
         $etablissement->setPays("FR");
         $etablissement->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
-        $etablissement->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
         $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $etablissement->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
         $etablissement->save();
+        $compteExploitant = $etablissement->getCompteExploitantObject();
+        $etablissement->save();
 
-        echo $etablissement->_id." (".$etablissement->getFamille().")\n";
+        $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
+        $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
+        $adresse = trim($this->getInfos($tiers, Db2Tiers::COL_NUMERO) . " " . $this->getInfos($tiers, Db2Tiers::COL_ADRESSE));
+        $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getNom());
+        $commune = $this->getInfos($tiers, Db2Tiers::COL_COMMUNE);
+        $compteExploitant->setCommune(($commune) ? $commune : $etablissement->getCommune());
+        $codePostal = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL);
+        $compteExploitant->setCodePostal(($codePostal) ? $codePostal : $etablissement->getCodePostal());
+        $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
+        $compteExploitant->save();
+
+        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id."\n";
 
         return $etablissement;
     }

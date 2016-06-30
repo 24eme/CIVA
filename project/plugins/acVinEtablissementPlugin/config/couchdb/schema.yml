@@ -43,6 +43,7 @@ Etablissement:
                            '*': { }
        site_fiche: { required: false }
        compte: {  }
+       compte_exploitant: {  }
        num_interne: {  }
        raison_sociale: {  }
        nom: {  }
