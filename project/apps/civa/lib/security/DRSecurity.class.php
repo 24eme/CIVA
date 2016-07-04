@@ -9,7 +9,7 @@ class DRSecurity implements SecurityInterface {
 
     protected $dr;
     protected $myUser;
-    protected $tiers;
+    protected $etablissement;
 
     public static function getInstance($myUser, $dr = null) {
 
@@ -19,7 +19,7 @@ class DRSecurity implements SecurityInterface {
     public function __construct($myUser, $dr = null) {
         $this->myUser = $myUser;
         $this->dr = $dr;
-        $this->tiers = $this->myUser->getDeclarant();
+        $this->etablissement = $this->myUser->getDeclarant();
     }
 
     public function isAuthorized($droits) {
@@ -29,7 +29,7 @@ class DRSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$this->tiers->isDeclarantDR()) {
+        if($this->etablissement->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR) {
 
             return false;
         }

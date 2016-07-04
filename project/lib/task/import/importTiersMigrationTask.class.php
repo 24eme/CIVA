@@ -173,6 +173,7 @@ EOF;
         $etablissement->setNoAccises($this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES));
         $etablissement->setFamille($tiers[0]->getFamille());
 
+        $etablissement->setSiret($this->getInfos($tiers, Db2Tiers::COL_SIRET));
         $etablissement->setAdresse($this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE));
         $etablissement->setCodePostal($this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL_SIEGE));
         $etablissement->setCommune($this->getInfos($tiers, Db2Tiers::COL_COMMUNE_SIEGE));
@@ -188,7 +189,7 @@ EOF;
         $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
         $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
         $adresse = trim($this->getInfos($tiers, Db2Tiers::COL_NUMERO) . " " . $this->getInfos($tiers, Db2Tiers::COL_ADRESSE));
-        $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getNom());
+        $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getAdresse());
         $commune = $this->getInfos($tiers, Db2Tiers::COL_COMMUNE);
         $compteExploitant->setCommune(($commune) ? $commune : $etablissement->getCommune());
         $codePostal = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL);

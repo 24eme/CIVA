@@ -42,13 +42,13 @@ class VracSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$tiers->isDeclarantContrat()) {
-            
+        /*if(!$tiers->isDeclarantContrat()) {
+
             return false;
-        }
+        }*/
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
-            
+
             return false;
         }
 
@@ -59,10 +59,10 @@ class VracSecurity implements SecurityInterface {
 
         /*** CREATION ***/
 
-        if(in_array(self::CREATION, $droits) && !$tiers->isDeclarantContratForResponsable()) {
+        /*if(in_array(self::CREATION, $droits) && !$tiers->isDeclarantContratForResponsable()) {
 
             return false;
-        }
+        }*/
 
         if(in_array(self::CREATION, $droits)) {
 

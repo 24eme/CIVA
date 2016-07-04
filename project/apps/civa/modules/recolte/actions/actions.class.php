@@ -34,12 +34,12 @@ class recolteActions extends EtapesActions {
             if ($this->getUser()->hasFlash('flash_message')) {
                 $this->getUser()->setFlash('flash_message', $this->getUser()->getFlash('flash_message'));
             }
-            
+
             return $this->redirect($this->onglets->getUrl('recolte_add'));
         }
 
         if(!$request->getParameter('appellation_lieu', null)) {
-            
+
             return $this->redirect($this->onglets->getUrl('recolte'));
         }
 
@@ -114,7 +114,7 @@ class recolteActions extends EtapesActions {
 
         if($this->onglets->getCurrentKeyAppellation() == "appellation_ALSACEBLANC") $nonEdel = true;
         else $nonEdel = false;
-        
+
         $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key), array('nonEdel'=> $nonEdel));
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -196,7 +196,7 @@ class recolteActions extends EtapesActions {
 
         $this->initOnglets($request);
         $this->initPrecDR();
-        
+
         $this->appellationlieu = $this->onglets->getLieu();
         if($this->onglets->getCurrentAppellation()->getKey() == 'appellation_GRDCRU'){
             $this->isGrandCru = true;
@@ -218,7 +218,7 @@ class recolteActions extends EtapesActions {
             }
         }
     }
-    
+
     public function executeRendementsMaxAjax(sfWebRequest $request) {
     	//$this->forward404Unless($request->isXmlHttpRequest());
 
@@ -239,13 +239,13 @@ class recolteActions extends EtapesActions {
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
     					}
     				} else {
-    					
+
 	    				if ($lieu->getConfig()->getRendementNoeud()) {
 	    					$rd = $lieu->getConfig()->getRendementNoeud();
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
 						foreach($lieu->getCouleurs() as $couleur) {
-                            
+
 	    				foreach ($couleur->getConfig()->filter('^cepage') as $key => $cepage_config) {
 	    					if($cepage_config->hasMinQuantite()) {
 	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
@@ -266,7 +266,7 @@ class recolteActions extends EtapesActions {
     		}
     	}
     	return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement,
-                                                                        'min_quantite'=> $this->min_quantite, 
+                                                                        'min_quantite'=> $this->min_quantite,
                                                                         'max_quantite'=> $this->max_quantite));
     }
 
@@ -279,7 +279,7 @@ class recolteActions extends EtapesActions {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
 
-            
+
             $this->redirect($this->onglets->getUrl('recolte'));
         }
     }
@@ -298,7 +298,7 @@ class recolteActions extends EtapesActions {
         if (isset($appellation_lieu['lieu'])) {
             $lieu = $appellation_lieu['lieu'];
         }
-        
+
         preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
         $couleur = 'couleur';
         if (isset($couleur_cepage['couleur']) && $couleur_cepage['couleur']) {
@@ -308,9 +308,9 @@ class recolteActions extends EtapesActions {
         if (isset($couleur_cepage['cepage'])) {
             $cepage = $couleur_cepage['cepage'];
         }
-        
+
         if(!$cepage) {
-           $couleur = null; 
+           $couleur = null;
         }
 
         if ($this->declaration->exist('validee') && $this->declaration->validee) {
@@ -346,7 +346,7 @@ class recolteActions extends EtapesActions {
     }
 
     protected function initPrecDR(){
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);
     }
 
     protected function getFormDetailsOptions() {

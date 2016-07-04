@@ -27,7 +27,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      *
      * @param sfEventDispatcher $dispatcher
      * @param sfStorage $storage
-     * @param type $options 
+     * @param type $options
      */
     public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array())
     {
@@ -39,7 +39,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
-     * 
+     *
      */
     protected function clearCredentialsDeclaration()
     {
@@ -49,7 +49,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
-     * 
+     *
      */
     public function signOutDeclaration()
     {
@@ -66,7 +66,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         $this->requireDeclaration();
         $this->requireTiers();
         if (is_null($this->_declaration)) {
-            $this->_declaration = $this->getDeclarant()->getDeclaration($this->getCampagne());
+            $this->_declaration = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getDeclarant()->getIdentifiant(), $this->getCampagne());
             if (!$this->_declaration) {
                 $declaration = new DR();
                 $declaration->set('_id', 'DR-' . $this->getDeclarant()->cvi . '-' . $this->getCampagne());
@@ -96,10 +96,10 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function getPeriodeDS($type_ds = null){
         $declarant = $this->getDeclarantDS($type_ds);
         if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
-            
+
             return CurrentClient::getCurrent()->getPeriodeDS();
         }
-        
+
         if(CurrentClient::getCurrent()->isDSDecembre()) {
 
             return CurrentClient::getCurrent()->getAnneeDS()."07";
@@ -115,7 +115,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     {
         return substr($this->getPeriodeDS($type_ds), 4, 2);
     }
-    
+
     /**
      * @return string
      */
@@ -126,13 +126,13 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     /**
      *
-     * @param string $etape 
+     * @param string $etape
      */
     public function addEtapeDeclaration($etape)
     {
         $this->requireDeclaration();
         if ($etape == 'recolte') {
-            
+
         }
         if ($this->getDeclaration()->addEtape($etape)) {
             $this->getDeclaration()->save();
@@ -162,26 +162,26 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         if ($this->hasCredential(self::CREDENTIAL_OPERATEUR)) {
             return true;
         }
-         
+
         return (CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
     }
-    
+
     /**
      * returns trus if validate
      */
     public function isDrValidee()
     {
         $declaration = $this->getDeclaration();
-        
+
         if ($this->hasCredential(self::CREDENTIAL_ADMIN)) {
             return ($declaration->isValideeCiva());
         }
 
-        return ($declaration->isValideeTiers() || $declaration->isValideeCiva()); 
+        return ($declaration->isValideeTiers() || $declaration->isValideeCiva());
     }
 
     /**
-     * 
+     *
      */
     public function initCredentialsDeclaration()
     {
@@ -199,7 +199,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
-     * 
+     *
      */
     protected function requireDeclaration()
     {
@@ -208,8 +208,8 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("you must be logged in with a tiers");
         }
     }
-    
-    
+
+
     /**
      * DS
      */
@@ -247,7 +247,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
         return CurrentClient::getCurrent()->ds_non_ouverte == 1;
     }
-    
+
     public function getDs($type_ds)
     {
         $declarant = $this->getDeclarantDS($type_ds);
@@ -255,7 +255,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
-        if (!$declarant->hasLieuxStockage() && !$declarant->isAjoutLieuxDeStockage()) {                                                                                                                                                
+        if (!$declarant->hasLieuxStockage() && !$declarant->isAjoutLieuxDeStockage()) {
             return null;
         }
 
@@ -286,11 +286,11 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         }
         $this->signOutDeclaration();
     }
-    
+
 
     /**
      *
-     * @param _Tiers $tiers 
+     * @param _Tiers $tiers
      */
     public function signInTiers($tiers)
     {
@@ -302,7 +302,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     /**
      *
-     * @param string $namespace 
+     * @param string $namespace
      */
     public function signOutCompte($namespace = self::NAMESPACE_COMPTE_USED)
     {
@@ -311,7 +311,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     }
 
     /**
-     * 
+     *
      */
     public function signOutTiers()
     {

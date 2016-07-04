@@ -9,9 +9,9 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class declarationComponents extends sfComponents {
-    
-    
-    
+
+
+
     /**
      *
      * @param sfWebRequest $request
@@ -19,23 +19,23 @@ class declarationComponents extends sfComponents {
     public function executeMonEspace(sfWebRequest $request) {
       $this->dr_editable = $this->getUser()->isDrEditable();
     }
-    
+
     /**
      *
      * @param sfWebRequest $request
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
         $this->declaration = $this->getUser()->getDeclaration();
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);
 	      $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
     }
-    
+
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->campagnes = $this->getUser()->getTiers('Recoltant')->getDeclarationsArchivesSince(($this->getUser()->getCampagne()-1));
+        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);;
     }
 
     /**
@@ -102,7 +102,7 @@ class declarationComponents extends sfComponents {
         }
         $this->lies = $this->dr->lies;
         $this->jeunes_vignes = $this->dr->jeunes_vignes;
-	
+
         $this->vintable = array();
         if ($this->dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
           $this->vintable['superficie'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();

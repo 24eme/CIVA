@@ -1,24 +1,24 @@
 <?php
 class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
-    
+
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_REPARTITION = 'repartition';
     const ETAPE_RECOLTE = 'recolte';
     const ETAPE_VALIDATION = 'validation';
 
     public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(), 
-                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION), 
-                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION), 
+    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(),
+                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION),
+                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION),
                                              self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION, self::ETAPE_RECOLTE));
 
-    
-    protected $utilisateurs_document = null; 
+
+    protected $utilisateurs_document = null;
     protected $declarant_document = null;
 
 
     public function  __construct() {
-        parent::__construct();   
+        parent::__construct();
         $this->initDocuments();
     }
 
@@ -26,17 +26,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         parent::__clone();
         $this->identifiant = $this->cvi;
         $this->initDocuments();
-    } 
+    }
 
     protected function initDocuments() {
         $this->utilisateurs_document = new UtilisateursDocument($this);
         $this->declarant_document = new DeclarantDocument($this);
     }
-    
+
     public function constructId() {
         $this->set('_id', 'DR-' . $this->cvi . '-' . $this->campagne);
     }
-    
+
     /**
      *
      * @param string $etape
@@ -248,7 +248,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function getValideeParByCompteId($compte_id) {
-
         if($this->hasDateDepotMairie()) {
 
             return DRClient::VALIDEE_PAR_CIVA;
@@ -266,14 +265,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return null;
         }
 
-        $compte_dr = $this->getEtablissementObject()->getCompteObject();
+        $compte_dr = $this->getEtablissementObject()->getMasterCompte();
 
         if($compte->isOperateur()) {
 
             return DRClient::VALIDEE_PAR_CIVA;
         }
-        
-        if($compte->_id != $compte_dr->_id) {
+
+        if($compte instanceof Compte && $compte->getSociete()->_id != $compte_dr->getSociete()->_id) {
 
             return $compte->getNom();
         }
@@ -285,7 +284,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->remove('validee');
         $this->remove('modifiee');
     }
-    
+
     public function emailSended(){
         if($this->exist('en_attente_envoi') && $this->en_attente_envoi){
             $this->remove('en_attente_envoi');
@@ -376,7 +375,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function getRecoltantObject() {
-        return acCouchdbManager::getClient('Recoltant')->retrieveByCvi($this->cvi);
+        return $this->getEtablissement();
     }
 
     public function save() {
@@ -402,12 +401,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                 $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
                                 array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s / %s", $appellation->getLibelle(), ($acheteur) ? $acheteur->nom : $cvi), 'info' => "Vous n'avez déclaré aucune vente pour cette appellation / acheteur"));
                             }
-                        } 
+                        }
                     }
                 }
 
                 if($appellation->getRendementRecoltant() >= 1000) {
-                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Vérifiez votre saisie, nous avons constaté un rendement excessif dans l'appellation"));  
+                    array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => $appellation->getLibelle(), 'info' => "Vérifiez votre saisie, nous avons constaté un rendement excessif dans l'appellation"));
                 }
 
               foreach ($appellation->getLieux() as $lieu) {
@@ -552,7 +551,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
                                     continue;
                                 }
-                                
+
                                 if ($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle() == "Assemblage Edelzwicker") {
                                     if (!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
                                         array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey(), $couleur->getKey(), $cepage->getKey()), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));
@@ -596,7 +595,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $recap_is_ok = true;
 
         if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
-            
+
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
@@ -606,7 +605,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             foreach($acheteurs as $cvi => $acheteur) {
                 $volume = round($noeud->getVolumeAcheteur($cvi, $type), 2);
                 $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
-                
+
                 if($acheteur->dontdplc > $volume) {
                     array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif',  'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
                         $recap_is_ok = false;
@@ -640,7 +639,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         // Verifie que les lies sont inférieur au volume sur place
         if(!$noeud->getLiesMax() && $noeud->getLies() > 0) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_pas_volume_sur_place')));
-        
+
         } elseif($noeud->getLies() > $noeud->getLiesMax()) {
             array_push($validLogErreur, array('url_log_param' => $onglet->getUrlParams($appellation->getKey(), $lieu->getKey()), 'url_log_page'=> 'recolte_recapitulatif', 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_usages_industriels_superieur_volume_sur_place')));
         }
@@ -654,13 +653,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
         return false;
     }
-    
+
     public function getPremiereModificationDr() {
         if(!$this->utilisateurs_document->getPremiereModification()) {
 
             return null;
         }
-        
+
         preg_match("/^(\d+)\/(\d+)\/(\d+)$/", $this->utilisateurs_document->getPremiereModification(), $matches);
 
         return $matches[3]."-".$matches[2]."-".$matches[1];
@@ -687,43 +686,44 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function getEtablissementObject() {
-        return $this->getRecoltantObject();
+
+        return $this->getEtablissement();
     }
 
     public function getEtablissement() {
-        return acCouchdbManager::getClient('_Tiers')->retrieveByCvi($this->cvi);
+        return EtablissementClient::getInstance()->find($this->cvi);
     }
-    
+
     public function storeDeclarant() {
         $this->identifiant = $this->cvi;
         $this->declarant_document->storeDeclarant();
 
         $tiers = $this->getEtablissement();
 
-        $this->declaration_commune = $tiers->declaration_commune;
-        $this->declaration_insee = $tiers->declaration_insee;
+        $this->declaration_commune = $tiers->commune;
+        $this->declaration_insee = $tiers->insee;
 
         if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getCompteEmail();
+            $this->declarant->email = $tiers->getEmail();
         }
 
-        $this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
+        //$this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
         $this->declarant->exploitant->nom = $tiers->exploitant->nom;
         $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
         $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
         $this->declarant->exploitant->commune = $tiers->exploitant->commune;
-        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
+        //$this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
         $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
     }
-    
+
     public function hasDateDepotMairie() {
         return $this->exist('date_depot_mairie');
     }
-    
+
     public function getDateDepotMairieFr() {
        return Date::francizeDate($this->date_depot_mairie);
     }
-    
+
     public function setDepotmairie($date_iso) {
         if($this->modifiee == $this->validee){
             $this->modifiee = $date_iso;
@@ -735,7 +735,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDateValidationFr() {
         return $this->getDateFromUtilisateurs('validation');
     }
-    
+
     public function getDateEditionFr() {
        return $this->getDateFromUtilisateurs('edition');
     }
@@ -752,7 +752,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         return null;
     }
-    
+
     private function getDateFromUtilisateurs($editOrValid)
     {
         $date = date('Y_m-d');
@@ -761,16 +761,16 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             if(count($node)){
                 $date = $node[key($node)];
             }
-        }   
+        }
        return Date::francizeDate($date);
     }
 
     public function hasAutorisation($autorisation) {
 
 
-        return $this->exist('autorisations') && 
-               $this->autorisations->exist($autorisation) && 
+        return $this->exist('autorisations') &&
+               $this->autorisations->exist($autorisation) &&
                $this->autorisations->get($autorisation);
-    }  
+    }
 
 }

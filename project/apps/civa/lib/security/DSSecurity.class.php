@@ -43,21 +43,21 @@ class DSSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$this->tiers->isDeclarantStock()) {
-            
+        /*if(!$this->tiers->isDeclarantStock()) {
+
+            return false;
+        }*/
+
+        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
+
             return false;
         }
 
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
-            
-            return false;
-        }
-        
         if(in_array(self::DECLARANT, $droits)) {
 
             return true;
         }
-        
+
         if(!$this->tiers->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
 
             return false;
@@ -112,7 +112,7 @@ class DSSecurity implements SecurityInterface {
         }
 
         if(in_array(self::EDITION , $droits) &&$this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
-                
+
             return true;
         }
 

@@ -24,10 +24,10 @@ class DRAcheteurSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$this->tiers->isDeclarantDRAcheteur()) {
-
-            return false;
-        }
+        // if(!$this->tiers->isDeclarantDRAcheteur()) {
+        //
+        //     return false;
+        // }
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DR_ACHETEUR)) {
 

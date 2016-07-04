@@ -28,13 +28,18 @@ class GammaSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
+        if(!isset($this->tiers)) {
+
+            return false;
+        }
+
         if(!$this->tiers->isDeclarantGamma()) {
-            
+
             return false;
         }
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_GAMMA)) {
-            
+
             return false;
         }
 

@@ -26,7 +26,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
      *
      * @param sfEventDispatcher $dispatcher
      * @param sfStorage $storage
-     * @param type $options 
+     * @param type $options
      */
     public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array()) {
         parent::initialize($dispatcher, $storage, $options);
@@ -38,7 +38,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     /**
      *
-     * @param _Tiers $tiers 
+     * @param _Tiers $tiers
      */
     public function signInTiers($tiers) {
 
@@ -67,7 +67,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
 
     /**
-     * 
+     *
      */
     protected function clearCredentialsTiers() {
         foreach ($this->_credentials_tiers as $credential) {
@@ -76,7 +76,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
 
     /**
-     * 
+     *
      */
     public function signOutTiers() {
         $this->_tiers = null;
@@ -88,7 +88,6 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
      * @return _Tiers
      */
     public function getTiers($type = null) {
-        $this->requireTiers();
 
         if (is_null($this->_tiers)) {
             $this->_tiers = array();
@@ -117,7 +116,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             } else {
                 $type = 'MetteurEnMarche';
             }
-            
+
 //            if (array_key_exists('Acheteur', $this->_tiers)) {
 //                $type = 'Acheteur';
 //            }elseif(array_key_exists('MetteurEnMarche', $this->_tiers)){
@@ -131,9 +130,10 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
         if (!isset($this->_tiers[$type]))
             throw new sfException('no tiers for type "' . $type . '"');
-        return $this->_tiers[$type];
+            
+        return EtablissementClient::getInstance()->find("ETABLISSEMENT-".$this->_tiers[$type]->getCvi());
     }
-    
+
     public function getDeclarant() {
         return $this->getTiers();
     }
@@ -145,7 +145,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     public function getDeclarantVrac() {
         $declarants = $this->getDeclarantsVrac();
-		
+
         return current($declarants);
     }
 
@@ -163,7 +163,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
 
     /**
-     * 
+     *
      */
     protected function requireTiers() {
         $this->requireCompte();
@@ -174,7 +174,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     /**
      *
-     * @param string $namespace 
+     * @param string $namespace
      */
     public function signOutCompte($namespace = self::NAMESPACE_COMPTE_USED) {
         $this->signOutTiers();

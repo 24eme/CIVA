@@ -35,7 +35,7 @@ class tiersActions extends EtapesActions {
 
                 $referer = $this->getUser()->getFlash('referer');
                 if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
-                    return $this->redirect($referer);                                                                                                            
+                    return $this->redirect($referer);
                 }
 
                 return $this->redirect("@mon_espace_civa");
@@ -76,33 +76,33 @@ class tiersActions extends EtapesActions {
         foreach($vracs as $vrac) {
             $item = $vrac->value;
             if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
-               $this->vracs['CONTRAT_A_TERMINER'] += 1; 
+               $this->vracs['CONTRAT_A_TERMINER'] += 1;
             }
 
             if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
                 if(array_key_exists($item->soussignes->vendeur->identifiant, $tiers) && !$item->soussignes->vendeur->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
                 }
                 if(array_key_exists($item->soussignes->acheteur->identifiant, $tiers) && !$item->soussignes->acheteur->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
                 }
                 if(array_key_exists($item->soussignes->mandataire->identifiant, $tiers) && !$item->soussignes->mandataire->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1; 
+                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
                 }
                 if($item->is_proprietaire) {
-                    $this->vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1; 
+                    $this->vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1;
                 }
-            }   
+            }
 
             if($item->is_proprietaire && ($item->statut == Vrac::STATUT_VALIDE || $item->statut == Vrac::STATUT_ENLEVEMENT)) {
-                $this->vracs['CONTRAT_A_ENLEVER'] += 1; 
+                $this->vracs['CONTRAT_A_ENLEVER'] += 1;
             }
         }
 
         $blocs = TiersSecurity::getInstance($this->getUser())->getBlocs();
 
         $this->nb_blocs = count($blocs);
-            
+
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
                 if(is_array($url)) {
@@ -110,7 +110,7 @@ class tiersActions extends EtapesActions {
                 }
                 return $this->redirect($url);
             }
-        } 
+        }
     }
 
     public function executeMonEspaceDR(sfWebRequest $request) {
@@ -132,18 +132,18 @@ class tiersActions extends EtapesActions {
         $droits = array();
         $this->type_ds = $request->getParameter("type");
         if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
-               $droits[] = TiersSecurity::DS_NEGOCE; 
+               $droits[] = TiersSecurity::DS_NEGOCE;
         } elseif($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
-               $droits[] = TiersSecurity::DS_PROPRIETE; 
+               $droits[] = TiersSecurity::DS_PROPRIETE;
         } else {
 
             return $this->forward404();
         }
-        
+
         $this->secureTiers($droits);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');   
+        $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
@@ -169,7 +169,7 @@ class tiersActions extends EtapesActions {
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
         $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
-		
+
         $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
         $this->form_gest_err = 0;
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
@@ -178,7 +178,7 @@ class tiersActions extends EtapesActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             if ($request->getParameter('gestionnaire')) {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
-                if   ($this->form_gest->isValid()) {
+                if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
                 } else {
                     $this->form_gest_err = 1;
@@ -200,7 +200,7 @@ class tiersActions extends EtapesActions {
             }
         }
     }
-    
+
     /**
      *
      * @param sfRequest $request A request object
@@ -258,17 +258,17 @@ class tiersActions extends EtapesActions {
 
     protected function secureTiers($droits) {
         if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
-            
+
             return $this->forwardSecure();
         }
     }
 
     protected function forwardSecure()
-    {    
+    {
         $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
 
         throw new sfStopException();
-    } 
+    }
 
 
 }
