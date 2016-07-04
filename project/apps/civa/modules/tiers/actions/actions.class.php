@@ -19,15 +19,17 @@ class tiersActions extends EtapesActions {
 
         $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
+        $this->societe = $this->compte->getSociete();
     	$not_uniq = 0;
-    	$tiers = array();
-        if (count($this->compte->tiers) >= 1) {
-    	    foreach ($this->compte->tiers as $t) {
-                if (isset($tiers[$t->type])) {
+    	$etablissements = array();
+        $etablissementsObject = $this->societe->getEtablissementsObject();
+        if (count($etablissementsObject) >= 1) {
+    	    foreach ($etablissementsObject as $e) {
+                if (isset($etablissements[$e->getFamille()])) {
                   $not_uniq = 1;
                   continue;
                 }
-                $tiers[$t->type] = acCouchdbManager::getClient()->find($t->id);
+                $etablissements[$e->famille] = $e;
             }
 
     	    if (!$not_uniq) {

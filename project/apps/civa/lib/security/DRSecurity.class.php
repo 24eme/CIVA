@@ -36,7 +36,7 @@ class DRSecurity implements SecurityInterface {
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DR_RECOLTANT)) {
 
-            return false;
+            //return false;
         }
 
         if(in_array(self::EDITION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)

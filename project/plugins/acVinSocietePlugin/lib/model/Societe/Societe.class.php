@@ -152,6 +152,15 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $contacts;
     }
 
+    public function getEtablissementsObject() {
+        $etablissements = array();
+        foreach ($this->getEtablissementsObj() as $id => $e) {
+            $etablissements[$id] = $e->etablissement;
+
+        }
+        return $etablissements;
+    }
+
     public function getComptesAndEtablissements() {
         $contacts = array();
 
@@ -331,7 +340,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
             $compte->identifiant = $identifiant;
             $compte->constructId();
         }
-        
+
         $this->compte_societe = $compte->_id;
         $compte->statut = CompteClient::STATUT_ACTIF;
         $compte->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));

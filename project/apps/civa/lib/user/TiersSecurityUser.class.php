@@ -45,6 +45,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         $this->requireCompte();
         $this->signOutTiers();
         $this->addCredential(self::CREDENTIAL_TIERS);
+        $this->addCredential(self::CREDENTIAL_DECLARATION);
 
         if (!is_array($tiers))
             $tiers = array($tiers);
@@ -94,44 +95,36 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             if ($this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) {
                 foreach (explode(',', $this->getAttribute(self::SESSION_TIERS, null, self::NAMESPACE_TIERS)) as $id) {
                     $t = acCouchdbManager::getClient()->find($id);
-                    if (isset($this->_tiers[$t->type]))
+                    if (isset($this->_tiers[$t->famille]))
                         throw new sfException('An user cannot have more than two tiers of the same type');
-                    $this->_tiers[$t->type] = $t;
+                    $this->_tiers[$t->famille] = $t;
                 }
             } else {
-                $this->_tiers = $this->getCompte()->getTiers();
+                $this->_tiers = $this->getCompte()->getSociete()->getEtablissementsObject();
             }
             if (!$this->_tiers) {
                 $this->signOutCompte();
                 throw new sfException("The tiers does not exist");
             }
         }
+
         if (!$type) {
-            if (array_key_exists('Recoltant', $this->_tiers)) {
-                $type = 'Recoltant';
+            if (array_key_exists(EtablissementFamilles::FAMILLE_PRODUCTEUR, $this->_tiers)) {
+                $type = EtablissementFamilles::FAMILLE_PRODUCTEUR;
             } elseif (array_key_exists('Acheteur', $this->_tiers)) {
                 $type = 'Acheteur';
             } elseif (array_key_exists('Courtier', $this->_tiers)) {
                 $type = 'Courtier';
             } else {
-                $type = 'MetteurEnMarche';
+                $type = EtablissementFamilles::FAMILLE_PRODUCTEUR;
             }
-
-//            if (array_key_exists('Acheteur', $this->_tiers)) {
-//                $type = 'Acheteur';
-//            }elseif(array_key_exists('MetteurEnMarche', $this->_tiers)){
-//                 $type = 'MetteurEnMarche';
-//            }elseif (array_key_exists('Recoltant', $this->_tiers)) {
-//                $type = 'Recoltant';
-//            } else {
-//                $type = 'Courtier';
-//            }
         }
 
-        if (!isset($this->_tiers[$type]))
-            throw new sfException('no tiers for type "' . $type . '"');
-            
-        return EtablissementClient::getInstance()->find("ETABLISSEMENT-".$this->_tiers[$type]->getCvi());
+        if (!isset($this->_tiers[$type])) {
+            //throw new sfException('no tiers for type "' . $type . '"');
+        }
+
+        return EtablissementClient::getInstance()->find("ETABLISSEMENT-".current($this->_tiers)->getIdentifiant());
     }
 
     public function getDeclarant() {
@@ -140,7 +133,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
 
     public function getDeclarantDS($type_ds = null) {
 
-        return $this->getCompte()->getDeclarantDS($type_ds);
+        return current($this->getCompte()->getSociete()->getEtablissementsObject());
     }
 
     public function getDeclarantVrac() {
@@ -153,7 +146,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         $declarants = array();
         $tiers = $this->getTiers();
 
-        if($tiers->type == 'Recoltant' && isset($this->_tiers['MetteurEnMarche'])) {
+        if($tiers->famille == 'Recoltant' && isset($this->_tiers['MetteurEnMarche'])) {
 
             $declarants[$this->_tiers['MetteurEnMarche']->_id] = $this->_tiers['MetteurEnMarche'];
         }

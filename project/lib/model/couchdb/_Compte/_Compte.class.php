@@ -1,10 +1,10 @@
 <?php
 abstract class _Compte extends Base_Compte {
-    const STATUS_NOUVEAU = 'NOUVEAU';
-    const STATUS_INSCRIT = 'INSCRIT';
-    const STATUS_INACTIF = 'INACTIF';
-    const STATUS_MOT_DE_PASSE_OUBLIE = 'MOT_DE_PASSE_OUBLIE';
-    
+    const STATUS_NOUVEAU = CompteClient::STATUT_TELEDECLARANT_NOUVEAU;
+    const STATUS_INSCRIT = CompteClient::STATUT_TELEDECLARANT_INSCRIT;
+    const STATUS_INACTIF = CompteClient::STATUT_TELEDECLARANT_INACTIF;
+    const STATUS_MOT_DE_PASSE_OUBLIE = CompteClient::STATUT_TELEDECLARANT_OUBLIE;
+
     public function constructId() {
         parent::constructId();
         $this->set('_id', 'COMPTE-' . $this->login);
@@ -12,14 +12,14 @@ abstract class _Compte extends Base_Compte {
         if(!$this->statut) {
             $this->statut = self::STATUS_NOUVEAU;
         }
-        if($this->statut == self::STATUS_NOUVEAU && !$this->mot_de_passe) { 
+        if($this->statut == self::STATUS_NOUVEAU && !$this->mot_de_passe) {
             $this->mot_de_passe = $this->generatePass();
         }
     }
 
     /**
      *
-     * @param string $mot_de_passe 
+     * @param string $mot_de_passe
      */
     public function setPasswordSSHA($mot_de_passe) {
         mt_srand((double)microtime()*1000000);
@@ -27,7 +27,7 @@ abstract class _Compte extends Base_Compte {
         $hash = "{SSHA}" . base64_encode(pack("H*", sha1($mot_de_passe . $salt)) . $salt);
         $this->_set('mot_de_passe', $hash);
     }
- 
+
     public function getCodeCreation() {
         if($this->statut != self::STATUS_NOUVEAU) {
             return null;
@@ -35,9 +35,9 @@ abstract class _Compte extends Base_Compte {
 
         return preg_replace('/^\{TEXT\}/', "", $this->mot_de_passe);
     }
-    
+
     /**
-     * 
+     *
      */
     protected function updateStatut() {
         if(!$this->isActif()) {
@@ -57,13 +57,13 @@ abstract class _Compte extends Base_Compte {
 
     public function getStatus() {
         $this->updateStatut();
-        
+
         return $this->statut;
     }
-    
+
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getNom() {
         return ' ';
@@ -71,46 +71,46 @@ abstract class _Compte extends Base_Compte {
 
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getIntitule() {
         return '';
     }
-    
+
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getGecos() {
         return ',,'.$this->getNom().',';
     }
-    
+
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse() {
         return ' ';
     }
-    
+
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getCodePostal() {
         return ' ';
     }
-    
+
     /**
      *
-     * @return string 
+     * @return string
      */
     public function getCommune() {
         return  ' ';
     }
-    
+
     /**
-     * 
+     *
      */
     public function updateLdap() {
         $ldap = new Ldap();
@@ -138,7 +138,7 @@ abstract class _Compte extends Base_Compte {
 
         return $this->statut != self::STATUS_INACTIF;
     }
-    
+
     public function isInscrit()
     {
     	return $this->statut != self::STATUS_NOUVEAU && $this->isActif();
@@ -151,7 +151,7 @@ abstract class _Compte extends Base_Compte {
     public function setActif() {
         $this->statut = self::STATUS_INSCRIT;
         if(!$this->mot_de_passe) {
-            $this->mot_de_passe = $this->generatePass(); 
+            $this->mot_de_passe = $this->generatePass();
         }
         $this->updateStatut();
     }
@@ -160,13 +160,13 @@ abstract class _Compte extends Base_Compte {
 
         return _CompteClient::getInstance()->getComptesPersonnes($this);
     }
-    
+
     public function save() {
         $this->updateStatut();
         $this->updateLdap();
         parent::save();
     }
-    
+
     public function resetMotDePasseFromLdap() {
         $ldap = new Ldap();
         $info = $ldap->get($this);
@@ -183,5 +183,5 @@ abstract class _Compte extends Base_Compte {
         return sprintf("{TEXT}%04d", rand(1000, 9999));
     }
 
-    
+
 }

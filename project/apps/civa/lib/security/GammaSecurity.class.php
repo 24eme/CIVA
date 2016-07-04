@@ -33,7 +33,7 @@ class GammaSecurity implements SecurityInterface {
             return false;
         }
 
-        if(!$this->tiers->isDeclarantGamma()) {
+        if(!$this->tiers->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR) {
 
             return false;
         }

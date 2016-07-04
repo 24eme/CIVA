@@ -265,6 +265,11 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         return CompteClient::getInstance()->createTypeFromOrigines($this->origines);
     }
 
+    public function getStatus() {
+
+        return $this->getStatutTeledeclarant();
+    }
+
     public function getStatutTeledeclarant() {
         if (preg_match("{TEXT}", $this->mot_de_passe)) {
 
@@ -346,6 +351,11 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function hasDroit($droit) {
+        if(!$this->exist('droits')) {
+
+            return false;
+        }
+
         $droits = $this->get('droits')->toArray(0, 1);
         return in_array($droit, $droits);
     }
