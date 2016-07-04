@@ -251,7 +251,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function getDs($type_ds)
     {
         $declarant = $this->getDeclarantDS($type_ds);
-        if(!$declarant->isDeclarantStock()) {
+        if(!$declarant->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
             throw new sfException("Vous n'avez pas les droits pour créez une DS");
         }
 
@@ -262,7 +262,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         $this->requireTiers();
         if (!isset($this->_ds[$type_ds])) {
             $periode = $this->getPeriodeDS($type_ds);
-            $this->_ds[$type_ds] = $declarant->getDs($periode);
+            $this->_ds[$type_ds] = DSClient::getInstance()->findByPrincipaleByIdentifiantAndPeriode($declarant->getIdentifiant(), $periode);
             if (!isset($this->_ds[$type_ds])) {
                 $ds = new DSCiva();
                 if($declarant->exist('civaba') && $declarant->civaba){

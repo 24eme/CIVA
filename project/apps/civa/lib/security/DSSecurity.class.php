@@ -50,7 +50,7 @@ class DSSecurity implements SecurityInterface {
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
 
-            return false;
+            //return false;
         }
 
         if(in_array(self::DECLARANT, $droits)) {

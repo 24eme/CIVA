@@ -397,4 +397,53 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return EtablissementClient::getInstance()->getNatureInaoLibelle($this->nature_inao);
     }
 
+    public function hasLieuxStockage() {
+
+        return count($this->lieux_stockage) > 0;
+    }
+
+    public function getLieuxStockage() {
+
+        return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
+    }
+
+    public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
+        foreach($this->getLieuxStockage($ajoutLieuxStockage) as $lieu_stockage) {
+
+            return $lieu_stockage;
+        }
+
+        return null;
+    }
+
+    public function isAjoutLieuxDeStockage(){
+
+        return false;
+    }
+
+    public function storeLieuStockage($adresse,$commune,$code_postal)
+    {
+        $newId = 0;
+        $identifiant = $this->getIdentifiant();
+        if(!$this->exist('lieux_stockage')){
+            $this->add('lieux_stockage');
+        }
+        $lieux_stockage = $this->_get('lieux_stockage');
+        foreach ($lieux_stockage as $key => $value) {
+            $current_id = intval(str_replace($identifiant, '', $key));
+            if($current_id > $newId){
+                $newId = $current_id;
+            }
+        }
+        $newId = $identifiant.sprintf('%03d',$newId+1);
+        $lieu_stockage = new stdClass();
+        $lieu_stockage->numero = $newId;
+        $lieu_stockage->nom = $this->nom;
+        $lieu_stockage->adresse = $adresse;
+        $lieu_stockage->commune = $commune;
+        $lieu_stockage->code_postal = $code_postal;
+        $lieux_stockage->add($newId, $lieu_stockage);
+        return $lieu_stockage;
+    }
+
 }

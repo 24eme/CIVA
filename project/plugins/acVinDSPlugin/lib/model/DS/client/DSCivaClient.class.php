@@ -22,7 +22,7 @@ class DSCivaClient extends DSClient {
     const ETAPE_AUTRES = 4;
     const ETAPE_VALIDATION = 5;
     const ETAPE_VISUALISATION = 6;
-    
+
     const TYPE_DS_PROPRIETE = 'propriete';
     const TYPE_DS_NEGOCE = 'negoce';
 
@@ -80,7 +80,7 @@ class DSCivaClient extends DSClient {
      public function findAllByCvi($cvi) {
          return $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-999999-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
      }
-    
+
     public function findByIdentifiantAndPeriode($identifiant, $periode) {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
         $tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage());
@@ -90,7 +90,7 @@ class DSCivaClient extends DSClient {
                 return $ds;
             }
         }
-        
+
         return null;
     }
 
@@ -103,13 +103,13 @@ class DSCivaClient extends DSClient {
         if (!preg_match('/([0-9]{4})-([0-9]{2})-([0-9]{2})/', $date, $matches)) {
 
             throw new Exception(sprintf("Date de stock invalide : %s" , $date));
-            
+
         }
 
-        return $matches[1].$matches[2]; 
+        return $matches[1].$matches[2];
     }
-    
-    public function createDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false) {    
+
+    public function createDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false) {
        $dss = $this->findOrCreateDssByTiers($tiers, $type_ds, $date_stock, $ds_neant, true);
        foreach ($dss as $ds) {
            $ds->addAppellation('declaration/certification/genre/appellation_ALSACEBLANC');
@@ -122,7 +122,7 @@ class DSCivaClient extends DSClient {
        }
        return $dss;
     }
-    
+
     public function findOrCreateDssByTiers($tiers, $type_ds, $date_stock, $ds_neant = false, $onlyCreate = false) {
         if(!$type_ds){
             throw new sfException("Il n'est pas possible de créer une Déclaration de Stock avec un compte de catégorie ".$tiers->categorie);
@@ -176,7 +176,7 @@ class DSCivaClient extends DSClient {
         }
         if(count($dss)){
             foreach ($dss as $ds) {
-                if (!$ds_neant) {         
+                if (!$ds_neant) {
                     $ds->updateProduitsFromLastDr();
                 }
             }
@@ -222,7 +222,7 @@ class DSCivaClient extends DSClient {
     }
 
     public function findDssByCvi($tiers, $date_stock, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        $type_ds = $tiers->getTypeDs();
+        $type_ds = DSCivaClient::TYPE_DS_PROPRIETE;
         $periode = $this->buildPeriode($this->createDateStock($date_stock),$type_ds);
         return $this->findDssByCviAndPeriode($tiers->getIdentifiant(), $periode, $hydrate);
     }
@@ -337,7 +337,7 @@ class DSCivaClient extends DSClient {
 
     public function getLastDs($ds)
     {
-        $allDssByCvi = $this->findAllByCvi($ds->identifiant);        
+        $allDssByCvi = $this->findAllByCvi($ds->identifiant);
         $last_ds = null;
         foreach ($allDssByCvi as $dsByCvi) {
             if($ds->periode > $dsByCvi->periode){
@@ -346,11 +346,11 @@ class DSCivaClient extends DSClient {
                 }
             }
         }
-        
+
         if(!$last_ds){
-            return null; 
+            return null;
         }
-        
+
         $last_ds_principale = $this->getDSPrincipaleByDs($last_ds);
         $last_dss = $this->findDssByDS($last_ds_principale);
         if(!$last_dss){
@@ -363,7 +363,7 @@ class DSCivaClient extends DSClient {
         }
         return null;
     }
-    
+
     public function getTotauxByAppellationsRecap($ds) {
         $dss = $this->findDssByDS($ds);
         $totauxByAppellationsRecap = array();
@@ -540,14 +540,14 @@ class DSCivaClient extends DSClient {
             if (!preg_match('/^DS-C?[0-9]{10}-' . $periode . '-[0-9]{3}$/', $id)) {
                 continue;
             }
-            
+
             $result_ids[] = $id;
         }
         return $result_ids;
     }
 
     public function changeDSPrincipale($dss, $last_ds_principale, $num_new_principale) {
-     
+
         if ($last_ds_principale->getLieuStockage() == $num_new_principale) {
             return $dss;
         }
@@ -559,7 +559,7 @@ class DSCivaClient extends DSClient {
         $date_depot_mairie = ($last_ds_principale->exist('date_depot_mairie')) ? $last_ds_principale->get('date_depot_mairie') : null;
 
         $new_dss = array();
-        
+
         foreach ($dss as $key => $current_ds) {
             if ($current_ds->getLieuStockage() == $num_new_principale) {
                 $current_ds->add('ds_principale', 1);
