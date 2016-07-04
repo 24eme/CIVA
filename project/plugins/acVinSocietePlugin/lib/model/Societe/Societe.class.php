@@ -8,6 +8,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
 
     private $changedCooperative = null;
     private $changedStatut = null;
+    private $compte_societe_object = null;
 
     public function constructId() {
         $this->set('_id', 'SOCIETE-' . $this->identifiant);
@@ -229,7 +230,16 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
             return null;
         }
 
-        return CompteClient::getInstance()->find($this->compte_societe);
+        if(is_null($this->compte_societe_object)) {
+
+            return CompteClient::getInstance()->find($this->compte_societe);
+        }
+
+        return $this->compte_societe_object;
+    }
+
+    public function setCompteSocieteObject($compte) {
+        $this->compte_societe_object = $compte;
     }
 
     public function getContact() {
@@ -311,12 +321,17 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $a;
     }
 
-    protected function createCompteSociete() {
+    public function createCompteSociete($identifiant = null) {
         if ($this->compte_societe) {
             return;
         }
 
         $compte = CompteClient::getInstance()->findOrCreateCompteSociete($this);
+        if(!is_null($identifiant)) {
+            $compte->identifiant = $identifiant;
+            $compte->constructId();
+        }
+        
         $this->compte_societe = $compte->_id;
         $compte->statut = CompteClient::STATUT_ACTIF;
         $compte->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));

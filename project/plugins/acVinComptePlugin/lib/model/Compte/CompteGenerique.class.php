@@ -66,7 +66,7 @@ abstract class CompteGenerique extends acCouchdbDocument {
     }
 
     public function setAdresseComplementaire($s) {
-        
+
         return ($this->siege->adresse_complementaire = $s);
     }
 
@@ -128,7 +128,10 @@ abstract class CompteGenerique extends acCouchdbDocument {
     }
 
     public function getTelephoneMobile() {
-        if (is_null($this->telephone_mobile)) {
+    if (is_null($this->telephone_mobile)) {
+            if(!$this->getMasterCompte()) {
+                throw new sfException($this->_id);
+            }
             $this->telephone_mobile = $this->getMasterCompte()->telephone_mobile;
         }
         return $this->telephone_mobile;

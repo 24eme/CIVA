@@ -90,17 +90,12 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function getCompteExploitantObject() {
-        $compte = null;
-        if($this->getCompteExploitant()) {
-            $compte = CompteClient::getInstance()->find($this->getCompteExploitant());
+        if(!$this->getCompteExploitant()) {
+
+            return null;
         }
 
-        if(!$compte) {
-            $compte = CompteClient::getInstance()->createCompteFromSociete($this->getSociete());
-            $this->compte_exploitant = $compte->_id;
-        }
-
-        return $compte;
+        return CompteClient::getInstance()->find($this->getCompteExploitant());;
     }
 
     public function getContact() {
@@ -215,6 +210,11 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         }
     }
 
+    public function isSameIdentifiantConstruction() {
+
+        return preg_match("/^".$this->getSociete()->getIdentifiant()."/", $this->getIdentifiant());
+    }
+
     public function save() {
         if(!$this->getCompte()){
             $this->setCompte($this->getSociete()->getMasterCompte()->_id);
@@ -224,7 +224,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         $needSaveSociete = false;
 
-        if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete()){
+        if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
             if ($this->isSameCompteThanSociete()) {
                 $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
                 $compte->addOrigine($this->_id);

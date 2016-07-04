@@ -120,6 +120,9 @@ EOF;
             $societe->setIdentifiant($identifiantSociete);
             $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
             $societe->constructId();
+            $compte = $societe->createCompteSociete($societe->getIdentifiant()."0");
+            $compte->constructId();
+            $societe->setCompteSocieteObject($compte);
         }
 
         $societe->setRaisonSociale(preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))));
@@ -166,6 +169,17 @@ EOF;
 
         //$societe->pushContactAndAdresseTo($etablissement);
 
+        if(!$etablissement->getCompte() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getIdentifiant()."0")) {
+            $compte = CompteClient::getInstance()->createCompteFromEtablissement($etablissement);
+            $compte->addOrigine($etablissement->_id);
+            $compte->setIdentifiant($etablissement->getIdentifiant()."0");
+            $compte->constructId();
+            $etablissement->setCompte($compte->_id);
+            $compte->save();
+        } else {
+            $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant()."0");
+        }
+
         $etablissement->setIntitule($this->getInfos($tiers, Db2Tiers::COL_INTITULE));
         $etablissement->setNom(preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))));
         $etablissement->setNumInterne($this->getInfos($tiers, Db2Tiers::COL_CIVABA));
@@ -183,8 +197,16 @@ EOF;
         $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $etablissement->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
         $etablissement->save();
+
         $compteExploitant = $etablissement->getCompteExploitantObject();
-        $etablissement->save();
+        if(!$compteExploitant) {
+            $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($societe);
+            $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."01");
+            $compteExploitant->constructId();
+
+            $etablissement->setCompteExploitant($compteExploitant->_id);
+            $etablissement->save();
+        }
 
         $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
         $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
