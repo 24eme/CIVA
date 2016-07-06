@@ -63,9 +63,9 @@ EOF;
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
                 if(isset($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]) && $this->getInfos($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)], Db2Tiers::COL_CVI) && $db2Tiers->get(Db2Tiers::COL_CVI)) {
-                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL"][] = $db2Tiers;
+                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL".$db2Tiers->getFamille()][] = $db2Tiers;
                 } else {
-                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][] = $db2Tiers;
+                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
                 }
                 continue;
             }
@@ -80,22 +80,17 @@ EOF;
 
         foreach($societes as $numSoc => $etablissements) {
             ksort($societes, SORT_NUMERIC);
-            if(count($etablissements) == 1) {
+            if(count($etablissements) > 1) {
                 continue;
             }
 
-            $tiers = $etablissements[$numSoc];
+            $tiers = current($etablissements);
 
             $societe = $this->importSociete($tiers);
 
             $num = 1;
-            $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
-            $num++;
 
             foreach($etablissements as $numEt => $tiers) {
-                if($numSoc === $numEt) {
-                    continue;
-                }
                 $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
                 $num++;
             }
@@ -147,12 +142,6 @@ EOF;
     {
         $identifiantEtablissement = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
         $identifiantEtablissement = $identifiantEtablissement;
-
-        if(count($tiers) > 2) {
-            echo "/!\ Plus de 2 tiers\n";
-        } else {
-            //return;
-        }
 
         //echo $identifiantEtablissement;
         //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
@@ -219,13 +208,22 @@ EOF;
         $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
         $compteExploitant->save();
 
-        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id."\n";
+        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers\n";
 
         return $etablissement;
     }
 
     protected function getInfos($tiers, $key) {
+        $val = null;
+        $num = null;
         foreach($tiers as $t) {
+            if($val && $t->get($key) && $val != $t->get($key)) {
+                echo "-------diff:(".$num.")".$val."/(".$t->get(Db2Tiers::COL_NUM).")".$t->get($key)."\n";
+            }
+
+            $val = $t->get($key);
+            $num = $t->get(Db2Tiers::COL_NUM);
+
             if($t->get($key)) {
 
                 return $t->get($key);
