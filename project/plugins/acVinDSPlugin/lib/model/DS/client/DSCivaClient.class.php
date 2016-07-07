@@ -99,6 +99,22 @@ class DSCivaClient extends DSClient {
         return $this->findByIdentifiantAndPeriode($identifiant, $periode);
     }
 
+    public function getEtablissement($societe, $type_ds = null) {
+        foreach($societe->getEtablissementsObject() as $etablissement) {
+            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+
+                return $etablissement;
+            }
+
+            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+
+                return $etablissement;
+            }
+        }
+
+        return null;
+    }
+
     public function buildPeriode($date, $type_ds = null) {
         if (!preg_match('/([0-9]{4})-([0-9]{2})-([0-9]{2})/', $date, $matches)) {
 

@@ -43,10 +43,10 @@ class DSSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        /*if(!$this->tiers->isDeclarantStock()) {
+        if(!in_array($this->tiers->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT))) {
 
             return false;
-        }*/
+        }
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
 

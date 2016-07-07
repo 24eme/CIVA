@@ -27,9 +27,14 @@ class DRSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
-        /*** DECLARANT ***/
 
-        if($this->etablissement->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR) {
+        /*** DECLARANT ***/
+        if(!$this->etablissement) {
+
+            return false;
+        }
+
+        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
 
             return false;
         }

@@ -43,6 +43,8 @@ EOF;
         foreach ($lines as $a) {
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
 
+            echo ($db2Tiers->get(Db2Tiers::COL_CVI)?$db2Tiers->get(Db2Tiers::COL_CVI):$db2Tiers->get(Db2Tiers::COL_CIVABA)).";".$db2Tiers->getFamille().";".$db2Tiers->get(Db2Tiers::COL_TYPE_TIERS)."\n";
+
             if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) == $db2Tiers->get(Db2Tiers::COL_MAISON_MERE)) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
             }
@@ -62,16 +64,13 @@ EOF;
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
-                if(isset($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]) && $this->getInfos($societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)], Db2Tiers::COL_CVI) && $db2Tiers->get(Db2Tiers::COL_CVI)) {
-                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NUM)."SPECIAL".$db2Tiers->getFamille()][] = $db2Tiers;
-                } else {
-                    $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
-                }
+                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]["00000".$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
+
                 continue;
             }
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][] = $db2Tiers;
+                $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
                 continue;
             }
         }
@@ -80,9 +79,11 @@ EOF;
 
         foreach($societes as $numSoc => $etablissements) {
             ksort($societes, SORT_NUMERIC);
-            if(count($etablissements) > 1) {
+            if(count($etablissements) == 1) {
                 continue;
             }
+
+            ksort($etablissements);
 
             $tiers = current($etablissements);
 
@@ -174,7 +175,7 @@ EOF;
         $etablissement->setNumInterne($this->getInfos($tiers, Db2Tiers::COL_CIVABA));
         $etablissement->setCvi($this->getInfos($tiers, Db2Tiers::COL_CVI));
         $etablissement->setNoAccises($this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES));
-        $etablissement->setFamille($tiers[0]->getFamille());
+        $etablissement->setFamille($this->getFamille($tiers));
 
         $etablissement->setSiret($this->getInfos($tiers, Db2Tiers::COL_SIRET));
         $etablissement->setAdresse($this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE));
@@ -208,9 +209,30 @@ EOF;
         $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
         $compteExploitant->save();
 
-        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers\n";
+        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
 
         return $etablissement;
+    }
+
+    protected function getFamille($tiers) {
+        $famille = null;
+        $producteurVinicateur = false;
+        foreach($tiers as $t) {
+            if($famille && $famille != $t->getFamille()) {
+                throw new sfException($famille."/".$t->getFamille());
+            }
+            $famille = $t->getFamille();
+            if($t->isProducteurVinificateur()) {
+                $producteurVinicateur = true;
+            }
+        }
+
+        if($producteurVinicateur) {
+
+            return EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR;
+        }
+
+        return $famille;
     }
 
     protected function getInfos($tiers, $key) {

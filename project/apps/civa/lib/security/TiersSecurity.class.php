@@ -45,11 +45,11 @@ class TiersSecurity implements SecurityInterface {
 
             return DSSecurity::getInstance($this->myUser, null, DSCivaClient::TYPE_DS_NEGOCE)->isAuthorized(DSSecurity::DECLARANT);
         }
-        
+
         if(in_array(self::VRAC, $droits)) {
 
             $isDeclarant = VracSecurity::getInstance($this->myUser)->isAuthorized(VracSecurity::DECLARANT);
-            
+
             if(!$isDeclarant) {
 
                 return false;
@@ -94,7 +94,7 @@ class TiersSecurity implements SecurityInterface {
     }
 
     public function getDroitUrls() {
-        
+
         return array(
             TiersSecurity::DR => 'mon_espace_civa_dr',
             TiersSecurity::DR_ACHETEUR => 'mon_espace_civa_dr_acheteur',

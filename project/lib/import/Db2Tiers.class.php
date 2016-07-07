@@ -97,6 +97,13 @@ class Db2Tiers extends Db2 {
         return null;
     }
 
+    public function isProducteurVinificateur() {
+        
+        return ($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR && preg_match("/^(VRT|VRP|VVV)$/", $this->get(Db2Tiers::COL_TYPE_TIERS)));
+    }
+
+
+
     public function printDebug() {
         echo "  T \n";
         echo "   NUM   : ".$this->get(Db2Tiers::COL_NUM)."\n";

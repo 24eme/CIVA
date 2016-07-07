@@ -403,8 +403,11 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function getLieuxStockage() {
+        if($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR) {
+            return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
+        }
 
-        return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
+        return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getIdentifiant()));
     }
 
     public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
