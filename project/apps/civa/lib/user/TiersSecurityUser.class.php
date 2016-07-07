@@ -124,7 +124,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
             //throw new sfException('no tiers for type "' . $type . '"');
         }
 
-        return EtablissementClient::getInstance()->find("ETABLISSEMENT-".current($this->_tiers)->getIdentifiant());
+        return $this->getDeclarant();
     }
 
     public function getDeclarant() {
