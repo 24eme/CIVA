@@ -79,13 +79,16 @@ EOF;
 
         foreach($societes as $numSoc => $etablissements) {
             ksort($societes, SORT_NUMERIC);
-            if(count($etablissements) == 1) {
+            if(count($etablissements) > 1) {
                 continue;
             }
 
             ksort($etablissements);
 
             $tiers = current($etablissements);
+            if(count($tiers) == 1) {
+                continue;
+            }
 
             $societe = $this->importSociete($tiers);
 
@@ -240,19 +243,18 @@ EOF;
         $num = null;
         foreach($tiers as $t) {
             if($val && $t->get($key) && $val != $t->get($key)) {
-                echo "-------diff:(".$num.")".$val."/(".$t->get(Db2Tiers::COL_NUM).")".$t->get($key)."\n";
+                echo "-------diff:".$key.":(".$num.")".$val."/(".$t->get(Db2Tiers::COL_NUM).")".$t->get($key)."\n";
             }
-
-            $val = $t->get($key);
-            $num = $t->get(Db2Tiers::COL_NUM);
 
             if($t->get($key)) {
-
-                return $t->get($key);
+                $val = $t->get($key);
             }
+
+            $num = $t->get(Db2Tiers::COL_NUM);
+
         }
 
-        return null;
+        return $val;
     }
 
     protected function resolveIdentifiantSociete($etablissements) {
