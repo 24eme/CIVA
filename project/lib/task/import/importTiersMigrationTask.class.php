@@ -1,4 +1,3 @@
-
 <?php
 
 class importTiersMigrationTask extends sfBaseTask

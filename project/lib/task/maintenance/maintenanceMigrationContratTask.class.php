@@ -56,20 +56,25 @@ class maintenanceMigrationContratTask extends sfBaseTask
             }
 
             $newValue = $this->tiersId2EtablissementId($value);
+
             echo $parentKey."/".$key.":".$value." => ".$newValue ."\n";
 
-            if(is_array($iterable)) {
-                $iterable[$key] = $newValue;
-            }
-
-            if(is_object($iterable)) {
-                $iterable->{$key} = $newValue;
-            }
+            $this->replaceValue($iterable, $key, $newValue);
 
             $modifie = true;
         }
 
         return $modifie;
+    }
+
+    public function replaceValue($iterable, $key, $newValue) {
+        if(is_array($iterable)) {
+            $iterable[$key] = $newValue;
+        }
+
+        if(is_object($iterable)) {
+            $iterable->{$key} = $newValue;
+        }
     }
 
     public function isTiers($value) {
@@ -88,7 +93,7 @@ class maintenanceMigrationContratTask extends sfBaseTask
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$tiers->cvi, acCouchdbClient::HYDRATE_JSON);
 
         if($etablissement)  {
-            
+
             return $etablissement->_id;
         }
 
