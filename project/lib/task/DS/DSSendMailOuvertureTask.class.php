@@ -236,7 +236,7 @@ Depuis 2014 vous avez la possibilité de télé-déclarer sur le Portail CIVA <h
 
 Le télé-service \"Alsace Stocks\" sera accessible du 18 juillet au 10 septembre inclus, et vous n'aurez donc pas à renvoyer le formulaire papier au CIVA.
 
-Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à pas\", vous pourrez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
 
 Cordialement,
