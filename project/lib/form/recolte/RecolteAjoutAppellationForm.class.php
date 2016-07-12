@@ -13,7 +13,7 @@
 	  $this->setWidgets(array(
             'appellation' => new sfWidgetFormChoice(array('choices'  => $this->getAppellationChoices())),
           ));
-          
+
           $this->setValidators(array(
             'appellation' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getAppellationChoices()))),
           ));
@@ -61,5 +61,3 @@
         }
 
     }
-
-?>
