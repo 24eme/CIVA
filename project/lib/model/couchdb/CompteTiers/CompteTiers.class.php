@@ -168,7 +168,7 @@ class CompteTiers extends BaseCompteTiers {
         $droits = array();
         $tiers = $this->getTiersObject();
         foreach ($tiers as $t) {
-            if !($t) {
+            if (!$t) {
                 throw new sfException(sprintf("Tiers non trouvable : %", $this->_id));
             }
             if($t->isDeclarantDR()) {
