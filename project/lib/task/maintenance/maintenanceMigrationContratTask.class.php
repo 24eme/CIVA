@@ -30,17 +30,19 @@ class maintenanceMigrationContratTask extends sfBaseTask
 
         $vrac = VracClient::getInstance()->find($arguments['doc_id'], acCouchdbClient::HYDRATE_JSON);
 
-        $this->replace($vrac, "");
-
-        VracClient::getInstance()->storeDoc($vrac);
+        if($this->replace($vrac, "")) {
+            VracClient::getInstance()->storeDoc($vrac);
+            echo "Enregistrement du doc ".$vrac->_id."\n";
+        }
     }
 
     public function replace(&$iterable, $parentKey) {
+        $modifie = false;
         foreach($iterable as $key => $value) {
 
             if(is_array($value) || is_object($value)) {
 
-                $this->replace($value, $parentKey."/".$key);
+                $modifie = ($this->replace($value, $parentKey."/".$key)) ? true : $modifie;
                 continue;
             }
 
@@ -63,7 +65,11 @@ class maintenanceMigrationContratTask extends sfBaseTask
             if(is_object($iterable)) {
                 $iterable->{$key} = $newValue;
             }
+
+            $modifie = true;
         }
+
+        return $modifie;
     }
 
     public function isTiers($value) {
@@ -74,16 +80,30 @@ class maintenanceMigrationContratTask extends sfBaseTask
     public function tiersId2EtablissementId($value) {
         $tiers = _TiersClient::getInstance()->find($value, acCouchdbClient::HYDRATE_JSON);
 
+        if(!$tiers) {
+
+            return;
+        }
+
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$tiers->cvi, acCouchdbClient::HYDRATE_JSON);
 
         if($etablissement)  {
+            
             return $etablissement->_id;
         }
 
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-C".$tiers->civaba, acCouchdbClient::HYDRATE_JSON);
 
         if($etablissement)  {
+
             return $etablissement->_id;
+        }
+
+        if($compte = _CompteClient::getInstance()->find($tiers->compte[0], acCouchdbClient::HYDRATE_JSON)) {
+            if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$compte->login, acCouchdbClient::HYDRATE_JSON))  {
+
+                return $etablissement->_id;
+            }
         }
 
         return null;
