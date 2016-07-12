@@ -144,16 +144,8 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
     }
 
     public function getDeclarantsVrac() {
-        $declarants = array();
-        $tiers = $this->getTiers();
 
-        if($tiers->famille == 'Recoltant' && isset($this->_tiers['MetteurEnMarche'])) {
-
-            $declarants[$this->_tiers['MetteurEnMarche']->_id] = $this->_tiers['MetteurEnMarche'];
-        }
-
-        $declarants[$tiers->_id] = $tiers;
-        return $declarants;
+        return VracClient::getInstance()->getEtablissements($this->getCompte()->getSociete());
     }
 
     /**

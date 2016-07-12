@@ -1,3 +1,4 @@
+
 <?php
 
 class importTiersMigrationTask extends sfBaseTask
@@ -43,7 +44,7 @@ EOF;
         foreach ($lines as $a) {
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
 
-            echo ($db2Tiers->get(Db2Tiers::COL_CVI)?$db2Tiers->get(Db2Tiers::COL_CVI):$db2Tiers->get(Db2Tiers::COL_CIVABA)).";".$db2Tiers->getFamille().";".$db2Tiers->get(Db2Tiers::COL_TYPE_TIERS)."\n";
+            // echo ($db2Tiers->get(Db2Tiers::COL_CVI)?$db2Tiers->get(Db2Tiers::COL_CVI):$db2Tiers->get(Db2Tiers::COL_CIVABA)).";".$db2Tiers->getFamille().";".$db2Tiers->get(Db2Tiers::COL_TYPE_TIERS)."\n";
 
             if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) == $db2Tiers->get(Db2Tiers::COL_MAISON_MERE)) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
@@ -79,15 +80,15 @@ EOF;
 
         foreach($societes as $numSoc => $etablissements) {
             ksort($societes, SORT_NUMERIC);
-            if(count($etablissements) > 1) {
-                continue;
+            if(count($etablissements) == 1) {
+                //continue;
             }
 
             ksort($etablissements);
 
             $tiers = current($etablissements);
             if(count($tiers) == 1) {
-                continue;
+                //continue;
             }
 
             $societe = $this->importSociete($tiers);
@@ -144,8 +145,8 @@ EOF;
 
     protected function importEtablissement($societe, $tiers, $num)
     {
-        $identifiantEtablissement = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
-        $identifiantEtablissement = $identifiantEtablissement;
+        $famille = $this->getFamille($tiers);
+        $identifiantEtablissement = (in_array($famille, array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && $this->getInfos($tiers, Db2Tiers::COL_CVI)) ? $this->getInfos($tiers, Db2Tiers::COL_CVI) : "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
 
         //echo $identifiantEtablissement;
         //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
@@ -246,10 +247,12 @@ EOF;
                 echo "-------diff:".$key.":(".$num.")".$val."/(".$t->get(Db2Tiers::COL_NUM).")".$t->get($key)."\n";
             }
 
-            if($t->get($key)) {
-                $val = $t->get($key);
+            if($t->get($key) && $t->isMetteurEnMarche()) {
+
+                return $t->get($key);
             }
 
+            $val = $t->get($key);
             $num = $t->get(Db2Tiers::COL_NUM);
 
         }

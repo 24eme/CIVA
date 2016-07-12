@@ -33,7 +33,7 @@ class tiersActions extends EtapesActions {
             }
 
     	    if (!$not_uniq) {
-                $this->getUser()->signInTiers(array_values($tiers));
+                $this->getUser()->signInTiers(array_values($etablissements));
 
                 $referer = $this->getUser()->getFlash('referer');
                 if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {

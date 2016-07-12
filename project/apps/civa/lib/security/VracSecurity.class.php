@@ -49,7 +49,7 @@ class VracSecurity implements SecurityInterface {
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
 
-            return false;
+            //return false;
         }
 
         if(in_array(self::DECLARANT, $droits)) {

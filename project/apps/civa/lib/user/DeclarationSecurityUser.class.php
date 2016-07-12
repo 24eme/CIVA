@@ -66,6 +66,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         $this->requireDeclaration();
         $this->requireTiers();
         if (is_null($this->_declaration)) {
+            if(!$this->getDeclarant()) {
+                return null;
+            }
             $this->_declaration = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($this->getDeclarant()->getIdentifiant(), $this->getCampagne());
             if (!$this->_declaration) {
                 $declaration = new DR();
@@ -187,6 +190,12 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     {
         $this->requireDeclaration();
         $declaration = $this->getDeclaration();
+
+        if(!$declaration) {
+
+            return null;
+        }
+
         $this->clearCredentialsDeclaration();
         if ($this->isDrEditable()) {
             if ($this->isDrValidee()) {
