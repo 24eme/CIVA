@@ -22,6 +22,8 @@ curl -sX DELETE "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CURRENT"?rev=$(
 
 curl -s -X PUT -d '{ "_id": "CURRENT", "type": "Current", "configurations": { "2000-08-01": "CONFIGURATION" } }' http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CURRENT
 
+
+# Import des vues
 cd ..
 mkdir .views
 make
