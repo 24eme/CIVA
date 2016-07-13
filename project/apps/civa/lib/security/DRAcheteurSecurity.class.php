@@ -14,7 +14,7 @@ class DRAcheteurSecurity implements SecurityInterface {
 
     public function __construct($myUser) {
         $this->myUser = $myUser;
-        $this->tiers = $this->myUser->getDeclarant();
+        $this->tiers = $this->myUser->getDeclarantDRAcheteur();
     }
 
     public function isAuthorized($droits) {
@@ -24,10 +24,10 @@ class DRAcheteurSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        // if(!$this->tiers->isDeclarantDRAcheteur()) {
-        //
-        //     return false;
-        // }
+        if(!$this->tiers) {
+
+             return false;
+        }
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DR_ACHETEUR)) {
 

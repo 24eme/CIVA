@@ -15,7 +15,12 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function getLogin() {
-        return preg_replace("/^[0-9]{6}([0-9]+)$/", "", $this->identifiant);
+        if($this->exist('login') && $this->_get('login')) {
+
+            return $this->_get('login');
+        }
+        
+        return preg_replace("/0$/", "", $this->getIdentifiant());
     }
 
     public function getMasterCompte() {
@@ -363,6 +368,11 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     public function getDroits() {
 
         return $this->_get('droits');
+    }
+
+    public function isInscrit() {
+
+        return true;
     }
 
     public function isTeledeclarationActive() {

@@ -132,6 +132,11 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         return DRClient::getInstance()->getEtablissement($this->getCompte()->getSociete());
     }
 
+    public function getDeclarantDRAcheteur() {
+
+        return DRClient::getInstance()->getEtablissementAcheteur($this->getCompte()->getSociete());
+    }
+
     public function getDeclarantDS($type_ds = null) {
 
         return DSCivaClient::getInstance()->getEtablissement($this->getCompte()->getSociete(), $type_ds);

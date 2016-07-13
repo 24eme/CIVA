@@ -141,6 +141,18 @@ class DRClient extends acCouchdbClient {
       return null;
   }
 
+  public function getEtablissementAcheteur($societe) {
+      foreach($societe->getEtablissementsObject() as $etablissement) {
+
+          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE)) && $etablissement->getFamille()) {
+
+              return $etablissement;
+          }
+      }
+
+      return null;
+  }
+
   protected function recodeNumber($value) {
 
     return round(str_replace(",", ".", $value)*1, 2);

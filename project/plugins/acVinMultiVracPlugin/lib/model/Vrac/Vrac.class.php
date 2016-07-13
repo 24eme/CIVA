@@ -6,7 +6,7 @@
 
 class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
-	
+
 	const STATUT_CREE = 'CREE';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
 	const STATUT_VALIDE = 'VALIDE';
@@ -26,10 +26,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     const ROLE_VENDEUR = 'vendeur';
     const ROLE_ACHETEUR = 'acheteur';
     const ROLE_MANDATAIRE = 'mandataire';
-	
+
 	protected $_config;
 	protected $archivage_document;
-	
+
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Brouillon',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
@@ -38,7 +38,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_ENLEVEMENT => 'En cours d\'enlèvement',
 		self::STATUT_CLOTURE => 'Cloturé'
 	);
-	
+
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => null,
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
@@ -47,14 +47,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_ENLEVEMENT => 'Visualiser',
 		self::STATUT_CLOTURE => 'Visualiser'
 	);
-	
+
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
 		self::STATUT_VALIDE => 'Enlever',
 		self::STATUT_ENLEVEMENT => 'Enlever',
 	);
-	
+
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
 		self::STATUT_VALIDE_PARTIELLEMENT,
@@ -66,43 +66,43 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::ROLE_ACHETEUR,
 		self::ROLE_MANDATAIRE,
 	);
-	
-  	public static function getStatutsLibellesActions() 
+
+  	public static function getStatutsLibellesActions()
   	{
   		return self::$statuts_libelles_actions;
   	}
-	
-  	public static function getStatutsLibellesActionsProprietaire() 
+
+  	public static function getStatutsLibellesActionsProprietaire()
   	{
   		return array_merge(self::$statuts_libelles_actions, self::$statuts_libelles_actions_proprietaire);
   	}
-	
-  	public static function getStatutsLibelles() 
+
+  	public static function getStatutsLibelles()
   	{
   		return self::$statuts_libelles;
   	}
-	
-  	public static function getStatutsSupprimable() 
+
+  	public static function getStatutsSupprimable()
   	{
   		return self::$statuts_supprimable;
   	}
-	
-  	public static function getTypesTiers() 
+
+  	public static function getTypesTiers()
   	{
   		return self::$types_tiers;
   	}
-    
+
     public function  __construct() {
-        parent::__construct();         
+        parent::__construct();
         $this->archivage_document = new ArchivageDocument($this);
     }
-  	
+
   	public function getStatutLibelle()
   	{
   		$libelles = self::getStatutsLibelles();
   		return $libelles[$this->valide->statut];
   	}
-  	
+
   	public function getStatutLibelleAction($proprietaire = false, $hasValidated = false)
   	{
   		$libelles = self::getStatutsLibellesActions();
@@ -114,7 +114,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
   		}
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
-    
+
     public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
     {
         $this->_config = $config;
@@ -142,34 +142,34 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         return $this->_get('type_archive');
     }
-    
+
     public function getTypeForArchive() {
     	return ucfirst(strtolower($this->type_contrat));
     }
 
-    public function constructId() 
+    public function constructId()
     {
         $this->set('_id', VracClient::getInstance()->buildId($this->numero_contrat));
     }
-    
+
     public function getNumeroArchive()
     {
     	return $this->_get('numero_archive');
     }
-    
-	public function getConfiguration() 
+
+	public function getConfiguration()
 	{
-        $campagne = substr($this->campagne,0,4);      
+        $campagne = substr($this->campagne,0,4);
 
         $conf_2012 = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
         if($campagne > '2012'){
             return $conf_2012;
-        }        
+        }
         $conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
         return $conf;
      }
 
-    public function initProduits() 
+    public function initProduits()
     {
     	if (isset($this->_config[VracClient::getConfigurationProduits($this->type_contrat)])) {
     		$produits = $this->_config[VracClient::getConfigurationProduits($this->type_contrat)];
@@ -178,8 +178,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		}
     	}
     }
-    
-	public function addProduit($hash) 
+
+	public function addProduit($hash)
 	{
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash_config = preg_replace('/^declaration/','recolte', $hash);
@@ -191,7 +191,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         if ($produit->getKey() == self::CEPAGE_EDEL) {
         	$produit->libelle .= self::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
-        }          
+        }
         if ($produit->getKey() == self::CEPAGE_MUSCAT) {
         	$produit->libelle = self::CEPAGE_MUSCAT_LIBELLE;
         }
@@ -203,7 +203,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $produit;
     }
 
-    public function addDetail($hash, $config = null) 
+    public function addDetail($hash, $config = null)
     {
         $produit = $this->addProduit($hash);
         if(!$produit) {
@@ -212,7 +212,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $produit->addDetail($config);
     }
 
-    public function addDynamiqueDetail($hash, $lieuDit = null, $vtsgn = null, $config = null) 
+    public function addDynamiqueDetail($hash, $lieuDit = null, $vtsgn = null, $config = null)
     {
         $detail = $this->addDetail($hash, $config);
         $detail->lieu_dit = $lieuDit;
@@ -220,7 +220,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $detail->supprimable = 1;
         $detail->position = ($this->declaration->getPositionNouveauProduitDetail() - 1);
     }
-    
+
     public function addActeur($type, $tiers)
     {
     	$noeud = $type.'_identifiant';
@@ -229,7 +229,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		call_user_func(array('Vrac', 'store'.ucfirst($type).'Informations'), $tiers);
     	}
     }
-    
+
     public function addType($acteur, $type)
     {
     	$noeud = $acteur.'_type';
@@ -240,48 +240,50 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function storeAcheteurInformations($tiers)
     {
-    	$compte = $tiers->getCompteObject();
-       
-        if((!$tiers->civaba || !$tiers->no_accises) && $compte) {
+    	$compte = $tiers->getContact();
+
+        /*if((!$tiers->getNumInterne() || !$tiers->no_accises) && $compte) {
             if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
                       $tiers->no_accises = $metteurEnMarche->no_accises;
                       $tiers->civaba = $metteurEnMarche->civaba;
             }
-        }
+        }*/
 
     	$this->acheteur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->acheteur->raison_sociale = $tiers->nom;
     	$this->acheteur->siret = $tiers->siret;
     	$this->acheteur->cvi = $tiers->cvi;
     	$this->acheteur->num_accise = $tiers->no_accises;
-    	$this->acheteur->civaba = $tiers->civaba;
+    	$this->acheteur->civaba = $tiers->getNumInterne();
     	$this->acheteur->adresse = $tiers->siege->adresse;
     	$this->acheteur->code_postal = $tiers->siege->code_postal;
     	$this->acheteur->commune = $tiers->siege->commune;
     	$this->acheteur->telephone = $tiers->telephone;
-    	$this->acheteur->famille = null;
+    	$this->acheteur->famille = $tiers->getFamille();
     	$this->acheteur->identifiant = $tiers->_id;
 
-        $this->acheteur->remove('emails'); 
-        $this->acheteur->add('emails'); 
+        $this->acheteur->remove('emails');
+        $this->acheteur->add('emails');
 
         if($this->isProprietaire($this->acheteur->identifiant)) {
-            $this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+            $this->acheteur->emails = array($tiers->getEmail());
         } else {
-            $this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+			$this->acheteur->emails = array($tiers->getEmail());
         }
     }
-    
+
     public function storeVendeurInformations($tiers)
     {
-    	$compte = $tiers->getCompteObject();
-       
-        if((!$tiers->civaba || !$tiers->no_accises) && $compte) {
+    	$compte = $tiers->getContact();
+
+        /*if((!$tiers->getNumInterne() || !$tiers->no_accises) && $compte) {
             if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
                       $tiers->no_accises = $metteurEnMarche->no_accises;
                       $tiers->civaba = $metteurEnMarche->civaba;
             }
-        }
+        }*/
 
 
     	$this->vendeur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
@@ -289,21 +291,23 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->siret = $tiers->siret;
     	$this->vendeur->cvi = $tiers->cvi;
     	$this->vendeur->num_accise = $tiers->no_accises;
-    	$this->vendeur->civaba = $tiers->civaba;
+    	$this->vendeur->civaba = $tiers->getNumInterne();
     	$this->vendeur->adresse = $tiers->siege->adresse;
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
     	$this->vendeur->commune = $tiers->siege->commune;
     	$this->vendeur->telephone = $tiers->telephone;
-    	$this->vendeur->famille = null;
+    	$this->vendeur->famille = $tiers->getFamille();
     	$this->vendeur->identifiant = $tiers->_id;
 
-        $this->vendeur->remove('emails'); 
-        $this->vendeur->add('emails'); 
+        $this->vendeur->remove('emails');
+        $this->vendeur->add('emails');
 
-        if($this->isProprietaire($this->vendeur->identifiant)) {
-            $this->vendeur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+		if($this->isProprietaire($this->vendeur->identifiant)) {
+            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+            $this->vendeur->emails = array($tiers->getEmail());
         } else {
-            $this->vendeur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+			$this->vendeur->emails = array($tiers->getEmail());
         }
     }
 
@@ -322,8 +326,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->identifiant = $tiers->_id;
     	$this->mandataire->num_db2 = ($tiers->exist("db2"))? $tiers->db2->num : null;
 
-        $this->mandataire->remove('emails'); 
-        $this->mandataire->add('emails'); 
+        $this->mandataire->remove('emails');
+        $this->mandataire->add('emails');
 
         if($this->isProprietaire($this->mandataire->identifiant)) {
             $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
@@ -340,40 +344,40 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             $telephone = $matches[1];
         }
 
-        $this->interlocuteur_commercial->nom = $nom;    
+        $this->interlocuteur_commercial->nom = $nom;
         $this->interlocuteur_commercial->email = ($email) ? $email : null;
         if(!$this->interlocuteur_commercial->exist('telephone')) {
             $this->interlocuteur_commercial->add('telephone');
         }
         $this->interlocuteur_commercial->telephone = ($telephone) ? $telephone : null;
     }
-    
+
     public function isSupprimable()
     {
-    	
+
         return in_array($this->valide->statut, self::getStatutsSupprimable());
     }
-    
+
     public function isBrouillon()
     {
     	return (!$this->valide->statut || $this->valide->statut == self::STATUT_CREE)? true : false;
     }
-    
+
     public function isValide()
     {
     	return ($this->numero_visa)? true : false;
     }
-    
+
     public function isCloture()
     {
     	return ($this->valide->statut == self::STATUT_CLOTURE);
     }
-    
+
     public function isAnnule()
     {
     	return ($this->valide->statut == self::STATUT_ANNULE);
     }
-    
+
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
@@ -390,7 +394,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isActeur($userId) {
         if(!$this->getTypeTiers($userId)) {
             return false;
-        } 
+        }
 
         return true;
     }
@@ -400,7 +404,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
         return $this->hasValide($userId);
     }
-    
+
     public function hasValide($userId)
     {
     	try {
@@ -410,7 +414,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     	return ($date)? true : false;
     }
-    
+
     public function getUserDateValidation($userId)
     {
     	$type = $this->getTypeTiers($userId);
@@ -419,9 +423,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     	return ($this->valide->get('date_validation_'.$type))? $this->valide->get('date_validation_'.$type) : null;
     }
-    
+
     public function signerProrietaire()
-    {   
+    {
         $this->signer($this->createur_identifiant);
     }
 
@@ -441,7 +445,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
         $this->updateValideStatut();
     }
-    
+
     public function updateValideStatut()
     {
     	$valide = true;
@@ -465,76 +469,76 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$this->clotureContrat();
     	}
     }
-    
+
     public function updateEnlevementStatut()
     {
     	if ($this->hasRetiraisons() && $this->valide->statut == self::STATUT_VALIDE) {
     		$this->valide->statut = self::STATUT_ENLEVEMENT;
     	}
     }
-    
+
     public function clotureContrat()
     {
     	$this->valide->statut = self::STATUT_CLOTURE;
     	$this->valide->date_cloture = date('Y-m-d');
     }
-    
+
     public function clotureProduits()
     {
     	$this->declaration->clotureProduits();
     	$this->valide->statut = self::STATUT_CLOTURE;
     	$this->valide->date_cloture = date('Y-m-d');
     }
-    
+
     public function getTotalVolumeEnleve()
     {
     	return $this->volume_enleve_total;
     }
-    
+
     public function getTotalVolumePropose()
     {
     	return $this->volume_propose_total;
     }
-    
+
     public function getTotalPrixEnleve()
     {
     	return $this->prix_reel_total;
     }
-    
+
     public function getTotalPrixPropose()
     {
     	return $this->prix_total;
     }
-    
+
     public function allProduitsClotures()
     {
     	return $this->declaration->allProduitsClotures();
     }
-    
+
     public function hasRetiraisons()
     {
     	return $this->declaration->hasRetiraisons();
     }
-    
+
     public function isProprietaire($identifiant)
     {
     	return ($this->createur_identifiant == $identifiant)? true : false;
     }
-    
+
     public function isAcheteurProprietaire()
     {
     	return ($this->createur_identifiant == $this->acheteur_identifiant)? true : false;
     }
-    
+
     public function isVendeurProprietaire()
     {
     	return ($this->createur_identifiant == $this->vendeur_identifiant)? true : false;
     }
-    
+
     public function hasCourtier() {
         return ($this->mandataire_identifiant)? true : false;
     }
-    
+
     public function getActeurs($withCreator = true) {
     	$acteurs = array();
     	if ($this->vendeur_identifiant) {
@@ -560,7 +564,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     	return $acteurs;
     }
-    
+
     public function getEmails($withCreator = true) {
     	$acteurs = $this->getActeurs($withCreator);
     	$emails = array();
@@ -576,7 +580,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     	return $emails;
     }
-    
+
     public function getEmailsActeur($acteurIdentifiant) {
     	$acteurs = $this->getActeurs(true);
     	$type = $this->getTypeTiers($acteurIdentifiant);
@@ -594,7 +598,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     	return $emails;
     }
-    
+
     public function getCreateurInformations()
     {
     	if ($this->createur_identifiant == $this->mandataire_identifiant) {
@@ -608,7 +612,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     	return null;
     }
-    
+
     public function updateTotaux()
     {
     	$this->volume_enleve_total = $this->declaration->getTotalVolumeEnleve();
@@ -616,13 +620,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->prix_reel_total = $this->declaration->getTotalPrixEnleve();
     	$this->prix_total = $this->declaration->getTotalPrixPropose();
     }
-    
+
     public function hasProduits()
     {
     	return $this->declaration->hasProduits();
     }
 
-    protected function preSave() 
+    protected function preSave()
     {
         $this->archivage_document->preSave();
         if (!$this->numero_visa && $this->numero_archive) {
@@ -630,7 +634,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$prefixe = self::PREFIXE_NUMERO;
     		if ($this->type_contrat == VracClient::TYPE_BOUTEILLE) {
     			$prefixe++;
-    		}	
+    		}
             $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
     	}
         if(!$this->numero_db2 && $this->numero_archive){
@@ -638,18 +642,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	    		$prefixe = self::PREFIXE_NUMERO;
 	    		if ($this->type_contrat == VracClient::TYPE_BOUTEILLE) {
 	    			$prefixe++;
-	    		}	
+	    		}
                 $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
         }
     }
-    
-    protected function doSave() 
+
+    protected function doSave()
     {
     	if ($this->valide->statut == self::STATUT_ENLEVEMENT || $this->valide->statut == self::STATUT_CLOTURE) {
         	$this->date_modification = date('Y-m-d');
     	}
     }
-    
+
     public function forceSave()
     {
     	$this->definitionValidation();
@@ -661,27 +665,29 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         return false;
     }
-    
-    public function isArchivageCanBeSet() 
+
+    public function isArchivageCanBeSet()
     {
         return ($this->valide->statut == self::STATUT_VALIDE || $this->valide->statut == self::STATUT_CLOTURE);
     }
-    
+
     public function setTiersQualite($noeud, $qualite)
     {
-    	if ($qualite == 'Negociant') {
+    	if ($qualite == EtablissementFamilles::FAMILLE_NEGOCIANT) {
     		$this->{$noeud} = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
-    	}
-    	if ($qualite == 'Cooperative') {
+    	} elseif ($qualite == EtablissementFamilles::FAMILLE_COOPERATIVE) {
     		$this->{$noeud} = AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY;
-    	}
+    	} else {
+			$this->{$noeud} = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
+		}
+
     }
-    
+
     public function setAcheteurQualite($qualite)
     {
     	$this->setTiersQualite('acheteur_type', $qualite);
     }
-    
+
     public function setVendeurQualite($qualite)
     {
     	$this->setTiersQualite('vendeur_type', $qualite);

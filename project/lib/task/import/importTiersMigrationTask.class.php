@@ -114,7 +114,7 @@ EOF;
     protected function importSociete($tiers) {
         $identifiantSociete = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
 
-        if(!$identifiantSociete) {
+        if(!str_replace("C", "", $identifiantSociete)) {
             return;
         }
 
@@ -135,6 +135,7 @@ EOF;
             $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
             $societe->constructId();
             $compte = $societe->createCompteSociete($societe->getIdentifiant()."9");
+            $compte->setLogin($societe->getIdentifiant());
             $compte->constructId();
             $societe->setCompteSocieteObject($compte);
         }
@@ -170,6 +171,10 @@ EOF;
 
         //echo $identifiantEtablissement;
         //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
+
+        if(!str_replace("C", "", $identifiantEtablissement) {
+            continue;
+        }
 
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement);
 
