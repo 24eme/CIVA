@@ -134,7 +134,7 @@ EOF;
             $societe->setIdentifiant($identifiantSociete);
             $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
             $societe->constructId();
-            $compte = $societe->createCompteSociete($societe->getIdentifiant()."0");
+            $compte = $societe->createCompteSociete($societe->getIdentifiant()."9");
             $compte->constructId();
             $societe->setCompteSocieteObject($compte);
         }
@@ -192,10 +192,10 @@ EOF;
 
         //$societe->pushContactAndAdresseTo($etablissement);
 
-        if(!$etablissement->getCompte() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getIdentifiant()."0")) {
+        if(!$etablissement->getCompte() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getIdentifiant()."9")) {
             $compte = CompteClient::getInstance()->createCompteFromEtablissement($etablissement);
             $compte->addOrigine($etablissement->_id);
-            $compte->setIdentifiant($etablissement->getIdentifiant()."0");
+            $compte->setIdentifiant($etablissement->getIdentifiant()."9");
             $compte->constructId();
             $etablissement->setCompte($compte->_id);
             try {
@@ -205,7 +205,7 @@ EOF;
                 return;
             }
         } else {
-            $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant()."0");
+            $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant()."9");
         }
 
         $etablissement->setIntitule($this->getInfos($tiers, Db2Tiers::COL_INTITULE));
