@@ -19,8 +19,8 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
             return $this->_get('login');
         }
-        
-        return preg_replace("/0$/", "", $this->getIdentifiant());
+
+        return preg_replace("/9$/", "", $this->getIdentifiant());
     }
 
     public function getMasterCompte() {
