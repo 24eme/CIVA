@@ -1,11 +1,28 @@
 <?php
 
+function display_cvi_formatted($cvi){
+    if(is_null($cvi) || !$cvi){
+        echo '';
+    }
+    if(!preg_match('/[0-9]{10}/', $cvi)){
+        echo $cvi;
+    }
+    echo preg_replace('/([0-9]{2})([0-9]{3})([0-9]{5})/','\1 \2 \3' , $cvi);
+}
+
 function display_field($object, $fieldName) {
     if (is_null($object)) {
         echo '';
         return;
     }
     echo (!is_null($object->$fieldName)) ? $object->$fieldName : '';
+}
+
+function get_field($object, $fieldName) {
+    if (is_null($object)) {
+        return '';
+    }
+    return (!is_null($object->$fieldName)) ? $object->$fieldName : '';
 }
 
 function escape_string_for_latex($string) {
