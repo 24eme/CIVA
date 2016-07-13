@@ -253,7 +253,7 @@ Le CIVA");
             $document = new ExportDSPdfEmpty($tiers, $type_ds, array($this, 'getPartial'), true, 'pdf');
         }
         catch (sfException $e){
-            echo $this->red('[ABSENCE DE LIEUX DE STOCKAGE] '.$e->getMessage());
+            echo 'ERROR;'.$tiers->_id.';ABSENCE DE LIEUX DE STOCKAGE] '.$e->getMessage()."\n";
             return false;
         }
         $document->removeCache();
