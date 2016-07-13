@@ -1,4 +1,4 @@
-all: project/cache project/log project/config/app.yml project/config/databases.yml project/bin/config.inc project/web/declaration_dev.php  .views/etablissements.json .views/mouvements.json .views/societe.json .views/compte.json .views/drm.json project/data/latex
+all: project/cache project/log project/config/app.yml project/config/databases.yml project/bin/config.inc project/web/civa_dev.php  .views/etablissements.json .views/mouvements.json .views/societe.json .views/compte.json .views/drm.json project/data/latex
 
 project/cache:
 	mkdir project/cache
