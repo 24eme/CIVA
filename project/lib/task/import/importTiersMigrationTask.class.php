@@ -135,7 +135,6 @@ EOF;
             $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
             $societe->constructId();
             $compte = $societe->createCompteSociete($societe->getIdentifiant()."9");
-            $compte->setLogin($societe->getIdentifiant());
             $compte->constructId();
             $societe->setCompteSocieteObject($compte);
         }
@@ -155,7 +154,7 @@ EOF;
         try {
             $societe->save();
         } catch (Exception $e) {
-            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
             continue;
         }
 
@@ -206,7 +205,7 @@ EOF;
             try {
                 $compte->save();
             } catch (Exception $e) {
-                echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+                echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
                 return;
             }
         } else {
@@ -233,7 +232,7 @@ EOF;
         try {
             $etablissement->save();
         } catch (Exception $e) {
-            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
             return;
         }
 
@@ -247,7 +246,7 @@ EOF;
             try {
                 $etablissement->save();
             } catch (Exception $e) {
-                echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+                echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
                 return;
             }
         }
@@ -264,7 +263,7 @@ EOF;
         try {
             $compteExploitant->save();
         } catch (Exception $e) {
-            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
             return;
         }
 
