@@ -156,7 +156,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $teledeclarant) {
 
-            $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet 2015")
+            $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet 2016")
                     ->setBody("Bonjour,
 
 Vous avez télé-déclaré votre Stock 2015 sur le Portail du CIVA <https://declaration.vinsalsace.pro> et nous n'avons donc pas pré-identifié de formulaire pour votre entreprise en Mairie.
