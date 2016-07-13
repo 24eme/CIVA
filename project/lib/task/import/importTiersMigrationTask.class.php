@@ -172,7 +172,7 @@ EOF;
         //echo $identifiantEtablissement;
         //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
 
-        if(!str_replace("C", "", $identifiantEtablissement) {
+        if(!str_replace("C", "", $identifiantEtablissement)) {
             continue;
         }
 
