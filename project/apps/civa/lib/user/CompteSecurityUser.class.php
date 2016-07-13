@@ -176,15 +176,4 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         );
     }
 
-    public function hasTeledeclaration() {
-        return $this->isAuthenticated() && $this->getCompte() && $this->hasCredential(Roles::TELEDECLARATION);
-    }
-
-    public function hasTeledeclarationDrm() {
-        return $this->hasTeledeclaration() && $this->hasCredential(Roles::TELEDECLARATION_DRM);
-    }
-
-    public function hasOnlyCredentialDRM() {
-        return $this->hasCredential(Roles::ROLEDRM) && $this->hasCredential(Roles::DRM);
-    }
 }
