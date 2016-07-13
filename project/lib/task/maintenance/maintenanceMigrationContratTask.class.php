@@ -1,6 +1,6 @@
 <?php
 
-class maintenanceMigrationContratTask extends sfBaseTask
+class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
 {
     protected function configure()
     {
@@ -17,7 +17,7 @@ class maintenanceMigrationContratTask extends sfBaseTask
         ));
 
         $this->namespace        = 'maintenance';
-        $this->name             = 'migration-contrat';
+        $this->name             = 'mutualisation-compte-remplacement-doc';
         $this->briefDescription = '';
         $this->detailedDescription = '';
     }
@@ -38,7 +38,11 @@ class maintenanceMigrationContratTask extends sfBaseTask
 
     public function replace(&$iterable, $parentKey) {
         $modifie = false;
+        $keys2Replace = array();
         foreach($iterable as $key => $value) {
+            if($this->isTiers($key)) {
+                $keys2Replace[$key] = $this->tiersId2EtablissementId($key);
+            }
 
             if(is_array($value) || is_object($value)) {
 
@@ -56,18 +60,45 @@ class maintenanceMigrationContratTask extends sfBaseTask
             }
 
             $newValue = $this->tiersId2EtablissementId($value);
+            $this->replaceValue($iterable, $key, $newValue);
 
             echo $parentKey."/".$key.":".$value." => ".$newValue ."\n";
 
-            $this->replaceValue($iterable, $key, $newValue);
+            $modifie = true;
+        }
 
+        foreach($keys2Replace as $key => $newKey) {
+            $this->replaceKey($iterable, $key, $newKey);
+            echo $parentKey."/".$key." => ".$parentKey."/".$newKey." \n";
             $modifie = true;
         }
 
         return $modifie;
     }
 
+    public function replaceKey($iterable, $key, $newKey) {
+        if(!$newKey) {
+            return false;
+        }
+
+        if(is_array($iterable)) {
+            $value = $iterable[$key];
+            $iterable[$newKey] = $value;
+            unset($iterable[$key]);
+        }
+
+        if(is_object($iterable)) {
+            $value = $iterable->{$key};
+            $iterable->{$newKey} = $value;
+            unset($iterable->{$key});
+        }
+    }
+
     public function replaceValue($iterable, $key, $newValue) {
+        if(!$newValue) {
+            return;
+        }
+
         if(is_array($iterable)) {
             $iterable[$key] = $newValue;
         }
