@@ -187,7 +187,7 @@ Le CIVA");
 
 En 2015, vous avez déposé une Déclaration de Stocks \"papier\", nous avons donc envoyé en Mairie un formulaire pré-identifié pour votre entreprise.
 
-Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 18 juillet 2016 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 18 juillet et vous n'aurez donc aucun document à remettre en Mairie.
+Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 juillet 2016 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 18 juillet et vous n'aurez donc aucun document à remettre en Mairie.
 
 Attention la date limite de télé-déclaration est fixée par les Douanes au 10 septembre minuit.
 
