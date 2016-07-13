@@ -1,37 +1,56 @@
 <?php
 
-function sprintFloat($float) 
+function formatFloat($number, $defaultDecimalFormat = null, $maxDecimalAuthorized = null, $format = null, $milliSeparate = false) {
+    
+    return FloatHelper::getInstance()->format($number, $defaultDecimalFormat, $maxDecimalAuthorized, $format, $milliSeparate);
+}
+
+function formatFloatFr($number, $defaultDecimalFormat = null, $maxDecimalAuthorized = null, $format = null, $milliSeparate = false) {
+    
+    return FloatHelper::getInstance()->formatFr($number, $defaultDecimalFormat, $maxDecimalAuthorized, $format, $milliSeparate);
+}
+
+function sprintFloat($number, $format = "%01.02f", $milliSeparate = false) 
 {
-	if (is_null($float))
-		return null;
-  return sprintf("%01.02f", round($float, 2));
+    return formatFloat($number, null, null, $format, $milliSeparate);
 }
 
-function sprintFloatFr($float)
+function sprintFloatFr($float, $format = "%01.02f", $milliSeparate = false)
 {
-
-  return preg_replace('/\./', ',', sprintFloat($float));
+    return formatFloatFr($number, null, null, $format, $milliSeparate);
 }
 
-function echoFloat($float) 
+function echoFloat($number, $milliSeparate = false) 
 {
-  echo sprintFloat($float);
+    echo formatFloat($number, null, null, null, $milliSeparate);
 }
 
-function echoFloatFr($float)
+function echoFloatFr($number, $milliSeparate = false)
 {
-  echo sprintFloatFr($float);
+    echo formatFloatFr($number, null, null, null, $milliSeparate);
 }
 
-function echoSignedFloat($float) 
+function echoLongFloat($number, $milliSeparate = false) 
 {
-  echo ($float>0)? '+'.sprintFloat($float) : sprintFloat($float);
+    echo formatFloat($number, 4, 4, null, $milliSeparate);
 }
 
-function echoArialFloat($float) {
-    echo number_format($float, 2, '.', ' ');
+function echoLongFloatFr($number, $milliSeparate = false)
+{
+    echo formatFloatFr($number, 4, 4, null, $milliSeparate);
 }
 
-function getArialFloat($float) {
-    return number_format($float, 2, '.', ' ');
+function echoSignedFloat($number) 
+{
+    echo ($number>0)? '+'.formatFloat($number) : formatFloat($number);
+}
+
+function echoArialFloat($number) {
+    
+    echo number_format($number, 2, '.', ' ');
+}
+
+function getArialFloat($number) {
+    
+    return number_format($number, 2, '.', ' ');
 }
