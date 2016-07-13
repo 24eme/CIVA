@@ -167,7 +167,7 @@ class drmActions extends drmGeneriqueActions {
 
         $this->drmCsvEdi = new DRMImportCsvEdi(sfConfig::get('sf_data_dir') . '/upload/' . $this->md5, $this->drm);
         $this->drmCsvEdi->importCSV();
-        
+
         $this->redirect('drm_validation', $this->drm);
 
     }
@@ -244,7 +244,7 @@ class drmActions extends drmGeneriqueActions {
         $this->isTeledeclarationMode = false;
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->societe = $this->etablissement->getSociete();
-        if ($this->etablissement->famille != EtablissementFamilles::FAMILLE_PRODUCTEUR)
+        if ($this->etablissement->famille != EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)
              throw new sfException("L'établissement sélectionné ne déclare pas de DRM");
 
         $this->campagne = $request->getParameter('campagne');

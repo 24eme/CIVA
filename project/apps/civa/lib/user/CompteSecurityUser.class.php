@@ -61,6 +61,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     public function signInFirst($compte) {
         $this->addCredential(self::CREDENTIAL_COMPTE);
+        $this->addCredential("drm");
         $this->signInCompte($compte, self::NAMESPACE_COMPTE_AUTHENTICATED);
         $this->signInCompte($compte, self::NAMESPACE_COMPTE_USED);
 
@@ -173,5 +174,17 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED)
 
         );
+    }
+
+    public function hasTeledeclaration() {
+        return $this->isAuthenticated() && $this->getCompte() && $this->hasCredential(Roles::TELEDECLARATION);
+    }
+
+    public function hasTeledeclarationDrm() {
+        return $this->hasTeledeclaration() && $this->hasCredential(Roles::TELEDECLARATION_DRM);
+    }
+
+    public function hasOnlyCredentialDRM() {
+        return $this->hasCredential(Roles::ROLEDRM) && $this->hasCredential(Roles::DRM);
     }
 }
