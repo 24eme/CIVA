@@ -1,6 +1,6 @@
 <?php
 
-class csvFile 
+class CsvFileAcheteur 
 {
   const CSV_ACHETEUR_CVI = 0;
   const CSV_ACHETEUR_LIBELLE = 1;
@@ -29,7 +29,7 @@ class csvFile
     $this->ignore = $ignore_first_if_comment;
     if (!file_exists($file) && !preg_match('/^http/', $file))
       throw new Exception("Cannont access $file");
-      
+
     $this->file = $file;
     $handle = fopen($this->file, 'r');
     if (!$handle)

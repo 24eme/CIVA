@@ -1,10 +1,10 @@
 <?php
 
 abstract class _DSNoeud extends acCouchdbDocumentTree {
-    
+
     public function getConfig() {
-        
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(preg_replace('/^\/declaration/', '/recolte', $this->getHash()));
+
+        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(HashMapper::convert($this->getHash()));
     }
 
     abstract public function getChildrenNode();
@@ -14,10 +14,11 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         $items_config = $this->getConfig()->getChildrenNode();
         $items_sorted = array();
 
-        foreach($items_config as $hash => $item_config) {
-            $hash = preg_replace('/^\/recolte/','declaration',$hash);
-            if($this->exist($item_config->getKey())) {
-                $items_sorted[$hash] = $this->get($item_config->getKey());
+        foreach($items_config as $hashConfig => $item_config) {
+            $hashDS = str_replace("recolte", "declaration", HashMapper::inverse($item_config->getHash()));
+            if($this->getDocument()->exist($hashDS)) {
+                $item = $this->getDocument()->get($hashDS);
+                $items_sorted[$item->getKey()] = $item;
             }
         }
 
@@ -25,15 +26,15 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
     }
 
     public function getChildrenNodeDeep($level = 1) {
-      if($this->getConfig()->hasManyNoeuds()) {
-          
+      if(count($this->getChildrenNode()) > 1) {
+
           throw new sfException("getChildrenNodeDeep() peut uniquement être appelé d'un noeud qui contient un seul enfant...");
       }
 
       $node = $this->getChildrenNode()->getFirst();
-      
+
       if($level > 1) {
-        
+
         return $node->getChildrenNodeDeep($level - 1);
       }
 
@@ -48,8 +49,8 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $produits;
     }
-    
-    
+
+
     public function getProduitsSorted() {
         $produits = array();
         foreach($this->getChildrenNodeSorted() as $key => $item) {
@@ -58,7 +59,7 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $produits;
     }
-    
+
     public function getProduitsSortedWithFilter($matches) {
         $produits = $this->getProduitsSorted();
         $result = array();
@@ -117,7 +118,7 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
 
         return $this->getConfig()->hasLieuEditable();
     }
-    
+
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         switch ($vtsgn) {
             case DSCivaClient::VOLUME_VT:
@@ -155,14 +156,14 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         parent::update();
         $this->updateTotalVolumes();
     }
-    
-    public function cleanAllNodes() {   
+
+    public function cleanAllNodes() {
         foreach($this->getChildrenNodeSorted() as $item) {
-            $item->cleanAllNodes();  
+            $item->cleanAllNodes();
             if(!count($item->getProduitsDetails())){
                 $this->remove($item->getKey());
             }
         }
-    }    
-    
+    }
+
 }

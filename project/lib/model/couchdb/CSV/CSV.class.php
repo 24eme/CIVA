@@ -1,6 +1,6 @@
 <?php
 
-class CSV extends baseCSV 
+class CSV extends baseCSV
 {
   public function storeCSV(CsvFile $csv) {
     $ids = array();
@@ -18,7 +18,7 @@ class CSV extends baseCSV
   }
 
   public function getCsvFile() {
-    $csv = new CsvFile($this->getAttachmentUri($this->getCsvFilename()));
+    $csv = new CsvFileAcheteur($this->getAttachmentUri($this->getCsvFilename()));
     return $csv;
   }
 

@@ -61,9 +61,9 @@ class declarationComponents extends sfComponents {
         $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatifCouleur();
         $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
         $cvi = array();
-        foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->filter('^appellation_') as $appellation_key => $appellation_config) {
-          if ($this->dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
-              $appellation = $this->dr->recolte->getNoeudAppellations()->get($appellation_key);
+        foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
+          if ($this->dr->recolte->getNoeudAppellations()->exist("appellation_".$appellation_key)) {
+              $appellation = $this->dr->recolte->getNoeudAppellations()->get("appellation_".$appellation_key);
               if ($appellation->getConfig()->excludeTotal())
                 continue;
               $this->appellations[] = $appellation->getAppellation();

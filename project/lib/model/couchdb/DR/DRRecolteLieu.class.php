@@ -38,7 +38,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCouleur($cepage = null) {
-        if (!$cepage && $this->getConfig()->getNbCouleurs() > 1)
+        if (!$cepage && count($this->getConfig()->couleurs) > 1)
             throw new sfException("getCouleur() ne peut être appelé d'un lieu qui n'a qu'une seule couleur...");
         $couleur = 'couleur';
         if ($cepage)
@@ -68,13 +68,13 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getNbCouleurs() {
-        
+
         return count($this->filter('^couleur'));
     }
 
     public function getCepages() {
         throw new sfException("La liste des cépages est impossible à partir du lieu");
-        
+
         return $this->getCouleur()->getCepages();
     }
 
@@ -85,10 +85,10 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
             }
         }
         if ($this->getAppellation()->getConfig()->hasManyLieu()) {
-            
+
             return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
         } else {
-            
+
             return $this->getAppellation()->getConfig()->getDouane()->getFullAppCode($vtsgn);
         }
     }
@@ -105,7 +105,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function canHaveUsagesLiesSaisi() {
-        
+
         return !$this->isLiesSaisisCepage() && !$this->getConfig()->existRendementCouleur();
     }
 

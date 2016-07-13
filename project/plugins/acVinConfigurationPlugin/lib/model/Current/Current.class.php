@@ -5,17 +5,16 @@
  */
 
 class Current extends BaseCurrent {
-    
+
     public function __construct() {
         parent::__construct();
         $this->set('_id', 'CURRENT');
     }
-    
+
     public function getPeriode()
     {
     	return date('Y-m');
     }
-
 
     public function getConfigurationId($date) {
         foreach($this->configurations as $confDate => $confId) {
@@ -41,5 +40,44 @@ class Current extends BaseCurrent {
         parent::save();
         CurrentClient::getInstance()->cacheResetConfiguration();
     }
-    
+
+    /* A remplacer */
+
+    public function getCampagne() {
+
+        return "2015";
+    }
+
+    public function isDREditable() {
+
+        return false;
+    }
+
+    public function isDSDecembre() {
+
+        return false;
+    }
+
+    public function getDsNonEditable() {
+
+        return 0;
+    }
+
+    public function getDsNonOuverte() {
+
+        return 0;
+    }
+
+    public function getPeriodeDS() {
+
+        return "201607";
+    }
+
+    public function hasCurrentFromTheFuture() {
+
+        return false;
+    }
+
+    /* Fin */
+
 }

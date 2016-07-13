@@ -137,11 +137,17 @@ class VracClient extends acCouchdbClient {
         return $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
     }
 
+	public function buildCampagneVrac($date) {
+      $campagne_manager = new CampagneManager('12-01');
+
+      return $campagne_manager->getCampagneByDate($date);
+    }
+
     public function createVrac($createurIdentifiant, $date = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
-        $campagne = ConfigurationClient::getInstance()->buildCampagneVrac($date);
+        $campagne = $this->buildCampagneVrac($date);
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);

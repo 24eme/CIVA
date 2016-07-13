@@ -663,4 +663,190 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return false;
     }
 
+    /**** DR ****/
+
+    public function getRendement() {
+
+      return $this->getRendementCepage();
+    }
+
+    public function getRendementNoeud() {
+
+        return -1;
+    }
+
+    public function getRendementAppellation() {
+
+        return $this->getRendementByKey('rendement_appellation');
+    }
+
+    public function getRendementCouleur() {
+
+        return $this->getRendementByKey('rendement_couleur');
+    }
+
+    public function getRendementCepage() {
+
+        return $this->getRendementByKey('rendement');
+    }
+
+    public function hasRendementAppellation() {
+
+        return $this->hasRendementByKey('rendement_appellation');
+    }
+
+    public function hasRendementCouleur() {
+
+        return $this->hasRendementByKey('rendement_couleur');
+    }
+
+    public function hasRendementCepage() {
+
+        return $this->hasRendementByKey('rendement');
+    }
+
+    public function existRendementAppellation() {
+
+        return $this->existRendementByKey('rendement_appellation');
+    }
+
+    public function existRendementCouleur() {
+
+        return $this->existRendementByKey('rendement_couleur');
+    }
+
+    public function existRendementCepage() {
+
+        return $this->existRendementByKey('rendement');
+    }
+
+    public function existRendement() {
+
+        return $this->existRendementCepage() || $this->existRendementCouleur() || $this->existRendementAppellation();
+    }
+
+    public function hasRendementNoeud() {
+        $r = $this->getRendementNoeud();
+
+        return ($r && $r > 0);
+    }
+
+    public function existRendementByKey($key) {
+
+        return $this->store('exist_rendement_by_key_'.$key, array($this, 'existRendementByKeyStorable'), array($key));
+    }
+
+    protected function existRendementByKeyStorable($key) {
+      if($this->hasRendementByKey($key)) {
+
+        return true;
+      }
+
+      foreach($this->getChildrenNode() as $noeud) {
+        if($noeud->existRendementByKey($key)) {
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    protected function getRendementByKey($key) {
+
+        return $this->store('rendement_by_key_'.$key, array($this, 'findRendementByKeyStorable'), array($key));
+    }
+
+    protected function findRendementByKeyStorable($key) {
+        if ($this->exist($key) && $this->_get($key)) {
+
+            return $this->_get($key);
+        }
+
+        return $this->getParentNode()->get($key);
+    }
+
+    protected function hasRendementByKey($key) {
+        $r = $this->getRendementByKey($key);
+
+        return ($r && $r > 0);
+    }
+
+    public function hasMout() {
+        if ($this->exist('mout')) {
+
+            return ($this->mout == 1);
+        }
+
+        return $this->getParentNode()->hasMout();
+    }
+
+    public function excludeTotal()
+    {
+        return ($this->exist('exclude_total') && $this->get('exclude_total'));
+    }
+
+    public function hasTotalCepage() {
+
+      return $this->store('has_total_cepage', array($this, 'hasTotalCepageStorable'));
+    }
+
+    protected function hasTotalCepageStorable() {
+
+      if ($this->exist('no_total_cepage')) {
+
+          return !($this->no_total_cepage == 1);
+      }
+
+      if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+
+          return false;
+      }
+
+      return $this->getParentNode()->hasTotalCepage();
+    }
+
+    public function hasVtsgn() {
+        if ($this->exist('no_vtsgn')) {
+            return (! $this->get('no_vtsgn'));
+        }
+
+
+        if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+            return false;
+        }
+
+        return $this->getParentNode()->hasVtsgn();
+    }
+
+    public function isForDR() {
+
+        return !$this->exist('no_dr') || !$this->get('no_dr');
+    }
+
+    public function isForDS() {
+
+        return !$this->exist('no_ds') || !$this->get('no_ds');
+    }
+
+    public function isAutoDs() {
+        if ($this->exist('auto_ds')) {
+            return $this->get('auto_ds');
+        }
+
+        return $this->getParentNode()->isAutoDs();
+    }
+
+    public function hasCepageRB() {
+        foreach($this->getProduits() as $produit) {
+            if($produit->getKey() == "RB") {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**** DR ****/
+
 }
