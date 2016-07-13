@@ -92,10 +92,18 @@ EOF;
 
             $societe = $this->importSociete($tiers);
 
+            if(!$societe) {
+                continue;
+            }
+
             $num = 1;
 
             foreach($etablissements as $numEt => $tiers) {
-                $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
+                try {
+                    $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
+                } catch (Exception $e) {
+                    continue;
+                }
                 $num++;
             }
 
@@ -110,9 +118,16 @@ EOF;
             return;
         }
 
-        $societe = SocieteClient::getInstance()->find("SOCIETE-".$identifiantSociete);
+        $statut = SocieteClient::STATUT_ACTIF;
 
-        //if($societe) { return $societe; }
+        if($this->isCloture($tiers)) {
+            $statut = SocieteClient::STATUT_SUSPENDU;
+            if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantSociete, acCouchdbClient::HYDRATE_JSON)) {
+                return;
+            }
+        }
+
+        $societe = SocieteClient::getInstance()->find("SOCIETE-".$identifiantSociete);
 
         if(!$societe) {
             $societe = new Societe();
@@ -132,12 +147,18 @@ EOF;
         $societe->setCommune($this->getInfos($tiers, Db2Tiers::COL_COMMUNE_SIEGE));
         $societe->setInsee($this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE));
         $societe->setPays("FR");
+        $societe->setStatut($statut);
         $societe->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
         $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $societe->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
-        $societe->save();
+        try {
+            $societe->save();
+        } catch (Exception $e) {
+            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            continue;
+        }
 
-        echo $societe->_id." (".$societe->getRaisonSociale().") avec le compte ".$societe->getCompteSociete()."\n";
+        echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()."\n";
 
         return $societe;
     }
@@ -151,6 +172,15 @@ EOF;
         //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
 
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement);
+
+        $statut = EtablissementClient::STATUT_ACTIF;
+
+        if($this->isCloture($tiers)) {
+            $statut = EtablissementClient::STATUT_SUSPENDU;
+            if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantEtablissement)) {
+                return;
+            }
+        }
 
         if(!$etablissement) {
             $etablissement = new Etablissement();
@@ -168,7 +198,12 @@ EOF;
             $compte->setIdentifiant($etablissement->getIdentifiant()."0");
             $compte->constructId();
             $etablissement->setCompte($compte->_id);
-            $compte->save();
+            try {
+                $compte->save();
+            } catch (Exception $e) {
+                echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+                return;
+            }
         } else {
             $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant()."0");
         }
@@ -179,7 +214,7 @@ EOF;
         $etablissement->setCvi($this->getInfos($tiers, Db2Tiers::COL_CVI));
         $etablissement->setNoAccises($this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES));
         $etablissement->setFamille($this->getFamille($tiers));
-
+        $etablissement->setStatut($statut);
         $etablissement->setSiret($this->getInfos($tiers, Db2Tiers::COL_SIRET));
         $etablissement->setAdresse($this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE));
         $etablissement->setCodePostal($this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL_SIEGE));
@@ -189,7 +224,13 @@ EOF;
         $etablissement->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
         $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $etablissement->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
-        $etablissement->save();
+
+        try {
+            $etablissement->save();
+        } catch (Exception $e) {
+            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            return;
+        }
 
         $compteExploitant = $etablissement->getCompteExploitantObject();
         if(!$compteExploitant) {
@@ -198,7 +239,12 @@ EOF;
             $compteExploitant->constructId();
 
             $etablissement->setCompteExploitant($compteExploitant->_id);
-            $etablissement->save();
+            try {
+                $etablissement->save();
+            } catch (Exception $e) {
+                echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+                return;
+            }
         }
 
         $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
@@ -210,11 +256,27 @@ EOF;
         $codePostal = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL);
         $compteExploitant->setCodePostal(($codePostal) ? $codePostal : $etablissement->getCodePostal());
         $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
-        $compteExploitant->save();
+        try {
+            $compteExploitant->save();
+        } catch (Exception $e) {
+            echo "ERROR;".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            return;
+        }
 
-        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET).") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
+        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET)." ".$etablissement->getStatut().") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
 
         return $etablissement;
+    }
+
+    protected function isCloture($tiers) {
+        foreach($tiers as $t) {
+            if($t->isCloture()) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getFamille($tiers) {
@@ -251,7 +313,9 @@ EOF;
                 return $t->get($key);
             }
 
-            $val = $t->get($key);
+            if($t->get($key)) {
+                $val = $t->get($key);
+            }
             $num = $t->get(Db2Tiers::COL_NUM);
 
         }
