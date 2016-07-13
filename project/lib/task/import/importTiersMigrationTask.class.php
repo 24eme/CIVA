@@ -235,7 +235,7 @@ EOF;
         $compteExploitant = $etablissement->getCompteExploitantObject();
         if(!$compteExploitant) {
             $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($societe);
-            $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."901");
+            $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."01"."9");
             $compteExploitant->constructId();
 
             $etablissement->setCompteExploitant($compteExploitant->_id);
