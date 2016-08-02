@@ -6,9 +6,12 @@ class CompteTiers extends BaseCompteTiers {
     protected $_duplicated = null;
     
     public function getNom() {
-        if($this->isCompteSociete()) {
-            
-            return $this->getTiersField('nom');
+        if($this->isCompteSociete()) {            
+            $nom = $this->getTiersField('nom');
+
+            if($nom) {
+                return $nom;
+            }
         }
 
         return $this->_get('nom');

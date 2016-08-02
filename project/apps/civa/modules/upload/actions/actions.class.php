@@ -73,6 +73,14 @@ class uploadActions extends EtapesActions {
         $this->has_superficie = array();
 	    $this->productmd5 = array();
 
+        $this->allSuperficieIsEmpty = true;
+
+        foreach ($this->csv->getCsv() as $line) {
+            if (isset($line[CsvFile::CSV_SUPERFICIE]) && $line[CsvFile::CSV_SUPERFICIE]) {
+                $this->allSuperficieIsEmpty = false;
+            }
+        }
+
         if (isset($this->previous_recoltant))
             unset($this->previous_recoltant);
         foreach ($this->csv->getCsv() as $line) {
@@ -424,6 +432,10 @@ class uploadActions extends EtapesActions {
     }
 
     protected function shouldHaveSuperficieTotal($line) {
+        if($this->allSuperficieIsEmpty) {
+            return false;
+        }
+
         if (!$this->hasChangedRecoltant($line)) {
 
             return false;

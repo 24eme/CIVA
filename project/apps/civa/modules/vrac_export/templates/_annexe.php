@@ -1,5 +1,5 @@
 <?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-<div style="font-size: 7pt;">
+<div style="font-size: 6pt;">
 <p>
 On entend par « bouteilles nues » ou « en tiré-bouché »,  les bouteilles mises en circulation entre opérateurs et dépourvues d’un étiquetage comportant l’ensemble des mentions obligatoires au regard de la règlementation communautaire ou nationale pour la remise au consommateur final ou aux collectivités. 
 </p>
@@ -63,7 +63,7 @@ Les vins et les vins de liqueur préemballés en France peuvent être mis en cir
 <h4 style="text-align: center; font-weight: normal;">CETTE DÉCLARATION EST PROTÉGÉE PAR LE SECRET <br /> PROFESSIONNEL ET LES PRINCIPES DE CONFIDENTIALITÉ</h4>
 </div>
 <?php else: ?>
-<div style="font-size: 7pt;">
+<div style="font-size: 6pt;">
 <h4><b>Art. D644-6 du Code Rural modifié par le décret 2008-998 du 23/9/08</b></h4>
 <p>
 L’article susmentionné rend obligatoire l’information des organismes de contrôle agréés sur les intentions de transactions de vins non conditionnés.
@@ -124,9 +124,39 @@ La retenue sur les achats de vin en vrac correspond à la moitié de la cotisati
 <p>
 « Dans tous les cas, la mise en œuvre des sanctions prévues à l’alinéa précédent ne fait pas obstacle à l’application éventuelle de celles prévues par les contrats de fourniture ainsi que par les règlements intérieurs des groupements coopératifs agricoles en cause, en cas de défaut d’exécution des clauses de ces règlements. »
 </p>
+
+<h4><b>Clause de réserve de propriété</b></h4>
+
+<p>
+Le transfert de propriété du vin à l'acheteur ne s'opère qu'au fur et à mesure de l'encaissement du prix de vente, sur un volume de vin proportionnel au paiement encaissé par rapport au prix total, le transfert de propriété s'opérant du prix de vente le plus bas, vers le prix le plus élévé.
+</p>
+
+<p>
+L'acheteur s'oblige à faire figurer de façon apparente dans sa comptabilité les vins soumis à la réserve de propriété et sur une ligne distincte de l'actif de son bilan.
+</p>
+
+<p>Le vin dont la propriété est réservée peut être élaboré par l'acheteur. Mais il ne peut le céder à titre onéreux ou gratuit, ou le donner en garantie, que proportionnellememt au vin dont la propriété lui à été transférée. En cas de cession prohibée à un tiers, le droit de propriété du vendeur est reportable sur la créance de son acheteur sur le sous-acquéreur.</p>
+
+<p>L'acheteur doit conserver le vin dont la propriété est réservée dans un état sain et marchand et bénéficier d'une assurance contre tout risque de dégradation, avarie ou perte, stipulant qu'en cas de sinistre son vendeur sera subrogé dans ses droits contre l'assureur.
+</p>
+
+<p>La saisie ou toute autre intervention d'un tiers sur le vin dont la propriété est réservée oblige l'acheteur à en informer sans délai le vendeur.</p>
+
+<p>A défaut de paiement intégral et dans le delai, le vendeur peut revendiquer le vin dont la propriété est réservée. L'acheteur doit le restituer dans les 8 jours après la date de réception ou à défaut la date de première présentation de la mise en demeure du vendeur. A défaut de restitution, le vendeur pourra l'y contraindre par voie de justice. Tous les frais en résultant seront à la charge de l'acheteur qui ne peut réclamer aucune indemnité pour le travail réalisé sur le vin. En cas de procédure collective, la procédure de revendication suivra les règles de droit applicable.</p>
+
+<p>La revendication du vin dont la propriété est réservée a en principe lieu en nature, quel que soit son stade d'évolution, d'élaboration, de vinification ou de conditionnement.</p>
+
+<p>En cas d'assemblage du vin, la revendication a lieu sur l'assemblage à concurrence du volume de vin dont la propriété est restée réservée.</p>
+
+<p>Si le vin ne se retrouve pas en nature, la revendication aura lieu prioritairement sur le vin vendu par le même vendeur. A défaut, la revendication s'opère sur un bien fongible, selon les critères suivants :<br />
+- triple critère : vin de même cépage, même appellation et même millésime ;<br />
+- à défaut, double critère : même cépage et même appellation, subsidiairement même cépage et
+même millésime, subsidiairement même appellation et même millésime ;<br />
+- à defaut, critère unique : même cépage, subsidiairement même appellation, subsidiairement même
+millésime.</p>
+
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<h4 style="text-align: center; font-weight: normal;">CETTE DÉCLARATION EST PROTÉGÉE PAR LE SECRET <br /> PROFESSIONNEL ET LES PRINCIPES DE CONFIDENTIALITÉ</h4>
+
+<h5 style="text-align: center; font-weight: normal;">CETTE DÉCLARATION EST PROTÉGÉE PAR LE SECRET PROFESSIONNEL ET LES PRINCIPES DE CONFIDENTIALITÉ</h5>
 </div>
 <?php endif; ?>

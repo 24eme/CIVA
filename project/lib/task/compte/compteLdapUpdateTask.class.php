@@ -39,6 +39,7 @@ EOF;
 
     foreach($ids as $id) {
         $compte = sfCouchdbManager::getClient('_Compte')->retrieveDocumentById($id);
+        echo $compte->_id."\n";
         $compte->updateLdap();
     }
   }

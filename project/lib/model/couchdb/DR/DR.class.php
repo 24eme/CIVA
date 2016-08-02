@@ -392,7 +392,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
                     foreach($acheteursByType as $type => $cvis) {
                         if($type == "cave_particuliere" && $cvis && round($appellation->getTotalCaveParticuliere(), 2) == 0) {
-                            array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucune vente pour"));
+                            //array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucun volume sur place pour"));
                         }
                         if(!$cvis instanceof acCouchdbJson) {
                             continue;

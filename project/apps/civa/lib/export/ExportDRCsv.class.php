@@ -106,7 +106,7 @@ class ExportDRCsv extends ExportCsv {
                             if($detail->cave_particuliere > 0) {
                                 $this->addDetailTotal($detail);
                             }
-                            foreach ($detail->filter('negoces|cooperatives') as $acheteurs) {
+                            foreach ($detail->filter('negoces|cooperatives|mouts') as $acheteurs) {
                                 foreach ($acheteurs as $acheteur) {
                                         $this->addDetailAcheteur($acheteur);
                                 }

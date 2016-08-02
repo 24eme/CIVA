@@ -36,7 +36,7 @@ class ExportUserDRValideeCsv extends ExportCsv {
             $this->_acheteur = acCouchdbManager::getClient("Acheteur")->retrieveByCvi($acheteur_or_cvi);
         }
         if (!$this->_acheteur) {
-            throw new sfException("Acheteur not find");
+            throw new sfException("L'acheteur n'a pas été trouvé");
         }
         $drs = acCouchdbManager::getClient("DR")->findAllByCampagneAndCviAcheteur($this->_campagne, $this->_acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
 

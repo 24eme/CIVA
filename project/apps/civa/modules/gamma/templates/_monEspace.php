@@ -10,13 +10,13 @@
 <?php else : ?>
         <div class="ligne_form">
             <input type="radio" id="gamma_type_acces_inscription" name="gamma[type_acces]" value="plateforme" checked="checked"  />
-            <label for="gamma_type_acces_inscription">Alsace Gamm@ (Plateforme réelle)</label>
+            <label for="gamma_type_acces_inscription">Alsace Gamm@</label>
         </div>
 <?php endif; ?>
-        <div class="ligne_form">
+        <!--<div class="ligne_form">
             <input type="radio" id="gamma_type_acces_plateforme_test" name="gamma[type_acces]" value="plateforme_test" />
             <label for="gamma_type_acces_plateforme_test">Plateforme de test</label>
-        </div>
+        </div>-->
         <div class="ligne_form ligne_btn">
             <input type="image" id="mon_espace_civa_gamma_valider" name="gamma_bouton" class="btn" src="/images/boutons/btn_valider.png" alt="Valider" />
         </div>

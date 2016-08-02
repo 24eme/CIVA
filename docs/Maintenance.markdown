@@ -22,7 +22,7 @@ Export des modifications depuis le dernier numéro de séquence :
 
 Stocker le numéro de séquence courant pour exporter les modifications la prochaine fois :
 
- > curl -s -X GET "http://localhost:5984/civa" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
+ > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
 
 ### Désactivation des Tiers inactifs
 
@@ -99,7 +99,7 @@ Enfin dans le cas d'un import complet uniquement, il convient de stocker le num�
 
 Stocker le numéro de séquence courant :
 
- > curl -s -X GET "http://localhost:5984/civa" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
+ > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
 
 ### Mise à jour des comptes
 
@@ -256,6 +256,14 @@ Pour débugguer, il existe une tache qui permet de sortir le XML d'une seule DR 
 
  > bash bin/export_drs_jeunes_vignes.sh [campagne]
 
+### Générer les DRs automatiques
+
+php symfony DR:creationFromAcheteur --year=[campagne] [--dry-run=true]
+
+### Exporter csv des DR concernant un acheteur
+
+php symfony export:dr-acheteur-csv [campagne] [cvi]
+
 Contrat Vrac
 ------------
 
@@ -286,3 +294,13 @@ Valable pour la création et la mise à jour.
 Tache de génération des PDFs :
 
  > php symfony export:ds-pdf
+
+### Déclarants et envoi du mail d'ouverture
+
+Obtenir la liste des déclarants
+
+ > bash bin/send_mail_ouverture_ds.sh [periode] --dryrun=true
+
+Envoi du mail d'ouverture
+
+ > bash bin/send_mail_ouverture_ds.sh [periode]

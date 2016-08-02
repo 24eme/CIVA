@@ -62,7 +62,7 @@ EOF;
             
             try {
             	$message = $this->getMailer()->compose()
-                      ->setFrom(array('dominique@civa.fr' => "Webmaster Vinsalsace.pro"))
+                      ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($compte->getEmail())
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));

@@ -45,8 +45,7 @@ class compteActions extends sfActions {
             
             return $this->redirectAfterLogin($request);
 		}	   
-		
-	    $url = sfConfig::get('app_cas_url') . '/login?service=' . urlencode($request->getUri());
+	    $url = sfConfig::get('app_cas_url') . '/login?service=' . str_replace('http://', 'https://', urlencode($request->getUri()));
 	    
         return $this->redirect($url);
     }
@@ -232,7 +231,7 @@ class compteActions extends sfActions {
                 }
 
                 try {
-                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : <" . $lien . ">\n\nCordialement,\n\nLe CIVA");
+                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
