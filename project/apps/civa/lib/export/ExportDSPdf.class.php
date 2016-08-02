@@ -271,7 +271,7 @@ class ExportDSPdf extends ExportDocument {
     protected function getRecapAutres() {
 
         return array("Rebêches" => $this->ds_principale->rebeches, 
-                     "Usages industiels" => $this->ds_principale->getUsagesIndustriels());
+                     "Usages industriels" => $this->ds_principale->getUsagesIndustriels());
     }
 
     protected function getRecapVinsSansIG() {
