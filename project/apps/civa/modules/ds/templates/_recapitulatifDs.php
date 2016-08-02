@@ -82,7 +82,7 @@ if (isset($validation_dss)) {
                         <td><?php echoFloat($ds_principale->getRebeches()); ?></td>
                     </tr>
                     <tr>
-                        <td class="appellation">Usages industiels</td>
+                        <td class="appellation">Usages industriels</td>
                         <td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
                     </tr>
                 </tbody>
