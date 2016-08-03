@@ -12,8 +12,13 @@
         printf(html_entity_decode($title) , $sf_request->getParameter('annee', date("Y"))); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/components/vins/vins.css" rel="stylesheet">
+    <link href="/components/select2/select2.css" rel="stylesheet">
+    <link href="/components/select2/select2-bootstrap.min.css" rel="stylesheet">
+    <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
     <?php include_stylesheets() ?>
-    <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script>
+    <!-- <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script> -->
   </head>
   <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->
@@ -27,8 +32,16 @@
         </div>
     <!-- fin #global -->
     <?php include_partial('global/init') ?>
+    <script src="/components/jquery/jquery.js"></script>
+    <script src="/components/bootstrap/bootstrap.js"></script>
+    <script src="/components/moment/moment-with-locales.min.js"></script>
+    <script src="/components/select2/select2.min.js"></script>
+    <script src="/components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/js/plugins/jquery.plugins.min.js"></script>
+    <script src="/js/lib/jquery-ui-1.8.21.min.js"></script>
+    <script src="/js/lib/jquery.sticky.js"></script>
     <?php include_javascripts() ?>
     <?php include_partial('global/ieCssJavascript') ?>
-    <?php include_partial('global/ajaxNotification') ?> 
+    <?php include_partial('global/ajaxNotification') ?>
   </body>
 </html>
