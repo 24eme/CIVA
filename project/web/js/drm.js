@@ -118,7 +118,7 @@
         initNonApurement();
         initUpdateEtablissementValidation();
         initSignatureDrmPopup();
-        initBoldSaisie();        
+        initBoldSaisie();
     });
 
     var initRaccourcis = function () {
@@ -166,8 +166,8 @@
             }
         });
         $('div.panel-heading').click(function(){
-            var col = colonnes.findByHash($('.col_focus').data('hash'));     
-            col.valider($(this).parent().data('hash')); 
+            var col = colonnes.findByHash($('.col_focus').data('hash'));
+            col.valider($(this).parent().data('hash'));
         });
     }
 
@@ -208,7 +208,7 @@
     }
 
     var updateCrdsTotaux = function (id) {
-
+      
         var crds_debut_de_mois = $("#" + id + " td.crds_debut_de_mois input").val();
 
         var entreesAchats = (!isNaN(parseInt($("#" + id + " td.crds_entreesAchats input").val()))) ? parseInt($("#" + id + " td.crds_entreesAchats input").val()) : 0;
@@ -236,7 +236,7 @@
          height: 'auto',
          width: 'auto',
          'afterShow': openedPopupAjoutCRD
-         
+
          });*/
 
         $('a.ajout_crds_popup').click();
@@ -283,7 +283,7 @@
          width: 'auto',
          minWidth: 500,
          'afterShow': $.initProtectForms
-         
+
          });*/
 
         $('.popup_contenu a#drm_nouvelle_popup_close').click(function () {

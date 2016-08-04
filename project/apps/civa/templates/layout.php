@@ -12,11 +12,13 @@
         printf(html_entity_decode($title) , $sf_request->getParameter('annee', date("Y"))); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/components/vins/vins.css" rel="stylesheet">
+    <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
     <link href="/components/select2/select2.css" rel="stylesheet">
     <link href="/components/select2/select2-bootstrap.min.css" rel="stylesheet">
-    <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <?php include_stylesheets() ?>
     <!-- <script type="text/javascript" src="/js/lib/jquery-1.4.2.min.js"></script> -->
   </head>
@@ -40,6 +42,9 @@
     <script src="/js/plugins/jquery.plugins.min.js"></script>
     <script src="/js/lib/jquery-ui-1.8.21.min.js"></script>
     <script src="/js/lib/jquery.sticky.js"></script>
+    <script src="/js/ajaxHelper.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/drm.js"></script>
     <?php include_javascripts() ?>
     <?php include_partial('global/ieCssJavascript') ?>
     <?php include_partial('global/ajaxNotification') ?>
