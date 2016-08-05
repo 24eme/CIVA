@@ -11,11 +11,11 @@ Le catalogue produit nécessaire aux imports de DRM pour le CIVA est décrit dan
 Ce fichier comporte les différentes colonnes suivantes :
 
 1. La certification : la certification du produit AOC
-2. Le genre : ??
+2. Le genre : Tranquille, Mousseux
 3. L'appellation : AOC Alsace blanc, AOC Crémant d'Alsace
-4. La mention : ??
-5. Le lieu : s'il existe ??
-6. La couleur : Rouge/Rosé/Blanc
+4. La mention :
+5. Le lieu : Kanzlerberg, Mambourg... pour les Grands Crus et les communales ; libre pour les lieux dits
+6. La couleur : Rouge, Rosé ou Blanc
 7. Le cepage : Gewurztraminer, Pinot Blanc, Riesling...
 
 Il est aussi possible d'utiliser la dernière colonne pour définir le produit grace à son libellé complet [Spécification générique DRM logiciels tiers, section : identification du vin](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md#description-des-lignes-cave) .
