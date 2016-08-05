@@ -20,6 +20,8 @@ Ce fichier comporte les différentes colonnes suivantes :
 
 Il est aussi possible d'utiliser la dernière colonne pour définir le produit grace à son libellé complet [Spécification générique DRM logiciels tiers, section : identification du vin](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md#description-des-lignes-cave) .
 
+Le champs 13 « complément » des lignes CAVE permet de déclarer des produits VT ou SGN.
+
 ## Catalogue des mouvements de DRM spécifiques au portail du CIVA
 
 Le catalogue des mouvements de DRM admis par le portail d'du CIVA  [Catalogue mouvements](catalogue_mouvements.csv) est composé de trois colonnes :
