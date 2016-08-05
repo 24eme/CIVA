@@ -179,9 +179,10 @@ class drmActions extends drmGeneriqueActions {
     public function executeExportEdi(sfWebRequest $request) {
         $this->setLayout(false);
         $drm = $this->getRoute()->getDRM();
-        $this->drmCsvEdi = new DRMCsvEdi($drm);
+        
+        $this->drmCsvEdi = new DRMExportCsvEdi($drm);
 
-        $filename = 'export_edi_' . $drm->identifiant . '_' . $drm->periode;
+        $filename = $drm->identifiant . '_' . $drm->periode.'_'.$drm->_rev.'.csv';
 
 
         $attachement = "attachment; filename=" . $filename . ".csv";
