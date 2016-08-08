@@ -21,7 +21,8 @@
                             <table id="table_drm_crds" class="table table-bordered table-condensed table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-xs-2 text-center vertical-center" rowspan="2">CRD <a data-form="#form_crds" href="<?php echo url_for('drm_crd', array('sf_subject' => $crdsForms->getObject(), 'add_crd' => $regime, 'genre' => $genre)); ?>" class="btn btn-xs link-submit btn-link"><span class="glyphicon glyphicon-plus-sign"></span> Ajouter un type de CRD</a></th>
+                                        <th class="col-xs-2 text-center vertical-center" rowspan="2">CRD <a data-form="#form_crds" href="<?php echo url_for('drm_crd', array('identifiant' => $crdsForms->getObject()->getIdentifiant(),
+                                          'periode_version' => $crdsForms->getObject()->getPeriodeAndVersion())).'?add_crd='.$regime.'&genre='.$genre; ?>" class="btn btn-xs btn-link"><span class="glyphicon glyphicon-plus-sign"></span> Ajouter un type de CRD</a></th>
                                         <th class="col-xs-1 text-center vertical-center" rowspan="2">Stock</th>
                                         <th class="text-center" colspan="3">Entrées</th>
                                         <th class="text-center" colspan="3">Sorties</th>

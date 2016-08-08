@@ -3,6 +3,7 @@
 class drm_crdsActions extends drmGeneriqueActions {
 
     public function executeCrd(sfWebRequest $request) {
+        //var_dump($request->isMethod(sfRequest::POST)); exit;
         $this->initSocieteAndEtablissementPrincipal();
         $this->drm = $this->getRoute()->getDRM();
         $this->drm->crdsInitDefault();
@@ -12,6 +13,7 @@ class drm_crdsActions extends drmGeneriqueActions {
             $this->addCrdRegime = $request->getParameter('add_crd');
             $this->addCrdGenre = $request->getParameter('genre');
             $this->addCrdForm = new DRMAddCrdTypeForm($this->drm,array('genre' => $this->addCrdGenre));
+
         }
 
         if ($request->isMethod(sfRequest::POST)) {
@@ -37,7 +39,7 @@ class drm_crdsActions extends drmGeneriqueActions {
             if ($this->form->isValid()) {
                 $this->form->save();
                 $this->redirect('drm_crd', $this->form->getObject());
-            } 
+            }
             $regimes = $this->form->getRegimeCrds();
             $this->regime = $regimes[0];
         }

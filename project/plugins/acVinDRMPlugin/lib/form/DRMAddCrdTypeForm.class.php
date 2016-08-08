@@ -17,7 +17,7 @@ class DRMAddCrdTypeForm extends acCouchdbObjectForm {
     public function __construct(acCouchdbJson $object, $options = array(), $CSRFSecret = null) {
         $this->drm = $object;
         $this->regimeCrds = $this->drm->getRegimesCrds();
-        if(isset($options['genre'])) { 
+        if(isset($options['genre'])) {
             $this->defaultGenre = $options['genre'];
         }
         parent::__construct($this->drm, $options, $CSRFSecret);
@@ -41,7 +41,7 @@ class DRMAddCrdTypeForm extends acCouchdbObjectForm {
             $this->setValidator('litrage_crd_' . $regime, new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getTypeLitrages())), array('required' => "Aucun litrage n'a été saisi !")));
             $this->setValidator('stock_debut_' . $regime, new sfValidatorNumber(array('required' => false)));
             $this->setValidator('genre_crd_' . $regime, new sfValidatorChoice(array('multiple' => false, 'required' => true, 'choices' => array_keys($this->getGenres())), array('required' => "Aucun genre n'a été saisi !")));
-            
+
             if(isset($this->defaultGenre)) {
                 $this->setDefault('genre_crd_' . $regime, $this->defaultGenre);
             }
@@ -68,7 +68,7 @@ class DRMAddCrdTypeForm extends acCouchdbObjectForm {
         parent::updateDefaultsFromObject();
 //        if (count($this->getGenres()) <= 1) {
 //            $genreCrdKeys = array_keys($this->getGenres());
-//            $genreCrd = $genreCrdKeys[0];           
+//            $genreCrd = $genreCrdKeys[0];
 //            foreach ($this->regimeCrds as $regime) {
 //                $this->setDefault('genre_crd_' . $regime, $genreCrd);
 //            }
@@ -85,8 +85,12 @@ class DRMAddCrdTypeForm extends acCouchdbObjectForm {
     public function getTypeLitrages() {
         if (is_null($this->typesLitrages)) {
             $contenances = sfConfig::get('app_vrac_contenances');
-            if (!$contenances)
-                throw new sfException("Les contenances n'ont pas été renseignée dans le fichier de configuration app.yml");
+            if (!$contenances){
+              $contenances = DRMConfiguration::getInstance()->getContenances();
+            }
+            if (!$contenances){
+              throw new sfException("Les contenances n'ont pas été renseignée dans le fichier de configuration app.yml ou dans drm.yml");
+            }
             $this->typesLitrages = array("" => "");
             foreach ($contenances as $key => $value) {
                 $this->typesLitrages['' . $value] = $key;
