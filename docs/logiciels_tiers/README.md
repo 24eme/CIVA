@@ -6,21 +6,21 @@ Cette documentation référence l'ensemble des lignes exportables dans le fichie
 
 ## Catalogue des produits spécifiques au portail du CIVA
 
-Le catalogue produit nécessaire aux imports de DRM pour le CIVA est décrit dans le fichier suivant : [Catalogue produit](catalogue_produits.csv)
+Le catalogue produit nécessaire aux imports de DRM pour le CIVA est décrit dans le fichier suivant : [Catalogue produit](catalogue_produits.csv) (ce fichier ne traite pas le cas de la colonne mention avec « VT » ou « SGN »)
 
 Ce fichier comporte les différentes colonnes suivantes :
 
 1. La certification : la certification du produit AOC
 2. Le genre : Tranquille, Mousseux
 3. L'appellation : AOC Alsace blanc, AOC Crémant d'Alsace
-4. La mention :
+4. La mention : vide, VT ou SGN
 5. Le lieu : Kanzlerberg, Mambourg... pour les Grands Crus et les communales ; libre pour les lieux dits
 6. La couleur : Rouge, Rosé ou Blanc
 7. Le cepage : Gewurztraminer, Pinot Blanc, Riesling...
 
-Il est aussi possible d'utiliser la dernière colonne pour définir le produit grace à son libellé complet [Spécification générique DRM logiciels tiers, section : identification du vin](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md#description-des-lignes-cave) .
+La dernière colonne indique le libellé complet du produit, le processus d'import ne tiendra pas compte de ce champs si les 7 champs d'identification sont remplis. Il sera utilisé que si une ambiguité ressort de l'exploitation de ces champs.
 
-Le champs 13 « complément » des lignes CAVE permet de déclarer des produits VT ou SGN.
+Pour plus de détails sur l'exploitation de ces champs, voir la [section "identification du vin" de la Spécification générique DRM pour logiciels tiers, ](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md#description-des-lignes-cave) .
 
 ## Catalogue des mouvements de DRM spécifiques au portail du CIVA
 
