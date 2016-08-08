@@ -241,6 +241,7 @@ class DRMDetail extends BaseDRMDetail {
         $contrats = $this->getContratsVracByHash($this->getCepage()->getHash());
 
         $correspondance_hash = $this->getCepage()->getConfig()->getCorrespondanceHash();
+        
         if ($correspondance_hash) {
             $contrats = array_merge($contrats, $this->getContratsVracByHash($correspondance_hash));
         }
@@ -249,7 +250,7 @@ class DRMDetail extends BaseDRMDetail {
     }
 
     public function getContratsVracByHash($hash) {
-        return DRMClient::getInstance()->getContratsFromProduit($this->getDocument()->identifiant, $hash, array(VracClient::TYPE_BOUTEILLE, VracClient::TYPE_VRAC));
+        return DRMClient::getInstance()->getContratsFromProduit("ETABLISSEMENT-".$this->getDocument()->identifiant, $hash, array(VracClient::TYPE_BOUTEILLE, VracClient::TYPE_VRAC));
     }
 
     public function isModifiedMother($key) {

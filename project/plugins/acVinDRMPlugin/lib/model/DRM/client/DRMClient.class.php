@@ -3,7 +3,7 @@
 class DRMClient extends acCouchdbClient {
 
     const CONTRATSPRODUITS_NUMERO_CONTRAT = 0;
-    const CONTRATSPRODUITS_ETS_NOM = 1;
+    const CONTRATSPRODUITS_ETS_ACHETEUR_ID = 1;
     const CONTRATSPRODUITS_VOL_TOTAL = 2;
     const CONTRATSPRODUITS_VOL_ENLEVE = 3;
     const ETAPE_CHOIX_PRODUITS = 'CHOIX_PRODUITS';
@@ -348,32 +348,46 @@ class DRMClient extends acCouchdbClient {
         if (!$transaction_types)
             return $this->getContratsFromProduitAndATransaction($vendeur_identifiant, $produit);
 
+        $oldHashProduit = $this->convertHashProduit($produit);
         $vracs = array();
         foreach ($transaction_types as $t) {
             $vracs = array_merge($vracs, $this->getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $t));
+            $vracs = array_merge($vracs, $this->getContratsFromProduitAndATransaction($vendeur_identifiant, $oldHashProduit, $t));
         }
         return $vracs;
     }
 
-    public function getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $type_transaction = null) {
-      return array();
-        $startkey = array(null, $vendeur_identifiant, $produit);
-        if ($type_transaction) {
-            array_push($startkey, $type_transaction);
+    private function convertHashProduit($hashProduit){
+      $oldHashProduit = preg_replace(
+      '/(declaration)\/(certification)s\/([A-Z_]*)\/(genre)s\/([A-Z]*)\/(appellation)s\/([A-Z]*)\/(mention)s\/([A-Z]*)\/(lieu)x\/([A-Z]*)\/(couleur)s\/([A-Z]*)\/(cepage)s\/([A-Z]*)/'
+      ,'\1/\2/\4/\6_\7/\8/\10/\12/\14_\15',$hashProduit);
+      return $oldHashProduit;
+    }
+
+    public function getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $type_transaction) {
+
+        $status = array(Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_VALIDE, Vrac::STATUT_CLOTURE);
+        $requestResults = array();
+        foreach ($status as $statut) {
+          $startkey = array($statut, $type_transaction, $vendeur_identifiant, $produit);
+          $endkey = $startkey;
+          array_push($endkey, array());
+          $rows = acCouchdbManager::getClient()
+          ->startkey($startkey)
+          ->endkey($endkey)
+          ->getView("VRAC", "contratsFromProduit")
+          ->rows;
+          $requestResults = array_merge($requestResults,$rows);
         }
-        $endkey = $startkey;
-        array_push($endkey, array());
-        $rows = acCouchdbManager::getClient()
-                        ->startkey($startkey)
-                        ->endkey($endkey)
-                        ->getView("vrac", "contratsFromProduit")
-                ->rows;
+
         $vracs = array();
-        foreach ($rows as $key => $row) {
+        foreach ($requestResults as $key => $row) {
             $vol_restant = round($row->value[self::CONTRATSPRODUITS_VOL_TOTAL] - $row->value[self::CONTRATSPRODUITS_VOL_ENLEVE], 2);
             $volume = '[' . $row->value[self::CONTRATSPRODUITS_VOL_ENLEVE] . '/' . $row->value[self::CONTRATSPRODUITS_VOL_TOTAL] . ']';
             $volume = ($row->value[self::CONTRATSPRODUITS_VOL_ENLEVE] == '') ? '[0/' . $row->value[self::CONTRATSPRODUITS_VOL_TOTAL] . ']' : $volume;
-            $vracs[VracClient::getInstance()->getId($row->id)] = $row->value[self::CONTRATSPRODUITS_ETS_NOM] .
+
+            $acheteur = EtablissementClient::getInstance()->find($row->value[self::CONTRATSPRODUITS_ETS_ACHETEUR_ID]);
+            $vracs[$row->id] = $acheteur->raison_sociale .
                     ' - ' . str_replace('VRAC-', '', $row->id).' ('. $row->value[self::CONTRATSPRODUITS_NUMERO_CONTRAT] . ') - ' .
                     $vol_restant . ' hl ' .
                     $volume;

@@ -208,7 +208,7 @@
     }
 
     var updateCrdsTotaux = function (id) {
-      
+
         var crds_debut_de_mois = $("#" + id + " td.crds_debut_de_mois input").val();
 
         var entreesAchats = (!isNaN(parseInt($("#" + id + " td.crds_entreesAchats input").val()))) ? parseInt($("#" + id + " td.crds_entreesAchats input").val()) : 0;
