@@ -1,8 +1,8 @@
 #Spécifications techniques de l'implémentation du format de DRM attendues sur le portail du CIVA
 
-La spécification complète du format d'import attendue est détaillée ici : [Spécification générique DRM logiciels tiers](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md) .
+La spécification complète du format d'import attendue est détaillée ici : [Spécification générique DRM logiciels tiers](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md). Cette documentation est commune pour les portails déclaratifs du CIVA, du CIVP, d'Interloire, d'InterRhone, d'IVBD, d'IVSO et d'IVSE.
 
-Cette documentation référence l'ensemble des lignes exportables dans le fichier csv, ainsi que leur interprétation au sein de l'applicatif du CIVA.
+Cette page apporte un éclairage CIVA à la documentation générique. Elle permet d'accéder à la liste des produits CIVA (et la manière de les déclarer) ainsi que les mouvements désirés pour la DRM CIVA.
 
 ## Catalogue des produits spécifiques au portail du CIVA
 
