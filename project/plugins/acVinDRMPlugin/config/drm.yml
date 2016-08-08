@@ -1,0 +1,6 @@
+all:
+  configuration:
+    drm:
+      details:
+        export_detail:
+          required: ["identifiant"]
