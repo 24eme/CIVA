@@ -356,7 +356,8 @@ class DRMClient extends acCouchdbClient {
     }
 
     public function getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $type_transaction = null) {
-        $startkey = array(VracClient::STATUS_CONTRAT_NONSOLDE, $vendeur_identifiant, $produit);
+      return array();
+        $startkey = array(null, $vendeur_identifiant, $produit);
         if ($type_transaction) {
             array_push($startkey, $type_transaction);
         }

@@ -30,6 +30,7 @@
            <div id="contenu">
                 <?php echo $sf_content ?>
             </div>
+            <div id="ajax-modal" class="modal"></div>
             <?php include_partial('global/footer') ?>
         </div>
     <!-- fin #global -->
@@ -44,7 +45,7 @@
     <script src="/js/lib/jquery.sticky.js"></script>
     <script src="/js/ajaxHelper.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/drm.js"></script>
+    <script src="/js/popups.js"></script>
     <?php include_javascripts() ?>
     <?php include_partial('global/ieCssJavascript') ?>
     <?php include_partial('global/ajaxNotification') ?>

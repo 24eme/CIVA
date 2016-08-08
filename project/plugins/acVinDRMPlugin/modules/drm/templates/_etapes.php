@@ -15,7 +15,7 @@
         <?php $isDouaneTypeSuspendu = $drm->isDouaneType(DRMClient::TYPE_DRM_SUSPENDU); ?>
         <li style="<?php if(!$isDouaneTypeSuspendu): ?>opacity: 0.5;<?php endif ?>" class="<?php if($actif): ?>active<?php endif; ?> <?php if (!$past && !$actif): ?>disabled<?php endif; ?> <?php if ($past && !$actif && $isDouaneTypeSuspendu): ?>visited<?php endif; ?>">
             <a href="<?php echo url_for('drm_edition_details', array('sf_subject' => $drm, 'details' => DRM::DETAILS_KEY_SUSPENDU)); ?>">
-                <span>Mouvements Suspendus</span>
+                <span>Mvts Suspendus</span>
                 <small>Etape <?php echo $cpt_etape++; ?></small>
             </a>
         </li>
@@ -24,7 +24,7 @@
         <?php $isDouaneTypeAcquitte = $drm->isDouaneType(DRMClient::TYPE_DRM_ACQUITTE); ?>
         <li style="<?php if(!$drm->isDouaneType(DRMClient::TYPE_DRM_ACQUITTE)): ?>opacity: 0.5;<?php endif ?>" class="<?php if($actif): ?>active<?php endif; ?> <?php if (!$past && !$actif): ?>disabled<?php endif; ?> <?php if ($past && !$actif && $isDouaneTypeAcquitte): ?>visited<?php endif; ?>">
             <a href="<?php echo url_for('drm_edition_details', array('sf_subject' => $drm, 'details' => DRM::DETAILS_KEY_ACQUITTE)); ?>">
-                <span>Mouvements Acquittés</span>
+                <span>Mvts Acquittés</span>
                 <small>Etape <?php echo $cpt_etape++; ?></small>
             </a>
         </li>
