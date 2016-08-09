@@ -179,7 +179,7 @@ class drmActions extends drmGeneriqueActions {
     public function executeExportEdi(sfWebRequest $request) {
         $this->setLayout(false);
         $drm = $this->getRoute()->getDRM();
-        
+
         $this->drmCsvEdi = new DRMExportCsvEdi($drm);
 
         $filename = $drm->identifiant . '_' . $drm->periode.'_'.$drm->_rev.'.csv';
@@ -230,12 +230,14 @@ class drmActions extends drmGeneriqueActions {
     public function executeDelete(sfWebRequest $request) {
         $this->isTeledeclarationMode = $this->isTeledeclarationDrm();
         $this->drm = $this->getRoute()->getDRM();
+        $identifiant = $this->drm->getidentifiant();
         $this->initDeleteForm();
         if ($request->isMethod(sfRequest::POST)) {
             $this->deleteForm->bind($request->getParameter($this->deleteForm->getName()));
             if ($this->deleteForm->isValid()) {
                 $this->drm->delete();
-                $this->redirect('drm_etablissement', $this->drm);
+                $url = $this->generateUrl('drm_etablissement', array('identifiant' => $identifiant, 'campagne' => -1));
+                $this->redirect($url);
             }
         }
     }
