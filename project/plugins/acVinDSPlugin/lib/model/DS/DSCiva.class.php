@@ -9,7 +9,7 @@
  * Description of class DSCiva
  * @author mathurin
  */
-class DSCiva extends DS implements IUtilisateursDocument {
+class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
     protected $utilisateurs_document = null;
 
@@ -754,5 +754,13 @@ public function getConfigurationCampagne() {
         $this->date_echeance = Date::getIsoDateFinDeMoisISO($date_stock, 1);
         $this->periode = DSCivaClient::getInstance()->buildPeriode($date_stock, $this->get('type_ds'));
         return $this->_set('date_stock', $date_stock);
+    }
+
+    public function getDRMEdiProduitRows(DRMExportCsvEdi $edi){
+      $lignesEdi = "";
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        $lignesEdi.= $edi->createRowStockNullProduitDetail($produit);
+      }
+      return $lignesEdi;
     }
 }

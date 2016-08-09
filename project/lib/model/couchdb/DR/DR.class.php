@@ -1,5 +1,5 @@
 <?php
-class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
+class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument, IDRMEdiExportable {
 
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_REPARTITION = 'repartition';
@@ -771,6 +771,22 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         return $this->exist('autorisations') &&
                $this->autorisations->exist($autorisation) &&
                $this->autorisations->get($autorisation);
+    }
+
+    public function getDRMEdiProduitRows(DRMExportCsvEdi $edi){
+      $lignesEdi = "";
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        $lignesEdi.= $edi->createRowStockNullProduitDetail($produit);
+      }
+      return $lignesEdi;
+    }
+
+    public function getDRMEdiRecolteRows(DRMExportCsvEdi $edi){
+      $lignesEdi = "";
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        $lignesEdi.= $edi->createRowRecolteProduitDetail($produit);
+      }
+      return $lignesEdi;
     }
 
 }

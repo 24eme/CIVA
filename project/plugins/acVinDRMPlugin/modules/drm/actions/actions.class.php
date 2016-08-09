@@ -125,9 +125,58 @@ class drmActions extends drmGeneriqueActions {
                     $drm->save();
                     return $this->redirect('drm_validation', array('identifiant' => $drm->identifiant, 'periode_version' => $drm->getPeriodeAndVersion()));
                     break;
+                case DRMClient::DRM_CREATION_DOCUMENTS :
+                    return $this->redirect('drm_create_from_documents', array('identifiant' => $identifiant, 'periode' => $periode));
+                    break;
             }
         }
         return $this->redirect('drm_societe', array('identifiant' => $identifiant));
+    }
+
+    /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeCreateFromDocuments(sfWebRequest $request) {
+        $isTeledeclarationMode = $this->isTeledeclarationDrm();
+        $identifiant = $request->getParameter('identifiant');
+        $periode = $request->getParameter('periode');
+        $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
+
+        $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForReprise($identifiant, $periode);
+
+        foreach ($documentRepriseInfos as $documentRepriseInfo) {
+          $drm = $this->createReprise($documentRepriseInfo,$drm);
+        }
+
+        var_dump($drm); exit;
+    }
+
+    private function createReprise($documentRepriseInfo,$drm){
+      $docTypeClientName = $documentRepriseInfo->docType.'Client';
+      $docTypeClient = $docTypeClientName::getInstance();
+      $doc = $docTypeClient->find($documentRepriseInfo->idDoc);
+      $edi = new DRMExportCsvEdi($drm);
+      $ediFileUpdate = "";
+      foreach ($documentRepriseInfo->repriseTypes as $typeReprise) {
+
+        switch ($typeReprise) {
+          case DRMClient::REPRISE_TYPE_DRM :
+          break;
+          case DRMClient::REPRISE_TYPE_PRODUIT :
+          $ediFileUpdate.=$doc->getDRMEdiProduitRows($edi);
+          break;
+          case DRMClient::REPRISE_TYPE_STOCK :
+          break;
+          case DRMClient::REPRISE_TYPE_RECOLTE :
+          $ediFileUpdate.=$doc->getDRMEdiRecolteRows($edi);
+          break;
+          case DRMClient::REPRISE_TYPE_CONTRAT :
+          break;
+        }
+      }
+      print_r($ediFileUpdate); exit;
+      $docReprise = $documentRepriseInfo;
     }
 
     /**

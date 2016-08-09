@@ -29,9 +29,23 @@ class DRMClient extends acCouchdbClient {
     const DRM_CREATION_EDI = 'CREATION_EDI';
     const DRM_CREATION_VIERGE = 'CREATION_VIERGE';
     const DRM_CREATION_NEANT = 'CREATION_NEANT';
+    const DRM_CREATION_DOCUMENTS = 'CREATION_DOCUMENTS';
     const DETAIL_EXPORT_PAYS_DEFAULT = 'inconnu';
     const TYPE_DRM_SUSPENDU = 'SUSPENDU';
     const TYPE_DRM_ACQUITTE = 'ACQUITTE';
+
+    const REPRISE_DOC_DRM = "DRM";
+    const REPRISE_DOC_DR = "DR";
+    const REPRISE_DOC_DS = "DS";
+    const REPRISE_DOC_CONTRAT = "CONTRAT";
+
+    const REPRISE_TYPE_PRODUIT = "TYPE_PRODUIT";
+    const REPRISE_TYPE_STOCK = "TYPE_STOCK";
+    const REPRISE_TYPE_RECOLTE = "TYPE_RECOLTE";
+    const REPRISE_TYPE_DRM = "TYPE_DRM";
+    const REPRISE_TYPE_CONTRAT = "TYPE_CONTRAT";
+
+
 
     public static $types_libelles = array(DRM::DETAILS_KEY_SUSPENDU => 'Suspendu', DRM::DETAILS_KEY_ACQUITTE => 'Acquitté');
     public static $drm_etapes = array(self::ETAPE_CHOIX_PRODUITS, self::ETAPE_SAISIE_SUSPENDU, self::ETAPE_SAISIE_ACQUITTE, self::ETAPE_CRD, self::ETAPE_ADMINISTRATION, self::ETAPE_VALIDATION);
@@ -42,7 +56,10 @@ class DRMClient extends acCouchdbClient {
         self::DRM_DOCUMENTACCOMPAGNEMENT_DSADSAC => 'DSA/DSAC',
         self::DRM_DOCUMENTACCOMPAGNEMENT_DAE => 'DAE',
         self::DRM_DOCUMENTACCOMPAGNEMENT_EMPREINTE => 'Empreinte');
-    public static $typesCreationLibelles = array(self::DRM_CREATION_VIERGE => "Création d'une drm vierge", self::DRM_CREATION_NEANT => "Création d'une drm à néant", self::DRM_CREATION_EDI => 'Création depuis un logiciel tiers');
+    public static $typesCreationLibelles = array(self::DRM_CREATION_DOCUMENTS => "Création d'une drm pré-remplie",
+                                                 self::DRM_CREATION_VIERGE => "Création d'une drm vierge",
+                                                 self::DRM_CREATION_NEANT => "Création d'une drm à néant",
+                                                 self::DRM_CREATION_EDI => 'Création depuis un logiciel tiers');
     protected $drm_historiques = array();
 
     /**
@@ -348,7 +365,7 @@ class DRMClient extends acCouchdbClient {
         if (!$transaction_types)
             return $this->getContratsFromProduitAndATransaction($vendeur_identifiant, $produit);
 
-        $oldHashProduit = $this->convertHashProduit($produit);
+        $oldHashProduit = ConfigurationClient::getInstance()->convertHashProduitForDRM($produit);
         $vracs = array();
         foreach ($transaction_types as $t) {
             $vracs = array_merge($vracs, $this->getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $t));
@@ -357,12 +374,6 @@ class DRMClient extends acCouchdbClient {
         return $vracs;
     }
 
-    private function convertHashProduit($hashProduit){
-      $oldHashProduit = preg_replace(
-      '/(declaration)\/(certification)s\/([A-Z_]*)\/(genre)s\/([A-Z]*)\/(appellation)s\/([A-Z]*)\/(mention)s\/([A-Z]*)\/(lieu)x\/([A-Z]*)\/(couleur)s\/([A-Z]*)\/(cepage)s\/([A-Z]*)/'
-      ,'\1/\2/\4/\6_\7/\8/\10/\12/\14_\15',$hashProduit);
-      return $oldHashProduit;
-    }
 
     public function getContratsFromProduitAndATransaction($vendeur_identifiant, $produit, $type_transaction) {
 
@@ -425,6 +436,98 @@ class DRMClient extends acCouchdbClient {
         return $this->drm_historiques[$identifiant . $campagne];
     }
 
+    public function getDocumentsForReprise($identifiant, $periode = null){
+      $documents = array();
+      if (!$periode) {
+            $periode = $this->getCurrentPeriode();
+            $last_drm = $this->getHistorique($identifiant, $periode)->getLastDRM();
+            if ($last_drm) {
+                $periode = $this->getPeriodeSuivante($last_drm->periode);
+            }
+        }
+        $annee = ConfigurationClient::getinstance()->getAnnee($periode);
+        $mois = intval(substr($periode,4,2));
+        $prev_drm = $this->getHistorique($identifiant, $periode)->getPrevious($periode);
+        $prev_dr = $this->getPreviousDr($identifiant, $periode);
+
+        $prev_ds = $this->getPreviousDs($identifiant, $annee, $mois);
+        if($prev_drm){
+          $drmReprise = $this->createRepriseInfo(self::REPRISE_DOC_DRM,
+                                                 array(self::REPRISE_TYPE_DRM => self::REPRISE_TYPE_DRM),
+                                                 $prev_drm->_id);
+          $documents[] = $drmReprise;
+          if(($prev_dr->getCampagne() == $annee) && $mois == 10){
+            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+                                                array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
+                                                $prev_dr->_id);
+          $documents[] = $drReprise;
+          }
+
+        }elseif($prev_dr && ($prev_ds && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
+          $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+                                                array(self::REPRISE_TYPE_PRODUIT => self::REPRISE_TYPE_PRODUIT,self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
+                                                $prev_dr->_id);
+          $documents[] = $drReprise;
+        }elseif($prev_ds){
+          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
+                                                array(self::REPRISE_TYPE_PRODUIT => self::REPRISE_TYPE_PRODUIT,self::REPRISE_TYPE_STOCK => self::REPRISE_TYPE_STOCK),
+                                                $prev_ds->_id);
+          $documents[] = $dsReprise;
+          if(($prev_dr->getCampagne() == $annee) && $mois == 10){
+            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+                                                array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
+                                                $prev_dr->_id);
+          $documents[] = $drReprise;
+          }
+        }
+        return $documents;
+    }
+
+    private function getPreviousDr($identifiant, $periode){
+      $all_prev_dr = DRClient::getInstance()->getAllByCvi($identifiant);
+
+      if(!$all_prev_dr){
+        return null;
+      }
+      $drArray = $all_prev_dr->getDatas();
+      $drArrayReverse = array_reverse($drArray);
+      foreach ($drArrayReverse as $prev_dr) {
+        $a = substr(strrchr($prev_dr->_id, "-"), 1);
+        $annee = substr($periode,0,4);
+        $mois = intval(substr($periode,4,2));
+        if(($a == $annee ) && ($mois > 9)){
+          return $prev_dr;
+        }elseif($a == ($annee-1)){
+           return $prev_dr;
+        }
+      }
+      return end($drArray);
+    }
+
+    private function getPreviousDs($identifiant, $annee,$mois){
+      $all_prev_ds = $this->startkey('DS-'.$identifiant.'-000000-000')->endkey('DS-'.$identifiant.'-999999-999')->execute();
+      if(!$all_prev_ds){
+        return null;
+      }
+      foreach ($all_prev_ds as $prev_ds) {
+        $matches = array();
+        preg_match("/([0-9]{4})([0-9]{2})/",$prev_ds->getPeriode(),$matches);
+        if((($matches[1] == $annee) && ($matches[2] >= $mois)) || ($matches[1] > $annee)){
+          return $prev_ds;
+        }
+      }
+      $arrayDs = $all_prev_ds->getDatas();
+      return end($arrayDs);
+    }
+
+    private function createRepriseInfo($docType,$repriseTypes,$idDoc){
+      $infos = new stdClass();
+      $infos->docType = $docType;
+      $infos->repriseTypes = $repriseTypes;
+      $infos->idDoc = $idDoc;
+      return $infos;
+    }
+
     public function createDoc($identifiant, $periode = null, $isTeledeclarationMode = false) {
         if (!$periode) {
             $periode = $this->getCurrentPeriode();
@@ -449,34 +552,33 @@ class DRMClient extends acCouchdbClient {
             return $next_drm->generateSuivanteByPeriode($periode, $isTeledeclarationMode);
         }
 
-        $drm = new DRM();
-        $drm->identifiant = $identifiant;
-        $drm->periode = $periode;
-        $drm->teledeclare = $isTeledeclarationMode;
-        $drm->etape = self::ETAPE_SAISIE;
-        $drm->buildFavoris();
-        $drm->storeDeclarant();
-        $drm->initSociete();
-        $drm->initCrds();
-        $drm->initLies();
-        $drm->clearAnnexes();
-        if ($isTeledeclarationMode) {
-            $drm->etape = self::ETAPE_CHOIX_PRODUITS;
-        }
+        $drm = $this->createDRMEmpty($identifiant,$periode,$isTeledeclarationMode);
         $drmLast = DRMClient::getInstance()->findLastByIdentifiant($identifiant);
 
         if ($drmLast) {
             $drm->generateByDRM($drmLast);
             return $drm;
         }
-        /*if (!$drm->getEtablissement()->isNegociant()) {
-            $dsLast = DSClient::getInstance()->findLastByIdentifiant($identifiant);
-            if ($dsLast) {
-                $drm->generateByDS($dsLast);
-                return $drm;
-            }
-        }*/
+
         return $drm;
+    }
+
+    public function createDrmEmpty($identifiant,$periode,$isTeledeclarationMode){
+      $drm = new DRM();
+      $drm->identifiant = $identifiant;
+      $drm->periode = $periode;
+      $drm->teledeclare = $isTeledeclarationMode;
+      $drm->etape = self::ETAPE_SAISIE;
+      $drm->buildFavoris();
+      $drm->storeDeclarant();
+      $drm->initSociete();
+      $drm->initCrds();
+      //$drm->initLies();
+      $drm->clearAnnexes();
+      if ($isTeledeclarationMode) {
+          $drm->etape = self::ETAPE_CHOIX_PRODUITS;
+      }
+      return $drm;
     }
 
     public function generateVersionCascade($drm) {

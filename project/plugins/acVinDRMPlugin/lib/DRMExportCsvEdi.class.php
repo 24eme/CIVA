@@ -49,10 +49,23 @@ class DRMExportCsvEdi extends DRMCsvEdi {
         $cepage = $cepageConfig->getCepage()->getLibelle();
 
         $complement = "";
-        $libelle = $produitDetail->getLibelle("%format_libelle%");
+        if($produitDetail instanceof DSDetail){
+          $libelle = "";
+        }else{
+          $libelle = $produitDetail->getLibelle("%format_libelle%");
+        }
         $type_drm = ($produitDetail->getParent()->getKey() == 'details')? 'suspendu' : 'acquitte';
 
-        return $certification . ";" . $genre . ";" . $appellation . ";" . $mention . ";" . $lieu . ";" . $couleur . ";" . $cepage. ";". $complement. ";". $libelle. ";". $type_drm;
+        return $certification . ";" .
+         $genre . ";" .
+          $appellation .
+          ";" . $mention .
+          ";" . $lieu .
+          ";" . $couleur .
+           ";" . $cepage.
+           ";". $complement.
+            ";". $libelle.
+            ";". $type_drm;
     }
 
     private function getLibelleDetail($keyDetail) {
@@ -60,6 +73,23 @@ class DRMExportCsvEdi extends DRMCsvEdi {
             return 'contrat';
         }
         return str_replace('_details', '', $keyDetail);
+    }
+
+    public function createRowStockNullProduitDetail($produitDetail){
+      $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
+      $lignes = $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "stocks_debut;initial;0;\n";
+      $lignes.= $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "stocks_fin;final;0;\n";
+      return $lignes;
+    }
+
+    public function createRowRecolteProduitDetail($produitDetail){
+      $volumeRecolte = 0;
+      foreach ($produitDetail->getDetail() as $detail) {
+        $volumeRecolte += $detail->getVolume();
+      }
+      $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
+      $lignes = $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "entrees;recolte;".$volumeRecolte.";\n";
+      return $lignes;
     }
 
     private function createMouvementsEdi() {

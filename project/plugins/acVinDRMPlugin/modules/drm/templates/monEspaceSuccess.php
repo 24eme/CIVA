@@ -5,7 +5,7 @@
     <li><a href="" class="active"><?php echo ($campagne == -1) ? "Les derniers mois" : $campagne ?></a></li>
 </ol>
 
-<div class="row">
+<div class="row"  id="application_drm">
     <div class="col-xs-12">
         <?php include_component('drm', 'formEtablissementChoice', array('identifiant' => $etablissement->_id)) ?>
     </div>

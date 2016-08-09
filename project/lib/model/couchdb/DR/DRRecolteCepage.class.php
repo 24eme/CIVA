@@ -12,13 +12,18 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this->getCouleur()->getLieu();
     }
 
+    public function getCepage() {
+
+      return $this;
+    }
+
     public function getChildrenNode() {
 
         return $this->detail;
     }
 
     public function getProduits() {
-      
+
         return array($this->getHash() => $this);
     }
 
@@ -47,7 +52,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getCodeDouane($vtsgn = '') {
-        
+
         return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
     }
 
@@ -62,10 +67,10 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       foreach($this->getChildrenNode() as $item) {
         $volume += $item->total_volume;
       }
-      
+
       return $volume;
     }
-    
+
     public function getSurPlaceRebeches() {
       if($this->getKey() != 'cepage_RB') {
 
@@ -77,10 +82,10 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       foreach($this->getChildrenNode() as $item) {
         $volume += $item->cave_particuliere;
       }
-      
+
       return $volume;
     }
-    
+
 
     public function getArrayUniqueKey($out = array()) {
         $resultat = array();
@@ -115,7 +120,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function canHaveUsagesLiesSaisi() {
-        
+
         return false;
     }
 
@@ -130,7 +135,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     protected function getSumNoeudFields($field, $exclude = true) {
-        
+
         return parent::getSumNoeudFields($field, false);
     }
 
@@ -139,8 +144,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return parent::getSumNoeudWithMethod($method, false);
     }
 
-    public function cleanAllNodes() {   
-        
+    public function cleanAllNodes() {
+
         return;
     }
 

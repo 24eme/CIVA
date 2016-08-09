@@ -126,7 +126,7 @@ class DRM extends BaseDRM implements InterfaceMouvementDocument, InterfaceVersio
         $detail->produit_libelle = $detail->getLibelle($format = "%format_libelle% %la%");
 
         $this->declaration->reorderByConf();
-        
+
         return $this->getProduit($hash, $detailsKey, $labels);
     }
 
@@ -201,6 +201,18 @@ class DRM extends BaseDRM implements InterfaceMouvementDocument, InterfaceVersio
     public function generateByDS(DS $ds) {
         $this->identifiant = $ds->identifiant;
         foreach ($ds->declarations as $produit) {
+            $produitConfig = $this->getConfig()->getProduitWithCorrespondanceInverse($produit->hash);
+            if (!$produitConfig->isActif()) {
+
+                continue;
+            }
+            $this->addProduit($produitConfig->produit_hash);
+        }
+    }
+
+    public function generateByDR(DR $dr){
+        $this->identifiant = $dr->identifiant;
+        foreach ($dr->recolte as $produit) {
             $produitConfig = $this->getConfig()->getProduitWithCorrespondanceInverse($produit->hash);
             if (!$produitConfig->isActif()) {
 
