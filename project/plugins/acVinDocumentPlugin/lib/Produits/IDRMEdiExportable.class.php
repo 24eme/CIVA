@@ -12,5 +12,5 @@
 interface IDRMEdiExportable {
     public function getDRMEdiProduitRows(DRMExportCsvEdi $edi);
 
-    public function getDRMEdiRecolteRows(DRMExportCsvEdi $edi);
+    public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi);
 }

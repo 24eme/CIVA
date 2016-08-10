@@ -764,7 +764,7 @@ public function getConfigurationCampagne() {
       return $lignesEdi;
     }
 
-    public function getDRMEdiRecolteRows(DRMExportCsvEdi $edi){
+    public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi){
       //Pas besoin ici;
       return "";
     }

@@ -34,16 +34,12 @@ class DRMClient extends acCouchdbClient {
     const TYPE_DRM_SUSPENDU = 'SUSPENDU';
     const TYPE_DRM_ACQUITTE = 'ACQUITTE';
 
-    const REPRISE_DOC_DRM = "DRM";
     const REPRISE_DOC_DR = "DR";
     const REPRISE_DOC_DS = "DS";
     const REPRISE_DOC_CONTRAT = "CONTRAT";
 
-    const REPRISE_TYPE_PRODUIT = "TYPE_PRODUIT";
-    const REPRISE_TYPE_STOCK = "TYPE_STOCK";
-    const REPRISE_TYPE_RECOLTE = "TYPE_RECOLTE";
-    const REPRISE_TYPE_DRM = "TYPE_DRM";
-    const REPRISE_TYPE_CONTRAT = "TYPE_CONTRAT";
+    const REPRISE_TYPE_CATALOGUE = "REPRISE_CATALOGUE";
+    const REPRISE_TYPE_MOUVEMENT = "REPRISE_MOUVEMENT";
 
 
 
@@ -240,7 +236,7 @@ class DRMClient extends acCouchdbClient {
 
         $this->getHistorique($identifiant, $periode)->reload();
 
-        return $this->createDocByPeriode($identifiant, $periode);
+        return $this-> ByPeriode($identifiant, $periode);
     }
 
     public function listCampagneByEtablissementId($identifiant) {
@@ -436,50 +432,66 @@ class DRMClient extends acCouchdbClient {
         return $this->drm_historiques[$identifiant . $campagne];
     }
 
-    public function getDocumentsForReprise($identifiant, $periode = null){
-      $documents = array();
-      if (!$periode) {
+    public function getAnyPreviousDrm($identifiant, $periode = null, $isTeledeclarationMode = false) {
+        if (!$periode) {
             $periode = $this->getCurrentPeriode();
             $last_drm = $this->getHistorique($identifiant, $periode)->getLastDRM();
             if ($last_drm) {
                 $periode = $this->getPeriodeSuivante($last_drm->periode);
             }
         }
-        $annee = ConfigurationClient::getinstance()->getAnnee($periode);
-        $mois = intval(substr($periode,4,2));
         $prev_drm = $this->getHistorique($identifiant, $periode)->getPrevious($periode);
+        return $prev_drm;
+    }
+
+    public function getDocumentsForRepriseCatalogue($identifiant, $periode = null){
+        $documents = array();
+        $annee = ConfigurationClient::getInstance()->getAnnee($periode);
+        $mois = intval(substr($periode,4,2));
+
         $prev_dr = $this->getPreviousDr($identifiant, $periode);
-
         $prev_ds = $this->getPreviousDs($identifiant, $annee, $mois);
-        if($prev_drm){
-          $drmReprise = $this->createRepriseInfo(self::REPRISE_DOC_DRM,
-                                                 array(self::REPRISE_TYPE_DRM => self::REPRISE_TYPE_DRM),
-                                                 $prev_drm->_id);
-          $documents[] = $drmReprise;
-          if(($prev_dr->getCampagne() == $annee) && $mois == 10){
-            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
-                                                array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
-                                                $prev_dr->_id);
-          $documents[] = $drReprise;
-          }
-
-        }elseif($prev_dr && ($prev_ds && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
-          $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
-                                                array(self::REPRISE_TYPE_PRODUIT => self::REPRISE_TYPE_PRODUIT,self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
-                                                $prev_dr->_id);
+        if($prev_dr && ($prev_ds && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
+          $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE,$prev_dr->_id);
           $documents[] = $drReprise;
         }elseif($prev_ds){
-          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
-                                                array(self::REPRISE_TYPE_PRODUIT => self::REPRISE_TYPE_PRODUIT,self::REPRISE_TYPE_STOCK => self::REPRISE_TYPE_STOCK),
-                                                $prev_ds->_id);
+          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,self::REPRISE_TYPE_CATALOGUE,$prev_ds->_id);
           $documents[] = $dsReprise;
-          if(($prev_dr->getCampagne() == $annee) && $mois == 10){
-            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
-                                                array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
+          // if(($prev_dr->getCampagne() == $annee) && $mois == 10){
+          //   $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+          //                                       array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
+          //                                       $prev_dr->_id);
+          // $documents[] = $drReprise;
+          }
+        return $documents;
+    }
+
+    public function getDocumentsForRepriseMouvement($identifiant, $periode = null){
+        $documents = array();
+        $annee = ConfigurationClient::getInstance()->getAnnee($periode);
+        $mois = intval(substr($periode,4,2));
+
+        $prev_dr = $this->getPreviousDr($identifiant, $periode);
+        $prev_ds = $this->getPreviousDs($identifiant, $annee, $mois);
+        if($prev_dr && ($prev_dr->getValidee()->format('Ym') ==  $periode)){
+          $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+                                                self::REPRISE_TYPE_MOUVEMENT,
                                                 $prev_dr->_id);
           $documents[] = $drReprise;
-          }
         }
+        if($prev_ds && $prev_ds->getPeriode() == $periode){
+          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
+                                                self::REPRISE_TYPE_MOUVEMENT,
+                                                $prev_ds->_id);
+          $documents[] = $dsReprise;
+          }
+          if($contrat){
+            $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_CONTRAT,
+            self::REPRISE_TYPE_MOUVEMENT,
+            $prev_ds->_id);
+            $documents[] = $dsReprise;
+          }
+
         return $documents;
     }
 
@@ -520,10 +532,10 @@ class DRMClient extends acCouchdbClient {
       return end($arrayDs);
     }
 
-    private function createRepriseInfo($docType,$repriseTypes,$idDoc){
+    private function createRepriseInfo($docType,$repriseType,$idDoc){
       $infos = new stdClass();
       $infos->docType = $docType;
-      $infos->repriseTypes = $repriseTypes;
+      $infos->repriseType = $repriseType;
       $infos->idDoc = $idDoc;
       return $infos;
     }

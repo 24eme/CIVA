@@ -115,7 +115,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
     private function checkCSVIntegrity() {
         $ligne_num = 1;
         foreach ($this->getDocRows() as $csvRow) {
-            if(count($csvRow) < 20){
+            if(count($csvRow) < 17){
               $this->csvDoc->addErreur($this->createWrongFormatFieldCountError($ligne_num, $csvRow));
               $ligne_num++;
               continue;

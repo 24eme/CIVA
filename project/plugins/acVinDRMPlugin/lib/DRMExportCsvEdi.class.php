@@ -82,13 +82,9 @@ class DRMExportCsvEdi extends DRMCsvEdi {
       return $lignes;
     }
 
-    public function createRowRecolteProduitDetail($produitDetail){
-      $volumeRecolte = 0;
-      foreach ($produitDetail->getDetail() as $detail) {
-        $volumeRecolte += $detail->getVolume();
-      }
+    public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume){
       $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
-      $lignes = $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "entrees;recolte;".$volumeRecolte.";\n";
+      $lignes = $debutLigne . $this->getProduitCSV($produit) . ";" . $catMouvement.";".$typeMouvement.";".$volume.";\n";
       return $lignes;
     }
 

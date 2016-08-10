@@ -781,10 +781,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
       return $lignesEdi;
     }
 
-    public function getDRMEdiRecolteRows(DRMExportCsvEdi $edi){
+    public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        $lignesEdi.= $edi->createRowRecolteProduitDetail($produit);
+        $volumeRecolte = 0;
+        foreach ($produit->getDetail() as $detail) {
+          $volumeRecolte += $detail->getVolume();
+        }
+        $lignesEdi.= $edi->createRowMouvementProduitDetail($produit,"entrees","recolte",$volumeRecolte);
       }
       return $lignesEdi;
     }
