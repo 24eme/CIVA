@@ -36,7 +36,7 @@ class ExportDRPdf extends ExportDocument {
         }
 
         if($dr->hasDateDepotMairie()){
-            
+
             return 'Déposée en mairie le '.$dr->getDateDepotMairieFr() . $this->getLibelleModification($dr);
         }
 
@@ -46,7 +46,7 @@ class ExportDRPdf extends ExportDocument {
 
             $libelle .= $this->getLibelleValidationPar($dr->validee_par);
         }
-        
+
         return $libelle . $this->getLibelleModification($dr);
     }
 
@@ -64,17 +64,17 @@ class ExportDRPdf extends ExportDocument {
 
     protected function getLibelleValidationPar($par) {
         if($par == DRClient::VALIDEE_PAR_RECOLTANT) {
-          
+
             return " par le récoltant";
         }
 
         if($par == DRClient::VALIDEE_PAR_CIVA) {
-          
+
             return " par le CIVA";
         }
 
         if($par == DRClient::VALIDEE_PAR_AUTO) {
-          
+
             return " automatiquement";
         }
 
@@ -83,7 +83,7 @@ class ExportDRPdf extends ExportDocument {
 
     protected function init($dr, $filename = null) {
         $validee = $this->getLibelleValidation($dr);
-        
+
         $title = 'Déclaration de récolte '.$dr->campagne;
         $header = $dr->declarant->nom."\nCommune de déclaration : ".$dr->declaration_commune."\n".$validee;
         if (!$filename) {
@@ -104,7 +104,7 @@ class ExportDRPdf extends ExportDocument {
 
     public static function buildFileName($dr, $with_name = true, $with_rev = false) {
       $filename = sprintf("DR_%s_%s", $dr->cvi, $dr->campagne);
-        
+
       if($with_name) {
           $declarant_nom = strtoupper(KeyInflector::slugify($dr->declarant->nom));
           $filename .= '_'.$declarant_nom;
@@ -118,7 +118,7 @@ class ExportDRPdf extends ExportDocument {
     }
 
     protected function create($dr) {
-        
+
           foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
                 $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
@@ -136,7 +136,7 @@ class ExportDRPdf extends ExportDocument {
       $infosPage = array();
 	  $nb_colonnes_by_page = 6;
           $nb_colonnes = count($infos['appellations']) - 1;
-	  if ($nb_colonnes == 5) 
+	  if ($nb_colonnes == 5)
 		$nb_colonnes_by_page = 5;
           if ($nb_colonnes >= $nb_colonnes_by_page) {
 			$pages = array();
@@ -177,12 +177,12 @@ class ExportDRPdf extends ExportDocument {
     		foreach ($pages as $key => $page) {
     			if ($currentPage == $nb_pages)
     				$has_total = true;
-    			else 
+    			else
     				$has_total = false;
     			$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
     			$currentPage++;
     		}
-          	
+
           } else {
           	$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
@@ -193,7 +193,7 @@ class ExportDRPdf extends ExportDocument {
 
       protected function createRecap($dr) {
         $recap = $this->getRecapTotal($dr);
-        $total = array("revendique_sur_place" => null, 
+        $total = array("revendique_sur_place" => null,
                        "usages_industriels_sur_place" => null);
         foreach($recap as $key => $item) {
           $total["revendique_sur_place"] += $item->revendique_sur_place;
@@ -211,7 +211,7 @@ class ExportDRPdf extends ExportDocument {
         return DRClient::getInstance()->getTotauxByAppellationsRecap($dr);
     }
 
-    
+
     private function getRecapitulatifInfos($dr)
     {
         $appellations = array();
@@ -298,7 +298,7 @@ class ExportDRPdf extends ExportDocument {
         }
 
         $infos['total_revendique'] = array_sum(array_values($revendique));
-        
+
         if($dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place && !$has_no_usages_industriels && !$has_no_recapitulatif_couleur) {
           $infos['total_revendique_sur_place'] = array_sum(array_values($revendique_sur_place));
         } else {
@@ -309,7 +309,7 @@ class ExportDRPdf extends ExportDocument {
         $infos['lies'] = $dr->lies;
         return $infos;
     }
-    
+
 	private function createAppellationLieu($lieu, $hasLieuEditable, $hasVTSGN) {
       $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
     	$colonnes = array();
@@ -430,7 +430,7 @@ class ExportDRPdf extends ExportDocument {
 			      $c['mouts_'.$cvi] = $vente;
 			    }
 			    array_push($colonnes, $c);
-	    	}	
+	    	}
     	} // endforeach; couleurs
     	$c = array();
     	$c['type'] = 'total';
