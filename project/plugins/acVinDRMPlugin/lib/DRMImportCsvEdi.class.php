@@ -19,7 +19,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
 
     public function __construct($file, DRM $drm = null) {
         if(is_null($this->csvDoc)) {
-            $this->csvDoc = CSVClient::getInstance()->createOrFindDocFromDRM($file, $drm);
+            $this->csvDoc = CSVDRMClient::getInstance()->createOrFindDocFromDRM($file, $drm);
         }
         $this->initConf();
         parent::__construct($file, $drm);
@@ -178,7 +178,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
                 $num_ligne++;
                 continue;
             }
-            
+
             $type_douane_drm = KeyInflector::slugify($csvRow[self::CSV_CAVE_TYPE_DRM]);
             $type_douane_drm_key = $this->getDetailsKeyFromDRMType($type_douane_drm);
             $type_drm = KeyInflector::slugify($csvRow[self::CSV_CAVE_TYPE_MOUVEMENT]);

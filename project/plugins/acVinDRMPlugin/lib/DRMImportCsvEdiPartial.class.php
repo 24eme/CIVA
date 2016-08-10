@@ -19,7 +19,7 @@ class DRMImportCsvEdiPartial extends DRMImportCsvEdi {
 
     public function __construct($file, DRM $drm = null) {
         if(is_null($this->csvDoc)) {
-            $this->csvDoc = CSVClient::getInstance()->createOrFindDocFromDRM($file, $drm);
+            $this->csvDoc = CSVDRMClient::getInstance()->createOrFindDocFromDRM($file, $drm);
         }
         $this->initConf();
         parent::__construct($file, $drm);

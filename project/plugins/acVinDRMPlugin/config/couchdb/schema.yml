@@ -565,7 +565,7 @@ DRM:
             'horodatage': string
             'id_declaration': string
 
-CSV:
+CSVDRM:
   definition:
     fields:
       _id: {  }
