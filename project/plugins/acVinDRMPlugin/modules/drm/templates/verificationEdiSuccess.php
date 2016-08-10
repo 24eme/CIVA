@@ -1,4 +1,4 @@
-<section id="principal">
+<section id="application_drm">
     <h2>Rapport d'erreurs de l'import de la DRM</h2>
     <table class="table table-bordered table-condensed table-striped">
         <thead>

@@ -1,4 +1,3 @@
-
 DRM:
   definition:
     fields:
@@ -429,6 +428,13 @@ DRM:
                 fields:
                   dispense: { type: integer }
                   organisme: {  }
+            statistiques:
+              type: collection
+              definition:
+                fields:
+                  jus: { type: float }
+                  mcr: { type: float }
+                  vinaigre: { type: float }            
       identifiant: {  }
       mode_de_saisie: {  }
       commentaire: {}
