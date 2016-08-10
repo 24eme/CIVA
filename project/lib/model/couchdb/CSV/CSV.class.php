@@ -26,4 +26,22 @@ class CSV extends baseCSV
     return $this->getCsvFile()->getCsvRecoltant($cvi);
   }
 
+  public function clearErreurs() {
+      $this->remove('erreurs');
+      $this->add('erreurs');
+      $this->statut = null;
+  }
+
+  public function getFileContent() {
+      return file_get_contents($this->getAttachmentUri($this->getFileName()));
+  }
+
+  public function getFileName($partiel = true) {
+      return 'import_partiel_edi_' . $this->identifiant . '_' . $this->periode . '.csv';
+  }
+
+  public function hasErreurs() {
+      return count($this->erreurs);
+  }
+
 }

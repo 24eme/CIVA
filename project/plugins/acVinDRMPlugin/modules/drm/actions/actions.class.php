@@ -137,46 +137,90 @@ class drmActions extends drmGeneriqueActions {
      *
      * @param sfWebRequest $request
      */
-    public function executeCreateFromDocuments(sfWebRequest $request) {
+    public function executeCreateEdiFileFromDocuments(sfWebRequest $request) {
         $isTeledeclarationMode = $this->isTeledeclarationDrm();
         $identifiant = $request->getParameter('identifiant');
         $periode = $request->getParameter('periode');
         $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
 
         $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForReprise($identifiant, $periode);
-
+        $ediFileContent = "";
         foreach ($documentRepriseInfos as $documentRepriseInfo) {
-          $drm = $this->createReprise($documentRepriseInfo,$drm);
+          $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
+        }
+        $drm->save();
+        if($ediFileContent){
+          $fileDiscr = date('YmdHis').'_'.uniqid();
+
+          $filename = 'import_'.$drm->identifiant . '_' . $drm->periode.'_'.$fileDiscr.'.csv';
+
+          $path = sfConfig::get('sf_data_dir') . '/import-drm/'.$filename;
+          $saveFileStatut = file_put_contents($path,$ediFileContent);
+          if($saveFileStatut){
+            return $this->redirect('drm_partial_import_from_document', array('identifiant' => $drm->identifiant, 'periode_version' => $drm->periode, 'filediscr' => $fileDiscr));
+          }
+          throw new sfException("Le fichier $path n'a pas été enregistré");
+        }else{
+          return $this->redirect('drm_choix_produit', $drm);
         }
 
-        var_dump($drm); exit;
     }
 
-    private function createReprise($documentRepriseInfo,$drm){
+
+      /**
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeImportEdiFileFromDocuments(sfWebRequest $request) {
+        $this->isTeledeclarationMode = $this->isTeledeclarationDrm();
+        $this->identifiant = $request->getParameter('identifiant');
+        $this->periode = $request->getParameter('periode_version');
+        $filediscr = $request->getParameter('filediscr');
+
+        $filename = 'import_'.$this->identifiant . '_' . $this->periode.'_'.$filediscr.'.csv';
+        $path = sfConfig::get('sf_data_dir') . '/import-drm/'.$filename;
+
+        $this->drm = $this->getRoute()->getDRM();
+
+        $this->drmCsvEdi = new DRMImportCsvEdiPartial($path,$this->drm);
+
+        $this->drmCsvEdi->checkCSV();
+
+        if($this->drmCsvEdi->hasErreurs()){
+          return $this->setTemplate("verificationEdi");
+        }else{
+          $this->drmCsvEdi->importCSV(true);
+          return $this->redirect('drm_choix_produit', $this->drm);
+        }
+    }
+
+
+    private function createReprise($documentRepriseInfo,&$drm){
       $docTypeClientName = $documentRepriseInfo->docType.'Client';
       $docTypeClient = $docTypeClientName::getInstance();
       $doc = $docTypeClient->find($documentRepriseInfo->idDoc);
       $edi = new DRMExportCsvEdi($drm);
       $ediFileUpdate = "";
       foreach ($documentRepriseInfo->repriseTypes as $typeReprise) {
-
         switch ($typeReprise) {
           case DRMClient::REPRISE_TYPE_DRM :
+          $drm = DRMClient::getInstance()->createDoc($drm->identifiant, $drm->periode, true);
           break;
           case DRMClient::REPRISE_TYPE_PRODUIT :
           $ediFileUpdate.=$doc->getDRMEdiProduitRows($edi);
           break;
           case DRMClient::REPRISE_TYPE_STOCK :
+          throw new sfException("Reprise stock");
           break;
           case DRMClient::REPRISE_TYPE_RECOLTE :
           $ediFileUpdate.=$doc->getDRMEdiRecolteRows($edi);
           break;
           case DRMClient::REPRISE_TYPE_CONTRAT :
+          throw new sfException("Reprise Contrats");
           break;
         }
       }
-      print_r($ediFileUpdate); exit;
-      $docReprise = $documentRepriseInfo;
+      return $ediFileUpdate;
     }
 
     /**

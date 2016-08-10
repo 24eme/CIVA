@@ -76,11 +76,6 @@ class DRMRouting {
             'periode' => null), array('sf_method' => array('get')), array('model' => 'Etablissement',
             'type' => 'object')));
 
-        $r->prependRoute('drm_create_from_documents', new EtablissementRoute('/drm/:identifiant/creation-documents/:periode', array('module' => 'drm',
-            'action' => 'createFromDocuments',
-            'periode' => null), array('sf_method' => array('get')), array('model' => 'Etablissement',
-            'type' => 'object')));
-
         $r->prependRoute('drm_delete', new DRMRoute('/drm/:identifiant/delete/:periode_version', array('module' => 'drm',
             'action' => 'delete'), array('sf_method' => array('get', 'post')), array('model' => 'DRM',
             'type' => 'object',
@@ -192,6 +187,17 @@ class DRMRouting {
 
         $r->prependRoute('drm_export_fichier_edi', new DRMRoute('/drm/:identifiant/export-edi/:periode_version', array('module' => 'drm',
             'action' => 'exportEdi'), array('sf_method' => array('get', 'post')), array('model' => 'DRM',
+            'type' => 'object'
+        )));
+
+        $r->prependRoute('drm_create_from_documents', new EtablissementRoute('/drm/:identifiant/creation-documents/:periode', array('module' => 'drm',
+            'action' => 'createEdiFileFromDocuments',
+            'periode' => null), array('sf_method' => array('get')), array('model' => 'Etablissement',
+            'type' => 'object')));
+
+        $r->prependRoute('drm_partial_import_from_document', new DRMRoute('/drm/:identifiant/import-from-documents/:periode_version/:filediscr', array('module' => 'drm',
+            'action' => 'importEdiFileFromDocuments',
+            'periode' => null), array('sf_method' => array('get')), array('model' => 'DRM',
             'type' => 'object'
         )));
 

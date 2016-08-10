@@ -178,7 +178,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
                 $num_ligne++;
                 continue;
             }
-
+            
             $type_douane_drm = KeyInflector::slugify($csvRow[self::CSV_CAVE_TYPE_DRM]);
             $type_douane_drm_key = $this->getDetailsKeyFromDRMType($type_douane_drm);
             $type_drm = KeyInflector::slugify($csvRow[self::CSV_CAVE_TYPE_MOUVEMENT]);
@@ -426,7 +426,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
         }
     }
 
-    private function getDetailsKeyFromDRMType($drmType) {
+    private function getDetailsKeyFromDRMType($drmType ) {
         if(KeyInflector::slugify($drmType) == "SUSPENDU") {
 
             return DRM::DETAILS_KEY_SUSPENDU;
