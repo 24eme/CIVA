@@ -22,7 +22,7 @@ La dernière colonne indique le libellé complet du produit, le processus d'impo
 
 En plus de ce catalogue, le CIVA met à disposition un référentiel produit organisé par colonne (un onglet par colonne) sur le modèle de ce qui a été mis à disposition pour les fichiers DR : [télécharger le référentiel «colonne»](https://declaration.vinsalsace.pro/documents/Fichier-op%C3%A9rateurs-reference_v1.xls)
 
-Pour plus de détails sur l'exploitation de ces champs, voir la [section "identification du vin" de la Spécification générique DRM pour logiciels tiers, ](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/edi/speficication_technique.md#description-des-lignes-cave) .
+Pour plus de détails sur l'exploitation de ces champs, voir la [section "identification du vin" de la Spécification générique DRM pour logiciels tiers, ](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/speficication_technique.md#description-des-lignes-cave) .
 
 ## Catalogue des mouvements de DRM spécifiques au portail du CIVA
 
