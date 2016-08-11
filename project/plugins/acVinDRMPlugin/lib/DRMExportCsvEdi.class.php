@@ -37,7 +37,7 @@ class DRMExportCsvEdi extends DRMCsvEdi {
         return $body;
     }
 
-    public function getProduitCSV($produitDetail) {
+    public function getProduitCSV($produitDetail, $force_type_drm = null) {
         $cepageConfig = $produitDetail->getCepage()->getConfig();
 
         $certification = $cepageConfig->getCertification()->getLibelle();
@@ -55,7 +55,9 @@ class DRMExportCsvEdi extends DRMCsvEdi {
           $libelle = $produitDetail->getLibelle("%format_libelle%");
         }
         $type_drm = ($produitDetail->getParent()->getKey() == 'details')? 'suspendu' : 'acquitte';
-
+        if($force_type_drm){
+          $type_drm = $force_type_drm;
+        }
         return $certification . ";" .
          $genre . ";" .
           $appellation .
@@ -75,16 +77,16 @@ class DRMExportCsvEdi extends DRMCsvEdi {
         return str_replace('_details', '', $keyDetail);
     }
 
-    public function createRowStockNullProduitDetail($produitDetail){
+    public function createRowStockNullProduit($produitDetail){
       $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
-      $lignes = $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "stocks_debut;initial;0;\n";
-      $lignes.= $debutLigne . $this->getProduitCSV($produitDetail) . ";" . "stocks_fin;final;0;\n";
+      $lignes = $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;0;\n";
+      $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;0;\n";
       return $lignes;
     }
 
     public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume){
       $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
-      $lignes = $debutLigne . $this->getProduitCSV($produit) . ";" . $catMouvement.";".$typeMouvement.";".$volume.";\n";
+      $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";\n";
       return $lignes;
     }
 

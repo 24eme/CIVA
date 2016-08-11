@@ -775,8 +775,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiProduitRows(DRMExportCsvEdi $edi){
       $lignesEdi = "";
-      foreach ($this->getProduits() as $hashProduit => $produit) {
-        $lignesEdi.= $edi->createRowStockNullProduitDetail($produit);
+      foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
+        $cepageNode = $produit->getParent()->getParent();
+        $lignesEdi.= $edi->createRowStockNullProduit($cepageNode);
       }
       return $lignesEdi;
     }

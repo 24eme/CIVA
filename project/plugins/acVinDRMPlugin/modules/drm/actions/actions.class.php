@@ -152,6 +152,7 @@ class drmActions extends drmGeneriqueActions {
           foreach ($documentRepriseInfos as $documentRepriseInfo) {
             $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
           }
+
           $drm->save();
           if($ediFileContent){
             $fileDiscr = date('YmdHis').'_'.uniqid();
