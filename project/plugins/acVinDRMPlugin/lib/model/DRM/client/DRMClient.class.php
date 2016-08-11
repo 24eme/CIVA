@@ -457,11 +457,6 @@ class DRMClient extends acCouchdbClient {
         }elseif($prev_ds){
           $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,self::REPRISE_TYPE_CATALOGUE,$prev_ds->_id);
           $documents[] = $dsReprise;
-          // if(($prev_dr->getCampagne() == $annee) && $mois == 10){
-          //   $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
-          //                                       array(self::REPRISE_TYPE_RECOLTE => self::REPRISE_TYPE_RECOLTE),
-          //                                       $prev_dr->_id);
-          // $documents[] = $drReprise;
           }
         return $documents;
     }
@@ -473,19 +468,27 @@ class DRMClient extends acCouchdbClient {
 
         $prev_dr = $this->getPreviousDr($identifiant, $periode);
         $prev_ds = $this->getPreviousDs($identifiant, $annee, $mois);
-        if($prev_dr && ($prev_dr->getValidee()->format('Ym') ==  $periode)){
-          $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
+        $contrats = null;
+
+        if($prev_dr){
+          $periodeDR = substr(str_replace('-','',$prev_dr->getValidee()),0,6);
+          if($periodeDR ==  $periode){
+            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
                                                 self::REPRISE_TYPE_MOUVEMENT,
                                                 $prev_dr->_id);
           $documents[] = $drReprise;
+          }
         }
-        if($prev_ds && $prev_ds->getPeriode() == $periode){
-          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
+        if($prev_ds){
+          $periodeDsPlus1 = "".($prev_ds->getPeriode()+1);
+          if($periodeDsPlus1 == $periode){
+            $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
                                                 self::REPRISE_TYPE_MOUVEMENT,
                                                 $prev_ds->_id);
-          $documents[] = $dsReprise;
+            $documents[] = $dsReprise;
           }
-          if($contrat){
+        }
+        if($contrats){
             $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_CONTRAT,
             self::REPRISE_TYPE_MOUVEMENT,
             $prev_ds->_id);

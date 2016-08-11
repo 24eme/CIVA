@@ -759,13 +759,21 @@ public function getConfigurationCampagne() {
     public function getDRMEdiProduitRows(DRMExportCsvEdi $edi){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        $lignesEdi.= $edi->createRowStockNullProduitDetail($produit);
+        $lignesEdi.= $edi->createRowStockNullProduit($produit);
       }
       return $lignesEdi;
     }
 
     public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi){
-      //Pas besoin ici;
-      return "";
+      $lignesEdi = "";
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+
+        /**
+         * Attention ! ICI on ne prend pas encore les VT et les SGN
+         */
+        $lignesEdi.= $edi->createRowMouvementProduitDetail($produit,"stocks_debut","initial",$produit->getVolumeNormal());
+        $lignesEdi.= $edi->createRowMouvementProduitDetail($produit,"stocks_fin","final",$produit->getVolumeNormal());
+      }
+      return $lignesEdi;
     }
 }

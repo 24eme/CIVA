@@ -458,7 +458,7 @@ class DRMImportCsvEdi extends DRMCsvEdi {
     }
 
     private function categorieMouvementNotFoundError($num_ligne, $csvRow) {
-        return $this->createError($num_ligne, $csvRow[self::CSV_CAVE_CATEGORIE_MOUVEMENT], "Le catégorie de mouvement n'a pas été trouvé");
+        return $this->createError($num_ligne, $csvRow[self::CSV_CAVE_CATEGORIE_MOUVEMENT], "La catégorie de mouvement n'a pas été trouvée");
     }
 
     private function typeMouvementNotFoundError($num_ligne, $csvRow) {

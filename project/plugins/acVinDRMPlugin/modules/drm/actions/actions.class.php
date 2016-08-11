@@ -126,6 +126,10 @@ class drmActions extends drmGeneriqueActions {
                     return $this->redirect('drm_validation', array('identifiant' => $drm->identifiant, 'periode_version' => $drm->getPeriodeAndVersion()));
                     break;
                 case DRMClient::DRM_CREATION_DOCUMENTS :
+                    /* Ici on fait la reprise et l'alimentation de la DRM par EDI
+                     * La route drm_create_from_documents créer une DRM et la remplie avec des éléments CATALOGUE ou MOUVEMENT
+                     * provenant d'un fichier EDI créé
+                     */
                     return $this->redirect('drm_create_from_documents', array('identifiant' => $identifiant, 'periode' => $periode));
                     break;
             }
@@ -134,7 +138,7 @@ class drmActions extends drmGeneriqueActions {
     }
 
     /**
-     *
+     * Route de création de DRM et de fichier EDI venant alimenter la DRM
      * @param sfWebRequest $request
      */
     public function executeCreateEdiFileFromDocuments(sfWebRequest $request) {
@@ -143,18 +147,41 @@ class drmActions extends drmGeneriqueActions {
         $periode = $request->getParameter('periode');
         $drm = DRMClient::getInstance()->getAnyPreviousDrm($identifiant, $periode, $isTeledeclarationMode);
         $ediFileContent = "";
+        /**
+         * initialisation de la DRM
+         */
         if($drm){
-          //TRUC
+          /**
+           * Cas le plus classique : on récupère les informations CATALOGUE produit depuis la DRM précedente
+           */
+           $drm = DRMClient::getInstance()->createDoc($identifiant, $periode, $isTeledeclarationMode);
 
         }else{
+          /**
+           * Cas d'initialisation : on récupère les informations CATALOGUE produit depuis le doc le plus récent entre DS et DR
+           */
           $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
           $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForRepriseCatalogue($identifiant, $periode);
           foreach ($documentRepriseInfos as $documentRepriseInfo) {
             $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
           }
+        }
 
-          $drm->save();
-          if($ediFileContent){
+        $drm->save();
+
+         /**
+          * Dans tout les cas de figure, après la DRM crée, on récupère des mouvements/stock :
+          *  - Si la DRM est juste après la DR, on récupère les mouvements d'entrées récolte
+          *  - Si la DRM est juste après une DS, on récupère les stocks début de mois
+          *  - Dans tout les cas, on récupère les mouvements de sortie contrat en phase d'enlèvement
+          */
+        $documentRepriseMvtInfos = DRMClient::getInstance()->getDocumentsForRepriseMouvement($identifiant, $periode);
+
+        foreach ($documentRepriseMvtInfos as $documentRepriseMvtInfo) {
+          $ediFileContent.= $this->createReprise($documentRepriseMvtInfo,$drm);
+        }
+    //    var_dump($ediFileContent); exit;
+        if($ediFileContent){
             $fileDiscr = date('YmdHis').'_'.uniqid();
 
             $filename = 'import_'.$drm->identifiant . '_' . $drm->periode.'_'.$fileDiscr.'.csv';
@@ -168,9 +195,7 @@ class drmActions extends drmGeneriqueActions {
           }else{
             return $this->redirect('drm_choix_produit', $drm);
           }
-        }
-
-    }
+      }
 
 
       /**
@@ -211,7 +236,7 @@ class drmActions extends drmGeneriqueActions {
         case DRMClient::REPRISE_TYPE_CATALOGUE :
         $ediFileUpdate.=$doc->getDRMEdiProduitRows($edi);
         break;
-        case DRMClient::REPRISE_MOUVEMENT :
+        case DRMClient::REPRISE_TYPE_MOUVEMENT :
         $ediFileUpdate.=$doc->getDRMEdiMouvementRows($edi);
         break;
       }
