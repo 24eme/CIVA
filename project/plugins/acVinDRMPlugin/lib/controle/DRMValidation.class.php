@@ -88,7 +88,7 @@ class DRMValidation extends DocumentValidation {
                     }
 
                     if ($vrac->valide->statut != VracClient::STATUS_CONTRAT_NONSOLDE) {
-                        $this->addPoint('erreur', 'vrac_detail_nonsolde', sprintf("Contrat %s", $mouvement->produit_libelle, $vrac->__toString()), $this->generateUrl('vrac_visualisation', $vrac));
+                        $this->addPoint('erreur', 'vrac_detail_nonsolde', sprintf("Contrat %s", $mouvement->produit_libelle, $vrac->__toString()), $this->generateUrl('vrac_fiche', $vrac));
                         continue;
                     }
                     $id_volume_restant = $mouvement->produit_hash . $mouvement->vrac_numero;

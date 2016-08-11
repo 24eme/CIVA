@@ -52,7 +52,7 @@ $hasDontRevendique = ConfigurationClient::getCurrent()->hasDontRevendique();
                         <td><a href="#tab=mouvements_<?php echo $typeKey ?>&filtre=<?php echo strtolower($produit_libelle); ?>"><?php if($drm->version): ?><small class="text-muted"><?php echo ($mouvement->version) ? $mouvement->version : "M00" ?></small> <?php endif; ?><?php echo $mouvement->produit_libelle ?></a></td>
                         <td><?php
                             if ($mouvement->vrac_numero) {
-                                echo (!isset($no_link) || !$no_link) ? '<a href="' . url_for("vrac_visualisation", array("numero_contrat" => $mouvement->vrac_numero)) . '">' : '';
+                                echo (!isset($no_link) || !$no_link) ? '<a href="' . url_for("vrac_fiche", array("numero_contrat" => $mouvement->vrac_numero)) . '">' : '';
                                 echo $mouvement->type_libelle . ' ' . $mouvement->numero_archive;
                                 echo (!isset($no_link) || !$no_link) ? '</a>' : '';
                             } else {

@@ -219,6 +219,7 @@ class drmActions extends drmGeneriqueActions {
           return $this->setTemplate("verificationEdi");
         }else{
           $this->drmCsvEdi->importCSV(true);
+          unlink($path);
           return $this->redirect('drm_choix_produit', $this->drm);
         }
     }

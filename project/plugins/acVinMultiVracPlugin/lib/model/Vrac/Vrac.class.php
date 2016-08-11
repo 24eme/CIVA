@@ -692,4 +692,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     {
     	$this->setTiersQualite('vendeur_type', $qualite);
     }
+
+		public function getRepartitionCVOCoef($vendeurIdentifiant,$date){
+			/**
+			 * Pas de repartition CVO dans les mvts
+			 */
+			return 0.0;
+		}
 }

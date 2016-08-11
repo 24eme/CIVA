@@ -141,9 +141,10 @@ class DRMESDetails extends BaseDRMESDetails {
             if($detail->isSansContrat()) {
                 $mouvement->cvo = $this->getProduitDetail()->getCVOTaux();
             } else {
-                $mouvement->vrac_numero = $detail->getVrac()->numero_contrat;
-                $mouvement->vrac_destinataire = $detail->getVrac()->acheteur->nom;
-                $mouvement->cvo = $this->getProduitDetail()->getCVOTaux() * $detail->getVrac()->getRepartitionCVOCoef($detail->getVrac()->vendeur_identifiant, $detail->getDocument()->getDate());
+                $vracDoc = $detail->getVrac();
+                $mouvement->vrac_numero = $vracDoc->numero_contrat;
+                $mouvement->vrac_destinataire = $vracDoc->acheteur->intitule ." ". $vracDoc->acheteur->raison_sociale;
+                $mouvement->cvo = $this->getProduitDetail()->getCVOTaux() * $vracDoc->getRepartitionCVOCoef($vracDoc->vendeur_identifiant, $detail->getDocument()->getDate());
             }
         }
 
@@ -164,10 +165,10 @@ class DRMESDetails extends BaseDRMESDetails {
 
             return null;
         }
-
-        $mouvement->vrac_destinataire = $detail->getVrac()->vendeur->nom;
-        $mouvement->region = $detail->getVrac()->getAcheteurObject()->region;
-        $mouvement->cvo = $this->getProduitDetail()->getCVOTaux() * $detail->getVrac()->getRepartitionCVOCoef($detail->getVrac()->acheteur_identifiant, $detail->getDocument()->getDate());
+        $vracDoc = $detail->getVrac();
+        $mouvement->vrac_destinataire = $vracDoc->vendeur->intitule ." ". $vracDoc->vendeur->raison_sociale;
+        $mouvement->region = 'ALSACE';
+        $mouvement->cvo = $this->getProduitDetail()->getCVOTaux() * $vracDoc->getRepartitionCVOCoef($vracDoc->acheteur_identifiant, $detail->getDocument()->getDate());
         if ($mouvement->cvo > 0 && $mouvement->volume) {
             $mouvement->facturable = 1;
         }
