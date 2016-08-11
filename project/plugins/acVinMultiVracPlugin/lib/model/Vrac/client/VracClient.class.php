@@ -159,6 +159,10 @@ class VracClient extends acCouchdbClient {
       return $this->find($this->getId($numeroContrat));
     }
 
+		public function findByNumContrat($numeroContrat){
+			return $this->findByNumeroContrat($numeroContrat);
+		}
+
 
     public function getId($numeroContrat)
     {

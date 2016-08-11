@@ -84,9 +84,11 @@ class DRMExportCsvEdi extends DRMCsvEdi {
       return $lignes;
     }
 
-    public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume){
+    public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume, $num_contrat = null){
       $debutLigne = self::TYPE_CAVE . ";" . $this->drm->periode . ";" . $this->drm->identifiant . ";" . $this->drm->declarant->no_accises . ";";
-      $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";\n";
+      $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";";
+      $lignes .= ($num_contrat)? ";".str_replace("VRAC-","",$num_contrat).";" : "";
+      $lignes .= "\n";
       return $lignes;
     }
 

@@ -36,7 +36,7 @@ class DRMClient extends acCouchdbClient {
 
     const REPRISE_DOC_DR = "DR";
     const REPRISE_DOC_DS = "DS";
-    const REPRISE_DOC_CONTRAT = "CONTRAT";
+    const REPRISE_DOC_VRAC = "VRAC";
 
     const REPRISE_TYPE_CATALOGUE = "REPRISE_CATALOGUE";
     const REPRISE_TYPE_MOUVEMENT = "REPRISE_MOUVEMENT";
@@ -461,40 +461,17 @@ class DRMClient extends acCouchdbClient {
         return $documents;
     }
 
-    public function getDocumentsForRepriseMouvement($identifiant, $periode = null){
+    public function getDocumentsForRepriseMouvements($identifiant, $periode = null){
         $documents = array();
-        $annee = ConfigurationClient::getInstance()->getAnnee($periode);
-        $mois = intval(substr($periode,4,2));
-
-        $prev_dr = $this->getPreviousDr($identifiant, $periode);
-        $prev_ds = $this->getPreviousDs($identifiant, $annee, $mois);
-        $contrats = null;
-
-        if($prev_dr){
-          $periodeDR = substr(str_replace('-','',$prev_dr->getValidee()),0,6);
-          if($periodeDR ==  $periode){
-            $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,
-                                                self::REPRISE_TYPE_MOUVEMENT,
-                                                $prev_dr->_id);
-          $documents[] = $drReprise;
-          }
+        $reprisesMvtInfos = DRMRepriseMvtsView::getInstance()->getRepriseMvts('ETABLISSEMENT-'.$identifiant, $periode);
+        foreach ($reprisesMvtInfos as $mvtInfo) {
+          $mvtInfoSuppl = ($mvtInfo->key[DRMRepriseMvtsView::KEY_TYPE_DOC] == self::REPRISE_DOC_VRAC)? $mvtInfo : null;
+          $reprise = $this->createRepriseInfo($mvtInfo->key[DRMRepriseMvtsView::KEY_TYPE_DOC],
+                                              self::REPRISE_TYPE_MOUVEMENT,
+                                              $mvtInfo->key[DRMRepriseMvtsView::KEY_ID_DOC],
+                                              $mvtInfoSuppl);
+          $documents[] = $reprise;
         }
-        if($prev_ds){
-          $periodeDsPlus1 = "".($prev_ds->getPeriode()+1);
-          if($periodeDsPlus1 == $periode){
-            $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,
-                                                self::REPRISE_TYPE_MOUVEMENT,
-                                                $prev_ds->_id);
-            $documents[] = $dsReprise;
-          }
-        }
-        if($contrats){
-            $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_CONTRAT,
-            self::REPRISE_TYPE_MOUVEMENT,
-            $prev_ds->_id);
-            $documents[] = $dsReprise;
-          }
-
         return $documents;
     }
 
@@ -535,11 +512,12 @@ class DRMClient extends acCouchdbClient {
       return end($arrayDs);
     }
 
-    private function createRepriseInfo($docType,$repriseType,$idDoc){
+    private function createRepriseInfo($docType,$repriseType,$idDoc, $viewResult = null){
       $infos = new stdClass();
       $infos->docType = $docType;
       $infos->repriseType = $repriseType;
       $infos->idDoc = $idDoc;
+      $infos->viewResult = $viewResult;
       return $infos;
     }
 

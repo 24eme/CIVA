@@ -145,28 +145,26 @@ class drmActions extends drmGeneriqueActions {
         $isTeledeclarationMode = $this->isTeledeclarationDrm();
         $identifiant = $request->getParameter('identifiant');
         $periode = $request->getParameter('periode');
-        $drm = DRMClient::getInstance()->getAnyPreviousDrm($identifiant, $periode, $isTeledeclarationMode);
+        $drmPrec = DRMClient::getInstance()->getAnyPreviousDrm($identifiant, $periode, $isTeledeclarationMode);
         $ediFileContent = "";
         /**
          * initialisation de la DRM
          */
-        if($drm){
+        $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
+        if($drmPrec){
           /**
            * Cas le plus classique : on récupère les informations CATALOGUE produit depuis la DRM précedente
            */
            $drm = DRMClient::getInstance()->createDoc($identifiant, $periode, $isTeledeclarationMode);
-
         }else{
           /**
            * Cas d'initialisation : on récupère les informations CATALOGUE produit depuis le doc le plus récent entre DS et DR
            */
-          $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
           $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForRepriseCatalogue($identifiant, $periode);
           foreach ($documentRepriseInfos as $documentRepriseInfo) {
             $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
           }
         }
-
         $drm->save();
 
          /**
@@ -175,12 +173,12 @@ class drmActions extends drmGeneriqueActions {
           *  - Si la DRM est juste après une DS, on récupère les stocks début de mois
           *  - Dans tout les cas, on récupère les mouvements de sortie contrat en phase d'enlèvement
           */
-        $documentRepriseMvtInfos = DRMClient::getInstance()->getDocumentsForRepriseMouvement($identifiant, $periode);
+        $repriseMvtInfos = DRMClient::getInstance()->getDocumentsForRepriseMouvements($identifiant, $periode);
 
-        foreach ($documentRepriseMvtInfos as $documentRepriseMvtInfo) {
-          $ediFileContent.= $this->createReprise($documentRepriseMvtInfo,$drm);
+        foreach ($repriseMvtInfos as $repriseMvtInfo) {
+          $ediFileContent.= $this->createReprise($repriseMvtInfo,$drm);
         }
-    //    var_dump($ediFileContent); exit;
+
         if($ediFileContent){
             $fileDiscr = date('YmdHis').'_'.uniqid();
 
@@ -226,21 +224,37 @@ class drmActions extends drmGeneriqueActions {
     }
 
 
-    private function createReprise($documentRepriseInfo,&$drm){
+    private function createReprise($documentRepriseInfo,$drm){
       $docTypeClientName = $documentRepriseInfo->docType.'Client';
       $docTypeClient = $docTypeClientName::getInstance();
       $doc = $docTypeClient->find($documentRepriseInfo->idDoc);
       $edi = new DRMExportCsvEdi($drm);
       $ediFileUpdate = "";
-      switch ($documentRepriseInfo->repriseType) {
-        case DRMClient::REPRISE_TYPE_CATALOGUE :
-        $ediFileUpdate.=$doc->getDRMEdiProduitRows($edi);
-        break;
-        case DRMClient::REPRISE_TYPE_MOUVEMENT :
-        $ediFileUpdate.=$doc->getDRMEdiMouvementRows($edi);
-        break;
-      }
+      if(!$documentRepriseInfo->viewResult){
+        switch ($documentRepriseInfo->repriseType) {
+          case DRMClient::REPRISE_TYPE_CATALOGUE :
+          $ediFileUpdate.=$doc->getDRMEdiProduitRows($edi);
+          break;
+          case DRMClient::REPRISE_TYPE_MOUVEMENT :
+          $ediFileUpdate.=$doc->getDRMEdiMouvementRows($edi);
+          break;
+        }
+      }else{
+        $viewresult = $documentRepriseInfo->viewResult;
+        $produitHash = $viewresult->value[DRMRepriseMvtsView::VALUE_PRODUIT_HASH];
+        $catMouvement = $viewresult->value[DRMRepriseMvtsView::VALUE_CAT_MVT];
+        $typeMouvement = $viewresult->value[DRMRepriseMvtsView::VALUE_TYPE_MVT];
+        $volume = $viewresult->value[DRMRepriseMvtsView::VALUE_VOLUME];
 
+        $cepageNode = $doc->getOrAdd($produitHash);
+        foreach ($cepageNode->getProduitsDetails()  as $key => $produitsDetail) {
+          foreach ($produitsDetail->getRetiraisons() as $retiraison) {
+            if(substr(str_replace("-",'',$retiraison->getDate()),0,6) == $drm->getPeriode()){
+              $ediFileUpdate .= $edi->createRowMouvementProduitDetail($produitsDetail, $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
+            }
+          }
+        }
+      }
       return $ediFileUpdate;
     }
 
