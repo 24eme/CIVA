@@ -2,7 +2,7 @@
 <?php use_helper('DRM'); ?>
 
 <?php include_partial('drm/breadcrumb', array('drm' => $drm)); ?>
-
+<div id="application_drm" >
 <?php if (!$isTeledeclarationMode): ?>
 <div class="row" style="opacity: 0.7">
     <div class="col-xs-12">
@@ -86,6 +86,7 @@
             <a href="<?php echo url_for('drm_pdf', array('identifiant' => $drm->getIdentifiant(), 'periode_version' => $drm->getPeriodeAndVersion(), 'appellation' => 1)); ?>" class="btn btn-success">Télécharger le PDF</a>
         </div>
     <?php //endif; ?>
+</div>
 </div>
 <?php
 include_partial('drm/colonne_droite', array('drm' => $drm, 'isTeledeclarationMode' => $isTeledeclarationMode));

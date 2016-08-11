@@ -111,7 +111,7 @@ class DRMRouting {
 
         $r->prependRoute('drm_visualisation', new DRMRoute('/drm/:identifiant/visualisation/:periode_version/:hide_rectificative', array('module' => 'drm_visualisation',
             'action' => 'visualisation',
-            'hide_rectificative' => null), array('sf_method' => array('get')), array('model' => 'DRM',
+            'hide_rectificative' => "-1"), array('sf_method' => array('get')), array('model' => 'DRM',
             'type' => 'object',
             'control' => array('valid'))));
 
