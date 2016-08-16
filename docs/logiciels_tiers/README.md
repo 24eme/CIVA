@@ -18,7 +18,7 @@ Ce fichier comporte les différentes colonnes suivantes :
 6. La couleur : Rouge, Rosé ou Blanc
 7. Le cepage : Gewurztraminer, Pinot Blanc, Riesling...
 
-La dernière colonne indique le libellé complet du produit, le processus d'import ne tiendra pas compte de ce champs si les 7 champs d'identification sont remplis. Il sera utilisé que si une ambiguité ressort de l'exploitation de ces champs.
+La dernière colonne indique le libellé complet du produit, le processus d'import ne tiendra pas compte de ce champ si les 7 champs d'identification sont remplis. Il ne sera utilisé que si une ambiguité ressort de l'exploitation de ces champs.
 
 En plus de ce catalogue, le CIVA met à disposition un référentiel produit organisé par colonne (un onglet par colonne) sur le modèle de ce qui a été mis à disposition pour les fichiers DR : [télécharger le référentiel «colonne»](https://declaration.vinsalsace.pro/documents/Fichier-op%C3%A9rateurs-reference_v1.xls)
 
@@ -30,7 +30,7 @@ Le catalogue des mouvements de DRM admis par le portail d'du CIVA  [Catalogue mo
 
 1. Le type de DRM : suspendu ou acquitte
 2. La catégorie du mouvement : stocks_debut, stocks_fin, entrees ou sorties
-3. Le type du mouvement : achatcrd, vrac, repli...
+3. Le type du mouvement : recolte, vrac, repli...
 
 ## Exemple complet de fichier d'import de DRM
 
