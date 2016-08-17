@@ -246,7 +246,8 @@ DRM:
                                                                                                             total_revendique: { type: float }
                                                                                                             total: { type: float }
                                                                                                             produit_libelle: {  }
-                                                                                                            cvo: {type: float}
+                                                                                                            cvo: {type: float}                                                                                                            
+                                                                                                            observations: { required: false }
                                                                                                             labels:
                                                                                                               type: array_collection
                                                                                                               definition:
@@ -434,7 +435,7 @@ DRM:
                 fields:
                   jus: { type: float }
                   mcr: { type: float }
-                  vinaigre: { type: float }            
+                  vinaigre: { type: float }
       identifiant: {  }
       mode_de_saisie: {  }
       commentaire: {}
