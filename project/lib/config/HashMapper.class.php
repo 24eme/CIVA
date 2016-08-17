@@ -9,8 +9,8 @@ class HashMapper {
         $hash = preg_replace("|/mention|", "/mentions/DEFAUT", $hash);
         $hash = preg_replace("|/lieu/|", "/lieux/DEFAUT/", $hash);
         $hash = preg_replace("|/lieu$|", "/lieux/DEFAUT", $hash);
-        $hash = preg_replace("|/lieu([0-9]+)/|", "/lieux/$1/", $hash);
-        $hash = preg_replace("|/lieu([0-9]+)$|", "/lieux/$1", $hash);
+        $hash = preg_replace("|/lieu([A-Z0-9]+)/|", "/lieux/$1/", $hash);
+        $hash = preg_replace("|/lieu([A-Z0-9]+)$|", "/lieux/$1", $hash);
         $hash = preg_replace("|/couleur/|", "/couleurs/DEFAUT/", $hash);
         $hash = preg_replace("|/couleur$|", "/couleurs/DEFAUT", $hash);
         $hash = preg_replace("|/couleur([a-zA-Z0-9_-]{2,30})/|", "/couleurs/$1/", $hash);
@@ -31,8 +31,8 @@ class HashMapper {
         $hash = preg_replace("|/mentions/DEFAUT|", "/mention" , $hash);
         $hash = preg_replace("|/lieux/DEFAUT/|", "/lieu/", $hash);
         $hash = preg_replace("|/lieux/DEFAUT|", "/lieu", $hash);
-        $hash = preg_replace("|/lieux/([0-9]+)/|", "/lieu$1", $hash);
-        $hash = preg_replace("|/lieux/([0-9]+)$|", "/lieu$1", $hash);
+        $hash = preg_replace("|/lieux/([A-Z0-9]+)/|", "/lieu$1/", $hash);
+        $hash = preg_replace("|/lieux/([A-Z0-9]+)$|", "/lieu$1", $hash);
         $hash = preg_replace("|/couleurs/DEFAUT/|", "/couleur/", $hash);
         $hash = preg_replace("|/couleurs/DEFAUT$|", "/couleur",$hash);
         $hash = preg_replace("|/couleurs/([a-zA-Z0-9_-]{2,30})/|", "/couleur$1/", $hash);

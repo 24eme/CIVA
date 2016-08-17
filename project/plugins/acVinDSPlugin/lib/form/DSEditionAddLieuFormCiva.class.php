@@ -28,9 +28,8 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
     {
         if (is_null($this->_choices)) {
             $this->_choices = array("" => "");
-            foreach($this->getLieux() as $key => $lieu) {
-                $hash = $lieu->getHash();
-                if($this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
+            foreach($this->getLieux() as $hash => $lieu) {
+                if($this->_ds->exist($hash)) {
 
                     continue;
                 }
@@ -45,8 +44,8 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
     {
         $lieux = array();
 
-        foreach($this->_config_noeud->mention->getFirstgetLieux() as $lieu) {
-            $lieux[HashMapper::inverse(str_replace($lieu->getHash()))] = $lieu;
+        foreach($this->_config_noeud->mentions->getFirst()->getLieux() as $lieu) {
+            $lieux[HashMapper::inverse($lieu->getHash())] = $lieu;
         }
 
         return $lieux;
