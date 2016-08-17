@@ -1,20 +1,20 @@
-<?php use_helper('Text') ?>    
+<?php use_helper('Text') ?>
 <?php $produits = $form->getProduitsDetails(); ?>
     <ul id="liste_cepages">
-        <?php 
+        <?php
         foreach ($produits as $key => $detail) :
             ?>
     	<li>
-    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small> 
+    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small>
     	</li>
         <?php endforeach; ?>
-	<?php if((count($produits) < count($lieu->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS))) || $lieu->getConfig()->hasLieuEditable()): ?>	
+	<?php if((count($produits) < count($lieu->getConfig()->getProduits())) || $lieu->getConfig()->hasLieuEditable()): ?>
 		<li class="ajout">
 			<a class="ajax" href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />
 			</a>
 		</li>
-        <?php endif; ?>	
+        <?php endif; ?>
     </ul>
     <div id="donnees_stock_cepage">
             <div id="col_hors_vt_sgn" class="colonne">
@@ -29,7 +29,7 @@
 				<div class="col_cont">
 					<ul>
                         <?php $tabindex = 1; ?>
-						<?php foreach ($produits as $key => $detail) : 
+						<?php foreach ($produits as $key => $detail) :
 							$key = $detail->getHashForKey();
 							?>
 						<li>
@@ -59,7 +59,7 @@
 							<?php
 							if(!$detail->getCepage()->no_vtsgn){
 								echo $form[DSCivaClient::VOLUME_VT.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex));
-								echo $form[DSCivaClient::VOLUME_VT.$key]->renderError(); 
+								echo $form[DSCivaClient::VOLUME_VT.$key]->renderError();
 							}
 							?>
 						</li>
@@ -75,14 +75,14 @@
                 <div class="col_cont">
                     <ul>
                         <?php $tabindex = 3; ?>
-                        <?php foreach ($produits as $key => $detail) : 
+                        <?php foreach ($produits as $key => $detail) :
                              $key = $detail->getHashForKey();
                             ?>
                         <li>
                             <?php
                             if(!$detail->getCepage()->no_vtsgn){
                                 echo $form[DSCivaClient::VOLUME_SGN.$key]->render(array('class' => 'num stock', 'tabindex' => $tabindex));
-                                echo $form[DSCivaClient::VOLUME_SGN.$key]->renderError(); 
+                                echo $form[DSCivaClient::VOLUME_SGN.$key]->renderError();
                             }
                             ?>
                         </li>
@@ -93,4 +93,3 @@
             </div>
 <?php endif; ?>
     </div>
-

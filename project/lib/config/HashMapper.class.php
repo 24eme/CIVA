@@ -30,7 +30,7 @@ class HashMapper {
         $hash = preg_replace("|/appellations/([a-zA-Z0-9_-]+)|", "/appellation_$1" , $hash);
         $hash = preg_replace("|/mentions/DEFAUT|", "/mention" , $hash);
         $hash = preg_replace("|/lieux/DEFAUT/|", "/lieu/", $hash);
-        $hash = preg_replace("|/lieux/DEFAUT|", "/lieu$", $hash);
+        $hash = preg_replace("|/lieux/DEFAUT|", "/lieu", $hash);
         $hash = preg_replace("|/lieux/([0-9]+)/|", "/lieu$1", $hash);
         $hash = preg_replace("|/lieux/([0-9]+)$|", "/lieu$1", $hash);
         $hash = preg_replace("|/couleurs/DEFAUT/|", "/couleur/", $hash);
@@ -39,7 +39,7 @@ class HashMapper {
         $hash = preg_replace("|/couleurs/([a-zA-Z0-9_-]{2,30})$|", "/couleur$1", $hash);
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
 
-        $hash = preg_replace("|/genres/EFF/appellations/CREMANT|", "/genres/TRANQ/appellations/CREMANT", $hash);
+        $hash = preg_replace("|/genres/EFF|", "/genre", $hash);
         $hash = preg_replace( "|/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE|", "/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE", $hash);
 
         return $hash;

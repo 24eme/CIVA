@@ -1,5 +1,5 @@
 <?php use_helper('ds'); ?>
-<?php 
+<?php
 $dss = $dss->getRawValue();
 $hasVolume = false;
 ?>
@@ -8,7 +8,7 @@ $hasVolume = false;
 <?php
     echo $form->renderHiddenFields();
     echo $form->renderGlobalErrors();
-?>  
+?>
 
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected"><a href="#">Lieux de stockage</a></li>
@@ -19,16 +19,16 @@ $hasVolume = false;
                 <?php echo $form['date_depot_mairie']->renderError(); ?>
                     <?php echo $form['date_depot_mairie']->renderLabel(); ?>
                 <?php echo $form['date_depot_mairie']->render(array('class' => "datepicker")); ?>
-                   
+
         <?php endif; ?>
 </ul>
-    
-        
+
+
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
-	
-	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>        
+
+	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
             <div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
@@ -44,11 +44,11 @@ $hasVolume = false;
 			<thead>
 				<tr>
                                     <th colspan="2">Lieux de stockage</th>
-					<?php 
-					$configurations = ConfigurationClient::getConfiguration()->getArrayAppellations();
+					<?php
+					$configurations = ConfigurationClient::getConfiguration()->declaration->getArrayAppellations();
 					foreach ($configurations as $conf):
-					?>					
-					<th><?php 
+					?>
+					<th><?php
                                                 $l = $conf->getLibelle();
 						echo (($aoc = substr($l,0,3))=='AOC')? $aoc : '';
                                              ?>
@@ -56,11 +56,11 @@ $hasVolume = false;
 					<?php
 					endforeach;
 					?>
-                                        
+
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($tiers->getLieuxStockage(true) as $numero => $lieu_stockage): 
+				<?php foreach($tiers->getLieuxStockage(true) as $numero => $lieu_stockage):
                                                 $identifiant = $tiers->getIdentifiant();
                                                 $num_lieu = str_replace($identifiant, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
@@ -71,22 +71,22 @@ $hasVolume = false;
                                         <input style='visibility:hidden;' type="radio" name="<?php echo $form['ds_principale']->renderName(); ?>" id="<?php echo $form['ds_principale']->renderId() . "_" . $num_lieu; ?>" value="<?php echo $num_lieu; ?>" <?php echo ($current_ds && $current_ds->isDsPrincipale()) ? 'checked="checked"' : '' ?> />
 					</td>
                                         <td class="adresse_lieu <?php echo ($num_lieu == $ds->getLieuStockage())? "ds_lieu_principal_bold" : ""; ?>" id="<?php echo "adresse_".$num_lieu; ?>">
-                                                <?php echo formatNumeroStockage($lieu_stockage->numero, $ds->isAjoutLieuxDeStockage()) ?> 
+                                                <?php echo formatNumeroStockage($lieu_stockage->numero, $ds->isAjoutLieuxDeStockage()) ?>
                                                 <?php echo ($num_lieu == $ds->getLieuStockage())? "<span id='principal_label'>(principal)</span>" : ""; ?>
                                                 <br />
 						<?php echo $lieu_stockage->adresse ?> <?php echo $lieu_stockage->code_postal ?> <?php echo $lieu_stockage->commune ?>
                                         </td>
 					<?php  $cpt = 0;
 					 $name = 'lieuxStockage_'.$num_lieu;
-						foreach ($form->getWidget($name)->getChoices() as $key => $value): 
+						foreach ($form->getWidget($name)->getChoices() as $key => $value):
 							$paire = ($cpt%2==0)? 'paire' : '';
-							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';                                                        
+							$checked = ($form[$name]->getValue() && in_array($key, $form[$name]->getValue()))? 'checked="checked"' : '';
                                                         $disabled = ($current_ds && $current_ds->exist($key) && $current_ds->get($key)->hasVolume());
                                                         if($disabled){
-                                                            $hasVolume =true;  
+                                                            $hasVolume =true;
                                                         }
 						?>
-					
+
 					<td class="<?php echo $paire ?>">
 					<?php if($disabled): ?>
 					<input type="hidden" name="<?php echo $form[$name]->renderName().'[]'; ?>" id="<?php echo $form[$name]->renderId() . "_" . str_replace('/','_',$key); ?>" value="<?php echo $key; ?>">
@@ -96,12 +96,12 @@ $hasVolume = false;
 					</td>
 					<?php endif; ?>
 				   <?php $cpt++;
-				   endforeach; ?>                                       
+				   endforeach; ?>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-	</div>	
+	</div>
         <?php if($ds->isTypeDsNegoce()): ?>
             <a class="btn_majeur btn_petit btn_vert" style="float: left; margin-top: 20px;" href="<?php echo url_for('ds_ajout_lieux_stockage', array('id' => $ds->_id)); ?>">Ajout d'un lieu de stockage</a>
        <?php endif; ?>
@@ -119,6 +119,3 @@ $hasVolume = false;
 </ul>
 </form>
 <?php include_partial('popupLieuxStockageNeant', array('hasVolume' => $hasVolume)); ?>
-
-
-
