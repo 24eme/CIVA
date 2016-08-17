@@ -16,29 +16,40 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
           <?php echo $annexesForm->renderHiddenFields(); ?>
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title text-center"><strong>Déclaration des documents d'accompagnement</strong></h3>
+                    <div class="panel panel-default" >
+                        <div class="panel-heading " style="cursor:pointer;" id="drm_annexes_documents" >
+                          <div class="row">
+                            <div class="col-xs-11">
+                              <h3 class="panel-title text-center"><strong>Déclaration des documents d'accompagnement</strong></h3>
+                            </div>
+                            <div class="col-xs-1 text-right">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_documents" aria-expanded="true" aria-controls="collapse_documents">
+                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasAnnexes())? 'glyphicon-chevron-right' : 'glyphicon-chevron-down' ?> " style="padding-top: 4px;" ></span>
+                              </a>
+                            </div>
+                          </div>
                         </div>
-                        <div class="panel-body">
-                          <table id="table_drm_adminitration" class="table table-bordered table-striped">
-                              <thead >
-                                  <tr>
-                                      <th class="col-xs-4" >Type de document</th>
-                                      <th class="col-xs-4">Numéro de début</th>
-                                      <th class="col-xs-4">Numéro de fin</th>
-                                  </tr>
-                              </thead>
-                              <tbody class="drm_adminitration">
-                                  <?php foreach ($annexesForm->getDocTypes() as $typeDoc): ?>
-                                      <tr>
-                                          <td style="vertical-align: middle;" class="drm_annexes_type"><?php echo DRMClient::$drm_documents_daccompagnement[$typeDoc]; ?></td>
-                                          <td class="drm_annexes_doc_debut"><?php echo $annexesForm[$typeDoc . '_debut']->render(); ?></td>
-                                          <td class="drm_annexes_doc_fin"><?php echo $annexesForm[$typeDoc . '_fin']->render(); ?></td>
-                                      </tr>
-                                  <?php endforeach; ?>
-                              </tbody>
-                          </table>
+                        <div id="collapse_documents" class="panel-collapse collapse <?php echo ($drm->hasAnnexes())? 'in' : '' ?>" role="tabpanel" aria-labelledby="drm_annexes_documents">
+                          <div class="panel-body">
+                            <table id="table_drm_adminitration" class="table table-bordered table-striped">
+                                <thead >
+                                    <tr>
+                                        <th class="col-xs-4" >Type de document</th>
+                                        <th class="col-xs-4">Numéro de début</th>
+                                        <th class="col-xs-4">Numéro de fin</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="drm_adminitration">
+                                    <?php foreach ($annexesForm->getDocTypes() as $typeDoc): ?>
+                                        <tr>
+                                            <td style="vertical-align: middle;" class="drm_annexes_type"><?php echo DRMClient::$drm_documents_daccompagnement[$typeDoc]; ?></td>
+                                            <td class="drm_annexes_doc_debut"><?php echo $annexesForm[$typeDoc . '_debut']->render(); ?></td>
+                                            <td class="drm_annexes_doc_fin"><?php echo $annexesForm[$typeDoc . '_fin']->render(); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -47,7 +58,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
               <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="drm_annexes_apurement" >
                             <h3 class="panel-title text-center"><strong>Relevé de non apurement</strong></h3>
                         </div>
                         <div class="panel-body">
@@ -82,7 +93,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                 <div class="row">
                   <div class="col-xs-12">
                       <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="drm_annexes_stats_europeenes" >
                             <h3 class="panel-title text-center"><strong>Statistiques européennes</strong></h3>
                         </div>
                       <div class="panel-body">
@@ -120,7 +131,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                 <div class="row">
                   <div class="col-xs-12">
                       <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="drm_annexes_observations" >
                             <h3 class="panel-title text-center"><strong>Observations</strong></h3>
                         </div>
                       <div class="panel-body">
@@ -154,7 +165,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
               <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-default">
-                      <div class="panel-heading">
+                      <div class="panel-heading"  id="drm_annexes_douanes" >
                           <h3 class="panel-title text-center"><strong>Sucre / Paiement Douane</strong></h3>
                       </div>
                     <div class="panel-body">
