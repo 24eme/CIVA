@@ -24,7 +24,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                             </div>
                             <div class="col-xs-1 text-right">
                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_documents" aria-expanded="true" aria-controls="collapse_documents">
-                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasAnnexes())? 'glyphicon-chevron-right' : 'glyphicon-chevron-down' ?> " style="padding-top: 4px;" ></span>
+                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasAnnexes())? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' ?> " style="padding-top: 4px;" ></span>
                               </a>
                             </div>
                           </div>
@@ -65,7 +65,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                             </div>
                             <div class="col-xs-1 text-right">
                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_apurement" aria-expanded="true" aria-controls="collapse_apurement">
-                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasApurementPossible())? 'glyphicon-chevron-right' : 'glyphicon-chevron-down' ?> " style="padding-top: 4px;" ></span>
+                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasApurementPossible())? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' ?> " style="padding-top: 4px;" ></span>
                               </a>
                             </div>
                           </div>
@@ -111,7 +111,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                               </div>
                               <div class="col-xs-1 text-right">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_stats_europeenes" aria-expanded="true" aria-controls="collapse_stats_europeenes">
-                                  &nbsp;<span class="glyphicon  glyphicon-chevron-right" style="padding-top: 4px;" ></span>
+                                  &nbsp;<span class="glyphicon  glyphicon-chevron-down" style="padding-top: 4px;" ></span>
                                 </a>
                               </div>
                             </div>
@@ -160,7 +160,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                               </div>
                               <div class="col-xs-1 text-right">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_observations" aria-expanded="true" aria-controls="collapse_observations">
-                                  &nbsp;<span class="glyphicon  glyphicon-chevron-right" style="padding-top: 4px;" ></span>
+                                  &nbsp;<span class="glyphicon  glyphicon-chevron-down" style="padding-top: 4px;" ></span>
                                 </a>
                               </div>
                             </div>
@@ -205,7 +205,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                           </div>
                           <div class="col-xs-1 text-right">
                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_douanes" aria-expanded="true" aria-controls="collapse_douanes">
-                              &nbsp;<span class="glyphicon  glyphicon-chevron-right" style="padding-top: 4px;" ></span>
+                              &nbsp;<span class="glyphicon  glyphicon-chevron-down" style="padding-top: 4px;" ></span>
                             </a>
                           </div>
                         </div>

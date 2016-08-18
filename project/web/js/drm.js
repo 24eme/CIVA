@@ -119,7 +119,19 @@
         initUpdateEtablissementValidation();
         initSignatureDrmPopup();
         initBoldSaisie();
+        initAnnexes();
     });
+
+    var initAnnexes = function(){
+
+      $('.panel-collapse').on('show.bs.collapse', function(){
+        $(this).parent().find('.panel-heading a span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+        });
+
+      $('.panel-collapse').on('hide.bs.collapse', function(){
+        $(this).parent().find('.panel-heading a span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+      });
+    }
 
     var initRaccourcis = function () {
         $('a.click-on-space-key').keypress(function (e) {
