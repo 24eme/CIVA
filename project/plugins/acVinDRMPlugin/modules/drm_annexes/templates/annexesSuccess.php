@@ -59,8 +59,18 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                 <div class="col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="drm_annexes_apurement" >
-                            <h3 class="panel-title text-center"><strong>Relevé de non apurement</strong></h3>
+                          <div class="row">
+                            <div class="col-xs-11">
+                              <h3 class="panel-title text-center"><strong>Relevé de non apurement</strong></h3>
+                            </div>
+                            <div class="col-xs-1 text-right">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_apurement" aria-expanded="true" aria-controls="collapse_apurement">
+                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasApurementPossible())? 'glyphicon-chevron-right' : 'glyphicon-chevron-down' ?> " style="padding-top: 4px;" ></span>
+                              </a>
+                            </div>
+                          </div>
                         </div>
+                        <div id="collapse_apurement" class="panel-collapse collapse <?php echo ($drm->hasApurementPossible())? 'in' : '' ?>" role="tabpanel" aria-labelledby="drm_annexes_apurement">
                         <div class="panel-body">
                           <table id="table_drm_non_apurement" class="table table-bordered table-striped">
                               <thead >
@@ -86,6 +96,7 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                               </thead>
                           </table>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
