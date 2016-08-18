@@ -45,9 +45,6 @@ class DRMAnnexesForm extends acCouchdbObjectForm {
         $observations = new DRMObservationsCollectionForm($this->drm);
         $this->embedForm('observationsProduits', $observations);
 
-        // $this->setWidget('observations', new sfWidgetFormTextarea(array(), array('style' => 'width: 100%;resize:none;')));
-        // $this->setValidator('observations', new sfValidatorString(array('required' => false)));
-        // $this->widgetSchema->setLabel('observations', 'Observations générales');
 
         $this->embedForm('releve_non_apurement', new DRMReleveNonApurementItemsForm($this->drm->getReleveNonApurement()));
         $this->widgetSchema->setNameFormat('drmAnnexesForm[%s]');
