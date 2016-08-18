@@ -3,6 +3,16 @@
 
 # default values
 all:
+  configuration_compte:
+    intitules: ["CAVES", "DOMAINE", "EAR", "EARL", "EURL", "GAEC", "GFA, DU", "HERITIERS", "INDIVISION", "M.", "MADAME", "MADEME", "MAISON", "MELLE", "M., ET, MME", "MLLE", "MM.", "MME", "MMES", "MME, VEUVE", "MRS", "S.A.", "SA", "SARL", "S.A.S.", "SAS", "SASU", "S.C.A.", "SCA", "SCEA", "S.C.I.", "SCI", "S.D.F.", "SDF", "SICA", "STE", "STEF", "VEUVE", "VINS"]
+  configuration_dr:
+      motif_non_recolte:
+        "AE": "Assemblage Edelzwicker"
+        "DC": "Déclaration en cours"
+        "PC": "Problème climatique"
+        "MV": "Maladie de la vigne"
+        "MP": "Motifs personnels"
+        "VV": "Vendanges en Vert"
   configuration:
     vrac:
       delai_suppression: 5
@@ -103,8 +113,3 @@ all:
         url: "@confirmation"
     orders: [mon_espace_civa, exploitation_message, notice_evolutions, exploitation, repartition, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
   css_class_field_error: "erreur"
-
-
-
-
-

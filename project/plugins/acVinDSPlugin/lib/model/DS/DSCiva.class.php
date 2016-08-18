@@ -140,8 +140,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         $noeud = $this->getOrAdd($hash);
         $config = $noeud->getConfig();
         $noeud->libelle = $config->getLibelle();
-
-        if($noeud instanceof DSCepage && !$config->getParent()->hasManyNoeuds() && !$config->hasLieuEditable()) {
+        if($noeud instanceof DSCepage && count($config->getParentNode()->getChildrenNode()) <= 1 && !$config->hasLieuEditable()) {
             $this->addDetail($hash);
         }
 
@@ -151,14 +150,12 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
             }
         }
 
-        if(!$config->hasManyNoeuds() && count($config->getChildrenNode()) > 0) {
-            $this->addNoeud($config->getChildrenNode()->getFirst()->getHash());
+        if(count($config->getChildrenNode()) == 1) {
+            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash()));
         }
 
         return $noeud;
     }
-
-
 
     public function addAppellation($hash) {
 
@@ -222,11 +219,10 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
     public function addProduit($hash,$fromDs = false) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
-        $hash_config = preg_replace('/^declaration/','recolte', $hash);
+        $hash_config = HashMapper::convert($hash);
         if($fromDs){
             $hash_config = preg_replace('/^\/declaration/','/recolte', $hash);
         }
-
         try {
             $this->getConfig()->get($hash_config)->isForDS();
         } catch(Exception $e) {
@@ -326,7 +322,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
      public function getPreviousLieu($lieu){
         $appellation = $lieu->getAppellation();
-        $appellations = $appellation->getParent()->getAppellationsSorted();
+        $appellations = $this->declaration->getAppellationsSorted();
         $lieux = $lieu->getParent()->getLieuxSorted();
         while($previous = array_pop($lieux)) {
             if($previous->getHash() == $lieu->getHash() && count($lieux) > 0){

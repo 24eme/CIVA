@@ -91,6 +91,17 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return $this->produits_all;
     }
 
+
+    public function getArrayAppellations() {
+        $appellations = array();
+        foreach($this->getChildrenNode() as $item) {
+
+            $appellations = array_merge($appellations, $item->getArrayAppellations());
+        }
+
+        return $appellations;
+    }
+
     public function findDroitsDate($date, $interpro) {
         $datesDroits = $this->getDatesDroits($interpro);
 
@@ -843,6 +854,11 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
                 return true;
             }
         }
+
+        return false;
+    }
+
+    public function hasLieuEditable() {
 
         return false;
     }

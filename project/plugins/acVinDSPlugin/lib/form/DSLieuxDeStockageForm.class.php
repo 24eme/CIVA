@@ -15,7 +15,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         $this->appelations = $this->getAppelations();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
         $this->identifiant = $this->tiers->getIdentifiant();
-        
+
         $defaults = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
             $id_lieu = str_replace($this->identifiant,'', $lieu_s);
@@ -23,8 +23,8 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
             if(array_key_exists($ds_id, $this->dss)){
                 $current_ds = $this->dss[$ds_id];
                 foreach ($this->getAppelations() as $key => $value) {
-                if($current_ds->exist($key)){
-                    $defaults['lieuxStockage_'.$id_lieu][] = $key;
+                    if($current_ds->exist($key)){
+                        $defaults['lieuxStockage_'.$id_lieu][] = $key;
                     }
                 }
             }
@@ -32,7 +32,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
         if($ds->isDsPrincipale() && $this->ds->isDateDepotMairie()){
             $defaults['date_depot_mairie'] = $this->ds->getDateDepotMairieFr();
         }
-        
+
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
 
@@ -47,35 +47,35 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
             $this->widgetSchema->setLabel('date_depot_mairie', 'Date de dépot en mairie :');
             $this->setValidator('date_depot_mairie', new sfValidatorRegex(array('required' => true, 'pattern' => "/^([0-9]){2}\/([0-9]){2}\/([0-9]){4}$/"),array('invalid' => 'Le format de la date de dépot en mairie doit être jj/mm/aaaa')));
         }
-        
+
         $this->setWidget('neant', new sfWidgetFormChoice(array('choices' => $this->getNeant(),'expanded' => true, 'multiple' => true)));
         $this->setValidator('neant', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getNeant()), 'multiple' => true)));
-        
+
         $this->setWidget('ds_principale', new sfWidgetFormChoice(array('choices' => $this->getLieuxStockage(),'expanded' => false, 'multiple' => true)));
         $this->setValidator('ds_principale', new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getLieuxStockage()), 'multiple' => true)));
-        
-        
-        
+
+
+
         $this->getValidatorSchema()->setPostValidator(new ValidatorLieuxStockageDS($this->lieux_stockage,$this->ds));
 
-        
-        
+
+
         $this->widgetSchema->setLabel('neant', 'DS Néant');
         $this->widgetSchema->setNameFormat('ds_lieu[%s]');
     }
 
 
-    
-    
-    
+
+
+
     public function doUpdateDss($dss) {
-        
-        $values = $this->getValues();   
+
+        $values = $this->getValues();
         if(count($values['ds_principale']) != 1){
             throw new sfException("La ds principale doit être basée sur un des lieux de stockage proposés");
         }
         $num = $values['ds_principale'][0];
-        
+
         foreach ($this->lieux_stockage as $lieu_id => $lieu) {
             $lieu_num = preg_replace('/^(C?[0-9]{10})([0-9]{3})$/', "$2", $lieu_id);
             $ds_id = preg_replace("/[0-9]{3}$/", $lieu_num, $this->ds->_id);
@@ -86,7 +86,7 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 $current_ds = $dss[$new_ds->_id];
             }
             foreach ($values as $key => $value) {
-                $l = preg_replace('/^lieuxStockage_/', '', $key); 
+                $l = preg_replace('/^lieuxStockage_/', '', $key);
                 if($l==$lieu_num){
                     foreach ($this->appelations as $key => $appelation) {
                         if($value && in_array($key, $value) && !$current_ds->exist($key)){
@@ -94,13 +94,13 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                         }
                         if( ($value && !in_array($key, $value)) && ($current_ds->exist($key))){
                             if($current_ds->get($key)->hasVolume()){
-                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie"); 
+                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie");
                             }
                             $current_ds->remove($key);
                         }
                         if(!$value && $current_ds->exist($key)){
                             if($current_ds->get($key)->hasVolume()){
-                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie"); 
+                                throw new sfException("L'appellation $key de la ds $current_ds->_id ne peut être supprimer car du volume a été saisie");
                             }
                             $current_ds->remove($key);
                         }
@@ -108,9 +108,9 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
                 }
         }
         }
-        
+
         $dss = DSCivaClient::getInstance()->changeDSPrincipale($dss,$this->ds,$num);
-        
+
         $is_neant = $values['neant'] && $values['neant'][0] == 1;
         foreach ($dss as $ds) {
             if($is_neant){
@@ -129,33 +129,33 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
             if($ds->isDsPrincipale() && $this->ds->isDateDepotMairie()){
                 $ds->add('date_depot_mairie',Date::getIsoDateFromFrenchDate($values['date_depot_mairie']));
             }
-            
+
         }
         return $dss;
     }
-    
 
     public function getAppelations(){
         $result = array();
-        foreach (ConfigurationClient::getConfiguration()->getArrayAppellations() as $conf){
-            $result[preg_replace('/^\/recolte/','declaration',$conf->getHash())] = $conf->getLibelle();
+        foreach (ConfigurationClient::getConfiguration()->declaration->getArrayAppellations() as $conf){
+            $result[preg_replace('/^\/recolte/','declaration',HashMapper::inverse($conf->getHash()))] = $conf->getLibelle();
         }
+
         return $result;
     }
-    
+
     public function getLieuxStockage() {
         $lieux_stockages = array();
         foreach ($this->lieux_stockage as $lieu_s => $value) {
             $stockage_num = str_replace($this->identifiant,'', $lieu_s);
-            $lieux_stockages[$stockage_num] = $stockage_num; 
+            $lieux_stockages[$stockage_num] = $stockage_num;
          }
          return $lieux_stockages;
     }
-    
+
     public function getNeant() {
         return array(1 => 1);
     }
-    
+
     public function postValidator(){
 
     }

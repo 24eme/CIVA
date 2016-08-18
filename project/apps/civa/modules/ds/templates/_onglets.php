@@ -1,15 +1,15 @@
-<?php $is_appellations_completes = count($ds->declaration->getAppellationsSorted()) >= count($ds->declaration->getConfig()->getNoeudAppellations()->getChildrenNodeArray()) ?>
+<?php $is_appellations_completes = count($ds->declaration->getAppellationsSorted()) >= count($ds->declaration->getConfig()->getArrayAppellations()) ?>
 
 <ul id="onglets_majeurs" class="clearfix onglets_stock <?php echo ($is_appellations_completes) ? "concis" : null ?>">
     <?php foreach ($ds->declaration->getAppellationsSorted() as $app_key => $app):  ?>
     <?php $selected = (isset($appellation) && $app->getHash() == $appellation->getHash()); ?>
     <li class="<?php echo $selected ? 'ui-tabs-selected' : '' ; ?>">
         <a class="ajax" href="<?php echo url_for('ds_edition_operateur', $app->getRawValue()); ?>">
-            <span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span> 
+            <span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span>
             <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
         </a>
-        
-        <?php if(isset($appellation) && $selected && $appellation->getConfig()->hasManyLieu()): ?>
+
+        <?php if(isset($appellation) && $selected && count($appellation->getConfig()->mentions->getFirst()->getLieux()) > 1): ?>
             <ul class="sous_onglets">
                 <?php foreach ($appellation->getLieuxSorted() as $l): ?>
                 <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">
@@ -21,7 +21,7 @@
         <?php endif; ?>
     </li>
     <?php endforeach; ?>
-    
+
     <?php if(!$is_appellations_completes): ?>
 	<li class="ajouter ajouter_appelation"><a class="ajax" title="Ajouter une appellation" href="<?php echo url_for('ds_ajout_appellation', $ds) ?>">&nbsp;</a></li>
     <?php endif; ?>
@@ -31,4 +31,3 @@
         </a>
     </li>
 </ul>
-
