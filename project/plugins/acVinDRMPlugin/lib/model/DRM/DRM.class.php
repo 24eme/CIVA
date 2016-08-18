@@ -1335,6 +1335,16 @@ class DRM extends BaseDRM implements InterfaceMouvementDocument, InterfaceVersio
         return false;
     }
 
+    public function getObservationsArray(){
+      $observations = array();
+      foreach ($this->getProduitsDetails($this->teledeclare) as $hash => $detail) {
+        if($detail->exist('observations') && $detail->get('observations')){
+          $observations[$detail->getLibelle()] = $detail->get('observations');
+        }
+      }
+      return $observations;
+    }
+
     /*
     * Fin Observations
     */
