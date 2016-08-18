@@ -206,8 +206,11 @@ var initClotureContratCheckboxes = function()
 };
 
 $.fn.checkboxesBehaviour = function(){
-  var reg_debut = new RegExp("vrac_produits__", "g");
+	var reg_debut = new RegExp("vrac_produits__", "g");
   var reg_fin = new RegExp("(_detail_[0-9]+)_[A-Za-z0-9\_\-]*", "g");
+	if($(this).attr('id') == undefined){
+		return false;
+	}
   var champsClass = $(this).attr('id').replace(reg_fin,'$1').replace(reg_debut,'ret_');
   var date = $('.'+champsClass).parent().parent().children('td.echeance').children('input.input_date');
     if($(this).is(':checked')){

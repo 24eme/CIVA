@@ -366,12 +366,12 @@
 
     var initCollectionDeleteNonApurementTemplate = function ()
     {
-        $('.drm_non_apurement_delete_row .btn_supprimer_ligne_template').on('click', function ()
-        {
-            var element = $(this).parent().parent();
-            $(element).remove();
-            return false;
-        });
+        $('.drm_non_apurement_delete_row .drm_non_apurement_delete_btn').live('click', function ()
+         {
+             var element = $(this).parent().parent();
+             $(element).remove();
+             return false;
+         });
     }
 
     var initNonApurement = function () {

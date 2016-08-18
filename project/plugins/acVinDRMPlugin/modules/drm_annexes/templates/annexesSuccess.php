@@ -65,12 +65,12 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                             </div>
                             <div class="col-xs-1 text-right">
                               <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_apurement" aria-expanded="true" aria-controls="collapse_apurement">
-                                &nbsp;<span class="glyphicon  <?php echo ($drm->hasApurementPossible())? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' ?> " style="padding-top: 4px;" ></span>
+                                &nbsp;<span class="glyphicon  <?php echo (count($annexesForm['releve_non_apurement']))? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' ?> " style="padding-top: 4px;" ></span>
                               </a>
                             </div>
                           </div>
                         </div>
-                        <div id="collapse_apurement" class="panel-collapse collapse <?php echo ($drm->hasApurementPossible())? 'in' : '' ?>" role="tabpanel" aria-labelledby="drm_annexes_apurement">
+                        <div id="collapse_apurement" class="panel-collapse collapse <?php echo (count($annexesForm['releve_non_apurement']))? 'in' : '' ?>" role="tabpanel" aria-labelledby="drm_annexes_apurement">
                         <div class="panel-body">
                           <table id="table_drm_non_apurement" class="table table-bordered table-striped">
                               <thead >
@@ -205,20 +205,20 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                           </div>
                           <div class="col-xs-1 text-right">
                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_douanes" aria-expanded="true" aria-controls="collapse_douanes">
-                              &nbsp;<span class="glyphicon  glyphicon-chevron-down" style="padding-top: 4px;" ></span>
+                              &nbsp;<span class="glyphicon <?php echo (!$drm->hasPaiementDouane())? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' ?> " style="padding-top: 4px;" ></span>
                             </a>
                           </div>
                         </div>
                       </div>
-                    <div id="collapse_douanes" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="drm_annexes_douanes">
+                    <div id="collapse_douanes" class="panel-collapse collapse <?php echo (!$drm->hasPaiementDouane())? 'in' : '' ?>" role="tabpanel" aria-labelledby="drm_annexes_douanes">
                       <div class="panel-body">
-                      <table id="table_drm_non_apurement" class="table table-bordered table-striped">
+                      <table class="table table-bordered table-striped">
                         <thead >
                           <tr>
                             <th class="col-xs-12" colspan="3" >Information sur le sucre</th>
                           </tr>
                         </thead>
-                        <tbody class="drm_non_apurement" id="nonapurement_list">
+                        <tbody>
                           <tr>
                             <td class="col-xs-5">
                               <?php echo $annexesForm['quantite_sucre']->renderLabel(); ?>
@@ -233,13 +233,13 @@ $paiement_douane_frequence = ($societe->exist('paiement_douane_frequence')) ? $s
                       </tbody>
                     </table>
                     <br/>
-                    <table id="table_drm_non_apurement" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                       <thead>
                         <tr>
                           <th colspan="3">Condition de paiement des douanes</th>
                         </tr>
                         </thead>
-                        <tbody class="drm_non_apurement" id="nonapurement_list">
+                        <tbody>
                           <tr>
                               <td class="col-xs-3">
                                 <?php echo $annexesForm['paiement_douane_frequence']->renderLabel(); ?>
