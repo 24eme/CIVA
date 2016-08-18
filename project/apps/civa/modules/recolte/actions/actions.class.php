@@ -25,7 +25,6 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();

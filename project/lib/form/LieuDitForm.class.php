@@ -17,14 +17,15 @@ class LieuDitForm extends acCouchdbObjectForm {
 
     public function doUpdateObject($values) {
         if (isset($values['lieu'])) {
-            foreach ($this->getObject()->getMentions() as $mention){
-                if($mention->getConfig()->exist($values['lieu'])){
+            /*if($mention->getConfig()->exist($values['lieu'])){
                     $lieu = $mention->add($values['lieu']);
-                    foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
-                       $lieu->add($k);
+                    foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
+
                     }
                 }
-            }
+            }*/
+            $this->getObject()->getDocument()->getOrAdd($values['lieu']);
         }
     }
+
 }

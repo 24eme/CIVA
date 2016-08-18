@@ -5,7 +5,7 @@
  */
 
 class ConfigurationMention extends BaseConfigurationMention {
-	
+
 	  const TYPE_NOEUD = 'mention';
 
     protected function loadAllData() {
@@ -23,7 +23,7 @@ class ConfigurationMention extends BaseConfigurationMention {
      * @return ConfigurationAppellation
      */
     public function getAppellation() {
-        
+
         return $this->getParentNode();
     }
 
@@ -31,7 +31,7 @@ class ConfigurationMention extends BaseConfigurationMention {
 
         return $this->getAppellation()->getCertification();
     }
-    
+
     public function getLabels($interpro) {
 
         return $this->getCertification()->getLabels($interpro);
@@ -47,24 +47,29 @@ class ConfigurationMention extends BaseConfigurationMention {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     public function setDonneesCsv($datas) {
       parent::setDonneesCsv($datas);
-      
+
     	$this->getAppellation()->setDonneesCsv($datas);
     	$this->libelle = ($datas[ProduitCsvFile::CSV_PRODUIT_MENTION_LIBELLE])? $datas[ProduitCsvFile::CSV_PRODUIT_MENTION_LIBELLE] : null;
         $this->code = $this->formatCodeFromCsv($datas[ProduitCsvFile::CSV_PRODUIT_MENTION_CODE]);
 
     	$this->setDroitDouaneCsv($datas, ProduitCsvFile::CSV_PRODUIT_MENTION_CODE_APPLICATIF_DROIT);
-    	$this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_MENTION_CODE_APPLICATIF_DROIT); 
+    	$this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_MENTION_CODE_APPLICATIF_DROIT);
     	$this->setDepartementCsv($datas);
     }
-    
+
   	public function getTypeNoeud() {
   		return self::TYPE_NOEUD;
   	}
+
+	public function getLieux() {
+
+		return $this->_get('lieux');
+	}
 
 }

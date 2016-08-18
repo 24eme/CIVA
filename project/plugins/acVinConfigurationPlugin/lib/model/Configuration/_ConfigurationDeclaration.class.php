@@ -871,15 +871,27 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return false;
     }
 
+    public function getLieux() {
+        $lieux = array();
+
+        foreach($this->getChildrenNode() as $item) {
+            $lieuxItems = $item->getLieux();
+            foreach($lieuxItems as $lieuxItem) {
+                $lieux[$lieuxItem->getHash()] = $lieuxItem;
+            }
+        }
+
+        return $lieux;
+    }
+
     public function hasLieuEditable() {
 
         return false;
     }
 
-
     public function hasManyLieu() {
 
-        return false;
+        return count($this->getLieux()) > 1;
     }
 
     public function hasManyCouleur() {

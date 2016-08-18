@@ -39,7 +39,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function hasAllDistinctLieu() {
         $nb_lieu = count($this->getDistinctLieux());
-        $nb_lieu_config = count($this->getConfig()->getDistinctLieux());
+        $nb_lieu_config = count($this->getConfig()->getLieux());
         return (!($nb_lieu < $nb_lieu_config));
     }
 
@@ -71,10 +71,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getLieuChoices() {
         $lieu_choices = array('' => '');
-        foreach ($this->getConfig()->getDistinctLieux() as $key => $item) {
-            foreach( $this->getMentions() as $mention ){
-                if (!$mention->exist($key)) {
-                    $lieu_choices[$key] = $item->getLibelle();
+        foreach ($this->getConfig()->getLieux() as $item) {
+            foreach( $this->getMentions() as $mention){
+                $hash = HashMapper::inverse($item->getHash());
+                if(!$mention->getDocument()->exist($hash)) {
+                    $lieu_choices[$hash] = $item->getLibelle();
                 }
             }
         }

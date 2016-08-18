@@ -152,7 +152,7 @@ class acheteurActions extends EtapesActions {
         $declaration->save();
         return $this->redirect('@exploitation_lieu');
     }
-    
+
     public function executeExploitationAcheteursNoRecolte(sfWebRequest $request) {
         $this->setCurrentEtape('repartition');
         $this->redirectToNextEtapes();

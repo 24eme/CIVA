@@ -354,7 +354,9 @@ class RecolteOnglets {
             $lieu = $this->getFirstKeyLieu($appellation);
         }
 
-        return $this->getItemsCouleur($appellation, $lieu)->getFirstKey();
+        $hashes = explode("/", HashMapper::inverse($this->getItemsCouleur($appellation, $lieu)->getFirst()->getHash()));
+
+        return $hashes[count($hashes) - 1];
     }
 
     protected function getFirstKeyCepage($appellation = null, $lieu = null, $couleur = null) {
@@ -380,6 +382,7 @@ class RecolteOnglets {
                 $appellation = $this->getFirstKeyAppellation();
                 $lieu = $this->getFirstKeylieu($appellation);
                 $couleur = $this->getFirstKeyCouleur($appellation, $lieu);
+                echo $couleur;
                 $cepage = $this->getFirstKeyCepage($appellation, $lieu, $couleur);
             }
         }
@@ -512,11 +515,14 @@ class RecolteOnglets {
         $value = $this->convertValueToKey($value, $prefix);
         $items = $this->$method();
         foreach($items as $item) {
-            $hashes = explode("/", HashMapper::inverse($item->getHash()));
+            if($item instanceof _ConfigurationDeclaration) {
+                $hashes = explode("/", HashMapper::inverse($item->getHash()));
+            } else {
+                $hashes = explode("/", $item->getHash());
+            }
             if ($value != $hashes[count($hashes) -1]) {
                 continue;
             }
-
             return $value;
         }
         return false;
