@@ -1,7 +1,9 @@
 <ul id="liste_sepages">
     <?php foreach ($onglets->getItemsCouleur() as $key_couleur => $couleur): ?>
-        <?php foreach ($couleur->getChildrenFilter(ConfigurationAbstract::TYPE_DECLARATION_DR) as $key => $cepage): ?>
-            <?php if (!$recapitulatif && $onglets->getCurrentKeyCepage() == $key): ?>
+        <?php $couleurs_hashes = explode("/", HashMapper::inverse($couleur->getHash())); ?>
+        <?php $key_couleur = $couleurs_hashes[count($couleurs_hashes) - 1]; ?>
+        <?php foreach ($couleur->getChildrenNode() as $key => $cepage): ?>
+            <?php if (!$recapitulatif && $onglets->getCurrentCepage()->getHash() == HashMapper::inverse($cepage->getHash())): ?>
                 <li class="ui-tabs-selected">
                     <a href="<?php echo url_for($onglets->getUrl('recolte',null, null, $key_couleur, $key)->getRawValue()) ?>">
                         <?php echo $cepage->libelle ?>

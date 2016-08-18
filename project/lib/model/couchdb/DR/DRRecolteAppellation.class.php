@@ -11,7 +11,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getLieux() {
-        
+
         return $this->getChildrenNodeDeep();
     }
 
@@ -32,7 +32,7 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
                 return true;
             }
         }
-       
+
         return false;
     }
 
@@ -45,14 +45,14 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
 
     public function getUsagesIndustrielsCalcule(){
-        
+
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
     public function getAppellation() {
       $v = $this->_get('appellation');
       if (!$v)
-	$this->_set('appellation', $this->getConfig()->getAppellation());
+	$this->_set('appellation', $this->getConfig()->getKey());
       return $this->_get('appellation');
     }
 

@@ -102,6 +102,19 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return $appellations;
     }
 
+    public function getArrayAppellationsMout() {
+        $appellations = array();
+        foreach($this->getChildrenNode() as $item) {
+            if(!$item->hasMout()) {
+                continue;
+            }
+
+            $appellations = array_merge($appellations, $item->getArrayAppellations());
+        }
+
+        return $appellations;
+    }
+
     public function findDroitsDate($date, $interpro) {
         $datesDroits = $this->getDatesDroits($interpro);
 
@@ -861,6 +874,27 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     public function hasLieuEditable() {
 
         return false;
+    }
+
+
+    public function hasManyLieu() {
+
+        return false;
+    }
+
+    public function hasManyCouleur() {
+
+        return false;
+    }
+
+    public function hasManyNoeuds() {
+
+        return false;
+    }
+
+    public function isSuperficieRequired() {
+
+        return true;
     }
 
     /**** DR ****/

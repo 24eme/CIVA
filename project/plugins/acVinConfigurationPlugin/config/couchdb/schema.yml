@@ -461,6 +461,7 @@ Configuration:
                                                 code_comptable: {  }
                                                 code_douane: {  }
                                                 densite: {  }
+                                                mout: {  }
                                                 detail:
                                                   required: false
                                                   class: ConfigurationDetail

@@ -15,7 +15,7 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
     }
 
     public function getAppellationsSorted() {
-        
+
         return $this->getChildrenNodeSorted();
     }
 
@@ -39,7 +39,7 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
      * @return boolean
      */
     public function hasAllAppellation() {
-        return (!($this->getAppellations()->count() < $this->getConfigAppellations()->count()));
+        return (!($this->getAppellations()->count() < $this->getConfigAppellations()->getChildrenNode()->count()));
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -48,11 +48,11 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
     }
 
     public function getUsagesIndustrielsCalcule(){
-        
+
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
-    public function cleanAllNodes() {   
+    public function cleanAllNodes() {
         $keys_to_delete = array();
         foreach($this->getChildrenNodeSorted() as $item) {
             $item->cleanAllNodes();

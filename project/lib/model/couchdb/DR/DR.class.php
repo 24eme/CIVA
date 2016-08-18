@@ -342,11 +342,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function getConfigurationCampagne() {
-        return acCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
+        return ConfigurationClient::getConfiguration();
+        //return acCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
     }
 
     public function setCampagne($campagne) {
-        $nextCampagne = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
+        //$nextCampagne = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
+        $nextCampagne = ConfigurationClient::getConfiguration();
         foreach ($this->recolte->getAppellations() as $k => $a) {
             if (!$nextCampagne->get($a->getParent()->getHash())->exist($k)) {
                 $this->recolte->getNoeudAppellations()->remove($k);

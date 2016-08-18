@@ -36,7 +36,7 @@ class RecolteOnglets {
     }
 
     public function getItemsAppellationConfig() {
-        return $this->_declaration->get('recolte')->getNoeudAppellations()->getConfig()->filter('^appellation');
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->getConfig()->getAppellations();
     }
 
     public function getCouleur($appellation = null, $lieu = null, $couleur = null) {
@@ -45,7 +45,7 @@ class RecolteOnglets {
         }
         $couleur = $this->convertValueToKey($couleur, $this->_prefix_key_couleur);
 
-        return $this->getLieu($appellation, $lieu)->getConfig()->get($couleur);
+        return $this->getLieu($appellation, $lieu)->getConfig()->get(HashMapper::convert("/".$couleur."/"));
     }
 
     public function getLieu($appellation = null, $lieu = null) {
@@ -70,15 +70,16 @@ class RecolteOnglets {
     }
 
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
+
         return $this->getLieu($appellation, $lieu)->getConfig()->getCouleurs();
     }
 
     public function getItemsCepage($appellation = null, $lieu = null, $couleur = null) {
-        return $this->getCouleur($appellation, $lieu, $couleur)->filter('^cepage');
+        return $this->getCouleur($appellation, $lieu, $couleur)->getChildrenNode();
     }
 
     public function getItemsCepageLieu($appellation = null, $lieu = null) {
-        return $this->getLieu($appellation, $lieu)->getConfig()->getCepagesFilter(ConfigurationAbstract::TYPE_DECLARATION_DR);
+        return $this->getLieu($appellation, $lieu)->getConfig()->getChildrenNode();
     }
 
     public function setCurrentAppellation($value = null) {
@@ -134,6 +135,7 @@ class RecolteOnglets {
     }
 
     public function getCurrentKeyCepage() {
+
         return $this->_current_key_cepage;
     }
 
@@ -347,7 +349,7 @@ class RecolteOnglets {
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {
         $lieu = $this->getLieu($appellation, $lieu)->getKey();
-        
+
         if (!$lieu) {
             $lieu = $this->getFirstKeyLieu($appellation);
         }
@@ -358,7 +360,7 @@ class RecolteOnglets {
     protected function getFirstKeyCepage($appellation = null, $lieu = null, $couleur = null) {
         foreach ($this->getItemsCepage($appellation, $lieu, $couleur) as $key => $item) {
             if ($this->getCouleur($appellation, $lieu, $couleur)->exist($key) && $this->_declaration->exist($item->getHash()) && count($this->_declaration->get($item->getHash())->detail) > 0) {
-                
+
                 return $key;
             }
         }
@@ -509,11 +511,15 @@ class RecolteOnglets {
         }
         $value = $this->convertValueToKey($value, $prefix);
         $items = $this->$method();
-        if (isset($items[$value])) {
+        foreach($items as $item) {
+            $hashes = explode("/", HashMapper::inverse($item->getHash()));
+            if ($value != $hashes[count($hashes) -1]) {
+                continue;
+            }
+
             return $value;
-        } else {
-            return false;
         }
+        return false;
     }
 
     protected function convertKeyToValue($key, $prefix) {
@@ -525,4 +531,3 @@ class RecolteOnglets {
     }
 
 }
-
