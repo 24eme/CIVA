@@ -27,7 +27,7 @@
         ?>
 
     <!--<a href="<?php /*echo url_for($onglets->getUrl('recolte_add')->getRawValue()) */?>">Ajouter</a>-->
-        <div id="donnees_recolte_sepage" class="clearfix <?php echo ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && $onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "deux_totaux" : "" ?>">
+        <div id="donnees_recolte_sepage" class="clearfix <?php echo ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && count($onglets->getCurrentLieu()->getConfig()->getCouleurs()) > 1) ? "deux_totaux" : "" ?>">
 
             <?php
             include_partial('detailHeader', array('acheteurs' => $acheteurs,
@@ -49,7 +49,7 @@
                 'onglets' => $onglets,
                 'acheteurs' => $acheteurs,
                 'has_acheteurs_mout' => $has_acheteurs_mout));
-            ?>                                           
+            ?>
             <ul id="btn_cepage" class="btn_prev_suiv clearfix">
                 <?php if ($onglets->hasPreviousCepage()): ?>
                     <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
@@ -77,7 +77,7 @@
                         'has_acheteurs_mout' => $has_acheteurs_mout))
                     ?>
                 <?php endif; ?>
-            <?php endforeach; ?>                                                 
+            <?php endforeach; ?>
         <?php elseif (!$onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
             <?php
             echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),

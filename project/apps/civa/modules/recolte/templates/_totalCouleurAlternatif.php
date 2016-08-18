@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
-<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo ($onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "col_double" : "" ?>">
-    <h2>Total 
+<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo (count($onglets->getCurrentLieu()->getConfig()->getCouleurs()) > 1) ? "col_double" : "" ?>">
+    <h2>Total
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
         <strong><?php echo $couleur->getLibelle() ?></strong>
         <a href="" class="msg_aide" rel="help_popup_DR_total_couleur_alternatif" title="Message aide"></a>

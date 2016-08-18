@@ -884,6 +884,19 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return $lieux;
     }
 
+    public function getCouleurs() {
+        $couleurs = array();
+
+        foreach($this->getChildrenNode() as $item) {
+            $couleursItems = $item->getCouleurs();
+            foreach($couleursItems as $couleursItem) {
+                $couleurs[$couleursItem->getHash()] = $couleursItem;
+            }
+        }
+
+        return $couleurs;
+    }
+
     public function hasLieuEditable() {
 
         return false;
@@ -896,12 +909,12 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function hasManyCouleur() {
 
-        return false;
+        return count($this->getCouleurs()) > 1;
     }
 
     public function hasManyNoeuds() {
 
-        return false;
+        return count($this->getChildrenNode()) > 1;
     }
 
     public function isSuperficieRequired() {

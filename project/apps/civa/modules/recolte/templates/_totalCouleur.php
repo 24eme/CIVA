@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
-<div id="col_couleur_totale" class="col_recolte col_total col_calcule <?php echo ($onglets->getCurrentLieu()->getConfig()->getNbCouleurs() > 1) ? "col_double" : "" ?>">
-    <h2>Total 
+<div id="col_couleur_totale" class="col_recolte col_total col_calcule <?php echo (count($onglets->getCurrentLieu()->getConfig()->getCouleurs()) > 1) ? "col_double" : "" ?>">
+    <h2>Total
         <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
         <strong><?php echo $couleur->getLibelle() ?></strong>
         <a href="" class="msg_aide" rel="help_popup_DR_total_couleur" title="Message aide"></a>
@@ -62,12 +62,12 @@
                 <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
             </li>
             <li>
-                <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($couleur->getDplc()); ?>"/>                  
+                <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($couleur->getDplc()); ?>"/>
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" value="<?php echoFloat($couleur->getDplc()); ?>"/>
-                
+
                 <input type="text" id="appellation_usages_industriels"  class="num <?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" <?php if($couleur->isLiesSaisisCepage()) echo "mode='sum'" ?> readonly="readonly" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>" />
                 <input type="hidden" id="appellation_usages_industriels_orig" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>" />
-                
+
                 <input type="hidden" id="appellation_lies" readonly="readonly" <?php if($couleur->isLiesSaisisCepage()) echo "mode='sum'" ?> class="num" value="<?php echoFloat($couleur->getLies()); ?>" />
                 <input type="hidden" id="appellation_lies_orig" value="<?php echoFloat($couleur->getLies()); ?>" />
             </li>
