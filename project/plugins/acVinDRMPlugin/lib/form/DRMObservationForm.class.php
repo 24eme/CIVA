@@ -21,7 +21,7 @@ class DRMObservationForm extends BaseForm
 	public function configure()
 	{
 		$this->setWidgets(array(
-            'observations' => new sfWidgetFormInput()
+            'observations' => new bsWidgetFormInput()
         ));
         $this->setValidators(array(
             'observations' => new sfValidatorString(array('required' => false))

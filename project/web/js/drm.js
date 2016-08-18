@@ -119,7 +119,19 @@
         initUpdateEtablissementValidation();
         initSignatureDrmPopup();
         initBoldSaisie();
+        initAnnexes();
     });
+
+    var initAnnexes = function(){
+
+      $('.panel-collapse').on('show.bs.collapse', function(){
+        $(this).parent().find('.panel-heading a span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+        });
+
+      $('.panel-collapse').on('hide.bs.collapse', function(){
+        $(this).parent().find('.panel-heading a span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+      });
+    }
 
     var initRaccourcis = function () {
         $('a.click-on-space-key').keypress(function (e) {
@@ -354,12 +366,12 @@
 
     var initCollectionDeleteNonApurementTemplate = function ()
     {
-        $('.drm_non_apurement_delete_row .btn_supprimer_ligne_template').on('click', function ()
-        {
-            var element = $(this).parent().parent();
-            $(element).remove();
-            return false;
-        });
+        $('.drm_non_apurement_delete_row .drm_non_apurement_delete_btn').live('click', function ()
+         {
+             var element = $(this).parent().parent();
+             $(element).remove();
+             return false;
+         });
     }
 
     var initNonApurement = function () {
