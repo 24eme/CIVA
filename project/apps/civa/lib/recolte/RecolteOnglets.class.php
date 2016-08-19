@@ -36,7 +36,7 @@ class RecolteOnglets {
     }
 
     public function getItemsAppellationConfig() {
-        return $this->_declaration->get('recolte')->getNoeudAppellations()->getConfig()->getAppellations();
+        return $this->_declaration->get('recolte')->getConfig()->getArrayAppellations();
     }
 
     public function getCouleur($appellation = null, $lieu = null, $couleur = null) {
@@ -289,12 +289,12 @@ class RecolteOnglets {
 
     protected function previous($method_items_config, $method_items, $method_get_key) {
         $prev_key = false;
-        foreach ($this->$method_items_config() as $key => $item) {
-            if ($method_items_config == $method_items || $this->$method_items()->exist($key)) {
-                if ($key == $this->$method_get_key()) {
+        foreach ($this->$method_items_config() as $item) {
+            if ($method_items_config == $method_items || $this->_declaration->exist(HashMapper::inverse($item->getHash()))) {
+                if ($item->getKey() == $this->$method_get_key()) {
                     return $prev_key;
                 }
-                $prev_key = $key;
+                $prev_key = $item->getKey();
             }
         }
         return false;
@@ -302,12 +302,12 @@ class RecolteOnglets {
 
     protected function next($method_items_config, $method_items, $method_get_key) {
         $next = false;
-        foreach ($this->$method_items_config() as $key => $item) {
-            if ($method_items_config == $method_items || $this->$method_items()->exist($key)) {
+        foreach ($this->$method_items_config() as $item) {
+            if ($method_items_config == $method_items || $this->_declaration->exist(HashMapper::inverse($item->getHash()))) {
                 if ($next) {
-                    return $key;
+                    return $item->getKey();
                 }
-                $next = ($key == $this->$method_get_key());
+                $next = ($item->getKey() == $this->$method_get_key());
             }
         }
         return false;
@@ -318,10 +318,11 @@ class RecolteOnglets {
     }
 
     protected function getFirstKeyAppellation() {
-        foreach ($this->getItemsAppellationConfig() as $key => $item) {
+        foreach ($this->getItemsAppellationConfig() as $item) {
 
-            if ($this->_declaration->recolte->getNoeudAppellations()->exist($key)) {
-                return $key;
+            if ($this->_declaration->exist(HashMapper::inverse($item->getHash()))) {
+
+                return $item->getKey();
             }
         }
 
