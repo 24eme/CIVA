@@ -922,6 +922,14 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return true;
     }
 
+    public function getMout() {
+        if(!$this->exist('mout')) {
+            return 0;
+        }
+        
+        return $this->_get('mout');
+    }
+
     /**** DR ****/
 
 }

@@ -5,7 +5,7 @@
  */
 
 class ConfigurationAppellation extends BaseConfigurationAppellation {
-	
+
 	  const TYPE_NOEUD = 'appellation';
 
     public function getChildrenNode() {
@@ -22,19 +22,19 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
 
         return $this->getGenre()->getCertification();
     }
-    
+
     public function setDonneesCsv($datas) {
       parent::setDonneesCsv($datas);
     	$this->getGenre()->setDonneesCsv($datas);
     	$this->libelle = ($datas[ProduitCsvFile::CSV_PRODUIT_DENOMINATION_LIBELLE])? $datas[ProduitCsvFile::CSV_PRODUIT_DENOMINATION_LIBELLE] : null;
       $this->code = $this->formatCodeFromCsv($datas[ProduitCsvFile::CSV_PRODUIT_DENOMINATION_CODE]);
       $this->densite = ($datas[ProduitCsvFile::CSV_PRODUIT_DENSITE])? $datas[ProduitCsvFile::CSV_PRODUIT_DENSITE] : Configuration::DEFAULT_DENSITE;
-    	
+
     	$this->setDroitDouaneCsv($datas, ProduitCsvFile::CSV_PRODUIT_DENOMINATION_CODE_APPLICATIF_DROIT);
-    	$this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_DENOMINATION_CODE_APPLICATIF_DROIT); 
-        
+    	$this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_DENOMINATION_CODE_APPLICATIF_DROIT);
+
     }
-    
+
   	public function getTypeNoeud() {
   		return self::TYPE_NOEUD;
   	}
