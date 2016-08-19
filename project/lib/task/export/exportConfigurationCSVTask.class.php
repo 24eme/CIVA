@@ -72,7 +72,7 @@ EOF;
                      $produit->getLieu()->getLibelleLong().";".str_replace("lieu", "", $produit->getLieu()->getKey()).";".
                      $produit->getCouleur()->getLibelleLong().";".strtolower(str_replace("couleur", "", $produit->getCouleur()->getKey())).";".
                      $produit->getLibelleLong().";".str_replace("cepage_", "", $produit->getKey()).";".
-                     ";".$cotisationDouane.";2015-08-01;G;".$cotisationCVO.";2015-08-01;C;;;;;;;;;;;;;;%a% %l% %ce% %m%;certification;".
+                     ";".$cotisationDouane.";2015-08-01;G;".$cotisationCVO.";2015-08-01;C;;;;;;;;;;;".$produit->getCodeProduit($mentionKey).";cepage;;%a% %l% %ce% %m%;certification;".
                      "\n";
             }
         }
