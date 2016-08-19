@@ -14,6 +14,9 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     protected $produits = array();
     protected $libelle_format = array();
     protected $dates_droits = null;
+    protected $format_libelle_calcule = false;
+    protected $code_comptable = false;
+    protected $code_produit = false;
 
     const ATTRIBUTE_CVO_FACTURABLE = 'CVO_FACTURABLE';
     const ATTRIBUTE_CVO_ACTIF = 'CVO_ACTIF';
@@ -28,6 +31,11 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         $this->loadProduitsByDates();
         $this->getLibelles();
         $this->getCodes();
+        $this->getFormatLibelleCalcule();
+        $this->getCodeProduit();
+        $this->getCodeComptable();
+        $this->getLibelleFormat(array(), "%format_libelle% (%code_produit%)");
+        $this->getLibelleFormat(array(), "%format_libelle%");
     }
 
     abstract public function getChildrenNode();
@@ -218,30 +226,41 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function getCodeProduit() {
-        if (!$this->_get('code_produit')) {
-
-            return $this->getParentNode()->getCodeProduit();
+        if($this->code_produit === false) {
+            if (!$this->_get('code_produit')) {
+                $this->code_produit = $this->getParentNode()->getCodeProduit();
+            } else {
+                $this->code_produit = $this->_get('code_produit');
+            }
         }
 
-        return $this->_get('code_produit');
+        return $this->code_produit;
     }
 
     public function getCodeComptable() {
-        if (!$this->_get('code_comptable')) {
+        if($this->code_comptable === false) {
+            if (!$this->_get('code_comptable')) {
 
-            return $this->getParentNode()->getCodeComptable();
+                return $this->getParentNode()->getCodeComptable();
+            } else {
+
+                return $this->_get('code_comptable');
+            }
         }
 
-        return $this->_get('code_comptable');
+        return $this->code_comptable;
     }
 
     public function getFormatLibelleCalcule() {
-        if (!$this->getFormatLibelle()) {
-
-            return $this->getParentNode()->getFormatLibelleCalcule();
+        if($this->format_libelle_calcule === false) {
+            if (!$this->getFormatLibelle()) {
+                $this->format_libelle_calcule = $this->getParentNode()->getFormatLibelleCalcule();
+            } else {
+                $this->format_libelle_calcule = $this->getFormatLibelle();
+            }
         }
 
-        return $this->getFormatLibelle();
+        return $this->format_libelle_calcule;
     }
 
     public function getFormatLibelleDefinitionNoeud() {
@@ -270,8 +289,8 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     public function getLibelleFormat($labels = array(), $format = "%format_libelle%", $label_separator = ", ") {
         if (!array_key_exists($format, $this->libelle_format)) {
             $format_libelle = $this->getFormatLibelleCalcule();
-            $format = str_replace("%format_libelle%", $format_libelle, $format);
-            $libelle = $this->formatProduitLibelle($format);
+            $formatResolu = str_replace("%format_libelle%", $format_libelle, $format);
+            $libelle = $this->formatProduitLibelle($formatResolu);
             $libelle = $this->getDocument()->formatLabelsLibelle($labels, $libelle, $label_separator);
             $this->libelle_format[$format] = trim($libelle);
         }
@@ -926,7 +945,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         if(!$this->exist('mout')) {
             return 0;
         }
-        
+
         return $this->_get('mout');
     }
 

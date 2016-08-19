@@ -35,6 +35,24 @@ class ConfigurationDeclaration extends BaseConfigurationDeclaration {
         return false;
     }
 
+    public function getCodeProduit() {
+        if(!$this->exist('code_produit')) {
+
+            return null;
+        }
+
+        return $this->_get('code_produit');
+    }
+
+    public function getCodeComptable() {
+        if(!$this->exist('code_comptable')) {
+
+            return null;
+        }
+
+        return $this->_get('code_comptable');
+    }
+
     protected function compressDroitsSelf() {
 
         return null;
