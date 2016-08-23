@@ -37,3 +37,19 @@ Le catalogue des mouvements de DRM admis par le portail d'du CIVA  [Catalogue mo
 Un exemple spécifique de DRM à importer pour le portail du CIVA est disponible ici : [Exemple de fichier d'import pour le CIVA](exemple_export_drm.csv) .
 
 Ce fichier reprend l'ensemble des spécificités décrites ci-dessus.
+
+## Suivi du projet chez les éditeurs de registres de cave 
+
+| Nom de l'Éditeur | Prise de contact | Génération du fichier de transfer | Recette des échanges en préproduction | Transmission opérationnelle en production | Versions compatibles |
+|------------------|------------------|-----------------------------------|---------------------------------------|------------------------------------------------------|----------------------|
+| chambre d'agriculture | Oui |  |  |  |  |
+| bsi-info              | Oui |  |  |  |  |
+| capvision             | Oui |  |  |  |  |
+| cegar                 | Oui |  |  |  |  |
+| cfg67                 | Oui |  |  |  |  |
+| graineinfo            | Oui |  |  |  |  |
+| idsystemes            | Oui |  |  |  |  |
+| info-log              | Oui |  |  |  |  |
+| ingeteldata           | Oui |  |  |  |  |
+| isagri                | Oui |  |  |  |  |
+| nsi-sadimo            | Oui |  |  |  |  |
