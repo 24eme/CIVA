@@ -72,4 +72,9 @@ class ConfigurationMention extends BaseConfigurationMention {
 		return $this->_get('lieux');
 	}
 
+	public function hasManyLieu() {
+
+		return count($this->getLieux()) > 1;
+	}
+
 }

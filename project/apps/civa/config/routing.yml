@@ -390,6 +390,16 @@ recolte_delete:
   param: { module: recolte, action: delete }
   class: sfRouteAnchor
 
+recolte_detail_add:
+  url:   /recolte_produit_ajout
+  param: { module: recolte, action: add}
+  class: sfRouteAnchor
+
+recolte_detail_update:
+    url:   /recolte_produit_edition
+    param: { module: recolte, action: update}
+    class: sfRouteAnchor
+
 recolte_add:
   url:   /recolte/:appellation_lieu/:couleur_cepage/add
   param: { module: recolte, action: add}
@@ -452,19 +462,19 @@ print:
 send_email_pdf:
   url: /send-email-pdf
   param: {module: declaration, action: sendPdf}
-  
+
 send_email_acheteurs_pdf:
   url: /send-email-acheteurs-pdf
   param: {module: declaration, action: sendPdfAcheteurs}
-  
+
 recolte_feed_back:
   url: /declaration/retour-experience
   param: {module: declaration, action: feedBack}
-  
+
 recolte_feed_back_confirmation:
   url: /declaration/retour-experience-confirmation
   param: {module: declaration, action: feedBackConfirmation}
-  
+
 xml:
   url: /xml/:annee
   param: {module: export, action: xml}

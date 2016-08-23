@@ -770,4 +770,16 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
     }
 
+    public function getMentions() {
+        $mentions = array();
+
+        foreach($this->getChildrenNode() as $item) {
+            foreach($item->getMentions() as $mention) {
+                $mentions[$mention->getHash()] = $mention;
+            }
+        }
+
+        return $mentions;
+    }
+
 }

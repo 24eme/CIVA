@@ -4,6 +4,7 @@ class RecolteOnglets {
 
     protected $_declaration = null;
     protected $_current_key_appellation = null;
+    protected $_current_key_mention = null;
     protected $_current_key_lieu = null;
     protected $_current_key_couleur = null;
     protected $_current_key_cepage = null;
@@ -17,6 +18,7 @@ class RecolteOnglets {
     public function __construct(acCouchdbJson $declaration, $sf_route_previous_etape = null, $sf_route_next_etape = null) {
         $this->_declaration = $declaration;
         $this->_prefix_key_appellation = 'appellation_';
+        $this->_prefix_key_mention = 'mention';
         $this->_prefix_key_lieu = 'lieu';
         $this->_prefix_key_cepage = 'cepage_';
         $this->_prefix_key_couleur = 'couleur';
@@ -48,7 +50,7 @@ class RecolteOnglets {
         return $this->getLieu($appellation, $lieu)->getConfig()->get(HashMapper::convert("/".$couleur."/"));
     }
 
-    public function getLieu($appellation = null, $lieu = null) {
+    public function getLieu($appellation = null, $lieu = null, $mention = "mention") {
         if (is_null($appellation)) {
             $appellation = $this->getCurrentKeyAppellation();
         }
@@ -58,15 +60,15 @@ class RecolteOnglets {
         }
         $lieu = $this->convertValueToKey($lieu, $this->_prefix_key_lieu);
 
-        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->getLieux()->get($lieu);
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->get($mention)->get($lieu);
     }
 
-    public function getItemsLieu($appellation = null) {
+    public function getItemsLieu($appellation = null, $mention = "mention") {
         if (is_null($appellation)) {
             $appellation = $this->getCurrentKeyAppellation();
         }
         $appellation = $this->convertValueToKey($appellation, $this->_prefix_key_appellation);
-        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->getLieux();
+        return $this->_declaration->get('recolte')->getNoeudAppellations()->get($appellation)->get($mention)->getLieux();
     }
 
     public function getItemsCouleur($appellation = null, $lieu = null, $couleur = null) {
@@ -123,7 +125,7 @@ class RecolteOnglets {
     }
 
     public function getCurrentLieu() {
-        return $this->getCurrentAppellation()->getLieux()->get($this->_current_key_lieu);
+        return $this->getCurrentAppellation()->get("mention")->getLieux()->get($this->_current_key_lieu);
     }
 
     public function getCurrentKeyCouleur() {
@@ -345,7 +347,12 @@ class RecolteOnglets {
             throw new sfException(sprintf("Aucun lieu définis dans l'appellation %s", $appellation));
         }
 
-        return $this->getItemsLieu($appellation)->getFirstKey();
+        foreach($this->getItemsLieu($appellation) as $item) {
+
+            return $item->getKey();
+        }
+
+        return null;
     }
 
     protected function getFirstKeyCouleur($appellation = null, $lieu = null) {

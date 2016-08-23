@@ -38,4 +38,10 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
   	public function getTypeNoeud() {
   		return self::TYPE_NOEUD;
   	}
+
+	public function getMentions() {
+
+		return $this->_get('mentions');
+	}
+
 }

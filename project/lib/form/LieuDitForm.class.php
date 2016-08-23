@@ -24,7 +24,9 @@ class LieuDitForm extends acCouchdbObjectForm {
                     }
                 }
             }*/
-            $this->getObject()->getDocument()->getOrAdd($values['lieu']);
+            foreach($this->getObject()->getChildrenNode() as $item) {
+                $this->getObject()->getChildrenNode()->add($item->getKey())->getChildrenNode()->add($values['lieu']);
+            }
         }
     }
 

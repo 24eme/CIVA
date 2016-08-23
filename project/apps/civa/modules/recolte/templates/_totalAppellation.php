@@ -1,14 +1,14 @@
 <?php use_helper('Float') ?>
 <div id="col_recolte_totale" class="col_recolte col_total">
     <h2>Total
-        <?php if($onglets->getCurrentAppellation()->getConfig()->hasManyLieu()): ?>
+        <?php if($produit->getAppellation()->getConfig()->hasManyLieu()): ?>
             <?php echo $lieu->getConfig()->libelle ?>
         <?php else: ?>
-            <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
+            <?php echo $produit->getAppellation()->getConfig()->libelle ?>
         <?php endif; ?>
     </h2>
     <div class="col_cont">
-        <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+        <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
         <p class="lieu">&nbsp;</p>
         <?php endif; ?>
         <p class="denomination">&nbsp;</p>
@@ -18,14 +18,14 @@
             <input id="appellation_total_superficie" type="text" class="num" readonly="readonly" value="<?php echoFloat($lieu->getTotalSuperficie()); ?>" />
         </p>
 
-        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
+        <?php if (!$produit->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
                 <?php include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
                                                               'acheteurs_value' => $lieu->getVolumeAcheteurs('negoces')));?>
         </div>
         <?php endif; ?>
 
-        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
+        <?php if (!$produit->getConfig()->hasNoCooperative()): ?>
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
@@ -34,7 +34,7 @@
         </div>
         <?php endif; ?>
 
-        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$produit->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
@@ -63,7 +63,7 @@
             <li>
                 <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($lieu->getDplc()); ?>" />
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplc()); ?>"/>
-               
+
                 <input type="text" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?>" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
                 <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
 
@@ -83,7 +83,7 @@
             <?php endif; ?>
             <?php if ($lieu->getConfig()->existRendementCepage()):?>
             <li>
-            
+
                 <input type="text" id="appellation_total_dplc_sum" class="<?php if ($lieu->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcTotal() > 0 && $lieu->getDplc() == $lieu->getDplcTotal()) echo 'alerte'; ?>" readonly="readonly" value="Σ <?php echoFloat($lieu->getDplcTotal()); ?>"/>
                 <input type="hidden" id="appellation_total_dplc_sum_orig" class="num" value="<?php echoFloat($lieu->getDplcTotal()); ?>"/>
             </li>

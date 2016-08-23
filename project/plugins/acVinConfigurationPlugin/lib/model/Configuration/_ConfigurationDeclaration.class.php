@@ -890,6 +890,19 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return false;
     }
 
+    public function getMentions() {
+        $mentions = array();
+
+        foreach($this->getChildrenNode() as $item) {
+            $mentionsItems = $item->getMentions();
+            foreach($mentionsItems as $mentionItem) {
+                $mentions[$mentionItem->getHash()] = $mentionItem;
+            }
+        }
+
+        return $mentions;
+    }
+
     public function getLieux() {
         $lieux = array();
 
@@ -922,8 +935,13 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function hasManyLieu() {
+        foreach($this->getChildrenNode() as $item) {
+            if($item->hasManyLieu()) {
 
-        return count($this->getLieux()) > 1;
+                return true;
+            }
+        }
+        return false;
     }
 
     public function hasManyCouleur() {

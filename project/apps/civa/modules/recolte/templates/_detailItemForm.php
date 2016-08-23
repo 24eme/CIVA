@@ -1,56 +1,56 @@
 <div class="col_recolte col_active">
-    <form id=" " action="<?php echo ($is_new) ? url_for($onglets->getUrl('recolte_add')->getRawValue()) : url_for(array_merge($onglets->getUrl('recolte_update')->getRawValue(), array('detail_key' => $key))) ?>" method="post" onsubmit="return valider_can_submit();">
+    <form action="<?php echo ($is_new) ? url_for('recolte_detail_add', array('hash' => $produit->getHash())) : url_for('recolte_detail_update', array('hash' => $detail->getHash())) ?>" method="post" onsubmit="return valider_can_submit();">
         <?php echo $form->renderHiddenFields(); ?>
-        <h2><?php echo $onglets->getCurrentCepage()->getConfig()->libelle ?></h2>
+        <h2><?php echo $produit->libelle ?></h2>
 
         <div class="col_cont">
 
-            <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+            <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
                 <p class="lieu <?php echo ($form['lieu']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                     <?php echo $form['lieu']->render(array('class' => 'premier_focus')) ?>
                 </p>
             <?php endif; ?>
 
             <p class="denomination <?php echo ($form['denomination']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                <?php if ($onglets->getCurrentCepage()->getConfig()->hasDenomination()) : ?>
+                <?php if ($produit->getConfig()->hasDenomination()) : ?>
                     <?php echo $form['denomination']->render() ?>
                 <?php endif; ?>
             </p>
 
             <p class="mention <?php echo ($form['vtsgn']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                <?php if ($onglets->getCurrentCepage()->getConfig()->hasVtsgn()) : ?>
+                <?php if ($produit->getConfig()->hasVtsgn()) : ?>
                     <?php echo $form['vtsgn']->render() ?>
                 <?php endif; ?>
             </p>
 
             <p class="superficie <?php echo ($form['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                <?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie()) : ?>
+                <?php if ($produit->getConfig()->hasSuperficie()) : ?>
                     <?php echo $form['superficie']->render(array('class' => 'superficie num premier_focus')) ?>
                 <?php endif; ?>
             </p>
 
-            <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
+            <?php if (!$produit->getConfig()->hasNoNegociant()): ?>
                 <div class="vente_raisins">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_NEGOCES])); ?>
-                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+                    <?php if (!$produit->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_acheteur" tabindex="-1">Acheteur</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
 
-            <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
+            <?php if (!$produit->getConfig()->hasNoCooperative()): ?>
                 <div class="caves">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_COOPERATIVES])); ?>
-                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+                    <?php if (!$produit->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_cave" tabindex="-1">Cave</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
 
-            <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+            <?php if (isset($form[RecolteForm::FORM_NAME_MOUTS]) && !$produit->getConfig()->hasNoMout()): ?>
                 <div class="mouts">
                     <?php include_partial('formAcheteurs', array('form_acheteurs' => $form[RecolteForm::FORM_NAME_MOUTS])); ?>
-                    <?php if (!$onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
+                    <?php if (!$produit->getConfig()->hasMinQuantite()) : ?>
                     <a href="#" class="ajout ajout_mout" tabindex="-1">Acheteur de mouts</a>
                     <?php endif; ?>
                 </div>
@@ -71,7 +71,7 @@
                         <?php else: ?>
                             <input id="detail_lies" type="hidden" class="lies num readonly" readonly="readonly" value="<?php echo $detail->lies ?>" />
                         <?php endif; ?>
-                        
+
                         <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
                     </li>
                 </ul>
@@ -83,17 +83,17 @@
         </div>
 
         <div class="col_btn">
-            <a href="<?php echo url_for($onglets->getUrl('recolte')->getRawValue()); ?>" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
+            <a href="" tabindex="-1" class="annuler_tmp"><img src="/images/boutons/btn_annuler_col_cepage.png" alt="Annuler" /></a>
             <script><!--
-<?php if ($onglets->getCurrentCepage()->getConfig()->excludeTotal()) : ?>
+<?php if ($produit->getConfig()->excludeTotal()) : ?>
         autoTotal = false;
 <?php else : ?>
         autoTotal = true;
 <?php endif; ?>
-    function valider_can_submit() 
+    function valider_can_submit()
     {
-        
-<?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()) : ?>
+
+<?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()) : ?>
             if (!document.getElementById('detail_lieu').value) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_lieu')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
@@ -101,7 +101,7 @@
             }
 <?php endif; ?>
 
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasSuperficie() && $onglets->getCurrentCepage()->getConfig()->isSuperficieRequired()) : ?>
+<?php if ($produit->getConfig()->hasSuperficie() && $produit->getConfig()->isSuperficieRequired()) : ?>
             if (!document.getElementById('detail_superficie').value || !(document.getElementById('detail_superficie').value > 0)) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_no_superficie')); ?></p>');
                 openPopup($('#popup_msg_erreur'), 0);
@@ -112,7 +112,7 @@
     <?php if (isset($form['lies'])) : ?>
     var inputs_mouts = $(".col_active .mouts input[class*='acheteur_mouts_']");
     if(!inputs_mouts.length) {
-        if (parseFloat($('#detail_lies').val()) > 0 && (!$('#detail_cave_particuliere').val() || parseFloat($('#detail_cave_particuliere').val()) == 0)) { 
+        if (parseFloat($('#detail_lies').val()) > 0 && (!$('#detail_cave_particuliere').val() || parseFloat($('#detail_cave_particuliere').val()) == 0)) {
             $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_log_usages_industriels_pas_volume_sur_place')); ?></p>');
             openPopup($('#popup_msg_erreur'), 0);
             return false;
@@ -125,16 +125,16 @@
     }
     <?php endif; ?>
 
-<?php if ($onglets->getCurrentCepage()->getConfig()->hasMinQuantite()) : ?>
-            var total_non_negociant = <?php echo $onglets->getCurrentLieu()->getTotalVolumeForMinQuantite() ?>;
-            var min = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>);
-            var max = truncTotal(total_non_negociant * <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>);
+<?php if ($produit->getConfig()->hasMinQuantite()) : ?>
+            var total_non_negociant = <?php echo $produit->getLieu()->getTotalVolumeForMinQuantite() ?>;
+            var min = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->min_quantite ?>);
+            var max = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->max_quantite ?>);
 
-            var min_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->min_quantite ?>;
-            var max_quantite = <?php echo $onglets->getCurrentCepage()->getConfig()->max_quantite ?>;
+            var min_quantite = <?php echo $produit->getConfig()->min_quantite ?>;
+            var max_quantite = <?php echo $produit->getConfig()->max_quantite ?>;
 
-            var volume_cooperatives = <?php echo json_encode($onglets->getCurrentLieu()->getVolumeAcheteursForMinQuantite()->getRawValue()) ?>;
-            var volume_cave_particuliere = <?php echo $onglets->getCurrentLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
+            var volume_cooperatives = <?php echo json_encode($produit->getLieu()->getVolumeAcheteursForMinQuantite()->getRawValue()) ?>;
+            var volume_cave_particuliere = <?php echo $produit->getLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
 
             if (parseFloat($('#detail_vol_total_recolte').val()) < min) {
                 $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_dr_popup_min_quantite')); ?></p>');
@@ -148,7 +148,7 @@
                 return false;
             }
 
-            for(cvi in volume_cooperatives) { 
+            for(cvi in volume_cooperatives) {
                 volume = volume_cooperatives[cvi];
                 volume_saisie = 0;
                 var input_cooperative = $(".col_active .caves input[class*='acheteur_cooperatives_"+cvi+"']");
@@ -183,8 +183,8 @@
 
 <?php endif; ?>
 
-<?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable() || $onglets->getCurrentCepage()->getConfig()->hasDenomination() || $onglets->getCurrentCepage()->getConfig()->hasVtsgn()): ?>
-            var couples_unique_key = <?php echo json_encode($onglets->getCurrentCepage()->getArrayUniqueKey(array($form->getObject()->getKey()))->getRawValue()); ?>;
+<?php if ($produit->getAppellation()->getConfig()->hasLieuEditable() || $produit->getConfig()->hasDenomination() || $produit->getConfig()->hasVtsgn()): ?>
+            var couples_unique_key = <?php echo json_encode($produit->getArrayUniqueKey(array($form->getObject()->getKey()))->getRawValue()); ?>;
             var lieu_val = '';
             if($('.col_recolte.col_active .col_cont p.lieu input').length > 0) {
                 lieu_val = $('.col_recolte.col_active .col_cont p.lieu input').val();

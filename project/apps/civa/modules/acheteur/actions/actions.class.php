@@ -91,7 +91,7 @@ class acheteurActions extends EtapesActions {
             if ($appellation->getConfig()->hasManyLieu()) {
                 $this->appellations[$appellation->getKey()] = $appellation;
                 $lieux = array();
-                foreach ($appellation->getDistinctLieux() as $key => $lieu) {
+                foreach ($appellation->getLieux() as $key => $lieu) {
                     $lieux[$key] = $lieu->getLibelle();
                }
 

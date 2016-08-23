@@ -1,9 +1,9 @@
 <?php use_helper('Float') ?>
-<div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage() || $onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>display:none;<?php endif; ?>">
+<div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage() || $produit->getLieu()->getConfig()->hasManyCouleur()): ?>display:none;<?php endif; ?>">
     <h2>Total <br /> <?php echo $cepage->libelle ?> </h2>
 
     <div class="col_cont">
-        <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+        <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
             <p class="lieu">&nbsp;</p>
         <?php endif; ?>
         <p class="denomination">&nbsp;</p>
@@ -12,7 +12,7 @@
             <input type="hidden" id="cepage_total_superficie_orig" value="<?php echoFloat($cepage->getTotalSuperficie()); ?>" />
             <input type="text" id="cepage_total_superficie" class="num" readonly="readonly" value="<?php echoFloat($cepage->getTotalSuperficie()); ?>" />
         </p>
-        <?php  if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
+        <?php  if (!$produit->getConfig()->hasNoNegociant()): ?>
         <div class="vente_raisins">
                 <?php
                     include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
@@ -20,7 +20,7 @@
         </div>
         <?php endif; ?>
 
-        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
+        <?php if (!$produit->getConfig()->hasNoCooperative()): ?>
         <div class="caves">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
@@ -29,7 +29,7 @@
         </div>
         <?php endif; ?>
 
-        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$produit->getConfig()->hasNoMout()): ?>
         <div class="mouts">
             <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
@@ -77,7 +77,7 @@
             <?php endif; ?>
             <?php if ($cepage->getConfig()->hasRendementNoeud()):?>
             <li>
-                
+
                 <input type="text" id="cepage_dplc_rendement" class="num <?php if ($cepage->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($cepage->getDplcRendement() > 0 && $cepage->getDplc() == $cepage->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($cepage->getDplcRendement()); ?>" />
                 <input type="hidden" id="cepage_dplc_rendement_orig" value="<?php echoFloat($cepage->getDplcRendement()); ?>" />
             </li>

@@ -11,8 +11,15 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getLieux() {
+        $lieux = array();
+        foreach($this->getMentions() as $mention) {
+            foreach($mention->getChildrenNode() as $lieu) {
 
-        return $this->getChildrenNodeDeep();
+                $lieux[$lieu->getHash()] = $lieu;
+            }
+        }
+
+        return $lieux;
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -72,12 +79,10 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     public function getLieuChoices() {
         $lieu_choices = array('' => '');
         foreach ($this->getConfig()->getLieux() as $item) {
-            foreach( $this->getMentions() as $mention){
                 $hash = HashMapper::inverse($item->getHash());
-                if(!$mention->getDocument()->exist($hash)) {
-                    $lieu_choices[$hash] = $item->getLibelle();
+                if(!$this->getDocument()->exist($hash)) {
+                    $lieu_choices["lieu".$item->getKey()] = $item->getLibelle();
                 }
-            }
         }
         asort($lieu_choices);
         return $lieu_choices;

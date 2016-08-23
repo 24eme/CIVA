@@ -25,6 +25,7 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
+
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
@@ -68,6 +69,7 @@ class recolteActions extends EtapesActions {
     }
 
     public function executeAdd(sfWebRequest $request) {
+        $this->produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI");
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();

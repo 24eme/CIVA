@@ -5,38 +5,37 @@
     <p class="message"><?php echo $sf_user->getFlash('msg_info'); ?></p>
 <?php endif; ?>
 
-<!-- #principal -->
 <p class="intro_declaration_recolte"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_declaration_recolte'); ?></p>
 
 <?php include_partial('global/errorMessages', array('form' => $form_detail)); ?>
 
-<!--<form id="principal" action="<?php // echo url_for('@recolte');   ?>" method="post">-->
-<?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-    'onglets' => $onglets)); ?>
-<!-- #application_dr -->
+<?php include_partial('ongletsAppellations', array(
+    'declaration' => $declaration,
+    'produit' => $produit,
+)); ?>
 <div id="application_dr" class="clearfix">
-    <!-- #gestion_recolte -->
     <div id="gestion_recolte" class="clearfix gestion_recolte_donnees">
 
-        <?php include_partial('messageRepli', array('onglets' => $onglets)); ?>
+        <?php include_partial('messageRepli', array('produit' => $produit)); ?>
         <?php
         include_partial('ongletsCepages', array('declaration' => $declaration,
             'nb_details_current' => $nb_details_current,
-            'onglets' => $onglets,
+            'produit' => $produit,
             'recapitulatif' => false));
         ?>
 
-    <!--<a href="<?php /*echo url_for($onglets->getUrl('recolte_add')->getRawValue()) */?>">Ajouter</a>-->
-        <div id="donnees_recolte_sepage" class="clearfix <?php echo ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur() && count($onglets->getCurrentLieu()->getConfig()->getCouleurs()) > 1) ? "deux_totaux" : "" ?>">
+        <div id="donnees_recolte_sepage" class="clearfix <?php echo ($produit->getLieu()->getConfig()->hasManyCouleur() && count($produit->getLieu()->getConfig()->getCouleurs()) > 1) ? "deux_totaux" : "" ?>">
 
             <?php
             include_partial('detailHeader', array('acheteurs' => $acheteurs,
                 'has_acheteurs_mout' => $has_acheteurs_mout,
-                'onglets' => $onglets))
+                'produit' => $produit))
             ?>
 
             <?php
-            include_partial('detailList', array('details' => $details,
+            include_partial('detailList', array(
+                'produit' => $produit,
+                'details' => $details,
                 'onglets' => $onglets,
                 'detail_key' => $detail_key,
                 'detail_action_mode' => $detail_action_mode,
@@ -45,56 +44,55 @@
                 'has_acheteurs_mout' => $has_acheteurs_mout))
             ?>
             <?php
-            include_partial('totalCepage', array('cepage' => $onglets->getCurrentCepage(),
-                'onglets' => $onglets,
+            include_partial('totalCepage', array('cepage' => $produit,
+                'produit' => $produit,
                 'acheteurs' => $acheteurs,
                 'has_acheteurs_mout' => $has_acheteurs_mout));
             ?>
             <ul id="btn_cepage" class="btn_prev_suiv clearfix">
-                <?php if ($onglets->hasPreviousCepage()): ?>
+                <?php /*if ($onglets->hasPreviousCepage()): ?>
                     <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                 <?php endif; ?>
                 <?php if ($onglets->hasNextCepage()): ?>
                     <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
-                        <?php endif; ?>
+                <?php endif; */ ?>
             </ul>
         </div>
 
-        <?php if ($onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
-            <?php foreach ($onglets->getCurrentLieu()->getCouleurs() as $couleur): ?>
-                <?php if ($couleur->getKey() == ($onglets->getCurrentCouleur()->getKey())): ?>
+        <?php if ($produit->getLieu()->getConfig()->hasManyCouleur()): ?>
+            <?php foreach ($produit->getLieu()->getCouleurs() as $couleur): ?>
+                <?php if ($couleur->getKey() == ($produit->getCouleur()->getKey())): ?>
                     <?php
                     include_partial('totalCouleur', array('couleur' => $couleur,
-                        'onglets' => $onglets,
+                        'produit' => $produit,
                         'acheteurs' => $acheteurs,
                         'has_acheteurs_mout' => $has_acheteurs_mout))
                     ?>
                 <?php else: ?>
                     <?php
                     include_partial('totalCouleurAlternatif', array('couleur' => $couleur,
-                        'onglets' => $onglets,
+                        'produit' => $produit,
                         'acheteurs' => $acheteurs,
                         'has_acheteurs_mout' => $has_acheteurs_mout))
                     ?>
                 <?php endif; ?>
             <?php endforeach; ?>
-        <?php elseif (!$onglets->getCurrentLieu()->getConfig()->hasManyCouleur()): ?>
+        <?php elseif (!$produit->getLieu()->getConfig()->hasManyCouleur()): ?>
             <?php
-            echo include_partial('totalAppellation', array('lieu' => $onglets->getCurrentLieu(),
-                'onglets' => $onglets,
+            echo include_partial('totalAppellation', array('lieu' => $produit->getLieu(),
+                'produit' => $produit,
                 'acheteurs' => $acheteurs,
                 'has_acheteurs_mout' => $has_acheteurs_mout))
             ?>
         <?php endif; ?>
     </div>
-    <!-- fin #gestion_recolte -->
 
-    <?php include_partial('boutonAppellation', array('onglets' => $onglets)) ?>
+    <?php //include_partial('boutonAppellation', array('onglets' => $onglets)) ?>
 
 </div>
 <!-- fin #application_dr -->
 
-<?php include_partial('boutons') ?>
+<?php //include_partial('boutons') ?>
 
 <!--</form>-->
 <!-- fin #principal -->

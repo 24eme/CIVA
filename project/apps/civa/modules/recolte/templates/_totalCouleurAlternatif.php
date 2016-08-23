@@ -1,13 +1,13 @@
 <?php use_helper('Float') ?>
-<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo (count($onglets->getCurrentLieu()->getConfig()->getCouleurs()) > 1) ? "col_double" : "" ?>">
+<div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo (count($produit->getLieu()->getConfig()->getCouleurs()) > 1) ? "col_double" : "" ?>">
     <h2>Total
-        <?php echo $onglets->getCurrentAppellation()->getConfig()->libelle ?>
+        <?php echo $produit->getAppellation()->getConfig()->libelle ?>
         <strong><?php echo $couleur->getLibelle() ?></strong>
         <a href="" class="msg_aide" rel="help_popup_DR_total_couleur_alternatif" title="Message aide"></a>
     </h2>
 
     <div class="col_cont">
-        <?php if ($onglets->getCurrentAppellation()->getConfig()->hasLieuEditable()): ?>
+        <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
             <p class="lieu">&nbsp;</p>
         <?php endif; ?>
         <p class="denomination">&nbsp;</p>
@@ -16,14 +16,14 @@
             <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalSuperficie()); ?>" />
         </p>
 
-        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoNegociant()): ?>
+        <?php if (!$produit->getConfig()->hasNoNegociant()): ?>
             <div class="vente_raisins">
                 <?php include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->negoces,
                     'acheteurs_value' => $couleur->getVolumeAcheteurs('negoces'))); ?>
             </div>
         <?php endif; ?>
 
-        <?php if (!$onglets->getCurrentCepage()->getConfig()->hasNoCooperative()): ?>
+        <?php if (!$produit->getConfig()->hasNoCooperative()): ?>
             <div class="caves">
                 <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->cooperatives,
@@ -32,7 +32,7 @@
             </div>
         <?php endif; ?>
 
-        <?php if ($has_acheteurs_mout && !$onglets->getCurrentCepage()->getConfig()->hasNoMout()): ?>
+        <?php if ($has_acheteurs_mout && !$produit->getConfig()->hasNoMout()): ?>
             <div class="mouts">
                 <?php
                 include_partial('itemAcheteurs', array('acheteurs' => $acheteurs->mouts,
