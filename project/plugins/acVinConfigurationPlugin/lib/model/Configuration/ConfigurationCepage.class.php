@@ -155,58 +155,38 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
     public function hasMinQuantite()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
-            return true;
-        }
 
-        return false;
+        return $this->getAttribut('min_quantite');
     }
 
     public function hasMaxQuantite()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('max_quantite') && $this->attributs->get('max_quantite')) {
-            return true;
-        }
-
-        return false;
+        
+        return $this->getAttribut('max_quantite');
     }
 
     public function hasNoNegociant()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('no_negociant') && $this->attributs->get('no_negociant')) {
-            return true;
-        }
 
-        return false;
+        return $this->getAttribut('no_negociant');
     }
 
     public function hasNoCooperative()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('no_cooperative') && $this->attributs->get('no_cooperative')) {
-            return true;
-        }
 
-        return false;
+        return $this->getAttribut('no_cooperative');
     }
 
     public function hasNoMout()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('no_mout') && $this->attributs->get('no_mout')) {
 
-            return true;
-        }
-
-        return false;
+        return $this->getAttribut('no_mout');
     }
 
     public function hasNoMotifNonRecolte()
     {
-        if ($this->exist('attributs') && $this->attributs->exist('no_motif_non_recolte') && $this->attributs->get('no_motif_non_recolte')) {
 
-            return true;
-        }
-
-        return false;
+        return $this->getAttribut('no_motif_non_recolte');
     }
 
     public function hasTotalCepage() {

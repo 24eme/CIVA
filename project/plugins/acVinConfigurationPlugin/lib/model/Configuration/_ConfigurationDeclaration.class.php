@@ -706,6 +706,16 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return false;
     }
 
+    public function getAttribut($name, $default = null) {
+        if (!$this->exist('attributs') || !$this->attributs->exist($name)) {
+
+            return $default;
+        }
+
+
+        return $this->attributs->get($name);
+    }
+
     /**** DR ****/
 
     public function getRendement() {
@@ -960,11 +970,11 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function getMout() {
-        if(!$this->exist('mout')) {
+        if($this->exist('attributs') &&  !$this->attributs->exist('mout')) {
             return 0;
         }
 
-        return $this->_get('mout');
+        return $this->attributs->get('mout');
     }
 
     /**** DR ****/
