@@ -4,3 +4,4 @@
 default:
   metas:
     title:        Destination de la récolte - Déclaration de récolte de %d
+  layout:         layoutAncien

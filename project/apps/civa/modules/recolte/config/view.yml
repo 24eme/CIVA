@@ -4,3 +4,4 @@
 default:
   metas:
     title:        " Déclaration de récolte de %d"
+  layout:         layoutAncien
