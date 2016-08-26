@@ -73,6 +73,6 @@ EOF;
             return;
         }
 
-        echo $noeud->getHash().";".$attribut.";".$noeud->_get($attribut)."\n";
+        echo HashMapper::convert($noeud->getHash()).";".$attribut.";".$noeud->_get($attribut)."\n";
     }
 }
