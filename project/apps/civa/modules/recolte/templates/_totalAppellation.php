@@ -2,9 +2,9 @@
 <div id="col_recolte_totale" class="col_recolte col_total">
     <h2>Total
         <?php if($produit->getAppellation()->getConfig()->hasManyLieu()): ?>
-            <?php echo $lieu->getConfig()->libelle ?>
+            <?php echo $lieu->getConfig()->libelle ?> <?php echo $produit->getMention()->getConfig()->libelle ?>
         <?php else: ?>
-            <?php echo $produit->getAppellation()->getConfig()->libelle ?>
+            <?php echo $produit->getAppellation()->getConfig()->libelle ?> <?php echo $produit->getMention()->getConfig()->libelle ?>
         <?php endif; ?>
     </h2>
     <div class="col_cont">

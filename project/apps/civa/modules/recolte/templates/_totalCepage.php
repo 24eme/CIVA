@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
 <div id="col_cepage_total" class="col_recolte col_total" style="<?php if (!$cepage->getConfig()->hasTotalCepage() || $produit->getLieu()->getConfig()->hasManyCouleur()): ?>display:none;<?php endif; ?>">
-    <h2>Total <br /> <?php echo $cepage->libelle ?> </h2>
+    <h2>Total <br /> <?php echo $cepage->libelle ?> <?php echo $cepage->getMention()->libelle ?></h2>
 
     <div class="col_cont">
         <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>

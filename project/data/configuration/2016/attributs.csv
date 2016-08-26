@@ -1,4 +1,6 @@
-/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC;rendement_appellation;80
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT;rendement_appellation;80
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/VT;rendement;55
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/SGN;rendement;40
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/CH;rendement;100
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/CH;no_vtsgn;1
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/SY;rendement;100

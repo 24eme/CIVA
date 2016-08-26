@@ -970,7 +970,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function getMout() {
-        if($this->exist('attributs') &&  !$this->attributs->exist('mout')) {
+        if(!$this->exist('attributs') ||  !$this->attributs->exist('mout')) {
             return 0;
         }
 
