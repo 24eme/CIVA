@@ -28,15 +28,14 @@
 
             <?php
             include_partial('detailHeader', array('acheteurs' => $acheteurs,
-                'has_acheteurs_mout' => $has_acheteurs_mout,
-                'produit' => $produit))
+                                                  'has_acheteurs_mout' => $has_acheteurs_mout,
+                                                  'produit' => $produit))
             ?>
 
             <?php
             include_partial('detailList', array(
                 'produit' => $produit,
                 'details' => $details,
-                'onglets' => $onglets,
                 'detail_key' => $detail_key,
                 'detail_action_mode' => $detail_action_mode,
                 'form' => $form_detail,
@@ -50,12 +49,12 @@
                 'has_acheteurs_mout' => $has_acheteurs_mout));
             ?>
             <ul id="btn_cepage" class="btn_prev_suiv clearfix">
-                <?php /*if ($onglets->hasPreviousCepage()): ?>
-                    <li class="prec"><a href="<?php echo url_for($onglets->getPreviousUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
+                <?php if ($produit->getConfig()->getPreviousSister()): ?>
+                    <li class="prec"><a href="<?php echo url_for('recolte_produit', array('hash' => HashMapper::inverse( $produit->getConfig()->getPreviousSister()->getHash()))) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                 <?php endif; ?>
-                <?php if ($onglets->hasNextCepage()): ?>
-                    <li class="suiv"><a href="<?php echo url_for($onglets->getNextUrlCepage()->getRawValue()) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
-                <?php endif; */ ?>
+                <?php if ($produit->getConfig()->getNextSister()): ?>
+                    <li class="suiv"><a href="<?php echo url_for('recolte_produit', array('hash' => HashMapper::inverse( $produit->getConfig()->getNextSister()->getHash()))) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
+                <?php endif; ?>
             </ul>
         </div>
 
@@ -87,7 +86,7 @@
         <?php endif; ?>
     </div>
 
-    <?php //include_partial('boutonAppellation', array('onglets' => $onglets)) ?>
+    <?php include_partial('boutonAppellation', array('produit' => $produit)) ?>
 
 </div>
 <!-- fin #application_dr -->
@@ -111,7 +110,8 @@
 </script>
 
 <?php
-include_partial('popupAjoutOnglets', array('onglets' => $onglets,
+include_partial('popupAjoutOnglets', array(
+    'produit' => $produit,
     'form_appellation' => $form_ajout_appellation,
     'form_lieu' => $form_ajout_lieu,
     'url_lieu' => $url_ajout_lieu))
@@ -120,21 +120,21 @@ include_partial('popupAjoutOnglets', array('onglets' => $onglets,
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_acheteur',
     'title' => 'Ajouter un acheteur',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
+    'action' => '',
     'name' => 'negoces',
     'cssclass' => 'vente_raisins'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_cave',
     'title' => 'Ajouter une cave',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
+    'action' => '',
     'name' => 'cooperatives',
     'cssclass' => 'caves'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_mout',
     'title' => 'Ajouter un acheteur de mout',
-    'action' => url_for($onglets->getUrl('recolte_add_acheteur', null, null, null, null, null, null)->getRawValue()),
+    'action' => '',
     'name' => 'mouts',
     'cssclass' => 'mouts'))
 ?>

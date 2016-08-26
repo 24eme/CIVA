@@ -376,7 +376,42 @@ exploitation_autres:
 # *********** RECOLTE ***********
 
 recolte:
-  url:   /recolte/:appellation_lieu/:couleur_cepage
+  url:   /recolte
+  param: { module: recolte, action: recolte}
+  class: sfRouteAnchor
+
+recolte_produit:
+  url:   /recolte/produit
+  param: { module: recolte, action: produit}
+  class: sfRouteAnchor
+
+recolte_produit_ajout:
+  url:   /recolte/produit_ajout
+  param: { module: recolte, action: produitAjout}
+  class: sfRouteAnchor
+
+recolte_produit_edition:
+  url:   /recolte/produit_edition
+  param: { module: recolte, action: produitEdition}
+  class: sfRouteAnchor
+
+recolte_produit_suppression:
+  url:   /recolte/produit_suppression
+  param: { module: recolte, action: produitSuppression}
+  class: sfRouteAnchor
+
+recolte_noeud:
+  url:   /recolte/noeud
+  param: { module: recolte, action: produitNoeud}
+  class: sfRouteAnchor
+
+recolte_recapitulatif:
+  url:   /recolte/racapitulatif
+  param: {module: recolte, action: recapitulatif }
+  class: sfRouteAnchor
+
+recolte:
+  url:   /recolte
   param: { module: recolte, action: recolte, appellation_lieu: null,couleur_cepage: null}
   class: sfRouteAnchor
 
@@ -423,11 +458,6 @@ recolte_add_lieu:
 recolte_add_acheteur:
   url:   /recolte/:appellation_lieu/:couleur_cepage/add_acheteur
   param: { module: recolte, action: ajoutAcheteurAjax }
-  class: sfRouteAnchor
-
-recolte_recapitulatif:
-  url:   /recapitulatif/:appellation_lieu
-  param: {module: recolte, action: recapitulatif }
   class: sfRouteAnchor
 
 recolte_rendements_max:

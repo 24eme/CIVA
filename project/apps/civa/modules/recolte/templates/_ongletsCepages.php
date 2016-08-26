@@ -3,22 +3,17 @@
         <?php $couleurs_hashes = explode("/", HashMapper::inverse($couleur->getHash())); ?>
         <?php $key_couleur = $couleurs_hashes[count($couleurs_hashes) - 1]; ?>
         <?php foreach ($couleur->getChildrenNode() as $key => $cepage): ?>
-            <?php if (!$recapitulatif && $produit->getHash() == HashMapper::inverse($cepage->getHash())): ?>
+            <?php $hash = HashMapper::inverse($cepage->getHash()); ?>
+            <?php if (!$recapitulatif && $produit->getHash() == $hash): ?>
                 <li class="ui-tabs-selected">
-                    <a href="">
-                        <?php echo $cepage->libelle ?>
-                        <?php if ($nb_details_current && $nb_details_current > 0): ?>
-                            &nbsp;<span>(<?php echo $nb_details_current ?>)</span>
-                        <?php endif; ?>
+                    <a href="<?php echo url_for('recolte_produit', array('hash' => $hash)) ?>">
+                        <?php echo $cepage->libelle ?> <?php echo $cepage->getMention()->getLibelle() ?><?php if ($nb_details_current && $nb_details_current > 0): ?>&nbsp;<span>(<?php echo $nb_details_current ?>)</span><?php endif; ?>
                     </a>
                 </li>
             <?php else: ?>
                 <li>
-                    <a href="">
-                        <?php echo $cepage->libelle ?>
-                        <?php if ($produit->getLieu()->exist($key_couleur) && $produit->getLieu()->get($key_couleur)->exist($key) && $produit->getLieu()->get($key_couleur)->get($key)->detail->count() > 0): ?>
-                            &nbsp;<span>(<?php echo $produit->getLieu()->get($key_couleur)->get($key)->detail->count() ?>)</span>
-                        <?php endif; ?>
+                    <a href="<?php echo url_for('recolte_produit', array('hash' => $hash)) ?>">
+                        <?php echo $cepage->libelle ?> <?php echo $cepage->getMention()->getLibelle() ?><?php if ($produit->getDocument()->exist($hash) &&  $produit->getDocument()->get($hash)->detail->count() > 0): ?>&nbsp;<span>(<?php echo $produit->getDocument()->get($hash)->detail->count() ?>)</span><?php endif; ?>
                     </a>
                 </li>
             <?php endif; ?>

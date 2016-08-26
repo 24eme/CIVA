@@ -25,7 +25,11 @@ class recolteActions extends EtapesActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
+        $produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_CH");
 
+        return $this->redirect('recolte_produit', array('hash' => $produit->getHash()));
+
+        /*$this->produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI");
         $this->initOnglets($request);
         $this->initDetails();
         $this->initAcheteurs();
@@ -45,6 +49,94 @@ class recolteActions extends EtapesActions {
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->redirectByBoutonsEtapes();
+        }*/
+    }
+
+
+    public function executeProduit(sfWebRequest $request) {
+        if(!$this->declaration->exist($request->getParameter('hash'))) {
+
+            return $this->redirect('recolte_produit_ajout', array('hash' => $request->getParameter('hash')));
+        }
+
+        $this->produit = $this->declaration->get($request->getParameter('hash'));
+        $this->initDetails();
+        $this->initAcheteurs();
+        $this->initPrecDR();
+
+        $this->setTemplate("recolte");
+    }
+
+    public function executeProduitAjout(sfWebRequest $request) {
+        $this->produit = $this->declaration->getOrAdd($request->getParameter('hash'));
+        $this->initDetails();
+        $this->initAcheteurs();
+        $this->initPrecDR();
+
+        $this->detail_action_mode = 'add';
+        $this->is_detail_edit = true;
+
+        $detail = $this->details->add();
+        $this->detail_key = $this->details->count() - 1;
+
+        $this->form_detail = new RecolteForm($detail, $this->getFormDetailsOptions());
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->processFormDetail($this->form_detail, $request);
+        }
+
+        $this->setTemplate('recolte');
+    }
+
+    public function executeProduitEdition(sfWebRequest $request) {
+        $this->produit = $this->declaration->get($request->getParameter('hash'));
+        $this->initDetails();
+        $this->initAcheteurs();
+        $this->initPrecDR();
+
+        $this->detail_action_mode = 'update';
+        $this->is_detail_edit = true;
+
+        $this->detail_key = $request->getParameter('detail_key');
+        $this->forward404Unless($this->details->exist($this->detail_key));
+
+        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), $this->getFormDetailsOptions());
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->processFormDetail($this->form_detail, $request);
+        }
+        $this->setTemplate('recolte');
+    }
+
+    public function executeProduitSuppression(sfWebRequest $request) {
+        $this->produit = $this->declaration->get($request->getParameter('hash'));
+        $this->initDetails();
+
+        $detail_key = $request->getParameter('detail_key');
+        $this->forward404Unless($this->details->exist($detail_key));
+
+        $this->details->remove($detail_key);
+        $this->declaration->update();
+        $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
+        $this->declaration->save();
+
+        $this->redirect('recolte_produit', array('hash' => $this->produit->getHash()));
+    }
+
+    public function executeProduitNoeud(sfWebRequest $request) {
+        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+
+        if($this->noeud instanceof DRRecolteAppellation) {
+            foreach($this->noeud->getLieux() as $lieu) {
+
+                $this->noeud = $lieu;
+                break;
+            }
+        }
+
+        foreach($this->noeud->getConfig()->getProduits() as $produit) {
+
+            return $this->redirect('recolte_produit', array('hash' => HashMapper::inverse($produit->getHash())));
         }
     }
 
@@ -276,12 +368,12 @@ class recolteActions extends EtapesActions {
         if ($form->isValid()) {
             $form->getObject()->getCouchdbDocument()->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
             $detail = $form->save();
-            if (!$this->onglets->getCurrentCepage()->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
+            if (!$this->produit->getConfig()->hasNoMotifNonRecolte() && $detail->exist('motif_non_recolte')) {
                 $this->getUser()->setFlash('open_popup_ajout_motif', $detail->getKey());
             }
 
 
-            $this->redirect($this->onglets->getUrl('recolte'));
+            $this->redirect('recolte_produit', array('hash' => $this->produit->getHash()));
         }
     }
 
@@ -320,30 +412,29 @@ class recolteActions extends EtapesActions {
 
         $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
         $this->onglets->init($appellation, $lieu, $couleur, $cepage);
-
-        /*** AjOUT APPELLATION ***/
-        $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
-        $this->form_ajout_lieu = null;
-        $this->url_ajout_lieu = null;
-        if ($this->onglets->getCurrentAppellation()->getConfig()->hasManyLieu()) {
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->onglets->getCurrentAppellation());
-            $this->url_ajout_lieu = $this->onglets->getUrl('recolte_add_lieu', null, null, null, null, null);
-        }
     }
 
     protected function initDetails() {
-        $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
-        $this->details = $this->onglets->getCurrentLieu()->add($this->onglets->getCurrentKeyCouleur())->add($this->onglets->getCurrentKeyCepage())->add('detail');
+        $this->details = $this->produit->add('detail');
         $this->nb_details_current = $this->details->count();
 
         $this->detail_key = null;
         $this->detail_action_mode = null;
         $this->form_detail = null;
+
+        /*** AjOUT APPELLATION ***/
+        $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
+        $this->form_ajout_lieu = null;
+        $this->url_ajout_lieu = null;
+        if ($this->produit->getAppellation()->getConfig()->hasManyLieu()) {
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->produit->getAppellation());
+            $this->url_ajout_lieu = "";
+        }
     }
 
     protected function initAcheteurs() {
-        $this->has_acheteurs_mout = ($this->onglets->getCurrentAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->onglets->getCurrentKeyAppellation());
+        $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
     }
 
     protected function initPrecDR(){
@@ -353,8 +444,8 @@ class recolteActions extends EtapesActions {
     protected function getFormDetailsOptions() {
 
         return array(
-                'lieu_required' => $this->onglets->getCurrentAppellation()->getConfig()->hasLieuEditable(),
-                'superficie_required' => $this->onglets->getCurrentCepage()->getConfig()->isSuperficieRequired(),
+                'lieu_required' => $this->produit->getAppellation()->getConfig()->hasLieuEditable(),
+                'superficie_required' => $this->produit->getConfig()->isSuperficieRequired(),
                 'acheteurs_negoce' => $this->acheteurs->negoces,
                 'acheteurs_cooperative' => $this->acheteurs->cooperatives,
                 'acheteurs_mout' => $this->acheteurs->mouts,

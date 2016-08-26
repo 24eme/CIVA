@@ -15,13 +15,12 @@
                         'detail' => $detail,
                         'produit' => $produit,
                         'key' => $key,
-                        'onglets' => $onglets,
                         'acheteurs' => $acheteurs,
                         'has_acheteurs_mout' => $has_acheteurs_mout)) ?>
         <?php endif; ?>
 <?php endforeach; ?>
 <?php if (!$produit->getConfig()->hasOnlyOneDetail() || !count($produit->detail) ) :?>
-        <a href="<?php echo url_for($onglets->getUrl('recolte_add')->getRawValue()) ?>" id="ajout_col" class=""><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
+        <a href="<?php echo url_for('recolte_produit_ajout', array('hash' => $produit->getHash())) ?>" id="ajout_col" class=""><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
 <?php endif; ?>
     </div>
 </div>

@@ -152,7 +152,7 @@ DR:
                               usages_industriels: { type:float }
                               lies: { type: float }
                               # ------- MENTION ----------
-                              'mention':
+                              '*':
                                 type : collection
                                 class: DRRecolteMention
                                 definition:

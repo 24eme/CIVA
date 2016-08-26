@@ -1,5 +1,5 @@
 <?php use_helper('jQuery') ?>
-<?php echo jq_form_remote_tag(array('url' => url_for($url->getRawValue()),
+<?php echo jq_form_remote_tag(array('url' => url_for($url),
                                     'method' => 'post',
                                     'dataType' => 'json',
                                     'update' => array('failure' => "$('#form_ajout_lieu').replaceWith('Une erreur est survenue !');"),

@@ -1,10 +1,10 @@
-<?php if ($produit->getAppellation()->getConfig()->hasManyLieu()): ?>
+<?php if ($produit->getMention()->getConfig()->hasManyLieu()): ?>
 <ul class="sous_onglets">
 	<?php $first = true ?>
-    <?php foreach($produit->getAppellation()->getLieux() as $key => $lieu): ?>
+    <?php foreach($produit->getMention()->getLieux() as $key => $lieu): ?>
         <?php if ($key != 'lieu'): ?>
         <li class="<?php if ($produit->getLieu()->getHash() == $lieu->getHash()): ?>ui-tabs-selected<?php endif; ?> <?php if ($first):?>premier<?php endif; ?>">
-            <a href=""><?php echo $lieu->getConfig()->libelle ?></a>
+            <a href="<?php echo url_for('recolte_noeud', array('hash' => HashMapper::inverse($lieu->getHash()))) ?>"><?php echo $lieu->getConfig()->libelle ?></a>
         </li>
 		<?php $first = false ?>
         <?php endif; ?>

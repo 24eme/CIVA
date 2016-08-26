@@ -6,7 +6,10 @@ class HashMapper {
         $hash = preg_replace("|/certification|", "/certifications/AOC_ALSACE", $hash);
         $hash = preg_replace("|/genre|", "/genres/TRANQ", $hash);
         $hash = preg_replace("|/appellation_([a-zA-Z0-9_-]+)|", "/appellations/$1", $hash);
-        $hash = preg_replace("|/mention|", "/mentions/DEFAUT", $hash);
+        $hash = preg_replace("|/mention/|", "/mentions/DEFAUT/", $hash);
+        $hash = preg_replace("|/mention$|", "/mentions/DEFAUT", $hash);
+        $hash = preg_replace("|/mention([A-Z0-9]+)/|", "/mentions/$1/", $hash);
+        $hash = preg_replace("|/mention([A-Z0-9]+)$|", "/mentions/$1", $hash);
         $hash = preg_replace("|/lieu/|", "/lieux/DEFAUT/", $hash);
         $hash = preg_replace("|/lieu$|", "/lieux/DEFAUT", $hash);
         $hash = preg_replace("|/lieu([A-Z0-9]+)/|", "/lieux/$1/", $hash);
@@ -28,7 +31,10 @@ class HashMapper {
         $hash = preg_replace("|/certifications/AOC_ALSACE|", "/certification", $hash);
         $hash = preg_replace("|/genres/TRANQ|", "/genre", $hash);
         $hash = preg_replace("|/appellations/([a-zA-Z0-9_-]+)|", "/appellation_$1" , $hash);
-        $hash = preg_replace("|/mentions/DEFAUT|", "/mention" , $hash);
+        $hash = preg_replace("|/mentions/DEFAUT/|", "/mention/", $hash);
+        $hash = preg_replace("|/mentions/DEFAUT|", "/mention", $hash);
+        $hash = preg_replace("|/mentions/([A-Z0-9]+)/|", "/mention$1/", $hash);
+        $hash = preg_replace("|/mentions/([A-Z0-9]+)$|", "/mention$1", $hash);
         $hash = preg_replace("|/lieux/DEFAUT/|", "/lieu/", $hash);
         $hash = preg_replace("|/lieux/DEFAUT|", "/lieu", $hash);
         $hash = preg_replace("|/lieux/([A-Z0-9]+)/|", "/lieu$1/", $hash);
