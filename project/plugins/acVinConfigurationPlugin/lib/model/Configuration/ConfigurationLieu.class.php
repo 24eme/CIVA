@@ -56,6 +56,11 @@ class ConfigurationLieu extends BaseConfigurationLieu {
         return false;
     }
 
+	public function getRendementNoeud() {
+
+		return $this->getRendementAppellation();
+	}
+
     public function setDonneesCsv($datas) {
       parent::setDonneesCsv($datas);
 

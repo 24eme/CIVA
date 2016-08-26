@@ -314,14 +314,13 @@ class recolteActions extends EtapesActions {
 
     public function executeRendementsMaxAjax(sfWebRequest $request) {
     	//$this->forward404Unless($request->isXmlHttpRequest());
-
     	$dr = $this->declaration;
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
-    	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->filter('appellation_') as $key_appellation => $appellation_config) {
-            if ($dr->recolte->getNoeudAppellations()->exist($key_appellation)) {
-    			$appellation = $dr->recolte->getNoeudAppellations()->get($key_appellation);
+    	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getChildrenNode() as $key_appellation => $appellation_config) {
+            if ($dr->exist(HashMapper::inverse($appellation_config->getHash()))) {
+    			$appellation = $dr->get(HashMapper::inverse($appellation_config->getHash()));
     			foreach ($appellation->getDistinctLieux() as $lieu) {
                     if ($lieu->getConfig()->getRendementNoeud() == -1) {
                         continue;
@@ -338,21 +337,20 @@ class recolteActions extends EtapesActions {
 	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
 	    				}
 						foreach($lieu->getCouleurs() as $couleur) {
-
-	    				foreach ($couleur->getConfig()->filter('^cepage') as $key => $cepage_config) {
-	    					if($cepage_config->hasMinQuantite()) {
-	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
-	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
-	    					}
-	    					if($cepage_config->getRendementCepage()) {
-	    						$rd = $cepage_config->getRendementCepage();
-	    						if($appellation->getConfig()->hasManyLieu()) {
-	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
-	    						}else {
-	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
-	    						}
-	    					}
-	    				}
+    	    				foreach ($couleur->getConfig()->getChildrenNode() as $key => $cepage_config) {
+    	    					if($cepage_config->hasMinQuantite()) {
+    	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
+    	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
+    	    					}
+    	    					if($cepage_config->getRendementCepage()) {
+    	    						$rd = $cepage_config->getRendementCepage();
+    	    						if($appellation->getConfig()->hasManyLieu()) {
+    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
+    	    						}else {
+    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
+    	    						}
+    	    					}
+    	    				}
 						}
     				}
     			}

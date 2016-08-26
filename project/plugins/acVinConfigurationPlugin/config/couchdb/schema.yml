@@ -228,7 +228,12 @@ Configuration:
                         code_produit: {  }
                         code_comptable: {  }
                         code_douane: {  }
-                        rendement: { required: false }
+                        attributs:
+                          type: collection
+                          required: false
+                          definition:
+                            fields:
+                             '*': { }
                         departements:
                           type: array_collection
                           definition:
@@ -310,7 +315,12 @@ Configuration:
                                     code_produit: {  }
                                     code_comptable: {  }
                                     code_douane: {  }
-                                    rendement: { required: false }
+                                    attributs:
+                                      type: collection
+                                      required: false
+                                      definition:
+                                        fields:
+                                         '*': { }
                                     '*':
                                       required: false
                                       class: ConfigurationDetail
@@ -463,9 +473,12 @@ Configuration:
                                                 code_comptable: {  }
                                                 code_douane: {  }
                                                 densite: {  }
-                                                mout: { required: false }
-                                                rendement: { required: false }
-                                                rendement_appellation: { required: false }
+                                                attributs:
+                                                  type: collection
+                                                  required: false
+                                                  definition:
+                                                    fields:
+                                                     '*': { }
                                                 detail:
                                                   required: false
                                                   class: ConfigurationDetail
@@ -617,10 +630,12 @@ Configuration:
                                                             code_produit: {  }
                                                             code_comptable: {  }
                                                             code_douane: {  }
-                                                            rendement: { required: false }
-                                                            rendement_mention: { required: false }
-                                                            no_total_cepage: { required: false }
-                                                            exclude_total: { required: false }
+                                                            attributs:
+                                                              type: collection
+                                                              required: false
+                                                              definition:
+                                                                fields:
+                                                                 '*': { }
                                                             interpro:
                                                               type: collection
                                                               definition:
@@ -771,7 +786,12 @@ Configuration:
                                                                         code_produit: {  }
                                                                         code_comptable: {  }
                                                                         code_douane: {  }
-                                                                        rendement: { required: false }
+                                                                        attributs:
+                                                                          type: collection
+                                                                          required: false
+                                                                          definition:
+                                                                            fields:
+                                                                             '*': { }
                                                                         interpro:
                                                                           type: collection
                                                                           definition:
@@ -923,8 +943,12 @@ Configuration:
                                                                                     code_produit: {  }
                                                                                     code_comptable: {  }
                                                                                     code_douane: {  }
-                                                                                    rendement: { required: false }
-                                                                                    rendement_couleur: { required: false }
+                                                                                    attributs:
+                                                                                      type: collection
+                                                                                      required: false
+                                                                                      definition:
+                                                                                        fields:
+                                                                                         '*': { }
                                                                                     interpro:
                                                                                       type: collection
                                                                                       definition:
@@ -1076,14 +1100,12 @@ Configuration:
                                                                                                 code_produit: {  }
                                                                                                 code_comptable: {  }
                                                                                                 code_douane: {  }
-                                                                                                rendement: { required: false }
-                                                                                                superficie_optionnelle: { required: false }
-                                                                                                exclude_total: { required: false }
-                                                                                                no_motif_non_recolte: { required: false }
-                                                                                                no_mout: { required: false }
-                                                                                                no_negociant: { required: false }
-                                                                                                min_quantite: { required: false }
-                                                                                                max_quantite: { required: false }
+                                                                                                attributs:
+                                                                                                  type: collection
+                                                                                                  required: false
+                                                                                                  definition:
+                                                                                                    fields:
+                                                                                                     '*': { }
                                                                                                 cepages_autorises:
                                                                                                   type: array_collection
                                                                                                   definition:

@@ -5,9 +5,9 @@
  */
 
 class ConfigurationCouleur extends BaseConfigurationCouleur {
-	
+
 	const TYPE_NOEUD = 'couleur';
-    
+
     public function getChildrenNode() {
 
       return $this->cepages;
@@ -24,7 +24,7 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
     public function hasCepage() {
     	return (count($this->cepages) > 1 || (count($this->cepages) == 1 && $this->cepages->getFirst()->getKey() != Configuration::DEFAULT_KEY));
     }
-    
+
     public function setDonneesCsv($datas) {
       parent::setDonneesCsv($datas);
 
@@ -33,11 +33,11 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
       $this->code = $this->formatCodeFromCsv($datas[ProduitCsvFile::CSV_PRODUIT_COULEUR_CODE]);
 
       $this->setDroitDouaneCsv($datas, ProduitCsvFile::CSV_PRODUIT_COULEUR_CODE_APPLICATIF_DROIT);
-      $this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_COULEUR_CODE_APPLICATIF_DROIT); 
-      
+      $this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_COULEUR_CODE_APPLICATIF_DROIT);
+
       $this->setDepartementCsv($datas);
     }
-    
+
   	public function hasDepartements() {
   		return false;
   	}
@@ -53,4 +53,9 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
   	public function getTypeNoeud() {
   		return self::TYPE_NOEUD;
   	}
+
+	public function getRendementNoeud() {
+
+		return $this->getRendementCouleur();
+	}
 }

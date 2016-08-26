@@ -99,114 +99,136 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     /* DR */
+
     public function existRendementByKey($key) {
 
         return $this->hasRendementByKey($key);
     }
 
     public function hasLieuEditable() {
+
         return $this->getParent()->getParent()->getParent()->getParent()->hasLieuEditable();
     }
 
     public function hasDenomination() {
-    if ($this->exist('no_denomination')) {
-      return !($this->no_denomination == 1);
-    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
-      return false;
-    }
-    return true;
+        if ($this->exist('attributs') && $this->attributs->exist('no_denomination')) {
+
+            return !($this->attributs->no_denomination == 1);
+        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->get('min_quantite')) {
+
+            return false;
+        }
+
+        return true;
     }
 
     public function hasSuperficie() {
-    if ($this->exist('no_superficie')) {
-      return !($this->no_superficie == 1);
-    } elseif ($this->exist('min_quantite') && $this->get('min_quantite')) {
-      return false;
-    }
-    return true;
+        if ($this->exist('attributs') && $this->attributs->exist('no_superficie')) {
+
+            return !($this->attributs->no_superficie == 1);
+        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
+
+            return false;
+        }
+
+        return true;
     }
 
     public function isSuperficieRequired() {
-    if(!$this->hasSuperficie()) {
-      return false;
-    }
+        if(!$this->hasSuperficie()) {
+            return false;
+        }
 
-    if ($this->exist('superficie_optionnelle')) {
-      return (! $this->get('superficie_optionnelle'));
-    }
+        if ($this->exist('attributs') && $this->attributs->exist('superficie_optionnelle')) {
+            return (! $this->attributs->get('superficie_optionnelle'));
+        }
 
-    return true;
+        return true;
     }
 
     public function hasOnlyOneDetail() {
-    if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
-      return true;
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
-      return true;
-    return false;
+        if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
+          return true;
+        if ($this->exist('min_quantite') && $this->get('min_quantite'))
+          return true;
+        return false;
     }
     public function hasMinQuantite()
     {
-    if ($this->exist('min_quantite') && $this->get('min_quantite'))
-      return true;
-    return false;
+        if ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function hasMaxQuantite()
     {
-    if ($this->exist('max_quantite') && $this->get('max_quantite'))
-      return true;
-    return false;
+        if ($this->exist('attributs') && $this->attributs->exist('max_quantite') && $this->attributs->get('max_quantite')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function hasNoNegociant()
     {
-    if ($this->exist('no_negociant') && $this->get('no_negociant'))
-      return true;
-    return false;
+        if ($this->exist('attributs') && $this->attributs->exist('no_negociant') && $this->attributs->get('no_negociant')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function hasNoCooperative()
     {
-    if ($this->exist('no_cooperative') && $this->get('no_cooperative'))
-      return true;
-    return false;
+        if ($this->exist('attributs') && $this->attributs->exist('no_cooperative') && $this->attributs->get('no_cooperative')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function hasNoMout()
     {
-    if ($this->exist('no_mout') && $this->get('no_mout'))
-      return true;
-    return false;
+        if ($this->exist('attributs') && $this->attributs->exist('no_mout') && $this->attributs->get('no_mout')) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public function hasNoMotifNonRecolte()
     {
-    if ($this->exist('no_motif_non_recolte') && $this->get('no_motif_non_recolte'))
-      return true;
-    return false;
-    }
+        if ($this->exist('attributs') && $this->attributs->exist('no_motif_non_recolte') && $this->attributs->get('no_motif_non_recolte')) {
 
-    public function hasTotalCepage() {
-    if (!$this->getLieu()->existRendementCepage()) {
+            return true;
+        }
+
         return false;
     }
 
-    return parent::hasTotalCepage();
+    public function hasTotalCepage() {
+        if (!$this->getLieu()->existRendementCepage()) {
+            return false;
+        }
+
+        return parent::hasTotalCepage();
     }
 
     public function getRendementNoeud() {
 
-    return $this->getRendementCepage();
+        return $this->getRendementCepage();
     }
 
     public function existRendement() {
-    if($this->getKey() == 'cepage_RB') {
+        if($this->getKey() == 'cepage_RB') {
 
-      return false;
-    }
+            return false;
+        }
 
-    return parent::existRendement();
+        return parent::existRendement();
     }
     /* FIN DR */
 

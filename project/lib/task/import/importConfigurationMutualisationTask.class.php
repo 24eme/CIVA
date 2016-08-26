@@ -74,6 +74,11 @@ EOF;
             $configuration->getOrAdd('mvts_favoris')->add($mvt[0], $mvt[0]);
         }
 
+        foreach (file($import_dir . '/attributs.csv') as $attributLine) {
+            $attribut = explode(";", preg_replace('/"/', '', str_replace("\n", "", $attributLine)));
+            $configuration->getOrAdd($attribut[0])->add('attributs')->add($attribut[1], $attribut[2]);
+        }
+
         $configuration->labels->add('agriculture_biologique', "Agriculture Biologique");
 
         $configuration->save();

@@ -801,9 +801,9 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     protected function findRendementByKeyStorable($key) {
-        if ($this->exist($key) && $this->_get($key)) {
+        if ($this->exist('attributs') && $this->attributs->exist($key) && $this->attributs->_get($key)) {
 
-            return $this->_get($key);
+            return $this->attributs->_get($key);
         }
 
         return $this->getParentNode()->get($key);
@@ -816,9 +816,9 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function hasMout() {
-        if ($this->exist('mout')) {
+        if ($this->exist('attributs') && $this->attributs->exist('mout')) {
 
-            return ($this->mout == 1);
+            return ($this->attributs->mout == 1);
         }
 
         return $this->getParentNode()->hasMout();
@@ -826,7 +826,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function excludeTotal()
     {
-        return ($this->exist('exclude_total') && $this->get('exclude_total'));
+        return ($this->exist('attributs') && $this->attributs->exist('exclude_total') && $this->attributs->get('exclude_total'));
     }
 
     public function hasTotalCepage() {
@@ -836,12 +836,12 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     protected function hasTotalCepageStorable() {
 
-      if ($this->exist('no_total_cepage')) {
+      if ($this->exist('attributs') && $this->attributs->exist('no_total_cepage')) {
 
-          return !($this->no_total_cepage == 1);
+          return !($this->attributs->no_total_cepage == 1);
       }
 
-      if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+      if ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
 
           return false;
       }
@@ -850,12 +850,12 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     public function hasVtsgn() {
-        if ($this->exist('no_vtsgn')) {
-            return (! $this->get('no_vtsgn'));
+        if ($this->exist('attributs') && $this->attributs->exist('no_vtsgn')) {
+            return (!$this->attributs->get('no_vtsgn'));
         }
 
 
-        if ($this->exist('min_quantite') && $this->get('min_quantite')) {
+        if ($this->exist('attributs') && $this->exist('min_quantite') && $this->get('min_quantite')) {
             return false;
         }
 
