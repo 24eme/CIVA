@@ -62,25 +62,28 @@ class declarationComponents extends sfComponents {
         $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
         $cvi = array();
         foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
-          if ($this->dr->recolte->getNoeudAppellations()->exist("appellation_".$appellation_key)) {
-              $appellation = $this->dr->recolte->getNoeudAppellations()->get("appellation_".$appellation_key);
-              if ($appellation->getConfig()->excludeTotal())
-                continue;
-              $this->appellations[] = $appellation->getAppellation();
-              $this->libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
-              $this->superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
-              $this->volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-              $this->volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
-              $this->revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $this->revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
-              $this->usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
-              $this->usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsSurPlace();
-              $this->volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              if($appellation->getConfig()->hasCepageRB()) {
-                $this->volume_rebeches[$appellation->getAppellation()] = $appellation->getTotalRebeches();
-                $this->volume_rebeches_sur_place[$appellation->getAppellation()] = $appellation->getSurPlaceRebeches();
-              }
-          }
+            if ($this->dr->recolte->getNoeudAppellations()->exist("appellation_".$appellation_key)) {
+                $appellation = $this->dr->recolte->getNoeudAppellations()->get("appellation_".$appellation_key);
+                if ($appellation->getConfig()->excludeTotal()) {
+                    continue;
+                }
+                foreach($appellation->getMentions() as $mention) {
+                    $this->appellations[] = $mention->getHash();
+                    $this->libelle[$mention->getHash()] = $appellation->getConfig()->getLibelle()." ".$mention->getConfig()->getLibelle();
+                    $this->superficie[$mention->getHash()] = $mention->getTotalSuperficie();
+                    $this->volume[$mention->getHash()] = $mention->getTotalVolume();
+                    $this->volume_vendus[$mention->getHash()] = $mention->getTotalVolumeVendus();
+                    $this->revendique[$mention->getHash()] = $mention->getVolumeRevendique();
+                    $this->revendique_sur_place[$mention->getHash()] = $mention->getVolumeRevendiqueCaveParticuliere();
+                    $this->usages_industriels[$mention->getHash()] = $mention->getUsagesIndustriels();
+                    $this->usages_industriels_sur_place[$mention->getHash()] = $mention->getUsagesIndustrielsSurPlace();
+                    $this->volume_sur_place[$mention->getHash()] = $mention->getTotalCaveParticuliere();
+                    if($mention->getConfig()->hasCepageRB()) {
+                        $this->volume_rebeches[$mention->getHash()] = $mention->getTotalRebeches();
+                        $this->volume_rebeches_sur_place[$mention->getHash()] = $mention->getSurPlaceRebeches();
+                    }
+                }
+            }
         }
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));

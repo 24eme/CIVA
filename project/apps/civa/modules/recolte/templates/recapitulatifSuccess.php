@@ -8,15 +8,15 @@
 			<form id="principal" action="" method="post" onsubmit="return valider_can_submit();">
             <?php echo $form->renderHiddenFields(); ?>
             <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-                                                               'onglets' => $onglets)); ?>
+                                                               'produit' => $noeud)); ?>
                 <input name="is_validation_interne" type="hidden" value="0" />
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
-				
+
 					<!-- #gestion_recolte -->
 					<div id="gestion_recolte" class="clearfix gestion_recolte_recapitulatif">
 						<?php include_partial('ongletsCepages', array('declaration' => $declaration,
-                                                                                              'onglets' => $onglets,
+                                                                                              'produit' => $noeud,
                                                                                               'recapitulatif' => true)); ?>
 
 						<div class="recapitualtif clearfix" id="donnees_recolte_sepage">
@@ -145,12 +145,12 @@
                                     </div>
                                 </div>
                             <?php endif; ?>
-                            </div>                  
+                            </div>
 							<div id="recap_ventes">
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                    <?php if (count($form->getEmbeddedForms()) > 1): ?>    
+                                    <?php if (count($form->getEmbeddedForms()) > 1): ?>
                                     <h3 class="titre_section"><?php echo $form_item->getObject()->getLibelle(); ?></h3>
                                     <?php endif; ?>
 									<div class="bloc_gris">
@@ -160,7 +160,7 @@
 												<tr>
 													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
 													<th class="cvi">n°CVI</th>
-													<th class="commune"><span>Commune</span></th>				
+													<th class="commune"><span>Commune</span></th>
 													<th><span>Superficie</span></th>
 													<th><span>Volume total</span></th>
 													<th><span>Dont dépassement</span></th>
@@ -210,24 +210,24 @@
 						</div>
                     </div>
 					<!-- fin #gestion_recolte -->
-					<?php include_partial('boutonAppellation', array('onglets' => $onglets, 'is_recap'=>true)) ?>
+					<?php include_partial('boutonAppellation', array('produit' => $noeud, 'is_recap' => true)) ?>
 			    </div>
 				<!-- fin #application_dr -->
-				
+
 				<?php include_partial('boutons') ?>
 
                 <?php include_partial('initRendementsMax') ?>
 
                 <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
 
-				
+
 			</form>
 			<!-- fin #principal -->
 
-                        <?php include_partial('recolte/popupAjoutOnglets', array('onglets' => $onglets,
+                        <?php /*include_partial('recolte/popupAjoutOnglets', array('produit' => $noeud,
                                                          'form_appellation' => $form_ajout_appellation,
                                                          'form_lieu' => $form_ajout_lieu,
-                                                         'url_lieu' => $url_ajout_lieu)) ?>
+                                                         'url_lieu' => $url_ajout_lieu))*/ ?>
 
                         <script type="text/javascript">
                             $('input[name="validation_interne"]').click(function() {

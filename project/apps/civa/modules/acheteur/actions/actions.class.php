@@ -92,7 +92,7 @@ class acheteurActions extends EtapesActions {
                 $this->appellations[$appellation->getKey()] = $appellation;
                 $lieux = array();
                 foreach ($appellation->getLieux() as $key => $lieu) {
-                    $lieux[$key] = $lieu->getLibelle();
+                    $lieux[$key] = $lieu->getLibelle()." ".$lieu->getMention()->getConfig()->getLibelle();
                }
 
                 $form = new LieuDitForm($appellation, array('lieu_required' => !(count($lieux) > 0), 'lieux' => $lieux));

@@ -126,7 +126,7 @@ class recolteActions extends EtapesActions {
     public function executeProduitNoeud(sfWebRequest $request) {
         $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
 
-        if($this->noeud instanceof DRRecolteAppellation) {
+        if($this->noeud instanceof DRRecolteMention) {
             foreach($this->noeud->getLieux() as $lieu) {
 
                 $this->noeud = $lieu;
@@ -140,62 +140,123 @@ class recolteActions extends EtapesActions {
         }
     }
 
-    public function executeUpdate(sfWebRequest $request) {
-        $this->initOnglets($request);
-        $this->initDetails();
-        $this->initAcheteurs();
-        $this->initPrecDR();
+    public function executeProduitNoeudPrecedent(sfWebRequest $request) {
+        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
 
-        $this->detail_action_mode = 'update';
-        $this->is_detail_edit = true;
-
-        $this->detail_key = $request->getParameter('detail_key');
-        $this->forward404Unless($this->details->exist($this->detail_key));
-
-        $this->form_detail = new RecolteForm($this->details->get($this->detail_key), $this->getFormDetailsOptions());
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->processFormDetail($this->form_detail, $request);
-        }
-        $this->setTemplate('recolte');
-    }
-
-    public function executeAdd(sfWebRequest $request) {
-        $this->produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI");
-        $this->initOnglets($request);
-        $this->initDetails();
-        $this->initAcheteurs();
-        $this->initPrecDR();
-
-        $this->detail_action_mode = 'add';
-        $this->is_detail_edit = true;
-
-        $detail = $this->details->add();
-        $this->detail_key = $this->details->count() - 1;
-
-        $this->form_detail = new RecolteForm($detail, $this->getFormDetailsOptions());
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->processFormDetail($this->form_detail, $request);
+        if($this->noeud->getPreviousSister()) {
+            return $this->redirect('recolte_noeud', array('hash' => $this->noeud->getPreviousSister()->getHash()));
         }
 
-        $this->setTemplate('recolte');
+        if($this->noeud->getParent() instanceof DRRecolte) {
+
+            return $this->redirect('exploitation_autres');
+        }
+
+        return $this->redirect('recolte_noeud_precedent', array('hash' => $this->noeud->getParent()->getHash()));
     }
 
-    public function executeDelete(sfWebRequest $request) {
-        $this->initOnglets($request);
-        $this->initDetails();
 
-        $detail_key = $request->getParameter('detail_key');
-        $this->forward404Unless($this->details->exist($detail_key));
+    public function executeProduitNoeudSuivant(sfWebRequest $request) {
+        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
 
-        $this->details->remove($detail_key);
-        $this->declaration->update();
-        $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
-        $this->declaration->save();
+        if($this->noeud->getNextSister()) {
+            return $this->redirect('recolte_noeud', array('hash' => $this->noeud->getNextSister()->getHash()));
+        }
 
-        $this->redirect($this->onglets->getUrl('recolte'));
+        if($this->noeud->getParent() instanceof DRRecolte) {
+
+            return $this->redirect('exploitation_autres');
+        }
+
+        return $this->redirect('recolte_noeud_suivant', array('hash' => $this->noeud->getParent()->getHash()));
     }
+
+    public function executeRecapitulatif(sfWebRequest $request) {
+        $this->help_popup_action = "help_popup_recapitulatif_ventes";
+        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+
+        $this->initPrecDR();
+
+        $this->appellationlieu = $this->noeud;
+        if($this->noeud->getAppellation()->getKey() == 'appellation_GRDCRU'){
+            $this->isGrandCru = true;
+        }else{
+            $this->isGrandCru = false;
+        }
+        $this->form = new RecapitulatifContainerForm($this->appellationlieu);
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                if($request->getParameter("is_validation_interne")) {
+                    $this->getUser()->setFlash('recapitulatif_confirmation', 'Votre saisie a bien été enregistrée');
+
+                    return $this->redirect('recolte_recapitulatif', array('hash' => $this->noeud->getHash()));
+                } else {
+
+                    return $this->redirect('recolte_noeud_suivant', array('hash' => $this->noeud->getHash()));
+                }
+            }
+        }
+    }
+
+    // public function executeUpdate(sfWebRequest $request) {
+    //     $this->initOnglets($request);
+    //     $this->initDetails();
+    //     $this->initAcheteurs();
+    //     $this->initPrecDR();
+    //
+    //     $this->detail_action_mode = 'update';
+    //     $this->is_detail_edit = true;
+    //
+    //     $this->detail_key = $request->getParameter('detail_key');
+    //     $this->forward404Unless($this->details->exist($this->detail_key));
+    //
+    //     $this->form_detail = new RecolteForm($this->details->get($this->detail_key), $this->getFormDetailsOptions());
+    //
+    //     if ($request->isMethod(sfWebRequest::POST)) {
+    //         $this->processFormDetail($this->form_detail, $request);
+    //     }
+    //     $this->setTemplate('recolte');
+    // }
+
+    // public function executeAdd(sfWebRequest $request) {
+    //     $this->produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_RI");
+    //     $this->initOnglets($request);
+    //     $this->initDetails();
+    //     $this->initAcheteurs();
+    //     $this->initPrecDR();
+    //
+    //     $this->detail_action_mode = 'add';
+    //     $this->is_detail_edit = true;
+    //
+    //     $detail = $this->details->add();
+    //     $this->detail_key = $this->details->count() - 1;
+    //
+    //     $this->form_detail = new RecolteForm($detail, $this->getFormDetailsOptions());
+    //
+    //     if ($request->isMethod(sfWebRequest::POST)) {
+    //         $this->processFormDetail($this->form_detail, $request);
+    //     }
+    //
+    //     $this->setTemplate('recolte');
+    // }
+    //
+    // public function executeDelete(sfWebRequest $request) {
+    //     $this->initOnglets($request);
+    //     $this->initDetails();
+    //
+    //     $detail_key = $request->getParameter('detail_key');
+    //     $this->forward404Unless($this->details->exist($detail_key));
+    //
+    //     $this->details->remove($detail_key);
+    //     $this->declaration->update();
+    //     $this->declaration->utilisateurs->edition->add($this->getUser()->getCompte(CompteSecurityUser::NAMESPACE_COMPTE_AUTHENTICATED)->get('_id'), date('d/m/Y'));
+    //     $this->declaration->save();
+    //
+    //     $this->redirect($this->onglets->getUrl('recolte'));
+    // }
 
     public function executeMotifNonRecolte(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
@@ -283,35 +344,6 @@ class recolteActions extends EtapesActions {
         }
     }
 
-    public function executeRecapitulatif(sfWebRequest $request) {
-
-        $this->help_popup_action = "help_popup_recapitulatif_ventes";
-
-        $this->initOnglets($request);
-        $this->initPrecDR();
-
-        $this->appellationlieu = $this->onglets->getLieu();
-        if($this->onglets->getCurrentAppellation()->getKey() == 'appellation_GRDCRU'){
-            $this->isGrandCru = true;
-        }else{
-            $this->isGrandCru = false;
-        }
-        $this->form = new RecapitulatifContainerForm($this->appellationlieu);
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $this->form->save();
-                if($request->getParameter("is_validation_interne")) {
-                    $this->getUser()->setFlash('recapitulatif_confirmation', 'Votre saisie a bien été enregistrée');
-                    return $this->redirect($this->onglets->getUrlRecap());
-                } else {
-                    return $this->redirect($this->onglets->getNextUrl());
-                }
-            }
-        }
-    }
-
     public function executeRendementsMaxAjax(sfWebRequest $request) {
     	//$this->forward404Unless($request->isXmlHttpRequest());
     	$dr = $this->declaration;
@@ -377,42 +409,42 @@ class recolteActions extends EtapesActions {
         }
     }
 
-    protected function initOnglets(sfWebRequest $request) {
-
-
-        preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
-        $appellation = null;
-
-        if (isset($appellation_lieu['appellation'])) {
-            $appellation = $appellation_lieu['appellation'];
-        }
-
-        $lieu = null;
-        if (isset($appellation_lieu['lieu'])) {
-            $lieu = $appellation_lieu['lieu'];
-        }
-
-        preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
-        $couleur = 'couleur';
-        if (isset($couleur_cepage['couleur']) && $couleur_cepage['couleur']) {
-            $couleur = preg_replace('/-$/', '', $couleur_cepage['couleur']);
-        }
-        $cepage = null;
-        if (isset($couleur_cepage['cepage'])) {
-            $cepage = $couleur_cepage['cepage'];
-        }
-
-        if(!$cepage) {
-           $couleur = null;
-        }
-
-        if ($this->declaration->exist('validee') && $this->declaration->validee) {
-            $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.') !');
-        }
-
-        $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
-        $this->onglets->init($appellation, $lieu, $couleur, $cepage);
-    }
+    // protected function initOnglets(sfWebRequest $request) {
+    //
+    //
+    //     preg_match('/(?P<appellation>\w+)-?(?P<lieu>\w*)/', $request->getParameter('appellation_lieu', null), $appellation_lieu);
+    //     $appellation = null;
+    //
+    //     if (isset($appellation_lieu['appellation'])) {
+    //         $appellation = $appellation_lieu['appellation'];
+    //     }
+    //
+    //     $lieu = null;
+    //     if (isset($appellation_lieu['lieu'])) {
+    //         $lieu = $appellation_lieu['lieu'];
+    //     }
+    //
+    //     preg_match('/(?P<couleur>(\w*-)|)(?P<cepage>\w+)/', $request->getParameter('couleur_cepage', null), $couleur_cepage);
+    //     $couleur = 'couleur';
+    //     if (isset($couleur_cepage['couleur']) && $couleur_cepage['couleur']) {
+    //         $couleur = preg_replace('/-$/', '', $couleur_cepage['couleur']);
+    //     }
+    //     $cepage = null;
+    //     if (isset($couleur_cepage['cepage'])) {
+    //         $cepage = $couleur_cepage['cepage'];
+    //     }
+    //
+    //     if(!$cepage) {
+    //        $couleur = null;
+    //     }
+    //
+    //     if ($this->declaration->exist('validee') && $this->declaration->validee) {
+    //         $this->getUser()->setFlash('msg_info', 'Vous consultez une DR validée ('.$this->declaration->validee.') !');
+    //     }
+    //
+    //     $this->onglets = new RecolteOnglets($this->declaration, $this->_etapes_config->previousUrl(), $this->_etapes_config->nextUrl());
+    //     $this->onglets->init($appellation, $lieu, $couleur, $cepage);
+    // }
 
     protected function initDetails() {
         $this->details = $this->produit->add('detail');

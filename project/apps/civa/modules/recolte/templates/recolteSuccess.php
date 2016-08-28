@@ -91,7 +91,7 @@
 </div>
 <!-- fin #application_dr -->
 
-<?php //include_partial('boutons') ?>
+<?php include_partial('boutons') ?>
 
 <!--</form>-->
 <!-- fin #principal -->

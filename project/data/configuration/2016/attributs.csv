@@ -1,6 +1,12 @@
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT;rendement_appellation;80
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/VT;rendement;55
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/SGN;rendement;40
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/LIEUDIT/mentions/VT;rendement;55
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/LIEUDIT/mentions/SGN;rendement;40
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/COMMUNALE/mentions/VT;rendement;55
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/COMMUNALE/mentions/SGN;rendement;40
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU/mentions/VT;rendement;55
+/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU/mentions/SGN;rendement;40
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/CH;rendement;100
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/CH;no_vtsgn;1
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT/lieux/DEFAUT/couleurs/DEFAUT/cepages/SY;rendement;100
@@ -53,7 +59,6 @@
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/COMMUNALE/mentions/DEFAUT/lieux/STGR/couleurs/Blanc/cepages/PB;no_vtsgn;1
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/COMMUNALE/mentions/DEFAUT/lieux/SCHE/couleurs/Blanc;rendement_couleur;72
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/COMMUNALE/mentions/DEFAUT/lieux/WOLX/couleurs/Blanc;rendement_couleur;72
-/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU;rendement;61
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU/mentions/DEFAUT/lieux/01;rendement;55
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU/mentions/DEFAUT/lieux/02;rendement;50
 /declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/GRDCRU/mentions/DEFAUT/lieux/02/couleurs/DEFAUT/cepages/ED;no_vtsgn;1

@@ -389,8 +389,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
+            foreach ($appellation->getMentions() as $mention) {
                 if($appellation->getTotalSuperficie() != 0) {
-                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
+                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey())->get($mention->getKey());
                     foreach($acheteursByType as $type => $cvis) {
                         if($type == "cave_particuliere" && $cvis && round($appellation->getTotalCaveParticuliere(), 2) == 0) {
                             //array_push($validLogVigilance, array('url_log_param' => $onglet->getUrlParams($appellation->getKey()), 'log' => sprintf("%s", $appellation->getLibelle()), 'info' => "Vous n'avez déclaré aucun volume sur place pour"));
@@ -563,6 +564,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
                     }
                 }
+              }
             }
         }
 

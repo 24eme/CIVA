@@ -20,5 +20,5 @@
         <?php endforeach; ?>
     <?php endforeach; ?>
     <!--<li class="alerte"><a href="#">Rebêche <span></span></a></li>-->
-    <li class="recapitulatif <?php if ($recapitulatif): ?> ui-tabs-selected<?php endif; ?>" ><a href="">Récap. des<br />Ventes&nbsp;et<br />Vol.&nbsp;à&nbsp;détruire<span></span></a></li>
+    <li class="recapitulatif <?php if ($recapitulatif): ?> ui-tabs-selected<?php endif; ?>" ><a href="<?php echo url_for("recolte_recapitulatif", array("hash" => $produit->getLieu()->getHash())) ?>">Récap. des<br />Ventes&nbsp;et<br />Vol.&nbsp;à&nbsp;détruire<span></span></a></li>
 </ul>

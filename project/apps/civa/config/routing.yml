@@ -365,10 +365,6 @@ exploitation_lieu_delete:
   url:  /exploitation_lieu/delete/:lieu
   param: {module: acheteur, action: exploitationLieuDelete }
 
-  exploitation_lieu_delete:
-  url:  /exploitation_lieu/delete/:appellation/:lieu
-  param: {module: acheteur, action: exploitationLieuDelete }
-
 exploitation_autres:
   url:   /exploitation_autres
   param: { module: declaration, action: exploitationAutres }
@@ -403,6 +399,16 @@ recolte_produit_suppression:
 recolte_noeud:
   url:   /recolte/noeud
   param: { module: recolte, action: produitNoeud}
+  class: sfRouteAnchor
+
+recolte_noeud_precedent:
+  url:   /recolte/noeud/precedent
+  param: { module: recolte, action: produitNoeudPrecedent}
+  class: sfRouteAnchor
+
+recolte_noeud_suivant:
+  url:   /recolte/noeud/suivant
+  param: { module: recolte, action: produitNoeudSuivant}
   class: sfRouteAnchor
 
 recolte_recapitulatif:
