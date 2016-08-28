@@ -321,39 +321,41 @@ class recolteActions extends EtapesActions {
     	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getChildrenNode() as $key_appellation => $appellation_config) {
             if ($dr->exist(HashMapper::inverse($appellation_config->getHash()))) {
     			$appellation = $dr->get(HashMapper::inverse($appellation_config->getHash()));
-    			foreach ($appellation->getDistinctLieux() as $lieu) {
-                    if ($lieu->getConfig()->getRendementNoeud() == -1) {
-                        continue;
-                    }
-    				if ($lieu->getConfig()->existRendementCouleur()) {
-    					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
-	    					$rd = $couleurConfig->getRendementCouleur();
-    						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
-    					}
-    				} else {
+                foreach($appellation->getMentions() as $mention) {
+        			foreach ($mention->getLieux() as $lieu) {
+                        if ($lieu->getConfig()->getRendementNoeud() == -1) {
+                            continue;
+                        }
+        				if ($lieu->getConfig()->existRendementCouleur()) {
+        					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
+    	    					$rd = $couleurConfig->getRendementCouleur();
+        						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
+        					}
+        				} else {
 
-	    				if ($lieu->getConfig()->getRendementNoeud()) {
-	    					$rd = $lieu->getConfig()->getRendementNoeud();
-	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
-	    				}
-						foreach($lieu->getCouleurs() as $couleur) {
-    	    				foreach ($couleur->getConfig()->getChildrenNode() as $key => $cepage_config) {
-    	    					if($cepage_config->hasMinQuantite()) {
-    	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
-    	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
-    	    					}
-    	    					if($cepage_config->getRendementCepage()) {
-    	    						$rd = $cepage_config->getRendementCepage();
-    	    						if($appellation->getConfig()->hasManyLieu()) {
-    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
-    	    						}else {
-    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
-    	    						}
-    	    					}
+    	    				if ($lieu->getConfig()->getRendementNoeud()) {
+    	    					$rd = $lieu->getConfig()->getRendementNoeud();
+    	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
     	    				}
-						}
-    				}
-    			}
+    						foreach($lieu->getCouleurs() as $couleur) {
+        	    				foreach ($couleur->getConfig()->getChildrenNode() as $key => $cepage_config) {
+        	    					if($cepage_config->hasMinQuantite()) {
+        	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
+        	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
+        	    					}
+        	    					if($cepage_config->getRendementCepage()) {
+        	    						$rd = $cepage_config->getRendementCepage();
+        	    						if($appellation->getConfig()->hasManyLieu()) {
+        	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
+        	    						} else {
+        	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
+        	    						}
+        	    					}
+        	    				}
+    						}
+        				}
+        			}
+                }
     		}
     	}
     	return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement,
@@ -432,7 +434,7 @@ class recolteActions extends EtapesActions {
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey())->get($this->produit->getMention()->getKey());
     }
 
     protected function initPrecDR(){

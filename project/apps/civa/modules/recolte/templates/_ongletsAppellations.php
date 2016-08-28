@@ -1,5 +1,5 @@
 <ul id="onglets_majeurs" class="clearfix onglets_recolte">
-    <?php foreach($declaration->recolte->getConfig()->getMentions() as $mention): ?>
+    <?php foreach($declaration->recolte->getMentions() as $mention): ?>
         <?php $appellation = $mention->getAppellation(); ?>
         <?php if ($declaration->exist(HashMapper::inverse($appellation->getHash()))): ?>
         <li <?php if ($produit->getMention()->getHash() == HashMapper::inverse($mention->getHash())): ?>class="ui-tabs-selected"<?php endif; ?>>

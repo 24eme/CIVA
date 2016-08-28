@@ -110,19 +110,6 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return $appellations;
     }
 
-    public function getArrayAppellationsMout() {
-        $appellations = array();
-        foreach($this->getChildrenNode() as $item) {
-            if(!$item->hasMout()) {
-                continue;
-            }
-
-            $appellations = array_merge($appellations, $item->getArrayAppellations());
-        }
-
-        return $appellations;
-    }
-
     public function findDroitsDate($date, $interpro) {
         $datesDroits = $this->getDatesDroits($interpro);
 
@@ -900,7 +887,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return false;
     }
 
-    public function getMentions() {
+        public function getMentions() {
         $mentions = array();
 
         foreach($this->getChildrenNode() as $item) {

@@ -40,12 +40,14 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-            foreach($acheteurs->getNoeudAppellations() as $key => $appellation) {
-                $app = $this->getNoeudAppellations()->add($key);
-                if (!$app->getConfig()->hasManyLieu()) {
-                    $lieu = $app->mention->add('lieu');
-                    foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
-                        $this->getDocument()->getOrAdd(HashMapper::inverse($v->getHash()));
+            foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+                foreach($appellation as $mention_key => $mention) {
+                    $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
+                    if (!$app->getConfig()->hasManyLieu()) {
+                        $lieu = $app->add('lieu');
+                        foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
+                            $this->getDocument()->getOrAdd(HashMapper::inverse($v->getHash()));
+                        }
                     }
                 }
             }

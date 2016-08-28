@@ -6,10 +6,6 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return $this->getAppellations();
     }
 
-    public function getMentions() {
-       return $this->getChildrenNodeDeep();
-    }
-
     public function getAppellations(){
         return $this->filter('^appellation');
     }

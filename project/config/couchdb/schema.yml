@@ -79,26 +79,31 @@ DR:
                     definition:
                       fields:
                         '*':
-                          # -------- rappel des appellations -------
-                          type: collection
-                          definition:
-                            fields:
-                              negoces:
-                                type: array_collection
-                                definition:
-                                  fields:
-                                    '*': {  }
-                              cooperatives:
-                                type: array_collection
-                                definition:
-                                  fields:
-                                    '*': {  }
-                              cave_particuliere: {type: integer}
-                              mouts:
-                                type: array_collection
-                                definition:
-                                  fields:
-                                    '*': {  }
+                            #------ Appellation ------
+                            type: collection
+                            definition:
+                              fields:
+                                '*':
+                                  # -------- Mention -------
+                                  type: collection
+                                  definition:
+                                    fields:
+                                      negoces:
+                                        type: array_collection
+                                        definition:
+                                          fields:
+                                            '*': {  }
+                                      cooperatives:
+                                        type: array_collection
+                                        definition:
+                                          fields:
+                                            '*': {  }
+                                      cave_particuliere: {type: integer}
+                                      mouts:
+                                        type: array_collection
+                                        definition:
+                                          fields:
+                                            '*': {  }
       cvi: {  }
       lies: {type: float}
       jeunes_vignes: {type: float}
