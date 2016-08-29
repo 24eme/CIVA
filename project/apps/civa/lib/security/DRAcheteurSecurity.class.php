@@ -31,7 +31,7 @@ class DRAcheteurSecurity implements SecurityInterface {
 
         if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DR_ACHETEUR)) {
 
-            //return false;
+            return false;
         }
 
         if(in_array(self::DECLARANT, $droits)) {
