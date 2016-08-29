@@ -2,13 +2,13 @@
 	<?php if(count(TiersSecurity::getInstance($sf_user)->getBlocs()) > 1): ?>
 	<li class="<?php if($active== 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa") ?>">Accueil</a></li>
 	<?php endif; ?>
-	<li class=""><a href="<?php echo url_for("drm_etablissement", array("identifiant" => $sf_user->getDeclarant()->getIdentifiant())) ?>">DRM</a></li>
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
 	<li class="<?php if($active== 'recolte'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr") ?>">Récolte</a></li>
 	<?php endif; ?>
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
 	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur") ?>">Acheteur Récolte</a></li>
 	<?php endif; ?>
+	<li class=""><a href="<?php echo url_for("drm_etablissement", array("identifiant" => $sf_user->getDeclarant()->getIdentifiant())) ?>">DRM</a></li>
 	<?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::VRAC)): ?>
 	<li class="<?php if($active== 'vrac'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_vrac") ?>">Contrats</a></li>
 	<?php endif; ?>
