@@ -221,7 +221,7 @@ class DRClient extends acCouchdbClient {
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
 
-          foreach ($dr->recolte->getAppellationsSorted() as $app_key => $appellation) {
+          foreach ($dr->recolte->getAppellations() as $app_key => $appellation) {
               switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
                   case 'GRDCRU':
                   case 'CREMANT':

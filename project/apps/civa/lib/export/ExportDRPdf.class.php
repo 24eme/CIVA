@@ -51,6 +51,8 @@ class ExportDRPdf extends ExportDocument {
     }
 
     protected function getLibelleModification($dr) {
+        $libelle = null;
+
         if ($dr->isHumanlyModifiee()) {
             $libelle .= ' et modifiée le '.$dr->getDateModifieeFr();
         }
@@ -118,18 +120,21 @@ class ExportDRPdf extends ExportDocument {
     }
 
     protected function create($dr) {
+        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getChildrenNode() as $appellation_config) {
+            if ($dr->exist(HashMapper::inverse($appellation_config->getHash()))) {
+                $appellation = $dr->get(HashMapper::inverse($appellation_config->getHash()));
+                foreach ($appellation->getConfig()->getMentions() as $mention) {
+                    foreach ($mention->getLieux() as $lieu) {
+                        if (!$dr->exist(HashMapper::inverse($lieu->getHash()))) {
+                            continue;
+                        }
 
-          foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
-            if ($dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
-                $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
-                foreach ($appellation->getConfig()->getLieux() as $lieu) {
-                  if (!$appellation->getLieux()->exist($lieu->getKey()))
-                    continue;
-                  $lieu = $appellation->getLieux()->get($lieu->getKey());
-                  $this->createAppellationLieu($lieu, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
+                        $lieu = $dr->get(HashMapper::inverse($lieu->getHash()));
+                        $this->createAppellationLieu($lieu, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
+                    }
                 }
             }
-          }
+        }
 
       $infos = $this->getRecapitulatifInfos($dr);
 
@@ -230,27 +235,28 @@ class ExportDRPdf extends ExportDocument {
         $volume_cooperatives = array();
         $cvi = array();
         $has_cepage_rb = false;
-        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
-          if ($dr->recolte->getNoeudAppellations()->exist($appellation_key)) {
-              $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_key);
-              if ($appellation->getConfig()->excludeTotal())
+        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getMentions() as $mention_config) {
+            if ($dr->exist(HashMapper::inverse($mention_config->getHash()))) {
+                $mention = $dr->get(HashMapper::inverse($mention_config->getHash()));
+                if ($mention->getConfig()->excludeTotal()) {
                 continue;
-              $appellations[] = $appellation->getAppellation();
-              $libelle[$appellation->getAppellation()] = $appellation->getConfig()->getLibelle();
-              $superficie[$appellation->getAppellation()] = $appellation->getTotalSuperficie();
-              $volume[$appellation->getAppellation()] = $appellation->getTotalVolume();
-              $volume_vendus[$appellation->getAppellation()] = $appellation->getTotalVolumeVendus();
-              $revendique[$appellation->getAppellation()] = $appellation->getVolumeRevendique();
-              $revendique_sur_place[$appellation->getAppellation()] = $appellation->getVolumeRevendiqueCaveParticuliere();
-              $usages_industriels_sur_place[$appellation->getAppellation()] = $appellation->getUsagesIndustrielsSurPlace();
-              $usages_industriels[$appellation->getAppellation()] = $appellation->getUsagesIndustriels();
-              $volume_sur_place[$appellation->getAppellation()] = $appellation->getTotalCaveParticuliere();
-              $volume_rebeches[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getTotalRebeches() : null;
-              $volume_rebeches_sur_place[$appellation->getAppellation()] = $appellation->getConfig()->hasCepageRB() ? $appellation->getSurPlaceRebeches() : null;
-              if($appellation->getConfig()->hasCepageRB()) {
+                }
+                $appellations[] = $mention->getHash();
+                $libelle[$mention->getHash()] =  $mention->getAppellation()->getConfig()->getLibelle() .' '. $mention->getConfig()->getLibelle();
+                $superficie[$mention->getHash()] = $mention->getTotalSuperficie();
+                $volume[$mention->getHash()] = $mention->getTotalVolume();
+                $volume_vendus[$mention->getHash()] = $mention->getTotalVolumeVendus();
+                $revendique[$mention->getHash()] = $mention->getVolumeRevendique();
+                $revendique_sur_place[$mention->getHash()] = $mention->getVolumeRevendiqueCaveParticuliere();
+                $usages_industriels_sur_place[$mention->getHash()] = $mention->getUsagesIndustrielsSurPlace();
+                $usages_industriels[$mention->getHash()] = $mention->getUsagesIndustriels();
+                $volume_sur_place[$mention->getHash()] = $mention->getTotalCaveParticuliere();
+                $volume_rebeches[$mention->getHash()] = $mention->getConfig()->hasCepageRB() ? $mention->getTotalRebeches() : null;
+                $volume_rebeches_sur_place[$mention->getHash()] = $mention->getConfig()->hasCepageRB() ? $mention->getSurPlaceRebeches() : null;
+                if($mention->getConfig()->hasCepageRB()) {
                 $has_cepage_rb = true;
-              }
-          }
+                }
+            }
         }
 
         $infos = array();
@@ -311,7 +317,7 @@ class ExportDRPdf extends ExportDocument {
     }
 
 	private function createAppellationLieu($lieu, $hasLieuEditable, $hasVTSGN) {
-      $hasManyCouleur = $lieu->getConfig()->getNbCouleurs() > 1;
+      $hasManyCouleur = count($lieu->getConfig()->getCouleurs()) > 1;
     	$colonnes = array();
     	$afterTotal = array();
     	$acheteurs = $lieu->acheteurs;
@@ -319,14 +325,17 @@ class ExportDRPdf extends ExportDocument {
     	foreach ($lieu->getCouleurs() as $couleur) {
         $nbCepageCouleur = 0;
 	    	foreach ($couleur->getConfig()->getCepages() as $cepage_config) {
-          if (!$couleur->exist($cepage_config->getKey())) {
-            continue;
-          }
-          $cepage = $couleur->get($cepage_config->getKey());
+                if (!$couleur->getDocument()->exist(HashMapper::inverse($cepage_config->getHash()))) {
+                    continue;
+                }
+                $cepage = $couleur->getDocument()->get(HashMapper::inverse($cepage_config->getHash()));
 
-			    if (!count($cepage->detail))
-			     continue;
-    		  $i = 0;
+			    if (!count($cepage->detail)) {
+
+                    continue;
+                }
+
+                $i = 0;
     		  foreach ($cepage->detail as $detail) {
   					$c = array();
   					$c['type'] = 'detail';
