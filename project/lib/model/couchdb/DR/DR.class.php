@@ -267,10 +267,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $compte_dr = $this->getEtablissementObject()->getMasterCompte();
 
-        if($compte->isOperateur()) {
+        /*if($compte->isOperateur()) {
 
             return DRClient::VALIDEE_PAR_CIVA;
-        }
+        }*/
 
         if($compte instanceof Compte && $compte->getSociete()->_id != $compte_dr->getSociete()->_id) {
 

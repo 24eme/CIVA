@@ -11,8 +11,19 @@
             <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
         <h3 class="noir">Vos téléservices</h3>
+        <?php $nb_blocs++; ?>
         <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">
             <?php $i = $nb_blocs ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+                <div class="bloc_acceuil_header">DRM</div>
+                <div class="bloc_acceuil_content">
+                    <p class="mineure">Aucune information à signaler</p>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('drm_etablissement', array("identifiant" => $sf_user->getDeclarant()->getIdentifiant())) ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
             <?php if (TiersSecurity::getInstance($sf_user)->isAuthorized(TiersSecurity::DR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
