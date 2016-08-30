@@ -64,13 +64,20 @@ EOF;
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]["00000".$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
+                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
 
                 continue;
             }
 
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->get(Db2Tiers::COL_NO_STOCK).$db2Tiers->getFamille()][] = $db2Tiers;
+            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes) && !array_key_exists($db2Tiers->getFamille(), $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)])) {
+                $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->getFamille()][] = $db2Tiers;
+
+                continue;
+            }
+
+            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
+                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
+
                 continue;
             }
         }
@@ -98,7 +105,7 @@ EOF;
 
             $num = 1;
 
-            foreach($etablissements as $numEt => $tiers) {
+            foreach($etablissements as $tiers) {
                 try {
                     $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
                 } catch (Exception $e) {
@@ -155,7 +162,7 @@ EOF;
             $societe->save();
         } catch (Exception $e) {
             echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
-            continue;
+            return;
         }
 
         echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()."\n";
