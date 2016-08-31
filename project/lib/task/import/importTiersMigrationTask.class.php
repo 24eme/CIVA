@@ -30,7 +30,6 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-        // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
@@ -42,8 +41,6 @@ EOF;
 
         foreach ($lines as $a) {
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
-
-            // echo ($db2Tiers->get(Db2Tiers::COL_CVI)?$db2Tiers->get(Db2Tiers::COL_CVI):$db2Tiers->get(Db2Tiers::COL_CIVABA)).";".$db2Tiers->getFamille().";".$db2Tiers->get(Db2Tiers::COL_TYPE_TIERS)."\n";
 
             if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) == $db2Tiers->get(Db2Tiers::COL_MAISON_MERE)) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
@@ -64,28 +61,23 @@ EOF;
             $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
+                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]["00000".$db2Tiers->getFamille()][] = $db2Tiers;
 
                 continue;
             }
 
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes) && !array_key_exists($db2Tiers->getFamille(), $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)])) {
+            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes) && !array_key_exists("00000".$db2Tiers->getFamille(), $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)])) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->getFamille()][] = $db2Tiers;
 
                 continue;
             }
 
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
-
-                continue;
-            }
+            $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
         }
 
         ksort($societes, SORT_NUMERIC);
 
         foreach($societes as $numSoc => $etablissements) {
-            ksort($societes, SORT_NUMERIC);
             if(count($etablissements) == 1) {
                 //continue;
             }
@@ -97,7 +89,7 @@ EOF;
                 //continue;
             }
 
-            $societe = $this->importSociete($tiers);
+            $societe = $this->importSociete($tiers, $etablissements);
 
             if(!$societe) {
                 continue;
@@ -109,6 +101,7 @@ EOF;
                 try {
                     $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
                 } catch (Exception $e) {
+                    echo "ERROR;".$societe->_id.";".$e->getMessage()."\n";
                     continue;
                 }
                 $num++;
@@ -118,7 +111,7 @@ EOF;
         }
     }
 
-    protected function importSociete($tiers) {
+    protected function importSociete($tiers, $etablissements) {
         $identifiantSociete = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
 
         if(!str_replace("C", "", $identifiantSociete)) {
@@ -129,9 +122,9 @@ EOF;
 
         if($this->isCloture($tiers)) {
             $statut = SocieteClient::STATUT_SUSPENDU;
-            if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantSociete, acCouchdbClient::HYDRATE_JSON)) {
-                return;
-            }
+            /*if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantSociete, acCouchdbClient::HYDRATE_JSON)) {
+                 return;
+            }*/
         }
 
         $societe = SocieteClient::getInstance()->find("SOCIETE-".$identifiantSociete);
@@ -141,7 +134,7 @@ EOF;
             $societe->setIdentifiant($identifiantSociete);
             $societe->setTypeSociete(SocieteClient::TYPE_OPERATEUR);
             $societe->constructId();
-            $compte = $societe->createCompteSociete($societe->getIdentifiant()."9");
+            $compte = $societe->createCompteSociete($societe->getIdentifiant());
             $compte->constructId();
             $societe->setCompteSocieteObject($compte);
         }
@@ -158,14 +151,15 @@ EOF;
         $societe->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
         $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $societe->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
+
         try {
             $societe->save();
         } catch (Exception $e) {
-            echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)."\n";
+            echo "ERROR;".$e->getMessage().";".$this->getInfos($tiers, Db2Tiers::COL_NUM)."\n";
             return;
         }
 
-        echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()."\n";
+        echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()." ".count($etablissements)." etablissements "."\n";
 
         return $societe;
     }
@@ -174,9 +168,6 @@ EOF;
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = (in_array($famille, array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && $this->getInfos($tiers, Db2Tiers::COL_CVI)) ? $this->getInfos($tiers, Db2Tiers::COL_CVI) : "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
-
-        //echo $identifiantEtablissement;
-        //if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement, acCouchdbClient::HYDRATE_JSON)) { return $etablissement; }
 
         if(!str_replace("C", "", $identifiantEtablissement)) {
             continue;
@@ -188,9 +179,9 @@ EOF;
 
         if($this->isCloture($tiers)) {
             $statut = EtablissementClient::STATUT_SUSPENDU;
-            if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantEtablissement)) {
-                return;
-            }
+            // if(!_CompteClient::getInstance()->find("COMPTE-".$identifiantEtablissement)) {
+            //     return;
+            // }
         }
 
         if(!$etablissement) {
@@ -201,12 +192,10 @@ EOF;
             $etablissement->constructId();
         }
 
-        //$societe->pushContactAndAdresseTo($etablissement);
-
-        if(!$etablissement->getCompte() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getIdentifiant()."9")) {
+        if(!$etablissement->getCompte() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getIdentifiant())) {
             $compte = CompteClient::getInstance()->createCompteFromEtablissement($etablissement);
             $compte->addOrigine($etablissement->_id);
-            $compte->setIdentifiant($etablissement->getIdentifiant()."9");
+            $compte->setIdentifiant($etablissement->getIdentifiant());
             $compte->constructId();
             $etablissement->setCompte($compte->_id);
             try {
@@ -216,7 +205,7 @@ EOF;
                 return;
             }
         } else {
-            $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant()."9");
+            $etablissement->setCompte("COMPTE-".$etablissement->getIdentifiant());
         }
 
         $etablissement->setIntitule($this->getInfos($tiers, Db2Tiers::COL_INTITULE));
@@ -246,7 +235,7 @@ EOF;
         $compteExploitant = $etablissement->getCompteExploitantObject();
         if(!$compteExploitant) {
             $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($societe);
-            $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."01"."9");
+            $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."01");
             $compteExploitant->constructId();
 
             $etablissement->setCompteExploitant($compteExploitant->_id);
@@ -274,7 +263,7 @@ EOF;
             return;
         }
 
-        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET)." ".$etablissement->getStatut().") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
+        echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET)." ".$etablissement->getStatut().") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." Num maison mère : ".$this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
 
         return $etablissement;
     }
@@ -319,7 +308,7 @@ EOF;
                 echo "-------diff:".$key.":(".$num.")".$val."/(".$t->get(Db2Tiers::COL_NUM).")".$t->get($key)."\n";
             }
 
-            if($t->get($key) && $t->isMetteurEnMarche()) {
+            if($t->get($key) && $t->isRecoltant()) {
 
                 return $t->get($key);
             }
@@ -332,18 +321,6 @@ EOF;
         }
 
         return $val;
-    }
-
-    protected function resolveIdentifiantSociete($etablissements) {
-        $printed = false;
-        foreach($etablissements as $tiers) {
-            foreach($tiers as $t) {
-                if($t->get(Db2Tiers::COL_CVI)) {
-                    //echo (($printed) ? "PLUSIEURS" : "").$t->get(Db2Tiers::COL_CVI)."\n";
-                    $printed = true;
-                }
-            }
-        }
     }
 
 }
