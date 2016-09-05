@@ -3,7 +3,3 @@
 
 default:
   layout:         layoutAncien
-
-exploitationAdministratifSuccess:
-  metas:
-    title:        Administratif - Déclaration de récolte de %d

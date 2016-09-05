@@ -8,7 +8,7 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class tiersActions extends EtapesActions {
+class tiersActions extends sfActions {
 
     /**
      * Executes index action
@@ -59,7 +59,7 @@ class tiersActions extends EtapesActions {
 
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
+        //$this->setCurrentEtape('mon_espace_civa');
 
         if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->getUser())->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
 
@@ -119,14 +119,12 @@ class tiersActions extends EtapesActions {
         $this->secureTiers(TiersSecurity::DR);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceDRAcheteur(sfWebRequest $request) {
         $this->secureTiers(TiersSecurity::DR_ACHETEUR);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
         $this->formUploadCsv = new UploadCSVForm();
     }
 
@@ -145,7 +143,6 @@ class tiersActions extends EtapesActions {
         $this->secureTiers($droits);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
@@ -160,47 +157,6 @@ class tiersActions extends EtapesActions {
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-    }
-
-    /**
-     *s
-     * @param sfWebRequest $request
-     */
-    public function executeExploitationAdministratif(sfWebRequest $request) {
-        $this->setCurrentEtape('exploitation');
-        $this->help_popup_action = "help_popup_exploitation_administratif";
-
-        $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
-
-        $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
-        $this->form_gest_err = 0;
-        $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
-        $this->form_expl_err = 0;
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            if ($request->getParameter('gestionnaire')) {
-                $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
-                if ($this->form_gest->isValid()) {
-                    $this->form_gest->save();
-                } else {
-                    $this->form_gest_err = 1;
-                }
-            }
-            if ($request->getParameter('exploitation')) {
-                $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
-                if ($this->form_expl->isValid()) {
-                    $tiers = $this->form_expl->save();
-                } else {
-                    $this->form_expl_err = 1;
-                }
-            }
-            if (!$this->form_gest_err && !$this->form_expl_err) {
-                $dr = $this->getUser()->getDeclaration();
-                $dr->storeDeclarant();
-                $dr->save();
-                $this->redirectByBoutonsEtapes();
-            }
-        }
     }
 
     /**

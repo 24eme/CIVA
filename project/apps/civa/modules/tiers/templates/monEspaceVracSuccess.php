@@ -1,5 +1,3 @@
-<?php include_partial('global/actions', array('etape' => 0, 'help_popup_action' => $help_popup_action)) ?>
-
 <?php include_partial('tiers/title') ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
