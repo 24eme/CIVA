@@ -184,12 +184,12 @@ class ExportDRPdf extends ExportDocument {
     				$has_total = true;
     			else
     				$has_total = false;
-    			$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+    			$this->document->addPage($this->getPartial('dr_export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infosPage[$key], 'has_total' => $has_total, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
     			$currentPage++;
     		}
 
           } else {
-          	$this->document->addPage($this->getPartial('export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+          	$this->document->addPage($this->getPartial('dr_export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
           if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()) {
             $this->createRecap($dr);
@@ -205,7 +205,7 @@ class ExportDRPdf extends ExportDocument {
           $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
         }
         if($dr->hasVolumeSurPlace() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()){
-          $this->document->addPage($this->getPartial('export/recapitulatifDRM', array('dr' => $dr,
+          $this->document->addPage($this->getPartial('dr_export/recapitulatifDRM', array('dr' => $dr,
                                                                                       'recap_total' => $recap,
                                                                                       'total' => $total)));
         }
@@ -483,7 +483,7 @@ class ExportDRPdf extends ExportDocument {
     	$identification_enabled = 1;
 	    foreach($pages as $p) {
 	      $this->nb_pages++;
-	      $this->document->addPage($this->getPartial('export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
+	      $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $lieu->getLibelleWithAppellation(), 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLieuEditable' => $hasLieuEditable, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
 	      $identification_enabled = 0;
 	    }
   	}

@@ -9,7 +9,7 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
-class drExportActions extends sfActions {
+class dr_exportActions extends sfActions {
 
     public function executeXml(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers();
@@ -32,7 +32,8 @@ class drExportActions extends sfActions {
 
     private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
-        return $this->renderText($this->generateUrl('print', array('annee'=>$this->annee, 'from_csv' => $from_csv)));
+
+        return $this->renderText($this->generateUrl('dr_pdf', array('id' => $this->dr->_id, 'annee'=>$this->annee, 'from_csv' => $from_csv)));
     }
     /**
      * Executes index action
@@ -47,30 +48,30 @@ class drExportActions extends sfActions {
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
+            $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
         } else {
-            $dr = acCouchdbManager::getClient()->find($key);
+            $this->dr = acCouchdbManager::getClient()->find($key);
         }
 
         $this->setLayout(false);
 
         try {
-            if (!$dr->updated)
+            if (!$this->dr->updated)
                 throw new Exception();
         }catch(Exception $e) {
-            $dr->update();
-            $dr->cleanNoeuds();
-            $dr->save();
+            $this->dr->update();
+            $this->dr->cleanNoeuds();
+            $this->dr->save();
         }
 
-        if(!$dr->isValideeCiva()) {
-            $dr->cleanNoeuds();
-            $dr->storeDeclarant();
+        if(!$this->dr->isValideeCiva()) {
+            $this->dr->cleanNoeuds();
+            $this->dr->storeDeclarant();
         }
 
-        $this->forward404Unless($dr);
+        $this->forward404Unless($this->dr);
 
-        $this->document = new ExportDRPdf($dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = new ExportDRPdf($this->dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
         if($request->getParameter('force') || $request->getParameter("from_csv")) {
             $this->document->removeCache();

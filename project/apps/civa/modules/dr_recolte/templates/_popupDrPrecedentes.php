@@ -6,11 +6,11 @@
         <!--<li>
             <a href="#"><?php echo $campagne ?></a>
             <ul>-->
-        <li><?php echo link_to($campagne, '@visualisation?annee='.$campagne, array('target'=>'blank')); ?></li>
+        <li><?php echo link_to($campagne, 'dr_visualisation', array('annee' => $campagne, 'id' => $id), array('target'=>'blank')); ?></li>
         <!-- </ul>
      </li>-->
             <?php endforeach; ?>
     </ul>
     <?php endif; ?>
-    
+
 </div>

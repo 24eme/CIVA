@@ -59,7 +59,6 @@ class tiersActions extends sfActions {
 
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        //$this->setCurrentEtape('mon_espace_civa');
 
         if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->getUser())->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
 
@@ -149,14 +148,12 @@ class tiersActions extends sfActions {
         $this->secureTiers(TiersSecurity::VRAC);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
     }
 
     public function executeMonEspaceGamma(sfWebRequest $request) {
         $this->secureTiers(TiersSecurity::GAMMA);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
     }
 
     /**

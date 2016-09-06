@@ -1,4 +1,4 @@
-<?php 
+<?php
 	use_helper('Float');
 	use_helper('drExport');
 	$appellations = $infos['appellations'];
@@ -23,7 +23,7 @@ table {
 }
 </style>
 
-<?php include_partial('export/exploitation', array('dr' => $dr)); ?>
+<?php include_partial('dr_export/exploitation', array('dr' => $dr)); ?>
 <br /><br />
 <span style="background-color: black; color: white; font-weight: bold;">Récapitulatif</span><br/>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">

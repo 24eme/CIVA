@@ -1,6 +1,6 @@
 <?php use_helper('Float') ?>
-<?php include_partial('global/etapes', array('etape' => 3)) ?>
-<?php include_partial('global/actions', array('etape' => 3, 'help_popup_action'=>$help_popup_action)) ?>
+<?php include_partial('dr/etapes', array('etape' => 3, 'dr' => $declaration)) ?>
+<?php include_partial('dr/actions', array('etape' => 3, 'help_popup_action' => $help_popup_action)) ?>
 
 <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
@@ -214,9 +214,9 @@
 			    </div>
 				<!-- fin #application_dr -->
 
-				<?php include_partial('boutons') ?>
+				<?php include_partial('boutons', array('dr' => $declaration)) ?>
 
-                <?php include_partial('initRendementsMax') ?>
+                <?php include_partial('initRendementsMax', array('dr' => $declaration)) ?>
 
                 <?php include_partial('popupDrPrecedentes' , array('campagnes'=>$campagnes)) ?>
 

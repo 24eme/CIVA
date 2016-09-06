@@ -1,5 +1,5 @@
-<?php include_partial('global/etapes', array('etape' => 5)) ?>
-<?php include_partial('global/actions', array('etape' => 0)) ?>
+<?php include_partial('dr/etapes', array('etape' => 5, 'dr' => $dr)) ?>
+<?php include_partial('dr/actions', array('etape' => 0)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post">
@@ -35,7 +35,7 @@
                     <p>
                         Vous pourrez directement exploiter les données de votre Déclaration de Récolte en télédéclarant votre Déclaration de Revendication sur le <a style="text-decoration: underline;" target="_blank" href="<?php echo sfConfig::get('app_ava_url') ?>">portail de télédéclaration de l'Association des Viticulteurs d'Alsace</a>.
                     </p>
-                </div>    
+                </div>
                 <?php endif; ?>
                 <?php if($has_import && !$dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)): ?>
                 <div id="div-btn-email">
@@ -52,7 +52,7 @@
                 <p>Laissez nous vos commentaires à propos de la saisie de la déclaration de Récolte</p>
             </div>
             <div class="ligne_form ligne_btn">
-                <a href="<?php echo url_for('recolte_feed_back'); ?>">
+                <a href="<?php echo url_for('dr_feed_back', $dr); ?>">
                     <img src="/images/boutons/btn_donnez_votre_avis.png" alt="Donnez votre avis" />
                 </a>
             </div>
@@ -61,11 +61,11 @@
     </div>
     <!-- fin #application_dr -->
 
-    <?php include_partial('global/boutons', array('display' => array('retour','previsualiser'))) ?>
+    <?php include_partial('dr/boutons', array('display' => array('retour','previsualiser'), 'dr' => $dr)) ?>
 
 </form>
 <!-- fin #principal -->
 
-<?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
-<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee)) ?>
+<?php include_partial('generationDuPdf', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee, 'dr' => $dr)) ?>
 <?php //include_partial('envoiMailDR', array('annee' => $annee)) ?>

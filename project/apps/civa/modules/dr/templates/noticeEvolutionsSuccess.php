@@ -4,5 +4,5 @@
 	<?php echo acCouchdbManager::getClient('Messages')->getMessage('dr_notice_evolutions'); ?>
 </div>
 
-<?php include_partial('global/boutons', array('display' => array('precedent','suivant'))) ?>
+<?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
 </form>

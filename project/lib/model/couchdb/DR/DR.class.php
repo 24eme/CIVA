@@ -385,6 +385,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function check() {
+        return array("erreur" => array(), "vigilance" => array());
         $onglet = new RecolteOnglets($this);
         $validLogVigilance = array();
         $validLogErreur = array();

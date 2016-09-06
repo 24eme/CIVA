@@ -27,7 +27,7 @@ class dr_recolteActions extends _DRActions {
     public function executeRecolte(sfWebRequest $request) {
         $produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_CH");
 
-        return $this->redirect('dr_recolte_produit', $produit);
+        return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $produit->getHash()));
     }
 
 
@@ -311,7 +311,7 @@ class dr_recolteActions extends _DRActions {
                 }
     		}
     	}
-    	return $this->renderPartial('recolte/popupRendementsMax', array('rendement'=> $this->rendement,
+    	return $this->renderPartial('dr_recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite,
                                                                         'max_quantite'=> $this->max_quantite));
     }

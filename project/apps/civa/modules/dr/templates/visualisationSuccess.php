@@ -9,7 +9,7 @@
         <div id="validation_dr">
             <p class="intro_declaration"></p>
             <!-- #acheteurs_caves -->
-            <?php include_component('declaration', 'recapDeclaration', array('dr' => $dr)) ?>
+            <?php include_component('dr', 'recapDeclaration', array('dr' => $dr)) ?>
             <!-- fin #acheteurs_caves -->
         </div>
     </div>
@@ -23,10 +23,10 @@
         <?php array_push($boutons, 'email_acheteurs') ?>
     <?php endif; ?>
 
-    <?php include_partial('global/boutons', array('display' => $boutons)) ?>
+    <?php include_partial('dr/boutons', array('display' => $boutons, array('dr' => $dr))) ?>
 
 </form>
 <!-- fin #principal -->
-<?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
-<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee)) ?>
-<?php include_partial('envoiMailDR', array('annee' => $annee)) ?>
+<?php include_partial('generationDuPdf', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('envoiMailDR', array('annee' => $annee, 'dr' => $dr)) ?>

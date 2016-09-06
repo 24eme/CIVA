@@ -1,5 +1,5 @@
-<?php include_partial('global/etapes', array('etape' => 3)) ?>
-<?php include_partial('global/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
+<?php include_partial('dr/etapes', array('etape' => 3, 'dr' => $dr)) ?>
+<?php include_partial('dr/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post">
@@ -33,7 +33,7 @@
         </div>
         <!-- fin #application_dr -->
 
-        <?php include_partial('global/boutons', array('display' => array('precedent','suivant'))) ?>
+        <?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
 
 </form>
 <!-- fin #principal -->

@@ -20,7 +20,7 @@
         <?php endif; ?>
 <?php endforeach; ?>
 <?php if (!$produit->getConfig()->hasOnlyOneDetail() || !count($produit->detail) ) :?>
-        <a href="<?php echo url_for('dr_recolte_produit_ajout', array('hash' => $produit->getHash())) ?>" id="ajout_col" class=""><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
+        <a href="<?php echo url_for('dr_recolte_produit_ajout', array('sf_subject' => $produit, 'hash' => $produit->getHash())) ?>" id="ajout_col" class=""><img src="/images/boutons/btn_ajouter_colonne.png" alt="Ajouter une colonne" /></a>
 <?php endif; ?>
     </div>
 </div>

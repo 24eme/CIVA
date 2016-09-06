@@ -75,11 +75,11 @@ class drActions extends _DRActions {
     public function executeNoticeEvolutions(sfWebRequest $request) {
         $this->setCurrentEtape('notice_evolutions');
 
-        $dr = $this->getRoute()->getDR();
+        $this->dr = $this->getRoute()->getDR();
 
         if($this->getUser()->isSimpleOperateur()) {
 
-            return $this->redirectToNextEtapes($dr);
+            return $this->redirectToNextEtapes($this->dr);
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -89,7 +89,7 @@ class drActions extends _DRActions {
                 return $this->redirect('mon_espace_civa_dr');
             }
 
-            return $this->redirectByBoutonsEtapes(null, $dr);
+            return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
     }
 
@@ -278,21 +278,24 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('exploitation_autres');
         $this->help_popup_action = "help_popup_autres";
 
-        $this->form = new ExploitationAutresForm($this->getUser()->getDeclaration());
+        $this->dr = $this->getRoute()->getDR();
+
+        $this->form = new ExploitationAutresForm($this->dr);
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
-                $this->redirectByBoutonsEtapes();
+                $this->redirectByBoutonsEtapes(null, $this->dr);
             }
         }
     }
 
     public function executeValidation(sfWebRequest $request) {
-
         $this->help_popup_action = "help_popup_validation";
         $this->setCurrentEtape('validation');
+
+        $this->dr = $this->getRoute()->getDR();
 
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
@@ -370,7 +373,7 @@ class drActions extends _DRActions {
             $this->dr->save();
             $this->getUser()->initCredentialsDeclaration();
 
-            return $this->redirectByBoutonsEtapes();
+            return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
 
     }
@@ -436,7 +439,7 @@ class drActions extends _DRActions {
 
             return $this->redirect('mon_espace_civa_dr');
         }
-        $this->dr = $this->getUser()->getDeclaration();
+        $this->dr = $this->getRoute()->getObject();
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -469,7 +472,7 @@ class drActions extends _DRActions {
 
     public function executeInvaliderCiva(sfWebRequest $request) {
         $this->setCurrentEtape('mon_espace_civa');
-        $dr = $this->getUser()->getDeclaration();
+        $dr = $this->getRoute()->getDR();
         if ($dr) {
             $dr->remove('modifiee');
             $dr->add('etape');
@@ -477,11 +480,11 @@ class drActions extends _DRActions {
             $dr->save();
         }
         $this->getUser()->initCredentialsDeclaration();
-        $this->redirectToNextEtapes();
+        $this->redirectToNextEtapes($dr);
     }
 
     public function executeInvaliderRecoltant(sfWebRequest $request) {
-        $dr = $this->getUser()->getDeclaration();
+        $dr = $this->getRoute()->getDR();
         if ($dr) {
             $dr->remove('modifiee');
             $dr->remove('validee');
@@ -494,7 +497,7 @@ class drActions extends _DRActions {
         }
 
         $this->getUser()->initCredentialsDeclaration();
-        $this->redirect('@mon_espace_civa_dr');
+        $this->redirect('mon_espace_civa_dr');
     }
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {

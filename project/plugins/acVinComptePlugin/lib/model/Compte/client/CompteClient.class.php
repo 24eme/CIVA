@@ -142,7 +142,7 @@ class CompteClient extends acCouchdbClient {
 
     public function findByLogin($login, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
 
-        $compte = CompteClient::getInstance()->find("COMPTE-".$login."9");
+        $compte = CompteClient::getInstance()->find("COMPTE-".$login);
 
         if($compte) {
 

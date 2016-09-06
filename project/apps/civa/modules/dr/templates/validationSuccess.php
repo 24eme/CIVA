@@ -1,5 +1,5 @@
-<?php include_partial('global/etapes', array('etape' => 4)) ?>
-<?php include_partial('global/actions', array('etape' => 4, 'help_popup_action'=> $help_popup_action)) ?>
+<?php include_partial('dr/etapes', array('etape' => 4, 'dr' => $dr)) ?>
+<?php include_partial('dr/actions', array('etape' => 4, 'help_popup_action'=> $help_popup_action)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post" class="ui-tabs">
@@ -42,16 +42,16 @@
         <?php } ?>
 
         <!-- #acheteurs_caves -->
-        <?php include_component('declaration', 'recapDeclaration', array('dr' => $dr)) ?>
+        <?php include_component('dr', 'recapDeclaration', array('dr' => $dr)) ?>
         <!-- fin #acheteurs_caves -->
         </div>
     </div>
     <!-- fin #application_dr -->
 	  <?php if ($annee == $sf_user->getCampagne()) : ?>
 	    <?php if($error){ ?>
-            <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser'))) ?>
+            <?php include_partial('dr/boutons', array('display' => array('precedent','previsualiser'), 'dr' => $dr)) ?>
         <?php }else{?>
-            <?php include_partial('global/boutons', array('display' => array('precedent','previsualiser','valider'))) ?>
+            <?php include_partial('dr/boutons', array('display' => array('precedent','previsualiser','valider'), 'dr' => $dr)) ?>
         <?php } ?>
     <?php endif; ?>
 </form>
@@ -59,4 +59,4 @@
 
 <?php include_partial('generationDuPdf', array('annee' => $annee)) ?>
 
-<?php include_partial('declaration/popupConfirmeValidation', array('dr' => $dr, 'formDatesModification' => isset($formDatesModification) ? $formDatesModification : null, 'validation_compte_id' => $validation_compte_id)) ?>
+<?php include_partial('dr/popupConfirmeValidation', array('dr' => $dr, 'formDatesModification' => isset($formDatesModification) ? $formDatesModification : null, 'validation_compte_id' => $validation_compte_id)) ?>

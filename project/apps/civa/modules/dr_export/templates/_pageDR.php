@@ -9,11 +9,11 @@ table {
 pre {display: inline;}
 </style>
 
-<?php include_partial('export/exploitation', array('dr' => $dr)); ?>
+<?php include_partial('dr_export/exploitation', array('dr' => $dr)); ?>
 <br />
 <div><span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle_appellation; ?></span></div>
 <table border="1" cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
-<?php 
+<?php
 
 if (!function_exists('printColonne')) {
   function printColonne($libelle, $colonnes, $key, $unite = '', $display_zero = true) {
@@ -56,7 +56,7 @@ if (!function_exists('printColonne')) {
           echo $v;
 
           if (($c['type'] == 'total'))    echo '</b>';
-          
+
 	        if ($unite) {
 	         echo "&nbsp;<small>$unite</small>";
            if($unite == 'hl') {
@@ -87,7 +87,7 @@ echo printColonne('Cépage', $colonnes_cepage, 'cepage');
 if ($hasLieuEditable) {
   echo printColonne('Lieu', $colonnes_cepage, 'lieu');
 }
-echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');	
+echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');
 if ($hasVTSGN) {
   echo printColonne('VT/SGN', $colonnes_cepage, 'vtsgn');
 }
@@ -146,5 +146,3 @@ if($has_no_usages_industriels) {
 </td>
 </tr>
 </table>
-
-

@@ -16,6 +16,7 @@ class drComponents extends sfComponents {
      */
     public function executeMonEspace(sfWebRequest $request) {
       $this->dr_editable = $this->getUser()->isDrEditable();
+      $this->dr = $this->getUser()->getDeclaration();
     }
 
     /**

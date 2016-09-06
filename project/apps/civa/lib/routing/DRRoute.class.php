@@ -17,7 +17,7 @@ class DRRoute extends sfObjectRoute implements InterfaceTiersRoute {
     }
 
     protected function doConvertObjectToArray($object) {
-        $parameters = array("id" => $object->_id);
+        $parameters = array("id" => $object->getDocument()->_id);
 
         return $parameters;
     }

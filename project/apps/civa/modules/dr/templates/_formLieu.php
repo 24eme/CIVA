@@ -7,7 +7,7 @@
         <?php if (count($form->getOption('lieux', array()))) : ?>
             <ul id="liste_grands_crus">
                 <?php foreach ($form->getOption('lieux', array()) as $k => $l) : ?>
-                    <li><?php echo $l; ?> <a class="supprimer" href="<?php echo url_for('@exploitation_lieu_delete?appellation='.$appellation->getConfig()->getKey().'&lieu=' . $k); ?>"><img alt="Supprimer" src="/images/pictos/pi_supprimer.png"></a></li>
+                    <li><?php echo $l; ?> <a class="supprimer" href="<?php echo url_for('dr_repartition_lieu_delete', array('appellation' => $appellation->getConfig()->getKey(), 'lieu' => $k, 'id' => $dr->_id)); ?>"><img alt="Supprimer" src="/images/pictos/pi_supprimer.png"></a></li>
                 <?php endforeach; ?>
             </ul>
         <?php else : ?>

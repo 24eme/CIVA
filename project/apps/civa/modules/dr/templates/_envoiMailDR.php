@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    ajax_url_to_process = "<?php echo url_for('@send_email_pdf?annee='.$annee.'&message=custom'); ?>;"
+    ajax_url_to_process = "<?php echo url_for('dr_send_email_pdf', array('id' => $dr->_id, 'annee' => $annee, 'message' => 'custom')); ?>;"
 
     var sendMail = function(){
             openPopup($('#popup_loader_send'));
