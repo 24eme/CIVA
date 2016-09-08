@@ -9,16 +9,15 @@ class TiersSecurity implements SecurityInterface {
     const GAMMA = 'GAMMA';
     const VRAC = 'VRAC';
 
-    protected $myUser;
+    protected $compte;
 
-    public static function getInstance($myUser) {
+    public static function getInstance($compte) {
 
-        return new TiersSecurity($myUser);
+        return new TiersSecurity($compte);
     }
 
-    public function __construct($myUser) {
-        $this->myUser = $myUser;
-        $this->tiers = $this->myUser->getDeclarant();
+    public function __construct($compte) {
+        $this->compte = $compte;
     }
 
     public function isAuthorized($droits) {
@@ -28,8 +27,10 @@ class TiersSecurity implements SecurityInterface {
 
         if(in_array(self::DR, $droits)) {
 
-            return DRSecurity::getInstance($this->myUser)->isAuthorized(DRSecurity::DECLARANT);
+            return DRSecurity::getInstance($this->compte)->isAuthorized(DRSecurity::DECLARANT);
         }
+
+        return;
 
         if(in_array(self::DR_ACHETEUR, $droits)) {
 

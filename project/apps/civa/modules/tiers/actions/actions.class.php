@@ -60,9 +60,15 @@ class tiersActions extends sfActions {
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
 
-        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->getUser())->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
+        $this->compte = CompteClient::getInstance()->findByLogin($request->getParameter('identifiant'));
 
-            return $this->redirect('mon_espace_civa_dr');
+        TiersSecurity::getInstance($this->compte);
+        TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR);
+
+
+        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
+
+            //return $this->redirect('mon_espace_civa_dr');
         }
 
         $this->vracs = array(
@@ -73,7 +79,6 @@ class tiersActions extends sfActions {
         );
         $tiers = $this->getUser()->getDeclarantsVrac();
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
-
         foreach($vracs as $vrac) {
             $item = $vrac->value;
             if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
@@ -100,16 +105,16 @@ class tiersActions extends sfActions {
             }
         }
 
-        $blocs = TiersSecurity::getInstance($this->getUser())->getBlocs();
+        $blocs = TiersSecurity::getInstance($this->compte)->getBlocs();
 
         $this->nb_blocs = count($blocs);
 
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
                 if(is_array($url)) {
-                    $this->redirect($url[0], $url[1]);
+                    //return $this->redirect($url[0], $url[1]);
                 }
-                return $this->redirect($url);
+                //return $this->redirect($url);
             }
         }
     }
@@ -212,7 +217,7 @@ class tiersActions extends sfActions {
     }
 
     protected function secureTiers($droits) {
-        if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
+        if(!TiersSecurity::getInstance($this->compte)->isAuthorized($droits)) {
 
             return $this->forwardSecure();
         }

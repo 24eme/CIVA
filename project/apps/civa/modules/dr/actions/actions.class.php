@@ -11,7 +11,7 @@ class drActions extends _DRActions {
 
         if ($dr_data) {
             if ($dr_data['type_declaration'] == 'brouillon') {
-                $dr = $this->getUser()->getDeclaration();
+                $dr = DRClient::getInstance()->find("DR-".$etablissement->getIdentifiant()."-".$campagne);
 
                 try {
                     if($dr->etape) {
@@ -453,7 +453,7 @@ class drActions extends _DRActions {
 
     public function executeSendPdfAcheteurs(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $dr = $this->getUser()->getDeclaration();
+        $dr = $this->getRoute()->getDR();
 
         $annee = $this->getRequestParameter('annee', null);
 
@@ -466,7 +466,7 @@ class drActions extends _DRActions {
 
     public function executeSendPdf(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $dr = $this->getUser()->getDeclaration();
+        $dr = $this->getRoute()->getDR();
         $annee = $this->getRequestParameter('annee', null);
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
@@ -540,7 +540,7 @@ Cordialement,
 
 Le CIVA';*/
 
-        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getUser()->getDeclarant()->cvi;
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getRoute()->getDR()->cvi;
 
         $to = sfConfig::get('app_email_feed_back');
         $this->emailSend = true;
