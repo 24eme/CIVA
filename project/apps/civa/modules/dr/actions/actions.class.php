@@ -250,19 +250,23 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {
-        $declaration = $this->getUser()->getDeclaration();
-        $appellation_key = $request->getParameter('appellation');
-        $this->forward404Unless($declaration->recolte->getNoeudAppellations()->exist('appellation_'.$appellation_key));
-        $appellation = $declaration->recolte->getNoeudAppellations()->get('appellation_'.$appellation_key);
-        $this->forward404Unless($appellation->getConfig()->hasManyLieu());
+        $declaration = $this->getRoute()->getDR();
+        $hash = $request->getParameter('hash');
 
-        foreach($appellation->getMentions() as $mention){
-            if($mention->exist($request->getParameter('lieu'))){
-                $mention->remove($request->getParameter('lieu'));
-            }
+        if(!$declaration->exist($hash)) {
+
+            return $this->redirect('dr_repartition_lieu', $declaration);
         }
+
+        if(!$declaration->get($hash) instanceof DRRecolteLieu) {
+
+            return $this->redirect('dr_repartition_lieu', $declaration);
+        }
+
+        $declaration->remove($hash);
         $declaration->save();
-        return $this->redirect('@exploitation_lieu');
+
+        return $this->redirect('dr_repartition_lieu', $declaration);
     }
 
     public function executeNoRecolte(sfWebRequest $request) {
