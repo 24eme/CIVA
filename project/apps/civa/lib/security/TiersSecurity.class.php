@@ -18,6 +18,10 @@ class TiersSecurity implements SecurityInterface {
 
     public function __construct($compte) {
         $this->compte = $compte;
+        if(!$this->compte) {
+
+            throw new sfException("Le compte est nul");
+        }
     }
 
     public function isAuthorized($droits) {
@@ -27,25 +31,25 @@ class TiersSecurity implements SecurityInterface {
 
         if(in_array(self::DR, $droits)) {
 
-            return DRSecurity::getInstance($this->compte)->isAuthorized(DRSecurity::DECLARANT);
+            return DRSecurity::getInstance(DRClient::getInstance()->getEtablissement($this->compte->getSociete()))->isAuthorized(DRSecurity::DECLARANT);
         }
-
-        return;
 
         if(in_array(self::DR_ACHETEUR, $droits)) {
 
-            return DRAcheteurSecurity::getInstance($this->myUser)->isAuthorized(DRAcheteurSecurity::DECLARANT);
+            return DRAcheteurSecurity::getInstance($this->compte)->isAuthorized(DRAcheteurSecurity::DECLARANT);
         }
 
         if(in_array(self::DS_PROPRIETE, $droits)) {
 
-            return DSSecurity::getInstance($this->myUser, null, DSCivaClient::TYPE_DS_PROPRIETE)->isAuthorized(DSSecurity::DECLARANT);
+            return DSSecurity::getInstance(DSCivaClient::getInstance()->getEtablissement($this->compte->getSociete(), DSCivaClient::TYPE_DS_PROPRIETE), null, DSCivaClient::TYPE_DS_PROPRIETE)->isAuthorized(DSSecurity::DECLARANT);
         }
 
         if(in_array(self::DS_NEGOCE, $droits)) {
 
-            return DSSecurity::getInstance($this->myUser, null, DSCivaClient::TYPE_DS_NEGOCE)->isAuthorized(DSSecurity::DECLARANT);
+            return DSSecurity::getInstance(DSCivaClient::getInstance()->getEtablissement($this->compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), null, DSCivaClient::TYPE_DS_NEGOCE)->isAuthorized(DSSecurity::DECLARANT);
         }
+
+        return;
 
         if(in_array(self::VRAC, $droits)) {
 

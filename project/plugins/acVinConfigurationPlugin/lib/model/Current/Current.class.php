@@ -68,14 +68,41 @@ class Current extends BaseCurrent {
         return 0;
     }
 
+    public function hasCurrentFromTheFuture() {
+
+        return false;
+    }
+
     public function getPeriodeDS() {
 
         return "201607";
     }
 
-    public function hasCurrentFromTheFuture() {
+    public function getAnneeDS($type_ds = null)
+    {
+        return substr($this->getPeriodeDSByType($type_ds), 0, 4);
+    }
 
-        return false;
+    public function getMonthDS($type_ds = null)
+    {
+        return substr($this->getPeriodeDSByType($type_ds), 4, 2);
+    }
+
+    public function getPeriodeDSByType($type_ds = null){
+
+        return $this->getPeriodeDS();
+        $declarant = $this->getDeclarantDS($type_ds);
+        if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
+
+            return CurrentClient::getCurrent()->getPeriodeDS();
+        }
+
+        if(CurrentClient::getCurrent()->isDSDecembre()) {
+
+            return CurrentClient::getCurrent()->getAnneeDS()."07";
+        }
+
+        return CurrentClient::getCurrent()->getPeriodeDS();
     }
 
     /* Fin */

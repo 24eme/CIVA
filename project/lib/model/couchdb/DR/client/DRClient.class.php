@@ -24,6 +24,7 @@ class DRClient extends acCouchdbClient {
 
   public function createDeclarationClone($dr, $tiers, $campagne, $depot_mairie) {
     $doc = clone $dr;
+    exit;
     $doc->campagne = $campagne;
     $doc->cvi = $tiers->cvi;
     $this->initDeclaration($doc, $depot_mairie);

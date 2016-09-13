@@ -2,8 +2,7 @@
     <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
     <div class="contenu_section">
         <p class="intro">Vous souhaitez :</p>
-        <?php if (!$declaration->isNew()): ?>
-
+        <?php if ($dr): ?>
             <div class="ligne_form">
                 <input type="radio" id="type_declaration_visualisation" name="dr[type_declaration]" value="visualisation"  />
                 <label for="type_declaration_visualisation">Visualiser ma déclaration en cours</label>

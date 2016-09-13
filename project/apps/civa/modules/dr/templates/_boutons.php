@@ -6,7 +6,7 @@
     <li class="prec"><input type="image" src="/images/boutons/btn_retourner_etape_prec.png" alt="Retourner à l'étape précédente" name="boutons[previous]" /></li>
     <?php endif; ?>
     <?php if(in_array('retour', $display->getRawValue())): ?>
-    <li class="prec"><a href="<?php echo url_for('@mon_espace_civa_dr') ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" name="boutons[previous]" /></a></li>
+    <li class="prec"><a href="<?php echo url_for('mon_espace_civa_dr', $etablissement) ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" name="boutons[previous]" /></a></li>
     <?php endif; ?>
     <?php if(in_array('valider', $display->getRawValue())): ?>
     <li class="suiv" ><input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" /></li>
@@ -23,7 +23,7 @@
     </li>
     <?php endif; ?>
     <?php if(in_array('email_acheteurs', $display->getRawValue())): ?>
-    <li style="padding-right: 10px;" id="email-visualisation">    
+    <li style="padding-right: 10px;" id="email-visualisation">
         <a href="#" id="btn-email-acheteur"></a>
     </li>
     <?php endif; ?>

@@ -8,7 +8,6 @@ class DRSecurity implements SecurityInterface {
     const DEVALIDATION_CIVA = 'DEVALIDATION_CIVA';
 
     protected $dr;
-    protected $compte;
     protected $sfUser;
     protected $etablissement;
 
@@ -17,11 +16,10 @@ class DRSecurity implements SecurityInterface {
         return new DRSecurity($compte, $dr);
     }
 
-    public function __construct($compte, $dr = null) {
-        $this->compte = $compte;
+    public function __construct($etablissement, $dr = null) {
         $this->dr = $dr;
         $this->sfUser = sfContext::getInstance()->getUser();
-        $this->etablissement = DRClient::getInstance()->getEtablissement($this->compte->getSociete());
+        $this->etablissement = $etablissement;
     }
 
     public function isAuthorized($droits) {
@@ -40,31 +38,31 @@ class DRSecurity implements SecurityInterface {
             return false;
         }
 
-        if(!$this->compte->hasDroit(_CompteClient::DROIT_DR_RECOLTANT)) {
+        /*if(!$this->compte->hasDroit(_CompteClient::DROIT_DR_RECOLTANT)) {
 
-            //return false;
-        }
+            return false;
+        }*/
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential($compte::CREDENTIAL_ADMIN)
+        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)
                                             && $this->dr
                                             && $this->dr->isValideeCiva()) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential($compte::CREDENTIAL_ADMIN)) {
+        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 
             return true;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential($compte::CREDENTIAL_OPERATEUR)
+        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)
                                             && $this->dr
                                             && $this->dr->isValideeTiers()) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential($compte::CREDENTIAL_OPERATEUR)) {
+        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
         }

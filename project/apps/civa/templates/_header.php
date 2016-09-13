@@ -3,7 +3,7 @@
 
 <!-- #header -->
 <div id="header" class="clearfix pngfix">
-    <h1 id="logo"><a href="<?php echo url_for('@mon_espace_civa'); ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
+    <h1 id="logo"><a href="<?php if($sf_user->isAuthenticated()): ?>echo url_for('mon_espace_civa', array('identifiant' => $sf_user->getCompte()->getIdentifiant())); ?><?php endif; ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
     <div id="titre_rubrique">
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
@@ -27,7 +27,7 @@
                         <?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@tiers');  ?>
                 <?php endif; ?>
             </p>
-        <?php elseif ($sf_user->hasCredential('compte')) : ?>  
+        <?php elseif ($sf_user->hasCredential('compte')) : ?>
             <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNom(), '@tiers'); ?></p>
         <?php endif; ?>
     </div>
@@ -36,7 +36,7 @@
         <h2>Accès directs</h2>
         <ul>
             <?php if ($sf_user->hasCredential('tiers')): ?>
-                <li><a href="<?php echo url_for('@mon_espace_civa'); ?>">Mes déclarations</a></li>
+                <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $sf_user->getCompte()->getIdentifiant())); ?>">Mes déclarations</a></li>
                 <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
                 <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
             <?php else: ?>

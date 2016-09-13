@@ -11,25 +11,32 @@ class _DRActions extends sfActions
 
     protected function redirectByBoutonsEtapes($boutons_suppl = null, $dr) {
         if ($this->askRedirectToNextEtapes()) {
-            $this->redirectToNextEtapes($dr);
+
+            return $this->redirectToNextEtapes($dr);
         } elseif ($this->askRedirectToPreviousEtapes()) {
-            $this->redirectToPreviousEtapes();
+
+            return $this->redirectToPreviousEtapes($dr);
         } elseif ($this->askRedirectToPrevisualiser()) {
-            $this->redirectToPrevisualiser();
+
+            return $this->redirectToPrevisualiser();
         } elseif (!is_null($boutons_suppl) && is_array($boutons_suppl)) {
             foreach($boutons_suppl as $bouton_suppl => $action) {
                 if (in_array($bouton_suppl, $this->getBoutons())) {
                     if ($action == 'next') {
-                        $this->redirectToNextEtapes($dr);
+
+                        return $this->redirectToNextEtapes($dr);
                     } elseif ($action == 'previous') {
-                        $this->redirectToPreviousEtapes($dr);
+
+                        return $this->redirectToPreviousEtapes($dr);
                     } elseif($action == 'previsualiser') {
-                        $this->redirectToPrevisualiser($dr);
+
+                        return $this->redirectToPrevisualiser($dr);
                     }
                 }
             }
         } else {
-            $this->redirect($this->getRoute()->getParameters());
+
+            return $this->redirect($this->getRoute()->getParameters());
         }
     }
 

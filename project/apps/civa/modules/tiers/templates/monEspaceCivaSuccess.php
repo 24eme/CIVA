@@ -16,14 +16,14 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if(CurrentClient::getCurrent()->isDREditable() && !$sf_user->hasCredential(myUser::CREDENTIAL_DECLARATION_VALIDE)): ?>
+                    <?php if(CurrentClient::getCurrent()->isDREditable()): ?>
                     <p><strong>A valider</strong> avant le 10/12/<?php echo $compte->getCampagne() ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_dr') ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_dr', array('identifiant' => $compte->getIdentifiant())) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -78,7 +78,7 @@
                     <?php if($infos): ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
-                </div>
+                </div>()
                 <div class="bloc_acceuil_footer">
                     <a href="<?php echo url_for('mon_espace_civa_vrac') ?>">Accéder</a>
                 </div>
@@ -101,7 +101,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Alsace stocks <br /><small style="font-size: 10px;">propriété</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($compte->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && $compte->isDsEditable(DSCivaClient::TYPE_DS_PROPRIETE) && (!$compte->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$compte->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
+                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && $sf_user->isDsEditable(DSCivaClient::TYPE_DS_PROPRIETE) && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
                         <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
                         <?php else: ?>
@@ -112,7 +112,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("identifiant" => $compte->getIdentifiant(), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -121,7 +121,7 @@
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <br /><small style="font-size: 10px;">négoce</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($compte->isDsEditable(DSCivaClient::TYPE_DS_NEGOCE) && (!$compte->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$compte->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
+                    <?php if($sf_user->isDsEditable(DSCivaClient::TYPE_DS_NEGOCE) && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
                         <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
                         <?php else: ?>
@@ -132,7 +132,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("identifiant" => $compte->getIdentifiant(), "type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

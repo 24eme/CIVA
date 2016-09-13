@@ -14,21 +14,9 @@ class drComponents extends sfComponents {
      *
      * @param sfWebRequest $request
      */
-    public function executeMonEspace(sfWebRequest $request) {
-      $this->dr_editable = $this->getUser()->isDrEditable();
-      $this->dr = $this->getUser()->getDeclaration();
-    }
-
-    /**
-     *
-     * @param sfWebRequest $request
-     */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
-        $this->declaration = $this->getUser()->getDeclaration();
-        $this->etablissement = $this->getUser()->getTiers('Recoltant');
-        $this->campagne = $this->getUser()->getCampagne();
-        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);
-	      $this->has_import =  acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->getUser()->getCampagne(), $this->getUser()->getTiers()->cvi);
+        $this->campagnes = DRClient::getInstance()->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->campagne-1), 4);
+	      $this->has_import = acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->campagne, $this->etablissement->getIdentifiant());
     }
 
     /**

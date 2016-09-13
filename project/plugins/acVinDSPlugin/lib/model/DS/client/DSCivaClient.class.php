@@ -94,6 +94,16 @@ class DSCivaClient extends DSClient {
         return null;
     }
 
+    public function findPrincipaleByIdentifiantAndPeriode($identifiant, $periode) {
+        $ds = $this->findByIdentifiantAndPeriode($identifiant, $periode);
+        if(!$ds) {
+
+            return null;
+        }
+
+        return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
+    }
+
     public function retrieveByPeriodeAndIdentifiant($identifiant, $periode) {
 
         return $this->findByIdentifiantAndPeriode($identifiant, $periode);
@@ -604,6 +614,14 @@ class DSCivaClient extends DSClient {
             }
         }
         return $new_dss;
+    }
+
+    public function removeDeclaration($ds)
+    {
+        $dss = DSCivaClient::getInstance()->findDssByDS($ds);
+        foreach ($dss as $ds) {
+            $ds->delete();
+        }
     }
 
 }

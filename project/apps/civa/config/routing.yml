@@ -228,20 +228,26 @@ tiers:
   param: { module: tiers, action: login }
 
 mon_espace_civa:
-  url:   /mon_espace_civa
+  url:   /mon_espace_civa/:identifiant
   param: { module: tiers, action: monEspaceCiva }
 
 mon_espace_civa_dr:
-  url:   /mon_espace_civa/dr
+  url:   /mon_espace_civa/:identifiant/dr
   param: { module: tiers, action: monEspaceDR }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_dr_acheteur:
   url:   /mon_espace_civa/dr_acheteur
   param: { module: tiers, action: monEspaceDRAcheteur }
 
 mon_espace_civa_ds:
-  url:   /mon_espace_civa/ds/:type
+  url:   /mon_espace_civa/:identifiant/ds/:type
   param: { module: tiers, action: monEspaceDS }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_gamma:
   url:   /mon_espace_civa/gamma
@@ -325,6 +331,9 @@ dr_visualisation_avant_import:
 dr_init:
   url:   /dr_initialisation/:identifiant/:campagne
   param: { module: dr, action: init }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 dr_invalider_recoltant:
   url:   /dr/:id/invalider_recoltant

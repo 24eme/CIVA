@@ -6,53 +6,58 @@ class drActions extends _DRActions {
         $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
         $campagne = $request->getParameter('campagne');
-        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$request->getParameter('identifiant'));
+        $etablissement = $this->getRoute()->getEtablissement();
         $dr_data = $this->getRequestParameter('dr', null);
 
-        if ($dr_data) {
-            if ($dr_data['type_declaration'] == 'brouillon') {
-                $dr = DRClient::getInstance()->find("DR-".$etablissement->getIdentifiant()."-".$campagne);
+        if (!$dr_data) {
 
-                try {
-                    if($dr->etape) {
-                        return $this->redirectToEtape($dr->etape, $dr);
-                    }
-                } catch (Exception $e) { }
-
-                return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
-            } elseif ($dr_data['type_declaration'] == 'supprimer') {
-                $this->getUser()->removeDeclaration();
-
-                return $this->redirect('@mon_espace_civa_dr');
-            } elseif ($dr_data['type_declaration'] == 'visualisation') {
-                $this->redirect('@visualisation?annee=' . $campagne);
-            } elseif ($dr_data['type_declaration'] == 'vierge') {
-                $doc = DRClient::getInstance()->createDeclaration($etablissement, $campagne, $this->getUser()->isSimpleOperateur());
-                $doc->save();
-
-                return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $doc);
-            } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
-                $this->redirect('@visualisation_avant_import');
-            } elseif ($dr_data['type_declaration'] == 'import') {
-                $acheteurs = array();
-                $dr = DRClient::getInstance()->createFromCSVRecoltant($campagne, $etablissement, $acheteurs, $this->getUser()->isSimpleOperateur());
-                $dr->save();
-                $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
-
-                return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
-            } elseif ($dr_data['type_declaration'] == 'precedente') {
-                $old_doc = $etablissement->getDeclaration($dr_data['liste_precedentes_declarations']);
-                if (!$old_doc) {
-                    throw new Exception("Bug: " . $dr_data['liste_precedentes_declarations'] . " not found :()");
-                }
-                $doc = DRClient::getInstance()->createDeclarationClone($old_doc, $etablissement, $this->getUser()->getCampagne(), $this->getUser()->isSimpleOperateur());
-                $doc->save();
-
-                return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $doc);
-            }
+            return $this->forward404();
         }
 
-        return $this->redirect('mon_espace_civa_dr');
+        $dr = DRClient::getInstance()->find("DR-".$etablissement->getIdentifiant()."-".$campagne);
+
+        if ($dr_data['type_declaration'] == 'brouillon') {
+            try {
+                if($dr->etape) {
+                    return $this->redirectToEtape($dr->etape, $dr);
+                }
+            } catch (Exception $e) { }
+
+            return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
+        } elseif ($dr_data['type_declaration'] == 'supprimer') {
+            $dr->delete();
+
+            return $this->redirect('mon_espace_civa_dr', $etablissement);
+        } elseif ($dr_data['type_declaration'] == 'visualisation') {
+
+            return $this->redirect('@visualisation?annee=' . $campagne);
+        } elseif ($dr_data['type_declaration'] == 'vierge') {
+            $dr = DRClient::getInstance()->createDeclaration($etablissement, $campagne, $this->getUser()->isSimpleOperateur());
+            $dr->save();
+
+            return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
+        } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
+            $this->redirect('@visualisation_avant_import');
+        } elseif ($dr_data['type_declaration'] == 'import') {
+            $acheteurs = array();
+            $dr = DRClient::getInstance()->createFromCSVRecoltant($campagne, $etablissement, $acheteurs, $this->getUser()->isSimpleOperateur());
+            $dr->save();
+            $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
+
+            return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
+        } elseif ($dr_data['type_declaration'] == 'precedente') {
+            $drPrevious = DRClient::getInstance()->find("DR-".$etablissement->getIdentifiant()."-".$dr_data['liste_precedentes_declarations']);
+            if (!$drPrevious) {
+                throw new Exception("Bug: " . $dr_data['liste_precedentes_declarations'] . " not found :(");
+            }
+
+            $dr = DRClient::getInstance()->createDeclarationClone($drPrevious, $etablissement, $campagne, $this->getUser()->isSimpleOperateur());
+            $dr->save();
+
+            return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
+        }
+
+        return $this->forward404();
     }
 
     public function executeFlashPage(sfWebRequest $request) {

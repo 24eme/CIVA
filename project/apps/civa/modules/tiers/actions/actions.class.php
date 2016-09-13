@@ -40,7 +40,7 @@ class tiersActions extends sfActions {
                     return $this->redirect($referer);
                 }
 
-                return $this->redirect("@mon_espace_civa");
+                return $this->redirect("mon_espace_civa", array('identifiant' => $this->compte->getIdentifiant()));
     	    }
         }
 
@@ -62,14 +62,10 @@ class tiersActions extends sfActions {
 
         $this->compte = CompteClient::getInstance()->findByLogin($request->getParameter('identifiant'));
 
-        TiersSecurity::getInstance($this->compte);
-        TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR);
+        /*if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
 
-
-        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
-
-            //return $this->redirect('mon_espace_civa_dr');
-        }
+            return $this->redirect('mon_espace_civa_dr');
+        }*/
 
         $this->vracs = array(
             'CONTRAT_A_TERMINER' => 0,
@@ -120,6 +116,10 @@ class tiersActions extends sfActions {
     }
 
     public function executeMonEspaceDR(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->compte = $this->etablissement->getSociete()->getContact();
+        $this->campagne = CurrentClient::getCurrent()->campagne;
+        $this->dr = DRClient::getInstance()->retrieveByCampagneAndCvi($this->etablissement->getIdentifiant(), $this->campagne);
         $this->secureTiers(TiersSecurity::DR);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
@@ -135,6 +135,8 @@ class tiersActions extends sfActions {
     public function executeMonEspaceDS(sfWebRequest $request) {
         $droits = array();
         $this->type_ds = $request->getParameter("type");
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->compte = $this->etablissement->getSociete()->getContact();
         if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
                $droits[] = TiersSecurity::DS_NEGOCE;
         } elseif($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {

@@ -8,26 +8,24 @@ class DSSecurity implements SecurityInterface {
     const EDITION = 'EDITION';
 
     protected $ds;
-    protected $myUser;
     protected $type_ds;
-    protected $tiers;
+    protected $etablissement;
 
-    public static function getInstance($myUser, $ds_principale = null, $type_ds = null) {
+    public static function getInstance($etablissement, $ds_principale = null, $type_ds = null) {
 
-        return new DSSecurity($myUser, $ds_principale, $type_ds);
+        return new DSSecurity($etablissement, $ds_principale, $type_ds);
     }
 
-    public function __construct($myUser, $ds_principale = null, $type_ds = null) {
-        $this->myUser = $myUser;
+    public function __construct($etablissement, $ds_principale = null, $type_ds = null) {
+        $this->etablissement = $etablissement;
         $this->ds = $ds_principale;
         if($this->ds) {
             $type_ds = $ds_principale->type_ds;
         }
         if(!$type_ds) {
 
-            throw new sfException("Type DS unknow");
+            throw new sfException("Le type de la DS \"".$type_ds."\" n'est pas comnnu");
         }
-        $this->tiers = $this->myUser->getDeclarantDS($type_ds);
         $this->type_ds = $type_ds;
     }
 
@@ -36,34 +34,34 @@ class DSSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
-        if(!$this->tiers) {
+        if(!$this->etablissement) {
 
             return false;
         }
 
         /*** DECLARANT ***/
 
-        if(!in_array($this->tiers->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT))) {
+        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT))) {
 
             return false;
         }
 
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
+        /*if(!$this->compte->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
 
-            //return false;
-        }
+            return false;
+        }*/
 
         if(in_array(self::DECLARANT, $droits)) {
 
             return true;
         }
 
-        if(!$this->tiers->hasLieuxStockage() && !$this->tiers->isAjoutLieuxDeStockage()) {
+        if(!$this->etablissement->hasLieuxStockage() && !$this->etablissement->isAjoutLieuxDeStockage()) {
 
             return false;
         }
 
-        if($this->tiers && $this->ds && $this->tiers->getIdentifiant() != $this->ds->identifiant) {
+        if($this->etablissement && $this->ds && $this->etablissement->getIdentifiant() != $this->ds->identifiant) {
 
             throw new sfException("Pas sa DS");
 
@@ -84,12 +82,12 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::CREATION, $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+        if(in_array(self::CREATION, $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
         }
 
-        if(in_array(self::CREATION, $droits) && !$this->myUser->isDsEditable($this->type_ds)) {
+        if(in_array(self::CREATION, $droits) && !$this->compte->isDsEditable($this->type_ds)) {
 
             return false;
         }
@@ -111,7 +109,7 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::EDITION , $droits) &&$this->myUser->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+        if(in_array(self::EDITION , $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
 
             return true;
         }
@@ -121,12 +119,12 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::EDITION , $droits) && $this->myUser->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+        if(in_array(self::EDITION , $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
         }
 
-        if(in_array(self::EDITION , $droits) && !$this->myUser->isDsEditable($this->type_ds)) {
+        if(in_array(self::EDITION , $droits) && !$this->compte->isDsEditable($this->type_ds)) {
 
             return false;
         }

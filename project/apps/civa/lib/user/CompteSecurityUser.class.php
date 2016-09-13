@@ -166,14 +166,12 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
     protected function requireCompte() {
         if (!$this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_COMPTE)) {
-	  throw new sfException("you must be logged with a tiers");
+	        throw new sfException("you must be logged with a tiers");
         }
     }
 
     public function isInDelegateMode() {
-        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED)
-
-        );
+        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
     }
 
 }
