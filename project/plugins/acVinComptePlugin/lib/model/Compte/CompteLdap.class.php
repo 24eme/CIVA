@@ -1,7 +1,7 @@
 <?php
 class CompteLdap extends acVinLdap {
 
-  public function saveCompte($compte, $verbose = 0) 
+  public function saveCompte($compte, $verbose = 0)
     {
       $info = $this->info($compte);
       if ($verbose) {
@@ -14,7 +14,7 @@ class CompteLdap extends acVinLdap {
     /**
      *
      * @param _Compte $compte
-     * @return bool 
+     * @return bool
      */
     public function deleteCompte($compte, $verbose = 0) {
       if ($verbose) {
@@ -22,32 +22,34 @@ class CompteLdap extends acVinLdap {
       }
         return $this->delete(self::getIdentifiant($compte));
     }
-    
+
     protected static function getIdentifiant($compte) {
-      if ($compte->isSocieteContact()) {
-	return $compte->getSociete()->identifiant;
-      }else{
-	return $compte->identifiant;
+        if ($compte->isSocieteContact()) {
+
+            return $compte->getSociete()->identifiant;
+        } else {
+
+            return $compte->identifiant;
       }
     }
 
     /**
      *
      * @param _Compte $compte
-     * @return array 
+     * @return array
      */
-    protected function info($compte) 
+    protected function info($compte)
     {
       $info = array();
       $info['uid']              = self::getIdentifiant($compte);
       if (!is_null($compte->getNom())){
 	$info['sn']             = $compte->getNom();
-      } 
+      }
       else{
-	$info['sn']             = $compte->nom_a_afficher;          
+	$info['sn']             = $compte->nom_a_afficher;
       }
       if ($compte->getPrenom()){
-          $info['givenName']        = $compte->getPrenom(); 
+          $info['givenName']        = $compte->getPrenom();
       }
       $info['cn']               = $compte->nom_a_afficher;
       $info['objectClass'][0]   = 'top';
@@ -55,9 +57,10 @@ class CompteLdap extends acVinLdap {
       $info['objectClass'][2]   = 'posixAccount';
       $info['objectClass'][3]   = 'inetOrgPerson';
       $info['loginShell']       = '/bin/bash';
-      $info['uidNumber']        = (int)self::getIdentifiant($compte);
+      $info['uidNumber']        = '1000';
       $info['gidNumber']        = '1000';
       $info['homeDirectory']    = '/home/'.self::getIdentifiant($compte);
+      $info['gecos']            = self::getGecos($compte);
       if ($compte->email && preg_match('/@/', $compte->email))
 	$info['mail']             = $compte->email;
       if ($compte->adresse) {
@@ -76,7 +79,7 @@ class CompteLdap extends acVinLdap {
       $info['facsimileTelephoneNumber'] = $compte->fax;
       if ($compte->telephone_mobile)
       $info['mobile']           = $compte->telephone_mobile;
-      $info['description']      = ($compte->societe_informations->type)? $compte->societe_informations->type : '';
+      $info['description']      = "(=".self::getIdentifiant($compte).")(=".$compte->email.")";
       if ($compte->exist('mot_de_passe')) {
 	$info['userPassword']  = $compte->mot_de_passe;
 	if(!$compte->isActif()) {
@@ -85,5 +88,14 @@ class CompteLdap extends acVinLdap {
       }
       return $info;
     }
-    
+
+    public static function getGecos($compte) {
+        $noAccises = null;
+
+        if($compte->getEtablissement()) {
+            $noAccises = $compte->getEtablissement()->no_accises;
+        }
+
+        return sprintf("%s, %s, %s, %s", self::getIdentifiant($compte), $noAccises, $compte->getNom(), $compte->nom_a_afficher);
+    }
 }
