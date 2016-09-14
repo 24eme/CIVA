@@ -41,7 +41,7 @@ class DSSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT))) {
+        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT || EtablissementFamilles::FAMILLE_COOPERATIVE))) {
 
             return false;
         }

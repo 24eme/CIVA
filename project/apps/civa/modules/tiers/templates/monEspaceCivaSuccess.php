@@ -71,7 +71,7 @@
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($vracs['CONTRAT_A_ENLEVER']): ?>
-                        <p href="<?php echo url_for('mon_espace_civa_vrac') ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> <strong>à enlever</strong></p>
+                        <p href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><?php echo $vracs['CONTRAT_A_ENLEVER'] ?> contrat<?php echo ($vracs['CONTRAT_A_ENLEVER'] > 1) ? "s" : "" ?> <strong>à enlever</strong></p>
                         <?php $infos = false ?>
                     <?php endif; ?>
                     <?php if($infos): ?>
@@ -111,7 +111,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("identifiant" => $compte->getIdentifiant(), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -131,7 +131,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("identifiant" => $compte->getIdentifiant(), "type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), "type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
