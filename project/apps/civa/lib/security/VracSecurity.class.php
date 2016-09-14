@@ -85,12 +85,12 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(!$this->vrac->isActeur($tiers->_id)) {
+        if(!$this->vrac->isActeur($etablissement->_id)) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
+        if(in_array(self::EDITION, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
 
             return false;
         }
@@ -107,14 +107,14 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::SIGNATURE, $droits) && $this->vrac->hasSigne($tiers->_id)) {
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->hasSigne($etablissement->_id)) {
 
             return false;
         }
 
         /*** SUPPRESSION ***/
 
-        if(in_array(self::SUPPRESSION, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
+        if(in_array(self::SUPPRESSION, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
 
             return false;
         }

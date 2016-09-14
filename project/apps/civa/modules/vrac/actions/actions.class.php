@@ -20,6 +20,7 @@ class vracActions extends sfActions
 
 	public function executeHistorique(sfWebRequest $request)
 	{
+		$this->compte = $this->getRoute()->getCompte();
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
 
@@ -29,11 +30,11 @@ class vracActions extends sfActions
 		$this->role = $request->getParameter('role');
 
 		if (!$this->campagne) {
-			$this->campagne = ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
+			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type, $this->role);
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac()), ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac()), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
         $this->roles = $this->findRoles();
@@ -55,8 +56,9 @@ class vracActions extends sfActions
 
     public function executeExportCSV(sfWebRequest $request)
     {
+		$this->compte = $this->getRoute()->getCompte();
         $this->secureVrac(VracSecurity::DECLARANT, null);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants(VracClient::getInstance()->getEtablissements($this->compte->getSociete()));
         $this->setLayout(false);
         $this->setResponseCsv(sprintf('export_contrats_%s.csv', date('Ymd')));
     }
@@ -280,8 +282,9 @@ class vracActions extends sfActions
     {
 
         $this->user = $this->getUser()->getDeclarantVrac();
-        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-        $this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
+        $this->config = ConfigurationClient::getConfiguration('2012');
+        //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
+        $this->appellationsLieuDit = json_encode(array());
         $this->vrac = $this->getRoute()->getVrac();
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
@@ -335,14 +338,14 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-    	if (!$this->config->recolte->certification->genre->exist($appellation)) {
+    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
     	$result = array();
-    	if ($this->config->recolte->certification->genre->get($appellation)->hasManyLieu()) {
-			foreach ($this->config->recolte->certification->genre->get($appellation)->getLieux() as $key => $lieu) {
-				$result[$key] = $lieu->libelle;
+    	if ($this->config->get($appellation)->hasManyLieu()) {
+			foreach ($this->config->get($appellation)->getLieux() as $key => $lieu) {
+				$result[$lieu->getKey()] = $lieu->libelle;
 			}
     	}
     	return $this->renderText(json_encode($result));
@@ -356,20 +359,20 @@ class vracActions extends sfActions
     	$appellation = $request->getParameter('appellation', null);
     	$lieu = $request->getParameter('lieu', 'lieu');
     	if (!$lieu) {
-    		$lieu = 'lieu';
+    		$lieu = 'DEFAUT';
     	}
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-    	if (!$this->config->recolte->certification->genre->exist($appellation)) {
+    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
-    	if (!$this->config->recolte->certification->genre->get($appellation)->mention->exist($lieu)) {
+    	if (!$this->config->get($appellation)->mentions->get('DEFAUT')->lieux->exist($lieu)) {
     		throw new sfException('Lieu "'.$lieu.'" n\'existe pas.');
     	}
     	$result = array();
-		foreach ($this->config->recolte->certification->genre->get($appellation)->mention->get($lieu)->getCepages() as $key => $cepage) {
+		foreach ($this->config->get($appellation)->mentions->get('DEFAUT')->lieux->get($lieu)->getProduits() as $key => $cepage) {
 			$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $cepage->libelle;
 			if ($key == Vrac::CEPAGE_EDEL) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
@@ -393,8 +396,7 @@ class vracActions extends sfActions
     	if (!$hash) {
     		throw new sfException('Hash cépage obligatoire.');
     	}
-    	$hash = str_replace('declaration/', 'recolte/', $hash);
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+    	$this->config = ConfigurationClient::getConfiguration('2012');
     	if (!$this->config->exist($hash)) {
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
@@ -469,8 +471,10 @@ class vracActions extends sfActions
     }
 
     protected function secureVrac($droits, $vrac) {
-
-        if(!VracSecurity::getInstance($this->getUser(), $vrac)->isAuthorized($droits)) {
+		if(!isset($this->compte)) {
+			$this->compte = $this->getUser()->getCompte();
+		}
+        if(!VracSecurity::getInstance($this->compte, $vrac)->isAuthorized($droits)) {
 
             return $this->forwardSecure();
         }

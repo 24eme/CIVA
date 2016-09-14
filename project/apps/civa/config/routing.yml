@@ -1,7 +1,52 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/10-Routing
+# *********** TIERS ***********
+
+tiers:
+  url: /tiers
+  param: { module: tiers, action: login }
+
+mon_espace_civa:
+  url:   /mon_espace_civa/:identifiant
+  param: { module: tiers, action: monEspaceCiva }
+
+mon_espace_civa_dr:
+  url:   /mon_espace_civa/:identifiant/dr
+  param: { module: tiers, action: monEspaceDR }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_dr_acheteur:
+  url:   /mon_espace_civa/dr_acheteur
+  param: { module: tiers, action: monEspaceDRAcheteur }
+
+mon_espace_civa_ds:
+  url:   /mon_espace_civa/:identifiant/ds/:type
+  param: { module: tiers, action: monEspaceDS }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_gamma:
+  url:   /mon_espace_civa/gamma
+  param: { module: tiers, action: monEspaceGamma }
+
+mon_espace_civa_vrac:
+  url:   /mon_espace_civa/:identifiant/vrac
+  param: { module: tiers, action: monEspaceVrac }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+delegation:
+  url: /delegation
+  param: { module: tiers, action: delegation}
+
+migration_compte:
+  url: /migration_compte
+  param: { module: tiers, action: migrationCompte}
 
 # *********** VRAC ***********
+
 vrac_selection_type:
   url: /vrac/selection-type/:type
   param: { module: vrac, action: selectionType, type: null }
@@ -9,11 +54,19 @@ vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
 vrac_historique:
-  url: /vrac/historique
+  url: /vrac/:identifiant/historique
   param: { module: vrac, action: historique }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 vrac_export_csv:
-  url: /vrac/export/csv
+  url: /vrac/:identifiant/export/csv
   param: { module: vrac, action: exportCSV }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 vrac_soussigne_informations:
   url: /vrac/:numero_contrat/soussignes-informations
   param: { module: vrac, action: soussigneInformations }
@@ -151,6 +204,7 @@ telecharger_la_notice_vrac:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
+  
 annuaire_retour:
   url: /annuaire/retour
   param: { module: annuaire, action: retour }
@@ -220,53 +274,6 @@ compte_personne_ajouter:
 compte_personne_modifier:
   url: /mon_compte/personne/modifier/:login
   param: { module: compte, action: personneModifier }
-
-# *********** TIERS ***********
-
-tiers:
-  url: /tiers
-  param: { module: tiers, action: login }
-
-mon_espace_civa:
-  url:   /mon_espace_civa/:identifiant
-  param: { module: tiers, action: monEspaceCiva }
-
-mon_espace_civa_dr:
-  url:   /mon_espace_civa/:identifiant/dr
-  param: { module: tiers, action: monEspaceDR }
-  class: EtablissementRoute
-  options: { model: Etablissement, type: object }
-  requirements: { sf_method: [get, post] }
-
-mon_espace_civa_dr_acheteur:
-  url:   /mon_espace_civa/dr_acheteur
-  param: { module: tiers, action: monEspaceDRAcheteur }
-
-mon_espace_civa_ds:
-  url:   /mon_espace_civa/:identifiant/ds/:type
-  param: { module: tiers, action: monEspaceDS }
-  class: EtablissementRoute
-  options: { model: Etablissement, type: object }
-  requirements: { sf_method: [get, post] }
-
-mon_espace_civa_gamma:
-  url:   /mon_espace_civa/gamma
-  param: { module: tiers, action: monEspaceGamma }
-
-mon_espace_civa_vrac:
-  url:   /mon_espace_civa/:identifiant/vrac
-  param: { module: tiers, action: monEspaceVrac }
-  class: CompteRoute
-  options: { model: Compte, type: object }
-  requirements: { sf_method: [get, post] }
-
-delegation:
-  url: /delegation
-  param: { module: tiers, action: delegation}
-
-migration_compte:
-  url: /migration_compte
-  param: { module: tiers, action: migrationCompte}
 
 
 # *********** GAMMA ***********

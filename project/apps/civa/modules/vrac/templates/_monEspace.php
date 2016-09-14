@@ -7,7 +7,7 @@
 			<li class="nouveau_contrat"><a href="<?php echo ($hasDoubt)? null : url_for('vrac_nouveau'); ?>"<?php if($hasDoubt): ?> id="choixType"<?php endif; ?>><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
 			<li><a href="<?php echo url_for('annuaire') ?>">Gérer son annuaire</a></li>
 			<?php endif; ?>
-			<li><a href="<?php echo url_for('vrac_historique') ?>">Voir tout</a></li>
+			<li><a href="<?php echo url_for('vrac_historique', $compte) ?>">Voir tout</a></li>
 		</ul>
 	</div>
 </div>
@@ -16,7 +16,7 @@
 	<div class="contenu_section">
 		<p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
 		<ul>
-			<li><a href="<?php echo url_for('@telecharger_la_notice_vrac') ?>" class="pdf">Télécharger la notice</a></li>
+			<li><a href="<?php echo url_for('telecharger_la_notice_vrac') ?>" class="pdf">Télécharger la notice</a></li>
 		</ul>
 		<p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
 	</div>

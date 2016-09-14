@@ -1,11 +1,11 @@
 <?php
-class VracProduitAjoutForm extends acCouchdbObjectForm 
+class VracProduitAjoutForm extends acCouchdbObjectForm
 {
    	public function configure()
     {
   		$this->setWidgets(array(
   			'vrac' => new sfWidgetFormInputHidden(),
-  			'hash' => new sfWidgetFormInputHidden(), 
+  			'hash' => new sfWidgetFormInputHidden(),
   		    'lieu_dit' => new sfWidgetFormInputText(),
         	'vtsgn' => new sfWidgetFormChoice(array('choices' => $this->getVtSgn()))
     	));
@@ -25,13 +25,13 @@ class VracProduitAjoutForm extends acCouchdbObjectForm
         $this->validatorSchema->setPostValidator(new VracProduitAjoutValidator());
   		$this->widgetSchema->setNameFormat('vrac_produit_ajout[%s]');
     }
-    
+
     public function getVtSgn()
     {
-    	return array('' => '', 'VT' => 'VT', 'SGN' =>'SGN'); 
+    	return array('' => '', 'VT' => 'VT', 'SGN' =>'SGN');
     }
-    
+
     public function doUpdateObject($values) {
-    	$this->getObject()->addDynamiqueDetail($values['hash'], $values['lieu_dit'], $values['vtsgn']);
+    	$this->getObject()->addDynamiqueDetail(HashMapper::inverse($values['hash']), $values['lieu_dit'], $values['vtsgn']);
     }
 }

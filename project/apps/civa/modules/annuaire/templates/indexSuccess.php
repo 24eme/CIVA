@@ -5,8 +5,8 @@
 		<div class="annuaire clearfix">
 			<div class="bloc_annuaire">
 				<h2 class="titre_section">Récoltants (<?php echo count($annuaire->recoltants) ?>)</h2>
-				
-				<div class="bloc">			
+
+				<div class="bloc">
 					<?php if (count($annuaire->recoltants) > 0): ?>
 						<?php $i = 0; ?>
 						<ul>
@@ -26,10 +26,10 @@
 
 				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_recoltant.png" alt="Ajouter un récoltant" /></a>
 			</div>
-		
+
 			<div class="bloc_annuaire">
 				<h2 class="titre_section">Négociants (<?php echo count($annuaire->negociants) ?>)</h2>
-				
+
 				<div class="bloc">
 					<?php if (count($annuaire->negociants) > 0): ?>
 						<?php $i = 0; ?>
@@ -101,6 +101,5 @@
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv">
-	<li><a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
+	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img src="/images/boutons/btn_retour_espace_contrats.png" alt="Retourner à l'espace contrats" /></a></li>
 </ul>
-
