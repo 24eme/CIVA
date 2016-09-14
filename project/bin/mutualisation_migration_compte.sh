@@ -24,11 +24,6 @@ curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/VRAC/_view/tous
 
 curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_all_docs" | grep "ANNUAIRE" | cut -d "," -f 1 |sed 's/{"id":"//' | sed 's/"//' | sed 's/^/php symfony maintenance:mutualisation-compte-remplacement-doc /' | bash
 
-# Import de la conf au format mutualisé
-curl -sX DELETE "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CONFIGURATION"?rev=$(curl -sX GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CONFIGURATION" | grep -Eo '"_rev":"[a-z0-9-]+"' | sed 's/"//g' | sed 's/_rev://')
-
-php symfony import:configuration-mutualisation CONFIGURATION data/configuration
-
 curl -sX DELETE "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CURRENT"?rev=$(curl -sX GET "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CURRENT" | grep -Eo '"_rev":"[a-z0-9-]+"' | sed 's/"//g' | sed 's/_rev://')
 
 curl -s -X PUT -d '{ "_id": "CURRENT", "type": "Current", "configurations": { "2000-08-01": "CONFIGURATION" } }' http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/CURRENT

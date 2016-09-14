@@ -218,18 +218,18 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
 
     public function addProduit($hash,$fromDs = false) {
+        //echo $hash."\n";
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash_config = HashMapper::convert($hash);
-        if($fromDs){
-            $hash_config = preg_replace('/^\/declaration/','/recolte', $hash);
-        }
-        try {
+        /*try {
             $this->getConfig()->get($hash_config)->isForDS();
         } catch(Exception $e) {
+            echo $hash."\n";
+            echo $hash_config."\n";
             return null;
-        }
+        }*/
 
-        if(!$this->getConfig()->get($hash_config)->isForDS()) {
+        if(!$this->getConfig()->exist($hash_config)) {
             $this->addNoeud($this->getConfig()->get($hash_config)->getParent()->getHash());
             return null;
         }
