@@ -254,8 +254,11 @@ mon_espace_civa_gamma:
   param: { module: tiers, action: monEspaceGamma }
 
 mon_espace_civa_vrac:
-  url:   /mon_espace_civa/vrac
+  url:   /mon_espace_civa/:identifiant/vrac
   param: { module: tiers, action: monEspaceVrac }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
 
 delegation:
   url: /delegation

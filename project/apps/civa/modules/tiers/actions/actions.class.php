@@ -152,7 +152,10 @@ class tiersActions extends sfActions {
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
+        $this->compte = $this->getRoute()->getCompte();
+        $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $this->secureTiers(TiersSecurity::VRAC);
+
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
     }

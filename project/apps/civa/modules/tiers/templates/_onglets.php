@@ -8,9 +8,9 @@
 	<?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
 	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur") ?>">Acheteur Récolte</a></li>
 	<?php endif; ?>
-	<li class=""><a href="<?php echo url_for("drm_etablissement", array("identifiant" => $compte->getIdentifiant())) ?>">DRM</a></li>
+	<!-- <li class=""><a href="<?php echo url_for("drm_etablissement", array("identifiant" => $compte->getIdentifiant())) ?>">DRM</a></li> -->
 	<?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::VRAC)): ?>
-	<li class="<?php if($active== 'vrac'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_vrac") ?>">Contrats</a></li>
+	<li class="<?php if($active== 'vrac'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_vrac", array('identifiant' => $compte->getIdentifiant())) ?>">Contrats</a></li>
 	<?php endif; ?>
 	<?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::GAMMA)): ?>
 	<li class="<?php if($active== 'gamma'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_gamma") ?>">Gamm@</a></li>

@@ -12,30 +12,39 @@ class VracSecurity implements SecurityInterface {
     const CLOTURE = 'CLOTURE';
 
     protected $vrac;
-    protected $myUser;
-    protected $tiers;
+    protected $compte;
+    protected $etablissements;
 
-    public static function getInstance($myUser, $vrac = null) {
+    public static function getInstance($compte, $vrac = null) {
 
-        return new VracSecurity($myUser, $vrac);
+        return new VracSecurity($compte, $vrac);
     }
 
-    public function __construct($myUser, $vrac = null) {
-        $this->myUser = $myUser;
+    public function getUser() {
+
+        return sfContext::getInstance()->getUser();
+    }
+
+    public function __construct($compte, $vrac = null) {
+        $this->compte = $compte;
+        if(!$this->compte) {
+
+            throw new sfException("Le compt est nul");
+        }
         $this->vrac = $vrac;
-        $this->tiers = $this->myUser->getDeclarantsVrac();
+        $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
     }
 
     public function isAuthorized($droits) {
-        foreach($this->tiers as $t) {
-            if($this->isAuthorizedTiers($t, $droits)) {
+        foreach($this->etablissements as $etablissement) {
+            if($this->isAuthorizedTiers($etablissement, $droits)) {
                 return true;
             }
         }
         return false;
     }
 
-    public function isAuthorizedTiers($tiers, $droits) {
+    public function isAuthorizedTiers($etablissement, $droits) {
         if(!is_array($droits)) {
             $droits = array($droits);
         }
@@ -47,10 +56,10 @@ class VracSecurity implements SecurityInterface {
             return false;
         }*/
 
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
+        /*if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
 
-            //return false;
-        }
+            return false;
+        }*/
 
         if(in_array(self::DECLARANT, $droits)) {
 

@@ -9,7 +9,6 @@
             <p class="flash_message"><?php echo $compte->getFlash('confirmation'); ?></p>
         <?php endif; ?>
         <h3 class="noir">Vos téléservices</h3>
-        <?php $nb_blocs++; ?>
         <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">
             <?php $i = $nb_blocs ?>
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR)): ?>
@@ -44,7 +43,7 @@
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?>">
+            <!--<div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?>">
                 <div class="bloc_acceuil_header">DRM</div>
                 <div class="bloc_acceuil_content">
                     <p class="mineure">Aucune information à signaler</p>
@@ -53,7 +52,7 @@
                     <a href="<?php echo url_for('drm_etablissement', array("identifiant" => $compte->getIdentifiant())) ?>">Accéder</a>
                 </div>
             </div>
-            <?php $i = $i -1 ?>
+            <?php //$i = $i -1 ?>-->
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::VRAC)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_header">Alsace Contrats</div>
@@ -78,9 +77,9 @@
                     <?php if($infos): ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
-                </div>()
+                </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_vrac') ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

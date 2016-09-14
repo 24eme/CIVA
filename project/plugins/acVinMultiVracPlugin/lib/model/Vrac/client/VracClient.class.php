@@ -187,4 +187,5 @@ class VracClient extends acCouchdbClient {
   		}
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}
+
 }

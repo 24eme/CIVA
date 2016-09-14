@@ -49,18 +49,16 @@ class TiersSecurity implements SecurityInterface {
             return DSSecurity::getInstance(DSCivaClient::getInstance()->getEtablissement($this->compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), null, DSCivaClient::TYPE_DS_NEGOCE)->isAuthorized(DSSecurity::DECLARANT);
         }
 
-        return;
-
         if(in_array(self::VRAC, $droits)) {
 
-            $isDeclarant = VracSecurity::getInstance($this->myUser)->isAuthorized(VracSecurity::DECLARANT);
+            $isDeclarant = VracSecurity::getInstance($this->compte)->isAuthorized(VracSecurity::DECLARANT);
 
             if(!$isDeclarant) {
 
                 return false;
             }
 
-            if(VracSecurity::getInstance($this->myUser, null)->isAuthorized(VracSecurity::CREATION)) {
+            if(VracSecurity::getInstance($this->compte, null)->isAuthorized(VracSecurity::CREATION)) {
 
                 return true;
             }
@@ -78,6 +76,8 @@ class TiersSecurity implements SecurityInterface {
 
             return true;
         }
+
+        return;
 
         if(in_array(self::GAMMA, $droits)) {
 
