@@ -401,7 +401,7 @@ class DSCivaClient extends DSClient {
 
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation) {
-                switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
+                switch ($appellation_key = preg_replace('/^appellation_/', '', $appellation->getKey())) {
                     case 'GRDCRU':
                     case 'CREMANT':
                         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $appellation_key, $appellation, $appellation->getLibelle());
