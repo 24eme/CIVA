@@ -22,13 +22,13 @@
         <?php if ($sf_user->hasCredential('tiers')) : ?>
             <p class="utilisateur">
                 <?php if ($sf_user->isInDelegateMode()):?>
-                        <?php echo sprintf('%s , vous êtes connecté en tant que %s', $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->getNom(), $sf_user->getCompte()->getNom()) ;?>
+                        <?php echo sprintf('%s , vous êtes connecté en tant que %s', $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->getNomAAfficher(), $sf_user->getCompte()->getNomAAfficher()) ;?>
                 <?php else : ?>
-                        <?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNom(), '@tiers');  ?>
+                        <?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNomAAfficher(), '@tiers');  ?>
                 <?php endif; ?>
             </p>
         <?php elseif ($sf_user->hasCredential('compte')) : ?>
-            <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNom(), '@tiers'); ?></p>
+            <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNomAAfficher(), '@tiers'); ?></p>
         <?php endif; ?>
     </div>
 

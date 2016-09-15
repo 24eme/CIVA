@@ -19,7 +19,8 @@ class HashMapper {
         $hash = preg_replace("|/couleur([a-zA-Z0-9_-]{2,30})/|", "/couleurs/$1/", $hash);
         $hash = preg_replace("|/couleur([a-zA-Z0-9_-]{2,30})$|", "/couleurs/$1", $hash);
         $hash = preg_replace("|/cepage_([a-zA-Z0-9_-]+)|", "/cepages/$1", $hash);
-
+        $hash = str_replace("couleur/Rouge", "couleur/rouge", $hash);
+        $hash = str_replace("couleur/Blanc", "couleur/blanc", $hash);
         $hash = preg_replace("|/genres/TRANQ/appellations/CREMANT|", "/genres/EFF/appellations/CREMANT", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE|", "/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE", $hash);
 
@@ -44,8 +45,9 @@ class HashMapper {
         $hash = preg_replace("|/couleurs/DEFAUT$|", "/couleur",$hash);
         $hash = preg_replace("|/couleurs/([a-zA-Z0-9_-]{2,30})/|", "/couleur$1/", $hash);
         $hash = preg_replace("|/couleurs/([a-zA-Z0-9_-]{2,30})$|", "/couleur$1", $hash);
+        $hash = str_replace("couleurblanc", "couleurBlanc", $hash);
+        $hash = str_replace("couleurrouge", "couleurRouge", $hash);
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
-
         $hash = preg_replace("|/genres/EFF|", "/genre", $hash);
 
         return $hash;

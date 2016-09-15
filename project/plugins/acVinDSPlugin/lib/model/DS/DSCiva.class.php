@@ -106,7 +106,6 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         if($this->isTypeDsNegoce()){
             $this->addDetailsFromDRNegoce();
         }
-
     }
 
     protected function updateProduitsFromDS($ds) {

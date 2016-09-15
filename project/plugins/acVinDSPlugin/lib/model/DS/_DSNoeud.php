@@ -18,7 +18,7 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
             $hashDS = str_replace("recolte", "declaration", HashMapper::inverse($item_config->getHash()));
             if($this->getDocument()->exist($hashDS)) {
                 $item = $this->getDocument()->get($hashDS);
-                $items_sorted[$item->getKey()] = $item;
+                $items_sorted[$item->getHash()] = $item;
             }
         }
 
