@@ -211,6 +211,12 @@ Configuration:
                               douane_type: { }
                               douane_cat: { }
                               taxable_douane: { }
+            attributs:
+              type: collection
+              required: false
+              definition:
+                fields:
+                 '*': { }
             certifications:
               type: collection
               definition:

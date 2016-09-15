@@ -27,9 +27,8 @@ $hasVolume = false;
 
 <!-- #application_ds -->
 <div id="application_ds" class="clearfix">
-
 	<p class="intro_declaration">Définissez ici le détail de vos lieux de stockage</p>
-            <div class="ds_neant">
+    <div class="ds_neant">
 		<?php echo $form['neant']->renderLabel(); ?>
 		<input type="checkbox" name="<?php echo $form['neant']->renderName().'[]'; ?>" id="<?php echo $form['neant']->renderId(); ?>" value="<?php echo "1"; ?>" <?php echo ($ds->isDsNeant())? "checked='checked'" : '' ?>  <?php echo (!$ds->hasNoAppellation() &&  !isset($error))? "readonly='readonly'" : ''; ?> />
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
@@ -38,14 +37,14 @@ $hasVolume = false;
             <?php if(count($tiers->getLieuxStockage(true)) > 1) : ?>
                 <a href="#" class="" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
             <?php endif; ?>
-        </div>
+    </div>
 	<div id="lieux_stockage">
 		<table class="table_donnees pyjama_auto">
 			<thead>
 				<tr>
                                     <th colspan="2">Lieux de stockage</th>
 					<?php
-					$configurations = ConfigurationClient::getConfiguration()->declaration->getArrayAppellations();
+					$configurations = $ds->getConfig()->declaration->getArrayAppellations();
 					foreach ($configurations as $conf):
 					?>
 					<th><?php

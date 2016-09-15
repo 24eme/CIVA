@@ -261,4 +261,4 @@ declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Blanc;
 declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Rosé;RS;;L387;Vins Tranquilles;3.77;1900-01-01;G;0;1900-01-01;C;;;;;;;;;;;4S999;cepage;;%a% %l% %ce% %m%;certification;
 declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Rouge;RG;;L387;Vins Tranquilles;3.77;1900-01-01;G;0;1900-01-01;C;;;;;;;;;;;4R999;cepage;;%a% %l% %ce% %m%;certification;
 declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Sans IG;VINTABLE;;L387;Vins Tranquilles;3.77;1900-01-01;G;0;1900-01-01;C;;;;;;;;;;;4VDT999;cepage;;%a% %l% %ce% %m%;certification;
-declaration;Vins sans IG;VINSSIG;;EFF;Vins sans IG;VINTABLE;;DEFAUT;;;;;Mousseux;MS;;L385;Vins Mousseux;9.33;1900-01-01;G;0;1900-01-01;C;;;;;;;;;;;4M999;cepage;;%a% %l% %ce% %m%;certification;
+declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Mousseux;MS;;L385;Vins Mousseux;9.33;1900-01-01;G;0;1900-01-01;C;;;;;;;;;;;4M999;cepage;;%a% %l% %ce% %m%;certification;

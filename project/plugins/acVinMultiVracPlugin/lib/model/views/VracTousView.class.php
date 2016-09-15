@@ -6,14 +6,14 @@ class VracTousView extends acCouchdbView
 
         return acCouchdbManager::getView('VRAC', 'tous', 'Vrac');
     }
-    
+
     public function findAll()
     {
     	return $this->client->getView($this->design, $this->view)->rows;
     }
 
-    public function findBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null) 
-    { 
+    public function findBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null)
+    {
     	if ($type) {
     		$types = array($type);
     	} else {
@@ -41,7 +41,7 @@ class VracTousView extends acCouchdbView
 
     	return $result;
     }
-    
+
     public function findSortedBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null) {
     	$items = $this->findBy($identifiant, $campagne, $statut, $type, $role);
     	$result = array();
@@ -63,4 +63,4 @@ class VracTousView extends acCouchdbView
         krsort($result);
         return $result;
     }
-}  
+}

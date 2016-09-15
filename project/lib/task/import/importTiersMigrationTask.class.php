@@ -40,7 +40,7 @@ EOF;
         $lines = file($arguments['file']);
 
         foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
+            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
 
             if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) == $db2Tiers->get(Db2Tiers::COL_MAISON_MERE)) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
@@ -48,7 +48,7 @@ EOF;
         }
 
         foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
+            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes)) {
                 continue;
@@ -58,7 +58,7 @@ EOF;
         }
 
         foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
+            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
 
             if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
                 $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]["00000".$db2Tiers->getFamille()][] = $db2Tiers;
@@ -78,16 +78,9 @@ EOF;
         ksort($societes, SORT_NUMERIC);
 
         foreach($societes as $numSoc => $etablissements) {
-            if(count($etablissements) == 1) {
-                //continue;
-            }
-
             ksort($etablissements);
 
             $tiers = current($etablissements);
-            if(count($tiers) == 1) {
-                //continue;
-            }
 
             $societe = $this->importSociete($tiers, $etablissements);
 
@@ -159,7 +152,7 @@ EOF;
             return;
         }
 
-        echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()." ".count($etablissements)." etablissements "."\n";
+            echo $societe->_id." (".$societe->getRaisonSociale()." ".$societe->getStatut().") avec le compte ".$societe->getCompteSociete()." ".count($etablissements)." etablissements "."\n";
 
         return $societe;
     }
@@ -170,7 +163,8 @@ EOF;
         $identifiantEtablissement = (in_array($famille, array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && $this->getInfos($tiers, Db2Tiers::COL_CVI)) ? $this->getInfos($tiers, Db2Tiers::COL_CVI) : "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
 
         if(!str_replace("C", "", $identifiantEtablissement)) {
-            continue;
+            echo "Pas d'identifiant ".$this->getInfos($tiers, Db2Tiers::COL_NUM);
+            return null;
         }
 
         $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiantEtablissement);
@@ -224,6 +218,8 @@ EOF;
         $etablissement->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
         $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
         $etablissement->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
+        $etablissement->add('declaration_insee', ($this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION)) ? $this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION) : $etablissement->getInsee());
+        $etablissement->add('declaration_commune', ($etablissement->declaration_insee) ? $this->getCommune($etablissement->declaration_insee    ): $etablissement->getCommune());
 
         try {
             $etablissement->save();
@@ -247,6 +243,7 @@ EOF;
             }
         }
 
+        $compteExploitant->setCivilite($this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR));
         $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
         $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
         $adresse = trim($this->getInfos($tiers, Db2Tiers::COL_NUMERO) . " " . $this->getInfos($tiers, Db2Tiers::COL_ADRESSE));
@@ -256,6 +253,7 @@ EOF;
         $codePostal = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL);
         $compteExploitant->setCodePostal(($codePostal) ? $codePostal : $etablissement->getCodePostal());
         $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
+
         try {
             $compteExploitant->save();
         } catch (Exception $e) {
@@ -265,7 +263,20 @@ EOF;
 
         echo $etablissement->_id." (".$etablissement->getIntitule() ." ". $etablissement->getNom().", ".$etablissement->getFamille().", ".$this->getInfos($tiers, Db2Tiers::COL_SIRET)." ".$etablissement->getStatut().") avec le compte ".$etablissement->getCompte()." et le compte exploitant ".$compteExploitant->_id." ".count($tiers)." tiers, Num : ".$this->getInfos($tiers, Db2Tiers::COL_NUM)." Num Stock : ".$this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)." Num maison mère : ".$this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE)." ".$this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS)."\n";
 
+        if($etablissement->getCvi() && $etablissement->getIdentifiant() != $etablissement->getCvi() && !CompteClient::getInstance()->find("COMPTE-".$etablissement->getCvi(), acCouchdbClient::HYDRATE_JSON)) {
+            $this->createCompteLS("COMPTE-".$etablissement->getCvi(), $etablissement->getMasterCompte()->_id);
+        }
+
         return $etablissement;
+    }
+
+    protected function createCompteLS($id, $idReference) {
+        $ls = new LS();
+        $ls->set('_id', $id);
+        $ls->pointeur = $idReference;
+        $ls->save();
+
+        echo "Compte annexe ".$ls->_id."\n";
     }
 
     protected function isCloture($tiers) {
@@ -321,6 +332,23 @@ EOF;
         }
 
         return $val;
+    }
+
+    private function getCommune($insee) {
+          if (is_null($this->_insee)) {
+              $csv = array();
+              $this->_insee = array();
+              foreach (file(sfConfig::get('sf_data_dir') . '/import/Commune') as $c) {
+                  $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+                  $this->_insee[$csv[0]] = $csv[1];
+              }
+          }
+
+          if(array_key_exists($insee, $this->_insee)) {
+              return $this->_insee[$insee];
+          } else {
+              return null;
+          }
     }
 
 }

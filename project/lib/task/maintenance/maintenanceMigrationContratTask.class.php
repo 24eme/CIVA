@@ -60,16 +60,16 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
             }
 
             $newValue = $this->tiersId2EtablissementId($value);
-            $this->replaceValue($iterable, $key, $newValue);
-
-            echo $parentKey."/".$key.":".$value." => ".$newValue ."\n";
-
+            if($this->replaceValue($iterable, $key, $newValue)) {
+                echo $parentKey."/".$key.":".$value." => ".$newValue ."\n";
+            }
             $modifie = true;
         }
 
         foreach($keys2Replace as $key => $newKey) {
-            $this->replaceKey($iterable, $key, $newKey);
-            echo $parentKey."/".$key." => ".$parentKey."/".$newKey." \n";
+            if($this->replaceKey($iterable, $key, $newKey)) {
+                echo $parentKey."/".$key." => ".$parentKey."/".$newKey." \n";
+            }
             $modifie = true;
         }
 
@@ -92,11 +92,13 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
             $iterable->{$newKey} = $value;
             unset($iterable->{$key});
         }
+
+        return true;
     }
 
     public function replaceValue($iterable, $key, $newValue) {
         if(!$newValue) {
-            return;
+            return false;
         }
 
         if(is_array($iterable)) {
@@ -106,6 +108,8 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
         if(is_object($iterable)) {
             $iterable->{$key} = $newValue;
         }
+
+        return false;
     }
 
     public function isTiers($value) {
@@ -117,7 +121,6 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
         $tiers = _TiersClient::getInstance()->find($value, acCouchdbClient::HYDRATE_JSON);
 
         if(!$tiers) {
-
             return;
         }
 
@@ -135,11 +138,9 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
             return $etablissement->_id;
         }
 
-        if($compte = _CompteClient::getInstance()->find($tiers->compte[0], acCouchdbClient::HYDRATE_JSON)) {
-            if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$compte->login, acCouchdbClient::HYDRATE_JSON))  {
+        if($etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".str_replace("COMPTE-", "", $tiers->compte[0]), acCouchdbClient::HYDRATE_JSON))  {
 
-                return $etablissement->_id;
-            }
+            return $etablissement->_id;
         }
 
         return null;

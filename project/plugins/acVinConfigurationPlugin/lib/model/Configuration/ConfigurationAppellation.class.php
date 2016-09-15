@@ -44,4 +44,12 @@ class ConfigurationAppellation extends BaseConfigurationAppellation {
 		return $this->_get('mentions');
 	}
 
+	public function hasLieuEditable() {
+        if(!$this->exist('attributs') || !$this->attributs->exist('detail_lieu_editable')) {
+            return 0;
+        }
+
+        return $this->attributs->get('detail_lieu_editable');
+    }
+
 }

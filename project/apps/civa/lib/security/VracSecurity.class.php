@@ -68,10 +68,10 @@ class VracSecurity implements SecurityInterface {
 
         /*** CREATION ***/
 
-        /*if(in_array(self::CREATION, $droits) && !$tiers->isDeclarantContratForResponsable()) {
+        if(in_array(self::CREATION, $droits) && $etablissement->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
 
             return false;
-        }*/
+        }
 
         if(in_array(self::CREATION, $droits)) {
 

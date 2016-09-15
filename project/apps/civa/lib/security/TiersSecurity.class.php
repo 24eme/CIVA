@@ -35,7 +35,7 @@ class TiersSecurity implements SecurityInterface {
         }
 
         if(in_array(self::DR_ACHETEUR, $droits)) {
-
+            return false;
             return DRAcheteurSecurity::getInstance($this->compte)->isAuthorized(DRAcheteurSecurity::DECLARANT);
         }
 
@@ -63,7 +63,7 @@ class TiersSecurity implements SecurityInterface {
                 return true;
             }
 
-            $tiersVrac = $this->myUser->getDeclarantsVrac();
+            $tiersVrac = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
 
             if($tiersVrac instanceof sfOutputEscaperArrayDecorator) {
                 $tiersVrac = $tiersVrac->getRawValue();
@@ -90,24 +90,39 @@ class TiersSecurity implements SecurityInterface {
     public function getBlocs() {
         $blocs = array();
         foreach($this->getDroitUrls() as $droit => $url) {
-            if ($this->isAuthorized($droit)) {
-                $blocs[$droit] = $url;
-            }
+            $blocs[$droit] = $url;
         }
 
         return $blocs;
     }
 
     public function getDroitUrls() {
+        $droits = array();
+        if ($this->isAuthorized(TiersSecurity::DR)) {
+            $droits[TiersSecurity::DR] = array('mon_espace_civa_dr', array('identifiant' => DRClient::getInstance()->getEtablissement($this->compte->getSociete())->getIdentifiant()));
+        }
 
-        return array(
-            TiersSecurity::DR => 'mon_espace_civa_dr',
-            TiersSecurity::DR_ACHETEUR => 'mon_espace_civa_dr_acheteur',
-            TiersSecurity::VRAC => 'mon_espace_civa_vrac',
-            TiersSecurity::GAMMA => 'mon_espace_civa_gamma',
-            TiersSecurity::DS_PROPRIETE => array('mon_espace_civa_ds', array('type' => DSCivaClient::TYPE_DS_PROPRIETE)),
-            TiersSecurity::DS_NEGOCE => array('mon_espace_civa_ds', array('type' => DSCivaClient::TYPE_DS_NEGOCE)),
-        );
+        if ($this->isAuthorized(TiersSecurity::DR_ACHETEUR )) {
+            $droits[TiersSecurity::DR_ACHETEUR] = 'mon_espace_civa_dr_acheteur';
+        }
+
+        if ($this->isAuthorized(TiersSecurity::VRAC )) {
+            $droits[TiersSecurity::VRAC] = 'mon_espace_civa_vrac';
+        }
+
+        if ($this->isAuthorized(TiersSecurity::GAMMA )) {
+            $droits[TiersSecurity::GAMMA] = 'mon_espace_civa_gamma';
+        }
+
+        if ($this->isAuthorized(TiersSecurity::DS_PROPRIETE )) {
+            $droits[TiersSecurity::DS_PROPRIETE] = array('mon_espace_civa_ds', array('identifiant' => DSCivaClient::getInstance()->getEtablissement($this->compte->getSociete(), DSCivaClient::TYPE_DS_PROPRIETE)->getIdentifiant(), 'type' => DSCivaClient::TYPE_DS_PROPRIETE));
+        }
+
+        if ($this->isAuthorized(TiersSecurity::DS_NEGOCE )) {
+            $droits[TiersSecurity::DS_NEGOCE] = array('mon_espace_civa_ds', array('identifiant' => DSCivaClient::getInstance()->getEtablissement($this->compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE)->getIdentifiant(), 'type' => DSCivaClient::TYPE_DS_PROPRIETE));
+        }
+
+        return $droits;
     }
 
 }

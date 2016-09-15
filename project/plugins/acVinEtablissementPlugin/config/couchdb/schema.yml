@@ -62,6 +62,8 @@ Etablissement:
        adresse_compta: { }
        caution: { }
        raison_sociale_cautionneur: { required: false }
+       declaration_insee: { required: false }
+       declaration_commune: { required: false }
        siege:
            type: collection
            definition:

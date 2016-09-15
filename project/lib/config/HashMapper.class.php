@@ -29,6 +29,7 @@ class HashMapper {
     public static function inverse($hash) {
         $hash = preg_replace("|^/declaration|", "/recolte", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE|", "/certification", $hash);
+        $hash = preg_replace("|/certifications/VINSSIG|", "/certification", $hash);
         $hash = preg_replace("|/genres/TRANQ|", "/genre", $hash);
         $hash = preg_replace("|/appellations/([a-zA-Z0-9_-]+)|", "/appellation_$1" , $hash);
         $hash = preg_replace("|/mentions/DEFAUT/|", "/mention/", $hash);
@@ -46,7 +47,6 @@ class HashMapper {
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
 
         $hash = preg_replace("|/genres/EFF|", "/genre", $hash);
-        $hash = preg_replace( "|/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE|", "/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE", $hash);
 
         return $hash;
     }

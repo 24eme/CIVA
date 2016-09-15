@@ -928,7 +928,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function hasLieuEditable() {
 
-        return false;
+        return $this->getAppellation()->hasLieuEditable();
     }
 
     public function hasManyLieu() {

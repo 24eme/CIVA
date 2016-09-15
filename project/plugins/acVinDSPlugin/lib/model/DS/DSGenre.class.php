@@ -21,7 +21,19 @@ class DSGenre extends BaseDSGenre {
         return $this->filter('^appellation');
     }
 
-   public function updateVolumes($vtsgn,$old_volume,$volume) {
+    public function getAppellationsSorted() {
+        $appellations = array();
+        foreach($this->getConfig()->getArrayAppellations() as $item) {
+            $hash = str_replace("recolte", "declaration", HashMapper::inverse($item->getHash()));
+            if($this->getDocument()->exist($hash)) {
+                $appellations[$hash] = $this->getDocument()->get($hash);
+            }
+        }
+
+        return $appellations;
+    }
+
+    public function updateVolumes($vtsgn,$old_volume,$volume) {
         parent::updateVolumes($vtsgn, $old_volume, $volume);
         $this->getCertification()->updateVolumes($vtsgn,$old_volume,$volume);
     }

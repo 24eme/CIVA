@@ -23,7 +23,7 @@
         <?php array_push($boutons, 'email_acheteurs') ?>
     <?php endif; ?>
 
-    <?php include_partial('dr/boutons', array('display' => $boutons, array('dr' => $dr))) ?>
+    <?php include_partial('dr/boutons', array('display' => $boutons, 'etablissement' => $dr->getEtablissement(), array('dr' => $dr))) ?>
 
 </form>
 <!-- fin #principal -->

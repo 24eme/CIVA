@@ -73,7 +73,7 @@ class tiersActions extends sfActions {
             'CONTRAT_EN_ATTENTE_SIGNATURE' => 0,
             'CONTRAT_A_ENLEVER' => 0,
         );
-        $tiers = $this->getUser()->getDeclarantsVrac();
+        $tiers = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
         foreach($vracs as $vrac) {
             $item = $vrac->value;
@@ -108,9 +108,9 @@ class tiersActions extends sfActions {
         if($this->nb_blocs == 1) {
             foreach($blocs as $droit => $url) {
                 if(is_array($url)) {
-                    //return $this->redirect($url[0], $url[1]);
+                    return $this->redirect($url[0], $url[1]);
                 }
-                //return $this->redirect($url);
+                return $this->redirect($url);
             }
         }
     }

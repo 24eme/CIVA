@@ -111,7 +111,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_PROPRIETE), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

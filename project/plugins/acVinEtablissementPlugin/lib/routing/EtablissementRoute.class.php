@@ -12,7 +12,7 @@ class EtablissementRoute extends sfObjectRoute implements InterfaceEtablissement
             throw new sfError404Exception("Vous n'avez pas le droit d'accéder à cette page");
         }
         $module = sfContext::getInstance()->getRequest()->getParameterHolder()->get('module');
-        sfContext::getInstance()->getResponse()->setTitle(strtoupper($module).' - '.$this->etablissement->nom);
+        //sfContext::getInstance()->getResponse()->setTitle(strtoupper($module).' - '.$this->etablissement->nom);
         return $this->etablissement;
     }
 
@@ -22,11 +22,11 @@ class EtablissementRoute extends sfObjectRoute implements InterfaceEtablissement
     }
 
     public function getEtablissement() {
-      
+
 	if (!$this->etablissement) {
            $this->etablissement = $this->getObject();
       	}
-      	
+
 	return $this->etablissement;
     }
 }

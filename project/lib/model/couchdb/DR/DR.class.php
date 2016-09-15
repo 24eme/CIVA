@@ -705,14 +705,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $tiers = $this->getEtablissement();
 
-        $this->declaration_commune = $tiers->commune;
-        $this->declaration_insee = $tiers->insee;
+        $this->declaration_commune = $tiers->declaration_commune;
+        $this->declaration_insee = $tiers->declaration_insee;
 
         if(!$this->declarant->email) {
             $this->declarant->email = $tiers->getEmail();
         }
 
-        //$this->declarant->exploitant->sexe = $tiers->exploitant->sexe;
+        $this->declarant->exploitant->sexe = $tiers->exploitant->civilite;
         $this->declarant->exploitant->nom = $tiers->exploitant->nom;
         $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
         $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;

@@ -60,7 +60,7 @@ class Current extends BaseCurrent {
 
     public function getDsNonEditable() {
 
-        return 0;
+        return 1;
     }
 
     public function getDsNonOuverte() {

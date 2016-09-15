@@ -119,17 +119,7 @@ class dsActions extends sfActions {
             if ($request->getParameter('exploitation')) {
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
                 if ($this->form_expl->isValid()) {
-
                     $tiers = $this->form_expl->save();
-                    // $ldap = new ldap();
-
-                    if ($tiers) {
-                        /* $values['nom'] = $tiers->nom;
-                          $values['adresse'] = $tiers->siege->adresse;
-                          $values['code_postal'] = $tiers->siege->code_postal;
-                          $values['ville'] = $tiers->siege->commune; */
-                        //$ldap->ldapModify($this->tiers);
-                    }
                 } else {
                     $this->form_expl_err = 1;
                 }

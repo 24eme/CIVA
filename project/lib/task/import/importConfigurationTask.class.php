@@ -80,7 +80,7 @@ EOF;
             }
         }
 
-        if(is_file($import_dir . '/mouvements_favoris.csv')) {
+        if(is_file($import_dir . '/attributs.csv')) {
             foreach (file($import_dir . '/attributs.csv') as $attributLine) {
                 $attribut = explode(";", preg_replace('/"/', '', str_replace("\n", "", $attributLine)));
                 $configuration->getOrAdd($attribut[0])->add('attributs')->add($attribut[1], $attribut[2]);

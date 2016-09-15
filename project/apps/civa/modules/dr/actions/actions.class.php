@@ -2,6 +2,7 @@
 class drActions extends _DRActions {
 
     public function executeInit(sfWebRequest $request) {
+        throw new sfException("En maintenance");
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
         $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
@@ -480,6 +481,7 @@ class drActions extends _DRActions {
     }
 
     public function executeInvaliderCiva(sfWebRequest $request) {
+        throw new sfException("En maintenance");
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getRoute()->getDR();
         if ($dr) {
@@ -493,6 +495,7 @@ class drActions extends _DRActions {
     }
 
     public function executeInvaliderRecoltant(sfWebRequest $request) {
+        throw new sfException("En maintenance");
         $dr = $this->getRoute()->getDR();
         if ($dr) {
             $dr->remove('modifiee');
