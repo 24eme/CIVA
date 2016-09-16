@@ -53,9 +53,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         $this->declaration_commune = $tiers->declaration_commune;
         $this->declaration_insee = $tiers->declaration_insee;
 
-        if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getCompteEmail();
-        }
+        $this->declarant->email = $tiers->getCompte();
 
         if($tiers->exist('civaba') && $tiers->civaba){
                 $this->add('civaba', $tiers->civaba);
