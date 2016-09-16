@@ -36,7 +36,6 @@ class globalActions extends sfActions {
             $this->getUser()->signOut();
             return $this->redirect("@login");
         } else {
-            exit;
             return $this->redirect("mon_espace_civa", array('identifiant' => $this->getUser()->getCompte()->getIdentifiant()));
         }
     }

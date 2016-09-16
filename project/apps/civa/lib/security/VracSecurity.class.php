@@ -48,7 +48,6 @@ class VracSecurity implements SecurityInterface {
         if(!is_array($droits)) {
             $droits = array($droits);
         }
-
         /*** DECLARANT ***/
 
         /*if(!$tiers->isDeclarantContrat()) {

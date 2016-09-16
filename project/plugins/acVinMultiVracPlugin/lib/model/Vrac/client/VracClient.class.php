@@ -95,6 +95,15 @@ class VracClient extends acCouchdbClient {
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
 
+	public function getFirstEtablissement($societe) {
+		foreach($societe->getEtablissementsObject() as $etablissement) {
+
+			return $etablissement;
+		}
+
+		return null;
+	}
+
 	public function getEtablissements($societe) {
 
 		return $societe->getEtablissementsObject();

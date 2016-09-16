@@ -317,12 +317,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->nom = $tiers->nom;
     	$this->mandataire->raison_sociale = $tiers->nom;
     	$this->mandataire->siret = $tiers->siret;
-    	$this->mandataire->carte_pro = $tiers->no_carte_professionnelle;
+    	$this->mandataire->carte_pro = $tiers->carte_pro;
     	$this->mandataire->adresse = $tiers->siege->adresse;
     	$this->mandataire->code_postal = $tiers->siege->code_postal;
     	$this->mandataire->commune = $tiers->siege->commune;
     	$this->mandataire->telephone = $tiers->telephone;
-    	$this->mandataire->famille = null;
+    	$this->mandataire->famille = $tiers->getFamille();
     	$this->mandataire->identifiant = $tiers->_id;
     	$this->mandataire->num_db2 = ($tiers->exist("db2"))? $tiers->db2->num : null;
 
@@ -330,9 +330,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->mandataire->add('emails');
 
         if($this->isProprietaire($this->mandataire->identifiant)) {
-            $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+			//$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+			$this->mandataire->emails = array($tiers->getEmail());
         } else {
-            $this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+            //$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+			$this->mandataire->emails = array($tiers->getEmail());
         }
     }
 

@@ -153,7 +153,7 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac');
 		}
 
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
 
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
@@ -233,13 +233,12 @@ class vracActions extends sfActions
 
     public function executeEtape(sfWebRequest $request)
     {
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
 		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
-
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
     	if ($this->etapes->isGt($this->etape, VracEtapes::ETAPE_PRODUITS) && !$this->vrac->hasProduits()) {
@@ -281,7 +280,7 @@ class vracActions extends sfActions
     public function executeAjouterProduit(sfWebRequest $request)
     {
 
-        $this->user = $this->getUser()->getDeclarantVrac();
+        $this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
         $this->config = ConfigurationClient::getConfiguration('2012');
         //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
         $this->appellationsLieuDit = json_encode(array());
@@ -313,18 +312,18 @@ class vracActions extends sfActions
     	if (!$identifiant) {
     		throw new sfException('Id du tiers obligatoire.');
     	}
-    	$tiers = _TiersClient::getInstance()->find($identifiant);
-    	if (!$tiers) {
+    	$etablissement = EtablissementClient::getInstance()->find($identifiant);
+    	if (!$etablissement) {
     		throw new sfException('Le tiers d\'id "'.$identifiant.'" n\'existe pas.');
     	}
 
         $acteur = $request->getParameter('acteur');
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
         $this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
-        $this->vrac->addActeur($acteur, $tiers);
+        $this->vrac->addActeur($acteur, $etablissement);
 
     	return $this->renderPartial('vrac/soussigne', array('vrac' => $this->vrac, 'tiers' => $this->vrac->{$acteur}, 'fiche' => false));
     }
@@ -496,7 +495,7 @@ class vracActions extends sfActions
 
     protected function populateVracTiers($vrac)
     {
-    	$declarant = $this->getUser()->getDeclarantVrac();
+    	$declarant = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
     	if ($vrac->isNew() && $typeTiers) {
 			if ($typeTiers == 'vendeur') {

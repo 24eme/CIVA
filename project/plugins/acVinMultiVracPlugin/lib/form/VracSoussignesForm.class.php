@@ -1,9 +1,9 @@
 <?php
-class VracSoussignesForm extends acCouchdbObjectForm 
-{    
+class VracSoussignesForm extends acCouchdbObjectForm
+{
 	protected $annuaire;
-	
-	public function __construct(acCouchdbJson $object, $annuaire = null, $options = array(), $CSRFSecret = null) 
+
+	public function __construct(acCouchdbJson $object, $annuaire = null, $options = array(), $CSRFSecret = null)
 	{
 		$this->annuaire = $annuaire;
         parent::__construct($object, $options, $CSRFSecret);
@@ -47,7 +47,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
 
-    
+
 	protected function updateDefaultsFromObject() {
         parent::updateDefaultsFromObject();
         $defaults = $this->getDefaults();
@@ -60,10 +60,10 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if ($this->getObject()->isNew() && !$this->getObject()->type_contrat) {
         	$defaults['type_contrat'] = VracClient::TYPE_VRAC;
         }
-        $this->setDefaults($defaults); 
+        $this->setDefaults($defaults);
     }
 
-    protected function doUpdateObject($values) 
+    protected function doUpdateObject($values)
     {
     	$acheteur = $values['acheteur'];
     	$vendeur = $values['vendeur'];
@@ -88,22 +88,22 @@ class VracSoussignesForm extends acCouchdbObjectForm
     		$this->getObject()->initProduits();
     	}
     }
-    
+
     protected function getContratTypes()
     {
     	return VracClient::getContratTypes();
     }
-    
+
     protected function getTypes()
     {
     	return AnnuaireClient::getAnnuaireTypes();
     }
-    
+
     public function getAnnuaire()
     {
     	return $this->annuaire;
     }
-    
+
     public function getRecoltants()
     {
     	$annuaire = $this->getAnnuaire();
@@ -112,12 +112,15 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	}
     	$result = array();
     	foreach ($annuaire->recoltants as $key => $value) {
+			if(!preg_match("/ETABLISSEMENT/", $key)) {
+				continue;
+			}
     		$num = explode('-', $key);
     		$result[$key] = $value." (".$num[1].")";
     	}
     	return array_merge(array('' => ''), $result);
     }
-    
+
     public function getNegociants()
     {
     	$annuaire = $this->getAnnuaire();
@@ -126,12 +129,15 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	}
     	$result = array();
     	foreach ($annuaire->negociants as $key => $value) {
+			if(!preg_match("/ETABLISSEMENT/", $key)) {
+				continue;
+			}
     		$num = explode('-', $key);
     		$result[$key] = $value." (".$num[1].")";
     	}
     	return array_merge(array('' => ''), $result);
     }
-    
+
     public function getCavesCooperatives()
     {
     	$annuaire = $this->getAnnuaire();
@@ -140,12 +146,15 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	}
     	$result = array();
     	foreach ($annuaire->caves_cooperatives as $key => $value) {
+			if(!preg_match("/ETABLISSEMENT/", $key)) {
+				continue;
+			}
     		$num = explode('-', $key);
     		$result[$key] = $value." (".$num[1].")";
     	}
     	return array_merge(array('' => ''), $result);
     }
-    
+
     public function getCommerciaux()
     {
     	$annuaire = $this->getAnnuaire();
