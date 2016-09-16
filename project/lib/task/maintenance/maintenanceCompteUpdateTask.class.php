@@ -39,7 +39,11 @@ EOF;
             return;
         }
 
-        $compte->setEmail($arguments['email']);
+        $master = $compte->getMasterObject();
+        $master->setEmail($arguments['email']);
+        $master->save();
+
+        $compte = CompteClient::getInstance()->find($arguments['doc_id']);
         $compte->setMotDePasse($arguments['mot_de_passe']);
         $compte->save();
     }

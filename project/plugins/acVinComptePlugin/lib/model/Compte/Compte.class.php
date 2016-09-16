@@ -220,6 +220,20 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         return $this->getEtablissement() != null;
     }
 
+    public function getMasterObject() {
+        if($this->isSocieteContact()) {
+
+            return $this->getSociete();
+        }
+
+        if($this->isEtablissementContact()) {
+
+            return $this->getEtablissement();
+        }
+
+        return $this;
+    }
+
     public function getEtablissement() {
         if($this->isSocieteContact()) {
             $societe = $this->getSociete();

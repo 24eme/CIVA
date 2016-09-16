@@ -29,6 +29,11 @@ class DSSecurity implements SecurityInterface {
         $this->type_ds = $type_ds;
     }
 
+    public function getUser() {
+        
+        return sfContext::getInstance()->getUser();
+    }
+
     public function isAuthorized($droits) {
         if(!is_array($droits)) {
             $droits = array($droits);
@@ -82,7 +87,7 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::CREATION, $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
+        if(in_array(self::CREATION, $droits) && $this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
         }
@@ -124,7 +129,7 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::EDITION , $droits) && !$this->compte->isDsEditable($this->type_ds)) {
+        if(in_array(self::EDITION , $droits) && !$this->getUser()->isDsEditable($this->type_ds)) {
 
             return false;
         }

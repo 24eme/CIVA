@@ -1,13 +1,13 @@
 <?php
-class CompteModificationForm extends CompteForm {
+class CreationCompteForm extends CompteForm {
 
     /**
      *
      */
     protected function checkCompte() {
         parent::checkCompte();
-        if ($this->_compte->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_INSCRIT) {
-            throw new sfException("compte must be status : INSCRIT");
+        if ($this->_compte->getStatus() != CompteClient::STATUT_TELEDECLARANT_NOUVEAU) {
+            throw new sfException("compte must be status : NOUVEAU");
         }
     }
 
@@ -16,8 +16,6 @@ class CompteModificationForm extends CompteForm {
      */
     public function configure() {
         parent::configure();
-        $this->getValidator('mdp1')->setOption('required', false);
-        $this->getValidator('mdp2')->setOption('required', false);
     }
 
     /**
@@ -39,7 +37,6 @@ class CompteModificationForm extends CompteForm {
         }
         $compte->save();
 
-        return $compte;
+        return $this->_compte;
     }
-
 }

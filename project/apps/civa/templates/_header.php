@@ -24,11 +24,11 @@
                 <?php if ($sf_user->isInDelegateMode()):?>
                         <?php echo sprintf('%s , vous êtes connecté en tant que %s', $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->getNomAAfficher(), $sf_user->getCompte()->getNomAAfficher()) ;?>
                 <?php else : ?>
-                        <?php echo link_to($sf_user->getTiers()->getIntitule().' '.$sf_user->getTiers()->getNomAAfficher(), '@tiers');  ?>
+                        <?php echo link_to($sf_user->getCompte()->getNomAAfficher(), 'tiers');  ?>
                 <?php endif; ?>
             </p>
         <?php elseif ($sf_user->hasCredential('compte')) : ?>
-            <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNomAAfficher(), '@tiers'); ?></p>
+            <p class="utilisateur"><?php echo link_to($sf_user->getCompte()->getNomAAfficher(), 'tiers'); ?></p>
         <?php endif; ?>
     </div>
 
@@ -43,9 +43,9 @@
                 <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
                 <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
             <?php endif; ?>
-            <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_INSCRIT) : ?>
+            <?php if ($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == CompteClient::STATUT_TELEDECLARANT_INSCRIT) : ?>
                 <li><a href="<?php echo url_for('@compte_modification'); ?>">Mon compte</a></li>
-            <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE): ?>
+            <?php elseif($sf_user->hasCredential('compte') && $sf_user->getCompte()->getStatus() == CompteClient::STATUT_TELEDECLARANT_OUBLIE): ?>
                 <li><a href="<?php echo url_for('@compte_modification_oublie'); ?>">Mon compte</a></li>
             <?php endif; ?>
 

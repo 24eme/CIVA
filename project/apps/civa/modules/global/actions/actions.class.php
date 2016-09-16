@@ -27,14 +27,14 @@ class globalActions extends sfActions {
 
     public function executeSecure() {
         if (!$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS) && $this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
-            return $this->redirect("@admin");
+            return $this->redirect("admin");
         } elseif (!$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS) && $this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE_TIERS)) {
-            return $this->redirect("@tiers");
+            return $this->redirect("tiers");
         } elseif($this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE) && !$this->getUser()->hasCredential(myUser::CREDENTIAL_TIERS)) {
-            return $this->redirect("@compte_modification");
+            return $this->redirect("compte_modification");
         } elseif(!$this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE)) {
             $this->getUser()->signOut();
-            return $this->redirect("@login");
+            return $this->redirect("login");
         } else {
             return $this->redirect("mon_espace_civa", array('identifiant' => $this->getUser()->getCompte()->getIdentifiant()));
         }

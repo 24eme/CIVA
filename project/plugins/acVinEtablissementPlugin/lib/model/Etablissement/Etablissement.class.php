@@ -226,6 +226,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
             if ($this->isSameCompteThanSociete()) {
+                throw new sfException("Pas de création");
                 $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
                 $compte->addOrigine($this->_id);
             }else{
@@ -241,11 +242,11 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
             $this->setCompte($compte->_id);
         } else if(!$this->isSameCompteThanSociete()){
+            throw new sfException("Pas de suppression");
             $compteEtablissement = $this->getMasterCompte();
             $compteSociete = $this->getSociete()->getMasterCompte();
 
             $this->setCompte($compteSociete->_id);
-
             CompteClient::getInstance()->find($compteEtablissement->_id)->delete();
         }
 

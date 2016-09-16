@@ -305,7 +305,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     {
         parent::signInTiers($tiers);
         if ($this->hasCredential(myUser::CREDENTIAL_DECLARATION)) {
-            $this->initCredentialsDeclaration();
+            //$this->initCredentialsDeclaration();
         }
     }
 

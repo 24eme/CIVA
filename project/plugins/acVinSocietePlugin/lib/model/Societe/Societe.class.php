@@ -365,6 +365,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         $compteMaster = $this->getMasterCompte();
 
         if (!$compteMaster) {
+            throw new sfException("Pas de création");
             $compteMaster = $this->createCompteSociete();
         }
 
