@@ -366,7 +366,7 @@ class ExportDSPdf extends ExportDocument {
     protected function preBuildRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
         $produits = $ds->declaration->getConfig()->get(HashMapper::convert("/certification/genre/appellation_".$appellation_key))->getProduits();
         foreach($produits as $produit) {
-            if($produit->exist('attributs') && $produit->attributs->exist('no_ds') && $produit->attributs->get('no_ds')) {
+            if(!$produit->isForDS()) {
                 continue;
             }
             $key = $this->addProduit($recap, $produit, $lieu, $couleur);

@@ -142,8 +142,11 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         }
 
         if($config->isAutoDs()) {
-            foreach($config->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS) as $item) {
-                $this->addDetail($item->getHash());
+            foreach($config->getProduits() as $item) {
+                if(!$item->isForDS()) {
+                    continue;
+                }
+                $this->addDetail(HashMapper::inverse($item->getHash()));
             }
         }
 
@@ -218,16 +221,13 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         //echo $hash."\n";
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash_config = HashMapper::convert($hash);
-        /*try {
-            $this->getConfig()->get($hash_config)->isForDS();
-        } catch(Exception $e) {
-            echo $hash."\n";
-            echo $hash_config."\n";
-            return null;
-        }*/
 
         if(!$this->getConfig()->exist($hash_config)) {
-            $this->addNoeud($this->getConfig()->get($hash_config)->getParent()->getHash());
+            return null;
+        }
+
+        if(!$this->getConfig()->get($hash_config)->isForDS()) {
+            $this->addNoeud(HashMapper::inverse($this->getConfig()->get($hash_config)->getParentNode()->getHash()));
             return null;
         }
 

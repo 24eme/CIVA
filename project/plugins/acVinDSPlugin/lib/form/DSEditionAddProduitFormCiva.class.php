@@ -37,6 +37,9 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
             $this->_choices_produits = array("" => "");
             foreach($this->getProduits() as $hash => $cepage) {
                 $hash = preg_replace('/^\/recolte/','declaration',$hash);
+                if(!$cepage->isForDS()) {
+                    continue;
+                }
                 if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist(preg_replace('/^\/recolte/','declaration',$hash)) && count($this->_ds->get($hash)->detail) > 0) {
 
                     continue;

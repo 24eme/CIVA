@@ -861,17 +861,27 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function isForDR() {
 
-        return !$this->exist('no_dr') || !$this->get('no_dr');
+        if(!$this->exist('attributs') || !$this->attributs->exist('no_dr') || !$this->attributs->get('no_dr')) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public function isForDS() {
+        if(!$this->exist('attributs') || !$this->attributs->exist('no_ds') || !$this->attributs->get('no_ds')) {
 
-        return !$this->exist('no_ds') || !$this->get('no_ds');
+            return true;
+        }
+
+        return false;
     }
 
     public function isAutoDs() {
-        if ($this->exist('auto_ds')) {
-            return $this->get('auto_ds');
+        if($this->exist('attributs') && $this->attributs->exist('auto_ds') && $this->attributs->get('auto_ds')) {
+
+            return true;
         }
 
         return $this->getParentNode()->isAutoDs();
