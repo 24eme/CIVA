@@ -105,7 +105,7 @@ EOF;
     }
 
     protected function importSociete($tiers, $etablissements) {
-        $identifiantSociete = $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $identifiantSociete = $this->buildIdentifiantSociete($tiers);
 
         if(!str_replace("C", "", $identifiantSociete)) {
             return;
@@ -160,7 +160,7 @@ EOF;
     protected function importEtablissement($societe, $tiers, $num)
     {
         $famille = $this->getFamille($tiers);
-        $identifiantEtablissement = (in_array($famille, array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && $this->getInfos($tiers, Db2Tiers::COL_CVI)) ? $this->getInfos($tiers, Db2Tiers::COL_CVI) : "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
 
         if(!str_replace("C", "", $identifiantEtablissement)) {
             echo "Pas d'identifiant ".$this->getInfos($tiers, Db2Tiers::COL_NUM);
@@ -221,6 +221,10 @@ EOF;
         $etablissement->add('declaration_insee', ($this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION)) ? $this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION) : $etablissement->getInsee());
         $etablissement->add('declaration_commune', ($etablissement->declaration_insee) ? $this->getCommune($etablissement->declaration_insee    ): $etablissement->getCommune());
 
+        if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
+            $etablissement->setCartePro($this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET));
+        }
+
         try {
             $etablissement->save();
         } catch (Exception $e) {
@@ -243,15 +247,16 @@ EOF;
             }
         }
 
-        $compteExploitant->setCivilite($this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR));
         $nom = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
-        $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
         $adresse = trim($this->getInfos($tiers, Db2Tiers::COL_NUMERO) . " " . $this->getInfos($tiers, Db2Tiers::COL_ADRESSE));
-        $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getAdresse());
         $commune = $this->getInfos($tiers, Db2Tiers::COL_COMMUNE);
-        $compteExploitant->setCommune(($commune) ? $commune : $etablissement->getCommune());
         $codePostal = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL);
+
+        $compteExploitant->setCivilite($this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR));
+        $compteExploitant->setNom(($nom) ? $nom : $etablissement->getNom());
+        $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getAdresse());
         $compteExploitant->setCodePostal(($codePostal) ? $codePostal : $etablissement->getCodePostal());
+        $compteExploitant->setCommune(($commune) ? $commune : $etablissement->getCommune());
         $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
 
         try {
@@ -268,6 +273,26 @@ EOF;
         }
 
         return $etablissement;
+    }
+
+    protected function buildIdentifiantSociete($tiers) {
+        if($this->getFamille($tiers) == EtablissementFamilles::FAMILLE_COURTIER) {
+
+            return $this->getInfos($tiers, Db2Tiers::COL_SIRET) ? sprintf("%09d", $this->getInfos($tiers, Db2Tiers::COL_SIRET)) : null;
+        }
+
+        return $this->getInfos($tiers, Db2Tiers::COL_CVI) ? $this->getInfos($tiers, Db2Tiers::COL_CVI): "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+    }
+
+    protected function buildIdentifiantEtablissement($tiers) {
+        $famille = $this->getFamille($tiers);
+
+        if($this->getFamille($tiers) == EtablissementFamilles::FAMILLE_COURTIER) {
+
+            return $this->getInfos($tiers, Db2Tiers::COL_SIRET) ? sprintf("%09d", $this->getInfos($tiers, Db2Tiers::COL_SIRET)) : null;
+        }
+
+        return (in_array($famille, array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && $this->getInfos($tiers, Db2Tiers::COL_CVI)) ? $this->getInfos($tiers, Db2Tiers::COL_CVI) : "C".$this->getInfos($tiers, Db2Tiers::COL_CIVABA);;
     }
 
     protected function createCompteLS($id, $idReference) {

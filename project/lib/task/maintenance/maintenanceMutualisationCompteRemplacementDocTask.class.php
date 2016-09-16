@@ -62,15 +62,15 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
             $newValue = $this->tiersId2EtablissementId($value);
             if($this->replaceValue($iterable, $key, $newValue)) {
                 echo $parentKey."/".$key.":".$value." => ".$newValue ."\n";
+                $modifie = true;
             }
-            $modifie = true;
         }
 
         foreach($keys2Replace as $key => $newKey) {
             if($this->replaceKey($iterable, $key, $newKey)) {
                 echo $parentKey."/".$key." => ".$parentKey."/".$newKey." \n";
+                $modifie = true;
             }
-            $modifie = true;
         }
 
         return $modifie;
@@ -109,12 +109,12 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
             $iterable->{$key} = $newValue;
         }
 
-        return false;
+        return true;
     }
 
     public function isTiers($value) {
 
-        return preg_match("/^(REC|MET|ACHAT)-[0-9]+$/", $value);
+        return preg_match("/^(REC|MET|ACHAT|COURT)-[0-9]+$/", $value);
     }
 
     public function tiersId2EtablissementId($value) {
@@ -123,15 +123,20 @@ class maintenanceMutualisationCompteRemplacementDocTask extends sfBaseTask
         if(!$tiers) {
             return;
         }
+        $etablissement = null;
 
-        $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$tiers->cvi, acCouchdbClient::HYDRATE_JSON);
+        if(isset($tiers->cvi)) {
+            $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$tiers->cvi, acCouchdbClient::HYDRATE_JSON);
+        }
 
         if($etablissement)  {
 
             return $etablissement->_id;
         }
 
-        $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-C".$tiers->civaba, acCouchdbClient::HYDRATE_JSON);
+        if(isset($tiers->civaba)) {
+            $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-C".$tiers->civaba, acCouchdbClient::HYDRATE_JSON);
+        }
 
         if($etablissement)  {
 

@@ -107,7 +107,7 @@ class TiersSecurity implements SecurityInterface {
         }
 
         if ($this->isAuthorized(TiersSecurity::VRAC )) {
-            $droits[TiersSecurity::VRAC] = 'mon_espace_civa_vrac';
+            $droits[TiersSecurity::VRAC] = array('mon_espace_civa_vrac', array('identifiant' => $this->compte->getIdentifiant()));
         }
 
         if ($this->isAuthorized(TiersSecurity::GAMMA )) {
