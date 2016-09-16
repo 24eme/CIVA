@@ -27,8 +27,11 @@ mon_espace_civa_ds:
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_gamma:
-  url:   /mon_espace_civa/gamma
+  url:   /mon_espace_civa/:identifiant/gamma
   param: { module: tiers, action: monEspaceGamma }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_vrac:
   url:   /mon_espace_civa/:identifiant/vrac
@@ -204,7 +207,7 @@ telecharger_la_notice_vrac:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
-  
+
 annuaire_retour:
   url: /annuaire/retour
   param: { module: annuaire, action: retour }

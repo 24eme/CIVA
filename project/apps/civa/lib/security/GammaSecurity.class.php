@@ -4,21 +4,15 @@ class GammaSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
 
-    protected $myUser;
-    protected $tiers;
+    protected $compte;
 
-    public static function getInstance($myUser) {
+    public static function getInstance($compte) {
 
-        return new GammaSecurity($myUser);
+        return new GammaSecurity($compte);
     }
 
-    public function __construct($myUser) {
-        $this->myUser = $myUser;
-        try {
-            $this->tiers = $this->myUser->getTiers('MetteurEnMarche');
-        } catch (Exception $e) {
-            $this->tiers = new MetteurEnMarche();
-        }
+    public function __construct($compte) {
+        $this->compte = $compte;
     }
 
     public function isAuthorized($droits) {
@@ -28,24 +22,16 @@ class GammaSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!isset($this->tiers)) {
-
-            return false;
+        $hasNoAccises = false;
+        foreach($this->compte->getSociete()->getEtablissementsObject() as $etablissement) {
+            if($etablissement->no_accises) {
+                $hasNoAccises = true;
+            }
         }
 
-        if(!$this->tiers->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR) {
+        if(!$hasNoAccises) {
 
             return false;
-        }
-
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_GAMMA)) {
-
-            return false;
-        }
-
-        if(in_array(self::DECLARANT, $droits)) {
-
-            return true;
         }
 
         return true;

@@ -77,11 +77,9 @@ class TiersSecurity implements SecurityInterface {
             return true;
         }
 
-        return;
-
         if(in_array(self::GAMMA, $droits)) {
 
-            return GammaSecurity::getInstance($this->myUser)->isAuthorized(GammaSecurity::DECLARANT);
+            return GammaSecurity::getInstance($this->compte)->isAuthorized(GammaSecurity::DECLARANT);
         }
 
         return false;
@@ -111,7 +109,7 @@ class TiersSecurity implements SecurityInterface {
         }
 
         if ($this->isAuthorized(TiersSecurity::GAMMA )) {
-            $droits[TiersSecurity::GAMMA] = 'mon_espace_civa_gamma';
+            $droits[TiersSecurity::GAMMA] = array('mon_espace_civa_gamma', array('identifiant' => $this->compte->getIdentifiant()));
         }
 
         if ($this->isAuthorized(TiersSecurity::DS_PROPRIETE )) {

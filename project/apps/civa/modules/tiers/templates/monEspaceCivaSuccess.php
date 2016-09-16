@@ -91,7 +91,7 @@
                     <p class="mineure">Aucune information à signaler</p>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_gamma') ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_gamma', array('identifiant' => $compte->identifiant)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
