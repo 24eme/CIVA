@@ -374,7 +374,7 @@ public function getConfigurationCampagne() {
     public function getTotalAOCByType($type) {
         $total = 0;
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(preg_match('/^appellation_VINTABLE/', $hash)) {
+            if(preg_match('/appellation_VINTABLE/', $hash)) {
 
                 continue;
             }
@@ -386,7 +386,7 @@ public function getConfigurationCampagne() {
 
     public function getTotalVinSansIg() {
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(preg_match('/^appellation_VINTABLE/', $hash))
+            if(preg_match('/appellation_VINTABLE/', $hash))
                     return ($appellation->getTotalStock())? ($appellation->getTotalStock() - $this->getTotalMousseuxSansIg()) : 0;
         }
         return 0;
@@ -394,7 +394,7 @@ public function getConfigurationCampagne() {
 
     public function getTotalMousseuxSansIg() {
         foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(preg_match('/^appellation_VINTABLE/', $hash)){
+            if(preg_match('/appellation_VINTABLE/', $hash)){
                 if(!$appellation->exist('mention')) return 0;
                 if(!$appellation->mention->exist('lieu')) return 0;
                 if(!$appellation->mention->lieu->exist('couleur')) return 0;
@@ -534,7 +534,7 @@ public function getConfigurationCampagne() {
 
     public function hasAOC() {
         foreach($this->declaration->getAppellationsSorted() as $appellation) {
-            if(preg_match('/^appellation_VINTABLE$/',$appellation->getKey())) {
+            if(preg_match('/appellation_VINTABLE/',$appellation->getKey())) {
                 continue;
             }
 
