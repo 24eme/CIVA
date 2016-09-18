@@ -96,6 +96,6 @@ class CompteLdap extends acVinLdap {
             $noAccises = $compte->getEtablissement()->no_accises;
         }
 
-        return sprintf("%s, %s, %s, %s", self::getIdentifiant($compte), $noAccises, $compte->getNom(), $compte->nom_a_afficher);
+        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compte), $noAccises, $compte->getNom(), $compte->nom_a_afficher);
     }
 }
