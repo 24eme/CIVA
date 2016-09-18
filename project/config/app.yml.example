@@ -18,6 +18,7 @@ all:
     dn: "cn=admin,dc=vinsalsace,dc=pro"
     dc: "dc=vinsalsace,dc=pro"
     pass: "LDAP_ADMIN_PASSWORD"
+    auto: false
   secret_key:
     publication_mairies: "cle_secrete"
   gamma:
@@ -38,9 +39,3 @@ all:
     url: "https://url_a_remplacer.com"
 test:
 #  autologin: login
-
-
-
-
-
-
