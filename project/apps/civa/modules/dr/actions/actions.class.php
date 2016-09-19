@@ -421,15 +421,13 @@ class drActions extends _DRActions {
     public function executeVisualisation(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_visualisation";
         $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
 
-        if($annee + 4 < $this->getUser()->getCampagne()) {
+        $this->dr = $this->getRoute()->getDR();
 
-            $this->forward404("Cette DR n'est plus accessible");
-        }
+        $this->annee = $this->dr->getCampagne();
 
-        $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $this->dr = acCouchdbManager::getClient()->find($key);
+        $key = $this->dr->_id;
+
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->forward404Unless($this->dr);
 
@@ -441,7 +439,6 @@ class drActions extends _DRActions {
             $this->dr->save();
         }
 
-        $this->annee = $annee;
     }
 
     public function executeConfirmation(sfWebRequest $request) {
