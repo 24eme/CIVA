@@ -5,7 +5,7 @@ class CompteRoute extends sfObjectRoute implements InterfaceCompteRoute {
     protected $compte = null;
 
     protected function getObjectForParameters($parameters = null) {
-      $this->compte = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", $parameters['identifiant']));
+      $this->compte = CompteClient::getInstance()->find("COMPTE-".$parameters['identifiant']);
       return $this->compte;
     }
 
