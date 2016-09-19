@@ -30,7 +30,7 @@ class DSSecurity implements SecurityInterface {
     }
 
     public function getUser() {
-        
+
         return sfContext::getInstance()->getUser();
     }
 
@@ -62,7 +62,6 @@ class DSSecurity implements SecurityInterface {
         }
 
         if(!$this->etablissement->hasLieuxStockage() && !$this->etablissement->isAjoutLieuxDeStockage()) {
-
             return false;
         }
 
@@ -96,6 +95,7 @@ class DSSecurity implements SecurityInterface {
 
             return false;
         }
+
 
         if(in_array(self::CREATION, $droits)) {
 

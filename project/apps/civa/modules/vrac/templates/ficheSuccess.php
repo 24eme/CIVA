@@ -118,6 +118,7 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
+	console.log("nop");
 openPopup($("#popup_cloture_contrat"));
 });
 </script>

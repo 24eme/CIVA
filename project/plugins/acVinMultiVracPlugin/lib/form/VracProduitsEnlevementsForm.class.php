@@ -1,13 +1,13 @@
 <?php
-class VracProduitsEnlevementsForm extends acCouchdbObjectForm 
-{    
+class VracProduitsEnlevementsForm extends acCouchdbObjectForm
+{
 	public function configure()
     {
         $this->embedForm('produits', new VracProduitEnlevementCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted()));
         $this->widgetSchema->setNameFormat('vrac[%s]');
     }
-    
-    public function doUpdateObject($values) 
+
+    public function doUpdateObject($values)
     {
         parent::doUpdateObject($values);
         foreach ($this->getEmbeddedForms() as $key => $embedForm) {
@@ -16,7 +16,7 @@ class VracProduitsEnlevementsForm extends acCouchdbObjectForm
         $this->getObject()->updateTotaux();
         $this->getObject()->updateEnlevementStatut();
     }
-    
+
 	public function bind(array $taintedValues = null, array $taintedFiles = null)
     {
         foreach ($this->embeddedForms as $key => $form) {
@@ -31,8 +31,8 @@ class VracProduitsEnlevementsForm extends acCouchdbObjectForm
         $this->validatorSchema[$name] = $form->getValidatorSchema();
     }
 
-    public function getFormTemplateRetiraisons($detail, $key) 
-    {      
+    public function getFormTemplateRetiraisons($detail, $key)
+    {
         $form_embed = new VracEnlevementForm($detail->retiraisons->add());
         $form = new VracCollectionTemplateForm($this, 'produits]['.$key.'][enlevements', $form_embed);
 

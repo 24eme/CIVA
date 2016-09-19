@@ -125,8 +125,7 @@ class VracSecurity implements SecurityInterface {
 
         /*** ENLEVEMENT ***/
 
-        if(in_array(self::ENLEVEMENT, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
-
+        if(in_array(self::ENLEVEMENT, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
             return false;
         }
 
@@ -142,7 +141,7 @@ class VracSecurity implements SecurityInterface {
 
         /*** CLOTURE ***/
 
-        if(in_array(self::CLOTURE, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
+        if(in_array(self::CLOTURE, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
 
             return false;
         }

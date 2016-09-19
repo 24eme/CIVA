@@ -191,7 +191,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function hasRetiraisons()
     {
     	$result = false;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
         	if ($item->hasRetiraisons()) {
         		$result = true;
         		break;
