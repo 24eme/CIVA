@@ -292,7 +292,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
     public function getNextLieu($lieu){
         $appellation = $lieu->getAppellation();
-        $appellations = $appellation->getParent()->getAppellationsSorted();
+        $appellations = $appellation->getGenre()->getCertification()->getParent()->getAppellationsSorted();
         $lieux = $lieu->getParent()->getLieuxSorted();
         $next = false;
         foreach ($lieux as $hash => $l) {
