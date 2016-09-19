@@ -13,7 +13,7 @@
 	  $this->setWidgets(array(
             'appellation' => new sfWidgetFormChoice(array('choices'  => $this->getAppellationChoices())),
           ));
-          
+
           $this->setValidators(array(
             'appellation' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($this->getAppellationChoices()))),
           ));
@@ -22,10 +22,15 @@
           $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
         }
 
+        protected function updateDefaultsFromObject() {
+            
+        }
+
         public function getAppellationChoices() {
             if (is_null($this->_appellation_choices)) {
                 $this->_appellation_choices = array();
-                foreach ($this->getObject()->getNoeudAppellations()->getConfig()->filter('^appellation') as $key => $item) {
+
+                foreach ($this->getObject()->getNoeudAppellations()->getConfig()->getChildrenNode() as $key => $item) {
                     if (!$this->getObject()->getNoeudAppellations()->exist($key)) {
                         $this->_appellation_choices[$key] = $item->getLibelle();
                     }
@@ -61,5 +66,3 @@
         }
 
     }
-
-?>

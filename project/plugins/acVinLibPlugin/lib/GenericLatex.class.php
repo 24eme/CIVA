@@ -33,15 +33,17 @@ class GenericLatex {
     if (!preg_match('/Transcript written/', $output) || preg_match('/Fatal error/', $output)) {
       throw new sfException($output);
     }
+/*
     if ($ret) {
       $log = $this->getLatexFileNameWithoutExtention().'.log';
-      $grep = preg_grep('/^!/', file_get_contents($log));
-      array_unshift($grep, "/!\ Latex error\n");
-      array_unshift($grep, "Latex log $log:\n");
+      $grep = preg_grep('/^!/', file($log));
       if ($grep){
+	      array_unshift($grep, "/!\ Latex error\n");
+	      array_unshift($grep, "Latex log $log:\n");
               throw new sfException(implode(' ', $grep));
       }
     }
+*/
     $pdfpath = $this->getLatexFileNameWithoutExtention().'.pdf';
     if (!file_exists($pdfpath)) {
       throw new sfException("pdf not created ($pdfpath): ".$output);
@@ -79,9 +81,12 @@ class GenericLatex {
 
   public function echoPDFWithHTTPHeader() {
     $attachement = 'attachment; filename='.$this->getPublicFileName();
-    header("content-type: application/pdf\n");
+    header("Content-Type: application/pdf\n");
     header("content-length: ".filesize($this->getPDFFile())."\n");
-    header("content-disposition: $attachement\n\n");
+    header("Content-Transfer-Encoding: binary\n");
+    header("Cache-Control: public\n");
+    header("Expires: 0\n");
+    header("Content-disposition: $attachement\n\n");
     echo $this->getPDFFileContents();
   }
 

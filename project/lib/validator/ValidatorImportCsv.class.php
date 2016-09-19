@@ -16,13 +16,13 @@ class ValidatorImportCsv extends sfValidatorFile
   protected function doClean($values)
   {
     $csvValidated = new CsvValidatedFile(parent::doClean($values));
-    
+
     $errorSchema = new sfValidatorErrorSchema($this);
 
     //Conversion UTF8
     $filecontent = preg_replace("/^[^a-z0-9#]*/i", "", file_get_contents($csvValidated->getTempName()));
     if(htmlentities(utf8_decode($filecontent),ENT_NOQUOTES)) {
-      $filecontent = utf8_encode($filecontent); 
+      $filecontent = utf8_encode($filecontent);
     }
     $fc = preg_replace('/&([a-z])[^;]+;([^&])/i', '\1\2', htmlentities(str_replace('&', '', $filecontent),ENT_NOQUOTES));
     $fc = str_replace("\r", "", $fc);
@@ -37,7 +37,7 @@ class ValidatorImportCsv extends sfValidatorFile
     fclose($handle);
 
     try {
-      $csv = new CsvFile($file);
+      $csv = new CsvFileAcheteur($file);
     }catch(Exception $e) {
       $csv = null;
       $errorSchema->addError(new sfValidatorError($this, $e->getMessage()));

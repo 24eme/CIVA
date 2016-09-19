@@ -11,8 +11,15 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
     }
 
     public function getLieux() {
-        
-        return $this->getChildrenNodeDeep();
+        $lieux = array();
+        foreach($this->getMentions() as $mention) {
+            foreach($mention->getChildrenNode() as $lieu) {
+
+                $lieux[$lieu->getHash()] = $lieu;
+            }
+        }
+
+        return $lieux;
     }
 
     public function getVolumeRevendique($force_calcul = false) {
@@ -32,27 +39,27 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
                 return true;
             }
         }
-       
+
         return false;
     }
 
 
     public function hasAllDistinctLieu() {
         $nb_lieu = count($this->getDistinctLieux());
-        $nb_lieu_config = count($this->getConfig()->getDistinctLieux());
+        $nb_lieu_config = count($this->getConfig()->getLieux());
         return (!($nb_lieu < $nb_lieu_config));
     }
 
 
     public function getUsagesIndustrielsCalcule(){
-        
+
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 
     public function getAppellation() {
       $v = $this->_get('appellation');
       if (!$v)
-	$this->_set('appellation', $this->getConfig()->getAppellation());
+	$this->_set('appellation', $this->getConfig()->getKey());
       return $this->_get('appellation');
     }
 
@@ -71,12 +78,11 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
 
     public function getLieuChoices() {
         $lieu_choices = array('' => '');
-        foreach ($this->getConfig()->getDistinctLieux() as $key => $item) {
-            foreach( $this->getMentions() as $mention ){
-                if (!$mention->exist($key)) {
-                    $lieu_choices[$key] = $item->getLibelle();
+        foreach ($this->getConfig()->getLieux() as $item) {
+                $hash = HashMapper::inverse($item->getHash());
+                if(!$this->getDocument()->exist($hash)) {
+                    $lieu_choices["lieu".$item->getKey()] = $item->getLibelle();
                 }
-            }
         }
         asort($lieu_choices);
         return $lieu_choices;

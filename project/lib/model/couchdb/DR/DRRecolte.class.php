@@ -28,7 +28,7 @@ class DRRecolte extends BaseDRRecolte {
     }
 
     public function setLies() {
-        
+
     }
 
     /**
@@ -40,17 +40,19 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
-            foreach($acheteurs->getNoeudAppellations() as $key => $appellation) {
-                $app = $this->getNoeudAppellations()->add($key);
-                if (!$app->getConfig()->hasManyLieu()) {
-                    $lieu = $app->mention->add('lieu');
-                    foreach ($lieu->getConfig()->filter('^couleur') as $k => $v) {
-                        $lieu->add($k);
+            foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+                foreach($appellation as $mention_key => $mention) {
+                    $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
+                    if (!$app->getConfig()->hasManyLieu()) {
+                        $lieu = $app->add('lieu');
+                        foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
+                            $this->getDocument()->getOrAdd(HashMapper::inverse($v->getHash()));
+                        }
                     }
                 }
             }
             $list_to_remove = array();
-            foreach($this->getAppellations() as $key => $appellation) {                
+            foreach($this->getAppellations() as $key => $appellation) {
                 if (!$acheteurs->getNoeudAppellations()->exist($key)) {
                     $list_to_remove[] = $this->getNoeudAppellations()->get($key)->getHash();
                 }
@@ -58,7 +60,7 @@ class DRRecolte extends BaseDRRecolte {
             foreach ($list_to_remove as $hash_to_remove) {
                $this->getDocument()->remove($hash_to_remove);
             }
-                    
+
         }
     }
 

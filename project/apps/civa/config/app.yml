@@ -3,6 +3,16 @@
 
 # default values
 all:
+  configuration_compte:
+    intitules: ["CAVES", "DOMAINE", "EAR", "EARL", "EURL", "GAEC", "GFA, DU", "HERITIERS", "INDIVISION", "M.", "MADAME", "MADEME", "MAISON", "MELLE", "M., ET, MME", "MLLE", "MM.", "MME", "MMES", "MME, VEUVE", "MRS", "S.A.", "SA", "SARL", "S.A.S.", "SAS", "SASU", "S.C.A.", "SCA", "SCEA", "S.C.I.", "SCI", "S.D.F.", "SDF", "SICA", "STE", "STEF", "VEUVE", "VINS"]
+  configuration_dr:
+      motif_non_recolte:
+        "AE": "Assemblage Edelzwicker"
+        "DC": "Déclaration en cours"
+        "PC": "Problème climatique"
+        "MV": "Maladie de la vigne"
+        "MP": "Motifs personnels"
+        "VV": "Vendanges en Vert"
   configuration:
     vrac:
       delai_suppression: 5
@@ -81,30 +91,25 @@ all:
         url: "@mon_espace_civa_dr"
         next_is_new_etape: exploitation
       exploitation_message:
-        url: "@exploitation_message"
+        url: "dr_message"
       notice_evolutions:
-        url: "@dr_notice_evolutions"
+        url: "dr_notice_evolutions"
       exploitation:
-        url: "@exploitation_administratif"
+        url: "dr_exploitation"
         next_is_new_etape: repartition
       repartition:
-        url: "@exploitation_acheteurs"
+        url: "dr_repartition"
       exploitation_lieu:
-        url: "@exploitation_lieu"
+        url: "dr_repartition_lieu"
         next_is_new_etape: recolte
       recolte:
-        url: "@recolte"
+        url: "dr_recolte"
       exploitation_autres:
-        url: "@exploitation_autres"
+        url: "dr_autres"
         next_is_new_etape: validation
       validation:
-        url: "@validation"
+        url: "dr_validation"
       confirmation:
-        url: "@confirmation"
+        url: "dr_confirmation"
     orders: [mon_espace_civa, exploitation_message, notice_evolutions, exploitation, repartition, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
   css_class_field_error: "erreur"
-
-
-
-
-

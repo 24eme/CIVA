@@ -1,8 +1,8 @@
 <div id="contrats_vrac">
 	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
-	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv') ?>">Exporter les contrats en CSV</a>
+	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant())) ?>">Exporter les contrats en CSV</a>
 	<div class="fond">
-		<form action="<?php echo url_for('vrac_historique', array('campagne' => $campagne)) ?>" method="GET">
+		<form action="<?php echo url_for('vrac_historique', array('campagne' => $campagne, 'identifiant' => $compte->getIdentifiant())) ?>" method="GET">
 			<ul class="filtres clearfix">
 				<li><label for="statut">Type de contrat :</label><select id="type" name="type"><option value="">Tous</option><?php foreach ($types as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($type == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
 				<li><label for="statut">Statut :</label><select id="statut" name="statut"><option value="">Tous</option><?php foreach ($statuts as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($statut == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
@@ -23,5 +23,5 @@
 	</div>
 </div>
 <ul id="btn_etape" class="btn_prev_suiv">
-	<li><a href="<?php echo url_for('mon_espace_civa_vrac') ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
+	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
 </ul>

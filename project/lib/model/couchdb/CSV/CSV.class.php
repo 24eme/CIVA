@@ -1,6 +1,6 @@
 <?php
 
-class CSV extends baseCSV 
+class CSV extends baseCSV
 {
   public function storeCSV(CsvFile $csv) {
     $ids = array();
@@ -18,12 +18,30 @@ class CSV extends baseCSV
   }
 
   public function getCsvFile() {
-    $csv = new CsvFile($this->getAttachmentUri($this->getCsvFilename()));
+    $csv = new CsvFileAcheteur($this->getAttachmentUri($this->getCsvFilename()));
     return $csv;
   }
 
   public function getCsvRecoltant($cvi) {
     return $this->getCsvFile()->getCsvRecoltant($cvi);
+  }
+
+  public function clearErreurs() {
+      $this->remove('erreurs');
+      $this->add('erreurs');
+      $this->statut = null;
+  }
+
+  public function getFileContent() {
+      return file_get_contents($this->getAttachmentUri($this->getFileName()));
+  }
+
+  public function getFileName($partiel = true) {
+      return 'import_partiel_edi_' . $this->identifiant . '_' . $this->periode . '.csv';
+  }
+
+  public function hasErreurs() {
+      return count($this->erreurs);
   }
 
 }

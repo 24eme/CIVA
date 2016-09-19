@@ -15,7 +15,7 @@ class compteUpdateTask extends sfBaseTask {
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
         ));
 
-        $this->namespace = 'compte';
+        $this->namespace = 'compteciva';
         $this->name = 'update';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
@@ -48,7 +48,7 @@ EOF;
 
                 continue;
             }
-            
+
             $stocks[$liaison->key[0]][$liaison->key[1]][] = acCouchdbManager::getClient()->find($liaison->key[2], acCouchdbClient::HYDRATE_JSON);
         }
 
@@ -65,7 +65,7 @@ EOF;
                 if (($met_en_attente && $num == $met_en_attente->db2->num)) {
                     continue;
                 }
-                
+
                 if ($met_en_attente && count($tiers) == 1 && $tiers[0]->type == 'Recoltant' && $tiers[0]->statut != _TiersClient::STATUT_INACTIF) {
                     $tiers[] = $met_en_attente;
                     $met_en_attente_add = true;
@@ -73,7 +73,7 @@ EOF;
                     $tiers[] = $met_en_attente;
                     $met_en_attente_add = true;
                 }
-                
+
                 $comptes[$this->getLogin($tiers)] = $tiers;
             }
             if ($met_en_attente && !$met_en_attente_add) {
@@ -83,12 +83,12 @@ EOF;
 
         foreach($acheteurs as $acheteur) {
            $tiers = array($acheteur);
-           $comptes[$this->getLogin($tiers)] = $tiers;     
+           $comptes[$this->getLogin($tiers)] = $tiers;
         }
 
         foreach($courtiers as $courtier) {
            $tiers = array($courtier);
-           $comptes[$this->getLogin($tiers)] = $tiers;     
+           $comptes[$this->getLogin($tiers)] = $tiers;
         }
 
 
@@ -96,7 +96,7 @@ EOF;
         $ids_compte = acCouchdbManager::getClient("_Compte")->getAll(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
         foreach ($ids_compte as $id) {
             $compte = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
-            
+
             if (array_key_exists($compte->login, $comptes) && $compte->type == "CompteProxy") {
                 $compte->type = "CompteTiers";
                 unset($compte->compte_reference);
@@ -104,7 +104,7 @@ EOF;
                 $compte_object->save();
             }
         }
-        
+
         $tiers_compte = array();
 
         // Mise à jour ou création des comptes
@@ -121,11 +121,11 @@ EOF;
                  $compte->email = $emailDb2;
             }
 
-            
+
             if($emailDb2 && $compte->email != $emailDb2) {
                 echo sprintf("INFO;L'email couchdb et db2 diffèrent;%s;%s;%s\n",$compte->_id, $compte->email, $emailDb2);
             }
-            
+
             $compte->db2->no_stock = $tiers[0]->db2->no_stock;
 
             $compte->remove("tiers");
@@ -170,14 +170,14 @@ EOF;
             }
 
             $compte->save();
-            
+
             if ($compte->getStatut() == "INSCRIT" && !$compte->email) {
                 echo sprintf("INFO;Inscrit ne possédant pas d'email;%s;%s\n", $compte->_id, $compte->nom);
             }
         }
 
         $tiers_open = array();
-        
+
         foreach($tiers_compte as $id_tiers => $ids_compte) {
             $tiers = acCouchdbManager::getClient()->find($id_tiers, acCouchdbClient::HYDRATE_DOCUMENT);
             $tiers->remove("compte");
@@ -210,7 +210,7 @@ EOF;
                 return $t->siren;
             }
             if (($t->type == 'Recoltant' || $t->type == 'Acheteur') && $t->cvi) {
-                
+
                 return $t->cvi;
             }
             if (is_null($login) && $t->civaba) {

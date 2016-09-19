@@ -14,7 +14,7 @@
                 <div class="ligne_form ligne_form_label">
                     <?php echo $form['login']->renderError() ?>
                     <?php echo $form['login']->renderLabel() ?>
-                    <?php echo $form['login']->render() ?>
+                    <?php echo $form['login']->render(array("autofocus" => "autofocus")) ?>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
@@ -26,7 +26,7 @@
             <?php include_partial('admin/gamma') ?>
             <?php endif;?>
         </div>
-        
+
         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
         <div id="precedentes_declarations">
             <?php include_partial('admin/export') ?>
@@ -37,4 +37,3 @@
         </div>
         <?php endif; ?>
     </div>
-

@@ -11,9 +11,7 @@
             ));
 
             $this->getWidget('lies')->setLabel('Volume à détruire saisi');
-            
+
             $this->widgetSchema->setNameFormat('acheteur[%s]');
         }
     }
-
-?>

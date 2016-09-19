@@ -24,10 +24,13 @@
 
 [data-icon]:before,
 .icon-bouteille:before,
+<<<<<<< HEAD
 .icon-camion:before,
 .icon-contrat:before,
 .icon-drm:before,
 .icon-etablissement:before,
+=======
+>>>>>>> 0fa99f28370570438963de8b5101565c828d75e2
 .icon-mouts:before,
 .icon-raisins:before,
 .icon-vrac:before {
@@ -46,6 +49,7 @@
 }
 
 .icon-bouteille:before { content: "\f100"; }
+<<<<<<< HEAD
 .icon-camion:before { content: "\f107"; }
 .icon-contrat:before { content: "\f101"; }
 .icon-drm:before { content: "\f102"; }
@@ -53,3 +57,8 @@
 .icon-mouts:before { content: "\f104"; }
 .icon-raisins:before { content: "\f105"; }
 .icon-vrac:before { content: "\f106"; }
+=======
+.icon-mouts:before { content: "\f101"; }
+.icon-raisins:before { content: "\f102"; }
+.icon-vrac:before { content: "\f103"; }
+>>>>>>> 0fa99f28370570438963de8b5101565c828d75e2

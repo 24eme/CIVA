@@ -6,17 +6,16 @@ class CompteModificationOublieForm extends CompteForm {
             throw new sfException("compte must be status : OUBLIE");
         }
     }
-    
+
     public function configure() {
         parent::configure();
         unset($this['email']);
     }
-    
+
     public function save() {
         if ($this->isValid()) {
-            $this->_compte->setPasswordSSHA($this->getValue('mdp1'));
+            $this->_compte->setMotDePasseSSHA($this->getValue('mdp1'));
             $this->_compte->save();
-            $this->_compte->updateLdap();
         } else {
             throw new sfException("form must be valid");
         }

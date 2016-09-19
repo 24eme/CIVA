@@ -26,17 +26,17 @@ class _CompteClient extends acCouchdbClient {
         'Acheteur' => array(self::DROIT_DR_ACHETEUR, self::DROIT_VRAC_SIGNATURE, self::DROIT_VRAC_RESPONSABLE, self::DROIT_DS_DECLARANT),
         'Courtier' => array(self::DROIT_VRAC_SIGNATURE, self::DROIT_VRAC_RESPONSABLE),
     );
-    
+
     public static function getInstance() {
-    
-        return acCouchdbManager::getClient('_Compte'); 
+
+        return acCouchdbManager::getClient('_Compte');
     }
 
     /**
      *
      * @param string $login
      * @param integer $hydrate
-     * @return Compte 
+     * @return Compte
      */
     public function retrieveByLogin($login, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->findByLogin($login, $hydrate);
@@ -78,11 +78,11 @@ class _CompteClient extends acCouchdbClient {
 
         return self::$droits[$key];
     }
-    
+
     /**
      *
      * @param integer $hydrate
-     * @return acCouchdbDocumentCollection 
+     * @return acCouchdbDocumentCollection
      */
     public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey('COMPTE-')->endkey('COMPTE-C999999999')->execute($hydrate);
@@ -94,7 +94,7 @@ class _CompteClient extends acCouchdbClient {
     }
 
     public function generateComptePersonne($compte) {
-        
+
         $personne = new CompteTiers();
         $personne->login = sprintf("%s%02d", $compte->login, $this->getComptePersonneDernierNumero($compte) + 1);
         $personne->add("id_compte_societe", $compte->_id);

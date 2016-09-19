@@ -1,4 +1,4 @@
-<?php 
+<?php
 use_helper('Float');
 use_helper('ds');
 include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 3, 'recap' => 1));
@@ -8,10 +8,10 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 <h2 class="titre_page"><?php echo getTitleLieuStockageStock($ds); ?></h2>
 
 	<?php include_partial('ds/onglets', array('ds' => $ds, 'recap' => true)) ?>
-	
+
 	<!-- #application_ds -->
 	<div id="application_ds" class="clearfix">
-		
+
 		<div id="recap_lieu_stockage" class="page_recap">
 			<div id="recap_appellations">
 				<table class="table_donnees pyjama_auto">
@@ -27,14 +27,14 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<tbody>
 					<?php if($ds->hasAOC()): ?>
 						<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
-		                    if(!preg_match('/^appellation_VINTABLE$/',$appellation_key)): ?>
+		                    if(!preg_match('/appellation_VINTABLE/',$appellation_key)): ?>
 		                        <tr>
 		                                <td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
 		                                <td><?php echoFloat($appellation->getTotalStock()); ?></td>
 		                                <td><?php echoFloat($appellation->getTotalNormal()); ?></td>
 		                                <td><?php echoFloat($appellation->getTotalVt()); ?></td>
 		                                <td><?php echoFloat($appellation->getTotalSgn()); ?></td>
-		                        </tr>                                            
+		                        </tr>
 		                    <?php endif; ?>
 		                <?php endforeach; ?>
 	            	<?php else: ?>
@@ -44,7 +44,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 	            	<?php endif; ?>
 					</tbody>
 				</table>
-				
+
 				<div id="total" class="ligne_total">
 					<h3>Total AOC</h3>
 					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalAOC()); ?>" />
@@ -60,18 +60,18 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 							<th class="total">Total <span class="unites">(hl)</span></th>
 						</tr>
 					</thead>
-					<tbody>        
+					<tbody>
 						<tr>
 							<td class="appellation">Vins sans IG</td>
 							<td><?php echoFloat($ds->getTotalVinSansIg()); ?></td>
-						</tr>        
+						</tr>
 						<tr>
 							<td class="appellation">Vins sans IG mousseux</td>
                             <td><?php echoFloat($ds->getTotalMousseuxSansIg()); ?></td>
 						</tr>
 					</tbody>
 				</table>
-				
+
 				<div id="total" class="ligne_total">
 					<h3>Total Vins sans IG</h3>
 					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalVinSansIg() + $ds->getTotalMousseuxSansIg()); ?>" />

@@ -3,7 +3,7 @@
 class exportComptesCsvTask extends sfBaseTask {
 
     protected function configure() {
-        $this->addArguments(array(  
+        $this->addArguments(array(
         ));
 
         $this->addOptions(array(
@@ -13,7 +13,7 @@ class exportComptesCsvTask extends sfBaseTask {
                 // add your own options here
         ));
 
-        $this->namespace = 'export';
+        $this->namespace = 'exportciva';
         $this->name = 'comptes-csv';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
@@ -128,7 +128,7 @@ EOF;
         $validation_proxy["nom"]["required"] = false;
 
         foreach ($comptes as $id_compte => $compte) {
-            
+
             if ($compte->type == "CompteVirtuel") {
                 $csv->add(array(
                         "type" => "Virtuel",
@@ -282,5 +282,5 @@ EOF;
 
         echo $csv->output(false);
     }
-    
+
 }

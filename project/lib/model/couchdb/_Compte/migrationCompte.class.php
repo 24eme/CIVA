@@ -68,16 +68,16 @@ class MigrationCompte {
 
         if(!is_null($this->commune))
             $this->new_rec->commune= $this->commune;
-        
+
         $this->new_rec->remove('emails');
         $this->new_rec->add('emails');
         $this->new_rec->update();
         $this->new_rec->save();
 
-        
+
         $this->_nouveau_compte->tiers->add(self::PREFIX_KEY_REC . $this->_nouveau_cvi);
         $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('id', self::PREFIX_KEY_REC . $this->_nouveau_cvi );
-       
+
         if(!is_null($this->nom))
             $this->_nouveau_compte->tiers->get(self::PREFIX_KEY_REC . $this->_nouveau_cvi)->set('nom', $this->nom);
 
@@ -98,7 +98,7 @@ class MigrationCompte {
             $ls_dr->save();
         }
     }
-    
+
     public function majNewPassword() {
         $new_compte = acCouchdbManager::getClient('_Compte')->find(self::PREFIX_KEY_COMPTE . $this->_nouveau_cvi);
         $new_compte->mot_de_passe = "{TEXT}".$this->_newPassword;

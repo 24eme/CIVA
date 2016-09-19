@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -58,10 +58,10 @@
       	   }
         });
 	}
-	
+
 	var initCollectionAddTemplate = function(element, regexp_replace, callback)
 	{
-		
+			if($(element).length){
 	    $(element).live('click', function()
 	    {
 	    	var lien = $(this);
@@ -79,7 +79,7 @@
 			for(key in params) {
 				bloc_html = bloc_html.replace(new RegExp(key, "g"), params[key]);
 			}
-			
+
 			if (ligneParent.hasClass("alt")) {
 				var b = $(bloc_html).addClass("alt");
 				var c = b.wrap("<tbody></tbody>");
@@ -95,7 +95,7 @@
 				{
 					bloc = ligneParent.parent().append(bloc_html);
 				}
-				
+
 			} else {
 				bloc = $($(this).attr('data-container')).append(bloc_html);
 			}
@@ -105,24 +105,28 @@
 	        }
 	        return false;
 	    });
+		}
 	};
-	
+
 	var initCollectionDeleteTemplate = function()
 	{
-		$('.btn_supprimer_ligne_template').live('click',function()
-	    {
-	    	var element = $(this).attr('data-container');
-	        $(this).parents(element).remove();
-	    	var brothers = $('.'+$(this).attr('data-brother'));
-	    	var cible = $('#'+$(this).attr('data-mother'));
-	    	sumContrat(brothers, cible);
-	
-	        return false;
-	    });
+		var btn_supprimer_ligne_template = $('.btn_supprimer_ligne_template');
+		if(btn_supprimer_ligne_template.length){
+			btn_supprimer_ligne_template.live('click',function()
+			{
+				var element = $(this).attr('data-container');
+				$(this).parents(element).remove();
+				var brothers = $('.'+$(this).attr('data-brother'));
+				var cible = $('#'+$(this).attr('data-mother'));
+				sumContrat(brothers, cible);
+
+				return false;
+			});
+		}
 	}
-        
-        
-        
+
+
+
         /**
  * Initalise la popup previsualisation des Contrat
  ******************************************/
@@ -196,26 +200,29 @@ var initClotureContrat = function()
 var initClotureContratCheckboxes = function()
 {
     $('.cloture input').change(function (){
-        $(this).checkboxesBehaviour();               
+        $(this).checkboxesBehaviour();
     });
-    
+
 };
 
 $.fn.checkboxesBehaviour = function(){
-  var reg_debut = new RegExp("vrac_produits__", "g");
+	var reg_debut = new RegExp("vrac_produits__", "g");
   var reg_fin = new RegExp("(_detail_[0-9]+)_[A-Za-z0-9\_\-]*", "g");
+	if($(this).attr('id') == undefined){
+		return false;
+	}
   var champsClass = $(this).attr('id').replace(reg_fin,'$1').replace(reg_debut,'ret_');
   var date = $('.'+champsClass).parent().parent().children('td.echeance').children('input.input_date');
     if($(this).is(':checked')){
         $('.'+champsClass).attr('readonly','readonly');
         date.attr('readonly','readonly');
-        date.datepicker('destroy');            
+        date.datepicker('destroy');
 
     }else{
         $('.'+champsClass).removeAttr('readonly');
-        date.removeAttr('readonly');            
+        date.removeAttr('readonly');
         date.datepickerInit();
-    }  
+    }
 };
 
 $.fn.datepickerInit = function(){
@@ -267,19 +274,19 @@ var sumContrat = function(brothers, cible)
                 if(sum <= 0){
                     $('#'+idCheckbox).hide();
                     cb.checkboxesBehaviour();
-                }   
+                }
                 }
 	});
 	sum = sum.toFixed(2);
 	cible.text(sum);
 	if (sum >= compare) {
 		cb.attr('checked', true);
-                cb.checkboxesBehaviour();    
-                
-	} 
+                cb.checkboxesBehaviour();
+
+	}
 };
-	
-    var callbackAddTemplate = function(ligneParent, bloc) 
+
+    var callbackAddTemplate = function(ligneParent, bloc)
     {
     	initNettoyageChamps();
         initSummableContrat();
@@ -287,7 +294,7 @@ var sumContrat = function(brothers, cible)
     }
 
     /**
-	*  Valide les champs du tableaux de 
+	*  Valide les champs du tableaux de
 	*  l'étape produits de la création de contrats
 	******************************************/
 	$.initChampsTableauProduits = function(params)
@@ -317,12 +324,12 @@ var sumContrat = function(brothers, cible)
 						champ_prix = ligne_courante.find('.prix input'),
 						champ_centilisation = ligne_courante.find('.centilisation select'),
 						champ_bouteille = ligne_courante.find('.bouteille input');
-					
+
 					if
 					(
 						(champ_volume.length > 0 && $.trim(champ_volume.val()))
-						&& (champ_prix.length > 0 && $.trim(champ_prix.val())) 
-						|| (champ_centilisation.length > 0 && champ_centilisation.val()) 
+						&& (champ_prix.length > 0 && $.trim(champ_prix.val()))
+						|| (champ_centilisation.length > 0 && champ_centilisation.val())
 						&& (champ_bouteille.length > 0 && $.trim(champ_bouteille.val()))
 					)
 					{
@@ -428,7 +435,7 @@ var sumContrat = function(brothers, cible)
 	/**
 	*  Fixe la hauteur des listes de l'annuaire
 	*  par rapport à un nombre de lignes donné
-	******************************************/ 
+	******************************************/
 	$.hauteurListesAnnuaire = function()
 	{
 		var liste = $('#contrats_vrac .bloc_annuaire .bloc'),

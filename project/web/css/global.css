@@ -56,13 +56,13 @@ table
 /**
  * Eléments génériques
  ******************************************/
-body.bttf { 
+body.bttf {
     background: #000 url(../images/fonds/bg_global_bttf.jpg) center 0 no-repeat;
 }
-body.bttf #header { 
+body.bttf #header {
     margin-left: 70px;
 }
-body.bttf #header #logo{ 
+body.bttf #header #logo{
     display: none;
 }
 
@@ -122,7 +122,7 @@ input[type=radio]
     display: block;
     font-size: 0;
     height: 0;
-    visibility: hidden; 
+    visibility: hidden;
 }
 
 .clearfix:after { clear: both; }
@@ -145,7 +145,7 @@ input[type=radio]
     zoom: 1;
 }
 
-.titre_principal 
+.titre_principal
 {
     background: #acb701;
     color: #f1f1f1;
@@ -154,7 +154,7 @@ input[type=radio]
     margin: 0 0 0 20px;
 }
 
-.titre_section 
+.titre_section
 {
     background: #dcdfa9;
     color: #848c03;
@@ -210,17 +210,17 @@ input[type=radio]
 }
 
 /* Tailles */
-.btn_petit 
-{ 
-    font-size: 13px; 
-    padding: 3px 8px; 
+.btn_petit
+{
+    font-size: 13px;
+    padding: 3px 8px;
 }
 
-.btn_grand 
-{ 
-    font-size: 16px; 
+.btn_grand
+{
+    font-size: 16px;
     font-weight: bold;
-    padding: 10px; 
+    padding: 10px;
 }
 
 /* Boutons fleche */
@@ -235,9 +235,9 @@ input[type=radio]
     border-bottom: 6px solid transparent;
     content: '';
     position: absolute;
-    height: 0; 
+    height: 0;
     top: 7px;
-    width: 0; 
+    width: 0;
 }
 
 .btn_fleche_g:after
@@ -264,12 +264,12 @@ input[type=radio]
 .btn_petit.btn_fleche_g:after { border-right: 6px solid #FFF; }
 .btn_petit.btn_fleche_d:after { border-left: 6px solid #FFF; }
 
-.btn_grand.btn_fleche_g:after, 
-.btn_grand.btn_fleche_d:after 
-{ 
+.btn_grand.btn_fleche_g:after,
+.btn_grand.btn_fleche_d:after
+{
     border-top: 9px solid transparent;
     border-bottom: 9px solid transparent;
-    top: 11px; 
+    top: 11px;
 }
 
 .btn_grand.btn_fleche_g:after { border-right: 9px solid #FFF; }
@@ -604,4 +604,8 @@ ul.statistiques li{
   z-index:1201;
   background:#900000;
   width:450px;
+}
+
+#application_drm{
+  padding: 0px 10px;
 }

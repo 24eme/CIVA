@@ -17,7 +17,7 @@
             'appellation' => new sfWidgetFormChoice(array('choices'  => array($this->getObject()->getKey() => $this->getObject()->getConfig()->getLibelle())), array('disabled' => 'disabled')),
             'lieu' => new sfWidgetFormChoice(array('choices'  => $lieu_choices)),
           ));
-          
+
           $this->setValidators(array(
             'appellation' => new sfValidatorString(array('required' => false)),
             'lieu' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($lieu_choices))),
@@ -33,5 +33,3 @@
 	    }
         }
     }
-
-?>

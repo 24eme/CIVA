@@ -156,7 +156,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $teledeclarant) {
 
-            $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet 2015")
+            $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet 2016")
                     ->setBody("Bonjour,
 
 Vous avez télé-déclaré votre Stock 2015 sur le Portail du CIVA <https://declaration.vinsalsace.pro> et nous n'avons donc pas pré-identifié de formulaire pour votre entreprise en Mairie.
@@ -187,7 +187,7 @@ Le CIVA");
 
 En 2015, vous avez déposé une Déclaration de Stocks \"papier\", nous avons donc envoyé en Mairie un formulaire pré-identifié pour votre entreprise.
 
-Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 18 juillet 2016 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 18 juillet et vous n'aurez donc aucun document à remettre en Mairie.
+Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 juillet 2016 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 18 juillet et vous n'aurez donc aucun document à remettre en Mairie.
 
 Attention la date limite de télé-déclaration est fixée par les Douanes au 10 septembre minuit.
 
@@ -236,7 +236,7 @@ Depuis 2014 vous avez la possibilité de télé-déclarer sur le Portail CIVA <h
 
 Le télé-service \"Alsace Stocks\" sera accessible du 18 juillet au 10 septembre inclus, et vous n'aurez donc pas à renvoyer le formulaire papier au CIVA.
 
-Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à pas\", vous pourrez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
 
 Cordialement,
@@ -253,7 +253,7 @@ Le CIVA");
             $document = new ExportDSPdfEmpty($tiers, $type_ds, array($this, 'getPartial'), true, 'pdf');
         }
         catch (sfException $e){
-            echo $this->red('[ABSENCE DE LIEUX DE STOCKAGE] '.$e->getMessage());
+            echo 'ERROR;'.$tiers->_id.';ABSENCE DE LIEUX DE STOCKAGE] '.$e->getMessage()."\n";
             return false;
         }
         $document->removeCache();

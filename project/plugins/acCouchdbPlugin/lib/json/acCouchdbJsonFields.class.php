@@ -19,12 +19,12 @@ abstract class acCouchdbJsonFields {
     private $_fields = null;
     /**
      *
-     * @var array 
+     * @var array
      */
     private $_fields_name = null;
     /**
      *
-     * @var string 
+     * @var string
      */
     private $_definition_model = null;
     /**
@@ -34,12 +34,12 @@ abstract class acCouchdbJsonFields {
     private $_definition_hash = null;
     /**
      *
-     * @var string 
+     * @var string
      */
     private $_hash = null;
     /**
      *
-     * @var type 
+     * @var type
      */
     private $_is_array = false;
     /**
@@ -52,7 +52,7 @@ abstract class acCouchdbJsonFields {
 
     /**
      *
-     * @var acCouchdbDocument 
+     * @var acCouchdbDocument
      */
     public function __construct(acCouchdbJsonDefinition $definition, acCouchdbDocument $document, $hash) {
         $this->_fields = array();
@@ -74,8 +74,8 @@ abstract class acCouchdbJsonFields {
 
     /**
      * Retourne la définition du modèle associé
-     * 
-     * @return acCouchdbJsonDefinition 
+     *
+     * @return acCouchdbJsonDefinition
      */
     public function getDefinition() {
         return acCouchdbManager::getDefinitionByHash($this->_definition_model, $this->_definition_hash);
@@ -83,7 +83,7 @@ abstract class acCouchdbJsonFields {
 
     /**
      * Retourne le document conteneur (permet donc de retourner à la racine)
-     * @return acCouchdbDocument 
+     * @return acCouchdbDocument
      * @deprecated
      * @see function getDocument()
      */
@@ -93,7 +93,7 @@ abstract class acCouchdbJsonFields {
 
     /**
      * Retourne le document conteneur (permet donc de retourner à la racine)
-     * @return acCouchdbDocument 
+     * @return acCouchdbDocument
      */
     public function getDocument() {
         return $this->_document;
@@ -105,30 +105,30 @@ abstract class acCouchdbJsonFields {
 
     /**
      * Permet de passer l'objet en mode "Tableau", il possédera donc des clés numériques
-     * 
-     * @param bool $value 
+     *
+     * @param bool $value
      */
     public function setIsArray($value) {
         $this->_is_array = $value;
     }
-    
+
 	/**
-	 * 
+	 *
 	 * @return string
 	 */
     public function getHash() {
         return $this->_hash;
     }
-    
-    
+
+
   public function getHashForKey() {
       return str_replace('/', '-', $this->_hash);
   }
-  
+
 
     /**
      * Permet de savoir si l'objet est en mode tableau
-     * @return bool 
+     * @return bool
      */
     public function isArray() {
         return $this->_is_array;
@@ -144,12 +144,12 @@ abstract class acCouchdbJsonFields {
 
     /**
      * Charge les données à partir de différents types : array, stdClass et acCouchdbJson
-     * @param mixed $data 
+     * @param mixed $data
      */
     public function load($data) {
         $this->_unloaded_data = $data;
     }
-    
+
     public function loadData() {
         if (is_null($this->_unloaded_data)) {
             return;
@@ -179,7 +179,7 @@ abstract class acCouchdbJsonFields {
         } else {
             $field = $this->addNormal($key);
         }
-        
+
         if (!is_null($item)) {
             $this->set($key, $item);
         }
@@ -193,7 +193,7 @@ abstract class acCouchdbJsonFields {
     /**
      *
      * @param string $key
-     * @return mixed 
+     * @return mixed
      */
     public function _get($key) {
         return $this->getField($key);
@@ -392,16 +392,16 @@ abstract class acCouchdbJsonFields {
 
     private function addNumeric($key) {
         if ($key === null) {
-           $this->loadData(); 
+           $this->loadData();
         }
         if ($key !== null && $this->_exist($key)) {
-            
+
             return $key;
         }
-        
+
         $field = $this->getDefinition()->get('*')->getDefaultValue($this->_document, $this->_hash . '/' . count($this->_fields));
         $this->_fields[count($this->_fields)] = $field;
-        
+
         return count($this->_fields)-1;
     }
 
@@ -409,7 +409,7 @@ abstract class acCouchdbJsonFields {
      *
      * @param string $key
      * @param mixed $data_or_object
-     * @return mixed 
+     * @return mixed
      */
     private function setFromDataOrObject($key, $data_or_object) {
         if($data_or_object instanceof acCouchdbJson || $data_or_object instanceof stdClass || is_array($data_or_object)) {
@@ -434,12 +434,12 @@ abstract class acCouchdbJsonFields {
         }
         return $data_or_object;
     }
-    
+
     public function clear() {
         if (!$this->_is_array) {
             throw new acCouchdbException("You can only clear an array collection");
         }
-        
+
         $this->_fields = array();
     }
 

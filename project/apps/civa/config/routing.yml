@@ -1,7 +1,55 @@
-# You can find more information about this file on the symfony website:
-# http://www.symfony-project.org/reference/1_4/en/10-Routing
+# *********** TIERS ***********
+
+tiers:
+  url: /tiers
+  param: { module: tiers, action: login }
+
+mon_espace_civa:
+  url:   /mon_espace_civa/:identifiant
+  param: { module: tiers, action: monEspaceCiva }
+
+mon_espace_civa_dr:
+  url:   /mon_espace_civa/:identifiant/dr
+  param: { module: tiers, action: monEspaceDR }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_dr_acheteur:
+  url:   /mon_espace_civa/dr_acheteur
+  param: { module: tiers, action: monEspaceDRAcheteur }
+
+mon_espace_civa_ds:
+  url:   /mon_espace_civa/:identifiant/ds/:type
+  param: { module: tiers, action: monEspaceDS }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_gamma:
+  url:   /mon_espace_civa/:identifiant/gamma
+  param: { module: tiers, action: monEspaceGamma }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_vrac:
+  url:   /mon_espace_civa/:identifiant/vrac
+  param: { module: tiers, action: monEspaceVrac }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+delegation:
+  url: /delegation
+  param: { module: tiers, action: delegation}
+
+migration_compte:
+  url: /migration_compte
+  param: { module: tiers, action: migrationCompte}
 
 # *********** VRAC ***********
+
 vrac_selection_type:
   url: /vrac/selection-type/:type
   param: { module: vrac, action: selectionType, type: null }
@@ -9,11 +57,19 @@ vrac_nouveau:
   url: /vrac/nouveau
   param: { module: vrac, action: nouveau }
 vrac_historique:
-  url: /vrac/historique
+  url: /vrac/:identifiant/historique
   param: { module: vrac, action: historique }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 vrac_export_csv:
-  url: /vrac/export/csv
+  url: /vrac/:identifiant/export/csv
   param: { module: vrac, action: exportCSV }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 vrac_soussigne_informations:
   url: /vrac/:numero_contrat/soussignes-informations
   param: { module: vrac, action: soussigneInformations }
@@ -151,6 +207,7 @@ telecharger_la_notice_vrac:
 annuaire:
   url: /annuaire
   param: { module: annuaire, action: index }
+
 annuaire_retour:
   url: /annuaire/retour
   param: { module: annuaire, action: retour }
@@ -221,70 +278,6 @@ compte_personne_modifier:
   url: /mon_compte/personne/modifier/:login
   param: { module: compte, action: personneModifier }
 
-# *********** TIERS ***********
-
-tiers:
-  url: /tiers
-  param: { module: tiers, action: login }
-
-mon_espace_civa:
-  url:   /mon_espace_civa
-  param: { module: tiers, action: monEspaceCiva }
-
-mon_espace_civa_dr:
-  url:   /mon_espace_civa/dr
-  param: { module: tiers, action: monEspaceDR }
-
-mon_espace_civa_dr_acheteur:
-  url:   /mon_espace_civa/dr_acheteur
-  param: { module: tiers, action: monEspaceDRAcheteur }
-
-mon_espace_civa_ds:
-  url:   /mon_espace_civa/ds/:type
-  param: { module: tiers, action: monEspaceDS }
-
-mon_espace_civa_gamma:
-  url:   /mon_espace_civa/gamma
-  param: { module: tiers, action: monEspaceGamma }
-
-mon_espace_civa_vrac:
-  url:   /mon_espace_civa/vrac
-  param: { module: tiers, action: monEspaceVrac }
-
-
-delegation:
-  url: /delegation
-  param: { module: tiers, action: delegation}
-
-migration_compte:
-  url: /migration_compte
-  param: { module: tiers, action: migrationCompte}
-
-dr_notice_evolutions:
-  url: /notice_evolutions
-  param: { module: declaration, action: noticeEvolutions}
-# *********** DECLARATION ***********
-
-declaration_init:
-  url:   /declaration/init
-  param: { module: declaration, action: init }
-
-declaration_invalider_recoltant:
-  url:   /admin/declaration/invalider_recoltant
-  param: { module: declaration, action: invaliderRecoltant }
-
-declaration_invalider_civa:
-  url:   /admin/declaration/invalider_civa
-  param: { module: declaration, action: invaliderCiva }
-
-declaration_autorisation:
-  url:   /declaration/autorisation
-  param: { module: declaration, action: autorisation }
-
-declaration_transmission:
-  url:   /declaration/transmission
-  param: { module: declaration, action: transmission }
-
 
 # *********** GAMMA ***********
 
@@ -338,153 +331,292 @@ delegate_mode_retour_espace_civa:
    url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }
 
-# *********** EXPLOITATION ***********
-visualisation_avant_import:
-  url:   /visualisation_avant_import
-  param: { module: declaration, action: visualisationAvantImport }
+# *********** DR ***********
 
+dr_telecharger_la_notice:
+  url:   /dr_telecharger_la_notice
+  param: { module: dr, action: downloadNotice }
 
-exploitation_message:
-  url:   /exploitation_message
-  param: { module: declaration, action: flashPage }
+dr_visualisation_avant_import:
+  url:   /dr_visualisation_avant_import/:identifiant/:campagne
+  param: { module: dr, action: visualisationAvantImport }
 
+dr_init:
+  url:   /dr_initialisation/:identifiant/:campagne
+  param: { module: dr, action: init }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
-exploitation_administratif:
-  url:   /exploitation_administratif
-  param: { module: tiers, action: exploitationAdministratif }
+dr_invalider_recoltant:
+  url:   /dr/:id/invalider_recoltant
+  param: { module: dr, action: invaliderRecoltant }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-exploitation_acheteurs:
-  url:   /exploitation_acheteurs
-  param: { module: acheteur, action: exploitationAcheteurs }
+dr_invalider_civa:
+  url:   /dr/:id/invalider_civa
+  param: { module: dr, action: invaliderCiva }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-exploitation_lieu:
-  url:   /exploitation_lieu
-  param: { module: acheteur, action: exploitationLieu }
+dr_autorisation:
+  url:   /dr/:id/autorisation
+  param: { module: dr, action: autorisation }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-exploitation_lieu_delete:
-  url:  /exploitation_lieu/delete/:lieu
-  param: {module: acheteur, action: exploitationLieuDelete }
+dr_transmission:
+  url:   /dr/:id/transmission
+  param: { module: dr, action: transmission }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-  exploitation_lieu_delete:
-  url:  /exploitation_lieu/delete/:appellation/:lieu
-  param: {module: acheteur, action: exploitationLieuDelete }
+dr_message:
+  url:   /dr/:id/message
+  param: { module: dr, action: flashPage }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-exploitation_autres:
-  url:   /exploitation_autres
-  param: { module: declaration, action: exploitationAutres }
+dr_notice_evolutions:
+  url: /dr/:id/notice_evolutions
+  param: { module: dr, action: noticeEvolutions}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-# *********** RECOLTE ***********
+dr_exploitation:
+  url:   /dr/:id/exploitation
+  param: { module: dr, action: exploitation }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte:
-  url:   /recolte/:appellation_lieu/:couleur_cepage
-  param: { module: recolte, action: recolte, appellation_lieu: null,couleur_cepage: null}
-  class: sfRouteAnchor
+dr_repartition:
+  url:   /dr/:id/repartition
+  param: { module: dr, action: repartition }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_update:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/update/:detail_key
-  param: { module: recolte, action: update }
-  class: sfRouteAnchor
+dr_repartition_lieu:
+  url:   /dr/:id/repartition_lieu
+  param: { module: dr, action: repartitionLieu }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_delete:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/delete/:detail_key
-  param: { module: recolte, action: delete }
-  class: sfRouteAnchor
+dr_repartition_lieu_delete:
+  url:  /dr/:id/reparition_lieu/suppression
+  param: {module: dr, action: repartitionLieuDelete }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_add:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add
-  param: { module: recolte, action: add}
-  class: sfRouteAnchor
+dr_autres:
+  url:   /dr/:id/autres
+  param: { module: dr, action: autres }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_motif_non_recolte:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/:detail_key/motif_non_recolte
-  param: { module: recolte, action: motifNonRecolte }
-  class: sfRouteAnchor
+dr_no_recolte:
+  url:   /dr/:id/no_recolte
+  param: { module: dr, action: noRecolte}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_add_appellation:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_appellation
-  param: { module: recolte, action: ajoutAppellationAjax }
-  class: sfRouteAnchor
+dr_recolte:
+  url:   /dr/:id/recolte
+  param: { module: dr_recolte, action: recolte}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_add_lieu:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_lieu
-  param: { module: recolte, action: ajoutLieuAjax }
-  class: sfRouteAnchor
+dr_recolte_produit:
+  url:    /dr/:id/recolte/produit
+  param: { module: dr_recolte, action: produit}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_add_acheteur:
-  url:   /recolte/:appellation_lieu/:couleur_cepage/add_acheteur
-  param: { module: recolte, action: ajoutAcheteurAjax }
-  class: sfRouteAnchor
+dr_recolte_produit_ajout:
+  url:    /dr/:id/recolte/produit_ajout
+  param: { module: dr_recolte, action: produitAjout}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_recapitulatif:
-  url:   /recapitulatif/:appellation_lieu
-  param: {module: recolte, action: recapitulatif }
-  class: sfRouteAnchor
+dr_recolte_produit_edition:
+  url:    /dr/:id/recolte/produit_edition
+  param: { module: dr_recolte, action: produitEdition}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_rendements_max:
-  url:   /rendements_max
-  param: { module: recolte, action: rendementsMaxAjax}
+dr_recolte_produit_suppression:
+  url:    /dr/:id/recolte/produit_suppression
+  param: { module: dr_recolte, action: produitSuppression}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-recolte_erreur_log:
-  url:   /recolte_erreur_log
-  param: {module: declaration, action: setFlashLog }
-  class: sfRouteAnchor
+dr_recolte_noeud:
+  url:    /dr/:id/recolte/noeud
+  param: { module: dr_recolte, action: produitNoeud}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-validation:
-  url:   /validation
-  param: { module: declaration, action: validation }
+dr_recolte_noeud_precedent:
+  url:    /dr/:id/recolte/noeud/precedent
+  param: { module: dr_recolte, action: produitNoeudPrecedent}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-visualisation:
-  url: /visualisation/:annee
-  param: {module: declaration, action: visualisation }
+dr_recolte_noeud_suivant:
+  url:    /dr/:id/recolte/noeud/suivant
+  param: { module: dr_recolte, action: produitNoeudSuivant}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-confirmation:
-  url:   /confirmation
-  param: { module: declaration, action: confirmation }
+dr_recolte_recapitulatif:
+  url:    /dr/:id/recolte/racapitulatif
+  param: {module: dr_recolte, action: recapitulatif }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-telecharger_la_notice:
-  url:   /telecharger_la_notice
-  param: { module: declaration, action: downloadNotice }
+dr_recolte_motif_non_recolte:
+  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/:detail_key/motif_non_recolte
+  param: { module: dr_recolte, action: motifNonRecolte }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-print:
-  url: /print/:annee
-  param: {module: export, action: pdf}
+dr_recolte_add_appellation:
+  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_appellation
+  param: { module: dr_recolte, action: ajoutAppellationAjax }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
 
-send_email_pdf:
-  url: /send-email-pdf
-  param: {module: declaration, action: sendPdf}
-  
-send_email_acheteurs_pdf:
-  url: /send-email-acheteurs-pdf
-  param: {module: declaration, action: sendPdfAcheteurs}
-  
-recolte_feed_back:
-  url: /declaration/retour-experience
-  param: {module: declaration, action: feedBack}
-  
-recolte_feed_back_confirmation:
-  url: /declaration/retour-experience-confirmation
-  param: {module: declaration, action: feedBackConfirmation}
-  
-xml:
-  url: /xml/:annee
-  param: {module: export, action: xml}
+dr_recolte_add_lieu:
+  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_lieu
+  param: { module: dr_recolte, action: ajoutLieuAjax }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_recolte_add_acheteur:
+  url:   dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_acheteur
+  param: { module: dr_recolte, action: ajoutAcheteurAjax }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_recolte_rendements_max:
+  url:   /dr/:id/recolte/rendements_max
+  param: { module: dr_recolte, action: rendementsMaxAjax}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_recolte_erreur_log:
+  url:   /dr/:id/recolte_erreur_log
+  param: {module: dr, action: setFlashLog }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_validation:
+  url:   /dr/:id/validation
+  param: { module: dr, action: validation }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_visualisation:
+  url: /dr/:id/visualisation
+  param: {module: dr, action: visualisation }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_confirmation:
+  url:   /dr/:id/confirmation
+  param: { module: dr, action: confirmation }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_pdf:
+  url: /dr/:id/pdf
+  param: {module: dr_export, action: pdf}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_send_email_pdf:
+  url: /dr/:id/send-email-pdf
+  param: {module: dr, action: sendPdf}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_send_email_acheteurs_pdf:
+  url: /dr/:id/send-email-acheteurs-pdf
+  param: {module: dr, action: sendPdfAcheteurs}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_feed_back:
+  url: /dr/:id/retour-experience
+  param: {module: dr, action: feedBack}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_feed_back_confirmation:
+  url: /dr/:id/retour-experience-confirmation
+  param: {module: dr, action: feedBackConfirmation}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_xml:
+  url: /dr/:id/xml
+  param: {module: dr_export, action: xml}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+# *********** DR ***********
 
 csv_comptes:
   url: /comptes/csv
-  param: {module: export, action: comptesCSV}
+  param: {module: dr_export, action: comptesCSV}
 
 csv_tiers_dr_en_cours:
   url: /tiers/dr-en-cours/csv
-  param: {module: export, action: csvTiersDREncours}
+  param: {module: dr_export, action: csvTiersDREncours}
 
 export_dr_acheteur_csv:
   url: /acheteur/import/dr/csv
-  param: {module: export, action: drAcheteurCsv}
+  param: {module: dr_export, action: drAcheteurCsv}
 
 export_dr_validee_csv:
   url: /acheteur/import/utilisateurs/csv
-  param: {module: export, action: drValideeCsv}
-
+  param: {module: dr_export, action: drValideeCsv}
 
 statistiques:
   url: /statistiques

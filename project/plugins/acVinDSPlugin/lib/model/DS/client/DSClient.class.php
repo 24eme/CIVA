@@ -12,14 +12,14 @@ class DSClient extends acCouchdbClient {
     public function buildId($identifiant, $periode, $lieu_stockage) {
         return sprintf('DS-%s-%s-%s', $identifiant, $periode, $lieu_stockage);
     }
-    
+
     public function createIdentifiant($cvi, $periode) {
        return $cvi;
     }
 
     public function buildPeriode($date) {
         preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $date, $matches);
-        
+
         return sprintf('%d%02d', $matches[1], $matches[2]);
     }
 
@@ -42,7 +42,7 @@ class DSClient extends acCouchdbClient {
 
         return preg_replace('/([0-9]{4})([0-9]{2})/', '$2', $periode);
     }
-    
+
     public function createDateStock($date_stock) {
 	if (preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $date_stock)) {
 		return $date_stock;
@@ -79,24 +79,34 @@ class DSClient extends acCouchdbClient {
     }
 
     public function findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $lieu_stockage) {
-        
+
         return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
     }
-    
-    
+
+    public function findByPrincipaleByIdentifiantAndPeriode($identifiant, $periode) {
+        $ds = acCouchdbManager::getClient('DSCiva')->findByIdentifiantAndPeriode($identifiant, $periode);
+        if(!$ds) {
+
+            return null;
+        }
+
+        return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
+    }
+
+
     public function create($data, $force_return_ls = false) {
         if (!isset($data->type)) {
-            
+
             throw new acCouchdbException('Property "type" ($data->type)');
         }
         if (!class_exists($data->type)) {
-            
+
             throw new acCouchdbException('Class "' . $data->type . '" not found');
         }
-        
+
         $doc = new DSCiva();
         $doc->loadFromCouchdb($data);
-        
+
         return $doc;
     }
 
@@ -113,14 +123,14 @@ class DSClient extends acCouchdbClient {
 		}
         return null;
     }
-    
+
     public function getMaster($id) {
         return $this->find($id);
     }
-    
+
     public function getLibelleFromId($id) {
        if (!preg_match('/^DS-[0-9]+-([0-9]{4})([0-9]{2})/', $id, $matches)) {
-            
+
             return $id;
         }
         sfContext::getInstance()->getConfiguration()->loadHelpers(array('Orthographe','Date'));

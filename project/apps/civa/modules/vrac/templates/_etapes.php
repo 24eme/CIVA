@@ -14,7 +14,7 @@
 	<?php endforeach; ?>
 </ul>
 <div id="suppression_contrat">
-<?php if(VracSecurity::getInstance($sf_user, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
+<?php if(VracSecurity::getInstance($sf_user->getCompte(), $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
 	<a id="btn_precedent" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
 		<img alt="Retourner à l'étape précédente" src="/images/boutons/btn_supprimer_contrat.png">
 	</a>

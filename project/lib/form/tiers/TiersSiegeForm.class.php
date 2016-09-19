@@ -8,7 +8,7 @@ class TiersSiegeForm extends acCouchdbObjectForm {
 				'adresse' => new sfWidgetFormTextarea(array('label' => 'Adresse')),
 				'commune' => new sfWidgetFormInputText(array('label' => 'Commune')),
 				));
-	
+
         $this->setValidators(array(
 				  'code_postal' => new sfValidatorRegex(array('required' => true, 'pattern' => '/^[0-9]+$/'), array('invalid' => 'Ne doit contenir que des chiffres', 'required' => 'Champ Requis')),
 				   'adresse' => new sfValidatorString(array('required' => true), array('required' => 'Champ Requis')),

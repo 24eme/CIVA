@@ -1,7 +1,7 @@
 <?php
 /**
  * BaseDSDetail
- * 
+ *
  * Base model for DSDetail
 
  * @property string $vtsgn
@@ -29,14 +29,13 @@
  * @method float setVci()
  * @method float getReserveQualitative()
  * @method float setReserveQualitative()
- 
  */
 
 abstract class BaseDSDetail extends acCouchdbDocumentTree {
-                
+
     public function configureTree() {
        $this->_root_class_name = 'DS';
        $this->_tree_class_name = 'DSDetail';
     }
-                
+
 }

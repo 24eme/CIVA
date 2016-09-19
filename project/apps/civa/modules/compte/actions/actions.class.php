@@ -21,10 +21,10 @@ class compteActions extends sfActions {
         }
 
         if ($this->getUser()->isAuthenticated() && $this->getUser()->hasCredential("compte")) {
-            
+
             return $this->redirectAfterLogin($request);
         }
-        
+
         if ($request->getParameter('ticket')) {
             /** CAS * */
             error_reporting(E_ALL);
@@ -42,11 +42,11 @@ class compteActions extends sfActions {
 
 		if(sfConfig::has('app_autologin') && sfConfig::get('app_autologin')) {
 			$this->getUser()->signIn(sfConfig::get('app_autologin'));
-            
+
             return $this->redirectAfterLogin($request);
-		}	   
+		}
 	    $url = sfConfig::get('app_cas_url') . '/login?service=' . str_replace('http://', 'https://', urlencode($request->getUri()));
-	    
+
         return $this->redirect($url);
     }
 
@@ -56,11 +56,11 @@ class compteActions extends sfActions {
         }
 
         return $this->redirect('tiers');
-    } 
+    }
 
     public function executeLoginNoCas(sfWebRequest $request) {
         if (!(sfConfig::has('app_login_no_cas') && sfConfig::get('app_login_no_cas'))) {
-            
+
             return $this->forward404Unless();
         }
 
@@ -80,10 +80,10 @@ class compteActions extends sfActions {
             }
         }
     }
-    
+
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeLogout(sfWebRequest $request) {
         require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
@@ -123,12 +123,12 @@ class compteActions extends sfActions {
 
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeCreation(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
         $this->service = $request->getParameter('service');
-        $this->forward404Unless($this->compte->getStatus() == _Compte::STATUS_NOUVEAU);
+        $this->forward404Unless($this->compte->getStatus() == CompteClient::STATUT_TELEDECLARANT_NOUVEAU);
 
         $this->form = new CreationCompteForm($this->compte);
 
@@ -153,7 +153,7 @@ class compteActions extends sfActions {
 
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeModificationOublie(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
@@ -175,7 +175,7 @@ class compteActions extends sfActions {
                 if ($this->service) {
                 	$this->redirect($this->service);
                 } else {
-                	$this->redirect('@mon_espace_civa');
+                	$this->redirect('mon_espace_civa', array('identifiant' => $this->compte->getIdentifiant()));
                 }
             }
         }
@@ -183,14 +183,14 @@ class compteActions extends sfActions {
 
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeModification(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
-        $this->forward404Unless(in_array($this->compte->getStatus(), array(_Compte::STATUS_MOT_DE_PASSE_OUBLIE, _Compte::STATUS_INSCRIT)));
+        $this->forward404Unless(in_array($this->compte->getStatutTeledeclarant(), array(CompteClient::STATUT_TELEDECLARANT_OUBLIE, CompteClient::STATUT_TELEDECLARANT_INSCRIT)));
 
         $this->form = new CompteModificationForm($this->compte);
-	   $this->service = $request->getParameter('service');
+	    $this->service = $request->getParameter('service');
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
@@ -206,7 +206,7 @@ class compteActions extends sfActions {
     }
 
     public function executeMotDePasseOublieLogin(sfWebRequest $request) {
-        $this->forward404Unless($compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($request->getParameter('login', null)));
+        $this->forward404Unless($compte = CompteClient::getInstance()->retrieveByLogin($request->getParameter('login', null)));
         $this->forward404Unless($compte->mot_de_passe == '{OUBLIE}' . $request->getParameter('mdp', null));
         $this->service = $request->getParameter('service');
         $this->getUser()->signInFirst($compte);
@@ -243,7 +243,7 @@ class compteActions extends sfActions {
             }
         }
     }
-    
+
     public function executeMotDePasseOublieConfirm(sfWebRequest $request) {
         $this->service = $request->getParameter('service');
     }
@@ -277,7 +277,7 @@ class compteActions extends sfActions {
         $this->setTemplate('personne');
         $this->compte = $this->getUser()->getCompte();
         $this->personne = _CompteClient::getInstance()->generateComptePersonne($this->compte);
-        
+
         $this->form = $this->processFormPersonne($this->personne, $request);
     }
 
@@ -286,7 +286,7 @@ class compteActions extends sfActions {
         $this->compte = $this->getUser()->getCompte();
         $this->personne = _CompteClient::getInstance()->findByLogin($request->getParameter('login'));
         $this->forward404Unless($this->personne);
-        
+
         $this->form = $this->processFormPersonne($this->personne, $request);
     }
 

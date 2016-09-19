@@ -4,9 +4,9 @@ class CompteTiers extends BaseCompteTiers {
 
     protected $_tiers = null;
     protected $_duplicated = null;
-    
+
     public function getNom() {
-        if($this->isCompteSociete()) {            
+        if($this->isCompteSociete()) {
             $nom = $this->getTiersField('nom');
 
             if($nom) {
@@ -24,7 +24,7 @@ class CompteTiers extends BaseCompteTiers {
 
     /**
      *
-     * @return array 
+     * @return array
      */
     public function getTiersObject() {
         if (is_null($this->_tiers)) {
@@ -36,7 +36,7 @@ class CompteTiers extends BaseCompteTiers {
         }
         return $this->_tiers;
     }
-    
+
     public function getTiersType($type = null) {
         $tiers = $this->getTiersIndexedByType();
 
@@ -63,7 +63,7 @@ class CompteTiers extends BaseCompteTiers {
     /**
      *
      * @param string $hash
-     * @return string 
+     * @return string
      */
     public function getTiersField($hash, $exist = false) {
         $value = null;
@@ -76,7 +76,7 @@ class CompteTiers extends BaseCompteTiers {
             } elseif (is_null($value)) {
                 $value = $tiers->get($hash);
             }
-            
+
         }
         return $value;
     }
@@ -127,7 +127,7 @@ class CompteTiers extends BaseCompteTiers {
     }
 
     public function isCompteSociete() {
-        
+
         return !$this->exist("id_compte_societe") || !$this->id_compte_societe || $this->id_compte_societe == $this->_id;
     }
 
@@ -168,6 +168,9 @@ class CompteTiers extends BaseCompteTiers {
         $droits = array();
         $tiers = $this->getTiersObject();
         foreach ($tiers as $t) {
+            if (!$t) {
+                throw new sfException(sprintf("Tiers non trouvable : %s", $this->_id));
+            }
             if($t->isDeclarantDR()) {
                 $droits[_CompteClient::DROIT_DR_RECOLTANT] = null;
             }
@@ -219,15 +222,15 @@ class CompteTiers extends BaseCompteTiers {
         foreach($this->getTiersObject() as $t) {
             $tiers[$t->type] = $t;
         }
-        
-        return $tiers; 
+
+        return $tiers;
     }
 
     public function getDeclarantDS($type_ds = null) {
         $tiers_propriete = null;
         foreach($this->getTiersObject() as $t) {
             if($t->isDeclarantStockNegoce() && $type_ds != DSCivaClient::TYPE_DS_PROPRIETE) {
-                
+
                 return $t->getDeclarantDS($type_ds);
             }
 

@@ -12,45 +12,53 @@ class VracSecurity implements SecurityInterface {
     const CLOTURE = 'CLOTURE';
 
     protected $vrac;
-    protected $myUser;
-    protected $tiers;
+    protected $compte;
+    protected $etablissements;
 
-    public static function getInstance($myUser, $vrac = null) {
+    public static function getInstance($compte, $vrac = null) {
 
-        return new VracSecurity($myUser, $vrac);
+        return new VracSecurity($compte, $vrac);
     }
 
-    public function __construct($myUser, $vrac = null) {
-        $this->myUser = $myUser;
+    public function getUser() {
+
+        return sfContext::getInstance()->getUser();
+    }
+
+    public function __construct($compte, $vrac = null) {
+        $this->compte = $compte;
+        if(!$this->compte) {
+
+            throw new sfException("Le compt est nul");
+        }
         $this->vrac = $vrac;
-        $this->tiers = $this->myUser->getDeclarantsVrac();
+        $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
     }
 
     public function isAuthorized($droits) {
-        foreach($this->tiers as $t) {
-            if($this->isAuthorizedTiers($t, $droits)) {
+        foreach($this->etablissements as $etablissement) {
+            if($this->isAuthorizedTiers($etablissement, $droits)) {
                 return true;
             }
         }
         return false;
     }
 
-    public function isAuthorizedTiers($tiers, $droits) {
+    public function isAuthorizedTiers($etablissement, $droits) {
         if(!is_array($droits)) {
             $droits = array($droits);
         }
-
         /*** DECLARANT ***/
 
-        if(!$tiers->isDeclarantContrat()) {
-            
-            return false;
-        }
+        /*if(!$tiers->isDeclarantContrat()) {
 
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
-            
             return false;
-        }
+        }*/
+
+        /*if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
+
+            return false;
+        }*/
 
         if(in_array(self::DECLARANT, $droits)) {
 
@@ -59,7 +67,7 @@ class VracSecurity implements SecurityInterface {
 
         /*** CREATION ***/
 
-        if(in_array(self::CREATION, $droits) && !$tiers->isDeclarantContratForResponsable()) {
+        if(in_array(self::CREATION, $droits) && $etablissement->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
 
             return false;
         }
@@ -76,12 +84,12 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(!$this->vrac->isActeur($tiers->_id)) {
+        if(!$this->vrac->isActeur($etablissement->_id)) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
+        if(in_array(self::EDITION, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
 
             return false;
         }
@@ -98,14 +106,14 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::SIGNATURE, $droits) && $this->vrac->hasSigne($tiers->_id)) {
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->hasSigne($etablissement->_id)) {
 
             return false;
         }
 
         /*** SUPPRESSION ***/
 
-        if(in_array(self::SUPPRESSION, $droits) && !$this->vrac->isProprietaire($tiers->_id)) {
+        if(in_array(self::SUPPRESSION, $droits) && !$this->vrac->isProprietaire($etablissement->_id)) {
 
             return false;
         }

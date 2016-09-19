@@ -1,31 +1,31 @@
 <?php
 abstract class CompteForm extends BaseForm {
-    
+
     protected $_compte = null;
-    
+
     /**
      *
      * @param Compte $compte
      * @param array $options
-     * @param string $CSRFSecret 
+     * @param string $CSRFSecret
      */
-    public function __construct(_Compte $compte, $options = array(), $CSRFSecret = null) {
+    public function __construct(Compte $compte, $options = array(), $CSRFSecret = null) {
         $this->_compte = $compte;
         $this->checkCompte();
         parent::__construct(array('email' => $this->_compte->email), $options, $CSRFSecret);
     }
-    
+
     /**
-     * 
+     *
      */
     protected function checkCompte() {
         if (!$this->_compte) {
             throw new sfException("compte does exist");
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public function configure() {
         $this->setWidgets(array(
@@ -48,16 +48,16 @@ abstract class CompteForm extends BaseForm {
                 'mdp2'  => new sfValidatorString(array('required' => true), array('required' => 'Champ obligatoire')),
         ));
         //$this->validatorSchema->setPostValidator(new ValidatorCreateCompte());
-        
-        $this->validatorSchema->setPostValidator(new sfValidatorSchemaCompare('mdp1', 
-                                                                             sfValidatorSchemaCompare::EQUAL, 
+
+        $this->validatorSchema->setPostValidator(new sfValidatorSchemaCompare('mdp1',
+                                                                             sfValidatorSchemaCompare::EQUAL,
                                                                              'mdp2',
                                                                              array(),
                                                                              array('invalid' => 'The passwords must match')));
     }
-    
+
     /**
-     * 
+     *
      * @return _Compte
      */
     public function save() {

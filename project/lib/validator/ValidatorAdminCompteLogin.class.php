@@ -1,7 +1,7 @@
 <?php
 
 class ValidatorAdminCompteLogin extends sfValidatorBase {
-    
+
     public function configure($options = array(), $messages = array()) {
         $this->setMessage('invalid', "Ce login n'existe pas");
         $this->addOption('comptes_type', array());
@@ -11,8 +11,8 @@ class ValidatorAdminCompteLogin extends sfValidatorBase {
         if (!$values['login']) {
             return array_merge($values);
         }
-        
-        $compte = acCouchdbManager::getClient('_Compte')->findByLoginMagic($values['login']);
+
+    $compte = CompteClient::getInstance()->find("COMPTE-".$values['login']);
 
         if (!$compte) {
 
@@ -20,11 +20,11 @@ class ValidatorAdminCompteLogin extends sfValidatorBase {
 
             throw new sfValidatorErrorSchema($this, array($this->getOption('login') => new sfValidatorError($this, 'invalid')));
         }
-        
-        if (!in_array($compte->getType(), $this->getOption('comptes_type'))) {
+
+        /*if (!in_array($compte->getType(), $this->getOption('comptes_type'))) {
             throw new sfValidatorErrorSchema($this, array($this->getOption('login') => new sfValidatorError($this, 'invalid')));
-        }
-            
+        }*/
+
         return array_merge($values, array('compte' => $compte));
     }
 

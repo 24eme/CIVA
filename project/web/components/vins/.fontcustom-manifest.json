@@ -1,7 +1,12 @@
 {
   "checksum": {
+<<<<<<< HEAD
     "previous": "ec11c8ed9cab8514c54ae9e2d9d136bd0c8648a38e2c51a6b390c94cb972d47e",
     "current": "ec11c8ed9cab8514c54ae9e2d9d136bd0c8648a38e2c51a6b390c94cb972d47e"
+=======
+    "previous": "26ffd560b29ac5f51901753de30201ab0ffad7b41a07a2478739f038635881ee",
+    "current": "26ffd560b29ac5f51901753de30201ab0ffad7b41a07a2478739f038635881ee"
+>>>>>>> 0fa99f28370570438963de8b5101565c828d75e2
   },
   "fonts": [
     "./vins.ttf",
@@ -14,10 +19,13 @@
       "codepoint": 61696,
       "source": "svg/bouteille.svg"
     },
+<<<<<<< HEAD
     "camion": {
       "codepoint": 61703,
       "source": "svg/camion.svg"
     },
+=======
+>>>>>>> 0fa99f28370570438963de8b5101565c828d75e2
     "contrat": {
       "codepoint": 61697,
       "source": "svg/contrat.svg"

@@ -4,3 +4,4 @@
 default:
   metas:
     title:        "Annuaire des vins d'Alsace %d"
+  layout:         layoutAncien

@@ -13,7 +13,7 @@
                 <div class="bloc_vert">
                     <p class="important">Votre déclaration de stocks a bien été enregistrée au CIVA.</p>
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
-                </div>                
+                </div>
                 <div id="div-btn-email"><a href="" id="btn-email"></a></div>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
     <li class="prec">
-        <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => $ds_principale->type_ds)); ?>">
+        <a href="<?php echo url_for('mon_espace_civa_ds', array("type" => $ds_principale->type_ds, "identifiant" => $ds_principale->getIdentifiant())); ?>">
             <img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à l'étape précédente" />
         </a>
     </li>

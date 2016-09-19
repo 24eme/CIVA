@@ -32,7 +32,7 @@ class ExportDSPdf extends ExportDocument {
         $this->ds_principale = $ds_principale;
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds_principale);
         $this->trieDSSForPDF();
-        
+
         $this->init($filename);
     }
 
@@ -50,7 +50,7 @@ class ExportDSPdf extends ExportDocument {
         }
         $this->dss = $dss_sorted;
     }
-    
+
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
             $this->create();
@@ -84,14 +84,14 @@ class ExportDSPdf extends ExportDocument {
         if(!$this->ds_principale->isValideeTiers()) {
             $validee = 'Exemplaire brouillon';
         }
-      
+
         sfContext::getInstance()->getConfiguration()->loadHelpers('ds');
         $title = 'Déclaration de Stocks au '.getDateDeclaration($this->ds_principale);
         $header = getHeader($this->ds_principale,$validee);
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
-            
+
         $config = array('PDF_FONT_SIZE_MAIN' => 9);
 
         if ($this->type == 'html') {
@@ -108,7 +108,7 @@ class ExportDSPdf extends ExportDocument {
 
     public static function buildFileName($ds_principale, $with_name = true, $with_rev = false) {
         $filename = sprintf("DS_%s_%s", $ds_principale->getIdentifiant(), $ds_principale->periode);
-        
+
         if($with_name) {
             $declarant_nom = strtoupper(KeyInflector::slugify($ds_principale->declarant->nom));
             $filename .= '_'.$declarant_nom;
@@ -138,7 +138,7 @@ class ExportDSPdf extends ExportDocument {
                 }
             }
             $this->createMainByDS($ds);
-            
+
             if($this->annexe) {
                 $this->createAnnexeByDS($ds);
             }
@@ -158,12 +158,12 @@ class ExportDSPdf extends ExportDocument {
                                                    "produits" => array(),
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
-                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
+                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"),
                                                         "produits" => array(),
                                                         "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                         "limit" => 14,
                                                         "nb_ligne" => 14),
-                       "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"), 
+                       "AOC Crémant d'Alsace" => array("colonnes" => array("couleur" => "Couleurs"),
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                        "produits" => array(),
                                                        "no_header" => true,
@@ -180,7 +180,7 @@ class ExportDSPdf extends ExportDocument {
         foreach($alsace_blanc as $appellation_key) {
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace"]);
         }
-       
+
         $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
@@ -191,7 +191,7 @@ class ExportDSPdf extends ExportDocument {
 
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
-            $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds, 
+            $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds,
                                                                                  'recap' => $page,
                                                                                  'autres' => $this->getAutres($ds),
                                                                                  'is_last_page' => $is_last)));
@@ -219,7 +219,7 @@ class ExportDSPdf extends ExportDocument {
                 $lieu = true;
             }
 
-            $recap[$appellation->getLibelle()] = array("colonnes" => $colonnes, 
+            $recap[$appellation->getLibelle()] = array("colonnes" => $colonnes,
                                                        "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                        "produits" => array(),
                                                        "limit" => -1,
@@ -228,20 +228,20 @@ class ExportDSPdf extends ExportDocument {
 
             $this->getRecap($ds, $appellation_key, $recap[$appellation->getLibelle()], $lieu);
         }
-        
+
         $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES);
         $this->rowspanPaginate($paginate);
 
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
-            $this->document->addPage($this->getPartial('ds_export/annexe', array('ds' => $ds, 
+            $this->document->addPage($this->getPartial('ds_export/annexe', array('ds' => $ds,
                                                                                  'recap' => $page)));
         }
     }
 
     protected function createRecap() {
-        
-        $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale, 
+
+        $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale,
                                                                             'recap_total' => $this->getRecapTotal(),
                                                                             'recap_autres' => $this->getRecapAutres(),
                                                                             'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
@@ -249,11 +249,11 @@ class ExportDSPdf extends ExportDocument {
 
     protected function getAutres($ds) {
         if(!array_key_exists($ds->_id, $this->autres)) {
-            $this->autres[$ds->_id] = array("Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null, 
-                      "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(), 
-                      "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(), 
-                      "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null, 
-                      "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null, 
+            $this->autres[$ds->_id] = array("Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null,
+                      "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(),
+                      "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(),
+                      "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null,
+                      "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null,
                       "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null);
         }
 
@@ -270,42 +270,42 @@ class ExportDSPdf extends ExportDocument {
 
     protected function getRecapAutres() {
 
-        return array("Rebêches" => $this->ds_principale->rebeches, 
+        return array("Rebêches" => $this->ds_principale->rebeches,
                      "Usages industriels" => $this->ds_principale->getUsagesIndustriels());
     }
 
     protected function getRecapVinsSansIG() {
 
-        return array("Vins Sans IG" => DSCivaClient::getInstance()->getTotalSansIG($this->ds_principale), 
+        return array("Vins Sans IG" => DSCivaClient::getInstance()->getTotalSansIG($this->ds_principale),
                      "Mousseux" => DSCivaClient::getInstance()->getTotalSansIGMousseux($this->ds_principale));
     }
 
     protected function getRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false, $empty =false) {
         if(!$ds->declaration->getAppellations()){
-            return; 
+            return;
         }
         if(!$ds->declaration->getAppellations()->exist('appellation_'.$appellation_key) && !$empty) {
-            return; 
+            return;
         }
 
         $appellation = $ds->declaration->getAppellations()->get('appellation_'.$appellation_key);
 
         $details = $appellation->getProduitsDetails();
-        
+
         if($empty && !count($details)){
             foreach ($recap["colonnes"] as $key => $colonne) {
                 $colonnes[$key] = array("rowspan" => 1, "libelle" => "");
             }
             $recap["produits"]["empty"] = array("colonnes" => $colonnes, "normal" => null, "vt" => null, "sgn" => null, "vide" => true);
         }
-        
+
         foreach($details as $detail) {
-            $key = $this->addProduit($recap, $detail->getCepage(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
+            $key = $this->addProduit($recap, $detail->getCepage()->getConfig(), ($lieu && $detail->lieu) ? $detail->lieu : $lieu, $couleur);
             $recap["produits"][$key]['vtsgn'] = $detail->getCepage()->hasVtsgn();
             if (!is_null($detail->volume_normal)) {
                 $recap["produits"][$key]["normal"] += $detail->volume_normal;
                 $recap["total"]["normal"] += $detail->volume_normal;
-                
+
             }
 
             if (!is_null($detail->volume_vt)) {
@@ -326,30 +326,30 @@ class ExportDSPdf extends ExportDocument {
     }
 
     protected function addProduit(&$recap, $produit_config, $lieu = false, $couleur = false) {
-        $key_lieu = "lieu:".$produit_config->getLieu()->getKey();
-        $key_cepage = "cepage:".$produit_config->getKey();
-        $key_couleur = "couleur:".$this->getCouleurKey($produit_config->getKey());
+        $key_lieu = "lieu:".str_replace("lieu", "", str_replace("DEFAUT", "", $produit_config->getLieu()->getKey()));
+        $key_cepage = "cepage:".str_replace("cepage_", "",  str_replace("DEFAUT", "", $produit_config->getKey()));
+        $key_couleur = "couleur:".ucfirst(str_replace("DEFAUT", "", str_replace("couleur", "", $this->getCouleurKey($produit_config->getKey()))));
 
         if($lieu) {
             $key = sprintf("%s%s/%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $this->getOrder($key_lieu), $key_lieu, $lieu);
-            $libelle = $produit_config->getLieu()->getLibelleLong();
+            $libelle = $produit_config->getLieu()->getLibelle();
             if($produit_config->getAppellation()->hasLieuEditable()) {
                 $key = sprintf("%s%s/%s", $this->getOrder($key_cepage), $key_cepage, $lieu);
                 $libelle = $lieu;
             }
-            $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $libelle), 
-                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
+            $colonnes = array("lieu" => array("rowspan" => 1, "libelle" => $libelle),
+                              "cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
         } elseif ($couleur) {
             $key = sprintf("%s%s", $this->getOrder($key_couleur), $key_couleur);
             $colonnes = array("couleur" => array("rowspan" => 1, "libelle" => $key_couleur));
         }
         else {
             $key = sprintf("%s%s", $this->getOrder($key_cepage), $key_cepage);
-            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelleLong()));
+            $colonnes = array("cepage" => array("rowspan" => 1, "libelle" => $produit_config->getLibelle()));
         }
 
         if(isset($recap["produits"][$key])) {
-            
+
             return $key;
         }
 
@@ -364,8 +364,11 @@ class ExportDSPdf extends ExportDocument {
     }
 
     protected function preBuildRecap($ds, $appellation_key, &$recap, $lieu = false, $couleur = false) {
-        $produits = $ds->declaration->getConfig()->getNoeudAppellations()->get('appellation_'.$appellation_key)->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS);
+        $produits = $ds->declaration->getConfig()->get(HashMapper::convert("/certification/genre/appellation_".$appellation_key))->getProduits();
         foreach($produits as $produit) {
+            if(!$produit->isForDS()) {
+                continue;
+            }
             $key = $this->addProduit($recap, $produit, $lieu, $couleur);
         }
 
@@ -376,7 +379,7 @@ class ExportDSPdf extends ExportDocument {
         $this->order = array();
 
         $i = 0;
-        foreach($ds->declaration->getConfig()->getNoeudAppellations() as $appellation) {
+        foreach($ds->declaration->getConfig()->getArrayAppellations() as $appellation) {
             if(!$appellation->hasManyLieu()) {
 
                 continue;
@@ -392,27 +395,27 @@ class ExportDSPdf extends ExportDocument {
         }
 
         $i = 0;
-        foreach($ds->declaration->getConfig()->getProduitsFilter(ConfigurationAbstract::TYPE_DECLARATION_DS) as $cepage) {
+        foreach($ds->declaration->getConfig()->getProduits() as $cepage) {
             if(isset($this->order["cepage:".$cepage->getKey()])) {
 
                 continue;
             }
 
             if(in_array($cepage->getKey(), array('cepage_PN', 'cepage_PR'))) {
-            
+
                 continue;
             }
 
             $this->order["cepage:".$cepage->getKey()] = $i;
-            $i++; 
+            $i++;
         }
 
-        $this->order["cepage:cepage_PN"] = $i;
-        $this->order["cepage:cepage_PR"] = $i + 1;
+        $this->order["cepage:PN"] = $i;
+        $this->order["cepage:PR"] = $i + 1;
 
-        $this->order['couleur:blanc'] = 1;
-        $this->order['couleur:rose'] = 2;
-        $this->order['couleur:rouge'] = 3;
+        $this->order['couleur:Blanc'] = 1;
+        $this->order['couleur:Rose'] = 2;
+        $this->order['couleur:Rouge'] = 3;
     }
 
 
@@ -522,7 +525,7 @@ class ExportDSPdf extends ExportDocument {
             }
 
             $cepage = $matches[1];
-           
+
             if($cepage == $prev_cepage) {
                 $recap['produits'][$prev_hash]['colonnes']['cepage']['rowspan'] += 1;
                 $recap['produits'][$hash]['colonnes']['cepage']['rowspan'] = 0;
@@ -536,10 +539,10 @@ class ExportDSPdf extends ExportDocument {
 
     protected function getCouleurKey($cepage) {
         if($cepage == "cepage_PR") {
-            
+
             return "rouge";
         } elseif($cepage == "cepage_PN") {
-            
+
             return "rose";
         }
 

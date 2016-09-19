@@ -56,16 +56,25 @@ EOF;
                 $cotisationCVO = "0";
             }
 
-            echo "declaration;".
-                 $certificationLibelle.";".$certificationKey.";". #Certification
-                 ";".$genreKey.";". #Genre
-                 $produit->getAppellation()->getLibelleLong().";".str_replace("appellation_", "", $produit->getAppellation()->getKey()).";". #Appellation
-                 ";;". #Mention
-                 $produit->getLieu()->getLibelleLong().";".str_replace("lieu", "", $produit->getLieu()->getKey()).";".
-                 $produit->getCouleur()->getLibelleLong().";".strtolower(str_replace("couleur", "", $produit->getCouleur()->getKey())).";".
-                 $produit->getLibelleLong().";".str_replace("cepage_", "", $produit->getKey()).";".
-                 ";".$cotisationDouane.";2015-08-01;G;".$cotisationCVO.";2015-08-01;C;;;;;;;;;;;;;;;%a% %l% %ce;certification;".
-                 "\n";
+            $mentions = array();
+            $mentions["DEFAUT"] = "";
+            if($produit->hasVTSGN()) {
+                $mentions["VT"] = "VT";
+                $mentions["SGN"] = "SGN";
+            }
+
+            foreach($mentions as $mentionKey => $mentionLibelle) {
+                echo "declaration;".
+                     $certificationLibelle.";".$certificationKey.";". #Certification
+                     ";".$genreKey.";". #Genre
+                     $produit->getAppellation()->getLibelleLong().";".str_replace("appellation_", "", $produit->getAppellation()->getKey()).";". #Appellation
+                     $mentionLibelle.";".$mentionKey.";". #Mention
+                     $produit->getLieu()->getLibelleLong().";".str_replace("lieu", "", $produit->getLieu()->getKey()).";".
+                     $produit->getCouleur()->getLibelleLong().";".strtolower(str_replace("couleur", "", $produit->getCouleur()->getKey())).";".
+                     $produit->getLibelleLong().";".str_replace("cepage_", "", $produit->getKey()).";".
+                     ";".$cotisationDouane.";2015-08-01;G;".$cotisationCVO.";2015-08-01;C;;;;;;;;;;;".$produit->getCodeProduit($mentionKey).";cepage;;%a% %l% %ce% %m%;certification;".
+                     "\n";
+            }
         }
     }
 }
