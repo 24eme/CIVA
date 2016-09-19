@@ -3,7 +3,7 @@
 
 <!-- #header -->
 <div id="header" class="clearfix pngfix">
-    <h1 id="logo"><a href="<?php if($sf_user->isAuthenticated()): ?><?php echo url_for('mon_espace_civa', array('identifiant' => $sf_user->getCompte()->getIdentifiant())); ?><?php endif; ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
+    <h1 id="logo"><a href="<?php if($sf_user->isAuthenticated()): ?><?php echo url_for('mon_espace_civa', array('identifiant' => $sf_user->getCompte()->getLogin())); ?><?php endif; ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
 
     <div id="titre_rubrique">
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
