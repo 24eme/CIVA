@@ -1,7 +1,7 @@
 {
   "checksum": {
-    "previous": "26ffd560b29ac5f51901753de30201ab0ffad7b41a07a2478739f038635881ee",
-    "current": "26ffd560b29ac5f51901753de30201ab0ffad7b41a07a2478739f038635881ee"
+    "previous": "02bf09847cea33669bef1310b1c450e37f3047ca1d6808c0a80f134e329ec7ba",
+    "current": "02bf09847cea33669bef1310b1c450e37f3047ca1d6808c0a80f134e329ec7ba"
   },
   "fonts": [
     "./vins.ttf",
@@ -14,28 +14,40 @@
       "codepoint": 61696,
       "source": "svg/bouteille.svg"
     },
-    "contrat": {
+    "camion": {
       "codepoint": 61697,
+      "source": "svg/camion.svg"
+    },
+    "contrat": {
+      "codepoint": 61698,
       "source": "svg/contrat.svg"
     },
+    "contrat2": {
+      "codepoint": 61707,
+      "source": "svg/contrat2.svg"
+    },
     "drm": {
-      "codepoint": 61698,
+      "codepoint": 61700,
       "source": "svg/drm.svg"
     },
     "etablissement": {
-      "codepoint": 61699,
+      "codepoint": 61701,
       "source": "svg/etablissement.svg"
     },
     "mouts": {
-      "codepoint": 61700,
+      "codepoint": 61702,
       "source": "svg/mouts.svg"
     },
     "raisins": {
-      "codepoint": 61701,
+      "codepoint": 61703,
       "source": "svg/raisins.svg"
     },
+    "stock": {
+      "codepoint": 61704,
+      "source": "svg/stock.svg"
+    },
     "vrac": {
-      "codepoint": 61702,
+      "codepoint": 61705,
       "source": "svg/vrac.svg"
     }
   },

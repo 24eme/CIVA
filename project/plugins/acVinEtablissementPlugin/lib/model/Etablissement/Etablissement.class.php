@@ -92,7 +92,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     public function getCompteExploitantObject() {
         if(!$this->getCompteExploitant()) {
 
-            return null;
+            return $this->getCompte();
         }
 
         return CompteClient::getInstance()->find($this->getCompteExploitant());;

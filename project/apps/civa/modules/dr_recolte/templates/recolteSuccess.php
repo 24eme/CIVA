@@ -34,6 +34,7 @@
 
             <?php
             include_partial('detailList', array(
+                'etablissement' => $etablissement,
                 'produit' => $produit,
                 'details' => $details,
                 'detail_key' => $detail_key,

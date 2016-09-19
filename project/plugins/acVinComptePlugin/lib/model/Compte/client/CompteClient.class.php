@@ -166,4 +166,9 @@ class CompteClient extends acCouchdbClient {
         return $societe->getMasterCompte();
     }
 
+    public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        return $this->startkey('COMPTE-')->endkey('COMPTE-C999999999')->execute($hydrate);
+    }
+
+
 }

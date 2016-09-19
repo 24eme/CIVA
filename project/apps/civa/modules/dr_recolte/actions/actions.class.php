@@ -38,6 +38,7 @@ class dr_recolteActions extends _DRActions {
         }
 
         $this->produit = $this->declaration->get($request->getParameter('hash'));
+        $this->etablissement = $this->declaration->getEtablissement();
         $this->initDetails();
         $this->initAcheteurs();
         $this->initPrecDR();
@@ -47,6 +48,7 @@ class dr_recolteActions extends _DRActions {
 
     public function executeProduitAjout(sfWebRequest $request) {
         $this->produit = $this->declaration->getOrAdd($request->getParameter('hash'));
+        $this->etablissement = $this->declaration->getEtablissement();
         $this->initDetails();
         $this->initAcheteurs();
         $this->initPrecDR();
@@ -68,6 +70,7 @@ class dr_recolteActions extends _DRActions {
 
     public function executeProduitEdition(sfWebRequest $request) {
         $this->produit = $this->declaration->get($request->getParameter('hash'));
+        $this->etablissement = $this->declaration->getEtablissement();
         $this->initDetails();
         $this->initAcheteurs();
         $this->initPrecDR();
@@ -120,14 +123,14 @@ class dr_recolteActions extends _DRActions {
 
     public function executeProduitNoeudPrecedent(sfWebRequest $request) {
         $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-
+        $this->etablissement = $this->declaration->getEtablissement();
         if($this->noeud->getPreviousSister()) {
             return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getPreviousSister()->getHash()));
         }
 
         if($this->noeud->getParent() instanceof DRRecolte) {
 
-            return $this->redirect('exploitation_autres');
+            return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
         }
 
         return $this->redirect('dr_recolte_noeud_precedent', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
@@ -136,14 +139,14 @@ class dr_recolteActions extends _DRActions {
 
     public function executeProduitNoeudSuivant(sfWebRequest $request) {
         $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-
+        $this->etablissement = $this->declaration->getEtablissement();
         if($this->noeud->getNextSister()) {
             return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getNextSister()->getHash()));
         }
 
         if($this->noeud->getParent() instanceof DRRecolte) {
 
-            return $this->redirect('exploitation_autres');
+            return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
         }
 
         return $this->redirect('dr_recolte_noeud_suivant', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
