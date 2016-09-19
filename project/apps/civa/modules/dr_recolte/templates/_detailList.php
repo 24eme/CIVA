@@ -4,6 +4,7 @@
         <?php foreach ($produit->detail as $key => $detail): ?>
         <?php if (in_array($detail_action_mode, array('add', 'update')) && $key == $detail_key): ?>
             <?php include_partial('detailItemForm', array(
+                'etablissement' => $etablissement,
                 'detail' => $detail,
                 'produit' => $produit,
                 'key' => $key,
@@ -12,6 +13,7 @@
         <?php else: ?>
         <?php
                     include_partial('detailItem', array(
+                        'etablissement' => $etablissement,
                         'detail' => $detail,
                         'produit' => $produit,
                         'key' => $key,

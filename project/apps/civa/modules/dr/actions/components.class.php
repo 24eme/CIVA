@@ -15,7 +15,7 @@ class drComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
-        $this->campagnes = DRClient::getInstance()->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->campagne-1), 4);
+        $this->campagnes = DRClient::getInstance()->getArchivesSince($this->etablissement->getIdentifiant(), ($this->campagne-1), 4);
 	      $this->has_import = acCouchdbManager::getClient('CSV')->countCSVsFromRecoltant($this->campagne, $this->etablissement->getIdentifiant());
     }
 
@@ -24,7 +24,7 @@ class drComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);;
+        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->etablissement->getIdentifiant(), ($this->getUser()->getCampagne()-1), 4);;
     }
 
     /**
