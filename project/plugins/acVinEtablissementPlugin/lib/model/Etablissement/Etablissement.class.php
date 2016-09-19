@@ -400,7 +400,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public function hasLieuxStockage() {
 
-        return count($this->lieux_stockage) > 0;
+        return $this->exist('lieux_stockage') && count($this->lieux_stockage) > 0;
     }
 
     /*public function getLieuxStockage() {
