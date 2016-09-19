@@ -226,7 +226,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
             if ($this->isSameCompteThanSociete()) {
-                throw new sfException("Pas de création");
+                throw new sfException("Pas de création ".$this->_id);
                 $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
                 $compte->addOrigine($this->_id);
             }else{
@@ -403,13 +403,13 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return count($this->lieux_stockage) > 0;
     }
 
-    public function getLieuxStockage() {
+    /*public function getLieuxStockage() {
         if($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR) {
             return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
         }
 
         return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getNumInterne()))->getLieuxStockage();
-    }
+    }*/
 
     public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
         foreach($this->getLieuxStockage($ajoutLieuxStockage) as $lieu_stockage) {
