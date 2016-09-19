@@ -1,0 +1,78 @@
+{
+  "checksum": {
+    "previous": "ec11c8ed9cab8514c54ae9e2d9d136bd0c8648a38e2c51a6b390c94cb972d47e",
+    "current": "ec11c8ed9cab8514c54ae9e2d9d136bd0c8648a38e2c51a6b390c94cb972d47e"
+  },
+  "fonts": [
+    "./vins.ttf",
+    "./vins.svg",
+    "./vins.woff",
+    "./vins.eot"
+  ],
+  "glyphs": {
+    "bouteille": {
+      "codepoint": 61696,
+      "source": "svg/bouteille.svg"
+    },
+    "camion": {
+      "codepoint": 61703,
+      "source": "svg/camion.svg"
+    },
+    "contrat": {
+      "codepoint": 61697,
+      "source": "svg/contrat.svg"
+    },
+    "drm": {
+      "codepoint": 61698,
+      "source": "svg/drm.svg"
+    },
+    "etablissement": {
+      "codepoint": 61699,
+      "source": "svg/etablissement.svg"
+    },
+    "mouts": {
+      "codepoint": 61700,
+      "source": "svg/mouts.svg"
+    },
+    "raisins": {
+      "codepoint": 61701,
+      "source": "svg/raisins.svg"
+    },
+    "vrac": {
+      "codepoint": 61702,
+      "source": "svg/vrac.svg"
+    }
+  },
+  "options": {
+    "autowidth": false,
+    "config": "fontcustom.yml",
+    "css_selector": ".icon-{{glyph}}",
+    "debug": false,
+    "font_ascent": 448,
+    "font_descent": 64,
+    "font_design_size": 16,
+    "font_em": 512,
+    "font_name": "vins",
+    "force": false,
+    "input": {
+      "templates": "svg",
+      "vectors": "svg"
+    },
+    "no_hash": true,
+    "output": {
+      "css": ".",
+      "fonts": ".",
+      "preview": "."
+    },
+    "preprocessor_path": null,
+    "quiet": false,
+    "templates": [
+      "css",
+      "preview"
+    ]
+  },
+  "templates": [
+    "./vins.css",
+    "./vins-preview.html"
+  ]
+}
