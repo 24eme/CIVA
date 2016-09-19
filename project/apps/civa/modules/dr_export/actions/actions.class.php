@@ -32,7 +32,6 @@ class dr_exportActions extends sfActions {
 
     private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
-
         return $this->renderText($this->generateUrl('dr_pdf', array('id' => $this->dr->_id, 'annee'=>$this->annee, 'from_csv' => $from_csv)));
     }
     /**
@@ -42,15 +41,14 @@ class dr_exportActions extends sfActions {
      */
     public function executePdf(sfWebRequest $request) {
         set_time_limit(180);
-        $tiers = $this->getUser()->getTiers();
-        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+        $this->dr = $this->getRoute()->getDR();
+        $this->etablissement = $this->dr->getEtablissement();
 
-        $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
+        $this->annee = $this->dr->getCampagne();
+
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
-            $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $tiers, $import_from, $this->getUser()->isSimpleOperateur());
-        } else {
-            $this->dr = acCouchdbManager::getClient()->find($key);
+            $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->etablissement, $import_from, $this->getUser()->isSimpleOperateur());
         }
 
         $this->setLayout(false);

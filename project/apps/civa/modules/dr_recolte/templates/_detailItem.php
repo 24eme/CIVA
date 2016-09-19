@@ -86,8 +86,8 @@
     </div>
 
     <div class="col_btn">
-        <a href="<?php echo url_for('recolte_produit_edition', array('hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="modifier_tmp btn_recolte_can_be_inactif"><img src="/images/boutons/btn_modifier_col_cepage.png" alt="Modifier" /></a>
-        <a href="<?php echo url_for('recolte_produit_suppression', array('hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')">
+        <a href="<?php echo url_for('dr_recolte_produit_edition', array('id' => $etablissement->getIdentifiant(), 'hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="modifier_tmp btn_recolte_can_be_inactif"><img src="/images/boutons/btn_modifier_col_cepage.png" alt="Modifier" /></a>
+        <a href="<?php echo url_for('dr_recolte_produit_suppression', array('id' => $etablissement->getIdentifiant(), 'hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="supprimer_tmp btn_recolte_can_be_inactif" onclick="return confirm('Etes vous sûr(e) de vouloir supprimer de détail ?')">
             <img src="/images/boutons/btn_supprimer_col_cepage.png" alt="Supprimer" />
         </a>
     </div>

@@ -10,7 +10,7 @@
         <?php endif; ?>
 
         <?php include_partial('dr/monEspace', array('etablissement' => $etablissement, 'dr' => $dr, 'campagne' => $campagne)) ?>
-        <?php include_component('dr', 'monEspaceColonne') ?>
+        <?php include_component('dr', 'monEspaceColonne',array('etablissement' => $etablissement)) ?>
     </div>
 
 
