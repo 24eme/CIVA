@@ -2,7 +2,7 @@
 class drActions extends _DRActions {
 
     public function executeInit(sfWebRequest $request) {
-        throw new sfException("En maintenance");
+        // throw new sfException("En maintenance");
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
         $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
@@ -113,8 +113,8 @@ class drActions extends _DRActions {
         $this->form_expl_err = 0;
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            throw new sfException("A réparer");
             if ($request->getParameter('gestionnaire')) {
+                throw new sfException("A réparer");
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
@@ -310,14 +310,13 @@ class drActions extends _DRActions {
 
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
-        $tiers = $this->getUser()->getTiers('Recoltant');
-        $annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-        $key = 'DR-' . $tiers->cvi . '-' . $annee;
-        $this->dr = acCouchdbManager::getClient()->find($key);
+        $etablissement = $this->dr->getEtablissement();
+        $this->annee =$this->dr->getCampagne();
+
+
         $this->dr->update();
 
         $check = $this->dr->check();
-        $this->annee = $annee;
 
         $this->validLogErreur = $this->updateUrlLog($check['erreur']);
         $this->validLogVigilance = $this->updateUrlLog($check['vigilance']);
@@ -479,7 +478,7 @@ class drActions extends _DRActions {
     }
 
     public function executeInvaliderCiva(sfWebRequest $request) {
-        throw new sfException("En maintenance");
+      //  throw new sfException("En maintenance");
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getRoute()->getDR();
         if ($dr) {
