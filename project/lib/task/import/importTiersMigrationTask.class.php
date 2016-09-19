@@ -100,6 +100,12 @@ EOF;
                 $num++;
             }
 
+            foreach ($societe->contacts as $idCompte => $compte) {
+                $contact = CompteClient::getInstance()->find($idCompte);
+                $contact->setStatut($societe->getStatut());
+                $contact->save();
+            }
+
             echo "------------------------\n";
         }
     }
