@@ -44,7 +44,6 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         set_time_limit(0);
         
-        $configCepappctr = new Cepappctr();
         $date_begin = Flag::getFlag(self::FLAG_EXPORT_DB2, date('1990-01-01'));
         $date_end = ($options['date-end'])? $options['date-end'] : date("Y-m-d", mktime(0, 0, 0, date('m'), date('d')-1, date('y'))); 
         $dates = array($date_begin, $date_end);

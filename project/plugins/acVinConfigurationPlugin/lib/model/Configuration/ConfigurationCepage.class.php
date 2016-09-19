@@ -114,7 +114,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
         if ($this->exist('attributs') && $this->attributs->exist('no_denomination')) {
 
             return !($this->attributs->no_denomination == 1);
-        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->get('min_quantite')) {
+        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
 
             return false;
         }
