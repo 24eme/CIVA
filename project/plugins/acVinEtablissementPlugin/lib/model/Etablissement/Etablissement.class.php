@@ -411,6 +411,22 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getNumInterne()))->getLieuxStockage();
     }*/
 
+    public function getLieuxStockage($ajoutLieuxStockage = false)
+    {
+        if($ajoutLieuxStockage && $this->isAjoutLieuxDeStockage() &&
+                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
+            $lieu_stockage = $this->storeLieuStockage($this->adresse,
+                                                    $this->commune,
+                                                   $this->code_postal);
+            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
+            return $this->_get('lieux_stockage');
+        }
+        if($this->exist('lieux_stockage')){
+            return $this->_get('lieux_stockage');
+        }
+        return array();
+    }
+
     public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
         foreach($this->getLieuxStockage($ajoutLieuxStockage) as $lieu_stockage) {
 
