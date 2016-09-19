@@ -51,11 +51,18 @@ migration_compte:
 # *********** VRAC ***********
 
 vrac_selection_type:
-  url: /vrac/selection-type/:type
-  param: { module: vrac, action: selectionType, type: null }
+  url: /vrac/selection-type/:type/:identifiant
+  param: { module: vrac, action: selectionType, type: null, identifiant: null }
 vrac_nouveau:
-  url: /vrac/nouveau
-  param: { module: vrac, action: nouveau }
+  url: /vrac/nouveau/:acteur/:identifiant
+  param: { module: vrac, action: etape, numero_contrat: nouveau, etape: soussignes }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+    allow_empty: true
+  requirements:
+    sf_method: [get, post]
 vrac_historique:
   url: /vrac/:identifiant/historique
   param: { module: vrac, action: historique }
@@ -71,7 +78,7 @@ vrac_export_csv:
   requirements: { sf_method: [get, post] }
 
 vrac_soussigne_informations:
-  url: /vrac/:numero_contrat/soussignes-informations
+  url: /vrac/:identifiant/:acteur/soussignes-informations/:numero_contrat
   param: { module: vrac, action: soussigneInformations }
   class: VracRoute
   options:
@@ -134,7 +141,7 @@ vrac_export_odg:
   requirements:
     sf_method: [get, post]
 vrac_annuaire_commercial:
-  url: /vrac/:numero_contrat/annuaire/commercial
+  url: /vrac/:numero_contrat/annuaire/:identifiant/commercial
   param: { module: vrac, action: annuaireCommercial }
   class: VracRoute
   options:
@@ -143,7 +150,7 @@ vrac_annuaire_commercial:
   requirements:
     sf_method: [get, post]
 vrac_annuaire:
-  url: /vrac/:numero_contrat/annuaire/:acteur/:type
+  url: /vrac/:numero_contrat/annuaire/:acteur/:identifiant/:type
   param: { module: vrac, action: annuaire }
   class: VracRoute
   options:
@@ -154,7 +161,7 @@ vrac_annuaire:
     sf_method: [get, post]
 vrac_etape:
   url: /vrac/:numero_contrat/:etape
-  param: { module: vrac, action: etape }
+  param: { module: vrac, action: etape,  }
   class: VracRoute
   options:
     model:    Vrac
@@ -205,23 +212,23 @@ telecharger_la_notice_vrac:
 
 # *********** ANNUAIRE *********
 annuaire:
-  url: /annuaire
+  url: /annuaire/:identifiant
   param: { module: annuaire, action: index }
 
 annuaire_retour:
-  url: /annuaire/retour
+  url: /annuaire/:identifiant/retour
   param: { module: annuaire, action: retour }
 annuaire_selectionner:
-  url: /annuaire/selectionner/:type
+  url: /annuaire/:identifiant/selectionner/:type
   param: { module: annuaire, action: selectionner, type: null }
 annuaire_commercial_ajouter:
-  url: /annuaire/ajouter/commercial
+  url: /annuaire/:identifiant/ajouter/commercial
   param: { module: annuaire, action: ajouterCommercial }
 annuaire_ajouter:
-  url: /annuaire/ajouter/:type/:identifiant
+  url: /annuaire/:identifiant/ajouter/:type/:identifiant_ajout
   param: { module: annuaire, action: ajouter }
 annuaire_supprimer:
-  url: /annuaire/supprimer/:type/:id
+  url: /annuaire/:identifiant/supprimer/:type/:id
   param: { module: annuaire, action: supprimer }
 
 

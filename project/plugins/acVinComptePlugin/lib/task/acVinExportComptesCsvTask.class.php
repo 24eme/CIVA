@@ -158,8 +158,8 @@ EOF;
                             "adresse" => $compte->adresse,
                             "code postal" => $compte->code_postal,
                             "commune" => $compte->commune,
-                            "civilite de l'exploitant" => ($etablissement->getExploitant()) ? $etablissement->getExploitant()->civilite : $compte->civilite,
-                            "nom de l'exploitant" => ($etablissement->getExploitant()) ? $etablissement->getExploitant()->nom : $compte->nom,
+                            "civilite de l'exploitant" => $etablissement->getExploitant()->civilite,
+                            "nom de l'exploitant" => $etablissement->getExploitant()->nom
                                 ), $validation);
                         }
                         }
