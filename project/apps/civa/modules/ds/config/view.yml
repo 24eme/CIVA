@@ -4,3 +4,4 @@
 default:
   metas:
     title:        "Déclaration de stocks de vins d'Alsace %d"
+  layout:         layoutAncien

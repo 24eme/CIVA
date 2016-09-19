@@ -17,7 +17,8 @@ class ds_exportActions extends sfActions
   */
     public function executePDF(sfWebRequest $request)
     {
-      if(!DSSecurity::getInstance($this->getUser(), $this->getRoute()->getDS())->isAuthorized(array(DSSecurity::CONSULTATION))) {
+          $this->ds = $this->getRoute()->getDS();
+      if(!DSSecurity::getInstance($this->ds->getEtablissement(), $this->getRoute()->getDS())->isAuthorized(array(DSSecurity::CONSULTATION))) {
 
          throw new sfSecurityException("Vous n'avez pas accès à cette DS");
       }
@@ -28,16 +29,16 @@ class ds_exportActions extends sfActions
       $this->ds->storeStockage();
 
       $this->setLayout(false);
-      
+
       $this->document = new ExportDSPdf($this->ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'));
-      
+
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }
       $this->document->generatePDF();
 
       if ($request->isXmlHttpRequest()) {
-          
+
           return $this->ajaxPdf();
       }
 
@@ -45,8 +46,8 @@ class ds_exportActions extends sfActions
 
       return $this->renderText($this->document->output());
     }
-    
-    
+
+
     public function executePDFEmpty(sfWebRequest $request)
     {
       if(!TiersSecurity::getInstance($this->getUser())) {
@@ -57,20 +58,20 @@ class ds_exportActions extends sfActions
       $type_ds = $request->getParameter('type');
 
       $this->tiers = $this->getUser()->getDeclarantDS($type_ds);
-      
+
       set_time_limit(180);
 
       $this->setLayout(false);
 
       $this->document = new ExportDSPdfEmpty($this->tiers, $type_ds, array($this, 'getPartial'), true, $this->getRequestParameter('output', 'pdf'), null, $this->getRequestParameter('force', 0));
-      
+
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }
       $this->document->generatePDF();
 
       if ($request->isXmlHttpRequest()) {
-          
+
           return $this->ajaxPdf();
       }
       $this->document->addHeaders($this->getResponse());
@@ -87,7 +88,7 @@ class ds_exportActions extends sfActions
                                                       ->endkey(array("2012-2013", false, array()))
                                                       ->getView("STATS", "DS");
       $values = array();
-      $values[] = array("cvi", "nom", "commune de déclaration", "téléphone", "e-mail", "étape");                                                
+      $values[] = array("cvi", "nom", "commune de déclaration", "téléphone", "e-mail", "étape");
       foreach ($ds_non_validees->rows as $row) {
           $ds = acCouchdbManager::getClient()->find($row->id, acCouchdbClient::HYDRATE_JSON);
           $ligne = array();

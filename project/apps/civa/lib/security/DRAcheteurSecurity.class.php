@@ -4,17 +4,17 @@ class DRAcheteurSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
 
-    protected $myUser;
-    protected $tiers;
+    protected $compte;
+    protected $etablissement;
 
-    public static function getInstance($myUser) {
+    public static function getInstance($compte) {
 
-        return new DRAcheteurSecurity($myUser);
+        return new DRAcheteurSecurity($compte);
     }
 
-    public function __construct($myUser) {
-        $this->myUser = $myUser;
-        $this->tiers = $this->myUser->getDeclarant();
+    public function __construct($compte) {
+        $this->compte = $compte;
+        $this->etablissement = DRClient::getInstance()->getEtablissementAcheteur($this->compte->getSociete());
     }
 
     public function isAuthorized($droits) {
@@ -24,12 +24,12 @@ class DRAcheteurSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$this->tiers->isDeclarantDRAcheteur()) {
+        if(!$this->etablissement) {
 
-            return false;
+             return false;
         }
 
-        if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_DR_ACHETEUR)) {
+        if(!$this->compte->hasDroit(_CompteClient::DROIT_DR_ACHETEUR)) {
 
             return false;
         }

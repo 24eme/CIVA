@@ -10,9 +10,9 @@
  *
  * @author vince
  */
-class Db2 {   
+class Db2 {
     protected $_data = array();
-    
+
     public function __construct($data) {
         $this->_data = $data;
     }
@@ -30,5 +30,3 @@ class Db2 {
         return ($this->_data[$column]) ? $this->_data[$column] : null;
     }
 }
-
-?>

@@ -1,19 +1,19 @@
 <?php
 
-class DSEditionAddAppellationFormCiva extends acCouchdbForm 
+class DSEditionAddAppellationFormCiva extends acCouchdbForm
 {
     protected $_ds = null;
     protected $_interpro = null;
     protected $_choices;
-    
-    public function __construct(DS $ds, $options = array(), $CSRFSecret = null) 
+
+    public function __construct(DS $ds, $options = array(), $CSRFSecret = null)
     {
         $this->_ds = $ds;
         $defaults = array();
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
-    
-    public function configure() 
+
+    public function configure()
     {
         $this->setWidget('hashref', new sfWidgetFormChoice(array('choices' => $this->getChoices())));
         $this->widgetSchema->setLabel('hashref', 'Séléctionnez une appellation :');
@@ -21,17 +21,18 @@ class DSEditionAddAppellationFormCiva extends acCouchdbForm
 
         $this->widgetSchema->setNameFormat('ds_add_appellation[%s]');
     }
-    
-    public function getChoices() 
+
+    public function getChoices()
     {
         if (is_null($this->_choices)) {
             $this->_choices = array("" => "");
             foreach($this->getAppellations() as $key => $appellation) {
-                $hash = $appellation->getHash();
+                $hash = str_replace("recolte", "declaration", HashMapper::inverse($appellation->getHash()));
                 if($this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
 
                     continue;
                 }
+
                 $this->_choices[$hash] = $appellation->getLibelle();
             }
         }
@@ -39,8 +40,8 @@ class DSEditionAddAppellationFormCiva extends acCouchdbForm
         return $this->_choices;
     }
 
-    public function getAppellations() 
+    public function getAppellations()
     {
-        return $this->_ds->declaration->getConfig()->getNoeudAppellations()->getAppellations();
+        return $this->_ds->declaration->getConfig()->getArrayAppellations();
     }
 }

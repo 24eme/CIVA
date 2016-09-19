@@ -1,8 +1,8 @@
-<form id="form_gamma" action="<?php echo url_for('@gamma') ?>" method="post">
+<form id="form_gamma" action="<?php echo url_for('gamma') ?>" method="post">
     <h3 class="titre_section">Alsace Gamm@ <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide" doc="/gamma/telecharger_la_notice"></a></h3>
     <div class="contenu_section">
         <!--<p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>-->
-	<?php if (!$sf_user->getTiers('MetteurEnMarche')->exist('gamma')) : ?>
+	<?php if (!$compte->hasDroit('gamma')) : ?>
         <div class="ligne_form">
             <input type="radio" id="gamma_type_acces_inscription" name="gamma[type_acces]" value="inscription" checked="checked" />
             <label for="gamma_type_acces_inscription">Inscription à Alsace Gamm@</label>
@@ -74,5 +74,3 @@ $(document).ready(function() {
    });
 });
 </script>
-
-

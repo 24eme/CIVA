@@ -1,14 +1,14 @@
 <?php
-class vracActions extends sfActions 
-{    
-	public function executeSelectionType(sfWebRequest $request) 
+class vracActions extends sfActions
+{
+	public function executeSelectionType(sfWebRequest $request)
     {
     	$this->forward404Unless($this->type = $request->getParameter('type'));
     	$this->getUser()->setAttribute('vrac_type_tiers', $this->type);
     	return $this->redirect('vrac_nouveau');
     }
-    
-    public function executeNouveau(sfWebRequest $request) 
+
+    public function executeNouveau(sfWebRequest $request)
     {
         $this->secureVrac(VracSecurity::CREATION, null);
         $this->getUser()->setAttribute('vrac_object', null);
@@ -17,23 +17,24 @@ class vracActions extends sfActions
     	$etapes = VracEtapes::getInstance();
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
-	
+
 	public function executeHistorique(sfWebRequest $request)
 	{
+		$this->compte = $this->getRoute()->getCompte();
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
-		
+
 		$this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
 		$this->role = $request->getParameter('role');
 
 		if (!$this->campagne) {
-			$this->campagne = ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
+			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac(), $this->campagne, $this->statut, $this->type, $this->role);
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac()), ConfigurationClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac()), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
         $this->roles = $this->findRoles();
@@ -55,8 +56,9 @@ class vracActions extends sfActions
 
     public function executeExportCSV(sfWebRequest $request)
     {
+		$this->compte = $this->getRoute()->getCompte();
         $this->secureVrac(VracSecurity::DECLARANT, null);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants(VracClient::getInstance()->getEtablissements($this->compte->getSociete()));
         $this->setLayout(false);
         $this->setResponseCsv(sprintf('export_contrats_%s.csv', date('Ymd')));
     }
@@ -68,7 +70,7 @@ class vracActions extends sfActions
         $this->response->setHttpHeader('Expires', '0', true);
     }
 
-	
+
 	public function executeAnnuaire(sfWebRequest $request)
 	{
 		$this->type = $request->getParameter('type');
@@ -102,10 +104,10 @@ class vracActions extends sfActions
 		$this->getUser()->setAttribute('vrac_acteur', $this->acteur);
 		return $this->redirect('annuaire_selectionner', array('type' => $this->type));
 	}
-	
+
 	public function executeAnnuaireCommercial(sfWebRequest $request)
 	{
-		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());	
+		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
@@ -124,11 +126,11 @@ class vracActions extends sfActions
 		$this->getUser()->setAttribute('vrac_object', serialize($this->vrac));
 		return $this->redirect('annuaire_commercial_ajouter');
 	}
-	
+
 	public function executeCloture(sfWebRequest $request)
 	{
         $this->vrac = $this->getRoute()->getVrac();
-        
+
         $this->secureVrac(VracSecurity::CLOTURE, $this->vrac);
 
 		$this->validation = new VracValidation($this->vrac);
@@ -140,8 +142,8 @@ class vracActions extends sfActions
 		}
 		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
 	}
-	
-	public function executeSupprimer(sfWebRequest $request) 
+
+	public function executeSupprimer(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
@@ -151,8 +153,8 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac');
 		}
 
-		$this->user = $this->getUser()->getDeclarantVrac();
-		
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
             return $this->redirect('mon_espace_civa_vrac');
@@ -172,15 +174,15 @@ class vracActions extends sfActions
         	}
         }
     }
-    
-	public function executeFiche(sfWebRequest $request) 
+
+	public function executeFiche(sfWebRequest $request)
 	{
 		$this->cleanSessions();
         $this->vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
         $this->user = $this->getTiersOfVrac($this->vrac);
-        
+
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
 		$this->validation = new VracValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
@@ -208,8 +210,8 @@ class vracActions extends sfActions
 
         return $user;
     }
-    
-	public function executeValidation(sfWebRequest $request) 
+
+	public function executeValidation(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
@@ -219,7 +221,7 @@ class vracActions extends sfActions
 
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
-		
+
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');
 		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 		foreach ($emails as $email) {
@@ -228,18 +230,17 @@ class vracActions extends sfActions
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
-    
-    public function executeEtape(sfWebRequest $request) 
+
+    public function executeEtape(sfWebRequest $request)
     {
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
     	$this->forward404Unless($this->etapes->exist($this->etape), 'L\'étape "'.$this->etape.'" n\'est pas prise en charge.');
 		$this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
-		
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
-        
+
     	if ($this->etapes->isGt($this->etape, VracEtapes::ETAPE_PRODUITS) && !$this->vrac->hasProduits()) {
     		return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => VracEtapes::ETAPE_PRODUITS));
     	}
@@ -247,7 +248,7 @@ class vracActions extends sfActions
     	$this->form = $this->getForm($this->vrac, $this->etape, $this->annuaire);
     	$this->next_etape = null;
     	if ($nextEtape = $this->getEtapeSuivante($this->etape, $this->etapes)) {
-    		$this->next_etape = $this->vrac->etape = $nextEtape;    		
+    		$this->next_etape = $this->vrac->etape = $nextEtape;
     	}
     	$this->validation = new VracContratValidation($this->vrac);
     	if ($request->isMethod(sfWebRequest::POST)) {
@@ -275,13 +276,14 @@ class vracActions extends sfActions
         	}
         }
     }
-    
+
     public function executeAjouterProduit(sfWebRequest $request)
     {
 
-        $this->user = $this->getUser()->getDeclarantVrac();
-        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-        $this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
+        $this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+        $this->config = ConfigurationClient::getConfiguration('2012');
+        //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
+        $this->appellationsLieuDit = json_encode(array());
         $this->vrac = $this->getRoute()->getVrac();
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
@@ -299,7 +301,7 @@ class vracActions extends sfActions
         	}
         }
     }
-    
+
     public function executeSoussigneInformations(sfWebRequest $request)
     {
 
@@ -310,23 +312,23 @@ class vracActions extends sfActions
     	if (!$identifiant) {
     		throw new sfException('Id du tiers obligatoire.');
     	}
-    	$tiers = _TiersClient::getInstance()->find($identifiant);
-    	if (!$tiers) {
+    	$etablissement = EtablissementClient::getInstance()->find($identifiant);
+    	if (!$etablissement) {
     		throw new sfException('Le tiers d\'id "'.$identifiant.'" n\'existe pas.');
     	}
 
         $acteur = $request->getParameter('acteur');
-		$this->user = $this->getUser()->getDeclarantVrac();
+		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
         $this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
 
-        $this->vrac->addActeur($acteur, $tiers);
+        $this->vrac->addActeur($acteur, $etablissement);
 
-    	return $this->renderPartial('vrac/soussigne', array('vrac' => $this->vrac, 'tiers' => $this->vrac->{$acteur}, 'fiche' => false));	
+    	return $this->renderPartial('vrac/soussigne', array('vrac' => $this->vrac, 'tiers' => $this->vrac->{$acteur}, 'fiche' => false));
     }
-    
-    public function executeAjouterProduitLieux(sfWebRequest $request) 
+
+    public function executeAjouterProduitLieux(sfWebRequest $request)
     {
     	if (!$request->isXmlHttpRequest()) {
     		throw new sfException('Requête ajax obligatoire.');
@@ -335,20 +337,20 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-    	if (!$this->config->recolte->certification->genre->exist($appellation)) {
+    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
     	$result = array();
-    	if ($this->config->recolte->certification->genre->get($appellation)->hasManyLieu()) {
-			foreach ($this->config->recolte->certification->genre->get($appellation)->getLieux() as $key => $lieu) {
-				$result[$key] = $lieu->libelle;
+    	if ($this->config->get($appellation)->hasManyLieu()) {
+			foreach ($this->config->get($appellation)->getLieux() as $key => $lieu) {
+				$result[$lieu->getKey()] = $lieu->libelle;
 			}
     	}
     	return $this->renderText(json_encode($result));
     }
-    
-    public function executeAjouterProduitCepages(sfWebRequest $request) 
+
+    public function executeAjouterProduitCepages(sfWebRequest $request)
     {
     	if (!$request->isXmlHttpRequest()) {
     		throw new sfException('Requête ajax obligatoire.');
@@ -356,20 +358,20 @@ class vracActions extends sfActions
     	$appellation = $request->getParameter('appellation', null);
     	$lieu = $request->getParameter('lieu', 'lieu');
     	if (!$lieu) {
-    		$lieu = 'lieu';
+    		$lieu = 'DEFAUT';
     	}
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
-    	if (!$this->config->recolte->certification->genre->exist($appellation)) {
+    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
-    	if (!$this->config->recolte->certification->genre->get($appellation)->mention->exist($lieu)) {
+    	if (!$this->config->get($appellation)->mentions->get('DEFAUT')->lieux->exist($lieu)) {
     		throw new sfException('Lieu "'.$lieu.'" n\'existe pas.');
     	}
     	$result = array();
-		foreach ($this->config->recolte->certification->genre->get($appellation)->mention->get($lieu)->getCepages() as $key => $cepage) {
+		foreach ($this->config->get($appellation)->mentions->get('DEFAUT')->lieux->get($lieu)->getProduits() as $key => $cepage) {
 			$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $cepage->libelle;
 			if ($key == Vrac::CEPAGE_EDEL) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_EDEL_LIBELLE_COMPLEMENT;
@@ -383,8 +385,8 @@ class vracActions extends sfActions
 		}
     	return $this->renderText(json_encode($result));
     }
-    
-    public function executeAjouterProduitVtsgn(sfWebRequest $request) 
+
+    public function executeAjouterProduitVtsgn(sfWebRequest $request)
     {
     	if (!$request->isXmlHttpRequest()) {
     		throw new sfException('Requête ajax obligatoire.');
@@ -393,8 +395,7 @@ class vracActions extends sfActions
     	if (!$hash) {
     		throw new sfException('Hash cépage obligatoire.');
     	}
-    	$hash = str_replace('declaration/', 'recolte/', $hash);
-    	$this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration('2012');
+    	$this->config = ConfigurationClient::getConfiguration('2012');
     	if (!$this->config->exist($hash)) {
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
@@ -404,7 +405,7 @@ class vracActions extends sfActions
     }
 
     public function executeDownloadNotice() {
-        
+
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_vrac.pdf", "aide_contrat.pdf");
     }
 
@@ -423,7 +424,7 @@ class vracActions extends sfActions
 	{
 		return VracFormFactory::create($vrac, $etape, $annuaire);
 	}
-    
+
     protected function getEtapeSuivante($etape, $etapes)
     {
     	$next = null;
@@ -433,13 +434,13 @@ class vracActions extends sfActions
     	}
     	return $next;
     }
-    
+
     protected function getAnnuaire()
     {
     	$compte = $this->getUser()->getCompte();
 		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
-    }    
-    
+    }
+
     protected function getFormRetiraisons($vrac, $user)
     {
     	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule()) {
@@ -459,7 +460,7 @@ class vracActions extends sfActions
         rsort($campagnes);
         return $campagnes;
     }
-    
+
     protected function getStatuts()
     {
         $statuts = Vrac::getStatutsLibelles();
@@ -469,40 +470,42 @@ class vracActions extends sfActions
     }
 
     protected function secureVrac($droits, $vrac) {
+		if(!isset($this->compte)) {
+			$this->compte = $this->getUser()->getCompte();
+		}
+        if(!VracSecurity::getInstance($this->compte, $vrac)->isAuthorized($droits)) {
 
-        if(!VracSecurity::getInstance($this->getUser(), $vrac)->isAuthorized($droits)) {
-            
             return $this->forwardSecure();
         }
     }
 
     protected function forwardSecure()
-    {    
+    {
         $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
 
         throw new sfStopException();
     }
-    
+
     protected function cleanSessions()
     {
     	$this->getUser()->setAttribute('vrac_object', null);
     	$this->getUser()->setAttribute('vrac_acteur', null);
     	$this->getUser()->setAttribute('vrac_type_tiers', null);
     }
-    
+
     protected function populateVracTiers($vrac)
     {
-    	$declarant = $this->getUser()->getDeclarantVrac();
+    	$declarant = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
     	if ($vrac->isNew() && $typeTiers) {
 			if ($typeTiers == 'vendeur') {
 				$vrac->vendeur_identifiant = $declarant->_id;
 	            $vrac->storeVendeurInformations($declarant);
-	            $vrac->setVendeurQualite($declarant->qualite_categorie);
+	            $vrac->setVendeurQualite($declarant->getFamille());
 			} else {
 				$vrac->acheteur_identifiant = $declarant->_id;
 	            $vrac->storeAcheteurInformations($declarant);
-	            $vrac->setAcheteurQualite($declarant->qualite_categorie);
+	            $vrac->setAcheteurQualite($declarant->getFamille());
 			}
 		}
 		return $vrac;

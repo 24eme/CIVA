@@ -23,7 +23,7 @@ class compteCreateVirtuelTask extends sfBaseTask
       new sfCommandOption('suppression', null, sfCommandOption::PARAMETER_REQUIRED, 'Supprime si existant', false),
     ));
 
-    $this->namespace        = 'compte';
+    $this->namespace        = 'compteciva';
     $this->name             = 'create-virtuel';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
@@ -47,7 +47,7 @@ EOF;
           throw new sfCommandException(sprintf("Le compte \"%s\" existe déjà", $arguments['login']));
         }
     }
-    
+
     $compte = new CompteVirtuel();
     $compte->login = $arguments['login'];
     $compte->constructId();
@@ -62,7 +62,7 @@ EOF;
     $compte->code_postal = $arguments['code_postal'];
     $compte->droits = $arguments['droits'];
     $compte->save();
-    
+
     $this->logSection("created", $compte->login);
   }
 }

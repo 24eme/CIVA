@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -10,7 +10,7 @@
  * @author vince
  */
 abstract class publierDRAbstractTask extends sfBaseTask {
-    
+
     protected function updateDR() {
         try {
             if (!$dr->updated)
@@ -109,4 +109,3 @@ abstract class publierDRAbstractTask extends sfBaseTask {
         $this->logSection("clean", $nb_clean.' file(s)');
     }
 }
-?>

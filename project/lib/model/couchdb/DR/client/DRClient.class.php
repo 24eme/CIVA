@@ -1,7 +1,7 @@
 <?php
 
 class DRClient extends acCouchdbClient {
-  
+
   const AUTORISATION_ACHETEURS = 'ACHETEURS';
   const AUTORISATION_AVA = 'AVA';
   const VALIDEE_PAR_RECOLTANT = "RECOLTANT";
@@ -24,6 +24,7 @@ class DRClient extends acCouchdbClient {
 
   public function createDeclarationClone($dr, $tiers, $campagne, $depot_mairie) {
     $doc = clone $dr;
+    exit;
     $doc->campagne = $campagne;
     $doc->cvi = $tiers->cvi;
     $this->initDeclaration($doc, $depot_mairie);
@@ -42,7 +43,7 @@ class DRClient extends acCouchdbClient {
     $doc->storeDeclarant();
     $doc->remove('date_depot_mairie');
     if($depot_mairie){
-      $doc->add('date_depot_mairie', null);                    
+      $doc->add('date_depot_mairie', null);
     }
     $doc->add('lies_saisis_cepage', 1);
   }
@@ -67,7 +68,7 @@ class DRClient extends acCouchdbClient {
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
-    
+
     $doc = $this->createDeclaration($tiers, $campagne, $depot_mairie);
     $doc->jeunes_vignes = 0;
     foreach ($csvs as $csv) {
@@ -129,6 +130,30 @@ class DRClient extends acCouchdbClient {
     return $doc;
   }
 
+  public function getEtablissement($societe) {
+      foreach($societe->getEtablissementsObject() as $etablissement) {
+
+          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR))) {
+
+              return $etablissement;
+          }
+      }
+
+      return null;
+  }
+
+  public function getEtablissementAcheteur($societe) {
+      foreach($societe->getEtablissementsObject() as $etablissement) {
+
+          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE)) && $etablissement->getFamille()) {
+
+              return $etablissement;
+          }
+      }
+
+      return null;
+  }
+
   protected function recodeNumber($value) {
 
     return round(str_replace(",", ".", $value)*1, 2);
@@ -160,7 +185,7 @@ class DRClient extends acCouchdbClient {
      *
      * @param string $cvi
      * @param string $campagne
-     * @return array 
+     * @return array
      */
     public function getArchivesSince($cvi, $campagne, $limit) {
         $docs = $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-'.$campagne)->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
@@ -178,14 +203,14 @@ class DRClient extends acCouchdbClient {
 
         return $this->startkey('DR-0000000000-0000')->endkey('DR-9999999999-9999')->execute($hydrate);
     }
-    
+
     public function findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        
+
         return $this->startkey(array($campagne, $cvi_acheteur))->endkey(array($campagne, (string)($cvi_acheteur + 1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }
-    
+
     public function findAllByCampagneAcheteurs($campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        
+
         return $this->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->executeView("DR", "campagne_acheteur", $hydrate);
     }
 
@@ -197,7 +222,7 @@ class DRClient extends acCouchdbClient {
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
 
-          foreach ($dr->recolte->getAppellationsSorted() as $app_key => $appellation) {
+          foreach ($dr->recolte->getAppellations() as $app_key => $appellation) {
               switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
                   case 'GRDCRU':
                   case 'CREMANT':
@@ -220,7 +245,7 @@ class DRClient extends acCouchdbClient {
             return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $appellation, 'Rouge ou Rosé');
         }
         if(!$appellation->getConfig()->existRendementCouleur()) {
-          
+
           return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $appellation, 'AOC Alsace Blanc');
         }
         foreach ($appellation->getLieux() as $lieu) {
@@ -255,5 +280,5 @@ class DRClient extends acCouchdbClient {
 
         return $totauxByAppellationsRecap;
     }
-    
+
 }

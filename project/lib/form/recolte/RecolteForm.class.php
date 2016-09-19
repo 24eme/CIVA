@@ -9,7 +9,6 @@ class RecolteForm extends acCouchdbObjectForm {
     const FORM_NAME = 'detail[%s]';
 
     public function configure() {
-
         $this->setWidgets(array(
             'lieu' => new sfWidgetFormInputText(),
             'denomination' => new sfWidgetFormInputText(),
@@ -31,7 +30,7 @@ class RecolteForm extends acCouchdbObjectForm {
             $this->setValidator('lies', new sfValidatorNumber(array('required' => false)));
             $this->getWidget('lies')->setAttribute('class', 'num lies');
         }
-        
+
         if ($this->getOption('lieu_required', false)) {
             $this->getValidator('lieu')->setOption('required', true);
         }
@@ -114,7 +113,7 @@ class RecolteForm extends acCouchdbObjectForm {
         if ($this->hasAcheteursMouts()) {
             $this->getObject()->mouts->clear();
         }
-        
+
         $this->updateAcheteurs(self::FORM_NAME_NEGOCES, $values, $this->getObject()->negoces);
         $this->updateAcheteurs(self::FORM_NAME_NEGOCES . self::FORM_SUFFIX_NEW, $values, $this->getObject()->negoces, $this->getAcheteursNegoces());
         $this->updateAcheteurs(self::FORM_NAME_COOPERATIVES, $values, $this->getObject()->cooperatives);
@@ -172,7 +171,7 @@ class RecolteForm extends acCouchdbObjectForm {
     }
 
     public function updateObjectEmbeddedForms($values, $forms = null) {
-        
+
     }
 
 }

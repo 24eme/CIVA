@@ -16,7 +16,7 @@ class compteLdapUpdateTask extends sfBaseTask
       // add your own options here
     ));
 
-    $this->namespace        = 'compte';
+    $this->namespace        = 'compteciva';
     $this->name             = 'ldap-update';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF

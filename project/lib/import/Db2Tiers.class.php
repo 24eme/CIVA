@@ -26,6 +26,7 @@ class Db2Tiers extends Db2 {
     const COL_TYPE_TIERS            = 17;
     const COL_RECOLTANT             = 23;
     const COL_COURTIER              = 31;
+    const COL_CLOTURE               = 35;
     const COL_TELEPHONE_PRO         = 37;
     const COL_TELEPHONE_PRIVE       = 38;
     const COL_FAX                   = 39;
@@ -45,27 +46,80 @@ class Db2Tiers extends Db2 {
     const COL_MOIS_NAISSANCE        = 69;
     const COL_NO_ASSICES            = 70;
     const COL_SITE_INTERNET         = 82;
-    
-    function isRecoltant() {
-        return ($this->get(self::COL_CVI) && 
-                    (($this->get(self::COL_RECOLTANT) == "O") || 
+
+    public function isRecoltant() {
+        return ($this->get(self::COL_CVI) &&
+                    (($this->get(self::COL_RECOLTANT) == "O") ||
                     (($this->get(self::COL_RECOLTANT) == "N" || !$this->get(self::COL_RECOLTANT)) && !$this->get(self::COL_CIVABA))));
     }
-    
-    function isMetteurEnMarche() {
-        return ($this->get(self::COL_CIVABA) && 
+
+    public function isMetteurEnMarche() {
+        return ($this->get(self::COL_CIVABA) &&
                 ($this->get(self::COL_RECOLTANT) == "N" || !$this->get(self::COL_RECOLTANT)));
-                   
+
     }
 
-    function isAcheteur() {
+    public function isCloture() {
+
+        return $this->get(self::COL_CLOTURE) == "O";
+    }
+
+    public function isAcheteur() {
 
         return $this->isMetteurEnMarche() && $this->get(self::COL_CVI);
     }
 
-    function isCourtier() {
+    public function isCourtier() {
 
         return (!$this->isMetteurEnMarche() && !$this->isRecoltant() && !$this->isAcheteur()) && ($this->get(self::COL_NUM) > 90000 || $this->get(self::COL_COURTIER)) ;
     }
-    
+
+    public function getFamille() {
+        if($this->isRecoltant()) {
+
+          return EtablissementFamilles::FAMILLE_PRODUCTEUR;
+        }
+
+        if($this->isCourtier()) {
+
+          return EtablissementFamilles::FAMILLE_COURTIER;
+        }
+
+        if($this->get(Db2Tiers::COL_TYPE_TIERS) == 'PN' || $this->get(Db2Tiers::COL_TYPE_TIERS) == 'SIC') {
+
+          return EtablissementFamilles::FAMILLE_NEGOCIANT;
+        }
+
+        if($this->get(Db2Tiers::COL_TYPE_TIERS) == 'CCV') {
+
+          return EtablissementFamilles::FAMILLE_COOPERATIVE;
+        }
+
+        if(preg_match("/^V/", $this->get(Db2Tiers::COL_TYPE_TIERS))) {
+
+          return EtablissementFamilles::FAMILLE_PRODUCTEUR;
+        }
+
+        return null;
+    }
+
+    public function isProducteurVinificateur() {
+
+        return ($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR && preg_match("/^(VRT|VRP|VVV)$/", $this->get(Db2Tiers::COL_TYPE_TIERS)));
+    }
+
+
+
+    public function printDebug() {
+        echo "  T \n";
+        echo "   NUM   : ".$this->get(Db2Tiers::COL_NUM)."\n";
+        echo "   NSTOCK: ".$this->get(Db2Tiers::COL_NO_STOCK)."\n";
+        echo "   NMERE : ".$this->get(Db2Tiers::COL_MAISON_MERE)."\n";
+        echo "   NOM   : ".$this->get(Db2Tiers::COL_NOM_PRENOM)."\n";
+        echo "   CVI   : ".$this->get(Db2Tiers::COL_CVI)."\n";
+        echo "   CIVABA: ".$this->get(Db2Tiers::COL_CIVABA)."\n";
+        echo "   ACCISE: ".$this->get(Db2Tiers::COL_NO_ASSICES)."\n";
+        echo "   TYPE  : ".$this->get(Db2Tiers::COL_TYPE_TIERS)."\n";
+    }
+
 }

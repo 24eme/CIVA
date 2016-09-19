@@ -3,12 +3,12 @@
 </div>
 
 <div id="contrats_vrac">
-	
+
 	<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_ajout_produit', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
 		<?php echo $form->renderHiddenFields() ?>
 
 		<div class="fond">
-			
+
 			<span id="errors"><?php echo $form['hash']->renderError() ?></span>
 			<h2 class="titre_section">Ajouter un produit</h2>
 
@@ -18,7 +18,7 @@
 					<td>
 						<select id="choix_appellation" name="appellation">
 							<option value="">--</option>
-							<?php foreach ($config->recolte->certification->getAppellations() as $key => $appellation): ?>
+							<?php foreach ($config->declaration->getArrayAppellations() as $key => $appellation): ?>
 							<option value="<?php echo $key ?>"><?php echo $appellation->libelle ?></option>
 							<?php endforeach; ?>
 						</select>
@@ -68,7 +68,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	
+
 	$("#valide_form").click(function() {
 		var valide = true;
 		var errors = "<ul class=\"error_list\">";
@@ -88,12 +88,12 @@ $(document).ready(function(){
 		}
 		return false;
 	});
-	
+
 	var appellationsLieuDit = Object.keys(jQuery.parseJSON('<?php echo $sf_data->getRaw('appellationsLieuDit'); ?>'));
     $("#choix_appellation").change(function() {
     	$("#errors").html('');
         var value = $(this).val();
-        
+
         $.post("<?php echo url_for('vrac_ajout_produit_lieux', array('sf_subject' => $vrac, 'etape' => $etape)) ?>", { appellation: value }, function(data){
         	$("#<?php echo $form['hash']->renderId() ?>").val(null);
 			var json = jQuery.parseJSON(data);
@@ -110,7 +110,7 @@ $(document).ready(function(){
 				$("#ligne_lieu").addClass("hidden");
 				$("#choix_lieu").trigger("change");
 			}
-        }); 
+        });
         if (jQuery.inArray(value, appellationsLieuDit) != -1) {
         	$("#ligne_lieu_dit").removeClass("hidden");
         } else {
@@ -138,7 +138,7 @@ $(document).ready(function(){
 	        	$("#choix_cepage").html(opts);
 	        	$("#ligne_cepage").removeClass("hidden");
 			}
-        }); 
+        });
     });
 
     $("#choix_cepage").change(function() {

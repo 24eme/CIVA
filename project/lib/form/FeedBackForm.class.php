@@ -10,11 +10,9 @@ class FeedBackForm extends sfForm {
         $this->setValidators(array(
                 'message' => new sfValidatorString(array('required' => true)),
         ));
-            
+
         $this->widgetSchema->setNameFormat('message[%s]');
         $this->validatorSchema['message']->setMessage('required', 'Le message est obligatoire');
     }
 
 }
-
-?>

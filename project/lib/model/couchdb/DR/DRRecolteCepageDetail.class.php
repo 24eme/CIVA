@@ -90,7 +90,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
         return $this->_storage[$key];
     }
-    
+
     public function getVolumeByAcheteur($cvi) {
        if(!$this->exist('negoces')){
            return 0;
@@ -105,8 +105,9 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     protected function deleteAcheteurUnused($type) {
         $appellation_key = $this->getCepage()->getLieu()->getAppellation()->getKey();
-        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->exist($appellation_key)) {
-            $acheteurs = $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->get($appellation_key)->get($type);
+        $mention_key = $this->getCepage()->getLieu()->getMention()->getKey();
+        if ($this->exist($type) && $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->exist($appellation_key) && $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->get($appellation_key)->get($mention_key)) {
+            $acheteurs = $this->getCouchdbDocument()->acheteurs->getNoeudAppellations()->get($appellation_key)->get($mention_key)->get($type);
             $acheteurs_detail = $this->get($type);
             foreach ($acheteurs_detail as $key => $item) {
                 if (!in_array($item->cvi, $acheteurs->toArray())) {
@@ -117,7 +118,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getVolumeMax() {
-        
+
         return round(($this->superficie / 100) * $this->getConfig()->getRendementNoeud(), 2);
     }
 
@@ -165,7 +166,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             return 'Déclaration en cours';
         }
     }
-    
+
     public static function getUKey( $lieu ="", $denom, $vtsgn) {
 
          return 'lieu:'.strtolower($lieu).',denomination:'.strtolower($denom).',vtsgn:'.strtolower($vtsgn);
@@ -191,7 +192,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $this->volume = $v;
         $this->volume_dplc = null;
         $this->lies = $this->getLies(true);
-        
+
         $this->usages_industriels = $this->lies;
         $this->volume_revendique = $this->volume - ($this->usages_industriels - $this->getLiesMouts());
 

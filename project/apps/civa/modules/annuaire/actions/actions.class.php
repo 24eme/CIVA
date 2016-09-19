@@ -1,13 +1,14 @@
 <?php
 class annuaireActions extends sfActions {
 
-	public function executeIndex(sfWebRequest $request) 
+	public function executeIndex(sfWebRequest $request)
 	{
 		$this->compte = $this->getUser()->getCompte();
 		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+		echo $this->annuaire."\n";
     }
 
-	public function executeSelectionner(sfWebRequest $request) 
+	public function executeSelectionner(sfWebRequest $request)
 	{
 		$this->type = $request->getParameter('type');
 		$this->compte = $this->getUser()->getCompte();
@@ -20,11 +21,11 @@ class annuaireActions extends sfActions {
         		$values = $this->form->getValues();
         		$tiers = $this->form->getTiers();
         		return $this->redirect('annuaire_ajouter', array('type' => $values['type'], 'identifiant' => $values['identifiant']));
-        	}	
+        	}
         }
     }
 
-	public function executeAjouter(sfWebRequest $request) 
+	public function executeAjouter(sfWebRequest $request)
 	{
 		$this->type = $request->getParameter('type');
 		$this->identifiant = $request->getParameter('identifiant');
@@ -60,7 +61,7 @@ class annuaireActions extends sfActions {
         }
     }
 
-	public function executeAjouterCommercial(sfWebRequest $request) 
+	public function executeAjouterCommercial(sfWebRequest $request)
 	{
 		$this->compte = $this->getUser()->getCompte();
 		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
@@ -81,7 +82,7 @@ class annuaireActions extends sfActions {
         	}
         }
     }
-    
+
     public function executeRetour(sfWebRequest $request)
     {
     	if ($vrac = $this->getUser()->getAttribute('vrac_object')) {
@@ -92,7 +93,7 @@ class annuaireActions extends sfActions {
     	return $this->redirect('@annuaire');
     }
 
-	public function executeSupprimer(sfWebRequest $request) 
+	public function executeSupprimer(sfWebRequest $request)
 	{
 		$type = $request->getParameter('type');
 		$id = $request->getParameter('id');

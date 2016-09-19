@@ -4,4 +4,4 @@
 default:
   metas:
     title: "Mon compte - Espace des professionnels du Vignoble d’Alsace"
-    
+  layout:         layoutAncien

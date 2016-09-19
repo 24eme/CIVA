@@ -11,15 +11,20 @@ class CompteVirtuel extends BaseCompteVirtuel {
         }
         return false;
     }
-    
+
+    public function getNomAAfficher() {
+
+        return $this->getNom();
+    }
+
     public function getNom() {
         return $this->_get('nom');
     }
-    
+
     public function getNoAccises() {
         return '1';
     }
-    
+
     public function getGecos() {
         return $this->getLogin() . ',' . $this->getNoAccises() . ',' . $this->getNom(). ',';
     }

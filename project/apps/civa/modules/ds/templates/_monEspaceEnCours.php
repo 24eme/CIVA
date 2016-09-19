@@ -1,8 +1,8 @@
 <?php use_helper('ds'); ?>
-<form id="form_ds" action="<?php echo url_for('ds_init', array('type' => $type_ds, 'sf_subject' => $ds)) ?>" method="post">
+<form id="form_ds" action="<?php echo url_for('ds_init', array('type' => $type_ds, 'sf_subject' => $etablissement)) ?>" method="post">
     <h3 class="titre_section">Déclaration de <?php echo getPeriodeFr($sf_user->getPeriodeDS($type_ds)) ?><a href="" class="msg_aide_ds" rel="help_popup_mon_espace_civa_ma_ds<?php if($ds->type_ds == DSCivaClient::TYPE_DS_NEGOCE): ?>_negoce<?php endif; ?>" title="Message aide"></a></h3>
     <span class="label_type_ds"><?php echo strtoupper($ds->type_ds); ?></span>
-    <div class="contenu_section">    
+    <div class="contenu_section">
         <?php if (!$ds->isNew()): ?>
             <p class="intro">Vous souhaitez :</p>
             <div class="ligne_form">

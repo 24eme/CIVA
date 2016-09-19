@@ -3,8 +3,8 @@
 class VracRoute extends sfObjectRoute
 {
 	const NOUVEAU = 'nouveau';
-	
-	protected function getObjectForParameters($parameters) 
+
+	protected function getObjectForParameters($parameters)
 	{
         if(!isset($parameters['numero_contrat'])) {
             throw new sfError404Exception('Numéro de contrat inexistant');
@@ -21,7 +21,7 @@ class VracRoute extends sfObjectRoute
         $vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
 
         if ($vrac) {
-            
+
             return $vrac;
         }
 
@@ -33,8 +33,8 @@ class VracRoute extends sfObjectRoute
         $parameters["numero_contrat"] = (!$object->isNew()) ? $object->numero_contrat : self::NOUVEAU;
         return $parameters;
     }
-    
-	public function getVrac() 
+
+	public function getVrac()
 	{
 
     	return $this->getObject();
@@ -44,7 +44,7 @@ class VracRoute extends sfObjectRoute
     {
         $tiers = $this->getUser()->getDeclarantVrac();
         $vrac = VracClient::getInstance()->createVrac($tiers->_id);
-        if ($tiers->type == 'Courtier') {
+        if ($tiers->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
             $vrac->mandataire_identifiant = $tiers->_id;
             $vrac->storeMandataireInformations($tiers);
         } /*elseif ($tiers->type == 'Acheteur') {

@@ -2,9 +2,9 @@
 
 abstract class Mouvement extends acCouchdbDocumentTree
 {
-    const TYPE_HASH_CONTRAT_VRAC = 'vrac_details';
-    const TYPE_HASH_CONTRAT_RAISIN = VracClient::TYPE_TRANSACTION_RAISINS;
-    const TYPE_HASH_CONTRAT_MOUT = VracClient::TYPE_TRANSACTION_MOUTS;
+  const TYPE_HASH_CONTRAT_VRAC = 'vrac_details';
+  // const TYPE_HASH_CONTRAT_RAISIN = VracClient::TYPE_TRANSACTION_RAISINS;
+  // const TYPE_HASH_CONTRAT_MOUT = VracClient::TYPE_TRANSACTION_MOUTS;
 
     public function setProduitHash($value) {
         $this->_set('produit_hash',  $value);
@@ -24,11 +24,11 @@ abstract class Mouvement extends acCouchdbDocumentTree
     public function getMD5Key() {
         $key = $this->getDocument()->identifiant . $this->produit_hash . $this->type_hash . $this->detail_identifiant;
         $key.= uniqid();
-        
+
         return md5($key);
     }
 
-    public function isFacturable() {        
+    public function isFacturable() {
         return $this->facturable;
     }
 
@@ -94,12 +94,12 @@ abstract class Mouvement extends acCouchdbDocumentTree
 
        return ConfigurationClient::getCurrent()->get($this->produit_hash);
     }
-    
+
     public function getDocId() {
 
         return $this->getDocument()->_id;
     }
-   
+
 
     public function getId() {
 

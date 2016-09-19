@@ -22,14 +22,15 @@ class adminActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->getUser()->signInCompteUsed($this->form->process());
-                $this->redirect('@tiers');
+
+                return $this->redirect('tiers', array('identifiant' => $this->form->getValue('login')));
             }
         }
     }
 
     /**
      *
-     * @param sfWebRequest $request 
+     * @param sfWebRequest $request
      */
     public function executeGamma(sfWebRequest $request) {
 
@@ -49,17 +50,17 @@ class adminActions extends sfActions {
         $this->form = new AdminBackToTheFutureForm();
 
         if (!$request->isMethod(sfWebRequest::POST)) {
-            
+
             return $this->redirect('@admin');
         }
-        
+
         $this->form->bind($request->getParameter($this->form->getName()));
-        
+
         if (!$this->form->isValid()) {
 
             return $this->redirect('@admin');
         }
-            
+
         $campagne = $this->form->getValue('campagne');
 
         $this->getUser()->setAttribute('back_to_the_future', $campagne);

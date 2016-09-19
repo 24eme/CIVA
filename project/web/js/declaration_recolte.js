@@ -109,15 +109,23 @@ $(document).ready( function()
 
     $('.datepickerOpenOnLoad').focus();
 
-    $(document).find('a.btn_inactif, input.btn_inactif').live('click', function() {
-        return false;
-    });
+   var btnInactif =  $(document).find('a.btn_inactif, input.btn_inactif');
+   if(btnInactif.length){
+     btnInactif.live('click', function() {
+       return false;
+     });
 
-    $(document).find('a.close_popup').live('click', function() {
-        $('.popup_ajout').dialog('close');
-        return false;
-    });
+   }
+   var btnClosePopup = $(document).find('a.close_popup');
+   if(btnClosePopup.length){
+      $(document).find('a.close_popup').live('click', function() {
+          $('.popup_ajout').dialog('close');
+          return false;
+      });
+    }
 
+  var btnRendementsMax =   $(document).find('a.open_popup_rendements_max');
+ if(btnRendementsMax.length){
     $(document).find('a.open_popup_rendements_max').live('click', function() {
         popup = $("#popup_rendements_max");
 
@@ -150,17 +158,19 @@ $(document).ready( function()
 
         return false;
     });
-
+  }
     if($('.col_active')){
         var element_premier_focus = $('.col_active').find('.premier_focus').eq(0);
         element_premier_focus.focus();
         element_premier_focus.select();
     }
-
-    $(document).find('a.btn_voir_dr_prec').live('click', function() {
+    var btnVoirDrPrec = $(document).find('a.btn_voir_dr_prec');
+    if(btnVoirDrPrec.length){
+      btnVoirDrPrec.live('click', function() {
         openPopup($('#popup_dr_precedentes'));
         return false;
-    });
+      });
+    }
 
     if($('#popup_rappel_log')){
         openPopup($('#popup_rappel_log'));
@@ -190,12 +200,12 @@ var initMsgAide = function()
 {
     var liens = $('a.msg_aide');
     var popup = $('#popup_msg_aide');
-
+    if(liens.length){
     liens.live('click', function()
     {
         var id_msg_aide = $(this).attr('rel');
         var title_msg_aide = $(this).attr('title');
-	var url_doc = $(this).attr('doc');
+	      var url_doc = $(this).attr('doc');
         $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
 
@@ -233,6 +243,7 @@ var initMsgAide = function()
 
         return false;
     });
+  }
 };
 
 /**
@@ -252,11 +263,14 @@ var choixPrecDecla = function()
         else liste_prec_decla.show();
     });
 
+    var espaceCivaValider = $('#mon_espace_civa_valider');
+    if(espaceCivaValider.length){
 
-    $('#mon_espace_civa_valider').live('click', function() {
+      $('#mon_espace_civa_valider').live('click', function() {
         if($('#type_declaration_suppr:checked').length > 0)
-            return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
-    });
+        return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
+      });
+    }
 
 
 };
@@ -317,11 +331,11 @@ var formExploitationAdministratif = function()
             $('#btn_etape input[name=boutons[next]]').addClass('btn_inactif');
             $('#btn_etape input[name=boutons[previous]]').addClass('btn_inactif');
             $('#btn_suivant').addClass('btn_inactif');
-            $('#btn_precedent').addClass('btn_inactif');            
-            
+            $('#btn_precedent').addClass('btn_inactif');
+
             bloc.addClass('edition');
             bloc.find('form input[type!="hidden"], form select').first().focus();
-            
+
             return false;
         });
 
@@ -913,7 +927,7 @@ var superficieOnChange = function(input) {
 };
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if($(elementCssId+'_dplc_rendement').length > 0) {
-    	 dplc_rendement = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_max_volume').val()); 
+    	 dplc_rendement = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_max_volume').val());
 
 	    if(dplc_rendement > 0) {
 	        $(elementCssId+'_dplc_rendement').val(dplc_rendement);
@@ -933,9 +947,9 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     }
 
     if(parseFloat($(elementCssId+'_volume_dplc').val()) > parseFloat($(elementCssId+'_lies').val())) {
-        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val()); 
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val());
     } else {
-        $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val()); 
+        $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val());
     }
 
     var usages_industriels = 0;
@@ -948,11 +962,11 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
 };
 
 var addClassAlerteIfNeeded = function (inputObj, condition, css_class)
-{   
+{
     if(!css_class) {
         css_class = 'alerte';
     }
-    
+
     inputObj.removeClass(css_class);
     if (condition) {
         inputObj.addClass(css_class);
@@ -1005,12 +1019,12 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#appellation_dplc_rendement'), parseFloat($('#appellation_dplc_rendement').val()) > 0 && parseFloat($('#appellation_dplc_rendement').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0 && parseFloat($('#appellation_total_dplc_sum').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
-    
+
     addClassAlerteIfNeeded($('#cepage_volume_revendique'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0 && parseFloat($('#cepage_dplc_rendement').val()) == parseFloat($('#cepage_volume_dplc').val()), 'alerte');
-    
+
     $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
     $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
 
@@ -1393,5 +1407,3 @@ var initPopup = function(btn, popup, fn_open_if)
         return openPopup(popup, fn_open_if);
     });
 };
-
-

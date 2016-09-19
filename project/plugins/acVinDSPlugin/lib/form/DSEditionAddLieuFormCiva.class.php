@@ -1,21 +1,21 @@
 <?php
 
-class DSEditionAddLieuFormCiva extends acCouchdbForm 
+class DSEditionAddLieuFormCiva extends acCouchdbForm
 {
     protected $_ds = null;
     protected $_interpro = null;
     protected $_config_noeud = null;
     protected $_choices;
-    
-    public function __construct(DS $ds, ConfigurationAppellation $config_noeud, $options = array(), $CSRFSecret = null) 
+
+    public function __construct(DS $ds, ConfigurationAppellation $config_noeud, $options = array(), $CSRFSecret = null)
     {
         $this->_ds = $ds;
         $this->_config_noeud = $config_noeud;
         $defaults = array();
         parent::__construct($ds, $defaults, $options, $CSRFSecret);
     }
-    
-    public function configure() 
+
+    public function configure()
     {
         $this->setWidget('hashref', new sfWidgetFormChoice(array('choices' => $this->getChoices())));
         $this->widgetSchema->setLabel('hashref', 'Séléctionnez un lieu-dit :');
@@ -23,14 +23,13 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
 
         $this->widgetSchema->setNameFormat('ds_add_lieu[%s]');
     }
-    
-    public function getChoices() 
+
+    public function getChoices()
     {
         if (is_null($this->_choices)) {
             $this->_choices = array("" => "");
-            foreach($this->getLieux() as $key => $lieu) {
-                $hash = $lieu->getHash();
-                if($this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
+            foreach($this->getLieux() as $hash => $lieu) {
+                if($this->_ds->exist($hash)) {
 
                     continue;
                 }
@@ -41,11 +40,17 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
         return $this->_choices;
     }
 
-    public function getLieux() 
+    public function getLieux()
     {
-        return $this->_config_noeud->getLieux();
+        $lieux = array();
+
+        foreach($this->_config_noeud->mentions->getFirst()->getLieux() as $lieu) {
+            $lieux[HashMapper::inverse($lieu->getHash())] = $lieu;
+        }
+
+        return $lieux;
     }
-    
+
     public function hasLieuEditable(){
         return $this->_config_noeud->hasLieuEditable();
     }

@@ -4,3 +4,4 @@
 default:
   metas:
     title:        "Contrat de vente de vins d'Alsace"
+  layout:         layoutAncien

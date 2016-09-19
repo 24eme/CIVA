@@ -15,7 +15,7 @@ var champsSommes = appDS.find('.ligne_total input.somme');
 var ajax_post_url = null;
 
 $(document).ready(function()
-{	
+{
 
     //navOngletsStock();
     initMsgAideDS();
@@ -36,7 +36,7 @@ $(document).ready(function()
         ajaxForm.ajaxPostForm();
     }
     initValidDSPopup();
-	
+
     initConfirmeValidationDs();
 
     if ($('#validation_ds').length > 0) {
@@ -58,12 +58,12 @@ $(document).ready(function()
 	initStocks();
 
     initRecapStocks();
-	
+
 	scrollLieuxStockage();
-        
+
     initDatepicker();
 
-    
+
 });
 
 
@@ -83,7 +83,7 @@ var initLoadingCreationDS = function()
         //if($('#form_ds #type_ds_normal').attr('checked') == 'checked') {
           openPopup($("#popup_loader"));
         //}
-    }); 
+    });
 }
 
 var initLieuxStockage = function()
@@ -100,13 +100,13 @@ var initLieuxStockage = function()
         }
         majCheckboxesAppellation();
     });
-    
+
     $('#ds_lieux_stockage_toggle').click(function(){
         $("input[name='ds_lieu[ds_principale]']").removeAttr("style");
         $('#ds_lieux_stockage_toggle').remove();
     });
-    
-    $("input[name='ds_lieu[ds_principale]']").change(function(){        
+
+    $("input[name='ds_lieu[ds_principale]']").change(function(){
         $("#principal_label").remove();
         var numChecked = $("input[name='ds_lieu[ds_principale]']:checked").val();
         $("td.adresse_lieu").each(function(){
@@ -115,14 +115,14 @@ var initLieuxStockage = function()
         $("#adresse_"+numChecked).addClass("ds_lieu_principal_bold");
         $("#adresse_"+numChecked).append( "<span id='principal_label'>(principal)</span>" );
     });
-    
+
 };
 
 var initExploitation = function()
 {
     if($('#exploitation_administratif').length == 0)
     {
-        
+
         return;
     }
 
@@ -142,14 +142,14 @@ var initRecapStocks = function()
 {
     if($('#recap_lieu_stockage').length == 0)
     {
-        
+
         return;
     }
 
     $('#btn_etape li.suiv a').focus();
 };
 
-var majCheckboxesAppellation = function(){    
+var majCheckboxesAppellation = function(){
         if($("#ds_lieu_neant").is(":checked")){
             $(".table_donnees input").each(function(){
                 $(this).attr("disabled","disabled");
@@ -157,7 +157,7 @@ var majCheckboxesAppellation = function(){
         }else{
         $(".table_donnees input").each(function(){
                 $(this).removeAttr("disabled");
-            }); 
+            });
         }
 };
 
@@ -174,7 +174,7 @@ var majLieuNeant = function(){
     }
     else
         $("#ds_lieu_neant").removeAttr("readonly");
-            
+
 };
 
 
@@ -190,16 +190,16 @@ var initDSSommesCol = function()
 		var col = $(champSomme.attr('data-somme-col'));
 		var valDefaut = champSomme.attr('data-val-defaut');
 		var somme = col.calculSommeCol();
-		
+
 		// Si une valeur par défaut existe
 		if(valDefaut)
 		{
 			valDefaut = parseFloat(valDefaut);
 			somme += valDefaut;
 		}
-		
+
 		champSomme.val(somme.toFixed(2));
-		
+
 		// Initialisation de la somme automatique au blur
 		if(!col.hasClass('init_somme_ok')) col.initDSColChamps();
 	});
@@ -213,12 +213,12 @@ $.fn.initDSColChamps = function()
 	var col = $(this);
 	var champs = col.find('input.num');
 	var somme = 0;
-	
+
 	champs.blur(function()
 	{
 		col.majDSSommesCol();
 	});
-	
+
 	col.addClass('init_somme_ok');
 };
 
@@ -230,18 +230,18 @@ $.fn.calculSommeCol = function()
 	var col = $(this);
 	var champs = col.find('input.num');
 	var somme = 0;
-	
+
 	champs.each(function()
 	{
 		var champ = $(this);
 		var val = champ.val();
-		
+
 		if(!val) val = 0;
 		val = parseFloat(val);
-		
+
 		somme += val;
 	});
-	
+
 	return somme;
 };
 
@@ -256,19 +256,19 @@ $.fn.majDSSommesCol = function()
 	var id = col.attr('id');
 	var champsSommesAssoc = champsSommes.filter('[data-somme-col=#'+id+']')
 	var somme = col.calculSommeCol();
-	
+
 	champsSommesAssoc.each(function()
 	{
 		var champSomme = $(this);
 		var valDefaut = champSomme.attr('data-val-defaut');
-		
+
 		// Si une valeur par défaut existe
 		if(valDefaut)
 		{
 			valDefaut = parseFloat(valDefaut);
 			somme += valDefaut;
 		}
-		
+
 		champSomme.val(somme);
 		champSomme.verifNettoyageChamp();
 	});
@@ -277,15 +277,15 @@ $.fn.majDSSommesCol = function()
 $.fn.ajaxPostForm = function(){
         var form = $(this);
         var form_id = $(this).attr('id');
-            
+
         $('#'+form_id+' .ajax').each(function(){
                 $(this).click(function(e){
                     ajax_post_url = $(this).attr('href');
                     formPost(form);
                     e.preventDefault()
-            }); 
+            });
         });
-    
+
 };
 
 var formPost = function(form)
@@ -293,7 +293,7 @@ var formPost = function(form)
         appDS.find('input.num').each(function(){
             $(this).verifNettoyageChamp();
         });
-        
+
         $.ajax({
             url: $(form).attr('action'),
             type: "POST",
@@ -302,8 +302,8 @@ var formPost = function(form)
             async : true,
             success: function(msg){if(ajax_post_url) {
                 document.location.href=ajax_post_url;
-            }},  
-            error: function(textStatus){  
+            }},
+            error: function(textStatus){
                 form.submit();
             }
     });
@@ -316,17 +316,17 @@ var navOngletsStock = function()
 {
 	var onglets = $('#onglets_majeurs.onglets_stock > li');
 	var sousMenus = onglets.find('.sous_onglets');
-	
+
 	onglets.each(function()
 	{
 		var ongletCourant = $(this);
 		var sousMenuCourant = ongletCourant.find('.sous_onglets');
-		
+
 		ongletCourant.hover(function()
 		{
 			onglets.removeClass('ui-tabs-selected');
 			sousMenus.addClass('invisible');
-			
+
 			if(!ongletCourant.hasClass('ui-tabs-selected'))
 			{
 				ongletCourant.addClass('ui-tabs-selected');
@@ -340,7 +340,7 @@ var navOngletsStock = function()
 var scrollLieuxStockage = function()
 {
 	var listeLieuxStockage = $('#liste_lieux_stockage');
-	
+
 	if(listeLieuxStockage.length > 0)
 	{
 		$.scrollTo(listeLieuxStockage, 800);
@@ -350,7 +350,7 @@ var scrollLieuxStockage = function()
 };
 
 var choixPrecDS = function()
-{   
+{
     $('#form_ds #mon_espace_civa_valider').click(function() {
         if($('#type_ds_suppr:checked').length > 0) {
             return confirm('Etes vous sûr(e) de vouloir supprimer cette déclaration ?');
@@ -410,16 +410,16 @@ var initLieuxStockageNeant = function()
 {
     $('#ds_lieu_neant').click(function() {
         var lien = $(this);
-        
+
         if(lien.attr('readonly')){
             openPopup($("#popup_ds_neant"));
             return false;
-        } 
+        }
     });
 }
 
 var initDatepicker = function(){
-    
+
     $(".datepicker").datepicker({
         showOn: "button",
         buttonImage: "/images/pictos/pi_calendrier.png",
@@ -439,7 +439,7 @@ var initMsgAideDS = function()
 {
     var liens = $('a.msg_aide_ds');
     var popup = $('#popup_msg_aide_ds');
-
+  if(liens.length){
     liens.live('click', function()
     {
         var id_msg_aide = $(this).attr('rel');
@@ -447,8 +447,8 @@ var initMsgAideDS = function()
 	var url_doc = $(this).attr('doc');
         $(popup).html('<div class="ui-autocomplete-loading popup-loading"></div>');
 
-        
-                       
+
+
         $.getJSON(
             url_ajax_msg_aide_ds,
             {
@@ -483,5 +483,5 @@ var initMsgAideDS = function()
 
         return false;
     });
+  }
 };
-

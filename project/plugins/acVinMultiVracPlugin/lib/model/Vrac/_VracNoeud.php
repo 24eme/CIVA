@@ -1,14 +1,14 @@
 <?php
 
 abstract class _VracNoeud extends acCouchdbDocumentTree {
-    
+
     public function getConfig() {
-        
-        return $this->getCouchdbDocument()->getConfiguration()->get(preg_replace('/^\/declaration/', '/recolte', $this->getHash()));
+
+        return $this->getCouchdbDocument()->getConfiguration()->get(HashMapper::convert($this->getHash()));
     }
 
     abstract public function getChildrenNode();
-    
+
     /*public function test()
     {
     	echo "Tu prends tes cliques, tu niques ta mère!";exit;
@@ -31,14 +31,14 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
     public function getChildrenNodeDeep($level = 1) {
       if($this->getConfig()->hasManyNoeuds()) {
-          
+
           throw new sfException("getChildrenNodeDeep() peut uniquement être appelé d'un noeud qui contient un seul enfant...");
       }
 
       $node = $this->getChildrenNode()->getFirst();
-      
+
       if($level > 1) {
-        
+
         return $node->getChildrenNodeDeep($level - 1);
       }
 
@@ -53,8 +53,8 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
         return $produits;
     }
-    
-    
+
+
     public function getProduitsSorted() {
         $produits = array();
         foreach($this->getChildrenNodeSorted() as $key => $item) {
@@ -63,7 +63,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
         return $produits;
     }
-    
+
     public function getProduitsSortedWithFilter($matches) {
         $produits = $this->getProduitsSorted();
         $result = array();
@@ -125,21 +125,21 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
         return $this->_get('libelle_long');
     }
-    
+
     public function getLibelleComplet() {
     	$libelle = $this->getParent()->getLibelleComplet();
     	return trim($libelle).' '.$this->libelle;
     }
-    
-    public function cleanAllNodes() {   
+
+    public function cleanAllNodes() {
         foreach($this->getChildrenNodeSorted() as $item) {
-            $item->cleanAllNodes();  
+            $item->cleanAllNodes();
             if(!count($item->getProduitsDetails())){
                 $this->remove($item->getKey());
             }
         }
-    }    
-    
+    }
+
     public function getTotalVolumeEnleve()
     {
     	$total = 0;
@@ -147,8 +147,8 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
             $total += $item->getTotalVolumeEnleve();
         }
         return $total;
-    } 
-    
+    }
+
     public function getTotalVolumePropose()
     {
     	$total = 0;
@@ -156,8 +156,8 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
             $total += $item->getTotalVolumePropose();
         }
         return $total;
-    } 
-    
+    }
+
     public function getTotalPrixEnleve()
     {
     	$total = 0;
@@ -165,8 +165,8 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
             $total += $item->getTotalPrixEnleve();
         }
         return $total;
-    } 
-    
+    }
+
     public function getTotalPrixPropose()
     {
     	$total = 0;
@@ -175,7 +175,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         }
         return $total;
     }
-    
+
     public function allProduitsClotures()
     {
     	$result = true;
@@ -187,7 +187,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         }
         return $result;
     }
-    
+
     public function hasRetiraisons()
     {
     	$result = false;
@@ -199,7 +199,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         }
         return $result;
     }
-    
+
     public function clotureProduits()
     {
         foreach($this->getChildrenNodeSorted() as $key => $item) {
@@ -207,5 +207,5 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         }
         return null;
     }
-    
+
 }

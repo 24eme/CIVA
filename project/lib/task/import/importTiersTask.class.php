@@ -2,7 +2,7 @@
 
 class importTiersTask extends sfBaseTask
 {
-    
+
   protected $_insee = null;
 
   protected function configure()
@@ -33,9 +33,9 @@ EOF;
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-    
+
     $nb_not_use = 0;
-    
+
     foreach (file($arguments['file']) as $a) {
         //$db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $a))));
         $db2_tiers = new Db2Tiers(explode(',', preg_replace('/"/', '', preg_replace('/[^"]+$/', '', $a))));
@@ -67,9 +67,9 @@ EOF;
 
     return $tiers;
   }
-  
+
   /**
-   * @param Db2Tiers $db2 
+   * @param Db2Tiers $db2
    * return _Tiers
    */
   private function loadTiers($db2, $acheteur = false) {
@@ -85,7 +85,7 @@ EOF;
       } elseif(!$acheteur && $db2->isCourtier()) {
           $tiers = $this->loadCourtier($db2);
       }
-      
+
       if(!$tiers) {
           return null;
       }
@@ -104,8 +104,8 @@ EOF;
       $tiers->exploitant->code_postal = $db2->get(Db2Tiers::COL_CODE_POSTAL);
       $tiers->exploitant->commune = $db2->get(Db2Tiers::COL_COMMUNE);
 
-      $tiers->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $db2->get(Db2Tiers::COL_ANNEE_NAISSANCE), 
-                                                                     $db2->get(Db2Tiers::COL_MOIS_NAISSANCE), 
+      $tiers->exploitant->date_naissance = sprintf("%04d-%02d-%02d", $db2->get(Db2Tiers::COL_ANNEE_NAISSANCE),
+                                                                     $db2->get(Db2Tiers::COL_MOIS_NAISSANCE),
                                                                      $db2->get(Db2Tiers::COL_JOUR_NAISSANCE));
 
       $tiers->exploitant->telephone = $db2->get(Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d', $db2->get(Db2Tiers::COL_TELEPHONE_PRIVE)) : null;
@@ -131,19 +131,19 @@ EOF;
 
       return $tiers;
   }
-  
+
   /**
-   * @param Db2Tiers $db2 
+   * @param Db2Tiers $db2
    * return Recoltant
    */
   private function loadRecoltant($db2) {
       $recoltant = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($db2->get(Db2Tiers::COL_CVI));
-      
+
       if(!$recoltant) {
           $recoltant = new Recoltant();
           $recoltant->set('_id', "REC-" . $db2->get(Db2Tiers::COL_CVI));
       }
-      
+
       $recoltant->civaba = ($db2->get(Db2Tiers::COL_CIVABA)) ? $db2->get(Db2Tiers::COL_CIVABA) : null;
       $recoltant->cvi = $db2->get(Db2Tiers::COL_CVI);
       $recoltant->siret = $db2->get(Db2Tiers::COL_SIRET);
@@ -153,19 +153,19 @@ EOF;
 
       return $recoltant;
   }
-  
+
   /**
-   * @param Db2Tiers $db2 
+   * @param Db2Tiers $db2
    * return MetteurEnMarche
    */
   private function loadMetteurEnMarche($db2) {
       $metteur = acCouchdbManager::getClient('MetteurEnMarche')->retrieveByCvi($db2->get(Db2Tiers::COL_CIVABA));
-      
+
       if(!$metteur) {
           $metteur = new MetteurEnMarche();
           $metteur->set('_id', "MET-" . $db2->get(Db2Tiers::COL_CIVABA));
       }
-      
+
       $metteur->remove('cvi_acheteur');
       $metteur->cvi = ($db2->get(Db2Tiers::COL_CVI)) ? $db2->get(Db2Tiers::COL_CVI) : null;
       $metteur->civaba = $db2->get(Db2Tiers::COL_CIVABA);
@@ -174,9 +174,9 @@ EOF;
 
       return $metteur;
   }
-  
+
   /**
-   * @param Db2Tiers $db2 
+   * @param Db2Tiers $db2
    * return MetteurEnMarche
    */
   private function loadCourtier($db2) {
@@ -209,7 +209,7 @@ EOF;
       $achat->declaration_commune = $this->getCommune($db2->get(Db2Tiers::COL_INSEE_DECLARATION));
       $achat->siret = $db2->get(Db2Tiers::COL_SIRET);
       $achat->no_accises = $db2->get(Db2Tiers::COL_NO_ASSICES);
-      
+
       return $achat;
   }
 
@@ -240,10 +240,10 @@ EOF;
       return _TiersClient::QUALITE_RECOLTANT;
     }
 
-    
+
     return null;
   }
-  
+
   private function getCommune($insee) {
         if (is_null($this->_insee)) {
             $csv = array();
@@ -253,14 +253,14 @@ EOF;
                 $this->_insee[$csv[0]] = $csv[1];
             }
         }
-        
+
         if(array_key_exists($insee, $this->_insee)) {
             return $this->_insee[$insee];
         } else {
             return null;
         }
    }
-   
+
    private function getCaveParticuliere($cave_particuliere) {
        $donnees = array(
         "A" => "ANDLAU-BARR",
@@ -286,7 +286,7 @@ EOF;
         "Y" => "ST-HIPPOLYTE (WUEN.)",
         "Z" => "ST-HIPPOLYTE (CIRRA)",
        );
-       
+
        if (array_key_exists($cave_particuliere, $donnees)) {
            return $donnees[$cave_particuliere];
        } else {

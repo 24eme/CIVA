@@ -5,7 +5,7 @@
  */
 
 class DSCepage extends BaseDSCepage {
-    
+
     public function getCouleur() {
 
         return $this->getParent();
@@ -37,12 +37,12 @@ class DSCepage extends BaseDSCepage {
     }
 
     public function getProduits() {
-      
+
         return array($this->getHash() => $this);
     }
-    
+
     public function getProduitsSorted() {
-      
+
         return array($this->getHash() => $this);
     }
 
@@ -55,18 +55,18 @@ class DSCepage extends BaseDSCepage {
       $details = array();
       foreach($this->getChildrenNode() as $key => $item) {
           $details[$item->getHash()] = $item;
-      } 
+      }
       return $details;
     }
 
     public function getProduitsDetailsSorted() {
-      
+
       return $this->getProduitsDetails();
     }
-    
+
     public function addDetail($lieu_dit = null) {
         if($detail = $this->getDetailNode($lieu_dit)) {
-            
+
             return $detail;
         }
         $detail = $this->detail->add();
@@ -79,7 +79,7 @@ class DSCepage extends BaseDSCepage {
     public function hasLieu($lieu) {
         return !is_null($this->getDetailLieu($lieu));
     }
-    
+
     public function getDetailNode($lieu = null) {
         foreach ($this->getProduitsDetails() as $d) {
             if(is_null($lieu)) {
@@ -87,33 +87,33 @@ class DSCepage extends BaseDSCepage {
                 return $d;
             }
 
-            if($d->exist('lieu') && trim(strtolower($d->lieu) == trim(strtolower($lieu)))) {                
-             
+            if($d->exist('lieu') && trim(strtolower($d->lieu) == trim(strtolower($lieu)))) {
+
                 return $d;
             }
         }
         return null;
     }
-    
+
     public function getDetailLieu($lieu) {
         foreach ($this->detail as $d) {
-            if($d->exist('lieu') && $d->lieu == $lieu)                
+            if($d->exist('lieu') && $d->lieu == $lieu)
                 return $d;
         }
         return null;
-    }   
-    
+    }
+
     public function getLieuDit() {
          foreach ($this->detail as $detail) {
              if($detail->exist('lieu') && $detail->lieu != '') return $detail->lieu;
          }
          return '';
     }
-    
+
     public function addVolumes($lieu,$vol_normal,$vol_vt,$vol_sgn,$sum=false) {
         $detail = $this->addDetail($lieu);
         if($vol_normal > 0.0)
-            $detail->updateVolume(DSCivaClient::VOLUME_NORMAL,$vol_normal, $sum);        
+            $detail->updateVolume(DSCivaClient::VOLUME_NORMAL,$vol_normal, $sum);
         if($vol_vt > 0.0)
             $detail->updateVolume(DSCivaClient::VOLUME_VT,$vol_vt, $sum);
         if($vol_sgn > 0.0)
@@ -134,12 +134,12 @@ class DSCepage extends BaseDSCepage {
 
         $this->total_stock = $this->total_normal + $this->total_vt + $this->total_sgn;
     }
-    
+
     public function checkNoVTSGNImport($vol_vt,$vol_sgn) {
         if($this->no_vtsgn && (($vol_vt > 0) || ($vol_sgn > 0)))
             return false;
         return true;
-    }  
+    }
 
     public function cleanAllNodes() {
         $details = $this->getProduitsDetails();
@@ -147,10 +147,10 @@ class DSCepage extends BaseDSCepage {
             if($detail->isVide()){
                 $detail->delete();
             }
-        }    
+        }
     }
-    
+
      public function getCodeDouane($vtsgn = '') {
-            return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();     
+            return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
             }
      }

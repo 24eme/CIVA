@@ -3,7 +3,7 @@
 abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
     protected $_compte = array();
-    
+
     const SESSION_COMPTE = 'compte';
     const NAMESPACE_COMPTE_AUTHENTICATED = "CompteSecurityUser_Authenticated";
     const NAMESPACE_COMPTE_USED = "CompteSecurityUser_Used";
@@ -25,7 +25,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      *
      * @param sfEventDispatcher $dispatcher
      * @param sfStorage $storage
-     * @param type $options 
+     * @param type $options
      */
     public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = array()) {
         parent::initialize($dispatcher, $storage, $options);
@@ -43,24 +43,25 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
         $cas_user =  preg_replace('/^[c]{1}([0-9]{10})$/', 'C\1', $cas_user);
 
-        $compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($cas_user);
+        $compte = acCouchdbManager::getClient('Compte')->retrieveByLogin($cas_user);
         if (!$compte) {
             throw new sfException('compte does not exist');
         }
         $this->signInFirst($compte);
-        
+
         if ($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE) {
             $compte->resetMotDePasseFromLdap();
             $compte->save();
         }
     }
-    
+
     /**
      *
-     * @param _Compte $compte 
+     * @param _Compte $compte
      */
     public function signInFirst($compte) {
         $this->addCredential(self::CREDENTIAL_COMPTE);
+        $this->addCredential("drm");
         $this->signInCompte($compte, self::NAMESPACE_COMPTE_AUTHENTICATED);
         $this->signInCompte($compte, self::NAMESPACE_COMPTE_USED);
 
@@ -69,7 +70,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     }
 
     /**
-     * 
+     *
      */
     public function signOut() {
         foreach($this->_namespaces_compte as $namespace) {
@@ -88,14 +89,14 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     protected function initCredentialsCompte() {
         foreach($this->_namespaces_compte as $namespace) {
             $compte = $this->getCompte($namespace);
-            foreach ($compte->droits as $credential) {
+            foreach ($compte->add('droits') as $credential) {
                 $this->addCredential($credential);
             }
-            if($compte->hasDelegation() && $this->getCompte()->login == $this->getCompte(self::NAMESPACE_COMPTE_AUTHENTICATED)->login){
+            if($compte->exist('delegation') && $this->getCompte()->login == $this->getCompte(self::NAMESPACE_COMPTE_AUTHENTICATED)->login){
                 $this->addCredential(self::CREDENTIAL_DELEGATION);
             }
 
-            if ($compte->type == 'CompteTiers') {
+            if ($compte->type == 'Compte') {
                 $this->addCredential(self::CREDENTIAL_COMPTE_TIERS);
             }
         }
@@ -113,7 +114,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
     /**
      *
-     * @param _Compte $compte 
+     * @param _Compte $compte
      */
     protected function signInCompte($compte, $namespace) {
 
@@ -130,10 +131,10 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->signOutCompte(self::NAMESPACE_COMPTE_USED);
         $this->signInCompteUsed($this->getCompte(self::NAMESPACE_COMPTE_AUTHENTICATED));
     }
-    
+
     /**
      *
-     * @param string $namespace 
+     * @param string $namespace
      */
     protected function signOutCompte($namespace) {
         $this->_compte = array();
@@ -146,9 +147,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      */
     public function getCompte($namespace = self::NAMESPACE_COMPTE_USED) {
         $this->requireCompte();
-        
+
         if (!array_key_exists($namespace, $this->_compte)) {
-            $this->_compte[$namespace] = acCouchdbManager::getClient('_Compte')->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
+            $this->_compte[$namespace] = CompteClient::getInstance()->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
             if (!$this->_compte[$namespace]) {
                 $this->signOut();
                 throw new sfException("The compte does not exist");
@@ -165,13 +166,12 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
 
     protected function requireCompte() {
         if (!$this->isAuthenticated() && $this->hasCredential(self::CREDENTIAL_COMPTE)) {
-	  throw new sfException("you must be logged with a tiers");
+	        throw new sfException("you must be logged with a tiers");
         }
     }
 
     public function isInDelegateMode() {
-        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED)
-
-        );
+        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
     }
+
 }

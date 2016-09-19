@@ -1,7 +1,7 @@
 <?php
 
 class VracClient extends acCouchdbClient {
-	
+
 	const VRAC_PREFIXE_ID = 'VRAC-';
 	const APP_CONFIGURATION = 'app_configuration_vrac';
 	const APP_CONFIGURATION_VRAC_PRODUITS = 'produits_vrac_statiques';
@@ -12,9 +12,9 @@ class VracClient extends acCouchdbClient {
 	const TYPE_BOUTEILLE = 'BOUTEILLE';
 	const TYPE_VRAC_LIBELLE = 'Vrac';
 	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
-	
+
 	protected static $_contrat_types = array(
-									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE, 
+									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
                                     self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE
                                  );
 
@@ -23,9 +23,9 @@ class VracClient extends acCouchdbClient {
                   Vrac::ROLE_ACHETEUR => "Acheteur",
                   Vrac::ROLE_MANDATAIRE => "Mandataire",
                   );
-	
+
 	protected static $_centilisations = array(
-									'75' => '75 cl', 
+									'75' => '75 cl',
 									'50' => '50 cl',
                                     '100' => '100 cl',
 									'37.5' => '37,5 cl',
@@ -36,12 +36,12 @@ class VracClient extends acCouchdbClient {
 									'300' => '300 cl',
 									'600' => '600 cl'
                                  );
-	
+
     public static function getInstance()
     {
       return acCouchdbManager::getClient("Vrac");
     }
-    
+
     public static function getConfigurationProduits($type)
     {
     	if ($type == self::TYPE_BOUTEILLE) {
@@ -49,7 +49,7 @@ class VracClient extends acCouchdbClient {
     	}
     	return self::APP_CONFIGURATION_VRAC_PRODUITS;
     }
-    
+
 	public static function getContratTypes()
     {
       return self::$_contrat_types;
@@ -59,12 +59,12 @@ class VracClient extends acCouchdbClient {
     {
       return self::$_roles;
     }
-    
+
 	public static function getCentilisations()
     {
       return self::$_centilisations;
     }
-    
+
     public static function getLibelleCentilisation($centilisation)
     {
     	$centilisations = self::getCentilisations();
@@ -81,7 +81,7 @@ class VracClient extends acCouchdbClient {
 
       return true;
     }
-    
+
     public static function getConfig()
     {
     	if ($config = sfConfig::get(self::APP_CONFIGURATION)) {
@@ -89,22 +89,36 @@ class VracClient extends acCouchdbClient {
     	}
     	throw new sfException('Aucune configuration vrac définie dans l\'app!');
     }
-    
+
 	  public function buildId($numero_contrat) {
-        
+
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
-    
+
+	public function getFirstEtablissement($societe) {
+		foreach($societe->getEtablissementsObject() as $etablissement) {
+
+			return $etablissement;
+		}
+
+		return null;
+	}
+
+	public function getEtablissements($societe) {
+
+		return $societe->getEtablissementsObject();
+	}
+
     protected function getDate($date = null)
     {
     	return ($date)? $date : date('Y-m-d');
     }
-    
+
     protected function getCampagne($campagne = null)
     {
     	return ($campagne)? $campagne : ConfigurationClient::getInstance()->buildCampagneVrac($this->getDate());
     }
-    
+
     public function getNumeroContratSuivant($date = null)
     {
     	$date = $this->getDate($date);
@@ -117,7 +131,7 @@ class VracClient extends acCouchdbClient {
         }
         return $id;
     }
-    
+
     public function getNumeroSuivant()
     {
         $contrats = VracTousView::getInstance()->findAll();
@@ -130,23 +144,33 @@ class VracClient extends acCouchdbClient {
 
     public function getAtDate($date, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
         return $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
-    } 
-    
-    public function createVrac($createurIdentifiant, $date = null) 
+    }
+
+	public function buildCampagneVrac($date) {
+      $campagne_manager = new CampagneManager('12-01');
+
+      return $campagne_manager->getCampagneByDate($date);
+    }
+
+    public function createVrac($createurIdentifiant, $date = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
-        $campagne = ConfigurationClient::getInstance()->buildCampagneVrac($date);
+        $campagne = $this->buildCampagneVrac($date);
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);
         return $vrac;
-    } 
-    
-    public function findByNumeroContrat($numeroContrat) 
+    }
+
+    public function findByNumeroContrat($numeroContrat)
     {
       return $this->find($this->getId($numeroContrat));
     }
+
+		public function findByNumContrat($numeroContrat){
+			return $this->findByNumeroContrat($numeroContrat);
+		}
 
 
     public function getId($numeroContrat)
@@ -154,13 +178,13 @@ class VracClient extends acCouchdbClient {
       return self::VRAC_PREFIXE_ID.$numeroContrat;
     }
 
-  	
+
   	public function getStatutLibelle($statut)
   	{
   		$libelles = Vrac::getStatutsLibelles();
   		return $libelles[$statut];
   	}
-  	
+
   	public function getStatutLibelleAction($statut, $proprietaire = false, $hasValidated = false)
   	{
   		$libelles = Vrac::getStatutsLibellesActions();
@@ -172,4 +196,5 @@ class VracClient extends acCouchdbClient {
   		}
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}
+
 }

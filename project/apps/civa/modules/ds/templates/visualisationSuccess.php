@@ -5,13 +5,13 @@
 </ul>
 
 <?php
-include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client, 'isAdmin' => false)); 
+include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_client' => $ds_client, 'isAdmin' => false));
 ?>
 <?php include_partial('generationDuPdf', array('ds' => $ds_principale)) ?>
 
 <ul id="btn_etape" class="btn_prev_suiv clearfix">
 	<li class="prec">
-		<a href="<?php echo url_for('mon_espace_civa_ds', array('type' => $ds_principale->type_ds)); ?>">
+		<a href="<?php echo url_for('mon_espace_civa_ds', array('type' => $ds_principale->type_ds, 'identifiant' => $ds_principale->getIdentifiant())); ?>">
 			<img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à l'étape précédente" />
 		</a>
 	</li>
@@ -25,7 +25,7 @@ include_partial('recapitulatifDs', array('ds_principale' => $ds_principale, 'ds_
 	<li class="previsualiser">
             <a href="<?php echo url_for('ds_export_pdf', $ds_principale);?>">
 		<input type="image" src="/images/boutons/btn_previsualiser.png" alt="Prévisualiser" name="boutons[previsualiser]" id="previsualiserDS">
-            </a>            
+            </a>
     </li>
 </ul>
 <?php include_partial('ds/envoiMailDS', array('ds' => $ds_principale,'message' => null)); ?>

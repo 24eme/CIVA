@@ -19,7 +19,7 @@ class uploadActions extends EtapesActions {
         $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->setCurrentEtape('mon_espace_civa');
-        
+
         $this->formUploadCsv = new UploadCSVForm();
 
         if ($request->isMethod('post')) {
@@ -28,10 +28,10 @@ class uploadActions extends EtapesActions {
                 return $this->redirect('upload/csvView?md5=' . $this->formUploadCsv->getValue('file')->getMd5());
             }
         }
-        
+
         $this->setTemplate('monEspaceDRAcheteur', 'tiers');
     }
-    
+
     public function executeCsvList(sfWebRequest $request) {
       $this->csv = acCouchdbManager::getClient('CSV')->getCSVsAcheteurs();
     }
@@ -41,7 +41,7 @@ class uploadActions extends EtapesActions {
         $this->setResponseCsv($this->csv->getCsvFilename());
         return $this->renderText(file_get_contents($this->csv->getAttachmentUri($this->csv->getCsvFilename())));
     }
-    
+
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');
         $this->response->setHttpHeader('Content-disposition', 'filename='.$filename, true);
@@ -61,7 +61,7 @@ class uploadActions extends EtapesActions {
         $md5 = $request->getParameter('md5');
         set_time_limit(600);
 
-        $this->csv = new CsvFile(sfConfig::get('sf_data_dir') . '/upload/' . $md5);
+        $this->csv = new CsvFileAcheteur(sfConfig::get('sf_data_dir') . '/upload/' . $md5);
         $this->cache = array();
         $cpt = -1;
         $this->errors = array();
@@ -76,7 +76,7 @@ class uploadActions extends EtapesActions {
         $this->allSuperficieIsEmpty = true;
 
         foreach ($this->csv->getCsv() as $line) {
-            if (isset($line[CsvFile::CSV_SUPERFICIE]) && $line[CsvFile::CSV_SUPERFICIE]) {
+            if (isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) && $line[CsvFileAcheteur::CSV_SUPERFICIE]) {
                 $this->allSuperficieIsEmpty = false;
             }
         }
@@ -192,45 +192,45 @@ class uploadActions extends EtapesActions {
     }
 
     protected function hasForbidenDenomination($line) {
-      if ($line[CsvFile::CSV_DENOMINATION] && $line[CsvFile::CSV_LIEU] == $line[CsvFile::CSV_DENOMINATION])
+      if ($line[CsvFileAcheteur::CSV_DENOMINATION] && $line[CsvFileAcheteur::CSV_LIEU] == $line[CsvFileAcheteur::CSV_DENOMINATION])
 	return true;
-      if (preg_match('/VEND\.? TARD\.?/i', $line[CsvFile::CSV_DENOMINATION]))
+      if (preg_match('/VEND\.? TARD\.?/i', $line[CsvFileAcheteur::CSV_DENOMINATION]))
 	return true;
-      if (preg_match('/vendenges? tardives?/i', $line[CsvFile::CSV_DENOMINATION]))
+      if (preg_match('/vendenges? tardives?/i', $line[CsvFileAcheteur::CSV_DENOMINATION]))
 	return true;
       return false;
     }
 
     protected function isVTSGNOk($line) {
-      if (!$line[CsvFile::CSV_VTSGN])
+      if (!$line[CsvFileAcheteur::CSV_VTSGN])
 	return true;
-      if ($line[CsvFile::CSV_VTSGN] && !$this->may_have_vtsgn) 
+      if ($line[CsvFileAcheteur::CSV_VTSGN] && !$this->may_have_vtsgn)
 	return false;
-      if ($line[CsvFile::CSV_VTSGN] == 'VT')
+      if ($line[CsvFileAcheteur::CSV_VTSGN] == 'VT')
 	return true;
-      if ($line[CsvFile::CSV_VTSGN] == 'SGN')
+      if ($line[CsvFileAcheteur::CSV_VTSGN] == 'SGN')
 	return true;
       return false;
     }
 
     protected function hasCVI($line) {
-        if (preg_match('/^[67][578]\d{8}$/', $line[CsvFile::CSV_ACHETEUR_CVI]) && preg_match('/^[67][578]\d{8}$/', $line[CsvFile::CSV_RECOLTANT_CVI]))
+        if (preg_match('/^[67][578]\d{8}$/', $line[CsvFileAcheteur::CSV_ACHETEUR_CVI]) && preg_match('/^[67][578]\d{8}$/', $line[CsvFileAcheteur::CSV_RECOLTANT_CVI]))
             return true;
         return false;
     }
 
     protected function cannotHaveDenomLieu($line) {
-        if ($this->has_lieudit && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+        if ($this->has_lieudit && isset($line[CsvFileAcheteur::CSV_LIEU]) && $line[CsvFileAcheteur::CSV_LIEU])
             return false;
-	if ($this->need_denomlieu && isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+	if ($this->need_denomlieu && isset($line[CsvFileAcheteur::CSV_LIEU]) && $line[CsvFileAcheteur::CSV_LIEU])
 	  return false;
-	if (isset($line[CsvFile::CSV_LIEU]) && $line[CsvFile::CSV_LIEU])
+	if (isset($line[CsvFileAcheteur::CSV_LIEU]) && $line[CsvFileAcheteur::CSV_LIEU])
 	  return true;
 	return false;
     }
 
     protected function isProductAlreadyDefined($line) {
-      $md5 = md5($line[CsvFile::CSV_RECOLTANT_CVI].$line[CsvFile::CSV_APPELLATION].$line[CsvFile::CSV_LIEU].$line[CsvFile::CSV_CEPAGE].$line[CsvFile::CSV_VTSGN].$line[CsvFile::CSV_DENOMINATION]);
+      $md5 = md5($line[CsvFileAcheteur::CSV_RECOLTANT_CVI].$line[CsvFileAcheteur::CSV_APPELLATION].$line[CsvFileAcheteur::CSV_LIEU].$line[CsvFileAcheteur::CSV_CEPAGE].$line[CsvFileAcheteur::CSV_VTSGN].$line[CsvFileAcheteur::CSV_DENOMINATION]);
       if (isset($this->productmd5[$md5])) {
 	   return true;
       }
@@ -246,20 +246,20 @@ class uploadActions extends EtapesActions {
         $this->has_lieudit = false;
 	    $this->may_have_vtsgn = false;
 
-        if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_APPELLATION])) {
+        if (!preg_match('/[a-z]/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
             return "appellation vide";
         }
 
-        if (strtolower($line[CsvFile::CSV_APPELLATION]) == 'jeunes vignes') {
+        if (strtolower($line[CsvFileAcheteur::CSV_APPELLATION]) == 'jeunes vignes') {
             $this->no_volume = true;
             return false;
         }
 
-        if (!preg_match('/[a-z]/i', $line[CsvFile::CSV_CEPAGE])) {
+        if (!preg_match('/[a-z]/i', $line[CsvFileAcheteur::CSV_CEPAGE])) {
             return "cepage vide";
         }
 
-        $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION], $line[CsvFile::CSV_LIEU], $line[CsvFile::CSV_CEPAGE]);
+        $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFileAcheteur::CSV_APPELLATION], $line[CsvFileAcheteur::CSV_LIEU], $line[CsvFileAcheteur::CSV_CEPAGE]);
 
 
         if (isset($prod['hash'])) {
@@ -291,7 +291,7 @@ class uploadActions extends EtapesActions {
                 $this->has_superficie[$lieu_appellation_libelle] = false;
             }
 
-            if($this->isPositive($line[CsvFile::CSV_SUPERFICIE])) {
+            if($this->isPositive($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
                 $this->has_superficie[$lieu_appellation_libelle] = true;
             }
 
@@ -304,7 +304,7 @@ class uploadActions extends EtapesActions {
     }
 
     protected function shouldHaveDenomLieu($line) {
-      if ($this->need_denomlieu && !$line[CsvFile::CSV_LIEU]) {
+      if ($this->need_denomlieu && !$line[CsvFileAcheteur::CSV_LIEU]) {
 	return true;
       }
       return false;
@@ -327,17 +327,17 @@ class uploadActions extends EtapesActions {
 
             return true;
         }
-        if (!isset($line[CsvFile::CSV_RECOLTANT_CVI])) {
+        if (!isset($line[CsvFileAcheteur::CSV_RECOLTANT_CVI])) {
             return false;
         }
         if (!isset($this->previous_recoltant))
-            $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+            $this->previous_recoltant = $line[CsvFileAcheteur::CSV_RECOLTANT_CVI];
         if ($this->has_changed_recoltant)
             return true;
-        if (isset($line[CsvFile::CSV_RECOLTANT_CVI]) && $line[CsvFile::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
+        if (isset($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]) && $line[CsvFileAcheteur::CSV_RECOLTANT_CVI] == $this->previous_recoltant)
             return false;
-        if (isset($line[CsvFile::CSV_RECOLTANT_CVI]))
-            $this->previous_recoltant = $line[CsvFile::CSV_RECOLTANT_CVI];
+        if (isset($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]))
+            $this->previous_recoltant = $line[CsvFileAcheteur::CSV_RECOLTANT_CVI];
         $this->has_changed_recoltant = true;
         return true;
     }
@@ -390,19 +390,19 @@ class uploadActions extends EtapesActions {
     }
 
     protected function hasWrongUnit($line) {
-      if ($line[CsvFile::CSV_VOLUME] > 1000)
+      if ($line[CsvFileAcheteur::CSV_VOLUME] > 1000)
 	return true;
-      if ($line[CsvFile::CSV_SUPERFICIE] > 1000)
+      if ($line[CsvFileAcheteur::CSV_SUPERFICIE] > 1000)
 	return true;
       return false;
     }
     protected function hasGoodUnit($line) {
       if (
-	  (preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE]) &&
-	  (!$line[CsvFile::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFile::CSV_VOLUME]))
+	  (preg_match('/^[0-9,\.]+$/', $line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) &&
+	  (!$line[CsvFileAcheteur::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFileAcheteur::CSV_VOLUME]))
 	  )
             return true;
-      if ($line[CsvFile::CSV_VOLUME] * 100 / $line[CsvFile::CSV_SUPERFICIE] > 10)
+      if ($line[CsvFileAcheteur::CSV_VOLUME] * 100 / $line[CsvFileAcheteur::CSV_SUPERFICIE] > 10)
 	return true;
       return false;
     }
@@ -410,25 +410,25 @@ class uploadActions extends EtapesActions {
     protected function hasVolume($line) {
         if ($this->no_volume)
             return true;
-        return $this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);
+        return $this->isPositiveOrZero($line[CsvFileAcheteur::CSV_VOLUME]);
     }
 
     protected function isVolumeNotCorrect($line) {
         if ($this->no_volume)
             return false;
-        return!$this->isPositiveOrZero($line[CsvFile::CSV_VOLUME]);
+        return!$this->isPositiveOrZero($line[CsvFileAcheteur::CSV_VOLUME]);
     }
 
     protected function shouldHaveSuperficie($line) {
         if ($this->is_rebeche || $this->no_surface)
             return false;
         try {
-            if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
+            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE])
                 return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
         } catch (Exception $e) {
             return false;
         }
-        return!$this->isPositive($line[CsvFile::CSV_SUPERFICIE]);
+        return!$this->isPositive($line[CsvFileAcheteur::CSV_SUPERFICIE]);
     }
 
     protected function shouldHaveSuperficieTotal($line) {
@@ -454,7 +454,7 @@ class uploadActions extends EtapesActions {
         if ($this->is_rebeche || $this->no_surface)
             return false;
         try {
-            if (!isset($line[CsvFile::CSV_SUPERFICIE]) || !$line[CsvFile::CSV_SUPERFICIE])
+            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE])
                 return ($this->getUser()->getTiers('Acheteur')->getQualite() == Acheteur::ACHETEUR_NEGOCIANT);
         } catch (Exception $e) {
             return false;
@@ -464,36 +464,36 @@ class uploadActions extends EtapesActions {
 
     protected function errorOnCVIAcheteur($line) {
         try {
-            return ($this->getUser()->getTiers('Acheteur')->cvi != $line[CsvFile::CSV_ACHETEUR_CVI]);
+            return ($this->getUser()->getTiers('Acheteur')->cvi != $line[CsvFileAcheteur::CSV_ACHETEUR_CVI]);
         } catch (Exception $e) {
             return true;
         }
     }
 
     protected function errorOnCVIRecoltant($line) {
-        if (!isset($this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]])) {
+        if (!isset($this->cache[$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]])) {
             try {
-                $rec = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFile::CSV_RECOLTANT_CVI]);
+                $rec = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
                 if($rec && !$rec->isActif()) {
                     $rec = null;
                 }
-                $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = !($rec);
+                $this->cache[$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]] = !($rec);
             } catch (Exception $e) {
-                $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]] = true;
+                $this->cache[$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]] = true;
             }
         }
-        return $this->cache[$line[CsvFile::CSV_RECOLTANT_CVI]];
+        return $this->cache[$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]];
     }
 
     protected function secureTiers($droits) {
         if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
-            
+
             return $this->forwardSecure();
         }
     }
 
     protected function forwardSecure()
-    {    
+    {
         $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
 
         throw new sfStopException();
