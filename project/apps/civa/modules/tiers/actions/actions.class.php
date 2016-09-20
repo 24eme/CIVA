@@ -62,10 +62,13 @@ class tiersActions extends sfActions {
 
         $this->compte = CompteClient::getInstance()->findByLogin($request->getParameter('identifiant'));
 
-        /*if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
+        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
 
             return $this->redirect('mon_espace_civa_dr');
-        }*/
+        }
+        if($request->getParameter('identifiant') != $this->getUser()->getCompte()->getIdentifiant()){
+          return $this->redirect('mon_espace_civa',array("identifiant" => $this->getUser()->getCompte()->getIdentifiant()));
+        }
 
         $this->vracs = array(
             'CONTRAT_A_TERMINER' => 0,

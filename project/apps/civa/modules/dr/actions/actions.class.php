@@ -9,7 +9,8 @@ class drActions extends _DRActions {
         $campagne = $request->getParameter('campagne');
         $etablissement = $this->getRoute()->getEtablissement();
         $dr_data = $this->getRequestParameter('dr', null);
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         if (!$dr_data) {
 
             return $this->forward404();
@@ -82,6 +83,8 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('notice_evolutions');
 
         $this->dr = $this->getRoute()->getDR();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
 
         if($this->getUser()->isSimpleOperateur()) {
 
@@ -111,7 +114,8 @@ class drActions extends _DRActions {
         $this->form_gest_err = 0;
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
         $this->form_expl_err = 0;
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         if ($request->isMethod(sfWebRequest::POST)) {
             if ($request->getParameter('gestionnaire')) {
                 throw new sfException("A réparer");
@@ -141,7 +145,8 @@ class drActions extends _DRActions {
     public function executeRepartition(sfWebRequest $request) {
         $this->setCurrentEtape('repartition');
         $this->dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->help_popup_action = "help_popup_exploitation_acheteur";
 
         $this->appellations = ExploitationAcheteursForm::getListeAppellations();
@@ -204,7 +209,8 @@ class drActions extends _DRActions {
         $this->appellations = array();
         $this->forms = array();
         $this->dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         foreach ($this->dr->recolte->getAppellations() as $appellation) {
 
             if ($appellation->getConfig()->hasManyLieu()) {
@@ -258,6 +264,8 @@ class drActions extends _DRActions {
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {
         $declaration = $this->getRoute()->getDR();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $declaration);
         $hash = $request->getParameter('hash');
 
         if(!$declaration->exist($hash)) {
@@ -290,7 +298,8 @@ class drActions extends _DRActions {
         $this->help_popup_action = "help_popup_autres";
 
         $this->dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->form = new ExploitationAutresForm($this->dr);
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -307,7 +316,8 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('validation');
 
         $this->dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
         $etablissement = $this->dr->getEtablissement();
@@ -422,7 +432,8 @@ class drActions extends _DRActions {
         $tiers = $this->getUser()->getTiers('Recoltant');
 
         $this->dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->annee = $this->dr->getCampagne();
 
         $key = $this->dr->_id;
@@ -447,6 +458,8 @@ class drActions extends _DRActions {
             return $this->redirect('mon_espace_civa_dr');
         }
         $this->dr = $this->getRoute()->getObject();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -457,7 +470,8 @@ class drActions extends _DRActions {
     public function executeSendPdfAcheteurs(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getRoute()->getDR();
-
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $annee = $this->getRequestParameter('annee', null);
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
@@ -470,6 +484,8 @@ class drActions extends _DRActions {
     public function executeSendPdf(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getRoute()->getDR();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $annee = $this->getRequestParameter('annee', null);
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
@@ -481,6 +497,8 @@ class drActions extends _DRActions {
       //  throw new sfException("En maintenance");
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getRoute()->getDR();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         if ($dr) {
             $dr->remove('modifiee');
             $dr->add('etape');
@@ -494,6 +512,8 @@ class drActions extends _DRActions {
     public function executeInvaliderRecoltant(sfWebRequest $request) {
         throw new sfException("En maintenance");
         $dr = $this->getRoute()->getDR();
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         if ($dr) {
             $dr->remove('modifiee');
             $dr->remove('validee');
@@ -513,6 +533,8 @@ class drActions extends _DRActions {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
         $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $this->visualisation_avant_import = true;
     }
 
@@ -584,6 +606,8 @@ Le CIVA';*/
 
         $dr = acCouchdbManager::getClient()->find($this->id);
         $dr->add('autorisations')->add(DRClient::AUTORISATION_AVA, 1);
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         $dr->save();
 
         return $this->redirect('declaration_transmission', array("url" => $this->url, "id" => $this->id));
@@ -594,6 +618,8 @@ Le CIVA';*/
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
         $dr = acCouchdbManager::getClient()->find($this->id);
+        $this->secureDR(array(DRSecurity::EDITION,
+                              DRSecurity::DECLARANT), $this->dr);
         if(!$dr || !$dr->isValideeTiers()) {
 
             return $this->redirect($this->url);
@@ -624,6 +650,24 @@ Le CIVA';*/
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
         return $this->renderText(file_get_contents($path));
+    }
+
+    protected function secureDR($droits, $dr = null) {
+        if(is_null($dr) && $this->getRoute() instanceof DRRoute) {
+            $dr = $this->getRoute()->getDR();
+        }
+
+        if(!DRSecurity::getInstance($this->getRoute()->getEtablissement(), $dr)->isAuthorized($droits)) {
+
+            return $this->forwardSecure();
+        }
+    }
+
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
     }
 
 }

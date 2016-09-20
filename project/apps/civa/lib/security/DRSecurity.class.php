@@ -3,6 +3,7 @@
 class DRSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
+    const VISUALISATION = 'VISUALISATION';
     const EDITION = 'EDITION';
     const DEVALIDATION = 'DEVALIDATION_TIERS';
     const DEVALIDATION_CIVA = 'DEVALIDATION_CIVA';
@@ -42,6 +43,19 @@ class DRSecurity implements SecurityInterface {
 
             return false;
         }*/
+
+        if(in_array(self::DECLARANT, $droits) && !$this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) &&
+          ($this->etablissement->identifiant != $this->sfUser->getCompte()->identifiant)){
+            return false;
+        }
+
+
+        if($this->etablissement && $this->dr &&
+            (($this->etablissement->getIdentifiant() != $this->dr->getEtablissement()->getIdentifiant())
+              || ($this->sfUser->getCompte()->identifiant
+              != $this->dr->getEtablissement()->getIdentifiant()))) {
+            return false;
+        }
 
         if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)
                                             && $this->dr
