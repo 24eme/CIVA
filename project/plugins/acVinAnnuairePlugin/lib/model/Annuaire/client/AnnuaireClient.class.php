@@ -71,6 +71,11 @@ class AnnuaireClient extends acCouchdbClient
             $tiers = EtablissementClient::getInstance()->find("C".$identifiant);
         }
 
+		if(!$tiers) {
+			$compte = CompteClient::getInstance()->find("COMPTE-".$identifiant);
+			$tiers = $compte->getSociete()->getEtablissementPrincipal();
+		}
+
         /*if($tiers->type == 'MetteurEnMarche' && $tiers->hasAcheteur()) {
             $tiers = $tiers->getCviObject();
         }*/
