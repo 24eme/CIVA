@@ -100,6 +100,12 @@ EOF;
                 $num++;
             }
 
+            foreach ($societe->contacts as $idCompte => $compte) {
+                $contact = CompteClient::getInstance()->find($idCompte);
+                $contact->setStatut($societe->getStatut());
+                $contact->save();
+            }
+
             echo "------------------------\n";
         }
     }
@@ -233,7 +239,7 @@ EOF;
         }
 
         $compteExploitant = $etablissement->getCompteExploitantObject();
-        if(!$compteExploitant) {
+        if(!$compteExploitant || !is_object($compteExploitant) ) {
             $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($societe);
             $compteExploitant->setIdentifiant($etablissement->getIdentifiant()."01");
             $compteExploitant->constructId();

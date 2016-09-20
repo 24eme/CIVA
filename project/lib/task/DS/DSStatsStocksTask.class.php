@@ -57,31 +57,33 @@ EOF;
             $stats['volume_vt'] += $ds->declaration->getTotalVT();
             $stats['volume_sgn'] += $ds->declaration->getTotalSGN();
             foreach($ds->declaration->getAppellationsSorted() as $appellation) {
-                if(!array_key_exists($appellation->getKey(), $stats['appellations'])) {
-                    $stats['appellations'][$appellation->getKey()]['volume_total'] = 0;
-                    $stats['appellations'][$appellation->getKey()]['volume_normal'] = 0;
-                    $stats['appellations'][$appellation->getKey()]['volume_vt'] = 0;
-                    $stats['appellations'][$appellation->getKey()]['volume_sgn'] = 0;
-                    $stats['appellations'][$appellation->getKey()]['cepages'] = array();
+            	$appellationKey = $appellation->getKey();
+                if(!array_key_exists($appellationKey, $stats['appellations'])) {
+                    $stats['appellations'][$appellationKey]['volume_total'] = 0;
+                    $stats['appellations'][$appellationKey]['volume_normal'] = 0;
+                    $stats['appellations'][$appellationKey]['volume_vt'] = 0;
+                    $stats['appellations'][$appellationKey]['volume_sgn'] = 0;
+                    $stats['appellations'][$appellationKey]['cepages'] = array();
                 }
 
-                $stats['appellations'][$appellation->getKey()]['volume_total'] += $appellation->getTotalStock();
-                $stats['appellations'][$appellation->getKey()]['volume_normal'] += $appellation->getTotalNormal();
-                $stats['appellations'][$appellation->getKey()]['volume_vt'] += $appellation->getTotalVT();
-                $stats['appellations'][$appellation->getKey()]['volume_sgn'] += $appellation->getTotalSGN();
+                $stats['appellations'][$appellationKey]['volume_total'] += $appellation->getTotalStock();
+                $stats['appellations'][$appellationKey]['volume_normal'] += $appellation->getTotalNormal();
+                $stats['appellations'][$appellationKey]['volume_vt'] += $appellation->getTotalVT();
+                $stats['appellations'][$appellationKey]['volume_sgn'] += $appellation->getTotalSGN();
 
                 foreach($appellation->getProduitsSorted() as $cepage) {
-                    if(!array_key_exists($cepage->getKey(), $stats['appellations'][$appellation->getKey()]['cepages'])) {
-                        $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_total'] = 0;
-                        $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_normal'] = 0;
-                        $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_vt'] = 0;
-                        $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_sgn'] = 0;
+            		$cepageKey = $cepage->getKey();
+                    if(!array_key_exists($cepageKey, $stats['appellations'][$appellationKey]['cepages'])) {
+                        $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_total'] = 0;
+                        $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_normal'] = 0;
+                        $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_vt'] = 0;
+                        $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_sgn'] = 0;
                     }
 
-                    $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_total'] += $cepage->getTotalStock();
-                    $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_normal'] += $cepage->getTotalNormal();
-                    $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_vt'] += $cepage->getTotalVT();
-                    $stats['appellations'][$appellation->getKey()]['cepages'][$cepage->getKey()]['volume_sgn'] += $cepage->getTotalSGN();
+                    $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_total'] += $cepage->getTotalStock();
+                    $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_normal'] += $cepage->getTotalNormal();
+                    $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_vt'] += $cepage->getTotalVT();
+                    $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_sgn'] += $cepage->getTotalSGN();
                 }
             }
         }
@@ -91,40 +93,38 @@ EOF;
         $ligne = "%s;%s;%01.02f;%01.02f;%01.02f;%01.02f\n";
         $configuration = ConfigurationClient::getConfiguration($campagne - 1);
 
-        foreach($configuration->recolte->getNoeudAppellations() as $c_appellation) {
-            if(!array_key_exists($c_appellation->getKey(), $stats['appellations'])) {
+        foreach($configuration->declaration->getArrayAppellations() as $c_appellation) {
+            $confAppellationKey = (preg_match('/appellation_/', $c_appellation->getKey()))? $c_appellation->getKey() : 'appellation_'.$c_appellation->getKey();
+            if(!array_key_exists($confAppellationKey, $stats['appellations'])) {
                 continue;
             }
-
-            $appellation_key = $c_appellation->getKey();
-            $appellation = $stats['appellations'][$appellation_key];
+            $appellation = $stats['appellations'][$confAppellationKey];
 
             foreach($c_appellation->getProduits() as $c_cepage) {
-                if(!array_key_exists($c_cepage->getKey(), $appellation['cepages'])) {
+            	$confCepageKey = (preg_match('/cepage_/', $c_cepage->getKey()))? $c_cepage->getKey() : 'cepage_'.$c_cepage->getKey();
+                if(!array_key_exists($confCepageKey, $appellation['cepages'])) {
                     continue;
                 }
+                $cepage = $appellation['cepages'][$confCepageKey];
 
-                $cepage_key = $c_cepage->getKey();
-                $cepage = $appellation['cepages'][$cepage_key];
-
-                echo sprintf($ligne, $appellation_key, 
-                                     $cepage_key, 
+                echo sprintf($ligne, $confAppellationKey, 
+                                     $confCepageKey, 
                                      $cepage['volume_total'],
                                      $cepage['volume_normal'],
                                      $cepage['volume_vt'],
                                      $cepage['volume_sgn']);
 
-                unset($appellation['cepages'][$cepage_key]);
+                unset($appellation['cepages'][$confCepageKey]);
             }
 
-            echo sprintf($ligne, $appellation_key, 
+            echo sprintf($ligne, $confAppellationKey, 
                                  "TOTAL", 
                                  $appellation['volume_total'],
                                  $appellation['volume_normal'],
                                  $appellation['volume_vt'],
                                  $appellation['volume_sgn']);
             
-            unset($stats['appellations'][$appellation_key]);
+            unset($stats['appellations'][$confAppellationKey]);
         }
 
         echo sprintf($ligne, "TOTAL", 

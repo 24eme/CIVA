@@ -11,15 +11,15 @@ class AnnuaireAjoutForm extends acCouchdbObjectForm
     {
         $this->setWidgets(array(
         	'type' => new sfWidgetFormChoice(array('choices' => $this->getTypes())),
-        	'identifiant' => new sfWidgetFormInputText()
+        	'identifiant_ajout' => new sfWidgetFormInputText()
     	));
         $this->widgetSchema->setLabels(array(
         	'type' => 'Type*:',
-        	'identifiant' => 'CVI*:'
+        	'identifiant_ajout' => 'CVI*:'
         ));
         $this->setValidators(array(
         	'type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getTypes()))),
-        	'identifiant' => new sfValidatorString(array('required' => true))
+        	'identifiant_ajout' => new sfValidatorString(array('required' => true))
         ));
         $this->validatorSchema->setPostValidator(new AnnuaireAjoutValidator());
   		$this->widgetSchema->setNameFormat('annuaire_ajout[%s]');

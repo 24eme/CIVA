@@ -24,8 +24,14 @@
 
 [data-icon]:before,
 .icon-bouteille:before,
+.icon-camion:before,
+.icon-contrat:before,
+.icon-contrat2:before,
+.icon-drm:before,
+.icon-etablissement:before,
 .icon-mouts:before,
 .icon-raisins:before,
+.icon-stock:before,
 .icon-vrac:before {
   display: inline-block;
   font-family: "vins";
@@ -42,6 +48,12 @@
 }
 
 .icon-bouteille:before { content: "\f100"; }
-.icon-mouts:before { content: "\f101"; }
-.icon-raisins:before { content: "\f102"; }
-.icon-vrac:before { content: "\f103"; }
+.icon-camion:before { content: "\f101"; }
+.icon-contrat:before { content: "\f102"; }
+.icon-contrat2:before { content: "\f10b"; }
+.icon-drm:before { content: "\f104"; }
+.icon-etablissement:before { content: "\f105"; }
+.icon-mouts:before { content: "\f106"; }
+.icon-raisins:before { content: "\f107"; }
+.icon-stock:before { content: "\f108"; }
+.icon-vrac:before { content: "\f109"; }

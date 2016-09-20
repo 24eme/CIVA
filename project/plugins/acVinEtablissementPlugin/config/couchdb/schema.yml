@@ -87,7 +87,7 @@ Etablissement:
          definition:
            fields:
              '*':
-               class: _TiersLieuStockage
+               class: EtablissementLieuStockage
                type: collection
                definition:
                  fields:

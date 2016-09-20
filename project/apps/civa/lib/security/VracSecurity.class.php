@@ -66,7 +66,6 @@ class VracSecurity implements SecurityInterface {
         }
 
         /*** CREATION ***/
-
         if(in_array(self::CREATION, $droits) && $etablissement->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
 
             return false;

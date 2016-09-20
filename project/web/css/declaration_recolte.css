@@ -195,8 +195,6 @@ ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a {
 
 /*ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }*/
 ul#onglets_majeurs.onglets_recolte li.ajouter a {
-	background: #666 url(../images/pictos/pi_ajout.png) 10px center
-		no-repeat;
 	padding-left: 30px;
 }
 
@@ -622,6 +620,16 @@ input.btn_inactif {
 	border-right: 1px solid #c6c8c7;
 }
 
+.bloc_acceuil_icon::before {
+    font-size: 30px;
+}
+.bloc_acceuil_icon {
+    float: left;
+    padding: 10px;
+    color: white;
+}
+
+
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header,
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content 
 {
@@ -652,12 +660,6 @@ input.btn_inactif {
 	padding-top: 7px;
 	padding-bottom: 6px;
 }
-
-#application_dr.mon_espace_civa .bloc_acceuil.recolte .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_recolte.png'); }
-#application_dr.mon_espace_civa .bloc_acceuil.contrats .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_contrats.png'); }
-#application_dr.mon_espace_civa .bloc_acceuil.gamma .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_gamma.png'); }
-#application_dr.mon_espace_civa .bloc_acceuil.stocks .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_stocks.png'); }
-#application_dr.mon_espace_civa .bloc_acceuil.drm .bloc_acceuil_header { background-image: url('../images/pictos/pi_mon_espace_drm.png'); }
 
 
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content,

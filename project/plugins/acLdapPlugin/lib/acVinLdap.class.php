@@ -14,7 +14,7 @@
 
 /**
  * acLdapPlugin lib.
- * 
+ *
  * @package    acLdapPlugin
  * @subpackage lib
  * @author     Jean-Baptiste Le Metayer <lemetayer.jb@gmail.com>
@@ -31,7 +31,7 @@ class acVinLdap
     protected $pass;
 
     /**
-     * 
+     *
      */
     public function __construct()
     {
@@ -43,9 +43,9 @@ class acVinLdap
 
     /**
      *
-     * @return bool 
+     * @return bool
      */
-    public function connect() 
+    public function connect()
     {
         $con = ldap_connect($this->serveur);
         ldap_set_option($con, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -55,12 +55,12 @@ class acVinLdap
             return false;
         }
     }
-    
+
     /**
      *
      * @param mixed $uid
      * @param array $infos
-     * @return bool 
+     * @return bool
      */
     public function save($uid, $infos)
     {
@@ -74,14 +74,14 @@ class acVinLdap
       }
       return false;
     }
-    
+
     /**
      *
      * @param mixed $uid
      * @param array $infos
-     * @return bool 
+     * @return bool
      */
-    protected function add($uid, $infos) 
+    protected function add($uid, $infos)
     {
         $con = $this->connect();
         if($con) {
@@ -94,12 +94,12 @@ class acVinLdap
         }
         return false;
     }
-    
+
     /**
      *
      * @param mixed $uid
      * @param array $infos
-     * @return bool 
+     * @return bool
      */
     protected function update($uid, $infos)
     {
@@ -118,7 +118,7 @@ class acVinLdap
     /**
      *
      * @param mixed $uid
-     * @return bool 
+     * @return bool
      */
     public function exist($uid)
     {
@@ -138,13 +138,13 @@ class acVinLdap
     /**
      *
      * @param mixed $uid
-     * @return bool 
+     * @return bool
      */
-    public function delete($uid) 
+    public function delete($uid)
     {
         $con = $this->connect();
         if($con) {
-            $delete = ldap_delete($con, 'uid='.$uid.',ou=People,'.$this->dc);
+            $delete = @ldap_delete($con, 'uid='.$uid.',ou=People,'.$this->dc);
             ldap_unbind($con);
             return $delete;
         } else {

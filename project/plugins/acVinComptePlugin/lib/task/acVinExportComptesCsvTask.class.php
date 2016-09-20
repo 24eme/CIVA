@@ -55,21 +55,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $tiers = array();
-        foreach ($arguments['tiers_types'] as $tiers_type) {
-            $tiers = array_merge($tiers, acCouchdbManager::getClient($tiers_type)->getAll(acCouchdbClient::HYDRATE_JSON)->getDocs());
-        }
-
-        $comptes = array();
-        foreach ($tiers as $t) {
-            if (count($t->compte) == 0) {
-                $this->logSection($t->cvi, "COMPTE VIDE", null, 'ERROR');
-                continue;
-            }
-            foreach ($t->compte as $id_compte) {
-                $comptes[$id_compte][] = $t;
-            }
-        }
+        $comptes = acCouchdbManager::getClient('Compte')->getAll()->getDocs();
 
         $csv = new ExportCsv(array(
                     "type" => "Type",
@@ -97,7 +83,7 @@ EOF;
             "mot_de_passe" => array("required" => true, "type" => "string"),
             "email" => array("required" => false, "type" => "string"),
             "cvi" => array("required" => false, "type" => "string"),
-            "civaba" => array("required" => false, "type" => "string"),
+            "interne" => array("required" => false, "type" => "string"),
             "siret" => array("required" => false, "type" => "string"),
             "qualite" => array("required" => false, "type" => "string"),
             "civilite" => array("required" => false, "type" => "string"),
@@ -105,63 +91,81 @@ EOF;
             "adresse" => array("required" => false, "type" => "string"),
             "code postal" => array("required" => false, "type" => "string"),
             "commune" => array("required" => false, "type" => "string"),
-            "exploitant_sexe" => array("required" => false, "type" => "string"),
+            "exploitant_civilite" => array("required" => false, "type" => "string"),
             "exploitant_nom" => array("required" => false, "type" => "string")
         );
 
-        foreach ($comptes as $id_compte => $tiers_c) {
-            $compte = acCouchdbManager::getClient()->retrieveDocumentById($id_compte, acCouchdbClient::HYDRATE_JSON);
-            if ($compte) {
-                foreach ($tiers_c as $t) {
-
-                    $intitule = $t->intitule;
-                    $nom = $t->nom;
-                    $adresse = $t->siege;
-                    if (!$adresse->adresse && isset($t->exploitant)) {
-                        if ($t->exploitant->nom) {
-                            $intitule = $t->exploitant->sexe;
-                            $nom = $t->exploitant->nom;
-                        }
-                        $adresse = $t->exploitant;
-                    }
-                    
-                    $email = $compte->email;
-                    if (!$email) {
-                        $email = $t->email;
-                    }
-
-                    if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
-                        $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
-                    } else {
-                        $mot_de_passe = "Compte déjà créé";
-                    }
-
-                    try {
-                        $csv->add(array(
-                            "type" => $t->type,
+        foreach ($comptes as $id_compte => $compte) {
+            
+            $mot_de_passe = "Compte déjà créé";
+            if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
+                $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
+            }
+            try {
+                        if ($compte->type == "CompteVirtuel") {
+                            $csv->add(array(
+                                "type" => $compte->type,
+                                "login" => $compte->login,
+                                "statut" => $compte->statut,
+                                "mot_de_passe" => $mot_de_passe,
+                                "email" => $compte->email,
+                                "cvi" => "",
+                                "interne" => "",
+                                "siret" => "",
+                                "qualite" => "",
+                                "civilite" => "",
+                                "nom" => $compte->nom,
+                                "adresse" => "",
+                                "code postal" => "",
+                                "commune" => "",
+                                "civilite de l'exploitant" => "",
+                                "nom de l'exploitant" => ""
+                            ), $validation);
+                        }else{
+                        $etablissement = $compte->getEtablissement();
+                        if (!$etablissement) {
+                            $csv->add(array(
+                                "type" => $compte->societe_informations->type,
+                                "login" => $compte->login,
+                                "statut" => $compte->statut,
+                                "mot_de_passe" => $mot_de_passe,
+                                "email" => $compte->email,
+                                "cvi" => "",
+                                "interne" => "",
+                                "siret" => "",
+                                "qualite" => "",
+                                "civilite" => $compte->civilite,
+                                "nom" => $compte->nom,
+                                "adresse" => $compte->adresse,
+                                "code postal" => $compte->code_postal,
+                                "commune" => $compte->commune,
+                                "civilite de l'exploitant" => "",
+                                "nom de l'exploitant" => ""
+                            ), $validation);
+                        }else{
+                            $csv->add(array(
+                            "type" => $compte->societe_informations->type,
                             "login" => $compte->login,
                             "statut" => $compte->statut,
                             "mot_de_passe" => $mot_de_passe,
-                            "email" => $email,
-                            "cvi" => $this->getTiersField($t, 'cvi', true),
-                            "civaba" => $this->getTiersField($t, 'civaba'),
-                            "siret" => $this->getTiersField($t, 'siret'),
-                            "qualite" => $this->getTiersField($t, 'qualite'),
-                            "civilite" => $intitule,
-                            "nom" => $nom,
-                            "adresse" => $adresse->adresse,
-                            "code postal" => $adresse->code_postal,
-                            "commune" => $adresse->commune,
-                            "sexe de l'exploitant" => $t->exploitant->sexe,
-                            "nom de l'exploitant" => $t->exploitant->nom,
+                            "email" => $compte->email,
+                            "cvi" => $etablissement->getCvi(),
+                            "interne" => $etablissement->num_interne,
+                            "siret" => $etablissement->siret,
+                            "qualite" => $etablissement->famille,
+                            "civilite" => $compte->civilite,
+                            "nom" => $compte->nom,
+                            "adresse" => $compte->adresse,
+                            "code postal" => $compte->code_postal,
+                            "commune" => $compte->commune,
+                            "civilite de l'exploitant" => $etablissement->getExploitant()->civilite,
+                            "nom de l'exploitant" => $etablissement->getExploitant()->nom
                                 ), $validation);
+                        }
+                        }
                     } catch (Exception $exc) {
-                        $this->logSection($t->cvi, $exc->getMessage(), null, 'ERROR');
+                        $this->logSection($compte->identifiant, $exc->getMessage(), null, 'ERROR');
                     }
-                }
-            } else {
-                $this->logSection($t->cvi, "COMPTE INEXISTANT", null, 'ERROR');
-            }
         }
 
         echo $csv->output(false);

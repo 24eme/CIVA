@@ -18,7 +18,7 @@ all:
     dn: "cn=admin,dc=vinsalsace,dc=pro"
     dc: "dc=vinsalsace,dc=pro"
     pass: "LDAP_ADMIN_PASSWORD"
-    auto: false
+    autoupdate: false
   secret_key:
     publication_mairies: "cle_secrete"
   gamma:
@@ -34,7 +34,7 @@ all:
       subject: "500 | Internal Server Error | Exception"
   email:
     feed_back: ["email@email.email"]
-  declarant_class: "_Tiers"
+  declarant_class: "Etablissement"
   ava:
     url: "https://url_a_remplacer.com"
 test:

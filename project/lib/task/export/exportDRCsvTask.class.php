@@ -38,7 +38,7 @@ EOF;
 
         foreach ($arguments['ids'] as $id) {
             $dr = DRClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
-
+            
             if(!$dr) {
 
                 throw new sfCommandArgumentsException("DR non trouvé : '".$id."'");

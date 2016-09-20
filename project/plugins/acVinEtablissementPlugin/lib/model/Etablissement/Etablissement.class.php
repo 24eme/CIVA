@@ -92,7 +92,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     public function getCompteExploitantObject() {
         if(!$this->getCompteExploitant()) {
 
-            return null;
+            return $this->getCompte();
         }
 
         return CompteClient::getInstance()->find($this->getCompteExploitant());;
@@ -226,7 +226,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
             if ($this->isSameCompteThanSociete()) {
-                throw new sfException("Pas de création");
+                throw new sfException("Pas de création ".$this->_id);
                 $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
                 $compte->addOrigine($this->_id);
             }else{
@@ -400,15 +400,31 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public function hasLieuxStockage() {
 
-        return count($this->lieux_stockage) > 0;
+        return $this->exist('lieux_stockage') && count($this->lieux_stockage) > 0;
     }
 
-    public function getLieuxStockage() {
+    /*public function getLieuxStockage() {
         if($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR) {
             return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
         }
 
         return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getNumInterne()))->getLieuxStockage();
+    }*/
+
+    public function getLieuxStockage($ajoutLieuxStockage = false)
+    {
+        if($ajoutLieuxStockage && $this->isAjoutLieuxDeStockage() &&
+                (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
+            $lieu_stockage = $this->storeLieuStockage($this->adresse,
+                                                    $this->commune,
+                                                   $this->code_postal);
+            $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
+            return $this->_get('lieux_stockage');
+        }
+        if($this->exist('lieux_stockage')){
+            return $this->_get('lieux_stockage');
+        }
+        return array();
     }
 
     public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
