@@ -132,11 +132,15 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     }
 
     public function cleanAllNodes() {
+        $keys_to_remove = array();
         foreach($this->getChildrenNode() as $item) {
             $item->cleanAllNodes();
             if(!count($item->getProduitsDetails())){
-                $this->remove($item->getKey());
+                $keys_to_remove[$item->getKey()] = $item->getKey();
             }
+        }
+        foreach($keys_to_remove as $key) {
+            $this->remove($key);
         }
     }
 
