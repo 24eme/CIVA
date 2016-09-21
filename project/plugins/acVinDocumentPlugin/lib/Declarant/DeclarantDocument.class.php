@@ -9,7 +9,7 @@ class DeclarantDocument
     {
         $this->document = $document;
     }
-    
+
     public function getIdentifiant()
     {
         return $this->document->identifiant;
@@ -19,16 +19,21 @@ class DeclarantDocument
     {
         return $this->document->declarant;
     }
-    
+
    public function getDeclarantObject() {
-       if(is_null($this->etablissement)) {
+        if(method_exists($this->document, "getDeclarantObject")) {
+
+            return $this->document->getDeclarantObject();
+        }
+
+        if(is_null($this->etablissement)) {
             $class = sfConfig::get('app_declarant_class', 'Etablissement');
             $this->etablissement = acCouchdbManager::getClient($class)->findByIdentifiant($this->getIdentifiant());
         }
 
         return $this->etablissement;
     }
-    
+
     public function getEtablissementObject() {
         return $this->getDeclarantObject();
     }

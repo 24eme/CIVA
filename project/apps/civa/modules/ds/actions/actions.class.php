@@ -11,8 +11,7 @@ class dsActions extends sfActions {
        $this->etablissement = $this->getRoute()->getEtablissement();
 
        $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($type_ds);
-       $this->ds = DSCivaClient::getInstance()->findPrincipaleByIdentifiantAndPeriode($this->etablissement->getIdentifiant(), $this->periode);
-
+       $this->ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($type_ds, $this->etablissement, $this->periode);
        $this->secureDS(array(DSSecurity::CONSULTATION,
                              DSSecurity::EDITION), $this->ds, $type_ds);
 
@@ -46,7 +45,7 @@ class dsActions extends sfActions {
             }
             $ds->save($this->getUserId());
         }
-        $this->ds = DSCivaClient::getInstance()->getDSPrincipale($this->etablissement,$date);
+        $this->ds = DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
 
         $this->redirect('ds_etape_redirect', $this->ds);
     }
@@ -93,7 +92,6 @@ class dsActions extends sfActions {
         $this->ds = $this->getRoute()->getDS();
         $this->tiers = $this->getRoute()->getTiers();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
-
         $this->form_gest = null;
         $this->form_gest_err = 0;
         $this->form_gest = new TiersExploitantForm($this->tiers->getExploitant());
@@ -489,7 +487,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale, true);
 
-        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds, 'identifiant' => $this->ds_principale->getIdentifiant()));
+        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds, 'sf_subject' => $this->ds_principale->getEtablissement()));
     }
 
     public function executeInvaliderRecoltant(sfWebRequest $request) {
@@ -501,7 +499,7 @@ Le CIVA';
 
         DSCivaClient::getInstance()->devalidate($this->ds_principale);
 
-        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds));
+        $this->redirect('mon_espace_civa_ds', array("type" => $this->ds_principale->type_ds, 'sf_subject' => $this->ds_principale->getEtablissement()));
     }
 
 
@@ -532,6 +530,7 @@ Le CIVA';
         if($request->getParameter('message', null) != "custom")
         {
             $mess = 'Bonjour ' . $this->tiers->nom . ',
+
 Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . '.
 
 Cordialement,
@@ -540,13 +539,13 @@ Le CIVA';
 
         }else{
 
-        $mess = 'Bonjour ' . $this->tiers->nom . ',
+            $mess = 'Bonjour ' . $this->tiers->nom . ',
 
-Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
+    Vous trouverez ci-joint votre Déclaration de Stocks pour l\'année ' . $this->ds->getAnnee() . ' que vous venez de valider.
 
-Cordialement,
+    Cordialement,
 
-Le CIVA';
+    Le CIVA';
 
         }
 

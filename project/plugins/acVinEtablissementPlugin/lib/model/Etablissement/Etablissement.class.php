@@ -411,7 +411,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getNumInterne()))->getLieuxStockage();
     }*/
 
-    public function getLieuxStockage($ajoutLieuxStockage = false)
+    public function getLieuxStockage($ajoutLieuxStockage = false, $identifiant = null)
     {
         if($ajoutLieuxStockage && $this->isAjoutLieuxDeStockage() &&
                 (!$this->exist('lieux_stockage') || (!count($this->_get('lieux_stockage'))))){
@@ -421,14 +421,28 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
             $this->lieux_stockage = array($lieu_stockage->numero => $lieu_stockage);
             return $this->_get('lieux_stockage');
         }
-        if($this->exist('lieux_stockage')){
+        if(!$this->exist('lieux_stockage')){
+
+            return array();
+        }
+
+        if(is_null($identifiant)) {
+
             return $this->_get('lieux_stockage');
         }
-        return array();
+        $lieuxStockage = array();
+        foreach($this->_get('lieux_stockage') as $lieuStockage) {
+            if(!preg_match("/".$identifiant."/", $lieuStockage->getKey())) {
+                continue;
+            }
+            $lieuxStockage[$lieuStockage->getKey()] = $lieuStockage;
+        }
+
+        return $lieuxStockage;
     }
 
-    public function getLieuStockagePrincipal($ajoutLieuxStockage = false) {
-        foreach($this->getLieuxStockage($ajoutLieuxStockage) as $lieu_stockage) {
+    public function getLieuStockagePrincipal($ajoutLieuxStockage = false, $identifiant = null) {
+        foreach($this->getLieuxStockage($ajoutLieuxStockage, $identifiant) as $lieu_stockage) {
 
             return $lieu_stockage;
         }
@@ -448,7 +462,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         if(!$this->exist('lieux_stockage')){
             $this->add('lieux_stockage');
         }
-        $lieux_stockage = $this->_get('lieux_stockage');
+        $lieux_stockage = $this->getLieuxStockage(false, $identifiant);
         foreach ($lieux_stockage as $key => $value) {
             $current_id = intval(str_replace($identifiant, '', $key));
             if($current_id > $newId){
@@ -462,7 +476,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         $lieu_stockage->adresse = $adresse;
         $lieu_stockage->commune = $commune;
         $lieu_stockage->code_postal = $code_postal;
-        $lieux_stockage->add($newId, $lieu_stockage);
+        $this->_get('lieux_stockage')->add($newId, $lieu_stockage);
         return $lieu_stockage;
     }
 

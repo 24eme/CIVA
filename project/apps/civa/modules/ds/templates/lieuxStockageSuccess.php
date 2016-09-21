@@ -34,7 +34,7 @@ $hasVolume = false;
                 <a href="" class="msg_aide_ds" rel="help_popup_ds_lieux_stockage_neant" title="Message aide"></a>
         </div>
         <div class="ds_lieu_toggle_stockage_principale">
-            <?php if(count($tiers->getLieuxStockage(true)) > 1) : ?>
+            <?php if(count($tiers->getLieuxStockage(true, $ds->getIdentifiant())) > 1) : ?>
                 <a href="#" class="" id="ds_lieux_stockage_toggle">Changer lieu de stockage principal</a>
             <?php endif; ?>
     </div>
@@ -59,8 +59,8 @@ $hasVolume = false;
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($tiers->getLieuxStockage(true) as $numero => $lieu_stockage):
-                                                $identifiant = $tiers->getIdentifiant();
+				<?php foreach($tiers->getLieuxStockage(true, $ds->getIdentifiant()) as $numero => $lieu_stockage):
+                                                $identifiant = $ds->getIdentifiant();
                                                 $num_lieu = str_replace($identifiant, '', $numero);
                                                 $ds_id = preg_replace("/[0-9]{3}$/", $num_lieu, $ds->_id);
                                                 $current_ds = (array_key_exists($ds_id, $dss))? $dss[$ds_id] : null;

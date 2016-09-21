@@ -39,11 +39,11 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
             throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
         }
 
-        if(!$tiers->lieux_stockage->exist($num_lieu)) {
+        if(!isset($tiers->lieux_stockage[$num_lieu])) {
             throw new sfException(sprintf("Le lieu de stockage %s n'existe pas dans l'etablissement de cvi %s ", $num_lieu, $this->identifiant));
         }
 
-        $this->set('stockage', $tiers->lieux_stockage->get($num_lieu));
+        $this->set('stockage', $tiers->lieux_stockage[$num_lieu]);
     }
 
     public function storeDeclarant() {
@@ -56,7 +56,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         $this->declarant->email = $tiers->getCompte();
 
         if($tiers->exist('civaba') && $tiers->civaba){
-                $this->add('civaba', $tiers->civaba);
+            $this->add('civaba', $tiers->civaba);
         }
 
         $this->declarant->exploitant->sexe = $tiers->exploitant->civilite;
@@ -269,9 +269,24 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         return $configs[$this->declarant->region];
     }
 
-   public function getEtablissement() {
+    public function getEtablissementObject() {
 
-        return EtablissementClient::getInstance()->find($this->identifiant);
+        return $this->getEtablissement();
+    }
+
+    public function getDeclarantObject() {
+
+        return $this->getEtablissement();
+    }
+
+   public function getEtablissement() {
+        $etablissement = EtablissementClient::getInstance()->find($this->identifiant);
+        if(!$etablissement) {
+
+            $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-C".$this->civaba);
+        }
+
+        return $etablissement;
     }
 
     public function getConfig() {
@@ -408,7 +423,6 @@ public function getConfigurationCampagne() {
     }
 
     public function isDsPrincipale() {
-
         if($this->exist('ds_principale')){
             return $this->ds_principale;
         }
@@ -435,7 +449,8 @@ public function getConfigurationCampagne() {
             return $this->_id == $ds_principale->_id;
         }
 
-        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal()->getNumeroIncremental();
+
+        return $this->getLieuStockage() == $this->getEtablissement()->getLieuStockagePrincipal(false, $this->getIdentifiant())->getNumeroIncremental();
     }
 
     public function isFirstDs(){

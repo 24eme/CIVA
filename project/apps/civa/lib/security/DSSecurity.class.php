@@ -65,22 +65,17 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        if($this->etablissement && $this->ds && $this->etablissement->getIdentifiant() != $this->ds->identifiant) {
-
-            throw new sfException("Pas sa DS");
-
+        if($this->etablissement && $this->ds && $this->etablissement->getIdentifiant() != $this->ds->identifiant && $this->etablissement->getCvi() != $this->ds->identifiant) {
             return false;
         }
 
         /*** CONSULTATION ***/
 
         if(in_array(self::CONSULTATION, $droits)) {
-
             return true;
         }
 
         /*** CREATION ***/
-
         if(in_array(self::CREATION, $droits) && $this->ds && !$this->ds->isNew()) {
 
             return false;
@@ -98,14 +93,14 @@ class DSSecurity implements SecurityInterface {
 
 
         if(in_array(self::CREATION, $droits)) {
-
             return true;
         }
 
+
+
         /*** EDITION ***/
 
-        if(!$this->ds) {
-
+        if(in_array(self::EDITION , $droits) && !$this->ds) {
             return false;
         }
 
