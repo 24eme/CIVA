@@ -12,6 +12,11 @@ class CompteVirtuel extends BaseCompteVirtuel {
         return false;
     }
 
+    public function getStatutTeledeclarant() {
+
+        return $this->getStatut();
+    }
+
     public function getNomAAfficher() {
 
         return $this->getNom();
