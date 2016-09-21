@@ -76,10 +76,6 @@ class AnnuaireClient extends acCouchdbClient
 			$tiers = $compte->getSociete()->getEtablissementPrincipal();
 		}
 
-        /*if($tiers->type == 'MetteurEnMarche' && $tiers->hasAcheteur()) {
-            $tiers = $tiers->getCviObject();
-        }*/
-
         if(!$tiers) {
 
             return null;

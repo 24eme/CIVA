@@ -19,10 +19,10 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         $items_config = $this->getConfig()->getChildrenNode();
         $items_sorted = array();
 
-        foreach($items_config as $hash => $item_config) {
-            $hash = preg_replace('/^\/recolte/','declaration',$hash);
-            if($this->exist($item_config->getKey())) {
-                $items_sorted[$hash] = $this->get($item_config->getKey());
+        foreach($items_config as $item_config) {
+            $hash = HashMapper::inverse($item_config->getHash());
+            if($this->getDocument()->exist($hash)) {
+                $items_sorted[$hash] = $this->getDocument()->get($hash);
             }
         }
 
@@ -132,18 +132,22 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     }
 
     public function cleanAllNodes() {
-        foreach($this->getChildrenNodeSorted() as $item) {
+        $keys_to_remove = array();
+        foreach($this->getChildrenNode() as $item) {
             $item->cleanAllNodes();
             if(!count($item->getProduitsDetails())){
-                $this->remove($item->getKey());
+                $keys_to_remove[$item->getKey()] = $item->getKey();
             }
+        }
+        foreach($keys_to_remove as $key) {
+            $this->remove($key);
         }
     }
 
     public function getTotalVolumeEnleve()
     {
     	$total = 0;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
             $total += $item->getTotalVolumeEnleve();
         }
         return $total;
@@ -152,7 +156,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function getTotalVolumePropose()
     {
     	$total = 0;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
             $total += $item->getTotalVolumePropose();
         }
         return $total;
@@ -161,7 +165,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function getTotalPrixEnleve()
     {
     	$total = 0;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
             $total += $item->getTotalPrixEnleve();
         }
         return $total;
@@ -170,7 +174,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function getTotalPrixPropose()
     {
     	$total = 0;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
             $total += $item->getTotalPrixPropose();
         }
         return $total;
@@ -179,7 +183,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function allProduitsClotures()
     {
     	$result = true;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
         	if (!$item->allProduitsClotures()) {
         		$result = false;
         		break;
@@ -191,7 +195,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     public function hasRetiraisons()
     {
     	$result = false;
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
         	if ($item->hasRetiraisons()) {
         		$result = true;
         		break;
@@ -202,7 +206,7 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
     public function clotureProduits()
     {
-        foreach($this->getChildrenNodeSorted() as $key => $item) {
+        foreach($this->getChildrenNode() as $key => $item) {
         	$item->clotureProduits();
         }
         return null;

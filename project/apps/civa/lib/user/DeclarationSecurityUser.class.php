@@ -271,17 +271,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         $this->requireTiers();
         if (!isset($this->_ds[$type_ds])) {
             $periode = $this->getPeriodeDS($type_ds);
-            $this->_ds[$type_ds] = DSClient::getInstance()->findByPrincipaleByIdentifiantAndPeriode($declarant->getIdentifiant(), $periode);
-            if (!isset($this->_ds[$type_ds])) {
-                $ds = new DSCiva();
-                if($declarant->exist('civaba') && $declarant->civaba){
-                    $ds->add('civaba', $declarant->civaba);
-                }
-                $ds->add('type_ds', $type_ds);
-                $ds->identifiant = $declarant->getIdentifiant();
-                $ds->set('_id', 'DS-' . $declarant->getIdentifiant() . '-' .$periode.'-'.$declarant->getLieuStockagePrincipal(true)->getNumeroIncremental());
-                return $ds;
-            }
+            $this->_ds[$type_ds] = DSCivaClient::getInstance()->findPrincipaleByIdentifiantAndPeriode($declarant->getIdentifiant(), $periode);
         }
 
         return $this->_ds[$type_ds];

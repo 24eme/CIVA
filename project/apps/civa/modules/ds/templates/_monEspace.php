@@ -3,8 +3,8 @@
 	<?php include_component('ds', 'monEspaceEnCours', array('type_ds' => $type_ds, 'etablissement' => $etablissement));  ?>
 <?php elseif (DSSecurity::getInstance($etablissement, $ds, $type_ds)->isAuthorized(DSSecurity::EDITION)): ?>
 	<?php include_component('ds', 'monEspaceEnCours', array('type_ds' => $type_ds, 'etablissement' => $etablissement));  ?>
-<?php elseif($ds && $ds->isValidee()): ?>
-    <?php include_component('ds', 'monEspaceValidee', array('type_ds' => $type_ds));  ?>
+<?php elseif($ds && $ds->isValideeTiers()): ?>
+    <?php include_component('ds', 'monEspaceValidee', array('type_ds' => $type_ds, 'etablissement' => $etablissement));  ?>
 <?php elseif(!$sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR) && $sf_user->isDsTerminee($type_ds)): ?>
     <?php include_partial('ds/monEspaceNonEditable',array('ds' => $ds, 'type_ds' => $type_ds)); ?>
 <?php elseif(!$sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR) && $sf_user->isDsNonOuverte($type_ds)): ?>

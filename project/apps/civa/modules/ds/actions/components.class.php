@@ -9,8 +9,9 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspace(sfWebRequest $request) {
-      $this->ds = $this->getUser()->getDs($this->type_ds);
-      $this->ds_editable = $this->getUser()->isDsEditable($this->type_ds);
+        $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($this->type_ds);
+        $this->ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($this->type_ds, $this->etablissement, $this->periode);
+        $this->ds_editable = $this->getUser()->isDsEditable($this->type_ds);
     }
 
     /**
@@ -18,7 +19,8 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceEnCours(sfWebRequest $request) {
-        $this->ds = $this->getUser()->getDs($this->type_ds);
+        $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($this->type_ds);
+        $this->ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($this->type_ds, $this->etablissement, $this->periode);
     }
 
         /**
@@ -26,7 +28,8 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceValidee(sfWebRequest $request) {
-        $this->ds = $this->getUser()->getDs($this->type_ds);
+        $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($this->type_ds);
+        $this->ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($this->type_ds, $this->etablissement, $this->periode);
     }
 
     /**
@@ -34,8 +37,8 @@ class dsComponents extends sfComponents {
      * @param sfWebRequest $request
      */
     public function executeMonEspaceColonne(sfWebRequest $request) {
-        $this->tiers = $this->getUser()->getDeclarantDS($this->type_ds);
-        $this->dsByperiodes = acCouchdbManager::getClient('DSCiva')->retrieveDsPrincipalesByPeriodeAndCvi($this->tiers->getIdentifiant(), $this->getUser()->getPeriodeDS($this->type_ds)-1);
+        $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($this->type_ds);
+        $this->dsByperiodes = DSCivaClient::getInstance()->findDsPrincipalesByPeriodeAndEtablissement($this->type_ds, $this->etablissement, $this->periode - 1);
 
         krsort($this->dsByperiodes);
     }

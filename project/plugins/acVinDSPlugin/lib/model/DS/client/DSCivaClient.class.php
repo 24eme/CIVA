@@ -64,9 +64,17 @@ class DSCivaClient extends DSClient {
         return $v->format('Y-m-d');
     }
 
-    public function retrieveDsPrincipalesByPeriodeAndCvi($cvi, $periode) {
+    public function findDsPrincipalesByPeriodeAndEtablissement($typeDS, $etablissement, $periode) {
+        if($typeDS == self::TYPE_DS_NEGOCE) {
+            $identifiant = $etablissement->getIdentifiant();
+        }
+
+        if($typeDS == self::TYPE_DS_PROPRIETE) {
+            $identifiant = $etablissement->getCvi();
+        }
+
         $dss_principales = array();
-        $docs = $this->startkey('DS-' . $cvi . '-000000-000')->endkey('DS-' . $cvi . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
+        $docs = $this->startkey('DS-' . $identifiant . '-000000-000')->endkey('DS-' . $identifiant . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
             if (preg_match('/DS-(C?([0-9]){10})-(?P<periode>\d+)/', $doc_id, $matches)) {
                 $periode_t = preg_replace('/^([0-9]{6})$/', "$1", $matches['periode']);
@@ -104,6 +112,18 @@ class DSCivaClient extends DSClient {
         return DSCivaClient::getInstance()->getDSPrincipaleByDs($ds);
     }
 
+    public function findPrincipaleByEtablissementAndPeriode($typeDS, $etablissement, $periode) {
+        if($typeDS == self::TYPE_DS_NEGOCE) {
+            $identifiant = $etablissement->getIdentifiant();
+        }
+
+        if($typeDS == self::TYPE_DS_PROPRIETE) {
+            $identifiant = $etablissement->getCvi();
+        }
+
+        return $this->findPrincipaleByIdentifiantAndPeriode($identifiant, $periode);
+    }
+
     public function retrieveByPeriodeAndIdentifiant($identifiant, $periode) {
 
         return $this->findByIdentifiantAndPeriode($identifiant, $periode);
@@ -111,7 +131,7 @@ class DSCivaClient extends DSClient {
 
     public function getEtablissement($societe, $type_ds = null) {
         foreach($societe->getEtablissementsObject() as $etablissement) {
-            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
 
                 return $etablissement;
             }
@@ -158,9 +178,15 @@ class DSCivaClient extends DSClient {
         $dss = array();
         $ds_principale_exist = false;
         $tiers->getLieuxStockage($onlyCreate);
-        foreach ($tiers->getLieuxStockage($onlyCreate) as $lieux_stockage) {
+        $identifiant = $tiers->getIdentifiant();
+
+        if($type_ds == self::TYPE_DS_PROPRIETE) {
+            $identifiant = $tiers->getCvi();
+        }
+
+        foreach ($tiers->getLieuxStockage($onlyCreate, $identifiant) as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
-            $ds = $this->findByIdentifiantPeriodeAndLieuStockage($tiers->getIdentifiant(), $periode, $num_lieu);
+            $ds = $this->findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $num_lieu);
             if($onlyCreate){
                 $ds = null;
             }
@@ -172,10 +198,10 @@ class DSCivaClient extends DSClient {
             $ds->add('type_ds', $type_ds);
             $ds->date_emission = date('Y-m-d');
             $ds->date_stock = $this->createDateStock($date_stock);
-            $ds->identifiant = $tiers->getIdentifiant();
+            $ds->identifiant = $identifiant;
             $ds->_id = sprintf('DS-%s-%s-%s', $ds->identifiant, $periode, $num_lieu);
-            if($tiers->exist('civaba') && $tiers->civaba){
-                    $ds->add('civaba', $tiers->civaba);
+            if($tiers->exist('num_interne') && $tiers->num_interne){
+                $ds->add('civaba', $tiers->num_interne);
             }
             if (!$ds_principale_exist) {
                 $ds->add('ds_principale', 1);
@@ -183,6 +209,7 @@ class DSCivaClient extends DSClient {
             } else {
                 $ds->add('ds_principale', 0);
             }
+
             $ds->storeInfos();
             if (!$ds_neant) {
                 $ds->updateProduitsFromLastDs();
@@ -207,6 +234,7 @@ class DSCivaClient extends DSClient {
                 }
             }
         }
+
         return $dss;
     }
 

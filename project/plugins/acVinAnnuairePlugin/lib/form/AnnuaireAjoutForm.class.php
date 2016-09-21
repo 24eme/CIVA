@@ -1,8 +1,8 @@
 <?php
-class AnnuaireAjoutForm extends acCouchdbObjectForm 
-{       
+class AnnuaireAjoutForm extends acCouchdbObjectForm
+{
 	protected $type;
-	 
+
 	public function __construct(acCouchdbJson $object, $type = null, $options = array(), $CSRFSecret = null) {
 		$this->type = $type;
 		parent::__construct($object, $options, $CSRFSecret);
@@ -24,19 +24,19 @@ class AnnuaireAjoutForm extends acCouchdbObjectForm
         $this->validatorSchema->setPostValidator(new AnnuaireAjoutValidator());
   		$this->widgetSchema->setNameFormat('annuaire_ajout[%s]');
     }
-    
+
     protected function getTypes()
     {
     	return AnnuaireClient::getAnnuaireTypes();
     }
-    
-    public function doUpdateObject($values) 
+
+    public function doUpdateObject($values)
     {
     	$tiers = $values['tiers'];
     	$libelle = ($tiers->intitule)? $tiers->intitule.' '.$tiers->nom : $tiers->nom;
         $entree = $this->getObject()->get($values['type'])->add($tiers->_id, $libelle);
     }
-    
+
     public function getTiers()
     {
     	$values = $this->getValues();
