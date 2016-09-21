@@ -9,7 +9,7 @@ abstract class CompteForm extends BaseForm {
      * @param array $options
      * @param string $CSRFSecret
      */
-    public function __construct(Compte $compte, $options = array(), $CSRFSecret = null) {
+    public function __construct($compte, $options = array(), $CSRFSecret = null) {
         $this->_compte = $compte;
         $this->checkCompte();
         parent::__construct(array('email' => $this->_compte->email), $options, $CSRFSecret);
