@@ -41,29 +41,36 @@ class maintenanceMigrationLieuxStockagesTask extends sfBaseTask
 
 
         $etablissement = null;
-
+        $identifiantLieuxStockage = null;
         if(preg_match("/REC-/", $tiers->_id)) {
             $etablissement = EtablissementClient::getInstance()->find(str_replace("REC-", "", $tiers->_id));
+            $identifiantLieuxStockage = $etablissement->getIdentifiant();
         }
 
         if(preg_match("/MET-/", $tiers->_id)) {
             $etablissement = EtablissementClient::getInstance()->find(str_replace("MET-", "C", $tiers->_id));
+            $identifiantLieuxStockage = $etablissement->getIdentifiant();
+        }
+
+        if(preg_match("/ACHAT-/", $tiers->_id)) {
+            $etablissement = EtablissementClient::getInstance()->find("C".$tiers->civaba);
+            $identifiantLieuxStockage =  $tiers->cvi;
         }
 
         if(!$etablissement && $tiers->statut == "INACTIF") {
 
             return;
         }
-        
-        if(!$etablissement) {
 
-            print_r($tiers->lieux_stockage);
+        if(!$etablissement) {
             throw new sfException("L'établissement correspondant au tiers ".$arguments['doc_id']." n'existe pas");
         }
-        if($etablissement->exist('lieux_stockage')) {
+        if(count($etablissement->getLieuxStockage(false, $identifiantLieuxStockage)) > 0) {
             return;
         }
-        $etablissement->add("lieux_stockage", $tiers->lieux_stockage);
+        foreach($tiers->lieux_stockage as $key => $lieu_stockage) {
+            $etablissement->add("lieux_stockage")->add($key, $lieu_stockage);
+        }
         $etablissement->save();
         echo "Etablissement ".$etablissement->_id." : ".count($etablissement->lieux_stockage)." lieu(x) de stockage(s) importé(s)\n";
     }
