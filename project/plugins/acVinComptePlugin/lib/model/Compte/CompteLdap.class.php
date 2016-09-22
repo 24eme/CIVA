@@ -96,12 +96,13 @@ class CompteLdap extends acVinLdap {
             $noAccises = $compte->getEtablissement()->no_accises;
         } else {
             foreach($compte->getSociete()->getEtablissementsObj() as $etablissement) {
-                if(preg_match("/".$etablissement->cvi."/", $compte->getIdentifiant()) || preg_match("/C".$etablissement->num_interne."/", $compte->getIdentifiant())) {
-                    $noAccises = $etablissement->no_accises;
+                echo $etablissement->etablissement->cvi;
+                if(preg_match("/".$etablissement->etablissement->cvi."/", $compte->getIdentifiant()) || preg_match("/C".$etablissement->etablissement->num_interne."/", $compte->getIdentifiant())) {
+                    $noAccises = $etablissement->etablissement->no_accises;
                 }
             }
         }
 
-        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compte), $noAccises, $compte->getNom(), $compte->nom_a_afficher);
+        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compte), $noAccises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
     }
 }
