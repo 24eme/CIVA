@@ -150,14 +150,14 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::SUPPRESSION, $this->vrac);
 
 		if ($this->vrac->isNew()) {
-            return $this->redirect('mon_espace_civa_vrac');
+            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
 		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
 
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
-            return $this->redirect('mon_espace_civa_vrac');
+            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
 		$this->form = new VracSuppressionForm($this->vrac);
