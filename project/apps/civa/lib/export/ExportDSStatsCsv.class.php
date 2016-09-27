@@ -8,7 +8,7 @@ class ExportDSStatsCsv {
 
         $this->ids = $ids;
         $this->campagne = $campagne;
-        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne - 1);
+        $this->config = ConfigurationClient::getConfigurationByCampagne($this->campagne);
     }
 
     public function export() {
@@ -80,8 +80,8 @@ class ExportDSStatsCsv {
                 $cepage_key = $c_cepage->getKey();
                 $cepage = $appellation['cepages'][$cepage_key];
 
-                $content .= sprintf($ligne, $c_appellation->getLibelleLong(), 
-                                     $c_cepage->getLibelleLong(), 
+                $content .= sprintf($ligne, $c_appellation->getLibelleLong(),
+                                     $c_cepage->getLibelleLong(),
                                      $this->convertFloat2Fr($cepage['volume_total']),
                                      $this->convertFloat2Fr($cepage['volume_normal']),
                                      $this->convertFloat2Fr($cepage['volume_vt']),
@@ -90,18 +90,18 @@ class ExportDSStatsCsv {
                 unset($appellation['cepages'][$cepage_key]);
             }
 
-            $content .= sprintf($ligne, $c_appellation->getLibelleLong(), 
-                                 "TOTAL", 
+            $content .= sprintf($ligne, $c_appellation->getLibelleLong(),
+                                 "TOTAL",
                                  $this->convertFloat2Fr($appellation['volume_total']),
                                  $this->convertFloat2Fr($appellation['volume_normal']),
                                  $this->convertFloat2Fr($appellation['volume_vt']),
                                  $this->convertFloat2Fr($appellation['volume_sgn']));
-            
+
             unset($stats['appellations'][$appellation_key]);
         }
 
-        $content .= sprintf($ligne, "TOTAL Général", 
-                             "", 
+        $content .= sprintf($ligne, "TOTAL Général",
+                             "",
                              $this->convertFloat2Fr($stats['volume_total']),
                              $this->convertFloat2Fr($stats['volume_normal']),
                              $this->convertFloat2Fr($stats['volume_vt']),
