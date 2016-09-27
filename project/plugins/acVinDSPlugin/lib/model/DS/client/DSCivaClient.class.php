@@ -90,7 +90,7 @@ class DSCivaClient extends DSClient {
      }
 
     public function findByIdentifiantAndPeriode($identifiant, $periode) {
-        $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
+        $tiers = EtablissementClient::getInstance()->findByIdentifiant($identifiant);
         $tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage());
         foreach ($tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage()) as $lieu_stockage) {
             if($ds = $this->find('DS-' . $identifiant . '-' . $periode. '-' . $lieu_stockage->getNumeroIncremental())) {
@@ -130,13 +130,27 @@ class DSCivaClient extends DSClient {
     }
 
     public function getEtablissement($societe, $type_ds = null) {
+        $isCooperativeEtNego = 0;
+        foreach($societe->getEtablissementsObject() as $etablissement) {
+            if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+                $isCooperativeEtNego++;
+            }
+        }
+
+        $isCooperativeEtNego = $isCooperativeEtNego > 1;
+
         foreach($societe->getEtablissementsObject() as $etablissement) {
             if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
 
                 return $etablissement;
             }
 
-            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && !$isCooperativeEtNego && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+
+                return $etablissement;
+            }
+
+            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && $isCooperativeEtNego && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT))) {
 
                 return $etablissement;
             }
@@ -183,7 +197,6 @@ class DSCivaClient extends DSClient {
         if($type_ds == self::TYPE_DS_PROPRIETE) {
             $identifiant = $tiers->getCvi();
         }
-
         foreach ($tiers->getLieuxStockage($onlyCreate, $identifiant) as $lieux_stockage) {
             $num_lieu = $lieux_stockage->getNumeroIncremental();
             $ds = $this->findByIdentifiantPeriodeAndLieuStockage($identifiant, $periode, $num_lieu);
