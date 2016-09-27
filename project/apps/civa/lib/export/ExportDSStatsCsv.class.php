@@ -8,7 +8,7 @@ class ExportDSStatsCsv {
 
         $this->ids = $ids;
         $this->campagne = $campagne;
-        $this->config = ConfigurationClient::getConfigurationByCampagne($this->campagne);
+        $this->config = ConfigurationClient::getConfiguration();
     }
 
     public function export() {
