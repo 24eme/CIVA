@@ -3,7 +3,6 @@
 class drm_crdsActions extends drmGeneriqueActions {
 
     public function executeCrd(sfWebRequest $request) {
-        //var_dump($request->isMethod(sfRequest::POST)); exit;
         $this->initSocieteAndEtablissementPrincipal();
         $this->drm = $this->getRoute()->getDRM();
         $this->drm->crdsInitDefault();

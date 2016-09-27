@@ -21,6 +21,22 @@ class DSGenre extends BaseDSGenre {
         return $this->filter('^appellation');
     }
 
+    public function getChildrenNodeSorted() {
+        $items = $this->getChildrenNode();
+        $items_config = $this->getDocument()->declaration->getConfig()->getArrayAppellations();
+        $items_sorted = array();
+
+        foreach($items_config as $hashConfig => $item_config) {
+            $hashDS = str_replace("recolte", "declaration", HashMapper::inverse($item_config->getHash()));
+            if($this->getDocument()->exist($hashDS)) {
+                $item = $this->getDocument()->get($hashDS);
+                $items_sorted[$item->getHash()] = $item;
+            }
+        }
+
+        return $items_sorted;
+    }
+
     public function getAppellationsSorted() {
         $appellations = array();
         foreach($this->getConfig()->getArrayAppellations() as $item) {
