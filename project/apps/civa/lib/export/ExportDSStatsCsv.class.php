@@ -80,8 +80,8 @@ class ExportDSStatsCsv {
 
                 $cepage = $appellation['cepages'][$cepage_key];
 
-                $content .= sprintf($ligne, $c_appellation->getLibelleLong(),
-                                     $c_cepage->getLibelleLong(),
+                $content .= sprintf($ligne, $c_appellation->getLibelle(),
+                                     $c_cepage->getLibelle(),
                                      $this->convertFloat2Fr($cepage['volume_total']),
                                      $this->convertFloat2Fr($cepage['volume_normal']),
                                      $this->convertFloat2Fr($cepage['volume_vt']),
@@ -90,7 +90,7 @@ class ExportDSStatsCsv {
                 unset($appellation['cepages'][$cepage_key]);
             }
 
-            $content .= sprintf($ligne, $c_appellation->getLibelleLong(),
+            $content .= sprintf($ligne, $c_appellation->getLibelle(),
                                  "TOTAL",
                                  $this->convertFloat2Fr($appellation['volume_total']),
                                  $this->convertFloat2Fr($appellation['volume_normal']),
