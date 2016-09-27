@@ -64,7 +64,7 @@ class ExportDSStatsCsv {
         $ligne = "%s;%s;%s;%s;%s;%s\n";
         $configuration = $this->config;
 
-        foreach($configuration->recolte->getNoeudAppellations() as $c_appellation) {
+        foreach($configuration->declaration->getArrayAppellations() as $c_appellation) {
             if(!array_key_exists($c_appellation->getKey(), $stats['appellations'])) {
                 continue;
             }
