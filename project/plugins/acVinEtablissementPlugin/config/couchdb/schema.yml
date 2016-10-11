@@ -46,6 +46,7 @@ Etablissement:
        compte: {  }
        compte_exploitant: {  }
        num_interne: {  }
+       num_reprise: { required: false }
        raison_sociale: {  }
        nom: {  }
        intitule: {  }
