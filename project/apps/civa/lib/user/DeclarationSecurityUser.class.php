@@ -233,7 +233,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
     public function isDsEditable($type_ds = null)
     {
 
-        return (!$this->isDsTerminee($type_ds) && !$this->isDsNonOuverte($type_ds));
+        return DSCivaClient::getInstance()->isTeledeclarationOuverte();
     }
 
     public function isDsTerminee($type_ds = null)
@@ -244,7 +244,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             return true;
         }
 
-        return CurrentClient::getCurrent()->ds_non_editable == 1;
+        return DSCivaClient::getInstance()->getDateFermeture()->format('Y-m-d') > date('Y-m-d');
     }
 
     public function isDsNonOuverte($type_ds = null)

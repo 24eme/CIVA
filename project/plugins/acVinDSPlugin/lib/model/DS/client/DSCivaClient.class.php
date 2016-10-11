@@ -665,4 +665,21 @@ class DSCivaClient extends DSClient {
         }
     }
 
+    public function getDateOuverture() {
+
+        return new DateTime(sfConfig::get('app_ds_date_ouverture'));
+    }
+
+    public function getDateFermeture() {
+
+        return new DateTime(sfConfig::get('app_ds_date_fermeture'));
+    }
+
+    public function isTeledeclarationOuverte() {
+        $dateOuverture = $this->getDateOuverture();
+        $dateFermeture = $this->getDateFermeture();
+
+        return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
+    }
+
 }

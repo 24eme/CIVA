@@ -67,7 +67,7 @@ class DRSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::EDITION, $droits) && !CurrentClient::getCurrent()->isDREditable()) {
+        if(in_array(self::EDITION, $droits) && !DRClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
         }

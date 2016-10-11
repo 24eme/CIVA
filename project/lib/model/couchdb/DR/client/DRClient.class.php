@@ -281,4 +281,21 @@ class DRClient extends acCouchdbClient {
         return $totauxByAppellationsRecap;
     }
 
+    public function getDateOuverture() {
+
+        return new DateTime(sfConfig::get('app_dr_date_ouverture'));
+    }
+
+    public function getDateFermeture() {
+
+        return new DateTime(sfConfig::get('app_dr_date_fermeture'));
+    }
+
+    public function isTeledeclarationOuverte() {
+        $dateOuverture = $this->getDateOuverture();
+        $dateFermeture = $this->getDateFermeture();
+
+        return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
+    }
+
 }

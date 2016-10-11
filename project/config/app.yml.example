@@ -37,5 +37,12 @@ all:
   declarant_class: "Etablissement"
   ava:
     url: "https://url_a_remplacer.com"
+  dr:
+    date_ouverture: "Y-m-d"
+    date_fermeture: "Y-m-d"
+  ds:
+    date_ouverture: "Y-m-d"
+    date_fermeture: "Y-m-d"
+
 test:
 #  autologin: login
