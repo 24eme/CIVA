@@ -147,8 +147,8 @@ EOF;
         $societe->setInsee($this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE));
         $societe->setPays("FR");
         $societe->setStatut($statut);
-        $societe->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
-        $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
+        $societe->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : "");
+        $societe->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : "");
         $societe->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
 
         try {
@@ -221,8 +221,8 @@ EOF;
         $etablissement->setCommune($this->getInfos($tiers, Db2Tiers::COL_COMMUNE_SIEGE));
         $etablissement->setInsee($this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE));
         $etablissement->setPays("FR");
-        $etablissement->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null);
-        $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null);
+        $etablissement->setTelephoneBureau($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : "");
+        $etablissement->setFax($this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : "");
         $etablissement->setEmail($this->getInfos($tiers, Db2Tiers::COL_EMAIL));
         $etablissement->add('declaration_insee', ($this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION)) ? $this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION) : $etablissement->getInsee());
         $etablissement->add('declaration_commune', ($etablissement->declaration_insee) ? $this->getCommune($etablissement->declaration_insee    ): $etablissement->getCommune());
@@ -263,7 +263,7 @@ EOF;
         $compteExploitant->setAdresse(($adresse) ? $adresse : $etablissement->getAdresse());
         $compteExploitant->setCodePostal(($codePostal) ? $codePostal : $etablissement->getCodePostal());
         $compteExploitant->setCommune(($commune) ? $commune : $etablissement->getCommune());
-        $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null);
+        $compteExploitant->setTelephonePerso($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : "");
 
         try {
             $compteExploitant->save();
