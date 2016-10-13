@@ -57,6 +57,10 @@ class DRRecolte extends BaseDRRecolte {
 
                         continue;
                     }
+                    if(!$this->getNoeudAppellations()->add($appellation_key)->getConfig()->exist($mention_key)) {
+
+                        continue;
+                    }
                     $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
                     if (!$app->getConfig()->hasManyLieu()) {
                         $lieu = $app->add('lieu');

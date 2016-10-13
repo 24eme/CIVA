@@ -50,30 +50,54 @@ class drComponents extends sfComponents {
         $this->has_no_recapitulatif_couleur = $this->dr->recolte->getConfig()->hasNoRecapitulatifCouleur();
         $this->can_calcul_volume_revendique_sur_place = $this->dr->recolte->canCalculVolumeRevendiqueSurPlace();
         $cvi = array();
-        foreach ($this->dr->recolte->getNoeudAppellations()->getConfig()->getAppellations() as $appellation_key => $appellation_config) {
-            if ($this->dr->recolte->getNoeudAppellations()->exist("appellation_".$appellation_key)) {
-                $appellation = $this->dr->recolte->getNoeudAppellations()->get("appellation_".$appellation_key);
-                if ($appellation->getConfig()->excludeTotal()) {
-                    continue;
-                }
-                foreach($appellation->getMentions() as $mention) {
-                    $this->appellations[] = $mention->getHash();
-                    $this->libelle[$mention->getHash()] = $appellation->getConfig()->getLibelle()." ".$mention->getConfig()->getLibelle();
-                    $this->superficie[$mention->getHash()] = $mention->getTotalSuperficie();
-                    $this->volume[$mention->getHash()] = $mention->getTotalVolume();
-                    $this->volume_vendus[$mention->getHash()] = $mention->getTotalVolumeVendus();
-                    $this->revendique[$mention->getHash()] = $mention->getVolumeRevendique();
-                    $this->revendique_sur_place[$mention->getHash()] = $mention->getVolumeRevendiqueCaveParticuliere();
-                    $this->usages_industriels[$mention->getHash()] = $mention->getUsagesIndustriels();
-                    $this->usages_industriels_sur_place[$mention->getHash()] = $mention->getUsagesIndustrielsSurPlace();
-                    $this->volume_sur_place[$mention->getHash()] = $mention->getTotalCaveParticuliere();
-                    if($mention->getConfig()->hasCepageRB()) {
-                        $this->volume_rebeches[$mention->getHash()] = $mention->getTotalRebeches();
-                        $this->volume_rebeches_sur_place[$mention->getHash()] = $mention->getSurPlaceRebeches();
+
+        foreach ($this->dr->getAppellationsAvecVtsgn() as $key => $appellation) {
+            //$appellation = $this->dr->recolte->getNoeudAppellations()->get("appellation_".$appellation_key);
+
+            /*foreach($appellation->getMentions() as $mention) {*/
+                $this->appellations[$key] = $key;
+                $this->superficie[$key] = 0;
+                $this->volume[$key] = 0;
+                $this->volume_vendus[$key] = 0;
+                $this->revendique[$key] = 0;
+                $this->revendique_sur_place[$key] = 0;
+                $this->usages_industriels[$key] = 0;
+                $this->usages_industriels_sur_place[$key] = 0;
+                $this->volume_sur_place[$key] = 0;
+                $this->libelle[$key] = $appellation['libelle'];
+                $exclude = false;
+                foreach($appellation['noeuds'] as $noeud) {
+                    if ($noeud->getAppellation()->getConfig()->excludeTotal()) {
+                        $exclude = true;
+                        continue;
+                    }
+                    $this->superficie[$key] += $noeud->getTotalSuperficie();
+                    $this->volume[$key] += $noeud->getTotalVolume();
+                    $this->volume_vendus[$key] += $noeud->getTotalVolumeVendus();
+                    $this->revendique[$key] += $noeud->getVolumeRevendique();
+                    $this->revendique_sur_place[$key] += $noeud->getVolumeRevendiqueCaveParticuliere();
+                    $this->usages_industriels[$key] += $noeud->getUsagesIndustriels();
+                    $this->usages_industriels_sur_place[$key] += $noeud->getUsagesIndustrielsSurPlace();
+                    $this->volume_sur_place[$key] += $noeud->getTotalCaveParticuliere();
+                    if($noeud->getConfig()->hasCepageRB()) {
+                        if(!isset($this->volume_rebeches[$key])) {
+                            $this->volume_rebeches[$key] = 0;
+                        }
+                        if(!isset($this->volume_rebeches_sur_place[$key])) {
+                            $this->volume_rebeches_sur_place[$key] = 0;
+                        }
+                        $this->volume_rebeches[$key] += $noeud->getTotalRebeches();
+                        $this->volume_rebeches_sur_place[$key] += $noeud->getSurPlaceRebeches();
                     }
                 }
-            }
+
+                if($exclude) {
+                    unset($this->appellations[$key]);
+                }
+
+            /*}*/
         }
+
         $this->total_superficie = array_sum(array_values($this->superficie));
         $this->total_volume = array_sum(array_values($this->volume));
         if($this->dr->recolte->getTotalVolumeVendus() > 0 && !$this->has_no_usages_industriels && !$this->has_no_recapitulatif_couleur) {
@@ -100,6 +124,6 @@ class drComponents extends sfComponents {
           $this->vintable['superficie'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
           $this->vintable['volume'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
         }
-    $this->annee = $this->dr->campagne;
-  }
+        $this->annee = $this->dr->campagne;
+    }
 }

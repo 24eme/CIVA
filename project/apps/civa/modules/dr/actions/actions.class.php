@@ -344,9 +344,9 @@ class drActions extends _DRActions {
                 $this->getUser());
         }
 
-        if ($this->askRedirectToPreviousEtapes()) {
+        if ($this->askRedirectToPreviousEtapes($this->dr)) {
 
-            return $this->redirectByBoutonsEtapes();
+            return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {

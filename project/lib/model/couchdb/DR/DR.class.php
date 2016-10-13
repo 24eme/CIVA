@@ -804,12 +804,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         foreach($this->recolte->getAppellations() as $appellation) {
             $appellations[$appellation->getHash()] = null;
         }
-        $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "lieux" => array());
-        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN","lieux" => array());
+        $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "noeuds" => array(), "lieux" => array());
+        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN", "noeuds" => array(), "lieux" => array());
         foreach($this->recolte->getAppellations() as $appellation) {
-            $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array());
+            $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array(), "noeuds" => array());
             foreach($appellation->getMentions() as $mention) {
                 $key = ($mention->getKey() == "mention") ? $appellation->getHash() : $mention->getKey();
+                $appellations[$key]['noeuds'][$mention->getHash()] = $mention;
                 if($mention->getConfig()->hasManyLieu() || $mention->getKey() != "mention") {
                     foreach($mention->getLieux() as $lieu)  {
                         $appellations[$key]['lieux'][] = $lieu;
