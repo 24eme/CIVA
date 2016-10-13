@@ -1,16 +1,14 @@
 <ul id="onglets_majeurs" class="clearfix onglets_recolte">
-    <?php foreach($declaration->recolte->getMentions() as $mention): ?>
-        <?php $appellation = $mention->getAppellation(); ?>
-        <?php if ($declaration->exist(HashMapper::inverse($appellation->getHash()))): ?>
-        <li <?php if ($produit->getMention()->getHash() == HashMapper::inverse($mention->getHash())): ?>class="ui-tabs-selected"<?php endif; ?>>
-            <a href="<?php echo url_for('dr_recolte_noeud', array('id' => $declaration->_id, 'hash' => HashMapper::inverse($mention->getHash()))) ?>"><?php echo str_replace('AOC', '<span>AOC</span> <br />',$appellation->libelle) ?> <?php echo $mention->getLibelle() ?></a>
-            <?php if ($produit->getAppellation()->getConfig()->hasManyLieu() && $produit->getMention()->getHash() == HashMapper::inverse($mention->getHash())): ?>
+    <?php foreach($appellations as $appellation): ?>
+        <li <?php if (preg_match("|".$appellation['hash']."/|", $produit->getMention()->getHash()."/")): ?>class="ui-tabs-selected"<?php endif; ?>>
+            <a href="<?php echo url_for('dr_recolte_noeud', array('id' => $declaration->_id, 'hash' => $appellation['hash'])) ?>"><?php echo str_replace('AOC', '<span>AOC</span> <br />',$appellation['libelle']) ?></a>
+            <?php if (count($appellation['lieux']) > 0 && preg_match("|".$appellation['hash']."|", $produit->getMention()->getHash())): ?>
             <?php include_partial('ongletsLieux', array('declaration' => $declaration,
                                                         'produit' => $produit,
+                                                        'items' =>  $appellation['lieux'],
                                                         'appellation_key' => $produit->getAppellation()->getKey())); ?>
             <?php endif; ?>
         </li>
-        <?php endif; ?>
     <?php endforeach; ?>
         <?php if (!$declaration->recolte->getNoeudAppellations()->hasAllAppellation()): ?>
         <li class="ajouter ajouter_appelation"><a href="#">Ajouter une<br /> appellation</a></li>

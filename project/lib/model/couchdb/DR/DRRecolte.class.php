@@ -40,8 +40,23 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
+            $mentions = array();
             foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
-                foreach($appellation as $mention_key => $mention) {
+                if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
+                    $mentions[$appellation_key] = $appellation_key;
+
+                    continue;
+                }
+                $mentions["mention"] = "mention";
+
+            }
+            foreach($mentions as $mention_key => $mention) {
+                foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+                    echo $appellation_key."\n";
+                    if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
+
+                        continue;
+                    }
                     $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
                     if (!$app->getConfig()->hasManyLieu()) {
                         $lieu = $app->add('lieu');
@@ -51,8 +66,12 @@ class DRRecolte extends BaseDRRecolte {
                     }
                 }
             }
+
             $list_to_remove = array();
             foreach($this->getAppellations() as $key => $appellation) {
+                if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
+                    continue;
+                }
                 if (!$acheteurs->getNoeudAppellations()->exist($key)) {
                     $list_to_remove[] = $this->getNoeudAppellations()->get($key)->getHash();
                 }

@@ -298,4 +298,31 @@ class DRClient extends acCouchdbClient {
         return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
     }
 
+    public function getConfigAppellationsAvecVtsgn() {
+        $appellations = array();
+        $configuration = ConfigurationClient::getCurrent();
+        foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            $appellations["appellation_".$appellation->getKey()] = null;
+        }
+        $appellations["mentionVT"] = array("libelle" => "Mention VT", "mout" => false, "hash" => "mentionVT", "lieux" => array());
+        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "mout" => false, "hash" => "mentionSGN","lieux" => array());
+        foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            $hash = HashMapper::inverse($appellation->getHash());
+            $appellations["appellation_".$appellation->getKey()] = array("libelle" => $appellation->getLibelle(), "mout" => $appellation->exist('attributs/mout') && $appellation->attributs->mout, "hash" => $hash."/mention", "lieux" => array());
+            foreach($appellation->getMentions() as $mention) {
+                if($mention->getKey() != "DEFAUT") {
+                    $hash = "mention".$mention->getKey();
+                }
+                if($mention->hasManyLieu() || $mention->getKey() != "DEFAUT") {
+                    foreach($mention->getLieux() as $lieu)  {
+                        $appellations["appellation_".$appellation->getKey()]['lieux'][] = $lieu;
+                    }
+                }
+            }
+
+        }
+
+        return $appellations;
+    }
+
 }

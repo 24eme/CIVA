@@ -144,7 +144,7 @@ class drActions extends _DRActions {
 
         $this->help_popup_action = "help_popup_exploitation_acheteur";
 
-        $this->appellations = ExploitationAcheteursForm::getListeAppellations();
+        $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
         $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
         $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
         $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
@@ -174,7 +174,7 @@ class drActions extends _DRActions {
             $commune = $donnees[2];
             $mout = ($request->getParameter('acheteur_mouts', null) == '1');
 
-            $appellations_form = ExploitationAcheteursForm::getListeAppellations();
+            $appellations_form = ExploitationAcheteursForm::getListeAppellations($this->dr);
             if ($mout) {
                 $appellations_form = ExploitationAcheteursForm::getListeAppellationsMout();
             }
@@ -190,7 +190,7 @@ class drActions extends _DRActions {
             return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
                 'cvi' => $cvi,
                 'commune' => $commune,
-                'appellations' => ExploitationAcheteursForm::getListeAppellations(),
+                'appellations' => ExploitationAcheteursForm::getListeAppellations($this->dr),
                 'form_item' => $form[$name . ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
                 'mout' => $mout));
         } else {

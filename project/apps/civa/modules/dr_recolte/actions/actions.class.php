@@ -105,7 +105,21 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeud(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+
+        if(in_array($request->getParameter('hash'), array("mentionVT", "mentionSGN"))) {
+            foreach($this->declaration->recolte->getMentions() as $mention) {
+                if($mention->getKey() != $request->getParameter('hash')) {
+                    continue;
+                }
+
+                $this->noeud = $mention;
+                break;
+            }
+        }
+
+        if(!isset($this->noeud)) {
+            $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+        }
 
         if($this->noeud instanceof DRRecolteMention) {
             foreach($this->noeud->getLieux() as $lieu) {
@@ -349,11 +363,13 @@ class dr_recolteActions extends _DRActions {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->produit->getAppellation());
             $this->url_ajout_lieu = "";
         }
+
+        $this->appellations = $this->declaration->getAppellationsAvecVtsgn();
     }
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey())->get($this->produit->getMention()->getKey());
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
     }
 
     protected function initPrecDR(){

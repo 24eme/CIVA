@@ -11,6 +11,7 @@
 
 <?php include_partial('ongletsAppellations', array(
     'declaration' => $declaration,
+    'appellations' => $appellations,
     'produit' => $produit,
 )); ?>
 <div id="application_dr" class="clearfix">

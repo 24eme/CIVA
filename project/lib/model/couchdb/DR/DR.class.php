@@ -799,4 +799,27 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
       return $lignesEdi;
     }
 
+    public function getAppellationsAvecVtsgn() {
+        $appellations = array();
+        foreach($this->recolte->getAppellations() as $appellation) {
+            $appellations[$appellation->getHash()] = null;
+        }
+        $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "lieux" => array());
+        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN","lieux" => array());
+        foreach($this->recolte->getAppellations() as $appellation) {
+            $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array());
+            foreach($appellation->getMentions() as $mention) {
+                $key = ($mention->getKey() == "mention") ? $appellation->getHash() : $mention->getKey();
+                if($mention->getConfig()->hasManyLieu() || $mention->getKey() != "mention") {
+                    foreach($mention->getLieux() as $lieu)  {
+                        $appellations[$key]['lieux'][] = $lieu;
+                    }
+                }
+            }
+
+        }
+
+        return $appellations;
+    }
+
 }
