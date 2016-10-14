@@ -169,6 +169,7 @@ class dr_recolteActions extends _DRActions {
     public function executeRecapitulatif(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_recapitulatif_ventes";
         $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+        $this->appellations = $this->declaration->getAppellationsAvecVtsgn();
 
         $this->initPrecDR();
 

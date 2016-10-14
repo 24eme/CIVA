@@ -52,12 +52,11 @@ class DRRecolte extends BaseDRRecolte {
             }
             foreach($mentions as $mention_key => $mention) {
                 foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
-                    echo $appellation_key."\n";
                     if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
 
                         continue;
                     }
-                    if(!$this->getNoeudAppellations()->add($appellation_key)->getConfig()->exist($mention_key)) {
+                    if(!$this->getConfig()->getDocument()->exist(HashMapper::convert($this->getNoeudAppellations()->add($appellation_key)->getHash()."/".$mention_key))) {
 
                         continue;
                     }
@@ -72,16 +71,24 @@ class DRRecolte extends BaseDRRecolte {
             }
 
             $list_to_remove = array();
-            foreach($this->getAppellations() as $key => $appellation) {
-                if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
-                    continue;
+            foreach($this->getAppellations() as $appellation) {
+                foreach($appellation->getMentions() as $mention) {
+                    if($mention->getKey() == "mention") {
+                        continue;
+                    }
+                    if(!$acheteurs->getNoeudAppellations()->exist($mention->getKey())) {
+                        $list_to_remove[] = $mention->getHash();
+                    }
                 }
-                if (!$acheteurs->getNoeudAppellations()->exist($key)) {
-                    $list_to_remove[] = $this->getNoeudAppellations()->get($key)->getHash();
+                if (!$acheteurs->getNoeudAppellations()->exist($appellation->getKey())) {
+                    $list_to_remove[] = $appellation->getHash();
                 }
             }
             foreach ($list_to_remove as $hash_to_remove) {
-               $this->getDocument()->remove($hash_to_remove);
+                if(count($this->getDocument()->getProduitsDetails()) > 0) {
+                    continue;
+                }
+                $this->getDocument()->remove($hash_to_remove);
             }
 
         }

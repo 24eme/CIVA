@@ -7,8 +7,11 @@
 <!-- #principal -->
 			<form id="principal" action="" method="post" onsubmit="return valider_can_submit();">
             <?php echo $form->renderHiddenFields(); ?>
-            <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-                                                               'produit' => $noeud)); ?>
+			   <?php include_partial('ongletsAppellations', array(
+		   				    'declaration' => $declaration,
+		   				    'appellations' => $appellations,
+		   				    'produit' => $noeud,
+		   				)); ?>
                 <input name="is_validation_interne" type="hidden" value="0" />
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">

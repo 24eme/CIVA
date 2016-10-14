@@ -817,7 +817,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     }
                 }
             }
+        }
 
+        if(!count($appellations["mentionSGN"]["noeuds"])) {
+            unset($appellations["mentionSGN"]);
+        }
+
+        if(!count($appellations["mentionVT"]["noeuds"])) {
+            unset($appellations["mentionVT"]);
         }
 
         return $appellations;

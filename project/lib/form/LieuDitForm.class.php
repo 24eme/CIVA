@@ -17,13 +17,6 @@ class LieuDitForm extends acCouchdbObjectForm {
 
     public function doUpdateObject($values) {
         if (isset($values['lieu'])) {
-            /*if($mention->getConfig()->exist($values['lieu'])){
-                    $lieu = $mention->add($values['lieu']);
-                    foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
-
-                    }
-                }
-            }*/
             foreach($this->getObject()->getChildrenNode() as $item) {
                 $this->getObject()->getChildrenNode()->add($item->getKey())->getChildrenNode()->add($values['lieu']);
             }
