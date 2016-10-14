@@ -92,12 +92,19 @@ class CompteLdap extends acVinLdap {
     public static function getGecos($compte) {
         $noAccises = null;
 
-        if($compte->getEtablissement()) {
+        if($compte->getEtablissement() && $compte->getEtablissement()->no_accises) {
             $noAccises = $compte->getEtablissement()->no_accises;
         } else {
             foreach($compte->getSociete()->getEtablissementsObj() as $etablissement) {
-                echo $etablissement->etablissement->cvi;
                 if(preg_match("/".$etablissement->etablissement->cvi."/", $compte->getIdentifiant()) || preg_match("/C".$etablissement->etablissement->num_interne."/", $compte->getIdentifiant())) {
+                    $noAccises = $etablissement->etablissement->no_accises;
+                }
+            }
+        }
+
+        if(!$noAccises) {
+            foreach($compte->getSociete()->getEtablissementsObj() as $etablissement) {
+                if($etablissement->etablissement->no_accises) {
                     $noAccises = $etablissement->etablissement->no_accises;
                 }
             }
