@@ -4,7 +4,7 @@
 <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
 <script type="text/javascript">
-    url_ajax = '<?php echo url_for('acheteur/exploitationAcheteursTableRowItemAjax') ?>';
+    url_ajax = '<?php echo url_for('dr_repartition_acheteurs', array('id' => $dr->_id)) ?>';
 </script>
 
 <!-- #principal -->

@@ -166,6 +166,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionTableRowItemAjax(sfWebRequest $request) {
+        $this->dr = $this->getRoute()->getDR();
         if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
             $name = $request->getParameter('qualite_name');
             $donnees = $request->getParameter('donnees');

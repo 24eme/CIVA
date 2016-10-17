@@ -432,6 +432,13 @@ dr_no_recolte:
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
+dr_repartition_acheteurs:
+  url:   /dr/:id/repartition_acheteurs
+  param: { module: dr, action: repartitionTableRowItemAjax}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
 dr_recolte:
   url:   /dr/:id/recolte
   param: { module: dr_recolte, action: recolte}
