@@ -29,8 +29,8 @@ mon_espace_civa_ds:
 mon_espace_civa_gamma:
   url:   /mon_espace_civa/:identifiant/gamma
   param: { module: tiers, action: monEspaceGamma }
-  class: CompteRoute
-  options: { model: Compte, type: object }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_vrac:
@@ -282,8 +282,11 @@ compte_personne_modifier:
 # *********** GAMMA ***********
 
 gamma:
-  url:   /gamma
+  url:   /gamma/:identifiant/inscription
   param: { module: gamma, action: process }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 gamma_telecharger_la_notice:
   url:   /gamma/telecharger_la_notice

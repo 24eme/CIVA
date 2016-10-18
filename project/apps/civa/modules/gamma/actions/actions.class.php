@@ -16,27 +16,20 @@ class gammaActions extends sfActions
      */
     public function executeProcess(sfWebRequest $request) {
         $compte = $this->getUser()->getCompte();
-        $inscription = $request->getParameter('gamma_inscription');
-        $this->tiers = $this->getUser()->getTiers('MetteurEnMarche');
-	    $type = $request->getParameter('gamma') ;
+        $etablissement = $this->getRoute()->getEtablissement();
+        $isInscrit = GammaClient::getInstance()->findByEtablissement($etablissement);
 
-        if (isset($inscription) && $inscription['choix']) {
-		    $compte->add('droits')->add(null, 'gamma');
-            $compte->save();
-
-            return $this->redirect(sfConfig::get('app_gamma_url_prod'));
-	    }
-
-        if (isset($inscription) || !isset($type)) {
-
-            return $this->redirect('mon_espace_civa_gamma', $compte);
-	    }
-        if ($type['type_acces'] == 'plateforme') {
-
-            return $this->redirect(sfConfig::get('app_gamma_url_prod'));
+        if (!$isInscrit) {
+		    $gamma = GammaClient::getInstance()->createOrFind($etablissement, $compte);
+            GammaClient::getInstance()->storeDoc($gamma);
         }
 
-        return $this->redirect(sfConfig::get('app_gamma_url_qualif'));
+        if(!$compte->exist('gecos') || GammaClient::getInstance()->getGecos($compte, $etablissement) != $compte->gecos) {
+            $compte->add('gecos', GammaClient::getInstance()->getGecos($compte, $etablissement));
+            $compte->save();
+        }
+
+        return $this->redirect(sfConfig::get('app_gamma_url_prod'));
     }
 
     /**

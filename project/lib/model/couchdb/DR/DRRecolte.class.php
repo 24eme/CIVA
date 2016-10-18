@@ -72,16 +72,17 @@ class DRRecolte extends BaseDRRecolte {
 
             $list_to_remove = array();
             foreach($this->getAppellations() as $appellation) {
-                foreach($appellation->getMentions() as $mention) {
-                    if($mention->getKey() == "mention") {
+                echo $appellation->getKey()."\n";
+                foreach($mentions as $mention_key) {
+                    if($mention == "mention") {
                         continue;
                     }
-                    if(!$acheteurs->getNoeudAppellations()->exist($mention->getKey())) {
-                        $list_to_remove[] = $mention->getHash();
+                    if(!$acheteurs->getNoeudAppellations()->exist($mention_key)) {
+                        $list_to_remove[$appellation->getHash()."/".$mention_key] = $appellation->getHash()."/".$mention_key;
                     }
                 }
                 if (!$acheteurs->getNoeudAppellations()->exist($appellation->getKey())) {
-                    $list_to_remove[] = $appellation->getHash();
+                    $list_to_remove[$appellation->getHash()] = $appellation->getHash();
                 }
             }
             foreach ($list_to_remove as $hash_to_remove) {
@@ -92,6 +93,7 @@ class DRRecolte extends BaseDRRecolte {
             }
 
         }
+        exit;
     }
 
 }

@@ -5,14 +5,15 @@ class GammaSecurity implements SecurityInterface {
     const DECLARANT = 'DECLARANT';
 
     protected $compte;
+    protected $etablissement;
 
-    public static function getInstance($compte) {
+    public static function getInstance($etablissement) {
 
-        return new GammaSecurity($compte);
+        return new GammaSecurity($etablissement);
     }
 
-    public function __construct($compte) {
-        $this->compte = $compte;
+    public function __construct($etablissement) {
+        $this->etablissement = $etablissement;
     }
 
     public function isAuthorized($droits) {
@@ -22,14 +23,7 @@ class GammaSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        $hasNoAccises = false;
-        foreach($this->compte->getSociete()->getEtablissementsObject() as $etablissement) {
-            if($etablissement->no_accises) {
-                $hasNoAccises = true;
-            }
-        }
-
-        if(!$hasNoAccises) {
+        if(!$this->etablissement && !$this->etablissement->no_accises) {
 
             return false;
         }

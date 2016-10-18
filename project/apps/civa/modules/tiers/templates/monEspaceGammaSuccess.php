@@ -9,7 +9,7 @@
             <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
 
-        <?php include_partial('gamma/monEspace', array('compte' => $compte)) ?>
+        <?php include_partial('gamma/monEspace', array('compte' => $compte, 'etablissement' => $etablissement, 'isInscrit' => $isInscrit)) ?>
         <?php include_partial('gamma/monEspaceColonne') ?>
     </div>
 </div>

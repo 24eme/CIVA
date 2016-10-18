@@ -1,8 +1,8 @@
-<form id="form_gamma" action="<?php echo url_for('gamma') ?>" method="post">
+<form id="form_gamma" action="<?php echo url_for('gamma', $etablissement) ?>" method="post">
     <h3 class="titre_section">Alsace Gamm@ <a href="" class="msg_aide" rel="help_popup_mon_espace_civa_gamma" title="Message aide" doc="/gamma/telecharger_la_notice"></a></h3>
     <div class="contenu_section">
         <!--<p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_gamma'); ?></p>-->
-	<?php if (!$compte->hasDroit('gamma')) : ?>
+	<?php if (!$isInscrit) : ?>
         <div class="ligne_form">
             <input type="radio" id="gamma_type_acces_inscription" name="gamma[type_acces]" value="inscription" checked="checked" />
             <label for="gamma_type_acces_inscription">Inscription à Alsace Gamm@</label>
@@ -35,7 +35,7 @@
         <p class="warning">Attention</p>
         <p class="intro">Vous allez vous inscrire sur la plateforme réelle Alsace Gamm@ du CIVA.</p>
         <p>Avez-vous déjà adhéré à Gamm@ sur Prodouane ?</p>
-        <form id="form_gamma_inscription" action="<?php echo url_for('@gamma') ?>" method="post">
+        <form id="form_gamma_inscription" action="<?php echo url_for('gamma', $etablissement) ?>" method="post">
             <div class="ligne_form" style="text-align: center;">
                 <input type="radio" class="check_choix" id="gamma_inscription_choix_oui" name="gamma_inscription[choix]" value="1" />
                 <label for="gamma_inscription_choix_oui">Oui</label>

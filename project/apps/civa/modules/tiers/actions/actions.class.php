@@ -161,7 +161,9 @@ class tiersActions extends sfActions {
     }
 
     public function executeMonEspaceGamma(sfWebRequest $request) {
-        $this->compte = $this->getRoute()->getCompte();
+        $this->compte = $this->getUser()->getCompte();
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->isInscrit = GammaClient::getInstance()->findByEtablissement($this->etablissement);
         $this->secureTiers(TiersSecurity::GAMMA);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
