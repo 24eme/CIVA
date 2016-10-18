@@ -91,6 +91,7 @@ class CompteLdap extends acVinLdap {
 
     public static function getGecos($compte) {
         $noAccises = null;
+        $compteGecos = $compte;
 
         if($compte->getEtablissement() && $compte->getEtablissement()->no_accises) {
             $noAccises = $compte->getEtablissement()->no_accises;
@@ -98,6 +99,7 @@ class CompteLdap extends acVinLdap {
             foreach($compte->getSociete()->getEtablissementsObj() as $etablissement) {
                 if(preg_match("/".$etablissement->etablissement->cvi."/", $compte->getIdentifiant()) || preg_match("/C".$etablissement->etablissement->num_interne."/", $compte->getIdentifiant())) {
                     $noAccises = $etablissement->etablissement->no_accises;
+                    $compteGecos = $etbalissement->getContact();
                 }
             }
         }
@@ -106,10 +108,11 @@ class CompteLdap extends acVinLdap {
             foreach($compte->getSociete()->getEtablissementsObj() as $etablissement) {
                 if($etablissement->etablissement->no_accises) {
                     $noAccises = $etablissement->etablissement->no_accises;
+                    $compteGecos = $etbalissement->getContact();
                 }
             }
         }
 
-        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compte), $noAccises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
+        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compteGecos), $noAccises, ($compteGecos->getNom()) ? $compteGecos->getNom() : $compteGecos->nom_a_afficher, $compteGecos->nom_a_afficher);
     }
 }
