@@ -22,7 +22,6 @@ class LieuDitForm extends acCouchdbForm {
     }
 
     public function setup() {
-        //$lieu_choices = $this->getObject()->getLieuChoices();
         $defaults = $this->getDefaults();
 
         $formAppellations = new BaseForm();
@@ -40,10 +39,11 @@ class LieuDitForm extends acCouchdbForm {
             $formLieux = new BaseForm();
             foreach($appellation->mention->getLieux() as $lieu) {
                 $formLieux->setWidget($lieu->getKey(), new sfWidgetFormInputCheckbox(array("value_attribute_value" => "1")));
-                if(count($lieu->getProduitsDetails())) {
-                    $formLieux->getWidget($lieu->getKey())->setAttribute('readonly', 'readonly');
-                }
                 $formLieux->setValidator($lieu->getKey(), new sfValidatorBoolean());
+
+                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($appellation->getHash()."/mentionVT/".$lieu->getKey()))) {
+                    $formLieux->getWidget($lieu->getKey())->setAttribute('disabled', 'disabled');
+                }
             }
             $formLieux->setDefaults($defaults["appellations"]["lieux_vtsgn"]);
             $formAppellation->embedForm('lieux_vtsgn', $formLieux);
@@ -54,16 +54,7 @@ class LieuDitForm extends acCouchdbForm {
 
         $this->embedForm('appellations', $formAppellations);
 
-
-
-	    /*$this->setWidgets(array(
-            'lieu' => new sfWidgetFormChoice(array( 'choices'  => $lieu_choices, ))));
-
-            $this->setValidators(array(
-                'lieu' => new sfValidatorChoice(array('required' => $this->getOption('lieu_required', true), 'choices' => array_keys($lieu_choices))),
-            ));*/
-
-            $this->widgetSchema->setNameFormat('lieudit[%s]');
+        $this->widgetSchema->setNameFormat('lieudit[%s]');
     }
 
 
@@ -76,6 +67,10 @@ class LieuDitForm extends acCouchdbForm {
 
                         continue;
                     }
+                    if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($item->getHash()."/".$keyLieu))) {
+
+                        continue;
+                    }
                     if($valueLieu) {
                         $item->getChildrenNode()->add($keyLieu);
                     } elseif($item->getChildrenNode()->exist($keyLieu) && !count($item->getChildrenNode()->get($keyLieu)->getProduitsDetails())) {
@@ -85,12 +80,18 @@ class LieuDitForm extends acCouchdbForm {
 
             }
         }
+
         foreach($values['appellations'] as $hashAppellation => $valuesAppellation) {
             if (!isset($valuesAppellation['ajout'])) {
                 continue;
             }
             foreach($this->getDocument()->get($hashAppellation)->mentions as $item) {
-                $item->getChildrenNode()->add($valuesAppellation['ajout']);
+                $keyLieu = $valuesAppellation['ajout'];
+                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($item->getHash()."/".$keyLieu))) {
+
+                    continue;
+                }
+                $item->getChildrenNode()->add($keyLieu);
             }
         }
     }

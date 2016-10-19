@@ -9,7 +9,7 @@
                 <?php foreach ($appellation->mention->getLieux() as $k => $l) : ?>
                     <li><?php echo $l->getLibelle(); ?>
                         <?php if(count($l->getProduitsDetails())): ?>
-                            <a onclick="alert(\"Ce lieu-dit ne pas être supprimé car il a des colonnes saisies\")" style="position: relative; float: right;  top: 2px; right: 0; margin-left: 70px; opacity: 0.5;" class="supprimer" href=""><img alt="Supprimer" src="/images/pictos/pi_supprimer.png"></a>
+                            <a onclick="alert('Ce lieu-dit ne pas être supprimé car il a des colonnes saisies'); return false;" style="position: relative; float: right;  top: 2px; right: 0; margin-left: 70px; opacity: 0.5;" class="supprimer" href="#"><img alt="Supprimer" src="/images/pictos/pi_supprimer.png"></a>
                         <?php else: ?>
                             <a style="position: relative; float: right;  top: 2px; right: 0; margin-left: 70px;" class="supprimer" href="<?php echo url_for('dr_repartition_lieu_delete', array('hash' => $appellation->getHash(),  'lieu' => $k, 'id' => $dr->_id)); ?>"><img alt="Supprimer" src="/images/pictos/pi_supprimer.png"></a>
                         <?php endif; ?>
