@@ -346,6 +346,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         //return acCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
     }
 
+    public function getConfiguration() {
+
+        return $this->getConfigurationCampagne();
+    }
+
     public function setCampagne($campagne) {
         //$nextCampagne = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
         $nextCampagne = ConfigurationClient::getConfiguration();
@@ -801,18 +806,34 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getAppellationsAvecVtsgn() {
         $appellations = array();
-        foreach($this->recolte->getAppellations() as $appellation) {
-            $appellations[$appellation->getHash()] = null;
+        foreach($this->getConfiguration()->declaration->getArrayAppellations() as $appellationConfig) {
+            $hash = HashMapper::inverse($appellationConfig->getHash());
+            if(!$this->exist($hash)) {
+                continue;
+            }
+            $appellations[$hash] = null;
         }
+
         $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "noeuds" => array(), "lieux" => array());
         $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN", "noeuds" => array(), "lieux" => array());
-        foreach($this->recolte->getAppellations() as $appellation) {
+
+        foreach($appellations as $hash => $null) {
+            if(!$this->exist($hash)) {
+                continue;
+            }
+            $appellation = $this->get($hash);
+
             $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array(), "noeuds" => array());
             foreach($appellation->getMentions() as $mention) {
                 $key = ($mention->getKey() == "mention") ? $appellation->getHash() : $mention->getKey();
                 $appellations[$key]['noeuds'][$mention->getHash()] = $mention;
                 if($mention->getConfig()->hasManyLieu() || $mention->getKey() != "mention") {
-                    foreach($mention->getLieux() as $lieu)  {
+                    foreach($mention->getConfig()->getLieux() as $lieuConfig)  {
+                        $hashLieu = HashMapper::inverse($lieuConfig->getHash());
+                        if(!$this->exist($hashLieu)) {
+                            continue;
+                        }
+                        $lieu = $this->get($hashLieu);
                         $appellations[$key]['lieux'][] = $lieu;
                     }
                 }
