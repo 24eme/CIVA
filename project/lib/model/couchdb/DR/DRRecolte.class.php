@@ -93,7 +93,6 @@ class DRRecolte extends BaseDRRecolte {
             }
 
         }
-        exit;
     }
 
 }

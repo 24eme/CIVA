@@ -3,13 +3,16 @@
 
 
 <form id="principal" action="<?php echo url_for('dr_repartition_lieu', $dr) ?>" method="post">
+    <?php echo $form->renderHiddenFields(); ?>
+    <?php echo $form->renderGlobalErrors(); ?>
+    
     <ul id="onglets_majeurs" class="clearfix">
         <li class="ui-tabs-selected"><a href="#exploitation_acheteurs">Répartition de la récolte</a></li>
     </ul>
 
     <div id="application_dr" class="clearfix">
-        <?php foreach($appellations as $key => $appellation): ?>
-            <?php include_partial('dr/formLieu', array('appellation' => $appellation, 'form' => $forms[$key], 'dr' => $dr)) ?>
+        <?php foreach($form['appellations'] as $hash => $formAppellation): ?>
+            <?php include_partial('dr/formLieu', array('appellation' => $dr->get($hash), 'form' => $formAppellation, 'dr' => $dr)) ?>
         <?php endforeach; ?>
     </div>
 

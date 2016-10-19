@@ -205,73 +205,55 @@ class drActions extends _DRActions {
         $this->appellations = array();
         $this->forms = array();
         $this->dr = $this->getRoute()->getDR();
+        $this->form = new LieuDitForm($this->dr);
 
-        foreach ($this->dr->recolte->getAppellations() as $appellation) {
-
-            if ($appellation->getConfig()->hasManyLieu()) {
-                $this->appellations[$appellation->getKey()] = $appellation;
-                $lieux = array();
-                foreach ($appellation->getLieux() as $key => $lieu) {
-                    $lieux[$key] = $lieu->getLibelle()." ".$lieu->getMention()->getConfig()->getLibelle();
-               }
-
-                $form = new LieuDitForm($appellation, array('lieu_required' => !(count($lieux) > 0), 'lieux' => $lieux));
-                $this->forms[$appellation->getKey()] = $form;
-            }
-        }
-
-        if (count($this->appellations) == 0) {
+        /*if (count($this->appellations) == 0) {
             if ($this->hasRequestParameter('from_recolte')) {
                 return $this->redirectToPreviousEtapes($this->dr);
             } else {
                 return $this->redirectToNextEtapes($this->dr);
             }
+        }*/
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
         }
 
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $valid = true;
-            if ($request->getParameter('boutons')) {
-                foreach($this->forms as $form) {
-                    $form->bind($request->getParameter($form->getName()));
-                    if ($form->isValid()) {
-                        $form->save();
-                    } else {
-                        $valid = false;
-                    }
-                }
-            } else {
-                foreach($this->forms as $form) {
-              if ($request->getParameter($form->getName().'_x') && $request->getParameter($form->getName().'_y')) {
-                        $form->bind($request->getParameter($form->getName()));
-                        if ($form->isValid()) {
-                            $form->save();
-                        } else {
-                            $valid = false;
-                        }
-                    }
-                }
-            }
-            if ($valid) {
-                return $this->redirectByBoutonsEtapes(null, $this->dr);
-            }
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
         }
+
+        $this->form->save();
+
+        return $this->redirectByBoutonsEtapes(null, $this->dr);
+
     }
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {
         $declaration = $this->getRoute()->getDR();
         $hash = $request->getParameter('hash');
+        $lieu = $request->getParameter('lieu');
+
 
         if(!$declaration->exist($hash)) {
 
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        if(!$declaration->get($hash) instanceof DRRecolteLieu) {
+        if(!$declaration->get($hash) instanceof DRRecolteAppellation) {
 
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        $declaration->remove($hash);
+        foreach($declaration->get($hash)->getMentions() as $mention) {
+
+            $mention->getLieux()->remove($lieu);
+        }
+
         $declaration->save();
 
         return $this->redirect('dr_repartition_lieu', $declaration);
