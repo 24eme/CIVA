@@ -72,9 +72,8 @@ class DRRecolte extends BaseDRRecolte {
 
             $list_to_remove = array();
             foreach($this->getAppellations() as $appellation) {
-                echo $appellation->getKey()."\n";
                 foreach($mentions as $mention_key) {
-                    if($mention == "mention") {
+                    if($mention_key == "mention") {
                         continue;
                     }
                     if(!$acheteurs->getNoeudAppellations()->exist($mention_key)) {
@@ -86,12 +85,11 @@ class DRRecolte extends BaseDRRecolte {
                 }
             }
             foreach ($list_to_remove as $hash_to_remove) {
-                if(count($this->getDocument()->getProduitsDetails()) > 0) {
+                if(count($this->getDocument()->get($hash_to_remove)->getProduitsDetails()) > 0) {
                     continue;
                 }
                 $this->getDocument()->remove($hash_to_remove);
             }
-
         }
     }
 
