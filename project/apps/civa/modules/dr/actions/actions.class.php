@@ -259,7 +259,7 @@ class drActions extends _DRActions {
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        if(count($declaration->get($hash)->getProduitsDetails())) {
+        if($declaration->get($hash)->hasDetailsInLieu($lieu)) {
 
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
