@@ -41,7 +41,7 @@ class LieuDitForm extends acCouchdbForm {
                 $formLieux->setWidget($lieu->getKey(), new sfWidgetFormInputCheckbox(array("value_attribute_value" => "1")));
                 $formLieux->setValidator($lieu->getKey(), new sfValidatorBoolean());
 
-                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($appellation->getHash()."/mentionVT/".$lieu->getKey()))) {
+                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($appellation->getHash()."/mentionVT/".$lieu->getKey())) ) {
                     $formLieux->getWidget($lieu->getKey())->setAttribute('disabled', 'disabled');
                 }
             }

@@ -259,8 +259,12 @@ class drActions extends _DRActions {
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        foreach($declaration->get($hash)->getMentions() as $mention) {
+        if(count($declaration->get($hash)->getProduitsDetails())) {
 
+            return $this->redirect('dr_repartition_lieu', $declaration);
+        }
+
+        foreach($declaration->get($hash)->getMentions() as $mention) {
             $mention->getLieux()->remove($lieu);
         }
 

@@ -72,7 +72,7 @@ class DRRecolte extends BaseDRRecolte {
 
             $list_to_remove = array();
             foreach($this->getAppellations() as $appellation) {
-                foreach($mentions as $mention_key) {
+                foreach($appellation->getMentions() as $mention_key => $mention) {
                     if($mention_key == "mention") {
                         continue;
                     }
