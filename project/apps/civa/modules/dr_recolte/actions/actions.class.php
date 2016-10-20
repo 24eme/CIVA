@@ -122,15 +122,33 @@ class dr_recolteActions extends _DRActions {
         }
 
         if($this->noeud instanceof DRRecolteMention) {
-            foreach($this->noeud->getLieux() as $lieu) {
-                $this->noeud = $lieu;
+            foreach($this->noeud->getConfig()->getLieux() as $lieuConfig) {
+                $hash = HashMapper::inverse($lieuConfig->getHash());
+                if(!$this->declaration->exist($hash)) {
+
+                    continue;
+                }
+                $this->noeud = $this->declaration->get(HashMapper::inverse($lieuConfig->getHash()));
                 break;
             }
         }
 
-        foreach($this->noeud->getConfig()->getProduits() as $produit) {
+        foreach($this->noeud->getConfig()->getProduits() as $produitConfig) {
+            if($produitConfig->exist('attributs/no_dr') && $produitConfig->get('attributs/no_dr')) {
+                continue;
+            }
 
-            return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => HashMapper::inverse($produit->getHash())));
+            $hash = HashMapper::inverse($produitConfig->getHash());
+
+            if (!count($this->noeud->getProduitsDetails())) {
+
+                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+            }
+
+            if($this->declaration->exist($hash) && count($this->declaration->get($hash)->getProduitsDetails())) {
+
+                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+            }
         }
     }
 
