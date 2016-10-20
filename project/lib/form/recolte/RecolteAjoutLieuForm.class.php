@@ -28,8 +28,7 @@
 
         public function doUpdateObject($values) {
             $lieu = $this->getObject()->mention->add($values['lieu']);
-	    foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
-	      $lieu->add($k);
-	    }
+
+            $this->values['lieu_hash'] = $lieu->getHash();
         }
     }

@@ -520,7 +520,7 @@ dr_recolte_add_appellation:
   requirements: { sf_method: [get, post] }
 
 dr_recolte_add_lieu:
-  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_lieu
+  url:    /dr/:id/recolte/ajout_lieu
   param: { module: dr_recolte, action: ajoutLieuAjax }
   class: DRRoute
   options: { model: DR, type: object }

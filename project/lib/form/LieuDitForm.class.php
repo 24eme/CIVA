@@ -4,6 +4,7 @@ class LieuDitForm extends acCouchdbForm {
 
     public function setDefaults($defaults)
     {
+        $defaults["appellations"] = array("lieux_vtsgn" => array());
         foreach ($this->getDocument()->recolte->getAppellations() as $appellation) {
             if (!$appellation->getConfig()->hasManyLieu()) {
                 continue;

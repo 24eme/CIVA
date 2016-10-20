@@ -233,10 +233,10 @@ class dr_recolteActions extends _DRActions {
             if ($this->form_ajout_appellation->isValid()) {
                 $this->form_ajout_appellation->save();
                 if ($this->form_ajout_appellation->needLieu()) {
-                    $request->setParameter('force_appellation', $this->form_ajout_appellation->getValue('appellation'));
+                    $request->setParameter('force_appellation', $this->form_ajout_appellation->getValue('appellation_hash'));
                     $request->setMethod(sfWebRequest::GET);
-                    $this->forward('recolte', 'ajoutLieuAjax');
-                    //return $this->redirect(array_merge($this->onglets->getUrl('dr_recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
+
+                    return $this->forward('dr_recolte', 'ajoutLieuAjax');
                 } else {
                     return $this->renderText(json_encode(array('action' => 'redirect',
                             'data' => $this->generateUrl('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' =>  $this->form_ajout_appellation->getValue('appellation_hash'))))));
@@ -250,26 +250,25 @@ class dr_recolteActions extends _DRActions {
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-
-        $this->initOnglets($request);
+        $this->initDetails();
 
         if ($request->hasParameter('force_appellation')) {
-            $this->forward404Unless($this->declaration->recolte->getNoeudAppellations()->getConfig()->exist($request->getParameter('force_appellation')));
-            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('dr_recolte_add_lieu', null, null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->getNoeudAppellations()->add($request->getParameter('force_appellation')));
+            $this->url_ajout_lieu = $this->generateUrl('dr_recolte_add_lieu', array('force_appellation' => $request->getParameter('force_appellation'), 'id' => $this->declaration->_id));
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->get($request->getParameter('force_appellation'))->getAppellation());
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form_ajout_lieu->bind($request->getParameter($this->form_ajout_lieu->getName()));
             if ($this->form_ajout_lieu->isValid()) {
                 $this->form_ajout_lieu->save();
+
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                        'data' => $this->generateUrl('dr_recolte_add', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
+                        'data' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->declaration->_id, 'hash' => $this->form_ajout_lieu->getValue('lieu_hash'))))));
             }
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
+                'data' => $this->getPartial('ajoutLieuForm', array('form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
     }
 
     public function executeAjoutAcheteurAjax(sfWebRequest $request) {
@@ -364,7 +363,7 @@ class dr_recolteActions extends _DRActions {
         $this->url_ajout_lieu = null;
         if (isset($this->produit) && $this->produit->getAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->produit->getAppellation());
-            $this->url_ajout_lieu = "";
+            $this->url_ajout_lieu = $this->generateUrl('dr_recolte_add_lieu', array('id' => $this->declaration->_id, 'force_appellation' => $this->produit->getMention()->getHash()));
         }
 
         $this->appellations = $this->declaration->getAppellationsAvecVtsgn();

@@ -47,7 +47,8 @@
             $this->getObject()->getCouchdbDocument()->acheteurs->getNoeudAppellations()->add($appellation_key)->cave_particuliere = 1;
             $this->getObject()->getCouchdbDocument()->update(array('from_acheteurs'));
             $this->values['appellation_hash'] = $appellationsConfig[$appellation_key]["hash"];
-            $this->_need_lieu = false;
+
+            $this->_need_lieu = $this->getObject()->getCouchdbDocument()->get($this->values['appellation_hash'])->getConfig()->hasManyLieu();;
             /*if ($config_appellation->mention->exist('lieu')) {
                 $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->mention->add('lieu');
                 foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {

@@ -216,7 +216,6 @@ class drActions extends _DRActions {
             $hasLieu = true;
             break;
         }
-
         if (!$hasLieu) {
             if ($this->hasRequestParameter('from_recolte')) {
                 return $this->redirectToPreviousEtapes($this->dr);
