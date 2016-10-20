@@ -807,6 +807,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getAppellationsAvecVtsgn() {
         $appellations = array();
         foreach($this->getConfiguration()->declaration->getArrayAppellations() as $appellationConfig) {
+            if($appellationConfig->getKey() == "PINOTNOIR") {
+                $appellations["mentionVT"] = null;
+                $appellations["mentionSGN"] = null;
+            }
             $hash = HashMapper::inverse($appellationConfig->getHash());
             if(!$this->exist($hash)) {
                 continue;

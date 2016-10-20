@@ -302,11 +302,18 @@ class DRClient extends acCouchdbClient {
         $appellations = array();
         $configuration = ConfigurationClient::getCurrent();
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            if($appellation->getKey() == "PINOTNOIR") {
+                $appellations["mentionVT"] = null;
+                $appellations["mentionSGN"] = null;
+            }
+
             if(!in_array($appellation->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
                 continue;
             }
+
             $appellations["appellation_".$appellation->getKey()] = null;
         }
+
         $appellations["mentionVT"] = array("libelle" => "Mention VT", "mout" => false, "hash" => "mentionVT", "lieux" => array());
         $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "mout" => false, "hash" => "mentionSGN","lieux" => array());
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
