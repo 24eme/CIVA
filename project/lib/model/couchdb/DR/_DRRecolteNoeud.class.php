@@ -761,12 +761,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function cleanAllNodes() {
         $keys_to_delete = array();
-        foreach($this->getChildrenNodeSorted() as $item) {
+        foreach($this->getChildrenNode() as $item) {
             $item->cleanAllNodes();
-
             if(!count($item->getProduitsDetails())){
-                $this->remove($item->getKey());
+                $keys_to_delete[$item->getKey()] = $item->getKey();
             }
+        }
+
+        foreach($keys_to_delete as $key) {
+            $this->remove($key);
         }
     }
 
