@@ -226,10 +226,10 @@ class dr_recolteActions extends _DRActions {
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-        $this->initOnglets($request);
+        $this->initDetails();
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form_ajout_appellation ->bind($request->getParameter($this->form_ajout_appellation->getName()));
+            $this->form_ajout_appellation->bind($request->getParameter($this->form_ajout_appellation->getName()));
             if ($this->form_ajout_appellation->isValid()) {
                 $this->form_ajout_appellation->save();
                 if ($this->form_ajout_appellation->needLieu()) {
@@ -239,7 +239,7 @@ class dr_recolteActions extends _DRActions {
                     //return $this->redirect(array_merge($this->onglets->getUrl('dr_recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
                 } else {
                     return $this->renderText(json_encode(array('action' => 'redirect',
-                            'data' => $this->generateUrl('dr_recolte_add', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
+                            'data' => $this->generateUrl('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' =>  $this->form_ajout_appellation->getValue('appellation_hash'))))));
                 }
             }
         }
@@ -349,8 +349,10 @@ class dr_recolteActions extends _DRActions {
     }
 
     protected function initDetails() {
-        $this->details = $this->produit->add('detail');
-        $this->nb_details_current = $this->details->count();
+        if(isset($this->produit)) {
+            $this->details = $this->produit->add('detail');
+            $this->nb_details_current = $this->details->count();
+        }
 
         $this->detail_key = null;
         $this->detail_action_mode = null;
@@ -360,7 +362,7 @@ class dr_recolteActions extends _DRActions {
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
         $this->form_ajout_lieu = null;
         $this->url_ajout_lieu = null;
-        if ($this->produit->getAppellation()->getConfig()->hasManyLieu()) {
+        if (isset($this->produit) && $this->produit->getAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->produit->getAppellation());
             $this->url_ajout_lieu = "";
         }

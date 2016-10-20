@@ -1,6 +1,5 @@
 <div id="<?php echo $id ?>" class="popup_ajout" title="<?php echo $title ?>">
     <form action="<?php echo $action ?>" method="post">
-
         <input type="hidden" name="type_cssclass" value="<?php echo $cssclass ?>" />
         <input type="hidden" name="type_name_field" value="<?php echo $name ?>" />
 
@@ -12,5 +11,5 @@
         <input type="image" name="" src="/images/boutons/btn_valider.png" alt="Valider" />
         <span class="valider-loading"></span>
     </form>
-    
+
 </div>

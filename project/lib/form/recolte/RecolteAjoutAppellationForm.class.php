@@ -23,17 +23,18 @@
         }
 
         protected function updateDefaultsFromObject() {
-            
+
         }
 
         public function getAppellationChoices() {
             if (is_null($this->_appellation_choices)) {
                 $this->_appellation_choices = array();
-
-                foreach ($this->getObject()->getNoeudAppellations()->getConfig()->getChildrenNode() as $key => $item) {
-                    if (!$this->getObject()->getNoeudAppellations()->exist($key)) {
-                        $this->_appellation_choices[$key] = $item->getLibelle();
+                $appellations = $this->getObject()->getDocument()->getAppellationsAvecVtsgn();
+                foreach (DRClient::getInstance()->getConfigAppellationsAvecVtsgn() as $key => $item) {
+                    if(array_key_exists(str_replace("/mention", "", $item["hash"]), $appellations)) {
+                        continue;
                     }
+                    $this->_appellation_choices[$key] = $item["libelle"];
                 }
             }
 
@@ -42,11 +43,12 @@
 
         public function doUpdateObject($values) {
             $appellation_key = $values['appellation'];
-                $config_appellation = $this->getObject()->getNoeudAppellations()->getConfig()->get($appellation_key);
-
+            $appellationsConfig = DRClient::getInstance()->getConfigAppellationsAvecVtsgn();
             $this->getObject()->getCouchdbDocument()->acheteurs->getNoeudAppellations()->add($appellation_key)->cave_particuliere = 1;
-
-            if ($config_appellation->mention->exist('lieu')) {
+            $this->getObject()->getCouchdbDocument()->update(array('from_acheteurs'));
+            $this->values['appellation_hash'] = $appellationsConfig[$appellation_key]["hash"];
+            $this->_need_lieu = false;
+            /*if ($config_appellation->mention->exist('lieu')) {
                 $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->mention->add('lieu');
                 foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
                   $lieu->add($k);
@@ -54,7 +56,7 @@
                 $this->_need_lieu = false;
             } else {
                 $this->_need_lieu = true;
-            }
+            }*/
         }
 
         public function needLieu() {

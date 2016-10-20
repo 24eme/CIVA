@@ -513,7 +513,7 @@ dr_recolte_motif_non_recolte:
   requirements: { sf_method: [get, post] }
 
 dr_recolte_add_appellation:
-  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_appellation
+  url:    /dr/:id/recolte/ajout_appellation
   param: { module: dr_recolte, action: ajoutAppellationAjax }
   class: DRRoute
   options: { model: DR, type: object }
@@ -527,7 +527,7 @@ dr_recolte_add_lieu:
   requirements: { sf_method: [get, post] }
 
 dr_recolte_add_acheteur:
-  url:   dr/:id/recolte/:appellation_lieu/:couleur_cepage/add_acheteur
+  url:   dr/:id/recolte/ajout_acheteur
   param: { module: dr_recolte, action: ajoutAcheteurAjax }
   class: DRRoute
   options: { model: DR, type: object }

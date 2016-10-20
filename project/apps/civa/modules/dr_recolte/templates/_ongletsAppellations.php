@@ -10,7 +10,7 @@
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
-        <?php if (!$declaration->recolte->getNoeudAppellations()->hasAllAppellation()): ?>
+        <?php if (!$declaration->hasAppellationsAvecVtsgn()): ?>
         <li class="ajouter ajouter_appelation"><a href="#">Ajouter une<br /> appellation</a></li>
         <?php endif; ?>
 </ul>

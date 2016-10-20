@@ -804,6 +804,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
       return $lignesEdi;
     }
 
+    public function hasAppellationsAvecVtsgn() {
+
+        return count($this->getAppellationsAvecVtsgn()) >= count(DRClient::getInstance()->getConfigAppellationsAvecVtsgn());
+    }
+
     public function getAppellationsAvecVtsgn() {
         $appellations = array();
         foreach($this->getConfiguration()->declaration->getArrayAppellations() as $appellationConfig) {
