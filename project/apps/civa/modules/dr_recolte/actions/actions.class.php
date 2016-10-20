@@ -163,15 +163,17 @@ class dr_recolteActions extends _DRActions {
 
     public function executeProduitCorrepondanceMention(sfWebRequest $request) {
         $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $request->getParameter('hash'));
+        $hashMentionConfig = HashMapper::convert($hashMention);
 
-        if($this->declaration->getConfig()->exist(HashMapper::convert($hashMention))) {
+        if($this->declaration->getConfig()->exist(HashMapper::convert($hashMention)) &&
+           $this->declaration->exist(HashMapper::inverse($this->declaration->getConfig()->get($hashMentionConfig)->getLieu()->getHash()))) {
             return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $hashMention));
         }
 
         $noeud = $this->declaration->getOrAdd($request->getParameter('hash'))->getLieu();
         $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $noeud->getHash());
 
-        if(!$this->declaration->exist(HashMapper::convert($hashMention))) {
+        if(!$this->declaration->exist($hashMention)) {
 
             return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $request->getParameter('hash_fallback')));
         }

@@ -1624,6 +1624,21 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin-top: 18px;
 }
 
+#gestion_recolte ul#liste_sepages > li.raccourci_mention {
+	margin-top: 20px;
+}
+
+#gestion_recolte ul#liste_sepages li.raccourci_mention {
+	opacity: 0.8;
+	background: #666;
+	border-color: #999;
+}
+
+#gestion_recolte ul#liste_sepages li.raccourci_mention a {
+	color: #fff;
+	font-weight: bold;
+}
+
 #gestion_recolte ul#liste_sepages li a {
 	color: #666666;
 	display: block;
