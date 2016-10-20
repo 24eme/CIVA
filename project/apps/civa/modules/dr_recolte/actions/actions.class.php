@@ -123,7 +123,6 @@ class dr_recolteActions extends _DRActions {
 
         if($this->noeud instanceof DRRecolteMention) {
             foreach($this->noeud->getLieux() as $lieu) {
-
                 $this->noeud = $lieu;
                 break;
             }
@@ -351,6 +350,9 @@ class dr_recolteActions extends _DRActions {
         if(isset($this->produit)) {
             $this->details = $this->produit->add('detail');
             $this->nb_details_current = $this->details->count();
+            foreach($this->produit->getLieu()->getConfig()->getCouleurs() as $couleur) {
+                $this->declaration->getOrAdd(HashMapper::inverse($couleur->getHash()));
+            }
         }
 
         $this->detail_key = null;
