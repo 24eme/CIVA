@@ -346,6 +346,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         //return acCouchdbManager::getClient('Configuration')->getConfiguration($this->campagne);
     }
 
+    public function getConfig() {
+
+        return $this->getConfigurationCampagne();
+    }
+
     public function getConfiguration() {
 
         return $this->getConfigurationCampagne();

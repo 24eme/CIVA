@@ -105,6 +105,14 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeud(sfWebRequest $request) {
+        if(
+        preg_match("|(mention[A-Z]*)|", $request->getParameter('origine'), $matchesOrigine) &&
+        preg_match("|(mention[A-Z]*)|", $request->getParameter('hash'), $matchesDestination) &&
+        $matchesOrigine[1] != $matchesDestination[1] &&
+        preg_match("|".str_replace($matchesDestination[1], $matchesOrigine[1], $request->getParameter('hash'))."|",  $request->getParameter('origine'))) {
+
+            return $this->redirect("dr_recolte_correspondance_mention", array('id' => $this->declaration->_id, 'hash' => $request->getParameter('origine'), 'mention' => $matchesDestination[1], 'hash_fallback' => $request->getParameter('hash')));
+        }
 
         if(in_array($request->getParameter('hash'), array("mentionVT", "mentionSGN"))) {
             foreach($this->declaration->recolte->getMentions() as $mention) {
@@ -116,6 +124,7 @@ class dr_recolteActions extends _DRActions {
                 break;
             }
         }
+
 
         if(!isset($this->noeud)) {
             $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
@@ -150,6 +159,24 @@ class dr_recolteActions extends _DRActions {
                 return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
             }
         }
+    }
+
+    public function executeProduitCorrepondanceMention(sfWebRequest $request) {
+        $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $request->getParameter('hash'));
+
+        if($this->declaration->getConfig()->exist(HashMapper::convert($hashMention))) {
+            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $hashMention));
+        }
+
+        $noeud = $this->declaration->getOrAdd($request->getParameter('hash'))->getLieu();
+        $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $noeud->getHash());
+
+        if(!$this->declaration->exist(HashMapper::convert($hashMention))) {
+
+            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $request->getParameter('hash_fallback')));
+        }
+
+        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $hashMention));
     }
 
     public function executeProduitNoeudPrecedent(sfWebRequest $request) {

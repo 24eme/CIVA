@@ -20,6 +20,16 @@
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endforeach; ?>
+    <?php if($produit->getMention()->getKey() != "mention" && $produit->getAppellation()->getMentions()->exist('mention')): ?>
+    <li class="raccourci_mention"><a href="<?php echo url_for('dr_recolte_correspondance_mention', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'mention' => 'mention')) ?>">Hors&nbsp;mention</a></li>
+    <?php endif; ?>
+    <?php if($produit->getMention()->getKey() != "mentionVT" && $produit->getAppellation()->getMentions()->exist('mentionVT')): ?>
+    <li class="raccourci_mention"><a href="<?php echo url_for('dr_recolte_correspondance_mention', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'mention' => 'mentionVT')) ?>">Mention VT</a></li>
+    <?php endif; ?>
+    <?php if($produit->getMention()->getKey() != "mentionSGN" && $produit->getAppellation()->getMentions()->exist('mentionSGN')): ?>
+    <li class="raccourci_mention"><a href="<?php echo url_for('dr_recolte_correspondance_mention', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'mention' => 'mentionSGN')) ?>">Mention SGN</a></li>
+    <?php endif; ?>
+
     <!--<li class="alerte"><a href="#">Rebêche <span></span></a></li>-->
     <li class="recapitulatif <?php if ($recapitulatif): ?> ui-tabs-selected<?php endif; ?>" ><a href="<?php echo url_for("dr_recolte_recapitulatif", array('sf_subject' => $produit->getDocument(), "hash" => $produit->getLieu()->getHash())) ?>">Récap. des<br />Ventes&nbsp;et<br />Vol.&nbsp;à&nbsp;détruire<span></span></a></li>
 </ul>
