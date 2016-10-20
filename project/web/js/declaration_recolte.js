@@ -1030,12 +1030,12 @@ var volumeOnChange = function(input) {
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
-        var val = (parseFloat($('#appellation_total_volume').val()) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
+        var val = ((parseFloat($('#appellation_total_volume').val()) - (parseFloat($('#appellation_lies').val()))) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
     }
     $('#appellation_current_rendement').html(val.replace(/\..*/, ''));
     val = parseFloat($('#cepage_total_volume').val())+'';
     if (parseFloat($('#cepage_total_superficie').val()) > 0) {
-        val = (parseFloat($('#cepage_total_volume').val()) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
+        val = ((parseFloat($('#cepage_total_volume').val()) - (parseFloat($('#cepage_lies').val()))) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
     }
     $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
 

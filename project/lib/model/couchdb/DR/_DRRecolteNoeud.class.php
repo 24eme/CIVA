@@ -60,7 +60,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
-            return round($this->getTotalVolume() / ($this->getTotalSuperficie() / 100), 0);
+            return round(($this->getTotalVolume() - $this->getLiesTotal()) / ($this->getTotalSuperficie() / 100), 0);
         } else {
             return 0;
         }
@@ -264,6 +264,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     public function getUsagesIndustrielsTotal() {
 
         return $this->getDataByFieldAndMethod('usages_industriels_total', array($this, 'getSumNoeudFields'), true, array('usages_industriels'));
+    }
+
+    public function getLiesTotal() {
+
+        return $this->getDataByFieldAndMethod('lies_total', array($this, 'getSumNoeudFields'), true, array('lies'));
     }
 
     public function canHaveUsagesLiesSaisi() {
@@ -761,12 +766,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function cleanAllNodes() {
         $keys_to_delete = array();
-        foreach($this->getChildrenNodeSorted() as $item) {
+        foreach($this->getChildrenNode() as $item) {
             $item->cleanAllNodes();
-
             if(!count($item->getProduitsDetails())){
-                $this->remove($item->getKey());
+                $keys_to_delete[$item->getKey()] = $item->getKey();
             }
+        }
+
+        foreach($keys_to_delete as $key) {
+            $this->remove($key);
         }
     }
 

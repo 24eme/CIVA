@@ -9,7 +9,7 @@
                 <tr>
                     <th><img src="/images/textes/appelations.png" alt="Appellations" /></th>
    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) :?>
-                    <th id="recap_th_<?php echo $a ?>"><?php echo preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a]); ?></th>
+                    <th id="recap_th_<?php echo $a ?>"><?php echo preg_replace('/(AOC|Vin de table|Mention)/', '<span>\1</span>', $libelle[$a]); ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>

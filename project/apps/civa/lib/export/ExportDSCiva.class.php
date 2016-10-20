@@ -85,15 +85,15 @@ class ExportDSCiva {
 
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
-        
-        foreach ($produitsAgreges as $code_douane => $obj) {  
+
+        foreach ($produitsAgreges as $code_douane => $obj) {
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
         }
-        
+
         if ($ds->hasRebechesForXML()) {
             $lignes .= $this->addXMLDSRebeches($ds);
         }
-        
+
         $lignes .= $this->addXMLDSMouts($ds);
         return $lignes;
     }
@@ -112,7 +112,7 @@ class ExportDSCiva {
         foreach ($products as $app_produit => $produit) {
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             if ($appellation_key == 'VINTABLE' && !$xml){
-               continue;                
+               continue;
             }
             if (!$vtsgn || $produit->hasVtsgn()) {
                 $code_douane = $this->getCodeDouane($produit,'',$xml);
@@ -190,7 +190,8 @@ class ExportDSCiva {
     protected function makeEnteteLigne($ds) {
         $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
 //        $neant = ($ds->isDsPrincipale() && $ds->isDsNeant()) ? "\"N\"" : "\"P\"";
-        $etb = $ds->getEtablissement();
+        $etb = _TiersClient::getInstance()->findByIdentifiant($ds->getIdentifiant());
+
         $lieu_stockage = "";
         if ($ds->stockage->exist("adresse")) {
             $lieu_stockage = str_replace(',', '', $ds->stockage->adresse);
@@ -218,7 +219,7 @@ class ExportDSCiva {
             $vin_table_volume = $vin_table->total_normal;
         }
 
-// Alsace Blanc + PinotNOIR + PinotNOIRROUGE 
+// Alsace Blanc + PinotNOIR + PinotNOIRROUGE
         $stock_aoc_normal = 0;
         $stock_aoc_vt = 0;
         $stock_aoc_sgn = 0;
@@ -309,15 +310,14 @@ class ExportDSCiva {
         $cpt = 1;
         $row = "";
         $produitsAgreges = $this->getProduitsAgregesForDS($ds);
-       
+
         $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
-        
+
        foreach ($produitsAgreges as $code_douane => $obj) {
             $app_produit = $obj->hash;
             $appellation_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)/', '$2', $app_produit);
             $cepage_key = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z]+)cepage_([A-Z]{2})/', '$4', $app_produit);
 
-            
             if($code_douane == "1R001S "){
                     $row.= $id_csv . ",";
                     $row.= "1,\"PN\",\"RG\",\"\"," . $cpt . ",";
@@ -327,7 +327,7 @@ class ExportDSCiva {
                     $cpt++;
                     continue;
             }
-            
+
             if($code_douane == "1S001S "){
                     $row.= $id_csv . ",";
                     $row.= "1,\"PN\",\"RS\",\"\"," . $cpt . ",";
@@ -337,7 +337,7 @@ class ExportDSCiva {
                     $cpt++;
                     continue;
             }
-            
+
             switch ($appellation_key) {
 //                case 'PINOTNOIR':
 //                    $row.= $id_csv . ",";
@@ -402,7 +402,7 @@ class ExportDSCiva {
             }
             $cpt++;
         }
-        
+
         return $row;
     }
 
@@ -459,10 +459,10 @@ class ExportDSCiva {
                 if($xml){
                     $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
                     if($cepage->getKey() == 'cepage_VINTABLE'){
-                       return "4B999"; 
+                       return "4B999";
                     }
                     if($cepage->getKey() == 'cepage_MS'){
-                       return "4B999M"; 
+                       return "4B999M";
                     }
                 }
                 return null;
@@ -470,7 +470,9 @@ class ExportDSCiva {
                 if ($cepage->getKey() == 'cepage_ED') {
                     return self::CODE_DOUANE_ED;
                 }
-                return $cepage->getConfig()->getDouane()->getFullAppCode($vtsgn) . $cepage->getConfig()->getDouane()->getCodeCepage();
+
+                return $cepage->getConfig()->getCodeDouane($vtsgn);
+                //return $cepage->getConfig()->getDouane()->getFullAppCode($vtsgn) . $cepage->getConfig()->getDouane()->getCodeCepage();
             case 'LIEUDIT':
             case 'COMMUNALE':
                 $cepage_code = preg_replace('/^([\/a-zA-Z]+)\/appellation_([A-Z]+)\/([\/0-9a-zA-Z_\-]+)\/lieu([A-Z]*)\/couleur([A-Za-z]*)\/cepage_([A-Z]{2})/', '$6', $cepage->getHash());
@@ -478,26 +480,33 @@ class ExportDSCiva {
                     return self::CODE_DOUANE_ED;
                 }
                 if ($cepage_code == "KL") {
-                    $hash = str_replace('/declaration', '/recolte', $cepage->getCouleur()->getHash());
+                    /*$hash = str_replace('/declaration', '/recolte', $cepage->getCouleur()->getHash());
                     $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                    return $config->getDouane()->getFullAppCode($vtsgn);
+                    return $config->getDouane()->getFullAppCode($vtsgn);*/
+
+                    return substr($cepage->getConfig()->getCodeDouane($vtsgn), 0, -1);
                 }
                 if ($cepage_code == "PR") {
-                    $hash = "/recolte/certification/genre/appellation_PINOTNOIRROUGE/mention/lieu/couleur/cepage_" . $cepage_code;
-                    $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                    return $config->getDouane()->getFullAppCode($vtsgn);
+                    $hash = "/declaration/certification/genre/appellation_PINOTNOIRROUGE/mention/lieu/couleur/cepage_" . $cepage_code;
+                    $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get(HashMapper::convert($hash));
+
+                    return substr($config->getCodeDouane($vtsgn), 0, -1);
                 }
+
                 $hash = "/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_" . $cepage_code;
-                $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                return $config->getDouane()->getFullAppCode($vtsgn) . $config->getDouane()->getCodeCepage();
+                $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get(HashMapper::convert($hash));
+
+                return $config->getCodeDouane($vtsgn);
 
             case 'PINOTNOIR':
             case 'PINOTNOIRROUGE':
-                $hash = str_replace('/declaration', '/recolte', $cepage->getLieu()->getHash());
-                $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                return $config->getDouane()->getFullAppCode($vtsgn);
+                //$hash = str_replace('/declaration', '/recolte', $cepage->getLieu()->getHash());
+                //$config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
+
+                return substr($cepage->getConfig()->getCodeDouane($vtsgn), 0, -1);
             default:
-                return $cepage->getConfig()->getDouane()->getFullAppCode($vtsgn) . $cepage->getConfig()->getDouane()->getCodeCepage();
+
+                return $cepage->getConfig()->getCodeDouane($vtsgn);
         }
     }
 

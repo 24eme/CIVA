@@ -8,7 +8,7 @@ class ExportDSStatsCsv {
 
         $this->ids = $ids;
         $this->campagne = $campagne;
-        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne - 1);
+        $this->config = ConfigurationClient::getConfiguration();
     }
 
     public function export() {
@@ -64,24 +64,24 @@ class ExportDSStatsCsv {
         $ligne = "%s;%s;%s;%s;%s;%s\n";
         $configuration = $this->config;
 
-        foreach($configuration->recolte->getNoeudAppellations() as $c_appellation) {
-            if(!array_key_exists($c_appellation->getKey(), $stats['appellations'])) {
+        foreach($configuration->declaration->getArrayAppellations() as $c_appellation) {
+            $appellation_key = "appellation_".$c_appellation->getKey();
+            if(!array_key_exists($appellation_key, $stats['appellations'])) {
                 continue;
             }
 
-            $appellation_key = $c_appellation->getKey();
             $appellation = $stats['appellations'][$appellation_key];
 
             foreach($c_appellation->getProduits() as $c_cepage) {
-                if(!array_key_exists($c_cepage->getKey(), $appellation['cepages'])) {
+                $cepage_key = "cepage_".$c_cepage->getKey();
+                if(!array_key_exists($cepage_key, $appellation['cepages'])) {
                     continue;
                 }
 
-                $cepage_key = $c_cepage->getKey();
                 $cepage = $appellation['cepages'][$cepage_key];
 
-                $content .= sprintf($ligne, $c_appellation->getLibelleLong(), 
-                                     $c_cepage->getLibelleLong(), 
+                $content .= sprintf($ligne, $c_appellation->getLibelle(),
+                                     $c_cepage->getLibelle(),
                                      $this->convertFloat2Fr($cepage['volume_total']),
                                      $this->convertFloat2Fr($cepage['volume_normal']),
                                      $this->convertFloat2Fr($cepage['volume_vt']),
@@ -90,18 +90,18 @@ class ExportDSStatsCsv {
                 unset($appellation['cepages'][$cepage_key]);
             }
 
-            $content .= sprintf($ligne, $c_appellation->getLibelleLong(), 
-                                 "TOTAL", 
+            $content .= sprintf($ligne, $c_appellation->getLibelle(),
+                                 "TOTAL",
                                  $this->convertFloat2Fr($appellation['volume_total']),
                                  $this->convertFloat2Fr($appellation['volume_normal']),
                                  $this->convertFloat2Fr($appellation['volume_vt']),
                                  $this->convertFloat2Fr($appellation['volume_sgn']));
-            
+
             unset($stats['appellations'][$appellation_key]);
         }
 
-        $content .= sprintf($ligne, "TOTAL Général", 
-                             "", 
+        $content .= sprintf($ligne, "TOTAL Général",
+                             "",
                              $this->convertFloat2Fr($stats['volume_total']),
                              $this->convertFloat2Fr($stats['volume_normal']),
                              $this->convertFloat2Fr($stats['volume_vt']),

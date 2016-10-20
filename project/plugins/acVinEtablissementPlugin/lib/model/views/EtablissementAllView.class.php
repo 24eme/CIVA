@@ -4,29 +4,36 @@ class EtablissementAllView extends acCouchdbView
 {
 	const KEY_INTERPRO_ID = 0;
 	const KEY_STATUT = 1;
-  const KEY_FAMILLE = 2;
-  const KEY_SOCIETE_ID = 3;
-  const KEY_ETABLISSEMENT_ID = 4;
+  	const KEY_FAMILLE = 2;
+  	const KEY_SOCIETE_ID = 3;
+  	const KEY_ETABLISSEMENT_ID = 4;
 	const KEY_NOM = 5;
 	const KEY_IDENTIFIANT = 6;
 	const KEY_CVI = 7;
-  const KEY_REGION = 8;
+  	const KEY_REGION = 8;
 
-  const VALUE_RAISON_SOCIALE = 0;
-  const VALUE_ADRESSE = 1;
-  const VALUE_COMMUNE = 2;
-  const VALUE_CODE_POSTAL = 3;
-  const VALUE_NO_ACCISES = 4;
-  const VALUE_CARTE_PRO = 5;
-  const VALUE_EMAIL = 6;
-  const VALUE_TELEPHONE = 7;
-  const VALUE_FAX = 8;
-  const VALUE_RECETTE_LOCALE_SOCIETE_ID = 9;
-  const VALUE_RECETTE_LOCALE_NOM = 10;
+	const VALUE_RAISON_SOCIALE = 0;
+	const VALUE_ADRESSE = 1;
+	const VALUE_COMMUNE = 2;
+	const VALUE_CODE_POSTAL = 3;
+	const VALUE_NO_ACCISES = 4;
+	const VALUE_CARTE_PRO = 5;
+	const VALUE_EMAIL = 6;
+	const VALUE_TELEPHONE = 7;
+	const VALUE_FAX = 8;
+	const VALUE_RECETTE_LOCALE_SOCIETE_ID = 9;
+	const VALUE_RECETTE_LOCALE_NOM = 10;
 
 	public static function getInstance() {
 
         return acCouchdbManager::getView('etablissement', 'all', 'Etablissement');
+    }
+
+	public function find() {
+
+        return $this->client
+			    ->reduce(false)
+			    ->getView($this->design, $this->view);
     }
 
     public function findByInterpro($interpro) {
@@ -77,7 +84,7 @@ class EtablissementAllView extends acCouchdbView
 	}
 
         return $etablissements;
-    }    
+    }
 
     public function findByInterproStatutAndFamille($interpro, $statut, $famille, $filter = null, $limit = null) {
       try{
@@ -87,7 +94,7 @@ class EtablissementAllView extends acCouchdbView
       }
     }
 
-    private function findByInterproStatutAndFamilleELASTIC($interpro, $statut, $famille, $query = null, $limit = 100) { 
+    private function findByInterproStatutAndFamilleELASTIC($interpro, $statut, $famille, $query = null, $limit = 100) {
       $q = explode(' ', $query);
       for($i = 0 ; $i < count($q); $i++) {
 	$q[$i] = '*'.$q[$i].'*';
@@ -157,7 +164,7 @@ class EtablissementAllView extends acCouchdbView
                             ->endkey(array($etablissement->interpro, $etablissement->statut, $etablissement->famille, $etablissement->id_societe,$etablissement->_id, array()))
 			    ->reduce(false)
 			    ->getView($this->design, $this->view)->rows;
-        
+
     }
 
     public static function makeLibelle($row) {
@@ -176,7 +183,7 @@ class EtablissementAllView extends acCouchdbView
 
     	if (isset($row->key[self::KEY_FAMILLE]))
     	  	$libelle .= $row->key[self::KEY_FAMILLE];
-        
+
     	if (isset($row->value[self::VALUE_COMMUNE]))
     	  	$libelle .= ' '.$row->value[self::VALUE_COMMUNE];
 
@@ -184,8 +191,8 @@ class EtablissementAllView extends acCouchdbView
     	  	$libelle .= ' '.$row->value[self::VALUE_CODE_POSTAL];
 
         $libelle .= " (Etablissement)";
-        
+
         return trim($libelle);
     }
 
-}  
+}

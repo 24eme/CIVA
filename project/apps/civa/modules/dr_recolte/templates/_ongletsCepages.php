@@ -3,6 +3,7 @@
         <?php $couleurs_hashes = explode("/", HashMapper::inverse($couleur->getHash())); ?>
         <?php $key_couleur = $couleurs_hashes[count($couleurs_hashes) - 1]; ?>
         <?php foreach ($couleur->getChildrenNode() as $key => $cepage): ?>
+            <?php if($cepage->exist('attributs/no_dr') && $cepage->get('attributs/no_dr')): continue; endif ?>
             <?php $hash = HashMapper::inverse($cepage->getHash()); ?>
             <?php if (!$recapitulatif && $produit->getHash() == $hash): ?>
                 <li class="ui-tabs-selected">

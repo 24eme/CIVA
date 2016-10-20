@@ -40,8 +40,26 @@ class DRRecolte extends BaseDRRecolte {
 
         if (in_array('from_acheteurs',$params)) {
             $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
+            $mentions = array();
             foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
-                foreach($appellation as $mention_key => $mention) {
+                if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
+                    $mentions[$appellation_key] = $appellation_key;
+
+                    continue;
+                }
+                $mentions["mention"] = "mention";
+
+            }
+            foreach($mentions as $mention_key => $mention) {
+                foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+                    if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
+
+                        continue;
+                    }
+                    if(!$this->getConfig()->getDocument()->exist(HashMapper::convert($this->getNoeudAppellations()->add($appellation_key)->getHash()."/".$mention_key))) {
+
+                        continue;
+                    }
                     $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
                     if (!$app->getConfig()->hasManyLieu()) {
                         $lieu = $app->add('lieu');
@@ -51,16 +69,27 @@ class DRRecolte extends BaseDRRecolte {
                     }
                 }
             }
+
             $list_to_remove = array();
-            foreach($this->getAppellations() as $key => $appellation) {
-                if (!$acheteurs->getNoeudAppellations()->exist($key)) {
-                    $list_to_remove[] = $this->getNoeudAppellations()->get($key)->getHash();
+            foreach($this->getAppellations() as $appellation) {
+                foreach($appellation->getMentions() as $mention_key => $mention) {
+                    if($mention_key == "mention") {
+                        continue;
+                    }
+                    if(!$acheteurs->getNoeudAppellations()->exist($mention_key)) {
+                        $list_to_remove[$appellation->getHash()."/".$mention_key] = $appellation->getHash()."/".$mention_key;
+                    }
+                }
+                if (!$acheteurs->getNoeudAppellations()->exist($appellation->getKey())) {
+                    $list_to_remove[$appellation->getHash()] = $appellation->getHash();
                 }
             }
             foreach ($list_to_remove as $hash_to_remove) {
-               $this->getDocument()->remove($hash_to_remove);
+                if(count($this->getDocument()->get($hash_to_remove)->getProduitsDetails()) > 0) {
+                    continue;
+                }
+                $this->getDocument()->remove($hash_to_remove);
             }
-
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class importConfigurationMutualisationTask extends sfBaseTask {
+class importConfigurationTask extends sfBaseTask {
 
     protected function configure() {
         // // add your own arguments here

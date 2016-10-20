@@ -4,7 +4,7 @@
 <?php include_partial('global/errorMessages', array('form' => $form)); ?>
 
 <script type="text/javascript">
-    url_ajax = '<?php echo url_for('acheteur/exploitationAcheteursTableRowItemAjax') ?>';
+    url_ajax = '<?php echo url_for('dr_repartition_acheteurs', array('id' => $dr->_id)) ?>';
 </script>
 
 <!-- #principal -->
@@ -202,28 +202,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="td_intro" colspan="2" style="text-align: left; border-bottom: none;"><?php echo $form['lies_saisis_cepage']->renderLabel() ?></td>
+                            <td class="td_intro" colspan="2" style="text-align: left;">Volume à détruire par cépage</td>
                         </tr>
-                        <tr><td colspan="2">
-                                <div id="bloc_choix_lies">
-                                    <div class="<?php if($form['lies_saisis_cepage']->getValue() == "1"): ?>actif<?php endif; ?>">
-                                        <input type="radio" <?php if($form['lies_saisis_cepage']->getValue() == "1"): ?>checked="checked"<?php endif; ?> id="exploitation_acheteurs_lies_saisis_cepage_1" value="1" name="exploitation_acheteurs[lies_saisis_cepage]">
-                                        <label class="label_texte" for="exploitation_acheteurs_lies_saisis_cepage_1">Cépage</label>
-                                        <label class="label_image" for="exploitation_acheteurs_lies_saisis_cepage_1">
-                                            <img src="/images/visuels/mode_saisie_lies_cepage.jpg" style="width: 300px; border: 1px solid #C6C8C7" />
-                                        </label>
-                                    </div>
-                                    <div class="<?php if($form['lies_saisis_cepage']->getValue() == "0"): ?>actif<?php endif; ?>">
-                                        <input id="exploitation_acheteurs_lies_saisis_cepage_0" type="radio" <?php if($form['lies_saisis_cepage']->getValue() == "0"): ?>checked="checked"<?php endif; ?> value="0" name="exploitation_acheteurs[lies_saisis_cepage]">
-                                        <label class="label_texte" for="exploitation_acheteurs_lies_saisis_cepage_0">Appellation</label>
-                                        <label class="label_image" for="exploitation_acheteurs_lies_saisis_cepage_0">
-                                            <img src="/images/visuels/mode_saisie_lies_appellation.jpg" style="width: 300px; border: 1px solid #C6C8C7;" />
-                                        </label>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- fin garder cette ligne -->
                     </tbody>
                 </table>
             </div>

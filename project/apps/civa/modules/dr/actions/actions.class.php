@@ -9,8 +9,7 @@ class drActions extends _DRActions {
         $campagne = $request->getParameter('campagne');
         $etablissement = $this->getRoute()->getEtablissement();
         $dr_data = $this->getRequestParameter('dr', null);
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         if (!$dr_data) {
 
             return $this->forward404();
@@ -83,8 +82,6 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('notice_evolutions');
 
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
 
         if($this->getUser()->isSimpleOperateur()) {
 
@@ -114,8 +111,7 @@ class drActions extends _DRActions {
         $this->form_gest_err = 0;
         $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
         $this->form_expl_err = 0;
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         if ($request->isMethod(sfWebRequest::POST)) {
             if ($request->getParameter('gestionnaire')) {
                 throw new sfException("A réparer");
@@ -145,11 +141,10 @@ class drActions extends _DRActions {
     public function executeRepartition(sfWebRequest $request) {
         $this->setCurrentEtape('repartition');
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         $this->help_popup_action = "help_popup_exploitation_acheteur";
 
-        $this->appellations = ExploitationAcheteursForm::getListeAppellations();
+        $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
         $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
         $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
         $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
@@ -171,6 +166,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionTableRowItemAjax(sfWebRequest $request) {
+        $this->dr = $this->getRoute()->getDR();
         if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
             $name = $request->getParameter('qualite_name');
             $donnees = $request->getParameter('donnees');
@@ -179,7 +175,7 @@ class drActions extends _DRActions {
             $commune = $donnees[2];
             $mout = ($request->getParameter('acheteur_mouts', null) == '1');
 
-            $appellations_form = ExploitationAcheteursForm::getListeAppellations();
+            $appellations_form = ExploitationAcheteursForm::getListeAppellations($this->dr);
             if ($mout) {
                 $appellations_form = ExploitationAcheteursForm::getListeAppellationsMout();
             }
@@ -195,7 +191,7 @@ class drActions extends _DRActions {
             return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
                 'cvi' => $cvi,
                 'commune' => $commune,
-                'appellations' => ExploitationAcheteursForm::getListeAppellations(),
+                'appellations' => ExploitationAcheteursForm::getListeAppellations($this->dr),
                 'form_item' => $form[$name . ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
                 'mout' => $mout));
         } else {
@@ -209,23 +205,18 @@ class drActions extends _DRActions {
         $this->appellations = array();
         $this->forms = array();
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
-        foreach ($this->dr->recolte->getAppellations() as $appellation) {
+        $this->form = new LieuDitForm($this->dr);
 
-            if ($appellation->getConfig()->hasManyLieu()) {
-                $this->appellations[$appellation->getKey()] = $appellation;
-                $lieux = array();
-                foreach ($appellation->getLieux() as $key => $lieu) {
-                    $lieux[$key] = $lieu->getLibelle()." ".$lieu->getMention()->getConfig()->getLibelle();
-               }
-
-                $form = new LieuDitForm($appellation, array('lieu_required' => !(count($lieux) > 0), 'lieux' => $lieux));
-                $this->forms[$appellation->getKey()] = $form;
+        $hasLieu = false;
+        foreach($this->dr->recolte->getAppellations() as $appellation) {
+            if(!$appellation->getConfig()->hasManyLieu()) {
+                continue;
             }
-        }
 
-        if (count($this->appellations) == 0) {
+            $hasLieu = true;
+            break;
+        }
+        if (!$hasLieu) {
             if ($this->hasRequestParameter('from_recolte')) {
                 return $this->redirectToPreviousEtapes($this->dr);
             } else {
@@ -233,52 +224,49 @@ class drActions extends _DRActions {
             }
         }
 
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $valid = true;
-            if ($request->getParameter('boutons')) {
-                foreach($this->forms as $form) {
-                    $form->bind($request->getParameter($form->getName()));
-                    if ($form->isValid()) {
-                        $form->save();
-                    } else {
-                        $valid = false;
-                    }
-                }
-            } else {
-                foreach($this->forms as $form) {
-              if ($request->getParameter($form->getName().'_x') && $request->getParameter($form->getName().'_y')) {
-                        $form->bind($request->getParameter($form->getName()));
-                        if ($form->isValid()) {
-                            $form->save();
-                        } else {
-                            $valid = false;
-                        }
-                    }
-                }
-            }
-            if ($valid) {
-                return $this->redirectByBoutonsEtapes(null, $this->dr);
-            }
+        if (!$request->isMethod(sfWebRequest::POST)) {
+
+            return sfView::SUCCESS;
         }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        return $this->redirectByBoutonsEtapes(null, $this->dr);
+
     }
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {
         $declaration = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $declaration);
         $hash = $request->getParameter('hash');
+        $lieu = $request->getParameter('lieu');
+
 
         if(!$declaration->exist($hash)) {
 
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        if(!$declaration->get($hash) instanceof DRRecolteLieu) {
+        if(!$declaration->get($hash) instanceof DRRecolteAppellation) {
 
             return $this->redirect('dr_repartition_lieu', $declaration);
         }
 
-        $declaration->remove($hash);
+        if($declaration->get($hash)->hasDetailsInLieu($lieu)) {
+
+            return $this->redirect('dr_repartition_lieu', $declaration);
+        }
+
+        foreach($declaration->get($hash)->getMentions() as $mention) {
+            $mention->getLieux()->remove($lieu);
+        }
+
         $declaration->save();
 
         return $this->redirect('dr_repartition_lieu', $declaration);
@@ -298,8 +286,7 @@ class drActions extends _DRActions {
         $this->help_popup_action = "help_popup_autres";
 
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         $this->form = new ExploitationAutresForm($this->dr);
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -316,8 +303,7 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('validation');
 
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         $this->getUser()->getAttributeHolder()->remove('log_erreur');
 
         $etablissement = $this->dr->getEtablissement();
@@ -354,9 +340,9 @@ class drActions extends _DRActions {
                 $this->getUser());
         }
 
-        if ($this->askRedirectToPreviousEtapes()) {
+        if ($this->askRedirectToPreviousEtapes($this->dr)) {
 
-            return $this->redirectByBoutonsEtapes();
+            return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
 
         if ($this->askRedirectToNextEtapes() && !$this->error && $request->isMethod(sfWebRequest::POST)) {
@@ -432,8 +418,7 @@ class drActions extends _DRActions {
         $tiers = $this->getUser()->getTiers('Recoltant');
 
         $this->dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         $this->annee = $this->dr->getCampagne();
 
         $key = $this->dr->_id;
@@ -458,8 +443,6 @@ class drActions extends _DRActions {
             return $this->redirect('mon_espace_civa_dr');
         }
         $this->dr = $this->getRoute()->getObject();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -470,8 +453,7 @@ class drActions extends _DRActions {
     public function executeSendPdfAcheteurs(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
+
         $annee = $this->getRequestParameter('annee', null);
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
@@ -484,8 +466,6 @@ class drActions extends _DRActions {
     public function executeSendPdf(sfWebRequest $request) {
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         $annee = $this->getRequestParameter('annee', null);
 
         $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
@@ -497,8 +477,6 @@ class drActions extends _DRActions {
       //  throw new sfException("En maintenance");
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         if ($dr) {
             $dr->remove('modifiee');
             $dr->add('etape');
@@ -512,8 +490,6 @@ class drActions extends _DRActions {
     public function executeInvaliderRecoltant(sfWebRequest $request) {
         throw new sfException("En maintenance");
         $dr = $this->getRoute()->getDR();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         if ($dr) {
             $dr->remove('modifiee');
             $dr->remove('validee');
@@ -533,8 +509,6 @@ class drActions extends _DRActions {
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
         $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         $this->visualisation_avant_import = true;
     }
 
@@ -606,8 +580,6 @@ Le CIVA';*/
 
         $dr = acCouchdbManager::getClient()->find($this->id);
         $dr->add('autorisations')->add(DRClient::AUTORISATION_AVA, 1);
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         $dr->save();
 
         return $this->redirect('declaration_transmission', array("url" => $this->url, "id" => $this->id));
@@ -618,8 +590,6 @@ Le CIVA';*/
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
         $dr = acCouchdbManager::getClient()->find($this->id);
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->dr);
         if(!$dr || !$dr->isValideeTiers()) {
 
             return $this->redirect($this->url);
@@ -650,24 +620,6 @@ Le CIVA';*/
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
         return $this->renderText(file_get_contents($path));
-    }
-
-    protected function secureDR($droits, $dr = null) {
-        if(is_null($dr) && $this->getRoute() instanceof DRRoute) {
-            $dr = $this->getRoute()->getDR();
-        }
-
-        if(!DRSecurity::getInstance($this->getRoute()->getEtablissement(), $dr)->isAuthorized($droits)) {
-
-            return $this->forwardSecure();
-        }
-    }
-
-    protected function forwardSecure()
-    {
-        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
-
-        throw new sfStopException();
     }
 
 }

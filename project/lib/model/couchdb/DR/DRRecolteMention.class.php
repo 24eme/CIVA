@@ -19,7 +19,6 @@ class DRRecolteMention extends BaseDRRecolteMention {
     }
 
     public function getLieux(){
-
         return $this->filter('^lieu');
     }
 
@@ -45,7 +44,7 @@ class DRRecolteMention extends BaseDRRecolteMention {
     }
 
     public function getUsagesIndustrielsCalcule(){
-        
+
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
     }
 

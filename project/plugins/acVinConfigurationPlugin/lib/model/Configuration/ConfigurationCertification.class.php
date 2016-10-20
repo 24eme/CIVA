@@ -5,9 +5,9 @@
  */
 
 class ConfigurationCertification extends BaseConfigurationCertification {
-	
+
 	  const TYPE_NOEUD = 'certification';
-    
+
     public function getChildrenNode() {
 
       return $this->genres;
@@ -19,7 +19,7 @@ class ConfigurationCertification extends BaseConfigurationCertification {
     }
 
     public function getCodes() {
-      
+
         return array($this->code);
     }
 
@@ -32,16 +32,16 @@ class ConfigurationCertification extends BaseConfigurationCertification {
 
       return $this->_get('code_comptable');
     }
-      
-    public function getCodeDouane() {
+
+    public function getCodeDouane($vtsgn = null) {
         return $this->_get('code_douane');
     }
 
     public function getLabels($interpro) {
-        
+
         return $this->getDocument()->labels;
     }
-    
+
     public function setDonneesCsv($datas) {
       parent::setDonneesCsv($datas);
     	$this->libelle = ($datas[ProduitCsvFile::CSV_PRODUIT_CATEGORIE_LIBELLE])? $datas[ProduitCsvFile::CSV_PRODUIT_CATEGORIE_LIBELLE] : null;
@@ -50,23 +50,23 @@ class ConfigurationCertification extends BaseConfigurationCertification {
     	$this->setDroitDouaneCsv($datas, ProduitCsvFile::CSV_PRODUIT_CATEGORIE_CODE_APPLICATIF_DROIT);
     	$this->setDroitCvoCsv($datas, ProduitCsvFile::CSV_PRODUIT_CATEGORIE_CODE_APPLICATIF_DROIT);
     }
-  	
+
   	public function hasUniqProduit($interpro) {
   		return count($this->getProduits($interpro, $departement)) == 1;
   	}
-  	
+
   	public function hasProduit($interpro, $departement) {
 
   		return count($this->getProduits($interpro, $departement)) > 0;
   	}
 
-    public function addInterpro($interpro) 
+    public function addInterpro($interpro)
     {
-      return null;  
+      return null;
     }
 
     public function getTypeNoeud() {
-        
+
         return self::TYPE_NOEUD;
     }
 

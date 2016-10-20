@@ -281,4 +281,61 @@ class DRClient extends acCouchdbClient {
         return $totauxByAppellationsRecap;
     }
 
+    public function getDateOuverture() {
+
+        return new DateTime(sfConfig::get('app_dr_date_ouverture'));
+    }
+
+    public function getDateFermeture() {
+
+        return new DateTime(sfConfig::get('app_dr_date_fermeture'));
+    }
+
+    public function isTeledeclarationOuverte() {
+        $dateOuverture = $this->getDateOuverture();
+        $dateFermeture = $this->getDateFermeture();
+
+        return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
+    }
+
+    public function getConfigAppellationsAvecVtsgn() {
+        $appellations = array();
+        $configuration = ConfigurationClient::getCurrent();
+        foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            if($appellation->getKey() == "PINOTNOIR") {
+                $appellations["mentionVT"] = null;
+                $appellations["mentionSGN"] = null;
+            }
+
+            if(!in_array($appellation->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
+                continue;
+            }
+
+            $appellations["appellation_".$appellation->getKey()] = null;
+        }
+
+        $appellations["mentionVT"] = array("libelle" => "Mention VT", "mout" => false, "hash" => "mentionVT", "lieux" => array());
+        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "mout" => false, "hash" => "mentionSGN","lieux" => array());
+        foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            if(!array_key_exists("appellation_".$appellation->getKey(), $appellations)) {
+                continue;
+            }
+            $hash = HashMapper::inverse($appellation->getHash());
+            $appellations["appellation_".$appellation->getKey()] = array("libelle" => $appellation->getLibelle(), "mout" => $appellation->exist('attributs/mout') && $appellation->attributs->mout, "hash" => $hash."/mention", "lieux" => array());
+            foreach($appellation->getMentions() as $mention) {
+                if($mention->getKey() != "DEFAUT") {
+                    $hash = "mention".$mention->getKey();
+                }
+                if($mention->hasManyLieu() || $mention->getKey() != "DEFAUT") {
+                    foreach($mention->getLieux() as $lieu)  {
+                        $appellations["appellation_".$appellation->getKey()]['lieux'][] = $lieu;
+                    }
+                }
+            }
+
+        }
+
+        return $appellations;
+    }
+
 }

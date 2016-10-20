@@ -1,5 +1,5 @@
 <div class="col_recolte col_active">
-    <form action="<?php echo ($is_new) ? url_for('dr_recolte_produit_ajout', array('sf_subject' => $produit, 'hash' => $produit->getHash())) : url_for('recolte_produit_edition', array('hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" method="post" onsubmit="return valider_can_submit();">
+    <form action="<?php echo ($is_new) ? url_for('dr_recolte_produit_ajout', array('sf_subject' => $produit->getDocument(), 'hash' => $produit->getHash())) : url_for('dr_recolte_produit_edition', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" method="post" onsubmit="return valider_can_submit();">
         <?php echo $form->renderHiddenFields(); ?>
         <h2><?php echo $produit->libelle ?></h2>
 

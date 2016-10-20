@@ -19,11 +19,9 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayTypeWithAppellation($type) {
         $tab = array();
-        foreach($this->getNoeudAppellations() as $appellation_key => $appellation) {
-            foreach($appellation as $mention_key => $acheteurs) {
-                foreach($acheteurs->{$type} as $acheteur_cvi) {
-                	$tab[$acheteur_cvi][$appellation_key."/".$mention_key] = true;
-                }
+        foreach($this->getNoeudAppellations() as $appellation_key => $acheteurs) {
+            foreach($acheteurs->{$type} as $acheteur_cvi) {
+            	$tab[$acheteur_cvi][$appellation_key] = true;
             }
         }
 
@@ -56,11 +54,9 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayMouts() {
         $mouts = array();
-        foreach($this->getNoeudAppellations() as $appellation) {
-            foreach($appellation as $acheteurs) {
-                foreach($acheteurs->mouts as $acheteur_cvi) {
-                    $mouts[] = $acheteur_cvi;
-                }
+        foreach($this->getNoeudAppellations() as $acheteurs) {
+            foreach($acheteurs->mouts as $acheteur_cvi) {
+                $mouts[] = $acheteur_cvi;
             }
         }
 
@@ -69,11 +65,9 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayMoutsWithAppellation() {
         $mouts = array();
-        foreach($this->getNoeudAppellations() as $appellation_key =>  $appellation) {
-            foreach($appellation as $mention_key => $acheteurs) {
-                foreach($acheteurs->mouts as $acheteur_cvi) {
-                    $mouts[$acheteur_cvi][$appellation_key."/".$mention_key] = true;
-                }
+        foreach($this->getNoeudAppellations() as $appellation_key =>  $acheteurs) {
+            foreach($acheteurs->mouts as $acheteur_cvi) {
+                $mouts[$acheteur_cvi][$appellation_key] = true;
             }
         }
 
@@ -82,10 +76,8 @@ class DRAcheteurs extends BaseDRAcheteurs {
 
     public function getArrayCaveParticuliereWithAppellation() {
         $cave_particuliere = array();
-        foreach($this->getNoeudAppellations() as $appellation_key => $appellation) {
-            foreach($appellation as $mention_key => $acheteurs) {
-                $cave_particuliere[$appellation_key."/".$mention_key] = ($acheteurs->cave_particuliere == 1);
-            }
+        foreach($this->getNoeudAppellations() as $appellation_key => $acheteurs) {
+            $cave_particuliere[$appellation_key] = ($acheteurs->cave_particuliere == 1);
         }
 
         return $cave_particuliere;

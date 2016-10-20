@@ -149,12 +149,13 @@ ul#onglets_majeurs {
 	font-weight: bold;
 	padding: 0 20px;
 	width: 958px;
+	position: relative;
 }
 
 ul#onglets_majeurs li {
 	float: left;
 	margin: 0 3px 0 0;
-	position: relative;
+	position: initial;
 }
 
 ul#onglets_majeurs li a {
@@ -196,6 +197,7 @@ ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a {
 /*ul#onglets_majeurs.onglets_recolte li.ui-tabs-selected a span { color: #000; }*/
 ul#onglets_majeurs.onglets_recolte li.ajouter a {
 	padding-left: 30px;
+	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat !important;
 }
 
 ul#onglets_majeurs li ul.sous_onglets_mentions {
@@ -208,9 +210,8 @@ ul#onglets_majeurs li ul.sous_onglets_mentions {
 
 ul#onglets_majeurs li ul.sous_onglets {
 	left: 0;
-	position: absolute;
+	margin-left: 20px
 	top: 30px;
-	width: 850px;
 	z-index: 100;
 }
 
@@ -237,9 +238,13 @@ ul#onglets_majeurs li ul.sous_onglets li.premier a {
 		-2px no-repeat;
 }
 
+ul#onglets_majeurs li.ui-tabs-selected ul.sous_onglets li a {
+	background-color: #ffd589;
+}
+
 ul#onglets_majeurs li ul.sous_onglets li.ui-tabs-selected a
 	{
-	background-color: #ffd589;
+	background-color: #ffb52c;
 	cursor: default;
 }
 
@@ -291,7 +296,7 @@ ul#btn_appelation li.previsualiser {
 
 /* Tableau de données */
 table.table_donnees {
-	
+
 }
 
 table.autres_infos {
@@ -631,7 +636,7 @@ input.btn_inactif {
 
 
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header,
-#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content 
+#application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_content
 {
 	padding: 15px;
 	text-align: center;
@@ -1399,21 +1404,21 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies {
-	width: 628px; 
-	margin: 0 auto; 
+	width: 628px;
+	margin: 0 auto;
 	display: block;
 }
 
 #exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div {
-	float:left; 
-	margin-right: 2px; 
-	padding: 4px 4px 0 4px; 
+	float:left;
+	margin-right: 2px;
+	padding: 4px 4px 0 4px;
 	border: 1px solid #EDECEC;
 }
 
 #exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif {
-	background: #DDDDDD; 
-	padding: 4px 4px 0 4px; 
+	background: #DDDDDD;
+	padding: 4px 4px 0 4px;
 	border: 1px solid #C6C8C7;
 }
 
@@ -1427,7 +1432,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	opacity: 0.60; filter:alpha(opacity=60);
 }
 
-#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image:hover, 
+#exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div label.label_image:hover,
 #exploitation_acheteurs #choix_mode_saisie_lies div#bloc_choix_lies div.actif label.label_image {
 	opacity: 1; filter:alpha(opacity=100);
 }
@@ -1496,7 +1501,7 @@ div#migration_compte .contenu_section#infos_traitement {
  * Cave particulière
  ******************************************/
 #vol_sur_place {
-	
+
 }
 
 #vol_sur_place table th {
@@ -2054,7 +2059,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #gestion_recolte #total_appelation .bloc_gris,
-#gestion_recolte #total_appelation .contenu_section 
+#gestion_recolte #total_appelation .contenu_section
 {
 	display: inline-block;
 	width: auto;
@@ -2103,7 +2108,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #gestion_recolte #recap_ventes table thead th {
-	
+
 }
 
 #gestion_recolte #recap_ventes table tbody td.nom small {
@@ -2208,7 +2213,7 @@ div#migration_compte .contenu_section#infos_traitement {
 #recolte_totale #total_general ul li:last-child {
 	border-bottom: none;
 }
- 
+
 #recolte_totale #total_general ul li.small input {
 	font-size: 11px;
 	font-weight: normal;
@@ -2334,7 +2339,7 @@ div#migration_compte .contenu_section#infos_traitement {
 	float: left;
 }
 
-#feed_back .bloc_form { 
+#feed_back .bloc_form {
 	margin-top: 10px;
 }
 
@@ -2736,9 +2741,9 @@ td.csv_num {
 /** popup tache **/
 
 .popup_tache h2 {
-	color: #848C03; 
-	font-weight: normal; 
-	font-size: 16px; 
+	color: #848C03;
+	font-weight: normal;
+	font-size: 16px;
 	text-align: center;
 }
 

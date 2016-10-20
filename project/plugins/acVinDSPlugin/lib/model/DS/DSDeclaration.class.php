@@ -42,75 +42,75 @@ class DSDeclaration extends BaseDSDeclaration {
     }
 
     public function hasGrdCru() {
-        return in_array('appellation_GRDCRU',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_GRDCRU',array_keys($this->getAppellationsSorted()));
     }
 
     public function getGrdCru() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_GRDCRU'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_GRDCRU'];
     }
 
      public function hasCremant() {
-        return in_array('appellation_CREMANT',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_CREMANT',array_keys($this->getAppellationsSorted()));
     }
 
     public function getCremant() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_CREMANT'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_CREMANT'];
     }
 
     public function hasAlsaceBlanc() {
-        return in_array('appellation_ALSACEBLANC',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_ALSACEBLANC',array_keys($this->getAppellationsSorted()));
     }
 
     public function getAlsaceBlanc() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_ALSACEBLANC'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_ALSACEBLANC'];
     }
 
     public function hasCommunale() {
-        return in_array('appellation_COMMUNALE',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_COMMUNALE',array_keys($this->getAppellationsSorted()));
     }
 
     public function getCommunale() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_COMMUNALE'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_COMMUNALE'];
     }
 
      public function hasPinotNoirRouge() {
-        return in_array('appellation_PINOTNOIRROUGE',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_PINOTNOIRROUGE',array_keys($this->getAppellationsSorted()));
     }
 
     public function getPinotNoirRouge() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_PINOTNOIRROUGE'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_PINOTNOIRROUGE'];
     }
 
     public function hasLieuDit() {
-        return in_array('appellation_LIEUDIT',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_LIEUDIT',array_keys($this->getAppellationsSorted()));
     }
 
     public function getLieuDit() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_LIEUDIT'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_LIEUDIT'];
     }
 
     public function hasPinotNoir() {
-        return in_array('appellation_PINOTNOIR',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_PINOTNOIR',array_keys($this->getAppellationsSorted()));
     }
 
     public function getPinotNoir() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_PINOTNOIR'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_PINOTNOIR'];
     }
 
     public function hasVinTable() {
-        return in_array('appellation_VINTABLE',array_keys($this->getAppellationsSorted()));
+        return in_array('/declaration/certification/genre/appellation_VINTABLE',array_keys($this->getAppellationsSorted()));
     }
 
     public function getVinTable() {
         $appellationsSorted = $this->getAppellationsSorted();
-        return $appellationsSorted['appellation_VINTABLE'];
+        return $appellationsSorted['/declaration/certification/genre/appellation_VINTABLE'];
     }
 
 

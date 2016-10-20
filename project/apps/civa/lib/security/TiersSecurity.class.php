@@ -79,7 +79,7 @@ class TiersSecurity implements SecurityInterface {
 
         if(in_array(self::GAMMA, $droits)) {
 
-            return GammaSecurity::getInstance($this->compte)->isAuthorized(GammaSecurity::DECLARANT);
+            return GammaSecurity::getInstance(GammaClient::getInstance()->getEtablissement($this->compte))->isAuthorized(GammaSecurity::DECLARANT);
         }
 
         return false;

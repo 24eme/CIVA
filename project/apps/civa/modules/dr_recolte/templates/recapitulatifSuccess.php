@@ -7,8 +7,11 @@
 <!-- #principal -->
 			<form id="principal" action="" method="post" onsubmit="return valider_can_submit();">
             <?php echo $form->renderHiddenFields(); ?>
-            <?php include_partial('ongletsAppellations', array('declaration' => $declaration,
-                                                               'produit' => $noeud)); ?>
+			   <?php include_partial('ongletsAppellations', array(
+		   				    'declaration' => $declaration,
+		   				    'appellations' => $appellations,
+		   				    'produit' => $noeud,
+		   				)); ?>
                 <input name="is_validation_interne" type="hidden" value="0" />
 				<!-- #application_dr -->
 				<div id="application_dr" class="clearfix">
@@ -40,11 +43,13 @@
 
 				            <div id="total_appelation">
 								<h2 class="titre_section">
-                                    <?php if($isGrandCru){ ?>
-                                    Total Lieu-dit
-                                    <?php }else{ ?>
-                                    Total Appellation
-                                    <?php } ?>
+									<?php if($appellationlieu->getMention()->getKey() != "mention"): ?>
+										Total Mention <small style="font-size: 14px;">- <?php echo $appellationlieu->getAppellation()->getLibelle(); ?> <?php echo $appellationlieu->getLieu()->getLibelle(); ?> <?php echo $appellationlieu->getMention()->getLibelle(); ?></small>
+                                    <?php elseif($isGrandCru): ?>
+                                    	Total Lieu-dit <small style="font-size: 14px;">- <?php echo $appellationlieu->getLieu()->getLibelle(); ?></small>
+                                    <?php else: ?>
+                                    	Total Appellation <small style="font-size: 14px;">- <?php echo $appellationlieu->getAppellation()->getLibelle(); ?></small>
+                                    <?php endif ?>
                                 </h2>
                                 <div class="clear"></div>
 								<div class="contenu_section">

@@ -16,8 +16,8 @@
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if(CurrentClient::getCurrent()->isDREditable()): ?>
-                    <p><strong>A valider</strong> avant le 10/12/<?php echo $compte->getCampagne() ?></p>
+                    <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
+                    <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateOuverture()->format('d/m/Y') ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
@@ -33,7 +33,7 @@
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if(CurrentClient::getCurrent()->isDREditable()): ?>
+                    <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
                     <p>Le portail est <strong>ouvert</strong></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
@@ -96,7 +96,7 @@
                     <p class="mineure">Aucune information à signaler</p>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_gamma', array('identifiant' => $compte->identifiant)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_gamma', GammaClient::getInstance()->getEtablissement($compte)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

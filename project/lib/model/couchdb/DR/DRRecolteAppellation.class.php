@@ -22,6 +22,17 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $lieux;
     }
 
+    public function hasDetailsInLieu($lieuKey) {
+        foreach($this->getMentions() as $mention) {
+            if($mention->getLieux()->exist($lieuKey) && count($mention->getLieux()->get($lieuKey)->getProduitsDetails())) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getVolumeRevendique($force_calcul = false) {
 
         return parent::getDataByFieldAndMethod("volume_revendique", array($this,"getSumNoeudFields") , $force_calcul);

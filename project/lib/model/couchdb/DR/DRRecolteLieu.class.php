@@ -5,7 +5,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     public function getLibelleWithAppellation() {
         if ($this->getLibelle())
             return $this->getParent()->getParent()->getLibelle() . ' ' . $this->getParent()->getLibelle() . ' - ' . $this->getLibelle();
-        return $this->getParent()->getParent()->getLibelle();
+        return $this->getParent()->getParent()->getLibelle().' '.$this->getParent()->getLibelle();
     }
 
     public function getMention() {

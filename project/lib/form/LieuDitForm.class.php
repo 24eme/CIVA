@@ -1,33 +1,105 @@
 <?php
 
-class LieuDitForm extends acCouchdbObjectForm {
+class LieuDitForm extends acCouchdbForm {
 
-    public function setup() {
-        $lieu_choices = $this->getObject()->getLieuChoices();
-	    $this->setWidgets(array(
-            'lieu' => new sfWidgetFormChoice(array( 'choices'  => $lieu_choices, ))));
+    public function setDefaults($defaults)
+    {
+        $defaults["appellations"] = array("lieux_vtsgn" => array());
+        foreach ($this->getDocument()->recolte->getAppellations() as $appellation) {
+            if (!$appellation->getConfig()->hasManyLieu()) {
+                continue;
+            }
 
-            $this->setValidators(array(
-                'lieu' => new sfValidatorChoice(array('required' => $this->getOption('lieu_required', true), 'choices' => array_keys($lieu_choices))),
-            ));
-
-            $this->widgetSchema->setNameFormat('lieudit_'.$this->getObject()->getKey().'[%s]');
-            $this->validatorSchema['lieu']->setMessage('required', 'Champ obligatoire');
-    }
-
-    public function doUpdateObject($values) {
-        if (isset($values['lieu'])) {
-            /*if($mention->getConfig()->exist($values['lieu'])){
-                    $lieu = $mention->add($values['lieu']);
-                    foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
-
-                    }
+            foreach($appellation->getLieux() as $lieu) {
+                if($lieu->getMention()->getKey() == "mention") {
+                    continue;
                 }
-            }*/
-            foreach($this->getObject()->getChildrenNode() as $item) {
-                $this->getObject()->getChildrenNode()->add($item->getKey())->getChildrenNode()->add($values['lieu']);
+
+                $defaults["appellations"]["lieux_vtsgn"][$lieu->getKey()] = true;
             }
         }
+
+        parent::setDefaults($defaults);
+    }
+
+    public function setup() {
+        $defaults = $this->getDefaults();
+
+        $formAppellations = new BaseForm();
+
+        foreach ($this->getDocument()->recolte->getAppellations() as $appellation) {
+            if (!$appellation->getConfig()->hasManyLieu()) {
+                continue;
+            }
+
+            $formAppellation = new BaseForm();
+
+            $formAppellation->setWidget('ajout', new sfWidgetFormChoice(array("choices" => $appellation->getLieuChoices())));
+            $formAppellation->setValidator('ajout', new sfValidatorPass());
+
+            $formLieux = new BaseForm();
+            foreach($appellation->mention->getLieux() as $lieu) {
+                $formLieux->setWidget($lieu->getKey(), new sfWidgetFormInputCheckbox(array("value_attribute_value" => "1")));
+                $formLieux->setValidator($lieu->getKey(), new sfValidatorBoolean());
+
+                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($appellation->getHash()."/mentionVT/".$lieu->getKey())) ) {
+                    $formLieux->getWidget($lieu->getKey())->setAttribute('disabled', 'disabled');
+                }
+            }
+            $formLieux->setDefaults($defaults["appellations"]["lieux_vtsgn"]);
+            $formAppellation->embedForm('lieux_vtsgn', $formLieux);
+
+
+            $formAppellations->embedForm($appellation->getHash(), $formAppellation);
+        }
+
+        $this->embedForm('appellations', $formAppellations);
+
+        $this->widgetSchema->setNameFormat('lieudit[%s]');
+    }
+
+
+
+    public function doUpdateObject($values) {
+        foreach($values['appellations'] as $hashAppellation => $valuesAppellation) {
+            foreach($valuesAppellation["lieux_vtsgn"] as $keyLieu => $valueLieu) {
+                foreach($this->getDocument()->get($hashAppellation)->mentions as $item) {
+                    if($item->getKey() == "mention") {
+
+                        continue;
+                    }
+                    if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($item->getHash()."/".$keyLieu))) {
+
+                        continue;
+                    }
+                    if($valueLieu) {
+                        $item->getChildrenNode()->add($keyLieu);
+                    } elseif($item->getChildrenNode()->exist($keyLieu) && !count($item->getChildrenNode()->get($keyLieu)->getProduitsDetails())) {
+                        $item->getChildrenNode()->remove($keyLieu);
+                    }
+                }
+
+            }
+        }
+
+        foreach($values['appellations'] as $hashAppellation => $valuesAppellation) {
+            if (!isset($valuesAppellation['ajout'])) {
+                continue;
+            }
+            foreach($this->getDocument()->get($hashAppellation)->mentions as $item) {
+                $keyLieu = $valuesAppellation['ajout'];
+                if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($item->getHash()."/".$keyLieu))) {
+
+                    continue;
+                }
+                $item->getChildrenNode()->add($keyLieu);
+            }
+        }
+    }
+
+    public function save() {
+        $this->doUpdateObject($this->getValues());
+        $this->getDocument()->save();
     }
 
 }

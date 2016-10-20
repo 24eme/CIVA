@@ -236,7 +236,7 @@ class DRMClient extends acCouchdbClient {
 
         $this->getHistorique($identifiant, $periode)->reload();
 
-        return $this-> ByPeriode($identifiant, $periode);
+        return $this->createDocByPeriode($identifiant, $periode);
     }
 
     public function listCampagneByEtablissementId($identifiant) {

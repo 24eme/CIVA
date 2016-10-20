@@ -45,27 +45,12 @@ class Current extends BaseCurrent {
 
     public function getCampagne() {
 
-        return "2015";
-    }
-
-    public function isDREditable() {
-
-        return false;
+        return "2016";
     }
 
     public function isDSDecembre() {
 
         return false;
-    }
-
-    public function getDsNonEditable() {
-
-        return 1;
-    }
-
-    public function getDsNonOuverte() {
-
-        return 0;
     }
 
     public function hasCurrentFromTheFuture() {

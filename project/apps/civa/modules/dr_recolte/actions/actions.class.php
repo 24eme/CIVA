@@ -107,11 +107,24 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeud(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+
+        if(in_array($request->getParameter('hash'), array("mentionVT", "mentionSGN"))) {
+            foreach($this->declaration->recolte->getMentions() as $mention) {
+                if($mention->getKey() != $request->getParameter('hash')) {
+                    continue;
+                }
+
+                $this->noeud = $mention;
+                break;
+            }
+        }
+
+        if(!isset($this->noeud)) {
+            $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+        }
 
         if($this->noeud instanceof DRRecolteMention) {
             foreach($this->noeud->getLieux() as $lieu) {
-
                 $this->noeud = $lieu;
                 break;
             }
@@ -157,15 +170,12 @@ class dr_recolteActions extends _DRActions {
     public function executeRecapitulatif(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_recapitulatif_ventes";
         $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
+        $this->appellations = $this->declaration->getAppellationsAvecVtsgn();
 
         $this->initPrecDR();
 
         $this->appellationlieu = $this->noeud;
-        if($this->noeud->getAppellation()->getKey() == 'appellation_GRDCRU'){
-            $this->isGrandCru = true;
-        }else{
-            $this->isGrandCru = false;
-        }
+        $this->isGrandCru = $this->noeud->getAppellation()->getConfig()->hasManyLieu();
         $this->form = new RecapitulatifContainerForm($this->appellationlieu);
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -213,20 +223,20 @@ class dr_recolteActions extends _DRActions {
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-        $this->initOnglets($request);
+        $this->initDetails();
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form_ajout_appellation ->bind($request->getParameter($this->form_ajout_appellation->getName()));
+            $this->form_ajout_appellation->bind($request->getParameter($this->form_ajout_appellation->getName()));
             if ($this->form_ajout_appellation->isValid()) {
                 $this->form_ajout_appellation->save();
                 if ($this->form_ajout_appellation->needLieu()) {
-                    $request->setParameter('force_appellation', $this->form_ajout_appellation->getValue('appellation'));
+                    $request->setParameter('force_appellation', $this->form_ajout_appellation->getValue('appellation_hash'));
                     $request->setMethod(sfWebRequest::GET);
-                    $this->forward('recolte', 'ajoutLieuAjax');
-                    //return $this->redirect(array_merge($this->onglets->getUrl('dr_recolte_add_lieu'), array('force_appellation' => $this->form_ajout_appellation->getValue('appellation'))));
+
+                    return $this->forward('dr_recolte', 'ajoutLieuAjax');
                 } else {
                     return $this->renderText(json_encode(array('action' => 'redirect',
-                            'data' => $this->generateUrl('dr_recolte_add', $this->onglets->getUrlParams($this->form_ajout_appellation->getValue('appellation'))))));
+                            'data' => $this->generateUrl('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' =>  $this->form_ajout_appellation->getValue('appellation_hash'))))));
                 }
             }
         }
@@ -237,26 +247,25 @@ class dr_recolteActions extends _DRActions {
 
     public function executeAjoutLieuAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-
-        $this->initOnglets($request);
+        $this->initDetails();
 
         if ($request->hasParameter('force_appellation')) {
-            $this->forward404Unless($this->declaration->recolte->getNoeudAppellations()->getConfig()->exist($request->getParameter('force_appellation')));
-            $this->url_ajout_lieu = array_merge($this->onglets->getUrl('dr_recolte_add_lieu', null, null, null, null, null), array('force_appellation' => $request->getParameter('force_appellation')));
-            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->recolte->getNoeudAppellations()->add($request->getParameter('force_appellation')));
+            $this->url_ajout_lieu = $this->generateUrl('dr_recolte_add_lieu', array('force_appellation' => $request->getParameter('force_appellation'), 'id' => $this->declaration->_id));
+            $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->declaration->get($request->getParameter('force_appellation'))->getAppellation());
         }
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form_ajout_lieu->bind($request->getParameter($this->form_ajout_lieu->getName()));
             if ($this->form_ajout_lieu->isValid()) {
                 $this->form_ajout_lieu->save();
+
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                        'data' => $this->generateUrl('dr_recolte_add', $this->onglets->getUrlParams($this->form_ajout_lieu->getObject()->getKey(), $this->form_ajout_lieu->getValue('lieu'))))));
+                        'data' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->declaration->_id, 'hash' => $this->form_ajout_lieu->getValue('lieu_hash'))))));
             }
         }
 
         return $this->renderText(json_encode(array('action' => 'render',
-                'data' => $this->getPartial('ajoutLieuForm', array('onglets' => $this->onglets ,'form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
+                'data' => $this->getPartial('ajoutLieuForm', array('form' => $this->form_ajout_lieu, 'url' => $this->url_ajout_lieu)))));
     }
 
     public function executeAjoutAcheteurAjax(sfWebRequest $request) {
@@ -336,8 +345,13 @@ class dr_recolteActions extends _DRActions {
     }
 
     protected function initDetails() {
-        $this->details = $this->produit->add('detail');
-        $this->nb_details_current = $this->details->count();
+        if(isset($this->produit)) {
+            $this->details = $this->produit->add('detail');
+            $this->nb_details_current = $this->details->count();
+            foreach($this->produit->getLieu()->getConfig()->getCouleurs() as $couleur) {
+                $this->declaration->getOrAdd(HashMapper::inverse($couleur->getHash()));
+            }
+        }
 
         $this->detail_key = null;
         $this->detail_action_mode = null;
@@ -347,15 +361,17 @@ class dr_recolteActions extends _DRActions {
         $this->form_ajout_appellation = new RecolteAjoutAppellationForm($this->declaration->recolte);
         $this->form_ajout_lieu = null;
         $this->url_ajout_lieu = null;
-        if ($this->produit->getAppellation()->getConfig()->hasManyLieu()) {
+        if (isset($this->produit) && $this->produit->getAppellation()->getConfig()->hasManyLieu()) {
             $this->form_ajout_lieu = new RecolteAjoutLieuForm($this->produit->getAppellation());
-            $this->url_ajout_lieu = "";
+            $this->url_ajout_lieu = $this->generateUrl('dr_recolte_add_lieu', array('id' => $this->declaration->_id, 'force_appellation' => $this->produit->getMention()->getHash()));
         }
+
+        $this->appellations = $this->declaration->getAppellationsAvecVtsgn();
     }
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey())->get($this->produit->getMention()->getKey());
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
     }
 
     protected function initPrecDR(){

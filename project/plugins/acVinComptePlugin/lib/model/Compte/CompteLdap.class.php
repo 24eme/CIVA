@@ -90,12 +90,11 @@ class CompteLdap extends acVinLdap {
     }
 
     public static function getGecos($compte) {
-        $noAccises = null;
+        if($compte->exist('gecos')) {
 
-        if($compte->getEtablissement()) {
-            $noAccises = $compte->getEtablissement()->no_accises;
+            return $compte->gecos;
         }
 
-        return sprintf("%s,%s,%s,%s", self::getIdentifiant($compte), $noAccises, $compte->getNom(), $compte->nom_a_afficher);
+        return null;
     }
 }

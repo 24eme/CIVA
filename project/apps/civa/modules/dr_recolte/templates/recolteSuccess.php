@@ -11,6 +11,7 @@
 
 <?php include_partial('ongletsAppellations', array(
     'declaration' => $declaration,
+    'appellations' => $appellations,
     'produit' => $produit,
 )); ?>
 <div id="application_dr" class="clearfix">
@@ -121,21 +122,21 @@ include_partial('popupAjoutOnglets', array(
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_acheteur',
     'title' => 'Ajouter un acheteur',
-    'action' => '',
+    'action' => url_for('dr_recolte_add_acheteur', array("sf_subject" => $produit->getDocument())),
     'name' => 'negoces',
     'cssclass' => 'vente_raisins'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_cave',
     'title' => 'Ajouter une cave',
-    'action' => '',
+    'action' => url_for('dr_recolte_add_acheteur', array("sf_subject" => $produit->getDocument())),
     'name' => 'cooperatives',
     'cssclass' => 'caves'))
 ?>
 <?php
 include_partial('popupAjoutAcheteur', array('id' => 'popup_ajout_mout',
     'title' => 'Ajouter un acheteur de mout',
-    'action' => '',
+    'action' => url_for('dr_recolte_add_acheteur', array("sf_subject" => $produit->getDocument())),
     'name' => 'mouts',
     'cssclass' => 'mouts'))
 ?>

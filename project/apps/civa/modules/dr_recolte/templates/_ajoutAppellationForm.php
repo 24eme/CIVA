@@ -1,6 +1,6 @@
 <?php use_helper('jQuery') ?>
 
-<?php echo jq_form_remote_tag(array('url' => '',
+<?php echo jq_form_remote_tag(array('url' => url_for('dr_recolte_add_appellation', $produit->getDocument()),
                                     'method' => 'post',
                                     'dataType' => 'json',
                                     'before' => "$('#form_ajout_appellation input[type=image]').hide();
