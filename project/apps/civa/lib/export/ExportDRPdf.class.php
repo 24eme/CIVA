@@ -120,19 +120,13 @@ class ExportDRPdf extends ExportDocument {
     }
 
     protected function create($dr) {
-        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getChildrenNode() as $appellation_config) {
-            if ($dr->exist(HashMapper::inverse($appellation_config->getHash()))) {
-                $appellation = $dr->get(HashMapper::inverse($appellation_config->getHash()));
-                foreach ($appellation->getConfig()->getMentions() as $mention) {
-                    foreach ($mention->getLieux() as $lieu) {
-                        if (!$dr->exist(HashMapper::inverse($lieu->getHash()))) {
-                            continue;
-                        }
-
-                        $lieu = $dr->get(HashMapper::inverse($lieu->getHash()));
-                        $this->createAppellationLieu($lieu, $appellation->getConfig()->hasLieuEditable(), $appellation->getConfig()->hasVtsgn());
-                    }
-                }
+        foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
+            foreach ($appellation['lieux'] as $lieu) {
+                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn());
+            }
+            if(!count($appellation['lieux'])) {
+                $lieu = $dr->get($appellation['hash']."/lieu");
+                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn());
             }
         }
 
@@ -235,26 +229,40 @@ class ExportDRPdf extends ExportDocument {
         $volume_cooperatives = array();
         $cvi = array();
         $has_cepage_rb = false;
-        foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getMentions() as $mention_config) {
-            if ($dr->exist(HashMapper::inverse($mention_config->getHash()))) {
-                $mention = $dr->get(HashMapper::inverse($mention_config->getHash()));
-                if ($mention->getConfig()->excludeTotal()) {
-                continue;
+
+        foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
+            $appellations[] = $appellation["hash"];
+            $libelle[$appellation["hash"]] = $appellation['libelle'];
+            $superficie[$appellation["hash"]] = 0;
+            $volume[$appellation["hash"]] = 0;
+            $volume_vendus[$appellation["hash"]] = 0;
+            $revendique[$appellation["hash"]] = 0;
+            $revendique_sur_place[$appellation["hash"]] = 0;
+            $usages_industriels_sur_place[$appellation["hash"]] = 0;
+            $usages_industriels[$appellation["hash"]] = 0;
+            $volume_sur_place[$appellation["hash"]] = 0;
+            $volume_rebeches[$appellation["hash"]] = null;
+            $volume_rebeches_sur_place[$appellation["hash"]] = null;
+
+            foreach($appellation["noeuds"] as $noeud) {
+                if ($noeud->getConfig()->excludeTotal()) {
+                    continue;
                 }
-                $appellations[] = $mention->getHash();
-                $libelle[$mention->getHash()] =  $mention->getAppellation()->getConfig()->getLibelle() .' '. $mention->getConfig()->getLibelle();
-                $superficie[$mention->getHash()] = $mention->getTotalSuperficie();
-                $volume[$mention->getHash()] = $mention->getTotalVolume();
-                $volume_vendus[$mention->getHash()] = $mention->getTotalVolumeVendus();
-                $revendique[$mention->getHash()] = $mention->getVolumeRevendique();
-                $revendique_sur_place[$mention->getHash()] = $mention->getVolumeRevendiqueCaveParticuliere();
-                $usages_industriels_sur_place[$mention->getHash()] = $mention->getUsagesIndustrielsSurPlace();
-                $usages_industriels[$mention->getHash()] = $mention->getUsagesIndustriels();
-                $volume_sur_place[$mention->getHash()] = $mention->getTotalCaveParticuliere();
-                $volume_rebeches[$mention->getHash()] = $mention->getConfig()->hasCepageRB() ? $mention->getTotalRebeches() : null;
-                $volume_rebeches_sur_place[$mention->getHash()] = $mention->getConfig()->hasCepageRB() ? $mention->getSurPlaceRebeches() : null;
-                if($mention->getConfig()->hasCepageRB()) {
-                $has_cepage_rb = true;
+                $superficie[$appellation["hash"]] += $noeud->getTotalSuperficie();
+                $volume[$appellation["hash"]] += $noeud->getTotalVolume();
+                $volume_vendus[$appellation["hash"]] += $noeud->getTotalVolumeVendus();
+                $revendique[$appellation["hash"]] += $noeud->getVolumeRevendique();
+                $revendique_sur_place[$appellation["hash"]] += $noeud->getVolumeRevendiqueCaveParticuliere();
+                $usages_industriels_sur_place[$appellation["hash"]] += $noeud->getUsagesIndustrielsSurPlace();
+                $usages_industriels[$appellation["hash"]] += $noeud->getUsagesIndustriels();
+                $volume_sur_place[$appellation["hash"]] += $noeud->getTotalCaveParticuliere();
+                if($noeud->getConfig()->hasCepageRB()) {
+                    $volume_rebeches[$appellation["hash"]] += $noeud->getTotalRebeches();
+                    $volume_rebeches_sur_place[$appellation["hash"]] += $noeud->getSurPlaceRebeches();
+                }
+
+                if($noeud->getConfig()->hasCepageRB()) {
+                    $has_cepage_rb = true;
                 }
             }
         }
@@ -342,6 +350,9 @@ class ExportDRPdf extends ExportDocument {
   					$c['cepage'] = $cepage->getLibelle();
   					$c['denomination'] = $detail->denomination;
   					$c['vtsgn'] = $detail->vtsgn;
+                    if($cepage->getMention()->getKey() != "mention") {
+                        $c['vtsgn'] = $cepage->getMention()->getLibelle();
+                    }
   					$c['superficie'] = $detail->superficie;
             $c['volume'] = $detail->volume;
             if($detail->canHaveUsagesLiesSaisi()) {
@@ -447,7 +458,10 @@ class ExportDRPdf extends ExportDocument {
     	$c['denomination'] = ($lieu->getKey() == 'lieu') ? 'Appellation' : '';
     	if ($lieu->getAppellation()->getAppellation() == 'VINTABLE')
       		$c['denomination'] = '';
-    	$c['vtsgn'] = '';
+        if($lieu->getMention()->getKey() != "mention") {
+            $c['denomination'] = '';
+    	    $c['vtsgn'] = $lieu->getMention()->getLibelle();
+        }
 	    $c['superficie'] = $lieu->total_superficie;
 	    $c['volume'] = $lieu->total_volume;
 	    $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
