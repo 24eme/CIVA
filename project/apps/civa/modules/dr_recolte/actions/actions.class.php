@@ -173,11 +173,7 @@ class dr_recolteActions extends _DRActions {
         $this->initPrecDR();
 
         $this->appellationlieu = $this->noeud;
-        if($this->noeud->getAppellation()->getKey() == 'appellation_GRDCRU'){
-            $this->isGrandCru = true;
-        }else{
-            $this->isGrandCru = false;
-        }
+        $this->isGrandCru = $this->noeud->getAppellation()->getConfig()->hasManyLieu();
         $this->form = new RecapitulatifContainerForm($this->appellationlieu);
 
         if ($request->isMethod(sfWebRequest::POST)) {

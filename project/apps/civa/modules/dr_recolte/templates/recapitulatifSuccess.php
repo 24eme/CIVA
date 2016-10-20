@@ -44,13 +44,12 @@
 				            <div id="total_appelation">
 								<h2 class="titre_section">
 									<?php if($appellationlieu->getMention()->getKey() != "mention"): ?>
-										Total Mention <?php echo $appellationlieu->getMention()->getLibelle(); ?>
+										Total Mention <small style="font-size: 14px;">- <?php echo $appellationlieu->getAppellation()->getLibelle(); ?> <?php echo $appellationlieu->getLieu()->getLibelle(); ?> <?php echo $appellationlieu->getMention()->getLibelle(); ?></small>
                                     <?php elseif($isGrandCru): ?>
-                                    	Total Lieu-dit
+                                    	Total Lieu-dit <small style="font-size: 14px;">- <?php echo $appellationlieu->getLieu()->getLibelle(); ?></small>
                                     <?php else: ?>
-                                    	Total Appellation
+                                    	Total Appellation <small style="font-size: 14px;">- <?php echo $appellationlieu->getAppellation()->getLibelle(); ?></small>
                                     <?php endif ?>
-									- <?php echo $appellationlieu->getLibelle(); ?>
                                 </h2>
                                 <div class="clear"></div>
 								<div class="contenu_section">
