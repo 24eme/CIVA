@@ -70,8 +70,7 @@ class drActions extends _DRActions {
         }
         if ($boutons && in_array('previous', array_keys($boutons))) {
             $this->getUser()->removeDeclaration();
-
-            return $this->redirect('mon_espace_civa_dr');
+            return $this->redirect('mon_espace_civa_dr', $this->getRoute()->getEtablissement());
         } elseif ($boutons && in_array('next', array_keys($boutons))) {
 
             return $this->redirectToNextEtapes($this->getRoute()->getDR());
@@ -92,7 +91,7 @@ class drActions extends _DRActions {
             $boutons = $this->getRequestParameter('boutons', null);
             if ($boutons && in_array('previous', array_keys($boutons))) {
 
-                return $this->redirect('mon_espace_civa_dr');
+                return $this->redirect('mon_espace_civa_dr', $this->getRoute()->getEtablissement());
             }
 
             return $this->redirectByBoutonsEtapes(null, $this->dr);
@@ -387,14 +386,7 @@ class drActions extends _DRActions {
     private function updateUrlLog($array) {
       $ret = array();
       foreach ($array as $log) {
-        if(!isset($log['url_log_param'])) {
-            $log['url_log'] = false;
-            array_push($ret, $log);
-            continue;
-        }
-        if (!isset($log['url_log_page']))
-          $log['url_log_page'] = 'recolte';
-        $log['url_log'] = $this->generateUrl($log['url_log_page'], $log['url_log_param']);
+        $log['url_log'] = isset($log['url']) ? $log['url'] : false;
         array_push($ret, $log);
       }
       return $ret;

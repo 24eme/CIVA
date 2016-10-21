@@ -19,7 +19,7 @@
                 <ul class="messages_log">
                 <?php foreach($validLogErreur as $key=>$log): ?>
                     <li>
-                        <?php echo $log['info'] ?>&nbsp;:&nbsp;<a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_erreur', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a>
+                        <?php echo $log['info'] ?>&nbsp;:&nbsp;<a href="<?php echo url_for('dr_recolte_erreur_log', array('id' => $dr->_id, 'array' => 'log_erreur', 'flash_message' => $key)); ?>"><?php echo $log['log']; ?></a>
                     </li>
                 <?php endforeach; ?>
                 </ul>
@@ -31,7 +31,7 @@
                 <ul class="messages_log">
                     <?php foreach($validLogVigilance as $key=>$log): ?>
                     <li>
-                        <?php echo $log['info'] ?>&nbsp;:&nbsp;<a href="<?php echo url_for('recolte_erreur_log', array('array'=>'log_vigilance', 'flash_message'=>$key)); ?>"><?php echo $log['log']; ?></a>
+                        <?php echo $log['info'] ?>&nbsp;:&nbsp;<a href="<?php echo url_for('dr_recolte_erreur_log', array('id' => $dr->_id, 'array' => 'log_vigilance', 'flash_message'=> $key)); ?>"><?php echo $log['log']; ?></a>
                     </li>
                     <?php endforeach; ?>
                 </ul>

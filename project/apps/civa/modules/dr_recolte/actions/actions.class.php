@@ -107,6 +107,14 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeud(sfWebRequest $request) {
+        if(
+        preg_match("|(mention[A-Z]*)|", $request->getParameter('origine'), $matchesOrigine) &&
+        preg_match("|(mention[A-Z]*)|", $request->getParameter('hash'), $matchesDestination) &&
+        $matchesOrigine[1] != $matchesDestination[1] &&
+        preg_match("|".str_replace($matchesDestination[1], $matchesOrigine[1], $request->getParameter('hash'))."|",  $request->getParameter('origine'))) {
+
+            return $this->redirect("dr_recolte_correspondance_mention", array('id' => $this->declaration->_id, 'hash' => $request->getParameter('origine'), 'mention' => $matchesDestination[1], 'hash_fallback' => $request->getParameter('hash')));
+        }
 
         if(in_array($request->getParameter('hash'), array("mentionVT", "mentionSGN"))) {
             foreach($this->declaration->recolte->getMentions() as $mention) {
@@ -119,21 +127,60 @@ class dr_recolteActions extends _DRActions {
             }
         }
 
+
         if(!isset($this->noeud)) {
             $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
         }
 
         if($this->noeud instanceof DRRecolteMention) {
-            foreach($this->noeud->getLieux() as $lieu) {
-                $this->noeud = $lieu;
+            foreach($this->noeud->getConfig()->getLieux() as $lieuConfig) {
+                $hash = HashMapper::inverse($lieuConfig->getHash());
+                if(!$this->declaration->exist($hash)) {
+
+                    continue;
+                }
+                $this->noeud = $this->declaration->get(HashMapper::inverse($lieuConfig->getHash()));
                 break;
             }
         }
 
-        foreach($this->noeud->getConfig()->getProduits() as $produit) {
+        foreach($this->noeud->getConfig()->getProduits() as $produitConfig) {
+            if($produitConfig->exist('attributs/no_dr') && $produitConfig->get('attributs/no_dr')) {
+                continue;
+            }
 
-            return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => HashMapper::inverse($produit->getHash())));
+            $hash = HashMapper::inverse($produitConfig->getHash());
+
+            if (!count($this->noeud->getProduitsDetails())) {
+
+                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+            }
+
+            if($this->declaration->exist($hash) && count($this->declaration->get($hash)->getProduitsDetails())) {
+
+                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+            }
         }
+    }
+
+    public function executeProduitCorrepondanceMention(sfWebRequest $request) {
+        $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $request->getParameter('hash'));
+        $hashMentionConfig = HashMapper::convert($hashMention);
+
+        if($this->declaration->getConfig()->exist(HashMapper::convert($hashMention)) &&
+           $this->declaration->exist(HashMapper::inverse($this->declaration->getConfig()->get($hashMentionConfig)->getLieu()->getHash()))) {
+            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $hashMention));
+        }
+
+        $noeud = $this->declaration->getOrAdd($request->getParameter('hash'))->getLieu();
+        $hashMention = preg_replace("|/mention[A-Z]*|", "/".$request->getParameter('mention'), $noeud->getHash());
+
+        if(!$this->declaration->exist($hashMention)) {
+
+            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $request->getParameter('hash_fallback')));
+        }
+
+        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $hashMention));
     }
 
     public function executeProduitNoeudPrecedent(sfWebRequest $request) {
