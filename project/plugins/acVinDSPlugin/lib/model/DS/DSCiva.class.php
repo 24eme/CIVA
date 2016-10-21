@@ -290,6 +290,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
     }
 
     public function getConfig() {
+        
         return ConfigurationClient::getConfiguration($this->getDateStock());
     }
 
