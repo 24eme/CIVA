@@ -8,10 +8,10 @@ class GammaClient
     }
 
     public function getEtablissement($compte) {
+        $etablissement = $compte->getEtablissementOrigineObject();
+        if($etablissement && $etablissement->no_accises) {
 
-        if($compte->getEtablissement() && $compte->getEtablissement()->no_accises) {
-
-            return $compte->getEtablissement();
+            return $etablissement;
         }
 
         $societe = $compte->getSociete();
