@@ -122,11 +122,11 @@ class ExportDRPdf extends ExportDocument {
     protected function create($dr) {
         foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
             foreach ($appellation['lieux'] as $lieu) {
-                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn());
+                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn() || in_array($lieu->getMention()->getKey(), array("mentionVT", "mentionSGN")));
             }
             if(!count($appellation['lieux'])) {
                 $lieu = $dr->get($appellation['hash']."/lieu");
-                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn());
+                $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn() || in_array($lieu->getMention()->getKey(), array("mentionVT", "mentionSGN")));
             }
         }
 
