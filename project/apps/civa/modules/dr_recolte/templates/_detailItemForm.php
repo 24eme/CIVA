@@ -127,11 +127,11 @@
 
 <?php if ($produit->getConfig()->hasMinQuantite()) : ?>
             var total_non_negociant = <?php echo $produit->getLieu()->getTotalVolumeForMinQuantite() ?>;
-            var min = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->min_quantite ?>);
-            var max = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->max_quantite ?>);
+            var min = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->get('attributs/min_quantite') ?>);
+            var max = truncTotal(total_non_negociant * <?php echo $produit->getConfig()->get('attributs/max_quantite') ?>);
 
-            var min_quantite = <?php echo $produit->getConfig()->min_quantite ?>;
-            var max_quantite = <?php echo $produit->getConfig()->max_quantite ?>;
+            var min_quantite = <?php echo $produit->getConfig()->get('attributs/min_quantite') ?>;
+            var max_quantite = <?php echo $produit->getConfig()->get('attributs/max_quantite') ?>;
 
             var volume_cooperatives = <?php echo json_encode($produit->getLieu()->getVolumeAcheteursForMinQuantite()->getRawValue()) ?>;
             var volume_cave_particuliere = <?php echo $produit->getLieu()->getTotalCaveParticuliereForMinQuantite() ?>;
