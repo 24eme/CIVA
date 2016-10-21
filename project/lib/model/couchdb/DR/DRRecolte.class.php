@@ -93,4 +93,57 @@ class DRRecolte extends BaseDRRecolte {
         }
     }
 
+    public function getAppellationsAvecVtsgn() {
+        $appellations = array();
+        foreach($this->getConfig()->getArrayAppellations() as $appellationConfig) {
+            if($appellationConfig->getKey() == "PINOTNOIR") {
+                $appellations["mentionVT"] = null;
+                $appellations["mentionSGN"] = null;
+            }
+            $hash = HashMapper::inverse($appellationConfig->getHash());
+            if(!$this->getDocument()->exist($hash)) {
+
+                continue;
+            }
+            $appellations[$hash] = null;
+        }
+
+        $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "noeuds" => array(), "lieux" => array());
+        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN", "noeuds" => array(), "lieux" => array());
+
+        foreach($appellations as $hash => $null) {
+            if(!$this->getDocument()->exist($hash)) {
+                continue;
+            }
+            $appellation = $this->getDocument()->get($hash);
+
+            $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array(), "noeuds" => array());
+            foreach($appellation->getMentions() as $mention) {
+                $key = ($mention->getKey() == "mention") ? $appellation->getHash() : $mention->getKey();
+                $appellations[$key]['noeuds'][$mention->getHash()] = $mention;
+                if($mention->getConfig()->hasManyLieu() || $mention->getKey() != "mention") {
+                    foreach($mention->getConfig()->getLieux() as $lieuConfig)  {
+                        $hashLieu = HashMapper::inverse($lieuConfig->getHash());
+                        if(!$this->getDocument()->exist($hashLieu)) {
+                            continue;
+                        }
+                        $lieu = $this->getDocument()->get($hashLieu);
+                        $appellations[$key]['lieux'][] = $lieu;
+                    }
+                }
+            }
+        }
+
+        if(!count($appellations["mentionSGN"]["noeuds"])) {
+            unset($appellations["mentionSGN"]);
+        }
+
+        if(!count($appellations["mentionVT"]["noeuds"])) {
+            unset($appellations["mentionVT"]);
+        }
+
+        return $appellations;
+    }
+
+
 }

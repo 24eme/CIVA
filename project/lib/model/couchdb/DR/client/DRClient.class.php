@@ -297,9 +297,13 @@ class DRClient extends acCouchdbClient {
         return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
     }
 
-    public function getConfigAppellationsAvecVtsgn() {
+    public function getConfigAppellationsAvecVtsgn($configuration = null) {
         $appellations = array();
-        $configuration = ConfigurationClient::getCurrent();
+
+        if(!$configuration) {
+            $configuration = ConfigurationClient::getCurrent();
+        }
+        
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
             if($appellation->getKey() == "PINOTNOIR") {
                 $appellations["mentionVT"] = null;

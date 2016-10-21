@@ -6,7 +6,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     protected $total_volume_before;
 
     public function getConfig() {
-        return $this->getCouchdbDocument()->getConfigurationCampagne()->get(HashMapper::convert($this->getHash()));
+        
+        return $this->getCouchdbDocument()->getConfig()->get(HashMapper::convert($this->getHash()));
     }
 
     abstract public function getChildrenNode();
