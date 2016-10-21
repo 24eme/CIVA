@@ -258,11 +258,21 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
     public function getEtablissementOrigine() {
         foreach ($this->origines as $origine) {
-            if (preg_match('/^ETABLISSEMENT[-]{1}[0-9]*$/', $origine)) {
+            if (preg_match('/^ETABLISSEMENT[-]{1}[C0-9]*$/', $origine)) {
                 return $origine;
             }
         }
         return null;
+    }
+
+    public function getEtablissementOrigineObject() {
+        $id = $this->getEtablissementOrigine();
+        if(!$id) {
+
+            return null;
+        }
+
+        return EtablissementClient::getInstance()->find($id);
     }
 
     public function setCivilite($c) {

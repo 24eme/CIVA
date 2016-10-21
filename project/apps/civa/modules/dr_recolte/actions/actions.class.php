@@ -243,13 +243,13 @@ class dr_recolteActions extends _DRActions {
 
     public function executeMotifNonRecolte(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-        $this->initOnglets($request);
+        $this->produit = $this->declaration->get($request->getParameter('hash'));
         $this->initDetails();
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
 
-        if($this->onglets->getCurrentKeyAppellation() == "appellation_ALSACEBLANC") $nonEdel = true;
+        if(preg_match("|/appellation_ALSACEBLANC/mention/|", $this->produit->getHash())) $nonEdel = true;
         else $nonEdel = false;
 
         $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key), array('nonEdel'=> $nonEdel));
@@ -258,14 +258,16 @@ class dr_recolteActions extends _DRActions {
             $this->form ->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
+
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                        'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
+                        'data' => $this->generateUrl('dr_recolte_noeud', array("id" => $this->declaration->_id, 'hash' => $this->produit->getHash())))));
             }
+
             return $this->renderText(json_encode(array('action' => 'render',
-                    'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
+                    'data' => $this->getPartial('dr_recolte/motifNonRecolteForm', array('produit' => $this->produit, 'form' => $this->form, 'detail_key' => $this->detail_key)))));
         }
 
-        return $this->renderText($this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)));
+        return $this->renderText($this->getPartial('dr_recolte/motifNonRecolteForm', array('produit' => $this->produit,'form' => $this->form, 'detail_key' => $this->detail_key)));
     }
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
@@ -332,45 +334,53 @@ class dr_recolteActions extends _DRActions {
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
-    	foreach ($dr->recolte->getNoeudAppellations()->getConfig()->getChildrenNode() as $key_appellation => $appellation_config) {
-            if ($dr->exist(HashMapper::inverse($appellation_config->getHash()))) {
-    			$appellation = $dr->get(HashMapper::inverse($appellation_config->getHash()));
-                foreach($appellation->getMentions() as $mention) {
-        			foreach ($mention->getLieux() as $lieu) {
-                        if ($lieu->getConfig()->getRendementNoeud() == -1) {
+    	foreach ($dr->getAppellationsAvecVtsgn() as $key_appellation => $appellationInfos) {
+			foreach ($appellationInfos["noeuds"] as $mention) {
+                $appellation = $mention->getAppellation();
+
+                if(in_array($key_appellation, array("mentionVT", "mentionSGN"))) {
+                    foreach($appellation->getConfig()->getMentions() as $mentionConfig) {
+                        if($mentionConfig->getRendementCepage() <= 0) {
                             continue;
                         }
-        				if ($lieu->getConfig()->existRendementCouleur()) {
-        					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
-    	    					$rd = $couleurConfig->getRendementCouleur();
-        						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
-        					}
-        				} else {
-
-    	    				if ($lieu->getConfig()->getRendementNoeud()) {
-    	    					$rd = $lieu->getConfig()->getRendementNoeud();
-    	    					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
-    	    				}
-    						foreach($lieu->getCouleurs() as $couleur) {
-        	    				foreach ($couleur->getConfig()->getChildrenNode() as $key => $cepage_config) {
-        	    					if($cepage_config->hasMinQuantite()) {
-        	    						$this->min_quantite = $cepage_config->min_quantite * 100 ;
-        	    						$this->max_quantite = $cepage_config->max_quantite * 100 ;
-        	    					}
-        	    					if($cepage_config->getRendementCepage()) {
-        	    						$rd = $cepage_config->getRendementCepage();
-        	    						if($appellation->getConfig()->hasManyLieu()) {
-        	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
-        	    						} else {
-        	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
-        	    						}
-        	    					}
-        	    				}
-    						}
-        				}
-        			}
+                        $this->rendement["Mention"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
+                    }
+                    continue;
                 }
-    		}
+
+                foreach($mention->getLieux() as $lieu) {
+                    if ($lieu->getConfig()->getRendementNoeud() == -1) {
+                        continue;
+                    }
+    				if ($lieu->getConfig()->existRendementCouleur()) {
+    					foreach ($lieu->getConfig()->getCouleurs() as $couleurConfig) {
+        					$rd = $couleurConfig->getRendementCouleur();
+    						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
+    					}
+    				} else {
+        				if ($lieu->getConfig()->getRendementNoeud()) {
+        					$rd = $lieu->getConfig()->getRendementNoeud();
+        					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
+        				}
+    					foreach($lieu->getCouleurs() as $couleur) {
+    	    				foreach ($couleur->getConfig()->getCepages() as $key => $cepage_config) {
+    	    					if($cepage_config->hasMinQuantite()) {
+    	    						$this->min_quantite = $cepage_config->attributs->min_quantite * 100 ;
+    	    						$this->max_quantite = $cepage_config->attributs->max_quantite * 100 ;
+    	    					}
+    	    					if($cepage_config->getRendementCepage()) {
+    	    						$rd = $cepage_config->getRendementCepage();
+    	    						if($appellation->getConfig()->hasManyLieu()) {
+    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
+    	    						} else {
+    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
+    	    						}
+    	    					}
+    	    				}
+    					}
+    				}
+                }
+			}
     	}
     	return $this->renderPartial('dr_recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite,

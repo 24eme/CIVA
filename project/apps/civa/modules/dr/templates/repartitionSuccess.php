@@ -189,25 +189,6 @@
                 </div>
             </div>
 
-            <div id="choix_mode_saisie_lies">
-                <table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
-                    <thead>
-                        <tr>
-                            <th class="titre_tab">
-                            <img alt="Choix pour le volume à détruire" src="/images/textes/usages-industriels.png?20151019">
-                            <a class="msg_aide" title="Message aide" rel="help_popup_exploitation_acheteur_choix_mode_saisie_lie" href=""></a>
-                            </th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="td_intro" colspan="2" style="text-align: left;">Volume à détruire par cépage</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
         </div>
 
     </div>

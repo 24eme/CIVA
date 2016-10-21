@@ -107,7 +107,7 @@
     var_config_popup_ajout_motif = { ajax: true , auto_open: false};
 <?php if ($sf_user->hasFlash('open_popup_ajout_motif')): ?>
         var_config_popup_ajout_motif.auto_open = true;
-        var_config_popup_ajout_motif.auto_open_url = '<?php echo url_for(array_merge($onglets->getUrl('dr_recolte_motif_non_recolte', null, null, null, null, null, null)->getRawValue(), array('detail_key' => $sf_user->getFlash('open_popup_ajout_motif')))) ?>';
+        var_config_popup_ajout_motif.auto_open_url = '<?php echo url_for('dr_recolte_motif_non_recolte', array('id' => $declaration->_id, 'hash'=> $produit->getHash(), 'detail_key' => $sf_user->getFlash('open_popup_ajout_motif'))) ?>';
 <?php endif; ?>
 </script>
 

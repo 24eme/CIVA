@@ -2,7 +2,7 @@
 
 class RecolteMotifNonRecolteForm extends acCouchdbObjectForm {
     public function configure() {
-        
+
         $tab = $this->getMotifNonRecolteChoices();
         if(!$this->getOption('nonEdel', false) || $this->getObject()->getCepage()->getKey() == 'cepage_ED') unset($tab['ae']);
 
@@ -16,11 +16,12 @@ class RecolteMotifNonRecolteForm extends acCouchdbObjectForm {
 
         $this->widgetSchema->setNameFormat("recolte_motif[%s]");
         $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
-        
+
         $this->validatorSchema['motif_non_recolte']->setMessage('required', 'Veuillez sélectionner un motif de non récolte.');
     }
 
     public function getMotifNonRecolteChoices() {
-        return array_merge(array('' => ''), ConfigurationClient::getConfiguration()->motif_non_recolte->toArray());
+
+        return array_merge(array('' => ''), sfConfig::get('app_configuration_dr_motifs_non_recolte'));
     }
 }

@@ -30,7 +30,7 @@
             if (is_null($this->_appellation_choices)) {
                 $this->_appellation_choices = array();
                 $appellations = $this->getObject()->getDocument()->getAppellationsAvecVtsgn();
-                foreach (DRClient::getInstance()->getConfigAppellationsAvecVtsgn() as $key => $item) {
+                foreach ($this->getObject()->getDocument()->getConfigAppellationsAvecVtsgn() as $key => $item) {
                     if(array_key_exists(str_replace("/mention", "", $item["hash"]), $appellations)) {
                         continue;
                     }
@@ -43,7 +43,7 @@
 
         public function doUpdateObject($values) {
             $appellation_key = $values['appellation'];
-            $appellationsConfig = DRClient::getInstance()->getConfigAppellationsAvecVtsgn();
+            $appellationsConfig = $this->getObject()->getDocument()->getConfigAppellationsAvecVtsgn();
             $this->getObject()->getCouchdbDocument()->acheteurs->getNoeudAppellations()->add($appellation_key)->cave_particuliere = 1;
             $this->getObject()->getCouchdbDocument()->update(array('from_acheteurs'));
             $this->values['appellation_hash'] = $appellationsConfig[$appellation_key]["hash"];
