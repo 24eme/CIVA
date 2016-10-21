@@ -35,7 +35,6 @@
                 <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" <?php if(!$has_import): ?>checked="checked"<?php endif; ?> />
                 <label for="type_declaration_vierge">Démarrer d'une déclaration vierge</label>
             </div>
-
             <?php if (count($campagnes) > 0): ?>
                 <div class="ligne_form">
                     <input type="radio" id="type_declaration_precedente" name="dr[type_declaration]" value="precedente" />

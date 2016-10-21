@@ -359,8 +359,27 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function setCampagne($campagne) {
         //$nextCampagne = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
         $nextCampagne = ConfigurationClient::getConfiguration();
-        foreach ($this->recolte->getAppellations() as $k => $a) {
-            if (!$nextCampagne->get($a->getParent()->getHash())->exist($k)) {
+        $produits_to_remove = array();
+        foreach($this->recolte->getProduits() as $produit) {
+            if(!$this->getConfig()->exist(HashMapper::convert($produit->getHash()))) {
+                $produits_to_remove[$produit->getHash()] = $produit->getHash();
+            }
+        }
+        foreach($produits_to_remove as $hash) {
+            $this->remove($hash);
+        }
+        $details_to_remove = array();
+        foreach($this->recolte->getProduitsDetails() as $detail) {
+            if($detail->vtsgn && !$detail->getCepage()->getConfig()->hasVtsgn()) {
+                $details_to_remove[$detail->getHash()] = $detail->getHash();
+            }
+        }
+        foreach($details_to_remove as $hash) {
+            $this->remove($hash);
+        }
+        $this->cleanNoeuds();
+        /*foreach ($this->recolte->getAppellations() as $k => $a) {
+            if (!$nextCampagne->get(HashMapper::convert($a->getParent()->getHash()))->exist($k)) {
                 $this->recolte->getNoeudAppellations()->remove($k);
                 continue;
             }
@@ -382,7 +401,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     }
                 }
             }
-        }
+        }*/
         return $this->_set('campagne', $campagne);
     }
 
