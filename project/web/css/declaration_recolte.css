@@ -1628,6 +1628,11 @@ div#migration_compte .contenu_section#infos_traitement {
 	margin-top: 20px;
 }
 
+
+#gestion_recolte ul#liste_sepages > li.raccourci_mention ~ li.raccourci_mention {
+	margin-top: 0;
+}
+
 #gestion_recolte ul#liste_sepages li.raccourci_mention {
 	opacity: 0.8;
 	background: #666;
