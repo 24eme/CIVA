@@ -64,8 +64,8 @@
         <p class="vol_total_recolte">
             <input type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
             <?php if (!$produit->getConfig()->hasNoMotifNonRecolte() && $detail->hasMotifNonRecolteLibelle()) : ?>
-                <a href="" class="ajout ajout_motif <?php if ($detail->getMotifNonRecolteLibelle() != 'Déclaration en cours')
-                echo 'ajout_lien'; ?>"><?php echo $detail->getMotifNonRecolteLibelle(); ?></a>
+                <a href="<?php echo url_for("dr_recolte_motif_non_recolte", array("id" => $produit->getDocument()->_id, "hash" => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="ajout ajout_motif <?php if ($detail->getMotifNonRecolteLibelle() != 'Déclaration en cours')
+                echo 'ajout_lien'; ?>"><?php echo str_replace(" ", "&nbsp;", $detail->getMotifNonRecolteLibelle()); ?></a>
         <?php endif; ?>
         </p>
         <?php if ($detail->getConfig()->existRendement()): ?>

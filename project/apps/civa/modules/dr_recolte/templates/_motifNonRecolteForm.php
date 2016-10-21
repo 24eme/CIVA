@@ -1,6 +1,6 @@
 <?php use_helper('jQuery') ?>
 
-<?php echo jq_form_remote_tag(array('url' => url_for(array_merge($onglets->getUrl('recolte_motif_non_recolte', null, null, null, null, null, null)->getRawValue(), array('detail_key' => $detail_key))),
+<?php echo jq_form_remote_tag(array('url' => url_for("dr_recolte_motif_non_recolte", array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'detail_key' => $detail_key)),
                                     'method' => 'post',
                                     'dataType' => 'json',
                                     'before' => "$('#form_motif_non_recolte input[type=image]').hide();

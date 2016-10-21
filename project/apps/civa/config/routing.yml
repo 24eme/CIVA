@@ -514,7 +514,7 @@ dr_recolte_recapitulatif:
   requirements: { sf_method: [get, post] }
 
 dr_recolte_motif_non_recolte:
-  url:    /dr/:id/recolte/:appellation_lieu/:couleur_cepage/:detail_key/motif_non_recolte
+  url:    /dr/:id/recolte/motif_non_recolte
   param: { module: dr_recolte, action: motifNonRecolte }
   class: DRRoute
   options: { model: DR, type: object }

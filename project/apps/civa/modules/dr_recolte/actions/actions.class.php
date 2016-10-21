@@ -241,13 +241,13 @@ class dr_recolteActions extends _DRActions {
 
     public function executeMotifNonRecolte(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
-        $this->initOnglets($request);
+        $this->produit = $this->declaration->get($request->getParameter('hash'));
         $this->initDetails();
 
         $this->detail_key = $request->getParameter('detail_key');
         $this->forward404Unless($this->details->exist($this->detail_key));
 
-        if($this->onglets->getCurrentKeyAppellation() == "appellation_ALSACEBLANC") $nonEdel = true;
+        if(preg_match("|/appellation_ALSACEBLANC/mention/|", $this->produit->getHash())) $nonEdel = true;
         else $nonEdel = false;
 
         $this->form = new RecolteMotifNonRecolteForm($this->details->get($this->detail_key), array('nonEdel'=> $nonEdel));
@@ -256,14 +256,16 @@ class dr_recolteActions extends _DRActions {
             $this->form ->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->form->save();
+
                 return $this->renderText(json_encode(array('action' => 'redirect',
-                        'data' => $this->generateUrl('recolte', array_merge($this->onglets->getUrlParams(), array('refresh' => uniqid()))))));
+                        'data' => $this->generateUrl('dr_recolte_noeud', array("id" => $this->declaration->_id, 'hash' => $this->produit->getHash())))));
             }
+
             return $this->renderText(json_encode(array('action' => 'render',
-                    'data' => $this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)))));
+                    'data' => $this->getPartial('dr_recolte/motifNonRecolteForm', array('produit' => $this->produit, 'form' => $this->form, 'detail_key' => $this->detail_key)))));
         }
 
-        return $this->renderText($this->getPartial('recolte/motifNonRecolteForm', array('onglets' => $this->onglets ,'form' => $this->form, 'detail_key' => $this->detail_key)));
+        return $this->renderText($this->getPartial('dr_recolte/motifNonRecolteForm', array('produit' => $this->produit,'form' => $this->form, 'detail_key' => $this->detail_key)));
     }
 
     public function executeAjoutAppellationAjax(sfWebRequest $request) {
