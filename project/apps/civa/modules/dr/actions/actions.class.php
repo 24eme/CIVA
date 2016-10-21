@@ -80,6 +80,8 @@ class drActions extends _DRActions {
     public function executeNoticeEvolutions(sfWebRequest $request) {
         $this->setCurrentEtape('notice_evolutions');
 
+        return $this->redirectToNextEtapes($this->getRoute()->getDR());
+
         $this->dr = $this->getRoute()->getDR();
 
         if($this->getUser()->isSimpleOperateur()) {
