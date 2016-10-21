@@ -16,6 +16,7 @@ Etablissement:
        teledeclaration_email: {  }
        nature_inao: {  }
        siret: {  }
+       acheteur_raisin: { required: false }
        recette_locale:
          type: collection
          definition:
