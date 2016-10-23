@@ -124,7 +124,9 @@ class ExportDRPdf extends ExportDocument {
             foreach ($appellation['lieux'] as $lieu) {
                 $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn() || in_array($lieu->getMention()->getKey(), array("mentionVT", "mentionSGN")));
             }
+
             if(!count($appellation['lieux'])) {
+                echo $appellation['hash']."\n";
                 $lieu = $dr->get($appellation['hash']."/lieu");
                 $this->createAppellationLieu($lieu, $lieu->getConfig()->hasLieuEditable(), $lieu->getConfig()->hasVtsgn() || in_array($lieu->getMention()->getKey(), array("mentionVT", "mentionSGN")));
             }

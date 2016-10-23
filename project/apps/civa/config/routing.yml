@@ -373,7 +373,7 @@ dr_autorisation:
   requirements: { sf_method: [get, post] }
 
 dr_transmission:
-  url:   /dr/:id/transmission
+  url:   /declaration/transmission
   param: { module: dr, action: transmission }
   class: DRRoute
   options: { model: DR, type: object }
@@ -579,6 +579,13 @@ dr_confirmation:
 dr_pdf:
   url: /dr/:id/pdf
   param: {module: dr_export, action: pdf}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_csv:
+  url: /dr/:id/csv
+  param: {module: dr_export, action: csv}
   class: DRRoute
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }

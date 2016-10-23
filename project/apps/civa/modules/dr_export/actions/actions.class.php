@@ -92,11 +92,9 @@ class dr_exportActions extends sfActions {
         return $this->renderText(file_get_contents(sfConfig::get('sf_data_dir').'/export/comptes/comptes.csv'));
     }
 
-    public function executeDrCsv(sfWebRequest $request) {
-         $this->tiers = $this->getUser()->getTiers();
-         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-         $this->cvi = $this->getRequestParameter('cvi', $this->tiers);
-         $csvContruct = new ExportDRCsv($this->annee,$this->tiers->cvi);
+    public function executeCsv(sfWebRequest $request) {
+         $dr = $this->getRoute()->getDr();
+         $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi);
          $csvContruct->export();
 
          return $this->renderText($csvContruct->output());

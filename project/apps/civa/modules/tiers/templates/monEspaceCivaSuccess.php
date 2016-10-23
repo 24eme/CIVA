@@ -17,7 +17,7 @@
                 <div class="bloc_acceuil_header">Alsace Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
-                    <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateOuverture()->format('d/m/Y') ?></p>
+                    <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>

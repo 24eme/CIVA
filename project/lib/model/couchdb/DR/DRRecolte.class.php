@@ -134,12 +134,10 @@ class DRRecolte extends BaseDRRecolte {
             }
         }
 
-        if(!count($appellations["mentionSGN"]["noeuds"])) {
-            unset($appellations["mentionSGN"]);
-        }
-
-        if(!count($appellations["mentionVT"]["noeuds"])) {
-            unset($appellations["mentionVT"]);
+        foreach($appellations as $key => $appellation) {
+            if(!count($appellations[$key]["noeuds"])) {
+                unset($appellations[$key]);
+            }
         }
 
         return $appellations;

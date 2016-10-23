@@ -18,6 +18,11 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return $this->getLieux();
     }
 
+    public function getMention() {
+
+        return $this;
+    }
+
     public function getLieux(){
         return $this->filter('^lieu');
     }

@@ -61,7 +61,7 @@
     </div>
     <!-- fin #application_dr -->
 
-    <?php include_partial('dr/boutons', array('display' => array('retour','previsualiser'), 'dr' => $dr)) ?>
+    <?php include_partial('dr/boutons', array('display' => array('retour','previsualiser'), 'dr' => $dr, 'etablissement' => $dr->getEtablissement())) ?>
 
 </form>
 <!-- fin #principal -->
