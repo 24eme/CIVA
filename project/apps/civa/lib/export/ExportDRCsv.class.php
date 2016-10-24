@@ -117,7 +117,7 @@ class ExportDRCsv extends ExportCsv {
                                 }
                             }
                         }
-                        if(!$couleur->getKey() == "couleur") {
+                        if($couleur->getKey() != "couleur") {
                             $this->addNoeudTotal($couleur);
                         }
                     }
