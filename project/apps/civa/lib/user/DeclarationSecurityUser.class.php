@@ -166,7 +166,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             return true;
         }
 
-        return (CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
+        return DRClient::getInstance()->isTeledeclarationOuverte();
     }
 
     /**
