@@ -9,6 +9,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->getAppellation()->getLibelle();
     }
 
+    public function getMention() {
+
+        return $this->getLieu()->getMention();
+    }
+
     public function getLieu() {
 
         return $this->getParent();
@@ -60,7 +65,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     protected function update($params = array()) {
         $this->preUpdateAcheteurs();
         parent::update($params);
-        
+
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);
