@@ -114,8 +114,8 @@ class drActions extends _DRActions {
         $this->form_expl_err = 0;
 
         if ($request->isMethod(sfWebRequest::POST)) {
+            throw new sfException("A réparer");
             if ($request->getParameter('gestionnaire')) {
-                throw new sfException("A réparer");
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
