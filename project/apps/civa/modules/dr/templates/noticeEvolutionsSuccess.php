@@ -19,8 +19,7 @@
 		</ol>
 		<br />
 		<br />
-
-		<a href="/telecharger_la_notice" style="height: 20px;" class="telecharger-btn"></a>
+		<a href="<?php echo url_for("dr_telecharger_la_notice"); ?>" style="height: 20px; display: none;" class="telecharger-btn"></a>
 	</div>
 	<?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
 </form>

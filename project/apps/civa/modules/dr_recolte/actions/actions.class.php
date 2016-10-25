@@ -343,7 +343,7 @@ class dr_recolteActions extends _DRActions {
                         if($mentionConfig->getRendementCepage() <= 0) {
                             continue;
                         }
-                        $this->rendement["Mention"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
+                        $this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
                     }
                     continue;
                 }
