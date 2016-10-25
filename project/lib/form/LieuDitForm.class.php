@@ -87,6 +87,10 @@ class LieuDitForm extends acCouchdbForm {
                 continue;
             }
             foreach($this->getDocument()->get($hashAppellation)->mentions as $item) {
+                if($item->getKey() != "mention") {
+
+                    continue;
+                }
                 $keyLieu = $valuesAppellation['ajout'];
                 if(!$this->getDocument()->getConfigurationCampagne()->exist(HashMapper::convert($item->getHash()."/".$keyLieu))) {
 
