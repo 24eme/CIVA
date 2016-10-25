@@ -26,7 +26,7 @@
 
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
     <li class="prec">
-        <a href="<?php echo url_for('mon_espace_civa_dr'); ?>">
+        <a href="<?php echo url_for('mon_espace_civa_dr', $dr->getEtablissement()); ?>">
             <img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à l'étape précédente" />
         </a>
     </li>

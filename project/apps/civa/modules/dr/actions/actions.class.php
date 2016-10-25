@@ -512,6 +512,7 @@ class drActions extends _DRActions {
     }
 
     public function executeFeedBack(sfWebRequest $request) {
+        $this->dr = $this->getRoute()->getDR();
         $this->form = new FeedBackForm();
 
         if(!$request->isMethod(sfWebRequest::POST)) {
@@ -557,11 +558,11 @@ Le CIVA';*/
             $this->emailSend = false;
         }
 
-        return $this->redirect('recolte_feed_back_confirmation');
+        return $this->redirect('dr_feed_back_confirmation', $this->dr);
     }
 
     public function executeFeedBackConfirmation(sfWebRequest $request) {
-
+        $this->dr = $this->getRoute()->getDR();
     }
 
     public function executeAutorisation(sfWebRequest $request) {
