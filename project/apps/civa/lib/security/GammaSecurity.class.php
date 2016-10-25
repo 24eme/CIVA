@@ -23,7 +23,7 @@ class GammaSecurity implements SecurityInterface {
 
         /*** DECLARANT ***/
 
-        if(!$this->etablissement && !$this->etablissement->no_accises) {
+        if(!$this->etablissement || !$this->etablissement->no_accises) {
 
             return false;
         }
