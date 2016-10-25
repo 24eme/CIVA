@@ -3,8 +3,8 @@
 
     <h2 class="titre_section"><?php echo $appellation->getLibelle() ?></h2>
     <div class="contenu_section">
-        <p class="txt_gris"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_gris_'.strtolower($appellation->getConfig()->getKey())); ?> <span style="margin-right: 25px; float:right;">Déclarer du VT / SGN</span></p>
-        <?php if (count($appellation->mention->getLieux())): ?>
+        <?php if ($appellation->mention->hasLieux()): ?>
+        <p class="txt_gris"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_exploitation_lieu_txt_gris_'.strtolower($appellation->getConfig()->getKey())); ?> <span style="margin-right: 25px; margin-top: -10px; float:right; text-align: center">Déclarer des VT / SGN<br /><small style="font-size: 12px; font-style: italic;">(en cochant les cases)</small></span></p>
             <ul id="liste_grands_crus">
                 <?php foreach ($appellation->mention->getLieux() as $k => $l) : ?>
                     <li><?php echo $l->getLibelle(); ?>
@@ -18,7 +18,6 @@
                 <?php endforeach; ?>
             </ul>
         <?php else : ?>
-
         <?php endif; ?>
 
         <?php echo $form->renderHiddenFields(); ?>
