@@ -25,9 +25,11 @@ class dr_recolteActions extends _DRActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-        $produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_CH");
+        foreach($this->declaration->getAppellationsAvecVtsgn() as $appellation) {
+            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $appellation["hash"]));
+        }
 
-        return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $produit->getHash()));
+        return $this->redirect('dr_repartition_acheteurs', $this->declaration);
     }
 
 
