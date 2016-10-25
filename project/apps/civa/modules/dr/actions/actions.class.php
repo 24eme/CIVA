@@ -104,17 +104,18 @@ class drActions extends _DRActions {
         $this->setCurrentEtape('exploitation');
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
-        $this->forwardUnless($this->tiers = $this->getUser()->getTiers(), 'declaration', 'monEspaceciva');
+        $this->forwardUnless($this->etablissement = $this->getRoute()->getEtablissement(), 'declaration', 'monEspaceciva');
 
+        $this->tiers = $this->etablissement;
         $this->dr = $this->getRoute()->getDR();
+        $this->etablissement = $this->getRoute()->getEtablissement();
 
-        $this->form_gest = new TiersExploitantForm($this->getUser()->getTiers()->getExploitant());
+        $this->form_gest = new TiersExploitantForm($this->etablissement->getExploitant());
         $this->form_gest_err = 0;
-        $this->form_expl = new TiersExploitationForm($this->getUser()->getTiers());
+        $this->form_expl = new TiersExploitationForm($this->etablissement);
         $this->form_expl_err = 0;
 
         if ($request->isMethod(sfWebRequest::POST)) {
-            throw new sfException("A réparer");
             if ($request->getParameter('gestionnaire')) {
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
