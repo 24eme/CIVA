@@ -31,7 +31,7 @@ class drActions extends _DRActions {
             return $this->redirect('mon_espace_civa_dr', $etablissement);
         } elseif ($dr_data['type_declaration'] == 'visualisation') {
 
-            return $this->redirect('@visualisation?annee=' . $campagne);
+            return $this->redirect('dr_visualisation', array('id' => $dr->_id));
         } elseif ($dr_data['type_declaration'] == 'vierge') {
             $dr = DRClient::getInstance()->createDeclaration($etablissement, $campagne, $this->getUser()->isSimpleOperateur());
             $dr->save();
