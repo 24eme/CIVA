@@ -26,7 +26,7 @@
     <?php if($produit->getMention()->getKey() != "mentionVT" && $produit->getAppellation()->getMentions()->exist('mentionVT/'.$produit->getLieu()->getKey())): ?>
     <li class="raccourci_mention"><a href="<?php echo url_for('dr_recolte_correspondance_mention', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'mention' => 'mentionVT')) ?>">Mention VT</a></li>
     <?php endif; ?>
-    <?php if($produit->getMention()->getKey() != "mentionSGN" && $produit->getAppellation()->getMentions()->exist('mentionSGN')): ?>
+    <?php if($produit->getMention()->getKey() != "mentionSGN" && $produit->getAppellation()->getMentions()->exist('mentionSGN/'.$produit->getLieu()->getKey())): ?>
     <li class="raccourci_mention"><a href="<?php echo url_for('dr_recolte_correspondance_mention', array('id' => $produit->getDocument()->_id, 'hash' => $produit->getHash(), 'mention' => 'mentionSGN')) ?>">Mention SGN</a></li>
     <?php endif; ?>
 
