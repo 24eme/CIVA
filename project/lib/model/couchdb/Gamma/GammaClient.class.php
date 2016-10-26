@@ -15,6 +15,12 @@ class GammaClient
         }
 
         $societe = $compte->getSociete();
+        foreach($societe->getEtablissementsObject() as $etablissement) {
+            if($compte->getIdentifiant() == $etablissement->cvi && $etablissement->exist('no_accises') && $etablissement->no_accises) {
+
+                return $etablissement;
+            }
+        }
 
         foreach($societe->getEtablissementsObject() as $etablissement) {
             if($etablissement->exist('no_accises') && $etablissement->no_accises) {
