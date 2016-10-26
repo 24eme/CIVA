@@ -184,34 +184,74 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeudPrecedent(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-        $this->etablissement = $this->declaration->getEtablissement();
-        if($this->noeud->getPreviousSister()) {
-            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getPreviousSister()->getHash()));
-        }
 
-        if($this->noeud->getParent() instanceof DRRecolte) {
-
-            return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
-        }
-
-        return $this->redirect('dr_recolte_noeud_precedent', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
+        return $this->redirectToSisterNoeud($this->declaration->getOrAdd($request->getParameter('hash')), "precedent");
     }
 
 
     public function executeProduitNoeudSuivant(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-        $this->etablissement = $this->declaration->getEtablissement();
-        if($this->noeud->getNextSister()) {
-            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getNextSister()->getHash()));
+
+        return $this->redirectToSisterNoeud($this->declaration->getOrAdd($request->getParameter('hash')), "suivant");
+    }
+
+    protected function redirectToSisterNoeud($noeud, $sens) {
+        $appellations = $this->declaration->getAppellationsAvecVtsgn();
+        $found = false;
+        $precedent = null;
+        if($noeud instanceof DRRecolteLieu) {
+            foreach($appellations as $appellation) {
+                foreach($appellation["lieux"] as $lieu) {
+                    if($found && $sens == "suivant") {
+
+                        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $lieu->getHash()));
+                    }
+                    if($lieu->getHash() == $noeud->getHash()) {
+                        $found = true;
+                    }
+                    if($found && $precedent && $sens == "precedent") {
+
+                        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
+                    }
+                    if(!$found) {
+                        $precedent = $lieu->getHash();
+                    }
+                }
+            }
+        }
+        $precedentLock = ($found && $precedent);
+        if(!$found) {
+            $precedent = null;
+        }
+        $found = false;
+        if($noeud instanceof DRRecolteLieu) {
+            $noeud = $noeud->getParent();
+        }
+        foreach($appellations as $appellation) {
+            foreach($appellation["noeuds"] as $mention) {
+                if($found && $sens == "suivant") {
+
+                    return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $mention->getHash()));
+                }
+                if($mention->getHash() == $noeud->getHash()) {
+                    $found = true;
+                }
+                if($found && $precedent && $sens == "precedent") {
+
+                    return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
+                }
+                if(!$precedentLock && !$found) {
+                    $precedent = $mention->getHash();
+                }
+            }
         }
 
-        if($this->noeud->getParent() instanceof DRRecolte) {
+        if($sens == "suivant") {
 
             return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
-        }
+        } elseif($sens == "precedent") {
 
-        return $this->redirect('dr_recolte_noeud_suivant', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
+            return $this->redirect('dr_repartition_lieu', array('id' => $this->declaration->_id, 'from_recolte' => 1));
+        }
     }
 
     public function executeRecapitulatif(sfWebRequest $request) {
