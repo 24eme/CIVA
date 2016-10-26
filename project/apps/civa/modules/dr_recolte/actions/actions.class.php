@@ -15,7 +15,7 @@ class dr_recolteActions extends _DRActions {
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getRoute()->getDR();
         $this->help_popup_action = "help_popup_DR";
-        if (!$this->declaration->recolte->getNoeudAppellations()->hasOneOrMoreAppellation()) {
+        if (!$this->declaration->recolte->hasOneOrMoreAppellation()) {
             $this->redirectToNextEtapes($this->declaration);
         }
     }
@@ -428,7 +428,11 @@ class dr_recolteActions extends _DRActions {
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
+        $appellation_key = $this->produit->getAppellation()->getKey();
+        if($this->produit->getMention()->getKey() != "mention") {
+            $appellation_key = $this->produit->getMention()->getKey();
+        }
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($appellation_key);
     }
 
     protected function initPrecDR(){

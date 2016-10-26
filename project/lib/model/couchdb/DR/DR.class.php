@@ -70,7 +70,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
             return true;
-            //return ($this->recolte->hasOneOrMoreAppellation());
         } elseif ($etape == self::ETAPE_VALIDATION) {
             return true;
         }
@@ -404,7 +403,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         foreach ($this->recolte->getAppellations() as $appellation) {
             foreach ($appellation->getMentions() as $mention) {
                 if($mention->getTotalSuperficie() != 0) {
-                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
+                    $appellation_key = $mention->getAppellation()->getKey();
+                    if($mention->getKey() != "mention") {
+                        $appellation_key = $mention->getKey();
+                    }
+                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation_key);
                     foreach($acheteursByType as $type => $cvis) {
                         if(!$cvis instanceof acCouchdbJson) {
                             continue;

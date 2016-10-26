@@ -8,6 +8,8 @@ class DRClient extends acCouchdbClient {
   const VALIDEE_PAR_CIVA = "CIVA";
   const VALIDEE_PAR_AUTO = "AUTO";
 
+  protected $appellations_config_vtsgn = array();
+
   public static function getInstance() {
 
     return acCouchdbManager::getClient('DR');
@@ -168,7 +170,6 @@ class DRClient extends acCouchdbClient {
         $i = 0;
         $keys = array_keys($docs->getDocs());
         foreach($keys as $key) {
-            //echo substr($key, strlen($key) - 4, 4);
             if (substr($key, strlen($key) - 4, 4) != $campagne) {
                 unset($docs[$key]);
             }
@@ -303,7 +304,12 @@ class DRClient extends acCouchdbClient {
         if(!$configuration) {
             $configuration = ConfigurationClient::getCurrent();
         }
-        
+
+        if(array_key_exists($configuration->_id, $this->appellations_config_vtsgn)) {
+
+            return $this->appellations_config_vtsgn[$configuration->_id];
+        }
+
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
             if($appellation->getKey() == "PINOTNOIR") {
                 $appellations["mentionVT"] = null;
@@ -331,14 +337,16 @@ class DRClient extends acCouchdbClient {
                 }
                 if($mention->hasManyLieu() || $mention->getKey() != "DEFAUT") {
                     foreach($mention->getLieux() as $lieu)  {
-                        $appellations["appellation_".$appellation->getKey()]['lieux'][] = $lieu;
+                        $appellations[($mention->getKey() == "DEFAUT") ? "appellation_".$appellation->getKey() : "mention".$mention->getKey()]['lieux'][HashMapper::inverse($lieu->getHash())] = $lieu;
                     }
                 }
             }
 
         }
 
-        return $appellations;
+        $this->appellations_config_vtsgn[$configuration->_id] = $appellations;
+
+        return $this->appellations_config_vtsgn[$configuration->_id];
     }
 
 }

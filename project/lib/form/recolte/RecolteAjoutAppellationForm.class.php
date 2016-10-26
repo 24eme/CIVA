@@ -44,11 +44,14 @@
         public function doUpdateObject($values) {
             $appellation_key = $values['appellation'];
             $appellationsConfig = $this->getObject()->getDocument()->getConfigAppellationsAvecVtsgn();
-            $this->getObject()->getCouchdbDocument()->acheteurs->getNoeudAppellations()->add($appellation_key)->cave_particuliere = 1;
-            $this->getObject()->getCouchdbDocument()->update(array('from_acheteurs'));
+            $this->getObject()->getDocument()->acheteurs->getNoeudAppellations()->add($appellation_key)->cave_particuliere = 1;
+            $this->getObject()->getDocument()->update(array('from_acheteurs'));
             $this->values['appellation_hash'] = $appellationsConfig[$appellation_key]["hash"];
 
-            $this->_need_lieu = $this->getObject()->getCouchdbDocument()->get($this->values['appellation_hash'])->getConfig()->hasManyLieu();;
+            $this->_need_lieu = false;
+            if($this->getObject()->getDocument()->exist($this->values['appellation_hash'])) {
+                $this->_need_lieu = $this->getObject()->getDocument()->get($this->values['appellation_hash'])->getConfig()->hasManyLieu();
+            }
             /*if ($config_appellation->mention->exist('lieu')) {
                 $lieu = $this->getObject()->getNoeudAppellations()->add($appellation_key)->mention->add('lieu');
                 foreach($lieu->getConfig()->filter('^couleur') as $k => $v) {
