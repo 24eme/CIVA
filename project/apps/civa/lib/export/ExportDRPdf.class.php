@@ -390,8 +390,8 @@ class ExportDRPdf extends ExportDocument {
                         $c['cepage'] = $cepage->getLibelle();
                         $c['denomination'] = $detail->denomination;
                         $c['vtsgn'] = $detail->vtsgn;
-                        if($cepage->getMention()->getKey() != "mention") {
-                            $c['vtsgn'] = $cepage->getMention()->getLibelle();
+                        if($lieu->getMention()->getKey() != "mention") {
+                            $c['vtsgn'] = $lieu->getMention()->getLibelle();
                         }
                         $c['superficie'] = $detail->superficie;
                         $c['volume'] = $detail->volume;
@@ -438,6 +438,9 @@ class ExportDRPdf extends ExportDocument {
                             $c['cepage'] = $cepage->getLibelle();
                             $c['denomination'] = 'Total';
                             $c['vtsgn'] = '';
+                            if($lieu->getMention()->getKey() != "mention") {
+                                $c['vtsgn'] = $lieu->getMention()->getLibelle();
+                            }
                             $c['superficie'] = $cepage->total_superficie;
                             $c['volume'] = $cepage->total_volume;
                             $c['cave_particuliere'] = $cepage->getTotalCaveParticuliere();
@@ -482,6 +485,9 @@ class ExportDRPdf extends ExportDocument {
                     else
                     $c['denomination'] = $couleur->libelle;
                     $c['vtsgn'] = '';
+                    if($lieu->getMention()->getKey() != "mention") {
+                        $c['vtsgn'] = $lieu->getMention()->getLibelle();
+                    }
                     $c['superficie'] = $couleur->total_superficie;
                     $c['volume'] = $couleur->total_volume;
                     $c['cave_particuliere'] = $couleur->getTotalCaveParticuliere();
