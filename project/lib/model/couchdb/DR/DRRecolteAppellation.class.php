@@ -22,6 +22,14 @@ class DRRecolteAppellation extends BaseDRRecolteAppellation {
         return $lieux;
     }
 
+    public function getLibelleCourt() {
+        $libelle = str_replace("AOC", "", $this->getLibelle());
+        $libelle = str_replace("Alsace Communale", "Communale", $libelle);
+        $libelle = str_replace("Alsace Grand Cru", "Grd Cru", $libelle);
+
+        return $libelle;
+    }
+
     public function hasDetailsInLieu($lieuKey) {
         foreach($this->getMentions() as $mention) {
             if($mention->getLieux()->exist($lieuKey) && count($mention->getLieux()->get($lieuKey)->getProduitsDetails())) {
