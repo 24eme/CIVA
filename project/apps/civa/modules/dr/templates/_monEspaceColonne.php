@@ -15,7 +15,7 @@
         </ul>
     </div>
 </div>
-<div id="documents_aide" style="display: none;">
+<div id="documents_aide">
 	<h3 class="titre_section">Documents d'aide</h3>
 	<div class="contenu_section">
 	    <p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>

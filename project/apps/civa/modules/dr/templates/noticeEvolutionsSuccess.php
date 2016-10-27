@@ -18,7 +18,8 @@
 		    </li>
 		</ol>
 		<br />
-		<a href="<?php echo url_for("dr_telecharger_la_notice"); ?>" style="height: 20px; display:none" class="telecharger-btn"></a>
+		<br />
+		<a href="<?php echo url_for("dr_telecharger_la_notice"); ?>" style="height: 20px;" class="telecharger-btn"></a>
 		<br />
 		<br />
 		<br />
