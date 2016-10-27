@@ -554,7 +554,7 @@ class ExportDRPdf extends ExportDocument {
         $identification_enabled = 1;
         foreach($pages as $p) {
             $this->nb_pages++;
-            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $lieu->getCouchdbDocument()->recolte->getConfig()->hasNoUsagesIndustriels())));
+            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $this->dr->recolte->getConfig()->hasNoUsagesIndustriels())));
             $identification_enabled = 0;
         }
   	}
