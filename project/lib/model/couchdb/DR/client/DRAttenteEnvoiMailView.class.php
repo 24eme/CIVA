@@ -16,14 +16,14 @@ class DRAttenteEnvoiMailView extends acCouchdbView
 	const KEY_CAMPAGNE = 0;
 	const KEY_CVI = 1;
         const KEY_MAIL = 2;
-	
-    public static function getInstance() 
+
+    public static function getInstance()
     {
         return acCouchdbManager::getView('DR', 'AttenteEnvoiMail', 'Dr');
     }
-    
-    public function findAll($campagne) 
+
+    public function findAll() 
     {
     	return $this->client->getView($this->design, $this->view)->rows;
     }
-}  
+}
