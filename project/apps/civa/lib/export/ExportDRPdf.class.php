@@ -124,7 +124,8 @@ class ExportDRPdf extends ExportDocument {
             if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
                 $this->createAppellationLieu($appellation['lieux'],
                                              true,
-                                             $appellation["libelle"]);
+                                             $appellation["libelle"],
+                                             str_replace("mention", "", $appellation_key));
                 continue;
             }
 
@@ -336,13 +337,29 @@ class ExportDRPdf extends ExportDocument {
         return $infos;
     }
 
-	private function createAppellationLieu($lieux, $hasVTSGN, $libelle) {
+	private function createAppellationLieu($lieux, $hasVTSGN, $libelle, $totalMentionLibelle = null) {
         $colonnes = array();
         $afterTotal = array();
         $hasLigneLieu = false;
         $hasLigneAppellation = false;
         $acheteurs = array();
         $acheteursLignes = array();
+
+        if($totalMentionLibelle) {
+            $colonneTotalMention = array();
+            $colonneTotalMention['type'] = 'total';
+            $colonneTotalMention['appellation'] = "Total";
+            $colonneTotalMention['lieu'] = "";
+            $colonneTotalMention['cepage'] = "";
+            $colonneTotalMention['denomination'] = "Mention";
+            $colonneTotalMention['vtsgn'] = $totalMentionLibelle;
+            $colonneTotalMention['superficie'] = 0;
+            $colonneTotalMention['volume'] = 0;
+            $colonneTotalMention['cave_particuliere'] = 0;
+            $colonneTotalMention['revendique'] = 0;
+            $colonneTotalMention['usages_industriels'] = 0;
+        }
+
         foreach($lieux as $lieu) {
             if(!$hasLigneLieu && ($lieu->getConfig()->hasLieuEditable() || $lieu->getMention()->getKey() != "mention")) {
                 $hasLigneLieu = true;
@@ -525,27 +542,43 @@ class ExportDRPdf extends ExportDocument {
                 $c['vtsgn'] = $lieu->getMention()->getLibelle();
             }
             $c['superficie'] = $lieu->total_superficie;
+            if(isset($colonneTotalMention)) { $colonneTotalMention['superficie'] += $c['superficie']; }
             $c['volume'] = $lieu->total_volume;
+            if(isset($colonneTotalMention)) { $colonneTotalMention['volume'] += $c['volume']; }
             $c['cave_particuliere'] = $lieu->getTotalCaveParticuliere();
+            if(isset($colonneTotalMention)) { $colonneTotalMention['cave_particuliere'] += $c['cave_particuliere']; }
             $c['revendique'] = $lieu->volume_revendique;
+            if(isset($colonneTotalMention)) { $colonneTotalMention['revendique'] += $c['revendique']; }
             $c['usages_industriels'] = $lieu->usages_industriels;
+            if(isset($colonneTotalMention)) { $colonneTotalMention['usages_industriels'] += $c['usages_industriels']; }
             if (!$c['usages_industriels'])
             $c['usages_industriels'] = '0,00';
             $negoces = $lieu->getVolumeAcheteurs('negoces');
             foreach($negoces as $cvi => $vente) {
                 $c['negoces_'.$cvi] = $vente;
+                if(isset($colonneTotalMention) && !isset($colonneTotalMention['negoces_'.$cvi])) { $colonneTotalMention['negoces_'.$cvi] = 0; }
+                if(isset($colonneTotalMention)) { $colonneTotalMention['negoces_'.$cvi] += $c['negoces_'.$cvi]; }
             }
             $coop =  $lieu->getVolumeAcheteurs('cooperatives');
             foreach($coop as $cvi => $vente) {
                 $c['cooperatives_'.$cvi] = $vente;
+                if(isset($colonneTotalMention) && !isset($colonneTotalMention['cooperatives_'.$cvi])) { $colonneTotalMention['cooperatives_'.$cvi] = 0; }
+                if(isset($colonneTotalMention)) { $colonneTotalMention['cooperatives_'.$cvi] += $c['cooperatives_'.$cvi]; }
             }
             $mouts =  $lieu->getVolumeAcheteurs('mouts');
             foreach($mouts as $cvi => $vente) {
                 $c['mouts_'.$cvi] = $vente;
+                if(isset($colonneTotalMention) && !isset($colonneTotalMention['mouts_'.$cvi])) { $colonneTotalMention['mouts_'.$cvi] = 0; }
+                if(isset($colonneTotalMention)) { $colonneTotalMention['mouts_'.$cvi] += $c['mouts_'.$cvi]; }
             }
             array_push($colonnes, $c);
             $colonnes = array_merge($colonnes, $afterTotal);
         }
+
+        if(isset($colonneTotalMention)) {
+            array_push($colonnes, $colonneTotalMention);
+        }
+
         $pages = array();
 
         $nb_colonnes_by_page = 6;
@@ -556,11 +589,11 @@ class ExportDRPdf extends ExportDocument {
             array_push($pages, $page);
             $lasti = ++$i;
         }
-        $extra = array('lies' => $lieu->getCouchdbDocument()->lies,  'jeunes_vignes' => $lieu->getCouchdbDocument()->jeunes_vignes);
+
         $identification_enabled = 1;
         foreach($pages as $p) {
             $this->nb_pages++;
-            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'extra' => $extra, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $this->dr->recolte->getConfig()->hasNoUsagesIndustriels())));
+            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $this->dr->recolte->getConfig()->hasNoUsagesIndustriels())));
             $identification_enabled = 0;
         }
   	}
