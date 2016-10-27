@@ -274,7 +274,7 @@ class drActions extends _DRActions {
 
     public function executeNoRecolte(sfWebRequest $request) {
         $this->setCurrentEtape('repartition');
-        $this->redirectToNextEtapes();
+        $this->redirectToNextEtapes($this->getRoute()->getDR());
     }
 
     public function executeDownloadNotice() {
