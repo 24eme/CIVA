@@ -396,7 +396,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
     public function isInscrit() {
 
-        return true;
+        return $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_NOUVEAU;
     }
 
     public function isTeledeclarationActive() {

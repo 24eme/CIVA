@@ -265,12 +265,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->acheteur->remove('emails');
         $this->acheteur->add('emails');
 
-        if($this->isProprietaire($this->acheteur->identifiant)) {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+        if($tiers->getEmail()) {
             $this->acheteur->emails = array($tiers->getEmail());
-        } else {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
-			$this->acheteur->emails = array($tiers->getEmail());
         }
     }
 
@@ -302,12 +298,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->vendeur->remove('emails');
         $this->vendeur->add('emails');
 
-		if($this->isProprietaire($this->vendeur->identifiant)) {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
+		if($tiers->getEmail()) {
             $this->vendeur->emails = array($tiers->getEmail());
-        } else {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
-			$this->vendeur->emails = array($tiers->getEmail());
         }
     }
 
@@ -329,11 +321,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->mandataire->remove('emails');
         $this->mandataire->add('emails');
 
-        if($this->isProprietaire($this->mandataire->identifiant)) {
-			//$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
-			$this->mandataire->emails = array($tiers->getEmail());
-        } else {
-            //$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
+        if($tiers->getEmail()) {
 			$this->mandataire->emails = array($tiers->getEmail());
         }
     }
