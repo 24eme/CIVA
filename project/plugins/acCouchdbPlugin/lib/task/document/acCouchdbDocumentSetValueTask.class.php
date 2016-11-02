@@ -36,6 +36,7 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $doc = acCouchdbManager::getClient()->find($arguments['doc_id']);
+    $doc->add($arguments['hash']);
     $doc->set($arguments['hash'], $arguments['value']);
     $doc->save();
 
