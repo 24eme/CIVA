@@ -14,7 +14,7 @@
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
-                <div class="bloc_acceuil_header">Alsace Récolte</div>
+                <div class="bloc_acceuil_header">Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
                     <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?></p>
@@ -23,7 +23,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_dr', array('identifiant' => $compte->getIdentifiant())) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_dr', DRClient::getInstance()->getEtablissement($compte->getSociete())) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -31,7 +31,7 @@
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
-                <div class="bloc_acceuil_header">Alsace Récolte</div>
+                <div class="bloc_acceuil_header">Achat Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
                     <p>Le portail est <strong>ouvert</strong></p>
@@ -40,7 +40,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_dr_acheteur') ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_dr_acheteur', DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete())) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -59,7 +59,7 @@
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::VRAC)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_icon icon-contrat2"></div>
-                <div class="bloc_acceuil_header">Alsace Contrats</div>
+                <div class="bloc_acceuil_header">Contrats</div>
                 <div class="bloc_acceuil_content">
                     <?php $infos = true ?>
                     <?php if($vracs['CONTRAT_A_SIGNER']): ?>
@@ -91,7 +91,7 @@
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::GAMMA)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
                 <div class="bloc_acceuil_icon icon-camion"></div>
-                <div class="bloc_acceuil_header">Alsace Gamm@</div>
+                <div class="bloc_acceuil_header">Gamm@</div>
                 <div class="bloc_acceuil_content">
                     <p class="mineure">Aucune information à signaler</p>
                 </div>
@@ -104,7 +104,7 @@
             <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DS_PROPRIETE)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_icon icon-stock"></div>
-                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Alsace stocks <br /><small style="font-size: 10px;">propriété</small></div>
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Stocks <br /><small style="font-size: 10px;">propriété</small></div>
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && $sf_user->isDsEditable(DSCivaClient::TYPE_DS_PROPRIETE) && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>

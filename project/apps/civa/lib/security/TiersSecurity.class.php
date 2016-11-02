@@ -35,7 +35,7 @@ class TiersSecurity implements SecurityInterface {
         }
 
         if(in_array(self::DR_ACHETEUR, $droits)) {
-            return false;
+
             return DRAcheteurSecurity::getInstance($this->compte)->isAuthorized(DRAcheteurSecurity::DECLARANT);
         }
 

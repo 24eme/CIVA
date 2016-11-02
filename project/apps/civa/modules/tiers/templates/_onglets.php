@@ -6,7 +6,7 @@
 	<li class="<?php if($active== 'recolte'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr", DRClient::getInstance()->getEtablissement($compte->getSociete())) ?>">Récolte</a></li>
 	<?php endif; ?>
 	<?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
-	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur") ?>">Acheteur Récolte</a></li>
+	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur", DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete())) ?>">Achat Récolte</a></li>
 	<?php endif; ?>
 	<!-- <li class=""><a href="<?php echo url_for("drm_etablissement", array("identifiant" => $compte->getIdentifiant())) ?>">DRM</a></li> -->
 	<?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::VRAC)): ?>

@@ -7,6 +7,9 @@ class DRClient extends acCouchdbClient {
   const VALIDEE_PAR_RECOLTANT = "RECOLTANT";
   const VALIDEE_PAR_CIVA = "CIVA";
   const VALIDEE_PAR_AUTO = "AUTO";
+  const ACHETEUR_COOPERATIVE = 'Cooperative';
+  const ACHETEUR_NEGOCIANT = 'Negociant';
+  const ACHETEUR_NEGOCAVE = 'NegoCave';
 
   protected $appellations_config_vtsgn = array();
 
@@ -131,38 +134,38 @@ class DRClient extends acCouchdbClient {
     return $doc;
   }
 
-  public function getEtablissement($societe) {
-      foreach($societe->getEtablissementsObject() as $etablissement) {
+    public function getEtablissement($societe) {
+        foreach($societe->getEtablissementsObject() as $etablissement) {
 
-          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR))) {
-
-              return $etablissement;
-          }
-      }
-
-      return null;
-  }
-
-  public function getEtablissementAcheteur($societe) {
-      foreach($societe->getEtablissementsObject() as $etablissement) {
-
-          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE)) && $etablissement->getFamille()) {
+            if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR))) {
 
               return $etablissement;
-          }
-      }
+            }
+        }
 
-      return null;
-  }
+        return null;
+    }
 
-  protected function recodeNumber($value) {
+    public function getEtablissementAcheteur($societe) {
+        foreach($societe->getEtablissementsObject() as $etablissement) {
 
-    return round(str_replace(",", ".", $value)*1, 2);
-  }
+            if($etablissement->exist('acheteur_raisin') && $etablissement->acheteur_raisin) {
+
+              return $etablissement;
+            }
+        }
+
+        return null;
+    }
+
+    protected function recodeNumber($value) {
+
+        return round(str_replace(",", ".", $value)*1, 2);
+    }
 
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
 
-      return $this->find('DR-'.$cvi.'-'.$campagne, $hydrate);
+        return $this->find('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
 
     public function getAllByCampagne($campagne, $hydrate = acCouchdbClient::HYDRATE_ON_DEMAND) {

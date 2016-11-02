@@ -8,7 +8,7 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class uploadActions extends EtapesActions {
+class uploadActions extends sfActions {
 
     /**
      * Executes index action
@@ -17,15 +17,15 @@ class uploadActions extends EtapesActions {
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->secureTiers(TiersSecurity::DR_ACHETEUR);
+        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->setCurrentEtape('mon_espace_civa');
 
         $this->formUploadCsv = new UploadCSVForm();
 
         if ($request->isMethod('post')) {
             $this->formUploadCsv->bind($request->getParameter($this->formUploadCsv->getName()), $request->getFiles($this->formUploadCsv->getName()));
             if ($this->formUploadCsv->isValid()) {
-                return $this->redirect('upload/csvView?md5=' . $this->formUploadCsv->getValue('file')->getMd5());
+                return $this->redirect('csv_view', array('sf_subject' => $this->etablissement, 'md5' => $this->formUploadCsv->getValue('file')->getMd5()));
             }
         }
 
@@ -57,6 +57,7 @@ class uploadActions extends EtapesActions {
     }
 
     public function executeCsvView(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $md5 = $request->getParameter('md5');
         set_time_limit(600);
@@ -356,7 +357,7 @@ class uploadActions extends EtapesActions {
 
     private function shouldHaveRebeche($line) {
         try {
-            if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
+            if ($this->etablissement->acheteur_raisin != DRClient::ACHETEUR_COOPERATIVE)
                 return false;
         } catch (Exception $e) {
             return false;
@@ -486,7 +487,7 @@ class uploadActions extends EtapesActions {
     }
 
     protected function secureTiers($droits) {
-        if(!TiersSecurity::getInstance($this->getUser())->isAuthorized($droits)) {
+        if(!TiersSecurity::getInstance($this->getUser()->getCompte())->isAuthorized($droits)) {
 
             return $this->forwardSecure();
         }

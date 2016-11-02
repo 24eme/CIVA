@@ -16,8 +16,11 @@ mon_espace_civa_dr:
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_dr_acheteur:
-  url:   /mon_espace_civa/dr_acheteur
+  url:   /mon_espace_civa/:identifiant/dr_acheteur
   param: { module: tiers, action: monEspaceDRAcheteur }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_ds:
   url:   /mon_espace_civa/:identifiant/ds/:type
@@ -668,16 +671,22 @@ a_propos_du_civa:
   param: {module: contenu, action: aProposDuCiva}
 
 upload_csv:
-  url: /upload/csv
+  url: /upload/:identifiant/csv
   param: {module: upload, action: monEspaceCiva}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 upload_list:
-  url: /upload/list
+  url: /upload/:identifiant/list
   param: {module: upload, action: csvList}
 
 csv_view:
-  url: /upload/csv/:md5
+  url: /upload/:identifiant/csv/:md5
   param: {module: upload, action: csvView}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 csv_download:
   url: /download/csv
