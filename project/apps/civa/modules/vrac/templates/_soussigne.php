@@ -5,7 +5,7 @@
 <div class="informations form_col">
 <ul>
 	<li><strong><?php echo renderTiersLibelle($tiers) ?></strong></li>
-    
+
     <?php if (!$fiche && !$tiers->isActif()): ?>
     <fieldset class="message message_erreur">
         <legend class="message_title" style="position: relative;">Point bloquant <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
@@ -23,8 +23,8 @@
 		</ul>
     </fieldset>
 	<?php endif; ?>
-    
-	<?php if (!$fiche && $tiers->isActif() && !$tiers->getCompteObject()->isInscrit()): ?>
+
+	<?php if (!$fiche && $tiers->isActif() && !$tiers->getTiersObject()->getContact()->isInscrit() && !$tiers->getTiersObject()->getSociete()->getContact()->isInscrit()): ?>
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
@@ -40,7 +40,7 @@
 	<li>&nbsp;</li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('cvi')): ?>
-        <?php if ($tiers->cvi): ?>    
+        <?php if ($tiers->cvi): ?>
             <li>CVI : <strong><?php echo $tiers->cvi ?></strong></li>
         <?php elseif ($tiers->civaba): ?>
             <li>CIVA : <strong><?php echo $tiers->civaba ?></strong></li>

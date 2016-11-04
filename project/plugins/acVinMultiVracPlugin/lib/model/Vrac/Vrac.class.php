@@ -265,9 +265,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->acheteur->remove('emails');
         $this->acheteur->add('emails');
 
-        if($tiers->getEmail()) {
-            $this->acheteur->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_unique($emails);
+
+		$this->acheteur->emails = $emails;
     }
 
     public function storeVendeurInformations($tiers)
@@ -298,9 +307,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->vendeur->remove('emails');
         $this->vendeur->add('emails');
 
-		if($tiers->getEmail()) {
-            $this->vendeur->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_unique($emails);
+
+		$this->vendeur->emails = $emails;
     }
 
     public function storeMandataireInformations($tiers)
@@ -321,9 +339,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->mandataire->remove('emails');
         $this->mandataire->add('emails');
 
-        if($tiers->getEmail()) {
-			$this->mandataire->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_unique($emails);
+
+		$this->mandataire->emails = $emails;
     }
 
     public function storeInterlocuteurCommercialInformations($nom, $contact) {
@@ -564,10 +591,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         		$emails[] = $email;
         	}
     	}
-        $emails = array_unique($emails);
+
     	if ($this->interlocuteur_commercial->email && !in_array($this->interlocuteur_commercial->email, $emails)) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
+
+		$emails = array_unique($emails);
 
     	return $emails;
     }
