@@ -1,6 +1,12 @@
 <?php
 class CompteLdap extends acVinLdap {
 
+    public function getCompte($compte)
+      {
+
+        return $this->get(self::getIdentifiant($compte));
+      }
+
   public function saveCompte($compte, $verbose = 0)
     {
       $info = $this->info($compte);
