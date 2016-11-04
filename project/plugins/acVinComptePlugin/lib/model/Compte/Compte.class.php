@@ -353,14 +353,6 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             $ldap->deleteCompte($this, $verbose);
     }
 
-    public function resetMotDePasseFromLdap() {
-        $ldap = new CompteLdap();
-        $info = $ldap->getCompte($this);
-        if($info && is_array($info['userpassword']) && count($info['userpassword']) > 0 && $info['userpassword'][0]) {
-            $this->mot_de_passe = $info['userpassword'][0];
-        }
-    }
-
     public function buildDroits($removeAll = false) {
         if ((!$this->exist('type_societe') || !$this->type_societe) && (!$this->exist('id_societe') || !$this->id_societe)) {
             throw new sfException("Aucun type de société les droits ne sont pas enregistrables");
