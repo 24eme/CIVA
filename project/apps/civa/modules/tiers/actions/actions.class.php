@@ -216,7 +216,7 @@ class tiersActions extends sfActions {
         $this->type_ds = $request->getParameter("type");
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->compte = $this->etablissement->getSociete()->getContact();
-        $this->blocs = $this->buildBlocs($compte);
+        $this->blocs = $this->buildBlocs($this->compte);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
     }
