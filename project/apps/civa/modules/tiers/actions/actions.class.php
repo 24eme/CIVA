@@ -184,7 +184,7 @@ class tiersActions extends sfActions {
     public function executeMonEspaceDRAcheteur(sfWebRequest $request) {
         $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
         $this->compte = $this->getUser()->getCompte();
-        $this->blocs = $this->buildBlocs($compte);
+        $this->blocs = $this->buildBlocs($this->compte);
         $this->etablissement = $this->getRoute()->getEtablissement();
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
