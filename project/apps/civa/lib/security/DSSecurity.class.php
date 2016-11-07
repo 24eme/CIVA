@@ -2,7 +2,6 @@
 
 class DSSecurity implements SecurityInterface {
 
-    const DECLARANT = 'DECLARANT';
     const CONSULTATION = 'CONSULTATION';
     const CREATION = 'CREATION';
     const EDITION = 'EDITION';
@@ -44,21 +43,12 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        /*** DECLARANT ***/
-
-        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT || EtablissementFamilles::FAMILLE_COOPERATIVE))) {
-
+        if($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_PROPRIETE)) {
             return false;
         }
 
-        /*if(!$this->compte->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
-
+        if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_NEGOCE)) {
             return false;
-        }*/
-
-        if(in_array(self::DECLARANT, $droits)) {
-
-            return true;
         }
 
         if(!$this->etablissement->hasLieuxStockage() && !$this->etablissement->isAjoutLieuxDeStockage()) {

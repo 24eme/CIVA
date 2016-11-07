@@ -19,9 +19,9 @@ class CompteDroitForm extends acCouchdbForm {
         ));
         $this->widgetSchema->setNameFormat('compte_droit[%s]');
     }
-    
+
     public function getDroits() {
 
-        return $this->getDocument()->getDroitsTiers();
+        return array();
     }
 }

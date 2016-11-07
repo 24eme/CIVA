@@ -2,7 +2,7 @@
 
 <div id="application_dr" class="mon_espace_civa clearfix">
 
-    <?php include_partial('tiers/onglets', array('active' => 'accueil', 'compte' => $compte)) ?>
+    <?php include_partial('tiers/onglets', array('active' => 'accueil', 'compte' => $compte, 'blocs' => $blocs)) ?>
 
     <div class="contenu">
         <?php if($sf_user->hasFlash('confirmation')) : ?>
@@ -10,25 +10,25 @@
         <?php endif; ?>
         <h3 class="noir">Vos téléservices</h3>
         <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">
-            <?php $i = $nb_blocs ?>
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR)): ?>
+            <?php $i = count($blocs) ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Récolte</div>
                 <div class="bloc_acceuil_content">
-                    <?php if(DRClient::getInstance()->isTeledeclarationOuverte()): ?>
+                    <?php if($drNeedToDeclare): ?>
                     <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_dr', DRClient::getInstance()->getEtablissement($compte->getSociete())) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_dr_compte', $compte) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DR_ACHETEUR)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Achat Récolte</div>
@@ -40,7 +40,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_dr_acheteur', DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete())) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_dr_acheteur_compte', $compte) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <?php //$i = $i -1 ?>-->
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::VRAC)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_VRAC)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_icon icon-contrat2"></div>
                 <div class="bloc_acceuil_header">Contrats</div>
@@ -83,12 +83,12 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_vrac_compte', $compte) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::GAMMA)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_GAMMA)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> gamma">
                 <div class="bloc_acceuil_icon icon-camion"></div>
                 <div class="bloc_acceuil_header">Gamm@</div>
@@ -96,12 +96,12 @@
                     <p class="mineure">Aucune information à signaler</p>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_gamma', GammaClient::getInstance()->getEtablissement($compte)) ?>">Accéder</a>
+                    <a href="<?php echo url_for('mon_espace_civa_gamma_compte', $compte) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DS_PROPRIETE)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_icon icon-stock"></div>
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Stocks <br /><small style="font-size: 10px;">propriété</small></div>
@@ -117,12 +117,12 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_PROPRIETE), "type" => DSCivaClient::TYPE_DS_PROPRIETE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for("mon_espace_civa_ds_compte", array("type" => DSCivaClient::TYPE_DS_PROPRIETE, "sf_subject" => $compte)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if (TiersSecurity::getInstance($compte)->isAuthorized(TiersSecurity::DS_NEGOCE)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_icon icon-stock"></div>
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <br /><small style="font-size: 10px;">négoce</small></div>
@@ -138,7 +138,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('mon_espace_civa_ds', array("sf_subject" => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), DSCivaClient::TYPE_DS_NEGOCE), "type" => DSCivaClient::TYPE_DS_NEGOCE)) ?>">Accéder</a>
+                    <a href="<?php echo url_for("mon_espace_civa_ds_compte", array("type" => DSCivaClient::TYPE_DS_NEGOCE, "sf_subject" => $compte)) ?>">Accéder</a>
                 </div>
             </div>
             <?php $i = $i -1 ?>

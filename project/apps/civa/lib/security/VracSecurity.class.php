@@ -48,17 +48,13 @@ class VracSecurity implements SecurityInterface {
         if(!is_array($droits)) {
             $droits = array($droits);
         }
+        
         /*** DECLARANT ***/
 
-        /*if(!$tiers->isDeclarantContrat()) {
+        if(!EtablissementSecurity::getInstance($etablissement)->isAuthorized(Roles::TELEDECLARATION_VRAC)) {
 
             return false;
-        }*/
-
-        /*if(!$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_SIGNATURE) && !$this->myUser->getCompte()->hasDroit(_CompteClient::DROIT_VRAC_RESPONSABLE)) {
-
-            return false;
-        }*/
+        }
 
         if(in_array(self::DECLARANT, $droits)) {
 
@@ -67,7 +63,8 @@ class VracSecurity implements SecurityInterface {
 
         /*** CREATION ***/
 
-        if(in_array(self::CREATION, $droits) && $etablissement->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
+
+        if(in_array(self::CREATION, $droits) && !$etablissement->hasDroit(Roles::TELEDECLARATION_VRAC_CREATION)) {
 
             return false;
         }

@@ -9,9 +9,10 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
-class dr_exportActions extends sfActions {
+class dr_exportActions extends _DRActions {
 
     public function executeXml(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $tiers = $this->getUser()->getTiers();
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
@@ -40,6 +41,7 @@ class dr_exportActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executePdf(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         set_time_limit(180);
         $this->dr = $this->getRoute()->getDR();
         $this->etablissement = $this->dr->getEtablissement();
@@ -93,9 +95,10 @@ class dr_exportActions extends sfActions {
     }
 
     public function executeCsv(sfWebRequest $request) {
-         $dr = $this->getRoute()->getDr();
-         $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi);
-         $csvContruct->export();
+        $this->secureDR(DRSecurity::CONSULTATION);
+        $dr = $this->getRoute()->getDr();
+        $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi);
+        $csvContruct->export();
 
          return $this->renderText($csvContruct->output());
     }

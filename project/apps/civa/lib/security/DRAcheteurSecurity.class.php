@@ -29,9 +29,8 @@ class DRAcheteurSecurity implements SecurityInterface {
              return false;
         }
 
-        if(in_array(self::DECLARANT, $droits)) {
-
-            return true;
+        if(!EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR_ACHETEUR)) {
+            return false;
         }
 
         return true;

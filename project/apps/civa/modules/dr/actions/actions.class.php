@@ -2,6 +2,8 @@
 class drActions extends _DRActions {
 
     public function executeInit(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
+
         // throw new sfException("En maintenance");
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
         $this->getUser()->initCredentialsDeclaration();
@@ -62,6 +64,7 @@ class drActions extends _DRActions {
     }
 
     public function executeFlashPage(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $boutons = $this->getRequestParameter('boutons', null);
         $this->setCurrentEtape('exploitation_message');
         if (!$this->getUser()->hasFlash('flash_message') && !$boutons) {
@@ -78,6 +81,7 @@ class drActions extends _DRActions {
     }
 
     public function executeNoticeEvolutions(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('notice_evolutions');
 
         $this->dr = $this->getRoute()->getDR();
@@ -99,6 +103,7 @@ class drActions extends _DRActions {
     }
 
     public function executeExploitation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('exploitation');
         $this->help_popup_action = "help_popup_exploitation_administratif";
 
@@ -139,6 +144,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartition(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('repartition');
         $this->dr = $this->getRoute()->getDR();
 
@@ -166,6 +172,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionTableRowItemAjax(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->dr = $this->getRoute()->getDR();
         if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
             $name = $request->getParameter('qualite_name');
@@ -200,6 +207,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionLieu(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('exploitation_lieu');
         $this->help_popup_action = "help_popup_exploitation_lieu";
         $this->appellations = array();
@@ -243,6 +251,7 @@ class drActions extends _DRActions {
     }
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $declaration = $this->getRoute()->getDR();
         $hash = $request->getParameter('hash');
         $lieu = $request->getParameter('lieu');
@@ -273,6 +282,7 @@ class drActions extends _DRActions {
     }
 
     public function executeNoRecolte(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('repartition');
         $this->redirectToNextEtapes($this->getRoute()->getDR());
     }
@@ -282,6 +292,7 @@ class drActions extends _DRActions {
     }
 
     public function executeAutres(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('exploitation_autres');
         $this->help_popup_action = "help_popup_autres";
 
@@ -299,6 +310,7 @@ class drActions extends _DRActions {
     }
 
     public function executeValidation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $this->help_popup_action = "help_popup_validation";
         $this->setCurrentEtape('validation');
 
@@ -394,6 +406,7 @@ class drActions extends _DRActions {
     }
 
     public function executeSetFlashLog(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
         $id = $this->getRequestParameter('flash_message', null);
         $array = $this->getRequestParameter('array', null);
 
@@ -407,8 +420,8 @@ class drActions extends _DRActions {
     }
 
     public function executeVisualisation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $this->help_popup_action = "help_popup_visualisation";
-        $tiers = $this->getUser()->getTiers('Recoltant');
 
         $this->dr = $this->getRoute()->getDR();
 
@@ -430,6 +443,7 @@ class drActions extends _DRActions {
     }
 
     public function executeConfirmation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $this->setCurrentEtape('confirmation');
         if($this->getUser()->isSimpleOperateur()) {
 
@@ -444,7 +458,7 @@ class drActions extends _DRActions {
     }
 
     public function executeSendPdfAcheteurs(sfWebRequest $request) {
-        $tiers = $this->getUser()->getTiers('Recoltant');
+        $this->secureDR(DRSecurity::CONSULTATION);
         $dr = $this->getRoute()->getDR();
 
         $annee = $this->getRequestParameter('annee', null);
@@ -454,9 +468,8 @@ class drActions extends _DRActions {
         $this->sendMailAcheteursReport = $this->mailerManager->sendAcheteursMails();
     }
 
-
-
     public function executeSendPdf(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $tiers = $this->getUser()->getTiers('Recoltant');
         $dr = $this->getRoute()->getDR();
         $annee = $this->getRequestParameter('annee', null);
@@ -467,7 +480,8 @@ class drActions extends _DRActions {
     }
 
     public function executeInvaliderCiva(sfWebRequest $request) {
-      //  throw new sfException("En maintenance");
+        $this->secureDR(DRSecurity::ADMIN);
+
         $this->setCurrentEtape('mon_espace_civa');
         $dr = $this->getRoute()->getDR();
         if ($dr) {
@@ -476,12 +490,13 @@ class drActions extends _DRActions {
             $dr->etape = 'validation';
             $dr->save();
         }
-        $this->getUser()->initCredentialsDeclaration();
+
         $this->redirectToNextEtapes($dr);
     }
 
     public function executeInvaliderRecoltant(sfWebRequest $request) {
-        throw new sfException("En maintenance");
+        $this->secureDR(DRSecurity::ADMIN);
+
         $dr = $this->getRoute()->getDR();
         if ($dr) {
             $dr->remove('modifiee');
@@ -495,10 +510,11 @@ class drActions extends _DRActions {
         }
 
         $this->getUser()->initCredentialsDeclaration();
-        $this->redirect('mon_espace_civa_dr');
+        $this->redirect('mon_espace_civa_dr', $dr->getEtablissement());
     }
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
         $this->acheteurs = array();
         $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
@@ -506,10 +522,11 @@ class drActions extends _DRActions {
     }
 
     public function executeConfirmationMailDR(sfWebRequest $request) {
-
+        $this->secureDR(DRSecurity::CONSULTATION);
     }
 
     public function executeFeedBack(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $this->dr = $this->getRoute()->getDR();
         $this->form = new FeedBackForm();
 
@@ -560,10 +577,13 @@ Le CIVA';*/
     }
 
     public function executeFeedBackConfirmation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         $this->dr = $this->getRoute()->getDR();
     }
 
     public function executeAutorisation(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
+
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
 
@@ -580,6 +600,7 @@ Le CIVA';*/
     }
 
     public function executeTransmission(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
         set_time_limit(180);
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
@@ -615,5 +636,4 @@ Le CIVA';*/
         $this->getResponse()->setHttpHeader('Expires', '0');
         return $this->renderText(file_get_contents($path));
     }
-
 }

@@ -16,7 +16,6 @@ class uploadActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeMonEspaceCiva(sfWebRequest $request) {
-        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->help_popup_action = "help_popup_mon_espace_civa";
 
@@ -58,7 +57,6 @@ class uploadActions extends sfActions {
 
     public function executeCsvView(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
-        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
         $md5 = $request->getParameter('md5');
         set_time_limit(600);
 

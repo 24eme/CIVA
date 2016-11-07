@@ -12,6 +12,7 @@ class dr_recolteActions extends _DRActions {
 
     public function preExecute() {
         parent::preExecute();
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getRoute()->getDR();
         $this->help_popup_action = "help_popup_DR";

@@ -274,7 +274,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$emails[] = $compte->email;
 		}
 
-		$emails = array_unique($emails);
+		$emails = array_values(array_unique($emails));
 
 		$this->acheteur->emails = $emails;
     }
@@ -316,7 +316,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$emails[] = $compte->email;
 		}
 
-		$emails = array_unique($emails);
+		$emails = array_values(array_unique($emails));
 
 		$this->vendeur->emails = $emails;
     }
@@ -348,7 +348,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$emails[] = $compte->email;
 		}
 
-		$emails = array_unique($emails);
+		$emails = array_values(array_unique($emails));
 
 		$this->mandataire->emails = $emails;
     }
@@ -596,7 +596,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
 
-		$emails = array_unique($emails);
+		$emails = array_values(array_unique($emails));
 
     	return $emails;
     }
@@ -614,7 +614,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
 
-        $emails = array_unique($emails);
+        $emails = array_values(array_unique($emails));
 
     	return $emails;
     }

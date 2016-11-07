@@ -15,9 +15,3 @@ csvTiersModifications:
 
 csvTiersModificationsEmail:
   credentials: [admin]
-
-pdf:
-  credentials: [declaration]
-  
-drAcheteurCsv:
-  credentials: [acheteur]

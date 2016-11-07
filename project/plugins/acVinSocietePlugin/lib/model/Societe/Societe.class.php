@@ -457,4 +457,13 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $this->_set('commentaire', $s);
     }
 
+    public function getDroits() {
+        $droits = array();
+        foreach($this->getEtablissementsObject() as $etablissement) {
+            $droits = array_merge($droits, $etablissement->getDroits());
+        }
+
+        return array_values(array_unique($droits));
+    }
+
 }

@@ -2,24 +2,31 @@
 
 class DRSecurity implements SecurityInterface {
 
-    const DECLARANT = 'DECLARANT';
+    const CONSULTATION = 'CONSULTATION';
     const EDITION = 'EDITION';
-    const DEVALIDATION = 'DEVALIDATION_TIERS';
-    const DEVALIDATION_CIVA = 'DEVALIDATION_CIVA';
+    const ADMIN = 'ADMIN';
 
     protected $dr;
-    protected $sfUser;
     protected $etablissement;
 
-    public static function getInstance($compte, $dr = null) {
+    public static function getInstance($dr, $etablissement = null) {
 
-        return new DRSecurity($compte, $dr);
+        return new DRSecurity($dr, $etablissement);
     }
 
-    public function __construct($etablissement, $dr = null) {
+    public function __construct($dr, $etablissement = null) {
         $this->dr = $dr;
-        $this->sfUser = sfContext::getInstance()->getUser();
-        $this->etablissement = $etablissement;
+        if($this->dr) {
+            $this->etablissement = $this->dr->getEtablissement();
+        }
+        if($etablissement) {
+            $this->etablissement = $etablissement;
+        }
+    }
+
+    public function getUser() {
+
+        return sfContext::getInstance()->getUser();
     }
 
     public function isAuthorized($droits) {
@@ -27,52 +34,32 @@ class DRSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
-        /*** DECLARANT ***/
         if(!$this->etablissement) {
 
             return false;
         }
 
-        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+        if(!EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR)) {
 
             return false;
         }
 
-        /*if(!$this->compte->hasDroit(_CompteClient::DROIT_DR_RECOLTANT)) {
-
-            return false;
-        }*/
-
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)
-                                            && $this->dr
-                                            && $this->dr->isValideeCiva()) {
-
-            return false;
-        }
-
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+        if(in_array(self::CONSULTATION, $droits)) {
 
             return true;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)
-                                            && $this->dr
-                                            && $this->dr->isValideeTiers()) {
+        if(in_array(self::EDITION, $droits) && !DRClient::getInstance()->isTeledeclarationOuverte() && (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) || !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR))) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->sfUser->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
-
-            return true;
-        }
-
-        if(in_array(self::EDITION, $droits) && !DRClient::getInstance()->isTeledeclarationOuverte()) {
+        if(in_array(self::EDITION, $droits) && $this->dr && $this->dr->isValideeCiva()) {
 
             return false;
         }
 
-        if(in_array(self::EDITION, $droits) && $this->dr && $this->dr->isValideeTiers()) {
+        if(in_array(self::EDITION, $droits) && $this->dr && $this->dr->isValideeTiers() && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 
             return false;
         }

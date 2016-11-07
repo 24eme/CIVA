@@ -7,12 +7,29 @@ tiers:
 mon_espace_civa:
   url:   /mon_espace_civa/:identifiant
   param: { module: tiers, action: monEspaceCiva }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_dr_compte:
+  url:   /mon_espace_civa_compte/:identifiant/dr
+  param: { module: tiers, action: monEspaceCompteDR }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_dr:
   url:   /mon_espace_civa/:identifiant/dr
   param: { module: tiers, action: monEspaceDR }
   class: EtablissementRoute
   options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_dr_acheteur_compte:
+  url:   /mon_espace_civa_compte/:identifiant/dr_acheteur
+  param: { module: tiers, action: monEspaceCompteDRAcheteur }
+  class: CompteRoute
+  options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_dr_acheteur:
@@ -22,6 +39,13 @@ mon_espace_civa_dr_acheteur:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+mon_espace_civa_ds_compte:
+  url:   /mon_espace_civa_compte/:identifiant/ds/:type
+  param: { module: tiers, action: monEspaceCompteDS }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 mon_espace_civa_ds:
   url:   /mon_espace_civa/:identifiant/ds/:type
   param: { module: tiers, action: monEspaceDS }
@@ -29,11 +53,25 @@ mon_espace_civa_ds:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+mon_espace_civa_gamma_compte:
+  url:   /mon_espace_civa_compte/:identifiant/gamma
+  param: { module: tiers, action: monEspaceCompteGamma }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 mon_espace_civa_gamma:
   url:   /mon_espace_civa/:identifiant/gamma
   param: { module: tiers, action: monEspaceGamma }
   class: EtablissementRoute
   options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_vrac_compte:
+  url:   /mon_espace_civa_compte/:identifiant/vrac
+  param: { module: tiers, action: monEspaceCompteVrac }
+  class: CompteRoute
+  options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_vrac:

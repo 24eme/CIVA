@@ -50,11 +50,6 @@ class ds_exportActions extends sfActions
 
     public function executePDFEmpty(sfWebRequest $request)
     {
-      if(!TiersSecurity::getInstance($this->getUser())) {
-
-         throw new sfSecurityException("Vous n'avez pas accès au DS pour ce tiers");
-      }
-
       $type_ds = $request->getParameter('type');
 
       $this->tiers = $this->getUser()->getDeclarantDS($type_ds);

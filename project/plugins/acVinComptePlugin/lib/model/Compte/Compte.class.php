@@ -380,18 +380,24 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function hasDroit($droit) {
-        if(!$this->exist('droits')) {
+        if(!$this->exist('droits') && !count($this->getDroits())) {
 
             return false;
         }
-
-        $droits = $this->get('droits')->toArray(0, 1);
+        $droits = $this->get('droits');
+        if(!is_array($droits)) {
+            $droits = $droits->toArray(0, 1);
+        }
         return in_array($droit, $droits);
     }
 
     public function getDroits() {
+        if(!$this->exist('droits')) {
 
-        return $this->_get('droits');
+            return $this->getSociete()->getDroits();
+        }
+        
+        return array_values(array_unique(array_merge($this->_get('droits')->toArray(true, false), $this->getSociete()->getDroits())));
     }
 
     public function isInscrit() {
