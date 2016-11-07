@@ -56,7 +56,7 @@
                 </div>
             </div>
             <?php //$i = $i -1 ?>-->
-            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_VRAC)): ?>
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_VRAC) && isset($blocs[Roles::TELEDECLARATION_VRAC])): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_icon icon-contrat2"></div>
                 <div class="bloc_acceuil_header">Contrats</div>
@@ -106,7 +106,7 @@
                 <div class="bloc_acceuil_icon icon-stock"></div>
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Stocks <br /><small style="font-size: 10px;">propriété</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && $sf_user->isDsEditable(DSCivaClient::TYPE_DS_PROPRIETE) && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
+                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
                         <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
                         <?php else: ?>
@@ -125,9 +125,9 @@
             <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> stocks">
                 <div class="bloc_acceuil_icon icon-stock"></div>
-                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Alsace stocks <br /><small style="font-size: 10px;">négoce</small></div>
+                <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes">Stocks <br /><small style="font-size: 10px;">négoce</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->isDsEditable(DSCivaClient::TYPE_DS_NEGOCE) && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
+                    <?php if(DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
                         <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
                         <?php else: ?>

@@ -67,7 +67,6 @@ class DSSecurity implements SecurityInterface {
 
         /*** CREATION ***/
         if(in_array(self::CREATION, $droits) && $this->ds && !$this->ds->isNew()) {
-
             return false;
         }
 
@@ -76,7 +75,7 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::CREATION, $droits) && !$this->compte->isDsEditable($this->type_ds)) {
+        if(in_array(self::CREATION, $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
         }
@@ -89,8 +88,8 @@ class DSSecurity implements SecurityInterface {
 
 
         /*** EDITION ***/
-
         if(in_array(self::EDITION , $droits) && !$this->ds) {
+
             return false;
         }
 
@@ -114,7 +113,7 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::EDITION , $droits) && !$this->getUser()->isDsEditable($this->type_ds)) {
+        if(in_array(self::EDITION , $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
         }

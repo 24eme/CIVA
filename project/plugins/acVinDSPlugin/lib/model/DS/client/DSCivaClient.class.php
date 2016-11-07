@@ -90,9 +90,12 @@ class DSCivaClient extends DSClient {
      }
 
     public function findByIdentifiantAndPeriode($identifiant, $periode) {
-        $tiers = EtablissementClient::getInstance()->findByIdentifiant($identifiant);
-        $tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage());
-        foreach ($tiers->getLieuxStockage($tiers->isAjoutLieuxDeStockage()) as $lieu_stockage) {
+        $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant);
+        if(!$etablissement) {
+            $etablissement = EtablissementClient::getInstance()->findByCvi($identifiant);
+        }
+        $etablissement->getLieuxStockage($etablissement->isAjoutLieuxDeStockage(), $identifiant);
+        foreach ($etablissement->getLieuxStockage($etablissement->isAjoutLieuxDeStockage()) as $lieu_stockage) {
             if($ds = $this->find('DS-' . $identifiant . '-' . $periode. '-' . $lieu_stockage->getNumeroIncremental())) {
 
                 return $ds;
@@ -130,27 +133,13 @@ class DSCivaClient extends DSClient {
     }
 
     public function getEtablissement($societe, $type_ds = null) {
-        $isCooperativeEtNego = 0;
         foreach($societe->getEtablissementsObject() as $etablissement) {
-            if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
-                $isCooperativeEtNego++;
-            }
-        }
-
-        $isCooperativeEtNego = $isCooperativeEtNego > 1;
-
-        foreach($societe->getEtablissementsObject() as $etablissement) {
-            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
 
                 return $etablissement;
             }
 
-            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && !$isCooperativeEtNego && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
-
-                return $etablissement;
-            }
-
-            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && $isCooperativeEtNego && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT))) {
+            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)) {
 
                 return $etablissement;
             }

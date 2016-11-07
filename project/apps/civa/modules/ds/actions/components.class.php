@@ -11,7 +11,7 @@ class dsComponents extends sfComponents {
     public function executeMonEspace(sfWebRequest $request) {
         $this->periode = CurrentClient::getCurrent()->getPeriodeDSByType($this->type_ds);
         $this->ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($this->type_ds, $this->etablissement, $this->periode);
-        $this->ds_editable = $this->getUser()->isDsEditable($this->type_ds);
+        $this->ds_editable = DSCivaClient::getInstance()->isTeledeclarationOuverte();
     }
 
     /**
