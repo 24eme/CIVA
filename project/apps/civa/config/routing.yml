@@ -716,7 +716,7 @@ upload_csv:
   requirements: { sf_method: [get, post] }
 
 upload_list:
-  url: /upload/:identifiant/list
+  url: /upload-list
   param: {module: upload, action: csvList}
 
 csv_view:

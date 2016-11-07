@@ -166,7 +166,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     }
 
     public function isInDelegateMode() {
-        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
+        return ($this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
     }
 
 }

@@ -11,9 +11,9 @@
 
       	<?php include_component('dr_acheteur', 'monEspace', array('formUploadCsv' => $formUploadCsv, 'etablissement' => $etablissement)) ?>
     </div>
-    <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION) ): ?>
+    <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION)): ?>
         <div class="contenu clearfix">
-                <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
+            <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
         </div>
     <?php endif;?>
 </div>

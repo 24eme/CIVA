@@ -178,6 +178,10 @@ class tiersActions extends sfActions {
         $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
         $compte = $this->getRoute()->getCompte();
 
+        if($this->getUser()->hasFlash('form_error')) {
+            $this->getUser()->setFlash('form_error', $this->getUser()->getFlash('form_error'));
+        }
+
         return $this->redirect('mon_espace_civa_dr_acheteur', DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete()));
     }
 
@@ -259,7 +263,7 @@ class tiersActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeDelegation(sfWebRequest $request) {
-        $this->forward404Unless($this->getUser()->hasCredential('delegation'));
+        $this->forward404Unless($this->getUser()->hasCredential(myUser::CREDENTIAL_DELEGATION));
         $this->compte = $this->getUser()->getCompte();
         $this->formDelegation = new DelegationLoginForm($this->getUser()->getCompte());
 
@@ -268,12 +272,12 @@ class tiersActions extends sfActions {
 
             if ($this->formDelegation->isValid()) {
                 $this->getUser()->signInCompteUsed($this->formDelegation->process());
-                $this->redirect('@tiers');
+                $this->redirect('tiers');
             }
         }
 
-        $this->executeMonEspaceDRAcheteur($request);
-        $this->setTemplate("monEspaceDRAcheteur");
+        $this->getUser()->setFlash('form_error', "Ce CVI n'existe pas");
+        return $this->redirect('mon_espace_civa_dr_acheteur_compte', $this->getUser()->getCompte());
     }
 
 
