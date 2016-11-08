@@ -318,7 +318,6 @@ class vracActions extends sfActions
     	}
 
         $acteur = $request->getParameter('acteur');
-		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
         $this->vrac = $this->populateVracTiers($this->getRoute()->getVrac());
 
         $this->secureVrac(VracSecurity::EDITION, $this->vrac);
