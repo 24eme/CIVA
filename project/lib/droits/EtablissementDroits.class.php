@@ -31,7 +31,7 @@ class EtablissementDroits
 
         $droits[Roles::TELEDECLARATION_VRAC] = Roles::TELEDECLARATION_VRAC;
 
-        if($etablissement->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR) {
+        if(!in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
             $droits[Roles::TELEDECLARATION_VRAC_CREATION] = Roles::TELEDECLARATION_VRAC_CREATION;
         }
 
