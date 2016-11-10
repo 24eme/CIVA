@@ -603,6 +603,11 @@ Le CIVA';*/
         $this->id = $request->getParameter('id');
         $this->url = $request->getParameter('url');
 
+        if(!DRClient::getInstance()->find($this->id)) {
+
+            return $this->redirect($this->url);
+        }
+
         return $this->redirect('dr_transmission', array('id' => $this->id, 'url' => $this->url));
     }
 
