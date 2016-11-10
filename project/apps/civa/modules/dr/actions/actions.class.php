@@ -599,12 +599,19 @@ Le CIVA';*/
         return $this->redirect('declaration_transmission', array("url" => $this->url, "id" => $this->id));
     }
 
+    public function executeTransmissionAva(sfWebRequest $request) {
+        $this->id = $request->getParameter('id');
+        $this->url = $request->getParameter('url');
+
+        return $this->redirect('dr_transmission', array('id' => $this->id, 'url' => $this->url));
+    }
+
     public function executeTransmission(sfWebRequest $request) {
         $this->secureDR(DRSecurity::CONSULTATION);
         set_time_limit(180);
         $this->url = $request->getParameter('url');
         $this->id = $request->getParameter('id');
-        $dr = acCouchdbManager::getClient()->find($this->id);
+        $dr = $this->getRoute()->getDR();
         if(!$dr || !$dr->isValideeTiers()) {
 
             return $this->redirect($this->url);
@@ -612,7 +619,7 @@ Le CIVA';*/
 
         if(!$dr->hasAutorisation(DRClient::AUTORISATION_AVA)) {
 
-            return $this->redirect('declaration_autorisation', array('id' => $this->id, 'url' => $this->url));
+            return $this->redirect('dr_autorisation', array('id' => $this->id, 'url' => $this->url));
         }
 
         $this->setLayout(false);

@@ -413,8 +413,12 @@ dr_autorisation:
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
-dr_transmission:
+dr_transmission_ava:
   url:   /declaration/transmission
+  param: { module: dr, action: transmissionAva }
+
+dr_transmission:
+  url:   /dr/:id/transmission
   param: { module: dr, action: transmission }
   class: DRRoute
   options: { model: DR, type: object }
