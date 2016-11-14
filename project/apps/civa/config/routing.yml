@@ -371,6 +371,14 @@ admin_back_to_now:
   url: /admin_back_to_now
   param: { module: admin, action: backToNow }
 
+admin_etablissements_diff_chargement:
+  url: /admin/etablissements-diff-chargement
+  param: { module: admin, action: etablissementDiffChargement }
+
+admin_etablissements_diff:
+  url: /admin/etablissements-diff
+  param: { module: admin, action: etablissementDiff }
+
 delegate_mode_retour_espace_civa:
    url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }

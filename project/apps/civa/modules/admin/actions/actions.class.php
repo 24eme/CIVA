@@ -73,4 +73,49 @@ class adminActions extends sfActions {
 
         return $this->redirect('@admin');
     }
+
+    public function executeEtablissementDiff(sfWebRequest $request) {
+        ini_set('memory_limit', '512M');
+        set_time_limit(0);
+        $tiersCsv = new Db2Tiers2Csv(sfConfig::get('sf_root_dir')."/data/import/Tiers/Tiers-last");
+        $this->etablissementsDb2 = $tiersCsv->getEtablissements();
+        $this->etablissementsCouchdb = array();
+        $results = EtablissementClient::getInstance()->startkey(array("INTERPRO-declaration", "ACTIF"))
+                            ->endkey(array("INTERPRO-declaration","ACTIF", array()))
+            			    ->reduce(false)
+            			    ->getView('etablissement', 'all');
+        foreach($results->rows as $row) {
+            $etablissement = EtablissementClient::getInstance()->find($row->id);
+            if($etablissement->getFamille() == "COURTIER") {
+                continue;
+            }
+            $this->etablissementsCouchdb[$row->id."/ETABLISSEMENT"] = EtablissementCsvFile::export($etablissement);
+            $this->etablissementsCouchdb[$row->id."/ETABLISSEMENT_EXPLOITANT"] = EtablissementCsvFile::exportExploitant($etablissement);
+        }
+
+        $this->setLayout('layout');
+        $this->diff = array_diff_assoc_recursive($this->etablissementsDb2, $this->etablissementsCouchdb);
+    }
+
+    public function executeEtablissementDiffChargement(sfWebRequest $request) {
+        $this->setLayout('layout');
+    }
+}
+
+function array_diff_assoc_recursive($array1, $array2) {
+    $difference=array();
+    foreach($array1 as $key => $value) {
+        if( is_array($value) ) {
+            if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+                $difference[$key] = $value;
+            } else {
+                $new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+                if( !empty($new_diff) )
+                    $difference[$key] = $new_diff;
+            }
+        } else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
+            $difference[$key] = $value;
+        }
+    }
+    return $difference;
 }

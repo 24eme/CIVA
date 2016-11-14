@@ -35,7 +35,9 @@ EOF;
         $results = EtablissementAllView::getInstance()->find();
 
         foreach($results->rows as $row) {
-            echo EtablissementCsvFile::export(EtablissementClient::getInstance()->find($row->id))."\n";
+            $etablissement = EtablissementClient::getInstance()->find($row->id);
+            echo implode(";", EtablissementCsvFile::export($etablissement))."\n";
+            echo implode(";", EtablissementCsvFile::exportExploitant($etablissement))."\n";
         }
 
     }
