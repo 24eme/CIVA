@@ -16,10 +16,10 @@ class Db2Tiers2Csv
         $etablissements = array();
         $lines = $this->getArrayCsv();
         foreach($lines as $line) {
-            if($line[0] != "ETABLISSEMENT" && $line[0] != "ETABLISSEMENT_EXPLOITANT") {
+            if($line[0] != "ETABLISSEMENT") {
                 continue;
             }
-            $etablissements["ETABLISSEMENT-".$line[2]."/".$line[0]] = $line;
+            $etablissements["ETABLISSEMENT-".$line[2]] = $line;
         }
 
         return $etablissements;
@@ -188,6 +188,7 @@ class Db2Tiers2Csv
             $identifiantEtablissement,
             $famille,
             $statut,
+            $this->getInfos($tiers, Db2Tiers::COL_NUM),
             $this->getInfos($tiers, Db2Tiers::COL_INTITULE),
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             $this->getInfos($tiers, Db2Tiers::COL_CVI),
@@ -206,33 +207,13 @@ class Db2Tiers2Csv
             null,
             $this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null,
             $this->getInfos($tiers, Db2Tiers::COL_EMAIL),
-        );
-
-
-        $this->csv[] = array(
-            "ETABLISSEMENT_EXPLOITANT",
-            $societe,
-            $identifiantEtablissement,
-            "EXPLOITANT",
-            $statut,
-            $this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR),
+            $intituleExploitant,
             $nomExploitant,
-            null,
-            null,
-            null,
-            null,
-            null,
             $adresseExploitant,
             $codePostalExploitant,
             $communeExploitant,
-            null,
             "FR",
-            null,
-            null,
-            null,
             $telExploitant,
-            null,
-            null,
         );
 
         return;

@@ -210,12 +210,15 @@ class EtablissementCsvFile extends CompteCsvFile
 
     public static function export($etablissement) {
 
+        $exploitant = $etablissement->getCompteExploitantObject();
+
         return array(
             "ETABLISSEMENT",
             $etablissement->id_societe,
             $etablissement->identifiant,
             $etablissement->famille,
             $etablissement->statut,
+            null,
             $etablissement->intitule,
             $etablissement->nom,
             $etablissement->cvi,
@@ -234,36 +237,13 @@ class EtablissementCsvFile extends CompteCsvFile
             $etablissement->telephone_perso,
             $etablissement->fax,
             $etablissement->email,
-        );
-    }
-
-    public static function exportExploitant($etablissement) {
-        $exploitant = $etablissement->getCompteExploitantObject();
-
-        return array(
-            "ETABLISSEMENT_EXPLOITANT",
-            $exploitant->id_societe,
-            $etablissement->identifiant,
-            "EXPLOITANT",
-            $exploitant->statut,
             $exploitant->civilite,
             $exploitant->nom,
-            null,
-            null,
-            null,
-            null,
-            null,
             $exploitant->adresse,
             $exploitant->code_postal,
             $exploitant->commune,
-            null,
             $exploitant->pays,
-            null,
-            null,
-            null,
             $exploitant->telephone_perso,
-            null,
-            null,
         );
     }
 
