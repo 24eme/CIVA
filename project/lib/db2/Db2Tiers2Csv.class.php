@@ -94,7 +94,7 @@ class Db2Tiers2Csv
 
             foreach($etablissements as $tiers) {
                 try {
-                    $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num));
+                    $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num), $etablissements);
                 } catch (Exception $e) {
                     continue;
                 }
@@ -145,7 +145,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $num)
+    protected function importEtablissement($societe, $tiers, $num, $societes)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -158,6 +158,17 @@ class Db2Tiers2Csv
 
         if(!str_replace("C", "", $identifiantEtablissement)) {
             return null;
+        }
+
+        $email = $this->getInfos($tiers, Db2Tiers::COL_EMAIL);
+        if(!$email) {
+            $find = false;
+            foreach($societes as $etablissements) {
+                $email = $this->getInfos($etablissements, Db2Tiers::COL_EMAIL);
+                if($email) {
+                    break;
+                }
+            }
         }
 
         $insee_declaration = ($this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION)) ? $this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION) : $this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE);
@@ -206,7 +217,7 @@ class Db2Tiers2Csv
             $this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO)) : null,
             null,
             $this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null,
-            $this->getInfos($tiers, Db2Tiers::COL_EMAIL),
+            $email,
             $intituleExploitant,
             $nomExploitant,
             $adresseExploitant,
