@@ -89,8 +89,10 @@ class adminActions extends sfActions {
             if($etablissement->getFamille() == "COURTIER") {
                 continue;
             }
-            $this->etablissementsCouchdb[$row->id."/ETABLISSEMENT"] = EtablissementCsvFile::export($etablissement);
-            $this->etablissementsCouchdb[$row->id."/ETABLISSEMENT_EXPLOITANT"] = EtablissementCsvFile::exportExploitant($etablissement);
+            $this->etablissementsCouchdb[$row->id] = EtablissementCsvFile::export($etablissement);
+            if(isset($this->etablissementsDb2[$row->id])) {
+                $this->etablissementsCouchdb[$row->id][5] = $this->etablissementsDb2[$row->id][5];
+            }
         }
 
         $this->setLayout('layout');
