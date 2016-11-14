@@ -161,12 +161,24 @@ class Db2Tiers2Csv
         }
 
         $email = $this->getInfos($tiers, Db2Tiers::COL_EMAIL);
-        if(!$email) {
-            $find = false;
+        $tel = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO)) {
+            $tel = sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO));
+        }
+        $fax = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_FAX)) {
+            $fax = sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX));
+        }
+        if(!$email || !$tel || !$fax) {
             foreach($societes as $etablissements) {
-                $email = $this->getInfos($etablissements, Db2Tiers::COL_EMAIL);
-                if($email) {
-                    break;
+                if(!$tel && $this->getInfos($etablissements, Db2Tiers::COL_TELEPHONE_PRO)) {
+                    $tel = sprintf('%010d', $this->getInfos($etablissements, Db2Tiers::COL_TELEPHONE_PRO));
+                }
+                if(!$fax && $this->getInfos($etablissements, Db2Tiers::COL_FAX)) {
+                    $fax = sprintf('%010d', $this->getInfos($etablissements, Db2Tiers::COL_FAX));
+                }
+                if(!$email && $this->getInfos($etablissements, Db2Tiers::COL_EMAIL)) {
+                    $email = $this->getInfos($etablissements, Db2Tiers::COL_EMAIL);
                 }
             }
         }
@@ -214,9 +226,9 @@ class Db2Tiers2Csv
             "FR",
             $insee_declaration,
             ($insee_declaration) ? $this->getCommune($insee_declaration): $etablissement->getCommune(),
-            $this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO)) : null,
+            $tel,
             null,
-            $this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null,
+            $fax,
             $email,
             $intituleExploitant,
             $nomExploitant,
