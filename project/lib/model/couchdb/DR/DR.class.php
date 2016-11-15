@@ -490,8 +490,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         if ($cepage->getConfig()->hasMinQuantite() || $cepage->getConfig()->hasMaxQuantite()) {
                             $volume_acheteurs = $cepage->getVolumeAcheteurs('cooperatives', false);
                             foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
-                                $volume_min = round($volume * $cepage->getConfig()->min_quantite, 2);
-                                $volume_max = round($volume * $cepage->getConfig()->max_quantite, 2);
+                                $volume_min = round($volume * $cepage->getConfig()->get('attributs/min_quantite'), 2);
+                                $volume_max = round($volume * $cepage->getConfig()->get('attributs/max_quantite'), 2);
                                 $volume_acheteur = (isset($volume_acheteurs[$cvi])) ? $volume_acheteurs[$cvi] : 0;
                                 if (!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $volume_acheteur < $volume_min) {
                                     array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
