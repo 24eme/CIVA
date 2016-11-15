@@ -246,8 +246,12 @@ class drActions extends _DRActions {
 
         $this->form->save();
 
-        return $this->redirectByBoutonsEtapes(null, $this->dr);
+        if(!$this->form->hasOneLieuForEach()) {
+            $this->erreur_global = "Vous devez saisir un lieu-dit pour chacune des appellations";
+            return sfView::SUCCESS;
+        }
 
+        return $this->redirectByBoutonsEtapes(null, $this->dr);
     }
 
     public function executeRepartitionLieuDelete(sfWebRequest $request) {

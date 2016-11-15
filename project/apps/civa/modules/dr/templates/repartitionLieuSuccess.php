@@ -10,6 +10,9 @@
         <li class="ui-tabs-selected"><a href="#exploitation_acheteurs">Répartition de la récolte</a></li>
     </ul>
     <div id="application_dr" class="clearfix">
+        <?php if(isset($erreur_global)): ?>
+            <ul style="margin-bottom: 40px;" class="error_list"><li><?php echo $erreur_global ?></li></ul>
+        <?php endif; ?>
         <?php foreach($form['appellations'] as $hash => $formAppellation): ?>
             <?php include_partial('dr/formLieu', array('appellation' => $dr->get($hash), 'form' => $formAppellation, 'dr' => $dr)) ?>
         <?php endforeach; ?>
@@ -21,6 +24,5 @@
     </div>
 
     <?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
-
 </form>
 <!-- fin #principal -->

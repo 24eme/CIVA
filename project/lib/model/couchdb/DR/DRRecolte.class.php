@@ -82,12 +82,19 @@ class DRRecolte extends BaseDRRecolte {
 
             $list_to_remove = array();
             foreach($this->getMentions() as $mention) {
-                $appellation_key = $mention->getAppellation()->getKey();
-                if($mention->getKey() != "mention") {
-                    $appellation_key = $mention->getKey();
+                if($mention->getKey() == "mention") {
+                    continue;
                 }
-                if(!$this->getDocument()->getAcheteurs()->getNoeudAppellations()->exist($appellation_key)) {
+
+                if(!$this->getDocument()->getAcheteurs()->getNoeudAppellations()->exist($mention->getKey())) {
                     $list_to_remove[$mention->getHash()] = $mention->getHash();
+                }
+            }
+
+            foreach($this->getAppellations() as $appellation) {
+                $appellation_key = $appellation->getKey();
+                if(!$this->getDocument()->getAcheteurs()->getNoeudAppellations()->exist($appellation_key)) {
+                    $list_to_remove[$appellation->getHash()] = $appellation->getHash();
                 }
             }
 
