@@ -533,7 +533,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         // vérifie le trop plein de DPLC
-                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round($cepage->getDplc(), 2) > 0) {
+                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round(($cepage->getDplc() - $cepage->getLies()),2) > 0) {
                             array_push($validLogVigilance, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                         }
 
