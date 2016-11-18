@@ -313,7 +313,7 @@ class uploadActions extends sfActions {
         if (!$this->is_rebeche)
             return false;
         try {
-            if ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_COOPERATIVE)
+            if ($this->etablissement->acheteur_raisin != DRClient::ACHETEUR_COOPERATIVE)
                 return true;
         } catch (Exception $e) {
             return false;
