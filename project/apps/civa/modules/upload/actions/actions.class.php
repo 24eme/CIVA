@@ -36,7 +36,9 @@ class uploadActions extends sfActions {
     }
 
     public function executeCsvDownload(sfWebRequest $request) {
-        $this->forward404Unless($this->csv = CSVClient::getInstance()->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
+        $this->etablissement = $this->getRoute()->getEtablissement();
+
+        $this->forward404Unless($this->csv = CSVClient::getInstance()->retrieveByCviAndCampagne($this->etablissement->cvi));
         $this->setResponseCsv($this->csv->getCsvFilename());
         return $this->renderText(file_get_contents($this->csv->getAttachmentUri($this->csv->getCsvFilename())));
     }

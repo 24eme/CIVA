@@ -741,8 +741,11 @@ csv_view:
   requirements: { sf_method: [get, post] }
 
 csv_download:
-  url: /download/csv
+  url: /download/:identifiant/csv
   param: {module: upload, action: csvDownload}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 task_list:
   url: /taches

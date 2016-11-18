@@ -3,7 +3,7 @@
     <div class="contenu_section">
         <?php if ($csv): ?>
             <ul>
-                <li><a href="<?php echo url_for('csv_download') ?>">Télécharger l'export</a></li>
+                <li><a href="<?php echo url_for('csv_download', $etablissement) ?>">Télécharger l'export</a></li>
             </ul>
             <br />
         <?php endif; ?>
