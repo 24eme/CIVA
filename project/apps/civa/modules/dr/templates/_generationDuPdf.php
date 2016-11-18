@@ -1,8 +1,8 @@
 <script>
     <?php if (isset($from_csv)): ?>
-    ajax_url_to_print = "<?php echo url_for(array('sf_route' => 'dr_pdf', 'id' => $dr->_id, 'annee' => $annee, 'ajax' => 1, 'from_csv' => 1)); ?>";
+    ajax_url_to_print = "<?php echo url_for("dr_pdf", array('identifiant' => $etablissement->identifiant, 'annee' => $annee, 'ajax' => 1, 'from_csv' => 1)); ?>";
     <?php else: ?>
-    ajax_url_to_print = "<?php echo url_for(array('sf_route' => 'dr_pdf', 'id' => $dr->_id, 'annee' => $annee, 'ajax' => 1)); ?>";
+    ajax_url_to_print = "<?php echo url_for("dr_pdf", array('identifiant' => $etablissement->identifiant, 'annee' => $annee, 'ajax' => 1)); ?>";
     <?php endif; ?>
 </script>
 <div style="display: none" id="popup_loader" title="Génération du PDF">

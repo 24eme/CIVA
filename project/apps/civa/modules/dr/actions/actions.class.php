@@ -40,12 +40,13 @@ class drActions extends _DRActions {
 
             return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
         } elseif ($dr_data['type_declaration'] == 'visualisation_avant_import') {
-            $this->redirect('@visualisation_avant_import');
+
+            return $this->redirect('dr_visualisation_avant_import', array('identifiant' => $etablissement->identifiant, 'campagne' => $campagne));
         } elseif ($dr_data['type_declaration'] == 'import') {
             $acheteurs = array();
             $dr = DRClient::getInstance()->createFromCSVRecoltant($campagne, $etablissement, $acheteurs, $this->getUser()->isSimpleOperateur());
             $dr->save();
-            $this->getUser()->setFlash('flash_message', $this->getPartial('declaration/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
+            $this->getUser()->setFlash('flash_message', $this->getPartial('dr/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
 
             return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
         } elseif ($dr_data['type_declaration'] == 'precedente') {
@@ -65,6 +66,7 @@ class drActions extends _DRActions {
 
     public function executeFlashPage(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
+        $this->dr = $this->getRoute()->getDR();
         $boutons = $this->getRequestParameter('boutons', null);
         $this->setCurrentEtape('exploitation_message');
         if (!$this->getUser()->hasFlash('flash_message') && !$boutons) {
@@ -519,9 +521,10 @@ class drActions extends _DRActions {
 
     public function executeVisualisationAvantImport(sfWebRequest $request) {
         $this->secureDR(DRSecurity::CONSULTATION);
-        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->campagne = $this->getRequestParameter('campagne');
         $this->acheteurs = array();
-        $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->getUser()->getTiers('Recoltant'), $this->acheteurs, $this->getUser()->isSimpleOperateur());
+        $this->dr = DRClient::getInstance()->createFromCSVRecoltant($this->campagne, $this->etablissement, $this->acheteurs, $this->getUser()->isSimpleOperateur());
         $this->visualisation_avant_import = true;
     }
 

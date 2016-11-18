@@ -57,6 +57,6 @@
 </form>
 <!-- fin #principal -->
 
-<?php include_partial('generationDuPdf', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('dr/generationDuPdf', array('annee' => $annee, 'etablissement' => $dr->getEtablissement())) ?>
 
 <?php include_partial('dr/popupConfirmeValidation', array('dr' => $dr, 'formDatesModification' => isset($formDatesModification) ? $formDatesModification : null, 'validation_compte_id' => $validation_compte_id)) ?>

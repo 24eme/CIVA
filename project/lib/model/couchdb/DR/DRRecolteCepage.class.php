@@ -123,9 +123,16 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       if (isset($hash[$uk]))
     	return $hash[$uk];
       $ret = $this->detail->add();
-      $ret->denomination = $denom;
+      if($denom) {
+        $ret->denomination = $denom;
+      }
+      if($vtsgn) {
+          $ret->vtsgn = $vtsgn;
+      }
       $ret->vtsgn = $vtsgn;
-      $ret->lieu = $lieu;
+      if($lieu) {
+        $ret->lieu = $lieu;
+      }
       return $ret;
     }
 

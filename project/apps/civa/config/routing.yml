@@ -392,6 +392,9 @@ dr_telecharger_la_notice:
 dr_visualisation_avant_import:
   url:   /dr_visualisation_avant_import/:identifiant/:campagne
   param: { module: dr, action: visualisationAvantImport }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 dr_init:
   url:   /dr_initialisation/:identifiant/:campagne
@@ -544,7 +547,6 @@ dr_recolte_correspondance_mention:
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
-
 dr_recolte_noeud_precedent:
   url:    /dr/:id/recolte/noeud/precedent
   param: { module: dr_recolte, action: produitNoeudPrecedent}
@@ -630,10 +632,10 @@ dr_confirmation:
   requirements: { sf_method: [get, post] }
 
 dr_pdf:
-  url: /dr/:id/pdf
+  url: /dr/:identifiant/pdf/:annee
   param: {module: dr_export, action: pdf}
-  class: DRRoute
-  options: { model: DR, type: object }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
 dr_csv:

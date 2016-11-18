@@ -66,6 +66,6 @@
 </form>
 <!-- fin #principal -->
 
-<?php include_partial('generationDuPdf', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('dr/generationDuPdf', array('annee' => $annee, 'etablissement' => $dr->getEtablissement())) ?>
 <?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee, 'dr' => $dr)) ?>
 <?php //include_partial('envoiMailDR', array('annee' => $annee)) ?>

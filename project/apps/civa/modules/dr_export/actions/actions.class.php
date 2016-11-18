@@ -33,7 +33,7 @@ class dr_exportActions extends _DRActions {
 
     private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
-        return $this->renderText($this->generateUrl('dr_pdf', array('id' => $this->dr->_id, 'annee'=>$this->annee, 'from_csv' => $from_csv)));
+        return $this->renderText($this->generateUrl('dr_pdf', array('identifiant' => $this->etablissement->identifiant, 'annee' => $this->annee, 'from_csv' => $from_csv)));
     }
     /**
      * Executes index action
@@ -43,14 +43,21 @@ class dr_exportActions extends _DRActions {
     public function executePdf(sfWebRequest $request) {
         $this->secureDR(DRSecurity::CONSULTATION);
         set_time_limit(180);
-        $this->dr = $this->getRoute()->getDR();
-        $this->etablissement = $this->dr->getEtablissement();
-
-        $this->annee = $this->dr->getCampagne();
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->annee = $request->getParameter('annee');
 
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
             $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->etablissement, $import_from, $this->getUser()->isSimpleOperateur());
+        }
+
+        if(!$this->dr) {
+            $this->dr = DRClient::getInstance()->find('DR-'.$this->etablissement->identifiant.'-'.$this->annee);
+        }
+
+        if(!$this->dr) {
+
+            return $this->forward404();
         }
 
         $this->setLayout(false);
@@ -71,7 +78,7 @@ class dr_exportActions extends _DRActions {
 
         $this->forward404Unless($this->dr);
 
-        $this->document = new ExportDRPdf($this->dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = @(new ExportDRPdf($this->dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf')));
 
         if($request->getParameter('force') || $request->getParameter("from_csv")) {
             $this->document->removeCache();

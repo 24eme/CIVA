@@ -12,7 +12,7 @@ td.error, td.warning{width: 700px; vertical-align: top;}
 td.maintitre{border-top: 1px solid black;}
 </style>
 <div class="recap">
-<?php 
+<?php
   if (count($recap->errors)) {
     echo "<p>Des erreurs ont été repérées concernant le fichier CSV que vous venez de nous fournir</p><table><tr><th>Message</th><th>Numéros de ligne</th></tr>";
     foreach ($recap->errors as $msg => $lines) {
@@ -48,12 +48,12 @@ td.maintitre{border-top: 1px solid black;}
 ?>
 </div>
 <div class="linkback">
-    <p style="float:right; margin: 15px;"><?php echo link_to("Retour à votre espace CIVA", "mon_espace_civa_dr_acheteur"); ?></p>
+    <p style="float:right; margin: 15px;"><?php echo link_to("Retour à votre espace CIVA", "mon_espace_civa_dr_acheteur", $etablissement); ?></p>
 </div>
 <table class="csv">
 <tr class="titre"><td>&nbsp;</td><td>CVI acheteur</td><td>Nom acheteur</td><td>CVI récoltant</td><td>Nom récoltant</td><td>Appellation</td><td>Lieu</td><td>Cepage</td><td>VT/SGN</td><td>Denomination</td><td>Superficie acheté</td><td>Volume acheté</td></tr>
 <?php   $cpt = 0;
-foreach ($csv->getRawValue()->getCsv() as $line) 
+foreach ($csv->getRawValue()->getCsv() as $line)
 {
   echo '<tr';
   if (count($errors[$cpt]))

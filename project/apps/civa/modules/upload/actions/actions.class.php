@@ -32,11 +32,11 @@ class uploadActions extends sfActions {
     }
 
     public function executeCsvList(sfWebRequest $request) {
-      $this->csv = acCouchdbManager::getClient('CSV')->getCSVsAcheteurs();
+      $this->csv = CSVClient::getInstance()->getCSVsAcheteurs();
     }
 
     public function executeCsvDownload(sfWebRequest $request) {
-        $this->forward404Unless($this->csv = acCouchdbManager::getClient("CSV")->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
+        $this->forward404Unless($this->csv = CSVClient::getInstance()->retrieveByCviAndCampagne($this->getUser()->getTiers('Acheteur')->cvi));
         $this->setResponseCsv($this->csv->getCsvFilename());
         return $this->renderText(file_get_contents($this->csv->getAttachmentUri($this->csv->getCsvFilename())));
     }
@@ -176,17 +176,17 @@ class uploadActions extends sfActions {
         }
 
         if (!$nb_errors) {
-            $cvi = $this->getUser()->getTiers()->cvi;
-            $csv = acCouchdbManager::getClient('CSV')->retrieveByCviAndCampagneOrCreateIt($cvi);
+            $cvi = $this->etablissement->cvi;
+            $csv = CSVClient::getInstance()->retrieveByCviAndCampagneOrCreateIt($cvi);
             $csv->storeCSV($this->csv);
             $csv->save();
             $this->getUser()->setFlash('confirmation', 'Les informations concernant la récolte de cette année ont bien été intégrées à notre base');
             if (!$nb_warnings)
-                return $this->redirect('@mon_espace_civa_dr_acheteur');
+                return $this->redirect('mon_espace_civa_dr_acheteur', $this->etablissement);
         }
         if (!$this->csv) {
             $this->getUser()->setFlash('error', 'Le fichier fourni ne semble pas être un fichier CSV valide');
-            return $this->redirect('@mon_espace_civa_dr_acheteur');
+            return $this->redirect('mon_espace_civa_dr_acheteur', $this->etablissement);
         }
     }
 
@@ -201,15 +201,8 @@ class uploadActions extends sfActions {
     }
 
     protected function isVTSGNOk($line) {
-      if (!$line[CsvFileAcheteur::CSV_VTSGN])
-	return true;
-      if ($line[CsvFileAcheteur::CSV_VTSGN] && !$this->may_have_vtsgn)
-	return false;
-      if ($line[CsvFileAcheteur::CSV_VTSGN] == 'VT')
-	return true;
-      if ($line[CsvFileAcheteur::CSV_VTSGN] == 'SGN')
-	return true;
-      return false;
+
+	    return true;
     }
 
     protected function hasCVI($line) {
@@ -243,7 +236,6 @@ class uploadActions extends sfActions {
         $this->is_rebeche = false;
         $this->need_denomlieu = false;
         $this->has_lieudit = false;
-	    $this->may_have_vtsgn = false;
 
         if (!preg_match('/[a-z]/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
             return "appellation vide";
@@ -258,13 +250,18 @@ class uploadActions extends sfActions {
             return "cepage vide";
         }
 
-        $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFileAcheteur::CSV_APPELLATION], $line[CsvFileAcheteur::CSV_LIEU], $line[CsvFileAcheteur::CSV_CEPAGE]);
+        $produit = DRClient::getInstance()->identifyProductCSV($line);
 
+        if($produit) {
+            $prod["hash"] = $produit->getHash();
+        } else {
+            $prod = array("error" => $line[CsvFileAcheteur::CSV_APPELLATION].' '.$line[CsvFileAcheteur::CSV_LIEU].' '.$line[CsvFileAcheteur::CSV_CEPAGE]." ".$line[CsvFileAcheteur::CSV_VTSGN]);
+        }
 
         if (isset($prod['hash'])) {
 
             $cepage = ConfigurationClient::getConfiguration()->get($prod['hash']);
-            $lieu = $cepage->getParent()->getParent();
+            $lieu = $cepage->getParentNode()->getParentNode();
             if ($lieu->getKey() != 'lieu')
                 $this->has_lieudit = true;
             if ($lieu->getParent()->getParent()->hasLieuEditable() || preg_match('/_GRDCRU/', $prod['hash']))
@@ -293,8 +290,6 @@ class uploadActions extends sfActions {
             if($this->isPositive($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
                 $this->has_superficie[$lieu_appellation_libelle] = true;
             }
-
-	       $this->may_have_vtsgn = $cepage->hasVtsgn();
         }
 
         if (!isset($prod['error']))
@@ -422,8 +417,10 @@ class uploadActions extends sfActions {
         if ($this->is_rebeche || $this->no_surface)
             return false;
         try {
-            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE])
-                return ($this->getUser()->getTiers('Acheteur')->getQualite() != Acheteur::ACHETEUR_NEGOCIANT);
+            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) {
+
+                return ($this->etablissement->acheteur_raisin != Acheteur::ACHETEUR_NEGOCIANT);
+            }
         } catch (Exception $e) {
             return false;
         }
@@ -453,8 +450,10 @@ class uploadActions extends sfActions {
         if ($this->is_rebeche || $this->no_surface)
             return false;
         try {
-            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE])
-                return ($this->getUser()->getTiers('Acheteur')->getQualite() == Acheteur::ACHETEUR_NEGOCIANT);
+            if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) {
+
+                return ($this->etablissement->acheteur_raisin == Acheteur::ACHETEUR_NEGOCIANT);
+            }
         } catch (Exception $e) {
             return false;
         }
@@ -463,7 +462,8 @@ class uploadActions extends sfActions {
 
     protected function errorOnCVIAcheteur($line) {
         try {
-            return ($this->getUser()->getTiers('Acheteur')->cvi != $line[CsvFileAcheteur::CSV_ACHETEUR_CVI]);
+
+            return ($this->etablissement->cvi != $line[CsvFileAcheteur::CSV_ACHETEUR_CVI]);
         } catch (Exception $e) {
             return true;
         }
@@ -472,7 +472,7 @@ class uploadActions extends sfActions {
     protected function errorOnCVIRecoltant($line) {
         if (!isset($this->cache[$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]])) {
             try {
-                $rec = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
+                $rec = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
                 if($rec && !$rec->isActif()) {
                     $rec = null;
                 }
