@@ -263,23 +263,26 @@ class uploadActions extends sfActions {
         if (isset($prod['hash'])) {
 
             $cepage = ConfigurationClient::getConfiguration()->get($prod['hash']);
+            $hashDR = HashMapper::inverse($prod['hash']);
             $lieu = $cepage->getParentNode()->getParentNode();
             if ($lieu->getKey() != 'lieu')
                 $this->has_lieudit = true;
-            if ($lieu->getParent()->getParent()->hasLieuEditable() || preg_match('/_GRDCRU/', $prod['hash']))
+            if ($lieu->getParent()->getParent()->hasLieuEditable() || preg_match('/_GRDCRU/', $hashDR))
                 $this->need_denomlieu = true;
 
-            if (preg_match('/_ED$/', $prod['hash'])) {
+
+
+            if (preg_match('/_ED$/', $hashDR)) {
                 $this->no_surface = true;
                 $this->has_edel = 1;
             }
 
-            if (preg_match('/_RB$/', $prod['hash'])) {
+            if (preg_match('/_RB$/', $hashDR)) {
                 $this->no_surface = true;
                 $this->is_rebeche = true;
                 $this->nb_rebeche++;
             }
-            if (preg_match('/_CREMANT/', $prod['hash'])) {
+            if (preg_match('/_CREMANT/', $hashDR)) {
                 $this->nb_cremant++;
             }
 
