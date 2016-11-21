@@ -185,6 +185,10 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             CompteGenerique::pullContact($this, $societe->getMasterCompte());
         }
 
+        if($new && $this->statut == CompteClient::STATUT_ACTIF) {
+            $this->add('date_creation', date('Y-m-d'));
+        }
+
         parent::save();
 
         if ($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $new) {

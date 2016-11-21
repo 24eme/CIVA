@@ -91,7 +91,7 @@ class adminActions extends sfActions {
             }
             $this->etablissementsCouchdb[$row->id] = EtablissementCsvFile::export($etablissement);
             if(isset($this->etablissementsDb2[$row->id])) {
-                $this->etablissementsCouchdb[$row->id][5] = $this->etablissementsDb2[$row->id][5];
+                //$this->etablissementsCouchdb[$row->id][5] = $this->etablissementsDb2[$row->id][5];
             }
         }
 

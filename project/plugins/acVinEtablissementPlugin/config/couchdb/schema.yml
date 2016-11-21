@@ -19,6 +19,7 @@ Etablissement:
        acheteur_raisin: { required: false }
        recette_locale:
          type: collection
+         required: false
          definition:
            fields:
              id_douane: {  }
@@ -28,6 +29,7 @@ Etablissement:
        type_dr: { required: false }
        liaisons_operateurs:
            type: collection
+           required: false
            definition:
              fields:
                '*':
@@ -66,23 +68,37 @@ Etablissement:
        raison_sociale_cautionneur: { required: false }
        declaration_insee: { required: false }
        declaration_commune: { required: false }
+       exploitant:
+          type: collection
+          class: EtablissementExploitant
+          required: false
+          definition:
+            fields:
+              civilite: {  }
+              nom: {  }
+              adresse: {  }
+              code_postal: {  }
+              commune: {  }
+              telephone: {  }
+              date_naissance: {  }
        siege:
-           type: collection
-           definition:
-             fields:
-               adresse: {  }
-               adresse_complementaire: {  }
-               code_postal: {  }
-               commune: {  }
-               pays: {}
+         type: collection
+         definition:
+           fields:
+             adresse: {  }
+             adresse_complementaire: {  }
+             code_postal: {  }
+             commune: {  }
+             pays: {  }
        comptabilite:
-           type: collection
-           definition:
-             fields:
-               adresse: {  }
-               code_postal: {  }
-               commune: {  }
-               pays: {}
+         type: collection
+         required: false
+         definition:
+           fields:
+             adresse: {  }
+             code_postal: {  }
+             commune: {  }
+             pays: {  }
        lieux_stockage:
          type: collection
          required: false

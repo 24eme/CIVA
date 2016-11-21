@@ -120,26 +120,37 @@ class Db2Tiers2Csv
             "SOCIETE",
             null,
             $identifiantSociete,
+            $identifiantSociete,
             SocieteClient::TYPE_OPERATEUR,
             $statut,
-            "",
+            null,
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
-            "",
-            "",
+            null,
+            $identifiantSociete,
+            null,
             ($this->getInfos($tiers, Db2Tiers::COL_SIRET)),
-            "",
-            "",
+            null,
+            null,
+            null,
+            null,
+            null,
             $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE),
+            null,
+            null,
             $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL_SIEGE),
             $this->getInfos($tiers, Db2Tiers::COL_COMMUNE_SIEGE),
             $this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE),
+            null,
             "FR",
             null,
             null,
             $this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRO) ) : null,
             null,
+            null,
             $this->getInfos($tiers, Db2Tiers::COL_FAX) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_FAX) ) : null,
             $this->getInfos($tiers, Db2Tiers::COL_EMAIL),
+            null,
+            null,
         );
 
         return "SOCIETE-".$identifiantSociete;
@@ -190,7 +201,6 @@ class Db2Tiers2Csv
         if(!$nomExploitant) {
             $nomExploitant = preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM)));
         }
-
         $adresseExploitant = trim($this->getInfos($tiers, Db2Tiers::COL_NUMERO) . " " . $this->getInfos($tiers, Db2Tiers::COL_ADRESSE));
         if(!$adresseExploitant) {
             $adresseExploitant = $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE);
@@ -203,33 +213,55 @@ class Db2Tiers2Csv
         if(!$codePostalExploitant) {
             $codePostalExploitant = $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL_SIEGE);
         }
-        $telExploitant = $this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ) : null;
+        $telExploitant = $this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE) ? sprintf('%010d',$this->getInfos($tiers, Db2Tiers::COL_TELEPHONE_PRIVE)) : null;
+        if(!$telExploitant) {
+            $telExploitant = $tel;
+        }
+
+
+        $dateNaissanceExploitant = sprintf("%04d-%02d-%02d", $this->getInfos($tiers, Db2Tiers::COL_ANNEE_NAISSANCE),
+                                                                       $this->getInfos($tiers, Db2Tiers::COL_MOIS_NAISSANCE),
+                                                                       $this->getInfos($tiers, Db2Tiers::COL_JOUR_NAISSANCE));
+
+        if($dateNaissanceExploitant == "0000-00-00") {
+            $dateNaissanceExploitant = null;
+        }
 
         $this->csv[] = array(
             "ETABLISSEMENT",
             $societe,
             $identifiantEtablissement,
+            $identifiantEtablissement,
             $famille,
             $statut,
-            $this->getInfos($tiers, Db2Tiers::COL_NUM),
             $this->getInfos($tiers, Db2Tiers::COL_INTITULE),
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
+            null,
             $this->getInfos($tiers, Db2Tiers::COL_CVI),
             $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
             $this->getInfos($tiers, Db2Tiers::COL_SIRET),
             $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES),
             ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null,
+            null,
+            null,
+            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
             $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE),
+            null,
+            null,
             $this->getInfos($tiers, Db2Tiers::COL_CODE_POSTAL_SIEGE),
             $this->getInfos($tiers, Db2Tiers::COL_COMMUNE_SIEGE),
             $this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE),
+            null,
             "FR",
             $insee_declaration,
             ($insee_declaration) ? $this->getCommune($insee_declaration): $etablissement->getCommune(),
             $tel,
             null,
+            null,
             $fax,
             $email,
+            null,
+            null,
             $intituleExploitant,
             $nomExploitant,
             $adresseExploitant,
@@ -237,6 +269,7 @@ class Db2Tiers2Csv
             $communeExploitant,
             "FR",
             $telExploitant,
+            $dateNaissanceExploitant,
         );
 
         return;

@@ -6,9 +6,6 @@ class compteMigrationTask extends sfBaseTask {
         $this->addArguments(array(
                 new sfCommandArgument('cvi', sfCommandArgument::REQUIRED, 'cvi'),
                 new sfCommandArgument('nouveau_cvi', sfCommandArgument::REQUIRED, 'Nouveau cvi'),
-                new sfCommandArgument('nom', sfCommandArgument::REQUIRED, 'Nom'),
-                new sfCommandArgument('commune', sfCommandArgument::REQUIRED, 'Commune'),
-
         ));
 
         $this->addOptions(array(
@@ -35,7 +32,6 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $compte = acCouchdbManager::getClient('_Compte')->retrieveByLogin($arguments['cvi']);
         $withCopyPasswords = (isset($options['withCopyPasswords']))? $options['withCopyPasswords'] : false;
         if(!preg_match('/[0-9]{10}/', $arguments['nouveau_cvi'])) {
 
@@ -47,13 +43,8 @@ EOF;
             throw new sfCommandException("Le nouveau compte existe déjà");
         }
 
-        if(is_object($compte)){
-            $migration = new MigrationCompte($compte, $arguments['nouveau_cvi'], $arguments['nom'], $arguments['commune'],$withCopyPasswords);
-            $migration->process();
-            $this->log('Compte créé');
-        }else{
-            $this->log('Compte non present en base');
-        }
+        $migration = new MigrationCompte($arguments['cvi'], $arguments['nouveau_cvi'], $withCopyPasswords);
+        $migration->process();
     }
 
 }

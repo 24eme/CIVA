@@ -2,7 +2,7 @@
 
 /* This file is part of the acVinComptePlugin package.
  * Copyright (c) 2011 Actualys
- * Authors :	
+ * Authors :
  * Tangui Morlier <tangui@tangui.eu.org>
  * Charlotte De Vichet <c.devichet@gmail.com>
  * Vincent Laurent <vince.laurent@gmail.com>
@@ -14,7 +14,7 @@
 
 /**
  * acVinComptePlugin task.
- * 
+ *
  * @package    acVinComptePlugin
  * @subpackage lib
  * @author     Tangui Morlier <tangui@tangui.eu.org>
@@ -23,10 +23,10 @@
  * @author     Jean-Baptiste Le Metayer <lemetayer.jb@gmail.com>
  * @version    0.1
  */
-class acVinExportComptesCsvTask extends sfBaseTask 
+class acVinExportComptesCsvTask extends sfBaseTask
 {
 
-    protected function configure() 
+    protected function configure()
     {
         $this->addArguments(array(
             new sfCommandArgument('tiers_types', sfCommandArgument::IS_ARRAY, 'Type du tiers : Recoltant|MetteurEnMarche|Acheteur', array("Recoltant", "MetteurEnMarche", "Acheteur")),
@@ -49,7 +49,7 @@ Call it with:
 EOF;
     }
 
-    protected function execute($arguments = array(), $options = array()) 
+    protected function execute($arguments = array(), $options = array())
     {
         ini_set('memory_limit', '512M');
         $databaseManager = new sfDatabaseManager($this->configuration);
@@ -61,6 +61,7 @@ EOF;
                     "type" => "Type",
                     "login" => "Login",
                     "statut" => "Statut",
+                    "date_creation" => "Date de création",
                     "mot_de_passe" => "Code de création",
                     "email" => "Email",
                     "cvi" => "Numéro CVI",
@@ -80,6 +81,7 @@ EOF;
             "type" => array("required" => true, "type" => "string"),
             "login" => array("required" => true, "type" => "string"),
             "statut" => array("required" => true, "type" => "string"),
+            "date_creation" => array("required" => true, "type" => "string"),
             "mot_de_passe" => array("required" => true, "type" => "string"),
             "email" => array("required" => false, "type" => "string"),
             "cvi" => array("required" => false, "type" => "string"),
@@ -96,10 +98,12 @@ EOF;
         );
 
         foreach ($comptes as $id_compte => $compte) {
-            
             $mot_de_passe = "Compte déjà créé";
             if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
                 $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
+            }
+            if(!$compte->mot_de_passe) {
+                continue;
             }
             try {
                         if ($compte->type == "CompteVirtuel") {
@@ -107,6 +111,7 @@ EOF;
                                 "type" => $compte->type,
                                 "login" => $compte->login,
                                 "statut" => $compte->statut,
+                                "date_creation" => ($compte->exist('date_creation') && $compte->date_creation) ? $compte->date_creation : null,
                                 "mot_de_passe" => $mot_de_passe,
                                 "email" => $compte->email,
                                 "cvi" => "",
@@ -128,6 +133,7 @@ EOF;
                                 "type" => $compte->societe_informations->type,
                                 "login" => $compte->login,
                                 "statut" => $compte->statut,
+                                "date_creation" => ($compte->exist('date_creation') && $compte->date_creation) ? $compte->date_creation : null,
                                 "mot_de_passe" => $mot_de_passe,
                                 "email" => $compte->email,
                                 "cvi" => "",
@@ -147,6 +153,7 @@ EOF;
                             "type" => $compte->societe_informations->type,
                             "login" => $compte->login,
                             "statut" => $compte->statut,
+                            "date_creation" => ($compte->exist('date_creation') && $compte->date_creation) ? $compte->date_creation : null,
                             "mot_de_passe" => $mot_de_passe,
                             "email" => $compte->email,
                             "cvi" => $etablissement->getCvi(),
@@ -158,8 +165,8 @@ EOF;
                             "adresse" => $compte->adresse,
                             "code postal" => $compte->code_postal,
                             "commune" => $compte->commune,
-                            "civilite de l'exploitant" => ($etablissement->getExploitant()) ? $etablissement->getExploitant()->civilite : $compte->civilite,
-                            "nom de l'exploitant" => ($etablissement->getExploitant()) ? $etablissement->getExploitant()->nom : $compte->nom,
+                            "civilite de l'exploitant" => ($etablissement->exist('exploitant') && $etablissement->getExploitant()) ? $etablissement->getExploitant()->civilite : $compte->civilite,
+                            "nom de l'exploitant" => ($etablissement->exist('exploitant') && $etablissement->getExploitant()) ? $etablissement->getExploitant()->nom : $compte->nom,
                                 ), $validation);
                         }
                         }

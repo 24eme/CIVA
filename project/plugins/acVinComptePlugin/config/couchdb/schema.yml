@@ -52,6 +52,8 @@ Compte:
             telephone: {  }
             fax: {  }
       interpro: {  }
+      date_modification: { required: false }
+      date_creation: { required: false}
       statut: {  }
       tags:
         type: collection

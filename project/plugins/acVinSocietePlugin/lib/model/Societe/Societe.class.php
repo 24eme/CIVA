@@ -14,6 +14,12 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         $this->set('_id', 'SOCIETE-' . $this->identifiant);
     }
 
+    public function removeEtablissement($idEtablissement) {
+        if ($this->etablissements->exist($idEtablissement)) {
+            $this->etablissements->remove($idEtablissement);
+        }
+    }
+
     public function removeContact($idContact) {
         if ($this->contacts->exist($idContact)) {
             $this->contacts->remove($idContact);

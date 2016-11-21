@@ -1,13 +1,12 @@
 <?php
 
-class EtablissementExportCsvTask extends sfBaseTask
+class SocieteImportCsvTask extends sfBaseTask
 {
-
-  protected $_insee = null;
 
   protected function configure()
   {
      $this->addArguments(array(
+        new sfCommandArgument('file', sfCommandArgument::REQUIRED, "Fichier csv pour l'import"),
      ));
 
     $this->addOptions(array(
@@ -16,8 +15,8 @@ class EtablissementExportCsvTask extends sfBaseTask
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
     ));
 
-    $this->namespace        = 'etablissement';
-    $this->name             = 'export-csv';
+    $this->namespace        = 'societe';
+    $this->name             = 'import-csv';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
 The [importTiers3|INFO] task does things.
@@ -32,12 +31,8 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $results = EtablissementAllView::getInstance()->find();
-
-        foreach($results->rows as $row) {
-            $etablissement = EtablissementClient::getInstance()->find($row->id);
-            echo implode(";", EtablissementCsvFile::export($etablissement))."\n";
-        }
+        $csv = new SocieteCsvFile($arguments['file']);
+        $csv->importSocietes();
 
     }
 }

@@ -30,6 +30,7 @@
     </thead>
     <tbody>
 <?php $keyIgnored = array(0,1,2,4,12,15,16,17,18,20,29); ?>
+<?php $keyIgnored = array(); ?>
 <?php foreach($diff as $id => $value): ?>
     <?php $etablissementDb2 = (isset($etablissementsDb2[$id])) ? $etablissementsDb2[$id] : null ; ?>
     <?php $etablissementCouchdb = (isset($etablissementsCouchdb[$id])) ? $etablissementsCouchdb[$id] : null ; ?>

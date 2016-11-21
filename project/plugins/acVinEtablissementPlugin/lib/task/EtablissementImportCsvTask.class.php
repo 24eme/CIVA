@@ -3,8 +3,6 @@
 class EtablissementImportCsvTask extends sfBaseTask
 {
 
-  protected $_insee = null;
-
   protected function configure()
   {
      $this->addArguments(array(
@@ -32,8 +30,6 @@ EOF;
   {
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
-        $results = EtablissementAllView::getInstance()->find();
 
         $csv = new EtablissementCsvFile($arguments['file']);
         $csv->importEtablissements();

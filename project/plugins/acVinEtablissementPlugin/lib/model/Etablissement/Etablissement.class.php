@@ -84,10 +84,10 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return CompteClient::getInstance()->find($this->getSociete()->compte_societe);
     }
 
-    public function getExploitant() {
+    /*public function getExploitant() {
 
         return $this->getCompteExploitantObject();
-    }
+    }*/
 
     public function getCompteExploitantObject() {
         if(!$this->getCompteExploitant()) {
@@ -227,9 +227,10 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
             if ($this->isSameCompteThanSociete()) {
-                throw new sfException("Pas de création ".$this->_id);
-                $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
-                $compte->addOrigine($this->_id);
+                //throw new sfException("Pas de création ".$this->_id);
+                //$compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
+                //$compte->addOrigine($this->_id);
+                $compte = $this->getMasterCompte();
             }else{
                 $compte = $this->getMasterCompte();
             }
