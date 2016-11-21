@@ -140,7 +140,7 @@ class CompteCsvFile extends CsvFile
             //return null;
         }
 
-        return $phone;
+        return ($phone) ? $phone : null;
     }
 
     protected function formatAndVerifyEmail($email, $c) {
@@ -152,7 +152,7 @@ class CompteCsvFile extends CsvFile
             //return null;
         }
 
-        return $email;
+        return ($email) ? $email : null;
     }
 
 }
