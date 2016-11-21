@@ -233,7 +233,6 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
             }else{
                 $compte = $this->getMasterCompte();
             }
-
             $this->pushContactAndAdresseTo($compte);
 
             $compte->id_societe = $this->getSociete()->_id;
@@ -403,14 +402,6 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
         return $this->exist('lieux_stockage') && count($this->lieux_stockage) > 0;
     }
-
-    /*public function getLieuxStockage() {
-        if($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR) {
-            return _TiersClient::getInstance()->find('REC-'.$this->getIdentifiant())->getLieuxStockage();
-        }
-
-        return _TiersClient::getInstance()->find('MET-'.str_replace("C", "", $this->getNumInterne()))->getLieuxStockage();
-    }*/
 
     public function getLieuxStockage($ajoutLieuxStockage = false, $identifiant = null)
     {

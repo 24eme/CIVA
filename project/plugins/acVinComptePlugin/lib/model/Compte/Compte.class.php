@@ -396,13 +396,13 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
             return $this->getSociete()->getDroits();
         }
-        
+
         return array_values(array_unique(array_merge($this->_get('droits')->toArray(true, false), $this->getSociete()->getDroits())));
     }
 
     public function isInscrit() {
 
-        return $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_NOUVEAU;
+        return $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_NOUVEAU && $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_INACTIF;
     }
 
     public function isTeledeclarationActive() {
