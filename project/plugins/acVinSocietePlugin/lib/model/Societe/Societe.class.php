@@ -158,9 +158,9 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $contacts;
     }
 
-    public function getEtablissementsObject() {
+    public function getEtablissementsObject($withSuspendu = true) {
         $etablissements = array();
-        foreach ($this->getEtablissementsObj() as $id => $e) {
+        foreach ($this->getEtablissementsObj($withSuspendu) as $id => $e) {
             $etablissements[$id] = $e->etablissement;
 
         }
@@ -466,7 +466,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
 
     public function getDroits() {
         $droits = array();
-        foreach($this->getEtablissementsObject() as $etablissement) {
+        foreach($this->getEtablissementsObject(false) as $etablissement) {
             $droits = array_merge($droits, $etablissement->getDroits());
         }
 

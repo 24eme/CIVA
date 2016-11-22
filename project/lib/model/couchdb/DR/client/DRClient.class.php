@@ -185,7 +185,7 @@ class DRClient extends acCouchdbClient {
   }
 
     public function getEtablissement($societe) {
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(false) as $etablissement) {
 
             if($etablissement->hasDroit(Roles::TELEDECLARATION_DR)) {
 
@@ -197,7 +197,7 @@ class DRClient extends acCouchdbClient {
     }
 
     public function getEtablissementAcheteur($societe) {
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(false) as $etablissement) {
 
             if($etablissement->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
 

@@ -6,7 +6,7 @@
 
     <div class="contenu">
         <?php if($sf_user->hasFlash('confirmation')) : ?>
-            <p class="flash_message"><?php echo $compte->getFlash('confirmation'); ?></p>
+            <p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
         <?php endif; ?>
         <h3 class="noir">Vos téléservices</h3>
         <div class="blocs_accueil_container_<?php echo $nb_blocs ?>">

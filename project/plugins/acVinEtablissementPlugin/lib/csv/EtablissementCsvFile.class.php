@@ -198,7 +198,7 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 $s = SocieteClient::getInstance()->find($s->_id);
                 $societeSuspendu = true;
-                foreach($s->getEtablissementsObject() as $etablissement) {
+                foreach($s->getEtablissementsObject(false) as $etablissement) {
                     if($etablissement->statut == EtablissementClient::STATUT_ACTIF) {
                         $societeSuspendu = false;
                     }

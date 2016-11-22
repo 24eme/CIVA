@@ -96,7 +96,7 @@ class VracClient extends acCouchdbClient {
     }
 
 	public function getFirstEtablissement($societe) {
-		foreach($societe->getEtablissementsObject() as $etablissement) {
+		foreach($societe->getEtablissementsObject(false) as $etablissement) {
 			if($etablissement->hasDroit(Roles::TELEDECLARATION_VRAC_CREATION)) {
 				return $etablissement;
 			}
@@ -107,7 +107,7 @@ class VracClient extends acCouchdbClient {
 
 	public function getEtablissements($societe) {
 
-		return $societe->getEtablissementsObject();
+		return $societe->getEtablissementsObject(false);
 	}
 
     protected function getDate($date = null)
