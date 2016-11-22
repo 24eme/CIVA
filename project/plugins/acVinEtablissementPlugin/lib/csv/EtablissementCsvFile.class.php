@@ -86,21 +86,20 @@ class EtablissementCsvFile extends CompteCsvFile
                     echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
                     $e->setIdSociete($s->_id);
                     $oldIdSociete = $e->id_societe;
-                    $oldSociete = SocieteClient::getInstance()->find($oldIdSociete);
                     $compteMaster = $e->getMasterCompte();
                     $compteMaster->id_societe = $s->_id;
-                    $compteMaster->save();
                     if($compteMaster->hasOrigine($oldIdSociete)) {
                         $compteMaster->removeOrigine($oldIdSociete);
                         $compteMaster->addOrigine($s->_id);
-                        if($oldSociete) {
-                            $oldSociete->removeContact($compteMaster->_id);
-                        }
-                        $s->addCompte($compteMaster);
                     }
+                    $compteMaster->save();
+                    $s = SocieteClient::getInstance()->find($s->_id);
+                    $s->addCompte($compteMaster);
                     $s->addEtablissement($e);
                     $s->save();
+                    $oldSociete = SocieteClient::getInstance()->find($oldIdSociete);
                     if($oldSociete) {
+                        $oldSociete->removeContact($compteMaster->_id);
                         $oldSociete->removeEtablissement($e->_id);
                         $oldSociete->save();
                     }
