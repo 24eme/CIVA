@@ -84,6 +84,7 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 if($e && $e->id_societe != $s->_id) {
                     echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
+                    $e->setIdSociete($s->_id);
                     $oldIdSociete = $e->id_societe;
                     $oldSociete = SocieteClient::getInstance()->find($oldIdSociete);
                     $compteMaster = $e->getMasterCompte();
@@ -104,7 +105,6 @@ class EtablissementCsvFile extends CompteCsvFile
                         $oldSociete->save();
                     }
                     $e = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiant);
-                    $e->setIdSociete($s->_id);
                     $e->save();
                 }
 
