@@ -82,6 +82,8 @@ class EtablissementCsvFile extends CompteCsvFile
                     $eOrigin = new acCouchdbJsonNative($e->toJson());
                 }
 
+                $forceSave = false;
+
                 if($e && $e->id_societe != $s->_id) {
                     echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
                     $oldIdSociete = $e->id_societe;
@@ -106,6 +108,7 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e = EtablissementClient::getInstance()->find($e->_id);
                     $e->setIdSociete($s->_id);
                     $e->save();
+                    $forceSave = true;
                 }
 
                 if(!$e && !$line[self::CSV_ID]) {
@@ -182,7 +185,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 $diff = $eFinal->diff($eOrigin);
                 $nouveau = $e->isNew();
 
-                if(!count($diff)) {
+                if(!count($diff) && !$forceSave) {
                     continue;
                 }
 
