@@ -13,6 +13,7 @@ all:
       "MV": "Maladie de la vigne"
       "MP": "Motifs personnels"
       "VV": "Vendanges en Vert"
+      "VF": "Vigne en friche"
   configuration:
     vrac:
       delai_suppression: 5
