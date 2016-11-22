@@ -105,6 +105,7 @@ class EtablissementCsvFile extends CompteCsvFile
                         $oldSociete->save();
                     }
                     $e = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiant);
+                    $e->setIdSociete($s->_id);
                     $e->save();
                 }
 
