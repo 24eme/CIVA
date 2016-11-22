@@ -84,8 +84,8 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 if($e && $e->id_societe != $s->_id) {
                     echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
-                    $e->setIdSociete($s->_id);
                     $oldIdSociete = $e->id_societe;
+                    $e->setIdSociete($s->_id);
                     $compteMaster = $e->getMasterCompte();
                     $compteMaster->id_societe = $s->_id;
                     if($compteMaster->hasOrigine($oldIdSociete)) {
