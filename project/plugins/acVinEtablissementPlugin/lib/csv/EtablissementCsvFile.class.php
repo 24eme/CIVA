@@ -103,7 +103,7 @@ class EtablissementCsvFile extends CompteCsvFile
                         $oldSociete->removeEtablissement($e->_id);
                         $oldSociete->save();
                     }
-                    $e = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$identifiant);
+                    $e = EtablissementClient::getInstance()->find($e->_id);
                     $e->setIdSociete($s->_id);
                     $e->save();
                 }
@@ -204,6 +204,7 @@ class EtablissementCsvFile extends CompteCsvFile
                     $statutSociete = SocieteClient::STATUT_ACTIF;
                 }
                 if($s->statut != $statutSociete) {
+                    $s = SocieteClient::getInstance()->find($s->_id);
                     $s->statut = $statutSociete;
                     $s->save();
                     echo "La société ".$s->_id." est maitnenant au statut ".$s->statut."\n";
