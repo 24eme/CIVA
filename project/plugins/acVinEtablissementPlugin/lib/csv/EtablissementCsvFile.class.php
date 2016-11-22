@@ -195,6 +195,7 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 $e->save();
 
+                $s = SocieteClient::getInstance()->find($s->_id);
                 $societeSuspendu = true;
                 foreach($s->getEtablissementsObject() as $etablissement) {
                     if($etablissement->statut == EtablissementClient::STATUT_ACTIF) {
@@ -207,7 +208,6 @@ class EtablissementCsvFile extends CompteCsvFile
                     $statutSociete = SocieteClient::STATUT_ACTIF;
                 }
                 if($s->statut != $statutSociete) {
-                    $s = SocieteClient::getInstance()->find($s->_id);
                     $s->statut = $statutSociete;
                     $s->save();
                     echo "La société ".$s->_id." est maitnenant au statut ".$s->statut."\n";
