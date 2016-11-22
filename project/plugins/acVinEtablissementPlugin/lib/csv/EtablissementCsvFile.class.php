@@ -129,6 +129,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 if(!$e->compte && $line[self::CSV_ID_COMPTE] && !CompteClient::getInstance()->find("COMPTE-".$identifiantCompte)) {
                     $compte = CompteClient::getInstance()->createCompteFromEtablissement($e);
                     $compte->addOrigine($e->_id);
+                    $compte->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
                     $compte->setIdentifiant($identifiantCompte);
                     $compte->constructId();
                 }
