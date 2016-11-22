@@ -381,6 +381,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         parent::save();
 
         if ($compteMaster->isNew()) {
+            $compteMaster->nom = $this->raison_sociale;
             $compteMaster->save();
         }
 
