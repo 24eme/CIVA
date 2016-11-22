@@ -102,6 +102,9 @@ EOF;
             if (substr($compte->mot_de_passe, 0, 6) == "{TEXT}") {
                 $mot_de_passe = preg_replace('/^\{TEXT\}/', "", $compte->mot_de_passe);
             }
+            if(!$compte->mot_de_passe) {
+                $mot_de_passe = "Aucun";
+            }
             if(!$compte->mot_de_passe && preg_match("/01$/", $compte->identifiant)) {
                 continue;
             }
