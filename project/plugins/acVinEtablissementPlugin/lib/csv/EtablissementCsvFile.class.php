@@ -90,7 +90,7 @@ class EtablissementCsvFile extends CompteCsvFile
                     $compteMaster->id_societe = $s->_id;
                     if($compteMaster->hasOrigine($oldIdSociete)) {
                         $compteMaster->removeOrigine($oldIdSociete);
-                        $compteMaster->addOrigine($s->_id);
+                        $compteMaster->addOrigine($e->_id);
                     }
                     $compteMaster->save();
                     $s = SocieteClient::getInstance()->find($s->_id);
