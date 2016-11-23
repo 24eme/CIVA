@@ -101,6 +101,6 @@ class CompteLdap extends acVinLdap {
             return $compte->gecos;
         }
 
-        return null;
+        return GammaClient::getInstance()->getGecos($compte);
     }
 }
