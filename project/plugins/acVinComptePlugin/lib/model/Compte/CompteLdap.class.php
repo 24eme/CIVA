@@ -96,7 +96,7 @@ class CompteLdap extends acVinLdap {
     }
 
     public static function getGecos($compte) {
-        if($compte->exist('gecos')) {
+        if($compte->exist('gecos') && $compte->gecos) {
 
             return $compte->gecos;
         }
