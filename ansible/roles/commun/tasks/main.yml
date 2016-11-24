@@ -1,0 +1,19 @@
+---
+- name: "modules debian installés"
+  apt: name={{item}} state=latest update_cache=yes cache_valid_time=1300000
+  with_items:
+  - apache2
+  - git-core
+  - python-mysqldb
+  - curl 
+  - libjson-perl
+
+- name: "Modules apache"
+  apache2_module: state=present name={{item}}
+  notify: reload apache
+  with_items:
+  - rewrite
+  - proxy
+  - proxy_http
+  - headers
+
