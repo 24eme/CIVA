@@ -1,8 +1,0 @@
----
-
-- name: Deploiement symfo
-  hosts: serveurs
-  remote_user: root
-  roles:
-  - commun
-  - application
