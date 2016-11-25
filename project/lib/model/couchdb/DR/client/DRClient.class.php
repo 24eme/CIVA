@@ -62,7 +62,8 @@ class DRClient extends acCouchdbClient {
     $csv_ids = CSVClient::getInstance()->getCSVsFromRecoltantArray($campagne, $cvi);
     $acheteurs = array();
     foreach($csv_ids as $csv_id) {
-      $acheteurs[] = acCouchdbManager::getClient()->find(preg_replace("/^CSV-([0-9]+)-.*/", 'ACHAT-\1', $csv_id));
+        $cvi = preg_replace("/^CSV-([0-9]+)-.*/", '\1', $csv_id);
+        $acheteurs[] = EtablissementClient::getInstance()->findByCvi($cvi);
     }
 
     return $acheteurs;

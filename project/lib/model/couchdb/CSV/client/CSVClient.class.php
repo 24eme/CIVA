@@ -14,6 +14,7 @@ class CSVClient extends acCouchdbClient {
     $ids = array();
     foreach ($csv as $k => $c)
       $ids[] = $k;
+
     return $ids;
   }
 
