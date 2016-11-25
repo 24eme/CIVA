@@ -10,6 +10,7 @@ class DRClient extends acCouchdbClient {
   const ACHETEUR_COOPERATIVE = 'Cooperative';
   const ACHETEUR_NEGOCIANT = 'Negociant';
   const ACHETEUR_NEGOCAVE = 'NegoCave';
+  const ACHETEUR_RECOLTANT = 'Recoltant';
 
   protected $appellations_config_vtsgn = array();
 
