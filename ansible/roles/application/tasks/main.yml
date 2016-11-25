@@ -14,3 +14,38 @@
 
 - name: install couchdb
   apt: deb=http://ftp.fr.debian.org/debian/pool/main/c/couchdb/couchdb_1.4.0-3+b1_amd64.deb state=present
+
+- name: récupération des derniers commits
+  git: repo=https://github.com/24eme/CIVA.git dest=/home/{{civa_user}}/civa version=prod
+  notify: symfony cc
+
+- name: "cache and log created"
+  file: path=/home/{{civa_user}}/civa/project/{{item}}
+    state=directory mode=2775 owner=www-data group={{civa_user}}
+  with_items:
+  - cache
+  - log
+  notify: symfony cc
+
+- name: "fichiers de configuration symfo"
+  template: src=templates/{{item.src}} dest=/home/{{civa_user}}/civa/project/config/{{item.dest}} owner={{civa_user}}
+  with_items:
+  - {src: app.yml.j2, dest: app.yml}
+  - {src: databases.yml.j2, dest: databases.yml}
+  notify: symfony cc
+
+- name: "base créée"
+  uri: url={{civa_couchdb_url}}{{civa_couchdb_name}}
+  register: couchdbexist
+  ignore_errors: yes
+
+- name: "creation de la base"
+  uri: url={{civa_couchdb_url}}{{civa_couchdb_name}} method=PUT status_code=201
+  when: couchdbexist|failed
+
+- name: "configuration apache"
+  template: src=templates/001-civapplicatif.conf.j2 dest=/etc/apache2/sites-available/001-civapplicatif.conf
+
+- name: "active le site apache"
+  file: src=/etc/apache2/sites-available/001-civapplicatif.conf dest=/etc/apache2/sites-enabled/001-civapplicatif.conf state=link
+  notify: reload apache

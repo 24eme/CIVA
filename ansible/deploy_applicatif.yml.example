@@ -1,0 +1,12 @@
+---
+
+- name: Deploiement symfo
+  hosts: serveurs
+  remote_user: root
+  vars:
+  - civa_user: "CIVA"
+  - civa_host: "192.168.0.0"
+  - civa_couchdb_name: "base_civa"
+  roles:
+  - commun
+  - application

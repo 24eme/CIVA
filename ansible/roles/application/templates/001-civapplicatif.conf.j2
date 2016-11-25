@@ -1,0 +1,18 @@
+    <VirtualHost *:80>
+      ServerName {{civa_host}}
+      DocumentRoot "/home/{{civa_user}}/civa/project/web"
+      DirectoryIndex index.php
+      <Directory "/home/{{civa_user}}/civa/project/web">
+        AllowOverride All
+        Allow from All
+	      Order deny,allow
+	      Require all granted
+      </Directory>
+
+      Alias /sf "/home/{{civa_user}}/civa/project/lib/vendor/symfony/data/work/web/sf"
+      <Directory "/home/{{civa_user}}/civa/project/lib/vendor/symfony/data/work/web/sf">
+        AllowOverride All
+        Allow from All
+	      Order deny,allow
+      </Directory>
+    </VirtualHost>

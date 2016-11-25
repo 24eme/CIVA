@@ -5,7 +5,8 @@
   - apache2
   - git-core
   - python-mysqldb
-  - curl 
+  - curl
+  - sudo
   - libjson-perl
 
 - name: "Modules apache"
@@ -17,3 +18,5 @@
   - proxy_http
   - headers
 
+- name: "s'assure que l'utilisateur existe"
+  user: name="{{civa_user}}" state=present groups={{civa_user}},sudo home=/home/{{civa_user}}
