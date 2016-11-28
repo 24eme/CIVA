@@ -9,7 +9,9 @@ class Db2Tiers2Csv
     public function __construct($file) {
         $this->file = $file;
         $this->csv = array();
-        $this->fillArray();
+        $this->newFillArray(false);
+        $this->newFillArray(true);
+        //$this->fillArray();
     }
 
     public function getEtablissements() {
@@ -36,9 +38,208 @@ class Db2Tiers2Csv
         return $this->csv;
     }
 
-    public function fillArray() {
+    public function newFillArray($suspendu = false) {
+        $lines = file($this->file);
+
+        $tiersComplet = array();
+        $etablissements = array();
         $societes = array();
 
+        foreach ($lines as $a) {
+            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
+            if(!$db2Tiers->isEtablissement()) {
+                continue;
+            }
+
+            $tiersComplet[$db2Tiers->get(Db2Tiers::COL_NUM)] = $db2Tiers;
+        }
+
+        ksort($tiersComplet, SORT_NUMERIC);
+
+        foreach($tiersComplet as $db2Tiers) {
+            if($db2Tiers->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR) {
+                continue;
+            }
+
+            $etablissements[$db2Tiers->get(Db2Tiers::COL_NUM)][] = $db2Tiers;
+            unset($tiersComplet[$db2Tiers->get(Db2Tiers::COL_NUM)]);
+        }
+
+        foreach($tiersComplet as $db2Tiers) {
+            if(isset($etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)])) {
+                continue;
+            }
+            if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) != $db2Tiers->get(Db2Tiers::COL_NUM)) {
+                continue;
+            }
+            if(!$db2Tiers->get(db2Tiers::COL_CIVABA)) {
+                continue;
+            }
+            $etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][] = $db2Tiers;
+            unset($tiersComplet[$db2Tiers->get(Db2Tiers::COL_NUM)]);
+        }
+
+        foreach($tiersComplet as $db2Tiers) {
+            $premierEtablissement = null;
+            if(!isset($etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)])) {
+                continue;
+            }
+
+            if(count($etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]) != 1) {
+                continue;
+            }
+
+            $premierEtablissement = $etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][0];
+
+            if($premierEtablissement->getFamille() != EtablissementFamilles::FAMILLE_PRODUCTEUR || !$premierEtablissement->get(DB2Tiers::COL_CIVABA)) {
+                continue;
+            }
+
+            if(!$db2Tiers->get(db2Tiers::COL_CVI)) {
+                continue;
+            }
+
+            $etablissements[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][] = $db2Tiers;
+            unset($tiersComplet[$db2Tiers->get(Db2Tiers::COL_NUM)]);
+        }
+
+        foreach($tiersComplet as $db2Tiers) {
+            $etablissements[$db2Tiers->get(Db2Tiers::COL_NUM)][] = $db2Tiers;
+            unset($tiersComplet[$db2Tiers->get(Db2Tiers::COL_NUM)]);
+        }
+
+
+        if(count($tiersComplet) > 0) {
+            foreach($tiersComplet as $db2Tiers) {
+                $db2Tiers->printDebug();
+            }
+            throw new Exception("Erreurs tous les tiers n'ont pas été réparti");
+        }
+
+
+        foreach($etablissements as $num => $tiers) {
+            if(!$suspendu && $this->isCloture($tiers)) {
+                unset($etablissements[$num]);
+                continue;
+            }
+
+            if($suspendu && !$this->isCloture($tiers)) {
+                unset($etablissements[$num]);
+                continue;
+            }
+
+            if($this->isCloture($tiers) && in_array($this->getFamille($tiers), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR)) && !$this->getInfos($tiers, Db2Tiers::COL_CVI)) {
+                unset($etablissements[$num]);
+                continue;
+            }
+        }
+
+        ksort($etablissements, SORT_NUMERIC);
+
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                if($t->get(Db2Tiers::COL_NO_STOCK) != $t->get(Db2Tiers::COL_NUM) || $t->get(Db2Tiers::COL_NUM) != $t->get(Db2Tiers::COL_MAISON_MERE)) {
+                    break;
+                }
+
+                $societes[$t->get(Db2Tiers::COL_NO_STOCK)][$num] = $tiers;
+                unset($etablissements[$num]);
+                break;
+            }
+        }
+
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                if(!isset($societes[$t->get(Db2Tiers::COL_NO_STOCK)])) {
+                    continue;
+                }
+
+                if($this->existFamille($societes[$t->get(Db2Tiers::COL_NO_STOCK)], $t->getFamille())) {
+                    continue;
+                }
+
+                $societes[$t->get(Db2Tiers::COL_NO_STOCK)][$num] = $tiers;
+                unset($etablissements[$num]);
+                break;
+            }
+        }
+
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                if(!isset($societes[$t->get(Db2Tiers::COL_MAISON_MERE)])) {
+                    break;
+                }
+
+                if($this->existFamille($societes[$t->get(Db2Tiers::COL_MAISON_MERE)], $t->getFamille())) {
+                    continue;
+                }
+
+                $societes[$t->get(Db2Tiers::COL_MAISON_MERE)][$num] = $tiers;
+                unset($etablissements[$num]);
+                break;
+            }
+        }
+
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                if(isset($societes[$t->get(Db2Tiers::COL_NO_STOCK)]) && $this->existFamille($societes[$t->get(Db2Tiers::COL_NO_STOCK)], $t->getFamille())) {
+                    continue;
+                }
+
+                $societes[$t->get(Db2Tiers::COL_NO_STOCK)][$num] = $tiers;
+                unset($etablissements[$num]);
+                break;
+            }
+        }
+
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                $societes[$num][$num] = $tiers;
+                unset($etablissements[$num]);
+                continue;
+            }
+        }
+
+        if(count($etablissements) > 0) {
+            throw new Exception("Erreurs tous les tiers n'ont pas été réparti");
+        }
+
+        ksort($societe, SORT_NUMERIC);
+
+        foreach($societes as $etablissements) {
+            $tiers = current($etablissements);
+
+            $societe = $this->importSociete($tiers, $etablissements);
+
+            if(!$societe) {
+                continue;
+            }
+
+            foreach($etablissements as $tiers) {
+                $etablissement = $this->importEtablissement($societe, $tiers, $etablissements);
+            }
+        }
+    }
+
+    protected function existFamille($etablissements, $famille) {
+        if($famille == EtablissementFamilles::FAMILLE_COOPERATIVE && count($etablissements)) {
+
+            return true;
+        }
+
+        foreach($etablissements as $tiers) {
+            foreach($tiers as $t) {
+                if($t->getFamille() == $famille) {
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /*public function fillArray() {
         $lines = file($this->file);
 
         foreach ($lines as $a) {
@@ -79,6 +280,10 @@ class Db2Tiers2Csv
 
         ksort($societes, SORT_NUMERIC);
 
+        //echo count($societes);
+
+        return;
+
         foreach($societes as $numSoc => $etablissements) {
             ksort($etablissements);
 
@@ -101,7 +306,7 @@ class Db2Tiers2Csv
                 $num++;
             }
         }
-    }
+    }*/
 
     protected function importSociete($tiers, $etablissements) {
         $identifiantSociete = $this->buildIdentifiantSociete($tiers);
@@ -119,7 +324,7 @@ class Db2Tiers2Csv
         $this->csv[] = array(
             "SOCIETE",
             null,
-            $identifiantSociete,
+            "SOCIETE-".$identifiantSociete,
             $identifiantSociete,
             SocieteClient::TYPE_OPERATEUR,
             $statut,
@@ -156,7 +361,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $num, $societes)
+    protected function importEtablissement($societe, $tiers, $societes)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -218,7 +423,6 @@ class Db2Tiers2Csv
             $telExploitant = $tel;
         }
 
-
         $dateNaissanceExploitant = sprintf("%04d-%02d-%02d", $this->getInfos($tiers, Db2Tiers::COL_ANNEE_NAISSANCE),
                                                                        $this->getInfos($tiers, Db2Tiers::COL_MOIS_NAISSANCE),
                                                                        $this->getInfos($tiers, Db2Tiers::COL_JOUR_NAISSANCE));
@@ -230,8 +434,8 @@ class Db2Tiers2Csv
         $this->csv[] = array(
             "ETABLISSEMENT",
             $societe,
-            $identifiantEtablissement,
-            $identifiantEtablissement,
+            "ETABLISSEMENT-".$identifiantEtablissement,
+            null,
             $famille,
             $statut,
             $this->getInfos($tiers, Db2Tiers::COL_INTITULE),
@@ -273,6 +477,24 @@ class Db2Tiers2Csv
         );
 
         return;
+
+        if($this->getInfos($tiers, Db2Tiers::COL_CVI)) {
+            $this->csv[] = array(
+                "COMPTE",
+                $societe,
+                "COMPTE-".$this->getInfos($tiers, Db2Tiers::COL_CVI),
+            );
+        }
+
+        if($this->getInfos($tiers, Db2Tiers::COL_CIVABA)) {
+            $this->csv[] = array(
+                "COMPTE",
+                $societe,
+                "COMPTE-".$this->getInfos($tiers, Db2Tiers::COL_CIVABA),
+            );
+        }
+
+        return;
     }
 
     protected function buildIdentifiantSociete($tiers) {
@@ -297,13 +519,13 @@ class Db2Tiers2Csv
 
     protected function isCloture($tiers) {
         foreach($tiers as $t) {
-            if($t->isCloture()) {
+            if(!$t->isCloture()) {
 
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     protected function getFamille($tiers) {
@@ -329,7 +551,6 @@ class Db2Tiers2Csv
 
     protected function getInfos($tiers, $key) {
         $val = null;
-        $num = null;
         foreach($tiers as $t) {
             if($t->get($key) && $t->isRecoltant()) {
 
@@ -339,8 +560,6 @@ class Db2Tiers2Csv
             if($t->get($key)) {
                 $val = $t->get($key);
             }
-            $num = $t->get(Db2Tiers::COL_NUM);
-
         }
 
         return $val;

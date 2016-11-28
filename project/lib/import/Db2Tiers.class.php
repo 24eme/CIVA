@@ -74,6 +74,11 @@ class Db2Tiers extends Db2 {
         return (!$this->isMetteurEnMarche() && !$this->isRecoltant() && !$this->isAcheteur()) && ($this->get(self::COL_NUM) > 90000 || $this->get(self::COL_COURTIER)) ;
     }
 
+    public function isEtablissement() {
+
+        return ($this->isRecoltant() || $this->isMetteurEnMarche() || $this->isCourtier());
+    }
+
     public function getFamille() {
         if($this->isRecoltant()) {
 
@@ -100,6 +105,11 @@ class Db2Tiers extends Db2 {
           return EtablissementFamilles::FAMILLE_PRODUCTEUR;
         }
 
+        if($this->isMetteurEnMarche()) {
+
+            return EtablissementFamilles::FAMILLE_NEGOCIANT;
+        }
+
         return null;
     }
 
@@ -108,10 +118,8 @@ class Db2Tiers extends Db2 {
         return ($this->getFamille() == EtablissementFamilles::FAMILLE_PRODUCTEUR && preg_match("/^(VRT|VRP|VVV)$/", $this->get(Db2Tiers::COL_TYPE_TIERS)));
     }
 
-
-
     public function printDebug() {
-        echo "  T \n";
+        echo "  TIERS \n";
         echo "   NUM   : ".$this->get(Db2Tiers::COL_NUM)."\n";
         echo "   NSTOCK: ".$this->get(Db2Tiers::COL_NO_STOCK)."\n";
         echo "   NMERE : ".$this->get(Db2Tiers::COL_MAISON_MERE)."\n";
@@ -120,6 +128,8 @@ class Db2Tiers extends Db2 {
         echo "   CIVABA: ".$this->get(Db2Tiers::COL_CIVABA)."\n";
         echo "   ACCISE: ".$this->get(Db2Tiers::COL_NO_ASSICES)."\n";
         echo "   TYPE  : ".$this->get(Db2Tiers::COL_TYPE_TIERS)."\n";
+        echo "   SUSPENDU  : ".$this->isCloture()."\n";
+        echo "   FAMILLE  : ".$this->getFamille()."\n";
     }
 
 }

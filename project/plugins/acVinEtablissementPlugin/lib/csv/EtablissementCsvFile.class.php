@@ -82,10 +82,11 @@ class EtablissementCsvFile extends CompteCsvFile
                     $eOrigin = new acCouchdbJsonNative($e->toJson());
                 }
 
-                $forceSave = false;
+                /*$forceSave = false;
 
                 if($e && $e->id_societe != $s->_id) {
                     echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
+                    continue;
                     $oldIdSociete = $e->id_societe;
                     $e->setIdSociete($s->_id);
                     $compteMaster = $e->getMasterCompte();
@@ -114,7 +115,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 if(!$e && !$line[self::CSV_ID]) {
                     $e = EtablissementClient::getInstance()->createEtablissementFromSociete($s, $line[self::CSV_FAMILLE]);
                     $e->constructId();
-                }
+                }*/
 
                 if(!$e && $line[self::CSV_ID]) {
                     $e = new Etablissement();
@@ -124,7 +125,7 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e->constructId();
                 }
 
-                $identifiantCompte = str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]);
+                /*$identifiantCompte = str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]);
                 $compte = null;
                 if(!$e->compte && $line[self::CSV_ID_COMPTE] && !CompteClient::getInstance()->find("COMPTE-".$identifiantCompte)) {
                     $compte = CompteClient::getInstance()->createCompteFromEtablissement($e);
@@ -136,9 +137,10 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 if(!$e->compte) {
                     $e->setCompte("COMPTE-".$identifiantCompte);
-                }
+                }*/
 
                 $e->famille = ($line[self::CSV_FAMILLE]) ? $line[self::CSV_FAMILLE] : null;
+
                 if(!array_key_exists($e->famille, EtablissementFamilles::getFamilles())) {
                     printf("Warning : %s La famille %s n'est pas connue\n", $e->_id, $e->famille);
                 }
@@ -164,11 +166,11 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e->nature_inao = $natures_inao[$line[self::CSV_NATURE_INAO]];
                 }
 
-                $email = $e->getEmail();
+                //$email = $e->getEmail();
                 $this->storeCompteInfos($e, $line);
-                if(!$e->isNew() && $e->getMasterCompte()->isInscrit()) {
+                /*if(!$e->isNew() && $e->getMasterCompte()->isInscrit()) {
                     $e->email = $email;
-                }
+                }*/
 
                 $e->add('declaration_insee', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_INSEE_DECLARATION] : $e->getInsee());
                 $e->add('declaration_commune', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_COMMUNE_DECLARATION] : $e->getCommune());
@@ -186,17 +188,18 @@ class EtablissementCsvFile extends CompteCsvFile
                 $diff = $eFinal->diff($eOrigin);
                 $nouveau = $e->isNew();
 
-                if(!count($diff) && !$forceSave) {
+
+                if(!count($diff)) {
                     continue;
                 }
 
-                if(isset($compte) && $compte->isNew()) {
+                /*if(isset($compte) && $compte->isNew()) {
                     $compte->save();
-                }
+                }*/
 
-                $e->save();
+                //$e->save();
 
-                $s = SocieteClient::getInstance()->find($s->_id);
+                /*$s = SocieteClient::getInstance()->find($s->_id);
                 $societeSuspendu = true;
                 foreach($s->getEtablissementsObject(false) as $etablissement) {
                     if($etablissement->statut == EtablissementClient::STATUT_ACTIF) {
@@ -218,7 +221,7 @@ class EtablissementCsvFile extends CompteCsvFile
                     $contact = CompteClient::getInstance()->find($idCompte);
                     $contact->setStatut($s->getStatut());
                     $contact->save();
-                }
+                }*/
 
                 $modifications = null;
                 foreach($diff as $key => $value) { $modifications .= "$key: $value ";}

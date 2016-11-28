@@ -56,34 +56,50 @@ class SocieteCsvFile extends CompteCsvFile
 
             try {
                 $identifiant = str_replace("SOCIETE-", "", $line[self::CSV_ID]);
-
-                $forceSave = false;
+                $sOrigin = new acCouchdbJsonNative(new stdClass());
+                $s = SocieteClient::getInstance()->find("SOCIETE-".$identifiant);
+                if($s) {
+                    $sOrigin = new acCouchdbJsonNative($s->toJson());
+                }
+                /*$forceSave = false;
 
                 $sOrigin = new acCouchdbJsonNative(new stdClass());
-              	$s = SocieteClient::getInstance()->find("SOCIETE-".$identifiant);
 
                 if($s) {
                     $sOrigin = new acCouchdbJsonNative($s->toJson());
                 }
 
-                $compte = null;
+                $compte = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]), acCouchdbClient::HYDRATE_DOCUMENT, true);*/
 
                 if(!$s) {
                   	$s = new Societe();
                     $s->identifiant = $identifiant;
-                    $s->type_societe = $line[self::CSV_FAMILLE];
                     $s->constructId();
-                    $compte = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]), acCouchdbClient::HYDRATE_DOCUMENT, true);
-
-                    if($line[self::CSV_ID_COMPTE] && !$compte) {
-                        $compte = $s->createCompteSociete(str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]));
-                        $compte->constructId();
-                    }
-
-                    $s->setCompteSocieteObject($compte);
+                    /*if($compte) {
+                        $s->compte_societe = $compte->_id;
+                        $s->addCompte($compte, -1);
+                        $compte->addOrigine($s->_id);
+                    }*/
                 }
 
-                $compte = ($compte) ? $compte : $s->getMasterCompte();
+
+                /*if($line[self::CSV_ID_COMPTE] && !$compte) {
+                    $compte = $s->createCompteSociete(str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]));
+                    $compte->constructId();
+                }*/
+
+                /*if($s && $compte && $compte->id_societe != $s->_id) {
+                    echo "Warning Le compte $compte->_id de la société  $s->_id est relié à une autre société " . $compte->id_societe ."\n";
+                    $compte->id_societe = $s->_id;
+                    if($compte->hasOrigine($compte->id_societe)) {
+                        $compte->removeOrigine($compte->id_societe);
+                        $compte->addOrigine($s->_id);
+                    }
+                }*/
+
+                /*$s->setCompteSocieteObject($compte);*/
+
+                /*$compte = ($compte) ? $compte : $s->getMasterCompte();
                 if($compte && $compte->id_societe != $s->_id) {
                     $forceSave = true;
                     echo "Warning Le compte $compte->_id de la société  $s->_id est relié à une autre société " . $compte->id_societe ."\n";
@@ -102,8 +118,9 @@ class SocieteCsvFile extends CompteCsvFile
                     if(!$s->isNew()) {
                         $compte->save();
                     }
-                }
-
+                }*/
+                //$s->compte_societe = null;
+                $s->type_societe = $line[self::CSV_FAMILLE];
                 $s->raison_sociale = trim($line[self::CSV_NOM]);
         	    $s->raison_sociale_abregee = trim($line[self::CSV_NOM_COURT]);
               	$s->interpro = 'INTERPRO-declaration';
@@ -114,21 +131,21 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->code_comptable_client = ($line[self::CSV_CODE_COMPTABLE_CLIENT]) ? $line[self::CSV_CODE_COMPTABLE_CLIENT] : null;
                 $s->code_comptable_fournisseur = ($line[self::CSV_CODE_COMPTABLE_FOURNISSEUR]) ? $line[self::CSV_CODE_COMPTABLE_FOURNISSEUR] : null;;
                 $s->statut = $line[self::CSV_STATUT];
-                $email = $s->getEmail();
                 $this->storeCompteInfos($s, $line);
-                if(!$s->isNew() && $s->getMasterCompte()->isInscrit()) {
-                    $s->email = $email;
-                }
 
                 $sFinal = new acCouchdbJsonNative($s->toJson());
                 $diff = $sFinal->diff($sOrigin);
                 $nouveau = $s->isNew();
 
-                if(!count($diff) && !$forceSave) {
+                if(!count($diff)) {
                     continue;
                 }
 
-              	$s->save();
+                /*if(!$compte->isNew() && !$s->isNew()) {
+                    $compte->save();
+                }*/
+
+              	//$s->save();
 
                 $modifications = null;
                 foreach($diff as $key => $value) { $modifications .= "$key: $value ";}
