@@ -40,15 +40,21 @@
   uri: url={{civa_couchdb_url}}{{civa_couchdb_name}}
   register: couchdbexist
   ignore_errors: yes
-
-- name: "couchdb on xinetd"
-  template: src=xinetd.couchdb.j2 dest=/etc/xinetd.d/couchdb
-  notify: reload xinetd
+  environment:
+    http_proxy: ""
+    all_proxy: ""
 
 
 - name: "creation de la base"
   uri: url={{civa_couchdb_url}}{{civa_couchdb_name}} method=PUT status_code=201
+  environment:
+    http_proxy: ""
+    all_proxy: ""
   when: couchdbexist|failed
+
+- name: "couchdb on xinetd"
+  template: src=xinetd.couchdb.j2 dest=/etc/xinetd.d/couchdb
+  notify: reload xinetd
 
 - name: "configuration apache"
   template: src=templates/001-civapplicatif.conf.j2 dest=/etc/apache2/sites-available/001-civapplicatif.conf
