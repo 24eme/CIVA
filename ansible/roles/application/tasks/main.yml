@@ -25,6 +25,7 @@
   with_items:
   - cache
   - log
+  - data/upload
   notify: symfony cc
 
 - name: "fichiers de configuration symfo"
