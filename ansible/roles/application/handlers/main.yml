@@ -3,3 +3,7 @@
   shell: php symfony cc
   args:
     chdir: /home/{{civa_user}}/civa/project
+
+- name: reload xinetd
+  service: name=xinetd state=reloaded
+
