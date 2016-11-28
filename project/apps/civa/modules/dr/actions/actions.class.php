@@ -469,7 +469,7 @@ class drActions extends _DRActions {
 
         $annee = $this->getRequestParameter('annee', null);
 
-        $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee);
+        $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr, $this->getRoute()->getEtablissement(),$annee);
 
         $this->sendMailAcheteursReport = $this->mailerManager->sendAcheteursMails();
     }
