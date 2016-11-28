@@ -23,7 +23,7 @@
                     <p class="important">Votre Déclaration de Récolte a été envoyé par email aux acheteurs :</p>
                     <ul>
                         <?php foreach(DRClient::getInstance()->getAcheteursApporteur($dr->cvi, $dr->campagne) as $acheteur): ?>
-                        <li>- <?php echo $acheteur->qualite; ?>, <?php echo $acheteur->nom ?>, <?php echo $acheteur->cvi; ?></li>
+                        <li>- <?php echo $acheteur->getFamille(); ?>, <?php echo $acheteur->nom ?>, <?php echo $acheteur->cvi; ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
