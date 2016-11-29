@@ -79,7 +79,7 @@ class DRClient extends acCouchdbClient {
 
         $cepage = $line[CsvFileAcheteur::CSV_CEPAGE];
         $cepage = preg_replace("/^0$/", "", $cepage);
-        $cepage = preg_replace("/Gewurzt./i", "Gewurztraminer", $cepage);
+        $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
         $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
         $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
 
