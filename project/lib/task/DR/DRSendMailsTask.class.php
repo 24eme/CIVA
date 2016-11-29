@@ -63,7 +63,7 @@ EOF;
                 if($dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
                     $this->mailerManager->sendAcheteursMails();
                 }
-                echo $dr->_id.":Email envoyé à ".$dr->getEtablissement()->email."\n";
+                echo $dr->_id.":Email envoyé à ".$dr->getEtablissement()->getEmailTeledeclaration()."\n";
             } catch(Exception $e) {
                 echo $dr->_id.":".$e->getMessage()."\n";
                 continue;

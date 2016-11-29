@@ -53,7 +53,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         $this->declaration_commune = $tiers->declaration_commune;
         $this->declaration_insee = $tiers->declaration_insee;
 
-        $this->declarant->email = $tiers->getCompte();
+        $this->declarant->email = $tiers->getEmailTeledeclaration();
 
         if($tiers->exist('civaba') && $tiers->civaba){
             $this->add('civaba', $tiers->civaba);
@@ -290,7 +290,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
     }
 
     public function getConfig() {
-        
+
         return ConfigurationClient::getConfiguration($this->getDateStock());
     }
 

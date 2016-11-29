@@ -4,6 +4,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     protected $_interpro = null;
     protected $droit = null;
+    protected $_id_societe_origine = null;
 
     /**
      * @return _Compte
@@ -224,47 +225,66 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return preg_match("/^".$this->getSociete()->getIdentifiant()."/", $this->getIdentifiant());
     }
 
+    public function isSynchroAutoActive() {
+
+        return false;
+    }
+
+    public function changeSociete($new_id) {
+        if($this->isNew()) {
+            continue;
+        }
+        if($this->_id == $new_id) {
+            return;
+        }
+        $this->_id_societe_origine = $this->id_societe;
+        $this->id_societe = $new_id;
+    }
+
     public function save() {
-        if(!$this->getCompte()){
-            $this->setCompte($this->getSociete()->getMasterCompte()->_id);
+
+        if($this->isSynchroAutoActive()) {
+            if(!$this->getCompte()){
+                $this->setCompte($this->getSociete()->getMasterCompte()->_id);
+            }
         }
 
         $societe = $this->getSociete();
-
         $needSaveSociete = false;
 
-        if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete() || !$this->isSameIdentifiantConstruction()){
-            if ($this->isSameCompteThanSociete()) {
-                //throw new sfException("Pas de création ".$this->_id);
-                //$compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
-                //$compte->addOrigine($this->_id);
-                $compte = $this->getMasterCompte();
-            }else{
-                $compte = $this->getMasterCompte();
+        if($this->isSynchroAutoActive()) {
+            if(!$this->isSameAdresseThanSociete() || !$this->isSameContactThanSociete()){
+                if ($this->isSameCompteThanSociete()) {
+                    $compte = CompteClient::getInstance()->createCompteFromEtablissement($this);
+                    $compte->addOrigine($this->_id);
+                } else {
+                    $compte = $this->getMasterCompte();
+                }
+
+                $this->pushContactAndAdresseTo($compte);
+
+                $compte->id_societe = $this->getSociete()->_id;
+                $compte->nom_a_afficher = $this->nom;
+
+                $compte->save();
+
+                $this->setCompte($compte->_id);
+            } else if(!$this->isSameCompteThanSociete()){
+                $compteEtablissement = $this->getMasterCompte();
+                $compteSociete = $this->getSociete()->getMasterCompte();
+
+                $this->setCompte($compteSociete->_id);
+
+                CompteClient::getInstance()->find($compteEtablissement->_id)->delete();
             }
-            $this->pushContactAndAdresseTo($compte);
 
-            $compte->id_societe = $this->getSociete()->_id;
-            $compte->nom_a_afficher = $this->nom;
+            if($this->isSameAdresseThanSociete()) {
+                $this->pullAdresseFrom($this->getSociete()->getMasterCompte());
+            }
 
-            $compte->save();
-
-            $this->setCompte($compte->_id);
-        } else if(!$this->isSameCompteThanSociete()){
-            throw new sfException("Pas de suppression");
-            $compteEtablissement = $this->getMasterCompte();
-            $compteSociete = $this->getSociete()->getMasterCompte();
-
-            $this->setCompte($compteSociete->_id);
-            CompteClient::getInstance()->find($compteEtablissement->_id)->delete();
-        }
-
-        if($this->isSameAdresseThanSociete()) {
-            $this->pullAdresseFrom($this->getSociete()->getMasterCompte());
-        }
-
-        if($this->isSameContactThanSociete()) {
-            $this->pullContactFrom($this->getSociete()->getMasterCompte());
+            if($this->isSameContactThanSociete()) {
+                $this->pullContactFrom($this->getSociete()->getMasterCompte());
+            }
         }
 
         $this->initFamille();
@@ -272,7 +292,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         $this->interpro = "INTERPRO-declaration";
         $this->region = EtablissementClient::getInstance()->calculRegion($this);
 
-        if($this->isNew()) {
+        if($this->isNew() || $this->_id_societe_origine) {
             $societe->addEtablissement($this);
             $needSaveSociete = true;
         }
@@ -283,7 +303,18 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
             $societe->save();
         }
 
-        $societe->getMasterCompte()->save();
+        if($this->_id_societe_origine) {
+            $societeOrigine = SocieteClient::getInstance()->find($this->_id_societe_origine);
+            if($societeOrigine) {
+                $societeOrigine->cleanEtablissements($this);
+                $societeOrigine->save();
+            }
+            $this->_id_societe_origine = null;
+        }
+
+        if($this->isSynchroAutoActive()) {
+            $societe->getMasterCompte()->save();
+        }
     }
 
     public function isActif() {
@@ -367,6 +398,17 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public function hasCompteTeledeclarationActivate() {
         return $this->getSociete()->getMasterCompte()->isTeledeclarationActive();
+    }
+
+    public function updateTeledeclarationEmailFromCompte() {
+        $compte = $this->getMasterCompte();
+
+        if(!$compte || !$compte->isInscrit()) {
+
+            return;
+        }
+
+        $this->setEmailTeledeclaration($compte->email);
     }
 
     public function getEmailTeledeclaration() {

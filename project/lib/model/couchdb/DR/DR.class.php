@@ -721,7 +721,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declaration_insee = $tiers->declaration_insee;
 
         if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getEmail();
+            $this->declarant->email = $tiers->getEmailTeledeclaration();
         }
 
         $this->declarant->exploitant->sexe = $tiers->exploitant->civilite;

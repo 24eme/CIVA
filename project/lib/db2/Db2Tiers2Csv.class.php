@@ -204,7 +204,7 @@ class Db2Tiers2Csv
             throw new Exception("Erreurs tous les tiers n'ont pas été réparti");
         }
 
-        ksort($societe, SORT_NUMERIC);
+        ksort($societes, SORT_NUMERIC);
 
         foreach($societes as $etablissements) {
             $tiers = current($etablissements);
@@ -476,21 +476,23 @@ class Db2Tiers2Csv
             $dateNaissanceExploitant,
         );
 
-        return;
+        $this->csv[] = array(
+            "COMPTE",
+            "ETABLISSEMENT-".$identifiantEtablissement,
+            "COMPTE-".$identifiantEtablissement,
+            null,
+            null,
+            $statut,
+        );
 
-        if($this->getInfos($tiers, Db2Tiers::COL_CVI)) {
+        if($this->getInfos($tiers, Db2Tiers::COL_CVI) && $identifiantEtablissement != $this->getInfos($tiers, Db2Tiers::COL_CVI)) {
             $this->csv[] = array(
                 "COMPTE",
-                $societe,
+                "ETABLISSEMENT-".$identifiantEtablissement,
                 "COMPTE-".$this->getInfos($tiers, Db2Tiers::COL_CVI),
-            );
-        }
-
-        if($this->getInfos($tiers, Db2Tiers::COL_CIVABA)) {
-            $this->csv[] = array(
-                "COMPTE",
-                $societe,
-                "COMPTE-".$this->getInfos($tiers, Db2Tiers::COL_CIVABA),
+                null,
+                null,
+                $statut,
             );
         }
 

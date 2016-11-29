@@ -6,6 +6,8 @@
  */
 class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
+    protected $_id_societe_origine = null;
+
     public function constructId() {
         $this->set('_id', 'COMPTE-' . $this->identifiant);
     }
@@ -50,7 +52,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             return;
         }
 
-        $this->nom_a_afficher = trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom));
+        $this->nom_a_afficher = preg_replace("/ +/", " ", trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom)));
     }
 
     public static function transformTag($tag) {
@@ -111,6 +113,17 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             }
         }
         return false;
+    }
+
+    public function changeSociete($new_id) {
+        if($this->isNew()) {
+            continue;
+        }
+        if($this->_id == $new_id) {
+            return;
+        }
+        $this->_id_societe_origine = $this->id_societe;
+        $this->id_societe = $new_id;
     }
 
     public function save() {
@@ -191,16 +204,26 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
         parent::save();
 
-        if ($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $new) {
+        if($this->isNew() || $this->_id_societe_origine) {
             $societe->addCompte($this);
             $societe->save();
+        }
+
+        if($this->_id_societe_origine) {
+            $societeOrigine = SocieteClient::getInstance()->find($this->_id_societe_origine);
+            if($societeOrigine) {
+                $societeOrigine->cleanComptes($this);
+                $societeOrigine->save();
+            }
+            $this->_id_societe_origine = null;
         }
 
         $this->autoUpdateLdap();
     }
 
     public function isSocieteContact() {
-        return ((SocieteClient::getInstance()->find($this->id_societe)->compte_societe) == $this->_id);
+
+        return false;
     }
 
     private function removeFournisseursTag() {

@@ -136,6 +136,7 @@ class compteActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->compte = $this->form->save();
+                CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($this->compte);
                 try {
                     $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\nVotre compte a bien été créé sur le site du CIVA. \n\nCordialement,\n\nLe CIVA");
                     $this->getUser()->setFlash('confirmation', "Votre compte a bien été créé.");
@@ -196,6 +197,7 @@ class compteActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->compte = $this->form->save();
+                CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($this->compte);
                 $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
 		if ($this->service) {
 		  return $this->redirect($this->service);

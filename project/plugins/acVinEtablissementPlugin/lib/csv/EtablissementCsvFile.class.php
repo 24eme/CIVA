@@ -82,63 +82,19 @@ class EtablissementCsvFile extends CompteCsvFile
                     $eOrigin = new acCouchdbJsonNative($e->toJson());
                 }
 
-                /*$forceSave = false;
-
-                if($e && $e->id_societe != $s->_id) {
-                    echo "Warning l'établissement ".$e->_id." a changé de société de " . $e->id_societe . " pour " . $s->_id ."\n";
-                    continue;
-                    $oldIdSociete = $e->id_societe;
-                    $e->setIdSociete($s->_id);
-                    $compteMaster = $e->getMasterCompte();
-                    $compteMaster->id_societe = $s->_id;
-                    if($compteMaster->hasOrigine($oldIdSociete)) {
-                        $compteMaster->removeOrigine($oldIdSociete);
-                        $compteMaster->addOrigine($e->_id);
-                    }
-                    $compteMaster->save();
-                    $s = SocieteClient::getInstance()->find($s->_id);
-                    $s->addCompte($compteMaster);
-                    $s->addEtablissement($e);
-                    $s->save();
-                    $oldSociete = SocieteClient::getInstance()->find($oldIdSociete);
-                    if($oldSociete) {
-                        $oldSociete->removeContact($compteMaster->_id);
-                        $oldSociete->removeEtablissement($e->_id);
-                        $oldSociete->save();
-                    }
-                    $e = EtablissementClient::getInstance()->find($e->_id);
-                    $e->setIdSociete($s->_id);
-                    $e->save();
-                    $forceSave = true;
-                }
-
-                if(!$e && !$line[self::CSV_ID]) {
-                    $e = EtablissementClient::getInstance()->createEtablissementFromSociete($s, $line[self::CSV_FAMILLE]);
-                    $e->constructId();
-                }*/
-
                 if(!$e && $line[self::CSV_ID]) {
                     $e = new Etablissement();
-                    $e->setIdSociete($s->_id);
                     $e->setIdentifiant($identifiant);
-                    $e->setFamille($line[self::CSV_FAMILLE]);
+                    $e->setIdSociete($s->_id);
                     $e->constructId();
                 }
 
-                /*$identifiantCompte = str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]);
-                $compte = null;
-                if(!$e->compte && $line[self::CSV_ID_COMPTE] && !CompteClient::getInstance()->find("COMPTE-".$identifiantCompte)) {
-                    $compte = CompteClient::getInstance()->createCompteFromEtablissement($e);
-                    $compte->addOrigine($e->_id);
-                    $compte->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
-                    $compte->setIdentifiant($identifiantCompte);
-                    $compte->constructId();
+                if($e->id_societe != $s->_id) {
+                    echo "Warning l'établissement $e->_id a changé de société : $e->id_societe => $s->_id\n";
+                    $e->changeSociete($s->_id);
                 }
 
-                if(!$e->compte) {
-                    $e->setCompte("COMPTE-".$identifiantCompte);
-                }*/
-
+                $e->compte = "COMPTE-".$identifiant;
                 $e->famille = ($line[self::CSV_FAMILLE]) ? $line[self::CSV_FAMILLE] : null;
 
                 if(!array_key_exists($e->famille, EtablissementFamilles::getFamilles())) {
@@ -148,7 +104,8 @@ class EtablissementCsvFile extends CompteCsvFile
               	$e->nom = $line[self::CSV_NOM];
                 $e->cvi = (isset($line[self::CSV_CVI]) && str_replace(" ", "", $line[self::CSV_CVI])) ? str_replace(" ", "", $line[self::CSV_CVI]) : null;
                 if($e->cvi && !preg_match("/^[0-9]+$/", $e->cvi)) {
-                  $e->addCommentaire("CVI provenant de l'import : ".$e->cvi);
+                    printf("Warning : %s Le CVI n'est pas correct : %s\n", $e->_id, $e->cvi);
+                  //$e->addCommentaire("CVI provenant de l'import : ".$e->cvi);
                   //$e->cvi = null;
                 }
                 $e->num_interne = (isset($line[self::CSV_NUM_INTERNE]) && str_replace(" ", "", $line[self::CSV_NUM_INTERNE])) ? str_replace(" ", "", $line[self::CSV_NUM_INTERNE]) : null;
@@ -166,62 +123,33 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e->nature_inao = $natures_inao[$line[self::CSV_NATURE_INAO]];
                 }
 
-                //$email = $e->getEmail();
-                $this->storeCompteInfos($e, $line);
-                /*if(!$e->isNew() && $e->getMasterCompte()->isInscrit()) {
-                    $e->email = $email;
-                }*/
+                if($e->isNew()) { // Temporaire
+                    $this->storeCompteInfos($e, $line);
+                }
 
                 $e->add('declaration_insee', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_INSEE_DECLARATION] : $e->getInsee());
                 $e->add('declaration_commune', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_COMMUNE_DECLARATION] : $e->getCommune());
 
-                $e->add('exploitant');
-                $e->exploitant->setCivilite(($line[self::CSV_EXPLOITANT_INTITULE]) ? $line[self::CSV_EXPLOITANT_INTITULE] : null);
-                $e->exploitant->setNom(($line[self::CSV_EXPLOITANT_NOM]) ? $line[self::CSV_EXPLOITANT_NOM] : null);
-                $e->exploitant->setAdresse(($line[self::CSV_EXPLOITANT_ADRESSE]) ? $line[self::CSV_EXPLOITANT_ADRESSE] : null);
-                $e->exploitant->setCodePostal(($line[self::CSV_EXPLOITANT_CODE_POSTAL]) ? $line[self::CSV_EXPLOITANT_CODE_POSTAL] : null);
-                $e->exploitant->setCommune(($line[self::CSV_EXPLOITANT_COMMUNE]) ? $line[self::CSV_EXPLOITANT_COMMUNE] : null);
-                $e->exploitant->setTelephone(($line[self::CSV_EXPLOITANT_TEL]) ? $line[self::CSV_EXPLOITANT_TEL] : null);
-                $e->exploitant->setDateNaissance(($line[self::CSV_EXPLOITANT_DATE_NAISSANCE]) ? $line[self::CSV_EXPLOITANT_DATE_NAISSANCE] : null);
+                if($e->isNew()) { // Temporaire
+                    $e->add('exploitant');
+                    $e->exploitant->setCivilite(($line[self::CSV_EXPLOITANT_INTITULE]) ? $line[self::CSV_EXPLOITANT_INTITULE] : null);
+                    $e->exploitant->setNom(($line[self::CSV_EXPLOITANT_NOM]) ? $line[self::CSV_EXPLOITANT_NOM] : null);
+                    $e->exploitant->setAdresse(($line[self::CSV_EXPLOITANT_ADRESSE]) ? $line[self::CSV_EXPLOITANT_ADRESSE] : null);
+                    $e->exploitant->setCodePostal(($line[self::CSV_EXPLOITANT_CODE_POSTAL]) ? $line[self::CSV_EXPLOITANT_CODE_POSTAL] : null);
+                    $e->exploitant->setCommune(($line[self::CSV_EXPLOITANT_COMMUNE]) ? $line[self::CSV_EXPLOITANT_COMMUNE] : null);
+                    $e->exploitant->setTelephone(($line[self::CSV_EXPLOITANT_TEL]) ? $line[self::CSV_EXPLOITANT_TEL] : null);
+                    $e->exploitant->setDateNaissance(($line[self::CSV_EXPLOITANT_DATE_NAISSANCE]) ? $line[self::CSV_EXPLOITANT_DATE_NAISSANCE] : null);
+                }
+
+                //$e->updateTeledeclarationEmailFromCompte();
 
                 $eFinal = new acCouchdbJsonNative($e->toJson());
                 $diff = $eFinal->diff($eOrigin);
                 $nouveau = $e->isNew();
 
-
                 if(!count($diff)) {
                     continue;
                 }
-
-                /*if(isset($compte) && $compte->isNew()) {
-                    $compte->save();
-                }*/
-
-                //$e->save();
-
-                /*$s = SocieteClient::getInstance()->find($s->_id);
-                $societeSuspendu = true;
-                foreach($s->getEtablissementsObject(false) as $etablissement) {
-                    if($etablissement->statut == EtablissementClient::STATUT_ACTIF) {
-                        $societeSuspendu = false;
-                    }
-                }
-
-                $statutSociete = SocieteClient::STATUT_SUSPENDU;
-                if(!$societeSuspendu) {
-                    $statutSociete = SocieteClient::STATUT_ACTIF;
-                }
-                if($s->statut != $statutSociete) {
-                    $s->statut = $statutSociete;
-                    $s->save();
-                    echo "La société ".$s->_id." est maitnenant au statut ".$s->statut."\n";
-                }
-
-                foreach ($s->contacts as $idCompte => $compte) {
-                    $contact = CompteClient::getInstance()->find($idCompte);
-                    $contact->setStatut($s->getStatut());
-                    $contact->save();
-                }*/
 
                 $modifications = null;
                 foreach($diff as $key => $value) { $modifications .= "$key: $value ";}
