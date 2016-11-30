@@ -15,18 +15,33 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
     }
 
     public function cleanEtablissements() {
-        foreach($this->getEtablissementsObject() as $etablissement) {
-            if($etablissement->id_societe != $this->_id) {
-                $this->removeEtablissement($etablissement->_id);
+        $etablissementsToRemove = array();
+        foreach ($this->etablissements as $id => $obj) {
+            $etablissement = EtablissementClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
+            if($etablissement && $etablissement->id_societe == $this->_id) {
+                continue;
             }
+
+            $etablissementsToRemove[] = $id;
+        }
+        foreach($etablissementsToRemove as $id) {
+            $this->removeEtablissement($id);
         }
     }
 
     public function cleanComptes() {
-        foreach($this->getContactsObj() as $contact) {
-            if($contact->id_societe != $this->_id) {
-                $this->removeContact($contact->_id);
+        $contactsToRemove = array();
+        foreach ($this->contacts as $id => $obj) {
+            $contact = CompteClient::getInstance()->find($id);
+            if($contact && $contact->id_societe == $this->_id) {
+                continue;
             }
+
+            $contactsToRemove[] = $id;
+        }
+
+        foreach($contactsToRemove as $id) {
+            $this->removeContact($id);
         }
     }
 
@@ -206,7 +221,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
             }
             $this->etablissements->add($e->_id)->ordre = $ordre;
         }
-        if ($e->compte) {
+        if ($e->compte && $e->getMasterCompte()) {
             $this->addCompte($e->getMasterCompte(), $ordre);
         }
     }

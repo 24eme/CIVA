@@ -204,7 +204,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
         parent::save();
 
-        if($this->isNew() || $this->_id_societe_origine) {
+        if(!$societe->contacts->exist($this->_id)) {
             $societe->addCompte($this);
             $societe->save();
         }

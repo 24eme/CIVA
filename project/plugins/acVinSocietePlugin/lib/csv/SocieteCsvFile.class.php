@@ -61,68 +61,17 @@ class SocieteCsvFile extends CompteCsvFile
                 if($s) {
                     $sOrigin = new acCouchdbJsonNative($s->toJson());
                 }
-                /*$forceSave = false;
-
-                $sOrigin = new acCouchdbJsonNative(new stdClass());
-
-                if($s) {
-                    $sOrigin = new acCouchdbJsonNative($s->toJson());
-                }
-
-                $compte = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]), acCouchdbClient::HYDRATE_DOCUMENT, true);*/
 
                 if(!$s) {
                   	$s = new Societe();
                     $s->identifiant = $identifiant;
                     $s->constructId();
-                    /*if($compte) {
-                        $s->compte_societe = $compte->_id;
-                        $s->addCompte($compte, -1);
-                        $compte->addOrigine($s->_id);
-                    }*/
                 }
 
-
-                /*if($line[self::CSV_ID_COMPTE] && !$compte) {
-                    $compte = $s->createCompteSociete(str_replace("COMPTE-", "", $line[self::CSV_ID_COMPTE]));
-                    $compte->constructId();
-                }*/
-
-                /*if($s && $compte && $compte->id_societe != $s->_id) {
-                    echo "Warning Le compte $compte->_id de la société  $s->_id est relié à une autre société " . $compte->id_societe ."\n";
-                    $compte->id_societe = $s->_id;
-                    if($compte->hasOrigine($compte->id_societe)) {
-                        $compte->removeOrigine($compte->id_societe);
-                        $compte->addOrigine($s->_id);
-                    }
-                }*/
-
-                /*$s->setCompteSocieteObject($compte);*/
-
-                /*$compte = ($compte) ? $compte : $s->getMasterCompte();
-                if($compte && $compte->id_societe != $s->_id) {
-                    $forceSave = true;
-                    echo "Warning Le compte $compte->_id de la société  $s->_id est relié à une autre société " . $compte->id_societe ."\n";
-                    if($compte->hasOrigine($compte->id_societe)) {
-                        $compte->removeOrigine($compte->id_societe);
-                        $compte->addOrigine($s->_id);
-                    }
-                    $oldSociete = SocieteClient::getInstance()->find($compte->id_societe);
-                    if($oldSociete) {
-                        $oldSociete->removeContact($compte->id_societe);
-                        $oldSociete->save();
-                    }
-                    $compte->id_societe = $s->_id;
-                    $s->compte_societe = $compte->_id;
-                    $s->addCompte($compte, -1);
-                    if(!$s->isNew()) {
-                        $compte->save();
-                    }
-                }*/
-                //$s->compte_societe = null;
+                $s->compte_societe = "COMPTE-".$s->identifiant;
                 $s->type_societe = $line[self::CSV_FAMILLE];
                 $s->raison_sociale = trim($line[self::CSV_NOM]);
-        	    $s->raison_sociale_abregee = trim($line[self::CSV_NOM_COURT]);
+        	    $s->raison_sociale_abregee = (trim($line[self::CSV_NOM_COURT])) ? trim($line[self::CSV_NOM_COURT]) : null;
               	$s->interpro = 'INTERPRO-declaration';
                 $s->siret = str_replace(" ", "", $line[self::CSV_SIRET]);
                 $s->code_naf = $line[self::CSV_CODE_NAF] ? str_replace(" ", "", $line[self::CSV_CODE_NAF]) : null;
@@ -133,22 +82,22 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->statut = $line[self::CSV_STATUT];
                 $this->storeCompteInfos($s, $line);
 
+                $s->cleanEtablissements();
+                $s->cleanComptes();
+
                 $sFinal = new acCouchdbJsonNative($s->toJson());
-                $diff = $sFinal->diff($sOrigin);
+                $diffFinal = $sFinal->diff($sOrigin);
+                $diffOrigin = $sOrigin->diff($sFinal);
                 $nouveau = $s->isNew();
 
-                if(!count($diff)) {
+                if(!count($diffFinal) && !count($diffOrigin)) {
                     continue;
                 }
 
-                /*if(!$compte->isNew() && !$s->isNew()) {
-                    $compte->save();
-                }*/
-
-              	//$s->save();
+              	$s->save();
 
                 $modifications = null;
-                foreach($diff as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 if($nouveau) { $modifications = "Création"; }
 
                 echo $s->_id." (".trim($modifications).")\n";

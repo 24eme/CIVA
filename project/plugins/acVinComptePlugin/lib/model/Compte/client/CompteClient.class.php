@@ -175,9 +175,14 @@ class CompteClient extends acCouchdbClient {
             continue;
         }
 
-        $etablissement = $compte->getEtablissementOrigine();
+        $etablissement = $compte->getEtablissementOrigineObject();
 
-        if(!$etablissement || !$etablissement->compte != $compte) {
+        if(!$etablissement) {
+            return;
+        }
+
+        if($etablissement->exist('teledeclaration_email') && $etablissement->teledeclaration_email && $etablissement->compte != $compte->_id) {
+
             return;
         }
 

@@ -91,12 +91,12 @@ class CompteCsvFile extends CsvFile
                 $c->statut = ($line[self::CSV_STATUT]) ? $line[self::CSV_STATUT] : $s->statut;
 
                 if($c->statut == CompteClient::STATUT_ACTIF && !$c->mot_de_passe) {
-                    $compte->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
+                    $c->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
                 }
 
-                /*$c->civilite = $e->getIntitule();
+                $c->civilite = $e->getIntitule();
                 $c->nom = $e->getNom();
-                $c->updateNomAAfficher();*/
+                $c->updateNomAAfficher();
                 $email = $c->email;
                 $e->pushContactAndAdresseTo($c);
                 if($c->isInscrit()) {
@@ -104,16 +104,19 @@ class CompteCsvFile extends CsvFile
                 }
 
                 $cFinal = new acCouchdbJsonNative($c->toJson());
-                $diff = $cFinal->diff($cOrigin);
+                $diffFinal = $cFinal->diff($cOrigin);
+                $diffOrigin = $cOrigin->diff($cFinal);
                 $nouveau = $c->isNew();
 
-                if(!count($diff)) {
+                if(!count($diffFinal) && !count($diffOrigin)) {
                     continue;
                 }
 
                 $modifications = null;
-                foreach($diff as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 if($nouveau) { $modifications = "Création"; }
+
+                $c->save();
 
                 echo $c->_id." (".trim($modifications).")\n";
         	} catch(Exception $e) {

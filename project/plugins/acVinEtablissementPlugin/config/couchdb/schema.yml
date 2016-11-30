@@ -47,7 +47,7 @@ Etablissement:
                            '*': { }
        site_fiche: { required: false }
        compte: {  }
-       compte_exploitant: {  }
+       compte_exploitant: { required: false }
        num_interne: {  }
        num_reprise: { required: false }
        raison_sociale: {  }

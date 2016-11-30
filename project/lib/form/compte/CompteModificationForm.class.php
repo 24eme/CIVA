@@ -29,11 +29,8 @@ class CompteModificationForm extends CompteForm {
             throw new sfException("form must be valid");
         }
 
-        $master = $this->_compte->getMasterObject();
-        $master->setEmail($this->getValue('email'));
-        $master->save();
-
         $compte = CompteClient::getInstance()->find($this->_compte->_id);
+        $compte->email = $this->getValue('email');
         if ($this->getValue('mdp1')) {
             $compte->setMotDePasseSSHA($this->getValue('mdp1'));
         }

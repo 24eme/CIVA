@@ -130,6 +130,8 @@ class EtablissementCsvFile extends CompteCsvFile
                 $e->add('declaration_insee', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_INSEE_DECLARATION] : $e->getInsee());
                 $e->add('declaration_commune', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_COMMUNE_DECLARATION] : $e->getCommune());
 
+                $e->remove('compte_exploitant');
+
                 if($e->isNew()) { // Temporaire
                     $e->add('exploitant');
                     $e->exploitant->setCivilite(($line[self::CSV_EXPLOITANT_INTITULE]) ? $line[self::CSV_EXPLOITANT_INTITULE] : null);
@@ -141,19 +143,21 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e->exploitant->setDateNaissance(($line[self::CSV_EXPLOITANT_DATE_NAISSANCE]) ? $line[self::CSV_EXPLOITANT_DATE_NAISSANCE] : null);
                 }
 
-                //$e->updateTeledeclarationEmailFromCompte();
+                $e->updateTeledeclarationEmailFromCompte();
 
                 $eFinal = new acCouchdbJsonNative($e->toJson());
-                $diff = $eFinal->diff($eOrigin);
+                $diffFinal = $eFinal->diff($eOrigin);
+                $diffOrigin = $eOrigin->diff($eFinal);
                 $nouveau = $e->isNew();
 
-                if(!count($diff)) {
+                if(!count($diffFinal) && !count($diffOrigin)) {
                     continue;
                 }
-
                 $modifications = null;
-                foreach($diff as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 if($nouveau) { $modifications = "Création"; }
+
+                $e->save();
 
                 echo $e->_id." (".trim($modifications).")\n";
             } catch(Exception $e) {
