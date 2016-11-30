@@ -21,7 +21,7 @@ class tiersActions extends sfActions {
         $this->societe = $this->compte->getSociete();
     	$not_uniq = 0;
     	$etablissements = array();
-        $etablissementsObject = $this->societe->getEtablissementsObject(false);
+        $etablissementsObject = $this->societe->getEtablissementsObject();
         if (count($etablissementsObject) >= 1) {
     	    foreach ($etablissementsObject as $e) {
                 if (isset($etablissements[$e->getFamille()])) {

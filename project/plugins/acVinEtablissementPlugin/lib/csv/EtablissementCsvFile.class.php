@@ -130,7 +130,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 $e->add('declaration_insee', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_INSEE_DECLARATION] : $e->getInsee());
                 $e->add('declaration_commune', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_COMMUNE_DECLARATION] : $e->getCommune());
 
-                $e->remove('compte_exploitant');
+                $e->remove('compte_exploitant'); // Temporaire
 
                 if($e->isNew()) { // Temporaire
                     $e->add('exploitant');
