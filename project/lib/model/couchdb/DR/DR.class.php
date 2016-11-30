@@ -401,6 +401,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
+            if($appellation->getKey() != "appellation_VINTABLE") {
+                foreach($appellation->getAcheteursArray() as $typeCvi =>$volume) {
+                    if($volume > 0 && !preg_match("/^.+_6/", $typeCvi)) {
+                        array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $appellation->getHash())), 'log' => $appellation->getLibelle(), 'info' => "Vous ne pouvez pas vendre de volume à un acheteur hors de la région Alsace pour cette appellation :"));
+                    }
+                }
+            }
+
             foreach ($appellation->getMentions() as $mention) {
                 if($mention->getTotalSuperficie() != 0) {
                     $appellation_key = $mention->getAppellation()->getKey();
