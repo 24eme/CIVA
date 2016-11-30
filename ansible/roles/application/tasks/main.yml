@@ -13,6 +13,7 @@
   - texlive-latex-extra
   - xinetd
   - erlang
+  - libmozjs185-1.0
 
 - name: install couchdb
   apt: deb=http://ftp.fr.debian.org/debian/pool/main/c/couchdb/couchdb_1.4.0-3+b1_amd64.deb state=present
