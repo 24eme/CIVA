@@ -123,27 +123,19 @@ class EtablissementCsvFile extends CompteCsvFile
                     $e->nature_inao = $natures_inao[$line[self::CSV_NATURE_INAO]];
                 }
 
-                if($e->isNew()) { // Temporaire
-                    $this->storeCompteInfos($e, $line);
-                }
+                $this->storeCompteInfos($e, $line);
 
                 $e->add('declaration_insee', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_INSEE_DECLARATION] : $e->getInsee());
                 $e->add('declaration_commune', ($line[self::CSV_INSEE_DECLARATION]) ? $line[self::CSV_COMMUNE_DECLARATION] : $e->getCommune());
 
-                $e->remove('compte_exploitant'); // Temporaire
-
-                if($e->isNew()) { // Temporaire
-                    $e->add('exploitant');
-                    $e->exploitant->setCivilite(($line[self::CSV_EXPLOITANT_INTITULE]) ? $line[self::CSV_EXPLOITANT_INTITULE] : null);
-                    $e->exploitant->setNom(($line[self::CSV_EXPLOITANT_NOM]) ? $line[self::CSV_EXPLOITANT_NOM] : null);
-                    $e->exploitant->setAdresse(($line[self::CSV_EXPLOITANT_ADRESSE]) ? $line[self::CSV_EXPLOITANT_ADRESSE] : null);
-                    $e->exploitant->setCodePostal(($line[self::CSV_EXPLOITANT_CODE_POSTAL]) ? $line[self::CSV_EXPLOITANT_CODE_POSTAL] : null);
-                    $e->exploitant->setCommune(($line[self::CSV_EXPLOITANT_COMMUNE]) ? $line[self::CSV_EXPLOITANT_COMMUNE] : null);
-                    $e->exploitant->setTelephone(($line[self::CSV_EXPLOITANT_TEL]) ? $line[self::CSV_EXPLOITANT_TEL] : null);
-                    $e->exploitant->setDateNaissance(($line[self::CSV_EXPLOITANT_DATE_NAISSANCE]) ? $line[self::CSV_EXPLOITANT_DATE_NAISSANCE] : null);
-                }
-
-                $e->updateTeledeclarationEmailFromCompte();
+                $e->add('exploitant');
+                $e->exploitant->setCivilite(($line[self::CSV_EXPLOITANT_INTITULE]) ? $line[self::CSV_EXPLOITANT_INTITULE] : null);
+                $e->exploitant->setNom(($line[self::CSV_EXPLOITANT_NOM]) ? $line[self::CSV_EXPLOITANT_NOM] : null);
+                $e->exploitant->setAdresse(($line[self::CSV_EXPLOITANT_ADRESSE]) ? $line[self::CSV_EXPLOITANT_ADRESSE] : null);
+                $e->exploitant->setCodePostal(($line[self::CSV_EXPLOITANT_CODE_POSTAL]) ? $line[self::CSV_EXPLOITANT_CODE_POSTAL] : null);
+                $e->exploitant->setCommune(($line[self::CSV_EXPLOITANT_COMMUNE]) ? $line[self::CSV_EXPLOITANT_COMMUNE] : null);
+                $e->exploitant->setTelephone(($line[self::CSV_EXPLOITANT_TEL]) ? $line[self::CSV_EXPLOITANT_TEL] : null);
+                $e->exploitant->setDateNaissance(($line[self::CSV_EXPLOITANT_DATE_NAISSANCE]) ? $line[self::CSV_EXPLOITANT_DATE_NAISSANCE] : null);
 
                 $eFinal = new acCouchdbJsonNative($e->toJson());
                 $diffFinal = $eFinal->diff($eOrigin);

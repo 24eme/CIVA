@@ -68,6 +68,7 @@ Etablissement:
        raison_sociale_cautionneur: { required: false }
        declaration_insee: { required: false }
        declaration_commune: { required: false }
+       date_modification: { required: false }
        exploitant:
           type: collection
           class: EtablissementExploitant

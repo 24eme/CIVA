@@ -100,7 +100,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
                     $this->_tiers[$t->famille] = $t;
                 }
             } else {
-                $this->_tiers = $this->getCompte()->getSociete()->getEtablissementsObject();
+            $this->_tiers = $this->getCompte()->getSociete()->getEtablissementsObject();
             }
             if (!$this->_tiers) {
                 $this->signOutCompte();

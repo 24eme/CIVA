@@ -242,7 +242,8 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function save() {
-
+        $this->add('date_modification', date('Y-m-d'));
+        
         if($this->isSynchroAutoActive()) {
             if(!$this->getCompte()){
                 $this->setCompte($this->getSociete()->getMasterCompte()->_id);
