@@ -13,7 +13,7 @@
                 <?php if($sf_user->hasFlash('maj')) : ?>
                     <p class="flash_message"><?php echo $sf_user->getFlash('maj'); ?></p>
                 <?php endif; ?>
-                <p><span>Identifiant :</span> <?php echo $compte->login; ?></p>
+                <p><span>Identifiant :</span> <?php echo $compte->identifiant; ?></p>
                 <p><span>Email :</span> <?php echo $compte->email; ?></p>
                 <p><span>Mot de passe :</span> ****** </p>
                 <div class="btn">
@@ -24,7 +24,7 @@
 
             <div class="modification clearfix"<?php if (!$form->hasErrors()) echo ' style="display:none;"'; ?>>
                 <p class="intro">Modification des informations de votre compte :</p>
-                
+
                 <form method="post" action="<?php echo url_for("@compte_modification") ?><?php if($service): ?>?service=<?php echo $service ?><?php endif; ?>">
                     <div class="ligne_form ligne_form_label">
                         <label for="compte_email">Identifiant : </label>
@@ -33,7 +33,7 @@
                     <div class="ligne_form ligne_form_label">
                         <?php echo $form->renderHiddenFields(); ?>
                         <?php echo $form->renderGlobalErrors(); ?>
-                        
+
                         <?php echo $form['email']->renderError() ?>
                         <?php echo $form['email']->renderLabel() ?>
                         <?php echo $form['email']->render() ?>
