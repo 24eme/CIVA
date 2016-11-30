@@ -13,7 +13,7 @@
                 <?php if($sf_user->hasFlash('maj')) : ?>
                     <p class="flash_message"><?php echo $sf_user->getFlash('maj'); ?></p>
                 <?php endif; ?>
-                <p><span>Identifiant :</span> <?php echo $compte->identifiant; ?></p>
+                <p><span>Identifiant :</span> <?php echo ($compte->exist('identifiant')) ? $compte->identifiant : null; ?></p>
                 <p><span>Email :</span> <?php echo $compte->email; ?></p>
                 <p><span>Mot de passe :</span> ****** </p>
                 <div class="btn">

@@ -451,11 +451,12 @@ class drActions extends _DRActions {
     public function executeConfirmation(sfWebRequest $request) {
         $this->secureDR(DRSecurity::CONSULTATION);
         $this->setCurrentEtape('confirmation');
+
+        $this->dr = $this->getRoute()->getObject();
         if($this->getUser()->isSimpleOperateur()) {
 
-            return $this->redirect('mon_espace_civa_dr');
+            return $this->redirect('mon_espace_civa_dr', $this->dr->getEtablissement());
         }
-        $this->dr = $this->getRoute()->getObject();
         $this->has_import = DRClient::getInstance()->hasImport($this->dr->cvi, $this->dr->campagne);
         $this->annee = $request->getParameter('annee', $this->getUser()->getCampagne());
         if ($request->isMethod(sfWebRequest::POST)) {
