@@ -12,6 +12,7 @@
   - texlive-lang-french
   - texlive-latex-extra
   - xinetd
+  - erlang
 
 - name: install couchdb
   apt: deb=http://ftp.fr.debian.org/debian/pool/main/c/couchdb/couchdb_1.4.0-3+b1_amd64.deb state=present
