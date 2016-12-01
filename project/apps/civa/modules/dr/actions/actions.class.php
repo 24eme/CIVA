@@ -208,7 +208,7 @@ class drActions extends _DRActions {
         }
     }
 
-    public function executeRepartitionLieu(sfWebRequest $request) {
+        public function executeRepartitionLieu(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('exploitation_lieu');
         $this->help_popup_action = "help_popup_exploitation_lieu";
@@ -248,9 +248,11 @@ class drActions extends _DRActions {
 
         $this->form->save();
 
-        if(!$this->form->hasOneLieuForEach()) {
-            $this->erreur_global = "Vous devez saisir un lieu-dit pour chacune des appellations";
-            return sfView::SUCCESS;
+        $boutons = $request->getPostParameter('boutons');
+        if(!$this->form->hasOneLieuForEach() && isset($boutons['next'])) {
+            $this->getUser()->setFlash('erreur_global', "Vous devez saisir un lieu-dit pour chacune des appellations");
+
+            return $this->redirect('dr_repartition_lieu', $this->dr);
         }
 
         return $this->redirectByBoutonsEtapes(null, $this->dr);
