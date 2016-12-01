@@ -89,7 +89,10 @@ class ExportDRStatsCsv {
 
         $content .= "Appellation;Cépage;Superficie (ares);Volume brut (hl)\n";
 
-        foreach($this->config->recolte->getNoeudAppellations() as $appellation_key => $config_appellation) {
+        foreach($this->config->declaration->getArrayAppellations() as $config_appellation) {
+                $hash = new acCouchdbHash(HashMapper::inverse($config_appellation->getHash());
+                $appellation_key = $hash->getLast();
+
                 if(!isset($stats['appellations'][$appellation_key])) {
                     continue;
 
@@ -97,7 +100,10 @@ class ExportDRStatsCsv {
                 $appellation = $stats['appellations'][$appellation_key];
 
                 foreach($config_appellation->getProduits() as $config_cepage) {
-                    if(!isset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()])) {
+                    $hash = new acCouchdbHash(HashMapper::inverse($config_cepage->getHash());
+                    $cepage_key = $hash->getLast();
+
+                    if(!isset($stats['appellations'][$appellation_key]['cepages'][$cepage_key])) {
                         continue;
 
                     }
@@ -106,12 +112,12 @@ class ExportDRStatsCsv {
                         continue;
                     }
 
-                    $cepage = $appellation['cepages'][$config_cepage->getKey()];
-                    $content .= sprintf("%s;%s;%s;%s\n", $config_appellation->getLibelleLong(), $config_cepage->getLibelleLong(), $this->convertFloat2Fr($cepage['superficie']), $this->convertFloat2Fr($cepage['volume']));
-                    unset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()]);
+                    $cepage = $appellation['cepages'][$cepage_key];
+                    $content .= sprintf("%s;%s;%s;%s\n", $config_appellation->getLibelle(), $config_cepage->getLibelle(), $this->convertFloat2Fr($cepage['superficie']), $this->convertFloat2Fr($cepage['volume']));
+                    unset($stats['appellations'][$appellation_key]['cepages'][$cepage_key]);
                 }
 
-                $content .= sprintf("%s;TOTAL;%s;%s\n", $config_appellation->getLibelleLong(), $this->convertFloat2Fr($appellation['superficie']), $this->convertFloat2Fr($appellation['volume']));
+                $content .= sprintf("%s;TOTAL;%s;%s\n", $config_appellation->getLibelle(), $this->convertFloat2Fr($appellation['superficie']), $this->convertFloat2Fr($appellation['volume']));
                 unset($stats['appellations'][$appellation_key]);
         }
 
