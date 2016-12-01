@@ -90,7 +90,7 @@ class ExportDRStatsCsv {
         $content .= "Appellation;Cépage;Superficie (ares);Volume brut (hl)\n";
 
         foreach($this->config->declaration->getArrayAppellations() as $config_appellation) {
-                $hash = new acCouchdbHash(HashMapper::inverse($config_appellation->getHash());
+                $hash = new acCouchdbHash(HashMapper::inverse($config_appellation->getHash()));
                 $appellation_key = $hash->getLast();
 
                 if(!isset($stats['appellations'][$appellation_key])) {
@@ -100,7 +100,7 @@ class ExportDRStatsCsv {
                 $appellation = $stats['appellations'][$appellation_key];
 
                 foreach($config_appellation->getProduits() as $config_cepage) {
-                    $hash = new acCouchdbHash(HashMapper::inverse($config_cepage->getHash());
+                    $hash = new acCouchdbHash(HashMapper::inverse($config_cepage->getHash()));
                     $cepage_key = $hash->getLast();
 
                     if(!isset($stats['appellations'][$appellation_key]['cepages'][$cepage_key])) {
