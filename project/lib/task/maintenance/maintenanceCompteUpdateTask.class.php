@@ -52,7 +52,7 @@ EOF;
         }
         $compte->save();
 
-        CompteClient::updateEmailEtablissementFromCompteAndSaveThem($compte);
+        CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($compte);
 
         echo "Le compte ".$arguments['doc_id']." a été mis à jour\n";
     }
