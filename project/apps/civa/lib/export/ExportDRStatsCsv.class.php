@@ -8,7 +8,7 @@ class ExportDRStatsCsv {
 
         $this->ids = $ids;
         $this->campagne = $campagne;
-        $this->config = ConfigurationClient::getInstance()->getConfigurationByCampagne($this->campagne);
+        $this->config = ConfigurationClient::getConfiguration($this->campagne."-10-01");
     }
 
     public function export() {
