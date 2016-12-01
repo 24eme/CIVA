@@ -8,7 +8,7 @@ class ExportDRStatsCsv {
 
         $this->ids = $ids;
         $this->campagne = $campagne;
-        $this->config = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($this->campagne);
+        $this->config = ConfigurationClient::getInstance()->getConfigurationByCampagne($this->campagne);
     }
 
     public function export() {
@@ -18,7 +18,7 @@ class ExportDRStatsCsv {
         $n=0;
 
         foreach ($this->ids as $id) {
-            $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_JSON);
+            $dr = DRClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
 
             if(!isset($dr)) {
 
@@ -96,7 +96,7 @@ class ExportDRStatsCsv {
                 }
                 $appellation = $stats['appellations'][$appellation_key];
 
-                foreach($config_appellation->getProduits() as $config_cepage) { 
+                foreach($config_appellation->getProduits() as $config_cepage) {
                     if(!isset($stats['appellations'][$appellation_key]['cepages'][$config_cepage->getKey()])) {
                         continue;
 
