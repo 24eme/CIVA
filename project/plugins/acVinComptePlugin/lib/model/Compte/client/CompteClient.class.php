@@ -172,7 +172,8 @@ class CompteClient extends acCouchdbClient {
 
     public function updateEmailEtablissementFromCompteAndSaveThem($compte) {
         if(!$compte->isInscrit()) {
-            continue;
+
+            return;
         }
 
         $etablissement = $compte->getEtablissementOrigineObject();
