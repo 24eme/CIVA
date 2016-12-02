@@ -168,6 +168,7 @@ class drActions extends _DRActions {
             if ($this->form->isValid()) {
                 $this->form->save();
                 $this->dr->save();
+
                 $this->redirectByBoutonsEtapes(null, $this->dr);
             }
         }
@@ -217,24 +218,23 @@ class drActions extends _DRActions {
         $this->dr = $this->getRoute()->getDR();
         $this->form = new LieuDitForm($this->dr);
 
-        $hasLieu = false;
-        foreach($this->dr->recolte->getAppellations() as $appellation) {
-            if(!$appellation->getConfig()->hasManyLieu()) {
-                continue;
-            }
-
-            $hasLieu = true;
-            break;
-        }
-        if (!$hasLieu) {
-            if ($this->hasRequestParameter('from_recolte')) {
-                return $this->redirectToPreviousEtapes($this->dr);
-            } else {
-                return $this->redirectToNextEtapes($this->dr);
-            }
-        }
-
         if (!$request->isMethod(sfWebRequest::POST)) {
+            $hasLieu = false;
+            foreach($this->dr->recolte->getAppellations() as $appellation) {
+                if(!$appellation->getConfig()->hasManyLieu()) {
+                    continue;
+                }
+
+                $hasLieu = true;
+                break;
+            }
+            if (!$hasLieu) {
+                if ($this->hasRequestParameter('from_recolte')) {
+                    return $this->redirectToPreviousEtapes($this->dr);
+                } else {
+                    return $this->redirectToNextEtapes($this->dr);
+                }
+            }
 
             return sfView::SUCCESS;
         }

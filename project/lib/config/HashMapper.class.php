@@ -2,14 +2,68 @@
 
 class HashMapper {
 
-    public static $convert_hash = array();
-    public static $inverse_hash = array();
+    public static $hashMapper = null;
 
     public static function convert($hash) {
-        $hashOrigine = $hash;
-        if(array_key_exists($hash, self::$convert_hash)) {
 
-            return self::$convert_hash[$hash];
+        return self::getHashMapper()->convert($hash);
+    }
+
+    public static function inverse($hash) {
+
+        return self::getHashMapper()->inverse($hash);
+    }
+
+    public static function getHashMapperCached() {
+
+        return new HashMapperCached();
+    }
+
+    public static function getHashMapper() {
+        if(is_null(self::$hashMapper)) {
+            self::$hashMapper = CacheFunction::cache('model', "HashMapper::getHashMapperCached");
+        }
+
+        return self::$hashMapper;
+    }
+
+}
+
+class HashMapperCached {
+
+    public $convert_hash = array();
+    public $inverse_hash = array();
+
+    public function __construct() {
+        $configuration = ConfigurationClient::getCurrent();
+        $this->callAll($configuration->declaration);
+    }
+
+    public function callAll($child) {
+        if(!method_exists($child, "getChildrenNode")) {
+
+            return;
+        }
+
+        if(!$child->getChildrenNode()) {
+
+            return;
+        }
+        foreach($child->getChildrenNode() as $child) {
+            $hash = $this->convert($child->getHash());
+            $this->inverse($hash);
+            $hash = $this->convert($child->getHash()."/");
+            $this->inverse($hash);
+            $this->callAll($child);
+        }
+    }
+
+    public function convert($hash) {
+        $hashOrigine = $hash;
+
+        if(array_key_exists($hash, $this->convert_hash)) {
+
+            return $this->convert_hash[$hash];
         }
 
         $hash = preg_replace("|^/recolte|", "/declaration", $hash);
@@ -34,16 +88,17 @@ class HashMapper {
         $hash = preg_replace("|/genres/TRANQ/appellations/CREMANT|", "/genres/EFF/appellations/CREMANT", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE|", "/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE", $hash);
 
-        self::$convert_hash[$hashOrigine] = $hash;
+        $this->convert_hash[$hashOrigine] = $hash;
 
         return $hash;
     }
 
-    public static function inverse($hash) {
+    public function inverse($hash) {
         $hashOrigine = $hash;
-        if(array_key_exists($hash, self::$inverse_hash)) {
 
-            return self::$inverse_hash[$hash];
+        if(array_key_exists($hash, $this->inverse_hash)) {
+
+            return $this->inverse_hash[$hash];
         }
 
         $hash = preg_replace("|^/declaration|", "/recolte", $hash);
@@ -68,7 +123,7 @@ class HashMapper {
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
         $hash = preg_replace("|/genres/EFF|", "/genre", $hash);
 
-        self::$inverse_hash[$hashOrigine] = $hash;
+        $this->inverse_hash[$hashOrigine] = $hash;
 
         return $hash;
     }

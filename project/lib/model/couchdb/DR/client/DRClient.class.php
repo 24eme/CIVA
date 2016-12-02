@@ -357,6 +357,7 @@ class DRClient extends acCouchdbClient {
         $appellations = array();
 
         if(!$configuration) {
+
             $configuration = ConfigurationClient::getCurrent();
         }
 
