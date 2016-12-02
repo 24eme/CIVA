@@ -29,7 +29,7 @@
 
 			<p>La rubrique "Volume à détruire" comprend à la fois les lies et les volumes éventuels en dépassement de rendement (sans distinction).</p>
 
-			<p>A compté de cette année, la gestion des lies doit se faire obligatoirement par cépage. Vous inscrivez vos lies connues dans la ligne "Volume à détruire" et le système vous calculera automatiquement le volume revendiqué par cépage.</p>
+			<p>A compter de cette année, la gestion des lies doit se faire obligatoirement par cépage. Vous inscrivez vos lies connues dans la ligne "Volume à détruire" et le système vous calculera automatiquement le volume revendiqué par cépage.</p>
 		</div>
 	</div>
 	<?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
