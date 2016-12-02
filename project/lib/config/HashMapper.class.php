@@ -1,7 +1,17 @@
 <?php
 
 class HashMapper {
+
+    public static $convert_hash = array();
+    public static $inverse_hash = array();
+
     public static function convert($hash) {
+        $hashOrigine = $hash;
+        if(array_key_exists($hash, self::$convert_hash)) {
+
+            return self::$convert_hash[$hash];
+        }
+
         $hash = preg_replace("|^/recolte|", "/declaration", $hash);
         $hash = preg_replace("|/certification|", "/certifications/AOC_ALSACE", $hash);
         $hash = preg_replace("|/genre|", "/genres/TRANQ", $hash);
@@ -24,10 +34,18 @@ class HashMapper {
         $hash = preg_replace("|/genres/TRANQ/appellations/CREMANT|", "/genres/EFF/appellations/CREMANT", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE|", "/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE", $hash);
 
+        self::$convert_hash[$hashOrigine] = $hash;
+
         return $hash;
     }
 
     public static function inverse($hash) {
+        $hashOrigine = $hash;
+        if(array_key_exists($hash, self::$inverse_hash)) {
+
+            return self::$inverse_hash[$hash];
+        }
+
         $hash = preg_replace("|^/declaration|", "/recolte", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE|", "/certification", $hash);
         $hash = preg_replace("|/certifications/VINSSIG|", "/certification", $hash);
@@ -49,6 +67,8 @@ class HashMapper {
         $hash = str_replace("couleurrouge", "couleurRouge", $hash);
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
         $hash = preg_replace("|/genres/EFF|", "/genre", $hash);
+
+        self::$inverse_hash[$hashOrigine] = $hash;
 
         return $hash;
     }
