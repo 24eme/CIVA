@@ -27,7 +27,10 @@ class dr_recolteActions extends _DRActions {
      */
     public function executeRecolte(sfWebRequest $request) {
         foreach($this->declaration->getAppellationsAvecVtsgn() as $appellation) {
-            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $appellation["hash"]));
+
+            $request->setParameter('hash', $appellation['hash']);
+
+            return $this->executeProduitNoeud($request);
         }
 
         return $this->redirect('dr_repartition_acheteurs', $this->declaration);
@@ -154,15 +157,14 @@ class dr_recolteActions extends _DRActions {
 
             if (!count($this->noeud->getProduitsDetails())) {
                 $request->setParameter('hash', $hash);
+
                 return $this->executeProduit($request);
-                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
             }
 
             if($this->declaration->exist($hash) && count($this->declaration->get($hash)->getProduitsDetails())) {
                 $request->setParameter('hash', $hash);
 
                 return $this->executeProduit($request);
-                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
             }
         }
     }
