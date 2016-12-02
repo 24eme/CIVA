@@ -152,19 +152,24 @@ class drActions extends _DRActions {
 
         $this->help_popup_action = "help_popup_exploitation_acheteur";
 
-        $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
-        $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
-        $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
-        $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
-
-        $this->acheteurs_negociant = ListAcheteursConfig::getNegoces();
-        $this->acheteurs_cave = ListAcheteursConfig::getCooperatives();
-        $this->acheteurs_mout = ListAcheteursConfig::getMouts();
-
         $this->form = new ExploitationAcheteursForm($this->dr->getAcheteurs());
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
+        }
+
+        if (!$request->isMethod(sfWebRequest::POST) || !$this->form->isValid()) {
+            $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
+            $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
+            $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
+            $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
+
+            $this->acheteurs_negociant = ListAcheteursConfig::getNegoces();
+            $this->acheteurs_cave = ListAcheteursConfig::getCooperatives();
+            $this->acheteurs_mout = ListAcheteursConfig::getMouts();
+        }
+
+        if ($request->isMethod(sfWebRequest::POST)) {
             if ($this->form->isValid()) {
                 $this->form->save();
                 $this->dr->save();
