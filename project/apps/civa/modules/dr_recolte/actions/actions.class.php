@@ -37,7 +37,7 @@ class dr_recolteActions extends _DRActions {
     public function executeProduit(sfWebRequest $request) {
         if(!$this->declaration->exist($request->getParameter('hash'))) {
 
-            return $this->redirect('dr_recolte_produit_ajout', array('id' => $this->declaration->_id, 'hash' => $request->getParameter('hash')));
+            return $this->executeProduitAjout($request);
         }
 
         $this->produit = $this->declaration->get($request->getParameter('hash'));
@@ -153,12 +153,15 @@ class dr_recolteActions extends _DRActions {
             $hash = HashMapper::inverse($produitConfig->getHash());
 
             if (!count($this->noeud->getProduitsDetails())) {
-
+                $request->setParameter('hash', $hash);
+                return $this->executeProduit($request);
                 return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
             }
 
             if($this->declaration->exist($hash) && count($this->declaration->get($hash)->getProduitsDetails())) {
+                $request->setParameter('hash', $hash);
 
+                return $this->executeProduit($request);
                 return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
             }
         }
