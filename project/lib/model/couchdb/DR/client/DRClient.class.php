@@ -49,6 +49,7 @@ class DRClient extends acCouchdbClient {
     $doc->remove('date_depot_mairie');
     if($depot_mairie){
       $doc->add('date_depot_mairie', null);
+      $doc->addEtape('repartition');
     }
     $doc->add('lies_saisis_cepage', 1);
   }
@@ -183,6 +184,7 @@ class DRClient extends acCouchdbClient {
     }
     $doc->utilisateurs->edition->add('csv', date('d/m/Y'));
     $doc->update();
+
     return $doc;
   }
 
