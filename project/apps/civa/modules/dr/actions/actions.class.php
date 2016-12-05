@@ -37,7 +37,7 @@ class drActions extends _DRActions {
         } elseif ($dr_data['type_declaration'] == 'vierge') {
             $dr = DRClient::getInstance()->createDeclaration($etablissement, $campagne, $this->getUser()->isSimpleOperateur());
             $dr->save();
-            if($dr->etape) {
+            if($dr->exist('etape') && $dr->etape) {
                 return $this->redirectToEtape($dr->etape, $dr);
             }
 
@@ -51,10 +51,10 @@ class drActions extends _DRActions {
             $dr->save();
             $this->getUser()->setFlash('flash_message', $this->getPartial('dr/importMessage', array('acheteurs' => $acheteurs, 'post_message' => true)));
 
-            if($dr->etape) {
+            if($dr->exist('etape') && $dr->etape) {
                 return $this->redirectToEtape($dr->etape, $dr);
             }
-            
+
             return $this->redirectByBoutonsEtapes(array('valider' => 'next'), $dr);
         } elseif ($dr_data['type_declaration'] == 'precedente') {
             $drPrevious = DRClient::getInstance()->find("DR-".$etablissement->getIdentifiant()."-".$dr_data['liste_precedentes_declarations']);
