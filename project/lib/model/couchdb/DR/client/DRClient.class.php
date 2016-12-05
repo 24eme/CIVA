@@ -298,21 +298,21 @@ class DRClient extends acCouchdbClient {
     }
 
     public function getTotauxAgregeByCouleur($totauxByAppellationsRecap, $app_key, $appellation) {
-        if (preg_match('/^PINOTNOIR/', $app_key)) {
-            return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $appellation, 'Rouge ou Rosé');
-        }
-        if(!$appellation->getConfig()->existRendementCouleur()) {
-
-          return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $appellation, 'AOC Alsace Blanc');
-        }
         foreach ($appellation->getLieux() as $lieu) {
-              foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
-                  if (preg_match('/Rouge$/', $couleur_key)) {
-                      $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $couleur, 'Rouge ou Rosé');
-                  } else {
-                      $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $couleur, 'AOC Alsace Blanc');
+            if (preg_match('/^PINOTNOIR/', $app_key)) {
+                $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $lieu, 'Rouge ou Rosé');
+            } else if(!$appellation->getConfig()->existRendementCouleur()) {
+
+                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $lieu, 'AOC Alsace Blanc');
+            } else {
+                  foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
+                      if (preg_match('/Rouge$/', $couleur_key)) {
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $couleur, 'Rouge ou Rosé');
+                      } else {
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $couleur, 'AOC Alsace Blanc');
+                      }
                   }
-              }
+           }
         }
         return $totauxByAppellationsRecap;
     }
