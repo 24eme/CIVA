@@ -436,7 +436,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
               foreach ($mention->getLieux() as $lieu) {
                 if ($lieu->getTotalSuperficie() == 0 && $lieu->getTotalVolume()) {
                     array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_volume_sans_superfice')));
-                } elseif($lieu->getTotalSuperficie() == 0) {
+                } elseif($lieu->getTotalSuperficie() == 0 && ($mention->getConfig()->hasManyLieu() || $mention->getKey() == 'mention')) {
                     array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
                 }
 

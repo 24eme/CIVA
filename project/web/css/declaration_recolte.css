@@ -2193,7 +2193,8 @@ div#migration_compte .contenu_section#infos_traitement {
 
 #recolte_totale #appelations table thead th {
 	font-size: 11px;
-	width: 93px;
+	width: 71px;
+	height: 33px;
 }
 
 #recolte_totale #appelations table thead th#recap_th_COMMUNALE {
@@ -2217,7 +2218,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #recolte_totale #total_general h2 {
-	line-height: 28px;
+	line-height: 38px;
 }
 
 #recolte_totale #total_general ul {
