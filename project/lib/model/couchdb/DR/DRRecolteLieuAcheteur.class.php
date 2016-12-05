@@ -46,10 +46,11 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   }
 
   protected function synchronizeRecolteAcheteur() {
-        $appellation_key = $this->getLieu()->getAppellation()->getKey();
         if($this->getLieu()->getMention()->getKey() != "mention") {
-            $appellation_key = $this->getLieu()->getMention()->getKey();
+            $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getMention()->getKey(), $this->type_acheteur, $this->getCVI());
         }
-        $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($appellation_key, $this->type_acheteur, $this->getCVI());
+
+        $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
+
   }
 }
