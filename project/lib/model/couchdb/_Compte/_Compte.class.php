@@ -17,6 +17,11 @@ abstract class _Compte extends Base_Compte {
         }
     }
 
+    public function getEtablissementOrigineObject() {
+
+        return null;
+    }
+
     /**
      *
      * @param string $mot_de_passe
