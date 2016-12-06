@@ -132,6 +132,7 @@ class EtablissementClient extends acCouchdbClient {
     }
 
     public function findByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        $cvi = $cvi."";
         $rows = EtablissementFindByCviView::getInstance()->findByCvi($cvi);
 
         if (!count($rows)) {
