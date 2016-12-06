@@ -21,7 +21,7 @@ class Db2Tiers2Csv
             if($line[0] != "ETABLISSEMENT") {
                 continue;
             }
-            $etablissements["ETABLISSEMENT-".$line[2]] = $line;
+            $etablissements["ETABLISSEMENT-".str_replace("ETABLISSEMENT-", "", $line[2])] = $line;
         }
 
         return $etablissements;

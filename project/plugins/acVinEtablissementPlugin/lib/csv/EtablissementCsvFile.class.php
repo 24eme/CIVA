@@ -10,7 +10,7 @@ class EtablissementCsvFile extends CompteCsvFile
     const CSV_STATUT = 5;
     const CSV_INTITULE = 6;
     const CSV_NOM = 7;
-    // const CSV_NOM_COURT = 8;
+    const CSV_NOM_COURT = 8;
     const CSV_CVI = 9;
     const CSV_NUM_INTERNE = 10;
     const CSV_SIRET = 11;
@@ -110,6 +110,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 }
                 $e->num_interne = (isset($line[self::CSV_NUM_INTERNE]) && str_replace(" ", "", $line[self::CSV_NUM_INTERNE])) ? str_replace(" ", "", $line[self::CSV_NUM_INTERNE]) : null;
                 $e->no_accises = (isset($line[self::CSV_NO_ACCISES]) && str_replace(" ", "", $line[self::CSV_NO_ACCISES])) ? str_replace(" ", "", $line[self::CSV_NO_ACCISES]) : null;
+                $e->siret = (isset($line[self::CSV_SIRET]) && str_replace(" ", "", $line[self::CSV_SIRET])) ? str_replace(" ", "", $line[self::CSV_SIRET]) : null;
                 $e->carte_pro = (isset($line[self::CSV_CARTE_PRO]) && str_replace(" ", "", $line[self::CSV_CARTE_PRO])) ? str_replace(" ", "", $line[self::CSV_CARTE_PRO]) : null;
                 $e->interpro = 'INTERPRO-declaration';
                 $e->statut = $line[self::CSV_STATUT];
@@ -169,13 +170,13 @@ class EtablissementCsvFile extends CompteCsvFile
 
     public static function export($etablissement) {
 
-        $exploitant = $etablissement->add('exploitant');
+        $exploitant = (isset($etablissement->exploitant)) ? $etablissement->exploitant : new stdClass();
 
         return array(
             "ETABLISSEMENT",
             $etablissement->id_societe,
-            $etablissement->identifiant,
-            str_replace("COMPTE-", "", $etablissement->compte),
+            $etablissement->_id,
+            null,
             $etablissement->famille,
             $etablissement->statut,
             $etablissement->intitule,
@@ -189,31 +190,31 @@ class EtablissementCsvFile extends CompteCsvFile
             null,
             null,
             $etablissement->region,
-            $etablissement->adresse,
+            $etablissement->siege->adresse,
             null,
             null,
-            $etablissement->code_postal,
-            $etablissement->commune,
-            $etablissement->insee,
+            $etablissement->siege->code_postal,
+            $etablissement->siege->commune,
+            isset($etablissement->insee) ? $etablissement->insee : null,
             null,
-            $etablissement->pays,
+            $etablissement->siege->pays,
             $etablissement->declaration_insee,
             $etablissement->declaration_commune,
-            $etablissement->telephone_bureau,
-            $etablissement->telephone_perso,
+            $etablissement->telephone,
+            null,
             null,
             $etablissement->fax,
             $etablissement->email,
             null,
             null,
-            $exploitant->civilite,
-            $exploitant->nom,
-            $exploitant->adresse,
-            $exploitant->code_postal,
-            $exploitant->commune,
+            isset($exploitant->civilite) ? $exploitant->civilite : null,
+            isset($exploitant->nom) ? $exploitant->nom : $etablissement->nom,
+            isset($exploitant->adresse) ? $exploitant->adresse : $etablissement->siege->adresse,
+            isset($exploitant->code_postal) ? $exploitant->code_postal : $etablissement->siege->code_postal,
+            isset($exploitant->commune) ? $exploitant->commune : $etablissement->siege->commune,
             "FR",
-            $exploitant->telephone,
-            $exploitant->date_naissance,
+            isset($exploitant->telephone) ? $exploitant->telephone : $etablissement->telephone,
+            isset($exploitant->date_naissance) ? $exploitant->date_naissance : null,
         );
     }
 
