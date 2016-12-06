@@ -17,7 +17,7 @@ class globalActions extends sfActions {
     public function executeMessageAjax(sfWebRequest $request) {
         $this->forward404Unless($request->isXmlHttpRequest());
         return $this->renderText(json_encode(array('titre' => $request->getParameter('title', null),
-						   'url_doc' => $request->getParameter('url_doc', '/telecharger_la_notice'),
+						   'url_doc' => $request->getParameter('url_doc', $this->generateUrl('dr_telecharger_la_notice')),
                 'message' => acCouchdbManager::getClient('Messages')->getMessage($request->getParameter('id', null)))));
 
     }
