@@ -6,6 +6,7 @@
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
+        <th>N°DB2</th>
         <th>Famille</th>
         <th>Statut</th>
         <th>Intitulé</th>
@@ -26,6 +27,7 @@
         <th>Exploitant Code Postal</th>
         <th>Exploitant Commune</th>
         <th>Exploitant Téléphone</th>
+        <th>Exploitant Date de naissance</th>
     </tr>
     </thead>
     <tbody>

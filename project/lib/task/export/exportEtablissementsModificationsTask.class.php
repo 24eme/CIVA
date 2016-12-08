@@ -25,30 +25,13 @@ class ExportEtablissemenstModificationsTask extends sfBaseTask
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        $tiersCsv = new Db2Tiers2Csv(sfConfig::get('sf_root_dir')."/data/import/Tiers/Tiers-last");
-        $etablissementsDb2 = $tiersCsv->getEtablissements();
-        $etablissementsCouchdb = array();
-        $results = EtablissementClient::getInstance()->startkey(array("INTERPRO-declaration", "ACTIF"))
-                            ->endkey(array("INTERPRO-declaration","ACTIF", array()))
-                            ->reduce(false)
-                            ->getView('etablissement', 'all');
-        foreach($results->rows as $row) {
-            $etablissement = EtablissementClient::getInstance()->find($row->id);
-            if($etablissement->getFamille() == "COURTIER") {
-                continue;
-            }
-            $etablissementsCouchdb[$row->id] = EtablissementCsvFile::export($etablissement);
-            if(isset($etablissementsDb2[$row->id])) {
-                $etablissementsCouchdb[$row->id][5] = $etablissementsDb2[$row->id][5];
-            }
-        }
+        $etablissementDiff = new EtablissementsDiff();
+        $etablissementsDb2 = $etablissementDiff->getEtablissementsDb2();
+        $etablissementsCouchdb = $etablissementDiff->getEtablissementsCouchdb();
+        $keysIgnored = $etablissementDiff->getKeyIgnored();
+        $diff = $etablissementDiff->getDiff();
 
-        echo "Identifiant;Famille;Statut;Numéro Tiers;Intitulé;Raison sociale;CVI;CIVABA;SIRET;Accises;Carte pro;Adresse;Code postal;Commune;INSEE;Pays;Déclaration Insee;Déclaration Commune;Téléphone Bureau;Téléphone Perso;Fax;Email;Exploitant Civilité;Exploitant Nom;Exploitant Adresse;Exploitant Code postal;Exploitant Commune;Exploitant Pays;Exploitant Télephone\n";
-
-
-        $diff = array_diff_assoc_recursive($etablissementsDb2, $etablissementsCouchdb);
-
-        $keysIgnored = array(0,1);
+        echo "N° DB2;Famille;Statut;Intitulé;Raison sociale;CVI;CIVABA;SIRET;Accises;Adresse;Code postal;Commune;Téléphone;Fax;Email;Exploitant Civilité;Exploitant Nom;Exploitant Adresse;Exploitant Code postal;Exploitant Commune;Exploitant Télephone;Exploitant date de naissance\n";
 
         foreach($diff as $id => $null) {
             $line = "";
@@ -70,22 +53,4 @@ class ExportEtablissemenstModificationsTask extends sfBaseTask
             echo $line."\n";
         }
     }
-}
-
-function array_diff_assoc_recursive($array1, $array2) {
-    $difference=array();
-    foreach($array1 as $key => $value) {
-        if( is_array($value) ) {
-            if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
-                $difference[$key] = $value;
-            } else {
-                $new_diff = array_diff_assoc_recursive($value, $array2[$key]);
-                if( !empty($new_diff) )
-                    $difference[$key] = $new_diff;
-            }
-        } else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
-            $difference[$key] = $value;
-        }
-    }
-    return $difference;
 }

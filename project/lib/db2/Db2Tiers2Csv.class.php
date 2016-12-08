@@ -435,7 +435,7 @@ class Db2Tiers2Csv
             "ETABLISSEMENT",
             $societe,
             "ETABLISSEMENT-".$identifiantEtablissement,
-            null,
+            $this->getInfos($tiers, Db2Tiers::COL_NUM),
             $famille,
             $statut,
             $this->getInfos($tiers, Db2Tiers::COL_INTITULE),

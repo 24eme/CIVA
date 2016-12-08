@@ -5,7 +5,7 @@ class EtablissementCsvFile extends CompteCsvFile
     const CSV_TYPE = 0;
     const CSV_ID_SOCIETE = 1;
     const CSV_ID = 2;
-    const CSV_ID_COMPTE = 3;
+    const CSV_NUM_REPRISE = 3;
     const CSV_FAMILLE = 4;
     const CSV_STATUT = 5;
     const CSV_INTITULE = 6;
