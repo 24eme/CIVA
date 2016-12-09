@@ -35,7 +35,7 @@ EOF;
   {
     set_time_limit('240');
     ini_set('memory_limit', '512M');
-    
+
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
@@ -47,23 +47,26 @@ EOF;
 		    				->endkey(array($arguments['campagne'], array()))
 						->getView("DR", "non_validees");
 	    foreach ($drs->rows as $item) {
+            $dr = DRClient::getInstance()->find($item->id);
+            if($dr->exist('date_depot_mairie')) {
+                continue;
+            }
 		$cvi = $item->key[1];
 
 	    	$this->logSection('cvi', $cvi);
-	    	
-	    	$compte = acCouchdbManager::getClient()->find('COMPTE-'.$cvi);
-        $rec = acCouchdbManager::getClient()->find('REC-'.$cvi);
-	    	echo sprintf("%s;%s;%s\n", $rec->cvi, $rec->nom, $rec->categorie);
+
+        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$cvi);
+	    	echo sprintf("%s;%s;%s\n", $etablissement->cvi, $etablissement->nom, $etablissement->famille);
         $nb_item++;
-            if(!$compte->getEmail()) {
+            if(!$etablissement->getEmailTeledeclaration()) {
                 $this->logSection('no email', $cvi, null, 'ERROR');
                 continue;
             }
-            
+
             try {
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
-                      ->setTo($compte->getEmail())
+                      ->setTo($etablissement->getEmailTeledeclaration())
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);
@@ -71,16 +74,16 @@ EOF;
             } catch (Exception $exc) {
                 $sended = false;
             }
-            
+
             if ($sended) {
                 $nb_email_send++;
                 sleep(1);
-                $this->logSection('sended', $cvi . ' : ' . $compte->getEmail());
+                $this->logSection('sended', $cvi . ' : ' . $etablissement->getEmailTeledeclaration());
             } else {
-                $this->logSection('send error', $cvi . ' : ' . $compte->getEmail(), null, 'ERROR');
+                $this->logSection('send error', $cvi . ' : ' . $etablissement->getEmailTeledeclaration(), null, 'ERROR');
             }
-            
-            
+
+
 	    }
 	    $this->logSection('Emails have been sended', sprintf('%d / %d envoyés', $nb_email_send,  $nb_item));
     }
@@ -89,9 +92,9 @@ EOF;
   protected function getMessageBody($compte, $campagne) {
       return "Bonjour,
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l’avez pas encore validée.
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l'avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider avant demain soir minuit.
+Nous vous rappelons que vous devez impérativement la valider avant samedi soir minuit.
 
 Cordialement,
 
