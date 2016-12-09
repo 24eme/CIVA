@@ -618,7 +618,7 @@ Le CIVA';*/
         $dr->add('autorisations')->add(DRClient::AUTORISATION_AVA, 1);
         $dr->save();
 
-        return $this->redirect('declaration_transmission', array("url" => $this->url, "id" => $this->id));
+        return $this->redirect('dr_transmission', array("url" => $this->url, "id" => $this->id));
     }
 
     public function executeTransmissionAva(sfWebRequest $request) {
