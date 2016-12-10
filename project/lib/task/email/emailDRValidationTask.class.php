@@ -67,7 +67,7 @@ EOF;
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($etablissement->getEmailTeledeclaration())
-                      ->setSubject('RAPPEL DR '.$arguments['campagne'])
+                      ->setSubject('DERNIER RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
@@ -94,7 +94,7 @@ EOF;
 
 Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l'avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider avant samedi soir minuit.
+Nous vous rappelons que vous devez impérativement la valider avant ce soir soir minuit.
 
 Cordialement,
 
