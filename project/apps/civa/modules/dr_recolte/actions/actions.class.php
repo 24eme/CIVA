@@ -233,6 +233,14 @@ class dr_recolteActions extends _DRActions {
             $noeud = $noeud->getParent();
         }
         foreach($appellations as $appellation) {
+            if($found && $sens == "suivant") {
+
+                return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $appellation['hash']));
+            }
+            if($found && $precedent && $sens == "precedent") {
+
+                return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
+            }
             foreach($appellation["noeuds"] as $mention) {
                 if($found && $sens == "suivant") {
 
@@ -240,14 +248,11 @@ class dr_recolteActions extends _DRActions {
                 }
                 if($mention->getHash() == $noeud->getHash()) {
                     $found = true;
+                    break;
                 }
-                if($found && $precedent && $sens == "precedent") {
-
-                    return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
-                }
-                if(!$precedentLock && !$found) {
-                    $precedent = $mention->getHash();
-                }
+            }
+            if(!$precedentLock && !$found) {
+                $precedent =  $appellation['hash'];
             }
         }
 
