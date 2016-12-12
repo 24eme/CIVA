@@ -512,7 +512,7 @@ class drActions extends _DRActions {
             $dr->save();
         }
 
-        $this->redirectToNextEtapes($dr);
+        return $this->redirectToEtape($dr->etape, $dr);
     }
 
     public function executeInvaliderRecoltant(sfWebRequest $request) {
