@@ -13,6 +13,11 @@
             }
         }
 
+        public function isAutorized($etapeCourante, $etapeCheck) {
+
+            return array_search($etapeCourante, $this->_orders) >= array_search($etapeCheck, $this->_orders);
+        }
+
         public function setCurrentEtape($current_etape) {
             $key = array_search($current_etape, $this->_orders);
             if ($key !== false) {
