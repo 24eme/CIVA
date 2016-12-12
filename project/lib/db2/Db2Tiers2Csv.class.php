@@ -442,7 +442,7 @@ class Db2Tiers2Csv
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
             $this->getInfos($tiers, Db2Tiers::COL_CVI),
-            $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
+            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_NUM)  : $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
             $this->getInfos($tiers, Db2Tiers::COL_SIRET),
             $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES),
             ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null,
