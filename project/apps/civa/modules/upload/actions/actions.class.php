@@ -102,7 +102,7 @@ class uploadActions extends sfActions {
                 $this->errors[$cpt - 1][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
             }
             if ($this->shouldHaveSuperficieTotal($line)) {
-                $this->errors[$cpt - 1][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
+                //$this->errors[$cpt - 1][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
             }
             if ($this->errorOnCVIAcheteur($line)) {
                 $this->errors[$cpt][] = 'Le CVI de la colonne acheteur ne correspond pas à celui de l\'utilisateur connecté';
@@ -154,7 +154,7 @@ class uploadActions extends sfActions {
             $this->errors[$cpt][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
         }
         if ($this->shouldHaveSuperficieTotal(false)) {
-            $this->errors[$cpt][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
+            //$this->errors[$cpt][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
         }
 
         $this->recap = new stdClass();
