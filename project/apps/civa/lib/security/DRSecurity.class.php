@@ -49,7 +49,7 @@ class DRSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::EDITION, $droits) && !DRClient::getInstance()->isTeledeclarationOuverte() && (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) || !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR))) {
+        if(in_array(self::EDITION, $droits) && !DRClient::getInstance()->isTeledeclarationOuverte() && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
 
             return false;
         }
