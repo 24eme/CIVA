@@ -45,7 +45,7 @@ class ExportEtablissemenstModificationsTask extends sfBaseTask
                 $isDiff = (trim($etablissementDb2[$key]) != trim($etablissementCouchdb[$key]));
                 $field = $etablissementCouchdb[$key];
                 if($isDiff) {
-                    $field = "*" . $field . " (".$etablissementDb2[$key].")";
+                    $field = "*" . str_replace("\n", " ", $field) . " (".str_replace("\n", " ", $etablissementDb2[$key]).")";
                 }
                 $line .= '"'.$field.'";';
             }
