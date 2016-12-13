@@ -23,6 +23,26 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
         return $this->getConfig()->filter('^appellation_');
     }
 
+    public function cleanAllNodes() {
+        $mentionsKey = array("mentionVT" => "mentionVT", "mentionSGN" => "mentionSGN");
+        foreach($this->getChildrenNode() as $appellation) {
+            foreach($appellation->getChildrenNode() as $mention) {
+                if(isset($mentionsKey[$mention->getKey()]) && count($mention->getProduitsDetails())) {
+                    unset($mentionsKey[$mention->getKey()]);
+                }
+            }
+            if(!count($appellation->getProduitsDetails())){
+                $this->getDocument()->acheteurs->certification->genre->remove($appellation->getKey());
+            }
+        }
+
+        foreach($mentionsKey as $mentionKey) {
+            $this->getDocument()->acheteurs->certification->genre->remove($mentionKey);
+        }
+
+        parent::cleanAllNodes();
+    }
+
     /*
      * @return boolean
      */
