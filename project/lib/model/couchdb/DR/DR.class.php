@@ -257,7 +257,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return DRClient::VALIDEE_PAR_AUTO;
         }
 
-        $compte = _CompteClient::getInstance()->find($compte_id);
+        $compte = CompteClient::getInstance()->find($compte_id);
+
+        if(!$compte) {
+            $compte = _CompteClient::getInstance()->find($compte_id);
+        }
 
         if(!$compte) {
 
@@ -266,10 +270,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $compte_dr = $this->getEtablissementObject()->getMasterCompte();
 
-        /*if($compte->isOperateur()) {
+        if($compte instanceof _Compte && $compte->isOperateur()) {
 
             return DRClient::VALIDEE_PAR_CIVA;
-        }*/
+        }
 
         if($compte instanceof Compte && $compte->getSociete()->_id != $compte_dr->getSociete()->_id) {
 

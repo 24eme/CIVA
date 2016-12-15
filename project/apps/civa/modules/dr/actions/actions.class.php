@@ -402,7 +402,6 @@ class drActions extends _DRActions {
             if(count($autorisations) > 0) {
                 $this->dr->add('autorisations', $autorisations);
             }
-
             $this->dr->validate($this->validation_date, $this->validation_compte_id);
             if(!$this->dr->hasDateDepotMairie()) {
                 $this->dr->add('en_attente_envoi', true);
