@@ -77,50 +77,54 @@ EOF;
 
                     continue;
                 }
-
-                foreach($appellation->mention as $lieu_key => $lieu) {
-                    if (!preg_match("/^lieu/", $lieu_key)) {
+                foreach($appellation as $mention_key => $mention) {
+                    if (!preg_match("/^mention/", $mention_key)) {
 
                         continue;
                     }
-
-                    if(!array_key_exists($appellation_key, $stats[$insee]['appellations'])) {
-                        $stats[$insee]['appellations'][$appellation_key]['superficie'] = 0;
-                        $stats[$insee]['appellations'][$appellation_key]['volume'] = 0;
-                        $stats[$insee]['appellations'][$appellation_key]['volume_revendique'] = 0;
-                        $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] = 0;
-                        $stats[$insee]['appellations'][$appellation_key]['cepages'] = array();
-                    }
-
-                    $stats[$insee]['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
-                    $stats[$insee]['volume_revendique'] += $lieu->volume_revendique;
-                    $stats[$insee]['usages_industriels'] += $lieu->usages_industriels;
-
-                    foreach($lieu as $couleur_key => $couleur) {
-                        if (!preg_match("/^couleur/", $couleur_key)) {
+                    foreach($mention as $lieu_key => $lieu) {
+                        if (!preg_match("/^lieu/", $lieu_key)) {
 
                             continue;
                         }
 
-                        foreach($couleur as $cepage_key => $cepage) {
-                            if (!preg_match("/^cepage/", $cepage_key)) {
+                        if(!array_key_exists($appellation_key, $stats[$insee]['appellations'])) {
+                            $stats[$insee]['appellations'][$appellation_key]['superficie'] = 0;
+                            $stats[$insee]['appellations'][$appellation_key]['volume'] = 0;
+                            $stats[$insee]['appellations'][$appellation_key]['volume_revendique'] = 0;
+                            $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] = 0;
+                            $stats[$insee]['appellations'][$appellation_key]['cepages'] = array();
+                        }
+
+                        $stats[$insee]['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
+                        $stats[$insee]['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
+                        $stats[$insee]['volume_revendique'] += $lieu->volume_revendique;
+                        $stats[$insee]['usages_industriels'] += $lieu->usages_industriels;
+
+                        foreach($lieu as $couleur_key => $couleur) {
+                            if (!preg_match("/^couleur/", $couleur_key)) {
 
                                 continue;
                             }
 
+                            foreach($couleur as $cepage_key => $cepage) {
+                                if (!preg_match("/^cepage/", $cepage_key)) {
 
-                            if(!array_key_exists($cepage_key, $stats[$insee]['appellations'][$appellation_key]['cepages'])) {
-                                $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
-                                $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
+                                    continue;
+                                }
+
+
+                                if(!array_key_exists($cepage_key, $stats[$insee]['appellations'][$appellation_key]['cepages'])) {
+                                    $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
+                                    $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
+                                }
+
+                                $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
+                                $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
                             }
-
-                            $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
-                            $stats[$insee]['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
                         }
                     }
                 }
-
                 $stats[$insee]['appellations'][$appellation_key]['superficie'] += $appellation->total_superficie;
                 $stats[$insee]['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
                 $stats[$insee]['superficie'] += $appellation->total_superficie;
