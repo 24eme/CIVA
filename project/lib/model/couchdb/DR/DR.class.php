@@ -81,7 +81,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      */
     public function removeVolumes() {
         $this->lies = null;
-        $this->recolte->certification->genre->removeVolumes();
+        if($this->exist('recolte/certification/genre')) {
+            $this->recolte->certification->genre->removeVolumes();
+        }
     }
 
     public function getProduits() {
