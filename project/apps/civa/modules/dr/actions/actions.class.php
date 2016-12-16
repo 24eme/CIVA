@@ -403,7 +403,7 @@ class drActions extends _DRActions {
                 $this->dr->add('autorisations', $autorisations);
             }
             $this->dr->validate($this->validation_date, $this->validation_compte_id);
-            if(!$this->dr->hasDateDepotMairie()) {
+            if(!$this->dr->hasDateDepotMairie() && $this->dr->modifiee_par != DRClient::VALIDEE_PAR_CIVA) {
                 $this->dr->add('en_attente_envoi', true);
             }
 
