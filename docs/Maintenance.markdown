@@ -6,120 +6,23 @@ Tiers
 
 ### Export des modifications de tiers
 
-L'export des modifications permet au CIVA de mettre à jour leur base DB2
+ > php symfony export:etablissements-modifications
 
-Elle survient la plupart du temps juste avant que le CIVA nous fournisse le fichier TIERS à importer
+### Mise à jour des tiers depuis DB2
 
-Le dernier numéro de séquence se trouve dans ce fichier :
+Concaténation et conversion en utf8 des fichiers db2 des actifs et cloturés  
 
- > cat data/export/tiers/tiers_modifications.num_sequence
+ > bash bin/build_tiers_file_from_db2.sh /path/to/DB2_TIERS_ACTIF /path/to/DB2_TIERS_CLOTURE
 
-Export des modifications depuis le dernier numéro de séquence :
+Transformation du fichier db2 en un csv contenant les sociétés, établissements et comptes
 
- > php symfony export:tiers-modifications-csv [numero_sequence] # Pour tester
- 
- > php symfony export:tiers-modifications-csv [numero_sequence] --flag_revision=true > /tmp/tiers-modifications.csv # Renvoi le csv et flague les révisions
+ > php symfony tiers:db2-csv data/import/Tiers/Tiers-last > /tmp/tiers.csv
 
-Stocker le numéro de séquence courant pour exporter les modifications la prochaine fois :
+Import du csv
 
- > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
-
-### Désactivation des Tiers inactifs
-
-La désactivation des tiers inactifs se fait depuis un fichier TIERS ne contenant que les tiers inactifs.
-
-#### 1. Désactivation des Tiers inactifs
-
-> php symfony tiers:desactivation path_to_fichier_db2
-
-#### 2. Mise à jour des comptes
-
-Il faut ensuite mettre à jour les comptes : se référer au chapitre "Mise à jour des comptes".
-
-### Migration de CVI
-
-/!\ La migration de CVI doit toujours être effectuer avant l'import du fichier TIERS
-
-Le tableau que le CIVA est de la forme suivante : 
-
-Ancien CVI  Nouveau CVI	 Nom         Prénom	 Commune    Récup. Histo DR	   Récup MDP si Cpt créé
-6837400440	6837400011	 BRAUNEISEN  Eric	 TURCKHEIM	OUI	        	   OUI
-
-Pour chacune des migrations, lancer la commande suivante :
-
- > php symfony compte:migration [cvi_actuelle] [nouveau_cvi] [nom_recoltant] [commune]
-
-Juste pour comprendre, cette tâche effectue les actions suivantes :
-
-1. Duplique le document 'REC-[CVI]' en 'REC-[NOUVEAU_CVI]' + mise à jour du nom et de la commune
-2. Duplique le compte 'COMPTE-[CVI]' en 'COMPTE-[NOUVEAU_CVI]' + mise à jour des tiers du nom et de la commune
-3. Crée un document lien symbolique avec le nouveau CVI de chacune des DRs du cvi actuel 
-
-Si le champs "Récup. Histo DR" est à "NON", il faut supprimer dans couchdb toutes les DRs du nouveau_cvi.
-
-Si le champs "Récup MDP" est à "NON" :
-1. Rechercher le document COMPTE-[nouveau_cvi] sur couchdb
-2. Changer le champ 'mot_de_passe' et lui attribuer la valeur '{TEXT}0000' où "0000" doit être remplacer par un nombre inventé.
-3. Changer le champ 'statut' à 'NOUVEAU'
-
-### Création et Mise à jour des tiers depuis DB2
-
-Cette procédure est valable pour la création et la mise à jour des tiers Récolatant et Metteur en marché
-
-Ainsi que la mise à jour (et pas la création) des acheteurs.
-
-L'import se fait en 2 ou 3 étapes.
-
-#### 1. Import des tiers
-
-Le fichier n'a pas besoin d'être complet, ce qui permet des ajouts ponctuels.
-
- > php symfony import:Tiers path_to_fichier_db2
-
-Ce n'est pas indispensable, mais l'usage est de stocker le fichier TIERS dans le projet : 
-
-* Pour un fichier complet : data/import/Tiers/Tiers-YYYYMMDD
-* Pour un fichier partiel : data/import/Tiers/maj/Tiers-maj-YYYYMMDD
-
-**Logs de sortie**
-
- > INFO;CREATION;...
-
- > INFO;MODIFICATION;...
-
-Rien de particulier à relever ce n'est qu'informatif.
-
-#### 2. Mise à jour des comptes
-
-Il faut ensuite mettre à jour les comptes : se référer au chapitre "Mise à jour des comptes".
-
-#### 3. Flaguer le numéro de séquence 
-
-Enfin dans le cas d'un import complet uniquement, il convient de stocker le numéro de séquence afin de pouvoir exporter les modifications pour la prochaine fois.
-
-Stocker le numéro de séquence courant :
-
- > curl -s -X GET "http://localhost:5984/civa_prod" | grep -Eo '"update_seq":[0-9]+,' | sed 's/"update_seq"://' | sed 's/,//' > data/export/tiers/tiers_modifications.num_sequence
-
-### Mise à jour des comptes
-
- > php symfony compte:update
-
-**Logs de sortie**
-
- > INFO;Création du compte;...
-
- > INFO;Modification du compte;...
-
- > INFO;Tiers mis à jour;...
-
- > INFO;Le compte a été activé;...
-
- > INFO;Le compte a été désactivé;...
-
- > INFO;Inscrit ne possédant pas d'email;... #Ce n'est pas grave, Dominique a déjà été mis au courant le problème se resolvera humainement
-
-Rien de particulier à relever ce n'est qu'informatif.
+ > php symfony societe:import-csv /tmp/tiers.csv
+ > php symfony etablissement:import-csv /tmp/tiers.csv
+ > php symfony compte:import-csv /tmp/tiers.csv
 
 DR
 --
@@ -196,7 +99,7 @@ Le fichier se génére dans data/export/dr/xml/DR-[campagne]-Civa.xml
 
 ##### Export CSV des compléments d'usages industriels pour les Grands Crus
 
-Dans les XML Douane et Civa ne figurent pas les colonnes totaux des Grands Crus, on perd donc les lies saisies. 
+Dans les XML Douane et Civa ne figurent pas les colonnes totaux des Grands Crus, on perd donc les lies saisies.
 
 Cet export permet de compléter les usages industriels des Grands Crus dans les fichiers XML.
 
@@ -204,7 +107,7 @@ Cet export permet de compléter les usages industriels des Grands Crus dans les 
 
 ##### Debugguer le XML
 
-L'export XML Civa et Douane se fait dans la même classe ExportDRXml.class.php. 
+L'export XML Civa et Douane se fait dans la même classe ExportDRXml.class.php.
 
 Chacun des deux XML a des particularités et des aggrégas différents.
 
@@ -242,23 +145,9 @@ Pour débugguer, il existe une tache qui permet de sortir le XML d'une seule DR 
 
  > php symfony dr:stats-recolte-mairie [campagne]
 
-#### Export des Ventes
-
-##### Ventes de raisins
-
- > bash bin/export_drs_ventes_raisins.sh [campagne]
-
-##### Ventes de moûts
-
- > bash bin/export_drs_ventes_mouts.sh [campagne]
-
-#### Export des superficie de jeunes vignes
-
- > bash bin/export_drs_jeunes_vignes.sh [campagne]
-
 ### Générer les DRs automatiques
 
-php symfony DR:creationFromAcheteur --year=[campagne] [--dry-run=true]
+php symfony DR:creationFromAcheteur --year=[campagne] [--dryrun=true]
 
 ### Exporter csv des DR concernant un acheteur
 
@@ -276,7 +165,7 @@ Contrat Vrac
 * date_end : optionnel, export des contrat jusqu'à date_end (format: AAAA-MM-DD)
 
 Si l'option date_end n'est pas spécifiée, elle sera à égale à la date d'hier (date du jour - 1 jour).
-date_begin, doit correspondre à la date du dernier export fait, ex.: 
+date_begin, doit correspondre à la date du dernier export fait, ex.:
 
 si un export à été fait le 01/01/2014 alors le prochain export par exemple le 10/01/2014 doit ressembler à :
 
