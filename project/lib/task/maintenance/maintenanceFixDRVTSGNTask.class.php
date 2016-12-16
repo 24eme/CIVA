@@ -38,23 +38,25 @@ EOF;
 
     if(!$dr) {
         echo "ERROR;Document introuvable;".$arguments['doc_id']."\n";
+        return;
     }
 
     $mentions = array();
 
     foreach($dr->recolte->getProduitsDetails() as $detail) {
+        $mentionKey = $detail->getCepage()->getMention()->getKey();
         if($detail->getCepage()->getMention()->getKey() == "mention") {
-            continue;
+            $mentionKey = $detail->getCepage()->getAppellation()->getKey();
         }
 
-        if(!isset($mentions[$detail->getCepage()->getMention()->getKey()])) {
-            $mentions[$detail->getCepage()->getMention()->getKey()] = array("negoces" => array(), "cooperatives" => array(), "mouts" => array(), "cave_particuliere" => null);
+        if(!isset($mentions[$mentionKey])) {
+            $mentions[$mentionKey] = array("negoces" => array(), "cooperatives" => array(), "mouts" => array(), "cave_particuliere" => null);
         }
 
         if($detail->cave_particuliere) {
-            $mentions[$detail->getCepage()->getMention()->getKey()]["cave_particuliere"] = 1;
+            $mentions[$mentionKey]["cave_particuliere"] = 1;
         }
-        foreach($mentions[$detail->getCepage()->getMention()->getKey()] as $keyAcheteur => $acheteur) {
+        foreach($mentions[$mentionKey] as $keyAcheteur => $acheteur) {
             if(!is_array($acheteur) || !$detail->exist($keyAcheteur)) {
                 continue;
             }
@@ -62,9 +64,13 @@ EOF;
                 if(!$achat->quantite_vendue) {
                     continue;
                 }
-                $mentions[$detail->getCepage()->getMention()->getKey()][$keyAcheteur][] = $achat->cvi;
-                array_unique($mentions[$detail->getCepage()->getMention()->getKey()][$keyAcheteur]);
+                $mentions[$mentionKey][$keyAcheteur][] = $achat->cvi;
+                $mentions[$mentionKey][$keyAcheteur] = array_unique($mentions[$mentionKey][$keyAcheteur]);
             }
+        }
+
+        if($mentionKey == "mentionVT" || $mentionKey == "mentionSGN") {
+            $mentions[$detail->getCepage()->getAppellation()->getKey()] = $mentions[$mentionKey];
         }
     }
 
@@ -72,8 +78,8 @@ EOF;
     foreach($mentions as $mentionKey => $acheteur) {
         if(!$dr->acheteurs->certification->genre->exist($mentionKey)) {
             $dr->acheteurs->certification->genre->add($mentionKey, $acheteur);
-            print_r($acheteur);
             $modif = true;
+            print_r($acheteur);
             echo $mentionKey.";".$arguments['doc_id']."\n";
         }
     }
