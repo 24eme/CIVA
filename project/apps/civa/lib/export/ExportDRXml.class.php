@@ -53,304 +53,314 @@ class ExportDRXml {
                 continue;
             }
             $appellation = $dr->get(HashMapper::inverse($appellationConfig->getHash()));
-            foreach ($appellationConfig->getLieux() as $lieuConfig) {
-                if (!$dr->exist(HashMapper::inverse($lieuConfig->getHash()))) {
+            foreach ($appellationConfig->getMentions() as $mentionConfig) {
+                if (!$dr->exist(HashMapper::inverse($mentionConfig->getHash()))) {
                     continue;
                 }
-                $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
+                $mention = $dr->get(HashMapper::inverse($mentionConfig->getHash()));
 
-                foreach($lieuConfig->getCouleurs() as $couleurConfig) {
-                    if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
+                foreach ($mentionConfig->getLieux() as $lieuConfig) {
+
+                    if (!$dr->exist(HashMapper::inverse($lieuConfig->getHash()))) {
                         continue;
                     }
-                    $couleur = $dr->get(HashMapper::inverse($couleurConfig->getHash()));
+                    $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
 
-                    $object = $lieu;
-                    if ($lieuConfig->hasManyCouleur()) {
-                        $object = $couleur;
-                    }
-
-                    if($this->destinataire == self::DEST_DOUANE) {
-                        if($appellation->getKey() == 'appellation_CREMANT') {
-                            $col_total_cremant_blanc = null;
-                            $col_total_cremant_rose = null;
+                    foreach($lieuConfig->getCouleurs() as $couleurConfig) {
+                        if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
+                            continue;
                         }
-                    }
+                        $couleur = $dr->get(HashMapper::inverse($couleurConfig->getHash()));
 
-                    $volume_revendique = $object->getVolumeRevendique();
-                    $usages_industriels = $object->getUsagesIndustriels();
+                        $object = $lieu;
+                        if ($lieuConfig->hasManyCouleur()) {
+                            $object = $couleur;
+                        }
 
-                    //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
-                    $acheteurs = array();
-                    $total = array();
+                        if($this->destinataire == self::DEST_DOUANE) {
+                            if($appellation->getKey() == 'appellation_CREMANT') {
+                                $col_total_cremant_blanc = null;
+                                $col_total_cremant_rose = null;
+                            }
+                        }
 
-                    $total['L1'] = $this->getCodeDouane($object);
-                    $total['L3'] = 'B';
-                    $total['L4'] = $object->getTotalSuperficie();
-                    $total['exploitant'] = array();
-                    $total['exploitant']['L5'] = $object->getTotalVolume();
+                        $volume_revendique = $object->getVolumeRevendique();
+                        $usages_industriels = $object->getUsagesIndustriels();
 
-                    $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
-                    $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
-                    $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
-                    $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
-                    $total['exploitant']['L10'] = $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
-                    $total['exploitant']['L11'] = 0; //HS
-                    $total['exploitant']['L12'] = 0; //HS
-                    $total['exploitant']['L13'] = 0; //HS
-                    $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                    $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
-                    if ($l15 < 0) {
-                        $l15 = 0;
-                    }
-                    $total['exploitant']['L15'] = $l15; //Volume revendique
-                    // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                    $total['exploitant']['L16'] = $usages_industriels; //DPLC
-                    $total['exploitant']['L17'] = 0; //HS
-                    $total['exploitant']['L18'] = 0; //HS
-                    $total['exploitant']['L19'] = 0; //HS
+                        //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
+                        $acheteurs = array();
+                        $total = array();
 
-                    $colass = null;
+                        $total['L1'] = $this->getCodeDouane($object);
+                        $total['L3'] = 'B';
+                        $total['L4'] = $object->getTotalSuperficie();
+                        $total['exploitant'] = array();
+                        $total['exploitant']['L5'] = $object->getTotalVolume();
 
-                    if ($this->destinataire == self::DEST_DOUANE &&
-                        count($couleurConfig->getCepages()) == 1 &&
-                        count($couleur->getCepages()) == 1 /*&&
-                    !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
-                        $cepage = $couleur->getCepages()->getFirst();
-                        //$total['mentionVal'] = '';
-                        foreach ($cepage->detail as $detail) {
-                            if(count($cepage->detail) == 1) {
-                                $detail = $cepage->detail[0];
-                                if ($appellationConfig->hasLieuEditable()) {
-                                    //$total['mentionVal'] = $detail->lieu;
-                                } else {
-                                    //$total['mentionVal'] = $detail->denomination;
-                                }
-                                if (!($object->getTotalVolume() > 0)) {
-                                    if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
-                                        $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                    } elseif(!isset($total['motifSurfZero'])) {
-                                        $total['motifSurfZero'] = 'PC';
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
+                        $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
+                        $total['exploitant']['L10'] = $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        $total['exploitant']['L11'] = 0; //HS
+                        $total['exploitant']['L12'] = 0; //HS
+                        $total['exploitant']['L13'] = 0; //HS
+                        $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                        $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+                        if ($l15 < 0) {
+                            $l15 = 0;
+                        }
+                        $total['exploitant']['L15'] = $l15; //Volume revendique
+                        // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
+                        $total['exploitant']['L16'] = $usages_industriels; //DPLC
+                        $total['exploitant']['L17'] = 0; //HS
+                        $total['exploitant']['L18'] = 0; //HS
+                        $total['exploitant']['L19'] = 0; //HS
+
+                        $colass = null;
+
+                        if ($this->destinataire == self::DEST_DOUANE &&
+                            count($couleurConfig->getCepages()) == 1 &&
+                            count($couleur->getCepages()) == 1 /*&&
+                        !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
+                            $cepage = $couleur->getCepages()->getFirst();
+                            //$total['mentionVal'] = '';
+                            foreach ($cepage->detail as $detail) {
+                                if(count($cepage->detail) == 1) {
+                                    $detail = $cepage->detail[0];
+                                    if ($appellationConfig->hasLieuEditable()) {
+                                        //$total['mentionVal'] = $detail->lieu;
+                                    } else {
+                                        //$total['mentionVal'] = $detail->denomination;
+                                    }
+                                    if (!($object->getTotalVolume() > 0)) {
+                                        if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
+                                            $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                        } elseif(!isset($total['motifSurfZero'])) {
+                                            $total['motifSurfZero'] = 'PC';
+                                        }
                                     }
                                 }
                             }
-                        }
-                    } else {
-                        foreach ($couleurConfig->getCepages() as $cepageConfig) {
-                            if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
-                                continue;
-                            }
-                            $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
-
-                            if($this->destinataire == self::DEST_DOUANE) {
-                                if (in_array($appellation->getKey(), array('appellation_ALSACEBLANC', 'appellation_LIEUDIT')) && $cepage->getKey() == 'cepage_ED') {
+                        } else {
+                            foreach ($couleurConfig->getCepages() as $cepageConfig) {
+                                if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
                                     continue;
                                 }
-                            }
+                                $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
 
-                            $cols = array();
-                            foreach ($cepage->detail as $detail) {
+                                if($this->destinataire == self::DEST_DOUANE) {
+                                    if (in_array($appellation->getKey(), array('appellation_ALSACEBLANC', 'appellation_LIEUDIT')) && $cepage->getKey() == 'cepage_ED') {
+                                        continue;
+                                    }
+                                }
 
-                                $col = array();
+                                $cols = array();
+                                foreach ($cepage->detail as $detail) {
 
-                                $col['L1'] = $this->getCodeDouane($detail);
+                                    $col = array();
 
-                                // SI PAS D'AUTRE AOC
-                                if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
                                     $col['L1'] = $this->getCodeDouane($detail);
-                                }
 
-                                $col['L3'] = 'B';
-                                if ($appellationConfig->hasLieuEditable()) {
-                                    $col['mentionVal'] = $detail->lieu;
-                                } else {
-                                    $col['mentionVal'] = $detail->denomination;
-                                }
-
-                                $col['L4'] = $detail->superficie;
-
-                                $col['exploitant'] = array();
-                                $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
-
-                                $this->setAcheteursForXml($col['exploitant'], $detail, 'negoces');
-                                $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
-                                $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
-
-                                $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
-                                $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
-                                $col['exploitant']['L11'] = 0; //HS
-                                $col['exploitant']['L12'] = 0; //HS
-                                $col['exploitant']['L13'] = 0; //HS
-                                $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
-                                    $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
-                                    if ($col['exploitant']['L15'] < 0) {
-                                        $col['exploitant']['L15'] = 0;
+                                    // SI PAS D'AUTRE AOC
+                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
+                                        $col['L1'] = $this->getCodeDouane($detail);
                                     }
-                                    $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
-                                } else {
-                                    $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
-                                    if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
-                                        $col['exploitant']['L15'] = 0;
+
+                                    $col['L3'] = 'B';
+                                    if ($appellationConfig->hasLieuEditable()) {
+                                        $col['mentionVal'] = $detail->lieu;
+                                    } else {
+                                        $col['mentionVal'] = $detail->denomination;
                                     }
-                                    $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
-                                }
 
-                                if(is_null($col['exploitant']['L16'])) {
-                                    $col['exploitant']['L16'] = 0;
-                                }
+                                    $col['L4'] = $detail->superficie;
 
-                                $col['exploitant']['L17'] = 0; //HS
-                                $col['exploitant']['L18'] = 0; //HS
-                                $col['exploitant']['L19'] = 0; //HS
+                                    $col['exploitant'] = array();
+                                    $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
 
-                                if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
-                                    $col['exploitant']['L14'] = $detail->volume;
-                                    $col['exploitant']['L15'] = 0;
-                                } elseif($appellation->getKey() == 'appellation_VINTABLE') {
-                                    $l14 = $detail->volume ;
-                                    if ($l14 < 0) {
-                                        $l14 = 0;
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'negoces');
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
+
+                                    $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
+                                    $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                                    $col['exploitant']['L11'] = 0; //HS
+                                    $col['exploitant']['L12'] = 0; //HS
+                                    $col['exploitant']['L13'] = 0; //HS
+                                    $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                                    if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
+                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        if ($col['exploitant']['L15'] < 0) {
+                                            $col['exploitant']['L15'] = 0;
+                                        }
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                    } else {
+                                        $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
+                                            $col['exploitant']['L15'] = 0;
+                                        }
+                                        $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                     }
-                                    $col['exploitant']['L14'] = $l14;
-                                    if ($this->destinataire == self::DEST_CIVA) {
+
+                                    if(is_null($col['exploitant']['L16'])) {
+                                        $col['exploitant']['L16'] = 0;
+                                    }
+
+                                    $col['exploitant']['L17'] = 0; //HS
+                                    $col['exploitant']['L18'] = 0; //HS
+                                    $col['exploitant']['L19'] = 0; //HS
+
+                                    if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                                         $col['exploitant']['L14'] = $detail->volume;
-                                    }
-                                    $col['exploitant']['L15'] = 0;
+                                        $col['exploitant']['L15'] = 0;
+                                    } elseif($appellation->getKey() == 'appellation_VINTABLE') {
+                                        $l14 = $detail->volume ;
+                                        if ($l14 < 0) {
+                                            $l14 = 0;
+                                        }
+                                        $col['exploitant']['L14'] = $l14;
+                                        if ($this->destinataire == self::DEST_CIVA) {
+                                            $col['exploitant']['L14'] = $detail->volume;
+                                        }
+                                        $col['exploitant']['L15'] = 0;
 
-                                    if($this->destinataire == self::DEST_DOUANE && round($cepage->getTotalVolumeAcheteurs('negoces'), 2) == $cepage->getTotalVolume()) {
-                                        $col['exploitant']['L14'] = 0;
+                                        if($this->destinataire == self::DEST_DOUANE && round($cepage->getTotalVolumeAcheteurs('negoces'), 2) == $cepage->getTotalVolume()) {
+                                            $col['exploitant']['L14'] = 0;
+                                        }
                                     }
-                                }
 
-                                uksort($col['exploitant'], 'exportDRXml::sortXML');
+                                    uksort($col['exploitant'], 'exportDRXml::sortXML');
 
-                                if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
-                                    $col['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                } elseif(!$detail->volume || $detail->volume == 0) {
-                                    if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
-                                        $dr->recolte->getNoeudAppellations()->exist('appellation_ALSACEBLANC') &&
-                                        $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->exist('cepage_ED') &&
-                                        $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
-                                        $col['motifSurfZero'] = 'AE';
-                                    } else {
-                                        $col['motifSurfZero'] = 'PC';
-                                    }
-                                    if ($appellation->getKey() == 'appellation_LIEUDIT' &&
-                                        $dr->recolte->getNoeudAppellations()->exist('appellation_LIEUDIT') &&
-                                        $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->exist('cepage_ED') &&
-                                        $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
-                                        $col['motifSurfZero'] = 'AE';
-                                    } else {
-                                        $col['motifSurfZero'] = 'PC';
-                                    }
-                                }
-
-                                if (!($object->getTotalVolume() > 0)) {
                                     if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
-                                        $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
-                                    } elseif(!isset($total['motifSurfZero'])) {
-                                        $total['motifSurfZero'] = 'PC';
+                                        $col['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                    } elseif(!$detail->volume || $detail->volume == 0) {
+                                        if ($appellation->getKey() == 'appellation_ALSACEBLANC' &&
+                                            $dr->recolte->getNoeudAppellations()->exist('appellation_ALSACEBLANC') &&
+                                            $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->exist('cepage_ED') &&
+                                            $dr->recolte->getNoeudAppellations()->get('appellation_ALSACEBLANC')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
+                                            $col['motifSurfZero'] = 'AE';
+                                        } else {
+                                            $col['motifSurfZero'] = 'PC';
+                                        }
+                                        if ($appellation->getKey() == 'appellation_LIEUDIT' &&
+                                            $dr->recolte->getNoeudAppellations()->exist('appellation_LIEUDIT') &&
+                                            $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->exist('cepage_ED') &&
+                                            $dr->recolte->getNoeudAppellations()->get('appellation_LIEUDIT')->lieu->couleur->get('cepage_ED')->getTotalVolume() > 0) {
+                                            $col['motifSurfZero'] = 'AE';
+                                        } else {
+                                            $col['motifSurfZero'] = 'PC';
+                                        }
+                                    }
+
+                                    if (!($object->getTotalVolume() > 0)) {
+                                        if ($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                                            $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                        } elseif(!isset($total['motifSurfZero'])) {
+                                            $total['motifSurfZero'] = 'PC';
+                                        }
+                                    }
+
+                                    if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
+                                        unset($col['L3'], $col['L4'], $col['mentionVal']);
+                                        $colass = $col;
+                                    } else {
+                                        $cols[$detail->vtsgn][] = $col;
                                     }
                                 }
 
-                                if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
-                                    unset($col['L3'], $col['L4'], $col['mentionVal']);
-                                    $colass = $col;
-                                } else {
-                                    $cols[$detail->vtsgn][] = $col;
-                                }
-                            }
-
-                            if ($this->destinataire == self::DEST_DOUANE) {
-                                $col_final = null;
-                                foreach($cols as $vtsgn => $groupe_cols) {
-                                    if (count($groupe_cols) > 0) {
-                                        $col_final = $groupe_cols[0];
-                                        unset($groupe_cols[0]);
-                                    }
-                                    foreach($groupe_cols as $col) {
-                                        unset($col_final['mentionVal']);
-                                        if ($cepage->getTotalVolume() != 0) {
-                                            unset($col_final['motifSurfZero']);
+                                if ($this->destinataire == self::DEST_DOUANE) {
+                                    $col_final = null;
+                                    foreach($cols as $vtsgn => $groupe_cols) {
+                                        if (count($groupe_cols) > 0) {
+                                            $col_final = $groupe_cols[0];
+                                            unset($groupe_cols[0]);
                                         }
-                                        $col_final = $this->sumColonnes($col_final, $col);
-                                    }
-
-                                    if(!$vtsgn) {
-                                        if($cepage->getDplc() > $cepage->getLies()) {
-                                            $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
-                                            $col_final['exploitant']['L16'] = $cepage->getDplc();
+                                        foreach($groupe_cols as $col) {
+                                            unset($col_final['mentionVal']);
+                                            if ($cepage->getTotalVolume() != 0) {
+                                                unset($col_final['motifSurfZero']);
+                                            }
+                                            $col_final = $this->sumColonnes($col_final, $col);
                                         }
 
-                                        if($cepage->getDplc() > $cepage->getLies() && $cepage->getLies() && count($cepage->detail->toArray(true, false)) > 1) {
-                                            echo "Warning DPLC > lies et lies > 0 et plusieurs détails : " . $dr->_id . "\n";
+                                        if(!$vtsgn) {
+                                            if($cepage->getDplc() > $cepage->getLies()) {
+                                                $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
+                                                $col_final['exploitant']['L16'] = $cepage->getDplc();
+                                            }
+
+                                            if($cepage->getDplc() > $cepage->getLies() && $cepage->getLies() && count($cepage->detail->toArray(true, false)) > 1) {
+                                                echo "Warning DPLC > lies et lies > 0 et plusieurs détails : " . $dr->_id . "\n";
+                                            }
+
+                                            if ($col_final['exploitant']['L15'] < 0) {
+                                                $col_final['exploitant']['L15'] = 0;
+                                            }
+
+                                            if($appellation->getKey() == 'appellation_VINTABLE') {
+                                                $col_final['exploitant']['L15'] = 0;
+                                            }
                                         }
 
-                                        if ($col_final['exploitant']['L15'] < 0) {
-                                            $col_final['exploitant']['L15'] = 0;
-                                        }
-
-                                        if($appellation->getKey() == 'appellation_VINTABLE') {
-                                            $col_final['exploitant']['L15'] = 0;
-                                        }
-                                    }
-
-                                    if (in_array($appellation->getKey(), array('appellation_CREMANT'))) {
-                                        if ($cepage->getKey() == 'cepage_PN') {
-                                            $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
-                                            unset($col_total_cremant_rose['mentionVal']);
-                                            if($col_total_cremant_rose['exploitant']['L5'] > 0) {
-                                                unset($col_total_cremant_rose['motifSurfZero']);
+                                        if (in_array($appellation->getKey(), array('appellation_CREMANT'))) {
+                                            if ($cepage->getKey() == 'cepage_PN') {
+                                                $col_total_cremant_rose = $this->sumColonnes($col_total_cremant_rose, $col_final);
+                                                unset($col_total_cremant_rose['mentionVal']);
+                                                if($col_total_cremant_rose['exploitant']['L5'] > 0) {
+                                                    unset($col_total_cremant_rose['motifSurfZero']);
+                                                }
+                                            } else {
+                                                $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
+                                                unset($col_total_cremant_blanc['mentionVal']);
+                                                if($col_total_cremant_blanc['exploitant']['L5'] > 0) {
+                                                    unset($col_total_cremant_blanc['motifSurfZero']);
+                                                }
                                             }
                                         } else {
-                                            $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_final);
-                                            unset($col_total_cremant_blanc['mentionVal']);
-                                            if($col_total_cremant_blanc['exploitant']['L5'] > 0) {
-                                                unset($col_total_cremant_blanc['motifSurfZero']);
-                                            }
+                                            uksort($col_final['exploitant'], 'exportDRXml::sortXML');
+                                            $xml[] = $col_final;
                                         }
-                                    } else {
-                                        uksort($col_final['exploitant'], 'exportDRXml::sortXML');
-                                        $xml[] = $col_final;
                                     }
-                                }
-                            } elseif($this->destinataire == self::DEST_CIVA) {
-                                foreach($cols as $groupe_cols) {
-                                    foreach($groupe_cols as $col) {
-                                        $xml[] = $col;
+                                } elseif($this->destinataire == self::DEST_CIVA) {
+                                    foreach($cols as $groupe_cols) {
+                                        foreach($groupe_cols as $col) {
+                                            $xml[] = $col;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    uksort($total['exploitant'], 'exportDRXml::sortXML');
+                        uksort($total['exploitant'], 'exportDRXml::sortXML');
 
-                    if ($colass) {
-                        $total['colonneAss'] = $colass;
-                    }
+                        if ($colass) {
+                            $total['colonneAss'] = $colass;
+                        }
 
-                    if ($this->destinataire == self::DEST_DOUANE) {
-                        if($appellation->getKey() == 'appellation_CREMANT') {
-                            if ($col_total_cremant_blanc) {
-                                $col_total_cremant_blanc['L1'] = '1B001M';
-                                uksort($col_total_cremant_blanc['exploitant'], 'exportDRXml::sortXML');
-                                $xml[] = $col_total_cremant_blanc;
-                            }
-                            if ($col_total_cremant_rose) {
-                                $col_total_cremant_rose['L1'] = '1S001M';
-                                uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
-                                $xml[] = $col_total_cremant_rose;
+                        if ($this->destinataire == self::DEST_DOUANE) {
+                            if($appellation->getKey() == 'appellation_CREMANT') {
+                                if ($col_total_cremant_blanc) {
+                                    $col_total_cremant_blanc['L1'] = '1B001M';
+                                    uksort($col_total_cremant_blanc['exploitant'], 'exportDRXml::sortXML');
+                                    $xml[] = $col_total_cremant_blanc;
+                                }
+                                if ($col_total_cremant_rose) {
+                                    $col_total_cremant_rose['L1'] = '1S001M';
+                                    uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
+                                    $xml[] = $col_total_cremant_rose;
+                                }
                             }
                         }
-                    }
 
-                    if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
-                        $xml[] = $total;
+                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
+                            $xml[] = $total;
+                        }
+
                     }
 
                 }
+
             }
         }
 
