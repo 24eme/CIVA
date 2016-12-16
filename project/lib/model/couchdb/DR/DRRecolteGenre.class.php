@@ -31,12 +31,15 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
                     unset($mentionsKey[$mention->getKey()]);
                 }
             }
-            if(!count($appellation->getProduitsDetails())){
+            if(!count($appellation->getProduitsDetails()) && $this->getDocument()->acheteurs->exist('certification/genre')){
                 $this->getDocument()->acheteurs->certification->genre->remove($appellation->getKey());
             }
         }
 
         foreach($mentionsKey as $mentionKey) {
+            if(!$this->getDocument()->acheteurs->exist('certification/genre')) {
+                continue;
+            }
             $this->getDocument()->acheteurs->certification->genre->remove($mentionKey);
         }
 
