@@ -13,10 +13,8 @@ class dr_exportActions extends _DRActions {
 
     public function executeXml(sfWebRequest $request) {
         $this->secureDR(DRSecurity::CONSULTATION);
-        $tiers = $this->getUser()->getTiers();
-        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-        $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
-        $dr = acCouchdbManager::getClient()->find($key);
+        $dr = $this->getRoute()->getDR();
+        $tiers = $this->getRoute()->getEtablissement();
 
         try {
             if (!$dr->updated)

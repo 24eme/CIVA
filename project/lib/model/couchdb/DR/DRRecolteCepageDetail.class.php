@@ -27,6 +27,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getCodeDouane() {
+
         return $this->getCepage()->getCodeDouane($this->vtsgn);
     }
 

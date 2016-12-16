@@ -55,6 +55,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getCodeDouane($vtsgn = '') {
+        foreach($this->getConfig()->getProduits() as $produit) {
+
+            return substr($produit->getCodeDouane(), 0, 6)." ";
+        }
+
         if ($this->getLieu()->getConfig()->hasManyCouleur()) {
             return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
         } else {

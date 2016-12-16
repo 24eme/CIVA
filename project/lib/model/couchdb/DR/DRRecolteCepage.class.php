@@ -63,7 +63,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
 
     public function getCodeDouane($vtsgn = '') {
 
-        return $this->getConfig()->getDouane()->getFullAppCode($vtsgn).$this->getConfig()->getDouane()->getCodeCepage();
+        return $this->getConfig()->getCodeDouane($vtsgn);
     }
 
     public function getTotalRebeches() {
