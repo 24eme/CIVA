@@ -352,11 +352,9 @@ class ExportDRXml {
                                 }
                             }
                         }
-
-                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
+                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention')) {
                             $xml[] = $total;
                         }
-
                     }
 
                 }
