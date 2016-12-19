@@ -25,7 +25,7 @@ class dr_exportActions extends sfActions {
             $dr->save();
         }
 
-        $xml = new ExportDRXml($dr, array($this, 'getPartial'));
+        $xml = new ExportDRXml($dr, array($this, 'getPartial'), $request->getParameter('destinataire', ExportDRXml::DEST_DOUANE));
         $this->response->setContentType('text/xml');
         return $this->renderText($xml->getContent());
     }

@@ -350,10 +350,9 @@ class ExportDRXml {
                                 $xml[] = $col_total_cremant_rose;
                             }
                         }
-                    }
-
-                    if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE'))) {
-                        $xml[] = $total;
+                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention')) {
+                            $xml[] = $total;
+                        }
                     }
 
                 }
