@@ -48,6 +48,7 @@ class ExportDRXml {
 
     protected function create($dr) {
         $xml = array();
+        $baliseachat = array();
         foreach ($dr->recolte->getConfig()->getArrayAppellations() as $appellationConfig) {
             if (!$dr->exist(HashMapper::inverse($appellationConfig->getHash()))) {
                 continue;
@@ -117,6 +118,23 @@ class ExportDRXml {
                         $total['exploitant']['L18'] = 0; //HS
                         $total['exploitant']['L19'] = 0; //HS
 
+                        if ($this->destinataire == self::DEST_DOUANE) {
+                          foreach ($couleurConfig->getCepages() as $cepageConfig) {
+                            if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
+                                continue;
+                            }
+                            $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
+                            foreach ($cepage->detail as $detail) {
+                              if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
+                                if (!isset($baliseachat[$m[0]])) {
+                                  $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
+                                }
+                                $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
+                              }
+                            }
+                          }
+                        }
+
                         $colass = null;
 
                         if ($this->destinataire == self::DEST_DOUANE &&
@@ -173,6 +191,7 @@ class ExportDRXml {
                                     } else {
                                         $col['mentionVal'] = $detail->denomination;
                                     }
+
 
                                     $col['L4'] = $detail->superficie;
 
@@ -361,8 +380,7 @@ class ExportDRXml {
 
             }
         }
-
-        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'xml' => $xml, 'destinataire' => $this->destinataire));
+        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
     }
 
     protected function sumColonnes($cols, $col) {
