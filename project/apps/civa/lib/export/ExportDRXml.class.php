@@ -48,8 +48,14 @@ class ExportDRXml {
 
     protected function create($dr) {
         $xml = array();
+<<<<<<< HEAD
         foreach ($dr->recolte->getNoeudAppellations()->getConfigAppellations() as $appellation_config) {
             if (!$dr->recolte->getNoeudAppellations()->exist($appellation_config->getKey())) {
+=======
+        $baliseachat = array();
+        foreach ($dr->recolte->getConfig()->getArrayAppellations() as $appellationConfig) {
+            if (!$dr->exist(HashMapper::inverse($appellationConfig->getHash()))) {
+>>>>>>> d105e46... AJout des balises achat pour les achats faits auprès d'autres viti
                 continue;
             }
             $appellation = $dr->recolte->getNoeudAppellations()->get($appellation_config->getKey());
@@ -78,6 +84,7 @@ class ExportDRXml {
                         }
                     }
 
+<<<<<<< HEAD
                     $volume_revendique = $object->getVolumeRevendique();
                     $usages_industriels = $object->getUsagesIndustriels();
 
@@ -137,6 +144,80 @@ class ExportDRXml {
                                         $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
                                     } elseif(!isset($total['motifSurfZero'])) {
                                         $total['motifSurfZero'] = 'PC';
+=======
+                        $volume_revendique = $object->getVolumeRevendique();
+                        $usages_industriels = $object->getUsagesIndustriels();
+
+                        //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
+                        $acheteurs = array();
+                        $total = array();
+
+                        $total['L1'] = $this->getCodeDouane($object);
+                        $total['L3'] = 'B';
+                        $total['L4'] = $object->getTotalSuperficie();
+                        $total['exploitant'] = array();
+                        $total['exploitant']['L5'] = $object->getTotalVolume();
+
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
+                        $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
+                        $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
+                        $total['exploitant']['L10'] = $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        $total['exploitant']['L11'] = 0; //HS
+                        $total['exploitant']['L12'] = 0; //HS
+                        $total['exploitant']['L13'] = 0; //HS
+                        $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                        $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+                        if ($l15 < 0) {
+                            $l15 = 0;
+                        }
+                        $total['exploitant']['L15'] = $l15; //Volume revendique
+                        // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
+                        $total['exploitant']['L16'] = $usages_industriels; //DPLC
+                        $total['exploitant']['L17'] = 0; //HS
+                        $total['exploitant']['L18'] = 0; //HS
+                        $total['exploitant']['L19'] = 0; //HS
+
+                        if ($this->destinataire == self::DEST_DOUANE) {
+                          foreach ($couleurConfig->getCepages() as $cepageConfig) {
+                            if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
+                                continue;
+                            }
+                            $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
+                            foreach ($cepage->detail as $detail) {
+                              if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
+                                if (!isset($baliseachat[$m[0]])) {
+                                  $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
+                                }
+                                $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
+                              }
+                            }
+                          }
+                        }
+
+                        $colass = null;
+
+                        if ($this->destinataire == self::DEST_DOUANE &&
+                            count($couleurConfig->getCepages()) == 1 &&
+                            count($couleur->getCepages()) == 1 /*&&
+                        !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
+                            $cepage = $couleur->getCepages()->getFirst();
+                            //$total['mentionVal'] = '';
+                            foreach ($cepage->detail as $detail) {
+                                if(count($cepage->detail) == 1) {
+                                    $detail = $cepage->detail[0];
+                                    if ($appellationConfig->hasLieuEditable()) {
+                                        //$total['mentionVal'] = $detail->lieu;
+                                    } else {
+                                        //$total['mentionVal'] = $detail->denomination;
+                                    }
+                                    if (!($object->getTotalVolume() > 0)) {
+                                        if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
+                                            $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                                        } elseif(!isset($total['motifSurfZero'])) {
+                                            $total['motifSurfZero'] = 'PC';
+                                        }
+>>>>>>> d105e46... AJout des balises achat pour les achats faits auprès d'autres viti
                                     }
                                 }
                             }
@@ -202,9 +283,41 @@ class ExportDRXml {
                                     $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
                                 }
 
+<<<<<<< HEAD
                                 if(is_null($col['exploitant']['L16'])) {
                                     $col['exploitant']['L16'] = 0;
                                 }
+=======
+
+                                    $col['L4'] = $detail->superficie;
+
+                                    $col['exploitant'] = array();
+                                    $col['exploitant']['L5'] = $detail->volume ; //Volume total sans lies
+
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'negoces');
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
+                                    $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
+
+                                    $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
+                                    $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                                    $col['exploitant']['L11'] = 0; //HS
+                                    $col['exploitant']['L12'] = 0; //HS
+                                    $col['exploitant']['L13'] = 0; //HS
+                                    $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
+                                    if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
+                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        if ($col['exploitant']['L15'] < 0) {
+                                            $col['exploitant']['L15'] = 0;
+                                        }
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                    } else {
+                                        $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
+                                            $col['exploitant']['L15'] = 0;
+                                        }
+                                        $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
+                                    }
+>>>>>>> d105e46... AJout des balises achat pour les achats faits auprès d'autres viti
 
                                 $col['exploitant']['L17'] = 0; //HS
                                 $col['exploitant']['L18'] = 0; //HS
@@ -358,8 +471,7 @@ class ExportDRXml {
                 }
             }
         }
-
-        $this->content = $this->getPartial('export/xml', array('dr' => $dr, 'xml' => $xml, 'destinataire' => $this->destinataire));
+        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
     }
 
     protected function sumColonnes($cols, $col) {
