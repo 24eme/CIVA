@@ -32,7 +32,7 @@ if (!function_exists('printXml')) {
 ?>
 <decRec numCvi="<?php echo $dr->cvi; ?>" campagne="<?php echo $dr->campagne; ?>-<?php echo ($dr->campagne+1); ?>" typeDec="DR" dateDepot="<?php echo ($dr->exist('date_depot_mairie') && $dr->date_depot_mairie) ? $dr->date_depot_mairie : $dr->validee ?>">
 <rensComp><typeViti>C</typeViti><modeFV>P</modeFV><persCtc><?php echo str_replace('&', 'et', $dr->declarant->getNom(ESC_RAW)) ?></persCtc><numTel><?php echo $dr->declarant->telephone; ?></numTel><mel><?php echo $dr->declarant->email; ?></mel></rensComp>
-<?php if (isset($achats)): foreach($achats as $achat) : ?><?php printXml($achat); ?><?php endforeach; endif;?>
-<?php foreach($colonnes as $colonne) : ?><colonne><?php printXml($colonne); ?></colonne><?php endforeach; ?>
+<?php if (isset($achats)): foreach($achats as $achat) : ?><?php printXml($achat); ?><?php endforeach; echo "\n"; endif;?>
+<?php foreach($colonnes as $colonne) : ?><colonne><?php printXml($colonne); ?></colonne><?php echo "\n"; endforeach; ?>
 <?php if($destinataire == ExportDRXml::DEST_CIVA): ?><qteLies></qteLies><?php echo "\n" ?><?php endif; ?>
 </decRec>
