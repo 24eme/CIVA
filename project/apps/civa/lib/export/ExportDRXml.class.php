@@ -30,6 +30,8 @@ class ExportDRXml {
             $key = self::$type2douane[$type].'_'.$cvi;
             if(!array_key_exists($key, $xml)) {
                 $item = array('numCvi' => $cvi, 'volume' => 0);
+            } else {
+                $item = $xml[$key];
             }
 
             $item['volume'] += $volume;
