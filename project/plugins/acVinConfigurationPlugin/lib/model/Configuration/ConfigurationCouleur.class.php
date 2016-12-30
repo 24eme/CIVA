@@ -21,6 +21,10 @@ class ConfigurationCouleur extends BaseConfigurationCouleur {
         return $this->getParentNode();
     }
 
+	public function getMention() {
+        return $this->getLieu()->getMention();
+    }
+
     public function hasCepage() {
     	return (count($this->cepages) > 1 || (count($this->cepages) == 1 && $this->cepages->getFirst()->getKey() != Configuration::DEFAULT_KEY));
     }

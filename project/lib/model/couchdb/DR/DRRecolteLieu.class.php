@@ -79,7 +79,14 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCodeDouane($vtsgn = '') {
-        foreach($this->getConfig()->getProduits() as $produit) {
+
+        $config = $this->getConfig();
+
+        if($config->getMention()->getKey() != "DEFAUT") {
+            $config = $config->getAppellation()->mentions->get("DEFAUT")->lieux->get($config->getKey());
+        }
+
+        foreach($config->getProduits() as $produit) {
 
             return substr($produit->getCodeDouane(), 0, 6)." ";
         }

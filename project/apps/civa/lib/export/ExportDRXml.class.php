@@ -27,8 +27,14 @@ class ExportDRXml {
             if($volume == 0) {
                 continue;
             }
-            $item = array('numCvi' => $cvi, 'volume' => $volume);
-            $xml[self::$type2douane[$type].'_'.$cvi] = $item;
+            $key = self::$type2douane[$type].'_'.$cvi;
+            if(!array_key_exists($key, $xml)) {
+                $item = array('numCvi' => $cvi, 'volume' => 0);
+            }
+
+            $item['volume'] += $volume;
+
+            $xml[$key] = $item;
         }
     }
 
@@ -54,6 +60,8 @@ class ExportDRXml {
                 continue;
             }
             $appellation = $dr->get(HashMapper::inverse($appellationConfig->getHash()));
+
+            $totals = array();
             foreach ($appellationConfig->getMentions() as $mentionConfig) {
                 if (!$dr->exist(HashMapper::inverse($mentionConfig->getHash()))) {
                     continue;
@@ -78,6 +86,7 @@ class ExportDRXml {
                             $object = $couleur;
                         }
 
+
                         if($this->destinataire == self::DEST_DOUANE) {
                             if($appellation->getKey() == 'appellation_CREMANT') {
                                 $col_total_cremant_blanc = null;
@@ -90,19 +99,39 @@ class ExportDRXml {
 
                         //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
                         $acheteurs = array();
+                        $keyTotal = $this->getCodeDouane($object);
                         $total = array();
+                        if(array_key_exists($keyTotal, $totals)) {
+                            $total = $totals[$keyTotal];
+                        }
 
                         $total['L1'] = $this->getCodeDouane($object);
                         $total['L3'] = 'B';
-                        $total['L4'] = $object->getTotalSuperficie();
-                        $total['exploitant'] = array();
-                        $total['exploitant']['L5'] = $object->getTotalVolume();
+                        if(!array_key_exists('L4', $total)) {
+                            $total['L4'] = 0;
+                        }
+                        $total['L4'] += $object->getTotalSuperficie();
+
+                        if(!array_key_exists('exploitant', $total)) {
+                            $total['exploitant'] = array();
+                        }
+
+                        if(!array_key_exists('L5', $total['exploitant'])) {
+                            $total['exploitant']['L5'] = 0;
+                        }
+                        $total['exploitant']['L5'] += $object->getTotalVolume();
 
                         $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
                         $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
                         $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
-                        $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
-                        $total['exploitant']['L10'] = $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        if(!array_key_exists('L9', $total['exploitant'])) {
+                            $total['exploitant']['L9'] = 0;
+                        }
+                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere();
+                        if(!array_key_exists('L10', $total['exploitant'])) {
+                            $total['exploitant']['L10'] = 0;
+                        }
+                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
                         $total['exploitant']['L11'] = 0; //HS
                         $total['exploitant']['L12'] = 0; //HS
                         $total['exploitant']['L13'] = 0; //HS
@@ -111,9 +140,15 @@ class ExportDRXml {
                         if ($l15 < 0) {
                             $l15 = 0;
                         }
-                        $total['exploitant']['L15'] = $l15; //Volume revendique
+                        if(!array_key_exists('L15', $total['exploitant'])) {
+                            $total['exploitant']['L15'] = 0;
+                        }
+                        $total['exploitant']['L15'] += $l15; //Volume revendique
                         // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                        $total['exploitant']['L16'] = $usages_industriels; //DPLC
+                        if(!array_key_exists('L16', $total['exploitant'])) {
+                            $total['exploitant']['L16'] = 0;
+                        }
+                        $total['exploitant']['L16'] += $usages_industriels; //DPLC
                         $total['exploitant']['L17'] = 0; //HS
                         $total['exploitant']['L18'] = 0; //HS
                         $total['exploitant']['L19'] = 0; //HS
@@ -371,13 +406,22 @@ class ExportDRXml {
                                 }
                             }
                         }
-                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention')) {
+                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE) {
                             $xml[] = $total;
+                        }
+
+                        if($this->destinataire == self::DEST_CIVA) {
+                            $totals[$keyTotal] = $total;
                         }
                     }
 
                 }
 
+            }
+            if(!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && $this->destinataire == self::DEST_CIVA) {
+                foreach($totals as $total) {
+                    $xml[] = $total;
+                }
             }
         }
         $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
