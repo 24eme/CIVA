@@ -91,7 +91,7 @@ class dsActions extends sfActions {
                               DSSecurity::EDITION));
 
         $this->ds = $this->getRoute()->getDS();
-        $this->tiers = $this->getRoute()->getTiers();
+        $this->tiers = $this->getRoute()->getEtablissement();
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
         $this->form_gest = null;
         $this->form_gest_err = 0;
@@ -108,7 +108,6 @@ class dsActions extends sfActions {
                 return $this->renderText(json_encode(array("success" => true)));
             }
             if ($request->getParameter('gestionnaire')) {
-                throw new sfException("A réparer");
                 $this->form_gest->bind($request->getParameter($this->form_gest->getName()));
                 if ($this->form_gest->isValid()) {
                     $this->form_gest->save();
@@ -117,7 +116,6 @@ class dsActions extends sfActions {
                 }
             }
             if ($request->getParameter('exploitation')) {
-                throw new sfException("A réparer");
                 $this->form_expl->bind($request->getParameter($this->form_expl->getName()));
                 if ($this->form_expl->isValid()) {
                     $tiers = $this->form_expl->save();
