@@ -17,6 +17,7 @@ Etablissement:
        nature_inao: {  }
        siret: {  }
        acheteur_raisin: { required: false }
+       ds_decembre: { required: false }
        recette_locale:
          type: collection
          required: false

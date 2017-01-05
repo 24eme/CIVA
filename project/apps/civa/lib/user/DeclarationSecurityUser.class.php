@@ -98,6 +98,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function getPeriodeDS($type_ds = null){
         $declarant = $this->getDeclarantDS($type_ds);
+
         if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
 
             return CurrentClient::getCurrent()->getPeriodeDS();

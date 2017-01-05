@@ -134,6 +134,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
     public function addNoeud($hash) {
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $hash = preg_replace("/(mentionVT|mentionSGN)/", "mention", $hash);
         $noeud = $this->getOrAdd($hash);
         $config = $noeud->getConfig();
         $noeud->libelle = $config->getLibelle();
@@ -218,8 +219,8 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
 
 
     public function addProduit($hash,$fromDs = false) {
-        //echo $hash."\n";
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
+        $hash = preg_replace("/(mentionVT|mentionSGN)/", "mention", $hash);
         $hash_config = HashMapper::convert($hash);
 
         if(!$this->getConfig()->exist($hash_config)) {
@@ -239,7 +240,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         $produit->getLieu()->libelle = $produit->getConfig()->getLieu()->libelle;
         $produit->getMention()->libelle = $produit->getConfig()->getMention()->libelle;
         $produit->getAppellation()->libelle = $produit->getConfig()->getAppellation()->libelle;
-        $produit->no_vtsgn = (int) !$config->hasVtsgn();
+        $produit->no_vtsgn = !$config->getDocument()->exist(str_replace("/mentions/DEFAUT/", "/mentions/VT/", $config->getHash()));
         return $produit;
     }
 
@@ -365,7 +366,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         return null;
     }
 
-public function getConfigurationCampagne() {
+    public function getConfigurationCampagne() {
         $campagne = (int) (preg_replace("/^([0-9]{4})[0-9]{2}$/", '\1', $this->getPeriode()) - 1);
         $conf_2012 = ConfigurationClient::getConfiguration('2012');
 

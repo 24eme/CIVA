@@ -671,4 +671,16 @@ class DSCivaClient extends DSClient {
         return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
     }
 
+    public function getConfigAppellations($config) {
+        $result = array();
+        foreach ($config->declaration->getArrayAppellations() as $appellationConfig){
+            if(!in_array($appellationConfig->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
+                continue;
+            }
+            $result[preg_replace('/^\/recolte/','declaration',HashMapper::inverse($appellationConfig->getHash()))] = $appellationConfig;
+        }
+
+        return $result;
+    }
+
 }

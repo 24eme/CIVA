@@ -136,8 +136,8 @@ class DSLieuxDeStockageForm extends acCouchdbForm {
 
     public function getAppelations(){
         $result = array();
-        foreach ($this->ds->getConfig()->declaration->getArrayAppellations() as $conf){
-            $result[preg_replace('/^\/recolte/','declaration',HashMapper::inverse($conf->getHash()))] = $conf->getLibelle();
+        foreach (DSCivaClient::getInstance()->getConfigAppellations($this->ds->getConfig()) as $hash => $configAppellation){
+            $result[$hash] = $configAppellation->getLibelle();
         }
 
         return $result;

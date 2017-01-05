@@ -42,6 +42,6 @@ class DSEditionAddAppellationFormCiva extends acCouchdbForm
 
     public function getAppellations()
     {
-        return $this->_ds->declaration->getConfig()->getArrayAppellations();
+        return DSCivaClient::getInstance()->getConfigAppellations($this->_ds->getConfig());
     }
 }

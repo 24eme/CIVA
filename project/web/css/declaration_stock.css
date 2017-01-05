@@ -11,7 +11,7 @@
 /* STRUCTURE / ELEMENTS GENERIQUES */
 /* =================================================== */
 
-#application_ds 
+#application_ds
 {
 	background: #f7f6f6;
 	clear: both;
@@ -55,11 +55,11 @@
 /**
  * Header DS
  ******************************************/
-.header_ds { margin: 0 0 15px; } 
-.header_ds.sous_menu { margin: 0 0 47px; } 
+.header_ds { margin: 0 0 15px; }
+.header_ds.sous_menu { margin: 0 0 47px; }
 
 .header_ds.sous_menu #liste_lieux_stockage { padding: 0 0 0 268px; }
- 
+
 /* Etapes */
 #etape_declaration.etapes_ds
 {
@@ -129,12 +129,12 @@
 }
 #etape_declaration.etapes_ds li.sous_menu ul li a:hover { text-decoration: underline; }
 
-ul#etape_declaration li.actif a em span.lieu 
+ul#etape_declaration li.actif a em span.lieu
 {
     color: black;
     display: inline-block;
     margin: 0 0 0 4px;
-/*    
+/*
     font-size: 12px;
     font-style: italic;
     font-weight: bold;
@@ -203,6 +203,10 @@ ul#etape_declaration.etapes_ds li.sous_menu ul li.ajouter_lieu_stockage{
 #onglets_majeurs.onglets_stock.concis li a { padding: 2px 3px 2px 2px; }
 #onglets_majeurs.onglets_stock li.ui-tabs-selected > a { background: #ffb52c; }
 
+#onglets_majeurs.onglets_stock .sous_onglets li a {
+	color: #000;
+}
+
 #onglets_majeurs.onglets_stock li.ajouter a
 {
 	background: #666 url(../images/pictos/pi_ajout.png) 10px center no-repeat;
@@ -213,7 +217,7 @@ ul#etape_declaration.etapes_ds li.sous_menu ul li.ajouter_lieu_stockage{
 
 #onglets_majeurs.onglets_stock li.recap_stock { float: right; }
 
-#onglets_majeurs.onglets_stock li .sous_onglets { top: 33px; }
+#onglets_majeurs.onglets_stock li .sous_onglets { top: 33px; position: absolute; }
 
 #onglets_majeurs .msg_aide_ds { margin-top: 2px; }
 
@@ -259,7 +263,7 @@ span.label_type_ds{
 {
 	border: 1px solid #C6C6C6;
 	border-top: 4px solid #ffbf4e;
-	margin-top: -8px;
+	margin-top: -5px;
 	padding: 55px 15px 15px 0;
 }
 
@@ -284,7 +288,7 @@ span.label_type_ds{
 
 #application_ds .ds_lieu_toggle_stockage_principale
 {
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
     height: 20px;
 }
 
@@ -305,7 +309,7 @@ span.label_type_ds{
 
 #application_ds #lieux_stockage table thead th { font-size: 11px; }
 
-#application_ds #lieux_stockage table thead th:first-child 
+#application_ds #lieux_stockage table thead th:first-child
 {
 	padding: 0 10px;
 	width: 135px;
@@ -335,7 +339,7 @@ span.label_type_ds{
 	margin: 3px 0;
 	padding: 0 5px;
 	width: 200px;
-	
+
 	overflow: hidden;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
@@ -570,13 +574,13 @@ span.label_type_ds{
 #application_ds #recap_total_ds #recap_lieu_stockage { margin: 0; }
 
 
-#application_ds #recap_autres_vins_sans_ig { 
+#application_ds #recap_autres_vins_sans_ig {
     float: left;
     margin: 0 20px 0 0;
-    width: 402px; 
+    width: 402px;
 }
 
-#application_ds #administration_validation { 
+#application_ds #administration_validation {
     float: left;
     width: 240px;
     margin: 15px 25px 0;
@@ -656,7 +660,7 @@ span.label_type_ds{
 }
 
 #confirmation_fin_stock #btn-email,
-#validation_ds #btn-email 
+#validation_ds #btn-email
 {
 	background: url(../images/boutons/btn-recevoir-ma-ds-par-email.png);
 }
