@@ -9,6 +9,7 @@ class acCouchdbDocumentSetValueTask extends sfBaseTask
        new sfCommandArgument('doc_id', sfCommandArgument::REQUIRED, 'ID du document'),
        new sfCommandArgument('hash', sfCommandArgument::REQUIRED, 'Hash'),
        new sfCommandArgument('value', sfCommandArgument::REQUIRED, 'Value'),
+       new sfCommandArgument('type', sfCommandArgument::OPTIONAL, 'Type', "string"),
     ));
 
     $this->addOptions(array(
@@ -37,7 +38,7 @@ EOF;
 
     $doc = acCouchdbManager::getClient()->find($arguments['doc_id']);
     $doc->add($arguments['hash']);
-    $doc->set($arguments['hash'], $arguments['value']);
+    $doc->set($arguments['hash'], settype($arguments['value'], $arguments['type']));
     $doc->save();
 
     echo "Document ".$doc->_id." set ".$arguments['hash']. " = ".$arguments['value']."\n";
