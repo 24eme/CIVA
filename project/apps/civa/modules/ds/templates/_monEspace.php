@@ -11,5 +11,7 @@
     <?php include_partial('ds/monEspaceNonOuvert',array('ds' => $ds, 'type_ds' => $type_ds)); ?>
 <?php elseif(!$sf_user->getDeclarantDS($type_ds)->hasLieuxStockage() && !$sf_user->getDeclarantDS($type_ds)->isAjoutLieuxDeStockage()): ?>
     <?php include_component('ds', 'monEspaceNoLieuxStockage', array('type_ds' => $type_ds)); ?>
+<?php else: ?>
+	<?php include_partial('ds/monEspaceNonEditable',array('ds' => $ds, 'type_ds' => $type_ds)); ?>
 <?php endif; ?>
 </div>

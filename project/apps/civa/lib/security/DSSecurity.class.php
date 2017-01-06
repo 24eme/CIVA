@@ -75,6 +75,11 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
+        if(in_array(self::CREATION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+
+            return false;
+        }
+
         if(in_array(self::CREATION, $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
@@ -111,6 +116,11 @@ class DSSecurity implements SecurityInterface {
         if(in_array(self::EDITION , $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
 
             return true;
+        }
+
+        if(in_array(self::EDITION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+
+            return false;
         }
 
         if(in_array(self::EDITION , $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
