@@ -108,7 +108,8 @@
                 <div class="bloc_acceuil_content">
                     <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
-                        <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
+                        <p class="mineure">Aucune information à signaler</p>
+                        <!--<p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>-->
                         <?php else: ?>
                         <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
                         <?php endif; ?>
@@ -129,7 +130,8 @@
                 <div class="bloc_acceuil_content">
                     <?php if(DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_NEGOCE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
-                        <p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>
+                            <p class="mineure">Aucune information à signaler</p>
+                            <!--<p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>-->
                         <?php else: ?>
                         <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
                         <?php endif; ?>
