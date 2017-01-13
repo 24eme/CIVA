@@ -151,7 +151,9 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
             }
         }
 
-        if(count($config->getChildrenNode()) == 1) {
+        if($noeud instanceof DSAppellation) {
+            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash()));
+        } elseif(count($config->getChildrenNode()) == 1) {
             $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash()));
         }
 
