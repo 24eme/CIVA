@@ -251,6 +251,9 @@ class ExportDRXml {
                                             $col['exploitant']['L15'] = 0;
                                         }
                                         $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                    } elseif(count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_DOUANE && $mention->getKey() != 'mention') {
+                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
                                     } else {
                                         $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                         if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
