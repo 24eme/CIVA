@@ -2,7 +2,7 @@
 class dsActions extends sfActions {
 
     public function executeInit(sfWebRequest $request) {
-       set_time_limit(180);
+       set_time_limit(240);
        ini_set("memory_limit", "256M");
 
        $this->forward404Unless($request->isMethod(sfWebRequest::POST));
