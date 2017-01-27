@@ -180,8 +180,8 @@ class DSCivaClient extends DSClient {
         $cpt = 1;
         $dss = array();
         $ds_principale_exist = false;
-        $tiers->getLieuxStockage($onlyCreate);
         $identifiant = $tiers->getIdentifiant();
+        $tiers->getLieuxStockage($onlyCreate, $identifiant);
 
         if($type_ds == self::TYPE_DS_PROPRIETE) {
             $identifiant = $tiers->getCvi();

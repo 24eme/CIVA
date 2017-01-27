@@ -35,7 +35,7 @@ class DSCiva extends DS implements IUtilisateursDocument, IDRMEdiExportable {
         }
         $num_lieu = $this->identifiant.$this->getLieuStockage();
 
-        if(!$tiers->getLieuxStockage(true)) {
+        if(!$tiers->getLieuxStockage(true, $this->identifiant)) {
             throw new sfException(sprintf("Aucun lieu de stockage n'existe dans l'etablissement de cvi %s ", $this->identifiant));
         }
 
