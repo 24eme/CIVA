@@ -9,7 +9,7 @@
         <?php $title = $sf_context->getInstance()->getResponse()->getTitle(); ?>
 
         <?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>
-            <?php $title="Hey ! Marty ! Nous sommes en ".acCouchdbManager::getClient("Current")->getCurrentFromTheFuture()->campagne." !"; ?>
+            <?php $title="Hey ! Marty ! Nous sommes en ".CurrentClient::getInstance()->getCurrent()->getCampagne()." !"; ?>
         <?php endif; ?>
 
         <h1>

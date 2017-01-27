@@ -2,7 +2,7 @@
 <div class="contenu_section">
     <?php if (acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>
         <p>Hey ! Marty ! <br />
-           Nous sommes en <?php echo acCouchdbManager::getClient("Current")->getCurrentFromTheFuture()->campagne ?> !</p>
+           Nous sommes en <?php echo acCouchdbManager::getClient("Current")->getCurrentFromTheFuture()?> !</p>
         <a style="margin-top: 10px;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for("admin_back_to_now") ?>">Revenir dans le présent</a>
     <?php else: ?>
         <form action="<?php echo url_for('@admin_back_to_the_future') ?>" method="post">
@@ -17,5 +17,5 @@
         </form>
     <?php endif; ?>
 
-    
+
 </div>

@@ -346,7 +346,7 @@ class ConfigurationClient extends acCouchdbClient {
 			$oldHashProduit = preg_replace(
 			'/(declaration)\/(certification)s\/([A-Z_]*)\/(genre)s\/([A-Z]*)\/(appellation)s\/([A-Z]*)\/(mention)s\/([A-Z]*)\/(lieu)x\/([A-Z]*)\/(couleur)s\/([A-Z]*)\/(cepage)s\/([A-Z]*)/'
 			,'\1/\2/\4/\6_\7/\8/\10/\12/\14_\15',$hashProduit);
-			
+
 			return $oldHashProduit;
 		}
 

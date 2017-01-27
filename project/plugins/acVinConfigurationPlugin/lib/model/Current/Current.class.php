@@ -44,6 +44,10 @@ class Current extends BaseCurrent {
     /* A remplacer */
 
     public function getCampagne() {
+        if(CurrentClient::getInstance()->hasCurrentFromTheFuture()) {
+
+            return CurrentClient::getInstance()->getCurrentFromTheFuture();
+        }
 
         return "2016";
     }
@@ -53,12 +57,12 @@ class Current extends BaseCurrent {
         return true;
     }
 
-    public function hasCurrentFromTheFuture() {
-
-        return false;
-    }
-
     public function getPeriodeDS() {
+
+        if(CurrentClient::getInstance()->hasCurrentFromTheFuture()) {
+
+            return CurrentClient::getInstance()->getCurrentFromTheFuture()."07";
+        }
 
         return "201612";
     }

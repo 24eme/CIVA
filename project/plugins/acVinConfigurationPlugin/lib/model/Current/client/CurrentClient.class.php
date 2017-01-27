@@ -34,13 +34,14 @@ class CurrentClient extends acCouchdbClient {
     return parent::retrieveDocumentById('CURRENT');
   }
 
-  /* A remplacer */
+  public function getCurrentFromTheFuture() {
+
+      return sfContext::getInstance()->getUser()->getAttribute('back_to_the_future');
+  }
 
   public function hasCurrentFromTheFuture() {
 
-      return false;
+      return sfContext::getInstance()->getUser()->hasAttribute('back_to_the_future');
   }
-
-  /* Fin */
 
 }
