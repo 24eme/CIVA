@@ -143,6 +143,20 @@ class vracActions extends sfActions
 		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
 	}
 
+	public function executeForcerCloture(sfWebRequest $request)
+	{
+        $this->vrac = $this->getRoute()->getVrac();
+
+        $this->secureVrac(VracSecurity::FORCE_CLOTURE, $this->vrac);
+
+		$this->vrac->forceClotureContrat();
+		$this->vrac->valide->email_cloture = true;
+		$this->vrac->save();
+		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès, aucun mail ne sera envoyé');
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+	}
+
 	public function executeSupprimer(sfWebRequest $request)
 	{
 		$this->cleanSessions();

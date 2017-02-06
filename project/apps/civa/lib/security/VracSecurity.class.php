@@ -10,6 +10,7 @@ class VracSecurity implements SecurityInterface {
     const SIGNATURE = 'SIGNATURE';
     const ENLEVEMENT = 'ENLEVEMENT';
     const CLOTURE = 'CLOTURE';
+    const FORCE_CLOTURE = 'FORCE_CLOTURE';
 
     protected $vrac;
     protected $compte;
@@ -48,7 +49,7 @@ class VracSecurity implements SecurityInterface {
         if(!is_array($droits)) {
             $droits = array($droits);
         }
-        
+
         /*** DECLARANT ***/
 
         if(!EtablissementSecurity::getInstance($etablissement)->isAuthorized(Roles::TELEDECLARATION_VRAC)) {
@@ -143,12 +144,24 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::ENLEVEMENT, $droits) && !$this->vrac->isValide()) {
+        if(in_array(self::CLOTURE, $droits) && !$this->vrac->isValide()) {
 
             return false;
         }
 
-        if(in_array(self::ENLEVEMENT, $droits) && $this->vrac->isCloture()) {
+        if(in_array(self::CLOTURE, $droits) && $this->vrac->isCloture()) {
+
+            return false;
+        }
+
+        /*** FORCE CLOTURE ***/
+
+        if(in_array(self::FORCE_CLOTURE, $droits) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+
+            return false;
+        }
+
+        if(in_array(self::FORCE_CLOTURE, $droits) && !$this->vrac->canForceClotureContrat()) {
 
             return false;
         }

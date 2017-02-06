@@ -5,29 +5,29 @@
  */
 
 class VracDetail extends BaseVracDetail {
-	
+
 	public function getCepage() {
 
         return $this->getParent()->getParent();
     }
-    
+
     public function getAppellation() {
     	return $this->getCepage()->getAppellation();
     }
-	
+
 	public function getLibelle() {
 
         return $this->getCepage()->getLibelleComplet();
     }
-    
+
     public function getLibelleSansCepage() {
     	return $this->getAppellation()->getLibelleComplet();
     }
-    
+
     public function getLieuLibelle() {
     	return $this->getCepage()->getCouleur()->getLieu()->getLibelle();
     }
-	
+
 	public function getComplementPartielLibelle() {
 		$complement = '';
 		if ($this->lieu_dit) {
@@ -38,7 +38,7 @@ class VracDetail extends BaseVracDetail {
 		}
         return $complement;
     }
-	
+
 	public function getComplementLibelle() {
 		$complement = $this->getComplementPartielLibelle();
 		if ($this->denomination) {
@@ -49,15 +49,15 @@ class VracDetail extends BaseVracDetail {
 		}
         return $complement;
     }
-	
+
 	public function getLibellePartiel() {
 		return $this->getLibelle().$this->getComplementPartielLibelle();
     }
-	
+
 	public function getLibelleComplet() {
 		return $this->getLibelle().$this->getComplementLibelle();
     }
-    
+
     public function defineActive()
     {
     	$this->actif = 0;
@@ -71,7 +71,7 @@ class VracDetail extends BaseVracDetail {
 	    	}
     	}
     }
-    
+
     public function updateVolumeEnleve()
     {
     	$total = null;
@@ -90,17 +90,29 @@ class VracDetail extends BaseVracDetail {
     	}
     	$this->volume_enleve = $total;
     }
-    
+
+	public function autoFillRetiraisons() {
+		if(count($this->retiraisons) > 0) {
+			return;
+		}
+
+		$retiraison = $this->retiraisons->add();
+		$retiraison->date = $this->getDocument()->valide->date_validation;
+		$retiraison->volume = $this->volume_propose;
+		$this->clotureProduits();
+		$this->updateVolumeEnleve();
+	}
+
     public function getTotalVolumeEnleve()
     {
     	return ($this->volume_enleve && $this->actif)? $this->volume_enleve : 0;
     }
-    
+
     public function getTotalVolumePropose()
     {
     	return ($this->volume_propose && $this->actif)? $this->volume_propose : 0;
     }
-    
+
     public function getTotalPrixPropose()
     {
     	if ($this->exist('nb_bouteille')) {
@@ -109,7 +121,7 @@ class VracDetail extends BaseVracDetail {
     		return ($this->volume_propose && $this->prix_unitaire && $this->actif)? $this->volume_propose * $this->prix_unitaire : 0;
     	}
     }
-    
+
     public function getTotalPrixEnleve()
     {
     	if ($this->exist('nb_bouteille')) {
@@ -118,17 +130,17 @@ class VracDetail extends BaseVracDetail {
     		return ($this->volume_enleve && $this->prix_unitaire && $this->actif)? $this->volume_enleve * $this->prix_unitaire : 0;
     	}
     }
-    
+
     public function allProduitsClotures()
     {
     	return (!$this->cloture && $this->actif)? false : true;
     }
-    
+
     public function hasRetiraisons()
     {
     	return (count($this->retiraisons) > 0)? true : false;
     }
-    
+
     public function clotureProduits()
     {
     	if (!$this->cloture && $this->actif) {
@@ -136,7 +148,7 @@ class VracDetail extends BaseVracDetail {
     	}
     	return null;
     }
-    
+
     public function updateProduit()
     {
     	if ($this->exist('nb_bouteille') && $this->actif) {
@@ -145,7 +157,7 @@ class VracDetail extends BaseVracDetail {
     		$this->clotureProduits();
     	}
     }
-    
+
     public function clear()
     {
     	$this->vtsgn = null;

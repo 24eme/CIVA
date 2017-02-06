@@ -129,6 +129,17 @@ vrac_supprimer:
     type:     object
   requirements:
     sf_method: [get, post]
+
+vrac_forcer_cloture:
+  url: /vrac/:numero_contrat/forcer-cloture
+  param: { module: vrac, action: forcerCloture }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
 vrac_cloture:
   url: /vrac/:numero_contrat/cloture
   param: { module: vrac, action: cloture }

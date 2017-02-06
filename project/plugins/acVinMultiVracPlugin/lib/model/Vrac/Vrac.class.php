@@ -494,6 +494,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     }
 
+	public function canForceClotureContrat()
+	{
+
+		return (!$this->volume_enleve_total && $this->isValide() && !$this->isCloture());
+	}
+
+	public function forceClotureContrat()
+    {
+		$this->autoFillRetiraisons();
+		$this->updateTotaux();
+        $this->updateEnlevementStatut();
+		$this->clotureContrat();
+    }
+
     public function clotureContrat()
     {
     	$this->valide->statut = self::STATUT_CLOTURE;
@@ -530,6 +544,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function allProduitsClotures()
     {
     	return $this->declaration->allProduitsClotures();
+    }
+
+	public function autoFillRetiraisons()
+    {
+    	return $this->declaration->autoFillRetiraisons();
     }
 
     public function hasRetiraisons()
