@@ -42,42 +42,46 @@ class ExportDRStatsCsv {
 
                     continue;
                 }
-
-                foreach($appellation->mention as $lieu_key => $lieu) {
-                    if (!preg_match("/^lieu/", $lieu_key)) {
+                foreach($appellation as $mention_key => $mention) {
+                    if (!preg_match("/^mention/", $mention_key)) {
 
                         continue;
                     }
-
-                    if(!array_key_exists($appellation_key, $stats['appellations'])) {
-                        $stats['appellations'][$appellation_key]['superficie'] = 0;
-                        $stats['appellations'][$appellation_key]['volume'] = 0;
-                        $stats['appellations'][$appellation_key]['cepages'] = array();
-                    }
-
-                    foreach($lieu as $couleur_key => $couleur) {
-                        if (!preg_match("/^couleur/", $couleur_key)) {
+                    foreach($mention as $lieu_key => $lieu) {
+                        if (!preg_match("/^lieu/", $lieu_key)) {
 
                             continue;
                         }
 
-                        foreach($couleur as $cepage_key => $cepage) {
-                            if (!preg_match("/^cepage/", $cepage_key)) {
+                        if(!array_key_exists($appellation_key, $stats['appellations'])) {
+                            $stats['appellations'][$appellation_key]['superficie'] = 0;
+                            $stats['appellations'][$appellation_key]['volume'] = 0;
+                            $stats['appellations'][$appellation_key]['cepages'] = array();
+                        }
+
+                        foreach($lieu as $couleur_key => $couleur) {
+                            if (!preg_match("/^couleur/", $couleur_key)) {
 
                                 continue;
                             }
 
-                            if(!array_key_exists($cepage_key, $stats['appellations'][$appellation_key]['cepages'])) {
-                                $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
-                                $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
-                            }
+                            foreach($couleur as $cepage_key => $cepage) {
+                                if (!preg_match("/^cepage/", $cepage_key)) {
 
-                            $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
-                            $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
+                                    continue;
+                                }
+
+                                if(!array_key_exists($cepage_key, $stats['appellations'][$appellation_key]['cepages'])) {
+                                    $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
+                                    $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
+                                }
+
+                                $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
+                                $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
+                            }
                         }
                     }
                 }
-
                 $stats['appellations'][$appellation_key]['superficie'] += $appellation->total_superficie;
                 $stats['appellations'][$appellation_key]['volume'] += $appellation->total_volume;
                 $stats['superficie'] += $appellation->total_superficie;
