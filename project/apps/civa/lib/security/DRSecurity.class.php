@@ -35,8 +35,18 @@ class DRSecurity implements SecurityInterface {
         }
 
         if(!$this->etablissement) {
-
             return false;
+        }
+
+        if($this->dr && in_array(self::CONSULTATION, $droits) && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR)) {
+            $etablissementCompte = DRClient::getInstance()->getEtablissement($this->getUser()->getCompte()->getSociete());
+
+            if($etablissementCompte && $drCompte = DRClient::getInstance()->find(str_replace($this->etablissement->identifiant, $etablissementCompte->identifiant, $this->dr->_id))) {
+                if ($drCompte->_id == $this->dr->_id) {
+
+                    return true;
+                }
+            }
         }
 
         if(!EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR)) {

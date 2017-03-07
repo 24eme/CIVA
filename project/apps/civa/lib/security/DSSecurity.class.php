@@ -43,6 +43,17 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
+        if($this->ds && in_array(self::CONSULTATION, $droits) && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR)) {
+            $etablissementCompte = DSCivaClient::getInstance()->getEtablissement($this->getUser()->getCompte()->getSociete(), $this->type_ds);
+
+            if($etablissementCompte && $dsCompte = DSCivaClient::getInstance()->find(str_replace($this->etablissement->identifiant, $etablissementCompte->identifiant, $this->ds->_id))) {
+                if ($dsCompte->_id == $this->ds->_id) {
+
+                    return true;
+                }
+            }
+        }
+
         if($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_PROPRIETE)) {
             return false;
         }

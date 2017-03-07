@@ -39,7 +39,7 @@ class dr_exportActions extends _DRActions {
      * @param sfRequest $request A request object
      */
     public function executePdf(sfWebRequest $request) {
-        $this->secureDR(DRSecurity::CONSULTATION);
+
         set_time_limit(180);
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->annee = $request->getParameter('annee');
@@ -56,6 +56,11 @@ class dr_exportActions extends _DRActions {
         if(!$this->dr) {
 
             return $this->forward404();
+        }
+
+        if(!DRSecurity::getInstance($this->dr)->isAuthorized(DRSecurity::CONSULTATION)) {
+
+            return $this->forwardSecure();
         }
 
         $this->setLayout(false);
