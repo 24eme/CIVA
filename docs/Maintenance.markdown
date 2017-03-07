@@ -21,10 +21,14 @@ Transformation du fichier db2 en un csv contenant les sociétés, établissement
 Import du csv
 
  > php symfony societe:import-csv /tmp/tiers.csv
- 
+
  > php symfony etablissement:import-csv /tmp/tiers.csv
- 
+
  > php symfony compte:import-csv /tmp/tiers.csv
+
+Migration de CVI :
+
+ > php symfony migration:cvi ancien_cvi nouveau_cvi [conserver_le_mot_de_passe=1]
 
 DR
 --
