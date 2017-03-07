@@ -1,6 +1,6 @@
 <div id="contrats_vrac" class="clearfix">
 	<div class="ajout_annuaire">
-		<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner', array('identifiant' => $identifiant)); ?><?php if (isset($redirect)): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
+		<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_selectionner'); ?><?php if (isset($redirect)): ?>?redirect=<?php echo $redirect ?><?php endif; ?>">
 			<h2 class="titre_principal">Ajouter un contact</h2>
 	
 			<div class="fond">
@@ -13,7 +13,7 @@
 			</div>
 			<ul class="btn_prev_suiv clearfix" id="btn_etape">
 			    <li class="prec">
-		            <a id="btn_precedent" href="<?php echo url_for('annuaire_retour', array('identifiant' => $identifiant)) ?>">
+		            <a id="btn_precedent" href="<?php echo url_for('@annuaire_retour') ?>">
 		                <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retour.png">
 		            </a>
 			    </li>

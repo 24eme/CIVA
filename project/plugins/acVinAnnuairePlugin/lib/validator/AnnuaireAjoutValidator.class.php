@@ -10,7 +10,7 @@ class AnnuaireAjoutValidator extends sfValidatorBase
     protected function doClean($values) 
     {
         $tiers = $this->getTiers($values);
-        if (!$tiers && $values['identifiant_ajout']) {
+        if (!$tiers && $values['identifiant']) {
             throw new sfValidatorErrorSchema($this, array('identifiant' => new sfValidatorError($this, 'invalid')));
         }
         return array_merge($values, array('tiers' => $tiers));
@@ -18,6 +18,6 @@ class AnnuaireAjoutValidator extends sfValidatorBase
     
     protected function getTiers($values)
     {
-    	return AnnuaireClient::getInstance()->findTiersByTypeAndIdentifiant($values['type'], $values['identifiant_ajout']);
+    	return AnnuaireClient::getInstance()->findTiersByTypeAndIdentifiant($values['type'], $values['identifiant']);
     }
 }

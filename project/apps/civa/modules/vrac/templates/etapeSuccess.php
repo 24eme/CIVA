@@ -7,7 +7,7 @@
 </ul>
 <div id="contrats_vrac">
 
-    <form id="principal" class="ui-tabs" method="post" action="<?php echo $url_form; ?>">
+    <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
 
 
         <div class="fond">
@@ -18,7 +18,7 @@
 			?>
             <?php echo $form->renderHiddenFields() ?>
             <?php echo $form->renderGlobalErrors() ?>
-            <?php include_partial('form_'.$etape, array('form' => $form, 'vrac' => $vrac, 'etape' => $etape, 'referer' => $referer, 'user' => $user, 'identifiant' => $identifiant)) ?>
+            <?php include_partial('form_'.$etape, array('form' => $form, 'vrac' => $vrac, 'etape' => $etape, 'referer' => $referer, 'user' => $user)) ?>
         </div>
 
         <ul class="btn_prev_suiv clearfix" id="btn_etape">

@@ -55,8 +55,6 @@ class dr_recolteActions extends _DRActions {
     public function executeProduitAjout(sfWebRequest $request) {
         $this->produit = $this->declaration->getOrAdd($request->getParameter('hash'));
         $this->etablissement = $this->declaration->getEtablissement();
-        $this->secureDR(array(DRSecurity::EDITION,
-                              DRSecurity::DECLARANT), $this->declaration);
         $this->initDetails();
         $this->initAcheteurs();
         $this->initPrecDR();
@@ -501,23 +499,5 @@ class dr_recolteActions extends _DRActions {
                 'acheteurs_cooperative' => $this->acheteurs->cooperatives,
                 'acheteurs_mout' => $this->acheteurs->mouts,
                 'has_acheteurs_mout' => $this->has_acheteurs_mout);
-    }
-
-    protected function secureDR($droits, $dr = null) {
-        if(is_null($dr) && $this->getRoute() instanceof DRRoute) {
-            $dr = $this->getRoute()->getDR();
-        }
-
-        if(!DRSecurity::getInstance($this->getRoute()->getEtablissement(), $dr)->isAuthorized($droits)) {
-
-            return $this->forwardSecure();
-        }
-    }
-
-    protected function forwardSecure()
-    {
-        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
-
-        throw new sfStopException();
     }
 }

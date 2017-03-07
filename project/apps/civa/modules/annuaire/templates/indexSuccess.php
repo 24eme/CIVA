@@ -12,9 +12,9 @@
 						<ul>
 							<?php foreach ($annuaire->getAnnuaireSorted('recoltants') as $key => $item): ?>
 								<?php if ($i % 2 == 0): ?>
-									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key, 'identifiant' => $identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key, 'identifiant'=>$identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'recoltants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du récoltant ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -24,7 +24,7 @@
 					<?php endif; ?>
 				</div>
 
-				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants', 'identifiant'=>$identifiant)) ?>" class="btn"><img src="/images/boutons/btn_ajouter_recoltant.png" alt="Ajouter un récoltant" /></a>
+				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'recoltants')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_recoltant.png" alt="Ajouter un récoltant" /></a>
 			</div>
 
 			<div class="bloc_annuaire">
@@ -36,9 +36,9 @@
 						<ul>
 							<?php foreach ($annuaire->getAnnuaireSorted('negociants') as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key, 'identifiant'=>$identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key, 'identifiant'=>$identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'negociants', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du négociant ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -48,7 +48,7 @@
 					<?php endif; ?>
 				</div>
 
-				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'negociants', 'identifiant'=>$identifiant)) ?>" class="btn"><img src="/images/boutons/btn_ajouter_negociant.png" alt="Ajouter un négociant" /></a>
+				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'negociants')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_negociant.png" alt="Ajouter un négociant" /></a>
 			</div>
 
 			<div class="bloc_annuaire">
@@ -59,9 +59,9 @@
 						<ul>
 							<?php foreach ($annuaire->getAnnuaireSorted('caves_cooperatives') as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key, 'identifiant'=>$identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key, 'identifiant'=>$identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $item ?> <span class="infos">(<?php echo $key; ?>)</span><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'caves_cooperatives', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression de la cave coopérative ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -71,7 +71,7 @@
 					<?php endif; ?>
 				</div>
 
-				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'caves_cooperatives', 'identifiant'=>$identifiant)) ?>" class="btn"><img src="/images/boutons/btn_ajouter_cave.png" alt="Ajouter une cave coopérative" /></a>
+				<a href="<?php echo url_for('annuaire_selectionner', array('type' => 'caves_cooperatives')) ?>" class="btn"><img src="/images/boutons/btn_ajouter_cave.png" alt="Ajouter une cave coopérative" /></a>
 			</div>
 
 			<div class="bloc_annuaire">
@@ -82,9 +82,9 @@
 						<ul>
 							<?php foreach ($annuaire->getAnnuaireSorted('commerciaux') as $key => $item): ?>
 								<?php if($i % 2 == 0): ?>
-									<li><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key, 'identifiant' => $identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php else: ?>
-									<li class="alt"><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key, 'identifiant' => $identifiant)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
+									<li class="alt"><?php echo $key ?><?php if ($item): ?> <span class="infos"><?php echo $item; ?></span><?php endif; ?><a href="<?php echo url_for('annuaire_supprimer', array('type' => 'commerciaux', 'id' => $key)) ?>" onclick="return confirm('Confirmez-vous la suppression du commercial ?')" class="btn_supprimer">X</a></li>
 								<?php endif; ?>
 								<?php $i++; ?>
 							<?php endforeach; ?>
@@ -94,7 +94,7 @@
 					<?php endif; ?>
 				</div>
 
-				<a href="<?php echo url_for('annuaire_commercial_ajouter', array('identifiant' => $identifiant)); ?>" class="btn"><img src="/images/boutons/btn_ajout_commercial.png" alt="Ajouter un interlocuteur commercial" /></a>
+				<a href="<?php echo url_for('@annuaire_commercial_ajouter') ?>" class="btn"><img src="/images/boutons/btn_ajout_commercial.png" alt="Ajouter un interlocuteur commercial" /></a>
 			</div>
 		</div>
 	</div>

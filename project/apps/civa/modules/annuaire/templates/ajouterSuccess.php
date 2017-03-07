@@ -1,6 +1,6 @@
 <div id="contrats_vrac" class="clearfix">
 	<div class="ajout_annuaire">
-		<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_ajouter', array('identifiant_ajout' => $identifiant_ajout, 'type' => $type, 'identifiant' => $identifiant)) ?>">
+		<form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('annuaire_ajouter', array('identifiant' => $identifiant, 'type' => $type)) ?>">
 			
 			<h2 class="titre_principal">Ajouter un contact</h2>
 

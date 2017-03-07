@@ -5,7 +5,7 @@
 		<ul id="actions_contrat">
 			<?php if(VracSecurity::getInstance($compte, null)->isAuthorized(VracSecurity::CREATION)): ?>
 			<li class="nouveau_contrat"><a href="<?php echo ($hasDoubt)? null : url_for('vrac_nouveau'); ?>"<?php if($hasDoubt): ?> id="choixType"<?php endif; ?>><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
-			<li><a href="<?php echo url_for('annuaire', array('identifiant' => $compte->identifiant)) ?>">Gérer son annuaire</a></li>
+			<li><a href="<?php echo url_for('annuaire') ?>">Gérer son annuaire</a></li>
 			<?php endif; ?>
 			<li><a href="<?php echo url_for('vrac_historique', $compte) ?>">Voir tout</a></li>
 		</ul>
@@ -21,4 +21,4 @@
 		<p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
 	</div>
 </div>
-<?php include_partial('vrac/popupChoixType', array('compte' => $compte)); ?>
+<?php include_partial('vrac/popupChoixType'); ?>

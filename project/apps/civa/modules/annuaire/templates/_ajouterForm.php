@@ -12,8 +12,8 @@
 				<?php echo $form['type']->render() ?>
 			</td>
 			<td>
-				<span><?php echo $form['identifiant_ajout']->renderError() ?></span>
-				<?php echo $form['identifiant_ajout']->render() ?>
+				<span><?php echo $form['identifiant']->renderError() ?></span>
+				<?php echo $form['identifiant']->render() ?>
 			</td>
 		</tr>
 	</tbody>
