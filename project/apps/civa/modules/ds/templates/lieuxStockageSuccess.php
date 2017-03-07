@@ -44,7 +44,7 @@ $hasVolume = false;
 				<tr>
                                     <th colspan="2">Lieux de stockage</th>
 					<?php
-					$configurations = $ds->getConfig()->declaration->getArrayAppellations();
+					$configurations = DSCivaClient::getInstance()->getConfigAppellations($ds->getConfig());
 					foreach ($configurations as $conf):
 					?>
 					<th><?php

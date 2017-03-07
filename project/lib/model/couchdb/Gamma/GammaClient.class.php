@@ -15,9 +15,15 @@ class GammaClient
         }
 
         $societe = $compte->getSociete();
+        foreach($societe->getEtablissementsObject() as $etablissement) {
+            if($compte->getIdentifiant() == $etablissement->cvi && $etablissement->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
+
+                return $etablissement;
+            }
+        }
 
         foreach($societe->getEtablissementsObject() as $etablissement) {
-            if($etablissement->exist('no_accises') && $etablissement->no_accises) {
+            if($etablissement->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
 
                 return $etablissement;
             }
@@ -60,11 +66,20 @@ class GammaClient
         return $gamma;
     }
 
-    public function getGecos($compte, $etablissement) {
+    public function getGecos($compte, $etablissement = null) {
+        if($etablissement === null) {
+            $etablissement = GammaClient::getInstance()->getEtablissement($compte);
+        }
+
+        if(!$etablissement) {
+            return sprintf("%s,%s,%s,%s", $compte->identifiant, null, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
+        }
+
         $gamma = $this->findByEtablissement($etablissement);
+
         if(!$gamma) {
 
-            throw new sfException("Le gecos est vide");
+            return sprintf("%s,%s,%s,%s", $compte->identifiant, $etablissement->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
         }
 
         return sprintf("%s,%s,%s,%s", $gamma->identifiant_inscription, $gamma->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);

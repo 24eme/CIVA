@@ -5,7 +5,7 @@ class DRCreationFromAcheteur extends sfBaseTask {
     protected function configure() {
       $this->addOptions(array(
 			      new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-			      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+			      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
 			      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
 			      new sfCommandOption('import', null, sfCommandOption::PARAMETER_REQUIRED, 'import type [couchdb|stdout]', 'couchdb'),
 			      new sfCommandOption('removedb', null, sfCommandOption::PARAMETER_REQUIRED, '= yes if remove the db debore import [yes|no]', 'no'),
@@ -25,12 +25,12 @@ EOF;
     }
 
     protected function createOne($cvi, $year) {
-	$tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
-	if (!$tiers) {
+	$e = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$cvi);
+	if (!$e) {
 	  print "ERROR;;".$cvi.";;;".$e->getMessage()."\n";
 	  return false;
 	}
-	$dr = acCouchdbManager::getClient('DR')->retrieveByCampagneAndCvi($cvi, $year);
+	$dr = DRClient::getInstance()->retrieveByCampagneAndCvi($cvi, $year);
 	if ($dr) {
 	  print "EXISTE;;".$cvi."\n";
 	  return false;
@@ -38,7 +38,7 @@ EOF;
 	$import_from = array();
 	try{
       if (!$dr)
- 	    $dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($year, $tiers, $import_from);
+ 	    $dr = DRClient::getInstance()->createFromCSVRecoltant($year, $e, $import_from);
 	  $check = $dr->check();
       $acheteurs = array_merge($dr->acheteurs->getArrayNegoces(), $dr->acheteurs->getArrayCooperatives(), $dr->acheteurs->getArrayMouts());
 	  if (count($check['erreur']) || count($check['vigilance'])) {
@@ -52,19 +52,19 @@ EOF;
             foreach($check['vigilance'] as $err) {
                 print "VIGILANCE;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";".implode(", ", $acheteurs).";" .$err['info'] . ";" . $err['log']. "\n";
             }
-            
+
         }
-    
+
         if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
         else
            $dr->validate($year."-12-10", "COMPTE-auto");
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
-	    
+
 	  }else{
-	    $tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($dr->getCVI());
-	    if (!$tiers) {
+          $e = EtablissementClient::getInstance()->find("ETABLISSEMENT-".$dr->getCVI());
+	    if (!$e) {
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
@@ -78,7 +78,7 @@ EOF;
         if(!$this->dryrun) {
 	       $dr->save();
         }
-	}catch(sfException $e) {	
+	}catch(sfException $e) {
 	  print "ERROR;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";;".$e->getMessage()."\n";
 	  return false;
 	}
@@ -96,9 +96,9 @@ EOF;
 	   $this->save_error = $options['save-error'];
 	   $this->save_vigilance = $options['save-vigilance'] || $options['save-error'];
        $this->dryrun = $options['dryrun'];
-	
+
 	$campagne = $options['year'];
-	  
+
 	if ($options['cvi'] && $campagne) {
 	  return $this->createOne($options['cvi'], $campagne);
 	}
@@ -109,7 +109,7 @@ EOF;
 	}
 
     print "type;ID doc;cvi récoltant;nom récoltant;cvi(s) acheteur(s);erreur;detail de l'erreur\n";
-	
+
 	$CVIs = acCouchdbManager::getClient()->startkey(array((string)$campagne))->endkey(array((string)($campagne+1)))->getView("CSV", "recoltant");
 
 	foreach ($CVIs->rows as $o) {

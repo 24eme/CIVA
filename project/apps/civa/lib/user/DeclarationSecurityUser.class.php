@@ -98,6 +98,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
 
     public function getPeriodeDS($type_ds = null){
         $declarant = $this->getDeclarantDS($type_ds);
+
         if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
 
             return CurrentClient::getCurrent()->getPeriodeDS();
@@ -166,7 +167,7 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
             return true;
         }
 
-        return (CurrentClient::getCurrent()->dr_non_editable == 0 && CurrentClient::getCurrent()->dr_non_ouverte == 0);
+        return DRClient::getInstance()->isTeledeclarationOuverte();
     }
 
     /**

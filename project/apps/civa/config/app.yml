@@ -13,6 +13,7 @@ all:
       "MV": "Maladie de la vigne"
       "MP": "Motifs personnels"
       "VV": "Vendanges en Vert"
+      "VF": "Vigne en friche"
   configuration:
     vrac:
       delai_suppression: 5
@@ -88,7 +89,7 @@ all:
   etapes:
     items:
       mon_espace_civa:
-        url: "@mon_espace_civa_dr"
+        url: "mon_espace_civa_dr"
         next_is_new_etape: exploitation
       exploitation_message:
         url: "dr_message"

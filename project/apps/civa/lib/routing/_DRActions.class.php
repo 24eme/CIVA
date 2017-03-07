@@ -86,4 +86,30 @@ class _DRActions extends sfActions
     protected function setCurrentEtape($current_etape) {
         $this->_etapes_config->setCurrentEtape($current_etape);
     }
+
+    public function secureDR($droit) {
+        if($this->getRoute() instanceof DRRoute) {
+            if(!DRSecurity::getInstance($this->getRoute()->getDR())->isAuthorized($droit)) {
+
+                return $this->forwardSecure();
+            }
+        }
+
+        if($this->getRoute() instanceof EtablissementRoute) {
+            if(!EtablissementSecurity::getInstance($this->getRoute()->getEtablissement())->isAuthorized(Roles::TELEDECLARATION_DR)) {
+                return $this->forwardSecure();
+            }
+        }
+
+        if(!$this->getRoute() instanceof EtablissementRoute && !$this->getRoute() instanceof DRRoute) {
+            exit;
+        }
+    }
+
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    }
 }

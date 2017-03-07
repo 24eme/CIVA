@@ -2,7 +2,6 @@
 
 class DSSecurity implements SecurityInterface {
 
-    const DECLARANT = 'DECLARANT';
     const CONSULTATION = 'CONSULTATION';
     const CREATION = 'CREATION';
     const EDITION = 'EDITION';
@@ -44,21 +43,23 @@ class DSSecurity implements SecurityInterface {
             return false;
         }
 
-        /*** DECLARANT ***/
+        if($this->ds && in_array(self::CONSULTATION, $droits) && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(array())) {
+            $etablissementCompte = DSCivaClient::getInstance()->getEtablissement($this->getUser()->getCompte()->getSociete(), $this->type_ds);
 
-        if(!in_array($this->etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_NEGOCIANT || EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+            if($etablissementCompte && $dsCompte = DSCivaClient::getInstance()->find(str_replace($this->etablissement->identifiant, $etablissementCompte->identifiant, $this->ds->_id))) {
+                if ($dsCompte->_id == $this->ds->_id) {
 
+                    return true;
+                }
+            }
+        }
+
+        if($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_PROPRIETE)) {
             return false;
         }
 
-        /*if(!$this->compte->hasDroit(_CompteClient::DROIT_DS_DECLARANT)) {
-
+        if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_NEGOCE)) {
             return false;
-        }*/
-
-        if(in_array(self::DECLARANT, $droits)) {
-
-            return true;
         }
 
         if(!$this->etablissement->hasLieuxStockage() && !$this->etablissement->isAjoutLieuxDeStockage()) {
@@ -77,7 +78,6 @@ class DSSecurity implements SecurityInterface {
 
         /*** CREATION ***/
         if(in_array(self::CREATION, $droits) && $this->ds && !$this->ds->isNew()) {
-
             return false;
         }
 
@@ -86,7 +86,12 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::CREATION, $droits) && !$this->compte->isDsEditable($this->type_ds)) {
+        if(in_array(self::CREATION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+
+            return false;
+        }
+
+        if(in_array(self::CREATION, $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
         }
@@ -99,8 +104,8 @@ class DSSecurity implements SecurityInterface {
 
 
         /*** EDITION ***/
-
         if(in_array(self::EDITION , $droits) && !$this->ds) {
+
             return false;
         }
 
@@ -124,7 +129,12 @@ class DSSecurity implements SecurityInterface {
             return true;
         }
 
-        if(in_array(self::EDITION , $droits) && !$this->getUser()->isDsEditable($this->type_ds)) {
+        if(in_array(self::EDITION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+
+            return false;
+        }
+
+        if(in_array(self::EDITION , $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
 
             return false;
         }

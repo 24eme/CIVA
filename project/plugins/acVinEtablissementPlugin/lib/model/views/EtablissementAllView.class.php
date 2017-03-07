@@ -26,7 +26,7 @@ class EtablissementAllView extends acCouchdbView
 
 	public static function getInstance() {
 
-        return acCouchdbManager::getView('etablissement', 'all', 'Etablissement');
+		return acCouchdbManager::getView('etablissement', 'all', 'Etablissement');
     }
 
 	public function find() {
@@ -95,6 +95,7 @@ class EtablissementAllView extends acCouchdbView
     }
 
     private function findByInterproStatutAndFamilleELASTIC($interpro, $statut, $famille, $query = null, $limit = 100) {
+		throw new sfException("Not Elastica");
       $q = explode(' ', $query);
       for($i = 0 ; $i < count($q); $i++) {
 	$q[$i] = '*'.$q[$i].'*';

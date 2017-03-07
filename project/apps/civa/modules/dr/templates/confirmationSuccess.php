@@ -23,7 +23,7 @@
                     <p class="important">Votre Déclaration de Récolte a été envoyé par email aux acheteurs :</p>
                     <ul>
                         <?php foreach(DRClient::getInstance()->getAcheteursApporteur($dr->cvi, $dr->campagne) as $acheteur): ?>
-                        <li>- <?php echo $acheteur->qualite; ?>, <?php echo $acheteur->nom ?>, <?php echo $acheteur->cvi; ?></li>
+                        <li>- <?php echo $acheteur->getFamille(); ?>, <?php echo $acheteur->nom ?>, <?php echo $acheteur->cvi; ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -61,11 +61,11 @@
     </div>
     <!-- fin #application_dr -->
 
-    <?php include_partial('dr/boutons', array('display' => array('retour','previsualiser'), 'dr' => $dr)) ?>
+    <?php include_partial('dr/boutons', array('display' => array('retour','previsualiser'), 'dr' => $dr, 'etablissement' => $dr->getEtablissement())) ?>
 
 </form>
 <!-- fin #principal -->
 
-<?php include_partial('generationDuPdf', array('annee' => $annee, 'dr' => $dr)) ?>
+<?php include_partial('dr/generationDuPdf', array('annee' => $annee, 'etablissement' => $dr->getEtablissement())) ?>
 <?php include_partial('envoiMailDRAcheteurs', array('annee' => $annee, 'dr' => $dr)) ?>
 <?php //include_partial('envoiMailDR', array('annee' => $annee)) ?>

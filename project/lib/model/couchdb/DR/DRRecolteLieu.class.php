@@ -4,7 +4,7 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
 
     public function getLibelleWithAppellation() {
         if ($this->getLibelle())
-            return $this->getParent()->getParent()->getLibelle() . ' ' . $this->getParent()->getLibelle() . ' - ' . $this->getLibelle();
+            return $this->getParent()->getParent()->getLibelle() . ' '.$this->getParent()->getLibelle() . ' - ' . $this->getLibelle();
         return $this->getParent()->getParent()->getLibelle().' '.$this->getParent()->getLibelle();
     }
 
@@ -79,6 +79,18 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function getCodeDouane($vtsgn = '') {
+
+        $config = $this->getConfig();
+
+        if($config->getMention()->getKey() != "DEFAUT") {
+            $config = $config->getAppellation()->mentions->get("DEFAUT")->lieux->get($config->getKey());
+        }
+
+        foreach($config->getProduits() as $produit) {
+
+            return substr($produit->getCodeDouane(), 0, 6)." ";
+        }
+
         if ($this->getParent()->getKey() == 'appellation_VINTABLE') {
             if ($this->getParent()->getParent()->filter('appellation_')->count() > 1) {
                 $vtsgn = 'AOC';

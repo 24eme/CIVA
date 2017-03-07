@@ -18,6 +18,20 @@ class DRRecolteMention extends BaseDRRecolteMention {
         return $this->getLieux();
     }
 
+    public function getMention() {
+
+        return $this;
+    }
+
+    public function hasLieux() {
+        foreach($this->getLieux() as $lieu) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function getLieux(){
         return $this->filter('^lieu');
     }

@@ -10,7 +10,7 @@
         </a>
 
         <?php if(isset($appellation) && $selected && count($appellation->getConfig()->mentions->getFirst()->getLieux()) > 1): ?>
-            <ul class="sous_onglets">
+            <ul class="sous_onglets" style="position: absolute; left: auto;">
                 <?php foreach ($appellation->getLieuxSorted() as $l): ?>
                 <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">
                     <a class="ajax" href="<?php echo url_for('ds_edition_operateur', $l) ?>"><?php echo $l->getLibelle(); ?></a>

@@ -17,18 +17,33 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
 
     /**
      *
-     * @return boolean
-     */
-    public function hasOneOrMoreAppellation() {
-        return $this->getAppellations()->count() > 0;
-    }
-
-    /**
-     *
      * @return acCouchdbJson
      */
     public function getConfigAppellations() {
         return $this->getConfig()->filter('^appellation_');
+    }
+
+    public function cleanAllNodes() {
+        $mentionsKey = array("mentionVT" => "mentionVT", "mentionSGN" => "mentionSGN");
+        foreach($this->getChildrenNode() as $appellation) {
+            foreach($appellation->getChildrenNode() as $mention) {
+                if(isset($mentionsKey[$mention->getKey()]) && count($mention->getProduitsDetails())) {
+                    unset($mentionsKey[$mention->getKey()]);
+                }
+            }
+            if(!count($appellation->getProduitsDetails()) && $this->getDocument()->acheteurs->exist('certification/genre')){
+                $this->getDocument()->acheteurs->certification->genre->remove($appellation->getKey());
+            }
+        }
+
+        foreach($mentionsKey as $mentionKey) {
+            if(!$this->getDocument()->acheteurs->exist('certification/genre')) {
+                continue;
+            }
+            $this->getDocument()->acheteurs->certification->genre->remove($mentionKey);
+        }
+
+        parent::cleanAllNodes();
     }
 
     /*
@@ -46,22 +61,6 @@ class DRRecolteGenre extends BaseDRRecolteGenre {
     public function getUsagesIndustrielsCalcule(){
 
         return parent::getDataByFieldAndMethod("usages_industriels_calcule", array($this,"getSumNoeudFields") , true);
-    }
-
-    public function cleanAllNodes() {
-        $keys_to_delete = array();
-        foreach($this->getChildrenNode() as $item) {
-            $item->cleanAllNodes();
-
-            if(!count($item->getProduitsDetails())){
-                $this->getDocument()->acheteurs->certification->genre->remove($item->getKey());
-                $keys_to_delete[$item->getKey()] = $item->getKey();
-            }
-        }
-
-        foreach($keys_to_delete as $key) {
-            $this->remove($key);
-        }
     }
 
     /**

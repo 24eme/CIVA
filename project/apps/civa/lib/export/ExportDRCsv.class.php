@@ -11,7 +11,7 @@
  * @author mathurin
  */
 class ExportDRCsv extends ExportCsv {
-    
+
     public static $_headers = array(
         "cvi_acheteur" => "CVI acheteur",
         "nom_acheteur" => "nom acheteur",
@@ -54,7 +54,7 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => array("type" => "string"),
         "hash" => array("type" => "string"),
     );
-    
+
     protected $_acheteur = null;
     protected $_debug = false;
     protected $_md5 = null;
@@ -63,7 +63,7 @@ class ExportDRCsv extends ExportCsv {
 
     /**
      *
-     * @param string $campagne 
+     * @param string $campagne
      */
     public function __construct($campagne, $cvi, $with_header = true, $debug = false) {
         if($with_header) {
@@ -75,10 +75,10 @@ class ExportDRCsv extends ExportCsv {
         if (!$this->dr) {
             throw new sfException("DR not find");
         }
-        
+
         $this->_md5 = $this->calculMd5($this->dr);
     }
-    
+
     public function add($data, $validation = array()) {
         $line = parent::add($data, $validation);
         if ($this->_debug) {
@@ -90,7 +90,7 @@ class ExportDRCsv extends ExportCsv {
     public function getMd5() {
         return $this->_md5;
     }
-    
+
     public function export() {
         $dr = $this->dr;
 
@@ -99,56 +99,53 @@ class ExportDRCsv extends ExportCsv {
         }
 
         foreach ($dr->recolte->getAppellations() as $appellation) {
-            foreach ($appellation->getLieux() as $lieu) {
-                foreach($lieu->getCouleurs() as $couleur) {
-                    foreach ($couleur->getCepages() as $cepage) {
-                        foreach ($cepage->getDetail() as $detail) {
-                            if($detail->cave_particuliere > 0) {
-                                $this->addDetailTotal($detail);
-                            }
-                            foreach ($detail->filter('negoces|cooperatives|mouts') as $acheteurs) {
-                                foreach ($acheteurs as $acheteur) {
-                                        $this->addDetailAcheteur($acheteur);
+            foreach($appellation->getMentions() as $mention) {
+                foreach ($mention->getLieux() as $lieu) {
+                    foreach($lieu->getCouleurs() as $couleur) {
+                        foreach ($couleur->getCepages() as $cepage) {
+                            foreach ($cepage->getDetail() as $detail) {
+                                if($detail->cave_particuliere > 0) {
+                                    $this->addDetailTotal($detail);
+                                }
+                                foreach ($detail->filter('negoces|cooperatives|mouts') as $acheteurs) {
+                                    foreach ($acheteurs as $acheteur) {
+                                            $this->addDetailAcheteur($acheteur);
+                                    }
+                                }
+                                if($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
+                                    $this->addDetailNonRecolte($detail);
                                 }
                             }
-                            if($detail->exist('motif_non_recolte') && $detail->motif_non_recolte) {
-                                $this->addDetailNonRecolte($detail);
-                            }
+                        }
+                        if($couleur->getKey() != "couleur") {
+                            $this->addNoeudTotal($couleur);
                         }
                     }
-                    if($lieu->getConfig()->hasManyCouleur()) {
-                        $this->addNoeudTotal($couleur);
+
+                    if($appellation->getConfig()->hasManyLieu()) {
+                        $this->addNoeudTotal($lieu);
+                    }
+
+                    foreach ($lieu->acheteurs as $acheteurs) {
+                        foreach ($acheteurs as $cvi_a => $acheteur) {
+                                $this->addNoeudAcheteur($lieu, $acheteur);
+                        }
                     }
                 }
-
-                if($appellation->getConfig()->hasManyLieu()) {
-                    $this->addNoeudTotal($lieu);
-                }
-
-                foreach ($lieu->acheteurs as $acheteurs) {
-                    foreach ($acheteurs as $cvi_a => $acheteur) {
-                            $this->addNoeudAcheteur($lieu, $acheteur);
-                    }
-                }
+                $this->addNoeudTotal($mention);
             }
-
-            $this->addNoeudTotal($appellation);
         }
         $this->addJeunesVignes($dr);
-                
+
         if ($this->_debug) {
             echo "------------ \n" . count($this->_ids_dr) . " DRs \n ------------\n";
         }
     }
-    
+
     protected function addDetailAcheteur($acheteur) {
         $detail = $acheteur->getParent()->getParent();
-        
-        $acheteurObject = acCouchdbManager::getClient()->find('ACHAT-'.$acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
 
-        if(!$acheteurObject) {
-            $acheteurObject = acCouchdbManager::getClient()->find('REC-'.$acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
-        }
+        $acheteurObject =  EtablissementClient::getInstance()->findByCvi($acheteur->cvi, acCouchdbClient::HYDRATE_JSON);
 
         $this->add(array(
             "cvi_acheteur" => $acheteur->cvi,
@@ -250,7 +247,7 @@ class ExportDRCsv extends ExportCsv {
             "hash" => $noeud->getHash(),
                 ), $this->_validation_ligne);
     }
-    
+
     protected function addNoeudTotal($noeud) {
         if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
             $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
@@ -267,10 +264,11 @@ class ExportDRCsv extends ExportCsv {
             $cepage = "TOTAL";
         }
 
-        if($noeud instanceof DRRecolteAppellation) {
+        if($noeud instanceof DRRecolteMention) {
             $lieu = "TOTAL";
             $cepage = "";
         }
+        $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
         $this->add(array(
             "cvi_acheteur" => $noeud->getCouchdbDocument()->cvi,
@@ -280,7 +278,7 @@ class ExportDRCsv extends ExportCsv {
             "appellation" => ($noeud instanceof DRRecolteAppellation) ? $noeud->getConfig()->getLibelle() : $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => $lieu,
             "cepage" => $cepage,
-            "vtsgn" => null,
+            "vtsgn" => $vtsgn,
             "denomination" => null,
             "superficie_livree" => ($noeud->canCalculSuperficieSurPlace()) ? $noeud->getSuperficieCaveParticuliere() : null,
             "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
@@ -318,7 +316,7 @@ class ExportDRCsv extends ExportCsv {
             "hash" => "/jeunes_vignes",
                 ), $this->_validation_ligne);
     }
-    
+
 
     protected function calculMd5($dr) {
        return $dr->_rev;
@@ -343,7 +341,7 @@ class ExportDRCsv extends ExportCsv {
 
         return $dr->modifiee;
     }
-    
+
     private function getValidationUser($dr) {
         $user = null;
 
@@ -360,7 +358,7 @@ class ExportDRCsv extends ExportCsv {
         if ($dr->exist('utilisateurs')) {
             foreach($dr->utilisateurs->validation as $compte => $date_fr) {
                 if (preg_match('/^COMPTE-auto$/', $compte)) {
-                   
+
                    return "Automatique";
                 }
 
@@ -379,7 +377,7 @@ class ExportDRCsv extends ExportCsv {
 
         if ((!$user || $user == "CIVA") && strtotime($dr->validee) >= strtotime($this->_campagne.'-12-10') && strtotime($dr->modifiee) >= strtotime($this->_campagne.'-12-10')) {
             $user = 'Automatique';
-        } 
+        }
 
         if(!$user) {
             $user = 'Inconnu';
@@ -387,5 +385,5 @@ class ExportDRCsv extends ExportCsv {
 
         return $user;
     }
-    
+
 }

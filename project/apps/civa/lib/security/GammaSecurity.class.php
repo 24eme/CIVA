@@ -4,7 +4,6 @@ class GammaSecurity implements SecurityInterface {
 
     const DECLARANT = 'DECLARANT';
 
-    protected $compte;
     protected $etablissement;
 
     public static function getInstance($etablissement) {
@@ -21,10 +20,7 @@ class GammaSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
-        /*** DECLARANT ***/
-
-        if(!$this->etablissement && !$this->etablissement->no_accises) {
-
+        if(!EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_GAMMA)) {
             return false;
         }
 

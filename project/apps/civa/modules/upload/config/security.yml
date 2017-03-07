@@ -1,4 +1,2 @@
-default:
-  credentials: [acheteur]
 csvList:
   credentials: [admin]

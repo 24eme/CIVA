@@ -5,7 +5,7 @@ class maintenanceCompteUpdateTask extends sfBaseTask {
     protected function configure() {
         // // add your own arguments here
         $this->addArguments(array(
-          new sfCommandArgument('doc_id', sfCommandArgument::REQUIRED, 'Campagne'),
+          new sfCommandArgument('doc_id', sfCommandArgument::REQUIRED, 'Document couchdb id '),
           new sfCommandArgument('mot_de_passe', sfCommandArgument::REQUIRED, 'mot de passe'),
           new sfCommandArgument('email', sfCommandArgument::OPTIONAL, 'email'),
         ));
@@ -39,13 +39,22 @@ EOF;
             return;
         }
 
-        $master = $compte->getMasterObject();
-        $master->setEmail($arguments['email']);
-        $master->save();
-
         $compte = CompteClient::getInstance()->find($arguments['doc_id']);
-        $compte->setMotDePasse($arguments['mot_de_passe']);
+        if($compte->isInscrit()) {
+            echo "Le compte ".$arguments['doc_id']." est déjà inscrit\n";
+            return;
+        }
+        if($arguments['email']) {
+            $compte->setEmail($arguments['email']);
+        }
+        if($arguments['mot_de_passe']) {
+            $compte->setMotDePasse($arguments['mot_de_passe']);
+        }
         $compte->save();
+
+        CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($compte);
+
+        echo "Le compte ".$arguments['doc_id']." a été mis à jour\n";
     }
 
 

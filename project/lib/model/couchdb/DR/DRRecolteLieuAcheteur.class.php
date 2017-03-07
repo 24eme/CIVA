@@ -1,6 +1,6 @@
 <?php
 
-class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur 
+class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
 {
   private $acheteur = null;
 
@@ -30,13 +30,10 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   }
   private function getAcheteurFromCVI() {
     if (!$this->acheteur) {
-      $this->acheteur = acCouchdbManager::getClient()->find('ACHAT-'.$this->getKey());
-    }
-    if(!$this->acheteur) {
-      $this->acheteur = acCouchdbManager::getClient()->find('REC-'.$this->getKey());
+      $this->acheteur = EtablissementClient::getInstance()->findByCvi($this->getKey());
     }
     if (!$this->acheteur) {
-        $this->acheteur = new Acheteur();
+        $this->acheteur = new Etablissement();
     }
     return $this->acheteur;
   }
@@ -49,6 +46,11 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   }
 
   protected function synchronizeRecolteAcheteur() {
-    $this->getCouchdbDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
+        if($this->getLieu()->getMention()->getKey() != "mention") {
+            $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getMention()->getKey(), $this->type_acheteur, $this->getCVI());
+        }
+
+        $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
+
   }
 }

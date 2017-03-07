@@ -2,77 +2,132 @@
 
 class CompteCsvFile extends CsvFile
 {
-
-    const CSV_ID = 0;
-    const CSV_ID_SOCIETE = 1;
-    const CSV_STATUT = 2;
-    const CSV_CIVILTE = 3;
-    const CSV_NOM = 4;
-    const CSV_PRENOM = 5;
-    const CSV_FONCTION = 6;
-    const CSV_ADRESSE = 7;
-    const CSV_ADRESSE_COMPLEMENTAIRE_1 = 8;
-    const CSV_ADRESSE_COMPLEMENTAIRE_2 = 9;
-    const CSV_ADRESSE_COMPLEMENTAIRE_3 = 10;
-    const CSV_CODE_POSTAL = 11;
-    const CSV_COMMUNE = 12;
-    const CSV_INSEE = 13;
-    const CSV_CEDEX = 14;
-    const CSV_PAYS = 15;
-    const CSV_EMAIL = 16;
-    const CSV_TEL_BUREAU = 17;
-    const CSV_TEL_PERSO = 18;
-    const CSV_MOBILE = 19;
-    const CSV_FAX = 20;
-    const CSV_WEB = 21;
-    const CSV_COMMENTAIRE = 22;
+    const CSV_TYPE = 0;
+    const CSV_ID_MASTER = 1;
+    const CSV_ID = 2;
+    const CSV_ID_COMPTE = 3;
+    //const CSV_FAMILLE = 4;
+    const CSV_STATUT = 5;
+    const CSV_INTITULE = 6;
+    const CSV_NOM = 7;
+    // const CSV_NOM_COURT = 8;
+    const CSV_CVI = 9;
+    const CSV_NUM_INTERNE = 10;
+    const CSV_SIRET = 11;
+    const CSV_NO_ACCISES = 12;
+    const CSV_CARTE_PRO = 13;
+    const CSV_RECETTE_LOCALE = 14;
+    const CSV_NATURE_INAO = 15;
+    const CSV_REGION = 16;
+    const CSV_ADRESSE = 17;
+    const CSV_ADRESSE_COMPLEMENTAIRE_1 = 18;
+    const CSV_ADRESSE_COMPLEMENTAIRE_2 = 19;
+    const CSV_CODE_POSTAL = 20;
+    const CSV_COMMUNE = 21;
+    const CSV_INSEE = 22;
+    const CSV_CEDEX = 23;
+    const CSV_PAYS = 24;
+    const CSV_INSEE_DECLARATION = 25;
+    const CSV_COMMUNE_DECLARATION = 26;
+    const CSV_TEL_BUREAU = 27;
+    const CSV_TEL_PERSO = 28;
+    const CSV_MOBILE = 29;
+    const CSV_FAX = 30;
+    const CSV_EMAIL = 31;
+    const CSV_WEB = 32;
+    const CSV_COMMENTAIRE = 33;
+    const CSV_EXPLOITANT_INTITULE = 34;
+    const CSV_EXPLOITANT_NOM = 35;
+    const CSV_EXPLOITANT_ADRESSE = 36;
+    const CSV_EXPLOITANT_CODE_POSTAL = 37;
+    const CSV_EXPLOITANT_COMMUNE = 38;
+    const CSV_EXPLOITANT_PAYS = 39;
+    const CSV_EXPLOITANT_TEL = 40;
+    const CSV_EXPLOITANT_DATE_NAISSANCE = 41;
 
     public function importComptes() {
         $this->errors = array();
-        $societes = array();
         $csvs = $this->getCsv();
         foreach ($csvs as $line) {
+            if($line[self::CSV_TYPE] != "COMPTE") {
+                continue;
+            }
+
             try{
-        	    if($line[self::CSV_ID]) {
-                      if (CompteClient::getInstance()->find($line[self::CSV_ID], acCouchdbClient::HYDRATE_JSON)) {
-                          echo "ERROR: Compte ".$id." existe\n";
-                          continue;
-                      }
+                $e = EtablissementClient::getInstance()->find(sprintf("ETABLISSEMENT-%s", str_replace("ETABLISSEMENT-", "", $line[self::CSV_ID_MASTER])));
+
+                if(!$e) {
+                    throw new sfException(sprintf("Document introuvable '%s'", $line[self::CSV_ID_MASTER]));
                 }
 
+                $s = $e->getSociete();
+                $identifiant = str_replace("COMPTE-", "", $line[self::CSV_ID]);
 
-                $societe = SocieteClient::getInstance()->find(sprintf("SOCIETE-%06d", $line[self::CSV_ID_SOCIETE]));
+                $cOrigin = new acCouchdbJsonNative(new stdClass());
+                $c = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", "", $line[self::CSV_ID]));
 
-                if(!$societe) {
-
-                    throw new sfException(sprintf("Societe introuvable '%s'", sprintf("SOCIETE-%06d", $line[self::CSV_ID_SOCIETE])));
+                if($c) {
+                    $cOrigin = new acCouchdbJsonNative($c->toJson());
                 }
 
-              	$c = CompteClient::getInstance()->createCompteFromSociete($societe);
+                if(!$c) {
+                    $c = new Compte();
+                    $c->id_societe = $s->_id;
+                    $c->identifiant = $identifiant;
+                    $c->interpro = 'INTERPRO-declaration';
+                    $c->constructId();
+                }
 
-                $c->statut = ($line[self::CSV_STATUT] == SocieteClient::STATUT_SUSPENDU) ? $line[self::CSV_STATUT] : $societe->statut;
+                $c->remove('origines');
+                $c->add('origines');
 
-                $c->civilite = $line[self::CSV_CIVILTE];
-                $c->nom = $line[self::CSV_NOM];
-                $c->prenom = $line[self::CSV_PRENOM];
-                $c->fonction = $line[self::CSV_FONCTION];
+                $c->addOrigine($e->_id);
 
-                $this->storeCompteInfos($c, $line);
+                if($c->id_societe != $s->_id) {
+                    echo "Warning le compte $c->_id a changé de société : $c->id_societe => $s->_id\n";
+                    $c->changeSociete($s->_id);
+                }
 
-                $societe->pushToCompteOrEtablissementAndSave($societe->getMasterCompte(), $c);
+                $c->statut = ($line[self::CSV_STATUT]) ? $line[self::CSV_STATUT] : $s->statut;
 
-                echo "Compte " . $c->_id ." créé\n";
+                if($c->statut == CompteClient::STATUT_ACTIF && !$c->mot_de_passe) {
+                    $c->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
+                }
+
+                $c->civilite = $e->getIntitule();
+                $c->nom = $e->getNom();
+                $c->updateNomAAfficher();
+                $email = $c->email;
+                $e->pushContactAndAdresseTo($c);
+                if($c->isInscrit()) {
+                    $c->email = $email;
+                }
+
+                $cFinal = new acCouchdbJsonNative($c->toJson());
+                $diffFinal = $cFinal->diff($cOrigin);
+                $diffOrigin = $cOrigin->diff($cFinal);
+                $nouveau = $c->isNew();
+
+                if(!count($diffFinal) && !count($diffOrigin)) {
+                    continue;
+                }
+
+                $modifications = null;
+                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                if($nouveau) { $modifications = "Création"; }
+
+                $c->save();
+
+                echo $c->_id." (".trim($modifications).")\n";
         	} catch(Exception $e) {
                echo $e->getMessage()."\n";
             }
         }
-
-        return $societes;
     }
 
     protected function storeCompteInfos(InterfaceCompteGenerique $c, $line) {
         $c->setAdresseComplementaire(null);
-        $c->adresse = trim(preg_replace('/,/', '', $this->getField($line, 'CSV_ADRESSE')));
+        $c->adresse = trim($this->getField($line, 'CSV_ADRESSE'));
         if(preg_match('/[a-z]/i', $this->getField($line, 'CSV_ADRESSE_COMPLEMENTAIRE_1'))) {
            $c->setAdresseComplementaire(trim(preg_replace('/,/', '', $this->getField($line, 'CSV_ADRESSE_COMPLEMENTAIRE_1'))));
             if(preg_match('/[a-z]/i', $this->getField($line, 'CSV_ADRESSE_COMPLEMENTAIRE_2'))) {
@@ -85,23 +140,9 @@ class CompteCsvFile extends CsvFile
         }
 
         $c->code_postal = trim($this->getField($line, 'CSV_CODE_POSTAL'));
-
-        if(!$c->code_postal) {
-            echo "WARNING: le code postal est vide pour la société ".$c->identifiant."\n";
-        }
-
-        if($c->code_postal && !preg_match("/^[0-9]{5}$/", $c->code_postal)) {
-            echo "WARNING: le code postal ne semple pas correct : ".$c->code_postal." pour la société ".$c->identifiant."\n";
-        }
-
         $c->commune = $this->getField($line, 'CSV_COMMUNE');
-        $c->insee = $this->getField($line, 'CSV_INSEE');
-
-        if(!$c->commune) {
-            echo "WARNING: la commune est vide pour la société ".$c->identifiant.":".implode(";", $line)."\n";
-        }
-
-        $c->pays = "";
+        $c->insee = $this->getField($line, 'CSV_INSEE') ? $this->getField($line, 'CSV_INSEE') : null;
+        $c->pays = $this->getField($line, 'CSV_PAYS');
 
         if(preg_match("/^FRANCE$/i", $this->getField($line, 'CSV_PAYS'))) {
             $c->pays = 'FR';
@@ -109,11 +150,7 @@ class CompteCsvFile extends CsvFile
 
         if(!$c->pays) {
             $pays = ConfigurationClient::getInstance()->findCountry($this->getField($line, 'CSV_PAYS'));
-            if($pays) {
-                $c->pays = $pays;
-            } else {
-                echo "WARNING: la pays ".$this->getField($line, 'CSV_PAYS')." n'a pas été trouvé pour la société ".$c->identifiant.":".implode(";", $line)."\n";
-            }
+            $c->pays = ($pays) ? $pays : null;
         }
 
         $c->email = $this->formatAndVerifyEmail($this->getField($line, 'CSV_EMAIL'), $c);
@@ -154,11 +191,11 @@ class CompteCsvFile extends CsvFile
 
         if($phone && !preg_match("/^[0-9]{10}$/", $phone) && !preg_match("/^00/", $phone)) {
             printf("WARNING: ".$c->_id.": Problème d'import : Le numéro de téléphone n'est pas correct %s\n", $phone);
-            $c->addCommentaire(sprintf("Problème d'import : Le numéro de téléphone n'est pas correct %s", $phone));
-            return null;
+            //$c->addCommentaire(sprintf("Problème d'import : Le numéro de téléphone n'est pas correct %s", $phone));
+            //return null;
         }
 
-        return $phone;
+        return ($phone) ? $phone : null;
     }
 
     protected function formatAndVerifyEmail($email, $c) {
@@ -166,11 +203,11 @@ class CompteCsvFile extends CsvFile
 
         if($email && !preg_match("/^[a-z0-9çéèàâê_\.-]+@[a-z0-9\.-]+$/i", $email)) {
             printf("WARNING: ".$c->_id.": L'email n'est pas correct %s\n", $email);
-            $c->addCommentaire(sprintf("Problème d'import: L'email n'est pas correct %s", $email));
-            return null;
+            //$c->addCommentaire(sprintf("Problème d'import: L'email n'est pas correct %s", $email));
+            //return null;
         }
 
-        return $email;
+        return ($email) ? $email : null;
     }
 
 }

@@ -17,6 +17,6 @@ echo "Le fichier $FILE_TIERS n'existe pas"
 exit;
 fi
 
-echo "CVI;NOM"
+echo "CVI;TELEPHONE;NOM;COOP;TYPE"
 
-cat $FILE_TIERS | awk -F ',' '{ print $24 ";" $58 ";" $7 }' | sed 's/"//g' | grep "^O;" | cut -d ";" -f 2,3 | grep -E "^6" | sed -r 's/[ ]+/ /' | while read ligne; do CVI=$(echo $ligne | cut -d ";" -f 1); curl -s $COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/DR-$CVI-$ANNEE | grep "not_found" | sed "s|^|$ligne|" | cut -d "{" -f 1; done
+cat $FILE_TIERS | awk -F ',' '{ if($36 == "\"O\"") { next; } print $24 ";" $58 ";" $38 ";" $7 ";" $12 ";" $18 }' | sed 's/"//g' | grep "^O;" | cut -d ";" -f 2,3,4,5,6 | grep -E "^6" | sed -r 's/[ ]+/ /' | while read ligne; do CVI=$(echo $ligne | cut -d ";" -f 1); curl -s $COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/DR-$CVI-$ANNEE | grep "not_found" | sed "s|^|$ligne|" | cut -d "{" -f 1; done

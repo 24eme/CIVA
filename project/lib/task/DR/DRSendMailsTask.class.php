@@ -41,15 +41,14 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
-        
-        $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll($arguments['campagne']);
+
+        $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll();
         foreach ($drs_to_send_mail as $dr_result) {
-            $dr = acCouchdbManager::getClient("DR")->find($dr_result->id);   
-            $tiers = acCouchdbManager::getClient("Recoltant")->retrieveByCvi($dr->cvi);
+            $dr = DRClient::getInstance()->find($dr_result->id);
             $annee = $dr->campagne;
-            $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$tiers,$annee); 
-            
-            $dr_new = acCouchdbManager::getClient("DR")->find($dr_result->id); 
+            $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$dr->getEtablissement(),$annee);
+
+            $dr_new = DRClient::getInstance()->find($dr_result->id);
 
             if($dr->_rev != $dr_new->_rev) {
                 continue;
@@ -64,7 +63,7 @@ EOF;
                 if($dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
                     $this->mailerManager->sendAcheteursMails();
                 }
-                echo $dr->_id.":Email envoyé à ".$tiers->getCompteEmail()."\n";
+                echo $dr->_id.":Email envoyé à ".$dr->getEtablissement()->getEmailTeledeclaration()."\n";
             } catch(Exception $e) {
                 echo $dr->_id.":".$e->getMessage()."\n";
                 continue;
@@ -74,11 +73,11 @@ EOF;
             $dr->save();
         }
     }
-    
+
     public function getPartial($templateName, $vars = null) {
         $this->configuration->loadHelpers('Partial');
         $vars = null !== $vars ? $vars : $this->varHolder->getAll();
         return get_partial($templateName, $vars);
     }
-    
+
 }

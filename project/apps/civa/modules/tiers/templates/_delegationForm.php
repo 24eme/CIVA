@@ -7,6 +7,9 @@
             <p class="intro">Pour vous connecter, merci d'indiquer le CVI :</p>
             <?php echo $form->renderHiddenFields(); ?>
             <?php echo $form->renderGlobalErrors(); ?>
+            <?php if($sf_user->hasFlash('form_error')): ?>
+                <ul class="error_list"><li><?php echo $sf_user->getFlash('form_error') ?></li></ul>
+            <?php endif; ?>
             <div class="ligne_form ligne_form_label">
                 <?php echo $form['compte']->renderError() ?>
                 <?php echo $form['compte']->renderLabel() ?>

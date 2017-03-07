@@ -1,10 +1,17 @@
 <?php
 class CompteDroitsForm extends acCouchdbForm {
-    
+
     protected $comptes = null;
 
     public function __construct(acCouchdbDocument $doc, $defaults = array(), $options = array(), $CSRFSecret = null) {
-        $this->comptes = $doc->getComptesPersonnes();
+        $this->comptes = array();
+        foreach($doc->getContactsObj() as $compte) {
+            if(!$compte->isActif() || !$compte->mot_de_passe) {
+                continue;
+            }
+
+            $this->comptes[$compte->_id] = $compte;
+        }
         parent::__construct($doc, $defaults, $options, $CSRFSecret);
     }
 
@@ -26,6 +33,8 @@ class CompteDroitsForm extends acCouchdbForm {
 
     public function configure() {
         foreach($this->comptes as $compte) {
+
+            $compte->add('droits');
             $this->embedForm($compte->_id, new CompteDroitForm($compte));
         }
 

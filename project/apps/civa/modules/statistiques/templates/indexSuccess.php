@@ -31,10 +31,10 @@
                             <li>à l'étape validation : <?php echo $etapeValidation; ?></li>
                         </ul>
                     </li>
-			        <li><strong>Nombre de CSV acheteurs uploadés : <?php echo link_to($nb_csv_acheteurs, '@upload_list'); ?></strong></li>
+			        <li><strong>Nombre de CSV acheteurs uploadés : <?php echo link_to($nb_csv_acheteurs, 'upload_list'); ?></strong></li>
 		            <li><strong>Utililisateurs éditeurs :</strong>
                     <ul>
-                        <?php 
+                        <?php
                         foreach ($utilisateurs_edition_dr as $u => $nb) {
                         	$u = str_replace('COMPTE-', '', $u);
                         	echo "<li>$u : $nb</li>";
@@ -60,7 +60,7 @@
                     </li>
                     <li><strong>Utililisateurs éditeurs :</strong>
                     <ul>
-                        <?php 
+                        <?php
                         foreach ($utilisateurs_edition_ds[$type] as $u => $nb) {
                             $u = str_replace('COMPTE-', '', $u);
                             echo "<li>$u : $nb</li>";

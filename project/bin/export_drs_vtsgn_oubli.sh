@@ -9,6 +9,6 @@ if ! test "$ANNEE"; then
     exit;
 fi
 
-echo '"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"date de creation";"date de validation";"validateur";"hash_produit"'
+echo '"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"date de creation";"date de validation";"validateur"'
 
-bash bin/export_drs_csv.sh $ANNEE | grep -v '"CVI acheteur"' | grep -v ';"VT";' | grep -v ';"SGN"' | grep -Ei "(séléction|selection|grain| nobles|vendange|tardive|sgn|vt|v\.t|s\.g\.n)"
+bash bin/export_drs_csv.sh $ANNEE | cut -d ";" -f -18 | grep -v '"CVI acheteur"' | grep -v ';"VT";' | grep -v ';"SGN";' | grep -Ei "(séléction|selection|grain| nobles|vendange|tardive|sgn|vt|v\.t|s\.g\.n)"

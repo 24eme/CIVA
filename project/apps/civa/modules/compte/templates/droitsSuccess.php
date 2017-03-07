@@ -10,7 +10,7 @@
 						<th style="width: auto;">Nom</th>
 						<th>Login</th>
 						<th>Email</th>
-						<?php foreach($compte->getDroitsTiers() as $droit): ?>
+						<?php foreach($compte->droits as $droit): ?>
 							<th><?php echo $droit ?></th>
 						<?php endforeach; ?>
 						<th>Code de création</th>
@@ -18,18 +18,18 @@
 					</thead>
 					<tbody>
 					<?php foreach($form->getComptes() as $compte_personne): ?>
-						<tr style="<?php echo ($compte_personne->isCompteSociete()) ? "font-weight: bold;" : null ?>">
+						<tr style="<?php echo ($compte_personne->isSocieteContact()) ? "font-weight: bold;" : null ?>">
 						<td><a href="<?php echo url_for('compte_personne_modifier', array('login' => $compte_personne->login)) ?>"><?php echo $compte_personne->nom; ?></a></td>
 						<td><?php echo $compte_personne->login ?></td>
 						<td><?php echo $compte_personne->email; ?></td>
-						<?php foreach($compte_personne->getDroitsTiers() as $key => $libelle): ?>
+						<?php foreach($compte_personne->droits as $key => $libelle): ?>
 						<td style="text-align: center;">
 							<input type="checkbox" id="comptes_droits<?php echo $compte_personne->_id ?>_droits_<?php echo $key ?>" value="<?php echo $key ?>" name="comptes_droits[<?php echo $compte_personne->_id ?>][droits][]" <?php echo (in_array($key, $compte_personne->droits->toArray())) ? 'checked="checked"' : null ?>>
 						</td>
 						<?php endforeach; ?>
 						<td>
-							<?php if($compte_personne->getCodeCreation()): ?>
-							<?php echo $compte_personne->getCodeCreation() ?>
+							<?php if($compte_personne->getStatutTeledeclarant() == CompteClient::STATUT_TELEDECLARANT_NOUVEAU): ?>
+							<?php //echo $compte_personne->getCodeCreation() ?>
 							<?php else: ?>
 								Compte déjà créé
 							<?php endif; ?>
@@ -45,7 +45,7 @@
                 </div>
         </div>
     </div>
+    <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $compte->identifiant)) ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" /></a></li>
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
-    <li><a href="<?php echo url_for('@mon_espace_civa') ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" /></a></li>
     </ul>
 </form>

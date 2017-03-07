@@ -7,6 +7,16 @@ tiers:
 mon_espace_civa:
   url:   /mon_espace_civa/:identifiant
   param: { module: tiers, action: monEspaceCiva }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_dr_compte:
+  url:   /mon_espace_civa_compte/:identifiant/dr
+  param: { module: tiers, action: monEspaceCompteDR }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_dr:
   url:   /mon_espace_civa/:identifiant/dr
@@ -15,9 +25,26 @@ mon_espace_civa_dr:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+mon_espace_civa_dr_acheteur_compte:
+  url:   /mon_espace_civa_compte/:identifiant/dr_acheteur
+  param: { module: tiers, action: monEspaceCompteDRAcheteur }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 mon_espace_civa_dr_acheteur:
-  url:   /mon_espace_civa/dr_acheteur
+  url:   /mon_espace_civa/:identifiant/dr_acheteur
   param: { module: tiers, action: monEspaceDRAcheteur }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_ds_compte:
+  url:   /mon_espace_civa_compte/:identifiant/ds/:type
+  param: { module: tiers, action: monEspaceCompteDS }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
 
 mon_espace_civa_ds:
   url:   /mon_espace_civa/:identifiant/ds/:type
@@ -26,11 +53,25 @@ mon_espace_civa_ds:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+mon_espace_civa_gamma_compte:
+  url:   /mon_espace_civa_compte/:identifiant/gamma
+  param: { module: tiers, action: monEspaceCompteGamma }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
 mon_espace_civa_gamma:
   url:   /mon_espace_civa/:identifiant/gamma
   param: { module: tiers, action: monEspaceGamma }
   class: EtablissementRoute
   options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_vrac_compte:
+  url:   /mon_espace_civa_compte/:identifiant/vrac
+  param: { module: tiers, action: monEspaceCompteVrac }
+  class: CompteRoute
+  options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
 mon_espace_civa_vrac:
@@ -95,6 +136,17 @@ vrac_supprimer:
     type:     object
   requirements:
     sf_method: [get, post]
+
+vrac_forcer_cloture:
+  url: /vrac/:numero_contrat/forcer-cloture
+  param: { module: vrac, action: forcerCloture }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
 vrac_cloture:
   url: /vrac/:numero_contrat/cloture
   param: { module: vrac, action: cloture }
@@ -337,6 +389,14 @@ admin_back_to_now:
   url: /admin_back_to_now
   param: { module: admin, action: backToNow }
 
+admin_etablissements_diff_chargement:
+  url: /admin/etablissements-diff-chargement
+  param: { module: admin, action: etablissementDiffChargement }
+
+admin_etablissements_diff:
+  url: /admin/etablissements-diff
+  param: { module: admin, action: etablissementDiff }
+
 delegate_mode_retour_espace_civa:
    url: /tiers/retour_mon_espace
    param: { module: tiers, action: signoutByCompteDelegue }
@@ -350,6 +410,9 @@ dr_telecharger_la_notice:
 dr_visualisation_avant_import:
   url:   /dr_visualisation_avant_import/:identifiant/:campagne
   param: { module: dr, action: visualisationAvantImport }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 dr_init:
   url:   /dr_initialisation/:identifiant/:campagne
@@ -378,6 +441,10 @@ dr_autorisation:
   class: DRRoute
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
+
+dr_transmission_ava:
+  url:   /declaration/transmission
+  param: { module: dr, action: transmissionAva }
 
 dr_transmission:
   url:   /dr/:id/transmission
@@ -498,7 +565,6 @@ dr_recolte_correspondance_mention:
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
-
 dr_recolte_noeud_precedent:
   url:    /dr/:id/recolte/noeud/precedent
   param: { module: dr_recolte, action: produitNoeudPrecedent}
@@ -584,8 +650,15 @@ dr_confirmation:
   requirements: { sf_method: [get, post] }
 
 dr_pdf:
-  url: /dr/:id/pdf
+  url: /dr/:identifiant/pdf/:annee
   param: {module: dr_export, action: pdf}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_csv:
+  url: /dr/:id/csv
+  param: {module: dr_export, action: csv}
   class: DRRoute
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
@@ -668,20 +741,29 @@ a_propos_du_civa:
   param: {module: contenu, action: aProposDuCiva}
 
 upload_csv:
-  url: /upload/csv
+  url: /upload/:identifiant/csv
   param: {module: upload, action: monEspaceCiva}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 upload_list:
-  url: /upload/list
+  url: /upload-list
   param: {module: upload, action: csvList}
 
 csv_view:
-  url: /upload/csv/:md5
+  url: /upload/:identifiant/csv/:md5
   param: {module: upload, action: csvView}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 csv_download:
-  url: /download/csv
+  url: /download/:identifiant/csv
   param: {module: upload, action: csvDownload}
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
 
 task_list:
   url: /taches

@@ -9,6 +9,11 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
         return $this->getAppellation()->getLibelle();
     }
 
+    public function getMention() {
+
+        return $this->getLieu()->getMention();
+    }
+
     public function getLieu() {
 
         return $this->getParent();
@@ -50,6 +55,17 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function getCodeDouane($vtsgn = '') {
+        $config = $this->getConfig();
+
+        if($config->getMention()->getKey() != "DEFAUT") {
+            $config = $config->getAppellation()->mentions->get("DEFAUT")->lieux->get($config->getLieu()->getKey())->couleurs->get($config->getKey());
+        }
+
+        foreach($config->getProduits() as $produit) {
+
+            return substr($produit->getCodeDouane(), 0, 6)." ";
+        }
+
         if ($this->getLieu()->getConfig()->hasManyCouleur()) {
             return $this->getConfig()->getDouane()->getFullAppCode($vtsgn);
         } else {
@@ -60,7 +76,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     protected function update($params = array()) {
         $this->preUpdateAcheteurs();
         parent::update($params);
-        
+
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_volume = $this->getTotalVolume(true);
             $this->total_superficie = $this->getTotalSuperficie(true);

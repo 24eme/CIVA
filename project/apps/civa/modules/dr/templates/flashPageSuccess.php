@@ -17,6 +17,6 @@
 <!-- fin #application_dr -->
 
 <form id="principal" action="" method="post">
-    <?php include_partial('global/boutons', array('display' => array('precedent', 'suivant'))) ?>
+    <?php include_partial('dr/boutons', array('display' => array('precedent', 'suivant'), 'etablissement' => $dr->getEtablissement(), array('dr' => $dr))) ?>
 </form>
 <!-- fin #principal -->

@@ -5,8 +5,8 @@ class AcheteurClient extends acCouchdbClient {
     protected $_acheteurs = null;
 
     public static function getInstance() {
-    
-        return acCouchdbManager::getClient('Acheteur'); 
+
+        return acCouchdbManager::getClient('Acheteur');
     }
 
     public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
@@ -22,6 +22,9 @@ class AcheteurClient extends acCouchdbClient {
                 ->executeView('ACHAT', 'qualite');
         $negocaves = $this->startkey(array('NegoCave'))
                 ->endkey(array('NegoCave', array()))
+                ->executeView('ACHAT', 'qualite');
+        $recoltants = $this->startkey(array('Recoltant'))
+                ->endkey(array('Recoltant', array()))
                 ->executeView('ACHAT', 'qualite');
 
         $acheteurs_negociant = array();
@@ -56,6 +59,12 @@ class AcheteurClient extends acCouchdbClient {
             $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
         }
 
+        foreach ($recoltants as $key => $value) {
+            $acheteurs_negociant[$value->cvi]['cvi'] = $value->cvi;
+            $acheteurs_negociant[$value->cvi]['commune'] = $value->commune;
+            $acheteurs_negociant[$value->cvi]['nom'] = $value->nom;
+        }
+
         uasort($acheteurs_negociant, 'AcheteurClient::sortByNom');
         uasort($acheteurs_mout, 'AcheteurClient::sortByNom');
 
@@ -67,7 +76,7 @@ class AcheteurClient extends acCouchdbClient {
     }
 
     public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        
+
         return parent::find('ACHAT-' . $cvi, $hydrate);
     }
 

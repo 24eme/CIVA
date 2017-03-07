@@ -14,6 +14,43 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         $this->set('_id', 'SOCIETE-' . $this->identifiant);
     }
 
+    public function cleanEtablissements() {
+        $etablissementsToRemove = array();
+        foreach ($this->etablissements as $id => $obj) {
+            $etablissement = EtablissementClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
+            if($etablissement && $etablissement->id_societe == $this->_id) {
+                continue;
+            }
+
+            $etablissementsToRemove[] = $id;
+        }
+        foreach($etablissementsToRemove as $id) {
+            $this->removeEtablissement($id);
+        }
+    }
+
+    public function cleanComptes() {
+        $contactsToRemove = array();
+        foreach ($this->contacts as $id => $obj) {
+            $contact = CompteClient::getInstance()->find($id);
+            if($contact && $contact->id_societe == $this->_id) {
+                continue;
+            }
+
+            $contactsToRemove[] = $id;
+        }
+
+        foreach($contactsToRemove as $id) {
+            $this->removeContact($id);
+        }
+    }
+
+    public function removeEtablissement($idEtablissement) {
+        if ($this->etablissements->exist($idEtablissement)) {
+            $this->etablissements->remove($idEtablissement);
+        }
+    }
+
     public function removeContact($idContact) {
         if ($this->contacts->exist($idContact)) {
             $this->contacts->remove($idContact);
@@ -152,9 +189,9 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $contacts;
     }
 
-    public function getEtablissementsObject() {
+    public function getEtablissementsObject($withSuspendu = true) {
         $etablissements = array();
-        foreach ($this->getEtablissementsObj() as $id => $e) {
+        foreach ($this->getEtablissementsObj($withSuspendu) as $id => $e) {
             $etablissements[$id] = $e->etablissement;
 
         }
@@ -184,7 +221,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
             }
             $this->etablissements->add($e->_id)->ordre = $ordre;
         }
-        if ($e->compte) {
+        if ($e->compte && $e->getMasterCompte()) {
             $this->addCompte($e->getMasterCompte(), $ordre);
         }
     }
@@ -359,27 +396,35 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $this->_get('date_modification');
     }
 
+    public function isSynchroAutoActive() {
+
+        return false;
+    }
+
     public function save() {
         $this->add('date_modification', date('Y-m-d'));
         $this->interpro = "INTERPRO-declaration";
-        $compteMaster = $this->getMasterCompte();
 
-        if (!$compteMaster) {
-            throw new sfException("Pas de création");
+        if ($this->isSynchroAutoActive() && !$compteMaster) {
+            $compteMaster = $this->getMasterCompte();
             $compteMaster = $this->createCompteSociete();
         }
 
-        if ($this->isInCreation()) {
+        if ($this->isInCreation() && !$this->getStatut()) {
             $this->setStatut(SocieteClient::STATUT_ACTIF);
         }
+
         parent::save();
 
-        if ($compteMaster->isNew()) {
+        if ($this->isSynchroAutoActive() && $compteMaster->isNew()) {
+            $compteMaster->nom = $this->raison_sociale;
             $compteMaster->save();
         }
 
-        foreach ($this->getComptesAndEtablissements() as $id => $compteOrEtablissement) {
-            $this->pushToCompteOrEtablissementAndSave($compteMaster, $compteOrEtablissement);
+        if($this->isSynchroAutoActive()) {
+            foreach ($this->getComptesAndEtablissements() as $id => $compteOrEtablissement) {
+                $this->pushToCompteOrEtablissementAndSave($compteMaster, $compteOrEtablissement);
+            }
         }
     }
 
@@ -455,6 +500,15 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
             return $this->_set('commentaire', $c . "\n" . $s);
         }
         return $this->_set('commentaire', $s);
+    }
+
+    public function getDroits() {
+        $droits = array();
+        foreach($this->getEtablissementsObject() as $etablissement) {
+            $droits = array_merge($droits, $etablissement->getDroits());
+        }
+
+        return array_values(array_unique($droits));
     }
 
 }

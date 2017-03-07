@@ -73,4 +73,21 @@ class adminActions extends sfActions {
 
         return $this->redirect('@admin');
     }
+
+    public function executeEtablissementDiff(sfWebRequest $request) {
+        ini_set('memory_limit', '256M');
+        set_time_limit(0);
+
+        $etablissementDiff = new EtablissementsDiff();
+        $this->etablissementsDb2 = $etablissementDiff->getEtablissementsDb2();
+        $this->etablissementsCouchdb = $etablissementDiff->getEtablissementsCouchdb();
+        $this->keyIgnored = $etablissementDiff->getKeyIgnored();
+        $this->diff = $etablissementDiff->getDiff();
+
+        $this->setLayout('layout');
+    }
+
+    public function executeEtablissementDiffChargement(sfWebRequest $request) {
+        $this->setLayout('layout');
+    }
 }

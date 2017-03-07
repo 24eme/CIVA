@@ -27,15 +27,11 @@ class CreationCompteForm extends CompteForm {
             throw new sfException("form must be valid");
         }
 
-        $master = $this->_compte->getMasterObject();
-        $master->setEmail($this->getValue('email'));
-        $master->save();
-
-        $compte = CompteClient::getInstance()->find($this->_compte->_id);
+        $this->_compte->email = $this->getValue('email');
         if ($this->getValue('mdp1')) {
-            $compte->setMotDePasseSSHA($this->getValue('mdp1'));
+            $this->_compte->setMotDePasseSSHA($this->getValue('mdp1'));
         }
-        $compte->save();
+        $this->_compte->save();
 
         return $this->_compte;
     }

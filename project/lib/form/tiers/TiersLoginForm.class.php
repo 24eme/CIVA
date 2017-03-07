@@ -48,9 +48,7 @@ class TiersLoginForm extends BaseForm {
 
     public function getChoiceTiers() {
         $choices = array();
-        echo $this->_compte->getSociete()->_id;
         foreach($this->_compte->getSociete()->getEtablissementsObject() as $id => $item) {
-            echo $id."\n";
             $choices[$id] = $item->nom . ' - ' . $item->getFamille();
         }
 

@@ -120,7 +120,7 @@ class drComponents extends sfComponents {
         $this->jeunes_vignes = $this->dr->jeunes_vignes;
 
         $this->vintable = array();
-        if ($this->dr->recolte->certification->genre->exist('appellation_VINTABLE')) {
+        if ($this->dr->exist('recolte/certification/genre/appellation_VINTABLE')) {
           $this->vintable['superficie'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalSuperficie();
           $this->vintable['volume'] = $this->dr->recolte->certification->genre->appellation_VINTABLE->getTotalVolume();
         }

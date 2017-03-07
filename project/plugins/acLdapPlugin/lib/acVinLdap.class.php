@@ -151,4 +151,23 @@ class acVinLdap
             return false;
         }
     }
+
+    /**
+     *
+     * @param mixed $uid
+     * @return array
+     */
+    public function get($uid) {
+        $con = $this->connect();
+        if($con) {
+            $search = ldap_search($con, 'ou=People,'.$this->dc, 'uid='.$uid);
+            $count = ldap_count_entries($con, $search);
+                if($count > 0) {
+                    $entries = ldap_get_entries($con, $search);
+                    return $entries[0];
+                }
+
+        }
+        return null;
+    }
 }

@@ -7,6 +7,12 @@ class DRClient extends acCouchdbClient {
   const VALIDEE_PAR_RECOLTANT = "RECOLTANT";
   const VALIDEE_PAR_CIVA = "CIVA";
   const VALIDEE_PAR_AUTO = "AUTO";
+  const ACHETEUR_COOPERATIVE = 'Cooperative';
+  const ACHETEUR_NEGOCIANT = 'Negociant';
+  const ACHETEUR_NEGOCAVE = 'NegoCave';
+  const ACHETEUR_RECOLTANT = 'Recoltant';
+
+  protected $appellations_config_vtsgn = array();
 
   public static function getInstance() {
 
@@ -43,6 +49,7 @@ class DRClient extends acCouchdbClient {
     $doc->remove('date_depot_mairie');
     if($depot_mairie){
       $doc->add('date_depot_mairie', null);
+      $doc->addEtape('repartition');
     }
     $doc->add('lies_saisis_cepage', 1);
   }
@@ -56,14 +63,41 @@ class DRClient extends acCouchdbClient {
     $csv_ids = CSVClient::getInstance()->getCSVsFromRecoltantArray($campagne, $cvi);
     $acheteurs = array();
     foreach($csv_ids as $csv_id) {
-      $acheteurs[] = acCouchdbManager::getClient()->find(preg_replace("/^CSV-([0-9]+)-.*/", 'ACHAT-\1', $csv_id));
+        $cvi = preg_replace("/^CSV-([0-9]+)-.*/", '\1', $csv_id);
+        $acheteurs[] = EtablissementClient::getInstance()->findByCvi($cvi);
     }
 
     return $acheteurs;
   }
 
+    public function identifyProductCSV($line) {
+        $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
+        $appellation = preg_replace("/^0$/", "", $appellation);
+        $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);
+
+        $lieu = $line[CsvFileAcheteur::CSV_LIEU];
+        $lieu = preg_replace("/^0$/", "", $lieu);
+
+        $cepage = $line[CsvFileAcheteur::CSV_CEPAGE];
+        $cepage = preg_replace("/^0$/", "", $cepage);
+        $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
+        $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
+        $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
+
+        $vtsgn = $line[CsvFileAcheteur::CSV_VTSGN];
+        $vtsgn = preg_replace("/^0$/", "", $vtsgn);
+
+        $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s %s", $appellation, $lieu, $cepage, $vtsgn)));
+
+        if(!$produit) {
+            $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s", $appellation, $cepage, $vtsgn)));
+        }
+
+        return $produit;
+    }
+
   public function createFromCSVRecoltant($campagne, $tiers, &$import, $depot_mairie = false) {
-    $csvs = acCouchdbManager::getClient('CSV')->getCSVsFromRecoltant($campagne, $tiers->cvi);
+    $csvs = CSVClient::getInstance()->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))
       throw new sfException('no csv found for '.$tiers->cvi) ;
     $campagne = $csvs[0]->campagne;
@@ -72,7 +106,7 @@ class DRClient extends acCouchdbClient {
     $doc->jeunes_vignes = 0;
     foreach ($csvs as $csv) {
           $acheteur_cvi = $csv->cvi;
-          $acheteur_obj = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($csv->cvi);
+          $acheteur_obj = EtablissementClient::getInstance()->findByCvi($csv->cvi);
 
           if (!$acheteur_obj)
         throw new sfException($acheteur_cvi.' acheteur inconnu');
@@ -81,36 +115,60 @@ class DRClient extends acCouchdbClient {
           $linenum = 0;
           foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
         $linenum++;
-        if (preg_match('/JEUNES +VIGNES/i', $line[CsvFile::CSV_APPELLATION])) {
-          if($doc->jeunes_vignes == $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE])) {
+        if (preg_match('/JEUNES +VIGNES/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
+          if($doc->jeunes_vignes == $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
             continue;
           }
-          $doc->jeunes_vignes += $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
+          $doc->jeunes_vignes += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
           continue;
         }
-        $prod = ConfigurationClient::getConfiguration()->identifyProduct($line[CsvFile::CSV_APPELLATION],
-                                         $line[CsvFile::CSV_LIEU],
-                                         $line[CsvFile::CSV_CEPAGE]);
 
+        $produit = $this->identifyProductCSV($line);
+        $prod = array();
+
+        if($produit) {
+            $prod["hash"] = $produit->getHash();
+        } else {
+            $prod = array("error" => $line[CsvFileAcheteur::CSV_APPELLATION].' '.$line[CsvFileAcheteur::CSV_LIEU].' '.$line[CsvFileAcheteur::CSV_CEPAGE]." ".$line[CsvFileAcheteur::CSV_VTSGN]);
+        }
 
         if (!isset($prod['hash']))
           throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
 
-        $cepage = $doc->getOrAdd($prod['hash']);
+        $cepage = $doc->getOrAdd(HashMapper::inverse($prod['hash']));
 
         $denomlieu = '';
         if ($cepage->getLieu()->getKey() == 'lieu')
-          $denomlieu = $line[CsvFile::CSV_LIEU];
-        $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($line[CsvFile::CSV_DENOMINATION], $line[CsvFile::CSV_VTSGN], $denomlieu);
-        $detail->superficie += $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]);
-        $detail->volume += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
-        if ($this->recodeNumber($line[CsvFile::CSV_VOLUME]) == 0) {
+          $denomlieu = $line[CsvFileAcheteur::CSV_LIEU];
+
+        if($denomlieu === "0") {
+            $denomlieu = "";
+        }
+        $vtsgn = $line[CsvFileAcheteur::CSV_VTSGN];
+
+        if($vtsgn === "0") {
+            $vtsgn = "";
+        }
+
+        $denom = $line[CsvFileAcheteur::CSV_DENOMINATION];
+        if($denom === "0") {
+            $denom = "";
+        }
+
+        $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $denomlieu);
+        $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+        $detail->volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+        if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
           $detail->denomination = 'repli';
           $detail->add('motif_non_recolte', 'AE');
         }
-          if($this->recodeNumber($line[CsvFile::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFile::CSV_SUPERFICIE]) > 0)
+          if($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
-            $acheteurs = $detail->add($acheteur_obj->getAcheteurDRType());
+              $acheteurDRType = "negoces";
+              if ($acheteur_obj->acheteur_raisin == self::ACHETEUR_COOPERATIVE) {
+                $acheteurDRType = "cooperatives";
+              }
+            $acheteurs = $detail->add($acheteurDRType);
             $acheteur = null;
             foreach ($acheteurs as $a) {
               if ($a->cvi == $acheteur_cvi)
@@ -120,47 +178,48 @@ class DRClient extends acCouchdbClient {
             if (!$acheteur)
               $acheteur = $acheteurs->add();
             $acheteur->cvi = $acheteur_cvi;
-            $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFile::CSV_VOLUME]);
+            $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
           }
         }
     }
     $doc->utilisateurs->edition->add('csv', date('d/m/Y'));
     $doc->update();
+
     return $doc;
   }
 
-  public function getEtablissement($societe) {
-      foreach($societe->getEtablissementsObject() as $etablissement) {
+    public function getEtablissement($societe) {
+        foreach($societe->getEtablissementsObject() as $etablissement) {
 
-          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR))) {
-
-              return $etablissement;
-          }
-      }
-
-      return null;
-  }
-
-  public function getEtablissementAcheteur($societe) {
-      foreach($societe->getEtablissementsObject() as $etablissement) {
-
-          if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE)) && $etablissement->getFamille()) {
+            if($etablissement->hasDroit(Roles::TELEDECLARATION_DR)) {
 
               return $etablissement;
-          }
-      }
+            }
+        }
 
-      return null;
-  }
+        return null;
+    }
 
-  protected function recodeNumber($value) {
+    public function getEtablissementAcheteur($societe) {
+        foreach($societe->getEtablissementsObject() as $etablissement) {
 
-    return round(str_replace(",", ".", $value)*1, 2);
-  }
+            if($etablissement->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
+
+              return $etablissement;
+            }
+        }
+
+        return null;
+    }
+
+    protected function recodeNumber($value) {
+
+        return round(str_replace(",", ".", $value)*1, 2);
+    }
 
     public function retrieveByCampagneAndCvi($cvi, $campagne, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
 
-      return $this->find('DR-'.$cvi.'-'.$campagne, $hydrate);
+        return $this->find('DR-'.$cvi.'-'.$campagne, $hydrate);
     }
 
     public function getAllByCampagne($campagne, $hydrate = acCouchdbClient::HYDRATE_ON_DEMAND) {
@@ -168,7 +227,6 @@ class DRClient extends acCouchdbClient {
         $i = 0;
         $keys = array_keys($docs->getDocs());
         foreach($keys as $key) {
-            //echo substr($key, strlen($key) - 4, 4);
             if (substr($key, strlen($key) - 4, 4) != $campagne) {
                 unset($docs[$key]);
             }
@@ -240,21 +298,21 @@ class DRClient extends acCouchdbClient {
     }
 
     public function getTotauxAgregeByCouleur($totauxByAppellationsRecap, $app_key, $appellation) {
-        if (preg_match('/^PINOTNOIR/', $app_key)) {
-            return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $appellation, 'Rouge ou Rosé');
-        }
-        if(!$appellation->getConfig()->existRendementCouleur()) {
-
-          return $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $appellation, 'AOC Alsace Blanc');
-        }
         foreach ($appellation->getLieux() as $lieu) {
-              foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
-                  if (preg_match('/Rouge$/', $couleur_key)) {
-                      $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $couleur, 'Rouge ou Rosé');
-                  } else {
-                      $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $couleur, 'AOC Alsace Blanc');
+            if (preg_match('/^PINOTNOIR/', $app_key)) {
+                $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $lieu, 'Rouge ou Rosé');
+            } else if(!$appellation->getConfig()->existRendementCouleur()) {
+
+                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $lieu, 'AOC Alsace Blanc');
+            } else {
+                  foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
+                      if (preg_match('/Rouge$/', $couleur_key)) {
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $couleur, 'Rouge ou Rosé');
+                      } else {
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $couleur, 'AOC Alsace Blanc');
+                      }
                   }
-              }
+           }
         }
         return $totauxByAppellationsRecap;
     }
@@ -301,9 +359,15 @@ class DRClient extends acCouchdbClient {
         $appellations = array();
 
         if(!$configuration) {
+
             $configuration = ConfigurationClient::getCurrent();
         }
-        
+
+        if(array_key_exists($configuration->_id, $this->appellations_config_vtsgn)) {
+
+            return $this->appellations_config_vtsgn[$configuration->_id];
+        }
+
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
             if($appellation->getKey() == "PINOTNOIR") {
                 $appellations["mentionVT"] = null;
@@ -331,14 +395,16 @@ class DRClient extends acCouchdbClient {
                 }
                 if($mention->hasManyLieu() || $mention->getKey() != "DEFAUT") {
                     foreach($mention->getLieux() as $lieu)  {
-                        $appellations["appellation_".$appellation->getKey()]['lieux'][] = $lieu;
+                        $appellations[($mention->getKey() == "DEFAUT") ? "appellation_".$appellation->getKey() : "mention".$mention->getKey()]['lieux'][HashMapper::inverse($lieu->getHash())] = $lieu;
                     }
                 }
             }
 
         }
 
-        return $appellations;
+        $this->appellations_config_vtsgn[$configuration->_id] = $appellations;
+
+        return $this->appellations_config_vtsgn[$configuration->_id];
     }
 
 }

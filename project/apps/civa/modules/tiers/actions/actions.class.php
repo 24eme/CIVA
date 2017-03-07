@@ -16,7 +16,6 @@ class tiersActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeLogin(sfWebRequest $request) {
-
         $this->getUser()->signOutTiers();
         $this->compte = $this->getUser()->getCompte();
         $this->societe = $this->compte->getSociete();
@@ -60,14 +59,18 @@ class tiersActions extends sfActions {
     public function executeMonEspaceCiva(sfWebRequest $request) {
         $this->help_popup_action = "help_popup_mon_espace_civa";
 
-        $this->compte = CompteClient::getInstance()->findByLogin($request->getParameter('identifiant'));
+        $this->secure();
 
-        if($this->getUser()->isSimpleOperateur() && TiersSecurity::getInstance($this->compte)->isAuthorized(TiersSecurity::DR) && CurrentClient::getCurrent()->isDREditable()) {
+        $this->compte = $this->getRoute()->getCompte();
 
-            return $this->redirect('mon_espace_civa_dr');
-        }
-        if($request->getParameter('identifiant') != $this->getUser()->getCompte()->getIdentifiant()){
-          return $this->redirect('mon_espace_civa',array("identifiant" => $this->getUser()->getCompte()->getIdentifiant()));
+        $this->blocs = $this->buildBlocs($this->compte);
+        $this->nb_blocs = count($this->blocs);
+
+        if(count($this->blocs) == 1) {
+            foreach ($this->blocs as $url) {
+
+                return $this->redirect($url);
+            }
         }
 
         $this->vracs = array(
@@ -104,70 +107,153 @@ class tiersActions extends sfActions {
             }
         }
 
-        $blocs = TiersSecurity::getInstance($this->compte)->getBlocs();
-
-        $this->nb_blocs = count($blocs);
-
-        if($this->nb_blocs == 1) {
-            foreach($blocs as $droit => $url) {
-                if(is_array($url)) {
-                    return $this->redirect($url[0], $url[1]);
-                }
-                return $this->redirect($url);
-            }
+        $this->drNeedToDeclare = false;
+        if($this->compte->hasDroit(Roles::TELEDECLARATION_DR) && DRClient::getInstance()->isTeledeclarationOuverte()) {
+            $dr = DRClient::getInstance()->retrieveByCampagneAndCvi(DRClient::getInstance()->getEtablissement($this->compte->getSociete())->getIdentifiant(), CurrentClient::getCurrent()->campagne);
+            $this->drNeedToDeclare = !$dr || !$dr->isValideeTiers();
         }
     }
 
+    protected function buildBlocs($compte) {
+        $blocs = array();
+        if($compte->hasDroit(Roles::TELEDECLARATION_DR)) {
+            $blocs[Roles::TELEDECLARATION_DR] = $this->generateUrl('mon_espace_civa_dr_compte', $compte);
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
+            $blocs[Roles::TELEDECLARATION_DR_ACHETEUR] = $this->generateUrl('mon_espace_civa_dr_acheteur_compte', $compte);
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
+            $blocs[Roles::TELEDECLARATION_GAMMA] = $this->generateUrl('mon_espace_civa_gamma_compte', $compte);
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_VRAC_CREATION)) {
+            $blocs[Roles::TELEDECLARATION_VRAC] = $this->generateUrl('mon_espace_civa_vrac_compte', $compte);
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_VRAC) && !isset($blocs[$compte->hasDroit(Roles::TELEDECLARATION_VRAC)])) {
+            $tiersVrac = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
+
+            if($tiersVrac instanceof sfOutputEscaperArrayDecorator) {
+                $tiersVrac = $tiersVrac->getRawValue();
+            }
+
+            if(count(VracTousView::getInstance()->findSortedByDeclarants($tiersVrac))) {
+                $blocs[Roles::TELEDECLARATION_VRAC] = $this->generateUrl('mon_espace_civa_vrac_compte', $compte);
+            }
+
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
+            $blocs[Roles::TELEDECLARATION_DS_PROPRIETE] = $this->generateUrl('mon_espace_civa_ds_compte', array('sf_subject' => $compte, 'type' => DSCivaClient::TYPE_DS_PROPRIETE));
+        }
+
+        if($compte->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)) {
+            $blocs[Roles::TELEDECLARATION_DS_NEGOCE] = $this->generateUrl('mon_espace_civa_ds_compte', array('sf_subject' => $compte, 'type' => DSCivaClient::TYPE_DS_NEGOCE));
+        }
+
+        return $blocs;
+    }
+
+    public function executeMonEspaceCompteDR(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_DR);
+        $compte = $this->getRoute()->getCompte();
+
+        return $this->redirect('mon_espace_civa_dr', DRClient::getInstance()->getEtablissement($compte->getSociete()));
+    }
+
     public function executeMonEspaceDR(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_DR);
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->compte = $this->etablissement->getSociete()->getContact();
+        $this->blocs = $this->buildBlocs($this->compte);
         $this->campagne = CurrentClient::getCurrent()->campagne;
         $this->dr = DRClient::getInstance()->retrieveByCampagneAndCvi($this->etablissement->getIdentifiant(), $this->campagne);
-        $this->secureTiers(TiersSecurity::DR);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
     }
 
+    public function executeMonEspaceCompteDRAcheteur(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
+        $compte = $this->getRoute()->getCompte();
+
+        if($this->getUser()->hasFlash('form_error')) {
+            $this->getUser()->setFlash('form_error', $this->getUser()->getFlash('form_error'));
+        }
+
+        return $this->redirect('mon_espace_civa_dr_acheteur', DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete()));
+    }
+
     public function executeMonEspaceDRAcheteur(sfWebRequest $request) {
-        $this->secureTiers(TiersSecurity::DR_ACHETEUR);
+        $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
+        $this->compte = $this->getUser()->getCompte();
+        $this->blocs = $this->buildBlocs($this->compte);
+        $this->etablissement = $this->getRoute()->getEtablissement();
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
         $this->formUploadCsv = new UploadCSVForm();
     }
 
+    public function executeMonEspaceCompteDS(sfWebRequest $request) {
+        if($request->getParameter('type') == DSCivaClient::TYPE_DS_PROPRIETE) {
+            $this->secure(Roles::TELEDECLARATION_DS_PROPRIETE);
+        }
+
+        if($request->getParameter('type') == DSCivaClient::TYPE_DS_NEGOCE) {
+            $this->secure(Roles::TELEDECLARATION_DS_NEGOCE);
+        }
+        $compte = $this->getRoute()->getCompte();
+
+        return $this->redirect('mon_espace_civa_ds', array('sf_subject' => DSCivaClient::getInstance()->getEtablissement($compte->getSociete(), $request->getParameter('type')), 'type' => $request->getParameter('type')));
+    }
+
     public function executeMonEspaceDS(sfWebRequest $request) {
-        $droits = array();
+        if($request->getParameter('type') == DSCivaClient::TYPE_DS_PROPRIETE) {
+            $this->secure(Roles::TELEDECLARATION_DS_PROPRIETE);
+        }
+
+        if($request->getParameter('type') == DSCivaClient::TYPE_DS_NEGOCE) {
+            $this->secure(Roles::TELEDECLARATION_DS_NEGOCE);
+        }
+
         $this->type_ds = $request->getParameter("type");
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->compte = $this->etablissement->getSociete()->getContact();
-        if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
-               $droits[] = TiersSecurity::DS_NEGOCE;
-        } elseif($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
-               $droits[] = TiersSecurity::DS_PROPRIETE;
-        } else {
-
-            return $this->forward404();
-        }
-
-        $this->secureTiers($droits);
+        $this->blocs = $this->buildBlocs($this->compte);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
+    }
+
+    public function executeMonEspaceCompteVrac(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_VRAC);
+        $compte = $this->getRoute()->getCompte();
+
+        return $this->redirect('mon_espace_civa_vrac', $compte);
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_VRAC);
         $this->compte = $this->getRoute()->getCompte();
+        $this->blocs = $this->buildBlocs($this->compte);
         $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
-        $this->secureTiers(TiersSecurity::VRAC);
-
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
     }
 
+    public function executeMonEspaceCompteGamma(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_GAMMA);
+        $compte = $this->getRoute()->getCompte();
+
+        return $this->redirect('mon_espace_civa_gamma', GammaClient::getInstance()->getEtablissement($compte));
+    }
+
     public function executeMonEspaceGamma(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_GAMMA);
         $this->compte = $this->getUser()->getCompte();
+        $this->blocs = $this->buildBlocs($this->compte);
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->isInscrit = GammaClient::getInstance()->findByEtablissement($this->etablissement);
-        $this->secureTiers(TiersSecurity::GAMMA);
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
     }
@@ -177,8 +263,7 @@ class tiersActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeDelegation(sfWebRequest $request) {
-
-        $this->forward404Unless($this->getUser()->hasCredential('delegation'));
+        $this->forward404Unless($this->getUser()->hasCredential(myUser::CREDENTIAL_DELEGATION));
         $this->compte = $this->getUser()->getCompte();
         $this->formDelegation = new DelegationLoginForm($this->getUser()->getCompte());
 
@@ -187,12 +272,12 @@ class tiersActions extends sfActions {
 
             if ($this->formDelegation->isValid()) {
                 $this->getUser()->signInCompteUsed($this->formDelegation->process());
-                $this->redirect('@tiers');
+                $this->redirect('tiers');
             }
         }
 
-        $this->executeMonEspaceDRAcheteur($request);
-        $this->setTemplate("monEspaceDRAcheteur");
+        $this->getUser()->setFlash('form_error', "Ce CVI n'existe pas");
+        return $this->redirect('mon_espace_civa_dr_acheteur_compte', $this->getUser()->getCompte());
     }
 
 
@@ -224,13 +309,20 @@ class tiersActions extends sfActions {
 
         $login_current_user = $this->getUser()->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED)->login;
         $this->getUser()->signIn($login_current_user);
-        $this->redirect('@mon_espace_civa');
+        $this->redirect('mon_espace_civa', $this->getUser()->getCompte());
     }
 
-    protected function secureTiers($droits) {
-        if(!TiersSecurity::getInstance($this->compte)->isAuthorized($droits)) {
+    protected function secure($droits = array()) {
+        if($this->getRoute() instanceof CompteRoute) {
+            if(!CompteSecurity::getInstance($this->getRoute()->getCompte())->isAuthorized($droits)) {
+                return $this->forwardSecure();
+            }
+        }
 
-            return $this->forwardSecure();
+        if($this->getRoute() instanceof EtablissementRoute) {
+            if(!EtablissementSecurity::getInstance($this->getRoute()->getEtablissement())->isAuthorized($droits)) {
+                return $this->forwardSecure();
+            }
         }
     }
 

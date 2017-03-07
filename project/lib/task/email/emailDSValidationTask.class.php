@@ -10,7 +10,7 @@
  * @author mathurin
  */
 class emailDSValidationTask extends sfBaseTask {
-    
+
   protected function configure()
   {
     $this->addArguments(array(
@@ -40,14 +40,14 @@ EOF;
   {
     set_time_limit('240');
     ini_set('memory_limit', '512M');
-    
+
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     if (isset($arguments['periode']) && !empty($arguments['periode'])) {
 	    $nb_item = 0;
-	    $nb_email_send = 0;  
+	    $nb_email_send = 0;
             $periode = $arguments['periode'];
             $campagne = substr($periode, 0, 4);
             $exportManager = new ExportDSCiva($periode);
@@ -64,7 +64,7 @@ EOF;
                     $this->logSection('no email', $identifiant, null, 'ERROR');
                 continue;
                 }
-            
+
                 try {
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
@@ -72,13 +72,13 @@ EOF;
                      // ->setTo('mpetit@actualys.com')
                       ->setSubject('RAPPEL DS '.$campagne)
                       ->setBody($this->getMessageBody($ds->declarant->get('nom'), $campagne));
-                $sended = $this->getMailer()->send($message);              
+                $sended = $this->getMailer()->send($message);
                 //echo $this->getMessageBody($compte, $campagne)."\n\n\n";
-            } catch (Exception $exc) {     
-                $this->logSection('send error', $identifiant . ' : ' . $exc->getMessage());    
+            } catch (Exception $exc) {
+                $this->logSection('send error', $identifiant . ' : ' . $exc->getMessage());
                 $sended = false;
             }
-            
+
             if ($sended) {
                 $nb_email_send++;
                 $this->logSection('sended', $identifiant . ' : ' . $ds->declarant->get('email'));
@@ -93,9 +93,9 @@ EOF;
   protected function getMessageBody($nom, $campagne) {
       return "Bonjour,
 
-Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro, mais ne l’avez pas encore validée. 
+Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".$campagne." sur le site VinsAlsace.pro, mais ne l’avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre minuit. 
+Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre minuit.
 
 Pour terminer la saisie, cliquez sur le lien suivant :
 http://declaration.vinsalsace.pro/

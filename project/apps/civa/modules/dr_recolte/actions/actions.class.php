@@ -12,10 +12,11 @@ class dr_recolteActions extends _DRActions {
 
     public function preExecute() {
         parent::preExecute();
+        $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('recolte');
         $this->declaration = $this->getRoute()->getDR();
         $this->help_popup_action = "help_popup_DR";
-        if (!$this->declaration->recolte->getNoeudAppellations()->hasOneOrMoreAppellation()) {
+        if (!$this->declaration->recolte->hasOneOrMoreAppellation()) {
             $this->redirectToNextEtapes($this->declaration);
         }
     }
@@ -25,16 +26,21 @@ class dr_recolteActions extends _DRActions {
      * @param sfWebRequest $request
      */
     public function executeRecolte(sfWebRequest $request) {
-        $produit = $this->declaration->getOrAdd("recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_CH");
+        foreach($this->declaration->getAppellationsAvecVtsgn() as $appellation) {
 
-        return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $produit->getHash()));
+            $request->setParameter('hash', $appellation['hash']);
+
+            return $this->executeProduitNoeud($request);
+        }
+
+        return $this->redirect('dr_repartition_acheteurs', $this->declaration);
     }
 
 
     public function executeProduit(sfWebRequest $request) {
         if(!$this->declaration->exist($request->getParameter('hash'))) {
 
-            return $this->redirect('dr_recolte_produit_ajout', array('id' => $this->declaration->_id, 'hash' => $request->getParameter('hash')));
+            return $this->executeProduitAjout($request);
         }
 
         $this->produit = $this->declaration->get($request->getParameter('hash'));
@@ -152,13 +158,15 @@ class dr_recolteActions extends _DRActions {
             $hash = HashMapper::inverse($produitConfig->getHash());
 
             if (!count($this->noeud->getProduitsDetails())) {
+                $request->setParameter('hash', $hash);
 
-                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+                return $this->executeProduit($request);
             }
 
             if($this->declaration->exist($hash) && count($this->declaration->get($hash)->getProduitsDetails())) {
+                $request->setParameter('hash', $hash);
 
-                return $this->redirect('dr_recolte_produit', array('sf_subject' => $this->declaration, 'hash' => $hash));
+                return $this->executeProduit($request);
             }
         }
     }
@@ -184,34 +192,79 @@ class dr_recolteActions extends _DRActions {
     }
 
     public function executeProduitNoeudPrecedent(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-        $this->etablissement = $this->declaration->getEtablissement();
-        if($this->noeud->getPreviousSister()) {
-            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getPreviousSister()->getHash()));
-        }
 
-        if($this->noeud->getParent() instanceof DRRecolte) {
-
-            return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
-        }
-
-        return $this->redirect('dr_recolte_noeud_precedent', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
+        return $this->redirectToSisterNoeud($this->declaration->getOrAdd($request->getParameter('hash')), "precedent");
     }
 
 
     public function executeProduitNoeudSuivant(sfWebRequest $request) {
-        $this->noeud = $this->declaration->getOrAdd($request->getParameter('hash'));
-        $this->etablissement = $this->declaration->getEtablissement();
-        if($this->noeud->getNextSister()) {
-            return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getNextSister()->getHash()));
+
+        return $this->redirectToSisterNoeud($this->declaration->getOrAdd($request->getParameter('hash')), "suivant");
+    }
+
+    protected function redirectToSisterNoeud($noeud, $sens) {
+        $appellations = $this->declaration->getAppellationsAvecVtsgn();
+        $found = false;
+        $precedent = null;
+        if($noeud instanceof DRRecolteLieu) {
+            foreach($appellations as $appellation) {
+                foreach($appellation["lieux"] as $lieu) {
+                    if($found && $sens == "suivant") {
+
+                        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $lieu->getHash()));
+                    }
+                    if($lieu->getHash() == $noeud->getHash()) {
+                        $found = true;
+                    }
+                    if($found && $precedent && $sens == "precedent") {
+
+                        return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
+                    }
+                    if(!$found) {
+                        $precedent = $lieu->getHash();
+                    }
+                }
+            }
+        }
+        $precedentLock = ($found && $precedent);
+        if(!$found) {
+            $precedent = null;
+        }
+        $found = false;
+        if($noeud instanceof DRRecolteLieu) {
+            $noeud = $noeud->getParent();
+        }
+        foreach($appellations as $appellation) {
+            if($found && $sens == "suivant") {
+
+                return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $appellation['hash']));
+            }
+            if($found && $precedent && $sens == "precedent") {
+
+                return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $precedent));
+            }
+            foreach($appellation["noeuds"] as $mention) {
+                if($found && $sens == "suivant") {
+
+                    return $this->redirect('dr_recolte_noeud', array('sf_subject' => $this->declaration, 'hash' => $mention->getHash()));
+                }
+                if($mention->getHash() == $noeud->getHash()) {
+                    $found = true;
+                    break;
+                }
+            }
+            if(!$precedentLock && !$found) {
+                $precedent =  $appellation['hash'];
+            }
         }
 
-        if($this->noeud->getParent() instanceof DRRecolte) {
+        if($sens == "suivant") {
 
             return $this->redirect('dr_autres', array('id' => $this->declaration->_id));
-        }
+        } elseif($sens == "precedent") {
 
-        return $this->redirect('dr_recolte_noeud_suivant', array('sf_subject' => $this->declaration, 'hash' => $this->noeud->getParent()->getHash()));
+            return $this->redirect('dr_repartition_lieu', array('id' => $this->declaration->_id, 'from_recolte' => 1));
+        }
     }
 
     public function executeRecapitulatif(sfWebRequest $request) {
@@ -343,7 +396,7 @@ class dr_recolteActions extends _DRActions {
                         if($mentionConfig->getRendementCepage() <= 0) {
                             continue;
                         }
-                        $this->rendement["Mention"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
+                        $this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
                     }
                     continue;
                 }
@@ -428,7 +481,11 @@ class dr_recolteActions extends _DRActions {
 
     protected function initAcheteurs() {
         $this->has_acheteurs_mout = ($this->produit->getAppellation()->getConfig()->mout == 1);
-        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($this->produit->getAppellation()->getKey());
+        $appellation_key = $this->produit->getAppellation()->getKey();
+        if($this->produit->getMention()->getKey() != "mention") {
+            $appellation_key = $this->produit->getMention()->getKey();
+        }
+        $this->acheteurs = $this->declaration->get('acheteurs')->getNoeudAppellations()->get($appellation_key);
     }
 
     protected function initPrecDR(){

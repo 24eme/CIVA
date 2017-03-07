@@ -6,6 +6,8 @@
  */
 class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
+    protected $_id_societe_origine = null;
+
     public function constructId() {
         $this->set('_id', 'COMPTE-' . $this->identifiant);
     }
@@ -20,7 +22,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             return $this->_get('login');
         }
 
-        return preg_replace("/9$/", "", $this->getIdentifiant());
+        return $this->getIdentifiant();
     }
 
     public function getMasterCompte() {
@@ -50,7 +52,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             return;
         }
 
-        $this->nom_a_afficher = trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom));
+        $this->nom_a_afficher = preg_replace("/ +/", " ", trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom)));
     }
 
     public static function transformTag($tag) {
@@ -111,6 +113,17 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             }
         }
         return false;
+    }
+
+    public function changeSociete($new_id) {
+        if($this->isNew()) {
+            continue;
+        }
+        if($this->_id == $new_id) {
+            return;
+        }
+        $this->_id_societe_origine = $this->id_societe;
+        $this->id_societe = $new_id;
     }
 
     public function save() {
@@ -185,18 +198,32 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             CompteGenerique::pullContact($this, $societe->getMasterCompte());
         }
 
+        if($new) {
+            $this->add('date_creation', date('Y-m-d'));
+        }
+
         parent::save();
 
-        if ($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $new) {
+        if(!$societe->contacts->exist($this->_id)) {
             $societe->addCompte($this);
             $societe->save();
+        }
+
+        if($this->_id_societe_origine) {
+            $societeOrigine = SocieteClient::getInstance()->find($this->_id_societe_origine);
+            if($societeOrigine) {
+                $societeOrigine->cleanComptes($this);
+                $societeOrigine->save();
+            }
+            $this->_id_societe_origine = null;
         }
 
         $this->autoUpdateLdap();
     }
 
     public function isSocieteContact() {
-        return ((SocieteClient::getInstance()->find($this->id_societe)->compte_societe) == $this->_id);
+
+        return false;
     }
 
     private function removeFournisseursTag() {
@@ -380,23 +407,29 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function hasDroit($droit) {
-        if(!$this->exist('droits')) {
+        if(!$this->exist('droits') && !count($this->getDroits())) {
 
             return false;
         }
-
-        $droits = $this->get('droits')->toArray(0, 1);
+        $droits = $this->get('droits');
+        if(!is_array($droits)) {
+            $droits = $droits->toArray(0, 1);
+        }
         return in_array($droit, $droits);
     }
 
     public function getDroits() {
+        if(!$this->exist('droits')) {
 
-        return $this->_get('droits');
+            return $this->getSociete()->getDroits();
+        }
+
+        return array_values(array_unique(array_merge($this->_get('droits')->toArray(true, false), $this->getSociete()->getDroits())));
     }
 
     public function isInscrit() {
 
-        return true;
+        return $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_NOUVEAU && $this->getStatutTeledeclarant() != CompteClient::STATUT_TELEDECLARANT_INACTIF;
     }
 
     public function isTeledeclarationActive() {

@@ -170,5 +170,26 @@ class CompteClient extends acCouchdbClient {
         return $this->startkey('COMPTE-')->endkey('COMPTE-C999999999')->execute($hydrate);
     }
 
+    public function updateEmailEtablissementFromCompteAndSaveThem($compte) {
+        if(!$compte->isInscrit()) {
+
+            return;
+        }
+
+        $etablissement = $compte->getEtablissementOrigineObject();
+
+        if(!$etablissement) {
+            return;
+        }
+
+        if($etablissement->exist('teledeclaration_email') && $etablissement->teledeclaration_email && $etablissement->compte != $compte->_id) {
+
+            return;
+        }
+
+        $etablissement->setEmailTeledeclaration($compte->email);
+        $etablissement->email = $etablissement->getEmailTeledeclaration();
+        $etablissement->save();
+    }
 
 }

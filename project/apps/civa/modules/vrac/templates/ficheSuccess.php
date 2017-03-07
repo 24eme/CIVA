@@ -55,6 +55,10 @@
 
 		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form, 'produits_hash_in_error' => $validation->getProduitsHashInError())) ?>
 
+		<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_CLOTURE)): ?>
+			<a style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
+		<?php endif; ?>
+
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -87,9 +91,9 @@
 
 	<table id="actions_fiche">
 		<tr>
-			<td style="width: 33%"><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
+			<td style="width: 40%"><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
 			<td align="center"><?php if ($vrac->isValide()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
-			<td style="width: 33%; text-align: right;">
+			<td style="width: 40%; text-align: right;">
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
 						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">

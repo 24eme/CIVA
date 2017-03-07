@@ -106,6 +106,10 @@ class RecolteForm extends acCouchdbObjectForm {
     }
 
     public function doUpdateObject($values) {
+        if(!isset($values['vtsgn']) && $this->getObject()->getMention()->getKey() != 'mention') {
+            $values['vtsgn'] = str_replace("mention", "", $this->getObject()->getMention()->getKey());
+        }
+
         parent::doUpdateObject($values);
 
         $this->getObject()->negoces->clear();

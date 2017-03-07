@@ -265,13 +265,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->acheteur->remove('emails');
         $this->acheteur->add('emails');
 
-        if($this->isProprietaire($this->acheteur->identifiant)) {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
-            $this->acheteur->emails = array($tiers->getEmail());
-        } else {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
-			$this->acheteur->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_values(array_unique($emails));
+
+		$this->acheteur->emails = $emails;
     }
 
     public function storeVendeurInformations($tiers)
@@ -302,13 +307,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->vendeur->remove('emails');
         $this->vendeur->add('emails');
 
-		if($this->isProprietaire($this->vendeur->identifiant)) {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
-            $this->vendeur->emails = array($tiers->getEmail());
-        } else {
-            //$this->acheteur->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
-			$this->vendeur->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_values(array_unique($emails));
+
+		$this->vendeur->emails = $emails;
     }
 
     public function storeMandataireInformations($tiers)
@@ -324,18 +334,23 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->telephone = $tiers->telephone;
     	$this->mandataire->famille = $tiers->getFamille();
     	$this->mandataire->identifiant = $tiers->_id;
-    	$this->mandataire->num_db2 = ($tiers->exist("db2"))? $tiers->db2->num : null;
+    	$this->mandataire->num_db2 = $tiers->num_interne;
 
         $this->mandataire->remove('emails');
         $this->mandataire->add('emails');
 
-        if($this->isProprietaire($this->mandataire->identifiant)) {
-			//$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_RESPONSABLE);
-			$this->mandataire->emails = array($tiers->getEmail());
-        } else {
-            //$this->mandataire->emails = $tiers->getEmailsByDroit(_CompteClient::DROIT_VRAC_SIGNATURE);
-			$this->mandataire->emails = array($tiers->getEmail());
-        }
+		$emails = array();
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+				continue;
+			}
+
+			$emails[] = $compte->email;
+		}
+
+		$emails = array_values(array_unique($emails));
+
+		$this->mandataire->emails = $emails;
     }
 
     public function storeInterlocuteurCommercialInformations($nom, $contact) {
@@ -479,6 +494,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
     }
 
+	public function canForceClotureContrat()
+	{
+
+		return (!$this->volume_enleve_total && $this->isValide() && !$this->isCloture());
+	}
+
+	public function forceClotureContrat()
+    {
+		$this->autoFillRetiraisons();
+		$this->updateTotaux();
+        $this->updateEnlevementStatut();
+		$this->clotureContrat();
+    }
+
     public function clotureContrat()
     {
     	$this->valide->statut = self::STATUT_CLOTURE;
@@ -515,6 +544,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function allProduitsClotures()
     {
     	return $this->declaration->allProduitsClotures();
+    }
+
+	public function autoFillRetiraisons()
+    {
+    	return $this->declaration->autoFillRetiraisons();
     }
 
     public function hasRetiraisons()
@@ -576,10 +610,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         		$emails[] = $email;
         	}
     	}
-        $emails = array_unique($emails);
+
     	if ($this->interlocuteur_commercial->email && !in_array($this->interlocuteur_commercial->email, $emails)) {
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
+
+		$emails = array_values(array_unique($emails));
 
     	return $emails;
     }
@@ -597,7 +633,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$emails[] = $this->interlocuteur_commercial->email;
     	}
 
-        $emails = array_unique($emails);
+        $emails = array_values(array_unique($emails));
 
     	return $emails;
     }

@@ -16,20 +16,21 @@ class vrac_exportActions extends sfActions
     {
       set_time_limit(180);
       $this->vrac = $this->getRoute()->getVrac();
-      
+      $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
+
       $odg = $request->getParameter('odg');
-      
+
       $this->setLayout(false);
 
       $this->document = new ExportVracPdf($this->vrac, $odg, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
-      
+
       if($request->getParameter('force')) {
         $this->document->removeCache();
       }
       $this->document->generatePDF();
 
       if ($request->isXmlHttpRequest()) {
-          
+
           return $this->ajaxPdf();
       }
 
@@ -37,11 +38,10 @@ class vrac_exportActions extends sfActions
 
       return $this->renderText($this->document->output());
     }
-	
+
     public function executeMain()
 	{
 	}
-   
 
     protected function setResponseCsv($filename) {
         $this->response->setContentType('application/csv');
@@ -53,5 +53,22 @@ class vrac_exportActions extends sfActions
     private function ajaxPdf() {
         sfConfig::set('sf_web_debug', false);
         return $this->renderText($this->generateUrl('vrac_export_pdf', $this->vrac));
+    }
+
+    protected function secureVrac($droits, $vrac) {
+        if(!isset($this->compte)) {
+            $this->compte = $this->getUser()->getCompte();
+        }
+        if(!VracSecurity::getInstance($this->compte, $vrac)->isAuthorized($droits)) {
+
+            return $this->forwardSecure();
+        }
+    }
+
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
     }
 }

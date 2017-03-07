@@ -33,15 +33,23 @@ class DRRecolte extends BaseDRRecolte {
 
     /**
      *
+     * @return boolean
+     */
+    public function hasOneOrMoreAppellation() {
+
+        return count($this->getAppellationsAvecVtsgn()) > 0;
+    }
+
+    /**
+     *
      * @param array $params
      */
     protected function update($params = array()) {
         parent::update($params);
 
         if (in_array('from_acheteurs',$params)) {
-            $acheteurs = $this->getCouchdbDocument()->getAcheteurs();
             $mentions = array();
-            foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+            foreach($this->getDocument()->getAcheteurs()->getNoeudAppellations() as $appellation_key => $appellation) {
                 if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
                     $mentions[$appellation_key] = $appellation_key;
 
@@ -51,43 +59,46 @@ class DRRecolte extends BaseDRRecolte {
 
             }
             foreach($mentions as $mention_key => $mention) {
-                foreach($acheteurs->getNoeudAppellations() as $appellation_key => $appellation) {
+                foreach($this->getDocument()->getAcheteurs()->getNoeudAppellations() as $appellation_key => $appellationAcheteurs) {
                     if(in_array($appellation_key, array("mentionVT", "mentionSGN"))) {
 
                         continue;
                     }
-                    if(!$this->getConfig()->getDocument()->exist(HashMapper::convert($this->getNoeudAppellations()->add($appellation_key)->getHash()."/".$mention_key))) {
+
+                    $hashConfig = HashMapper::convert($this->getNoeudAppellations()->add($appellation_key)->getHash()."/".$mention_key);
+                    if(!$this->getDocument()->getConfig()->exist($hashConfig)) {
 
                         continue;
                     }
-                    $app = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
-                    if (!$app->getConfig()->hasManyLieu()) {
-                        $lieu = $app->add('lieu');
-                        foreach ($lieu->getConfig()->getChildrenNode() as $k => $v) {
-                            $this->getDocument()->getOrAdd(HashMapper::inverse($v->getHash()));
+                    $appellation = $this->getNoeudAppellations()->add($appellation_key)->add($mention_key);
+                    if (!$appellation->getConfig()->hasManyLieu()) {
+                        $lieu = $appellation->add('lieu');
+                        foreach ($lieu->getConfig()->getChildrenNode() as $couleur) {
+                            $this->getDocument()->getOrAdd(HashMapper::inverse($couleur->getHash()));
                         }
                     }
                 }
             }
 
             $list_to_remove = array();
-            foreach($this->getAppellations() as $appellation) {
-                foreach($appellation->getMentions() as $mention_key => $mention) {
-                    if($mention_key == "mention") {
-                        continue;
-                    }
-                    if(!$acheteurs->getNoeudAppellations()->exist($mention_key)) {
-                        $list_to_remove[$appellation->getHash()."/".$mention_key] = $appellation->getHash()."/".$mention_key;
-                    }
+            foreach($this->getMentions() as $mention) {
+                if($mention->getKey() == "mention") {
+                    continue;
                 }
-                if (!$acheteurs->getNoeudAppellations()->exist($appellation->getKey())) {
+
+                if(!$this->getDocument()->getAcheteurs()->getNoeudAppellations()->exist($mention->getKey())) {
+                    $list_to_remove[$mention->getHash()] = $mention->getHash();
+                }
+            }
+
+            foreach($this->getAppellations() as $appellation) {
+                $appellation_key = $appellation->getKey();
+                if(!$this->getDocument()->getAcheteurs()->getNoeudAppellations()->exist($appellation_key)) {
                     $list_to_remove[$appellation->getHash()] = $appellation->getHash();
                 }
             }
+
             foreach ($list_to_remove as $hash_to_remove) {
-                if(count($this->getDocument()->get($hash_to_remove)->getProduitsDetails()) > 0) {
-                    continue;
-                }
                 $this->getDocument()->remove($hash_to_remove);
             }
         }
@@ -95,51 +106,35 @@ class DRRecolte extends BaseDRRecolte {
 
     public function getAppellationsAvecVtsgn() {
         $appellations = array();
-        foreach($this->getConfig()->getArrayAppellations() as $appellationConfig) {
-            if($appellationConfig->getKey() == "PINOTNOIR") {
-                $appellations["mentionVT"] = null;
-                $appellations["mentionSGN"] = null;
-            }
-            $hash = HashMapper::inverse($appellationConfig->getHash());
-            if(!$this->getDocument()->exist($hash)) {
 
-                continue;
-            }
-            $appellations[$hash] = null;
-        }
-
-        $appellations["mentionVT"] = array("libelle" => "Mention VT", "hash" => "mentionVT", "noeuds" => array(), "lieux" => array());
-        $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "hash" => "mentionSGN", "noeuds" => array(), "lieux" => array());
-
-        foreach($appellations as $hash => $null) {
-            if(!$this->getDocument()->exist($hash)) {
-                continue;
-            }
-            $appellation = $this->getDocument()->get($hash);
-
-            $appellations[$appellation->getHash()] = array("libelle" => $appellation->getLibelle(), "hash" => $appellation->getHash()."/mention", "lieux" => array(), "noeuds" => array());
-            foreach($appellation->getMentions() as $mention) {
-                $key = ($mention->getKey() == "mention") ? $appellation->getHash() : $mention->getKey();
-                $appellations[$key]['noeuds'][$mention->getHash()] = $mention;
-                if($mention->getConfig()->hasManyLieu() || $mention->getKey() != "mention") {
-                    foreach($mention->getConfig()->getLieux() as $lieuConfig)  {
-                        $hashLieu = HashMapper::inverse($lieuConfig->getHash());
-                        if(!$this->getDocument()->exist($hashLieu)) {
-                            continue;
-                        }
-                        $lieu = $this->getDocument()->get($hashLieu);
-                        $appellations[$key]['lieux'][] = $lieu;
-                    }
+        foreach($this->getDocument()->getConfigAppellationsAvecVtsgn() as $appellationConfig) {
+            $appellations[$appellationConfig["hash"]] = $appellationConfig;
+            $appellations[$appellationConfig["hash"]]["lieux"] = array();
+            foreach($appellationConfig["lieux"] as $hashLieu => $lieuConfig) {
+                if(!$this->getDocument()->exist($hashLieu)) {
+                    continue;
                 }
+                $appellations[$appellationConfig["hash"]]["lieux"][] = $this->getDocument()->get($hashLieu);
             }
         }
 
-        if(!count($appellations["mentionSGN"]["noeuds"])) {
-            unset($appellations["mentionSGN"]);
+        foreach($this->getMentions() as $mention) {
+            if($mention->getKey() == 'mention') {
+                $appellations[$mention->getHash()]["noeuds"][$mention->getHash()] = $mention;
+                if(!$mention->getConfig()->hasManyLieu()) {
+                    $appellations[$mention->getHash()]["lieux"] = array();
+                }
+                continue;
+            }
+
+            $appellations[$mention->getKey()]["noeuds"][$mention->getHash()] = $mention;
         }
 
-        if(!count($appellations["mentionVT"]["noeuds"])) {
-            unset($appellations["mentionVT"]);
+        foreach($appellations as $key => $appellation) {
+            if(!isset($appellations[$key]["noeuds"]) || !count($appellations[$key]["noeuds"])) {
+                unset($appellations[$key]);
+                continue;
+            }
         }
 
         return $appellations;

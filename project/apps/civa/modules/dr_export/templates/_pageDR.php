@@ -82,9 +82,11 @@ if (!function_exists('printColonne')) {
     echo '</tr>';
   }
 }
-
+if ($hasLigneAppellation) {
+echo printColonne('Appellation', $colonnes_cepage,'appellation');
+}
 echo printColonne('Cépage', $colonnes_cepage, 'cepage');
-if ($hasLieuEditable) {
+if ($hasLigneLieu) {
   echo printColonne('Lieu', $colonnes_cepage, 'lieu');
 }
 echo printColonne('Dénomination complémentaire', $colonnes_cepage, 'denomination');
@@ -94,16 +96,8 @@ if ($hasVTSGN) {
 echo printColonne('Superficie', $colonnes_cepage, 'superficie', 'ares');
 echo printColonne('Récolte totale', $colonnes_cepage, 'volume', 'hl');
 //echo printColonne('Motif de non recolte', $colonnes_cepage, 'motif_non_recolte');
-foreach ($acheteurs as $type_key => $acheteurs_type) {
-    foreach ($acheteurs_type as $cvi => $a) {
-        $type = 'Vente à ';
-        if ($a->type_acheteur == 'cooperatives') {
-        $type = 'Apport à ';
-        } else if ($a->type_acheteur == 'mouts') {
-        $type = 'Vente de mouts à ';
-        }
-        echo printColonne($type.$a->nom, $colonnes_cepage, $type_key.'_'.$cvi, 'hl');
-    }
+foreach ($acheteursLignes as $acheteurKey => $acheteurLibelle) {
+    echo printColonne($acheteurLibelle, $colonnes_cepage, $acheteurKey, 'hl');
 }
 echo printColonne('Volume sur place', $colonnes_cepage, 'cave_particuliere', 'hl');
 echo printColonne('Volume revendiqué', $colonnes_cepage, 'revendique', 'hl');
@@ -122,25 +116,31 @@ if($has_no_usages_industriels) {
 <table>
 <tr>
 <td style="width: 820px">
-<?php if ($enable_identification && count($acheteurs->getParent()->hasAcheteurs())) : ?>
+<?php if ($enable_identification && count($acheteurs)) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-  <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 100px;">N° CVI</th><th style="border: 1px solid black;width: 300px;">Raison sociale</th><th style="width: 120px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 120px;">Volume</th><th style="border: 1px solid black;width: 180px;">Dont dépassement</th></tr>
-  <?php foreach ($acheteurs as $type_key => $acheteurs_type) : ?>
-    <?php foreach($acheteurs_type as $cvi => $a) : ?>
-        <tr><td style="border: 1px solid black;width: 100px;"><?php echo $cvi; ?></td>
-            <td style="border: 1px solid black;width: 300px;">
-                <?php echo $a->nom.' - '.$a->commune; ?>
-                <?php if ($type_key == 'mouts'): ?>
-                    <br />
-                    <small><i>(Acheteur de mouts)</i></small>
+    <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><th style="border: 1px solid black;width: 130px;">Dont dépassement</th><?php if($hasLigneAppellation): ?><th style="border: 1px solid black;width: 250px;">Appellation / Lieu</th><?php endif; ?></tr>
+    <?php foreach($acheteurs as $acheteursLieu): ?>
+        <?php foreach ($acheteursLieu["acheteurs"] as $type_key => $acheteurs_type) : ?>
+            <?php foreach($acheteurs_type as $cvi => $a) : ?>
+            <tr><td style="border: 1px solid black;width: 95px;"><?php echo $cvi; ?></td>
+                <td style="border: 1px solid black;width: 295px;">
+                    <?php echo $a->nom.' - '.$a->commune; ?>
+                    <?php if ($type_key == 'mouts'): ?>
+                        <br />
+                        <small><i>(Acheteur de mouts)</i></small>
+                    <?php endif; ?>
+                </td>
+                <td style="border: 1px solid black;width: 100px; text-align: right;"><?php echoSuperficie($a->superficie); ?></td>
+                <td  style="border: 1px solid black;width: 100px; text-align: right;"><?php echoVolume($a->volume); ?></td>
+                <td style="border: 1px solid black;width: 130px; text-align: right;"><?php echoVolume($a->dontdplc); ?></td>
+                <?php if($hasLigneAppellation): ?>
+                <td style="border: 1px solid black;width: 250px; text-align: left"><?php echo $acheteursLieu["libelle_appellation"] ?></td>
                 <?php endif; ?>
-            </td>
-            <td style="border: 1px solid black;width: 120px; text-align: right;"><?php echoSuperficie($a->superficie); ?></td>
-            <td  style="border: 1px solid black;width: 120px; text-align: right;"><?php echoVolume($a->volume); ?></td>
-            <td style="border: 1px solid black;width: 180px; text-align: right;"><?php echoVolume($a->dontdplc); ?></td></tr>
+            </tr>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
     <?php endforeach; ?>
-  <?php endforeach; ?>
 </table>
 <?php endif;?>
 </td>

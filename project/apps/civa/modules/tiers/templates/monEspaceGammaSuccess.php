@@ -2,7 +2,7 @@
 
 <div id="application_dr" class="mon_espace_civa clearfix">
 
-    <?php include_partial('tiers/onglets', array('active' => 'gamma', 'compte' => $compte)) ?>
+    <?php include_partial('tiers/onglets', array('active' => 'gamma', 'compte' => $compte, 'blocs' => $blocs)) ?>
 
     <div id="espace_gamma" class="contenu clearfix">
         <?php if($sf_user->hasFlash('confirmation')) : ?>

@@ -21,7 +21,7 @@
                                 <div class="contenu_section">
                                         <div class="bloc_vert" action="" method="post">
                                                 <div class="ligne_form <?php echo ($form['jeunes_vignes']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
-                                                        <?php echo $form['jeunes_vignes']->render(array('class' => 'num')) ?>
+                                                        <?php echo $form['jeunes_vignes']->render(array('class' => 'num num_light num_float', 'style' => 'padding: 0 5px;')) ?>
                                                         <?php echo $form['jeunes_vignes']->renderLabel() ?>
                                                 </div>
                                         </div>

@@ -1,6 +1,12 @@
 <?php
 class CompteLdap extends acVinLdap {
 
+    public function getCompte($compte)
+      {
+
+        return $this->get(self::getIdentifiant($compte));
+      }
+
   public function saveCompte($compte, $verbose = 0)
     {
       $info = $this->info($compte);
@@ -90,11 +96,11 @@ class CompteLdap extends acVinLdap {
     }
 
     public static function getGecos($compte) {
-        if($compte->exist('gecos')) {
+        if($compte->exist('gecos') && $compte->gecos) {
 
             return $compte->gecos;
         }
 
-        return null;
+        return GammaClient::getInstance()->getGecos($compte);
     }
 }

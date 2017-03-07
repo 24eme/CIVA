@@ -16,8 +16,11 @@ Etablissement:
        teledeclaration_email: {  }
        nature_inao: {  }
        siret: {  }
+       acheteur_raisin: { required: false }
+       ds_decembre: { required: false }
        recette_locale:
          type: collection
+         required: false
          definition:
            fields:
              id_douane: {  }
@@ -27,6 +30,7 @@ Etablissement:
        type_dr: { required: false }
        liaisons_operateurs:
            type: collection
+           required: false
            definition:
              fields:
                '*':
@@ -44,7 +48,7 @@ Etablissement:
                            '*': { }
        site_fiche: { required: false }
        compte: {  }
-       compte_exploitant: {  }
+       compte_exploitant: { required: false }
        num_interne: {  }
        num_reprise: { required: false }
        raison_sociale: {  }
@@ -65,23 +69,38 @@ Etablissement:
        raison_sociale_cautionneur: { required: false }
        declaration_insee: { required: false }
        declaration_commune: { required: false }
+       date_modification: { required: false }
+       exploitant:
+          type: collection
+          class: EtablissementExploitant
+          required: false
+          definition:
+            fields:
+              civilite: {  }
+              nom: {  }
+              adresse: {  }
+              code_postal: {  }
+              commune: {  }
+              telephone: {  }
+              date_naissance: {  }
        siege:
-           type: collection
-           definition:
-             fields:
-               adresse: {  }
-               adresse_complementaire: {  }
-               code_postal: {  }
-               commune: {  }
-               pays: {}
+         type: collection
+         definition:
+           fields:
+             adresse: {  }
+             adresse_complementaire: {  }
+             code_postal: {  }
+             commune: {  }
+             pays: {  }
        comptabilite:
-           type: collection
-           definition:
-             fields:
-               adresse: {  }
-               code_postal: {  }
-               commune: {  }
-               pays: {}
+         type: collection
+         required: false
+         definition:
+           fields:
+             adresse: {  }
+             code_postal: {  }
+             commune: {  }
+             pays: {  }
        lieux_stockage:
          type: collection
          required: false

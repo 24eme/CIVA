@@ -48,11 +48,6 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
             throw new sfException('compte does not exist');
         }
         $this->signInFirst($compte);
-
-        if ($compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE) {
-            $compte->resetMotDePasseFromLdap();
-            $compte->save();
-        }
     }
 
     /**
@@ -171,7 +166,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
     }
 
     public function isInDelegateMode() {
-        return ( $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
+        return ($this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_AUTHENTICATED) != $this->getAttribute(self::SESSION_COMPTE, null, self::NAMESPACE_COMPTE_USED));
     }
 
 }

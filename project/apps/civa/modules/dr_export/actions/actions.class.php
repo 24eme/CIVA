@@ -9,13 +9,12 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
-class dr_exportActions extends sfActions {
+class dr_exportActions extends _DRActions {
 
     public function executeXml(sfWebRequest $request) {
-        $tiers = $this->getUser()->getTiers();
-        $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-        $key = 'DR-'.$tiers->cvi.'-'.$this->annee;
-        $dr = acCouchdbManager::getClient()->find($key);
+        $this->secureDR(DRSecurity::CONSULTATION);
+        $dr = $this->getRoute()->getDR();
+        $tiers = $this->getRoute()->getEtablissement();
 
         try {
             if (!$dr->updated)
@@ -32,7 +31,7 @@ class dr_exportActions extends sfActions {
 
     private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
-        return $this->renderText($this->generateUrl('dr_pdf', array('id' => $this->dr->_id, 'annee'=>$this->annee, 'from_csv' => $from_csv)));
+        return $this->renderText($this->generateUrl('dr_pdf', array('identifiant' => $this->etablissement->identifiant, 'annee' => $this->annee, 'from_csv' => $from_csv)));
     }
     /**
      * Executes index action
@@ -40,15 +39,28 @@ class dr_exportActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executePdf(sfWebRequest $request) {
-        set_time_limit(180);
-        $this->dr = $this->getRoute()->getDR();
-        $this->etablissement = $this->dr->getEtablissement();
 
-        $this->annee = $this->dr->getCampagne();
+        set_time_limit(180);
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->annee = $request->getParameter('annee');
 
         if ($request->getParameter("from_csv", null)) {
             $import_from = array();
             $this->dr = acCouchdbManager::getClient('DR')->createFromCSVRecoltant($this->annee, $this->etablissement, $import_from, $this->getUser()->isSimpleOperateur());
+        }
+
+        if(!$this->dr) {
+            $this->dr = DRClient::getInstance()->find('DR-'.$this->etablissement->identifiant.'-'.$this->annee);
+        }
+
+        if(!$this->dr) {
+
+            return $this->forward404();
+        }
+
+        if(!DRSecurity::getInstance($this->dr)->isAuthorized(DRSecurity::CONSULTATION)) {
+
+            return $this->forwardSecure();
         }
 
         $this->setLayout(false);
@@ -69,7 +81,7 @@ class dr_exportActions extends sfActions {
 
         $this->forward404Unless($this->dr);
 
-        $this->document = new ExportDRPdf($this->dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+        $this->document = @(new ExportDRPdf($this->dr, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf')));
 
         if($request->getParameter('force') || $request->getParameter("from_csv")) {
             $this->document->removeCache();
@@ -92,12 +104,11 @@ class dr_exportActions extends sfActions {
         return $this->renderText(file_get_contents(sfConfig::get('sf_data_dir').'/export/comptes/comptes.csv'));
     }
 
-    public function executeDrCsv(sfWebRequest $request) {
-         $this->tiers = $this->getUser()->getTiers();
-         $this->annee = $this->getRequestParameter('annee', $this->getUser()->getCampagne());
-         $this->cvi = $this->getRequestParameter('cvi', $this->tiers);
-         $csvContruct = new ExportDRCsv($this->annee,$this->tiers->cvi);
-         $csvContruct->export();
+    public function executeCsv(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::CONSULTATION);
+        $dr = $this->getRoute()->getDr();
+        $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi);
+        $csvContruct->export();
 
          return $this->renderText($csvContruct->output());
     }

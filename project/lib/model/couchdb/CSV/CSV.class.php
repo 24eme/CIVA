@@ -2,10 +2,10 @@
 
 class CSV extends baseCSV
 {
-  public function storeCSV(CsvFile $csv) {
+  public function storeCSV(CsvFileAcheteur $csv) {
     $ids = array();
     foreach ($csv->getCsv() as $ligne) {
-      $ids[$ligne[CsvFile::CSV_RECOLTANT_CVI]] = 1;
+      $ids[$ligne[CsvFileAcheteur::CSV_RECOLTANT_CVI]] = 1;
     }
     $this->recoltants = array_keys($ids);
     $this->save();

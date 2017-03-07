@@ -10,7 +10,7 @@
 <?php else : ?>
         <div class="ligne_form">
             <input type="radio" id="gamma_type_acces_inscription" name="gamma[type_acces]" value="plateforme" checked="checked"  />
-            <label for="gamma_type_acces_inscription">Alsace Gamm@</label>
+            <label for="gamma_type_acces_inscription">Alsace Gamm@ <span style="font-size: 12px">(en tant que <?php echo EtablissementFamilles::getFamilleLibelle($etablissement->getFamille()) ?>)</span></label>
         </div>
 <?php endif; ?>
         <!--<div class="ligne_form">

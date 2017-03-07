@@ -6,8 +6,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     protected $total_volume_before;
 
     public function getConfig() {
-        
-        return $this->getCouchdbDocument()->getConfig()->get(HashMapper::convert($this->getHash()));
+
+        return $this->getDocument()->getConfig()->get(HashMapper::convert($this->getHash()));
     }
 
     abstract public function getChildrenNode();
@@ -257,6 +257,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if($this->_get('usages_industriels') && !$force_calcul) {
 
             return $this->_get('usages_industriels');
+        }
+
+        if(!$this->getConfig()->hasRendementNoeud()) {
+
+            return $this->getUsagesIndustrielsTotal();
         }
 
         return $this->getDplc() > $this->getLies() ? $this->getDplc() : $this->getLies();

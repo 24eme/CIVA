@@ -70,7 +70,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return true;
         } elseif ($etape == self::ETAPE_RECOLTE) {
             return true;
-            //return ($this->recolte->hasOneOrMoreAppellation());
         } elseif ($etape == self::ETAPE_VALIDATION) {
             return true;
         }
@@ -82,7 +81,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      */
     public function removeVolumes() {
         $this->lies = null;
-        $this->recolte->certification->genre->removeVolumes();
+        if($this->exist('recolte/certification/genre')) {
+            $this->recolte->certification->genre->removeVolumes();
+        }
     }
 
     public function getProduits() {
@@ -258,7 +259,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return DRClient::VALIDEE_PAR_AUTO;
         }
 
-        $compte = _CompteClient::getInstance()->find($compte_id);
+        $compte = CompteClient::getInstance()->find($compte_id);
+
+        if(!$compte) {
+            $compte = _CompteClient::getInstance()->find($compte_id);
+        }
 
         if(!$compte) {
 
@@ -267,10 +272,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $compte_dr = $this->getEtablissementObject()->getMasterCompte();
 
-        /*if($compte->isOperateur()) {
+        if($compte instanceof _Compte && $compte->isOperateur()) {
 
             return DRClient::VALIDEE_PAR_CIVA;
-        }*/
+        }
 
         if($compte instanceof Compte && $compte->getSociete()->_id != $compte_dr->getSociete()->_id) {
 
@@ -402,9 +407,21 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $validLogVigilance = array();
         $validLogErreur = array();
         foreach ($this->recolte->getAppellations() as $appellation) {
+            if($appellation->getKey() != "appellation_VINTABLE") {
+                foreach($appellation->getAcheteursArray() as $typeCvi =>$volume) {
+                    if($volume > 0 && !preg_match("/^.+_6/", $typeCvi)) {
+                        array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $appellation->getHash())), 'log' => $appellation->getLibelle(), 'info' => "Vous ne pouvez pas vendre de volume à un acheteur hors de la région Alsace pour cette appellation :"));
+                    }
+                }
+            }
+
             foreach ($appellation->getMentions() as $mention) {
                 if($mention->getTotalSuperficie() != 0) {
-                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation->getKey());
+                    $appellation_key = $mention->getAppellation()->getKey();
+                    if($mention->getKey() != "mention") {
+                        $appellation_key = $mention->getKey();
+                    }
+                    $acheteursByType = $this->get('acheteurs')->getNoeudAppellations()->get($appellation_key);
                     foreach($acheteursByType as $type => $cvis) {
                         if(!$cvis instanceof acCouchdbJson) {
                             continue;
@@ -425,7 +442,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
               foreach ($mention->getLieux() as $lieu) {
                 if ($lieu->getTotalSuperficie() == 0 && $lieu->getTotalVolume()) {
                     array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_volume_sans_superfice')));
-                } elseif($lieu->getTotalSuperficie() == 0) {
+                } elseif($lieu->getTotalSuperficie() == 0 && ($mention->getConfig()->hasManyLieu() || $mention->getKey() == 'mention')) {
                     array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $lieu->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_superficie_zero')));
                 }
 
@@ -487,8 +504,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         if ($cepage->getConfig()->hasMinQuantite() || $cepage->getConfig()->hasMaxQuantite()) {
                             $volume_acheteurs = $cepage->getVolumeAcheteurs('cooperatives', false);
                             foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
-                                $volume_min = round($volume * $cepage->getConfig()->min_quantite, 2);
-                                $volume_max = round($volume * $cepage->getConfig()->max_quantite, 2);
+                                $volume_min = round($volume * $cepage->getConfig()->get('attributs/min_quantite'), 2);
+                                $volume_max = round($volume * $cepage->getConfig()->get('attributs/max_quantite'), 2);
                                 $volume_acheteur = (isset($volume_acheteurs[$cvi])) ? $volume_acheteurs[$cvi] : 0;
                                 if (!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $volume_acheteur < $volume_min) {
                                     array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
@@ -530,7 +547,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         // vérifie le trop plein de DPLC
-                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round($cepage->getDplc(), 2) > 0) {
+                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round(($cepage->getDplc() - $cepage->getLies()),2) > 0) {
                             array_push($validLogVigilance, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                         }
 
@@ -598,11 +615,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         //Vérifie que tous les dont_dplc et superficie dans le recapitulatif des ventes est rempli
         if (!$has_no_complete && !$noeud->hasCompleteRecapitulatifVente()) {
-            array_push($validLogVigilance, array($this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
+            array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
         }
 
         if (!$noeud->isValidRecapitulatifVente()) {
-            array_push($validLogErreur, array($this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
             return;
         }
 
@@ -610,7 +627,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
 
-            array_push($validLogErreur, array($this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
 
@@ -621,7 +638,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
 
                 if($acheteur->dontdplc > $volume) {
-                    array_push($validLogErreur, array($this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
+                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
                         $recap_is_ok = false;
                         continue;
                 }
@@ -718,7 +735,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declaration_insee = $tiers->declaration_insee;
 
         if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getEmail();
+            $this->declarant->email = $tiers->getEmailTeledeclaration();
         }
 
         $this->declarant->exploitant->sexe = $tiers->exploitant->civilite;

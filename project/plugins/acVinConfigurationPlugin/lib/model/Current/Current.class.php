@@ -44,28 +44,32 @@ class Current extends BaseCurrent {
     /* A remplacer */
 
     public function getCampagne() {
+        if(CurrentClient::getInstance()->hasCurrentFromTheFuture()) {
+
+            return CurrentClient::getInstance()->getCurrentFromTheFuture();
+        }
 
         return "2016";
     }
 
     public function isDSDecembre() {
 
-        return false;
-    }
-
-    public function hasCurrentFromTheFuture() {
-
-        return false;
+        return true;
     }
 
     public function getPeriodeDS() {
 
-        return "201607";
+        if(CurrentClient::getInstance()->hasCurrentFromTheFuture()) {
+
+            return CurrentClient::getInstance()->getCurrentFromTheFuture()."07";
+        }
+
+        return "201612";
     }
 
     public function getAnneeDS($type_ds = null)
     {
-        return substr($this->getPeriodeDSByType($type_ds), 0, 4);
+        return substr($this->getPeriodeDS(), 0, 4);
     }
 
     public function getMonthDS($type_ds = null)
@@ -75,19 +79,7 @@ class Current extends BaseCurrent {
 
     public function getPeriodeDSByType($type_ds = null){
 
-        return $this->getPeriodeDS();
-        $declarant = $this->getDeclarantDS($type_ds);
-        if(CurrentClient::getCurrent()->isDSDecembre() && $declarant && $declarant->exist('ds_decembre') && $declarant->ds_decembre) {
-
-            return CurrentClient::getCurrent()->getPeriodeDS();
-        }
-
-        if(CurrentClient::getCurrent()->isDSDecembre()) {
-
-            return CurrentClient::getCurrent()->getAnneeDS()."07";
-        }
-
-        return CurrentClient::getCurrent()->getPeriodeDS();
+        return sfContext::getInstance()->getUser()->getPeriodeDS($type_ds);
     }
 
     /* Fin */
