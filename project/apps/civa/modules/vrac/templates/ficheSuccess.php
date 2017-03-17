@@ -82,7 +82,14 @@
 				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
 			</td>
 		</tr>
-
+		<tr>
+			<td>
+				<label>Clause de réserve de propriété :</label>
+			</td>
+			<td>
+				<strong>Oui</strong> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="">verso du contrat</a>)</small>
+			</td>
+		</tr>
 	</tbody>
 </table>
 

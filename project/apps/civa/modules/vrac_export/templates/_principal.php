@@ -116,7 +116,7 @@
 
 <p>Les parties reconnaissent l'application de l'ensemble des stipulations figurant au verso ce ce contrat intitulées « Contrat de vente en vrac de vins AOC produits en Alsace ».</p>
 
-<p><span style="font-family: Dejavusans">☐</span> En cochant cette case, les parties acceptent l'application de la clause de réserve de propriété dont les modalités sont indiquées au verso de ce formulaire.</p>
+<p>Clause de réserve de propriété <small>(les modalités sont indiquées au verso de ce formulaire)</small> :&nbsp;&nbsp;&nbsp;<strong>Oui</strong> <span style="font-family: Dejavusans">☑</span>&nbsp;&nbsp;&nbsp;Non <span style="font-family: Dejavusans">☐</span></p>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;
