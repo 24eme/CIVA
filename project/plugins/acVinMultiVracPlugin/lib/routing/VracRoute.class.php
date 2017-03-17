@@ -42,7 +42,12 @@ class VracRoute extends sfObjectRoute
 
     protected function getNouveauVrac()
     {
-        $tiers = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		if($this->getUser()->getAttribute('vrac_createur')) {
+			$tiers = EtablissementClient::getInstance()->find($this->getUser()->getAttribute('vrac_createur'));
+		} else {
+			$tiers = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		}
+
         $vrac = VracClient::getInstance()->createVrac($tiers->_id);
         if ($tiers->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
             $vrac->mandataire_identifiant = $tiers->_id;

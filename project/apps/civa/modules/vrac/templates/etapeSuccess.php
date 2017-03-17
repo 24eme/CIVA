@@ -1,4 +1,4 @@
-<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape, 'user' => $user)) ?>
+<?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
 
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected">
@@ -11,9 +11,9 @@
 
 
         <div class="fond">
-        	<?php 
+        	<?php
 				if($validation->hasPoints() && !$next_etape) {
-					include_partial('global/validation', array('validation' => $validation)); 
+					include_partial('global/validation', array('validation' => $validation));
 				}
 			?>
             <?php echo $form->renderHiddenFields() ?>
@@ -43,4 +43,3 @@
         </ul>
     </form>
 </div>
-

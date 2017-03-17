@@ -558,7 +558,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isProprietaire($identifiant)
     {
-
     	return ($this->createur_identifiant == $identifiant)? true : false;
     }
 
