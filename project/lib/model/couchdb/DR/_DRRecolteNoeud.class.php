@@ -356,6 +356,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function canCalculVolumeRevendiqueSurPlace() {
+        if($this->getTotalCaveParticuliere() == 0) {
+            return true;
+        }
         if(!$this->hasCompleteRecapitulatifVenteDplc()) {
 
             return false;
@@ -371,6 +374,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function canCalculSuperficieSurPlace() {
+        if($this->getTotalCaveParticuliere() == 0) {
+            return true;
+        }
         if(!$this->hasCompleteRecapitulatifVenteSuperficie()) {
 
             return false;
@@ -393,6 +399,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getTotalDontDplcVendus() {
+        if($this->getTotalCaveParticuliere() == 0) {
+
+            return $this->getUsagesIndustriels();
+        }
+
         if(!$this->hasRecapitulatifVente()) {
 
             return $this->getDataByFieldAndMethod('total_dont_dplc_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontDplcVendus'));
@@ -402,6 +413,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getTotalSuperficieVendus() {
+        if($this->getTotalCaveParticuliere() == 0) {
+
+            return $this->getTotalSuperficie();
+        }
+
         if(!$this->hasRecapitulatifVente()) {
 
             return $this->getDataByFieldAndMethod('total_superficie_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalSuperficieVendus'));
