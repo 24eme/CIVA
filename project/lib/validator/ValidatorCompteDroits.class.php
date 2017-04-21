@@ -6,7 +6,7 @@ class ValidatorCompteDroits extends sfValidatorSchema
   protected function configure($options = array(), $messages = array())
   {
     $this->addRequiredOption('doc');
-    $this->addMessage('invalid', "La somme superficie des acheteurs ne peut être supérieure au total");
+    $this->addMessage('invalid', "Chacun des droit doit être dans au moins un compte");
   }
 
   protected function doClean($values)
@@ -14,14 +14,14 @@ class ValidatorCompteDroits extends sfValidatorSchema
     $errorSchema = new sfValidatorErrorSchema($this);
 
     $compte = $this->getCompteSociete();
-    
-    $droits = $compte->getDroitsTiers();
+
+    $droits = $compte->getDroits();
 
     $droits_finaux = array();
 
     foreach($values as $id_compte => $c) {
       if(!isset($c["droits"])) {
-        continue; 
+        continue;
       }
       foreach($c["droits"] as $droit) {
         $droits_finaux[$droit] = null;

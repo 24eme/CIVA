@@ -147,3 +147,7 @@ body > .navbar {
 
 #header #acces_directs ul li.admin a { color: #ff0000; }
 a.admin { color: #ff0000; }
+
+#global #contenu {
+    padding: 20px;
+}
