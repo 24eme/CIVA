@@ -2,5 +2,5 @@
 
 . bin/config.inc
 
-bash bin/export_comptes
-cat data/export/comptes/comptes.csv | cut -d ";" -f 2,3,4,5,14
+#bash bin/export_comptes
+cat data/export/comptes/comptes.csv | cut -d ";" -f 2,3,4,5,12
