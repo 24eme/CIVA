@@ -424,7 +424,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             return $this->getSociete()->getDroits();
         }
 
-        return $this->_get('droits')->toArray(true, false);
+        return $this->_get('droits');
 //        return array_values(array_unique(array_merge($this->_get('droits')->toArray(true, false), $this->getSociete()->getDroits())));
     }
 

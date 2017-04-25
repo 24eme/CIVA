@@ -16,6 +16,7 @@ class acCouchdbDocumentSetValueTask extends sfBaseTask
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+      new sfCommandOption('remove', null, sfCommandOption::PARAMETER_REQUIRED, 'Supprime la hash', false),
       // add your own options here
     ));
 
@@ -37,10 +38,18 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $doc = acCouchdbManager::getClient()->find($arguments['doc_id']);
-    $doc->add($arguments['hash']);
-    $doc->set($arguments['hash'], settype($arguments['value'], $arguments['type']));
+
+    if($options['remove']) {
+        $doc->remove($arguments['hash']);
+    } else {
+        $doc->add($arguments['hash'], settype($arguments['value'], $arguments['type']));
+    }
     $doc->save();
 
-    echo "Document ".$doc->_id." set ".$arguments['hash']. " = ".$arguments['value']."\n";
+    if($options['remove']) {
+        echo "Document ".$doc->_id." removed ".$arguments['hash'] ."\n";
+    } else {
+        echo "Document ".$doc->_id." set ".$arguments['hash']. " = ".$arguments['value']."\n";
+    }
   }
 }

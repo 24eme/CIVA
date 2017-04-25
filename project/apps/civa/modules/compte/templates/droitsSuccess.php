@@ -18,7 +18,7 @@
 					<?php foreach($form->getComptes() as $compte): ?>
                         <?php $formCompte= $form[$compte->_id]; ?>
 						<tr>
-						<td><a href="<?php echo url_for('compte_personne_modifier', array('login' => $compte->login)) ?>"><?php echo $compte->nom_a_afficher; ?></a> <?php if($compte->getCompteType() == CompteClient::TYPE_COMPTE_INTERLOCUTEUR): ?>(modifier)<?php endif; ?></td>
+						<td><?php echo $compte->nom_a_afficher; ?> <?php if($compte->getCompteType() == CompteClient::TYPE_COMPTE_INTERLOCUTEUR): ?>(<a href="<?php echo url_for('compte_personne_modifier', array('id' => $compte->_id)) ?>">modifier</a>)<?php endif; ?></td>
 						<td style="text-align: left"><?php echo $compte->login ?></td>
 						<td style="text-align: left"><?php echo $compte->email; ?></td>
                         <td style="text-align: center">
@@ -33,7 +33,7 @@
 						<?php foreach($compte->getSociete()->droits as $droit): ?>
 							<li>
                                 <?php echo $formCompte->renderError(); ?>
-                                <label><input type="checkbox" value="<?php echo $droit ?>" name="<?php echo $formCompte["droits"]->renderName() ?>[]" <?php echo (in_array($droit, $compte->droits)) ? 'checked="checked"' : null ?>>&nbsp;&nbsp;<?php echo $droit; ?></label>
+                                <label><input type="checkbox" value="<?php echo $droit ?>" name="<?php echo $formCompte["droits"]->renderName() ?>[]" <?php echo ($compte->hasDroit($droit)) ? 'checked="checked"' : null ?>>&nbsp;&nbsp;<?php echo $droit; ?></label>
                             </li>
 						<?php endforeach; ?>
                             </ul>
