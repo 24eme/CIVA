@@ -151,25 +151,18 @@ class drmActions extends drmGeneriqueActions {
         $identifiant = $request->getParameter('identifiant');
         $periode = $request->getParameter('periode');
 
-        $drmPrec = DRMClient::getInstance()->getAnyPreviousDrm($identifiant, $periode, $isTeledeclarationMode);
+        $drm = new DRM();
+        $drm->identifiant = $identifiant;
+        $drm->periode = $periode;
+
         $ediFileContent = "";
+
         /**
-         * initialisation de la DRM
-         */
-        $drm = DRMClient::getInstance()->createDrmEmpty($identifiant, $periode, $isTeledeclarationMode);
-        if($drmPrec){
-          /**
-           * Cas le plus classique : on récupère les informations CATALOGUE produit depuis la DRM précedente
-           */
-           $drm = DRMClient::getInstance()->createDoc($identifiant, $periode, $isTeledeclarationMode);
-        }else{
-          /**
-           * Cas d'initialisation : on récupère les informations CATALOGUE produit depuis le doc le plus récent entre DS et DR
-           */
-          $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForRepriseCatalogue($identifiant, $periode);
-          foreach ($documentRepriseInfos as $documentRepriseInfo) {
-            $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
-          }
+        * Cas d'initialisation : on récupère les informations CATALOGUE produit depuis le doc le plus récent entre DS et DR
+        */
+        $documentRepriseInfos = DRMClient::getInstance()->getDocumentsForRepriseCatalogue($identifiant, $periode);
+        foreach ($documentRepriseInfos as $documentRepriseInfo) {
+        $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
         }
 
          /**
@@ -184,10 +177,7 @@ class drmActions extends drmGeneriqueActions {
           $ediFileContent.= $this->createReprise($repriseMvtInfo,$drm);
         }
         if($ediFileContent){
-            $attachement = "attachment; filename=" . $filename . ".csv";
-
             $this->response->setContentType('text/csv');
-            $this->response->setHttpHeader('Content-Disposition', $attachement);
 
             echo $ediFileContent;
             exit;
