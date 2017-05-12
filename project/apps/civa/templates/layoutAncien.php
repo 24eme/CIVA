@@ -18,14 +18,14 @@
   <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->
 	<div id="global">
-	  <?php include_partial('global/header'); ?>
-          <?php include_partial('global/errorFlash') ?>
-           <div id="contenu">
-                <?php echo $sf_content ?>
-            </div>
-            <div id="ajax-modal" class="modal"></div>
-            <?php include_partial('global/footer') ?>
+	    <?php include_partial('global/header', array('compte' => ($sf_user->isAuthenticated() && $sf_user->getCompte()) ? $sf_user->getCompte() : null, 'compteOrigine' => ($sf_user->isInDelegateMode()) ? $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED) : null,'isAdmin' => $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR))); ?>
+        <?php include_partial('global/errorFlash') ?>
+        <div id="contenu">
+            <?php echo $sf_content ?>
         </div>
+        <div id="ajax-modal" class="modal"></div>
+        <?php include_partial('global/footer') ?>
+    </div>
     <!-- fin #global -->
     <?php include_partial('global/init') ?>
     <script type="text/javascript" src="/js/lib/jquery-ui-1.8.1.min.js"></script>

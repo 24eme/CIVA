@@ -39,4 +39,18 @@ class globalActions extends sfActions {
             return $this->redirect("mon_espace_civa", array('identifiant' => $this->getUser()->getCompte()->getIdentifiant()));
         }
     }
+
+    public function executeHeader(sfWebRequest $request) {
+        $compte = null;
+        if($request->getParameter('compte')) {
+            $compte = CompteClient::getInstance()->findByLogin($request->getParameter('compte'));
+        }
+
+        $compteOrigine = null;
+        if($request->getParameter('compteOrigine')) {
+            $compteOrigine = CompteClient::getInstance()->findByLogin($request->getParameter('compteOrigine'));
+        }
+
+        return $this->renderPartial("global/header", array("compte" => $compte, "compteOrigine" => $compteOrigine, "isAdmin" => $request->getParameter('isAdmin', false), "isAbsoluteUrl" => true, "title" => $request->getParameter('title', "Espace des professionnels du Vignoble d’Alsace")));
+    }
 }
