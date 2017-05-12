@@ -1,3 +1,6 @@
 all:
   is_secure: true
   credentials: [[drm, teledeclaration_drm]]
+
+createEdiFileFromDocuments:
+  is_secure: false

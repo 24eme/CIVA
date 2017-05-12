@@ -142,9 +142,15 @@ class drmActions extends drmGeneriqueActions {
      * @param sfWebRequest $request
      */
     public function executeCreateEdiFileFromDocuments(sfWebRequest $request) {
+        $allowIps = array("127.0.0.1","localhost");
+        if(!in_array($this->getRequest()->getHttpHeader ('addr','remote'),$allowIps)){
+          throw new sfException("Accès interdit");
+
+        }
         $isTeledeclarationMode = $this->isTeledeclarationDrm();
         $identifiant = $request->getParameter('identifiant');
         $periode = $request->getParameter('periode');
+
         $drmPrec = DRMClient::getInstance()->getAnyPreviousDrm($identifiant, $periode, $isTeledeclarationMode);
         $ediFileContent = "";
         /**
@@ -165,7 +171,6 @@ class drmActions extends drmGeneriqueActions {
             $ediFileContent.= $this->createReprise($documentRepriseInfo,$drm);
           }
         }
-        $drm->save();
 
          /**
           * Dans tout les cas de figure, après la DRM crée, on récupère des mouvements/stock :
@@ -178,18 +183,15 @@ class drmActions extends drmGeneriqueActions {
         foreach ($repriseMvtInfos as $repriseMvtInfo) {
           $ediFileContent.= $this->createReprise($repriseMvtInfo,$drm);
         }
-
         if($ediFileContent){
-            $fileDiscr = date('YmdHis').'_'.uniqid();
+            $attachement = "attachment; filename=" . $filename . ".csv";
 
-            $filename = 'import_'.$drm->identifiant . '_' . $drm->periode.'_'.$fileDiscr.'.csv';
+            $this->response->setContentType('text/csv');
+            $this->response->setHttpHeader('Content-Disposition', $attachement);
 
-            $path = sfConfig::get('sf_data_dir') . '/import-drm/'.$filename;
-            $saveFileStatut = file_put_contents($path,$ediFileContent);
-            if($saveFileStatut){
-              return $this->redirect('drm_partial_import_from_document', array('identifiant' => $drm->identifiant, 'periode_version' => $drm->periode, 'filediscr' => $fileDiscr));
-            }
-            throw new sfException("Le fichier $path n'a pas été enregistré");
+            echo $ediFileContent;
+            exit;
+
           }else{
             return $this->redirect('drm_choix_produit', $drm);
           }
@@ -207,8 +209,8 @@ class drmActions extends drmGeneriqueActions {
         $filediscr = $request->getParameter('filediscr');
 
         $filename = 'import_'.$this->identifiant . '_' . $this->periode.'_'.$filediscr.'.csv';
-        $path = sfConfig::get('sf_data_dir') . '/import-drm/'.$filename;
-
+        $path = sfConfig::get('sf_data_dir') . '/upload/'.$filename;
+        $this->md5 = $filediscr;
         $this->drm = $this->getRoute()->getDRM();
 
         $this->drmCsvEdi = new DRMImportCsvEdiPartial($path,$this->drm);
@@ -288,13 +290,13 @@ class drmActions extends drmGeneriqueActions {
         $this->md5 = $request->getParameter('md5');
         $this->identifiant = $request->getParameter('identifiant');
         $this->periode = $request->getParameter('periode');
-
+        $filename = 'import_'.$this->identifiant . '_' . $this->periode.'_'.$this->md5.'.csv';
         $this->drm = new DRM();
         $this->drm->identifiant = $this->identifiant;
         $this->drm->periode = $this->periode;
         $this->drm->teledeclare = true;
 
-        $this->drmCsvEdi = new DRMImportCsvEdi(sfConfig::get('sf_data_dir') . '/upload/' . $this->md5, $this->drm);
+        $this->drmCsvEdi = new DRMImportCsvEdi(sfConfig::get('sf_data_dir') . '/upload/' . $filename, $this->drm);
         $this->drmCsvEdi->importCSV();
 
         $this->redirect('drm_validation', $this->drm);
