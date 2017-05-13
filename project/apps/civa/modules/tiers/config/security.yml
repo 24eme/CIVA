@@ -4,6 +4,9 @@ default:
 login:
   credentials: [compte_tiers]
 
+nav:
+  is_secure: false
+
 #loginAdmin:
 #  credentials: [admin]
 

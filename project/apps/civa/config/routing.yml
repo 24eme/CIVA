@@ -785,6 +785,10 @@ header:
   url: /header
   param: {module: global, action: header}
 
+nav:
+  url: /nav
+  param: {module: tiers, action: nav}
+
 default_index:
   url:   /:module
   param: { action: index }
