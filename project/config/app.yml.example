@@ -37,6 +37,8 @@ all:
   declarant_class: "Etablissement"
   ava:
     url: "https://url_a_remplacer.com"
+  giilda:
+    url_drm: http://url_a_remplacer/drm/etablissement/%s
   dr:
     date_ouverture: "Y-m-d"
     date_fermeture: "Y-m-d"

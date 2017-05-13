@@ -45,17 +45,19 @@
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <!--<div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?>">
+            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DRM)): ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?>">
                 <div class="bloc_acceuil_icon icon-vrac"></div>
                 <div class="bloc_acceuil_header">DRM</div>
                 <div class="bloc_acceuil_content">
                     <p class="mineure">Aucune information à signaler</p>
                 </div>
                 <div class="bloc_acceuil_footer">
-                    <a href="<?php echo url_for('drm_etablissement', array("identifiant" => $compte->getIdentifiant())) ?>">Accéder</a>
+                    <a href="<?php echo $blocs[Roles::TELEDECLARATION_DRM] ?>">Accéder</a>
                 </div>
             </div>
-            <?php //$i = $i -1 ?>-->
+            <?php $i = $i -1 ?>
+            <?php endif; ?>
             <?php if ($compte->hasDroit(Roles::TELEDECLARATION_VRAC) && isset($blocs[Roles::TELEDECLARATION_VRAC])): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> contrats">
                 <div class="bloc_acceuil_icon icon-contrat2"></div>
