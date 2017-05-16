@@ -13,7 +13,7 @@ declaration;details;entrees;manipulations;1;1;;1;1;1;0;0;SUSPENDU;entrees-period
 declaration;details;entrees;excedent;1;1;;1;1;1;0;1;SUSPENDU;entrees-periode/autres-entrees;0
 declaration;details;sorties;ventefrancecrd;1;1;;-1;1;1;0;1;SUSPENDU;sorties-periode/sorties-avec-paiement-droits;1
 declaration;details;sorties;exporttaxe;1;1;EXPORT;-1;1;1;0;1;SUSPENDU;sorties-periode/sorties-avec-paiement-droits;1
-declaration;details;sorties;exoutilisateurautorise;1;1;;-1;1;1;0;0;SUSPENDU;sorties-periode/sorties-sans-paiement-droits/autres-sorties;0
+declaration;details;sorties;exoutilisateurautorise;1;1;;-1;1;1;0;1;SUSPENDU;sorties-periode/sorties-sans-paiement-droits/autres-sorties;0
 declaration;details;sorties;lies;1;1;;-1;1;1;1;0;SUSPENDU;sorties-periode/sorties-sans-paiement/sorties-definitivess;0
 declaration;details;sorties;export;1;1;EXPORT;-1;1;1;0;1;SUSPENDU;sorties-periode/sorties-sans-paiement-droits/sorties-definitives;0
 declaration;details;sorties;vrac;1;1;VRAC;-1;1;1;1;0;SUSPENDU;sorties-periode/sorties-sans-paiement-droits/sorties-definitives;0

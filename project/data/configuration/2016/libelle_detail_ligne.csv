@@ -1,15 +1,15 @@
 details;stocks_debut;initial;Initial;Stock début de mois;Stock début de mois
 details;stocks_debut;instance;En instance;En instance de revendication;Stock début En instance de revendication
 details;entrees;recolte;Récolte;Entrées récolte;Entrées récolte
-details;entrees;achatnoncrd;Achat (vrac/Blles sans CRD);Achats vrac + bouteilles sans CRD;Achats vrac + bouteilles sans CRD
+details;entrees;achatnoncrd;Achat (Vrac/Blles nues);Achats vrac + bouteilles sans CRD;Achats vrac + bouteilles sans CRD
 details;entrees;retourmarchandisetaxees;Retour taxé et CVO;Quantités réintégrées CVO + Droits circulation;Quantités réintégrées CVO + Droits circulation
 details;entrees;retourmarchandisenontaxees;Retour CVO non taxé;Quantités réintégrées CVO seule;Quantités réintégrées CVO seule
-details;entrees;retourembouteillage;Retour prestation;Retour de prestation d'embouteillage;Retour de prestation d'embouteillage
+details;entrees;retourembouteillage;Retour embouteillage;Retour de prestation d'embouteillage;Retour de prestation d'embouteillage
 details;entrees;retourrelogement;Retour de relogement;Retour de relogement;Retour de relogement
 details;entrees;retourtravailafacon;Retour travail à façon;Retour de travail à façon;Retour de travail à façon
-details;entrees;repli;Replis/déclassement;Replis/déclassement;Replis/déclassement
-details;entrees;manipulations;Manipulations;Manipulations;Manipulations
-details;entrees;excedent;Excédent;Quantités en excédent;Quantités en excédent
+details;entrees;repli;Repli/déclassement;Repli/déclassement;Repli/déclassement
+details;entrees;manipulations;Manipulations diverses;Manipulations diverses;Manipulations diverses
+details;entrees;excedent;Excédents;Quantités en excédent;Quantités en excédent
 details;sorties;ventefrancecrd;Blles CRD ou DSA France;Sortie taxables CRD ou DSA/DSAC France;Sortie taxables CRD ou DSA/DSAC France
 details;sorties;exporttaxe;Blles CRD Hors France;Sorties taxables DSA/DSAC Hors France Métropolitaine;Sorties taxables DSA/DSAC Hors France Métropolitaine
 details;sorties;exoutilisateurautorise;Exo vers utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé
@@ -21,8 +21,8 @@ details;sorties;destructionperte;Pertes et manquants;Autres sorties pertes et ma
 details;sorties;embouteillage;Embouteillage;Sortie pour prestation d'embouteillage;Sortie pour prestation d'embouteillage
 details;sorties;relogement;Relogement;Relogement;Relogement
 details;sorties;travailafacon;Travail à façon;Travail à façon;Travail à façon
-details;sorties;repli;Replis/déclassement;Autres sorties replis et déclassement;Autres sorties replis et délassement
-details;sorties;autresinternes;Autres mvts internes;Autres mouvements internes;Autres mouvements internes
+details;sorties;repli;Repli/déclassement;Autres sorties replis et déclassement;Autres sorties replis et délassement
+details;sorties;autresinternes;Manipulations diverses;Manipulations diverses;Manipulations diverses
 details;stocks_fin;final;Final;Stock fin de mois;Stock fin de mois
 details;stocks_fin;instance;En instance;En instance de revendication;Stock fin En instance de revendication
 detailsACQUITTE;stocks_debut;initial;Initial;Stock début de mois;Stock début de mois
