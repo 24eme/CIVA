@@ -1,31 +1,36 @@
 details;stocks_debut;initial;Initial;Stock début de mois;Stock début de mois
 details;stocks_debut;instance;En instance;En instance de revendication;Stock début En instance de revendication
 details;entrees;recolte;Récolte;Entrées récolte;Entrées récolte
-details;entrees;achatnoncrd;Achat sans CRD;Achats vrac + bouteilles sans CRD;Achats vrac + bouteilles sans CRD
+details;entrees;achatnoncrd;Achat (vrac/Blles sans CRD);Achats vrac + bouteilles sans CRD;Achats vrac + bouteilles sans CRD
 details;entrees;retourmarchandisetaxees;Retour taxé et CVO;Quantités réintégrées CVO + Droits circulation;Quantités réintégrées CVO + Droits circulation
 details;entrees;retourmarchandisenontaxees;Retour CVO non taxé;Quantités réintégrées CVO seule;Quantités réintégrées CVO seule
-details;entrees;retourmarchandisesanscvo;Retour sans compensation;Quantités réintégrées sans compensation;Quantités réintégrées sans compensation
+details;entrees;retourembouteillage;Retour prestation;Retour de prestation d'embouteillage;Retour de prestation d'embouteillage
+details;entrees;retourrelogement;Retour de relogement;Retour de relogement;Retour de relogement
+details;entrees;retourtravailafacon;Retour travail à façon;Retour de travail à façon;Retour de travail à façon
+details;entrees;repli;Replis/déclassement;Replis/déclassement;Replis/déclassement
+details;entrees;manipulations;Manipulations;Manipulations;Manipulations
 details;entrees;excedent;Excédent;Quantités en excédent;Quantités en excédent
-details;entrees;repli;Replis;Replis;Replis
-details;sorties;ventefrancecrd;CRD ou DSA France;Sortie taxables CRD ou DSA/DSAC France;Sortie taxables CRD ou DSA/DSAC France
-details;sorties;exporttaxe;CRD Hors France;Sorties taxables DSA/DSAC Hors France Métropolitaine;Sorties taxables DSA/DSAC Hors France Métropolitaine
-details;sorties;export;Hors Alsace Suspendu;Sorties en suspension hors France;Sorties en suspension hors France
-details;sorties;vrac;Contrats Alsace;Sorties en suspension vrac;Sorties en suspension contrats d’Alsace
-details;sorties;distillationusageindustriel;Exo vers utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé
-details;sorties;consommationfamilialedegustation;Dégustation propriété;Sorties en exonération dégustation à la propriété;Sorties en exonération dégustation à la propriété
-details;sorties;repli;Replis;Autres sorties replis;Autres sorties replis
+details;sorties;ventefrancecrd;Blles CRD ou DSA France;Sortie taxables CRD ou DSA/DSAC France;Sortie taxables CRD ou DSA/DSAC France
+details;sorties;exporttaxe;Blles CRD Hors France;Sorties taxables DSA/DSAC Hors France Métropolitaine;Sorties taxables DSA/DSAC Hors France Métropolitaine
+details;sorties;exoutilisateurautorise;Exo vers utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé
 details;sorties;lies;Lies;Autres sorties lies;Autres sorties lies
+details;sorties;export;Blles susp. hors Alsace;Sorties en suspension hors France;Sorties en suspension hors France
+details;sorties;vrac;Contrats Alsace;Sorties en suspension vrac;Sorties en suspension contrats d’Alsace
+details;sorties;consommationfamilialedegustation;Dégustation propriété;Sorties en exonération dégustation à la propriété;Sorties en exonération dégustation à la propriété
 details;sorties;destructionperte;Pertes et manquants;Autres sorties pertes et manquants;Autres sorties pertes et manquants
-details;sorties;temporaire;Temporaires;Autres sorties temporaires;Autres sorties temporaires
+details;sorties;embouteillage;Embouteillage;Sortie pour prestation d'embouteillage;Sortie pour prestation d'embouteillage
+details;sorties;relogement;Relogement;Relogement;Relogement
+details;sorties;travailafacon;Travail à façon;Travail à façon;Travail à façon
+details;sorties;repli;Replis/déclassement;Autres sorties replis et déclassement;Autres sorties replis et délassement
+details;sorties;autresinternes;Autres mvts internes;Autres mouvements internes;Autres mouvements internes
 details;stocks_fin;final;Final;Stock fin de mois;Stock fin de mois
 details;stocks_fin;instance;En instance;En instance de revendication;Stock fin En instance de revendication
 detailsACQUITTE;stocks_debut;initial;Initial;Stock début de mois;Stock début de mois
 detailsACQUITTE;stocks_debut;instance;En instance;En instance de revendication;Stock début En instance de revendication
-detailsACQUITTE;entrees;recolte;Récolte;Entrées récolte;Entrées récolte
+detailsACQUITTE;entrees;achat;Achats;Entrées achats;Entrées achats
 detailsACQUITTE;entrees;reintegration;Réintégration;Quantités réintégrées;Quantités réintégrées
-detailsACQUITTE;sorties;ventefrancecrd;CRD;Sorties sous CRD;Sorties sous CRD
-detailsACQUITTE;sorties;ventefrancedsa;DSA / DSAC;Sorties sous DSA / DSAC;Sorties sous DSA / DSAC
-detailsACQUITTE;sorties;export;Export;Sorties sous document commercial;Sorties sous document commercial
+detailsACQUITTE;sorties;ventefrancecrd;Blles France;Sorties bouteilles France;Sorties bouteilles France
+detailsACQUITTE;sorties;export;Blles Hors France;Sorties sous document commercial de bouteilles hors France;Sorties sous document commercial de bouteilles hors France
 detailsACQUITTE;sorties;consommationfamilialedegustation;Dégustation;Dégustation à la propriété;Dégustation à la propriété
 detailsACQUITTE;sorties;destructionperte;Pertes et manquants;Pertes et manquants;Pertes et manquants
 detailsACQUITTE;stocks_fin;final;Final;Stock fin de mois;Stock fin de mois
