@@ -176,6 +176,11 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]
+
+vrac_pdf_annexe:
+  url: /vrac-pdf-annexe
+  param: { module: vrac_export, action: annexe}
+
 vrac_export_odg:
   url: /vrac/:numero_contrat/odg
   param: { module: vrac_export, action: PDF, odg: 1}

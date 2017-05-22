@@ -22,7 +22,7 @@ class vrac_exportActions extends sfActions
 
       $this->setLayout(false);
 
-      $this->document = new ExportVracPdf($this->vrac, $odg, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
+      $this->document = @new ExportVracPdf($this->vrac, $odg, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
       if($request->getParameter('force')) {
         $this->document->removeCache();
@@ -37,6 +37,17 @@ class vrac_exportActions extends sfActions
       $this->document->addHeaders($this->getResponse());
 
       return $this->renderText($this->document->output());
+    }
+
+    public function executeAnnexe(sfWebRequest $request)
+    {
+        $type_contrat = $request->getParameter('type_contrat', VracClient::TYPE_VRAC);
+        @$document = new PageablePDF("VERSO DU CONTRAT DE VENTE EN VRAC", "DE VINS AOC PRODUITS EN ALSACE", "verso_contrat_".$type_contrat.".pdf", null, ' de ', 'P', ExportVracPdf::getConfig());
+        $document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $type_contrat, 'clause_reserve_propriete' => $request->getParameter('clause_reserve_propriete', false))));
+        $document->generatePDF();
+        $document->addHeaders($this->getResponse());
+
+        return $this->renderText(@$document->output());
     }
 
     public function executeMain()

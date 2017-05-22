@@ -682,6 +682,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->valide->statut == self::STATUT_ENLEVEMENT || $this->valide->statut == self::STATUT_CLOTURE) {
         	$this->date_modification = date('Y-m-d');
     	}
+
+		if($this->isNew() && $this->type_contrat == VracClient::TYPE_VRAC) {
+			$this->add('clause_reserve_propriete');
+		}
     }
 
     public function forceSave()
