@@ -327,7 +327,7 @@ compte_personne_ajouter:
   param: { module: compte, action: personneAjouter }
 
 compte_personne_modifier:
-  url: /mon_compte/personne/modifier/:login
+  url: /mon_compte/personne/modifier/:id
   param: { module: compte, action: personneModifier }
 
 

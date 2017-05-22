@@ -3,7 +3,7 @@
     <div class="clearfix" id="application_dr">
     	 <div id="nouvelle_declaration">
             <h3 class="titre_section">
-            <?php if($form->isNew()): ?>
+            <?php if($form->getObject()->isNew()): ?>
                 Ajouter un compte
             <?php else: ?>
                 Modifier le compte
@@ -11,7 +11,7 @@
             </h3>
             <div class="contenu_section">
    				<p class="intro">
-                    <?php if($form->isNew()): ?>
+                    <?php if($form->getObject()->isNew()): ?>
                         Entrez les informations pour ajouter un compte
                     <?php else: ?>
                         Entrez les informations pour modifier le compte

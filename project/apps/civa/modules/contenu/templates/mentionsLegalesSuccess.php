@@ -28,7 +28,7 @@
 
 
     <h3>Traitement des données à caractère personnel</h3>
-    <p>www.vinsalsace.com a fait l’objet d’une déclaration à la Commission Nationale de l’Informatique et des Libertés (CNIL) sous le n°&nbsp;1302461</p>
+    <p>vinsalsace.pro a fait l’objet d’une déclaration à la Commission Nationale de l’Informatique et des Libertés (CNIL) sous le n°&nbsp;1302461</p>
 
     <p>Conformément aux dispositions de la loi n°&nbsp;78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, vous disposez d’un droit d’accès, de modification, de rectification et de suppression des données qui vous concernent. Pour demander une modification, rectification ou suppression des données vous concernant, il vous suffit d’envoyer un courrier par voie électronique ou postale au CIVA en justifiant de votre identité.</p>
 

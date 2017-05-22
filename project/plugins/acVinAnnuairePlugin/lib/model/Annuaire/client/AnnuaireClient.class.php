@@ -67,13 +67,18 @@ class AnnuaireClient extends acCouchdbClient
     {
         $tiers = EtablissementClient::getInstance()->find($identifiant);
 
+		if(!$tiers) {
+            $tiers = EtablissementClient::getInstance()->findByCvi($identifiant);
+        }
+
         if(!$tiers) {
             $tiers = EtablissementClient::getInstance()->find("C".$identifiant);
         }
 
 		if(!$tiers) {
-			$compte = CompteClient::getInstance()->find("COMPTE-".$identifiant);
-			$tiers = $compte->getSociete()->getEtablissementPrincipal();
+			if($compte = CompteClient::getInstance()->find("COMPTE-".$identifiant)) {
+				$tiers = $compte->getSociete()->getEtablissementPrincipal();
+			}
 		}
 
         if(!$tiers) {

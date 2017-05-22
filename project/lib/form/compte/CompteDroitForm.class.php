@@ -2,7 +2,7 @@
 class CompteDroitForm extends acCouchdbForm {
 
     public function __construct(acCouchdbDocument $doc, $defaults = array(), $options = array(), $CSRFSecret = null) {
-        parent::__construct($doc, array("droits" => $doc->droits->toArray()), $options, $CSRFSecret);
+        parent::__construct($doc, array("droits" => $doc->droits), $options, $CSRFSecret);
     }
 
     public function configure() {
@@ -21,7 +21,10 @@ class CompteDroitForm extends acCouchdbForm {
     }
 
     public function getDroits() {
-
-        return array();
+        $droits = array();
+        foreach($this->getDocument()->getSociete()->droits as $droit) {
+            $droits[$droit] = $droit;
+        }
+        return $droits;
     }
 }
