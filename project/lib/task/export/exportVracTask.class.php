@@ -230,6 +230,7 @@ EOF;
                     break;
              	case "COMMUNALE":
                     $code = 7;
+                    break;
              	case "LIEUDIT":
                     $code = 8;
                 default:
@@ -237,12 +238,21 @@ EOF;
         }
         return $code;
     }
-    
+
     protected function getCepage($cepage)
     {
     	if ($cepage == "BL" || $cepage == "RS") {
     		$cepage = "CR";
     	}
+
+        if ($cepage == "AU" || $cepage == "PI") {
+            $cepage = "PB";
+        }
+
+        if ($cepage == "MO") {
+            $cepage = "MU";
+        }
+        
     	return $cepage;
     }
 }

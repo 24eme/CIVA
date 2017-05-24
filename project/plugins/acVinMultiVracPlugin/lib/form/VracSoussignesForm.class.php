@@ -75,8 +75,12 @@ class VracSoussignesForm extends acCouchdbObjectForm
     		$this->getObject()->remove('interlocuteur_commercial');
     		$this->getObject()->add('interlocuteur_commercial');
     	}
-    	$this->getObject()->acheteur_type = $values['acheteur_type'];
-    	$this->getObject()->vendeur_type = $values['vendeur_type'];
+		if($values['acheteur_type']) {
+    		$this->getObject()->acheteur_type = $values['acheteur_type'];
+		}
+		if($values['vendeur_type']) {
+    		$this->getObject()->vendeur_type = $values['vendeur_type'];
+		}
     	$this->getObject()->acheteur_identifiant = $acheteur->_id;
     	$this->getObject()->vendeur_identifiant = $vendeur->_id;
     	$this->getObject()->storeAcheteurInformations($acheteur);
