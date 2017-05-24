@@ -176,6 +176,11 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]
+
+vrac_pdf_annexe:
+  url: /vrac-pdf-annexe
+  param: { module: vrac_export, action: annexe}
+
 vrac_export_odg:
   url: /vrac/:numero_contrat/odg
   param: { module: vrac_export, action: PDF, odg: 1}
@@ -327,7 +332,7 @@ compte_personne_ajouter:
   param: { module: compte, action: personneAjouter }
 
 compte_personne_modifier:
-  url: /mon_compte/personne/modifier/:login
+  url: /mon_compte/personne/modifier/:id
   param: { module: compte, action: personneModifier }
 
 

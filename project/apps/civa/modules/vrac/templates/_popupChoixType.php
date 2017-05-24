@@ -1,6 +1,15 @@
 <div id="popup_choix_typeVrac" class="popup_ajout " title="Création du contrat">
     <form method="post" action="" id="contrats_vrac">
     		<div class="form_col selecteur bloc_infos" style="width:auto; border:none;margin:0;">
+                <div class="ligne_form" style="margin:0 0 25px 0;">
+                    <?php $etablissements = VracClient::getInstance()->getEtablissements($sf_user->getCompte()->getSociete()); ?>
+                    <select style="margin: 0; width: 100%;" id="select_createur">
+                    <?php foreach($etablissements as $etablissement): ?>
+                        <?php if(!VracSecurity::getInstance($sf_user->getCompte(), null)->isAuthorizedTiers($etablissement, VracSecurity::CREATION)): continue; endif; ?>
+                        <option value="<?php echo $etablissement->_id ?>"><?php echo $etablissement->nom ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
 				<div class="ligne_form" id="type_contrat_radio_list" style="margin:0;">
 					<label class="bold" style="display:inline-block;margin:0;">Vous êtes :</label>
 					<ul class="radio_list" style="margin:0;">
@@ -16,10 +25,9 @@
 	        <script type="text/javascript">
 				$("#popup_choix_typeVrac form").submit(function() {
 					var url = $('#popup_choix_typeVrac form input[type=radio]:checked').val();
-					document.location.href = url;
+					document.location.href = url+"?createur="+$('#select_createur').val();
 					return false;
 				});
 			</script>
     </form>
 </div>
-

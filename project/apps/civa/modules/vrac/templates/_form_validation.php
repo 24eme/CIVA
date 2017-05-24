@@ -69,14 +69,16 @@
 				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
 			</td>
 		</tr>
+		<?php if(isset($form['clause_reserve_propriete'])): ?>
 		<tr>
 			<td>
-				<label>Clause de réserve de propriété :</label>
+				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
 			</td>
 			<td>
-				<input type="checkbox" value="" /> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="">verso du contrat</a>)</small>
+			<?php echo $form['clause_reserve_propriete']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="">verso du contrat</a>)</small>
 			</td>
 		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php include_partial('vrac/popupConfirmeValidation'); ?>

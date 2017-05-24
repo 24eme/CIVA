@@ -38,17 +38,12 @@ class CompteDroitsForm extends acCouchdbForm {
             $this->embedForm($compte->_id, new CompteDroitForm($compte));
         }
 
-        $this->validatorSchema->setPostValidator(new ValidatorCompteDroits(null, array('doc' => $this->getDocument())));
+        //$this->validatorSchema->setPostValidator(new ValidatorCompteDroits(null, array('doc' => $this->getDocument())));
 
         $this->widgetSchema->setNameFormat('comptes_droits[%s]');
     }
 
     public function save() {
-        foreach($this->getDocument()->getTiersObject() as $tiers) {
-            $tiers->remove('emails');
-            $tiers->add('emails');
-            $tiers->save();
-        }
         foreach($this->comptes as $compte) {
             $compte->remove('droits');
             $compte->add('droits', $this->values[$compte->_id]["droits"]);

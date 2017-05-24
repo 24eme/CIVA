@@ -5,6 +5,9 @@ class vracActions extends sfActions
     {
     	$this->forward404Unless($this->type = $request->getParameter('type'));
     	$this->getUser()->setAttribute('vrac_type_tiers', $this->type);
+		if($request->getParameter('createur')) {
+    		$this->getUser()->setAttribute('vrac_createur', $request->getParameter('createur'));
+		}
     	return $this->redirect('vrac_nouveau');
     }
 
@@ -167,7 +170,7 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
-		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		$this->user = $this->getEtablissementCreateur();
 
 		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
 			$this->vrac->delete();
@@ -247,7 +250,7 @@ class vracActions extends sfActions
 
     public function executeEtape(sfWebRequest $request)
     {
-		$this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		$this->user = $this->getEtablissementCreateur();
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
     	$this->referer = ($this->getUser()->getFlash('referer'))? 1 : 0;
@@ -294,7 +297,7 @@ class vracActions extends sfActions
     public function executeAjouterProduit(sfWebRequest $request)
     {
 
-        $this->user = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+        $this->user = $this->getEtablissementCreateur();
         $this->config = ConfigurationClient::getConfiguration('2012');
         //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
         $this->appellationsLieuDit = json_encode(array());
@@ -504,11 +507,23 @@ class vracActions extends sfActions
     	$this->getUser()->setAttribute('vrac_object', null);
     	$this->getUser()->setAttribute('vrac_acteur', null);
     	$this->getUser()->setAttribute('vrac_type_tiers', null);
+    	$this->getUser()->setAttribute('vrac_createur', null);
     }
+
+	protected function getEtablissementCreateur() {
+		if($this->getUser()->getAttribute('vrac_createur')) {
+			$declarant = EtablissementClient::getInstance()->find($this->getUser()->getAttribute('vrac_createur'));
+		} else {
+			$declarant = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		}
+
+		return $declarant;
+	}
 
     protected function populateVracTiers($vrac)
     {
-    	$declarant = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
+		$declarant = $this->getEtablissementCreateur();
+
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
     	if ($vrac->isNew() && $typeTiers) {
 			if ($typeTiers == 'vendeur') {

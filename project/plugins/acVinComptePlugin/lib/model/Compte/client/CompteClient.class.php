@@ -192,4 +192,9 @@ class CompteClient extends acCouchdbClient {
         $etablissement->save();
     }
 
+    public function generateMotDePasseCreation() {
+
+        return "{TEXT}" . sprintf("%04d", rand(1000, 9999));
+    }
+
 }

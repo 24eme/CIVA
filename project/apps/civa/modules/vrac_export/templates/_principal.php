@@ -116,7 +116,9 @@
 
 <p>Les parties reconnaissent l'application de l'ensemble des stipulations figurant au verso ce ce contrat intitulées « Contrat de vente en vrac de vins AOC produits en Alsace ».</p>
 
-<p>Clause de réserve de propriété <small>(les modalités sont indiquées au verso de ce formulaire)</small> :&nbsp;&nbsp;&nbsp;<strong>Oui</strong> <span style="font-family: Dejavusans">☑</span>&nbsp;&nbsp;&nbsp;Non <span style="font-family: Dejavusans">☐</span></p>
+<?php if($vrac->exist('clause_reserve_propriete')): ?>
+<p>Clause de réserve de propriété <small>(les modalités sont indiquées au verso de ce formulaire)</small> :&nbsp;&nbsp;&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span></p>
+<?php endif; ?>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;
@@ -174,9 +176,6 @@
 	<tr>
 		<td style="text-align: left; font-size: 6pt;"><?php echo getLastSentence(); ?></td>
     </tr>
-    <!--<tr>
-        <td style="text-align: left; font-size: 6pt;">Les parties reconnaissent l'application des stipulations figurant au verso intitulées «contrat de vente de vins AOC produits en Alsace» dont elles déclarent avoir pris pleinement connaissance.</td>
-	</tr>-->
 </table>
 </div>
 </body>

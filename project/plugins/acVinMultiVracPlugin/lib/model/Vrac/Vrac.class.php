@@ -267,7 +267,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		$emails = array();
 		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
 				continue;
 			}
 
@@ -282,14 +282,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function storeVendeurInformations($tiers)
     {
     	$compte = $tiers->getContact();
-
-        /*if((!$tiers->getNumInterne() || !$tiers->no_accises) && $compte) {
-            if ($metteurEnMarche = $compte->getTiersType('MetteurEnMarche')) {
-                      $tiers->no_accises = $metteurEnMarche->no_accises;
-                      $tiers->civaba = $metteurEnMarche->civaba;
-            }
-        }*/
-
 
     	$this->vendeur->intitule = ($tiers->exist("intitule"))? $tiers->intitule : null;
     	$this->vendeur->raison_sociale = $tiers->nom;
@@ -309,7 +301,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		$emails = array();
 		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
 				continue;
 			}
 
@@ -341,7 +333,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		$emails = array();
 		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe) {
+        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
 				continue;
 			}
 
@@ -558,7 +550,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isProprietaire($identifiant)
     {
-
     	return ($this->createur_identifiant == $identifiant)? true : false;
     }
 
@@ -691,6 +682,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->valide->statut == self::STATUT_ENLEVEMENT || $this->valide->statut == self::STATUT_CLOTURE) {
         	$this->date_modification = date('Y-m-d');
     	}
+
+		if($this->isNew() && $this->type_contrat == VracClient::TYPE_VRAC) {
+			$this->add('clause_reserve_propriete');
+		}
     }
 
     public function forceSave()

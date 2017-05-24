@@ -34,7 +34,12 @@ class ExportVracPdf extends ExportDocument {
         return $this->document->generatePDF($this->no_cache);
     }
 
-    protected function init($filename = null) {  
+    public static function getConfig() {
+
+        return array('PDF_FONT_SIZE_MAIN' => 9);
+    }
+
+    protected function init($filename = null) {
     	if ($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
         	$title = "CONTRAT DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
@@ -49,7 +54,7 @@ class ExportVracPdf extends ExportDocument {
         if (!$filename) {
             $filename = $this->getFileName(true, true);
         }
-        $config = array('PDF_FONT_SIZE_MAIN' => 9);
+        $config = self::getConfig();
         if ($this->type == 'html') {
           $this->document = new PageableHTML($title, $header, $filename, $this->file_dir, ' de ', 'P', $config);
         }else {
@@ -96,13 +101,13 @@ class ExportVracPdf extends ExportDocument {
         return $filename.'.pdf';
     }
 
-    protected function create() {    
-            $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
-            $this->document->addPage($this->getPartial('vrac_export/annexe', array('vrac' => $this->vrac, 'odg' => $this->odg)));
+    protected function create() {
+        $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
+        $this->document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $this->vrac->type_contrat, 'clause_reserve_propriete' => $this->vrac->exist('clause_reserve_propriete'))));
     }
 
     protected function getPartial($templateName, $vars = null) {
-      return call_user_func_array($this->partial_function, array($templateName, $vars));
+        return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
 }

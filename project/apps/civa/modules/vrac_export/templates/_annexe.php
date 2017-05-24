@@ -1,7 +1,7 @@
-<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
+<?php if (isset($type_contrat) && $type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 <div style="font-size: 6pt;">
 <p>
-On entend par « bouteilles nues » ou « en tiré-bouché »,  les bouteilles mises en circulation entre opérateurs et dépourvues d’un étiquetage comportant l’ensemble des mentions obligatoires au regard de la règlementation communautaire ou nationale pour la remise au consommateur final ou aux collectivités. 
+On entend par « bouteilles nues » ou « en tiré-bouché »,  les bouteilles mises en circulation entre opérateurs et dépourvues d’un étiquetage comportant l’ensemble des mentions obligatoires au regard de la règlementation communautaire ou nationale pour la remise au consommateur final ou aux collectivités.
 </p>
 <p>
 Ces bouteilles <b><u>doivent néanmoins comporter une indication</u></b> permettant d’identifier le lot et une indication permettant l’identification de la personne qui a procédé à l’embouteillage (art.13 décret n°2012-655 du 4 mai 2012).
@@ -125,6 +125,7 @@ La retenue sur les achats de vin en vrac correspond à la moitié de la cotisati
 « Dans tous les cas, la mise en œuvre des sanctions prévues à l’alinéa précédent ne fait pas obstacle à l’application éventuelle de celles prévues par les contrats de fourniture ainsi que par les règlements intérieurs des groupements coopératifs agricoles en cause, en cas de défaut d’exécution des clauses de ces règlements. »
 </p>
 
+<?php if(isset($clause_reserve_propriete) && $clause_reserve_propriete): ?>
 <h4><b>Clause de réserve de propriété</b></h4>
 
 <p>
@@ -154,6 +155,7 @@ L'acheteur s'oblige à faire figurer de façon apparente dans sa comptabilité l
 même millésime, subsidiairement même appellation et même millésime ;<br />
 - à defaut, critère unique : même cépage, subsidiairement même appellation, subsidiairement même
 millésime.</p>
+<?php endif; ?>
 
 <p>&nbsp;</p>
 

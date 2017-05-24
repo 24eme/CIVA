@@ -273,15 +273,15 @@ class compteActions extends sfActions {
     public function executePersonneAjouter(sfWebRequest $request) {
         $this->setTemplate('personne');
         $this->compte = $this->getUser()->getCompte();
-        $this->personne = _CompteClient::getInstance()->generateComptePersonne($this->compte);
-
-        $this->form = $this->processFormPersonne($this->personne, $request);
+        $interlocuteur = CompteClient::getInstance()->createCompteFromSociete($this->compte->getSociete());
+        $interlocuteur->mot_de_passe = CompteClient::getInstance()->generateMotDePasseCreation();
+        $this->form = $this->processFormPersonne($interlocuteur, $request);
     }
 
     public function executePersonneModifier(sfWebRequest $request) {
         $this->setTemplate('personne');
         $this->compte = $this->getUser()->getCompte();
-        $this->personne = _CompteClient::getInstance()->findByLogin($request->getParameter('login'));
+        $this->personne = CompteClient::getInstance()->find($request->getParameter('id'));
         $this->forward404Unless($this->personne);
 
         $this->form = $this->processFormPersonne($this->personne, $request);
