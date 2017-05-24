@@ -1,4 +1,4 @@
-#Spécifications techniques de l'implémentation du format de DRM attendues sur le portail du CIVA
+# Spécifications techniques de l'implémentation du format de DRM attendues sur le portail du CIVA
 
 La spécification complète du format d'import attendu est détaillée ici : [Spécification générique DRM logiciels tiers](https://github.com/24eme/mutualisation-douane/blob/master/logiciels-tiers/). Cette documentation "générique" est commune pour les portails déclaratifs du CIVA, du CIVP, d'Interloire, d'InterRhone, d'IVBD, d'IVSO et d'IVSE.
 
@@ -26,7 +26,7 @@ Pour plus de détails sur l'exploitation de ces champs, voir la [section "identi
 
 ## Catalogue des mouvements de DRM spécifiques au portail du CIVA
 
-Le catalogue des mouvements de DRM admis par le portail d'du CIVA  [Catalogue mouvements](catalogue_mouvements.csv) est composé de trois colonnes :
+Le catalogue des mouvements de DRM admis par le portail du CIVA  [Catalogue mouvements](catalogue_mouvements.csv) est composé de trois colonnes :
 
 1. Le type de DRM : suspendu ou acquitte
 2. La catégorie du mouvement : stocks_debut, stocks_fin, entrees ou sorties
@@ -38,7 +38,7 @@ Un exemple spécifique de DRM à importer pour le portail du CIVA est disponible
 
 Ce fichier reprend l'ensemble des spécificités décrites ci-dessus.
 
-## Suivi du projet chez les éditeurs de registres de cave 
+## Suivi du projet chez les éditeurs de registres de cave
 
 | Nom de l'Éditeur | Prise de contact | Génération du fichier de transfer | Recette des échanges en préproduction | Transmission opérationnelle en production | Versions compatibles |
 |------------------|------------------|-----------------------------------|---------------------------------------|------------------------------------------------------|----------------------|
