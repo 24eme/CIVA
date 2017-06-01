@@ -153,6 +153,18 @@ class VracClient extends acCouchdbClient {
       return $campagne_manager->getCampagneByDate($date);
     }
 
+	public function isSoussigneInscrit($tiers) {
+		foreach($tiers->getSociete()->getContactsObj() as $compte) {
+			if(!$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC) || !$compte->isInscrit()) {
+				continue;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
     public function createVrac($createurIdentifiant, $date = null)
     {
     	$date = $this->getDate($date);
