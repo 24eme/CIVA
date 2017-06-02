@@ -10,7 +10,7 @@
  * @author mathurin
  */
 interface IDRMEdiExportable {
-    public function getDRMEdiProduitRows(DRMExportCsvEdi $edi);
+    public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV);
 
-    public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi);
+    public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV);
 }

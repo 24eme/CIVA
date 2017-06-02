@@ -698,6 +698,14 @@ dr_xml:
 
 # *********** DR ***********
 
+# *********** import DRM ***********
+
+drm_create_from_documents:
+  url: /drm/:identifiant/creation-documents/:periode
+  param: {module: drm, action: createEdiFileFromDocuments}
+
+# *********** import DRM fin ***********
+
 csv_comptes:
   url: /comptes/csv
   param: {module: dr_export, action: comptesCSV}

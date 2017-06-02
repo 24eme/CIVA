@@ -1,1 +1,0 @@
-<?php include_partial('drm_crds/ajout_crds_popups', array('form' => $form, 'regime' => $regime)); ?>

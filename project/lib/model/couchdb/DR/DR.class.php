@@ -804,23 +804,23 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                $this->autorisations->get($autorisation);
     }
 
-    public function getDRMEdiProduitRows(DRMExportCsvEdi $edi){
+    public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
         $cepageNode = $produit->getParent()->getParent();
-        $lignesEdi.= $edi->createRowStockNullProduit($cepageNode);
+        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
       }
       return $lignesEdi;
     }
 
-    public function getDRMEdiMouvementRows(DRMExportCsvEdi $edi){
+    public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
         $volumeRecolte = 0;
         foreach ($produit->getDetail() as $detail) {
           $volumeRecolte += $detail->getVolume();
         }
-        $lignesEdi.= $edi->createRowMouvementProduitDetail($produit,"entrees","recolte",$volumeRecolte);
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit,"entrees","recolte",$volumeRecolte);
       }
       return $lignesEdi;
     }
