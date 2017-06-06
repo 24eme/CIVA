@@ -1,5 +1,5 @@
 <?php
-class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument, IDRMEdiExportable {
+class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocument, InterfaceDeclarantDocument {
 
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_REPARTITION = 'repartition';
