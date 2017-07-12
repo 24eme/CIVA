@@ -54,7 +54,7 @@ class Current extends BaseCurrent {
 
     public function isDSDecembre() {
 
-        return true;
+        return false;
     }
 
     public function getPeriodeDS() {
