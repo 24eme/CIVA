@@ -13,18 +13,14 @@
             <li>Cet opérateur n'est plus actif</li>
         </ul>
     </fieldset>
-    <?php endif; ?>
-
-	<?php if (!$fiche && $tiers->isActif() && !count($tiers->emails)): ?>
+	<?php elseif (!$fiche && !count($tiers->emails)): ?>
     <fieldset class="message message_erreur">
     	<legend class="message_title" style="position: relative;">Point bloquant <a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
             <li>Saisie de contrat impossible avec un opérateur dépourvu d'adresse e-mail.</li>
 		</ul>
     </fieldset>
-	<?php endif; ?>
-
-	<?php if (!$fiche && $tiers->isActif() && !$tiers->getTiersObject()->getContact()->isInscrit() && !$tiers->getTiersObject()->getSociete()->getContact()->isInscrit()): ?>
+	<?php elseif (!$fiche && !VracClient::isSoussigneInscrit($tiers->getTiersObject())): ?>
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
