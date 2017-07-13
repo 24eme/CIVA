@@ -18,6 +18,7 @@ Etablissement:
        siret: {  }
        acheteur_raisin: { required: false }
        ds_decembre: { required: false }
+       no_ds_negociant: { required: false }
        recette_locale:
          type: collection
          required: false

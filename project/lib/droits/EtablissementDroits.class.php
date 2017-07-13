@@ -21,7 +21,7 @@ class EtablissementDroits
             $droits[Roles::TELEDECLARATION_DRM] = Roles::TELEDECLARATION_DRM;
         }
 
-        if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
+        if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE)) && (!$etablissement->exist('no_ds_negociant') || !$etablissement->no_ds_negociant)) {
 
             $droits[Roles::TELEDECLARATION_DS_NEGOCE] = Roles::TELEDECLARATION_DS_NEGOCE;
             $droits[Roles::TELEDECLARATION_DRM] = Roles::TELEDECLARATION_DRM;
