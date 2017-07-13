@@ -5,7 +5,7 @@
 PERIODE=$1
 OPTIONS=$2
 
-echo "Type de la DS;Teledeclarant N-1;PDF Brouillon;DS N-1;Login;Email;CVI;CIVABA;Catégorie;Qualité;Nom;Commune;Compte ID;Tiers ID;Mail Envoyé;Commentaires";
+echo "Type de la DS;Teledeclarant N-1;PDF Brouillon;DS N-1;Email;CVI;CIVABA;Famille;Nom;Commune;Société ID;Etablissement ID;Doit recevoir un mail;Mail Envoyé";
 
 curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/etablissement/_view/all?reduce=false" | cut -d "," -f 1 | sed 's/{"id":"//' | sed 's/"//' | grep "ETABLISSEMENT" | while read ligne
 do

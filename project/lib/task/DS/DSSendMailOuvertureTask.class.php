@@ -77,7 +77,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         if(!$etablissement->hasLieuxStockage() && !$etablissement->isAjoutLieuxDeStockage()) {
 
-            echo $type_ds.";ERROR;PAS DE LIEU DE STOCKAGE;".$compte->_id."\n";
+            echo $type_ds.";ERROR;PAS DE LIEU DE STOCKAGE;".$etablissement->_id."\n";
             return;
         }
 
@@ -88,10 +88,10 @@ class DSSendBrouillonTask extends sfBaseTask
         $recuperationDoc = ($type_ds == DSCivaClient::TYPE_DS_PROPRIETE);
         $email = $etablissement->getEmailTeledeclaration();
 
-        $log = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $type_ds, $teledeclarant, $recuperationDoc, !is_null($ds), $email, $tiers->cvi, $tiers->num_interne, $tiers->famille, $tiers->raison_sociale, $tiers->commune, $tiers->_id);
+        $log = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $type_ds, $teledeclarant, $recuperationDoc, !is_null($ds), $email, $tiers->cvi, $tiers->num_interne, $tiers->famille, $tiers->raison_sociale, $tiers->commune, $tiers->id_societe, $tiers->_id);
 
         if(!$email || $dryrun) {
-            echo $log.";".boolval($email)."\n";
+            echo $log.";".boolval($email).";0\n";
             return;
         }
 
@@ -117,11 +117,11 @@ class DSSendBrouillonTask extends sfBaseTask
         try {
             $this->getMailer()->send($message);
         } catch (Exception $e) {
-            echo $log.";0;".$e->getMessage()."\n";
+            echo $log.";1;0;".$e->getMessage()."\n";
             return false;
         }
 
-        echo $log.";1\n";
+        echo $log.";1;1\n";
 
         sleep(1);
     }
