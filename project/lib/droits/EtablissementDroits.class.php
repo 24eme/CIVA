@@ -18,11 +18,13 @@ class EtablissementDroits
         if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
 
             $droits[Roles::TELEDECLARATION_DS_PROPRIETE] = Roles::TELEDECLARATION_DS_PROPRIETE;
+            $droits[Roles::TELEDECLARATION_DRM] = Roles::TELEDECLARATION_DRM;
         }
 
         if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE))) {
 
             $droits[Roles::TELEDECLARATION_DS_NEGOCE] = Roles::TELEDECLARATION_DS_NEGOCE;
+            $droits[Roles::TELEDECLARATION_DRM] = Roles::TELEDECLARATION_DRM;
         }
 
         if($etablissement->exist('no_accises') && $etablissement->no_accises) {
