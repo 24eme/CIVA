@@ -265,24 +265,6 @@ class DSCivaClient extends DSClient {
         return $dss;
     }
 
-    public function removeAllDssByCvi($tiers, $date_stock) {
-        $type_ds = $tiers->getTypeDs();
-        $periode = $this->buildPeriode($this->createDateStock($date_stock),$type_ds);
-        $dss = $this->findDssByCviAndPeriode($tiers->getIdentifiant(), $periode);
-        $dssIds = array();
-        foreach ($dss as $ds) {
-            $dssIds[] = $ds->_id;
-            $this->delete($ds);
-        }
-        return $dssIds;
-    }
-
-    public function findDssByCvi($tiers, $date_stock, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        $type_ds = DSCivaClient::TYPE_DS_PROPRIETE;
-        $periode = $this->buildPeriode($this->createDateStock($date_stock),$type_ds);
-        return $this->findDssByCviAndPeriode($tiers->getIdentifiant(), $periode, $hydrate);
-    }
-
     public function getNextLieuStockageSecondaireByIdentifiantAndDate($identifiant, $date_stock) {
         $tiers = acCouchdbManager::getClient('_Tiers')->findByIdentifiant($identifiant);
         $type_ds = $tiers->getTypeDs();
@@ -330,16 +312,6 @@ class DSCivaClient extends DSClient {
 
     public function findDSByLieuStockageAndCampagne($lieu_num, $campagne) {
         return $this->find($this->buildId($identifiant, $periode, $lieu_stockage));
-    }
-
-    public function getDSPrincipale($tiers, $date_stock) {
-        $dss = $this->findDssByCvi($tiers, $date_stock);
-        foreach ($dss as $ds) {
-            if ($ds->isDsPrincipale())
-                return $ds;
-        }
-
-        return null;
     }
 
     public function getDSPrincipaleByDs($ds) {
