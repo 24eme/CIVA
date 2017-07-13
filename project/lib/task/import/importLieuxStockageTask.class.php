@@ -52,12 +52,12 @@ EOF;
 
     foreach($file as $line) {
       $data = str_getcsv($line, ';');
-      
+
       if($cvi && $cvi != trim($data[self::CSV_CVI])) {
         $this->importLieuxStockage($cvi, $lines);
         $lines = array();
       }
-      
+
       $cvi = trim($data[self::CSV_CVI]);
 
       $lines[$i] = $data;
@@ -71,70 +71,84 @@ EOF;
   }
 
   public function importLieuxStockage($cvi, $lines) {
-    $tiers = acCouchdbManager::getClient('Recoltant')->retrieveByCvi($cvi);
+    $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
 
-    if(!$tiers) {
-      $tiers = acCouchdbManager::getClient('Acheteur')->retrieveByCvi($cvi);
-      if($tiers && !$tiers->isDeclarantStockPropriete()) {
-        $tiers = null;
-      }
-
-      if($tiers) {
-        $this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
-      }
-    }
-
-    if(!$tiers) {
-      $this->logLignes("ERROR", sprintf("Récoltant ou cave coop '%s' introuvable", $cvi), $lines);
+    if(!$etablissement) {
+      $this->logLignes("ERROR", sprintf("Pas trouvé", $cvi), $lines);
 
       return;
     }
 
-    $tiers->remove('lieux_stockage');
-    $tiers->add('lieux_stockage');
+    if(!$etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
+      $this->logLignes("ERROR", sprintf("Ne fait pas de DS propriété", $cvi), $lines);
+
+      return;
+    }
+
+    if(!$etablissement->isActif()) {
+        $this->logLignes("ERROR", sprintf("L'établissement n'est pas actif", $cvi), $lines);
+
+        return;
+    }
+
+    if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COOPERATIVE) {
+      $this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
+    }
+
+    $etablissement->removeLieuxStockage($cvi);
 
     foreach($lines as $i => $line) {
       try{
-        $this->importLieuStockage($tiers, $line);
+        $this->importLieuStockage($etablissement, $line);
       } catch (Exception $e) {
         $this->logLigne("ERROR", $e->getMessage(), $line, $i);
         return;
       }
     }
 
+    if(!count($etablissement->getLieuxStockage(false, $cvi))) {
+        $this->logLignes("ERROR", "Établissement sans lieu de stockage", $lines);
+        return;
+    }
+
     try{
-      if($tiers->isModified()) {
+      if($etablissement->isModified()) {
         $this->logLignes("SUCCESS", "", $lines, $i);
       }
-      $tiers->save();
+      $etablissement->save();
     } catch (Exception $e) {
       $this->logLignes("ERROR", $e->getMessage(), $lines, $i);
     }
   }
 
-  public function importLieuStockage($tiers, $line) {
+  public function importLieuStockage($etablissement, $line) {
     if(!preg_match(sprintf('/^%s/', $line[self::CSV_CVI]), $line[self::CSV_NUMERO_INSTALLATION])) {
 
       throw new sfException(sprintf("Le CVI '%s' n'est pas compris dans le numéro d'installation '%s'", $line[self::CSV_CVI], $line[self::CSV_NUMERO_INSTALLATION]));
     }
 
+    if(preg_match("/supprimée/", $line[self::CSV_COMMUNE])) {
+        $this->logLignes("WARNING", sprintf("Le lieu de stockage a été supprimée"), array($line));
+        return;
+    }
+
     if(trim($line[self::CSV_CODE_POSTAL])) {
       $code_postal = trim($line[self::CSV_CODE_POSTAL]);
     } else {
-      $code_postal = $tiers->siege->code_postal;
+      $code_postal = $etablissement->siege->code_postal;
     }
 
     $commune = trim($line[self::CSV_COMMUNE]);
-    $adresse = trim($line[self::CSV_ADRESSE]);
+    $adresse = strtoupper(trim($line[self::CSV_ADRESSE]));
     $adresse = strtoupper(trim(preg_replace("/".$commune."$/", "", $adresse)));
     $adresse = strtoupper(trim(preg_replace("/".$code_postal."$/", "", $adresse)));
     $adresse = strtoupper(trim(preg_replace("/".$commune."$/", "", $adresse)));
 
-    $lieu_stockage = $tiers->add('lieux_stockage')->add(trim($line[self::CSV_NUMERO_INSTALLATION]));
-  
+    $lieu_stockage = $etablissement->add('lieux_stockage')->add(trim($line[self::CSV_NUMERO_INSTALLATION]));
+
     $lieu_stockage->numero = trim($line[self::CSV_NUMERO_INSTALLATION]);
     $lieu_stockage->nom = trim($line[self::CSV_RAISON_SOCIALE]);
-    
+
     $lieu_stockage->code_postal  = $code_postal;
     $lieu_stockage->commune  = $commune;
 

@@ -455,6 +455,23 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return $this->exist('lieux_stockage') && count($this->lieux_stockage) > 0;
     }
 
+    public function removeLieuxStockage($identifiant = null) {
+        $lieuxToRemove = array();
+        if(!$this->exist('lieux_stockage')) {
+            return;
+        }
+        foreach($this->_get('lieux_stockage') as $lieuStockage) {
+            if($identifiant && !preg_match("/".$identifiant."/", $lieuStockage->getKey())) {
+                continue;
+            }
+            $lieuxToRemove[$lieuStockage->getKey()] = $lieuStockage->getKey();
+        }
+
+        foreach($lieuxToRemove as $key) {
+            $this->add('lieux_stockage')->remove($key);
+        }
+    }
+
     public function getLieuxStockage($ajoutLieuxStockage = false, $identifiant = null)
     {
         if($ajoutLieuxStockage && $this->isAjoutLieuxDeStockage() &&

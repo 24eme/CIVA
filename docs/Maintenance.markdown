@@ -190,6 +190,12 @@ Tache de génération des PDFs :
 
  > php symfony export:ds-pdf
 
+### Mise à jour des lieux de stockages
+
+/!\ Le fichier tableur envoyé par les douanes nécessitent un retravaille
+
+ > php symfony import:LieuxStockages [chemin vers le csv des lieux de stockages]
+
 ### Déclarants et envoi du mail d'ouverture
 
 Obtenir la liste des déclarants
