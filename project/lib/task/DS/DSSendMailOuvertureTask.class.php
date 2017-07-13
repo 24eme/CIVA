@@ -54,7 +54,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         $etablissement = CompteClient::getInstance()->find($arguments["id_etablissement"]);
 
-        if($etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE) && !$etablissement->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)) {
+        if($etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
 
             $this->executeSendMail($etablissement, DSCivaClient::TYPE_DS_PROPRIETE, $options['dryrun']);
         }
