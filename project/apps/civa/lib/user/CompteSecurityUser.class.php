@@ -40,10 +40,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
      * @param string $cas_user
      */
     public function signIn($cas_user) {
-
         $cas_user =  preg_replace('/^[c]{1}([0-9]{10})$/', 'C\1', $cas_user);
 
-        $compte = acCouchdbManager::getClient('Compte')->retrieveByLogin($cas_user);
+        $compte = CompteClient::getInstance()->findByLogin($cas_user);
         if (!$compte) {
             throw new sfException('compte does not exist');
         }
@@ -91,7 +90,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
                 $this->addCredential(self::CREDENTIAL_DELEGATION);
             }
 
-            if ($compte->type == 'Compte') {
+            if ($compte->type == 'Compte' && $compte->getSociete() && count($compte->getSociete()->etablissements)) {
                 $this->addCredential(self::CREDENTIAL_COMPTE_TIERS);
             }
         }
@@ -144,7 +143,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
         $this->requireCompte();
 
         if (!array_key_exists($namespace, $this->_compte)) {
-            $this->_compte[$namespace] = CompteClient::getInstance()->retrieveByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
+            $this->_compte[$namespace] = CompteClient::getInstance()->findByLogin($this->getAttribute(self::SESSION_COMPTE, null, $namespace));
             if (!$this->_compte[$namespace]) {
                 $this->signOut();
                 throw new sfException("The compte does not exist");

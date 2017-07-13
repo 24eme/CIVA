@@ -71,12 +71,12 @@ class compteActions extends sfActions {
 
         $this->getUser()->signOut();
 
-        $this->form = new AdminCompteLoginForm(null, array('comptes_type' => array('CompteVirtuel'), false));
+        $this->form = new AdminCompteLoginForm();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->getUser()->signIn($this->form->process()->login);
-                $this->redirect('@tiers');
+                $this->redirect('tiers');
             }
         }
     }
