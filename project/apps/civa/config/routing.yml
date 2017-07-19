@@ -701,7 +701,7 @@ dr_xml:
 # *********** import DRM ***********
 
 drm_create_from_documents:
-  url: /drm/:identifiant/creation-documents/:periode
+  url: /drm-reprise/:identifiant/creation-documents/:periode
   param: {module: drm, action: createEdiFileFromDocuments}
 
 # *********** import DRM fin ***********
