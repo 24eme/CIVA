@@ -135,9 +135,9 @@ class DSSendBrouillonTask extends sfBaseTask
             $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Vous avez télé-déclaré votre Stock ".($campagne - 1)." sur le Portail du CIVA <https://declaration.vinsalsace.pro> et nous n'avons donc pas pré-identifié de formulaire pour votre entreprise en Mairie.
+A compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
 
-Si vous optez à nouveau pour cette solution, la procédure pour la télé-déclaration des Stocks au 31 juillet ".$campagne." sera accessible à compter du 18 juillet et vous n'avez donc aucun document à remettre en Mairie.
+Comme les années précédentes, vous pourrez accéder à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro> à compter du 24 juillet.
 
 Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre minuit.
 
@@ -161,9 +161,11 @@ Le CIVA");
             $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-En ".($campagne - 1).", vous avez déposé une Déclaration de Stocks \"papier\", nous avons donc envoyé en Mairie un formulaire pré-identifié pour votre entreprise.
+ATTENTION: à compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
 
-Si néanmoins, vous souhaitez cette année télé-déclarer votre Stock au 31 juillet ".$campagne." sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 18 juillet et vous n'aurez donc aucun document à remettre en Mairie.
+En ".($campagne - 1).", vous aviez encore déposé une Déclaration de Stocks \"papier\" en Mairie.
+
+Cette année il vous faudra télé-déclarer votre Stock au 31 juillet ".$campagne." sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 24 juillet.
 
 Attention la date limite de télé-déclaration est fixée par les Douanes au 10 septembre minuit.
 
@@ -184,11 +186,13 @@ Le CIVA");
             $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Vous avez télé-déclaré votre Stock ".($campagne - 1)." sur le Portail du CIVA <https://declaration.vinsalsace.pro> et nous ne vous avons donc pas fait parvenir de formulaire pré-identifié.
+A compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Si vous optez à nouveau pour cette solution, le télé-service \"Alsace Stocks\" sera accessible du 18 juillet au 10 septembre inclus, et vous n'avez donc pas de formulaire papier à envoyer au CIVA.
+Le télé-service \"Alsace Stocks\" sera accessible du 24 juillet au 10 septembre inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+
+ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre minuit.
 
 
 Cordialement,
@@ -206,13 +210,15 @@ Le CIVA");
             $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Vous recevrez dans les prochains jours votre Déclaration de Stocks au 31 juillet ".$campagne." à retourner au CIVA au plus tard le 10 septembre.
+ATTENTION: à compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
 
-Depuis 2014 vous avez la possibilité de télé-déclarer sur le Portail CIVA <https://declaration.vinsalsace.pro>, votre Stock au 31 Juillet voire celui au 31 Décembre si vous êtes concerné.
+En ".($campagne - 1).", vous aviez encore envoyé une Déclaration de Stocks \"papier\" au CIVA.
 
-Le télé-service \"Alsace Stocks\" sera accessible du 18 juillet au 10 septembre inclus, et vous n'aurez donc pas à renvoyer le formulaire papier au CIVA.
+Cette année il vous faudra télé-déclarer votre Stock au 31 juillet 2017 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible du 24 juillet au 10 septembre inclus.
 
 Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à pas\", vous pourrez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+
+ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre minuit.
 
 
 Cordialement,
