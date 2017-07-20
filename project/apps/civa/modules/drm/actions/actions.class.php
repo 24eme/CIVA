@@ -14,12 +14,11 @@ class drmActions extends sfActions {
 
       if(!in_array($this->getRequest()->getHttpHeader('addr','remote'),$allowIps)){
         throw new sfException("Accès interdit");
-
       }
 
       $identifiant = $request->getParameter('identifiant');
       $periode = $request->getParameter('periode');
-      $numero_accise = "COUCOU";
+      $numero_accise = "";
 
       $ediFileContent = "";
 
