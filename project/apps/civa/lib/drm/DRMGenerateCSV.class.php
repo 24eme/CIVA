@@ -74,6 +74,9 @@ class DRMGenerateCSV {
       $this->periode =  $periode;
     }
 
+    public function getPeriode(){
+      return $this->periode;
+    }
 
     public function getDocumentsForRepriseCatalogue(){
         $documents = array();
@@ -171,21 +174,45 @@ class DRMGenerateCSV {
       return $lignes;
     }
 
-    public function createRowStockNotNullProduitFromDS($produitDetail){
+    public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
       if($produitCepage->total_normal){
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$produitCepage->total_normal.";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;".$produitCepage->total_normal.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_normal;
+        }
+        $lignes.=";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_normal;
+        }
+        $lignes.=";\n";
       }
       if($produitCepage->total_sgn){
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;".$produitCepage->total_vt.";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;".$produitCepage->total_vt.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_sgn;
+        }
+        $lignes.=";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_sgn;
+        }
+        $lignes.=";\n";
       }
       if($produitCepage->total_vt){
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;".$produitCepage->total_sgn.";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;".$produitCepage->total_sgn.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_vt;
+        }
+        $lignes.=";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;";
+        if($withVolume){
+          $lignes.=$produitCepage->total_vt;
+        }
+        $lignes.=";\n";
 
       }
       return $lignes;
