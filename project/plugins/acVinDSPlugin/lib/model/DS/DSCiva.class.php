@@ -768,5 +768,13 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return $this->_set('date_stock', $date_stock);
     }
 
+    public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
+      $lignesEdi = "";
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        $lignesEdi.= $drmGenerateCSV->createRowStockNotNullProduitFromDS($produit);
+      }
+      return $lignesEdi;
+    }
+
 
 }

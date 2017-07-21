@@ -171,14 +171,38 @@ class DRMGenerateCSV {
       return $lignes;
     }
 
+    public function createRowStockNotNullProduitFromDS($produitDetail){
+      $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
+      $produitCepage = $produitDetail->getParent()->getParent();
+      $lignes = "";
+      if($produitCepage->total_normal){
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','DEFAUT') . ";" . "stocks_debut;initial;".$produitCepage->total_normal.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','DEFAUT') . ";" . "stocks_fin;final;".$produitCepage->total_normal.";\n";
+      }
+      if($produitCepage->total_sgn){
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;".$produitCepage->total_vt.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;".$produitCepage->total_vt.";\n";
+      }
+      if($produitCepage->total_vt){
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;".$produitCepage->total_sgn.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;".$produitCepage->total_sgn.";\n";
 
-    public function getProduitCSV($produitDetail, $force_type_drm = null) {
+      }
+      return $lignes;
+
+    }
+
+
+    public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
         $cepageConfig = $produitDetail->getCepage()->getConfig();
 
         $certification = $cepageConfig->getCertification()->getLibelle();
         $genre = $cepageConfig->getGenre()->getLibelle();
         $appellation = $cepageConfig->getAppellation()->getLibelle();
         $mention = $cepageConfig->getMention()->getLibelle();
+        if($mentionVtsgn){
+          $mention = $mentionVtsgn;
+        }
         $lieu = $cepageConfig->getLieu()->getLibelle();
         $couleur = $cepageConfig->getCouleur()->getLibelle();
         $cepage = $cepageConfig->getCepage()->getLibelle();
