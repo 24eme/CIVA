@@ -778,5 +778,9 @@ class DSCiva extends DS implements IUtilisateursDocument {
       return $lignesEdi;
     }
 
+    public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
+      return "";
+    }
+
 
 }
