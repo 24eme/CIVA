@@ -176,8 +176,8 @@ class DRMGenerateCSV {
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
       if($produitCepage->total_normal){
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','DEFAUT') . ";" . "stocks_debut;initial;".$produitCepage->total_normal.";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','DEFAUT') . ";" . "stocks_fin;final;".$produitCepage->total_normal.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$produitCepage->total_normal.";\n";
+        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;".$produitCepage->total_normal.";\n";
       }
       if($produitCepage->total_sgn){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;".$produitCepage->total_vt.";\n";
