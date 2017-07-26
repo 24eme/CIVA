@@ -67,7 +67,7 @@ class ProduitCsvFile extends CsvFile {
                 '/genres/' . $this->getKeyProduit($line[self::CSV_PRODUIT_GENRE_CODE], true, true) .
                 '/appellations/' . $this->getKeyProduit($line[self::CSV_PRODUIT_DENOMINATION_CODE], true, true) .
                 '/mentions/' . $this->getKeyProduit($line[self::CSV_PRODUIT_MENTION_CODE], true, true) .
-                '/lieux/' . $this->getKeyProduit($line[self::CSV_PRODUIT_LIEU_CODE], true, true) .
+                '/lieux/' . $this->getKeyLieu($line[self::CSV_PRODUIT_LIEU_CODE], true, true) .
                 '/couleurs/' . $this->getKeyProduit($line[self::CSV_PRODUIT_COULEUR_CODE], true, true) .
                 '/cepages/' . $this->getKeyProduit($line[self::CSV_PRODUIT_CEPAGE_CODE], true, true);
     }
@@ -77,7 +77,7 @@ class ProduitCsvFile extends CsvFile {
                 '/genres/' . $this->getKeyProduit($line[self::CSV_PRODUIT_GENRE_CODE], false, true) .
                 '/appellations/' . $this->getKeyProduit($line[self::CSV_PRODUIT_DENOMINATION_CODE], false, true) .
                 '/mentions/' . $this->getKeyProduit($line[self::CSV_PRODUIT_MENTION_CODE], false, true) .
-                '/lieux/' . $this->getKeyProduit($line[self::CSV_PRODUIT_LIEU_CODE], false, true) .
+                '/lieux/' . $this->getKeyLieu($line[self::CSV_PRODUIT_LIEU_CODE], false, true) .
                 '/couleurs/' . $this->getKeyProduit($line[self::CSV_PRODUIT_COULEUR_CODE], false, true).
                 '/cepages/' . $this->getKeyProduit($line[self::CSV_PRODUIT_CEPAGE_CODE], false, true);
     }
@@ -93,6 +93,13 @@ class ProduitCsvFile extends CsvFile {
         }
 
         return $correspondances[$key];
+    }
+    
+    private function getKeyLieu($key, $new = true, $withDefault = false) {
+    	if (is_numeric($key) && $key > 0 && $key < 10) {
+    		$key = sprintf("%02d", intval($key)); 
+    	}
+    	return $this->getKeyProduit($key, false, true);
     }
 
     private function getKeyProduit($key, $new = true, $withDefault = false) {
