@@ -727,5 +727,5 @@ declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rosé;rose;;;;L387;Vin
 declaration;Autre;AUTRE;;TRANQ;BFAV;BFAV;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
 declaration;Autre;AUTRE;;TRANQ;Rebêches;REBECHES;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
 declaration;Autre;AUTRE;;TRANQ;Usages Industriels;USAGESINDUSTRIELS;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
-declaration;Autre;AUTRE;;DEFAUT;Alcools sup. 18%;ASUP;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_SUP_18;;;%a%;appellation
-declaration;Autre;AUTRE;;DEFAUT;Alcools inf. 18%;AINF;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_INF_18;;;%a%;appellation
+declaration;Alcools;ALCOOLS;;DEFAUT;Alcool supérieur 18°;AS18;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_SUP_18;;;%a% %g% %l% %m% %co%;certification
+declaration;Alcools;ALCOOLS;;DEFAUT;Alcool inférieur 18°;AI18;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_INF_18;;;%a% %g% %l% %m% %co%;certification
