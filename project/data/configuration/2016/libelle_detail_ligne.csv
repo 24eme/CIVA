@@ -11,9 +11,9 @@ details;entrees;manipulations;Manipulations diverses;Manipulations diverses;Mani
 details;entrees;excedent;Excédents;Quantités en excédent;Quantités en excédent
 details;entrees;vci;VCI;VCI;VCI
 details;entrees;repli;Repli/déclassement;Repli/déclassement;Repli/déclassement
-details;sorties;ventefrancecrd;Blles CRD ou DSA France;Sortie taxables CRD ou DSA/DSAC France;Sortie taxables CRD ou DSA/DSAC France
+details;sorties;ventefrancecrd;Blles CRD - DSA France;Sortie taxables CRD ou DSA/DSAC France;Sortie taxables CRD ou DSA/DSAC France
 details;sorties;exporttaxe;Blles CRD Hors France;Sorties taxables DSA/DSAC Hors France Métropolitaine;Sorties taxables DSA/DSAC Hors France Métropolitaine
-details;sorties;exoversutilisateurauto;Exo vers utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé
+details;sorties;exoversutilisateurauto;Exo vers utilisat. autorisé;Sorties en exonération vers un utilisateur autorisé;Sorties en exonération vers un utilisateur autorisé
 details;sorties;consommationfamilialedegustation;Dégustation propriété;Sorties en exonération dégustation à la propriété;Sorties en exonération dégustation à la propriété
 details;sorties;repli;Repli/déclassement;Autres sorties replis et déclassement;Autres sorties replis et délassement
 details;sorties;lies;Lies;Autres sorties lies;Autres sorties lies
