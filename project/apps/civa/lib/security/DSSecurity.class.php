@@ -39,7 +39,6 @@ class DSSecurity implements SecurityInterface {
         }
 
         if(!$this->etablissement) {
-
             return false;
         }
 
@@ -55,44 +54,43 @@ class DSSecurity implements SecurityInterface {
         }
 
         if($this->type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_PROPRIETE)) {
-            return false;
+        	return false;
         }
 
         if($this->type_ds == DSCivaClient::TYPE_DS_NEGOCE && !EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DS_NEGOCE)) {
-            return false;
+        	return false;
         }
 
         if(!$this->etablissement->hasLieuxStockage() && !$this->etablissement->isAjoutLieuxDeStockage()) {
-            return false;
+        	return false;
         }
 
         if($this->etablissement && $this->ds && $this->etablissement->getIdentifiant() != $this->ds->identifiant && $this->etablissement->getCvi() != $this->ds->identifiant) {
-            return false;
+        	return false;
         }
 
         /*** CONSULTATION ***/
 
         if(in_array(self::CONSULTATION, $droits)) {
-            return true;
+        	return true;
         }
 
         /*** CREATION ***/
         if(in_array(self::CREATION, $droits) && $this->ds && !$this->ds->isNew()) {
-            return false;
+        	return false;
         }
 
         if(in_array(self::CREATION, $droits) && $this->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
-
             return true;
         }
-
-        if(in_array(self::CREATION, $droits) && !$this->etablissement->exist('ds_decembre')) {
-
+		/*
+		 * Voir condition avec vincent car bloque les ouvertures DS non negoces
+		 */
+        /*if(in_array(self::CREATION, $droits) && !$this->etablissement->exist('ds_decembre')) {
             return false;
-        }
+        }*/
 
         if(in_array(self::CREATION, $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
-
             return false;
         }
 
@@ -105,37 +103,30 @@ class DSSecurity implements SecurityInterface {
 
         /*** EDITION ***/
         if(in_array(self::EDITION , $droits) && !$this->ds) {
-
             return false;
         }
 
         if(in_array(self::EDITION , $droits) && $this->ds->isValideeCiva()) {
-
             return false;
         }
 
         if(in_array(self::EDITION , $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
-
             return true;
         }
 
         if(in_array(self::EDITION , $droits) && $this->ds->isValideeTiers()) {
-
             return false;
         }
 
         if(in_array(self::EDITION , $droits) && sfContext::getInstance()->getUser()->hasCredential(myUser::CREDENTIAL_OPERATEUR)) {
-
             return true;
         }
 
         if(in_array(self::EDITION, $droits) && !$this->etablissement->exist('ds_decembre')) {
-
             return false;
         }
 
         if(in_array(self::EDITION , $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
-
             return false;
         }
 
