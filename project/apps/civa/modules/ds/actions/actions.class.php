@@ -687,6 +687,7 @@ Le CIVA';
 
     public function executeFeedBack(sfWebRequest $request) {
         $this->type_ds = $request->getParameter("type");
+        $this->identifiant = $this->getUser()->getDeclarantDS($this->type_ds)->identifiant;
 
         $this->form = new FeedBackForm();
 
