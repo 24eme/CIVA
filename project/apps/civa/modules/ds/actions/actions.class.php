@@ -739,5 +739,6 @@ Le CIVA';*/
 
     public function executeFeedBackConfirmation(sfWebRequest $request) {
         $this->type_ds = $request->getParameter("type");
+        $this->identifiant = $this->getUser()->getDeclarantDS($this->type_ds)->identifiant;
     }
 }
