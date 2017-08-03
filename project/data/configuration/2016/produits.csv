@@ -1,4 +1,4 @@
-declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Total Alsace Blanc hors mention;;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S 1;cepage;;%ce%;cepage
+declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Total Alsace Blanc hors mention;;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S;cepage;;%ce%;cepage
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Chasselas;CH;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S 5;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Sylvaner;SY;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S 8;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Auxerrois;AU;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S0A;cepage;;%a% %l% %ce% %m%;certification
@@ -20,8 +20,8 @@ declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;SGN;SGN;;;;;Muscat Ot
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;;DEFAUT;;;;;Gewurztraminer;GW;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001S 1;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;VT;VT;;;;;Gewurztraminer;GW;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001D71;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace blanc;ALSACEBLANC;SGN;SGN;;;;;Gewurztraminer;GW;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B001D61;cepage;;%a% %l% %ce% %m%;certification
-declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Blanc;blanc;Total Lieu dit Blanc hors mention ;DEFAUT;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S05;cepage;;%ce%;cepage
-declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Rouge;rouge;Total Lieu dit Rouge ;DEFAUT;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S05;cepage;;%ce%;cepage
+declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Blanc;blanc;Total Lieu dit Blanc hors mention ;DEFAUT;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S;cepage;;%ce%;cepage
+declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Rouge;rouge;Total Lieu dit Rouge ;DEFAUT;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1R070S;cepage;;%ce%;cepage
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Blanc;blanc;Chasselas;CH;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S05;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Blanc;blanc;Sylvaner;SY;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S08;cepage;;%a% %l% %ce% %m%;certification
 declaration;AOC;AOC_ALSACE;;TRANQ;Alsace Lieu-dit;LIEUDIT;;DEFAUT;;;Blanc;blanc;Auxerrois;AU;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;1B070S0A;cepage;;%a% %l% %ce% %m%;certification
@@ -711,21 +711,23 @@ declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Rosé;
 declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Rouge;RG;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;4R999;cepage;;%c% %a% %l% %ce% %m%;certification
 declaration;Vins sans IG;VINSSIG;;TRANQ;Vins sans IG;VINTABLE;;DEFAUT;;;;;Sans IG;VINTABLE;;L387;Vins Tranquilles;3,77;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;4VDT999;cepage;;%c% %a% %l% %ce% %m%;certification
 declaration;Vins sans IG;VINSSIG;;EFF;Vins sans IG;VINTABLE;;DEFAUT;;;;;Mousseux;MS;;L385;Vins Mousseux;9,33;2015-08-01;G;7,38;2015-08-01;C;;;;;;;;;;;4M999;cepage;;%c% %a% %l% %ce% %m%;certification
-declaration;AOC;AOC_HORSALSACE;;EFF;Champagne;CHAMPAGNE;;;;;Blanc;blanc;;;;L385;Vins Mousseux;9,33;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;appellation
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%c% %a% %co%;certification
-declaration;Autre;AUTRE;;TRANQ;BFAV;BFAV;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
-declaration;Autre;AUTRE;;TRANQ;Rebêches;REBECHES;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
+declaration;AOC;AOC_HORSALSACE;;EFF;Champagne;CHAMPAGNE;;;;;Blanc;blanc;;;;L385;Vins Mousseux;9,33;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B998M;;;%a%;appellation
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B998S;;;%c% %a% %co%;certification
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1R998S;;;%c% %a% %co%;certification
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1S998S;;;%c% %a% %co%;certification
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B900S;;;%c% %a% %co%;certification
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1R900S;;;%c% %a% %co%;certification
+declaration;Vins AOP;AOP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1S900S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3B998S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3R998S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;France;DEFAUT;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3S998S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Blanc;blanc;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3B900S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rouge;rouge;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3R900S;;;%c% %a% %co%;certification
+declaration;Vins à IGP;IGP_HORSALSACE;;TRANQ;CEE;CEE;;;;;Rosé;rose;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;3S900S;;;%c% %a% %co%;certification
+declaration;Autre;AUTRE;;TRANQ;BFAV;BFAV;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;BFAV;;;%a%;certification
+declaration;Autre;AUTRE;;DEFAUT;DPLC;DPLC;;;;;Blanc;blanc;;;;;;;;;;;;;;;;;;;;;4B988Y;;;%a% %co%;certification
+declaration;Autre;AUTRE;;DEFAUT;DPLC;DPLC;;;;;Rouge;rouge;;;;;;;;;;;;;;;;;;;;;4R988Y;;;%a% %co%;certification
+declaration;Autre;AUTRE;;DEFAUT;Lies;LIES;;;;;;;;;;;;;;;;;;;;;;;;;;;4X999V;;;%a%;certification
 declaration;Autre;AUTRE;;TRANQ;Usages Industriels;USAGESINDUSTRIELS;;;;;;;;;;L387;Vins Tranquilles;3,77;2015-08-01;C;0;2015-08-01;C;;;;;;;;;;;1B231S  ;;;%a%;certification
 declaration;Alcools;ALCOOLS;;DEFAUT;Alcool supérieur 18°;AS18;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_SUP_18;;;%a% %g% %l% %m% %co%;certification
 declaration;Alcools;ALCOOLS;;DEFAUT;Alcool inférieur 18°;AI18;;;;;;;;;;;;;;;;;;;;;;;;;;;;ALCOOL_AUTRE_INF_18;;;%a% %g% %l% %m% %co%;certification
