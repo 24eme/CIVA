@@ -135,9 +135,9 @@ class tiersActions extends sfActions {
         if($compte->hasDroit(Roles::TELEDECLARATION_DR)) {
             $blocs[Roles::TELEDECLARATION_DR] = $this->generateUrl('mon_espace_civa_dr_compte', $compte);
         }
-
-        if($compte->hasDroit(Roles::TELEDECLARATION_DRM)) {
-            $blocs[Roles::TELEDECLARATION_DRM] = sprintf(sfConfig::get("app_giilda_url_drm"), $compte->identifiant);
+        $url_drm = sfConfig::get("app_giilda_url_drm",false);
+        if($compte->hasDroit(Roles::TELEDECLARATION_DRM) && $url_drm) {
+            $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $compte->identifiant);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
