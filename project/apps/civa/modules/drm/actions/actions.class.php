@@ -41,7 +41,7 @@ class drmActions extends sfActions {
       foreach ($repriseMvtInfos as $repriseMvtInfo) {
         $ediFileContent.= $this->createReprise($repriseMvtInfo,$drmGenerateCSV);
       }
-      if($ediFileContent){
+      if($ediFileContent !== false){
           $this->response->setContentType('text/csv');
 
           echo $ediFileContent;
