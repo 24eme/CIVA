@@ -84,6 +84,10 @@ class DRClient extends acCouchdbClient {
         $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
         $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
 
+        if(preg_match("/(AOC ALSACE PINOT NOIR ROUGE|AOC Alsace PN rouge)/i", $appellation)) {
+            $cepage = null;
+        }
+
         $vtsgn = $line[CsvFileAcheteur::CSV_VTSGN];
         $vtsgn = preg_replace("/^0$/", "", $vtsgn);
 
