@@ -131,7 +131,23 @@ class DSCivaClient extends DSClient {
 
         return $this->findByIdentifiantAndPeriode($identifiant, $periode);
     }
+    public function getEtablissements($societe, $type_ds) {
+        $etablissements = array();
 
+        foreach($societe->getEtablissementsObject() as $etablissement) {
+            if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
+
+                $etablissements[$etablissement->_id] = $etablissement;
+            }
+
+            if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)) {
+
+                $etablissements[$etablissement->_id] = $etablissement;
+            }
+        }
+
+        return $etablissements;
+    }
     public function getEtablissement($societe, $type_ds = null) {
         foreach($societe->getEtablissementsObject() as $etablissement) {
             if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
