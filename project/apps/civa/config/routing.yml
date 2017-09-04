@@ -4,6 +4,10 @@ tiers:
   url: /tiers
   param: { module: tiers, action: login }
 
+mon_esapce_accueil:
+  url:   /mon_espace_civa
+  param: { module: compte, action: login }
+
 mon_espace_civa:
   url:   /mon_espace_civa/:identifiant
   param: { module: tiers, action: monEspaceCiva }
