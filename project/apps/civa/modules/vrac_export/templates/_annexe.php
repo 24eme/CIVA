@@ -10,20 +10,20 @@ Ces bouteilles <b><u>doivent néanmoins comporter une indication</u></b> permett
 En outre, dès lors que ces produits sont transférés <b><u>hors</u></b> de la région administrative dans laquelle ils ont été embouteillés,  une information comportant les nom et adresse du destinataire est transmise avant l’expédition à la DIRECCTE de la région d’embouteillage.
 </p>
 
-<h4>Art.5 du 13e Accord Interprofessionnel du Conseil Interprofessionnel des Vins d’Alsace</h4>
-<i>(arrêté ministériel d’extension du 13/11/2012)</i>
+<h4>Art.5 du 15e Accord Interprofessionnel du Conseil Interprofessionnel des Vins d’Alsace</h4>
+<i>(arrêté ministériel d’extension du 9/08/2016)</i>
 
 <p>
 Toute transaction de vin AOC produit en Alsace, entre deux opérateurs du vignoble AOC, donne lieu dès la conclusion de la vente et quelle que soit la nature de l’opérateur, à l’établissement immédiat d’un contrat de vente conforme au contrat type interprofessionnel.
 </p>
 <p>
-Pour les transactions en bouteilles, le contrat fait apparaître, l’appellation, le cépage, les dénominations spécifiques susceptibles d’être revendiquées, la centilisation, le nombre de bouteilles, et le volume correspondant. Le prix est facultatif.
+Pour les transactions en bouteilles, le contrat fait apparaître, l’appellation, le cépage, les dénominations spécifiques susceptibles d’être revendiquées, le prix, la centilisation, le nombre de bouteilles, et le volume correspondant. Le prix est facultatif.
 </p>
 
 <h4>Transmission et enregistrement par le CIVA</h4>
 
 <p>
-C’est l’acheteur ou son courtier qui transmet au CIVA les 2 exemplaires du contrat prévus à cet effet.
+C’est l’acheteur ou son courtier qui transmet au CIVA les 2 exemplaires du contrat 'Papier' prévus à cet effet.
 </p>
 <p>
 Le contrat peut être établi et transmis de manière dématérialisée via la plateforme déclarative du portail interprofessionnel du CIVA. Dans ce cas toutes les parties sont invitées à signer électroniquement le contrat dans un délai maximum de 5 jours.
@@ -46,7 +46,7 @@ Les vins et les vins de liqueur préemballés en France peuvent être mis en cir
 		<li>b) L'indication permettant d'identifier le lot figure également dans le registre : « embouteillage » pour le vin en question. Il est reporté sur les registres : « entrée » et « sortie » de l'expéditeur et du destinataire.</li>
 		<li>c) Dès lors que ces produits vitivinicoles sont transférés <u>hors de la région administrative</u> dans laquelle ils ont été embouteillés, une information comportant les nom et adresse du destinataire est transmise avant l'expédition à la DIRECCTE (Direction Régionale des Entreprises, de la Concurrence, de la Consommation, du Travail et de l'Emploi) de la région d'embouteillage.</li>
 	</ul>
-<h4>Art.12 du 13e Accord Interprofessionnel du Conseil Interprofessionnel des Vins d’Alsace</h4>
+<h4>Art.11 du 15e Accord Interprofessionnel du Conseil Interprofessionnel des Vins d’Alsace</h4>
 <p>
 « Les producteurs-négociants, négociants et SICA paieront au CIVA la cotisation interprofessionnelle au taux en vigueur sur la totalité de leurs ventes en bouteilles dont la moitié, queI que soit le cépage, sera supportée par leurs vendeurs (qu’ils soient viticulteurs, coopératives ou négociants) et retenue à ceux-ci sur tous les achats de vins et de raisins. »
 </p>
