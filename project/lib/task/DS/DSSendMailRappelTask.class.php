@@ -46,18 +46,18 @@ EOF;
         }
 
         if(!$etablissement) {
-            echo "Établissement non trouvé : ".$arguments['id_etablissement']."\n";
+            echo "Établissement non trouvé : ".$arguments['identifiant']."\n";
             return;
         }
 
         if(!$etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds'])) {
-            echo "L'établissement ne fait pas de ds ".$arguments['type_ds']." : ".$arguments['id_etablissement']."\n";
+            echo "L'établissement ne fait pas de ds ".$arguments['type_ds']." : ".$arguments['identifiant']."\n";
             return;
         }
         $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
 
         if(!$ds) {
-            echo "La DS n'existe pas : ".$arguments['identifiant']."\n";
+            $this->sendMailOubli($etablissement, $options['dryrun']);
             return;
         }
 
@@ -94,6 +94,9 @@ Cordialement,
 Dominique WOLFF");
 
         try {
+            if(!$email) {
+                throw new sfException("Pas de mail");
+            }
             if($dryrun) {
                 throw new sfException("Dry run");
             }
@@ -107,10 +110,11 @@ Dominique WOLFF");
         sleep(1);
     }
 
-    public function sendMailOubli($etablissement) {
+    public function sendMailOubli($etablissement, $dryrun) {
+        $email = $etablissement->getEmailTeledeclaration();
         $message = Swift_Message::newInstance()
         ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
-        ->setTo($etablissement->email)
+        ->setTo($email)
         ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
         ->setBody("Bonjour,
 
@@ -129,13 +133,19 @@ Dominique WOLFF
 ");
 
         try {
+            if(!$email) {
+                throw new sfException("Pas de mail");
+            }
+            if($dryrun) {
+                throw new sfException("Dry run");
+            }
             $this->getMailer()->send($message);
         } catch (Exception $e) {
-            echo "L'envoi du mail oubli a échoué : ".$e->getMessage()." (".$etablissement->_id.")\n";
+            echo "L'envoi du mail oubli a échoué (".$email."): ".$e->getMessage()." (".$etablissement->_id.")\n";
             return false;
         }
 
-        echo "Mail oubli envoyé : ".$ds->_id."\n";
+        echo "Mail oubli envoyé (".$email.") : ".$etablissement->_id."\n";
         sleep(1);
     }
 
