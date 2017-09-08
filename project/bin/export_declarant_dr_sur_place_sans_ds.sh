@@ -21,5 +21,5 @@ bash bin/export_ds_csv.sh "propriete" "$PERIODE_DS" | awk -F ';' '{ print $4 }' 
 
 join -v 1 -t ";" -1 1 -2 1 /tmp/declarants_dr_volume_sur_place.csv /tmp/declarants_ds_propriete.csv
 
-#rm /tmp/declarants_dr_volume_sur_place.csv
-#rm /tmp/declarants_ds_propriete.csv
+rm /tmp/declarants_dr_volume_sur_place.csv
+rm /tmp/declarants_ds_propriete.csv
