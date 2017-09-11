@@ -330,7 +330,7 @@ var sumContrat = function(brothers, cible)
 						(champ_volume.length > 0 && $.trim(champ_volume.val()))
 						&& (champ_prix.length > 0 && $.trim(champ_prix.val()))
 						|| (champ_centilisation.length > 0 && champ_centilisation.val())
-						&& (champ_bouteille.length > 0 && $.trim(champ_bouteille.val()))
+						&& (champ_bouteille.length > 0 && $.trim(champ_bouteille.val()) && champ_prix.length > 0 && $.trim(champ_prix.val()))
 					)
 					{
 						ligne_courante.addClass('coche');
