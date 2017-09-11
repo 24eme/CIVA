@@ -684,7 +684,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
 
 		if($this->isNew() && $this->type_contrat == VracClient::TYPE_VRAC) {
-			$this->add('clause_reserve_propriete');
+			$this->add('clause_reserve_propriete', true);
 		}
     }
 
