@@ -75,7 +75,7 @@
 				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
 			</td>
 			<td>
-			<?php echo $form['clause_reserve_propriete']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="">verso du contrat</a>)</small>
+			<?php echo $form['clause_reserve_propriete']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
 			</td>
 		</tr>
 		<?php endif; ?>

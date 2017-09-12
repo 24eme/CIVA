@@ -20,7 +20,7 @@
             <li>Saisie de contrat impossible avec un opérateur dépourvu d'adresse e-mail.</li>
 		</ul>
     </fieldset>
-	<?php elseif (!$fiche && !VracClient::isSoussigneInscrit($tiers->getTiersObject())): ?>
+<?php elseif (!$fiche && !VracClient::getInstance()->isSoussigneInscrit($tiers->getTiersObject())): ?>
     <fieldset class="message">
     	<legend class="message_title" style="position: relative;">Point de vigilance<a href="" class="msg_aide_ds" rel="help_popup_validation_log_erreur" title="Message aide"></a> </legend>
      	<ul class="messages_log">
