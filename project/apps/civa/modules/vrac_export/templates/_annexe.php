@@ -17,7 +17,7 @@ En outre, dès lors que ces produits sont transférés <b><u>hors</u></b> de la 
 Toute transaction de vin AOC produit en Alsace, entre deux opérateurs du vignoble AOC, donne lieu dès la conclusion de la vente et quelle que soit la nature de l’opérateur, à l’établissement immédiat d’un contrat de vente conforme au contrat type interprofessionnel.
 </p>
 <p>
-Pour les transactions en bouteilles, le contrat fait apparaître, l’appellation, le cépage, les dénominations spécifiques susceptibles d’être revendiquées, le prix, la centilisation, le nombre de bouteilles, et le volume correspondant. Le prix est facultatif.
+Pour les transactions en bouteilles, le contrat fait apparaître, l’appellation, le cépage, les dénominations spécifiques susceptibles d’être revendiquées, le prix, la centilisation, le nombre de bouteilles, et le volume correspondant.
 </p>
 
 <h4>Transmission et enregistrement par le CIVA</h4>
