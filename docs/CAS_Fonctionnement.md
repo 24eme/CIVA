@@ -1,22 +1,22 @@
-#Comprendre le fonctionnement de CAS
+# Comprendre le fonctionnement de CAS
 
 Imaginons un CAS qui serait accessible depuis l'url **https://login.example.org/cas/**
 
 Imaginons que l'application cherchant à savoir si un utilisateur est identifié est **site.example.org**. Pour s'authentifier l'utilisateur utilise *http://site.example.org/connexion/*.
 
-##L'application redirige l'utilisateur vers le CAS
+## L'application redirige l'utilisateur vers le CAS
 
 Pour que l'application sache si l'utilisateur est identifié il faut qu'elle le redirige (HTTP 302) vers l'url suivante :
 
     https://login.example.org/cas/login?service=http://site.example.org/connexion/
 
-##Authentifié, l'utilisateur est redirigé vers l'application
+## Authentifié, l'utilisateur est redirigé vers l'application
 
 Un fois authentifié, l'application CAS redirigera l'utilisateur vers la page spécifiée dans l'argument service en lui ajoutant un argument ticket :
 
     http://site.example.org/connexion?ticket=ST-Y-XXXXXXXXXXXXXXXX-cas
 
-##L'application vérifie le ticket
+## L'application vérifie le ticket
 
 Pour savoir si le ticket est valable, l'application doit maintenant elle même interroger le serveur CAS pour lui demander si le ticket et valable. 
 
