@@ -60,8 +60,8 @@
                 <?php echo $form['cave_particuliere']->render(array('class' => 'num cave volume')) ?>
             </p>
             <p class="vol_total_recolte"><input type="text" id="detail_vol_total_recolte" class="num total readonly" tabindex="-1" readonly="readonly" value="<?php echoFloat($detail->volume) ?>" /></p>
-            <?php if ($detail->getConfig()->existRendement()): ?>
                 <ul class="vol_revendique_dplc">
+                    <?php if ($detail->getConfig()->existRendement()): ?>
                     <li>
                         <input id="detail_volume_revendique" tabindex="-1" type="<?php echo (isset($form['lies'])) ? "text" : "hidden" ?>" class="revendique num readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique) ?>" />
                     </li>
@@ -74,12 +74,21 @@
 
                         <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
                     </li>
+                    <?php endif; ?>
+                    <?php if($produit->getLieu()->canHaveVci()): ?>
+                    <li>
+                        <?php if (isset($form['vci'])) : ?>
+                            <?php echo $form['vci']->render(array('class' => 'vci num')) ?>
+                        <?php else: ?>
+                            <input id="detail_vci" type="hidden" class="vci num readonly" readonly="readonly" value="<?php echo $detail->lies ?>" />
+                        <?php endif; ?>
+                    </li>
+                    <?php endif; ?>
                 </ul>
                 <ul>
                     <li></li>
                     <li></li>
                 </ul>
-            <?php endif; ?>
         </div>
 
         <div class="col_btn">

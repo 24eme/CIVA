@@ -988,6 +988,11 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return true;
     }
 
+    public function canHaveVci() {
+
+        return true;
+    }
+
     public function getMout() {
         if(!$this->exist('attributs') ||  !$this->attributs->exist('mout')) {
             return 0;

@@ -72,6 +72,12 @@
                 <input type="hidden" id="appellation_lies_orig" value="<?php echoFloat($couleur->getLies()); ?>" />
             </li>
             <?php endif; ?>
+            <?php if($couleur->canHaveVci()): ?>
+            <li>
+                <input class="num" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+                <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+            </li>
+            <?php endif; ?>
         </ul>
         <ul>
             <li>

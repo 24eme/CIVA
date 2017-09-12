@@ -69,6 +69,12 @@
                 <input type="text" id="cepage_usages_industriels" readonly="readonly" class="num <?php if ($cepage->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
                 <input type="hidden" id="cepage_usages_industriels_orig" value="<?php echoFloat($cepage->getUsagesIndustriels()); ?>" />
             </li>
+            <?php if($cepage->getLieu()->canHaveVci()): ?>
+            <li>
+                <input type="text" id="cepage_vci" readonly="readonly" class="num" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
+                <input type="hidden" id="cepage_vci_orig" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
+            </li>
+            <?php endif; ?>
         </ul>
         <ul>
              <?php if ($cepage->getConfig()->existRendementAppellation() || $cepage->getConfig()->existRendementCouleur()):?>

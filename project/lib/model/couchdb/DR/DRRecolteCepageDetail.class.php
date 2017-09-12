@@ -56,6 +56,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->cave_particuliere;
     }
 
+    public function getTotalVci() {
+
+        return $this->vci;
+    }
+
     public function getLiesMax() {
 
         return round($this->cave_particuliere + $this->getVolumeAcheteurs('mouts'), 2);
@@ -232,6 +237,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     public function canHaveUsagesLiesSaisi() {
 
         return $this->getCepage()->isLiesSaisisCepage();
+    }
+
+    public function canHaveVci() {
+
+        return true;
     }
 
     public function getLies($force = false) {

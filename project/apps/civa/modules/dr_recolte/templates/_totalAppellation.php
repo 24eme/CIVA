@@ -59,7 +59,7 @@
             <li>
                     <input class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?>" type="text" id="appellation_volume_revendique" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
                     <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($lieu->getVolumeRevendique()); ?>" />
-                </li>
+            </li>
             <li>
                 <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($lieu->getDplc()); ?>" />
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplc()); ?>"/>
@@ -70,7 +70,13 @@
                 <input type="hidden" id="appellation_lies" readonly="readonly" <?php if($lieu->isLiesSaisisCepage()) echo "mode='sum'" ?> class="num" value="<?php echoFloat($lieu->getLies()); ?>" />
                 <input type="hidden" id="appellation_lies_orig" readonly="readonly" value="<?php echoFloat($lieu->getLies()); ?>" />
             </li>
-          <?php endif; ?>
+            <?php endif; ?>
+            <?php if($lieu->canHaveVci()): ?>
+            <li>
+                <input class="num" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
+                <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
+            </li>
+            <?php endif; ?>
       </ul>
       <ul>
             <?php if ($lieu->getConfig()->hasRendementNoeud()):?>

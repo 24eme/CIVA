@@ -308,6 +308,16 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getDocument()->exist('lies_saisis_cepage') && $this->getDocument()->get('lies_saisis_cepage');
     }
 
+    public function canHaveVci() {
+
+        return true;
+    }
+
+    public function getTotalVci() {
+
+        return $this->getDataByFieldAndMethod('total_vci', array($this, 'getSumNoeudWithMethod'), true, array('getTotalVci') );
+    }
+
     public function getLibelle() {
 
         return $this->store('libelle', array($this, 'findLibelle'));

@@ -11,6 +11,7 @@
 class dr_recolteActions extends _DRActions {
 
     public function preExecute() {
+        set_time_limit(0);
         parent::preExecute();
         $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('recolte');

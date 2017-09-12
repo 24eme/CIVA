@@ -851,7 +851,7 @@ var initGestionRecolteDonnees = function()
 
         etatBtnRecolteCanBeInactif(false);
 
-        if ($(this).hasClass('volume') || $(this).hasClass('lies')) {
+        if ($(this).hasClass('volume') || $(this).hasClass('lies') || $(this).hasClass('vci')) {
             volumeOnChange(this);
         }
         if ($(this).attr('id') == 'detail_superficie') {
@@ -995,6 +995,7 @@ var volumeOnChange = function(input) {
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
     updateElementRows($('input.total'), $('#cepage_total_volume'));
     updateElementRows($('input.lies'), $('#cepage_lies'));
+    updateElementRows($('input.vci'), $('#cepage_vci'));
 
     if ($('#cepage_rendement').val() == -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_volume').val()));
@@ -1010,6 +1011,7 @@ var volumeOnChange = function(input) {
     }
 
     updateAppellationTotal('#cepage_volume_dplc', '#appellation_total_dplc_sum');
+    updateAppellationTotal('#cepage_vci', '#appellation_vci');
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 

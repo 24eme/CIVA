@@ -60,6 +60,12 @@
             <li>
                 <input type="text" readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
+            <?php if($couleur->canHaveVci()): ?>
+            <li>
+                <input class="num" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+                <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+            </li>
+            <?php endif; ?>
         </ul>
         <ul>
             <li>
