@@ -75,9 +75,9 @@ class ConfigurationClient extends acCouchdbClient {
         return $this->configurations[$id];
     }
 
-    public function cacheFindConfigurationForCache($id) {
+	public function cacheFindConfigurationForCache($id) {
 
-        return CacheFunction::cache('model', array(ConfigurationClient::getInstance(), 'findConfigurationForCache'), array($id));
+        return CacheFunction::cache('model', "ConfigurationClientCache::findConfigurationForCache", array($id));
     }
 
     public function findConfigurationForCache($id) {
@@ -350,4 +350,13 @@ class ConfigurationClient extends acCouchdbClient {
 			return $oldHashProduit;
 		}
 
+}
+
+class ConfigurationClientCache {
+	public static function findConfigurationForCache($id) {
+        $configuration = ConfigurationClient::getInstance()->find($id);
+        $configuration->prepareCache();
+
+        return $configuration;
+    }
 }
