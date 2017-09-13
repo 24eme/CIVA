@@ -336,7 +336,10 @@ class ExportDRPdf extends ExportDocument {
           $infos['total_revendique_sur_place'] = null;
         }
 
-        $infos['total_volume_vci'] = array_sum(array_values($volume_vci));
+        $infos['total_volume_vci'] = null;
+        if($this->dr->recolte->canHaveVci()) {
+            $infos['total_volume_vci'] = array_sum(array_values($volume_vci));
+        }
 
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
         $infos['lies'] = $dr->lies;
