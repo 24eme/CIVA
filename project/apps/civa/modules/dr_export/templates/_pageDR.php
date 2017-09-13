@@ -109,6 +109,9 @@ if($has_no_usages_industriels) {
 } else {
   echo printColonne('Volume à détruire', $colonnes_cepage, 'usages_industriels', 'hl', false);
 }
+if (isset($hasVci)) {
+    echo printColonne('VCI', $colonnes_cepage, 'vci', 'hl', false);
+}
 ?>
 </table>
 <br />
