@@ -1801,11 +1801,11 @@ class CASClient
 			} else {
 				$final_uri .= $_SERVER['HTTP_X_FORWARDED_SERVER'];
 			}
-			if ( ($this->isHttps() && $_SERVER['SERVER_PORT']!=443)
+			/*if ( ($this->isHttps() && $_SERVER['SERVER_PORT']!=443)
 					|| (!$this->isHttps() && $_SERVER['SERVER_PORT']!=80) ) {
 				$final_uri .= ':';
 				$final_uri .= $_SERVER['SERVER_PORT'];
-			}
+			}*/
 			$request_uri = $_SERVER['REQUEST_URI'];
 			$request_uri = preg_replace('/\?.*$/','',$request_uri);
 			$final_uri .= $request_uri;
@@ -2629,13 +2629,13 @@ class CASClient
 				$server_name = $_SERVER['HTTP_X_FORWARDED_SERVER'];
 			}
 			$final_uri .= $server_name;
-			if (!strpos($server_name, ':')) {
+			/*if (!strpos($server_name, ':')) {
 				if ( ($this->isHttps() && $_SERVER['SERVER_PORT']!=443)
 						|| (!$this->isHttps() && $_SERVER['SERVER_PORT']!=80) ) {
 					$final_uri .= ':';
 					$final_uri .= $_SERVER['SERVER_PORT'];
 				}
-			}
+			}*/
 			
 			$request_uri	= explode('?', $_SERVER['REQUEST_URI'], 2);
 			$final_uri		.= $request_uri[0];
