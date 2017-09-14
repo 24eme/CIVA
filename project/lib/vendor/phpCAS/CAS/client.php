@@ -545,6 +545,8 @@ class CASClient
 	 * @private
 	 */
 	function isHttps() {
+		
+		return true;
 		//if ( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ) {
 		//0.4.24 by Hinnack
 		if ( isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
