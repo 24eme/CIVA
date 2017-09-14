@@ -111,4 +111,32 @@ class acCouchdbHash {
         }
     }
 
+    public static function getResultArray($hash) {
+        if($hash && strpos($hash, '/') === false) {
+            return array(
+                "first" => $hash,
+                "withoutFirst" => null,
+                "isAlone" => true,
+            );
+        }
+
+        $tab_hash = explode('/', $hash);
+        $hashArray = array();
+        foreach ($tab_hash as $item) {
+            if (trim($item) != '') {
+                $hashArray[] = $item;
+            }
+        }
+
+        $isAlone = (count($hashArray) == 1);
+
+        $first = array_shift($hashArray);
+
+        return array(
+            "first" => $first,
+            "withoutFirst" => implode('/', $hashArray),
+            "isAlone" => $isAlone,
+        );
+    }
+
 }
