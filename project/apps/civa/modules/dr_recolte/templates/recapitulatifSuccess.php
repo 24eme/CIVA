@@ -117,7 +117,7 @@
                                                 <tr class="chef_tr">
                                                     <td>Volume en dépassement global <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?></td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDepassementGlobal()) ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
@@ -137,7 +137,7 @@
                                                 <tr class="sous_tr">
                                                     <td>Dont dépassement à livrer avant le 15/12 <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplc()) ; ?></td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplcReel()) ; ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
 												<?php if($appellationlieu->canHaveVci()): ?>
