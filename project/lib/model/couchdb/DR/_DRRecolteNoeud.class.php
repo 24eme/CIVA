@@ -192,10 +192,17 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         if(!$this->getConfigRendementVci()) {
 
-            return $dplc;
+            //return $dplc;
         }
 
-        return round($dplc - $this->getTotalVci(), 2);;
+        $dplcWithVci = round($dplc - $this->getTotalVci(), 2);
+
+        if($dplcWithVci < 0) {
+
+            return 0;
+        }
+
+        return $dplcWithVci;
     }
 
     public function getDplcTotal() {
@@ -293,7 +300,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getDepassementGlobal() {
 
-        return round($this->getLies() + $this->getDplcReel() + $this->getTotalVci(), 2);
+        return max($this->getLies(), $this->getDplc());
     }
 
     public function getUsagesIndustrielsTotal() {

@@ -83,7 +83,8 @@
         <ul>
             <li>
             <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
-                <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getRendementMax()); ?>"/>
+                <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getConfig->getRendementNoeud()); ?>"/>
+                <input type="hidden" id="appellation_max_rendement" value="<?php echoFloat($couleur->getRendementMax()); ?>"/>
                 <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($couleur->getVolumeMaxRendement()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>

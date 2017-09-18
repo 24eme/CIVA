@@ -44,10 +44,12 @@
         </p>
         <p class="vol_total_recolte">
         <?php if ($cepage->getConfig()->hasRendementNoeud()): ?>
-            <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getRendementMax()); ?>" />
+            <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getConfig()->getRendementNoeud()); ?>" />
+            <input type="hidden" id='cepage_max_rendement' value="<?php echoFloat($cepage->getRendementMax()); ?>" />
             <input type="hidden" id='cepage_max_volume' value="<?php echoFloat($cepage->getVolumeMaxRendement()); ?>" />
         <?php else: ?>
             <input type="hidden" id='cepage_rendement' value="-1" />
+            <input type="hidden" id='cepage_max_rendement' value="-1" />
             <input type="hidden" id='cepage_max_volume' value="<?php echoFloat($cepage->getTotalVolume()); ?>" />
         <?php endif; ?>
             <input type="hidden" id='cepage_total_volume_orig' value="<?php echoFloat($cepage->getTotalVolume()); ?>" />

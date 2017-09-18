@@ -82,8 +82,9 @@
       <ul>
             <?php if ($lieu->getConfig()->hasRendementNoeud()):?>
             <li>
-	            <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxRendement()); ?>"/>
-                <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getRendementMax()); ?>"/>
+	            <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($lieu->getVolumeMaxRendement()); ?>"/>
+                <input type="hidden" id="appellation_max_rendement" value="<?php echoFloat($lieu->getRendementMax()); ?>"/>
+                <input type="hidden" id="appellation_rendement" value="<?php echoFloat($lieu->getConfig()->getRendementNoeud()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($lieu->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcRendement() > 0 && $lieu->getDplc() == $lieu->getDplcRendement()) echo 'alerte'; ?>" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" readonly="readonly" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
             </li>
