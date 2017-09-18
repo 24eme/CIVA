@@ -288,7 +288,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getUsagesIndustrielsTotal();
         }
 
-        return $this->getDplcWithVci() > $this->getLies() ? $this->getDplcWithVci() : $this->getLies();;
+        return $this->getDplcWithVci() > $this->getLies() ? $this->getDplcWithVci() : $this->getLies();
     }
 
     public function getDepassementGlobal() {
