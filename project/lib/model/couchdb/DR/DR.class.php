@@ -601,12 +601,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
-        if(!$noeud->getConfigRendementVci()) {
+        if(!$noeud->getRendementVciMax()) {
             return;
         }
+        echo $noeud->getHash()."\n";
 
         if($noeud->getTotalVci() > $noeud->getVolumeVciMax()) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré pour cette appellation"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré pour cette appellation"));
             return;
         }
     }

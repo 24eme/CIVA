@@ -787,6 +787,21 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
         return $this->existRendementCepage() || $this->existRendementCouleur() || $this->existRendementAppellation();
     }
 
+    public function existRendementVci() {
+
+        return $this->existRendementByKey('rendement_vci');
+    }
+
+    public function getRendementVci() {
+
+        return $this->getRendementByKey('rendement_vci');
+    }
+
+    public function hasRendementVci() {
+
+        return $this->hasRendementByKey('rendement_vci');
+    }
+
     public function hasRendementNoeud() {
         $r = $this->getRendementNoeud();
 
@@ -829,7 +844,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
     }
 
     protected function hasRendementByKey($key) {
-        $r = $this->getRendementByKey($key);
+        $r = $this->get($key);
 
         return ($r && $r > 0);
     }

@@ -190,11 +190,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     public function getDplcWithVci($force_calcul = false) {
         $dplc = $this->getDplc($force_calcul);
 
-        if(!$this->getConfigRendementVci()) {
-
-            //return $dplc;
-        }
-
         $dplcWithVci = round($dplc - $this->getTotalVci(), 2);
 
         if($dplcWithVci < 0) {
@@ -346,7 +341,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function canHaveVci() {
 
-        return true;
+        return $this->getConfig()->existRendementVci() || $this->getConfig()->getRendementVci();
     }
 
     public function getTotalVci() {
@@ -360,7 +355,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getRendementVciMax() {
-        if(!$this->getConfigRendementVci()) {
+        if(!$this->getConfigRendementVci() || !$this->hasRecapitulatif()) {
 
             return 0;
         }
@@ -381,7 +376,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getConfigRendementVci() {
 
-        return null;
+        return $this->getConfig()->rendement_vci;
     }
 
     public function getConfigRendementCepageMinimum() {

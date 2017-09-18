@@ -121,11 +121,6 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return !$this->isLiesSaisisCepage() && !$this->getConfig()->existRendementCouleur();
     }
 
-    public function getConfigRendementVci() {
-
-        return 5.0;
-    }
-
     protected function update($params = array()) {
         $this->preUpdateAcheteurs();
         parent::update($params);

@@ -113,6 +113,11 @@ class ConfigurationDeclaration extends BaseConfigurationDeclaration {
         return 0;
     }
 
+    public function getRendementVci()  {
+
+        return 0;
+    }
+
     public function hasMout() {
 
         return false;
