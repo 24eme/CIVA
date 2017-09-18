@@ -1035,8 +1035,8 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0 && parseFloat($('#cepage_dplc_rendement').val()) == parseFloat($('#cepage_volume_dplc').val()), 'alerte');
 
-    $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
-    $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
+    $('#appellation_total_dplc_sum').val('Σ '+parseFloat(truncTotal($('#appellation_total_dplc_sum').val())).toFixed(2));
+    $('#appellation_total_revendique_sum').val('Σ '+parseFloat(truncTotal($('#appellation_total_revendique_sum').val())).toFixed(2));
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
