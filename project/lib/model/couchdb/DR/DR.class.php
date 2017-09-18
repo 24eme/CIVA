@@ -428,7 +428,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
                         foreach($cvis as $cvi) {
                             if(round($mention->getVolumeAcheteur($cvi, $type), 2) == 0) {
-                                $acheteur = _TiersClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
+                                $acheteur = EtablissementClient::getInstance()->findByCvi($cvi, acCouchdbClient::HYDRATE_JSON);
                                 array_push($validLogVigilance, array('url' => $this->generateUrl("dr_recolte_noeud", array("id" => $this->_id, "hash" => $mention->getHash())), 'log' => sprintf("%s / %s", $appellation->getLibelle(), ($acheteur) ? $acheteur->nom : $cvi), 'info' => "Vous n'avez déclaré aucune vente pour cette appellation / acheteur"));
                             }
                         }
@@ -453,11 +453,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                     continue;
                 }
 
+                $this->checkNoeudVci($lieu, $validLogErreur, $validLogVigilance);
                 $this->checkNoeudRecapitulatif($lieu, $validLogErreur, $validLogVigilance);
                 $this->checkNoeudRecapitulatifVentes($lieu, $validLogErreur, $validLogVigilance);
 
                 //check les cepages
                 foreach ($lieu->getCouleurs() as $couleur) {
+                    $this->checkNoeudVci($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatif($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatifVentes($couleur, $validLogErreur, $validLogVigilance);
 
@@ -596,6 +598,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         return array('erreur' => $validLogErreur, 'vigilance' => $validLogVigilance);
+    }
+
+    protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
+        if(!$noeud->getConfigRendementVci()) {
+            return;
+        }
+
+        if($noeud->getTotalVci() > $noeud->getVolumeVciMax()) {
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré pour cette appellation"));
+            return;
+        }
     }
 
     protected function checkNoeudRecapitulatifVentes($noeud, &$validLogErreur, &$validLogVigilance) {
