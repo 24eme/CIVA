@@ -44,7 +44,7 @@
         </p>
         <p class="vol_total_recolte">
         <?php if ($cepage->getConfig()->hasRendementNoeud()): ?>
-            <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getConfig()->getRendementNoeud()); ?>" />
+            <input type="hidden" id='cepage_rendement' value="<?php echoFloat($cepage->getRendementMax()); ?>" />
             <input type="hidden" id='cepage_max_volume' value="<?php echoFloat($cepage->getVolumeMaxRendement()); ?>" />
         <?php else: ?>
             <input type="hidden" id='cepage_rendement' value="-1" />
@@ -55,7 +55,7 @@
         </p>
         <ul class="vol_revendique_dplc">
             <?php if ($cepage->getConfig()->hasRendementNoeud()): ?>
-            <li class="rendement <?php if (round($cepage->getRendementRecoltant()) > round($cepage->getConfig()->getRendementNoeud())): echo 'rouge'; endif;?>">Rdt : <strong><span id="cepage_current_rendement"><?php echo round($cepage->getRendementRecoltant(),0); ?></span> hl/ha</strong><span  class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_cepage" title="Message aide"></a></span></li>
+            <li class="rendement <?php if (round($cepage->getRendementRecoltant()) > round($cepage->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="cepage_current_rendement"><?php echo round($cepage->getRendementRecoltant(),0); ?></span> hl/ha</strong><span  class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_cepage" title="Message aide"></a></span></li>
             <?php endif; ?>
             <li>
                 <input type="text" class="num <?php if ($cepage->getDplc() > 0) echo 'rouge'; ?>" id="cepage_volume_revendique" readonly="readonly" value="<?php echoFloat($cepage->getVolumeRevendique()); ?>" />
@@ -73,6 +73,7 @@
             <li>
                 <input type="text" id="cepage_vci" readonly="readonly" class="num" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
                 <input type="hidden" id="cepage_vci_orig" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
+                <input type="hidden" id="cepage_rendement_vci" readonly="readonly" value="<?php echoFloat($cepage->getConfigRendementVci()); ?>" />
             </li>
             <?php endif; ?>
         </ul>

@@ -67,6 +67,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
     }
 
+    public function getRendementMax() {
+
+        return round($this->getConfig()->getRendementNoeud() + $this->getRendementVciMax(), 2);
+    }
+
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);
@@ -183,12 +188,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplcWithVci($force_calcul = false) {
+        $dplc = $this->getDplc($force_calcul);
+
         if(!$this->getConfigRendementVci()) {
 
-            return $this->getDplc($force_calcul);
+            return $dplc;
         }
 
-        return round($this->getDplc($force_calcul) - $this->getTotalVci(), 2);
+        return round($dplc - $this->getTotalVci(), 2);;
     }
 
     public function getDplcTotal() {
@@ -346,6 +353,10 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getRendementVciMax() {
+        if(!$this->getConfigRendementVci()) {
+
+            return 0;
+        }
         $rendementExcedent = round($this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud(), 2);
 
         if($rendementExcedent > $this->getConfigRendementVci()) {

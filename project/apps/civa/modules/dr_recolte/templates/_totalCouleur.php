@@ -54,7 +54,7 @@
         </p>
         <ul class="vol_revendique_dplc">
             <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
-            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getConfig()->getRendementNoeud())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
+            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getConfig()->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
             <?php endif; ?>
             <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
             <li>
@@ -76,13 +76,14 @@
             <li>
                 <input class="num" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
                 <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+                <input type="hidden" id="appellation_rendement_vci" readonly="readonly" value="<?php echoFloat($couleur->getConfigRendementVci()); ?>" />
             </li>
             <?php endif; ?>
         </ul>
         <ul>
             <li>
             <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
-                <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getConfig()->getRendementCouleur()); ?>"/>
+                <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getRendementMax()); ?>"/>
                 <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($couleur->getVolumeMaxRendement()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>

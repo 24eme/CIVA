@@ -53,7 +53,7 @@
         </p>
         <ul class="vol_revendique_dplc">
             <?php if ($lieu->getConfig()->existRendement()): ?>
-            <li class="rendement <?php if ($lieu->getConfig()->hasRendementNoeud() && round($lieu->getRendementRecoltant()) > round($lieu->getConfig()->getRendementNoeud() + $lieu->getRendementVciMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($lieu->getRendementRecoltant(),0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
+            <li class="rendement <?php if ($lieu->getConfig()->hasRendementNoeud() && round($lieu->getRendementRecoltant()) > round($lieu->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($lieu->getRendementRecoltant(),0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
             <?php endif; ?>
             <?php if ($lieu->getConfig()->existRendement()) : ?>
             <li>
@@ -64,7 +64,7 @@
                 <input type="hidden" id="appellation_volume_dplc" readonly="readonly" value="<?php echoFloat($lieu->getDplc()); ?>" />
                 <input type="hidden" id="appellation_volume_dplc_orig" readonly="readonly" class="alerte" value="<?php echoFloat( $lieu->getDplc()); ?>"/>
 
-                <input type="text" class="num <?php if ($lieu->getDplcWithVci() > 0) echo 'rouge'; ?>" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
+                <input type="text" class="num <?php if ($lieu->getDplc() > 0) echo 'rouge'; ?>" id="appellation_usages_industriels" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
                 <input type="hidden" id="appellation_usages_industriels_orig" readonly="readonly" value="<?php echoFloat($lieu->getUsagesIndustriels()); ?>"/>
 
                 <input type="hidden" id="appellation_lies" readonly="readonly" <?php if($lieu->isLiesSaisisCepage()) echo "mode='sum'" ?> class="num" value="<?php echoFloat($lieu->getLies()); ?>" />
@@ -75,6 +75,7 @@
             <li>
                 <input class="num <?php if ($lieu->getTotalVci() > $lieu->getVolumeVciMax()) echo 'rouge'; ?>" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
                 <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
+                <input type="hidden" id="appellation_rendement_vci" readonly="readonly" value="<?php echoFloat($lieu->getConfigRendementVci()); ?>" />
             </li>
             <?php endif; ?>
       </ul>
@@ -82,14 +83,13 @@
             <?php if ($lieu->getConfig()->hasRendementNoeud()):?>
             <li>
 	            <input type="hidden" id="appellation_max_volume" value="<?php echoFloat( $lieu->getVolumeMaxRendement()); ?>"/>
-                <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getConfig()->getRendementNoeud()); ?>"/>
+                <input type="hidden" id="appellation_rendement" value="<?php echoFloat( $lieu->getRendementMax()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($lieu->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcRendement() > 0 && $lieu->getDplc() == $lieu->getDplcRendement()) echo 'alerte'; ?>" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" readonly="readonly" value="<?php echoFloat($lieu->getDplcRendement()); ?>"/>
             </li>
             <?php endif; ?>
             <?php if ($lieu->getConfig()->existRendementCepage()):?>
             <li>
-
                 <input type="text" id="appellation_total_dplc_sum" class="<?php if ($lieu->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($lieu->getDplcTotal() > 0 && $lieu->getDplc() == $lieu->getDplcTotal()) echo 'alerte'; ?>" readonly="readonly" value="Σ <?php echoFloat($lieu->getDplcTotal()); ?>"/>
                 <input type="hidden" id="appellation_total_dplc_sum_orig" class="num" value="<?php echoFloat($lieu->getDplcTotal()); ?>"/>
             </li>
