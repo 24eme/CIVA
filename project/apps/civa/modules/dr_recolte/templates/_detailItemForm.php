@@ -119,8 +119,8 @@
 <?php endif; ?>
 
     <?php if (isset($form['lies'])) : ?>
-    var inputs_mouts = $(".col_active .mouts input[class*='acheteur_mouts_']");
-    if(!inputs_mouts.length) {
+    // var inputs_mouts = $(".col_active .mouts input[class*='acheteur_mouts_']");
+    // if(!inputs_mouts.length) {
         if (parseFloat($('#detail_lies').val()) > 0 && (!$('#detail_cave_particuliere').val() || parseFloat($('#detail_cave_particuliere').val()) == 0)) {
             $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id' => 'err_log_usages_industriels_pas_volume_sur_place')); ?></p>');
             openPopup($('#popup_msg_erreur'), 0);
@@ -131,7 +131,7 @@
             openPopup($('#popup_msg_erreur'), 0);
             return false;
         }
-    }
+    // }
     <?php endif; ?>
 
 <?php if ($produit->getConfig()->hasMinQuantite()) : ?>

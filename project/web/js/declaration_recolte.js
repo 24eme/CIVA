@@ -957,9 +957,20 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     }
 
     var dplc = parseFloat($(elementCssId+'_volume_dplc').val());
+    if(!dplc) {
+        dplc = 0;
+    }
     var dplc_with_vci = dplc - vci;
     var usages_industriels = 0;
     var lies = parseFloat($(elementCssId+'_lies').val());
+    if(!lies) {
+        lies = 0;
+    }
+
+    console.log("dplc" + dplc);
+    console.log("dplc_with_lie" + dplc_with_vci);
+    console.log("usages_insutriels" + usages_industriels);
+    console.log("lies" + lies);
 
     if(dplc_with_vci > lies) {
         usages_industriels = dplc_with_vci;
