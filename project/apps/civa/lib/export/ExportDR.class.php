@@ -41,6 +41,8 @@ class ExportDR extends ExportMiseAdispo
             return;
         }
 
+		$this->mkdirUnlessFolder($this->_file_dir.'/'.$campagne);
+
         $export = new ExportDRStatsCsv($this->getIds(), $campagne);
 
         $f = fopen($csv_path, 'w');

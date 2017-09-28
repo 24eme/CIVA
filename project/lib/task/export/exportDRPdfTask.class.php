@@ -40,9 +40,14 @@ EOF;
             if($options['clean']) {
                 $export_dr->clean();
             }
-            $export_dr->publication();
+            $publicationPdf = !preg_match('/^EXPORT-MAIRIES-/', $export->_id);
+            if($publicationPdf) {
+                $export_dr->publication();
+            }
             $export_dr->exportStatsCSV();
-            $export_dr->zip();
+            if($publicationPdf) {
+                $export_dr->zip();
+            }
             $export_dr->createHashMd5File();
         }
     }
