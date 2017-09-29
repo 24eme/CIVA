@@ -190,7 +190,7 @@ class ExportDSCiva {
     protected function makeEnteteLigne($ds) {
         $id_csv = substr($this->campagne, 2) . $ds->numero_archive;
 //        $neant = ($ds->isDsPrincipale() && $ds->isDsNeant()) ? "\"N\"" : "\"P\"";
-        $etb = _TiersClient::getInstance()->findByIdentifiant($ds->getIdentifiant());
+        $etb = EtablissementClient::getInstance()->findByIdentifiant($ds->getIdentifiant());
 
         $lieu_stockage = "";
         if ($ds->stockage->exist("adresse")) {
