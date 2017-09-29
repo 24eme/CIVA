@@ -7,6 +7,7 @@ class ExportDSCiva {
     protected $ds_ids;
     protected $client_ds;
     protected $ds_liste;
+    protected $etablissementsDb2;
 
     const CSV_DS_TRAITEE = 22; // "O" ou "N"
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
@@ -29,6 +30,8 @@ class ExportDSCiva {
                 $this->ds_liste[$ds->_id] = $ds;
             }
         }
+        $tiersCsv = new Db2Tiers2Csv(sfConfig::get('sf_root_dir')."/data/import/Tiers/Tiers-last");
+        $this->etablissementsDb2 = $tiersCsv->getEtablissements();
     }
 
     public function getDSListe() {
@@ -201,7 +204,7 @@ class ExportDSCiva {
 
         $principale = ($ds->isDsPrincipale()) ? "\"P\"" : "\"S\"";
         $proprieteNegoce = ($ds->isTypeDsNegoce())? "\"N\"" : "\"P\"";
-        $num_db2 = ($etb->exist('db2') && $etb->db2->exist('num')) ? $etb->db2->num : '';
+        $num_db2 = $this->etablissementsDb2[$etb->_id][EtablissementCsvFile::CSV_NUM_REPRISE];
         $cvi = "\"" . $ds->identifiant . "\"";
         $civagene0 = "0"; // A trouvé
 
