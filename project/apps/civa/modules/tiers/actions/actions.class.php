@@ -137,7 +137,7 @@ class tiersActions extends sfActions {
         }
         $url_drm = sfConfig::get("app_giilda_url_drm",false);
         if($compte->hasDroit(Roles::TELEDECLARATION_DRM) && $url_drm) {
-            $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $compte->identifiant);
+            $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $compte->getSociete()->identifiant);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
