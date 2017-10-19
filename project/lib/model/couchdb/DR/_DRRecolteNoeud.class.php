@@ -440,16 +440,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
             return false;
         }
+        if($this->getTotalVolumeVendus() > 0 && $this->getTotalVci() > 0) {
+
+            return false;
+        }
         foreach($this->getChildrenNode() as $item) {
             if(!$item->canCalculVolumeRevendiqueSurPlace()) {
 
                 return false;
             }
-        }
-
-        if($this->getTotalVolumeVendus() > 0 && $this->getTotalVci() > 0) {
-
-            return false;
         }
 
         return true;
