@@ -48,7 +48,7 @@
             <input type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getConfig()->getRendementNoeud())): echo 'rouge'; endif;?>">
+            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getRendementMax())): echo 'rouge'; endif;?>">
                 Rdt : <strong><span><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong>
                 <span class="picto_rdt_aide_col_total">
                     <a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a>
@@ -60,6 +60,11 @@
             <li>
                 <input type="text" readonly="readonly" class="<?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" value="<?php echoFloat($couleur->getUsagesIndustriels()); ?>"/>
             </li>
+            <?php if($couleur->canHaveVci()): ?>
+            <li>
+                <input class="num" type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
+            </li>
+            <?php endif; ?>
         </ul>
         <ul>
             <li>

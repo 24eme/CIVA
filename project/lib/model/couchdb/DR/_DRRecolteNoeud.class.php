@@ -67,6 +67,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
     }
 
+    public function getRendementMax() {
+
+        return round($this->getConfig()->getRendementNoeud() + $this->getRendementVciMax(), 2);
+    }
+
     public function getTotalSuperficie($force_calcul = false) {
 
         return $this->getDataByFieldAndMethod("total_superficie", array($this,"getSumNoeudFields"), $force_calcul);
@@ -89,7 +94,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getVolumeRevendiqueCaveParticuliere() {
 
-        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere(), 2);
+        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere() - $this->getTotalVci(), 2);
     }
 
     public function getUsagesIndustrielsCaveParticuliere() {
@@ -168,10 +173,31 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         if(!$this->getConfig()->hasRendementNoeud()) {
 
-            return $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
+            $dplc = $this->getDataByFieldAndMethod("dplc", array($this,"getDplcTotal") , $force_calcul);
+        } else {
+            $dplc = $this->getDataByFieldAndMethod('dplc', array($this, 'findDplc'), $force_calcul);
         }
 
-        return $this->getDataByFieldAndMethod('dplc', array($this, 'findDplc'), $force_calcul);
+        return $dplc;
+    }
+
+    public function getDplcReel($force_calcul = false) {
+        $dplcReel = round($this->getDplcWithVci() - $this->getLies(), 2);
+
+        return ($dplcReel > 0) ? $dplcReel : 0;
+    }
+
+    public function getDplcWithVci($force_calcul = false) {
+        $dplc = $this->getDplc($force_calcul);
+
+        $dplcWithVci = round($dplc - $this->getTotalVci(), 2);
+
+        if($dplcWithVci < 0) {
+
+            return 0;
+        }
+
+        return $dplcWithVci;
     }
 
     public function getDplcTotal() {
@@ -264,7 +290,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getUsagesIndustrielsTotal();
         }
 
-        return $this->getDplc() > $this->getLies() ? $this->getDplc() : $this->getLies();
+        return $this->getDplcWithVci() > $this->getLies() ? $this->getDplcWithVci() : $this->getLies();
+    }
+
+    public function getDepassementGlobal() {
+
+        return max($this->getLies(), $this->getDplc());
     }
 
     public function getUsagesIndustrielsTotal() {
@@ -306,6 +337,51 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     public function isLiesSaisisCepage() {
 
         return $this->getDocument()->exist('lies_saisis_cepage') && $this->getDocument()->get('lies_saisis_cepage');
+    }
+
+    public function canHaveVci() {
+
+        return $this->getConfig()->existRendementVci() || $this->getConfig()->getRendementVci();
+    }
+
+    public function getTotalVci() {
+
+        return $this->getDataByFieldAndMethod('total_vci', array($this, 'getSumNoeudWithMethod'), true, array('getTotalVci') );
+    }
+
+    public function getVolumeVciMax() {
+
+        return round($this->getRendementVciMax() * $this->getTotalSuperficie() / 100, 2);
+    }
+
+    public function getRendementVciMax() {
+        if(!$this->getConfigRendementVci() || !$this->hasRecapitulatif()) {
+
+            return 0;
+        }
+        $rendementExcedent = round($this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud(), 2);
+
+        if($rendementExcedent > $this->getConfigRendementVci()) {
+
+            return $this->getConfigRendementVci();
+        }
+
+        if($rendementExcedent < 0) {
+
+            return 0;
+        }
+
+        return $rendementExcedent;
+    }
+
+    public function getConfigRendementVci() {
+
+        return $this->getConfig()->rendement_vci;
+    }
+
+    public function getConfigRendementCepageMinimum() {
+
+        return $this->getRendementNoeud();
     }
 
     public function getLibelle() {
@@ -357,6 +433,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function canCalculVolumeRevendiqueSurPlace() {
         if($this->getTotalCaveParticuliere() == 0) {
+
             return true;
         }
         if(!$this->hasCompleteRecapitulatifVenteDplc()) {
@@ -368,6 +445,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
                 return false;
             }
+        }
+
+        if($this->getTotalVolumeVendus() > 0 && $this->getTotalVci() > 0) {
+
+            return false;
         }
 
         return true;

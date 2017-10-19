@@ -111,4 +111,21 @@ class acCouchdbHash {
         }
     }
 
+    public static function getResultArray($hash) {
+        if($hash && strpos($hash, '/') === false) {
+            return array(
+                "f" => $hash,
+                "w" => null
+            );
+        }
+
+        $hashArray = array_filter(explode('/', $hash), 'strlen');
+        $first = array_shift($hashArray);
+
+        return array(
+            "f" => $first,
+            "w" => (count($hashArray) > 0) ? implode('/', $hashArray) : null,
+        );
+    }
+
 }

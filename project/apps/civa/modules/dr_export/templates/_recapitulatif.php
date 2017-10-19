@@ -5,14 +5,15 @@
 	$libelle = $infos['libelle'];
 	$superficie = $infos['superficie'];
 	$volume = $infos['volume'];
-        $volume_vendus = $infos['volume_vendus'];
-        $volume_sur_place = $infos['volume_sur_place'];
-        $volume_rebeches = $infos['volume_rebeches'];
-        $volume_rebeches_sur_place = $infos['volume_rebeches_sur_place'];
+    $volume_vendus = $infos['volume_vendus'];
+    $volume_sur_place = $infos['volume_sur_place'];
+    $volume_rebeches = $infos['volume_rebeches'];
+    $volume_rebeches_sur_place = $infos['volume_rebeches_sur_place'];
 	$revendique = $infos['revendique'];
 	$revendique_sur_place = $infos['revendique_sur_place'];
 	$usages_industriels = $infos['usages_industriels'];
 	$usages_industriels_sur_place = $infos['usages_industriels_sur_place'];
+	$volume_vci = $infos['volume_vci'];
 ?>
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
@@ -155,6 +156,17 @@ table {
             <?php endif; ?>
         </tr>
     	<?php endif; ?>
+		<?php if($infos['total_volume_vci'] !== null): ?>
+		<tr>
+            <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;VCI</td>
+            <?php foreach ($appellations as $a): ?>
+            <td style="width: 120px;"><?php echoVolume($volume_vci[$a]); ?></td>
+            <?php endforeach; ?>
+            <?php if ($has_total): ?>
+            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci'], true);?></td>
+            <?php endif; ?>
+        </tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php if ($has_total): ?>

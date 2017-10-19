@@ -31,6 +31,11 @@ class RecolteForm extends acCouchdbObjectForm {
             $this->getWidget('lies')->setAttribute('class', 'num lies');
         }
 
+        if($this->getObject()->getCepage()->canHaveVci()) {
+            $this->setWidget('vci', new sfWidgetFormInputFloat());
+            $this->setValidator('vci', new sfValidatorNumber(array('required' => false)));
+        }
+
         if ($this->getOption('lieu_required', false)) {
             $this->getValidator('lieu')->setOption('required', true);
         }
