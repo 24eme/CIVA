@@ -94,7 +94,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getVolumeRevendiqueCaveParticuliere() {
 
-        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere(), 2);
+        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere() - $this->getTotalVci(), 2);
     }
 
     public function getUsagesIndustrielsCaveParticuliere() {
@@ -433,6 +433,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function canCalculVolumeRevendiqueSurPlace() {
         if($this->getTotalCaveParticuliere() == 0) {
+
             return true;
         }
         if(!$this->hasCompleteRecapitulatifVenteDplc()) {
@@ -444,6 +445,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
                 return false;
             }
+        }
+
+        if($this->getTotalVolumeVendus() > 0 && $this->getTotalVci() > 0) {
+
+            return false;
         }
 
         return true;
