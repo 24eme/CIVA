@@ -121,7 +121,7 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dont volume à détruire saisi <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels_saisies" title="Message aide"></a></td>
+                                                    <td>Dont volume à détruire saisi <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_saisies_industriels" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <?php if(isset($form[$key]['lies'])): ?>
                                                             <td class="valeur saisi">
