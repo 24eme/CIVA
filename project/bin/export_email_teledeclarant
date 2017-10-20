@@ -8,4 +8,11 @@ if ! test "$ANNEE"; then
 echo "L'année de déclaration de récolte est requise"
 fi
 
-curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Teledeclarant?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "," -f 4 | sed 's/"//g' | sed 's/\]//' | grep "@" | sort | uniq
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Teledeclarant?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "," -f 3,4 | sed 's/"//g' | sed 's/\]//' | grep "@" | cut -d "," -f 1 | sed "s|^|curl -s http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/COMPTE-|" | sed 's/$/ | grep --color ACTIF/' | bash | cut -d "," -f 1 | sed 's/{"_id":"COMPTE-//' | sed 's/"//' | sort | uniq > /tmp/teledeclarant_actif.csv
+
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Teledeclarant?startkey=\[\"$ANNEE\"\]&endkey=\[\"$ANNEE\",\[\]\]" | cut -d "," -f 3,4 | sed 's/"//g' | sed 's/\]//' | grep "@" | sort | uniq > /tmp/teledeclarant_email.csv
+
+join -t "," -1 1 -2 1 /tmp/teledeclarant_email.csv /tmp/teledeclarant_actif.csv | cut -d "," -f 2 | sort | uniq
+
+rm /tmp/teledeclarant_actif.csv 2> /dev/null
+rm /tmp/teledeclarant_email.csv 2> /dev/null
