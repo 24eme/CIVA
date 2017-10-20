@@ -99,7 +99,7 @@
                                 <div class="clear"></div>
                                 <?php if($appellationlieu->getConfig()->existRendement()): ?>
                                 <h2 class="titre_section" style="margin-top: 15px;">
-                                    Volume à détruire <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels" title="Message aide"></a>
+                                    Volume en dépassement <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels" title="Message aide"></a>
                                 </h2>
                                 <div class="clear"></div>
                                 <div class="contenu_section">
@@ -115,13 +115,13 @@
                                                 </tr>
                                                 <?php endif; ?>
                                                 <tr class="chef_tr">
-                                                    <td>Volume à détruire global <span class="unites">(hl)</span></td>
+                                                    <td>Volume en dépassement global <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getUsagesIndustriels()) ?></td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDepassementGlobal()) ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dont volume à détruire saisi <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_industriels_saisies" title="Message aide"></a></td>
+                                                    <td>Dont volume à détruire saisi <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_recap_usages_saisies_industriels" title="Message aide"></a></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <?php if(isset($form[$key]['lies'])): ?>
                                                             <td class="valeur saisi">
@@ -135,11 +135,19 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dépassement <span class="unites">(hl)</span></td>
+                                                    <td>Dont dépassement à livrer avant le 15/12 <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplc()) ; ?></td>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getDplcReel()) ; ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
+												<?php if($appellationlieu->canHaveVci()): ?>
+												<tr class="sous_tr">
+                                                    <td>Dont VCI <span class="unites">(hl)</span></td>
+                                                    <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
+                                                        <td class="valeur"><?php echoFloat($form_item->getObject()->getTotalVci()) ; ?></td>
+                                                    <?php endforeach; ?>
+                                                </tr>
+												<?php endif; ?>
                                             </tbody>
                                         </table>
                                         <?php if ($form->isLiesSaisisables()): ?>

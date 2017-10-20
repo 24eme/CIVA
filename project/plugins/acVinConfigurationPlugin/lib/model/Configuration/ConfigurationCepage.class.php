@@ -161,7 +161,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
     public function hasMaxQuantite()
     {
-        
+
         return $this->getAttribut('max_quantite');
     }
 

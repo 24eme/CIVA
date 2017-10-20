@@ -192,4 +192,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->volume_revendique = $this->getVolumeRevendique(true);
       }
     }
+
+    public function canHaveVci() {
+
+        return parent::canHaveVci() && $this->getConfig()->getRendementAppellation() && ($this->getConfig()->getRendementCepage() > $this->getConfig()->getRendementAppellation() || !$this->getConfig()->hasRendementCepage());
+    }
 }

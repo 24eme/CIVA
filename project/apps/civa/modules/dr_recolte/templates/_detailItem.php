@@ -68,21 +68,26 @@
                 echo 'ajout_lien'; ?>"><?php echo str_replace(" ", "&nbsp;", $detail->getMotifNonRecolteLibelle()); ?></a>
         <?php endif; ?>
         </p>
-        <?php if ($detail->getConfig()->existRendement()): ?>
             <ul class="vol_revendique_dplc">
+                <?php if ($detail->getConfig()->existRendement()): ?>
                 <li>
                     <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
-                    </li>
+                </li>
                 <li>
                     <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
                     <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num lies readonly" readonly="readonly" value="<?php echoFloat($detail->lies); ?>" />
                 </li>
+                <?php endif; ?>
+                <?php if($produit->getLieu()->canHaveVci()): ?>
+                <li>
+                    <input type="<?php echo (!$detail->canHaveVci()) ? 'hidden' : 'text' ?>" class="num vci readonly" readonly="readonly" value="<?php echoFloat($detail->vci); ?>" />
+                </li>
+                <?php endif; ?>
             </ul>
             <ul>
                 <li></li>
                 <li></li>
             </ul>
-        <?php endif; ?>
     </div>
 
     <div class="col_btn">

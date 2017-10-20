@@ -16,9 +16,9 @@ default:
     #robots:       index, follow
     pragma:	   no-cache
 
-  stylesheets:    [global.css?20150402, declaration_recolte.css?20161108, declaration_stock.css?20140613, contrats_vrac.css?20140619, jquery.ui.css, /components/vins/vins.css?20160919]
+  stylesheets:    [global.css?20150402, declaration_recolte.css?201709121856, declaration_stock.css?20140613, contrats_vrac.css?20140619, jquery.ui.css, /components/vins/vins.css?20160919]
 
-  javascripts:    [plugins/jquery.plugins.min.js, plugins/editable-1.3.3.min.js, global.js?20140613, declaration_recolte.js?20140613, declaration_stock.js?20140613, form.js?20140613, vrac.js?201709111101, autocomplete.js?20140613]
+  javascripts:    [plugins/jquery.plugins.min.js, plugins/editable-1.3.3.min.js, global.js?20140613, declaration_recolte.js?201709190941, declaration_stock.js?20140613, form.js?20140613, vrac.js?201709111101, autocomplete.js?20140613]
 
   has_layout:     true
   layout:         layout

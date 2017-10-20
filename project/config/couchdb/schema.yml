@@ -348,6 +348,7 @@ DR:
                                                                   volume_dplc: { type: float }
                                                                   usages_industriels: { type: float }
                                                                   lies: { type: float }
+                                                                  vci: { type: float }
 
 _Compte:
   type: abstract

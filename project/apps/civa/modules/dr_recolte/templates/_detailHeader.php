@@ -59,12 +59,15 @@
 
     <p class="vol_place">Volume sur place <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_place" title="Message aide"></a></p>
     <p class="vol_total_recolte">Volume Total Récolté <span class="unites">(hl)</span><a href="" class="msg_aide" rel="help_popup_DR_vol_total_recolte" title="Message aide"></a></p>
-    <?php if ($produit->getLieu()->getConfig()->existRendement()): ?>
         <ul class="vol_revendique_dplc">
+            <?php if ($produit->getLieu()->getConfig()->existRendement()): ?>
             <li>Volume revendiqué <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vol_revendique" title="Message aide"></a></li>
             <li>Volume à détruire <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_usages_industriels" title="Message aide"></a></li>
+            <?php endif; ?>
+            <?php if ($produit->getLieu()->canHaveVci()): ?>
+                <li>VCI <span class="unites">(hl)</span> <a href="" class="msg_aide" rel="help_popup_DR_vci" title="Message aide"></a></li>
+            <?php endif; ?>
         </ul>
-    <?php endif; ?>
     <ul>
         <?php if ($produit->getLieu()->getConfig()->existRendementAppellation() || $produit->getLieu()->getConfig()->existRendementCouleur()):?>
         <li>

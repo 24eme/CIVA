@@ -851,7 +851,7 @@ var initGestionRecolteDonnees = function()
 
         etatBtnRecolteCanBeInactif(false);
 
-        if ($(this).hasClass('volume') || $(this).hasClass('lies')) {
+        if ($(this).hasClass('volume') || $(this).hasClass('lies') || $(this).hasClass('vci')) {
             volumeOnChange(this);
         }
         if ($(this).attr('id') == 'detail_superficie') {
@@ -916,15 +916,20 @@ var superficieOnChange = function(input) {
         input = this;
     }
 
+    var rendement_appellation = parseFloat($('#appellation_rendement').val());
+
     updateElementRows($('input.superficie'), $('#cepage_total_superficie'));
     updateAppellationTotal('#cepage_total_superficie', '#appellation_total_superficie');
     $('#detail_max_volume').val(parseFloat($('#detail_superficie').val())/100 * parseFloat($('#detail_rendement').val()));
     $('#appellation_max_volume').val(parseFloat($('#appellation_total_superficie').val())/100 * parseFloat($('#appellation_rendement').val()));
+
+
     if ($('#cepage_rendement').val() != -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_superficie').val())/100 * parseFloat($('#cepage_rendement').val()));
     }
     volumeOnChange(input);
 };
+
 var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if($(elementCssId+'_dplc_rendement').length > 0) {
     	 dplc_rendement = parseFloat($(totalRecolteCssId).val()) - parseFloat($(elementCssId+'_max_volume').val());
@@ -946,19 +951,36 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
         $(elementCssId+'_volume_dplc').val(parseFloat($(elementCssId+'_total_dplc_sum').val().replace('Σ ', '')));
     }
 
-    if(parseFloat($(elementCssId+'_volume_dplc').val()) > parseFloat($(elementCssId+'_lies').val())) {
-        $(elementCssId+'_usages_industriels').val($(elementCssId+'_volume_dplc').val());
-    } else {
-        $(elementCssId+'_usages_industriels').val($(elementCssId+'_lies').val());
+    var vci = 0;
+    if($(elementCssId+'_vci').length > 0) {
+        vci = parseFloat($(elementCssId+'_vci').val());
     }
 
+    var dplc = parseFloat($(elementCssId+'_volume_dplc').val());
+    if(!dplc) {
+        dplc = 0;
+    }
+    var dplc_with_vci = dplc - vci;
     var usages_industriels = 0;
-
-    if($(elementCssId+'_usages_industriels').val()) {
-        usages_industriels = $(elementCssId+'_usages_industriels').val();
+    var lies = parseFloat($(elementCssId+'_lies').val());
+    if(!lies) {
+        lies = 0;
     }
 
-    $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - parseFloat(usages_industriels));
+    console.log("dplc" + dplc);
+    console.log("dplc_with_lie" + dplc_with_vci);
+    console.log("usages_insutriels" + usages_industriels);
+    console.log("lies" + lies);
+
+    if(dplc_with_vci > lies) {
+        usages_industriels = dplc_with_vci;
+        $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - dplc);
+    } else {
+        usages_industriels = lies;
+        $(elementCssId+'_volume_revendique').val(parseFloat($(totalRecolteCssId).val()) - usages_industriels);
+    }
+
+    $(elementCssId+'_usages_industriels').val(usages_industriels);
 };
 
 var addClassAlerteIfNeeded = function (inputObj, condition, css_class)
@@ -995,6 +1017,7 @@ var volumeOnChange = function(input) {
     updateElementRows($('input.cave'), $('#cepage_total_cave'));
     updateElementRows($('input.total'), $('#cepage_total_volume'));
     updateElementRows($('input.lies'), $('#cepage_lies'));
+    updateElementRows($('input.vci'), $('#cepage_vci'));
 
     if ($('#cepage_rendement').val() == -1) {
         $('#cepage_max_volume').val(parseFloat($('#cepage_total_volume').val()));
@@ -1010,6 +1033,7 @@ var volumeOnChange = function(input) {
     }
 
     updateAppellationTotal('#cepage_volume_dplc', '#appellation_total_dplc_sum');
+    updateAppellationTotal('#cepage_vci', '#appellation_vci');
 
     updateRevendiqueDPLC('#appellation_total_volume', '#appellation');
 
@@ -1019,28 +1043,44 @@ var volumeOnChange = function(input) {
     addClassAlerteIfNeeded($('#appellation_dplc_rendement'), parseFloat($('#appellation_dplc_rendement').val()) > 0 && parseFloat($('#appellation_dplc_rendement').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#appellation_total_dplc_sum'), parseFloat($('#appellation_total_dplc_sum').val()) > 0 && parseFloat($('#appellation_total_dplc_sum').val()) == parseFloat($('#appellation_volume_dplc').val()), 'alerte');
-
     addClassAlerteIfNeeded($('#cepage_volume_revendique'), parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_usages_industriels'),parseFloat($('#cepage_volume_dplc').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0, 'rouge');
     addClassAlerteIfNeeded($('#cepage_dplc_rendement'), parseFloat($('#cepage_dplc_rendement').val()) > 0 && parseFloat($('#cepage_dplc_rendement').val()) == parseFloat($('#cepage_volume_dplc').val()), 'alerte');
 
-    $('#appellation_total_dplc_sum').val('Σ '+truncTotal($('#appellation_total_dplc_sum').val()));
-    $('#appellation_total_revendique_sum').val('Σ '+truncTotal($('#appellation_total_revendique_sum').val()));
+    $('#appellation_total_dplc_sum').val('Σ '+parseFloat(truncTotal($('#appellation_total_dplc_sum').val())).toFixed(2));
+    $('#appellation_total_revendique_sum').val('Σ '+parseFloat(truncTotal($('#appellation_total_revendique_sum').val())).toFixed(2));
 
     var val = parseFloat($('#appellation_total_volume').val())+'';
     if (parseFloat($('#appellation_total_superficie').val()) > 0) {
         var val = ((parseFloat($('#appellation_total_volume').val()) - (parseFloat($('#appellation_lies').val()))) / (parseFloat($('#appellation_total_superficie').val()) / 100))+'';
     }
-    $('#appellation_current_rendement').html(val.replace(/\..*/, ''));
+    $('#appellation_current_rendement').html(Math.round(val));
     val = parseFloat($('#cepage_total_volume').val())+'';
     if (parseFloat($('#cepage_total_superficie').val()) > 0) {
         val = ((parseFloat($('#cepage_total_volume').val()) - (parseFloat($('#cepage_lies').val()))) / (parseFloat($('#cepage_total_superficie').val()/100)))+'';
     }
-    $('#cepage_current_rendement').html(val.replace(/\..*/, ''));
+    $('#cepage_current_rendement').html(Math.round(val));
 
-    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_current_rendement').html()) > parseFloat($('#cepage_rendement').val()), 'rouge');
-    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_current_rendement').html()) > parseFloat($('#appellation_rendement').val()), 'rouge');
+    var rendement_appellation = parseFloat($('#appellation_rendement').val());
+    var rendement_vci_max = 0;
+    var rendement_recoltant = parseFloat($('#appellation_current_rendement').html());
+    var rendement_config_vci = parseFloat($('#appellation_rendement_vci').val());
+    var rendement_excedent = rendement_recoltant - rendement_appellation;
+    if(rendement_config_vci && rendement_excedent > rendement_config_vci) {
+        rendement_vci_max = rendement_config_vci;
+    } else if(rendement_config_vci && rendement_excedent > 0) {
+        rendement_vci_max = rendement_excedent;
+    }
+    var rendement_appellation_max = rendement_appellation + rendement_vci_max;
+    $('#appellation_max_rendement').val(rendement_appellation_max);
+
+    if($('#appellation_vci').length > 0) {
+        addClassAlerteIfNeeded($('#appellation_vci'), $('#appellation_vci').val() > Math.round((parseFloat($('#appellation_max_rendement').val()) - parseFloat($('#appellation_rendement').val())) * parseFloat($('#appellation_total_superficie').val() / 100) * 100) / 100, 'rouge');
+    }
+
+    addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_current_rendement').html()) > parseFloat($('#cepage_max_rendement').val()), 'rouge');
+    addClassAlerteIfNeeded($('#col_recolte_totale .rendement'), parseFloat($('#appellation_current_rendement').html()) > parseFloat($('#appellation_max_rendement').val()), 'rouge');
     addClassAlerteIfNeeded($('#col_couleur_totale .rendement'), parseFloat($('#appellation_current_rendement').html()) > parseFloat($('#appellation_rendement').val()), 'rouge');
 
     $('.num').each(function() { $(this).verifNettoyageChamp()});
