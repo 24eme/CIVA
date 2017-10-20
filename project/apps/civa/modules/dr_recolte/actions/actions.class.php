@@ -408,6 +408,8 @@ class dr_recolteActions extends _DRActions {
         					$rd = $couleurConfig->getRendementCouleur();
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
     					}
+                    } elseif($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->existRendementCepage()) {
+                        $this->rendement[$appellation->getLibelle()]['cepage'][$lieu->getConfig()->getRendementCepage()][$lieu->getLibelle()] = 1;
     				} else {
         				if ($lieu->getConfig()->getRendementNoeud()) {
         					$rd = $lieu->getConfig()->getRendementNoeud();
@@ -420,12 +422,7 @@ class dr_recolteActions extends _DRActions {
     	    						$this->max_quantite = $cepage_config->attributs->max_quantite * 100 ;
     	    					}
     	    					if($cepage_config->getRendementCepage()) {
-    	    						$rd = $cepage_config->getRendementCepage();
-    	    						if($appellation->getConfig()->hasManyLieu()) {
-    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$lieu->getLibelle()] = 1;
-    	    						} else {
-    	    							$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$cepage_config->getLibelle()] = 1;
-    	    						}
+                                    $this->rendement[$appellation->getLibelle()]['cepage'][$cepage_config->getRendementCepage()][$cepage_config->getLibelle()] = 1;
     	    					}
     	    				}
     					}
