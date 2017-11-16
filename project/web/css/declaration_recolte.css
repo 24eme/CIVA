@@ -2128,7 +2128,7 @@ div#migration_compte .contenu_section#infos_traitement {
 }
 
 #gestion_recolte #recap_ventes table thead th {
-
+	font-size: 13px;
 }
 
 #gestion_recolte #recap_ventes table tbody td.nom small {
@@ -2141,9 +2141,18 @@ div#migration_compte .contenu_section#infos_traitement {
 	font-weight: bold;
 }
 
-#gestion_recolte #recap_ventes table tbody td.superficie input,#gestion_recolte #recap_ventes table tbody td.dplc input
+#gestion_recolte #recap_ventes table tbody td.superficie,
+#gestion_recolte #recap_ventes table tbody td.dplc input,
+#gestion_recolte #recap_ventes table tbody td.vci input
+{
+	text-align: right;
+}
+
+#gestion_recolte #recap_ventes table tbody td.superficie input,
+#gestion_recolte #recap_ventes table tbody td.dplc input,
+#gestion_recolte #recap_ventes table tbody td.vci input
 	{
-	width: 61px;
+	width: 55px;
 	text-align: right;
 	padding-right: 2px;
 }

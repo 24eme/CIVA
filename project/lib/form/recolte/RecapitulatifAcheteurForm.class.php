@@ -20,6 +20,11 @@
                 'dontdplc' => new sfValidatorNumber(array('required' => false, 'max' => round($this->acheteur->volume, 2))),
             ));
 
+            if($this->acheteur->getLieu()->canHaveVci()) {
+                $this->setWidget('vci', new sfWidgetFormInputFloat());
+                $this->setValidator('vci', new sfValidatorNumber(array('required' => false)));
+            }
+
             $this->widgetSchema->setLabel('superficie', "Superficie (".$this->acheteur->nom.")");
             $this->widgetSchema->setLabel('dontdplc', "Dont dépassement (".$this->acheteur->nom.")");
 

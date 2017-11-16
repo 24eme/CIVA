@@ -196,6 +196,7 @@ DR:
                                                              commune: {}
                                                              superficie: {type:float}
                                                              dontdplc: {type:float}
+                                                             vci: { type: float }
                                                  cooperatives:
                                                    type: collection
                                                    definition:
@@ -210,6 +211,7 @@ DR:
                                                              commune: {}
                                                              superficie: {type:float}
                                                              dontdplc: {type:float}
+                                                             vci: { type: float }
                                                  mouts:
                                                    type: collection
                                                    definition:
@@ -224,6 +226,7 @@ DR:
                                                              commune: {}
                                                              superficie: {type:float}
                                                              dontdplc: {type:float}
+                                                             vci: { type: float }
                                           # ------ Couleur ------
                                           '*':
                                             type: collection
@@ -254,6 +257,7 @@ DR:
                                                                  commune: {}
                                                                  superficie: {type:float}
                                                                  dontdplc: {type:float}
+                                                                 vci: { type: float }
                                                      cooperatives:
                                                        type: collection
                                                        definition:
@@ -268,6 +272,7 @@ DR:
                                                                  commune: {}
                                                                  superficie: {type:float}
                                                                  dontdplc: {type:float}
+                                                                 vci: { type: float }
                                                      mouts:
                                                        type: collection
                                                        definition:
@@ -282,6 +287,7 @@ DR:
                                                                  commune: {}
                                                                  superficie: {type:float}
                                                                  dontdplc: {type:float}
+                                                                 vci: { type: float }
                                               # ------ Cépage ------
                                                 '*':
                                                   type: collection
