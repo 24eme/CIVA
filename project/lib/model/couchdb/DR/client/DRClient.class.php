@@ -327,6 +327,7 @@ class DRClient extends acCouchdbClient {
             $totauxByAppellationsRecap[$key]->nom = 'TOTAL ' . $nom;
             $totauxByAppellationsRecap[$key]->revendique_sur_place = null;
             $totauxByAppellationsRecap[$key]->usages_industriels_sur_place = null;
+            $totauxByAppellationsRecap[$key]->vci_sur_place = null;
         }
 
         if (!$node) {
@@ -338,6 +339,7 @@ class DRClient extends acCouchdbClient {
         $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getUsagesIndustrielsSurPlace()) ? $node->getUsagesIndustrielsSurPlace() : 0;
 
         $totauxByAppellationsRecap[$key]->revendique_sur_place += $node->getTotalVolumeAcheteurs("mouts");
+        $totauxByAppellationsRecap[$key]->vci_sur_place += $node->getVciCaveParticuliere();
 
         return $totauxByAppellationsRecap;
     }
