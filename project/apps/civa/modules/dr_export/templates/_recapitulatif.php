@@ -14,6 +14,7 @@
 	$usages_industriels = $infos['usages_industriels'];
 	$usages_industriels_sur_place = $infos['usages_industriels_sur_place'];
 	$volume_vci = $infos['volume_vci'];
+	$volume_vci_sur_place = $infos['volume_vci_sur_place'];
 ?>
 <style>
 .tableau td, .tableau th, .tableau table {border: 1px solid black; }
@@ -166,6 +167,19 @@ table {
             <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci'], true);?></td>
             <?php endif; ?>
         </tr>
+		<?php endif; ?>
+		<?php if($infos['total_volume_vci_sur_place'] !== null): ?>
+		<tr>
+			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
+			<?php foreach ($appellations as $a): ?>
+			<td style="width: 120px;">
+				<?php echoVolume( $volume_vci_sur_place[$a]); ?>
+			</td>
+			<?php endforeach; ?>
+			<?php if ($has_total): ?>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci_sur_place'], true);?></td>
+			<?php endif; ?>
+		</tr>
 		<?php endif; ?>
 	</tbody>
 </table>

@@ -21,8 +21,8 @@
             ));
 
             if($this->acheteur->getLieu()->canHaveVci()) {
-                $this->setWidget('vci', new sfWidgetFormInputFloat());
-                $this->setValidator('vci', new sfValidatorNumber(array('required' => false)));
+                $this->setWidget('dontvci', new sfWidgetFormInputFloat());
+                $this->setValidator('dontvci', new sfValidatorNumber(array('required' => false)));
             }
 
             $this->widgetSchema->setLabel('superficie', "Superficie (".$this->acheteur->nom.")");

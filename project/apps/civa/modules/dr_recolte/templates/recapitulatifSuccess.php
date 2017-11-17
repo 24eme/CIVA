@@ -201,8 +201,8 @@
                                                                 <td class="superficie alt"></td>
                                                             <?php endif; ?>
                                                             <td class="volume"><?php echoFloat($info->getVolume()); ?> hl</td>
-															<?php if(isset($form[$key]['acheteurs'][$type][$cvi]['vci'])) : ?>
-                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['vci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['vci']->render(array("class" => 'num')); ?> hl</td>
+															<?php if(isset($form[$key]['acheteurs'][$type][$cvi]['dontvci'])) : ?>
+                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?> hl</td>
                                                             <?php endif; ?>
                                                             <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
                                                                 <td class="dplc <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
@@ -275,8 +275,10 @@
                                     <?php if($form_item->getObject()->acheteurs->count() > 0 && $form_item->getObject()->getConfig()->existRendement()): ?>
                                     var total_superficie = <?php echoFloat( $form_item->getObject()->getTotalSuperficie()); ?>;
                                     var total_dontdplc = <?php echoFloat($form_item->getObject()->getDontDplcVendusMax()); ?>;
+                                    var total_dontvci = <?php echoFloat($form_item->getObject()->getDontVciVendusMax()); ?>;
                                     var sum_superficie = 0;
                                     var sum_dont_dplc = 0;
+                                    var sum_dont_vci = 0;
                                     $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_superficie += parseFloat($(this).val());
@@ -290,6 +292,14 @@
                                         }
                                     });
                                     sum_dont_dplc = trunc(sum_dont_dplc, 2);
+
+									$('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+                                        if ($(this).val()) {
+                                            sum_dont_vci += parseFloat($(this).val());
+                                        }
+                                    });
+                                    sum_dont_dplc = trunc(sum_dont_dplc, 2);
+
 
                                     var dplc_sup_volume = false;
                                     $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
@@ -315,6 +325,13 @@
                                         openPopup($('#popup_msg_erreur'), 0);
                                         return false;
                                     }
+
+									if (sum_dont_vci > total_dontvci) {
+                                        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_vci_trop_eleve')); ?></p>');
+                                        openPopup($('#popup_msg_erreur'), 0);
+                                        return false;
+                                    }
+
                                     if (dplc_sup_volume) {
                                         $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_dplc_superieur_volume')); ?></p>');
                                         openPopup($('#popup_msg_erreur'), 0);

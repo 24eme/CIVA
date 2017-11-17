@@ -120,6 +120,18 @@
                     <?php endif;  ?>
                 </tr>
                 <?php endif; ?>
+                <?php if(isset($total_volume_vci_sur_place)): ?>
+                <tr class="small">
+                    <td>&nbsp;dont sur place (hl)</td>
+                    <?php foreach ($appellations as $a) if (!isset($ignore[$a]) || !$ignore[$a]) : ?>
+                    <td class="volume">
+                    <?php if($volume_vci[$a] != 0): ?>
+                        <?php echoFloat($volume_vci_sur_place[$a]); ?>
+                    <?php endif; ?>
+                    </td>
+                    <?php endif;  ?>
+                </tr>
+                <?php endif; ?>
             </tbody>
         </table>
    </div>
@@ -153,6 +165,9 @@
             <?php endif; ?>
             <?php if(isset($total_volume_vci)): ?>
             <li><input type="text" value="<?php echoFloat($total_volume_vci);?>" readonly="readonly"></li>
+            <?php endif; ?>
+            <?php if(isset($total_volume_vci_sur_place)): ?>
+            <li><input type="text" value="<?php echoFloat($total_volume_vci_sur_place);?>" readonly="readonly"></li>
             <?php endif; ?>
         </ul>
     </div>

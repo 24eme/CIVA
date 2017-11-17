@@ -52,6 +52,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return null;
     }
 
+    public function getTotalDontVciVendusByCvi($type, $cvi) {
+
+      return null;
+    }
+
     public function getProduitsDetails() {
       $details = array();
       foreach($this->getChildrenNode() as $key => $item) {

@@ -4,6 +4,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     protected $total_superficie_before;
     protected $total_volume_before;
+    protected $total_vci_before;
 
     public function getConfig() {
 
@@ -94,7 +95,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getVolumeRevendiqueCaveParticuliere() {
 
-        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere() - $this->getTotalVci(), 2);
+        return round($this->getTotalCaveParticuliere() - $this->getUsagesIndustrielsCaveParticuliere() - $this->getVciCaveParticuliere(), 2);
     }
 
     public function getUsagesIndustrielsCaveParticuliere() {
@@ -104,6 +105,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
 
         return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
+    }
+
+    public function getVciCaveParticuliere() {
+        if(!$this->getTotalCaveParticuliere()) {
+
+            return 0;
+        }
+
+        return round($this->getTotalVci() - $this->getTotalDontVciVendus(), 2);
     }
 
     public function getUsagesIndustrielsSurPlace() {
@@ -440,7 +450,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
             return false;
         }
-        if($this->getTotalVolumeVendus() > 0 && $this->getTotalVci() > 0) {
+        if(!$this->hasCompleteRecapitulatifVenteVci()) {
 
             return false;
         }
@@ -479,6 +489,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getDplc(), 2);
     }
 
+    public function getDontVciVendusMax() {
+
+        return round($this->getTotalVci(), 2);
+    }
+
     public function getTotalDontDplcVendus() {
         if($this->getTotalCaveParticuliere() == 0) {
 
@@ -491,6 +506,20 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
 
         return round($this->getTotalDontDplcRecapitulatifVente(), 2);
+    }
+
+    public function getTotalDontVciVendus() {
+        if($this->getTotalCaveParticuliere() == 0) {
+
+            return $this->getTotalVci();
+        }
+
+        if(!$this->hasRecapitulatifVente()) {
+
+            return $this->getDataByFieldAndMethod('total_dont_vci_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontVciVendus'));
+        }
+
+        return round($this->getTotalDontVciRecapitulatifVente(), 2);
     }
 
     public function getTotalSuperficieVendus() {
@@ -537,6 +566,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $dontdplc;
     }
 
+    public function getTotalDontVciVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatifVente() && $this->acheteurs->exist($type."/".$cvi)) {
+
+            return $this->acheteurs->get($type)->get($cvi)->dontvci;
+        }
+
+        $dontvci = null;
+
+        foreach($this->getChildrenNode() as $children) {
+            $dontvci += $children->getTotalDontVciVendusByCvi($type, $cvi);
+        }
+
+        return $dontvci;
+    }
+
     public function hasRecapitulatifVente() {
 
         return $this->exist('acheteurs') && $this->hasRecapitulatif();
@@ -544,7 +588,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function hasCompleteRecapitulatifVente() {
 
-        return $this->hasCompleteRecapitulatifVenteDplc() && $this->hasCompleteRecapitulatifVenteSuperficie();
+        return $this->hasCompleteRecapitulatifVenteDplc() && $this->hasCompleteRecapitulatifVenteSuperficie() && $this->hasCompleteRecapitulatifVenteVci();
     }
 
     public function hasNoCompleteRecapitulatifVente() {
@@ -560,6 +604,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         foreach ($this->acheteurs as $type => $type_acheteurs) {
             foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($this->getDplc() > 0 && !is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+                if ($this->getTotalVci() > 0 && !is_null($acheteur->dontvci)) {
                     return false;
                 }
                 if ($this->getTotalSuperficie() > 0 && !is_null($acheteur->superficie)) {
@@ -584,6 +631,27 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         foreach ($this->acheteurs as $type => $type_acheteurs) {
             foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($this->getDplc() > 0 && is_null($acheteur->dontdplc)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function hasCompleteRecapitulatifVenteVci() {
+        if(!$this->hasRecapitulatifVente()) {
+            return true;
+        }
+
+        if(!$this->hasAcheteurs()) {
+
+            return true;
+        }
+
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($this->getTotalVci() > 0 && is_null($acheteur->dontvci)) {
                     return false;
                 }
             }
@@ -649,13 +717,32 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $total_dontdplc;
     }
 
+    public function getTotalDontVciRecapitulatifVente() {
+        if(!$this->hasRecapitulatifVente()) {
+
+            throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
+        }
+
+        $total_dontvci = 0;
+        foreach ($this->acheteurs as $type => $type_acheteurs) {
+            foreach ($type_acheteurs as $cvi => $acheteur) {
+                if ($acheteur->dontvci) {
+                    $total_dontvci += $acheteur->dontvci;
+                }
+            }
+        }
+
+        return $total_dontvci;
+    }
+
     public function isValidRecapitulatifVente() {
         if(!$this->hasRecapitulatifVente()) {
             return true;
         }
 
         return (round($this->getTotalSuperficie(), 2) >= round($this->getTotalSuperficieRecapitulatifVente(), 2) &&
-                round($this->getDplc(), 2) >= round($this->getTotalDontDplcRecapitulatifVente(), 2));
+                round($this->getDplc(), 2) >= round($this->getTotalDontDplcRecapitulatifVente(), 2) &&
+                round($this->getTotalVci(), 2) >= round($this->getTotalDontVciRecapitulatifVente(), 2));
     }
 
     public function hasAcheteurs() {
@@ -676,6 +763,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_superficie_before = $this->getTotalSuperficie();
             $this->total_volume_before = $this->getTotalVolume();
+            $this->total_vci_before = $this->getTotalVci();
         }
     }
 
@@ -699,6 +787,10 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                     $acheteur->dontdplc = null;
                 }
 
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalVci(), 2) != round($this->total_vci_before, 2))) {
+                    $acheteur->dontvci = null;
+                }
+
                 if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2))) {
                     $acheteur->superficie = null;
                 }
@@ -706,6 +798,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                 if($this->getCouchdbDocument()->canUpdate() && !$this->hasRecapitulatifVente()) {
                     $acheteur->superficie = $this->getTotalSuperficieVendusByCvi($type, $cvi);
                     $acheteur->dontdplc = $this->getTotalDontDplcVendusByCvi($type, $cvi);
+                    $acheteur->dontvci = $this->getTotalDontVciVendusByCvi($type, $cvi);
                 }
             }
             $acheteurs_to_remove = array();
@@ -724,6 +817,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if ($this->getCouchdbDocument()->canUpdate() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
+            $unique_acheteur->dontvci = $this->getTotalVci();
         }
     }
 

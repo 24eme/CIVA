@@ -238,6 +238,7 @@ class ExportDRPdf extends ExportDocument {
         $usages_industriels = array();
         $usages_industriels_sur_place = array();
         $volume_vci = array();
+        $volume_vci_sur_place = array();
         $libelle = array();
         $volume_negoces = array();
         $volume_cooperatives = array();
@@ -252,12 +253,13 @@ class ExportDRPdf extends ExportDocument {
             $volume_vendus[$appellation["hash"]] = 0;
             $revendique[$appellation["hash"]] = 0;
             $revendique_sur_place[$appellation["hash"]] = 0;
-            $usages_industriels_sur_place[$appellation["hash"]] = 0;
             $usages_industriels[$appellation["hash"]] = 0;
+            $usages_industriels_sur_place[$appellation["hash"]] = 0;
             $volume_sur_place[$appellation["hash"]] = 0;
             $volume_rebeches[$appellation["hash"]] = null;
             $volume_rebeches_sur_place[$appellation["hash"]] = null;
             $volume_vci[$appellation["hash"]] = 0;
+            $volume_vci_sur_place[$appellation["hash"]] = 0;
 
             foreach($appellation["noeuds"] as $noeud) {
                 if ($noeud->getConfig()->excludeTotal()) {
@@ -276,6 +278,7 @@ class ExportDRPdf extends ExportDocument {
                     $volume_rebeches_sur_place[$appellation["hash"]] += $noeud->getSurPlaceRebeches();
                 }
                 $volume_vci[$appellation["hash"]] += $noeud->getTotalVci();
+                $volume_vci_sur_place[$appellation["hash"]] += $noeud->getVciCaveParticuliere();
 
                 if($noeud->getConfig()->hasCepageRB()) {
                     $has_cepage_rb = true;
@@ -293,6 +296,7 @@ class ExportDRPdf extends ExportDocument {
         $infos['volume_rebeches'] = $volume_rebeches;
         $infos['volume_rebeches_sur_place'] = $volume_rebeches_sur_place;
         $infos['volume_vci'] = $volume_vci;
+        $infos['volume_vci_sur_place'] = $volume_vci_sur_place;
         $infos['revendique'] = $revendique;
         $infos['revendique_sur_place'] = $revendique_sur_place;
         $infos['usages_industriels'] = $usages_industriels;
@@ -337,8 +341,12 @@ class ExportDRPdf extends ExportDocument {
         }
 
         $infos['total_volume_vci'] = null;
-        if($this->dr->recolte->canHaveVci()) {
+        $infos['total_volume_vci_sur_place'] = null;
+        if($dr->recolte->canHaveVci()) {
             $infos['total_volume_vci'] = array_sum(array_values($volume_vci));
+        }
+        if($dr->recolte->canHaveVci() && $dr->recolte->getTotalVolumeVendus() > 0 && $can_calcul_volume_revendique_sur_place) {
+            $infos['total_volume_vci_sur_place'] = array_sum(array_values($volume_vci_sur_place));
         }
 
         $infos['jeunes_vignes'] = $dr->jeunes_vignes;
