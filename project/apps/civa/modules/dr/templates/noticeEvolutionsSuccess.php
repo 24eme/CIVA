@@ -1,9 +1,9 @@
 <form id="principal" action="" method="post">
 	<h2 class="titre_principal">Important</h2>
 	<div id="notice_evolutions">
-		<h2>Volume Complémentaire Individuel (VCI)</h2>
+		<h2><strong>NOUVEAU</strong> : Volume Complémentaire Individuel (VCI)</h2>
 
-		<p style="font-size: 14px; margin-top: 15px;"><strong>Attention : Application pour le millésime 2017 sous réserve de la parution du Décret au journal officiel</strong></p>
+		<p style="font-size: 14px; margin-top: 15px;"><strong>Le décret étant paru, cette disposition est applicable pour le millésime 2017</strong></p>
 		<p style="font-size: 14px; margin-top: 15px;">Appellations concernées :<br />
 			<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 			    <li style="padding-top: 10px;">
