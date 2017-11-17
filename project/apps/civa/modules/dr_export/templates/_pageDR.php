@@ -122,7 +122,7 @@ if ($hasVci) {
 <?php if ($enable_identification && count($acheteurs)) : ?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-    <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><th style="border: 1px solid black;width: 130px;">Dont dépassement</th><?php if($hasLigneAppellation): ?><th style="border: 1px solid black;width: 250px;">Appellation / Lieu</th><?php endif; ?></tr>
+    <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><?php if($hasVci): ?><th style="border: 1px solid black;width: 100px;">Dont VCI</th><?php endif; ?><th style="border: 1px solid black;width: 130px;">Dont dépassement</th><?php if($hasLigneAppellation): ?><th style="border: 1px solid black;width: 250px;">Appellation / Lieu</th><?php endif; ?></tr>
     <?php foreach($acheteurs as $acheteursLieu): ?>
         <?php foreach ($acheteursLieu["acheteurs"] as $type_key => $acheteurs_type) : ?>
             <?php foreach($acheteurs_type as $cvi => $a) : ?>
@@ -136,6 +136,9 @@ if ($hasVci) {
                 </td>
                 <td style="border: 1px solid black;width: 100px; text-align: right;"><?php echoSuperficie($a->superficie); ?></td>
                 <td  style="border: 1px solid black;width: 100px; text-align: right;"><?php echoVolume($a->volume); ?></td>
+                <?php if($hasVci): ?>
+                    <td style="border: 1px solid black;width: 100px; text-align: right;"><?php echoVolume($a->dontvci); ?></td>
+                <?php endif; ?>
                 <td style="border: 1px solid black;width: 130px; text-align: right;"><?php echoVolume($a->dontdplc); ?></td>
                 <?php if($hasLigneAppellation): ?>
                 <td style="border: 1px solid black;width: 250px; text-align: left"><?php echo $acheteursLieu["libelle_appellation"] ?></td>
