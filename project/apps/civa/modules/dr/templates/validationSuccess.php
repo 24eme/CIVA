@@ -35,9 +35,14 @@
                     </li>
                     <?php endforeach; ?>
                 </ul>
-                <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace()): ?>
+                <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace() && !$this->getTotalVci()): ?>
                 <strong><?php echo acCouchdbManager::getClient('Messages')->getMessage('err_log_pas_calculer_revendique_sur_place') ?></strong>
                 <?php endif; ?>
+                <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace() && $this->getTotalVci() > 0): ?>
+                <strong>Le volume revendiqué sur place ne peut pas être calculé car tous les volumes en dépassement et/ou tous les volumes de vci de vos acheteurs n'ont pas été saisis dans le récapitulatif des ventes. Si vous n'affectez pas de dépassement et/ou pas de vci à vos acheteurs, tapez 0 dans la zone "dont dépassement" et/ou "dont vci"</strong>
+                <?php endif; ?>
+
+
             </fieldset>
         <?php } ?>
 

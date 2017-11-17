@@ -631,10 +631,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             }
         }
 
-        //Vérifie que tous les dont_dplc et superficie dans le recapitulatif des ventes est rempli
+        //Vérifie que tous les dont_dplc, dont_vci et superficie dans le recapitulatif des ventes est rempli
         if (!$has_no_complete && !$noeud->hasCompleteRecapitulatifVente()) {
             if($noeud->canHaveVci() && $noeud->getTotalVci() > 0) {
-                array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
+                array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement et/ou tous les volumes de vci"));
             } else {
                 array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
             }
@@ -655,7 +655,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         if($noeud->getTotalDontVciVendus() > $noeud->getDontVciVendusMax()) {
 
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontvci_trop_eleve')));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
             return;
         }
 
@@ -672,7 +672,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 }
 
                 if($acheteur->dontvci > $volume) {
-                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontvci_superieur_volume')));
+                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => "Dans le récapitulatif des ventes, le volume en \"dont vci\" d'un acheteur doit être inférieur à son volume vendu"));
                         $recap_is_ok = false;
                         continue;
                 }

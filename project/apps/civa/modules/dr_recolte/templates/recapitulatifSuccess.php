@@ -315,6 +315,20 @@
                                         dplc_sup_volume = true;
                                     });
 
+									var vci_sup_volume = false;
+                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+                                        if (!$(this).val()) {
+                                            return;
+                                        }
+                                        volume_achete = parseFloat($(this).parent().parent().find('td.volume').html().replace(' hl', ''));
+                                        if(parseFloat($(this).val()) <= parseFloat(volume_achete)) {
+
+                                            return;
+                                        }
+
+                                        vci_sup_volume = true;
+                                    });
+
                                     if (sum_superficie > total_superficie) {
                                         $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_superficie_trop_eleve')); ?></p>');
                                         openPopup($('#popup_msg_erreur'), 0);
@@ -327,13 +341,19 @@
                                     }
 
 									if (sum_dont_vci > total_dontvci) {
-                                        $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_vci_trop_eleve')); ?></p>');
+										$('#popup_msg_erreur').html("<p>La somme des \"volumes de vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs</p>");
                                         openPopup($('#popup_msg_erreur'), 0);
                                         return false;
                                     }
 
                                     if (dplc_sup_volume) {
                                         $('#popup_msg_erreur').html('<p><?php include_partial('global/message', array('id'=>'err_dr_recap_vente_popup_dplc_superieur_volume')); ?></p>');
+                                        openPopup($('#popup_msg_erreur'), 0);
+                                        return false;
+                                    }
+
+									if (vci_sup_volume) {
+                                        $('#popup_msg_erreur').html("<p>Le \"volume de vci\" ne peut pas être supérieur au \"volume acheté\"</p>");
                                         openPopup($('#popup_msg_erreur'), 0);
                                         return false;
                                     }
