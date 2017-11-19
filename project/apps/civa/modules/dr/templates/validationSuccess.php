@@ -35,7 +35,7 @@
                     </li>
                     <?php endforeach; ?>
                 </ul>
-                <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace() && !$this->getTotalVci()): ?>
+                <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace() && !$dr->recolte->getTotalVci()): ?>
                 <strong><?php echo acCouchdbManager::getClient('Messages')->getMessage('err_log_pas_calculer_revendique_sur_place') ?></strong>
                 <?php endif; ?>
                 <?php if ($dr->recolte->getTotalVolumeVendus() > 0 && !$dr->recolte->canCalculVolumeRevendiqueSurPlace() && $dr->recolte->getTotalVci() > 0): ?>
