@@ -42,6 +42,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return null;
     }
 
+    public function getTotalDontVciVendus() {
+
+     return null;
+   }
+
     public function getTotalSuperficieVendusByCvi($type, $cvi) {
 
       return null;
