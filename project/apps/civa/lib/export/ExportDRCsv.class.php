@@ -28,6 +28,8 @@ class ExportDRCsv extends ExportCsv {
         "superficie_totale" => "superficie totale",
         "volume_total" => "volume total",
         "volume_a_detruire_total" => "volume à détruire total",
+        "dont_vci" => "dont VCI",
+        "vci_total" => "VCI total",
         "validation_date" => "date de validation / dépot",
         "modification_date" => "date de modification",
         "validation_user" => "validateur",
@@ -49,6 +51,8 @@ class ExportDRCsv extends ExportCsv {
         "superficie_totale" => array("type" => "float", "format" => "%01.02f"),
         "volume_total" => array("type" => "float", "format" => "%01.02f"),
         "volume_a_detruire_total" => array("type" => "float", "format" => "%01.02f"),
+        "dont_vci" => array("type" => "float", "format" => "%01.02f"),
+        "vci_total" => array("type" => "float", "format" => "%01.02f"),
         "validation_date" => array("type" => "string"),
         "modification_date" => array("type" => "string"),
         "validation_user" => array("type" => "string"),
@@ -66,9 +70,6 @@ class ExportDRCsv extends ExportCsv {
      * @param string $campagne
      */
     public function __construct($campagne, $cvi, $with_header = true, $debug = false) {
-        if($with_header) {
-            parent::__construct(self::$_headers);
-        }
         $this->_debug = $debug;
         $this->_campagne = $campagne;
         $this->dr = acCouchdbManager::getClient("DR")->retrieveByCampagneAndCvi($cvi,$campagne);
@@ -76,10 +77,19 @@ class ExportDRCsv extends ExportCsv {
             throw new sfException("DR not find");
         }
 
+        if($with_header) {
+            parent::__construct(self::$_headers);
+        }
+
         $this->_md5 = $this->calculMd5($this->dr);
     }
 
     public function add($data, $validation = array()) {
+        if(!$this->dr->recolte->canHaveVci()) {
+            unset($data['dont_vci']);
+            unset($data['vci_total']);
+        }
+
         $line = parent::add($data, $validation);
         if ($this->_debug) {
             echo $line;
@@ -163,6 +173,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
+            "dont_vci" => null,
+            "vci_total" => $detail->exist('vci') ? $detail->vci : null,
             "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
@@ -190,6 +202,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
+            "dont_vci" => null,
+            "vci_total" => $detail->exist('vci') ? $detail->vci : null,
             "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
@@ -217,6 +231,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $detail->superficie,
             "volume_total" => $detail->volume,
             "volume_a_detruire_total" => $detail->usages_industriels,
+            "dont_vci" => null,
+            "vci_total" => $detail->exist('vci') ? $detail->vci : null,
             "validation_date" => $this->getValidationDate($detail->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
@@ -241,6 +257,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $noeud->getTotalSuperficie(),
             "volume_total" => $noeud->getTotalVolume(),
             "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
+            "dont_vci" => $acheteur->exist('dontvci') ? $acheteur->dontvci : null,
+            "vci_total" => $noeud->getTotalVci(),
             "validation_date" => $this->getValidationDate($acheteur->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($acheteur->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
@@ -286,6 +304,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $noeud->getTotalSuperficie(),
             "volume_total" => $noeud->getTotalVolume(),
             "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
+            "dont_vci" => $noeud->getVciCaveParticuliere(),
+            "vci_total" => $noeud->getTotalVci(),
             "validation_date" => $this->getValidationDate($noeud->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($noeud->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
@@ -310,6 +330,8 @@ class ExportDRCsv extends ExportCsv {
             "superficie_totale" => $dr->jeunes_vignes,
             "volume_total" => null,
             "volume_a_detruire_total" => null,
+            "dont_vci" => null,
+            "vci_total" => null,
             "validation_date" => $this->getValidationDate($dr),
             "modification_date" => $this->getModificationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
