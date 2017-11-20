@@ -135,7 +135,7 @@
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <tr class="sous_tr">
-                                                    <td>Dont dépassement à livrer avant le 15/12 <span class="unites">(hl)</span></td>
+                                                    <td>Dont dépassement à livrer avant le 15/12/<?php echo substr(($declaration->campagne + 1), 2, 2); ?> <span class="unites">(hl)</span></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                                         <td class="valeur"><?php echoFloat($form_item->getObject()->getDplcReel()) ; ?></td>
                                                     <?php endforeach; ?>
