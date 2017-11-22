@@ -1005,7 +1005,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function canHaveVci() {
 
-        return true;
+        return $this->existRendementVci() || $this->getRendementVci();
     }
 
     public function getMout() {

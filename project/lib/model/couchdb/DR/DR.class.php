@@ -584,6 +584,12 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                     continue;
                                 }
 
+                                if ($detail->vci > 0 && !$detail->canHaveVci()) {
+                                    array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => "Le VCI n'est pas autorisé pour ce produit"));
+
+                                    continue;
+                                }
+
                                 if ($detail->hasMotifNonRecolteLibelle() && $detail->getMotifNonRecolteLibelle() == "Assemblage Edelzwicker") {
                                     if (!$couleur->exist('cepage_ED') || !$couleur->cepage_ED->getTotalVolume()) {
                                         array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle() . $detail_nom, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_ED_non_saisie')));

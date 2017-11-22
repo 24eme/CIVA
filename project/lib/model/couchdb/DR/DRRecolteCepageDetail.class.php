@@ -241,7 +241,7 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function canHaveVci() {
 
-        return true;
+        return $this->getCepage()->canHaveVci();
     }
 
     public function getLies($force = false) {

@@ -351,7 +351,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function canHaveVci() {
 
-        return $this->getConfig()->existRendementVci() || $this->getConfig()->getRendementVci();
+        return $this->getConfig()->canHaveVci();
     }
 
     public function getTotalVci($force_calcul = true) {

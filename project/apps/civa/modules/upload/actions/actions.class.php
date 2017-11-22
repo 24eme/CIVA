@@ -110,8 +110,9 @@ class uploadActions extends sfActions {
             if ($this->errorOnCVIRecoltant($line)) {
                 $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à un déclarant connu ou actif dans la base du CIVA.';
             }
-            if ($errorprod = $this->cannotIdentifyProduct($line))
-                $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $errorprod . '», merci de vérifier les libellés.';
+            $produit = $this->cannotIdentifyProduct($line);
+            if (!is_object($produit))
+                $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $produit . '», merci de vérifier les libellés.';
             else {
 	      if ($this->shouldHaveSuperficie($line))
                 $this->errors[$cpt][] = 'La superficie est erronée.';
@@ -155,6 +156,11 @@ class uploadActions extends sfActions {
         }
         if ($this->shouldHaveSuperficieTotal(false)) {
             //$this->errors[$cpt][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
+        }
+
+        if (is_object($produit) && !$this->isVciAuthorized($produit, $line)) {
+
+            $this->errors[$cpt][] = "Le VCI n'est pas autorisé pour ce produit";
         }
 
         $this->recap = new stdClass();
@@ -297,8 +303,13 @@ class uploadActions extends sfActions {
             }
         }
 
-        if (!isset($prod['error']))
-            return false;
+
+
+        if (!isset($prod['error'])) {
+
+            return $produit;
+        }
+
         return $prod['error'];
     }
 
@@ -463,6 +474,14 @@ class uploadActions extends sfActions {
             return false;
         }
         return false;
+    }
+
+    protected function isVciAuthorized($produit, $line) {
+        if(!$line[CsvFileAcheteur::CSV_VOLUME_VCI]) {
+            return true;
+        }
+
+        return $produit->canHaveVci();
     }
 
     protected function errorOnCVIAcheteur($line) {
