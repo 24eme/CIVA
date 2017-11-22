@@ -178,6 +178,7 @@ DR:
                                           usages_industriels: { type: float }
                                           lies: { type: float }
                                           usages_industriels_saisi : { type: float, required: false }
+                                          vci : { type: float }
                                           acheteurs:
                                              type: collection
                                              definition:
@@ -239,6 +240,7 @@ DR:
                                                 dplc: {type: float}
                                                 usages_industriels: { ype:float }
                                                 lies: { type: float }
+                                                vci : { type: float }
                                                 acheteurs:
                                                   type: collection
                                                   definition:

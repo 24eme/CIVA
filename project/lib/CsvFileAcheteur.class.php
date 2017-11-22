@@ -15,6 +15,7 @@ class CsvFileAcheteur
   const CSV_SUPERFICIE = 9;
   const CSV_VOLUME = 10;
   const CSV_VOLUME_DPLC = 11;
+  const CSV_VOLUME_VCI = 15;
 
   private $file = null;
   private $separator = null;

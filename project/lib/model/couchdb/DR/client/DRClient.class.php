@@ -162,6 +162,7 @@ class DRClient extends acCouchdbClient {
         $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $denomlieu);
         $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
         $detail->volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+        $detail->vci += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI]);
         if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
           $detail->denomination = 'repli';
           $detail->add('motif_non_recolte', 'AE');
@@ -183,6 +184,9 @@ class DRClient extends acCouchdbClient {
               $acheteur = $acheteurs->add();
             $acheteur->cvi = $acheteur_cvi;
             $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+            $acheteurRecap = $detail->getCepage()->getNoeudRecapitulatif()->add('acheteurs')->get($acheteur->getParent()->getKey())->add($acheteur->cvi);
+            $acheteurRecap->type_acheteur = $acheteur->getParent()->getKey();
+            $acheteurRecap->dontvci = $acheteurRecap->dontvci + $line[CsvFileAcheteur::CSV_VOLUME_VCI];
           }
         }
     }

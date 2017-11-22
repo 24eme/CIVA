@@ -354,9 +354,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getConfig()->existRendementVci() || $this->getConfig()->getRendementVci();
     }
 
-    public function getTotalVci() {
+    public function getTotalVci($force_calcul = true) {
+        if(!$force_calcul && $this->exist('vci') && $this->_get('vci')) {
 
-        return $this->getDataByFieldAndMethod('total_vci', array($this, 'getSumNoeudWithMethod'), true, array('getTotalVci') );
+            return $this->_get('vci');
+        }
+
+        return $this->getDataByFieldAndMethod('total_vci', array($this, 'getSumNoeudWithMethod'), true, array('getTotalVci'));
     }
 
     public function getVolumeVciMax() {
@@ -439,6 +443,16 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     public function hasRecapitulatif() {
 
         return false;
+    }
+
+    public function getNoeudRecapitulatif() {
+
+        if($this->hasRecapitulatif()) {
+
+            return $this;
+        }
+
+        return $this->getParent()->getNoeudRecapitulatif();
     }
 
     public function canCalculVolumeRevendiqueSurPlace() {
@@ -763,7 +777,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if ($this->getCouchdbDocument()->canUpdate()) {
             $this->total_superficie_before = $this->getTotalSuperficie();
             $this->total_volume_before = $this->getTotalVolume();
-            $this->total_vci_before = $this->getTotalVci();
+            $this->total_vci_before = $this->getTotalVci(false);
         }
     }
 
