@@ -409,6 +409,10 @@ dr_telecharger_la_notice:
   url:   /dr_telecharger_la_notice
   param: { module: dr, action: downloadNotice }
 
+dr_telecharger_guide_vci:
+  url:   /dr_telecharger_guide_vci
+  param: { module: dr, action: downloadGuideVci }
+
 dr_visualisation_avant_import:
   url:   /dr_visualisation_avant_import/:identifiant/:campagne
   param: { module: dr, action: visualisationAvantImport }

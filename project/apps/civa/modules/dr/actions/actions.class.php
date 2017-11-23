@@ -311,6 +311,11 @@ class drActions extends _DRActions {
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/aide_recolte.pdf", "aide recolte.pdf");
     }
 
+    public function executeDownloadGuideVci() {
+
+        return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/guide_vci.pdf", "guide_vci.pdf");
+    }
+
     public function executeAutres(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('exploitation_autres');
