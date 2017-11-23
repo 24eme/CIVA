@@ -200,6 +200,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->lies = $this->getLies(true);
           $this->usages_industriels = $this->getUsagesIndustriels(true);
           $this->volume_revendique = $this->getVolumeRevendique(true);
+          $this->vci = $this->getTotalVci(true);
       }
     }
 

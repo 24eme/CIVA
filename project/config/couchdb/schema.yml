@@ -302,6 +302,7 @@ DR:
                                                       dplc: {type:float }
                                                       usages_industriels: { type:float }
                                                       lies: { type: float }
+                                                      vci: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:
