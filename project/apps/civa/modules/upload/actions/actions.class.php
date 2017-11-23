@@ -111,7 +111,7 @@ class uploadActions extends sfActions {
                 $this->errors[$cpt][] = 'Le CVI de la colonne recoltant ne correspond pas à un déclarant connu ou actif dans la base du CIVA.';
             }
             $produit = $this->cannotIdentifyProduct($line);
-            if (!is_object($produit))
+            if (!is_object($produit) && $produit !== false)
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $produit . '», merci de vérifier les libellés.';
             else {
 	      if ($this->shouldHaveSuperficie($line))
