@@ -137,7 +137,7 @@ EOF;
 
         foreach($stats['appellations'] as $appellation_key => $appellation) {
             foreach($appellation['cepages'] as $cepage_key => $cepage) {
-                echo sprintf("%s;%s;%01.02f;%01.02f;;;%s\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume'], ($cepage['vci'] > 0) ? sprintf("%01.02f", $cepage['vci']) : null );
+                echo sprintf("%s;%s;%01.02f;%01.02f;;;%s\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume'], ($cepage['vci'] > 0) ? sprintf("%01.02f", $cepage['vci']) : null);
             }
 
             echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels'], ($appellation['vci'] > 0) ? sprintf("%01.02f", $appellation['vci']) : null);
