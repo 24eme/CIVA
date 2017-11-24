@@ -39,6 +39,7 @@ EOF;
         $stats['volume'] = 0;
         $stats['volume_revendique'] = 0;
         $stats['usages_industriels'] = 0;
+        $stats['vci'] = 0;
         $stats['appellations'] = array();
         $n=0;
         foreach ($dr_ids as $id) {
@@ -82,14 +83,20 @@ EOF;
                             $stats['appellations'][$appellation_key]['volume'] = 0;
                             $stats['appellations'][$appellation_key]['volume_revendique'] = 0;
                             $stats['appellations'][$appellation_key]['usages_industriels'] = 0;
+                            $stats['appellations'][$appellation_key]['vci'] = 0;
                             $stats['appellations'][$appellation_key]['cepages'] = array();
                         }
 
                         $stats['appellations'][$appellation_key]['volume_revendique'] += $lieu->volume_revendique;
                         $stats['appellations'][$appellation_key]['usages_industriels'] += $lieu->usages_industriels;
+                        if(isset($lieu->vci)) {
+                            $stats['appellations'][$appellation_key]['vci'] += $lieu->vci;
+                        }
                         $stats['volume_revendique'] += $lieu->volume_revendique;
                         $stats['usages_industriels'] += $lieu->usages_industriels;
-
+                        if (isset($lieu->vci)) {
+                            $stats['vci'] += $lieu->vci;
+                        }
                         foreach($lieu as $couleur_key => $couleur) {
                             if (!preg_match("/^couleur/", $couleur_key)) {
 
@@ -106,10 +113,14 @@ EOF;
                                 if(!array_key_exists($cepage_key, $stats['appellations'][$appellation_key]['cepages'])) {
                                     $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] = 0;
                                     $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] = 0;
+                                    $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['vci'] = 0;
                                 }
 
                                 $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['superficie'] += $cepage->total_superficie;
                                 $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['volume'] += $cepage->total_volume;
+                                if(isset($cepage->vci)) {
+                                    $stats['appellations'][$appellation_key]['cepages'][$cepage_key]['vci'] += $cepage->vci;
+                                }
                             }
                         }
                     }
@@ -122,17 +133,17 @@ EOF;
             }
         }
 
-        echo "appellation;cepage;superficie;volume;volume_revendique;usages_industriels\n";
+        echo "appellation;cepage;superficie;volume;volume_revendique;usages_industriels;vci\n";
 
         foreach($stats['appellations'] as $appellation_key => $appellation) {
             foreach($appellation['cepages'] as $cepage_key => $cepage) {
-                echo sprintf("%s;%s;%01.02f;%01.02f;;\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume']);
+                echo sprintf("%s;%s;%01.02f;%01.02f;;;%s\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume'], ($cepage['vci'] > 0) ? sprintf("%01.02f", $cepage['vci']) : null );
             }
 
-            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']);
+            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels'], ($appellation['vci'] > 0) ? sprintf("%01.02f", $appellation['vci']) : null);
         }
 
-        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']);
+        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels'], ($stats['vci'] > 0) ? sprintf("%01.02f", $stats['vci']) : null);
 
         echo sprintf("NB_DR;%s",$n)."\n";
     }
