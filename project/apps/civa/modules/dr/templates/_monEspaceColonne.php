@@ -18,11 +18,11 @@
 <div id="documents_aide">
 	<h3 class="titre_section">Documents d'aide</h3>
 	<div class="contenu_section">
-	    <p class="intro"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_doc_aide'); ?></p>
+	    <p class="intro">En cas de besoin n'hésitez pas à consulter les notices d'aides completes au format pdf.</p>
 	    <ul>
 	        <li><a href="<?php echo url_for('dr_telecharger_la_notice') ?>" class="pdf">Télécharger&nbsp;la&nbsp;notice&nbsp;Récolte</a></li>
 	        <li><a href="<?php echo url_for('dr_telecharger_guide_vci') ?>" class="pdf">Télécharger le guide du VCI</a></li>
 	    </ul>
-	    <p class="intro pdf_link"><?php echo acCouchdbManager::getClient('Messages')->getMessage('telecharger_pdf_mon_espace'); ?></p>
+	    <p class="intro pdf_link">Ces notices sont au format PDF. Pour les visualiser, veuillez utiliser un <a href='http://pdfreaders.org/'>lecteur PDF</a>.</p>
 	</div>
 </div>
