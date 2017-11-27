@@ -653,13 +653,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $recap_is_ok = true;
 
-        if($noeud->getTotalDontDplcVendus() > $noeud->getDontDplcVendusMax()) {
+        if(round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
 
-        if($noeud->getTotalDontVciVendus() > $noeud->getDontVciVendusMax()) {
+        if(round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
             return;
