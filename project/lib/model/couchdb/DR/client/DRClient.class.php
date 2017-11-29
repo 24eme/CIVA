@@ -184,9 +184,12 @@ class DRClient extends acCouchdbClient {
               $acheteur = $acheteurs->add();
             $acheteur->cvi = $acheteur_cvi;
             $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
-            $acheteurRecap = $detail->getCepage()->getNoeudRecapitulatif()->add('acheteurs')->get($acheteur->getParent()->getKey())->add($acheteur->cvi);
-            $acheteurRecap->type_acheteur = $acheteur->getParent()->getKey();
-            $acheteurRecap->dontvci = $acheteurRecap->dontvci + $line[CsvFileAcheteur::CSV_VOLUME_VCI];
+
+            if($line[CsvFileAcheteur::CSV_VOLUME_VCI]) {
+                $acheteurRecap = $detail->getCepage()->getNoeudRecapitulatif()->add('acheteurs')->get($acheteur->getParent()->getKey())->add($acheteur->cvi);
+                $acheteurRecap->type_acheteur = $acheteur->getParent()->getKey();
+                $acheteurRecap->dontvci = $acheteurRecap->dontvci + $line[CsvFileAcheteur::CSV_VOLUME_VCI];
+            }
           }
         }
     }
