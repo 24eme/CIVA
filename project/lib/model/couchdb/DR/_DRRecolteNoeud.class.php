@@ -62,7 +62,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getRendementRecoltant() {
         if ($this->getTotalSuperficie() > 0) {
-            return round(($this->getTotalVolume() - $this->getLiesTotal()) / ($this->getTotalSuperficie() / 100), 0);
+            return round(($this->getTotalVolume() - $this->getLiesTotal()) / ($this->getTotalSuperficie() / 100), 4);
         } else {
             return 0;
         }
