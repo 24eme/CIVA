@@ -629,6 +629,10 @@ Le CIVA';*/
         $this->id = $request->getParameter('id');
         $this->url = $request->getParameter('url');
 
+        if(!$this->id) {
+            throw new sfException("L'id passé en paramètre est nul");
+        }
+
         if(!DRClient::getInstance()->find($this->id)) {
 
             return $this->redirect($this->url);

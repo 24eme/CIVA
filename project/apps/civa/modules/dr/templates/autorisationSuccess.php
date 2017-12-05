@@ -1,4 +1,4 @@
-<form action="" method="post">
+<form action="<?php echo url_for('dr_transmission', array('url' => $url, 'id' => $id)) ?>" method="post">
 <div style="text-align: center">
     <div id="block_autorisation">
     <h1>Transmission de numérique de Déclaration de récolte</h1>
