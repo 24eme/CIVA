@@ -67,7 +67,7 @@ EOF;
             	$message = $this->getMailer()->compose()
                       ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
                       ->setTo($etablissement->getEmailTeledeclaration())
-                      ->setSubject('DERNIER RAPPEL DR '.$arguments['campagne'])
+                      ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
                 $sended = $this->getMailer()->send($message);
                 //echo $this->getMessageBody($compte, $arguments['campagne'])."\n\n\n";
