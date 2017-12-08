@@ -2,7 +2,7 @@
 
 . bin/task.inc
 
-DESCRIPTION="Export des récoltants n'ayant pas de DR $DR_CAMPAGNE"
+DESCRIPTION="Export des récoltants n'ayant pas de DR $DR_CAMPAGNE par rapport à la liste des tiers db2 non cloturés et top récolte à oui"
 
 . bin/task_start.inc
 
