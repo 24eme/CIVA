@@ -92,12 +92,14 @@ EOF;
   protected function getMessageBody($compte, $campagne) {
       return "Bonjour,
 
-Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro et ne l'avez pas encore validée.
+Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne.". sur le site VinsAlsace.pro, mais ne l'avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider avant ce soir soir minuit.
+Nous vous rappelons que vous devez impérativement la valider AVANT le 12 décembre midi.
+
+Pour terminer la saisie, cliquez sur le lien suivant : <https://declaration.vinsalsace.pro>
 
 Cordialement,
 
-Le CIVA";
+Dominique WOLFF";
   }
 }
