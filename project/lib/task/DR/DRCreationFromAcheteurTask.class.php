@@ -58,7 +58,7 @@ EOF;
         if (count($check['vigilance']) && !$this->save_vigilance)
 	      return false;
         else
-           $dr->validate($year."-12-10", "COMPTE-auto");
+           $dr->validate($year."-12-12", "COMPTE-auto");
 	    if (count($check['erreur']) && !$this->save_error)
 		return false;
 
@@ -68,7 +68,7 @@ EOF;
 	      print "ERROR: unknown tiers".$dr->getCVI()."\n";
 	      return false;
 	    }
-	    $dr->validate($year."-12-10", "COMPTE-auto");
+	    $dr->validate($year."-12-12", "COMPTE-auto");
 	  }
 	}catch(sfException $e) {
 	  print "ERROR;".$dr->_id.";".$dr->cvi.";".$dr->declarant->nom.";;".$e->getMessage()."\n";
