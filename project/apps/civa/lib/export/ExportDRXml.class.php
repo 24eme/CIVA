@@ -98,6 +98,7 @@ class ExportDRXml {
 
                         $volume_revendique = $object->getVolumeRevendique();
                         $usages_industriels = $object->getUsagesIndustriels();
+                        $vci = $object->getTotalVci();
 
                         //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
                         $acheteurs = array();
@@ -150,10 +151,10 @@ class ExportDRXml {
                         if(!array_key_exists('L16', $total['exploitant'])) {
                             $total['exploitant']['L16'] = 0;
                         }
-                        $total['exploitant']['L16'] += $usages_industriels; //DPLC
+                        $total['exploitant']['L16'] += $usages_industriels + $vci; //DPLC
                         $total['exploitant']['L17'] = 0; //HS
                         $total['exploitant']['L18'] = 0; //HS
-                        $total['exploitant']['L19'] = 0; //HS
+                        $total['exploitant']['L19'] = $vci; //HS
 
                         if ($this->destinataire == self::DEST_DOUANE) {
                           foreach ($couleurConfig->getCepages() as $cepageConfig) {
@@ -251,18 +252,21 @@ class ExportDRXml {
                                             $col['exploitant']['L15'] = 0;
                                         }
                                         $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                        $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } elseif(count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_DOUANE && $mention->getKey() != 'mention') {
                                         $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                         if ($col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
-                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels() + $cepage->getTotalVci(); //DPLC
+                                        $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } else {
                                         $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
                                         if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
-                                        $col['exploitant']['L16'] = $detail->getUsagesIndustriels(); //DPLC
+                                        $col['exploitant']['L16'] = $detail->getUsagesIndustriels() + $detail->getTotalVci(); //DPLC
+                                        $col['exploitant']['L19'] = $detail->getTotalVci();
                                     }
 
                                     if(is_null($col['exploitant']['L16'])) {
@@ -271,7 +275,9 @@ class ExportDRXml {
 
                                     $col['exploitant']['L17'] = 0; //HS
                                     $col['exploitant']['L18'] = 0; //HS
-                                    $col['exploitant']['L19'] = 0; //HS
+                                    if(is_null($col['exploitant']['L19'])) {
+                                        $col['exploitant']['L19'] = 0;
+                                    }
 
                                     if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
                                         $col['exploitant']['L14'] = $detail->volume;
@@ -349,7 +355,7 @@ class ExportDRXml {
                                         if(!$vtsgn) {
                                             if($cepage->getDplc() > $cepage->getLies()) {
                                                 $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
-                                                $col_final['exploitant']['L16'] = $cepage->getDplc();
+                                                $col_final['exploitant']['L16'] = $cepage->getDplc() + $cepage->getTotalVci();
                                             }
 
                                             if($cepage->getDplc() > $cepage->getLies() && $cepage->getLies() && count($cepage->detail->toArray(true, false)) > 1) {
