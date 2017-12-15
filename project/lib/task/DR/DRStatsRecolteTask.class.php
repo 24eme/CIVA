@@ -133,17 +133,17 @@ EOF;
             }
         }
 
-        echo "appellation;cepage;superficie;volume;volume_revendique;usages_industriels;vci\n";
+        echo "appellation;cepage;superficie;volume;volume_revendique;usages_industriels (avec vci);dont vci\n";
 
         foreach($stats['appellations'] as $appellation_key => $appellation) {
             foreach($appellation['cepages'] as $cepage_key => $cepage) {
                 echo sprintf("%s;%s;%01.02f;%01.02f;;;%s\n", $appellation_key, $cepage_key, $cepage['superficie'],$cepage['volume'], ($cepage['vci'] > 0) ? sprintf("%01.02f", $cepage['vci']) : null);
             }
 
-            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels'], ($appellation['vci'] > 0) ? sprintf("%01.02f", $appellation['vci']) : null);
+            echo sprintf("%s;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $appellation_key, $appellation['superficie'],$appellation['volume'],$appellation['volume_revendique'],$appellation['usages_industriels']+$appellation['vci'], ($appellation['vci'] > 0) ? sprintf("%01.02f", $appellation['vci']) : null);
         }
 
-        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels'], ($stats['vci'] > 0) ? sprintf("%01.02f", $stats['vci']) : null);
+        echo sprintf("TOTAL;TOTAL;%01.02f;%01.02f;%01.02f;%01.02f;%s\n", $stats['superficie'],$stats['volume'],$stats['volume_revendique'],$stats['usages_industriels']+$stats['vci'], ($stats['vci'] > 0) ? sprintf("%01.02f", $stats['vci']) : null);
 
         echo sprintf("NB_DR;%s",$n)."\n";
     }
