@@ -159,25 +159,29 @@ class ExportDRPdf extends ExportDocument {
       				'libelle' => array_slice($infos['libelle'], $i, $nb_colonnes_by_page),
       				'superficie' => array_slice($infos['superficie'], $i, $nb_colonnes_by_page),
       				'volume' => array_slice($infos['volume'], $i, $nb_colonnes_by_page),
-              'volume_vendus' => array_slice($infos['volume_vendus'], $i, $nb_colonnes_by_page),
-              'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
-              'volume_rebeches' => array_slice($infos['volume_rebeches'], $i, $nb_colonnes_by_page),
-              'volume_rebeches_sur_place' => array_slice($infos['volume_rebeches_sur_place'], $i, $nb_colonnes_by_page),
-              'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
-              'revendique_sur_place' => array_slice($infos['revendique_sur_place'], $i, $nb_colonnes_by_page),
-              'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
+                    'volume_vendus' => array_slice($infos['volume_vendus'], $i, $nb_colonnes_by_page),
+                    'volume_sur_place' => array_slice($infos['volume_sur_place'], $i, $nb_colonnes_by_page),
+                    'volume_rebeches' => array_slice($infos['volume_rebeches'], $i, $nb_colonnes_by_page),
+                    'volume_rebeches_sur_place' => array_slice($infos['volume_rebeches_sur_place'], $i, $nb_colonnes_by_page),
+                    'revendique' => array_slice($infos['revendique'], $i, $nb_colonnes_by_page),
+                    'revendique_sur_place' => array_slice($infos['revendique_sur_place'], $i, $nb_colonnes_by_page),
+                    'usages_industriels' => array_slice($infos['usages_industriels'], $i, $nb_colonnes_by_page),
       				'usages_industriels_sur_place' => array_slice($infos['usages_industriels_sur_place'], $i, $nb_colonnes_by_page),
+      				'volume_vci' => array_slice($infos['volume_vci'], $i, $nb_colonnes_by_page),
+      				'volume_vci_sur_place' => array_slice($infos['volume_vci_sur_place'], $i, $nb_colonnes_by_page),
       				'total_superficie' => $infos['total_superficie'],
-              'total_volume' => $infos['total_volume'],
+                    'total_volume' => $infos['total_volume'],
         			'total_volume_vendus' => $infos['total_volume_vendus'],
-              'total_usages_industriels' => $infos['total_usages_industriels'],
-              'total_usages_industriels_sur_place' => $infos['total_usages_industriels_sur_place'],
-              'total_revendique' => $infos['total_revendique'],
+                    'total_usages_industriels' => $infos['total_usages_industriels'],
+                    'total_usages_industriels_sur_place' => $infos['total_usages_industriels_sur_place'],
+                    'total_revendique' => $infos['total_revendique'],
         			'total_revendique_sur_place' => $infos['total_revendique_sur_place'],
-              'total_volume_sur_place' => $infos['total_volume_sur_place'],
-              'total_volume_rebeches' => $infos['total_volume_rebeches'],
-              'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
-              'lies' => $infos['lies'],
+                    'total_volume_sur_place' => $infos['total_volume_sur_place'],
+                    'total_volume_rebeches' => $infos['total_volume_rebeches'],
+                    'total_volume_rebeches_sur_place' => $infos['total_volume_rebeches_sur_place'],
+                    'total_volume_vci' => $infos['total_volume_vci'],
+                    'total_volume_vci_sur_place' => $infos['total_volume_vci_sur_place'],
+                    'lies' => $infos['lies'],
         			'jeunes_vignes' => $infos['jeunes_vignes'],
 
       			);
@@ -206,7 +210,8 @@ class ExportDRPdf extends ExportDocument {
       protected function createRecap($dr) {
         $recap = $this->getRecapTotal($dr);
         $total = array("revendique_sur_place" => null,
-                       "usages_industriels_sur_place" => null);
+                       "usages_industriels_sur_place" => null,
+                       "vci_sur_place" => null);
         foreach($recap as $key => $item) {
             $total["revendique_sur_place"] += $item->revendique_sur_place;
             $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;

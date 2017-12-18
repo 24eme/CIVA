@@ -161,7 +161,13 @@ table {
 		<tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;VCI</td>
             <?php foreach ($appellations as $a): ?>
-            <td style="width: 120px;"><?php echoVolume($volume_vci[$a]); ?></td>
+				<td style="width: 120px;">
+					<?php if($volume_vci[$a]): ?>
+						<?php echoVolume($volume_vci[$a]); ?>
+					<?php else: ?>
+						&nbsp;
+					<?php endif; ?>
+				</td>
             <?php endforeach; ?>
             <?php if ($has_total): ?>
             <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci'], true);?></td>
@@ -173,7 +179,11 @@ table {
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
 			<?php foreach ($appellations as $a): ?>
 			<td style="width: 120px;">
-				<?php echoVolume( $volume_vci_sur_place[$a]); ?>
+				<?php if($volume_vci_sur_place[$a]): ?>
+					<?php echoVolume($volume_vci_sur_place[$a]); ?>
+				<?php else: ?>
+					&nbsp;
+				<?php endif; ?>
 			</td>
 			<?php endforeach; ?>
 			<?php if ($has_total): ?>
