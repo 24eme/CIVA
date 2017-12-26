@@ -251,7 +251,7 @@ class ExportDRXml {
                                         if ($col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
-                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels(); //DPLC
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels() + $cepage->getTotalVci(); //DPLC
                                         $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } elseif(count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_DOUANE && $mention->getKey() != 'mention') {
                                         $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
