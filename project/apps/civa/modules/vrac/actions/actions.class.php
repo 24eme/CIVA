@@ -8,7 +8,8 @@ class vracActions extends sfActions
 		if($request->getParameter('createur')) {
     		$this->getUser()->setAttribute('vrac_createur', $request->getParameter('createur'));
 		}
-    	return $this->redirect('vrac_nouveau');
+		
+    	return $this->redirect('vrac_nouveau', array('papier' => $request->getParameter('papier', 0)));
     }
 
     public function executeNouveau(sfWebRequest $request)
@@ -16,6 +17,7 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::CREATION, null);
         $this->getUser()->setAttribute('vrac_object', null);
         $this->getUser()->setAttribute('vrac_acteur', null);
+        $this->getUser()->setAttribute('vrac_papier', $request->getParameter('papier', false));
 
     	$etapes = VracEtapes::getInstance();
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
@@ -278,7 +280,11 @@ class vracActions extends sfActions
 				$this->cleanSessions();
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
-       			} else {
+       			} elseif($this->vrac->isPapier()) {
+					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+
+					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+			    } else {
 		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 					foreach ($emails as $email) {
 						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
@@ -508,6 +514,7 @@ class vracActions extends sfActions
     	$this->getUser()->setAttribute('vrac_acteur', null);
     	$this->getUser()->setAttribute('vrac_type_tiers', null);
     	$this->getUser()->setAttribute('vrac_createur', null);
+    	$this->getUser()->setAttribute('vrac_papier', null);
     }
 
 	protected function getEtablissementCreateur() {

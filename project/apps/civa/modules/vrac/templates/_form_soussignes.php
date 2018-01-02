@@ -1,8 +1,8 @@
 
 <div class="clearfix">
-	<fieldset id="type_contrat" class="bloc_infos">
+	<fieldset id="type_contrat" class="bloc_infos" style="margin-bottom: 25px;">
 		<legend class="titre_section">Type de contrat</legend>
-		
+
 		<div class="clearfix">
 			<div id="type_contrat_radio_list" class="form_col selecteur">
 				<div class="ligne_form">
@@ -16,13 +16,13 @@
 			</div>
 		</div>
 	</fieldset>
-	
+
 	<p class="intro_contrat_vrac">Saisissez ici les noms ou CVI des soussignés concernés par le contrat. Si ceux-ci ne sont pas déjà listés dans l'annuaire de vos interlocuteurs, vous pouvez ajouter un contact à partir de son CVI.</p>
-	
+
 	<?php if (!$vrac->isVendeurProprietaire()): ?>
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Vendeur</legend>
-		
+
 		<div class="clearfix">
 			<div class="form_col selecteur">
 				<div class="bloc_condition ligne_form" data-condition-cible="#vendeur_recoltants|#vendeur_negociants|#vendeur_caves_cooperatives">
@@ -41,21 +41,27 @@
 							<td valign="top">
 								<div id="vendeur_recoltants" data-acteur="vendeur" data-type="recoltant" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
 									<?php echo $form['vendeur_recoltant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "recoltants")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
 								<div id="vendeur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 									<?php echo $form['vendeur_negociant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "negociants")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
 								<div id="vendeur_caves_cooperatives" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 									<?php echo $form['vendeur_cave_cooperative_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "vendeur", "data-type" => "caves_cooperatives")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'vendeur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
 							</td>
 						</tr>
@@ -84,8 +90,8 @@
 				</div>
 				</div>
 			</div>
-			
-			
+
+
 			<div id="vendeur_infos" class="cible">
 			<?php if($vrac->vendeur_identifiant): ?>
 				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->vendeur, 'fiche' => false)); ?>
@@ -96,18 +102,18 @@
 		<?php echo $form['interlocuteur_commercial']->renderError() ?>
 	</fieldset>
 	<?php endif; ?>
-	
+
 	<?php if (!$vrac->isAcheteurProprietaire()): ?>
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Acheteur</legend>
-		
+
 		<div class="clearfix">
 			<div class="form_col selecteur">
 				<div class="bloc_condition ligne_form" data-condition-cible="#acheteur_recoltants|#acheteur_negociants|#acheteur_caves_cooperatives">
 					<label for="vrac_soussignes_acheteur_type_recoltants" class="bold">Type :</label>
 					<?php echo $form['acheteur_type']->render() ?>
 				</div>
-		
+
 				<div class="nom_cvi ligne_form">
 
 					<?php echo $form['acheteur_recoltant_identifiant']->renderError() ?>
@@ -118,23 +124,29 @@
 							<td valign="top" class="td_label"><label for="vrac_soussignes_acheteur_recoltant_identifiant" class="bold">Nom / CVI * :</label></td>
 							<td valign="top">
 								<div id="acheteur_recoltants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY ?>">
-									<?php echo $form['acheteur_recoltant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "recoltants")) ?>
+									<?php echo $form['acheteur_recoltant_identifiant']->render(array("class" => "choix_soussigne select2autocomplete", "data-acteur" => "acheteur", "data-type" => "recoltants")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
-			
+
 								<div id="acheteur_negociants" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY ?>">
 									<?php echo $form['acheteur_negociant_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "negociants")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
 								<div id="acheteur_caves_cooperatives" data-acteur="cave_cooperative" data-type="recoltant" class="bloc_conditionner ligne_form" data-condition-value="<?php echo AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY ?>">
 									<?php echo $form['acheteur_cave_cooperative_identifiant']->render(array("class" => "choix_soussigne", "data-acteur" => "acheteur", "data-type" => "caves_cooperatives")) ?>
+									<?php if(!$vrac->isPapier()): ?>
 									<div class="ajouter_annuaire">
 										<a href="<?php echo url_for('vrac_annuaire', array('sf_subject' => $vrac, 'type' => AnnuaireClient::ANNUAIRE_CAVES_COOPERATIVES_KEY, 'acteur' => 'acheteur')) ?>">Ajouter un contact</a>
 									</div>
+									<?php endif; ?>
 								</div>
 							</td>
 						</tr>
@@ -162,7 +174,7 @@
 				</div>
 				</div>
 			</div>
-			
+
 			<div id="mandataire_infos">
 			<?php if($vrac->mandataire_identifiant): ?>
 				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->mandataire, 'fiche' => false)); ?>
@@ -174,7 +186,7 @@
 	</fieldset>
 	<?php endif; ?>
 	<?php else: ?>
-	
+
 	<fieldset class="bloc_infos">
 		<legend class="titre_section">Acheteur</legend>
 
@@ -188,8 +200,8 @@
 				</div>
 				</div>
 			</div>
-			
-			
+
+
 			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
 				<?php include_partial('vrac/soussigne', array('vrac' => $vrac, 'tiers' => $vrac->acheteur, 'fiche' => false)); ?>
@@ -219,22 +231,22 @@
 
 		$("select.choix_soussigne").combobox();
 		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").combobox();
-		$("select.choix_soussigne").change(function() { 
+		$("select.choix_soussigne").change(function() {
 			var acteur = $(this).attr('data-acteur');
 			var type = $(this).attr('data-type');
-			if ($(this).val() == 'add') { 
+			if ($(this).val() == 'add') {
 				$("#principal").attr('action', url_annuaire.replace('-type-', type).replace('-acteur-', acteur));
 				$("#principal").submit();
 				return;
 			}
 			$.post(url_soussigne.replace('-acteur-', acteur), { identifiant: $(this).val() }, function(data) {$('#'+acteur+'_infos').empty(); $('#'+acteur+'_infos').append(data);});
 		});
-		
-		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").change(function() { 
+
+		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").change(function() {
 			if ($(this).val() == 'add') {
 				$("#principal").attr('action', '<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>');
 				$("#principal").submit();
-				return; 
+				return;
 			}
 		});
 		$(".remove_autocomplete").click(function() {
@@ -243,5 +255,3 @@
 	});
 	</script>
 </div>
-	
-

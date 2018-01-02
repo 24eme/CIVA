@@ -177,13 +177,13 @@ var initConfirmeSignatureVrac = function()
 
 var initChoixTypeVrac = function()
 {
-    $('#choixType').click(function() {
+    $('.choixTypeVracPopup').click(function() {
         openPopup($("#popup_choix_typeVrac"));
         return false;
     });
-    $('.choixType_OK').click(function() {
-        $("#popup_choix_typeVrac").dialog('close');
-        document.location.href=$(this).attr("href");
+
+	$('.choixTypeVracPopupPapier').click(function() {
+        openPopup($("#popup_choix_typeVracPapier"));
         return false;
     });
 };

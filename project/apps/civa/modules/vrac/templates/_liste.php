@@ -12,7 +12,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php 
+		<?php
 			$counter = 0;
 			foreach ($vracs as $vrac):
 				$item = $vrac->value;
@@ -20,6 +20,9 @@
 					continue;
 				}
 				if ($item->statut == Vrac::STATUT_CREE && !$item->is_proprietaire) {
+					continue;
+				}
+				if($item->papier && $item->statut == Vrac::STATUT_CREE && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 					continue;
 				}
 				$alt = ($counter%2);
@@ -35,8 +38,8 @@
 			<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
 			<td>
 				<ul class="liste_soussignes">
-					<?php 
-						if ($item->soussignes->vendeur->identifiant): 
+					<?php
+						if ($item->soussignes->vendeur->identifiant):
 							if (array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue()) && $item->soussignes->vendeur->date_validation) {
 								$hasValidated = true;
 							}
@@ -45,7 +48,7 @@
 					<?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
-					<?php 
+					<?php
 						if ($item->soussignes->acheteur->identifiant):
 							if (array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue()) && $item->soussignes->acheteur->date_validation) {
 								$hasValidated = true;
@@ -55,7 +58,7 @@
 						<?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong></li>
 					<?php endif; ?>
-					<?php 
+					<?php
 						if ($item->soussignes->mandataire->identifiant):
 							if (array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue()) && $item->soussignes->mandataire->date_validation) {
 								$hasValidated = true;
@@ -67,7 +70,7 @@
 					<?php endif; ?>
 				</ul>
 			</td>
-			<td><?php if (!$hasValidated && $item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
+			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && $item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
 					<?php if ($item->statut == Vrac::STATUT_CREE): ?>

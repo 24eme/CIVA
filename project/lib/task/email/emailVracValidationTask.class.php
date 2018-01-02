@@ -10,7 +10,7 @@
  * @author mathurin
  */
 class emailVracValidationTask extends sfBaseTask {
-    
+
   protected function configure()
   {
 
@@ -36,7 +36,7 @@ EOF;
   {
     set_time_limit('240');
     ini_set('memory_limit', '512M');
-    
+
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
@@ -47,7 +47,7 @@ EOF;
   	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
     foreach ($contrats as $contrat) {
     	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
-      $document->generatePDF();
+        $document->generatePDF();
     	$emails = $contrat->getEmails();
                     foreach($emails as $email) {
                     	VracMailer::getInstance()->validationContrat($contrat, $email, $document);

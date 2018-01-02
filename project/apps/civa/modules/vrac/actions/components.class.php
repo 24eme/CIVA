@@ -8,6 +8,7 @@ class vracComponents extends sfComponents {
     	$this->getUser()->setAttribute('vrac_acteur', null);
     	$this->getUser()->setAttribute('vrac_type_tiers', null);
     	$this->getUser()->setAttribute('vrac_createur', null);
+    	$this->getUser()->setAttribute('vrac_papier', null);
 		$this->tiers = $this->getUser()->getDeclarantsVrac();
         $this->hasDoubt = true;
         $etablissements = VracClient::getInstance()->getEtablissements($this->getUser()->getCompte()->getSociete());

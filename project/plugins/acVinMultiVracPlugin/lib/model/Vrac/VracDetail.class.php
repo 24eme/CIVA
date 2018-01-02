@@ -91,13 +91,15 @@ class VracDetail extends BaseVracDetail {
     	$this->volume_enleve = $total;
     }
 
-	public function autoFillRetiraisons() {
+	public function autoFillRetiraisons($fillDate = true) {
 		if(count($this->retiraisons) > 0) {
 			return;
 		}
 
 		$retiraison = $this->retiraisons->add();
-		$retiraison->date = $this->getDocument()->valide->date_validation;
+		if($fillDate) {
+			$retiraison->date = $this->getDocument()->valide->date_validation;
+		}
 		$retiraison->volume = $this->volume_propose;
 		$this->clotureProduits();
 		$this->updateVolumeEnleve();

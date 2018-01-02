@@ -438,6 +438,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->signer($this->createur_identifiant);
     }
 
+	public function signerPapier($date) {
+		$this->valide->date_validation_vendeur = $date;
+		$this->valide->date_validation_acheteur = $date;
+		$this->valide->date_validation_mandataire = $date;
+		$this->valide->date_validation = $date;
+		$this->declaration->cleanAllNodes();
+		$this->updateValideStatut();
+		$this->forceClotureContrat(false);
+		$this->valide->date_cloture = $date;
+		$this->valide->email_cloture = true;
+	}
+
     public function signer($tiers_id)
     {
     	$type = $this->getTypeTiers($tiers_id);
@@ -492,9 +504,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		return (!$this->volume_enleve_total && $this->isValide() && !$this->isCloture());
 	}
 
-	public function forceClotureContrat()
+	public function forceClotureContrat($fillDate = true)
     {
-		$this->autoFillRetiraisons();
+		$this->autoFillRetiraisons($fillDate);
 		$this->updateTotaux();
         $this->updateEnlevementStatut();
 		$this->clotureContrat();
@@ -538,9 +550,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return $this->declaration->allProduitsClotures();
     }
 
-	public function autoFillRetiraisons()
+	public function autoFillRetiraisons($fillDate = true)
     {
-    	return $this->declaration->autoFillRetiraisons();
+    	return $this->declaration->autoFillRetiraisons($fillDate);
     }
 
     public function hasRetiraisons()
@@ -727,10 +739,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->setTiersQualite('vendeur_type', $qualite);
     }
 
-		public function getRepartitionCVOCoef($vendeurIdentifiant,$date){
-			/**
-			 * Pas de repartition CVO dans les mvts
-			 */
-			return 0.0;
-		}
+	public function isPapier() {
+
+		return $this->exist('papier') && $this->papier;
+	}
+
+	public function getRepartitionCVOCoef($vendeurIdentifiant,$date){
+		/**
+		 * Pas de repartition CVO dans les mvts
+		 */
+		return 0.0;
+	}
 }

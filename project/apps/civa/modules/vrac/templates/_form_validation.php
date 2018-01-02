@@ -44,6 +44,7 @@
 	</tbody>
 </table>
 
+<?php if(!$vrac->isPapier()): ?>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -81,4 +82,35 @@
 		<?php endif; ?>
 	</tbody>
 </table>
+<?php endif; ?>
+
+<?php if($vrac->isPapier()): ?>
+<table class="validation table_donnees">
+	<thead>
+		<tr>
+			<th style="width: 212px;">Contrat papier</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<?php echo $form['numero_papier']->renderLabel() ?>
+			</td>
+			<td>
+				<span><?php echo $form['numero_papier']->renderError() ?></span>
+				<?php echo $form['numero_papier']->render() ?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo $form['date_signature']->renderLabel() ?>
+			</td>
+			<td>
+				<span><?php echo $form['date_signature']->renderError() ?></span>
+				<?php echo $form['date_signature']->render(array('class' => 'datepicker')) ?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<?php endif; ?>
 <?php include_partial('vrac/popupConfirmeValidation'); ?>

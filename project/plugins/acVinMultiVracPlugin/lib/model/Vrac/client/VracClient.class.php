@@ -165,7 +165,7 @@ class VracClient extends acCouchdbClient {
 		return false;
 	}
 
-    public function createVrac($createurIdentifiant, $date = null)
+    public function createVrac($createurIdentifiant, $date = null, $papier = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
@@ -173,6 +173,9 @@ class VracClient extends acCouchdbClient {
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne);
+		if($papier) {
+			$vrac->add('papier', true);
+		}
         return $vrac;
     }
 

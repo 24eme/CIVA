@@ -7,4 +7,5 @@ Acheteur : <?php echo ($vrac->acheteur->intitule)? $vrac->acheteur->intitule.' '
 
 <?php if ($vrac->hasCourtier()): ?>
 Courtier : <?php echo ($vrac->mandataire->intitule)? $vrac->mandataire->intitule.' '.$vrac->mandataire->raison_sociale : $vrac->mandataire->raison_sociale ?><?php if ($vrac->interlocuteur_commercial->nom): ?> (votre interlocuteur : <?php echo $vrac->interlocuteur_commercial->nom ?>)<?php endif; ?>
+
 <?php endif; ?>

@@ -15,7 +15,7 @@ class VracRoute extends sfObjectRoute
     	}
 
         if ($parameters['numero_contrat'] == self::NOUVEAU) {
-            return $this->getNouveauVrac(sfContext::getInstance()->getUser());
+            return $this->getNouveauVrac(sfContext::getInstance()->getUser(), null, $this->getUser()->getAttribute('vrac_papier'));
         }
 
         $vrac = VracClient::getInstance()->findByNumeroContrat($parameters['numero_contrat']);
@@ -48,7 +48,7 @@ class VracRoute extends sfObjectRoute
 			$tiers = VracClient::getInstance()->getFirstEtablissement($this->getUser()->getCompte()->getSociete());
 		}
 
-        $vrac = VracClient::getInstance()->createVrac($tiers->_id);
+        $vrac = VracClient::getInstance()->createVrac($tiers->_id, null, $this->getUser()->getAttribute('vrac_papier'));
         if ($tiers->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
             $vrac->mandataire_identifiant = $tiers->_id;
             $vrac->storeMandataireInformations($tiers);

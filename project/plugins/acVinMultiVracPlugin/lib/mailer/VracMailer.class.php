@@ -39,26 +39,45 @@ class VracMailer {
 
         return self::getMailer()->send($message);
     }
-    
-    public function validationContrat($vrac, $destinataire, $document) 
+
+    public function validationContrat($vrac, $destinataire, $document)
     {
+		if($vrac->isPapier()) {
+
+			return $this->validationContratPapier($vrac, $destinataire);
+		}
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));        
+        $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
   					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
-		
+
         return self::getMailer()->send($message);
     }
-    
-    public function annulationContrat($vrac, $destinataire) 
+
+	public function validationContratPapier($vrac, $destinataire)
+    {
+        $from = self::getFrom();
+        $to = array($destinataire);
+        $body = self::getBodyFromPartial('vrac_validation_contrat_papier', array('vrac' => $vrac));
+	    $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Validation de votre contrat papier n° '.$vrac->numero_papier;
+		$message = Swift_Message::newInstance()
+  					->setFrom($from)
+  					->setTo($to)
+  					->setSubject($subject)
+  					->setBody($body);
+
+        return self::getMailer()->send($message);
+    }
+
+    public function annulationContrat($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -70,36 +89,36 @@ class VracMailer {
 
         return self::getMailer()->send($message);
     }
-    
-    public function clotureContrat($vrac, $destinataire, $document) 
+
+    public function clotureContrat($vrac, $destinataire, $document)
     {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Cloture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_cloture_contrat_'.strtolower($vrac->type_contrat), array('vrac' => $vrac));        
+        $body = self::getBodyFromPartial('vrac_cloture_contrat_'.strtolower($vrac->type_contrat), array('vrac' => $vrac));
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
   					->setTo($to)
   					->setSubject($subject)
   					->setBody($body)
   					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
-		
+
         return self::getMailer()->send($message);
     }
-    
+
     protected static function getFrom()
     {
     	return array("ne_pas_repondre_contrat@civa.fr" => "Contrats CIVA");
     }
 
-    protected static function getMailer() 
+    protected static function getMailer()
     {
         return sfContext::getInstance()->getMailer();
     }
 
-    protected static function getBodyFromPartial($partial, $vars = null) 
+    protected static function getBodyFromPartial($partial, $vars = null)
     {
         return htmlspecialchars_decode(sfContext::getInstance()->getController()->getAction('email', 'main')->getPartial('email/' . $partial, $vars), ENT_QUOTES);
     }

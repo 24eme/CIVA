@@ -12,17 +12,18 @@ function(doc) {
 	var numero_visa = doc.numero_visa;
 	var etape = doc.etape;
 	var type_contrat = doc.type_contrat;
-	
+    var papier = (doc.papier) ? 1 : 0;
+
 	if (doc.vendeur_identifiant) {
 		var is_proprietaire = (doc.vendeur_identifiant == doc.createur_identifiant)? 1 : 0;
-		emit([doc.vendeur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "vendeur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat});
+		emit([doc.vendeur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "vendeur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat, papier: papier});
 	}
 	if (doc.acheteur_identifiant) {
 		var is_proprietaire = (doc.acheteur_identifiant == doc.createur_identifiant)? 1 : 0;
-		emit([doc.acheteur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "acheteur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat});
+		emit([doc.acheteur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "acheteur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat, papier: papier});
 	}
 	if (doc.mandataire_identifiant) {
 		var is_proprietaire = (doc.mandataire_identifiant == doc.createur_identifiant)? 1 : 0;
-		emit([doc.mandataire_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "mandataire", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat});
+		emit([doc.mandataire_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "mandataire", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, etape: etape, type_contrat: type_contrat, papier: papier});
 	}
 }
