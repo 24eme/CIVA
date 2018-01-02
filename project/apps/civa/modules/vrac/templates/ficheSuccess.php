@@ -11,12 +11,12 @@
 	<li class="ui-tabs-selected">
 		<a href="#" style="height: 18px;">
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if ($vrac->numero_archive): ?> numéro de visa <?php echo $vrac->numero_archive ?><?php endif; ?>
+			Contrat <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
 			Validation de votre contrat
 		<?php endif; ?>
 		</a>
-		<span class="statut"><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?></span>
+		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?></span>
 	</li>
 </ul>
 </div>
@@ -59,6 +59,7 @@
 			<a style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
 		<?php endif; ?>
 
+<?php if(!$vrac->isPapier()): ?>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -94,14 +95,14 @@
 		<?php endif; ?>
 	</tbody>
 </table>
-
+<?php endif; ?>
 
 	</div>
 
 	<table id="actions_fiche">
 		<tr>
 			<td style="width: 40%"><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
-			<td align="center"><?php if ($vrac->isValide()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
+			<td align="center"><?php if ($vrac->isValide() && !$vrac->isPapier()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
 			<td style="width: 40%; text-align: right;">
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
@@ -114,7 +115,7 @@
 				<?php if ($form): ?>
 					<input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider vos enlèvements" />
 				<?php endif; ?>
-				<?php if(!$form && $vrac->isCloture()): ?>
+				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
 					<p>Contrat vrac numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 			</td>

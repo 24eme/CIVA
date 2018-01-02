@@ -1,6 +1,6 @@
 <?php
 
-class WidgetEtablissement extends bsWidgetFormInput
+class WidgetEtablissementSelect extends sfWidgetFormSelect
 {
     protected $identifiant = null;
 
@@ -17,7 +17,8 @@ class WidgetEtablissement extends bsWidgetFormInput
 
         $this->addOption('familles', array());
         $this->addOption('autofocus', array());
-        $this->addRequiredOption('interpro_id', null);
+        $this->addOption('choices', array());
+        $this->addRequiredOption('interpro_id', 'INTERPRO-declaration');
     }
 
     public function setOption($name, $value) {
@@ -49,22 +50,16 @@ class WidgetEtablissement extends bsWidgetFormInput
         return sfContext::getInstance()->getRouting()->generate('etablissement_autocomplete_all', array('interpro_id' => $interpro_id));
     }
 
-    public function render($name, $value = null, $attributes = array(), $errors = array())
+    protected function getOptionsForSelect($value, $choices)
     {
-        $this->identifiant = $value;
-
-        if($this->identifiant) {
-            $etablissements = EtablissementAllView::getInstance()->findByEtablissement($this->identifiant);
-            if(!$etablissements) {
-                $value = null;
-            } else {
-                foreach($etablissements as $key => $etablissement) {
-                    $value = $etablissement->id.','.EtablissementAllView::getInstance()->makeLibelle($etablissement);
-                }
+        if($value) {
+            $etablissements = EtablissementAllView::getInstance()->findByEtablissement($value);
+            foreach($etablissements as $key => $etablissement) {
+                $choices[$value] = $etablissement->key[EtablissementAllView::KEY_NOM];
             }
         }
 
-        return parent::render($name, $value, $attributes, $errors);
+        return parent::getOptionsForSelect($value, $choices);
     }
 
 }

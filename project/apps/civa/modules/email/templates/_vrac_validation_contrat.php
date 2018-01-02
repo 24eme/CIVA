@@ -1,6 +1,5 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
-
 Ce contrat, ayant été validé par toutes les parties, a été visé par le CIVA.
 
 Vous trouverez ci-joint la version pdf avec le numéro de visa suivant <?php echo $vrac->numero_visa ?>.

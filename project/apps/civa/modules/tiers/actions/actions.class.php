@@ -83,6 +83,10 @@ class tiersActions extends sfActions {
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
         foreach($vracs as $vrac) {
             $item = $vrac->value;
+            if($item->papier) {
+                continue;
+            }
+            
             if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
                $this->vracs['CONTRAT_A_TERMINER'] += 1;
             }

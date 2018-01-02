@@ -24,6 +24,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'acheteur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
         	'acheteur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
         	'vendeur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
+        	'vendeur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
         	'vendeur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
         	'vendeur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
         	'interlocuteur_commercial' => new sfWidgetFormChoice(array('choices' => array_merge($commerciauxChoices, array('add' => 'Ajouter un contact'))))
@@ -40,6 +41,23 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'vendeur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($commerciauxChoices)))
         ));
+
+		if($this->getObject()->isPapier()) {
+			$this->setWidget('vendeur_recoltant_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
+			$this->setValidator('vendeur_recoltant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
+			$this->setWidget('vendeur_negociant_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_NEGOCIANT))));
+			$this->setValidator('vendeur_negociant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_NEGOCIANT))));
+			$this->setWidget('vendeur_cave_cooperative_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
+			$this->setValidator('vendeur_cave_cooperative_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
+
+			$this->setWidget('acheteur_recoltant_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
+			$this->setValidator('acheteur_recoltant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
+			$this->setWidget('acheteur_negociant_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_NEGOCIANT))));
+			$this->setValidator('acheteur_negociant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_NEGOCIANT))));
+			$this->setWidget('acheteur_cave_cooperative_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
+			$this->setValidator('acheteur_cave_cooperative_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
+		}
+
         if (!$this->getObject()->isNew()) {
         	unset($this['type_contrat']);
         }

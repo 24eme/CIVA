@@ -212,10 +212,10 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         return null;
     }
 
-    public function autoFillRetiraisons()
+    public function autoFillRetiraisons($fillDate = true)
     {
         foreach($this->getChildrenNode() as $key => $item) {
-        	$item->autoFillRetiraisons();
+        	$item->autoFillRetiraisons($fillDate);
         }
         return null;
     }

@@ -210,6 +210,12 @@ input[type=radio]
 }
 
 /* Tailles */
+.btn_minus
+{
+    font-size: 11px;
+    padding: 3px 8px;
+}
+
 .btn_petit
 {
     font-size: 13px;

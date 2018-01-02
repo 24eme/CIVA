@@ -1,6 +1,6 @@
 <?php
-class VracSoussignesAnnuaireForm extends VracSoussignesForm 
-{    
+class VracSoussignesAnnuaireForm extends VracSoussignesForm
+{
 	public function configure()
     {
     	$this->disableCSRFProtection();

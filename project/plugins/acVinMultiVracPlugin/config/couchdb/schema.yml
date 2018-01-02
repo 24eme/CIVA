@@ -153,7 +153,7 @@ Vrac:
                                                       libelle: {  }
                                                       libelle_long: { required: false }
                                                       no_vtsgn: {  }
-                                                      detail:                                                        
+                                                      detail:
                                                         type: array_collection
                                                         definition:
                                                           fields:
@@ -207,6 +207,7 @@ Vrac:
       numero_visa: {  }
       numero_db2: { }
       numero_archive: {  }
+      numero_papier: {  }
       prix_total: { type: float }
       prix_reel_total: { type: float }
       volume_propose_total: { type: float }
@@ -218,3 +219,4 @@ Vrac:
       date_export_creation: {  }
       motif_suppression: {  }
       clause_reserve_propriete: { required: false }
+      papier: { required: false }

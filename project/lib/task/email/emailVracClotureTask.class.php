@@ -46,6 +46,9 @@ EOF;
 
   	$contrats = VracMailingView::getInstance()->getContratsForEmailCloture();
     foreach ($contrats as $contrat) {
+        if($contrat->isPapier()) {
+            continue;
+        }
     	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
     	$document->generatePDF();
     	$emails = $contrat->getEmails();
