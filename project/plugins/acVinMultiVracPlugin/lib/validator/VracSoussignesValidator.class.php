@@ -1,16 +1,16 @@
 <?php
-class VracSoussignesValidator extends sfValidatorBase 
+class VracSoussignesValidator extends sfValidatorBase
 {
-	
+
 	protected $vrac;
-	
+
 	public function __construct($vrac, $options = array(), $messages = array())
   	{
   		$this->vrac = $vrac;
   		parent::__construct($options, $messages);
   	}
-    
-    public function configure($options = array(), $messages = array()) 
+
+    public function configure($options = array(), $messages = array())
     {
     	$this->setMessage('required', "Champ obligatoire");
         $this->setMessage('invalid', "Cet opérateur n'est plus actif");
@@ -18,7 +18,7 @@ class VracSoussignesValidator extends sfValidatorBase
         $this->addMessage('email', "Des informations obligatoires sont manquantes");
     }
 
-    protected function doClean($values) 
+    protected function doClean($values)
     {
     	$errorSchema = new sfValidatorErrorSchema($this);
     	$hasErrors = false;
@@ -47,7 +47,7 @@ class VracSoussignesValidator extends sfValidatorBase
     	if (!$vendeur && $this->vrac->isVendeurProprietaire()) {
     		$vendeur = $this->vrac->vendeur_identifiant;
     	}
-    	
+
     	if (!$vendeur) {
     		$errorSchema->addError(new sfValidatorErrorSchema($this, array('vendeur_'.$vendeur_type.'_identifiant' => new sfValidatorError($this, 'required'))));
             $hasErrors = true;
@@ -85,15 +85,15 @@ class VracSoussignesValidator extends sfValidatorBase
         $acheteurHasEmail = (count($this->vrac->acheteur->emails))? true : false;
         $mandataireHasEmail = ($this->vrac->mandataire_identifiant && count($this->vrac->mandataire->emails))? true : false;
 
-        if (!$vendeurHasEmail || !$acheteurHasEmail) {
+        if (!$this->vrac->isPapier() && (!$vendeurHasEmail || !$acheteurHasEmail)) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }
-        if (!$this->vrac->isAcheteurProprietaire() && !$this->vrac->isVendeurProprietaire() && !$mandataireHasEmail) {
+        if (!$this->vrac->isPapier() && (!$this->vrac->isAcheteurProprietaire() && !$this->vrac->isVendeurProprietaire() && !$mandataireHasEmail)) {
         	throw new sfValidatorErrorSchema($this, array(new sfValidatorError($this, 'email')));
         }
         return array_merge($values, array('acheteur' => $acheteur, 'vendeur' => $vendeur));
     }
-    
+
     protected function getTiers($id)
     {
     	return _TiersClient::getInstance()->find($id);
