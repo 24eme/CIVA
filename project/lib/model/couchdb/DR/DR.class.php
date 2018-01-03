@@ -262,7 +262,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $compte = CompteClient::getInstance()->find($compte_id);
 
         if(!$compte) {
-            $compte = _CompteClient::getInstance()->find($compte_id);
+            $compte = CompteClient::getInstance()->find($compte_id);
         }
 
         if(!$compte) {
@@ -272,7 +272,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $compte_dr = $this->getEtablissementObject()->getMasterCompte();
 
-        if($compte instanceof _Compte && $compte->isOperateur()) {
+        if($compte instanceof Compte && $compte->hasDroit(Roles::OPERATEUR)) {
 
             return DRClient::VALIDEE_PAR_CIVA;
         }
