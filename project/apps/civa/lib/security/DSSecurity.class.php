@@ -86,9 +86,9 @@ class DSSecurity implements SecurityInterface {
 		/*
 		 * Voir condition avec vincent car bloque les ouvertures DS non negoces
 		 */
-        /*if(in_array(self::CREATION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+        if(in_array(self::CREATION, $droits) && CurrentClient::getCurrent()->isDSDecembre() && !$this->etablissement->exist('ds_decembre')) {
             return false;
-        }*/
+        }
 
         if(in_array(self::CREATION, $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
             return false;
@@ -124,9 +124,10 @@ class DSSecurity implements SecurityInterface {
         /*
          * Voir condition avec vincent car bloque les ouvertures DS non negoces
          */
-        /*if(in_array(self::EDITION, $droits) && !$this->etablissement->exist('ds_decembre')) {
+        if(in_array(self::EDITION, $droits) && CurrentClient::getCurrent()->isDSDecembre() && !$this->etablissement->exist('ds_decembre')) {
+
             return false;
-        }*/
+        }
 
         if(in_array(self::EDITION , $droits) && !DSCivaClient::getInstance()->isTeledeclarationOuverte()) {
             return false;
