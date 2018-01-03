@@ -102,7 +102,17 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
+        if(in_array(self::EDITION, $droits) && $this->vrac->isPapier() && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+
+            return false;
+        }
+
         /*** SIGNATURE ***/
+
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isPapier()) {
+
+            return false;
+        }
 
         if(in_array(self::SIGNATURE, $droits) && $this->vrac->isValide()) {
 
