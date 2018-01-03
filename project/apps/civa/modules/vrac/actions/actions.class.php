@@ -8,7 +8,7 @@ class vracActions extends sfActions
 		if($request->getParameter('createur')) {
     		$this->getUser()->setAttribute('vrac_createur', $request->getParameter('createur'));
 		}
-		
+
     	return $this->redirect('vrac_nouveau', array('papier' => $request->getParameter('papier', 0)));
     }
 
@@ -17,7 +17,7 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::CREATION, null);
         $this->getUser()->setAttribute('vrac_object', null);
         $this->getUser()->setAttribute('vrac_acteur', null);
-        $this->getUser()->setAttribute('vrac_papier', $request->getParameter('papier', false));
+        $this->getUser()->setAttribute('vrac_papier', (bool) $request->getParameter('papier', false));
 
     	$etapes = VracEtapes::getInstance();
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));

@@ -15,8 +15,8 @@
 				<div class="ligne_form" id="type_contrat_radio_list" style="margin:0;">
 					<label class="bold" style="display:inline-block;margin:0;">Vous êtes :</label>
 					<ul class="radio_list" style="margin:0;">
-						<li><input type="radio" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', array('type' => 'vendeur', 'papier' => 1)) ?>" name="choix_type">&nbsp;<label for="choix_type_vendeur" style="display:inline-block;">Vendeur</label></li>
-						<li><input type="radio" checked="checked" id="choix_type_acheteur" value="<?php echo url_for('vrac_selection_type', array('type' => 'acheteur', 'papier' => (isset($papier)) ? $papier : 0)) ?>" name="choix_type">&nbsp;<label for="choix_type_acheteur" style="display:inline-block;">Acheteur</label></li>
+						<li><input type="radio" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', array('type' => 'vendeur', 'papier' => (isset($papier) && $papier) ? $papier : 0)) ?>" name="choix_type">&nbsp;<label for="choix_type_vendeur" style="display:inline-block;">Vendeur</label></li>
+						<li><input type="radio" checked="checked" id="choix_type_acheteur" value="<?php echo url_for('vrac_selection_type', array('type' => 'acheteur', 'papier' => (isset($papier) && $papier) ? $papier : 0)) ?>" name="choix_type">&nbsp;<label for="choix_type_acheteur" style="display:inline-block;">Acheteur</label></li>
 					</ul>
 				</div>
 			</div>
@@ -27,7 +27,8 @@
 	        <script type="text/javascript">
 				$("#<?php echo $id ?> form").submit(function() {
 					var url = $('#<?php echo $id ?> form input[type=radio]:checked').val();
-					document.location.href = url+"?createur="+$('#select_createur').val();
+
+					document.location.href = url+"&createur="+$('#select_createur').val();
 					return false;
 				});
 			</script>
