@@ -1,4 +1,4 @@
-<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteilles et la centilisation.<br />La saisie des zones "Dénomination", "Millésime" et "Prix" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
@@ -15,7 +15,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php 
+	<?php
 		$counter = 0;
 		foreach ($form['produits'] as $key => $embedForm) :
 			$detail = $vrac->get($key);
@@ -59,7 +59,7 @@
 
 <script type="text/javascript">
 
-	$(document).ready(function() 
+	$(document).ready(function()
 	{
 		$("#ajouter-produit").click(function() {
 			var lien = $(this);
@@ -72,5 +72,3 @@
 		$.initChampsTableauProduits({ajoutProduit: <?php echo $referer ?>});
 	});
 </script>
-	
-
