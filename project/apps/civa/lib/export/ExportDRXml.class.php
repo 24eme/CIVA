@@ -475,6 +475,11 @@ class ExportDRXml {
             return "1B001MST";
         }
 
+        if($noeud instanceof DRRecolteCepageDetail && $noeud->getAppellation()->getKey() == "appellation_CREMANT" && preg_match("/^auxe[r]*rois$/i", $noeud->denomination)) {
+
+            return "1B001M05";
+        }
+
 
         return $noeud->getCodeDouane();
     }
