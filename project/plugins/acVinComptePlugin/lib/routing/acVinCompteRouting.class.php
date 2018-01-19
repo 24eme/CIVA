@@ -37,6 +37,7 @@ class acVinCompteRouting {
         /*$r->prependRoute('ac_vin_logout', new sfRoute('/logout', array('module' => 'acVinCompte', 'action' => 'logout')));
         $r->prependRoute('ac_vin_login', new sfRoute('/login', array('module' => 'acVinCompte', 'action' => 'login')));
         $r->prependRoute('ac_vin_forbidden', new sfRoute('/forbidden', array('module' => 'acVinCompte', 'action' => 'forbidden')));*/
+        $r->prependRoute('compte_autocomplete_all', new sfRoute('/compte/autocomplete/:interpro_id/tous', array('module' => 'compte_autocomplete', 'action' => 'all')));
 
         return;
 

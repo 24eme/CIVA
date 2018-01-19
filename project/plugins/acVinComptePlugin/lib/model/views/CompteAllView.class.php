@@ -42,6 +42,12 @@ class CompteAllView extends acCouchdbView {
     }
 
     private function findByInterproELASTIC($interpro, $qs = null, $limit = 100, $query = array()) {
+
+        if(!class_exists("acElasticaManager")) {
+
+            throw new Exception("La librairie Elastica n'est pas installé");
+        }
+
       $index = acElasticaManager::getType('COMPTE');
       $q = new acElasticaQuery();
 

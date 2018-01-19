@@ -615,3 +615,38 @@ ul.statistiques li{
 #application_drm{
   padding: 0px 10px;
 }
+
+input[type="text"].ui-autocomplete-input
+{
+	border: 1px solid #c1c1c1;
+	border-bottom-color: #e1e1e1;
+	border-top-color: #848484;
+	width: 300px;
+    padding: 3px;
+    background: #FFF url('../images/pictos/pi_loupe_2.png') 98% 50% no-repeat;
+}
+
+.ui-button {
+    background: url('../images/puces/fleche_sous_menu.png') 50% 50% no-repeat;
+    border: 0;
+    cursor: pointer;
+    height: 17px;
+    margin: 0 5px;
+    vertical-align: middle;
+    width: 17px;
+}
+
+#form_admin_login .ui-button, #form_admin_login .remove_autocomplete {
+    display: none !important;
+}
+
+.remove_autocomplete {
+    background: url('../images/pictos/pi_supprimer.png') no-repeat;
+    display: inline-block;
+    height: 14px;
+    margin: 0 5px;
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+    width: 14px;
+}

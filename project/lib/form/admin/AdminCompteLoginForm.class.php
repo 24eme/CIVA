@@ -3,12 +3,16 @@
 class AdminCompteLoginForm extends BaseForm {
 
     /**
-     * 
+     *
      */
     public function configure() {
         $this->setWidgets(array(
                 'login'   => new sfWidgetFormInputText(),
         ));
+
+        if($this->getOption('autocomplete')) {
+            $this->setWidget('login', new WidgetCompteSelect(array('interpro_id' => 'INTERPRO-declaration')));
+        }
 
         $this->widgetSchema->setLabels(array(
                 'login'  => 'Login : ',
