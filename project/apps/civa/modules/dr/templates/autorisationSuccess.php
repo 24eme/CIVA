@@ -1,11 +1,11 @@
-<form action="<?php echo url_for('dr_transmission', array('url' => $url, 'id' => $id)) ?>" method="post">
+<form action="<?php echo url_for('dr_autorisation', array('url' => $url, 'id' => $id)) ?>" method="post">
 <div style="text-align: center">
     <div id="block_autorisation">
     <h1>Transmission de numérique de Déclaration de récolte</h1>
     <br/><br/>
     <p>Si vous souhaitez transmettre numériquement votre déclaration de récolte à l'AVA, merci de cliquer sur le bouton suivant :<p>
     <br/><br/>
-    <button type="submit" style="color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" id="lien_autorisation" href="<?php echo url_for('dr_transmission', array('url' => $url, 'id' => $id)) ?>">J'autorise la transmission de ma declaration de récolte</a>
+    <button type="submit" style="color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" id="lien_autorisation" href="<?php echo url_for('dr_autorisation', array('url' => $url, 'id' => $id)) ?>">J'autorise la transmission de ma declaration de récolte</a>
      </div>
 </div>
 </form>
