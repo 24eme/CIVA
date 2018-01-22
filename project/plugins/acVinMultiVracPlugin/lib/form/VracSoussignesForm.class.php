@@ -56,6 +56,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
 			$this->setValidator('acheteur_negociant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_NEGOCIANT))));
 			$this->setWidget('acheteur_cave_cooperative_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
 			$this->setValidator('acheteur_cave_cooperative_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_COOPERATIVE))));
+
+			unset($this->widgetSchema['interlocuteur_commercial']);
+			unset($this->validatorSchema['interlocuteur_commercial']);
 		}
 
         if (!$this->getObject()->isNew()) {
