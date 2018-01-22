@@ -621,8 +621,6 @@ input[type="text"].ui-autocomplete-input
 	border: 1px solid #c1c1c1;
 	border-bottom-color: #e1e1e1;
 	border-top-color: #848484;
-	width: 300px;
-    padding: 3px;
     background: #FFF url('../images/pictos/pi_loupe_2.png') 98% 50% no-repeat;
 }
 
@@ -638,6 +636,12 @@ input[type="text"].ui-autocomplete-input
 
 #form_admin_login .ui-button, #form_admin_login .remove_autocomplete {
     display: none !important;
+}
+
+#form_admin_login input[type="text"].ui-autocomplete-input
+{
+    width: 250px;
+    padding: 5px 3px;
 }
 
 .remove_autocomplete {
