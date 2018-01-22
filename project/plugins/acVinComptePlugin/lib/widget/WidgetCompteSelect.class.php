@@ -44,8 +44,8 @@ class WidgetCompteSelect extends sfWidgetFormSelect
     {
         if($value) {
             $comptes = CompteAllView::getInstance()->findByCompte($value);
-            foreach($etablissements as $key => $etablissement) {
-                $choices[$value] = $compte->key[EtablissementAllView::KEY_NOM];
+            foreach($comptes as $key => $compte) {
+                $choices[$value] = $compte->key[CompteAllView::KEY_NOM_A_AFFICHER];
             }
         }
 
