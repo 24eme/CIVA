@@ -98,7 +98,7 @@
 			</td>
 			<td>
 				<span><?php echo $form['numero_papier']->renderError() ?></span>
-				<?php echo $form['numero_papier']->render() ?>
+				<?php echo $form['numero_papier']->render(array("autofocus" => "autofocus")) ?>
 			</td>
 		</tr>
 		<tr>

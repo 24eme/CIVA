@@ -8,7 +8,7 @@
 				<div class="ligne_form">
 					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Veuillez selectionner le type de votre contrat :<?php else: ?>Vous avez selectionner le type de contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
-						<?php echo $form['type_contrat']->render(); ?>
+						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
 						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?></label></li></ul>
 					<?php endif; ?>

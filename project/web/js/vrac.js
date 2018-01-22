@@ -153,7 +153,9 @@ var initConfirmeValidationVrac = function()
 {
     $('#valideVrac').click(function() {
         openPopup($("#popup_confirme_validationVrac"));
-        return false;
+		$("#popup_confirme_validationVrac #valideVrac_OK").focus();
+
+		return false;
     });
     $('#valideVrac_OK').click(function() {
         $("#popup_confirme_validationVrac").dialog('close');
@@ -166,6 +168,7 @@ var initConfirmeSignatureVrac = function()
 {
     $('#signatureVrac').click(function() {
         openPopup($("#popup_confirme_signatureVrac"));
+		$("#popup_confirme_signatureVrac #signatureVrac_OK").focus();
         return false;
     });
     $('#signatureVrac_OK').click(function() {

@@ -187,7 +187,7 @@
 							}
 						}
 					});
-					var removeLink  = $( "<a href=\"#\" class=\"remove_autocomplete\">X</a>" ).insertAfter(input);
+					var removeLink  = $( "<a href=\"#\" tabindex=\"-1\" class=\"remove_autocomplete\">X</a>" ).insertAfter(input);
 					removeLink.click(function() {
 						if (select.children("option").length == 1) {
 							select.prepend($( "<option value=\"\"></option>" ));
