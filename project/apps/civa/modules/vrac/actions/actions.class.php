@@ -269,7 +269,7 @@ class vracActions extends sfActions
     	if ($nextEtape = $this->getEtapeSuivante($this->etape, $this->etapes)) {
     		$this->next_etape = $this->vrac->etape = $nextEtape;
     	}
-    	$this->validation = new VracContratValidation($this->vrac);
+		$this->validation = new VracContratValidation($this->vrac, $this->annuaire);
     	if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {

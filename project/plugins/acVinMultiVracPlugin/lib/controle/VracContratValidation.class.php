@@ -6,22 +6,25 @@ class VracContratValidation extends DocumentValidation
     const MAX_PRODUIT = 9;
 
 	protected $produits_controle = array();
-	
-	public function __construct($document, $options = null)
+	protected $annuaire = null;
+
+	public function __construct($document, $annuaire = null)
     {
-        parent::__construct($document, $options);
+        $this->annuaire = $annuaire;
+        parent::__construct($document);
         $this->noticeVigilance = false;
     }
-    
-  	public function configure() 
+
+  	public function configure()
   	{
         $this->addControle('erreur', 'nb_produits', 'Vous ne pouvez pas saisir plus de '.self::MAX_PRODUIT.' produits par contrat.');
   		$this->addControle('erreur', 'doublon_produits', 'Vous ne pouvez pas déclarer des produits identiques.');
         $this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
+    	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
   	}
 
-  	public function controle()
+    public function controle()
   	{
   		$this->produits_controle = array();
 		$doublon_libelles = array();
@@ -55,11 +58,19 @@ class VracContratValidation extends DocumentValidation
 			}
 		}
 	    if (count($doublon_libelles) > 0) {
-	      $this->addPoint('erreur', 'doublon_produits', implode(",", $doublon_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits'))); 
+	      $this->addPoint('erreur', 'doublon_produits', implode(",", $doublon_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
 	    }
 	    if (count($produits) > self::MAX_PRODUIT) {
-	    	$this->addPoint('erreur', 'nb_produits', '', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits'))); 
+	    	$this->addPoint('erreur', 'nb_produits', '', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
 	    }
+
+        if(!$this->document->isAcheteurProprietaire() && $this->annuaire && !$this->annuaire->exist($this->document->acheteur_type."/".$this->document->acheteur_identifiant)) {
+            $this->addPoint('vigilance', 'presence_annuaire', $this->document->acheteur->raison_sociale, $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'soussignes')));
+        }
+
+        if(!$this->document->isVendeurProprietaire() && $this->annuaire && !$this->annuaire->exist($this->document->vendeur_type."/".$this->document->vendeur_identifiant)) {
+            $this->addPoint('vigilance', 'presence_annuaire', $this->document->vendeur->raison_sociale, $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'soussignes')));
+        }
   	}
 
   	public function getProduitsHashInError() {
