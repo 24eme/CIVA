@@ -128,12 +128,12 @@
 	<?php endif; ?>
 	<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
 </div>
-<?php if (($vrac->valide->statut == Vrac::STATUT_ENLEVEMENT) && $vrac->allProduitsClotures() && !$validation->hasErreurs()): ?>
 <script type="text/javascript">
 $(document).ready(function()
 {
-	console.log("nop");
-openPopup($("#popup_cloture_contrat"));
+	<?php if (($vrac->valide->statut == Vrac::STATUT_ENLEVEMENT) && $vrac->allProduitsClotures() && !$validation->hasErreurs()): ?>
+	openPopup($("#popup_cloture_contrat"));
+	<?php endif; ?>
+	$('#onglets_majeurs .ui-tabs-selected a').focus();
 });
 </script>
-<?php endif; ?>

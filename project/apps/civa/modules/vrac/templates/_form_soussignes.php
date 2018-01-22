@@ -8,7 +8,7 @@
 				<div class="ligne_form">
 					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Veuillez selectionner le type de votre contrat :<?php else: ?>Vous avez selectionner le type de contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
-						<?php echo $form['type_contrat']->render(); ?>
+						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
 						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?></label></li></ul>
 					<?php endif; ?>
@@ -82,6 +82,7 @@
 
 		<div class="clearfix">
 			<div class="form_col">
+				<?php if(isset($form['interlocuteur_commercial'])): ?>
 				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
 				<div class="nom_cvi ligne_form">
 				<?php echo $form['interlocuteur_commercial']->render() ?>
@@ -89,6 +90,9 @@
 					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
 				</div>
 				</div>
+				<?php else: ?>
+					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
+				<?php endif; ?>
 			</div>
 
 
@@ -98,8 +102,9 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
-		<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<?php if(isset($form['interlocuteur_commercial'])): ?>
+			<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<?php endif; ?>
 	</fieldset>
 	<?php endif; ?>
 
@@ -166,6 +171,7 @@
 
 		<div class="clearfix">
 			<div class="form_col">
+				<?php if(isset($form['interlocuteur_commercial'])): ?>
 				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
 				<div class="nom_cvi ligne_form">
 				<?php echo $form['interlocuteur_commercial']->render() ?>
@@ -173,6 +179,9 @@
 					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
 				</div>
 				</div>
+				<?php else: ?>
+					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
+				<?php endif; ?>
 			</div>
 
 			<div id="mandataire_infos">
@@ -181,8 +190,9 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
-		<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<?php if(isset($form['interlocuteur_commercial'])): ?>
+			<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<?php endif; ?>
 	</fieldset>
 	<?php endif; ?>
 	<?php else: ?>
@@ -192,6 +202,7 @@
 
 		<div class="clearfix">
 			<div class="form_col">
+				<?php if(isset($form['interlocuteur_commercial'])): ?>
 				<p class="ligne_form">Veuillez selectionner l'identité de l'interlocuteur commercial en charge de ce contrat de vente en vrac :</p>
 				<div class="nom_cvi ligne_form">
 				<?php echo $form['interlocuteur_commercial']->render() ?>
@@ -199,6 +210,9 @@
 					<a href="<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>">Ajouter un contact</a>
 				</div>
 				</div>
+				<?php else: ?>
+					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
+				<?php endif; ?>
 			</div>
 
 
@@ -208,8 +222,9 @@
 			<?php endif; ?>
 			</div>
 		</div>
-
+		<?php if(isset($form['interlocuteur_commercial'])): ?>
 		<?php echo $form['interlocuteur_commercial']->renderError() ?>
+		<?php endif; ?>
 	</fieldset>
 	<?php endif; ?>
 	<style type="text/css">
@@ -230,7 +245,9 @@
 		var url_soussigne = "<?php echo url_for('vrac_soussigne_informations', array('sf_subject' => $vrac, 'acteur' => '-acteur-')) ?>";
 
 		$("select.choix_soussigne").combobox();
+		<?php if(isset($form['interlocuteur_commercial'])): ?>
 		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").combobox();
+		<?php endif; ?>
 		$("select.choix_soussigne").change(function() {
 			var acteur = $(this).attr('data-acteur');
 			var type = $(this).attr('data-type');
@@ -241,7 +258,7 @@
 			}
 			$.post(url_soussigne.replace('-acteur-', acteur), { identifiant: $(this).val() }, function(data) {$('#'+acteur+'_infos').empty(); $('#'+acteur+'_infos').append(data);});
 		});
-
+		<?php if(isset($form['interlocuteur_commercial'])): ?>
 		$("#<?php echo $form['interlocuteur_commercial']->renderId() ?>").change(function() {
 			if ($(this).val() == 'add') {
 				$("#principal").attr('action', '<?php echo url_for('vrac_annuaire_commercial', array('sf_subject' => $vrac)) ?>');
@@ -249,6 +266,7 @@
 				return;
 			}
 		});
+		<?php endif; ?>
 		$(".remove_autocomplete").click(function() {
 			$(this).parents(".selecteur").siblings(".cible").empty();
 		});

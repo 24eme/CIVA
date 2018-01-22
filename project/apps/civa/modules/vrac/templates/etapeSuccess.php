@@ -24,7 +24,7 @@
         <ul class="btn_prev_suiv clearfix" id="btn_etape">
             <li class="prec">
             	<?php if ($etapes->getFirst() != $etape): ?>
-                <a id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etapes->getPrev($etape))) ?>">
+                <a tabindex="-1" id="btn_precedent" href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etapes->getPrev($etape))) ?>">
                     <img alt="Retourner à l'étape précédente" src="/images/boutons/btn_retourner_etape_prec.png">
                 </a>
                 <?php endif; ?>
@@ -32,7 +32,7 @@
             <?php if(!$validation->hasErreurs() || $next_etape): ?>
             <li class="suiv">
                 <?php if ($etapes->getLast() == $etape): ?>
-                 <input tabindex="1" type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre contrat" id="valideVrac" />
+                 <input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre contrat" id="valideVrac" />
                 <?php else: ?>
                 <button type="submit" name="valider" style="cursor: pointer;">
                     <img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />

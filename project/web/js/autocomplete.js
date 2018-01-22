@@ -60,22 +60,27 @@
 			selected = select.find( "option:selected" );
 
 			value = selected.text() ? selected.text() : "";
-			
+
 			var newValueAllowed  = select.hasClass('permissif');
 			if(newValueAllowed) {
 				var newValueOption = $('<option class="new_value" value=""></option>');
 				select.append(newValueOption);
 			}
-			
+
 			var url_ajax = select.attr('data-ajax');
 			var limit = 20;
 			//var prev_term = "";
 			var minLength = (url_ajax) ? 1 : 0;
 			var delay = (url_ajax) ? 300 : 200;
 
-			var input = this.input = $( "<input type='text'>" )
-			.insertAfter( select )
-			.val( value )
+			var input = this.input = $( "<input type='text'>" ).insertAfter( select );
+
+			if($(select).attr('autofocus')) {
+				input.attr('autofocus', 'autofocus');
+				input.focus();
+			}
+
+			input.val( value )
 			.autocomplete({
 				delay: delay,
 				minLength: minLength,
@@ -182,7 +187,7 @@
 							}
 						}
 					});
-					var removeLink  = $( "<a href=\"#\" class=\"remove_autocomplete\">X</a>" ).insertAfter(input);
+					var removeLink  = $( "<a href=\"#\" tabindex=\"-1\" class=\"remove_autocomplete\">X</a>" ).insertAfter(input);
 					removeLink.click(function() {
 						if (select.children("option").length == 1) {
 							select.prepend($( "<option value=\"\"></option>" ));

@@ -12,7 +12,7 @@ class VracFormFactory
 				$form = new VracProduitsForm($vrac);
 				break;
 			case VracEtapes::ETAPE_VALIDATION :
-				$form = new VracValidationForm($vrac);
+				$form = new VracValidationForm($vrac, $annuaire);
 				break;
 			default:
 				throw new sfException ('La fabrique de formulaire vrac ne gère pas le cas "'.$step.'".');

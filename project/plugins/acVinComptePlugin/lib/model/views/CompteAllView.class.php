@@ -20,7 +20,7 @@ class CompteAllView extends acCouchdbView {
     const KEY_COMMUNE = 6;
     const KEY_CODE_POSTAL = 7;
     const KEY_COMPTE_TYPE = 8;
-    
+
     public static function getInstance() {
         return acCouchdbManager::getView('compte', 'all', 'Compte');
     }
@@ -32,7 +32,7 @@ class CompteAllView extends acCouchdbView {
 	return $this->findByInterproVIEW($interpro);
       }
     }
-    
+
     public function findByInterproAndStatut($interpro, $q = null, $limit = 100, $statut = CompteClient::STATUT_ACTIF) {
       try {
 	return $this->findByInterproELASTIC($interpro, $q, $limit, array(sprintf('statut:%s', $statut)));
@@ -42,6 +42,12 @@ class CompteAllView extends acCouchdbView {
     }
 
     private function findByInterproELASTIC($interpro, $qs = null, $limit = 100, $query = array()) {
+
+        if(!class_exists("acElasticaManager")) {
+
+            throw new Exception("La librairie Elastica n'est pas installé");
+        }
+
       $index = acElasticaManager::getType('COMPTE');
       $q = new acElasticaQuery();
 
@@ -89,14 +95,27 @@ class CompteAllView extends acCouchdbView {
 //                        ->endkey(array($interpro,$id, array()))
 //                        ->getView($this->design, $this->view);
 //    }
-//    
+//
       public function findByInterproAndStatutVIEW($interpro,$statut) {
         return $this->client->startkey(array($interpro,$statut))
                         ->endkey(array($interpro,$statut, array()))
                         ->getView($this->design, $this->view)->rows;
     }
-    
-    
+
+    public function findByCompte($identifiant) {
+        $compte = $this->client->find($identifiant, acCouchdbClient::HYDRATE_JSON);
+
+        if(!$compte) {
+            return null;
+        }
+
+        return $this->client->startkey(array($compte->interpro, $compte->statut, $compte->_id))
+                            ->endkey(array($compte->interpro, $compte->statut, $compte->_id, array()))
+			    ->reduce(false)
+			    ->getView($this->design, $this->view)->rows;
+
+    }
+
     public static function makeLibelle($datas) {
         $libelle = '';
         if (isset($datas[self::KEY_NOM_A_AFFICHER]) && $nom = $datas[self::KEY_NOM_A_AFFICHER]) {
@@ -114,7 +133,7 @@ class CompteAllView extends acCouchdbView {
         if (isset($datas[self::KEY_COMMUNE]) && $commune = $datas[self::KEY_COMMUNE]) {
             $libelle .= ' / ' . $commune;
         }
-        
+
         if (isset($datas[self::KEY_CODE_POSTAL]) && $cp = $datas[self::KEY_CODE_POSTAL]) {
             $libelle .= ' / ' . $cp;
         }
@@ -126,4 +145,3 @@ class CompteAllView extends acCouchdbView {
     }
 
 }
-

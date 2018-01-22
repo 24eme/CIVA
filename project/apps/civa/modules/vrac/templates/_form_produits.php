@@ -25,7 +25,11 @@
 			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong></td>
 			<td class="denomination">
 				<span><?php echo $embedForm['denomination']->renderError() ?></span>
+				<?php if ($counter == 0): ?>
+				<?php echo $embedForm['denomination']->render(array("autofocus" => "autofocus")) ?>
+				<?php else: ?>
 				<?php echo $embedForm['denomination']->render() ?>
+				<?php endif; ?>
 			</td>
 			<td class="millesime">
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>

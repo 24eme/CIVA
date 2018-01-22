@@ -11,8 +11,7 @@ class ValidatorAdminCompteLogin extends sfValidatorBase {
         if (!$values['login']) {
             return array_merge($values);
         }
-
-    $compte = CompteClient::getInstance()->find("COMPTE-".$values['login']);
+        $compte = CompteClient::getInstance()->find("COMPTE-".str_replace("COMPTE-", "", $values['login']));
 
         if (!$compte) {
 
