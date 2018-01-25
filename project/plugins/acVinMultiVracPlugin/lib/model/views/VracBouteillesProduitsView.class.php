@@ -16,22 +16,23 @@ class VracBouteillesProduitsView extends acCouchdbView
 	const VALUE_VOLUME_ENLEVE = 9;
 	const VALUE_PRIX_UNITAIRE = 10;
 	const VALUE_VTSGN = 11;
-	
-    public static function getInstance() 
+	const VALUE_DENOMINATION = 12;
+
+    public static function getInstance()
     {
         return acCouchdbManager::getView('VRAC', 'bouteilles_produits', 'Vrac');
     }
 
-    public function findBy($numeroArchive) 
-    {    
+    public function findBy($numeroArchive)
+    {
 		$startkey = array($numeroArchive);
 		$endkey = array($numeroArchive, array());
         return $this->client->startkey($startkey)
                             ->endkey($endkey)
                             ->getView($this->design, $this->view)->rows;
     }
-    
-    public function findForDb2Export($numeroArchive) 
+
+    public function findForDb2Export($numeroArchive)
     {
     	$result = array();
     	$items = $this->findBy($numeroArchive);
@@ -41,4 +42,4 @@ class VracBouteillesProduitsView extends acCouchdbView
     	ksort($result);
     	return $result;
     }
-}  
+}

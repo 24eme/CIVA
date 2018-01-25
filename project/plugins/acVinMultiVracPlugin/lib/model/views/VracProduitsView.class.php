@@ -17,22 +17,23 @@ class VracProduitsView extends acCouchdbView
 	const VALUE_MILLESIME = 10;
 	const VALUE_VTSGN = 11;
 	const VALUE_DATE_CIRCULATION = 12;
-	
-    public static function getInstance() 
+	const VALUE_DENOMINATION = 13;
+
+    public static function getInstance()
     {
         return acCouchdbManager::getView('VRAC', 'produits', 'Vrac');
     }
 
-    public function findBy($numeroArchive) 
-    {    
+    public function findBy($numeroArchive)
+    {
 		$startkey = array($numeroArchive);
 		$endkey = array($numeroArchive, array());
         return $this->client->startkey($startkey)
                             ->endkey($endkey)
                             ->getView($this->design, $this->view)->rows;
     }
-    
-    public function findForDb2Export($numeroArchive) 
+
+    public function findForDb2Export($numeroArchive)
     {
     	$result = array();
     	$items = $this->findBy($numeroArchive);
@@ -42,4 +43,4 @@ class VracProduitsView extends acCouchdbView
     	ksort($result);
     	return $result;
     }
-}  
+}

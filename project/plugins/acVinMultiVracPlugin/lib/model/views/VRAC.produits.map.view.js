@@ -71,22 +71,22 @@ function(doc) {
     	    	    	    	    	    						var vtsgn = null;
     	    	    	    	    	    						if (produit.vtsgn == "VT" || produit.vtsgn == "vt") {
     	    	    	    	    	    							vtsgn = 1;
-    	    	    	    	    	    						} 
+    	    	    	    	    	    						}
     	    	    	    	    	    						if (produit.vtsgn == "SGN" || produit.vtsgn == "sgn") {
     	    	    	    	    	    							vtsgn = 2;
-    	    	    	    	    	    						} 
+    	    	    	    	    	    						}
     	    	    	    	    	    						var date_circulation = fctGetDateCirculation(produit.retiraisons);
     	    	    	    	    	    						if (!date_circulation) {
     	    	    	    	    	    							date_circulation = doc.valide.date_validation;
     	    	    	    	    	    						}
     	    	    	    	    	    						date_circulation = (date_circulation)? (date_circulation).replace(regexpDate,"") : 0;
-    	    	    	    	    	    	    				emit([numero_archive], [numero_archive, numero_cepage, code_cepage, code_appellation, position, volume_propose, volume_enleve, prix_unitaire, degre, top_mercuriale, millesime, vtsgn, date_circulation]);
+    	    	    	    	    	    	    				emit([numero_archive], [numero_archive, numero_cepage, code_cepage, code_appellation, position, volume_propose, volume_enleve, prix_unitaire, degre, top_mercuriale, millesime, vtsgn, date_circulation, produit.denomination]);
     	    	    	    	    	    					}
     	    	    	    	    	    				}
     	    	    	    	    	    			}
     	    	    	    	    	    		}
     	    	    	    	    			}
-    	    	    	    	    		}    	    	    	    				
+    	    	    	    	    		}
     	    	    	    			}
     	    	    	    		}
     	    	    			}

@@ -48,17 +48,17 @@ function(doc) {
                                                                     var vtsgn = null;
                                                                     if (produit.vtsgn == "VT" || produit.vtsgn == "vt") {
                                                                         vtsgn = 1;
-                                                                    } 
+                                                                    }
                                                                     if (produit.vtsgn == "SGN" || produit.vtsgn == "sgn") {
                                                                         vtsgn = 2;
-                                                                    } 
-                                                                    emit([numero_archive], [numero_archive, position, millesime, code_appellation, code_cepage, denomination, num_agrement, centilisation, nb_bouteille, volume_enleve, prix_unitaire, vtsgn]);
+                                                                    }
+                                                                    emit([numero_archive], [numero_archive, position, millesime, code_appellation, code_cepage, denomination, num_agrement, centilisation, nb_bouteille, volume_enleve, prix_unitaire, vtsgn, produit.denomination]);
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            }                                           
+                                            }
                                         }
                                     }
                                 }

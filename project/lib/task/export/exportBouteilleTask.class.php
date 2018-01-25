@@ -82,6 +82,7 @@ EOF;
                 }
             	$i++;
             	$valuesProduit = $produit->value;
+                unset($valuesProduit[VracBouteillesProduitsView::VALUE_DENOMINATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_NUMERO_ORDRE] = $i;
