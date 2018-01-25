@@ -14,7 +14,7 @@
                 <div class="ligne_form ligne_form_label">
                     <?php echo $form['login']->renderError() ?>
                     <?php echo $form['login']->renderLabel() ?>
-                    <?php echo $form['login']->render(array("autofocus" => "autofocus", "class" => "combobox")) ?>
+                    <?php echo $form['login']->render(array("autofocus" => "autofocus", "class" => "combobox permissif")) ?>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
@@ -42,6 +42,12 @@
         $("select.combobox").combobox();
         $("select.combobox").live('change', function() {
             $(this).parents('form').submit();
+        });
+        $('#form_admin_login').live('submit', function() {
+            if(!$('select.combobox').val() || $('select.combobox').find(':selected').html() != $("input.ui-autocomplete-input").val()) {
+                $('select.combobox').find(':selected').removeAttr('selected');
+                $('select.combobox option.new_value').attr('selected','selected').val($("input.ui-autocomplete-input").val());
+            }
         });
     });
     </script>
