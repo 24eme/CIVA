@@ -5,7 +5,16 @@
 		</a>
 	</div>
 <?php endif; ?>
-
+<style media="screen">.printonly {display: none;}</style>
+<style  media="print">
+.noprint, strong.responsable, #actions_fiche, #titre_rubrique .utilisateur, #logo, #acces_directs, .btn_header, .modal, #footer, #ajax_notifications,  .popup_ajout, .popup_loader, .produits thead {display: none; }
+li {list-style-type: none;}
+.produits td {display: block; width: 100%}
+td.echeance {display: inline;}
+.produit, .validation thead th {font-weight: bold;text-align: left;}
+#onglets_majeurs {padding: 0}
+#onglets_majeurs a {text-decoration: none; color: black;}
+</style>
 <div id="contrat_onglet">
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected">
@@ -52,14 +61,15 @@
 				include_partial('global/validation', array('validation' => $validation));
 			}
 		?>
-
+<hr class="printonly"/>
 		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form, 'produits_hash_in_error' => $validation->getProduitsHashInError())) ?>
 
 		<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_CLOTURE)): ?>
-			<a style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
+			<a class="noprint" style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
 		<?php endif; ?>
 
 <?php if(!$vrac->isPapier()): ?>
+<hr class="printonly"/>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -89,7 +99,8 @@
 				<label>Clause de réserve de propriété :</label>
 			</td>
 			<td>
-				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
+				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
+
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -98,7 +109,13 @@
 <?php endif; ?>
 
 	</div>
-
+<?php if (!$vrac->isPapier()) : ?>
+<div class="printonly">
+<br/><br/><br/>
+<hr/>
+<p>Document non contractuel. Le document original télésigné est disponible sur votre espace VinsAlsace.pro</p>
+</div>
+<?php endif; ?>
 	<table id="actions_fiche">
 		<tr>
 			<td style="width: 40%"><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>
@@ -137,3 +154,4 @@ $(document).ready(function()
 	$('#onglets_majeurs .ui-tabs-selected a').focus();
 });
 </script>
+
