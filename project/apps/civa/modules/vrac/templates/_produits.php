@@ -2,7 +2,6 @@
 <?php use_helper('Float') ?>
 <?php use_helper('Text') ?>
 <?php use_helper('vrac') ?>
-
 <table class="table_donnees produits validation">
 	<thead>
 		<tr>
@@ -98,27 +97,27 @@
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
-				<?php echo $detail->nb_bouteille ?>
+				<span class="printonly">Nombre de bouteilles : </span><?php echo $detail->nb_bouteille ?>
 			</td>
-			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="centilisation"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
+			<td class="volume"><strong><span class="printonly">Volume enlevé : </span><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php else: ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td></td>
-			<td class="volume"><strong><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
+			<td class="volume"><strong><span class="printonly">Volume enlevé : </span><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php endif; ?>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td></td>
+		<tr class="<?php if ($alt): ?> alt<?php endif; ?>">
+		<td><strong class="printonly"><br/><br/>Enlevenemt :</strong></td>
 			<td></td>
 			<td></td>
 			<td class="echeance"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
@@ -143,21 +142,21 @@
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
-				<?php echo $detail->nb_bouteille ?>
+				<span class="printonly">Nombre de bouteilles : </span><?php echo $detail->nb_bouteille ?>
 			</td>
-			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="centilisation"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
-				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<?php endif; ?>
 		</tr>
