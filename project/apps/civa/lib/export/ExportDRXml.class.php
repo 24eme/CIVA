@@ -214,6 +214,10 @@ class ExportDRXml {
                                 $cols = array();
                                 foreach ($cepage->detail as $detail) {
 
+                                    if ($detail->exist('attributs') && $detail->attributs->exist('no_dr') && $detail->attributs->no_dr) {
+                                      continue;
+                                    }
+
                                     $col = array();
 
                                     $col['L1'] = $this->getCodeDouane($detail);

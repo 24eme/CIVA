@@ -53,21 +53,21 @@
 	<?php endif; ?>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('carte_pro')): ?>
-	<li>N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
+	<li class="noprint">N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('num_accise')): ?>
-	<li>N°Accises : <strong><?php echo $tiers->num_accise ?></strong></li>
+	<li class="noprint">N°Accises : <strong><?php echo $tiers->num_accise ?></strong></li>
 	<?php endif; ?>
-	<li>Adresse : <strong><?php echo $tiers->adresse ?></strong></li>
-	<li>Code postal : <strong><?php echo $tiers->code_postal ?></strong></li>
-	<li>Commune : <strong><?php echo $tiers->commune ?></strong></li>
-	<li>Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
-	<li>E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
+	<li class="noprint">Adresse : <strong><?php echo $tiers->adresse ?></strong></li>
+	<li class="noprint">Code postal : <strong><?php echo $tiers->code_postal ?></strong></li>
+	<li class="noprint">Commune : <strong><?php echo $tiers->commune ?></strong></li>
+	<li class="noprint">Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
+	<li class="noprint">E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
 	<?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
-	<li>Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
+	<li class="noprint">Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php else: ?>
-	<li>En attente de signature</li>
+	<li class="noprint">En attente de signature</li>
 	<?php endif; ?>
 	<?php endif; ?>
 </ul>

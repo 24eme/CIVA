@@ -3,13 +3,13 @@ class VracBouteillesProduitsView extends acCouchdbView
 {
 
 	const KEY_NUMERO_ARCHIVE = 0;
-	
+
 	const VALUE_NUMERO_ARCHIVE = 0;
 	const VALUE_NUMERO_ORDRE = 1;
 	const VALUE_MILLESIME = 2;
 	const VALUE_CODE_APPELLATION = 3;
 	const VALUE_CEPAGE = 4;
-	const VALUE_DENOMINATION = 5;
+	const VALUE_MENTION = 5;
 	const VALUE_NUM_AGREMENT = 6;
 	const VALUE_CENTILISATION = 7;
 	const VALUE_NB_BOUTEILLE = 8;
