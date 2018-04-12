@@ -6,7 +6,7 @@ class MigrationCVITask extends sfBaseTask {
         $this->addArguments(array(
             new sfCommandArgument('ancien_cvi', sfCommandArgument::REQUIRED, 'Ancien cvi'),
             new sfCommandArgument('nouveau_cvi', sfCommandArgument::REQUIRED, 'Nouveau cvi'),
-            new sfCommandArgument('keep_password', sfCommandArgument::OPTIONAL, 'Conserver le mpt de passe', true),
+            new sfCommandArgument('keep_password', sfCommandArgument::OPTIONAL, 'Conserver le mpt de passe', false),
         ));
 
         $this->addOptions(array(

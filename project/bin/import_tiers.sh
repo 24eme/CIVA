@@ -18,7 +18,7 @@ fi
 
 if [ ! -f $DATADB2FILECLOTURE ]
 then
-    echo "Le fichier des tiers actifs $DATADB2FILECLOTURE n'existe pas"
+    echo "Le fichier des tiers cloturés $DATADB2FILECLOTURE n'existe pas"
     exit 0
 fi
 
@@ -33,3 +33,5 @@ php symfony societe:import-csv $TMPTIERSFILE
 php symfony etablissement:import-csv $TMPTIERSFILE
 
 php symfony compte:import-csv $TMPTIERSFILE
+
+bash bin/export_comptes > /dev/null 2>&1
