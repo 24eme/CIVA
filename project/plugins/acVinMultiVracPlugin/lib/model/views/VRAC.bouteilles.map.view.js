@@ -1,5 +1,5 @@
 function(doc) {
-	
+
 	if (doc.type != "Vrac") {
 		return;
 	}
@@ -28,7 +28,10 @@ function(doc) {
 	var top_suppression = null;
 	var top_instance = null;
 	var utilisateur = "TELEDECL";
+	if(doc.papier) {
+		utilisateur = "PAPIER";
+	}
 	var date_export_creation = doc.date_export_creation;
-	
+
 	emit([type, statut, date], [numero_archive, cvi_vendeur, type_acheteur, cvi_acheteur, type_vendeur, identifiant_courtier, daa, total_volume_enleve, numero_contrat, date_arrivee, date_contrat, date_traitement, date_modification, top_instance, top_suppression, utilisateur, date_export_creation]);
 }

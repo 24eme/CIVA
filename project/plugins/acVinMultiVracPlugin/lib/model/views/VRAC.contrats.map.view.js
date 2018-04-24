@@ -1,5 +1,5 @@
 function(doc) {
-	
+
 	if (doc.type != "Vrac") {
 		return;
 	}
@@ -13,7 +13,7 @@ function(doc) {
 	date = (date)? date : doc.valide.date_saisie;
 	var statut = doc.valide.statut;
 	var type = doc.type_contrat;
-	
+
 	var numero_archive = doc.numero_archive;
 	var type_contrat = "P";
 	var mercuriales = "M";
@@ -50,8 +50,11 @@ function(doc) {
 	var nombre_contrats = 0;
 	var heure_traitement = 0;
 	var utilisateur = "TELEDECL";
+	if(doc.papier) {
+		utilisateur = "PAPIER";
+	}
 	var date_modif = (date)? (date).replace(regexpDate,"") : 0;
 	var creation = (doc.date_export_creation)? 0 : 1;
-	
+
 	emit([type, statut, date], [numero_archive, type_contrat, mercuriales, montant_cotisation, montant_cotisation_paye, mode_de_paiement, cvi_acheteur, type_acheteur, tca, cvi_vendeur, type_vendeur, numero_contrat, daa, date_arrivee, date_traitement, date_saisie, date_circulation, identifiant_courtier, reccod, total_volume_propose, total_volume_enleve, quantite_transferee, top_suppression, top_instance, nombre_contrats, heure_traitement, utilisateur, date_modif, creation]);
 }
