@@ -15,7 +15,7 @@ class CompteDroitForm extends acCouchdbForm {
         ));
 
         $this->setValidators(array(
-                'droits'  => new sfValidatorChoice(array('required' => false, 'multiple' => true, "choices" => array_keys($this->getDroits()) )),
+                'droits'  => new sfValidatorChoice(array('required' => false, 'multiple' => true, "choices" => array_keys($this->getDroits()))),
         ));
         $this->widgetSchema->setNameFormat('compte_droit[%s]');
     }
@@ -25,6 +25,8 @@ class CompteDroitForm extends acCouchdbForm {
         foreach($this->getDocument()->getSociete()->droits as $droit) {
             $droits[$droit] = $droit;
         }
+
+        $droits['teledeclaration_douane'] = "teledeclaration_douane";
         return $droits;
     }
 }

@@ -30,7 +30,7 @@
 						</td>
                         <td style="text-align: left; padding: 5px 5px;">
                             <ul>
-						<?php foreach($compte->getSociete()->droits as $droit): ?>
+						<?php foreach($formCompte['droits']->getWidget()->getChoices() as $droit): ?>
 							<li>
                                 <?php echo $formCompte->renderError(); ?>
                                 <label><input type="checkbox" value="<?php echo $droit ?>" name="<?php echo $formCompte["droits"]->renderName() ?>[]" <?php echo ($compte->hasDroit($droit)) ? 'checked="checked"' : null ?>>&nbsp;&nbsp;<?php echo $droit; ?></label>
