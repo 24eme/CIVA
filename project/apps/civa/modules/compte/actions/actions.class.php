@@ -87,8 +87,14 @@ class compteActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeLogout(sfWebRequest $request) {
-        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
         $this->getUser()->signOut();
+
+        if (sfConfig::get('app_giilda_url_logout')) {
+
+            return $this->redirect(sfConfig::get('app_giilda_url_logout'));
+        }
+
+        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
         $url = 'http://'.$request->getHost();
         error_reporting(E_ALL);
         phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
