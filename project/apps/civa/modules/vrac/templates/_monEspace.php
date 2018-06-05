@@ -25,4 +25,7 @@
 	</div>
 </div>
 <?php include_partial('vrac/popupChoixType'); ?>
-<?php include_partial('vrac/popupChoixType', array('papier' => true)); ?>
+
+<?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+	<?php include_partial('vrac/popupChoixType', array('papier' => true)); ?>
+<?php endif; ?>
