@@ -24,6 +24,11 @@ class VracProduitsView extends acCouchdbView
         return acCouchdbManager::getView('VRAC', 'produits', 'Vrac');
     }
 
+    public function getAll()
+    {
+        return $this->client->getView($this->design, $this->view)->rows;
+    }
+
     public function findBy($numeroArchive)
     {
 		$startkey = array($numeroArchive);
