@@ -847,6 +847,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
+        if(!$produit->getTotalCaveParticuliere()) {
+            continue;
+        }
         $cepageNode = $produit->getParent()->getParent();
         $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
       }

@@ -11,7 +11,7 @@ class drmActions extends sfActions {
       set_time_limit(0);
       ini_set('memory_limit', '512M');
       $allowIps = array("127.0.0.1", "localhost", "::1");
-      if(!in_array($this->getRequest()->getHttpHeader('addr','remote'), $allowIps)){
+      if(!in_array($this->getRequest()->getHttpHeader('addr','remote'), $allowIps) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
         throw new sfException("Accès interdit");
       }
 
