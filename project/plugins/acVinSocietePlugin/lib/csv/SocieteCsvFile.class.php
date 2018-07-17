@@ -98,6 +98,7 @@ class SocieteCsvFile extends CompteCsvFile
 
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
 
                 echo $s->_id." (".trim($modifications).")\n";

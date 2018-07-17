@@ -86,6 +86,7 @@ class CompteCsvFile extends CsvFile
                 if($c->id_societe != $s->_id) {
                     echo "Warning le compte $c->_id a changé de société : $c->id_societe => $s->_id\n";
                     $c->changeSociete($s->_id);
+                    $c->remove('droits');
                 }
 
                 $c->statut = ($line[self::CSV_STATUT]) ? $line[self::CSV_STATUT] : $s->statut;
@@ -103,6 +104,12 @@ class CompteCsvFile extends CsvFile
                     $c->email = $email;
                 }
 
+                $updateDroits = false;
+                if($c->isActif() && (!$c->exist('droits') || !count($c->_get('droits')->toArray(true, false)))) {
+                    $c->add('droits', $c->getDroits()->toArray(true, false));
+                    $updateDroits = true;
+                }
+
                 $cFinal = new acCouchdbJsonNative($c->toJson());
                 $diffFinal = $cFinal->diff($cOrigin);
                 $diffOrigin = $cOrigin->diff($cFinal);
@@ -114,7 +121,9 @@ class CompteCsvFile extends CsvFile
 
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffOrigin as $key => $value) { $modifications .= " $key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
+                if($updateDroits) { $modifications .= " (mise à jour des droits)"; }
 
                 $c->save();
 

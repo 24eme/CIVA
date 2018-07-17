@@ -148,6 +148,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 }
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
 
                 $e->save();
