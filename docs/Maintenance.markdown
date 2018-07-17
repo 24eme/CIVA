@@ -28,7 +28,9 @@ Import du csv
 
 Migration de CVI :
 
- > php symfony migration:cvi ancien_cvi nouveau_cvi [conserver_le_mot_de_passe=1]
+ > php symfony migration:cvi ancien_cvi nouveau_cvi
+
+ > php symfony migration:cvi ancien_cvi nouveau_cvi true #Pour conserver le mot de passe
 
 DR
 --
