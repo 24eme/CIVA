@@ -108,7 +108,7 @@
                 <div class="bloc_acceuil_icon icon-stock"></div>
                 <div class="bloc_acceuil_header bloc_acceuil_header_deux_lignes" >Stocks <br /><small style="font-size: 10px;">propriété</small></div>
                 <div class="bloc_acceuil_content">
-                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
+                    <?php if($sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE) && $sf_user->getDeclarantDS(DSCivaClient::TYPE_DS_PROPRIETE)->hasLieuxStockage() && DSCivaClient::getInstance()->isTeledeclarationOuverte() && (!$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE) || !$sf_user->getDs(DSCivaClient::TYPE_DS_PROPRIETE)->isValideeTiers())): ?>
                         <?php if(CurrentClient::getCurrent()->isDSDecembre()): ?>
                         <p class="mineure">Aucune information à signaler</p>
                         <!--<p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>-->
