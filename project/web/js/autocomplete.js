@@ -93,13 +93,16 @@
 					}
 
 					if(url_ajax) {
-					  	
+
 						//prev_term = request.term;
 						$.getJSON(url_ajax, {q:request.term,limit:limit+1}, function(data) {
 							//if (prev_term != request.term) {
 							//	return ;
 							//}
 							var inner_select = '';
+							if(newValueAllowed) {
+								inner_select += '<option value="' + request.term + '"></option>';
+							}
 							for(hash in data) {
 							 	inner_select += '<option value="'+hash+'">'+data[hash]+'</option>';
 							}
