@@ -95,6 +95,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 }
 
                 $e->compte = "COMPTE-".$identifiant;
+                $familleOrigine = $e->famille;
                 $e->famille = ($line[self::CSV_FAMILLE]) ? $line[self::CSV_FAMILLE] : null;
 
                 if(!array_key_exists($e->famille, EtablissementFamilles::getFamilles())) {
@@ -152,6 +153,14 @@ class EtablissementCsvFile extends CompteCsvFile
                 if($nouveau) { $modifications = "Création"; }
 
                 $e->save();
+
+                if($familleOrigine && $e->famille && $familleOrigine != $e->famille) {
+                    $compte = $etablissement->getMasterCompte();
+                    $compte->remove('droits');
+                    $compte->save();
+
+                    $modifications .= "(réinitialisation des droits du compte)";
+                }
 
                 echo $e->_id." (".trim($modifications).")\n";
             } catch(Exception $e) {
