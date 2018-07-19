@@ -20,10 +20,10 @@ use_helper('ds');
 			<!-- #gestion_stock -->
 
 
-			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if(count($appellation->getConfig()->mentions->getFirst()->lieux) > 1) echo 'avec_sous_onglets'; ?>">
+			<div id="gestion_stock" class="clearfix gestion_stock_donnees <?php if($lieu->getRawValue() instanceof DSLieu && count($appellation->getConfig()->mentions->getFirst()->lieux) > 1) echo 'avec_sous_onglets'; ?>">
 				<?php include_partial('dsEditionFormContentCiva', array('ds' => $ds, 'form' => $form, 'lieu' => $lieu, 'produit_key' => $produit_key));?>
                 <?php $tabindex = count($form->getProduitsDetails())*3 + 1 ?>
-                <?php if(count($appellation->getConfig()->mentions->getFirst()->lieux) > 1):  ?>
+                <?php if($lieu->getRawValue() instanceof DSLieu && count($appellation->getConfig()->mentions->getFirst()->lieux) > 1):  ?>
 			    <div id="sous_total" class="ligne_total">
 			        <h3>Sous total lieu-dit</h3>
 

@@ -5,10 +5,10 @@
         foreach ($produits as $key => $detail) :
             ?>
     	<li>
-    		<?php echo $detail->getCepage()->libelle ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small>
+    		<?php echo $detail->getLibelle() ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small>
     	</li>
         <?php endforeach; ?>
-	<?php if((count($produits) < count($lieu->getConfig()->getProduits())) || $lieu->getConfig()->hasLieuEditable()): ?>
+	<?php if((count($produits) < count($lieu->getConfig()->getProduits())) || ($lieu->getRawValue() instanceof DSLieu && $lieu->getConfig()->hasLieuEditable())): ?>
 		<li class="ajout">
 			<a class="ajax" href="<?php echo url_for('ds_ajout_produit', $lieu) ?>">
 				<img src="/images/boutons/btn_ajouter_produit.png" alt="Ajouter un produit" />

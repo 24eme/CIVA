@@ -152,6 +152,10 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
         }
     }
 
+    public function hasVolume() {
+        return ($this->total_stock && $this->total_stock > 0);
+    }
+
     public function update($params = array()) {
         parent::update();
         $this->updateTotalVolumes();

@@ -665,6 +665,9 @@ class DSCivaClient extends DSClient {
             if(!in_array($appellationConfig->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
                 continue;
             }
+            if($appellationConfig->getGenre()->getKey() == "VCI") {
+                $appellationConfig = $appellationConfig->getGenre();
+            }
             $result[preg_replace('/^\/recolte/','declaration',HashMapper::inverse($appellationConfig->getHash()))] = $appellationConfig;
         }
 

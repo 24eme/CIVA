@@ -127,6 +127,7 @@ DS:
                     inheritance: _DSNoeud
                     definition:
                       fields:
+                        libelle: {  }
                         total_stock: {type: float}
                         total_vt: {type:float}
                         total_sgn: {type:float}

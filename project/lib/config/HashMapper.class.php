@@ -68,7 +68,9 @@ class HashMapperCached {
 
         $hash = preg_replace("|^/recolte|", "/declaration", $hash);
         $hash = preg_replace("|/certification|", "/certifications/AOC_ALSACE", $hash);
-        $hash = preg_replace("|/genre|", "/genres/TRANQ", $hash);
+        $hash = preg_replace("|/genre/|", "/genres/TRANQ/", $hash);
+        $hash = preg_replace("|/genre^|", "/genres/TRANQ", $hash);
+        $hash = preg_replace("|/genreVCI|", "/genres/VCI", $hash);
         $hash = preg_replace("|/appellation_([a-zA-Z0-9_-]+)|", "/appellations/$1", $hash);
         $hash = preg_replace("|/mention/|", "/mentions/DEFAUT/", $hash);
         $hash = preg_replace("|/mention$|", "/mentions/DEFAUT", $hash);
@@ -105,6 +107,7 @@ class HashMapperCached {
         $hash = str_replace("/certifications/AOC_ALSACE", "/certification", $hash);
         $hash = str_replace("/certifications/VINSSIG", "/certification", $hash);
         $hash = str_replace("/genres/TRANQ", "/genre", $hash);
+        $hash = str_replace("/genres/VCI", "/genreVCI", $hash);
         $hash = preg_replace("|/appellations/([a-zA-Z0-9_-]+)|", "/appellation_$1" , $hash);
         $hash = str_replace("/mentions/DEFAUT/", "/mention/", $hash);
         $hash = str_replace("/mentions/DEFAUT", "/mention", $hash);

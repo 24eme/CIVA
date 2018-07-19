@@ -252,7 +252,11 @@ class dsActions extends sfActions {
         $this->form = new DSEditionFormCiva($this->ds, $this->lieu);
 
         $this->appellations = $this->ds->declaration->getAppellationsSorted();
-        $this->appellation = $this->lieu->getAppellation();
+        if($this->getRoute()->getNoeud() instanceof DSGenre) {
+            $this->appellation = $this->lieu;
+        } else {
+            $this->appellation = $this->lieu->getAppellation();
+        }
         $this->current_lieu = null;
         $this->isFirstAppellation = ($this->ds->getFirstAppellation()->getHash() == $this->appellation->getHash());
 

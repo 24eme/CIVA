@@ -8,8 +8,7 @@
             <span><?php echo (preg_match('/^AOC/', $app->libelle))? 'AOC ' : ''; ?></span>
             <br><?php echo (preg_match('/^AOC/', $app->libelle))? substr($app->libelle, 4) : $app->libelle; ?>
         </a>
-
-        <?php if(isset($appellation) && $selected && count($appellation->getConfig()->mentions->getFirst()->getLieux()) > 1): ?>
+        <?php if(isset($appellation) && $selected && $appellation->getRawValue() instanceof DSAppellation && count($appellation->getConfig()->mentions->getFirst()->getLieux()) > 1): ?>
             <ul class="sous_onglets" style="position: absolute; left: auto;">
                 <?php foreach ($appellation->getLieuxSorted() as $l): ?>
                 <li class="<?php echo (isset($lieu) && $lieu->getHash() == $l->getHash())? 'ui-tabs-selected' : ''; ?>">

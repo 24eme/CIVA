@@ -21,7 +21,12 @@ class DSGenre extends BaseDSGenre {
         return $this->filter('^appellation');
     }
 
-    public function getChildrenNodeSorted() {
+    public function hasManyLieu() {
+
+        return false;
+    }
+
+    /*public function getChildrenNodeSorted() {
         $items = $this->getChildrenNode();
         $items_config = $this->getDocument()->declaration->getConfig()->getArrayAppellations();
         $items_sorted = array();
@@ -47,7 +52,7 @@ class DSGenre extends BaseDSGenre {
         }
 
         return $appellations;
-    }
+    }*/
 
     public function updateVolumes($vtsgn,$old_volume,$volume) {
         parent::updateVolumes($vtsgn, $old_volume, $volume);

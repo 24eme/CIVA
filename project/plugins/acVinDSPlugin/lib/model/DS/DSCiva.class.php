@@ -310,9 +310,14 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function getNextLieu($lieu){
-        $appellation = $lieu->getAppellation();
-        $appellations = $appellation->getGenre()->getCertification()->getParent()->getAppellationsSorted();
-        $lieux = $lieu->getParent()->getLieuxSorted();
+        if($lieu instanceof DSLieu) {
+            $appellation = $lieu->getAppellation();
+            $lieux = $lieu->getParent()->getLieuxSorted();
+        } else {
+            $lieux = array();
+            $appellation = $lieu;
+        }
+        $appellations = $this->declaration->getAppellationsSorted();
         $next = false;
         foreach ($lieux as $hash => $l) {
             if($l->getHash() == $lieu->getHash()){
@@ -337,9 +342,14 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
      public function getPreviousLieu($lieu){
-        $appellation = $lieu->getAppellation();
+        if($lieu instanceof DSLieu) {
+            $appellation = $lieu->getAppellation();
+            $lieux = $lieu->getParent()->getLieuxSorted();
+        } else {
+            $lieux = array();
+            $appellation = $lieu;
+        }
         $appellations = $this->declaration->getAppellationsSorted();
-        $lieux = $lieu->getParent()->getLieuxSorted();
         while($previous = array_pop($lieux)) {
             if($previous->getHash() == $lieu->getHash() && count($lieux) > 0){
                 return array_pop($lieux);

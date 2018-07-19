@@ -18,12 +18,12 @@ class DSDeclaration extends BaseDSDeclaration {
 
     public function getAppellations() {
         if(!$this->exist('certification')) return array();
-        return $this->getChildrenNodeDeep(2)->getAppellations();
+        return $this->certification->genre->getAppellations();
     }
 
     public function getAppellationsSorted() {
         $appellations = array();
-        foreach($this->getConfig()->getArrayAppellations() as $item) {
+        foreach(DSCivaClient::getConfigAppellations($this->getDocument()->getConfig()) as $item) {
             $hash = str_replace("recolte", "declaration", HashMapper::inverse($item->getHash()));
             if($this->getDocument()->exist($hash)) {
                 $appellations[$hash] = $this->getDocument()->get($hash);

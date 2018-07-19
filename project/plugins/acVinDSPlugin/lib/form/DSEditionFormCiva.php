@@ -6,7 +6,7 @@ class DSEditionFormCiva extends acCouchdbForm {
     protected $noeud = null;
     protected $no_vtsgn = null;
 
-    public function __construct(acCouchdbJson $ds, DSLieu $noeud, $defaults = array(), $options = array(), $CSRFSecret = null) {
+    public function __construct(acCouchdbJson $ds, $noeud, $defaults = array(), $options = array(), $CSRFSecret = null) {
 
        $this->ds = $ds;
        $this->noeud = $noeud;

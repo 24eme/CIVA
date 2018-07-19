@@ -17,8 +17,10 @@ class DSDetail extends BaseDSDetail {
     }
 
     public function getLibelle() {
-
-        return $this->cepage;
+        if(!$this->cepage->getLibelle()) {
+            return $this->cepage->getAppellation()->getLibelle();
+        }
+        return $this->cepage->getLibelle();
     }
 
     public function updateVolume($vtsgn, $volume, $sum = false) {
