@@ -408,6 +408,11 @@ class DSCiva extends DS implements IUtilisateursDocument {
                 continue;
             }
 
+            if(preg_match('/VCI/', $hash)) {
+
+                continue;
+            }
+
             $total += ($appellation->get($type)) ? $appellation->get($type) : 0;
         }
         return $total;

@@ -34,16 +34,12 @@ class DSAppellation extends BaseDSAppellation {
         parent::updateVolumes($vtsgn, $old_volume, $volume);
         $this->getGenre()->updateVolumes($vtsgn,$old_volume,$volume);
     }
-    
+
     public function hasManyLieu() {
 
         return $this->getChildrenNodeDeep()->hasManyNoeuds();
     }
-    
-    public function hasVolume() {
-        return ($this->total_stock && $this->total_stock > 0);
-    }
-    
+
     public function isAutoCepages(){
         return $this->getConfig()->exist('auto_ds') && ($this->getConfig()->auto_ds == 1);
     }

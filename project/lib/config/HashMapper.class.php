@@ -69,7 +69,7 @@ class HashMapperCached {
         $hash = preg_replace("|^/recolte|", "/declaration", $hash);
         $hash = preg_replace("|/certification|", "/certifications/AOC_ALSACE", $hash);
         $hash = preg_replace("|/genre/|", "/genres/TRANQ/", $hash);
-        $hash = preg_replace("|/genre^|", "/genres/TRANQ", $hash);
+        $hash = preg_replace("|/genre$|", "/genres/TRANQ", $hash);
         $hash = preg_replace("|/genreVCI|", "/genres/VCI", $hash);
         $hash = preg_replace("|/appellation_([a-zA-Z0-9_-]+)|", "/appellations/$1", $hash);
         $hash = preg_replace("|/mention/|", "/mentions/DEFAUT/", $hash);
