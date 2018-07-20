@@ -17,7 +17,7 @@ class DSDeclaration extends BaseDSDeclaration {
     }
 
     public function getAppellations() {
-        if(!$this->exist('certification')) return array();
+        if(!$this->exist('certification/genre')) return array();
         return $this->certification->genre->getAppellations();
     }
 

@@ -50,12 +50,13 @@ table {
 <small><br /></small>
 <span style="background-color: black; color: white; font-weight: bold;">Autres Produits</span><?php if(!$is_last_page): ?><span><small><i>&nbsp;&nbsp;(Page suivante)</i></small></span><?php endif; ?><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
+<?php $i=0; ?>
 <?php foreach($autres as $libelle => $volume): ?>
-<tr>
-  <td style="text-align: left; width: 318px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo $libelle ?></td>
+    <?php $isCelluleVide = is_numeric($libelle); ?>
+<?php if($i % 2 == 0 || count($autres) <= 6): ?><tr><?php endif; ?>
+  <td style="text-align: left; width: 212px; border: 1px solid black; font-weight: bold; <?php if($isCelluleVide): ?>background-color: #bbb;<?php endif; ?>">&nbsp;<?php echo (!$isCelluleVide) ? $libelle : null ?></td>
   <td style="width: 106px; border: 1px solid black;<?php if(!$is_last_page || is_null($volume)): ?>background-color: #bbb;<?php endif; ?>"><?php ($is_last_page) ? echoVolume($volume, true) : echoVolume(null, true) ?></td>
-</tr>
+  <?php $i++; ?>
+<?php if($i % 2 == 0|| count($autres) <= 6): ?></tr><?php endif; ?>
 <?php endforeach; ?>
 </table>
-
-

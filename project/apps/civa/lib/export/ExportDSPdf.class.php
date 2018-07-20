@@ -249,12 +249,35 @@ class ExportDSPdf extends ExportDocument {
 
     protected function getAutres($ds) {
         if(!array_key_exists($ds->_id, $this->autres)) {
-            $this->autres[$ds->_id] = array("Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null,
-                      "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(),
-                      "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(),
-                      "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null,
-                      "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null,
-                      "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null);
+            $tableauGauche = array(
+                "Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null,
+                "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(),
+                "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(),
+                "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null,
+                "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null,
+                "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null,
+            );
+            $tableauDroite = $ds->getTotalVCI();
+
+            $hasTableauDroite = count($tableauDroite) > 0;
+
+            $this->autres[$ds->_id] = array();
+            foreach($tableauGauche as $key => $value) {
+                $this->autres[$ds->_id][$key] = $value;
+                if(!$hasTableauDroite) {
+                    continue;
+                }
+                $added = false;
+                foreach($tableauDroite as $keyDroite => $valueDroite) {
+                    $this->autres[$ds->_id][$keyDroite] = $valueDroite;
+                    unset($tableauDroite[$keyDroite]);
+                    $added = true;
+                    break;
+                }
+                if(!$added) {
+                    $this->autres[$ds->_id][] = null;
+                }
+            }
         }
 
         return $this->autres[$ds->_id];

@@ -441,6 +441,32 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return 0;
     }
 
+    public function getTotalVCI() {
+        $recap = array();
+        if(!$this->exist('declaration/certification')) {
+
+            return $recap;
+        }
+
+        if(!$this->declaration->certification->getConfig()->exist('genres/VCI')) {
+
+            return $recap;
+        }
+        foreach($this->declaration->certification->getConfig()->genres->get('VCI')->appellations as $appellation) {
+            $recap["VCI ".$appellation->getLibelle()] = 0;
+        }
+
+        if(!$this->exist('declaration/certification/genreVCI')) {
+
+            return $recap;
+        }
+        foreach($this->declaration->certification->genreVCI->getAppellations() as $appellation) {
+            $recap["VCI ".$appellation->getLibelle()] += $appellation->total_stock;
+        }
+
+        return $recap;
+    }
+
     public function isDsPrincipale() {
         if($this->exist('ds_principale')){
             return $this->ds_principale;
