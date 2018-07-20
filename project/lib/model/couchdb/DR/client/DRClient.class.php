@@ -387,7 +387,12 @@ class DRClient extends acCouchdbClient {
                 $appellations["mentionSGN"] = null;
             }
 
+
             if(!in_array($appellation->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
+                continue;
+            }
+
+            if($appellation->getGenre()->getKey() == "VCI") {
                 continue;
             }
 
@@ -397,6 +402,9 @@ class DRClient extends acCouchdbClient {
         $appellations["mentionVT"] = array("libelle" => "Mention VT", "mout" => false, "hash" => "mentionVT", "lieux" => array());
         $appellations["mentionSGN"] = array("libelle" => "Mention SGN", "mout" => false, "hash" => "mentionSGN","lieux" => array());
         foreach($configuration->declaration->getArrayAppellations() as $appellation) {
+            if($appellation->getGenre()->getKey() == "VCI") {
+                continue;
+            }
             if(!array_key_exists("appellation_".$appellation->getKey(), $appellations)) {
                 continue;
             }
