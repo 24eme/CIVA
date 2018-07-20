@@ -180,7 +180,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
             $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
         }
 
-        if($dr->recolte->getTotalVci() > 0) {
+        if($dr->recolte->getVciCaveParticuliere() > 0) {
             $this->addAppellation("declaration/certification/genreVCI");
         }
     }
