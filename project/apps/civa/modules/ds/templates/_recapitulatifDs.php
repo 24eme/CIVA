@@ -86,9 +86,31 @@ if (isset($validation_dss)) {
                         <td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
                     </tr>
                 </tbody>
-            </table>     
-        </div>	
-        
+            </table>
+        </div>
+
+        <?php $recapVCI = $ds_client->getTotauxVCIRecap($ds_principale); ?>
+        <?php if(count($recapVCI)): ?>
+        <div id="recap_vins_sans_ig">
+            <table class="table_donnees pyjama_auto">
+                <thead>
+                    <tr>
+                        <th class="appellation">VCI&nbsp;<a title="Message aide" rel="help_popup_validation_vins_sans_ig" class="msg_aide_ds" href=""></a></th>
+                        <th class="total">Total <span class="unites">(hl)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($recapVCI as $libelle => $volume): ?>
+                        <tr>
+                            <td class="appellation"><?php echo $libelle ?></td>
+                            <td><?php echoFloat($volume); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+
         <div id="recap_vins_sans_ig">
             <table class="table_donnees pyjama_auto">
                 <thead>

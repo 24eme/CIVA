@@ -484,6 +484,26 @@ class DSCivaClient extends DSClient {
         return $totalAOC;
     }
 
+
+    public function getTotauxVCIRecap($ds) {
+        $dss = $this->findDssByDS($ds);
+        $recap = array();
+
+        foreach ($dss as $ds_key => $ds) {
+            if(!$ds->exist('declaration/certification/genreVCI')) {
+                continue;
+            }
+            foreach($ds->declaration->certification->genreVCI->getAppellations() as $appellation) {
+                if(!isset($recap["VCI ".$appellation->getLibelle()])) {
+                    $recap["VCI ".$appellation->getLibelle()] = 0;
+                }
+                $recap["VCI ".$appellation->getLibelle()] += $appellation->total_stock;
+            }
+        }
+
+        return $recap;
+    }
+
     public function getTotalSansIG($ds) {
         $dss = $this->findDssByDS($ds);
         $totalSansIG = 0;
