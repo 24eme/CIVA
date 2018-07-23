@@ -193,7 +193,7 @@ class ExportDSPdf extends ExportDocument {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds,
                                                                                  'recap' => $page,
-                                                                                 'autres' => $this->getAutres($ds),
+                                                                                 'autres' => $this->getAutres($ds, true),
                                                                                  'is_last_page' => $is_last)));
         }
     }
@@ -247,7 +247,7 @@ class ExportDSPdf extends ExportDocument {
                                                                             'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
     }
 
-    protected function getAutres($ds) {
+    protected function getAutres($ds, $tableauDivise = true) {
         if(!array_key_exists($ds->_id, $this->autres)) {
             $tableauGauche = array(
                 "Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null,
@@ -264,7 +264,7 @@ class ExportDSPdf extends ExportDocument {
             $this->autres[$ds->_id] = array();
             foreach($tableauGauche as $key => $value) {
                 $this->autres[$ds->_id][$key] = $value;
-                if(!$hasTableauDroite) {
+                if(!$hasTableauDroite || !$tableauDivise) {
                     continue;
                 }
                 $added = false;
@@ -276,6 +276,12 @@ class ExportDSPdf extends ExportDocument {
                 }
                 if(!$added) {
                     $this->autres[$ds->_id][] = null;
+                }
+            }
+
+            if(!$tableauDivise) {
+                foreach($tableauDroite as $keyDroite => $valueDroite) {
+                    $this->autres[$ds->_id][$keyDroite] = $valueDroite;
                 }
             }
         }

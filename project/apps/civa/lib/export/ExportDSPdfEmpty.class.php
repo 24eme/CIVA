@@ -139,7 +139,7 @@ class ExportDSPdfEmpty extends ExportDSPdf {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/principalEmpty', array('ds' => $ds,
                                                                                          'recap' => $page,
-                                                                                         'autres' => $this->getAutres($ds),
+                                                                                         'autres' => $this->getAutres($ds, false),
                 'is_last_page' => $is_last)));
         }
     }
