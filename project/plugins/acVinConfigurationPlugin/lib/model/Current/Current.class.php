@@ -54,7 +54,7 @@ class Current extends BaseCurrent {
 
     public function isDSDecembre() {
 
-        return true;
+        return false;
     }
 
     public function getPeriodeDS() {
@@ -64,7 +64,7 @@ class Current extends BaseCurrent {
             return CurrentClient::getInstance()->getCurrentFromTheFuture()."07";
         }
 
-        return "201712";
+        return "201807";
     }
 
     public function getAnneeDS($type_ds = null)
