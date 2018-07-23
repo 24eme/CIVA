@@ -27,7 +27,7 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<tbody>
 					<?php if($ds->hasAOC()): ?>
 						<?php foreach ($ds->declaration->getAppellationsSorted() as $appellation_key => $appellation) :
-		                    if(!preg_match('/appellation_VINTABLE/',$appellation_key)): ?>
+		                    if(!preg_match('/(appellation_VINTABLE|genreVCI)/',$appellation_key)): ?>
 		                        <tr>
 		                                <td class="appellation"><?php echo $appellation->getLibelle(); ?></td>
 		                                <td><?php echoFloat($appellation->getTotalStock()); ?></td>
@@ -50,6 +50,33 @@ include_partial('dsRailEtapes',array('tiers' => $tiers, 'ds' => $ds, 'etape' => 
 					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalAOC()); ?>" />
 				</div>
 			</div>
+
+			<?php if($ds->declaration->exist('certification/genreVCI')): ?>
+			<div id="recap_vins_sans_ig">
+				<table class="table_donnees pyjama_auto">
+					<thead>
+						<tr>
+							<th class="appellation">VCI</th>
+							<th class="total">Total <span class="unites">(hl)</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($ds->getTotalVCI() as $libelle => $volume): ?>
+						<tr>
+							<td class="appellation"><?php echo $libelle; ?></td>
+							<td><?php echoFloat($volume); ?></td>
+						</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+
+				<div id="total" class="ligne_total">
+					<h3>Total VCI</h3>
+					<input type="text" readonly="readonly" value="<?php echoFloat($ds->getTotalVCIVolume()); ?>" />
+				</div>
+
+			</div>
+			<?php endif; ?>
 
 			<?php if($ds->declaration->getAppellations()->exist('appellation_VINTABLE')): ?>
 			<div id="recap_vins_sans_ig">

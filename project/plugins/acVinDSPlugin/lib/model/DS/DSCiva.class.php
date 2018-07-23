@@ -472,6 +472,16 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return $recap;
     }
 
+    public function getTotalVCIVolume() {
+        $volumeTotal = null;
+
+        foreach($this->getTotalVCI() as $volume) {
+            $volumeTotal += $volume;
+        }
+
+        return $volumeTotal;
+    }
+
     public function isDsPrincipale() {
         if($this->exist('ds_principale')){
             return $this->ds_principale;
