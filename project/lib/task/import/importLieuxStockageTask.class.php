@@ -114,8 +114,8 @@ EOF;
     try{
       if($etablissement->isModified()) {
         $this->logLignes("SUCCESS", "", $lines, $i);
+        $etablissement->save();
       }
-      $etablissement->save();
     } catch (Exception $e) {
       $this->logLignes("ERROR", $e->getMessage(), $lines, $i);
     }
@@ -147,7 +147,11 @@ EOF;
     $lieu_stockage = $etablissement->add('lieux_stockage')->add(trim($line[self::CSV_NUMERO_INSTALLATION]));
 
     $lieu_stockage->numero = trim($line[self::CSV_NUMERO_INSTALLATION]);
-    $lieu_stockage->nom = trim($line[self::CSV_RAISON_SOCIALE]);
+    $line[self::CSV_RAISON_SOCIALE] = str_replace("&amp;", "&", $line[self::CSV_RAISON_SOCIALE]);
+    $line[self::CSV_RAISON_SOCIALE] = str_replace("amp;", "&", $line[self::CSV_RAISON_SOCIALE]);
+    $line[self::CSV_RAISON_SOCIALE] = trim($line[self::CSV_RAISON_SOCIALE]);
+    $line[self::CSV_RAISON_SOCIALE] = preg_replace("/[ ]+/", " ", $line[self::CSV_RAISON_SOCIALE]);
+    $lieu_stockage->nom = $line[self::CSV_RAISON_SOCIALE];
 
     $lieu_stockage->code_postal  = $code_postal;
     $lieu_stockage->commune  = $commune;
