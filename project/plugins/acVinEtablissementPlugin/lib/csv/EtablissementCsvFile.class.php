@@ -155,7 +155,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 $e->save();
 
                 if($familleOrigine && $e->famille && $familleOrigine != $e->famille) {
-                    $compte = $etablissement->getMasterCompte();
+                    $compte = $e->getMasterCompte();
                     $compte->remove('droits');
                     $compte->save();
 

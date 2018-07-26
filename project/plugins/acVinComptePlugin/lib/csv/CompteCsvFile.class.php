@@ -106,7 +106,7 @@ class CompteCsvFile extends CsvFile
 
                 $updateDroits = false;
                 if($c->isActif() && (!$c->exist('droits') || !count($c->_get('droits')->toArray(true, false)))) {
-                    $c->add('droits', $c->getDroits()->toArray(true, false));
+                    $c->add('droits', $c->getDroits());
                     $updateDroits = true;
                 }
 
